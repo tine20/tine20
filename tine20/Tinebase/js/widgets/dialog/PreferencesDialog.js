@@ -25,17 +25,6 @@ Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
  */
 Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     /**
-     * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
-     */
-    /**
-     * @property {Number} loadRequest 
-     * transaction id of loadData request
-     */
-    /**
-     * @property loadMask {Ext.LoadMask}
-     */
-    
-    /**
      * @property {Locale.gettext} i18n
      */
     i18n: null,
@@ -104,11 +93,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.i18n = new Locale.Gettext();
         this.i18n.textdomain('Tinebase');
 
-        // init actions
         this.initActions();
-        // init buttons and tbar
         this.initButtons();
-        // get items for this dialog
         this.items = this.getItems();
         
         Tine.widgets.dialog.Preferences.superclass.initComponent.call(this);
@@ -143,7 +129,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             handler: this.onSwitchAdminMode,
             iconCls: 'action_adminMode',
             enableToggle: true
-            //disabled: true
         });
     },
     
@@ -203,7 +188,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         
         this.window.setTitle(this.i18n._('Edit Preferences'));
         this.loadMask = new Ext.LoadMask(ct, {msg: _('Loading ...')});
-        //this.loadMask.show();
     },
     
     /**
@@ -504,7 +488,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
  * Timetracker Edit Popup
  */
 Tine.widgets.dialog.Preferences.openWindow = function (config) {
-    //var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 470,
