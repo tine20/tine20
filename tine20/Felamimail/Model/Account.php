@@ -213,13 +213,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             $result['ssl'] = strtoupper($this->ssl);
         }
         
-        // add domain
-        if ($this->type == self::TYPE_SYSTEM) {
-            $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-            if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
-                $result['user'] .= '@' . $imapConfig['domain'];
-            }
-        }
+        $result['user'] = $this->_addDomainToUsername($result['user']);
         
         // overwrite settings with config.inc.php values if set
         if (Tinebase_Core::getConfig()->imap) {
@@ -237,6 +231,26 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         }
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+        
+        return $result;
+    }
+    
+    /**
+     * add domain from imap settings to username
+     * 
+     * @param string $_username
+     * @return string
+     */
+    protected function _addDomainToUsername($_username)
+    {
+        $result = $_username;
+        
+        if ($this->type == self::TYPE_SYSTEM) {
+            $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+            if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
+                $result .= '@' . $imapConfig['domain'];
+            }
+        }
         
         return $result;
     }
@@ -311,6 +325,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             'username'  => $this->user,
             'password'  => $this->password,
         );
+        
+        $result['username'] = $this->_addDomainToUsername($result['username']);
         
         return $result;
     }
