@@ -166,8 +166,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     public function setVacation(Felamimail_Model_Sieve_Vacation $_vacation)
     {
-        $accountId = $_vacation->getId();
-        $this->_setSieveBackendAndAuthenticate($accountId);
+        $account = Felamimail_Controller_Account::getInstance()->get($_vacation->getId());
+        $this->_setSieveBackendAndAuthenticate($account);
         
         $fsv = $_vacation->getFSV();
         
@@ -179,9 +179,10 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Put updated vacation SIEVE script ' . $this->_scriptName);
         
-        $this->_putScript($accountId, $script);
+        $this->_putScript($account, $script);
+        Felamimail_Controller_Account::getInstance()->setVacationActive($account, $_vacation->enabled);
         
-        return $this->getVacation($accountId);
+        return $this->getVacation($account);
     }
     
     /**

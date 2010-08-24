@@ -496,7 +496,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         // check if server has 'CHILDREN' support
         $_account->has_children_support = (in_array('CHILDREN', $capabilities['capabilities'])) ? 1 : 0;
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating capabilities for account: ' . $_account->name);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating capabilities for account: ' . $_account->name);
         
         if ($_account->delimiter) {
             $_account->delimiter = substr($_account->delimiter, 0, 1);
@@ -504,6 +504,28 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $result = $this->_backend->update($_account);
         return $this->get($result->getId());
+    }
+    
+    /**
+     * set vacation active field for account
+     * 
+     * @param string|Felamimail_Model_Account $_account
+     * @param boolean $_vacationEnabled
+     * @return Felamimail_Model_Account
+     */
+    public function setVacationActive(Felamimail_Model_Account $_account, $_vacationEnabled)
+    {
+        $account = $this->get($_account->getId());
+        if ($account->sieve_vacation_active != $_vacationEnabled) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating sieve_vacation_active = ' . $_vacationEnabled . ' for account: ' . $account->name);
+            
+            $account->sieve_vacation_active = (bool) $_vacationEnabled;
+            // @todo we should use $this->update($account) / but we don't want to updateCapabilities
+            //$result = $this->update($account);
+            $account = $this->_backend->update($account);
+        }
+        
+        return $account;
     }
     
     /******************************** protected funcs *********************************/
