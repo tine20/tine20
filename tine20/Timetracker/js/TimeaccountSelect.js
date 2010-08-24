@@ -221,7 +221,7 @@ Tine.Timetracker.TimeAccountStatusGridFilter = Ext.extend(Tine.widgets.grid.Filt
      * @private
      */
     initComponent: function() {
-        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
+        Tine.Timetracker.TimeAccountStatusGridFilter.superclass.initComponent.call(this);
         
         this.app = Tine.Tinebase.appMgr.get('Timetracker');
         this.label = this.label ? this.label : this.app.i18n._("Time Account - Status");
