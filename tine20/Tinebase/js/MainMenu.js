@@ -102,9 +102,9 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     getUserActions: function() {
         if (! this.userActions) {
             this.userActions = [
+                this.action_editProfile,
                 this.action_showPreferencesDialog,
-                this.action_changePassword,
-                this.action_logout
+                this.action_changePassword
             ];
         }
         return this.userActions;
@@ -138,6 +138,13 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             disabled: false,
             handler: this.onEditPreferences,
             iconCls: 'action_adminMode'
+        });
+
+        this.action_editProfile = new Ext.Action({
+            text: _('Edit Profile'),
+            disabled: false,
+            handler: this.onEditProfile,
+            iconCls: 'tinebase-accounttype-user'
         });
         
         this.action_changePassword = new Ext.Action({
@@ -218,6 +225,15 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      */
     onEditPreferences: function() {
         Tine.widgets.dialog.Preferences.openWindow({});
+    },
+
+    /**
+     * @private
+     */
+    onEditProfile: function() {
+        Tine.widgets.dialog.Preferences.openWindow({
+            initialNodeId: 'Tinebase.UserProfile'
+        });
     },
     
     /**
