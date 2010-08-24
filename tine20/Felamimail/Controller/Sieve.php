@@ -97,13 +97,14 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $this->_setSieveBackendAndAuthenticate($_accountId);
         
         $script = $this->_getSieveScript();
+        $vacation = ($script !== NULL) ? $script->getVacation() : NULL;
         
         $result = new Felamimail_Model_Sieve_Vacation(array(
             'id'    => ($_accountId instanceOf Felamimail_Model_Account) ? $_accountId->getId() : $_accountId
         ));
             
-        if ($script !== NULL) {
-            $result->setFromFSV($script->getVacation());
+        if ($vacation !== NULL) {
+            $result->setFromFSV($vacation);
         }
         
         return $result;
