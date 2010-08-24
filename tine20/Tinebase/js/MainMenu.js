@@ -90,7 +90,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             this.mainActions = [
                 this.action_aboutTine,
                 '-',
-                this.action_installGoogleGears,
                 this.action_showDebugConsole,
                 '-',
                 this.getUserActions(),
@@ -121,12 +120,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             text: String.format(_('About {0}'), Tine.title),
             handler: this.onAboutTine20,
             iconCls: 'action_about'
-        });
-        
-        this.action_installGoogleGears = new Ext.Action({
-            text: _('Install Google Gears'),
-            handler: this.onInstallGoogleGears,
-            disabled: (window.google && google.gears)
         });
         
         this.action_showDebugConsole = new Ext.Action({
@@ -209,19 +202,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         passwordDialog.show();
     },
     
-    /**
-     * the install Google Gears handler function
-     * @private
-     */
-    onInstallGoogleGears: function() {
-        var message = _('Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer.');
-        Tine.WindowFactory.getWindow({
-            width: 800,
-            height: 400,
-            url: "http://gears.google.com/?action=install&message=" + message
-        });
-    },
-
     /**
      * @private
      */
