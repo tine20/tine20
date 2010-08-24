@@ -4,8 +4,8 @@
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:TimeaccountGridPanel.js 7169 2009-03-05 10:37:38Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
  */
  
@@ -48,7 +48,8 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: _('Quick search'),    field: 'query',       operators: ['contains']}
+                {label: _('Quick search'),    field: 'query',       operators: ['contains']},
+                {filtertype: 'tinebase.department'}
                 //new Tine.widgets.tags.TagFilter({app: this.app})
             ],
             defaultFilter: 'query',
