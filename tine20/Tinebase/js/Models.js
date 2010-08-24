@@ -334,3 +334,31 @@ Tine.Tinebase.Model.Relation = Tine.Tinebase.data.Record.create([
     recordsName: 'Relations',
     containerProperty: null
 });
+
+/**
+ * @namespace Tine.Tinebase.Model
+ * @class     Tine.Tinebase.Model.Department
+ * @extends   Tine.Tinebase.data.Record
+ * 
+ * Model of a Department
+ */
+Tine.Tinebase.Model.Department = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'}
+], {
+    appName: 'Tinebase',
+    modelName: 'Department',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Department', 'Departments', n); gettext('Department');
+    recordName: 'Department',
+    recordsName: 'Departments',
+    containerProperty: null
+});
+
+Tine.Tinebase.Model.Department.getFilterModel = function() {
+    return [
+        {label: _('Name'),          field: 'name',       operators: ['contains']}
+    ];
+};

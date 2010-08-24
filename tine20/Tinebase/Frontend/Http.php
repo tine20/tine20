@@ -312,6 +312,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/grid/FilterToolbar.js',
             'Tinebase/js/widgets/grid/FilterToolbarQuickFilterPlugin.js',
             'Tinebase/js/widgets/grid/FilterSelectionModel.js',
+            'Tinebase/js/widgets/grid/DepartmentFilterModel.js',
             'Tinebase/js/widgets/grid/ForeignRecordFilter.js',
             'Tinebase/js/widgets/grid/QuickaddGridPanel.js',
             'Tinebase/js/widgets/grid/FileUploadGrid.js',
