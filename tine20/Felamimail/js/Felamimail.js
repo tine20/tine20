@@ -88,8 +88,27 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             Tine.log.debug('start preloading mails in "' + delayTime/1000 + '" seconds');
             this.checkMailsDelayedTask.delay(delayTime);
         }
+        
+        this.showActiveVacation();
     },
     
+    /**
+     * show a message box with active vacation information
+     * 
+     * TODO only show message for first account?
+     */
+    showActiveVacation: function () {
+        var accountsWithActiveVacation = Tine.Felamimail.loadAccountStore().query('sieve_vacation_active', true);
+        if (accountsWithActiveVacation.getCount() > 0) {
+            var first = accountsWithActiveVacation.first();
+            Ext.Msg.show({
+               title:   this.i18n._('Active Vacation Message'),
+               msg:     String.format(this.i18n._('Email account "{0}" has an active vacation message.'), first.get('name')),
+               icon:    Ext.MessageBox.INFO,
+               buttons: Ext.Msg.OK
+            });
+        }
+    },
     
     /**
      * check mails
