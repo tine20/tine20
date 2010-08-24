@@ -134,6 +134,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => 'tls',
             'InArray' => array(self::SECURE_NONE, self::SECURE_TLS)
         ),
+        'sieve_vacation_active' => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         //'sieve_credentials_id'  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         //'sieve_user'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         //'sieve_password'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),

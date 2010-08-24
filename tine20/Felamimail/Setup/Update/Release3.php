@@ -302,6 +302,27 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }    
 
     /**
+     * update function (-> 3.10)
+     * - add sieve vacation active field to account
+     */    
+    public function update_9()
+    {
+        $newFields = array(
+                '<field>
+                    <name>sieve_vacation_active</name>
+                    <type>boolean</type>
+                </field>'
+        );
+        
+        foreach ($newFields as $col) {
+            $this->_backend->addCol('felamimail_account', new Setup_Backend_Schema_Field_Xml($col));
+        }
+        
+        $this->setTableVersion('felamimail_account', '11');
+        $this->setApplicationVersion('Felamimail', '3.10');
+    }    
+    
+    /**
      * clear message cache tables and reset folder status
      */
     protected function _clearMessageCache()
