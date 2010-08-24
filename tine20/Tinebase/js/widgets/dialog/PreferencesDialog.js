@@ -68,6 +68,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
      */    
     adminPrefPanels: {},
     
+    /**
+     * @cfg String  initialNodeId to select after render
+     */
+    initialNodeId: null,
+    
     // private
     bodyStyle:'padding:5px',
     layout: 'fit',
@@ -189,7 +194,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     /**
      * @private
      */
-    onRender : function(ct, position){
+    onRender: function (ct, position) {
         Tine.widgets.dialog.Preferences.superclass.onRender.call(this, ct, position);
         
         // recalculate height, as autoHeight fails for Ext.Window ;-(
@@ -203,7 +208,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     /**
      * @private
      */
-    onCancel: function(){
+    onCancel: function () {
         this.fireEvent('cancel');
         this.purgeListeners();
         this.window.close();
@@ -433,6 +438,12 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         
         this.activateCard(card, false);
         this.loadMask.hide();
+        
+        if (this.initialNodeId !== null) {
+            var initialNode = this.treePanel.getNodeById(this.initialNodeId);
+            initialNode.select();
+            this.showPrefsForApp(this.initialNodeId);
+        }
     },
     
     /**
