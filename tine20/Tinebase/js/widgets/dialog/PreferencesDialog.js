@@ -58,9 +58,9 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     adminPrefPanels: {},
     
     /**
-     * @cfg String  initialNodeId to select after render
+     * @cfg String  initialCardName to select after render
      */
-    initialNodeId: null,
+    initialCardName: null,
     
     // private
     layout: 'fit',
@@ -162,7 +162,8 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             region: 'west',
             width: 200,
             border: false,
-            frame: false
+            frame: false,
+            initialNodeId: this.initialCardName
         })
         return [{
         	xtype: 'panel',
@@ -389,7 +390,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             remoteSort: false
         });
         
-        store.load();
+        Tine.log.debug(appName);
+        store.load({
+            callback: this.onStoreInitialLoad,
+            scope: this
+        });
     },
 
     /**
@@ -423,13 +428,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         
         this.activateCard(card, false);
         this.loadMask.hide();
-        
-        // TODO do this only on initial load
-        if (this.initialNodeId !== null) {
-            var initialNode = this.treePanel.getNodeById(this.initialNodeId);
-            initialNode.select();
-            this.showPrefsForApp(this.initialNodeId);
-        }
     },
     
     /**

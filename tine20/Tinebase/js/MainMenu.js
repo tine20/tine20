@@ -232,7 +232,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      */
     onEditProfile: function() {
         Tine.widgets.dialog.Preferences.openWindow({
-            initialNodeId: 'Tinebase.UserProfile'
+            initialCardName: 'Tinebase.UserProfile'
         });
     },
     
