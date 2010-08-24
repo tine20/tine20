@@ -263,7 +263,8 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     { name: 'smtp_password' },
     { name: 'sieve_hostname' },
     { name: 'sieve_port' },
-    { name: 'sieve_ssl' }
+    { name: 'sieve_ssl' },
+    { name: 'sieve_vacation_active', type: 'bool' }
 ]), {
     appName: 'Felamimail',
     modelName: 'Account',
