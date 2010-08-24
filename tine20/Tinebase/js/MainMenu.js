@@ -93,7 +93,9 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 this.action_installGoogleGears,
                 this.action_showDebugConsole,
                 '-',
-                this.getUserActions()
+                this.getUserActions(),
+                '-',
+                this.action_logout
             ];
         }
         return this.mainActions;
