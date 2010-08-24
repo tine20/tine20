@@ -12,7 +12,9 @@
  * TODO         move locale/timezone registry values to preferences MixedCollection?
  */
 
-Ext.onReady(function() {
+/*global Ext, Tine, google, OpenLayers, Locale, */
+
+Ext.onReady(function () {
     Tine.Tinebase.tineInit.initWindow();
     Tine.Tinebase.tineInit.initDebugConsole();
     Tine.Tinebase.tineInit.initBootSplash();
@@ -20,14 +22,14 @@ Ext.onReady(function() {
     Tine.Tinebase.tineInit.initAjax();
     Tine.Tinebase.tineInit.initRegistry();
     Tine.Tinebase.tineInit.initLibs();
-    var waitForInits = function() {
+    var waitForInits = function () {
         if (! Tine.Tinebase.tineInit.initList.initRegistry) {
             waitForInits.defer(100);
         } else {
             Tine.Tinebase.tineInit.initExtDirect();
             Tine.Tinebase.tineInit.initState();
             Tine.Tinebase.tineInit.initWindowMgr();
-            Tine.Tinebase.tineInit.onLangFilesLoad();
+            //Tine.Tinebase.tineInit.onLangFilesLoad();
             //Tine.Tinebase.tineInit.checkSelfUpdate();
             Tine.Tinebase.tineInit.renderWindow();
         }
@@ -75,7 +77,7 @@ Tine.weburl = 'http://www.tine20.org/';
 /**
  * quiet logging in release mode
  */
-Ext.LOGLEVEL = Tine.clientVersion.buildType == 'RELEASE' ? 0 : 7;
+Ext.LOGLEVEL = Tine.clientVersion.buildType === 'RELEASE' ? 0 : 7;
 Tine.log = Ext.ux.log;
 
 Ext.namespace('Tine.Tinebase');
@@ -111,18 +113,18 @@ Tine.Tinebase.tineInit = {
         initRegistry: false
     },
     
-    initWindow: function() {
+    initWindow: function () {
         // disable the native 'select all'
-        Ext.getBody().on('keydown', function(e) {
-            if(e.ctrlKey && e.getKey() == e.A){
+        Ext.getBody().on('keydown', function (e) {
+            if (e.ctrlKey && e.getKey() === e.A) {
                 e.preventDefault();
-            } else if(!window.isMainWindow && e.ctrlKey && e.getKey() == e.T){
+            } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
                 e.preventDefault();
             }
         });
         
         // disable generic drops
-        Ext.getBody().on('dragover', function(e) {
+        Ext.getBody().on('dragover', function (e) {
             e.stopPropagation();
             e.preventDefault();
             e.browserEvent.dataTransfer.dropEffect = 'none';
@@ -132,10 +134,10 @@ Tine.Tinebase.tineInit = {
         this.initList.initWindow = true;
     },
     
-    initDebugConsole: function() {
+    initDebugConsole: function () {
         var map = new Ext.KeyMap(Ext.getDoc(), [{
             key: [122], // F11
-            ctrl:true,
+            ctrl: true,
             fn: Tine.Tinebase.common.showDebugConsole
         }]);
     },
@@ -147,22 +149,24 @@ Tine.Tinebase.tineInit = {
      * 
      * defautl wait panel (picture only no string!)
      */
-    initBootSplash: function() {
-        centerSplash = function() {
-            var vp = Ext.getBody().getSize();
-            var p = Ext.get('tine-viewport-waitcycle');
-            p.moveTo(vp.width/2 - this.splash.width/2, vp.height/2 - this.splash.height/2);
+    initBootSplash: function () {
+        var centerSplash = function () {
+            var vp = Ext.getBody().getSize(),
+            	p = Ext.get('tine-viewport-waitcycle');
+            	
+            p.moveTo(vp.width / 2 - this.splash.width / 2, vp.height / 2 - this.splash.height / 2);
             
             var by = Ext.get('tine-viewport-poweredby');
             if (by) {
                 var bySize = by.getSize();
-                by.setTop(vp.height/2 - bySize.height);
-                by.setLeft(vp.width/2 - bySize.width);
-                by.setStyle({'z-index': 100000})
+                by.setTop(vp.height / 2 - bySize.height);
+                by.setLeft(vp.width / 2 - bySize.width);
+                by.setStyle({'z-index': 100000});
             }
         };
         
         this.splash = {
+        	xtype: 'container',
             id: 'tine-viewport-waitcycle',
             border: false,
             layout: 'fit',
@@ -180,6 +184,7 @@ Tine.Tinebase.tineInit = {
             layout: 'fit',
             border: false,
             items: {
+            	xtype: 'container',
                 id: 'tine-viewport-maincardpanel',
                 layout: 'card',
                 border: false,
@@ -188,14 +193,14 @@ Tine.Tinebase.tineInit = {
             },
             listeners: {
                 scope: this,
-                render: function(p) {
+                render: function (p) {
                     this.initList.initViewport = true;
                 }
             }
         });
     },
     
-    renderWindow: function(){
+    renderWindow: function () {
         var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
         
         // check if user is already logged in        
@@ -205,10 +210,10 @@ Tine.Tinebase.tineInit = {
                     defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
                     defaultPassword: Tine.Tinebase.registry.get('defaultPassword'),
                     scope: this,
-                    onLogin: function(response) {
+                    onLogin: function (response) {
                         Tine.Tinebase.tineInit.initList.initRegistry = false;
                         Tine.Tinebase.tineInit.initRegistry();
-                        var waitForRegistry = function() {
+                        var waitForRegistry = function () {
                             if (Tine.Tinebase.tineInit.initList.initRegistry) {
                                 Ext.MessageBox.hide();
                                 Tine.Tinebase.tineInit.initExtDirect();
@@ -233,7 +238,7 @@ Tine.Tinebase.tineInit = {
         Tine.Tinebase.tineInit.initAppMgr();
         
         /** temporary Tine.onReady for smooth transition to new window handling **/
-        if (typeof(Tine.onReady) == 'function') {
+        if (typeof(Tine.onReady) === 'function') {
             Tine.Tinebase.viewport.destroy();
             Tine.onReady();
             return;
@@ -254,7 +259,7 @@ Tine.Tinebase.tineInit = {
         //var ping = new Tine.Tinebase.sync.Ping({});
     },
 
-    initAjax: function() {
+    initAjax: function () {
         Ext.Ajax.url = Tine.Tinebase.tineInit.requestUrl;
         Ext.Ajax.method = 'POST';
         
@@ -275,7 +280,7 @@ Tine.Tinebase.tineInit = {
          * NOTE: implicitly transformed reqeusts get their callback fn's proxied 
          *       through generic response inspectors as defined below
          */
-        Ext.Ajax.on('beforerequest', function(connection, options){
+        Ext.Ajax.on('beforerequest', function (connection, options) {
             options.headers = options.headers || {};
             options.headers['X-Tine20-JsonKey'] = Tine.Tinebase.registry && Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('jsonKey') : '';
             
@@ -288,13 +293,13 @@ Tine.Tinebase.tineInit = {
                 var def = Tine.Tinebase.registry.get ? Tine.Tinebase.registry.get('serviceMap').services[options.params.method] : false;
                 if (def) {
                     // sort parms according to def
-                    for (var i=0, p; i<def.parameters.length; i++) {
+                    for (var i = 0, p; i < def.parameters.length; i += 1) {
                         p = def.parameters[i].name;
                         params[p] = options.params[p];
                     }
                 } else {
-                    for (param in options.params) {
-                        if (options.params.hasOwnProperty(param) && param != 'method') {
+                    for (var param in options.params) {
+                        if (options.params.hasOwnProperty(param) && param !== 'method') {
                             params[param] = options.params[param];
                         }
                     }
@@ -334,7 +339,7 @@ Tine.Tinebase.tineInit = {
          *  NOTE: Illegal json data responses are mapped to error code 530
          *        Empty resonses (Ext.Decode can't deal with them) are maped to 540
          */
-        Ext.Ajax.on('requestcomplete', function(connection, response, options){
+        Ext.Ajax.on('requestcomplete', function (connection, response, options) {
             
             // detect resoponse errors (e.g. html from xdebug) and convert into error response
             if (! options.isUpload && ! response.responseText.match(/^([{\[])|(<\?xml)+/)) {
@@ -360,28 +365,29 @@ Tine.Tinebase.tineInit = {
             }
             
             // strip jsonrpc fragments for non Ext.Direct requests
-            if (options.isImplicitJsonRpc){
+            if (options.isImplicitJsonRpc) {
                 var jsonrpc = Ext.decode(response.responseText);
                 if (jsonrpc.result) {
                     response.responseText = Ext.encode(jsonrpc.result);
                     
-                    if(options.cbs.success){
+                    if (options.cbs.success) {
                         options.cbs.success.call(options.scope, response, options);
                     }
-                    if(options.cbs.callback){
+                    if (options.cbs.callback) {
                         options.cbs.callback.call(options.scope, options, true, response);
                     }
                 } else {
                     
                     response.responseText = Ext.encode(jsonrpc.error);
                     
-                    if(options.cbs.failure){
+                    if (options.cbs.failure) {
                         options.cbs.failure.call(options.scope, response, options);
-                    } else if(options.cbs.callback){
+                    } else if (options.cbs.callback) {
                         options.cbs.callback.call(options.scope, options, false, response);
                     } else {
-                        var responseData = Ext.decode(response.responseText)
-                        var exception = responseData.data ? responseData.data : responseData;
+                        var responseData = Ext.decode(response.responseText);
+                        	
+                        exception = responseData.data ? responseData.data : responseData;	
                         exception.request = options.jsonData;
                         exception.response = response.responseText;
                         
@@ -400,10 +406,10 @@ Tine.Tinebase.tineInit = {
          *       -> status codes != 200 : This kind of exceptions are not part of the jsonrpc protocol
          *       -> timeouts: status code 520
          */
-        Ext.Ajax.on('requestexception', function(connection, response, options) {
+        Ext.Ajax.on('requestexception', function (connection, response, options) {
             // map connection errors to errorcode 510 and timeouts to 520
             var errorCode = response.status > 0 ? response.status :
-                            (response.status == 0 ? 510 : 520);
+                            (response.status === 0 ? 510 : 520);
                             
             // convert into error response
             if (! options.isUpload) {
@@ -433,13 +439,14 @@ Tine.Tinebase.tineInit = {
                 
                 response.responseText = Ext.encode(jsonrpc.error);
                     
-                if(options.cbs.failure){
+                if (options.cbs.failure) {
                     options.cbs.failure.call(options.scope, response, options);
-                } else if(options.cbs.callback){
+                } else if (options.cbs.callback) {
                     options.cbs.callback.call(options.scope, options, false, response);
                 } else {
-                    var responseData = Ext.decode(response.responseText)
-                    var exception = responseData.data ? responseData.data : responseData;
+                    var responseData = Ext.decode(response.responseText);
+                    
+                    exception = responseData.data ? responseData.data : responseData;
                     
                     Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 }
@@ -453,21 +460,21 @@ Tine.Tinebase.tineInit = {
     /**
      * init registry
      */
-    initRegistry: function() {
+    initRegistry: function () {
         Ext.namespace('Tine.Tinebase.registry');
         if (window.isMainWindow) {
             Ext.Ajax.request({
                 params: {
                     method: Tine.Tinebase.tineInit.getAllRegistryDataMethod
                 },
-                failure: function() {
+                failure: function () {
                     // if registry could not be loaded, this is mostly due to missconfiguaration
                     // don't send error reports for that!
                     Tine.Tinebase.ExceptionHandler.handleRequestException({
                         code: 503
                     });
                 },
-                success: function(response, request) {
+                success: function (response, request) {
                     var registryData = Ext.util.JSON.decode(response.responseText);
                     for (var app in registryData) {
                         if (registryData.hasOwnProperty(app)) {
@@ -477,7 +484,7 @@ Tine.Tinebase.tineInit = {
 
                                 for (var key in appData) {
                                     if (appData.hasOwnProperty(key)) {
-                                        if (key == 'preferences') {
+                                        if (key === 'preferences') {
                                             var prefs = new Ext.util.MixedCollection();
                                             for (var pref in appData[key]) {
                                                 if (appData[key].hasOwnProperty(pref)) {
@@ -499,7 +506,7 @@ Tine.Tinebase.tineInit = {
                     if (Tine.Tinebase.registry && Tine.Tinebase.registry.get('preferences')) {
                         var windowType = Tine.Tinebase.registry.get('preferences').get('windowtype');
                         
-                        if (Tine.WindowFactory && Tine.WindowFactory.windowType != windowType) {
+                        if (Tine.WindowFactory && Tine.WindowFactory.windowType !== windowType) {
                             Tine.WindowFactory.windowType = windowType;
                         }
                     }
@@ -511,7 +518,7 @@ Tine.Tinebase.tineInit = {
             //var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow();
             var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
             
-            for (p in mainWindow.Tine) {
+            for (var p in mainWindow.Tine) {
                 if (mainWindow.Tine[p].hasOwnProperty('registry') && Tine.hasOwnProperty(p)) {
                     Tine[p].registry = mainWindow.Tine[p].registry;
                 }
@@ -527,30 +534,31 @@ Tine.Tinebase.tineInit = {
      * @param {value} oldValue
      * @param {value} newValue
      */
-    onPreferenceChange: function(key, oldValue, newValue) {
-        switch (key) {
-            case 'windowtype':
-                //console.log('hier');
-                //break;
-            case 'confirmLogout':
-            case 'timezone':
-            case 'locale':
-                if (window.google && google.gears && google.gears.localServer) {
-                    var pkgStore = google.gears.localServer.openStore('tine20-package-store');
-                    if (pkgStore) {
-                        google.gears.localServer.removeStore('tine20-package-store');
-                    }
+    onPreferenceChange: function (key, oldValue, newValue) {
+        switch (key) 
+        {
+        case 'windowtype':
+            //console.log('hier');
+            //break;
+        case 'confirmLogout':
+        case 'timezone':
+        case 'locale':
+            if (window.google && google.gears && google.gears.localServer) {
+                var pkgStore = google.gears.localServer.openStore('tine20-package-store');
+                if (pkgStore) {
+                    google.gears.localServer.removeStore('tine20-package-store');
                 }
-                // reload mainscreen (only if timezone or locale have changed)
-                window.location = window.location.href.replace(/#+.*/, '');
-                break;
+            }
+            // reload mainscreen (only if timezone or locale have changed)
+            window.location = window.location.href.replace(/#+.*/, '');
+            break;
         }
     },
     
     /**
      * check if selfupdate is needed
      */
-    checkSelfUpdate: function() {
+    checkSelfUpdate: function () {
         if (! Tine.Tinebase.registry.get('version')) {
             return false;
         }        
@@ -562,7 +570,7 @@ Tine.Tinebase.tineInit = {
         
         var cp = new Ext.state.CookieProvider({});
         
-        if (serverVersion.packageString != 'none') {
+        if (serverVersion.packageString !== 'none') {
             needSelfUpdate = (serverVersion.packageString !== clientVersion.packageString);
         } else {
             needSelfUpdate = (serverVersion.codeName !== clientVersion.codeName);
@@ -573,7 +581,7 @@ Tine.Tinebase.tineInit = {
                 google.gears.localServer.removeManagedStore('tine20-store');
                 google.gears.localServer.removeStore('tine20-package-store');
             }
-            if (cp.get('clientreload', '0') == '0') {
+            if (cp.get('clientreload', '0') === '0') {
                 
                 cp.set('clientreload', '1');
                 window.location = window.location.href.replace(/#+.*/, '');
@@ -581,7 +589,7 @@ Tine.Tinebase.tineInit = {
                 
             } else {
                 cp.clear('clientreload');
-                new Ext.LoadMask(Ext.getBody(), {
+                var loadMask = new Ext.LoadMask(Ext.getBody(), {
                     msg: _('Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser.'),
                     msgCls: ''
                 }).show();
@@ -591,7 +599,7 @@ Tine.Tinebase.tineInit = {
             
             // if no selfupdate is needed we store langfile and index.php in manifest
             if (window.google && google.gears && google.gears.localServer) {
-                if (serverVersion.buildType == 'RELEASE') {
+                if (serverVersion.buildType === 'RELEASE') {
                     var pkgStore = google.gears.localServer.createStore('tine20-package-store');
                     var resources = [
                         '',
@@ -599,9 +607,9 @@ Tine.Tinebase.tineInit = {
                         'Tinebase/js/Locale/build/' + Tine.Tinebase.registry.get('locale').locale + '-all.js'
                     ];
                     
-                    Ext.each(resources, function(resource) {
+                    Ext.each(resources, function (resource) {
                         if (! pkgStore.isCaptured(resource)) {
-                            pkgStore.capture(resources, function(){/*console.log(arguments)*/});
+                            pkgStore.capture(resources, function () {/*console.log(arguments)*/});
                         }
                     }, this);
                 } else {
@@ -614,7 +622,7 @@ Tine.Tinebase.tineInit = {
     /**
      * initialise window and windowMgr (only popup atm.)
      */
-    initWindowMgr: function() {
+    initWindowMgr: function () {
         /**
          * init the window handling
          */
@@ -623,9 +631,7 @@ Tine.Tinebase.tineInit = {
         /**
          * initialise window types
          */
-        var windowType = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('windowtype')) 
-            ? Tine.Tinebase.registry.get('preferences').get('windowtype') 
-            : 'Browser';
+        var windowType = (Tine.Tinebase.registry.get('preferences') && Tine.Tinebase.registry.get('preferences').get('windowtype')) ? Tine.Tinebase.registry.get('preferences').get('windowtype') : 'Browser';
             
         Tine.WindowFactory = new Ext.ux.WindowFactory({
             windowType: windowType
@@ -645,7 +651,7 @@ Tine.Tinebase.tineInit = {
     /**
      * initialise state provider
      */
-    initState: function() {
+    initState: function () {
         if (Tine.Tinebase.tineInit.stateful === true) {
             if (window.isMainWindow || Ext.isIE) {
                 // NOTE: IE is as always pain in the ass! cross window issues prohibit serialisation of state objects
@@ -660,7 +666,7 @@ Tine.Tinebase.tineInit = {
     /**
      * add provider to Ext.Direct based on Tine servicemap
      */
-    initExtDirect: function() {
+    initExtDirect: function () {
         var sam = Tine.Tinebase.registry.get('serviceMap');
         
         Ext.Direct.addProvider(Ext.apply(sam, {
@@ -673,30 +679,30 @@ Tine.Tinebase.tineInit = {
     /**
      * init external libraries
      */
-    initLibs: function() {
+    initLibs: function () {
         if (OpenLayers) {
             // fix OpenLayers script location to find images/themes/...
-            OpenLayers._getScriptLocation = function() {
+            OpenLayers._getScriptLocation = function () {
                 return 'library/OpenLayers/';
-            }
+            };
         }
     },
     
     /**
      * initialise application manager
      */
-    initAppMgr: function() {
+    initAppMgr: function () {
         Tine.Tinebase.appMgr = new Tine.Tinebase.AppManager();
     },
     
     /**
      * config locales
      */
-    initLocale: function() {
+    initLocale: function () {
         //Locale.setlocale(Locale.LC_ALL, '');
         Tine.Tinebase.translation = new Locale.Gettext();
         Tine.Tinebase.translation.textdomain('Tinebase');
-        window._ = function(msgid) {
+        window._ = function (msgid) {
             return Tine.Tinebase.translation.dgettext('Tinebase', msgid);
         };
     },
@@ -704,7 +710,7 @@ Tine.Tinebase.tineInit = {
     /**
      * Last stage of initialisation, to be done after Tine.onReady!
      */
-    onLangFilesLoad: function() {
-    //    Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
+    onLangFilesLoad: function () {
+    	//Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
     }
 };
