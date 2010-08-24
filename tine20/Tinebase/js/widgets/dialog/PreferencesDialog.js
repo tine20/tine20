@@ -391,10 +391,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         });
         
         Tine.log.debug(appName);
-        store.load({
-            callback: this.onStoreInitialLoad,
-            scope: this
-        });
+        store.load();
     },
 
     /**
