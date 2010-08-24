@@ -125,7 +125,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         this.action_showDebugConsole = new Ext.Action({
             text: _('Debug Console (Ctrl + F11)'),
             handler: Tine.Tinebase.common.showDebugConsole,
-            hidden: ! Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/)
+            hidden: ! Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/),
+            iconCls: 'tinebase-action-debug-console'
         });
         
         this.action_showPreferencesDialog = new Ext.Action({

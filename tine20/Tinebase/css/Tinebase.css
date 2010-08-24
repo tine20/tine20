@@ -292,9 +292,9 @@ html, body {
     background-image:url(../../images/oxygen/32x32/mimetypes/text-csv.png) !important;
 }
 
-
-
-
+.tinebase-action-debug-console {
+    background-image:url(../../images/oxygen/16x16/apps/utilities-terminal.png) !important;
+}
 
 
 /* ----- tree classes --------------------------------------------------------*/
