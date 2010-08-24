@@ -23,6 +23,11 @@ Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
  */
 Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
 
+    /**
+     * @cfg String  initialNodeId to select after render
+     */
+    initialNodeId: null,
+    
     // presets
     iconCls: 'x-new-application',
     rootVisible: true,
@@ -40,14 +45,15 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         
         this.initTreeNodes();
         this.initHandlers();
-        this.selectRoot.defer(200, this);
+        this.selectInitialNode.defer(200, this);
     },
 
     /**
-     * select root node
+     * select initial node
      */
-    selectRoot: function() {
-    	this.fireEvent('click', this.getRootNode());
+    selectInitialNode: function() {
+        var initialNode = (this.initialNodeId !== null) ? this.getNodeById(this.initialNodeId) : this.getRootNode();
+    	this.fireEvent('click', initialNode);
     },
     
     /**
