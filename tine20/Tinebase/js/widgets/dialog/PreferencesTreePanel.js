@@ -28,6 +28,7 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
     rootVisible: true,
     border: false,
     autoScroll: true,
+    bodyStyle: 'background-color:white',
     
     /**
      * initComponent
