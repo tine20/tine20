@@ -336,7 +336,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
     
     doLayout: function() {
         if (typeof this.layout.layout == 'function') {
-            this.supr().doLayout.apply(this, arguments);
+            Tine.widgets.grid.FilterToolbar.superclass.doLayout.apply(this, arguments);
         }
         
         if (this.rendered) {
