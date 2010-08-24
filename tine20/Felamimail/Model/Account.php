@@ -17,6 +17,7 @@
  * class to hold Account data
  * 
  * @property  string  trash_folder
+ * @property  string  sieve_vacation_active
  * @package     Felamimail
  */
 class Felamimail_Model_Account extends Tinebase_Record_Abstract
