@@ -5,7 +5,7 @@
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        add filter toolbar
@@ -74,11 +74,11 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     initialNodeId: null,
     
     // private
-    bodyStyle:'padding:5px',
     layout: 'fit',
     cls: 'tw-editdialog',
     anchor:'100% 100%',
     buttonAlign: 'right',
+    border: false,
     
     //private
     initComponent: function(){
@@ -176,13 +176,14 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             title: _('Applications'),
             region: 'west',
             width: 200,
-            frame: true
+            border: false,
+            frame: false
         })
         return [{
         	xtype: 'panel',
             autoScroll: true,
-            border: true,
-            frame: true,
+            border: false,
+            frame: false,
             layout: 'border',
             items: [
                 this.treePanel,
@@ -439,6 +440,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
         this.activateCard(card, false);
         this.loadMask.hide();
         
+        // TODO do this only on initial load
         if (this.initialNodeId !== null) {
             var initialNode = this.treePanel.getNodeById(this.initialNodeId);
             initialNode.select();
