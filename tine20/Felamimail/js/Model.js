@@ -401,7 +401,8 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'cache_unreadcount',  type: 'int' },
       { name: 'cache_timestamp',    type: 'date', dateFormat: Date.patterns.ISO8601Long  },
       { name: 'cache_job_actions_estimate',     type: 'int' },
-      { name: 'cache_job_actions_done',         type: 'int' }
+      { name: 'cache_job_actions_done',         type: 'int' },
+      { name: 'client_access_time', type: 'date', dateFormat: Date.patterns.ISO8601Long  } // client only {@see Tine.Felamimail.folderBackend#updateMessageCache}
 ], {
     // translations for system folder:
     // _('INBOX') _('Drafts') _('Sent') _('Templates') _('Junk') _('Trash')
@@ -438,8 +439,8 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
      * returns true if current folder needs an update
      */
     needsUpdate: function(updateInterval) {
-        var timestamp = this.get('imap_timestamp');
-        return this.get('cache_status') !== 'complete' || timestamp == '' || timestamp.getElapsed() > updateInterval;
+        var timestamp = this.get('client_access_time');
+        return this.get('cache_status') !== 'complete' || ! Ext.isDate(timestamp) || timestamp.getElapsed() > updateInterval;
     }
 });
 
@@ -456,7 +457,8 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.Felamimail.Model.Folder,
     
     /**
-     * update message cache of given folder for given execution time
+     * update message cache of given folder for given execution time and sets the client_access_time
+     * 
      * 
      * @param   {String} folderId
      * @param   {Number} executionTime (seconds)
@@ -473,7 +475,9 @@ Tine.Felamimail.folderBackend = new Tine.Tinebase.data.RecordProxy({
         p.time = executionTime;
         
         options.beforeSuccess = function(response) {
-            return [this.recordReader(response)];
+            var folder = this.recordReader(response);
+            folder.set('client_access_time', new Date());
+            return [folder];
         };
         
         // give 5 times more before timeout

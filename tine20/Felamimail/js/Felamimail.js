@@ -229,8 +229,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         // check for outdated
         var outdated = this.folderStore.queryBy(function(folder) {
-            var timestamp = folder.get('imap_timestamp');
-            return timestamp == '' || timestamp.getElapsed() > this.updateInterval;
+            var timestamp = folder.get('client_access_time');
+            return ! Ext.isDate(timestamp) || timestamp.getElapsed() > this.updateInterval;
         }, this);
         if (outdated.getCount() > 0) {
             return outdated.first();
