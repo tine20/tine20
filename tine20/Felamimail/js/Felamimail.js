@@ -96,10 +96,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * show a message box with active vacation information
      * 
      * TODO only show message for first account?
+     * TODO only show messagebox once
      */
     showActiveVacation: function () {
         var accountsWithActiveVacation = Tine.Felamimail.loadAccountStore().query('sieve_vacation_active', true);
-        if (accountsWithActiveVacation.getCount() > 0) {
+        if (window.isMainWindow && accountsWithActiveVacation.getCount() > 0) {
             var first = accountsWithActiveVacation.first();
             Ext.Msg.show({
                title:   this.i18n._('Active Vacation Message'),
