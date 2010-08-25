@@ -19,7 +19,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Sieve Filter Dialog</p>
  * <p>This dialog is editing a filter rule.</p>
  * <p>
- * TODO         make action combo work / use cardlayout to switch between input fields 
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -55,6 +54,31 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * @private
+     */
+    onRender: function(ct, position) {
+        Tine.Felamimail.RuleEditDialog.superclass.onRender.call(this, ct, position);
+        
+        this.onChangeType.defer(250, this);
+    },
+    
+    /**
+     * Change type card layout depending on selected combo box entry and set field value
+     */
+    onChangeType: function() {
+        var type = this.actionTypeCombo.getValue();
+        
+        var cardLayout = Ext.getCmp(this.idPrefix + 'CardLayout').getLayout();
+        if (cardLayout !== 'card') {
+            cardLayout.setActiveItem(this.idPrefix + type);
+            if (this.record.get('action_type') == type) {
+                var field = this.getForm().findField('action_argument_' + type);
+                field.setValue(this.record.get('action_argument'));
+            }
+        }
+    },
+    
+    /**
      * executed after record got updated from proxy
      * 
      * @private
@@ -69,7 +93,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var title = this.app.i18n._('Edit Filter Rule');
         this.window.setTitle(title);
         
-        //Tine.log.debug(this.record);
+        Tine.log.debug(this.record);
         this.getForm().loadRecord(this.record);
         
         this.loadMask.hide();
@@ -82,6 +106,9 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         Tine.Felamimail.RuleEditDialog.superclass.onRecordUpdate.call(this);
         
         this.record.set('conditions', this.getConditions());
+        
+        var argumentField = this.getForm().findField('action_argument_' + this.actionTypeCombo.getValue());
+        this.record.set('action_argument', argumentField.getValue());
     },
     
     /**
@@ -166,8 +193,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * @return {Object}
      * @private
-     * 
-     * TODO switch action_argument input field if action_type combo changes (for example to the tree folder selection)
      */
     getFormItems: function() {
         
@@ -176,7 +201,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         this.actionTypeCombo = new Ext.form.ComboBox({
-            //fieldLabel: this.app.i18n._('Do this action:'),
             hideLabel       : true,
             name            : 'action_type',
             typeAhead       : false,
@@ -186,16 +210,19 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             mode            : 'local',
             forceSelection  : true,
             value           : 'discard',
-            anchor          : '90%',
-            columnWidth     : 0.5,
+            columnWidth     : 0.4,
             store: [
-                ['discard',     this.app.i18n._('Discard mail')],
-                ['fileinto',    this.app.i18n._('Move mail to folder')]
-                // TODO activate more actions
+                ['fileinto',    this.app.i18n._('Move mail to folder')],
+                ['redirect',    this.app.i18n._('Redirect mail to address')],
+                ['reject',      this.app.i18n._('Reject mail with this text')],
+                ['discard',     this.app.i18n._('Discard mail')]
                 //['keep',        this.app.i18n._('Keep mail')],
-                //['reject',      this.app.i18n._('Reject mail')],
-                //['redirect',    this.app.i18n._('Redirect mail')]
-            ]
+            ],
+            listeners: {
+                scope: this,
+                change: this.onChangeType,
+                select: this.onChangeType
+            }
         });
         
         this.idPrefix = Ext.id();
@@ -221,68 +248,65 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         ct.resumeEvents();
                     }
                 }
-            },
-            {
+            }, {
                 title: this.app.i18n._('Do this action:'),
                 region: 'center',
                 border: false,
                 frame: true,
-                layout: 'form',
-                //xtype: 'columnform',
-                //layout: 'fit',
-                /*
                 layout: 'column',
-                formDefaults: {
-                    xtype:'textfield',
-                    anchor: '90%',
-                    labelSeparator: '',
-                    maxLength: 256,
-                    columnWidth: 0.5,
-                    hideLabel: true
-                },
-                */
                 items: [
                     this.actionTypeCombo,
-                {
-                    xtype: 'textfield',
-                    anchor: '90%',
-                    name: 'action_argument',
-                    columnWidth: 0.5,
-                    hideLabel       : true
-                    //fieldLabel: this.app.i18n._('Move to folder')
-                }
-                
-                // TODO try to make this work
+                    // TODO try to add a spacer/margin between the two input fields
                 /*{
-                    id: this.idPrefix + 'ArgumentCardLayout',
+                    // spacer
+                    columnWidth: 0.1,
+                    layout: 'fit',
+                    title: '',
+                    items: []
+                }, */{
+                    id: this.idPrefix + 'CardLayout',
                     layout: 'card',
-                    activeItem: this.idPrefix + 'standard',
+                    activeItem: this.idPrefix + 'fileinto',
                     border: false,
-                    width: '100%',
+                    columnWidth: 0.5,
                     defaults: {
                         border: false
                     },
                     items: [{
-                        // nothing in here yet
-                        id: this.idPrefix + 'standard',
-                        layout: 'form',
-                        items: []
-                    }, {
-                        // fileinto config options
                         id: this.idPrefix + 'fileinto',
                         layout: 'form',
-                        autoHeight: 'auto',
-                        defaults: {
-                            width: 100,
-                            xtype: 'textfield'
-                        },
                         items: [{
                             // TODO folder selection combo
-                            name: 'action_argument'
+                            name: 'action_argument_fileinto',
+                            xtype: 'textfield',
+                            width: 200,
+                            hideLabel: true
                         }]
+                    }, {
+                        id: this.idPrefix + 'redirect',
+                        layout: 'form',
+                        items: [{
+                            name: 'action_argument_redirect',
+                            xtype: 'textfield',
+                            width: 200,
+                            hideLabel: true
+                        }]
+                    }, {
+                        id: this.idPrefix + 'reject',
+                        layout: 'form',
+                        items: [{
+                            name: 'action_argument_reject',
+                            xtype: 'textarea',
+                            width: 300,
+                            height: 60,
+                            hideLabel: true
+                        }]
+                    }, {
+                        id: this.idPrefix + 'discard',
+                        layout: 'fit',
+                        items: []
                     }]
-                }*/
-                ]
+                }]
             }]
         }];
     }
