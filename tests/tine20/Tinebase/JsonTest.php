@@ -242,7 +242,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(3, $results['totalcount']);
         
         foreach ($results['results'] as $result) {
-            if ($result['name'] == 'testPref') {
+            if ($result['name'] == 'defaultapp') {
                 $this->assertEquals($pref->value, $result['value']);
                 $this->assertTrue(is_array($result['options']));
                 $this->assertEquals(2, count($result['options']));
@@ -474,7 +474,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             $result[] = array(
                 'field' => 'name', 
                 'operator' => 'contains', 
-                'value' => 'testPref'
+                'value' => 'defaultapp'
             );
         }
         
@@ -504,7 +504,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     {
         return new Tinebase_Model_Preference(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name'              => 'testPref',
+            'name'              => 'defaultapp',
             'value'             => 'value1',
             'account_id'        => 0,
             'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
