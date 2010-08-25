@@ -782,6 +782,21 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         Tinebase_UserProfile::getInstance()->setUpdateableFields($configData['updateableFields']);
     }
     
+    /************************ department functions **************************/
+    
+    /**
+     * search / get departments
+     *
+     * @param  array $filter filter array
+     * @param  array $paging pagination info
+     * @return array
+     */
+    public function searchDepartments($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Tinebase_Department::getInstance(), 'Tinebase_Model_DepartmentFilter');
+        return $result;
+    }
+    
     /************************ protected functions ***************************/
     
     /**
