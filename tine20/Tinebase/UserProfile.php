@@ -213,12 +213,12 @@ class Tinebase_UserProfile
     {
         // check if user is permitted to update profile -> skip normal grant checking
         if (!Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_OWN_PROFILE)) {
-            throw new Tasks_Exception_AccessDenied('No rights to manage own profile');
+            throw new Tinebase_Exception_AccessDenied('No rights to manage own profile');
         }
         
         if (Tinebase_Core::getUser()->getId() != $_userId) {
             // We might itroduce a MANAGE_OTHER_PROFILE ?
-            throw new Tasks_Exception_AccessDenied('given profile does not belong to current user');
+            throw new Tinebase_Exception_AccessDenied('given profile does not belong to current user');
         }
     }
     
@@ -249,7 +249,7 @@ class Tinebase_UserProfile
     {
         Tinebase_Core::getLogger()->debug('setting userProfile readable fields to ' . print_r($_readableFields, TRUE));
         if (!Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN)) {
-            throw new Tasks_Exception_AccessDenied('No rights to set userProfile config');
+            throw new Tinebase_Exception_AccessDenied('No rights to set userProfile config');
         }
         
         $this->_readableFields = $_readableFields;
@@ -265,7 +265,7 @@ class Tinebase_UserProfile
     {
         Tinebase_Core::getLogger()->debug('setting userProfile updateable fields to ' . print_r($_updateableFields, TRUE));
         if (!Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::ADMIN)) {
-            throw new Tasks_Exception_AccessDenied('No rights to set userProfile config');
+            throw new Tinebase_Exception_AccessDenied('No rights to set userProfile config');
         }
         
         $this->_updateableFields = $_updateableFields;
