@@ -609,7 +609,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 /****************** yes / no *******************************/
             case Tinebase_Preference_Abstract::YES_NO_OPTIONS:
                 $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
-                $question = $locale->getTranslationList('Question');
+                $question = Zend_Locale::getTranslationList('Question', $locale);
 
                 list($yes, $dummy) = explode(':', $question['yes']);
                 list($no, $dummy) = explode(':', $question['no']);

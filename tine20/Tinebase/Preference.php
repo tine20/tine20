@@ -190,7 +190,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
             case Tinebase_Preference::TIMEZONE:
                 $locale =  Tinebase_Core::get(Tinebase_Core::LOCALE);
 
-                $availableTimezonesTranslations = $locale->getTranslationList('citytotimezone');
+                $availableTimezonesTranslations = Zend_Locale::getTranslationList('citytotimezone', $locale);
                 $availableTimezones = DateTimeZone::listIdentifiers();
                 //foreach ($availableTimezones as $timezone) {
                 //    $result[] = array($timezone, array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL);
