@@ -360,9 +360,18 @@ class Tinebase_User
         
         // update or create user in local sql backend
         try {
-            $userBackend->getUserByProperty('accountId', $user);
+            $currentUser = $userBackend->getUserByProperty('accountId', $user);
+            $user->openid = $currentUser->openid;
+            
             $user = $userBackend->updateUserInSqlBackend($user);
         } catch (Tinebase_Exception_NotFound $ten) {
+            try {
+                $invalidUser = $userBackend->getUserByProperty('accountLoginName', $username, 'Tinebase_Model_FullUser');
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " remove invalid user: " . $username);
+                $userBackend->deleteUserInSqlBackend($invalidUser);
+            } catch (Tinebase_Exception_NotFound $ten) {
+                // do nothing
+            }
             $user = $userBackend->addUserInSqlBackend($user);
         }
         
