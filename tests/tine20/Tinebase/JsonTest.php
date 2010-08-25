@@ -376,6 +376,73 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         //print_r($registryData['Tinebase']['userContact']);
     }
     
+    public function testGetUserProfile()
+    {
+        $profile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
+
+        $this->assertTrue(is_array($profile));
+        $this->assertTrue(array_key_exists('userProfile', $profile));
+        $this->assertTrue(is_array($profile['userProfile']));
+        $this->assertTrue(array_key_exists('readableFields', $profile));
+        $this->assertTrue(is_array($profile['readableFields']));
+        $this->assertTrue(array_key_exists('updateableFields', $profile));
+        $this->assertTrue(is_array($profile['updateableFields']));
+        
+        // try to get user profile of different user
+        $this->setExpectedException('Tinebase_Exception_AccessDenied');
+        
+        $sclever = array_value('sclever',Zend_Registry::get('personas'));
+        $this->_instance->getUserProfile($sclever->getId());
+    }
+    
+    public function testGetUserProfileConfig()
+    {
+        $config = $this->_instance->getUserProfileConfig();
+        
+        $this->assertTrue(is_array($config));
+        $this->assertTrue(array_key_exists('possibleFields', $config));
+        $this->assertTrue(is_array($config['possibleFields']));
+        $this->assertTrue(array_key_exists('readableFields', $config));
+        $this->assertTrue(is_array($config['readableFields']));
+        $this->assertTrue(array_key_exists('updateableFields', $config));
+        $this->assertTrue(is_array($config['updateableFields']));
+    }
+    
+    public function testSetUserProfileConfig()
+    {
+        $config = $this->_instance->getUserProfileConfig();
+        
+        $idx = array_search('n_prefix', $config['readableFields']);
+        if ($idx !== false) {
+            unset ($config['readableFields'][$idx]);
+        }
+        
+        $idx = array_search('tel_home', $config['updateableFields']);
+        if ($idx !== false) {
+            unset ($config['updateableFields'][$idx]);
+        }
+        
+        $this->_instance->setUserProfileConfig($config);
+    }
+    
+    public function testUpdateUserPofile()
+    {
+        $profile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
+        $profileData = $profile['userProfile'];
+        
+        $this->assertFalse(array_search('n_prefix', $profileData));
+        
+        $profileData['tel_home'] = 'mustnotchange';
+        $profileData['email_home'] = 'email@userprofile.set';
+        
+        $this->_instance->updateUserPofile($profileData);
+        
+        $updatedProfile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
+        $updatedProfileData = $updatedProfile['userProfile'];
+        $this->assertNotEquals('mustnotchange', $updatedProfileData['tel_home']);
+        $this->assertEquals('email@userprofile.set', $updatedProfileData['email_home']);
+    }
+    
     /******************** protected helper funcs ************************/
     
     /**
