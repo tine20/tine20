@@ -360,7 +360,7 @@ class Tinebase_User
         
         // update or create user in local sql backend
         try {
-            $currentUser = $userBackend->getUserByProperty('accountId', $user);
+            $currentUser = $userBackend->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
             $user->openid = $currentUser->openid;
             
             $user = $userBackend->updateUserInSqlBackend($user);
