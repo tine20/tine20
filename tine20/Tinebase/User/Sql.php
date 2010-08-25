@@ -113,6 +113,22 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getUserByProperty($_property, $_value, $_accountClass = 'Tinebase_Model_User')
     {
+        return $this->getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass);
+    }
+
+    /**
+     * get user by property
+     *
+     * @param   string  $_property      the key to filter
+     * @param   string  $_value         the value to search for
+     * @param   string  $_accountClass  type of model to return
+     * 
+     * @return  Tinebase_Model_User the user object
+     * @throws  Tinebase_Exception_NotFound
+     * @throws  Tinebase_Exception_Record_Validation
+     */
+    public function getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass = 'Tinebase_Model_User')
+    {
         if(!array_key_exists($_property, $this->rowNameMapping)) {
             throw new Tinebase_Exception_InvalidArgument("invalid property $_property requested");
         }
