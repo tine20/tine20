@@ -125,39 +125,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * get list of groups
-     * 
-     * @legacy
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return array with results array & totalcount (int)
-     * 
-     * @deprecated
-     * @todo    remove this if it isn't used anymore
-     */
-    public function getGroups($filter, $sort, $dir, $start, $limit)
-    {
-        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Calling deprecated function.");
-        
-        $filter = array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => $filter),
-        );
-        
-        $paging = array(
-            'sort'  => $sort,
-            'dir'   => $dir,
-            'start' => $start,
-            'limit' => $limit
-        );
-        
-        return $this->searchGroups($filter, $paging);
-    }
-    
-    /**
      * Search for groups matching given arguments
      *
      * @param  array $_filter
@@ -242,7 +209,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Setting state: {$name} -> {$value}");
         Tinebase_State::getInstance()->setState($name, $value);
     }
-    
     
     /**
      * adds a new personal tag
