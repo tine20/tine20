@@ -302,7 +302,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function getUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User')
     {
-        $user = parent::getUserByProperty($_property, $_accountId, $_accountClass);
+        $user = $this->getUserByPropertyFromSqlBackend($_property, $_accountId, $_accountClass);
 
         // append data from ldap plugins
         foreach ($this->_plugins as $plugin) {
