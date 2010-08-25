@@ -79,7 +79,7 @@ class Setup_Controller
      */
     private function __construct()
     {
-        // setup actions could take quite a while we try to set max execution time to 5 minutes
+        // setup actions could take quite a while we try to set max execution time to unlimited
         Setup_Core::setExecutionLifeTime(0);
         
         if (!defined('MAXLOOPCOUNT')) {
