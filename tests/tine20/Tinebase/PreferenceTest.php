@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
@@ -33,7 +33,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
     /**
      * @var array test objects
      */
-    protected $objects = array();
+    protected $_createdPrefs = array();
 
     /**
      * Runs the test methods of this class.
@@ -65,7 +65,10 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {      
+    {
+        foreach ($this->_createdPrefs as $pref) {
+            $this->_instance->delete($pref);
+        }
     }
     
     /**
@@ -140,15 +143,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
     public function testForcedPreference()
     {
         $forcedPrefName ='testForcedPref';
-        $forcedPref = new Tinebase_Model_Preference(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
-            'name'              => $forcedPrefName,
-            'value'             => 'forced value',
-            'account_id'        => '0',
-            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type'              => Tinebase_Model_Preference::TYPE_FORCED
-        ));
-        $forcedPref = $this->_instance->create($forcedPref);
+        $forcedPref = $this->_createTestPreference($forcedPrefName);
         
         // set pref for user
         $this->_instance->testForcedPref = 'user value';
@@ -156,9 +151,6 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         $pref = $this->_instance->$forcedPrefName;
         
         $this->assertEquals($forcedPref->value, $pref);
-        
-        // cleanup
-        $this->_instance->delete($forcedPref);
     }
 
     /**
@@ -192,12 +184,22 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
         $this->_instance->{Tinebase_Preference::TIMEZONE} = 'Europe/Nicosia';
         $userIds = $this->_instance->getUsersWithPref(Tinebase_Preference::TIMEZONE, 'Europe/Berlin');
         
-        //print_r($userIds);
-        
         $this->assertTrue(! in_array(Setup_Core::getUser()->getId(), $userIds), 'admin user should have other timezone setting');
         $this->assertGreaterThan(4, count($userIds), 'too few users found');
         
         $this->_instance->{Tinebase_Preference::TIMEZONE} = 'Europe/Berlin';
+    }
+    
+    /**
+     * test search for preferences and check if preference that is not defined is removed from result
+     */
+    public function testSearchPreferences()
+    {
+        $testPref = $this->_createTestPreference('testPref');
+        
+        $result = $this->_instance->search($this->_getPreferenceFilter(Tinebase_Model_Preference::TYPE_FORCED));
+        
+        $this->assertTrue(count($result) == 0);
     }
     
     /******************** protected helper funcs ************************/
@@ -205,9 +207,10 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
     /**
      * get preference filter
      *
+     * @param string $_type
      * @return Tinebase_Model_PreferenceFilter
      */
-    protected function _getPreferenceFilter()
+    protected function _getPreferenceFilter($_type = Tinebase_Model_Preference::TYPE_NORMAL)
     {
         return new Tinebase_Model_PreferenceFilter(array(
             array(
@@ -221,8 +224,30 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
             array(
                 'field' => 'type', 
                 'operator' => 'equals', 
-                'value' => Tinebase_Model_Preference::TYPE_NORMAL
+                'value' => $_type
             )
         ));
+    }
+    
+    /**
+     * create test preference
+     * 
+     * @param string $_prefName
+     * @return Tinebase_Model_Preference
+     */
+    protected function _createTestPreference($_prefName)
+    {
+        $pref = new Tinebase_Model_Preference(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(),
+            'name'              => $_prefName,
+            'value'             => 'forced value',
+            'account_id'        => '0',
+            'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+            'type'              => Tinebase_Model_Preference::TYPE_FORCED
+        ));
+        $pref = $this->_instance->create($pref);
+        $this->_createdPrefs[] = $pref;
+        
+        return $pref;
     }
 }
