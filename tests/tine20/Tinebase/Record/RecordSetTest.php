@@ -73,6 +73,21 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($obj->getFirstRecord()->date_single === $clone->getFirstRecord()->date_single, 'member var of record is not cloned');
     }
     
+    public function testGetFirstRecord()
+    {
+        $obj = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
+        
+        $r0 = new Tinebase_Record_DummyRecord(array('id' => 0), true);
+        $r1 = new Tinebase_Record_DummyRecord(array('id' => 1), true);
+        $obj->addRecord($r0);
+        $obj->addRecord($r1);
+        
+        $this->assertTrue($obj->getFirstRecord() === $r0);
+        
+        $obj->removeRecord($r0);
+        $this->assertTrue($obj->getFirstRecord() === $r1);
+    }
+    
     public function testFind()
     {
         $toFind = new Tinebase_Record_DummyRecord(array('string' => 'toFind'), true);
