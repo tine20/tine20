@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-13 19:09+0100\n"
+"PO-Revision-Date: 2010-08-25 18:24+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -51,17 +51,21 @@ msgstr "Informacje"
 msgid "Setup Authentication"
 msgstr "Konfiguruj uwierzytelnianie"
 
-#: js/ConfigManagerPanel.js:67 js/EmailPanel.js:192
+#: js/ConfigManagerPanel.js:67
+#: js/EmailPanel.js:192
 msgid "Username"
 msgstr "Użytkownik"
 
-#: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
-#: js/EmailPanel.js:196 js/AuthenticationPanel.js:317
+#: js/ConfigManagerPanel.js:77
+#: js/ConfigManagerPanel.js:113
+#: js/EmailPanel.js:196
+#: js/AuthenticationPanel.js:317
 #: js/AuthenticationPanel.js:424
 msgid "Password"
 msgstr "Hasło"
 
-#: js/ConfigManagerPanel.js:83 js/ConfigManagerPanel.js:103
+#: js/ConfigManagerPanel.js:83
+#: js/ConfigManagerPanel.js:103
 msgid "Database"
 msgstr "Baza danych"
 
@@ -69,13 +73,18 @@ msgstr "Baza danych"
 msgid "Adapter"
 msgstr "Adapter"
 
-#: js/ConfigManagerPanel.js:92 js/EmailPanel.js:188 js/EmailPanel.js:296
+#: js/ConfigManagerPanel.js:92
+#: js/EmailPanel.js:188
+#: js/EmailPanel.js:296
 #: js/EmailPanel.js:408
 msgid "Hostname"
 msgstr "Komputer"
 
-#: js/ConfigManagerPanel.js:97 js/EmailPanel.js:201 js/EmailPanel.js:300
-#: js/EmailPanel.js:412 js/AuthenticationPanel.js:310
+#: js/ConfigManagerPanel.js:97
+#: js/EmailPanel.js:201
+#: js/EmailPanel.js:300
+#: js/EmailPanel.js:412
+#: js/AuthenticationPanel.js:310
 msgid "Port"
 msgstr "Port"
 
@@ -147,7 +156,8 @@ msgstr "włączone"
 msgid "Config file is not writable"
 msgstr "Brak uprawnień zapisu do pliku konfiguracyjnego"
 
-#: js/ConfigManagerPanel.js:208 js/AuthenticationPanel.js:593
+#: js/ConfigManagerPanel.js:208
+#: js/AuthenticationPanel.js:593
 msgid "Save config"
 msgstr "Zapisz konfigurację"
 
@@ -155,7 +165,8 @@ msgstr "Zapisz konfigurację"
 msgid "Download config file"
 msgstr "Pobierz plik konfiguracyjny"
 
-#: js/EmailPanel.js:156 js/AuthenticationPanel.js:186
+#: js/EmailPanel.js:156
+#: js/AuthenticationPanel.js:186
 #: js/AuthenticationPanel.js:207
 msgid "Backend"
 msgstr "W tle"
@@ -172,19 +183,24 @@ msgstr "SMTP"
 msgid "Imap"
 msgstr "IMAP"
 
-#: js/EmailPanel.js:204 js/EmailPanel.js:303
+#: js/EmailPanel.js:204
+#: js/EmailPanel.js:303
 msgid "Secure Connection"
 msgstr "Bezpieczne połączenie"
 
-#: js/EmailPanel.js:215 js/EmailPanel.js:314 js/EmailPanel.js:330
+#: js/EmailPanel.js:215
+#: js/EmailPanel.js:314
+#: js/EmailPanel.js:330
 msgid "None"
 msgstr "Brak"
 
-#: js/EmailPanel.js:216 js/EmailPanel.js:315
+#: js/EmailPanel.js:216
+#: js/EmailPanel.js:315
 msgid "TLS"
 msgstr "TLS"
 
-#: js/EmailPanel.js:217 js/EmailPanel.js:316
+#: js/EmailPanel.js:217
+#: js/EmailPanel.js:316
 msgid "SSL"
 msgstr "SSL"
 
@@ -206,11 +222,11 @@ msgstr "Dołącz domenę do loginu"
 
 #: js/EmailPanel.js:279
 msgid "Cyrus Admin"
-msgstr ""
+msgstr "Administrator - Cyrus"
 
 #: js/EmailPanel.js:282
 msgid "Cyrus Admin Password"
-msgstr ""
+msgstr "Hasło adminitratora - Cyrus"
 
 #: js/EmailPanel.js:288
 msgid "Smtp"
@@ -250,7 +266,7 @@ msgstr "Przypomnienie hasła"
 
 #: js/EmailPanel.js:402
 msgid "SIEVE"
-msgstr ""
+msgstr "FILTR"
 
 #: js/EmailPanel.js:436
 msgid "MySql Hostname"
@@ -300,7 +316,8 @@ msgstr "Status"
 msgid "Depends on"
 msgstr "Zależy od"
 
-#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
+#: js/ApplicationGridPanel.js:82
+#: js/EnvCheckGridPanel.js:207
 msgid "Install application"
 msgstr "Zainstaluj aplikację"
 
@@ -360,27 +377,33 @@ msgstr "Potwierdzenie hasła"
 msgid "Try to split username"
 msgstr "Spróbuj podzielić nazwę użytkownika"
 
-#: js/AuthenticationPanel.js:282 js/AuthenticationPanel.js:349
+#: js/AuthenticationPanel.js:282
+#: js/AuthenticationPanel.js:349
 msgid "Account canonical form"
 msgstr "Konto standardowe"
 
-#: js/AuthenticationPanel.js:286 js/AuthenticationPanel.js:353
+#: js/AuthenticationPanel.js:286
+#: js/AuthenticationPanel.js:353
 msgid "Account domain name "
 msgstr "Nazwa domeny konta"
 
-#: js/AuthenticationPanel.js:291 js/AuthenticationPanel.js:356
+#: js/AuthenticationPanel.js:291
+#: js/AuthenticationPanel.js:356
 msgid "Account domain short name"
 msgstr "Skrót nazwy domeny konta"
 
-#: js/AuthenticationPanel.js:306 js/AuthenticationPanel.js:416
+#: js/AuthenticationPanel.js:306
+#: js/AuthenticationPanel.js:416
 msgid "Host"
 msgstr "Komputer"
 
-#: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:421
+#: js/AuthenticationPanel.js:314
+#: js/AuthenticationPanel.js:421
 msgid "Login name"
 msgstr "Login"
 
-#: js/AuthenticationPanel.js:330 js/AuthenticationPanel.js:437
+#: js/AuthenticationPanel.js:330
+#: js/AuthenticationPanel.js:437
 msgid "Bind requires DN"
 msgstr "Bind wymaga nazwy domeny"
 
@@ -396,11 +419,13 @@ msgstr "Filtr wyszukiwania"
 msgid "Accounts storage"
 msgstr "Konta"
 
-#: js/AuthenticationPanel.js:385 js/AuthenticationPanel.js:523
+#: js/AuthenticationPanel.js:385
+#: js/AuthenticationPanel.js:523
 msgid "Default user group name"
 msgstr "Domyślna nazwa grupy użytkownika"
 
-#: js/AuthenticationPanel.js:389 js/AuthenticationPanel.js:526
+#: js/AuthenticationPanel.js:389
+#: js/AuthenticationPanel.js:526
 msgid "Default admin group name"
 msgstr "Domyślna nazwa grupy administratora"
 
@@ -492,8 +517,10 @@ msgstr "Zapisz konfigurację i zainstaluj"
 msgid "Passwords don't match"
 msgstr "Hasła nie są takie same"
 
-#: js/AuthenticationPanel.js:627 js/AuthenticationPanel.js:634
-#: js/AuthenticationPanel.js:638 js/AuthenticationPanel.js:649
+#: js/AuthenticationPanel.js:627
+#: js/AuthenticationPanel.js:634
+#: js/AuthenticationPanel.js:638
+#: js/AuthenticationPanel.js:649
 #: js/AuthenticationPanel.js:659
 msgid "Should not be empty"
 msgstr "Nie może być puste"

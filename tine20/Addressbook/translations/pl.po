@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-14 17:32+0100\n"
+"PO-Revision-Date: 2010-08-25 18:18+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,7 +18,8 @@ msgstr ""
 msgid "%s's personal addressbook"
 msgstr "%s's osobista książka adresowa"
 
-#: Setup/setup.xml:546 js/Addressbook.js:54
+#: Setup/setup.xml:546
+#: js/Addressbook.js:54
 msgid "Internal Contacts"
 msgstr "Kontakty wewnętrzne"
 
@@ -30,13 +31,18 @@ msgstr "Pan"
 msgid "Ms"
 msgstr "Pani"
 
-#: Setup/setup.xml:608 js/ContactEditDialog.js:120 js/ContactEditDialog.js:385
-#: js/ContactGridDetailsPanel.js:132 js/ContactGrid.js:98 js/Model.js:27
+#: Setup/setup.xml:608
+#: js/ContactEditDialog.js:120
+#: js/ContactEditDialog.js:385
+#: js/ContactGridDetailsPanel.js:132
+#: js/ContactGrid.js:98
+#: js/Model.js:27
 #: js/Model.js:152
 msgid "Company"
 msgstr "Firma"
 
-#: Setup/Update/Release3.php:38 Setup/Initialize.php:51
+#: Setup/Update/Release3.php:38
+#: Setup/Initialize.php:51
 msgid "All contacts I have read grants for"
 msgstr "Wszystkie kontakty, które wolno mi czytać"
 
@@ -84,7 +90,8 @@ msgstr "Utwórz albo uaktualnij ulubione ze wspólnej książki adresowej"
 msgid "Searching..."
 msgstr "Wyszukiwanie..."
 
-#: js/ContactEditDialog.js:36 js/ContactEditDialog.js:43
+#: js/ContactEditDialog.js:36
+#: js/ContactEditDialog.js:43
 msgid "Map"
 msgstr "Mapowanie"
 
@@ -92,56 +99,79 @@ msgstr "Mapowanie"
 msgid "Personal Information"
 msgstr "Informacje osobiste"
 
-#: js/ContactEditDialog.js:87 js/Model.js:29
+#: js/ContactEditDialog.js:87
+#: js/Model.js:29
 msgid "Salutation"
 msgstr "Forma grzecznościowa"
 
-#: js/ContactEditDialog.js:97 js/Model.js:22
+#: js/ContactEditDialog.js:97
+#: js/Model.js:22
 msgid "Title"
 msgstr "Tytuł"
 
-#: js/ContactEditDialog.js:104 js/ContactGrid.js:95 js/Model.js:20
+#: js/ContactEditDialog.js:104
+#: js/ContactGrid.js:95
+#: js/Model.js:20
 #: js/Model.js:150
 msgid "First Name"
 msgstr "Imię"
 
-#: js/ContactEditDialog.js:108 js/Model.js:21
+#: js/ContactEditDialog.js:108
+#: js/Model.js:21
 msgid "Middle Name"
 msgstr "Drugie imię"
 
-#: js/ContactEditDialog.js:112 js/ContactEditDialog.js:385
-#: js/ContactGrid.js:94 js/Model.js:19 js/Model.js:151
+#: js/ContactEditDialog.js:112
+#: js/ContactEditDialog.js:385
+#: js/ContactGrid.js:94
+#: js/Model.js:19
+#: js/Model.js:151
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/ContactEditDialog.js:125 js/ContactGrid.js:99 js/Model.js:28
+#: js/ContactEditDialog.js:125
+#: js/ContactGrid.js:99
+#: js/Model.js:28
 msgid "Unit"
 msgstr "Jednostka"
 
-#: js/ContactEditDialog.js:134 js/ContactGrid.js:97 js/Model.js:24
+#: js/ContactEditDialog.js:134
+#: js/ContactGrid.js:97
+#: js/Model.js:24
 msgid "Display Name"
 msgstr "Wyświetlana nazwa"
 
-#: js/ContactEditDialog.js:139 js/ContactGrid.js:100 js/Model.js:30
-#: js/Model.js:154 Export/Pdf.php:118
+#: js/ContactEditDialog.js:139
+#: js/ContactGrid.js:100
+#: js/Model.js:30
+#: js/Model.js:154
+#: Export/Pdf.php:118
 msgid "Job Title"
 msgstr "Stanowisko"
 
-#: js/ContactEditDialog.js:144 js/ContactGrid.js:128 js/Model.js:26
-#: js/Model.js:158 Export/Pdf.php:115
+#: js/ContactEditDialog.js:144
+#: js/ContactGrid.js:128
+#: js/Model.js:26
+#: js/Model.js:158
+#: Export/Pdf.php:115
 msgid "Birthday"
 msgstr "Urodziny"
 
-#: js/ContactEditDialog.js:148 js/Model.js:23
+#: js/ContactEditDialog.js:148
+#: js/Model.js:23
 msgid "Suffix"
 msgstr "Dopełnienie nazwiska (sufiks)"
 
-#: js/ContactEditDialog.js:152 js/ContactGrid.js:101 js/Model.js:31
+#: js/ContactEditDialog.js:152
+#: js/ContactGrid.js:101
+#: js/Model.js:31
 #: js/Model.js:155
 msgid "Job Role"
 msgstr "Pełniona funkcja"
 
-#: js/ContactEditDialog.js:156 js/ContactGrid.js:102 js/Model.js:33
+#: js/ContactEditDialog.js:156
+#: js/ContactGrid.js:102
+#: js/Model.js:33
 #: Export/Pdf.php:77
 msgid "Room"
 msgstr "Pokój"
@@ -152,87 +182,126 @@ msgstr "Pokój"
 msgid "Contact Information"
 msgstr "Informacje kontaktowe"
 
-#: js/ContactEditDialog.js:168 js/ContactGridDetailsPanel.js:140
-#: js/ContactGridDetailsPanel.js:164 js/ContactGrid.js:114 js/Model.js:47
+#: js/ContactEditDialog.js:168
+#: js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164
+#: js/ContactGrid.js:114
+#: js/Model.js:47
 #: js/Model.js:153
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/ContactEditDialog.js:172 js/ContactGridDetailsPanel.js:141
-#: js/ContactGridDetailsPanel.js:165 js/ContactGrid.js:115 js/Model.js:48
+#: js/ContactEditDialog.js:172
+#: js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165
+#: js/ContactGrid.js:115
+#: js/Model.js:48
 msgid "Mobile"
 msgstr "Komórka"
 
-#: js/ContactEditDialog.js:176 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166 js/ContactGrid.js:116 js/Model.js:49
+#: js/ContactEditDialog.js:176
+#: js/ContactGridDetailsPanel.js:142
+#: js/ContactGridDetailsPanel.js:166
+#: js/ContactGrid.js:116
+#: js/Model.js:49
 msgid "Fax"
 msgstr "Faks"
 
-#: js/ContactEditDialog.js:180 js/ContactGrid.js:119 js/Model.js:53
+#: js/ContactEditDialog.js:180
+#: js/ContactGrid.js:119
+#: js/Model.js:53
 msgid "Phone (private)"
 msgstr "Telefon (prywatny)"
 
-#: js/ContactEditDialog.js:184 js/ContactGrid.js:121 js/Model.js:55
+#: js/ContactEditDialog.js:184
+#: js/ContactGrid.js:121
+#: js/Model.js:55
 msgid "Mobile (private)"
 msgstr "Komórka (prywatna)"
 
-#: js/ContactEditDialog.js:188 js/ContactGrid.js:120 js/Model.js:54
+#: js/ContactEditDialog.js:188
+#: js/ContactGrid.js:120
+#: js/Model.js:54
 msgid "Fax (private)"
 msgstr "Faks (prywatny)"
 
-#: js/ContactEditDialog.js:192 js/ContactGridDetailsPanel.js:143
-#: js/ContactGridDetailsPanel.js:167 js/Model.js:58
+#: js/ContactEditDialog.js:192
+#: js/ContactGridDetailsPanel.js:143
+#: js/ContactGridDetailsPanel.js:167
+#: js/Model.js:58
 msgid "E-Mail"
 msgstr "E-mail"
 
-#: js/ContactEditDialog.js:197 js/Model.js:59
+#: js/ContactEditDialog.js:197
+#: js/Model.js:59
 msgid "E-Mail (private)"
 msgstr "E-mail (prywatny)"
 
-#: js/ContactEditDialog.js:203 js/ContactGridDetailsPanel.js:145
-#: js/ContactGridDetailsPanel.js:169 js/ContactGrid.js:123 js/Model.js:60
+#: js/ContactEditDialog.js:203
+#: js/ContactGridDetailsPanel.js:145
+#: js/ContactGridDetailsPanel.js:169
+#: js/ContactGrid.js:123
+#: js/Model.js:60
 msgid "Web"
 msgstr "WWW"
 
-#: js/ContactEditDialog.js:235 js/Model.js:159 js/Model.js:160 js/Model.js:161
+#: js/ContactEditDialog.js:235
+#: js/Model.js:159
+#: js/Model.js:160
+#: js/Model.js:161
 msgid "Company Address"
 msgstr "Adres firmy"
 
-#: js/ContactEditDialog.js:238 js/ContactEditDialog.js:261
-#: js/ContactGrid.js:103 js/Model.js:159 js/Model.js:162
+#: js/ContactEditDialog.js:238
+#: js/ContactEditDialog.js:261
+#: js/ContactGrid.js:103
+#: js/Model.js:159
+#: js/Model.js:162
 msgid "Street"
 msgstr "Ulica"
 
-#: js/ContactEditDialog.js:241 js/ContactEditDialog.js:264
+#: js/ContactEditDialog.js:241
+#: js/ContactEditDialog.js:264
 msgid "Street 2"
 msgstr "Ulica 2"
 
-#: js/ContactEditDialog.js:244 js/ContactEditDialog.js:267
+#: js/ContactEditDialog.js:244
+#: js/ContactEditDialog.js:267
 #: js/ContactGrid.js:105
 msgid "Region"
 msgstr "Województwo"
 
-#: js/ContactEditDialog.js:247 js/ContactEditDialog.js:270 js/Model.js:160
+#: js/ContactEditDialog.js:247
+#: js/ContactEditDialog.js:270
+#: js/Model.js:160
 #: js/Model.js:163
 msgid "Postal Code"
 msgstr "Kod pocztowy"
 
-#: js/ContactEditDialog.js:250 js/ContactEditDialog.js:273
-#: js/ContactGrid.js:104 js/Model.js:161 js/Model.js:164
+#: js/ContactEditDialog.js:250
+#: js/ContactEditDialog.js:273
+#: js/ContactGrid.js:104
+#: js/Model.js:161
+#: js/Model.js:164
 msgid "City"
 msgstr "Miasto"
 
-#: js/ContactEditDialog.js:254 js/ContactEditDialog.js:277
+#: js/ContactEditDialog.js:254
+#: js/ContactEditDialog.js:277
 #: js/ContactGrid.js:107
 msgid "Country"
 msgstr "Kraj"
 
-#: js/ContactEditDialog.js:258 js/Model.js:162 js/Model.js:163 js/Model.js:164
+#: js/ContactEditDialog.js:258
+#: js/Model.js:162
+#: js/Model.js:163
+#: js/Model.js:164
 #: Export/Pdf.php:89
 msgid "Private Address"
 msgstr "Adres prywatny"
 
-#: js/ContactEditDialog.js:297 js/Model.js:64
+#: js/ContactEditDialog.js:297
+#: js/Model.js:64
 msgid "Description"
 msgstr "Opis"
 
@@ -248,7 +317,8 @@ msgstr "Eksportuj jako PDF"
 msgid "Either {0} or {1} must be given"
 msgstr "Należy wprowadzić {0} albo {1}"
 
-#: js/ContactGridDetailsPanel.js:63 js/Model.js:99
+#: js/ContactGridDetailsPanel.js:63
+#: js/Model.js:99
 msgid "Contacts"
 msgstr "kontakty"
 
@@ -264,7 +334,8 @@ msgstr "Prywatne"
 msgid "Info"
 msgstr "Informacja"
 
-#: js/ContactGrid.js:92 js/Model.js:165
+#: js/ContactGrid.js:92
+#: js/Model.js:165
 msgid "Type"
 msgstr "Ikona"
 
@@ -300,7 +371,8 @@ msgstr "Kod pocztowy (adres prywatny)"
 msgid "Country (private)"
 msgstr "Kraj (adres prywatny)"
 
-#: js/ContactGrid.js:113 Export/Pdf.php:53
+#: js/ContactGrid.js:113
+#: Export/Pdf.php:53
 msgid "Email"
 msgstr "E-mail"
 
@@ -320,7 +392,8 @@ msgstr "E-mail (prywatny)"
 msgid "URL (private)"
 msgstr "URL (prywatny)"
 
-#: js/ContactGrid.js:125 js/Model.js:156
+#: js/ContactGrid.js:125
+#: js/Model.js:156
 msgid "Note"
 msgstr "Notatka"
 
@@ -332,7 +405,8 @@ msgstr "Strefa czasowa"
 msgid "Geo"
 msgstr "Położenie geograficzne"
 
-#: js/ContactGrid.js:129 js/Model.js:168
+#: js/ContactGrid.js:129
+#: js/Model.js:168
 msgid "Creation Time"
 msgstr "Utworzono"
 
@@ -398,7 +472,8 @@ msgstr "Komórka prywatna"
 msgid "Internal Contact"
 msgstr "Kontakty wewnętrzne"
 
-#: js/Addressbook.js:29 js/Model.js:103
+#: js/Addressbook.js:29
+#: js/Model.js:103
 msgid "Addressbook"
 msgid_plural "Addressbooks"
 msgstr[0] "Książka adresowa"
@@ -407,57 +482,58 @@ msgstr[2] "książki adresowe"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
-msgstr ""
+msgstr "Ulica (adres firmy)"
 
 #: js/Model.js:35
 msgid "Street 2 (Company Address)"
-msgstr ""
+msgstr "Ulica 2 (adres firmy)"
 
 #: js/Model.js:36
 msgid "City (Company Address)"
-msgstr ""
+msgstr "Miasto (adres firmy)"
 
 #: js/Model.js:37
 msgid "Region (Company Address)"
-msgstr ""
+msgstr "Region (adres firmy)"
 
 #: js/Model.js:38
 msgid "Postal Code (Company Address)"
-msgstr ""
+msgstr "Kod pocztowy (adres firmy)"
 
 #: js/Model.js:39
 msgid "Country (Company Address)"
-msgstr ""
+msgstr "Państwo (adres firmy)"
 
 #: js/Model.js:41
 msgid "Street (Private Address)"
-msgstr ""
+msgstr "Ulica (adres prywatny)"
 
 #: js/Model.js:42
 msgid "Street 2 (Private Address)"
-msgstr ""
+msgstr "Ulica 2 (adres prywatny)"
 
 #: js/Model.js:43
 msgid "City (Private Address)"
-msgstr ""
+msgstr "Miasto (adres prywatny)"
 
 #: js/Model.js:44
 msgid "Region (Private Address)"
-msgstr ""
+msgstr "Region (adres prywatny)"
 
 #: js/Model.js:45
 msgid "Postal Code (Private Address)"
-msgstr ""
+msgstr "Kod pocztowy (adres prywatny)"
 
 #: js/Model.js:46
 msgid "Country (Private Address)"
-msgstr ""
+msgstr "Państwo (adres prywatny)"
 
 #: js/Model.js:61
 msgid "Web (private)"
-msgstr ""
+msgstr "WWW (prywatne)"
 
-#: js/Model.js:99 js/Model.js:145
+#: js/Model.js:99
+#: js/Model.js:145
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "kontakt"
@@ -569,6 +645,7 @@ msgid "Other Data"
 msgstr "Inne dane"
 
 #~ msgid "addressbook"
+
 #~ msgid_plural "addressbooks"
 #~ msgstr[0] "Książka adresowa"
 #~ msgstr[1] "książki adresowe"
