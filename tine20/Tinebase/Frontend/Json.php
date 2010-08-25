@@ -569,54 +569,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter->setFromArrayInUsersTimezone($decodedFilter);
         }
         
-        // make sure account is set in filter
-        $userId = Tinebase_Core::getUser()->getId();
-        if (! $filter->isFilterSet('account')) {
-            $accountFilter = $filter->createFilter('account', 'equals', array(
-                'accountId' => $userId, 
-                'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
-            ));
-            $filter->addFilter($accountFilter);
-        } else {
-            // only admins can search for other users prefs
-            $accountFilter = $filter->getAccountFilter();
-            $accountFilterValue = $accountFilter->getValue(); 
-            if ($accountFilterValue['accountId'] != $userId && $accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
-                if (!Tinebase_Acl_Roles::getInstance()->hasRight($applicationName, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
-                    return array(
-                        'results'       => array(),
-                        'totalcount'    => 0
-                    );
-                }
-            }
-        }
-        
-        // check if application has preference class
-        if ($backend = Tinebase_Core::getPreference($applicationName)) {
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($filter->toArray(), true));
-            
-            $paging = new Tinebase_Model_Pagination(array(
-                'dir'       => 'ASC',
-                'sort'      => array('name')
-            ));
-            $allPrefs = $backend->search($filter, $paging);
-            
-            // get single matching preferences for each different pref
-            $records = $backend->getMatchingPreferences($allPrefs);
-            
-            // add default prefs if not already in array
-            if (! $filter->isFilterSet('name')) {
-                $missingDefaultPrefs = array_diff($backend->getAllApplicationPreferences(), $records->name);
-                foreach ($missingDefaultPrefs as $prefName) {
-                    $records->addRecord($backend->getPreferenceDefaults($prefName));
-                }
-            }
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
-            
+        $backend = Tinebase_Core::getPreference($applicationName);
+        if ($backend) {
+            $records = $backend->search($filter);
             $result = $this->_multipleRecordsToJson($records);
-
             
             // add translated labels and descriptions
             $translations = $backend->getTranslatedPreferences();
@@ -627,6 +583,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $prefArray = array_merge($prefArray, array('label' => $prefArray['name']));
                 }
             }
+            
         } else {
             $result = array();
         }

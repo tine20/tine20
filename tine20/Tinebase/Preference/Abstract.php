@@ -102,6 +102,70 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     /**************************** public functions *********************************/
 
     /**
+     * search for preferences
+     * 
+     * @param  Tinebase_Model_Filter_FilterGroup    $_filter
+     * @param  Tinebase_Model_Pagination            $_pagination
+     * @param  boolean                              $_onlyIds
+     * @return Tinebase_Record_RecordSet of preferences
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
+    {
+        // make sure account is set in filter
+        $userId = Tinebase_Core::getUser()->getId();
+        if (! $_filter->isFilterSet('account')) {
+            $accountFilter = $_filter->createFilter('account', 'equals', array(
+                'accountId' => $userId, 
+                'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+            ));
+            $_filter->addFilter($accountFilter);
+        } else {
+            // only admins can search for other users prefs
+            $accountFilter = $_filter->getAccountFilter();
+            $accountFilterValue = $accountFilter->getValue(); 
+            if ($accountFilterValue['accountId'] != $userId && $accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                if (!Tinebase_Acl_Roles::getInstance()->hasRight($applicationName, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
+                    return new Tinebase_Record_RecordSet('Tinebase_Model_Preference');
+                }
+            }
+        }
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
+        
+        $paging = new Tinebase_Model_Pagination(array(
+            'dir'       => 'ASC',
+            'sort'      => array('name')
+        ));
+        $allPrefs = parent::search($_filter, $_pagination, $_onlyIds);
+        
+        // get single matching preferences for each different pref
+        $records = $this->getMatchingPreferences($allPrefs);
+        
+        $allAppPrefs = $this->getAllApplicationPreferences();
+        // add default prefs if not already in array (only if no name or type filters are set)
+        if (! $_filter->isFilterSet('name') && ! $_filter->isFilterSet('type')) {
+            $missingDefaultPrefs = array_diff($allAppPrefs, $records->name);
+            foreach ($missingDefaultPrefs as $prefName) {
+                $records->addRecord($this->getPreferenceDefaults($prefName));
+            }
+        }
+        // remove all prefs that are not defined
+        $undefinedPrefs = array_diff($records->name, $allAppPrefs);
+        if (count($undefinedPrefs) > 0) {
+            $records->addIndices(array('name'));
+            foreach ($undefinedPrefs as $undefinedPrefName) {
+                $record = $records->find('name', $undefinedPrefName);
+                $records->removeRecord($record);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removed undefined preference from result: ' . $undefinedPrefName);
+            }
+        }
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
+        
+        return $records;
+    }
+    
+    /**
      * do some call json functions if preferences name match
      * - every app should define its own special handlers
      *
