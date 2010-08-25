@@ -490,8 +490,10 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      */
     public function getFirstRecord()
     {
-        if (array_key_exists(0, $this->_listOfRecords)) {
-            return $this->_listOfRecords[0];
+        if (count($this->_listOfRecords) > 0) {
+            foreach ($this->_listOfRecords as $idx => $record) {
+                return $record;
+            }
         } else {
             return NULL;
         }
