@@ -49,7 +49,11 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: _('Quick search'),    field: 'query',       operators: ['contains']},
-                {filtertype: 'tinebase.department'}
+                {filtertype: 'foreignrecord', 
+                    app: this.app,
+                    foreignRecordClass: Tine.Tinebase.Model.Department,
+                    ownField: 'type'
+                }
                 //new Tine.widgets.tags.TagFilter({app: this.app})
             ],
             defaultFilter: 'query',
