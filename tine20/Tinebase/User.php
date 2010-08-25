@@ -366,8 +366,8 @@ class Tinebase_User
             $user = $userBackend->updateUserInSqlBackend($user);
         } catch (Tinebase_Exception_NotFound $ten) {
             try {
-                $invalidUser = $userBackend->getUserByProperty('accountLoginName', $username, 'Tinebase_Model_FullUser');
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " remove invalid user: " . $username);
+                $invalidUser = $userBackend->getUserByPropertyFromSqlBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " remove invalid user: " . $username);
                 $userBackend->deleteUserInSqlBackend($invalidUser);
             } catch (Tinebase_Exception_NotFound $ten) {
                 // do nothing
