@@ -51,7 +51,16 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
     initComponent: function() {
         this.foreignField = this.foreignRecordClass.getMeta('idProperty');
         
-        this.label = Tine.Tinebase.appMgr.get(this.foreignRecordClass.getMeta('appName')).i18n.n_(
+        var foreignApp = Tine.Tinebase.appMgr.get(this.foreignRecordClass.getMeta('appName')),
+            i18n;
+        if (foreignApp) {
+            i18n = foreignApp.i18n;            
+        } else {
+            i18n = new Locale.Gettext();
+            i18n.textdomain('Tinebase');
+        }
+        
+        this.label = i18n.n_(
             this.foreignRecordClass.getMeta('recordName'), this.foreignRecordClass.getMeta('recordsName'), 1
         );
         
