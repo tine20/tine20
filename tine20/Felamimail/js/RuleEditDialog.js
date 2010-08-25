@@ -276,9 +276,8 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         id: this.idPrefix + 'fileinto',
                         layout: 'form',
                         items: [{
-                            // TODO folder selection combo
                             name: 'action_argument_fileinto',
-                            xtype: 'textfield',
+                            xtype: 'felamimailfolderselect',
                             width: 200,
                             hideLabel: true
                         }]
