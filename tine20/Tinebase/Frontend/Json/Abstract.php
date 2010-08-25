@@ -322,11 +322,11 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records, true));
         
         // get acls for records
-        if ($_records[0]->has('container_id')) {
+        if ($_records->getFirstRecord()->has('container_id')) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
 
-        if ($_records[0]->has('tags')) {
+        if ($_records->getFirstRecord()->has('tags')) {
             Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         }
         
