@@ -338,7 +338,11 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                         
                     case 'pwdCanChange':
                     case 'pwdMustChange':
-                        $_ldapData[$this->_rowNameMapping[$key]]     = $value->getTimestamp();
+                        if ($value instanceof Zend_Date) {
+                            $_ldapData[$this->_rowNameMapping[$key]]     = $value->getTimestamp();
+                        } else {
+                            $_ldapData[$this->_rowNameMapping[$key]]     = array();
+                        }
                         break;
                         
                     case 'acctFlags':
