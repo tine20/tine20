@@ -86,6 +86,11 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_EmailUser_Abstract
      */
     public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
     {
+        // do nothing when no email address is set
+        if (!empty($_user->accountEmailAddress)) {
+            return $_emailUser;
+        }
+        
         $imap = $this->_getImapConnection();
         
         $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
