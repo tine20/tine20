@@ -117,20 +117,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
      */
 	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
 	{
-	    $_emailUser->emailGID = $this->_options['emailGID'];
-	    $_emailUser->emailUID = $_user->accountLoginName;
-	    
-        $metaData = $this->_getUserMetaData($_user);
-        $ldapData = $this->_user2ldap($_emailUser);
-        
-        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectclass'], $this->_requiredObjectClass));
-                
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-        
-        $this->_ldap->update($metaData['dn'], $ldapData);
-        
-        return $this->getUserById($_user->getId());
+	    return $this->updateUser($_user, $_emailUser);
 	}
 	
 	/**
@@ -140,22 +127,25 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
      */
-	public function updateUser($_user, Tinebase_Model_EmailUser $_emailUser)
+	public function updateUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
 	{
+	    if (!empty($_user->accountEmailAddress)) {
+	        return $this->_addEmailAttributes($_user, $_emailUser);
+	    } else {
+	        return $this->_removeEmailAttributes($_user, $_emailUser);
+	    }
+	}
+	
+	protected function _addEmailAttributes(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
+	{
+        $_emailUser->emailGID = $this->_options['emailGID'];
         $_emailUser->emailUID = $_user->accountLoginName;
-	    
+        
         $metaData = $this->_getUserMetaData($_user);
         $ldapData = $this->_user2ldap($_emailUser);
         
-        // check if user has all required object classes.
-        foreach ($this->_requiredObjectClass as $className) {
-            if (!in_array($className, $metaData['objectclass'])) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn'] . ' had no email objectclass.');
-
-                return $this->addUser($_user, $_emailUser);
-            }
-        }
-
+        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectclass'], $this->_requiredObjectClass));
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
@@ -164,6 +154,26 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
         return $this->getUserById($_user->getId());
 	}
 
+    protected function _removeEmailAttributes(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
+    {
+        $metaData = $this->_getUserMetaData($_user);
+        
+        $ldapData = array();
+        
+        foreach ($this->_userPropertyNameMapping as $ldapKeyName) {
+            $ldapData[$ldapKeyName] = array();
+        }
+        
+        $ldapData['objectclass'] = array_unique(array_diff($metaData['objectclass'], $this->_requiredObjectClass));
+                
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
+        $this->_ldap->update($metaData['dn'], $ldapData);
+        
+        return $_emailUser;
+    }
+    
 	/**
      * delete user by id
      *
