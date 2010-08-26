@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-25 18:21+0100\n"
+"PO-Revision-Date: 2010-08-26 12:16+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -38,7 +38,7 @@ msgstr "Użyj Felamimail do tworzenia wiadomości pocztowych w oparciu o książ
 
 #: Preference.php:109
 msgid "Use for NOTES"
-msgstr "Użyj dla notatek"
+msgstr "Użyj z notatkami"
 
 #: Preference.php:110
 msgid "Save Note default Value."

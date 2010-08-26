@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-25 18:18+0100\n"
+"PO-Revision-Date: 2010-08-26 12:46+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -320,7 +320,7 @@ msgstr "Należy wprowadzić {0} albo {1}"
 #: js/ContactGridDetailsPanel.js:63
 #: js/Model.js:99
 msgid "Contacts"
-msgstr "kontakty"
+msgstr "Kontakty"
 
 #: js/ContactGridDetailsPanel.js:66
 msgid "Select contact"
