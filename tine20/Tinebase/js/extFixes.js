@@ -123,7 +123,7 @@ Ext.form.DateField.prototype.getValue = function(){
     
     // return the value that was set (has time information when unchanged in client) 
     // and not just the date part!
-    value =  this.fullDateTime;
+    var value =  this.fullDateTime;
     return value || "";
 };
 
