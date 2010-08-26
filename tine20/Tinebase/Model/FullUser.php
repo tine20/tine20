@@ -136,19 +136,25 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             && isset($this->sambaSAM->pwdMustChange) 
             && $this->sambaSAM->pwdMustChange instanceof Zend_Date) 
         {
-            if (isset($this->sambaSAM->pwdLastSet) && $this->sambaSAM->pwdLastSet instanceof Zend_Date) {
-                $dateToCompare = $this->sambaSAM->pwdLastSet;
-            } else {
-                $dateToCompare = Zend_Date::now();
-            }
-            
-            if ($this->sambaSAM->pwdMustChange->compare($dateToCompare) < 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                    . ' User ' . $this->accountLoginName . ' has to change his pw: ' . $this->sambaSAM->pwdMustChange . ' < ' . Zend_Date::now());
+            if ($this->sambaSAM->pwdMustChange->compare(Zend_Date::now()) < 0) {
+                if (!isset($this->sambaSAM->pwdLastSet)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                        . ' User ' . $this->accountLoginName . ' has to change his pw: it got never set by user');
+                        
+                    $result = TRUE;
                     
-                $result = TRUE;
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Password is up to date.');
+                } else if (isset($this->sambaSAM->pwdLastSet) && $this->sambaSAM->pwdLastSet instanceof Zend_Date) {
+                    $dateToCompare = $this->sambaSAM->pwdLastSet;
+                    
+                    if ($this->sambaSAM->pwdMustChange->compare($dateToCompare) > 0) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                            . ' User ' . $this->accountLoginName . ' has to change his pw: ' . $this->sambaSAM->pwdMustChange . ' > ' . $dateToCompare);
+                            
+                        $result = TRUE;
+                    }
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Password is up to date.');
+                }
             }
         }
         
