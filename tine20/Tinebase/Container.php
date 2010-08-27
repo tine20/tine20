@@ -223,7 +223,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $this->_getContainerAclTable()->insert($data);
         }
 
-        $this->_removeFromCache($containerId);
+        $this->_clearCache();
         
         return true;
     }
@@ -687,7 +687,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($container, 'delete', $container);
         $this->update($container);
         
-        $this->_removeFromCache($containerId);
+        $this->_clearCache();
         
         /*
         // move all contained objects to next available personal container and try again to delete container
@@ -749,7 +749,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
 
-        $this->_removeFromCache($containerId);
+        $this->_clearCache();
         
         return $this->getContainerById($_containerId);
     }
@@ -1010,7 +1010,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
-            $this->_removeFromCache($containerId);
+            $this->_clearCache();
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();            
@@ -1021,13 +1021,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * remove container from cache if cache is available
+     * remove all container related entries from cache
      *
-     * @param string $_cacheId
-     * 
      * @todo memcached can't use tags -> clear complete cache or don't use tags in caching?
      */
-    protected function _removeFromCache($_containerId) 
+    protected function _clearCache() 
     {        
         $cache = Tinebase_Core::getCache();
         if (!$cache || !$cache->getOption('caching')) {
