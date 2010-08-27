@@ -204,7 +204,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
 	        
             $accounts = $this->_ldap->search(
 	            $filter, 
-	            $this->_options['userDn'], 
+	            $this->_options['baseDn'], 
 	            Zend_Ldap::SEARCH_SCOPE_SUB, 
 	            array_values($this->_rowNameMapping)
 	        );
@@ -270,7 +270,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
         
         $users = $this->_ldap->search(
             $filter, 
-            $this->_options['userDn'], 
+            $this->_options['baseDn'], 
             $this->_options['userSearchScope'] 
         );
         
