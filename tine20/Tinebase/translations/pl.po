@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-26 13:07+0100\n"
+"PO-Revision-Date: 2010-08-27 09:44+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -581,7 +581,7 @@ msgstr "Edytuj {0} \"{1}\""
 
 #: js/widgets/dialog/EditDialog.js:340
 msgid "Transfering {0}..."
-msgstr "Dodawanie {0}..."
+msgstr "Dodaję {0}..."
 
 #: js/widgets/dialog/EditDialog.js:441
 #: js/widgets/dialog/CredentialsDialog.js:109

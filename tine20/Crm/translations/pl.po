@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-26 13:00+0100\n"
+"PO-Revision-Date: 2010-08-27 10:23+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr "%s zapytania osobiste"
 #: js/LeadGridDetailsPanel.js:514
 #: js/LeadGridPanel.js:180
 msgid "Customer"
-msgstr "Klienci"
+msgstr "Klient"
 
 #: Controller.php:153
 #: js/Contact.js:189
@@ -36,7 +36,7 @@ msgstr "Klienci"
 #: js/LeadGridDetailsPanel.js:497
 #: js/LeadGridPanel.js:179
 msgid "Partner"
-msgstr "Wspólnicy"
+msgstr "Wspólnik"
 
 #: Controller.php:154
 msgid "Reseller"
@@ -174,7 +174,7 @@ msgstr "Odłącz {0}"
 #: js/Product.js:188
 #: js/LinkGridPanel.js:57
 msgid "Unlink selected {0}"
-msgstr "Usuń zaznaczone {0}"
+msgstr "Usuń zaznaczony {0}"
 
 #: js/Product.js:218
 msgid "Search for Products to add ..."
@@ -247,7 +247,7 @@ msgstr "Źródło zapytania..."
 #: js/LinkGridPanel.js:37
 #: js/LinkGridPanel.js:38
 msgid "Add new {0}"
-msgstr "Dodaj nowy {0}"
+msgstr "Dodaj nowe {0}"
 
 #: js/LinkGridPanel.js:72
 msgid "Edit {0}"
@@ -261,17 +261,17 @@ msgstr "Edytuj zaznaczone {0}"
 #: js/LeadGridDetailsPanel.js:220
 #: js/LeadGridDetailsPanel.js:253
 msgid "Leadstates"
-msgstr "Status zapytań"
+msgstr "Statusy zapytania"
 
 #: js/AdminPanel.js:128
 #: js/LeadGridDetailsPanel.js:242
 msgid "Leadtypes"
-msgstr "Typy zapytań"
+msgstr "Typy zapytania"
 
 #: js/AdminPanel.js:132
 #: js/LeadGridDetailsPanel.js:231
 msgid "Leadsources"
-msgstr "Źródła zapytań"
+msgstr "Źródło zapytania"
 
 #: js/AdminPanel.js:140
 msgid "Defaults"
@@ -283,7 +283,7 @@ msgstr "Ustawienia domyślne"
 #: js/LeadEditDialog.js:350
 #: Export/Pdf.php:79
 msgid "Leadstate"
-msgstr "Status zapytań"
+msgstr "Status zapytania"
 
 #: js/AdminPanel.js:166
 #: js/LeadGridDetailsPanel.js:486

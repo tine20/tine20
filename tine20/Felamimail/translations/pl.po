@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-26 12:16+0100\n"
+"PO-Revision-Date: 2010-08-27 10:35+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -587,7 +587,7 @@ msgstr "Nazwa konta"
 
 #: js/AccountEditDialog.js:125
 msgid "User Email"
-msgstr "Poczta użytkownika"
+msgstr "Adres pocztowy użytkownika"
 
 #: js/AccountEditDialog.js:130
 msgid "User Name (From)"
