@@ -107,6 +107,37 @@
     background-image:url(../../images/oxygen/32x32/actions/emptytrash.png) !important;
 }
 
+/* rule grid actions */
+
+.action_new_rule {
+    background-image:url(../../images/oxygen/16x16/actions/plus.png) !important;
+}
+.x-btn-medium .action_new_rule {
+    background-image:url(../../images/oxygen/22x22/actions/plus.png) !important;
+}
+.x-btn-large .action_new_rule {
+    background-image:url(../../images/oxygen/32x32/actions/plus.png) !important;
+}
+
+.action_move_up {
+    background-image:url(../../images/oxygen/16x16/actions/arrow-up.png) !important;
+}
+.x-btn-medium .action_move_up {
+    background-image:url(../../images/oxygen/22x22/actions/arrow-up.png) !important;
+}
+.x-btn-large .action_move_up {
+    background-image:url(../../images/oxygen/32x32/actions/arrow-up.png) !important;
+}
+
+.action_move_down {
+    background-image:url(../../images/oxygen/16x16/actions/arrow-down.png) !important;
+}
+.x-btn-medium .action_move_down {
+    background-image:url(../../images/oxygen/22x22/actions/arrow-down.png) !important;
+}
+.x-btn-large .action_move_down {
+    background-image:url(../../images/oxygen/32x32/actions/arrow-down.png) !important;
+}
 
 /***** flag classes ******/
 

@@ -39,14 +39,72 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     evalGrants: false,
     usePagingToolbar: false,
     
-    //newRecordIcon: 'cal-resource',
+    newRecordIcon: 'action_new_rule',
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         
         this.initColumns();
+        //this.actionToolbarItems = this.getToolbarItems();
         
         this.supr().initComponent.call(this);
+    },
+    
+    /**
+     * init actions with actionToolbar, contextMenu and actionUpdater
+     * 
+     * @private
+     */
+    initActions: function() {
+
+        this.action_moveup = new Ext.Action({
+            text: this.app.i18n._('Move up'),
+            handler: this.onMoveUp,
+            iconCls: 'action_move_up'
+        });
+
+        this.action_movedown = new Ext.Action({
+            text: this.app.i18n._('Move down'),
+            handler: this.onMoveDown,
+            iconCls: 'action_move_down'
+        });
+
+        //register actions in updater
+        this.actionUpdater.addActions([
+            this.action_moveup,
+            this.action_movedown
+        ]);
+        
+        this.supr().initActions.call(this);
+    },
+    
+    /**
+     * add custom items to action toolbar
+     * 
+     * @return {Object}
+     * 
+     * TODO move them above each other
+     */
+    getActionToolbarItems: function() {
+        return [
+            this.action_moveup,
+            this.action_movedown
+        ];
+    },
+    
+    /**
+     * add custom items to context menu
+     * 
+     * @return {Array}
+     */
+    getContextMenuItems: function() {
+        var items = [
+            '-',
+            this.action_moveup,
+            this.action_movedown
+        ];
+        
+        return items;
     },
     
     /**
@@ -57,14 +115,14 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var cb = new Ext.ux.grid.CheckColumn({
             header: this.app.i18n._('Enabled'),
             dataIndex: 'enabled',
-            width: 55
+            width: 70
         });
         
         this.gridConfig.columns = [{
             id: 'id',
             header: this.app.i18n._("ID"),
             width: 40,
-            sortable: true,
+            sortable: false,
             dataIndex: 'id'
         }, {
             id: 'conditions',
