@@ -125,7 +125,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     public function getContactByUserId($_userId, $_ignoreACL = FALSE)
     {
         $contact = $this->_backend->getByUserId($_userId);
-        if ($this->_doContainerACLChecks && $_ignoreACL === FALSE && !$this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
+        if ($_ignoreACL === FALSE && !$this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
             throw new Addressbook_Exception_AccessDenied('read access to contact denied');
         }            
         return $contact;
@@ -152,16 +152,12 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         Tinebase_UserProfile::getInstance()->checkRight($_userId);
         
-        $doContainerACLChecks = $this->_doContainerACLChecks;
-        $this->_doContainerACLChecks = FALSE;
-        
-        $contact = $this->getContactByUserId($_userId);
+        $contact = $this->getContactByUserId($_userId, TRUE);
         $userProfile = Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
-        
-        $this->_doContainerACLChecks = $doContainerACLChecks;
         
         return $userProfile;
     }
+    
     /**
      * update profile portion of given contact
      * 
