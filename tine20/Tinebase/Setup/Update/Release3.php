@@ -235,7 +235,11 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         </table>');
         
         $this->_backend->createTable($declaration);
-        $this->setTableVersion('scheduler', '1');
+        Tinebase_Application::getInstance()->addApplicationTable(
+            Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
+            'scheduler', 
+            1
+        );
         
         $request = new Zend_Controller_Request_Simple(); 
         $request->setControllerName('Tinebase_Alarm');
@@ -426,8 +430,11 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             </table>'
         );
         $this->_backend->createTable($declaration);
-        
-        $this->setTableVersion('departments', '1');
+        Tinebase_Application::getInstance()->addApplicationTable(
+            Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
+            'departments', 
+            1
+        );
                 
         $this->setApplicationVersion('Tinebase', '3.12');
     }
