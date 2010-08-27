@@ -173,7 +173,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $doContainerACLChecks = $this->_doContainerACLChecks;
         $this->_doContainerACLChecks = FALSE;
         
-        $contact = $this->getContactByUserId($_userProfile->account_id);
+        $contact = $this->getContactByUserId($_userProfile->account_id, true);
         $userProfile = Tinebase_UserProfile::getInstance()->mergeProfileInfo($contact, $_userProfile);
         
         $contact = $this->update($userProfile);
