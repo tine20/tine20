@@ -429,12 +429,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 </declaration>
             </table>'
         );
-        $this->_backend->createTable($declaration);
-        Tinebase_Application::getInstance()->addApplicationTable(
-            Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
-            'departments', 
-            1
-        );
+        $this->createTable('departments', $declaration);
                 
         $this->setApplicationVersion('Tinebase', '3.12');
     }
