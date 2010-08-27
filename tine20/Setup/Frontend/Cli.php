@@ -198,11 +198,13 @@ class Setup_Frontend_Cli
             }
         }
 
+        $updatedApps = 0;
         if(count($applications) > 0) {
             $controller->updateApplications($applications);
+            $updatedApps++;
         }
         
-        echo "Updated " . count($applications) . " applications.\n";        
+        echo "Updated " . $updatedApps . " applications.\n";        
     }
 
     /**
