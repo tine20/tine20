@@ -88,6 +88,10 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_EmailUser_Abstract
     {
         // do nothing when no email address is set
         if (empty($_user->accountEmailAddress)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
+                " user {$_user->accountLoginName} has no email address. Don't create/update imap mailbox."
+            );
+            
             return $_emailUser;
         }
         
@@ -96,8 +100,6 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_EmailUser_Abstract
         $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
         
         $mailbox = $imap->listMailbox('', $mailboxString);
-        
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  imap config: ' . print_r($mailbox, true));
         
         if (!array_key_exists($mailboxString, $mailbox)) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' must create mailbox ');
