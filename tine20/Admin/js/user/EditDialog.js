@@ -542,6 +542,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		                        emptyText: this.app.i18n._('no password set'),
 		                        columnWidth: .5,
                                 passwordsMatch: true,
+                                enableKeyEvents: true,
                                 listeners: {
                                     scope: this,
                                     blur: function(field) {
@@ -555,9 +556,12 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 									destroy: function() {
 										// destroy password confirm window
 										this.passwordConfirmWindow.destroy();
-									}
+									},
+                                    keydown: function(field) {
+                                        field.passwordsMatch = false;
+                                    }
                                 },
-                                validateValue : function(value){
+                                validateValue : function(value) {
                                     return this.passwordsMatch;
                                 }
 		                    }
