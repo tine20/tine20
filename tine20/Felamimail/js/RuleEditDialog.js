@@ -230,6 +230,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         return [{
             xtype: 'panel',
             layout: 'border',
+            autoScroll: true,
             items: [
             {
                 title: this.app.i18n._('If all of the following conditions are met:'),
@@ -319,8 +320,8 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
 Tine.Felamimail.RuleEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 400,
+        width: 700,
+        height: 300,
         name: Tine.Felamimail.RuleEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.RuleEditDialog',
         contentPanelConstructorConfig: config
