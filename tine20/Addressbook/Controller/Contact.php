@@ -125,10 +125,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     public function getContactByUserId($_userId, $_ignoreACL = FALSE)
     {
         $contact = $this->_backend->getByUserId($_userId);
-        if ($_ignoreACL === FALSE && !$this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
+        if ($this->_doContainerACLChecks && $_ignoreACL === FALSE && !$this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
             throw new Addressbook_Exception_AccessDenied('read access to contact denied');
         }            
-        return $contact;            
+        return $contact;
     }
 
     /**
