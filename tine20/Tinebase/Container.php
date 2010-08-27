@@ -877,7 +877,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 	        $grants = $this->_getGrantsFromArray($rows, $accountId);
             
-            $cache->save($grants, $cacheKey);
+            $cache->save($grants, $cacheKey, array('container'));
         }
         return $grants;
     }
@@ -1029,22 +1029,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     protected function _removeFromCache($_containerId) 
     {        
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        
+        $cache = Tinebase_Core::getCache();
         if (!$cache || !$cache->getOption('caching')) {
             return;
         }
 
         if (ucfirst(Tinebase_Core::getConfig()->caching->backend) !== 'Memcached') {
-            try {
-                $accountId          = Tinebase_Model_User::convertUserIdToInt(Tinebase_Core::getUser());
-                $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 0);                
-                $cache->remove('getGrantsOfAccount' . $_containerId . $accountId . 1);                
-            } catch (Exception $e) {
-                // no user account set
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'No user account set. Error: ' . $e->getMessage());
-            }
-            $cache->remove('getContainerById' . $_containerId);
             $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
         } else {
             $cache->clean(Zend_Cache::CLEANING_MODE_ALL);                
