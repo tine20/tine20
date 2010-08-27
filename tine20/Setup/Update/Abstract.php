@@ -168,7 +168,9 @@ class Setup_Update_Abstract
             Tinebase_Application::getInstance()->getApplicationByName($_application), 
             $_tableName, 
             1
-        );        
+        );
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Created new table ' . $_tableName);
     }
     
     /**
