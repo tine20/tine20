@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Update
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * @version     $Id: Abstract.php 1013 2008-03-11 21:45:31Z nelius_weiss $
  */
@@ -103,10 +103,15 @@ class Setup_Update_Abstract
 	 * version is stored in database table "applications_tables"
 	 *
 	 * @param string tableName
-	 * @return int version number 
+	 * @return int version number
+	 * @throws Setup_Exception_NotFound
 	 */	 
     public function setTableVersion($_tableName, $_version)
     {
+        if ($this->getTableVersion($_tableName) == 0) {
+            throw new Setup_Exception_NotFound('Table ' . $_tableName . ' not found in applications table or previous version number invalid.');
+        }
+        
         $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
         $where  = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_tableName),
