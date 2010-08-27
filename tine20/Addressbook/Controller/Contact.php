@@ -162,7 +162,9 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * update profile portion of given contact
      * 
      * @param  Addressbook_Model_Contact $_userProfile
-     * @return Addressbook_Model_Contact 
+     * @return Addressbook_Model_Contact
+     * 
+     * @todo think about adding $_ignoreACL to generic update() to simplify this
      */
     public function updateUserProfile($_userProfile)
     {
