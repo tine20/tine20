@@ -155,6 +155,23 @@ class Setup_Update_Abstract
     }
     
     /**
+     * create new table and add it to application tables
+     * 
+     * @param string $_tableName
+     * @param Setup_Backend_Schema_Table_Abstract $_table
+     * @param string $_application
+     */
+    public function createTable($_tableName, Setup_Backend_Schema_Table_Abstract $_table, $_application = 'Tinebase')
+    {
+        $this->_backend->createTable($_table);
+        Tinebase_Application::getInstance()->addApplicationTable(
+            Tinebase_Application::getInstance()->getApplicationByName($_application), 
+            $_tableName, 
+            1
+        );        
+    }
+    
+    /**
      * rename table in applications table
      *
      * @param string $_oldTableName
