@@ -73,7 +73,9 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             cardLayout.setActiveItem(this.idPrefix + type);
             if (this.record.get('action_type') == type) {
                 var field = this.getForm().findField('action_argument_' + type);
-                field.setValue(this.record.get('action_argument'));
+                if (field !== null) {
+                    field.setValue(this.record.get('action_argument'));
+                }
             }
         }
     },
@@ -107,8 +109,9 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.record.set('conditions', this.getConditions());
         
-        var argumentField = this.getForm().findField('action_argument_' + this.actionTypeCombo.getValue());
-        this.record.set('action_argument', argumentField.getValue());
+        var argumentField = this.getForm().findField('action_argument_' + this.actionTypeCombo.getValue()),
+            argumentValue = (argumentField !== null) ? argumentField.getValue() : '';
+        this.record.set('action_argument', argumentValue);
     },
     
     /**
