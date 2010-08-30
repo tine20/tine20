@@ -134,6 +134,28 @@ class Tinebase_Frontend_Json_Container
     }
     
     /**
+     * sets color of a container
+     * 
+     * @param  int      $containerId
+     * @param  string   $color
+     * @return array    updated container
+     * @throws Tinebase_Exception
+     */
+    public function setContainerColor($containerId, $color)
+    {
+        try {
+            $container = Tinebase_Container::getInstance()->setContainerColor($containerId, $color);
+        } catch (Tinebase_Exception $e) {
+            throw new Tinebase_Exception('Container not found or permission to set containername denied!');
+        }
+        
+        $result = $container->toArray();
+        $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
+        $result['path'] = $container->getPath();
+        return $result;
+    }
+    
+    /**
      * returns container grants
      * 
      * @param   int     $containerId
