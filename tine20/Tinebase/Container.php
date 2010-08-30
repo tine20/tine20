@@ -755,6 +755,41 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * set container color, if the user has the required right
+     *
+     * @param   int $_containerId
+     * @param   string $_color the new color
+     * @return  Tinebase_Model_Container
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function setContainerColor($_containerId, $_color)
+    {
+        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+
+        if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
+            throw new Tinebase_Exception_AccessDenied('Permission to set color of container denied.');
+        }
+        
+        if (! preg_match('/^#[0-9a-fA-F]{6}$/', $_color)) {
+            throw new Tinebase_Exception_UnexpectedValue('color is not valid');
+        }
+        
+        $where = array(
+            $this->_db->quoteInto('id = ?', $containerId)
+        );
+        
+        $data = array(
+            'color' => $_color
+        );
+        
+        $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+
+        $this->_removeFromCache($containerId);
+        
+        return $this->getContainerById($_containerId);
+    }
+    
+    /**
      * check if the given user user has a certain grant
      *
      * @param   string|Tinebase_Model_User          $_accountId
