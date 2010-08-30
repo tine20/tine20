@@ -397,7 +397,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $groupDn);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
         
-        $this->_ldap->deleteProperty($groupDn, $ldapData);
+        try {
+            $this->_ldap->deleteProperty($groupDn, $ldapData);
+        } catch (Zend_Ldap_Exception $zle) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 
+                "failed to remove groupmember {$accountMetaData['dn']} from group $groupDn: " . $zle->getMessage()
+            );
+        }
     }
         
     
