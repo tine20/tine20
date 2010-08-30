@@ -41,6 +41,13 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     protected $_currentAccount = NULL;
     
     /**
+     * disable events on demand
+     * 
+     * @var mixed   false => no events filtered, true => all events filtered, array => disable only specific events
+     */
+    protected $_disabledEvents = false;
+    
+    /**
      * generic check admin rights function
      * rules: 
      * - ADMIN right includes all other rights
@@ -150,5 +157,21 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         }
         
         return call_user_func(array($_controllerName, 'getInstance')); 
+    }
+    
+    /**
+     * suspend processing of event
+     */
+    public function suspendEvents()
+    {
+        $this->_disabledEvents = true;
+    }
+
+    /**
+     * resume processing of events
+     */
+    public function resumeEvents()
+    {
+        $this->_disabledEvents = false;
     }
 }
