@@ -40,6 +40,15 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/document-properties.png) !important;
 }
 
+.action_changecolor {
+    background-image:url(../../images/oxygen/16x16/actions/color-line.png) !important;
+}
+.x-btn-medium .action_changecolor {
+    background-image:url(../../images/oxygen/22x22/actions/color-line.png) !important;
+}
+.x-btn-large .action_changecolor {
+    background-image:url(../../images/oxygen/32x32/actions/color-line.png) !important;
+}
 
 .action_delete {
     background-image:url(../../images/oxygen/16x16/actions/edit-delete.png) !important;
