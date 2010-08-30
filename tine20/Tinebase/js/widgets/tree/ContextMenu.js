@@ -177,6 +177,30 @@ Tine.widgets.tree.ContextMenu = {
             },
             
             /**
+             * set color
+             */
+            changeNodeColor: function(cp, color) {
+                if (this.ctxNode) {
+                    var node = this.ctxNode;
+                        Ext.Ajax.request({
+                            params: {
+                                method: config.backend + '.set' + config.backendModel + 'Color',
+                                containerId: node.attributes.container.id,
+                                color: '#' + color
+                            },
+                            scope: this,
+                            success: function(_result, _request){
+                                var nodeData = Ext.util.JSON.decode(_result.responseText);
+                                node.getUI().colorNode.setStyle({'color': nodeData.color});
+                                node.attributes.color = nodeData.color;
+                                this.fireEvent('containercolorset', nodeData);
+                            }
+                        });
+                
+                }
+            },
+            
+            /**
              * manage permissions
              * 
              */
@@ -236,6 +260,19 @@ Tine.widgets.tree.ContextMenu = {
                         iconCls: 'action_rename',
                         handler: handler.renameNode,
                         scope: config.scope
+                    }));
+                    break;
+                case 'changecolor':
+                    items.push(new Ext.Action({     
+                        text: String.format(_('Set color for {0}'), config.nodeName),
+                        iconCls: 'action_changecolor',
+                        menu: new Ext.menu.ColorMenu({
+                            scope: this,
+                            listeners: {
+                                select: handler.changeNodeColor,
+                                scope: config.scope
+                            }
+                        })                                        
                     }));
                     break;
                 case 'grants':
