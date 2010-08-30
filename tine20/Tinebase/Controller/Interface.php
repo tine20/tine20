@@ -22,5 +22,15 @@ interface Tinebase_Controller_Interface
     /**
      * Instance of Controller Object.
      */
-    public static function getInstance();   
+    public static function getInstance();
+       
+    /**
+     * suspend processing of events
+     */
+    public function suspendEvents();
+
+    /**
+     * resume processing of events
+     */
+    public function resumeEvents();
 }
