@@ -433,4 +433,24 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 
         $this->setApplicationVersion('Tinebase', '3.12');
     }
+    
+    /**
+     * update to 3.13
+     * - add color to container table
+     */
+    public function update_12()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>color</name>
+                <type>text</type>
+                <length>7</length>
+                <default>NULL</default>
+            </field>');
+        $this->_backend->addCol('container', $declaration, 3);
+        
+        $this->setTableVersion('container', '3');
+        $this->setApplicationVersion('Tinebase', '3.13');
+    }
+
 }
