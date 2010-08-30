@@ -53,7 +53,13 @@ Tine.widgets.container.TreePanel = function(config) {
          * Fires when a container got renamed
          * @param {container} the container whose permissions where changed
          */
-        'containerpermissionchange'
+        'containerpermissionchange',
+        /**
+         * @event containercolorset
+         * Fires when a container color got changed
+         * @param {container} the container whose color where changed
+         */
+        'containercolorset'
     );
         
     Tine.widgets.container.TreePanel.superclass.constructor.call(this);
@@ -91,6 +97,11 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * grant which is required to select leaf node(s)
      */
     requiredGrant: 'readGrant',
+    /**
+     * @cfg {Boolean} useContainerColor
+     * use container colors
+     */
+    useContainerColor: false,
     
     useArrows: true,
     border: false,
@@ -175,6 +186,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforeNodeDrop, this);
+        this.on('append', this.onAppendNode, this);
         
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
@@ -299,13 +311,24 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             backendModel: 'Container'
         });
         
-        this.contextMenuSingleContainer= Tine.widgets.tree.ContextMenu.getMenu({
+        this.contextMenuSingleContainer = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.containerName,
-            actions: ['delete', 'rename', 'grants'],
+            actions: ['delete', 'rename', 'grants'].concat(this.useContainerColor ? ['changecolor'] : []),
             scope: this,
             backend: 'Tinebase_Container',
             backendModel: 'Container'
         });
+    },
+    
+    /**
+     * called when node is appended to this tree
+     */
+    onAppendNode: function(tree, parent, appendedNode, idx) {
+        if (this.useContainerColor && appendedNode.leaf) {
+            appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
+                this.colorNode = Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#9673;&nbsp', style: {color: appendedNode.attributes.container.color}}, true);
+            }, appendedNode.ui);
+        }
     },
     
     /**
