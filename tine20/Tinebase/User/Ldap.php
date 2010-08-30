@@ -69,7 +69,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         'accountHomeDirectory'      => 'homedirectory',
         'accountLoginShell'         => 'loginshell',
         'accountStatus'             => 'shadowinactive'
-        );
+    );
 
     /**
      * objectclasses required by this backend
