@@ -130,4 +130,44 @@ class Tinebase_State
         
         return $result;
     }
+    
+    /**
+     * decoder for the extjs state encoder
+     * 
+     * @param  mixed $_value
+     * @return mixed
+     */
+    public static function decode($_value)
+    {
+        $val = urldecode($_value);
+        list ($type, $data) = explode(':', $val);
+        
+        switch ($type) {
+            case 'a': //array
+                $array = array();
+                
+                $entries = explode('^', $data);
+                foreach ($entries as $entry) {
+                    $array[] = self::decode($entry);
+                }
+                return $array;
+                break;
+                
+            case 'n': // number
+            case 's': //string
+                return $data;
+                break;
+                
+            case 'o': //object
+                $object = array();
+                
+                $entries = explode('^', $data);
+                foreach ($entries as $entry) {
+                    list ($p, $v) = explode ('=', $entry);
+                    $object[$p] = self::decode($v);
+                }
+                return $object;
+                break;
+        }
+    }
 }
