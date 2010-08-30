@@ -71,6 +71,7 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
     recordClass: Tine.Calendar.Model.Event,
     ddGroup: 'cal-event',
     filterMode: 'filterToolbar',
+    useContainerColor: true,
     
     initComponent: function() {
         this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
@@ -115,24 +116,6 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         if (attr.container) {
             attr.container.capabilites_private = true;
         }
-        
-        attr.listeners = {
-            append: function(tree, node, appendedNode, index) {
-                if (appendedNode.leaf) {
-                    var container = appendedNode.attributes.container;
-                    // dynamically initialize colorMgr if needed
-                    if (! Tine.Calendar.colorMgr) {
-                        Tine.Calendar.colorMgr = new Tine.Calendar.ColorManager({});
-                    }
-                    var colorSet = Tine.Calendar.colorMgr.getColor(container);
-                    appendedNode.ui.render = appendedNode.ui.render.createSequence(function() {
-                        //Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&bull;&nbsp', style: {color: colorSet.color}})
-                        Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#9673;&nbsp', style: {color: colorSet.color}})
-                        //Ext.DomHelper.insertAfter(this.iconNode, {tag: 'span', html: '&nbsp;&#x2b24;&nbsp', style: {color: colorSet.color}})
-                    }, appendedNode.ui);
-                }
-            }
-        };
     },
     
     /**
