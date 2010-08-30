@@ -166,7 +166,6 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
     public function delete($_ids)
     {
         $courses = $this->getMultiple($_ids);
-        parent::delete($_ids);
         
         $groupController = Admin_Controller_Group::getInstance();
         $userController = Admin_Controller_User::getInstance();
@@ -179,8 +178,14 @@ class Courses_Controller_Course extends Tinebase_Controller_Record_Abstract
             $usersToDelete = array_merge($usersToDelete, $groupController->getGroupMembers($course->group_id));
         }
         
+        Courses_Controller::getInstance()->suspendEvents();
+        
         $userController->delete(array_unique($usersToDelete));
         $groupController->delete(array_unique($groupsToDelete));
+        
+        Courses_Controller::getInstance()->resumeEvents();
+        
+        parent::delete($_ids);
     }
     
     /**
