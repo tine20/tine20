@@ -784,7 +784,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
 
-        $this->_removeFromCache($containerId);
+        $this->_clearCache();
         
         return $this->getContainerById($_containerId);
     }
