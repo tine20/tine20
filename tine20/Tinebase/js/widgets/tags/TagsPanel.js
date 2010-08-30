@@ -227,6 +227,7 @@ Tine.widgets.tags.TagPanel = Ext.extend(Ext.Panel, {
                                 }),
                                 new Ext.Action({     
                                     text: _('Change Color'),
+                                    iconCls: 'action_changecolor',
                                     scope: this,
                                     menu: new Ext.menu.ColorMenu({
                                         // not working any longer ->
