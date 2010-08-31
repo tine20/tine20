@@ -5,7 +5,7 @@
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        use functions from Tinebase_Frontend_Json_Abstract
@@ -256,6 +256,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
 
+    /**
+     * search for users/accounts
+     * 
+     * @param array $filter
+     * @param array $paging
+     */
     public function searchUsers($filter, $paging)
     {
         $result = $this->getUsers($filter[0]['value'], $paging['sort'], $paging['dir'], $paging['start'], $paging['limit']);
