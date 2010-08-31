@@ -223,6 +223,13 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
             }
         }
         
+        if (version_compare($this->_device->acsversion, '12.0', '>=')) {
+            $airSyncBase = $_data->children('uri:AirSyncBase');
+            
+            if (isset($airSyncBase->Body) && isset($airSyncBase->Body->Data)) {
+                $task->description = $airSyncBase->Body->Data;
+            }
+        }
         // contact should be valid now
         $task->isValid();
         
