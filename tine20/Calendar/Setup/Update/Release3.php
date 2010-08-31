@@ -217,4 +217,69 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '3.6');
     }
+    
+    /**
+     * calendar colors: state -> container
+     */
+    public function update_6()
+    {
+        $tablePrefix = SQL_TABLE_PREFIX;
+        
+        // mialena fixed color map
+        $colorMap = array(
+            9  => '#FF6600',
+            16 => '#FF0000',
+            21 => '#3366FF',
+            24 => '#FF00FF',
+            27 => '#00FF00',
+            30 => '#993366',
+        );
+        
+        // $containerId => array($colorId => $usageCount)
+        $colorHistogram = array();
+        
+        $stmt = $this->_db->query("
+            SELECT *
+            FROM `{$tablePrefix}state` AS `state`
+        ");
+        
+        $states = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        foreach ($states as $state) {
+            $data = Zend_Json::decode($state['data']);
+            if (array_key_exists('cal-color-mgr-containers', $data)) {
+                $colorMgrData = Tinebase_State::decode($data['cal-color-mgr-containers']);
+                $containerColorMap = $colorMgrData['colorMap'];
+                foreach ($containerColorMap as $containerId => $colorId) {
+                    if (! array_key_exists($containerId, $colorHistogram)) {
+                        $colorHistogram[$containerId] = array();
+                    }
+                    
+                    if (! array_key_exists($colorId, $colorHistogram[$containerId])) {
+                        $colorHistogram[$containerId][$colorId] = 0;
+                    }
+                    
+                    $colorHistogram[$containerId][$colorId] = $colorHistogram[$containerId][$colorId] + 1;
+                }
+            }
+            
+            unset ($data['cal-color-mgr-containers']);
+            $this->_db->update($tablePrefix . 'state', array(
+                'data' => Zend_Json::encode($data),
+            ), "`id` = '{$state['id']}'");
+        }
+        
+        foreach ($colorHistogram as $containerId => $histogram) {
+            arsort($histogram);
+            reset($histogram);
+            $colorId = key($histogram);
+            $color = $colorMap[$colorId];
+            
+            $this->_db->update($tablePrefix . 'container', array(
+                'color' => $color,
+            ), "`id` = '{$containerId}'");
+        }
+        
+        $this->setApplicationVersion('Calendar', '3.7');
+    }
 }
