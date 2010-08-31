@@ -467,8 +467,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * -> use DOM extension
      * 
      * @return string
-     * 
-     * @todo perhaps we can remove the tidy code if it is slower than DOM
      */
     public function getPlainTextBody()
     {
