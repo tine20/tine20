@@ -360,7 +360,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         
         Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $grants, TRUE, FALSE);
         
-        // invalidate cache (no memcached support yet)
+        // invalidate cache
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('timeaccountGrants'));
     }
     

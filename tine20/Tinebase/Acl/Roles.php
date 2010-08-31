@@ -541,7 +541,7 @@ class Tinebase_Acl_Roles
             $this->_roleRightsTable->insert($data); 
         }
         
-        // invalidate cache (no memcached support yet)
+        // invalidate cache
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('rights'));
     }
 

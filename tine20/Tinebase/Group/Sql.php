@@ -153,7 +153,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             }
         }
         
-        // invalidate cache (no memcached support yet)
+        // invalidate cache
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));
     }
     
@@ -243,7 +243,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         try {
             $this->groupMembersTable->insert($data);
             
-            // invalidate cache (no memcached support yet)
+            // invalidate cache
             Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));     
                    
         } catch (Zend_Db_Statement_Exception $e) {
@@ -284,7 +284,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
          
         $this->groupMembersTable->delete($where);
         
-        // invalidate cache (no memcached support yet)
+        // invalidate cache
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('group'));
     }
     
