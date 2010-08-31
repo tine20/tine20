@@ -87,6 +87,9 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
         });
         
         this.on('beforeclick', this.onBeforeClick, this);
+        this.on('containercolorset', function() {
+            Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel().refresh(true);
+        });
         
         this.supr().initComponent.call(this);
     },
