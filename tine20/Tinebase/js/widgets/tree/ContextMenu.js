@@ -182,6 +182,7 @@ Tine.widgets.tree.ContextMenu = {
             changeNodeColor: function(cp, color) {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
+                    node.getUI().addClass("x-tree-node-loading");
                         Ext.Ajax.request({
                             params: {
                                 method: config.backend + '.set' + config.backendModel + 'Color',
@@ -194,6 +195,7 @@ Tine.widgets.tree.ContextMenu = {
                                 node.getUI().colorNode.setStyle({'color': nodeData.color});
                                 node.attributes.color = nodeData.color;
                                 this.fireEvent('containercolorset', nodeData);
+                                node.getUI().removeClass("x-tree-node-loading");
                             }
                         });
                 
