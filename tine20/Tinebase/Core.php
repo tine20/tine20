@@ -462,15 +462,18 @@ class Tinebase_Core
         try {
             $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
         } catch (Zend_Cache_Exception $e) {
+            $enabled = FALSE;
             if ('File' === $backendType && !is_dir($backendOptions['cache_dir'])) {
                 // create cache directory and re-try
                 if (mkdir($backendOptions['cache_dir'], 0770, true)) {
-                    self::setupCache($_enabled);
-                    return;
+                    $enabled = $_enabled;
                 }
             }
+            
+            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Cache error: ' . $e->getMessage());
 
-            throw $e;
+            self::setupCache($enabled);
+            return;
         }
 
 
