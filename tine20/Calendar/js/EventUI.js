@@ -258,6 +258,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             extraCls: extraCls,
             color: this.colorSet.color,
             bgColor: this.colorSet.light,
+            textColor: this.colorSet.text,
             zIndex: 100,
             width: width  +'px',
             height: '15px',
@@ -333,6 +334,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 extraCls: extraCls,
                 color: this.colorSet.color,
                 bgColor: this.colorSet.light,
+                textColor: this.colorSet.text,
                 zIndex: 100,
                 height: height + 'px',
                 left: Math.round(pos * 90 * 1/parallels) + '%',
@@ -369,11 +371,12 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
 Tine.Calendar.MonthViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     onSelectedChange: function(state){
         Tine.Calendar.MonthViewEventUI.superclass.onSelectedChange.call(this, state);
+        console.log(this);
         if(state){
             this.addClass('cal-monthview-active');
             this.setStyle({
                 'background-color': this.color,
-                'color':            '#FFFFFF'
+                'color':            this.colorSet.text
             });
             
         }else{
