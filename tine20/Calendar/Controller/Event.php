@@ -127,7 +127,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     	$ignoreUIDs = !empty($_event->uid) ? array($_event->uid) : array();
     	
     	// don't check if event is trasparent
-    	if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP) {
+    	if ($_event->transp == Calendar_Model_Event::TRANSP_TRANSP || count($_event->attendee) < 1) {
     	    return;
     	}
     	
