@@ -106,7 +106,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         // get timeaccount
         $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
         
-        if ($timeaccount->deadline == Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK) {
+        if (isset($timeaccount->deadline) && $timeaccount->deadline == Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Check if deadline is exceeded for timeaccount ' . $timeaccount->title);
             
             // it is only on monday allowed to add timesheets for last week
