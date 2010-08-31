@@ -100,6 +100,7 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
             'name'              => sprintf($translation->_("%s's personal calendar"), $account->accountFullName),
             'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
             'backend'           => 'Sql',
+            'color'             => '#FF6600',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId() 
         ));
         
