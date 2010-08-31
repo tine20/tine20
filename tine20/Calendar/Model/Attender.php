@@ -404,10 +404,11 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         $typeMap = array();
         
         foreach ($eventAttendee as $attendee) {
-            // resolve displaycontainers only if they are present...
+            // resolve displaycontainers only if they are present... -> only users have displaycontainer
             // ... they are not when used in filter context
-            $displaycontainerId = $attendee->displaycontainer_id;
-            if ($_resolveDisplayContainers && ! empty($displaycontainerId) && $displaycontainerId[0]) {
+            $displaycontainerId = array_diff($attendee->displaycontainer_id, array(''));
+            
+            if ($_resolveDisplayContainers && ! empty($displaycontainerId)) {
                 Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
             }
             
