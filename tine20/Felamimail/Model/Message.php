@@ -464,7 +464,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
 
     /**
      * get body as plain text with replaced blockquotes, stripped tags and replaced <br>s
-     * -> check if tidy or DOM extensions are installed. if not just strip the tags and replace <br>s
+     * -> check if tidy or DOM extensions are installed
      * 
      * @return string
      */
@@ -473,27 +473,22 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $result = '';
         
         if (extension_loaded('tidy')) {
-            $tidy = tidy_parse_string($this->body, array(), 'utf8');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using tidy extension to get plain text body.'); 
+            $tidy = tidy_parse_string($this->body, array(), 'utf8');
             $result = $this->_addQuotesAndStripTags($tidy->body());
 
-        } else if (extension_loaded('dom')) {
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using DOM extension to get plain text body.');
             $dom = new DOMDocument('1.0', 'utf-8');
             // use a hack to make sure html is loaded as utf8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
             $dom->loadHTML('<?xml encoding="UTF-8">' . $this->body);
             $bodyElements = $dom->getElementsByTagName('body');
             if ($bodyElements->length > 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using DOM extension to get plain text body.');
                 $result = $this->_addQuotesAndStripTags($bodyElements->item(0));
             } else {
                 throw new Felamimail_Exception('No body element found!');
             }
-        
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
-                . ' Extension "tidy" not found. You need to install/activate it to transform blockquotes in plaintext emails.');
-            $result = strip_tags(preg_replace('/\<br(\s*)?\/?\>/i', "\n", $this->body));
-        }
+        } 
         
         $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
         

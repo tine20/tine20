@@ -70,20 +70,11 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
         $result = $message->getPlainTextBody();
         //echo $result;
         
-        if (extension_loaded('tidy') || extension_loaded('dom')) {
-            $this->assertEquals("blabla\n" .
-                "> lalülüüla\n" .
-                "> \n" . 
-                "> > xyz\n" .
-                "\n" .
-                "jojo", $result);
-        } else {
-            $this->assertEquals("blabla\n" .
-                "lalülüüla\n" .
-                "\n" . 
-                "xyz\n" .
-                "\n" .
-                "jojo", $result);
-        }
+        $this->assertEquals("blabla\n" .
+            "> lalülüüla\n" .
+            "> \n" . 
+            "> > xyz\n" .
+            "\n" .
+            "jojo", $result);
     }
 }
