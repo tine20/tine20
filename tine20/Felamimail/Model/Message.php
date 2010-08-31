@@ -464,31 +464,25 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
 
     /**
      * get body as plain text with replaced blockquotes, stripped tags and replaced <br>s
-     * -> check if tidy or DOM extensions are installed
+     * -> use DOM extension
      * 
      * @return string
+     * 
+     * @todo perhaps we can remove the tidy code if it is slower than DOM
      */
     public function getPlainTextBody()
     {
         $result = '';
         
-        if (extension_loaded('tidy')) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using tidy extension to get plain text body.'); 
-            $tidy = tidy_parse_string($this->body, array(), 'utf8');
-            $result = $this->_addQuotesAndStripTags($tidy->body());
-
+        $dom = new DOMDocument('1.0', 'utf-8');
+        // use a hack to make sure html is loaded as utf8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
+        $dom->loadHTML('<?xml encoding="UTF-8">' . $this->body);
+        $bodyElements = $dom->getElementsByTagName('body');
+        if ($bodyElements->length > 0) {
+            $result = $this->_addQuotesAndStripTags($bodyElements->item(0));
         } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using DOM extension to get plain text body.');
-            $dom = new DOMDocument('1.0', 'utf-8');
-            // use a hack to make sure html is loaded as utf8 (@see http://php.net/manual/en/domdocument.loadhtml.php#95251)
-            $dom->loadHTML('<?xml encoding="UTF-8">' . $this->body);
-            $bodyElements = $dom->getElementsByTagName('body');
-            if ($bodyElements->length > 0) {
-                $result = $this->_addQuotesAndStripTags($bodyElements->item(0));
-            } else {
-                throw new Felamimail_Exception('No body element found!');
-            }
-        } 
+            throw new Felamimail_Exception('No body element found!');
+        }
         
         $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
         
@@ -507,6 +501,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * @return string
      * 
      * @todo we can transform more tags here, i.e. the <strong>BOLDTEXT</strong> tag could be replaced with *BOLDTEXT*
+     * @todo think about removing the tidy code
      */
     protected function _addQuotesAndStripTags($_node, $_quoteIndent = 0) {
         
