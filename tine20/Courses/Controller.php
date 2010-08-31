@@ -68,6 +68,14 @@ class Courses_Controller extends Tinebase_Controller_Abstract implements Tinebas
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
+        if ($this->_disabledEvents === true) {
+            // nothing todo
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' events are disabled. do nothing'
+            );
+            return;
+        }
+        
         switch(get_class($_eventObject)) {
             case 'Admin_Event_BeforeDeleteGroup':
                 // remove courses
