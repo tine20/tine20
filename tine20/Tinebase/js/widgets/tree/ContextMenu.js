@@ -193,7 +193,7 @@ Tine.widgets.tree.ContextMenu = {
                             success: function(_result, _request){
                                 var nodeData = Ext.util.JSON.decode(_result.responseText);
                                 node.getUI().colorNode.setStyle({'color': nodeData.color});
-                                node.attributes.color = nodeData.color;
+                                node.attributes.container.color = nodeData.color;
                                 this.fireEvent('containercolorset', nodeData);
                                 node.getUI().removeClass("x-tree-node-loading");
                             }
