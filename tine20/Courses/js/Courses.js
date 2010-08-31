@@ -117,17 +117,8 @@ Ext.reg('tine.courses.treepanel', Tine.Courses.TreePanel);
 Tine.Courses.coursesBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Courses',
     modelName: 'Course',
-    recordClass: Tine.Courses.Model.Course
-});
+    recordClass: Tine.Courses.Model.Course,
 
-/**
- * default backend
- */
-Tine.Courses.courseTypeBackend = new Tine.Tinebase.data.RecordProxy({
-    appName: 'Courses',
-    modelName: 'CourseType',
-    recordClass: Tine.Courses.Model.CourseType,
-    
     /**
      * deletes multiple records identified by their ids
      * 
@@ -147,4 +138,13 @@ Tine.Courses.courseTypeBackend = new Tine.Tinebase.data.RecordProxy({
         
         return this.doXHTTPRequest(options);
     }
+});
+
+/**
+ * default backend
+ */
+Tine.Courses.courseTypeBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Courses',
+    modelName: 'CourseType',
+    recordClass: Tine.Courses.Model.CourseType
 });
