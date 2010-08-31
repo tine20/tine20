@@ -1057,8 +1057,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     
     /**
      * remove all container related entries from cache
-     *
-     * @todo memcached can't use tags -> clear complete cache or don't use tags in caching?
      */
     protected function _clearCache() 
     {        
@@ -1067,11 +1065,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             return;
         }
 
-        if (ucfirst(Tinebase_Core::getConfig()->caching->backend) !== 'Memcached') {
-            $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
-        } else {
-            $cache->clean(Zend_Cache::CLEANING_MODE_ALL);                
-        }
+        $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
     }
 
     /**
