@@ -67,20 +67,23 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
             'body'  => 'blabla<br/><blockquote class="felamimail-body-blockquote">lalülüüla<br/><br/><blockquote>xyz</blockquote></blockquote><br/><br/>jojo'
         ));
         
-        if (extension_loaded('tidy')) {
+        $result = $message->getPlainTextBody();
+        //echo $result;
+        
+        if (extension_loaded('tidy') || extension_loaded('dom')) {
             $this->assertEquals("blabla\n" .
                 "> lalülüüla\n" .
                 "> \n" . 
                 "> > xyz\n" .
                 "\n" .
-                "jojo", $message->getPlainTextBody());
+                "jojo", $result);
         } else {
             $this->assertEquals("blabla\n" .
                 "lalülüüla\n" .
                 "\n" . 
                 "xyz\n" .
                 "\n" .
-                "jojo", $message->getPlainTextBody());
+                "jojo", $result);
         }
     }
 }
