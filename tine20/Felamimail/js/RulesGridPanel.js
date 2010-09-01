@@ -16,7 +16,6 @@ Ext.ns('Tine.Felamimail');
  * @class     Tine.Felamimail.RulesGridPanel
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
- * TODO         translate texts in action type renderer
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
@@ -43,9 +42,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
-        
         this.initColumns();
-        //this.actionToolbarItems = this.getToolbarItems();
         
         this.supr().initComponent.call(this);
     },
@@ -100,7 +97,6 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             if (switchRecord) {
                 // switch ids and resort store
-                
                 var oldId = record.id;
                     switchId = switchRecord.id;
 
@@ -174,25 +170,26 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, {
             id: 'conditions',
             header: this.app.i18n._("Conditions"),
-            width: 250,
+            width: 200,
             sortable: false,
             dataIndex: 'conditions',
             scope: this,
             renderer: this.conditionsRenderer
         }, {
             id: 'action',
-            header: this.app.i18n._("Action argument"),
-            width: 100,
+            header: this.app.i18n._("Action"),
+            width: 150,
             sortable: false,
-            dataIndex: 'action_argument'
-            //renderer: this.actionRenderer
+            dataIndex: 'action_type',
+            scope: this,
+            renderer: this.actionTypeRenderer
         }, {
             id: 'action',
-            header: this.app.i18n._("Action type"),
+            header: this.app.i18n._("Argument"),
             width: 100,
             sortable: false,
-            dataIndex: 'action_type'
-            //renderer: this.actionRenderer
+            dataIndex: 'action_argument',
+            renderer: this.actionArgumentRenderer
         }, cb];
         
         this.gridConfig.plugins = [cb]; 
@@ -235,11 +232,28 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * @param {Object} value
      * @return {String}
-     * 
-     * TODO activate again? or remove ...
      */
-    actionRenderer: function(value) {
-        return (value) ? value.type + ' ' + value.argument : '';
+    actionTypeRenderer: function(value) {
+        var conditions = Tine.Felamimail.RuleEditDialog.getConditions(this.app),
+            result = value;
+        
+        for (i=0; i < conditions.length; i++) {
+            if (conditions[i][0] == value) {
+                result =  conditions[i][1];
+            }
+        }
+            
+        return result;
+    },
+
+    /**
+     * action renderer
+     * 
+     * @param {Object} value
+     * @return {String}
+     */
+    actionArgumentRenderer: function(value) {
+        return Ext.util.Format.ellipsis(value, 30);
     },
     
     /**
@@ -292,8 +306,6 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         } else {
             this.store.remove(this.store.getById(recordData.id));
         }
-        
-        //Tine.log.debug(recordData);
         
         this.store.loadData({
             totalcount: 1,
