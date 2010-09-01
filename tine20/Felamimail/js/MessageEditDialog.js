@@ -223,6 +223,17 @@ Ext.namespace('Tine.Felamimail');
             if (this.replyToAll) {
                 this.to = this.to.concat(this.replyTo.get('to'));
                 this.cc = this.replyTo.get('cc');
+                
+                // remove own email from to/cc
+                var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('from'));
+                var emailRegexp = new RegExp(account.get('email'));
+                Ext.each(['to', 'cc'], function(field) {
+                    for (var i=0; i < this[field].length; i++) {
+                        if (emailRegexp.test(this[field][i])) {
+                            this[field].splice(i, 1);
+                        }
+                    }
+                }, this);
             }
         }
         
