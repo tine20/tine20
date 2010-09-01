@@ -16,7 +16,7 @@ Ext.ns('Tine.Felamimail');
  * @class     Tine.Felamimail.RulesGridPanel
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
- * TODO         make it possible to determine order of rules
+ * TODO         translate texts in renderers
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
@@ -56,39 +56,84 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initActions: function() {
-
         this.action_moveup = new Ext.Action({
             text: this.app.i18n._('Move up'),
             handler: this.onMoveUp,
+            scope: this,
             iconCls: 'action_move_up'
         });
 
         this.action_movedown = new Ext.Action({
             text: this.app.i18n._('Move down'),
             handler: this.onMoveDown,
+            scope: this,
             iconCls: 'action_move_down'
         });
 
-        //register actions in updater
-        this.actionUpdater.addActions([
-            this.action_moveup,
-            this.action_movedown
-        ]);
-        
         this.supr().initActions.call(this);
     },
     
+    onMoveUp: function() {
+        this.moveRecord('up');
+    },
+    
+    onMoveDown: function() {
+        this.moveRecord('down');
+    },
+    
+    /**
+     * move record up or down
+     * 
+     * @param {String} dir (up|down)
+     */
+    moveRecord: function(dir) {
+        var sm = this.grid.getSelectionModel();
+            
+        if (sm.getCount() == 1) {
+            var selectedRows = sm.getSelections();
+            record = selectedRows[0];
+            
+            // get next/prev record
+            var index = this.store.indexOf(record),
+                switchRecordIndex = (dir == 'down') ? index + 1 : index - 1,
+                switchRecord = this.store.getAt(switchRecordIndex);
+            
+            if (switchRecord) {
+                // switch ids and resort store
+                
+                var oldId = record.id;
+                    switchId = switchRecord.id;
+
+                record.set('id', Ext.id());
+                record.id = Ext.id();
+                switchRecord.set('id', oldId);
+                switchRecord.id = oldId;
+                record.set('id', switchId);
+                record.id = switchId;
+                
+                this.store.commitChanges();
+                this.store.sort('id', 'ASC');
+                sm.selectRecords([record]);
+            }
+        }
+    },
+
     /**
      * add custom items to action toolbar
      * 
      * @return {Object}
-     * 
-     * TODO move them above each other
      */
     getActionToolbarItems: function() {
         return [
-            this.action_moveup,
-            this.action_movedown
+            {
+                xtype: 'buttongroup',
+                columns: 1,
+                frame: false,
+                items: [
+                    this.action_moveup,
+                    this.action_movedown
+                ]
+            }
         ];
     },
     
@@ -118,12 +163,14 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 70
         });
         
-        this.gridConfig.columns = [{
+        this.gridConfig.columns = [
+        {
             id: 'id',
             header: this.app.i18n._("ID"),
             width: 40,
             sortable: false,
-            dataIndex: 'id'
+            dataIndex: 'id',
+            hidden: true
         }, {
             id: 'conditions',
             header: this.app.i18n._("Conditions"),
@@ -227,12 +274,14 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.store.remove(this.store.getById(recordData.id));
         }
         
-        Tine.log.debug(recordData);
+        //Tine.log.debug(recordData);
         
         this.store.loadData({
             totalcount: 1,
             results: [recordData]
         }, true);
+        
+        this.store.sort('id', 'ASC');
         
         // TODO it should be done like this:
         /*
