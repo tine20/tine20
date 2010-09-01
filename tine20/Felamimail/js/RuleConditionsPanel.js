@@ -64,6 +64,12 @@ Tine.Felamimail.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar
     }
 });
 
+/**
+ * get rule conditions for filter model and condition renderer
+ * 
+ * @param {} app
+ * @return {Array}
+ */
 Tine.Felamimail.RuleConditionsPanel.getFilterModel = function(app) {
     return [
         {label: app.i18n._('From'),     field: 'from',     operators: ['contains']},
@@ -71,4 +77,4 @@ Tine.Felamimail.RuleConditionsPanel.getFilterModel = function(app) {
         {label: app.i18n._('Subject'),  field: 'subject',  operators: ['contains']},
         {label: app.i18n._('Size'),     field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'}
     ];
-}
+};
