@@ -444,16 +444,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        try {
-            $accounts = $this->searchAccounts('');
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-            $accounts = array(
-                'results'       => array(),
-                'totalcount'    => 0,
-            );
-        }
+        $accounts = $this->searchAccounts('');
         
         $result = array(
             'accounts'              => $accounts
