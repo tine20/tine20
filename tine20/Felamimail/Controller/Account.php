@@ -120,15 +120,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         // check preference / config if we should add system account with tine user credentials or from config.inc.php
         if ($this->_useSystemAccount && ! $_onlyIds) {
-            if (count($result) == 0) { 
-                $result = $this->_addSystemAccount();
-            } else {
-                // check if resultset contains system account and add config values
-                foreach($result as $account) {
-                    if ($account->type == Felamimail_Model_Account::TYPE_SYSTEM) {
-                        $this->_addSystemAccountConfigValues($account);
-                    }
+            $systemAccountFound = FALSE;
+            // check if resultset contains system account and add config values
+            foreach($result as $account) {
+                if ($account->type == Felamimail_Model_Account::TYPE_SYSTEM) {
+                    $this->_addSystemAccountConfigValues($account);
+                    $systemAccountFound = TRUE;
                 }
+            }
+            if (! $systemAccountFound) {
+                $this->_addSystemAccount($result);
             }
         }
         
@@ -533,12 +534,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     /**
      * add system account with tine user credentials (from config.inc.php or config db) 
      *
-     * @return Tinebase_Record_RecordSet
+     * @param Tinebase_Record_RecordSet $_accounts of Felamimail_Model_Account
      */
-    protected function _addSystemAccount()
+    protected function _addSystemAccount(Tinebase_Record_RecordSet $_accounts)
     {
-        $result = new Tinebase_Record_RecordSet('Felamimail_Model_Account');
-        
         $userId = $this->_currentAccount->getId();
         $fullUser = Tinebase_User::getInstance()->getFullUserById($userId);
         $email = $this->_getAccountEmail($fullUser);
@@ -565,7 +564,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($systemAccount, 'create');
             $systemAccount = $this->_backend->create($systemAccount);
             $systemAccount = $this->updateCapabilities($systemAccount);
-            $result->addRecord($systemAccount);
+            $_accounts->addRecord($systemAccount);
             $this->_addedDefaultAccount = TRUE;
             
             // set as default account preference
@@ -577,8 +576,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create system account for user ' . $fullUser->accountLoginName . '. No email address given.');
         }
-                
-        return $result;
     }
     
     /**
