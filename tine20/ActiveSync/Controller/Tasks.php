@@ -144,7 +144,17 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         break;
                 }
             }
-        }        
+        }   
+
+        // body aka description
+        if (version_compare($this->_device->acsversion, '12.0', '>=')) {
+            $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
+            
+            $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
+            
+            $dataTag = $body->appendChild(new DOMElement('Data', null, 'uri:AirSyncBase'));
+            $dataTag->appendChild(new DOMText($data->description));
+        }
         
         // Completed is required
         if ($data->completed instanceof Zend_Date) {
@@ -230,7 +240,8 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                 $task->description = $airSyncBase->Body->Data;
             }
         }
-        // contact should be valid now
+        
+        // task should be valid now
         $task->isValid();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " taskData " . print_r($task->toArray(), true));
