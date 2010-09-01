@@ -76,6 +76,9 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         
         // NOTE cweiss 2010-06-15 this has to be precomputed on server side!
         attr.has_children = (account && account.get('has_children_support')) ? attr.has_children : true;
+        if (attr.has_children == "0") {
+            attr.has_children = false;
+        }
         
         Ext.apply(attr, {
     		leaf: !attr.has_children,
