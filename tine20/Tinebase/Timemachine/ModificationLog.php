@@ -255,15 +255,15 @@ class Tinebase_Timemachine_ModificationLog
             
             // we loop over the diffs! -> changes over fields which have no diff in storage are not in the loop!
             foreach ($diffs as $diff) {
-                if ($_newRecord[$diff->modified_attribute] instanceof Zend_Date) {
+                if (isset($_newRecord[$diff->modified_attribute]) && $_newRecord[$diff->modified_attribute] instanceof Zend_Date) {
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " we can't deal with dates yet -> non resolvable conflict!");
                     throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
                 }
-                if ($_newRecord[$diff->modified_attribute] == $diff->new_value) { 
+                if (isset($_newRecord[$diff->modified_attribute]) && $_newRecord[$diff->modified_attribute] == $diff->new_value) { 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user updated to same value for field '" .
                     $diff->modified_attribute . "', nothing to do.");
                     $resolved->addRecord($diff);
-                } elseif ($_newRecord[$diff->modified_attribute]  == $diff->old_value) {
+                } elseif (! isset($_newRecord[$diff->modified_attribute]) || $_newRecord[$diff->modified_attribute]  == $diff->old_value) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " merge current value into update data, as it was not changed in update request.");
                     $_newRecord[$diff->modified_attribute] = $diff->new_value;
                     $resolved->addRecord($diff);
