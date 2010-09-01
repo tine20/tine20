@@ -653,6 +653,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $this->_addConfigValuesToAccount($_account, $configKey, $values['keys'], $values['defaults']);
         }
         
+        $this->_addUserValues($_account);
+        
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->toArray(), TRUE)); 
     }
     
@@ -684,8 +686,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param string $_email
      * @return void
      */
-    protected function _addUserValues(Felamimail_Model_Account $_account, Tinebase_Model_FullUser $_user, $_email = NULL)
+    protected function _addUserValues(Felamimail_Model_Account $_account, Tinebase_Model_FullUser $_user = NULL, $_email = NULL)
     {
+        if ($_user === NULL) {
+            $_user = Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId());
+        }
+        
         // add user data
         $_account->user   = $_user->accountLoginName;
         $_account->email  = ($_email !== NULL) ? $_email : $_user->accountEmailAddress;
