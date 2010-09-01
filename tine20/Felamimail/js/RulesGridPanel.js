@@ -16,7 +16,7 @@ Ext.ns('Tine.Felamimail');
  * @class     Tine.Felamimail.RulesGridPanel
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
- * TODO         translate texts in renderers
+ * TODO         translate texts in action type renderer
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
@@ -177,20 +177,21 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 250,
             sortable: false,
             dataIndex: 'conditions',
+            scope: this,
             renderer: this.conditionsRenderer
-        }, {
-            id: 'action',
-            header: this.app.i18n._("Action type"),
-            width: 100,
-            sortable: false,
-            dataIndex: 'action_type'
-            //renderer: this.actionRenderer
         }, {
             id: 'action',
             header: this.app.i18n._("Action argument"),
             width: 100,
             sortable: false,
             dataIndex: 'action_argument'
+            //renderer: this.actionRenderer
+        }, {
+            id: 'action',
+            header: this.app.i18n._("Action type"),
+            width: 100,
+            sortable: false,
+            dataIndex: 'action_type'
             //renderer: this.actionRenderer
         }, cb];
         
@@ -246,6 +247,8 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * @param {Object} value
      * @return {String}
+     * 
+     * TODO show more conditions?
      */
     conditionsRenderer: function(value) {
         var result = '';
@@ -253,7 +256,23 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // show only first condition
         if (value && value.length > 0) {
             var condition = value[0]; 
-            result = '[' + condition.test + '] ' + condition.header + ' ' + condition.comperator + ' "' + condition.key + '"';
+            
+            // get header/comperator translation
+            var filterModel = Tine.Felamimail.RuleConditionsPanel.getFilterModel(this.app),
+                header, comperator, i;
+            for (i=0; i < filterModel.length; i++) {
+                if (condition.header == filterModel[i].field) {
+                    header = filterModel[i].label;
+                    if (condition.header == 'size') {
+                        comperator = (condition.comperator == 'over') ? _('is greater than') : _('is less than');
+                    } else {
+                        comperator = _(condition.comperator);
+                    }
+                }
+            }
+
+            result = //'[' + condition.test + '] ' + 
+                header + ' ' + comperator + ' "' + condition.key + '"';
         }
         
         return result;
