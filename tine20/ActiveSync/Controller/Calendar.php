@@ -908,7 +908,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             );
         }
                 
-        // we ignore the folders of others users and shared folders for now
+        // we ignore the folders of others users and shared folders for now cause events could be part of 
+        // multiple containers -> display_containers. Devices which support multiple folders would fetch
+        // such events mutliple times which is not allowed, cause the id has to be unique.
+        //
+        // a possible solution would be to prefix the event id's with the container id beforehand
                 
         return $folders;
     }
