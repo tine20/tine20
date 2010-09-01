@@ -254,6 +254,8 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     { name: 'delimiter' },
     { name: 'display_format' },
     { name: 'ns_personal' },
+    { name: 'ns_other' },
+    { name: 'ns_shared' },
     { name: 'signature' },
     { name: 'smtp_port' },
     { name: 'smtp_hostname' },
