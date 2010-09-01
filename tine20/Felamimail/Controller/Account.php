@@ -105,8 +105,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param boolean $_onlyIds
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
-     * 
-     * @todo move creation of system account to another place
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
@@ -114,9 +112,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $_filter = new Felamimail_Model_AccountFilter(array());
         }
         
-        $this->_checkRight($_action);
-        $this->checkFilterACL($_filter, $_action);
-        $result = $this->_backend->search($_filter, $_pagination, $_onlyIds);
+        $result = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
         // check preference / config if we should add system account with tine user credentials or from config.inc.php
         if ($this->_useSystemAccount && ! $_onlyIds) {
