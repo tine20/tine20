@@ -24,8 +24,6 @@ Ext.namespace('Tine.Felamimail');
  *  value       -> key
  * </p>
  * <p>
- * TODO         make this work with exts style windows
- * TODO         '+' needs to move down when new filter row is added
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -51,12 +49,7 @@ Tine.Felamimail.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         
-        this.filterModels = [
-            {label: this.app.i18n._('From'),     field: 'from',     operators: ['contains']},
-            {label: this.app.i18n._('To'),       field: 'to',       operators: ['contains']},
-            {label: this.app.i18n._('Subject'),  field: 'subject',  operators: ['contains']},
-            {label: this.app.i18n._('Size'),     field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'}
-        ];
+        this.filterModels = Tine.Felamimail.RuleConditionsPanel.getFilterModel(this.app);
         
         this.supr().initComponent.call(this);
     },
@@ -70,3 +63,12 @@ Tine.Felamimail.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar
         return this.getValue();
     }
 });
+
+Tine.Felamimail.RuleConditionsPanel.getFilterModel = function(app) {
+    return [
+        {label: app.i18n._('From'),     field: 'from',     operators: ['contains']},
+        {label: app.i18n._('To'),       field: 'to',       operators: ['contains']},
+        {label: app.i18n._('Subject'),  field: 'subject',  operators: ['contains']},
+        {label: app.i18n._('Size'),     field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'}
+    ];
+}
