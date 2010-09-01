@@ -280,6 +280,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             hideLabel: true
                         }]
                     }, {
+                        // TODO add email validator
                         id: this.idPrefix + 'redirect',
                         layout: 'form',
                         items: [{
