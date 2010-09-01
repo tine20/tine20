@@ -411,7 +411,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
 	        $event = $this->get($_record->getId());
-	        if ($event->{Tinebase_Model_Grants::GRANT_EDIT}) {
+	        if ($this->_doContainerACLChecks === FALSE || $event->{Tinebase_Model_Grants::GRANT_EDIT}) {
 	            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} ");
 		        
 	            // we need to resolve groupmembers before free/busy checking
