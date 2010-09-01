@@ -558,6 +558,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             
             // create new account and update capabilities
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($systemAccount, 'create');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), TRUE));
+            
             $systemAccount = $this->_backend->create($systemAccount);
             $systemAccount = $this->updateCapabilities($systemAccount);
             $_accounts->addRecord($systemAccount);
@@ -567,7 +569,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $systemAccount->getId();
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new system account "' . $systemAccount->name . '".');
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), TRUE));
             
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create system account for user ' . $fullUser->accountLoginName . '. No email address given.');
@@ -672,7 +673,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $prefix = ($_configKey == Tinebase_Model_Config::IMAP) ? '' : strtolower($_configKey) . '_';
         
         foreach ($config as $key => $value) {
-            if (in_array($key, $_keysOverwrite)) {
+            if (in_array($key, $_keysOverwrite) && ! empty($value)) {
                 $_account->{$prefix . $key} = $value;
             }
         }
