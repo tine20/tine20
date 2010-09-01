@@ -546,10 +546,22 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->_messageTestHelper('Amazon.eml', 'multipart/amazon');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        #var_dump($message->toArray());
         $this->assertEquals('multipart/alternative', $message->content_type);
         $this->assertContains('Samsung Wave S8500 Smartphone', $message->subject);
         $this->assertContains('Sie suchen Produkte aus der Kategorie Elektronik &amp; Foto?', $message->body);
+    }
+    
+    /**
+     * validate fetching a complete message from order form
+     */
+    public function testGetCompleteMessageOrder()
+    {
+        $cachedMessage = $this->_messageTestHelper('Angebotsformular.eml', 'text/angebot');
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        $this->assertEquals('text/plain', $message->content_type);
+        $this->assertContains('Angebotsformular', $message->subject);
+        $this->assertContains('*Formular-Weiterleitungs-Service*', $message->body);
     }
     
     /**
