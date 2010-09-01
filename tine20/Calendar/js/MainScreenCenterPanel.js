@@ -414,11 +414,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     onDeleteRecordsConfirmNonRecur: function(panel, selection) {
         panel.getTopToolbar().beforeLoad();
         
+        // create a copy of selection so selection changes don't affect this
+        var sel = Ext.unique(selection);
+                
         var options = {
             scope: this,
             success: function() {
                 panel.getTopToolbar().onLoad();
-                Ext.each(selection, function(event){
+                Ext.each(sel, function(event){
                     panel.getStore().remove(event);
                 });
             },
