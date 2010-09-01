@@ -340,7 +340,17 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }]]
             }]
         };
-    }
+    },
+    
+    /**
+     * generic request exception handler
+     * 
+     * @param {Object} exception
+     */
+    onRequestFailed: function(exception) {
+        Tine.Felamimail.handleRequestException(exception);
+        this.loadMask.hide();
+    }    
 });
 
 /**
@@ -350,11 +360,10 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @return  {Ext.ux.Window}
  */
  Tine.Felamimail.AccountEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 400,
         height: 550,
-        name: Tine.Felamimail.AccountEditDialog.prototype.windowNamePrefix + id,
+        name: Tine.Felamimail.AccountEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.AccountEditDialog',
         contentPanelConstructorConfig: config
     });
