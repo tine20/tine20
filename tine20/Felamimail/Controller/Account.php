@@ -692,10 +692,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $_user = Tinebase_User::getInstance()->getFullUserById($this->_currentAccount->getId());
         }
         
+        if ($_email === NULL) {
+            $_email = $this->_getAccountEmail($_user);
+        }
+        
         // add user data
         $_account->user   = $_user->accountLoginName;
-        $_account->email  = ($_email !== NULL) ? $_email : $_user->accountEmailAddress;
-        $_account->name   = ($_email !== NULL) ? $_email : $_user->accountEmailAddress;
+        $_account->email  = $_email;
+        $_account->name   = $_email;
         $_account->from   = $_user->accountFullName;
         
         // add contact data
