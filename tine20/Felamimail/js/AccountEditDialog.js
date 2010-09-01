@@ -64,7 +64,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.getForm().items.each(function(item) {
                 // only enable some fields
                 switch(item.name) {
-                    case 'name':
                     case 'signature':
                     case 'intelligent_folders':
                     case 'has_children_support':
