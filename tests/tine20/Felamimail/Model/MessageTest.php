@@ -64,17 +64,22 @@ class Felamimail_Model_MessageTest extends PHPUnit_Framework_TestCase
     public function testGetPlainTextBody()
     {
         $message = new Felamimail_Model_Message(array(
-            'body'  => 'blabla<br/><blockquote class="felamimail-body-blockquote">lalülüüla<br/><br/><blockquote>xyz</blockquote></blockquote><br/><br/>jojo'
+            'body'  =>  'blabla<br/><blockquote class="felamimail-body-blockquote">lalülüüla<br/><br/><div>lala</div><br/><blockquote class="felamimail-body-blockquote">xyz</blockquote></blockquote><br/><br/>jojo<br/>' .
+                        'lkjlhk<div><br></div><div><br><div>jjlöjlö</div><div><br></div></div>'
         ));
         
         $result = $message->getPlainTextBody();
-        //echo $result;
+        echo $result;
         
         $this->assertEquals("blabla\n" .
             "> lalülüüla\n" .
+            "> \n" .
+            "> lala\n" .
             "> \n" . 
             "> > xyz\n" .
-            "\n" .
-            "jojo", $result);
+            "\n\n" .
+            "jojo\n" .
+            "lkjlhk\n\n\n" .
+            "jjlöjlö\n", $result);
     }
 }

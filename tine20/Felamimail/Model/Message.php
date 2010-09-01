@@ -510,21 +510,29 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $valueProperty = ($_node instanceof DOMNode) ? 'nodeValue' : 'value';
         
         if ($hasChildren) {
-            $quoted = FALSE;
             $lastChild = NULL;
             $children = ($_node instanceof DOMNode) ? $_node->childNodes : $_node->child;
+            
             foreach ($children as $child) {
                 $isTextLeaf = ($child instanceof DOMNode) ? $child->{$nameProperty} == '#text' : ! $child->{$nameProperty};
                 if ($isTextLeaf) { 
                     // leaf -> add quotes and append to content string
                     if ($_quoteIndent > 0) {
-                        $result .= str_repeat(self::QUOTE, $_quoteIndent);
-                        $quoted = TRUE;
+                        $result .= str_repeat(self::QUOTE, $_quoteIndent) . $child->{$valueProperty};
+                        // add newline if parent is div
+                        if ($_node->{$nameProperty} == 'div') {
+                            $result .=  "\n" . str_repeat(self::QUOTE, $_quoteIndent);
+                        }
+                    } else {
+                        // add newline if parent is div
+                        if ($_node->{$nameProperty} == 'div') {
+                            $result .= "\n";
+                        }
+                        $result .= $child->{$valueProperty};
                     }
-                    $result .= $child->{$valueProperty};
                     
                 } else if ($child->{$nameProperty} == 'blockquote') {
-                    // new blockquote -> increase quote indention
+                    //  opening blockquote
                     $_quoteIndent++;
                     
                 } else if ($child->{$nameProperty} == 'br') {
@@ -534,14 +542,17 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                         $result .= str_repeat(self::QUOTE, $_quoteIndent);
                     }
                     $result .= "\n";
-                    $quoted = FALSE;
                 }
                 
                 $result .= $this->_addQuotesAndStripTags($child, $_quoteIndent);
                 
                 if ($child->{$nameProperty} == 'blockquote') {
-                    // close blockquote -> decrease quote indention
+                    // closing blockquote
                     $_quoteIndent--;
+                    // add newline after last closing blockquote
+                    if ($_quoteIndent == 0) {
+                        $result .= "\n";
+                    }
                 }
                 
                 $lastChild = $child;
