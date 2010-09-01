@@ -214,13 +214,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             forceSelection  : true,
             value           : 'discard',
             columnWidth     : 0.4,
-            store: [
-                ['fileinto',    this.app.i18n._('Move mail to folder')],
-                ['redirect',    this.app.i18n._('Redirect mail to address')],
-                ['reject',      this.app.i18n._('Reject mail with this text')],
-                ['discard',     this.app.i18n._('Discard mail')]
-                //['keep',        this.app.i18n._('Keep mail')],
-            ],
+            store: Tine.Felamimail.RuleEditDialog.getActionTypes(this.app),
             listeners: {
                 scope: this,
                 change: this.onChangeType,
@@ -330,4 +324,20 @@ Tine.Felamimail.RuleEditDialog.openWindow = function (config) {
         contentPanelConstructorConfig: config
     });
     return window;
+};
+
+/**
+ * get action types for action combo and action type renderer
+ * 
+ * @param {} app
+ * @return {Array}
+ */
+Tine.Felamimail.RuleEditDialog.getActionTypes = function(app) {
+    return [
+        ['fileinto',    app.i18n._('Move mail to folder')],
+        ['redirect',    app.i18n._('Redirect mail to address')],
+        ['reject',      app.i18n._('Reject mail with this text')],
+        ['discard',     app.i18n._('Discard mail')]
+        //['keep',        app.i18n._('Keep mail')],
+    ];
 };
