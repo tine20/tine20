@@ -263,7 +263,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 }
                 Ext.Msg.wait(_('Please Wait'), _('Saving favorite'));
                 
-                var existingRecordIdx = this.store.findExact('name', value);
+                var existingRecordIdx = this.store.find('name', new RegExp('^' + value + '$', 'i'));
                 var existingRecord = existingRecordIdx ? this.store.getAt(existingRecordIdx) : null;
                 if (existingRecord) {
                     if (existingRecord.isShared()) {
