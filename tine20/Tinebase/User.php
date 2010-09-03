@@ -434,13 +434,12 @@ class Tinebase_User
      */
     public static function createInitialAccounts($_options)
     {
-        if (! isset($_options['adminPassword'])) {
-            throw new Tinebase_Exception_InvalidArgument('Admin password has to be set when creating initial accont.');
+        if (! isset($_options['adminPassword']) || ! isset($_options['adminLoginName'] )) {
+            throw new Tinebase_Exception_InvalidArgument('Admin password and login name have to be set when creating initial account.');
         }
         
         $_options['adminFirstName']     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';
         $_options['adminLastName']      = isset($_options['adminLastName'])     ? $_options['adminLastName']  : 'Admin Account';
-        $_options['adminLoginName']     = isset($_options['adminLoginName'])    ? $_options['adminLoginName'] : 'tine20admin';
 
         // get admin & user groups
         $userBackend   = Tinebase_User::factory(Tinebase_User::SQL);
@@ -448,8 +447,6 @@ class Tinebase_User
         
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         $userGroup  = $groupsBackend->getDefaultGroup();
-        
-        print_r($_options);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_options['adminLoginName'] . ')');
 
