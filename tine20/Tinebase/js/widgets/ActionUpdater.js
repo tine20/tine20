@@ -12,7 +12,7 @@
  Tine.widgets.ActionUpdater = function(config) {
     config = config || {};
     var actions = config.actions || [];
-    delete(config.actions);
+    config.actions = [];
     
     Ext.apply(this, config);
     this.addActions(actions);
@@ -23,7 +23,7 @@
      * @cfg {Array|Toolbar} actions
      * all actions to update
      */
-    actions: [],
+    actions: null,
     
     /**
      * @cfg {Bool} evalGrants
