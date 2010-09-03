@@ -181,8 +181,8 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      */
     public function testTranslate()
     {
-        $oldLocale = Zend_Registry::get('locale');
-        Zend_Registry::set('locale', new Zend_Locale('de'));
+        $oldLocale = Tinebase_Core::get(Tinebase_Core::LOCALE);
+        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('de'));
 
         $record = new Tinebase_Record_DummyRecord(array(
             'string' => 'test',
@@ -192,7 +192,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
         $record->translate();
         
         $this->assertEquals('Wartet auf Feedback', $record->leadstate);
-        Zend_Registry::set('locale', $oldLocale);
+        Tinebase_Core::set(Tinebase_Core::LOCALE, $oldLocale);
     }
     
     /**
