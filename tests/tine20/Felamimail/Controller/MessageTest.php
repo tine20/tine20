@@ -565,6 +565,20 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * validate fetching a complete message with different encodings
+     */
+    public function testGetCompleteMessageDifferentEncoding()
+    {
+        $cachedMessage = $this->_messageTestHelper('UmlauteUTF8TextISO-8859-15Signatur.eml', 'text/different');
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        //print_r($message->toArray());
+        $this->assertEquals('text/plain', $message->content_type);
+        $this->assertContains('Umlaute UTF8 Text + ISO-8859-15 Signatur', $message->subject);
+        $this->assertContains('O Ö', $message->body);
+    }
+    
+    /**
      * validate fetching a complete message (rfc2822 part) 
      */
     public function testGetMessageRFC822()
