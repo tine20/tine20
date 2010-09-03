@@ -4,12 +4,10 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id: JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
  * 
- * @todo        make this work again (when setup tests have been moved)
- * @todo        add more tests
  */
 
 /**
@@ -39,9 +37,9 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Setup Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -62,8 +60,12 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_installAllApplications(array('defaultAdminGroupName' => 'Administrators', 'defaultUserGroupName' =>  'Users'));
-        $this->_installAllApplications();       
+        $this->_installAllApplications(array(
+            'defaultAdminGroupName' => 'Administrators', 
+            'defaultUserGroupName'  => 'Users', 
+            'adminLoginName'        => Tinebase_Core::get('testconfig')->username,
+            'adminPassword'         => Tinebase_Core::get('testconfig')->password,
+        ));
     }
        
     /**
@@ -72,13 +74,13 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUninstallApplications()
     {
-    	try {
-    		$result = $this->_uit->uninstallApplications(array('ActiveSync'));
-    	} catch (Tinebase_Exception_NotFound $e) {
-    		$this->_uit->installApplications(array('ActiveSync'));
-    		$result = $this->_uit->uninstallApplications(array('ActiveSync'));
-    	}
-    	        
+        try {
+            $result = $this->_uit->uninstallApplications(array('ActiveSync'));
+        } catch (Tinebase_Exception_NotFound $e) {
+            $this->_uit->installApplications(array('ActiveSync'));
+            $result = $this->_uit->uninstallApplications(array('ActiveSync'));
+        }
+                
         $apps = $this->_uit->searchApplications();
         
         // get active sync
@@ -93,22 +95,22 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($activeSyncApp));
         $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
 
-	    $this->_uit->installApplications(array('ActiveSync')); //cleanup
+        $this->_uit->installApplications(array('ActiveSync')); //cleanup
     }
     
     public function testInstallAdminAccountOptions()
     {
-    	$this->_uninstallAllApplications();
-    	$this->_uit->installApplications(array('Tinebase'), array('adminLoginName' => 'phpunit-admin', 'adminPassword' => 'phpunit-password'));
-    	$adminUser = Tinebase_User::getInstance()->getFullUserByLoginName('phpunit-admin');
-    	$this->assertTrue($adminUser instanceof Tinebase_Model_User);
-    	
-    	$this->assertNull(Tinebase_Auth::getBackendConfiguration('adminLoginName'));
-    	$this->assertNull(Tinebase_Auth::getBackendConfiguration('adminPassword'));
-    	$this->assertNull(Tinebase_Auth::getBackendConfiguration('adminConfirmation'));
-    	
-    	//cleanup
-    	$this->_uninstallAllApplications();
+        $this->_uninstallAllApplications();
+        $this->_uit->installApplications(array('Tinebase'), array('adminLoginName' => 'phpunit-admin', 'adminPassword' => 'phpunit-password'));
+        $adminUser = Tinebase_User::getInstance()->getFullUserByLoginName('phpunit-admin');
+        $this->assertTrue($adminUser instanceof Tinebase_Model_User);
+        
+        $this->assertNull(Tinebase_Auth::getBackendConfiguration('adminLoginName'));
+        $this->assertNull(Tinebase_Auth::getBackendConfiguration('adminPassword'));
+        $this->assertNull(Tinebase_Auth::getBackendConfiguration('adminConfirmation'));
+        
+        //cleanup
+        $this->_uninstallAllApplications();
     }
     
     public function testSaveAuthenticationRedirectSettings()
@@ -170,7 +172,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     public function testUninstallTinebaseShouldThrowDependencyException()
     {
         $this->setExpectedException('Setup_Exception_Dependency');
-    	$result = $this->_uit->uninstallApplications(array('Tinebase'));
+        $result = $this->_uit->uninstallApplications(array('Tinebase'));
     }
     
     /**
@@ -236,7 +238,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         foreach ($rights as $right) {
             if ($right['application_id'] === $applicationId &&
                 $right['right'] === 'run') {
-            	$hasRight = true;
+                $hasRight = true;
             }
         } 
         $this->assertTrue($hasRight, 'User role has run right for recently installed app?');
@@ -269,7 +271,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     
     public function testLoginWithWrongUsernameAndPassword()
     {
-    	$result = $this->_uit->login('unknown_user_xxyz', 'wrong_password');
+        $result = $this->_uit->login('unknown_user_xxyz', 'wrong_password');
         $this->assertFalse($result);
     }
     
