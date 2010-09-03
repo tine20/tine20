@@ -53,10 +53,10 @@ $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
 
 // get config
-if(file_exists(dirname(__FILE__) . '/config.inc.php')) {
-    $config = new Zend_Config(require dirname(__FILE__) . '/config.inc.php');
+if(file_exists(dirname(__FILE__) . '/phpunitconfig.inc.php')) {
+    $config = new Zend_Config(require dirname(__FILE__) . '/phpunitconfig.inc.php');
 } else {
-    throw new Exception("Couldn't find config.inc.php! \n");
+    throw new Exception("Couldn't find phpunitconfig.inc.php! \n");
 }
 
 $_SERVER['DOCUMENT_ROOT'] = $config->docroot;    
