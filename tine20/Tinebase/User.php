@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -418,15 +418,15 @@ class Tinebase_User
      * 
      * Method is called during Setup Initialization
      *
-     * @param array | optional $_options [hash that may contain override values for admin user name and password]
+     * @param array $_options [hash that may contain override values for admin user name and password]
      * 
      * @example $_options may contain the following keys:
      * <pre>
      * $options = array(
-     *  'admin_login_name' => 'admin',
-     *  'admin_login_password' => 'lars',
-     *  'admin_first_name' => 'Tine 2.0',
-     *  'admin_last_name' => 'Admin Account',
+     *  'adminLoginName'    => 'admin',
+     *  'adminPassword'     => 'lars',
+     *  'adminFirstName'    => 'Tine 2.0',
+     *  'adminLastName'     => 'Admin Account',
      * );
      * </pre>
      * 
@@ -434,8 +434,13 @@ class Tinebase_User
      */
     public static function createInitialAccounts($_options)
     {
-        $_options['adminFirstName'] = isset($_options['adminFirstName']) ? $_options['adminFirstName'] : 'Tine 2.0';
-        $_options['adminLastName']  = isset($_options['adminLastName'])  ? $_options['adminLastName']  : 'Admin Account';
+        if (! isset($_options['adminPassword'])) {
+            throw new Tinebase_Exception_InvalidArgument('Admin password has to be set when creating initial accont.');
+        }
+        
+        $_options['adminFirstName']     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';
+        $_options['adminLastName']      = isset($_options['adminLastName'])     ? $_options['adminLastName']  : 'Admin Account';
+        $_options['adminLoginName']     = isset($_options['adminLoginName'])    ? $_options['adminLoginName'] : 'tine20admin';
 
         // get admin & user groups
         $userBackend   = Tinebase_User::factory(Tinebase_User::SQL);
@@ -443,6 +448,8 @@ class Tinebase_User
         
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         $userGroup  = $groupsBackend->getDefaultGroup();
+        
+        print_r($_options);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_options['adminLoginName'] . ')');
 
