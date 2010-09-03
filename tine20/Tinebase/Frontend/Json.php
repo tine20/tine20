@@ -152,6 +152,34 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * Search for roles
+     * 
+     * @param  array $_filter
+     * @param  array $_paging
+     * @return array
+     */
+    public function searchRoles($filter, $paging)
+    {
+    	$result = array(
+            'results'     => array(),
+            'totalcount'  => 0
+        );
+        
+        $filter = new Tinebase_Model_RoleFilter(array(
+            'name'        => '%' . $filter[0]['value'] . '%',
+            'description' => '%' . $filter[0]['value'] . '%'
+        ));
+        
+        $paging['sort'] = isset($paging['sort']) ? $paging['sort'] : 'name';
+        $paging['dir'] = isset($paging['dir']) ? $paging['dir'] : 'ASC';
+        
+        $result['results'] = Tinebase_Acl_Roles::getInstance()->searchRoles($filter, new Tinebase_Model_Pagination($paging))->toArray();
+        $result['totalcount'] = Tinebase_Acl_Roles::getInstance()->searchCount($filter);
+        
+        return $result;
+    }
+    
+    /**
      * change password of user 
      *
      * @param  string $oldPassword the old password
