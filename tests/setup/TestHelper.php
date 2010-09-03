@@ -63,7 +63,8 @@ $_SERVER['DOCUMENT_ROOT'] = $config->docroot;
 
 TestServer::getInstance()->initFramework();
 
-Zend_Registry::set('locale', new Zend_Locale($config->locale));
+Tinebase_Core::set('locale', new Zend_Locale($config->locale));
+Tinebase_Core::set('testconfig', $config);
 
 /*
 $tinebaseController = Tinebase_Controller::getInstance();
