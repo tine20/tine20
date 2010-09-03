@@ -6,6 +6,9 @@
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
+ 
+/*global Ext, Tine*/
+
 Ext.ns('Tine.Admin.user');
 
 /**
@@ -29,7 +32,7 @@ Ext.ns('Tine.Admin.user');
  * @constructor
  * Create a new Tine.Admin.UserEditDialog
  */
-Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * @private
@@ -43,9 +46,9 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @private
      */
-    initComponent: function() {
+    initComponent: function () {
         var accountBackend = Tine.Tinebase.registry.get('accountBackend');
-        this.ldapBackend = (accountBackend == 'Ldap');
+        this.ldapBackend = (accountBackend === 'Ldap');
 
         Tine.Admin.UserEditDialog.superclass.initComponent.call(this);
     },
@@ -53,13 +56,13 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @private
      */
-    onRecordLoad: function() {
+    onRecordLoad: function () {
         // interrupt process flow until dialog is rendered
         if (! this.rendered) {
             this.onRecordLoad.defer(250, this);
             return;
         }
-        
+                
         // samba user
         var response = {
             responseText: Ext.util.JSON.encode(this.record.get('sambaSAM'))
@@ -73,8 +76,8 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // format dates
         var dateTimeDisplayFields = ['accountLastLogin', 'accountLastPasswordChange', 'logonTime', 'logoffTime', 'pwdLastSet', 'kickoffTime'];
-        for (var i=0; i < dateTimeDisplayFields.length; i++) {
-            if (dateTimeDisplayFields[i] == 'accountLastLogin' || dateTimeDisplayFields[i] == 'accountLastPasswordChange') {
+        for (var i = 0; i < dateTimeDisplayFields.length; i += 1) {
+            if (dateTimeDisplayFields[i] === 'accountLastLogin' || dateTimeDisplayFields[i] === 'accountLastPasswordChange') {
                 this.record.set(dateTimeDisplayFields[i], Tine.Tinebase.common.dateTimeRenderer(this.record.get(dateTimeDisplayFields[i])));
             } else {
                 this.samRecord.set(dateTimeDisplayFields[i], Tine.Tinebase.common.dateTimeRenderer(this.samRecord.get(dateTimeDisplayFields[i])));
@@ -96,7 +99,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @private
      */
-    onRecordUpdate: function() {
+    onRecordUpdate: function () {
         Tine.Admin.UserEditDialog.superclass.onRecordUpdate.call(this);
         
         var form = this.getForm();
@@ -115,12 +118,34 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         this.record.set('emailUser', '');
         this.record.set('emailUser', this.emailRecord.data);
+        
+        var newGroups = [],
+        	newRoles = [];
+        	
+        if (this.storeGroups) {
+	        this.storeGroups.each(function (rec) {
+	        	newGroups.push(rec.data.id);	        
+	        });
+	        // add selected primary group to new groups if not exists
+	        if (newGroups.indexOf(this.record.get('accountPrimaryGroup')) === -1) {
+	        	newGroups.push(this.record.get('accountPrimaryGroup'));
+	        }   
+        }
+        
+        if (this.storeRoles) { 
+	        this.storeRoles.each(function (rec) {
+	        	newRoles.push(rec.data.id);	        
+	        });
+        }
+        
+        this.record.set('accountGroups', newGroups);
+        this.record.set('accountRoles', newRoles);
     },
 
     /**
      * 'ok' handler for passwordConfirmWindow
      */
-    onPasswordConfirm: function() {
+    onPasswordConfirm: function () {
         var confirmForm = this.passwordConfirmWindow.items.first().getForm();
         var confirmValues = confirmForm.getValues();
         var passwordField = this.getForm().findField('accountPassword');
@@ -130,8 +155,8 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             return;
         }
         
-        if (confirmValues.passwordRepeat != passwordField.getValue()) {
-            passwordField.markInvalid(this.app.i18n._('Passwords do not match!'));
+        if (confirmValues.passwordRepeat !== passwordField.getValue()) {
+            passwordField.markInvalid(this.app.i18n.gettext('Passwords do not match!'));
             passwordField.passwordsMatch = false;
         } else {
             passwordField.passwordsMatch = true;
@@ -146,16 +171,154 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * Initi Fileserver tab items
+     * Init user memberships tab
+     * 
+     * @return {Array} - tab items
+     */
+    initUserMemberships: function () {
+    
+    	return [{
+    		region: 'west',
+    		layout: 'fit',
+    		width: 120,
+    		frame: false,
+    		border: true,
+    		xtype: 'treepanel',
+    		autoScroll: true,
+    		rootVisible: false,
+    		useArrows: true,
+			loader: new Ext.tree.TreeLoader(),
+			root: new Ext.tree.AsyncTreeNode({
+	            text: '',
+	            expanded: true,
+	            children: [{
+	            	text: Tine.Tinebase.translation.gettext('Groups'),
+		            iconCls: 'admin-node-groups',
+		            id: 'Groups',
+		            leaf: true
+	            }, {
+	            	text: Tine.Tinebase.translation.gettext('Roles'),
+		            iconCls: 'action_permissions',
+		            id: 'Roles',
+		            leaf: true
+	            }] 
+	        }),
+	        listeners: {
+	        	scope: this,
+	        	'click': function (node) {
+	        		var centerRegion = node.ownerTree.ownerCt.items.get(1);
+	        		
+	        		if (! node.pickerGrid) {
+	        			node.pickerGrid = this['initUser' + node.id](); 
+	        			centerRegion.add(node.pickerGrid);
+        				centerRegion.layout.setActiveItem(node.pickerGrid.id);
+        				centerRegion.doLayout();
+        				
+        				if (this.record.id) {
+				        	this['store' + node.id].loadData(this.record.get('account' + node.id));
+				    	}	
+	        		}
+	        		else {
+	        			centerRegion.layout.setActiveItem(node.pickerGrid.id);
+	        		}
+	        	}
+	        }
+    	}, {
+    		region: 'center',
+    		layout: 'card',
+    		frame: false,
+    		border: true,
+    		items: []
+    	}];
+    },
+    
+    /**
+     * Init User groups picker grid
+     * 
+     * @return {Tine.widgets.account.PickerGridPanel}
+     */
+    initUserGroups: function () {
+    	
+    	this.storeGroups = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: Tine.Tinebase.Model.Group
+        });
+    	
+        this.pickerGridGroups = new Tine.widgets.account.PickerGridPanel({
+        	border: false,
+        	frame: false,
+            store: this.storeGroups,
+            selectType: 'group',
+            selectAnyone: false,
+            selectTypeDefault: 'group'
+        }); 
+        
+    	return this.pickerGridGroups;
+    },
+    
+    /**
+     * Init User roles picker grid
+     * 
+     * @return {Tine.widgets.account.PickerGridPanel}
+     */
+    initUserRoles: function () {
+    	
+    	this.storeRoles = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: Tine.Tinebase.Model.Role
+        });
+            
+        this.pickerGridRoles = new Tine.widgets.grid.PickerGridPanel({
+        	border: false,
+        	frame: false,
+			autoExpandColumn: 'name',
+			store: this.storeRoles,
+			recordClass: Tine.Tinebase.Model.Role,
+			columns: [{id: 'name', header: Tine.Tinebase.translation.gettext('Name'), sortable: true, dataIndex: 'name'}],
+			initActionsAndToolbars: function () {
+		    	Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
+		    	
+		    	this.comboPanel = new Ext.Panel({
+		            layout: 'hfit',
+		            border: false,
+		            items: this.getSearchCombo(),
+		            columnWidth: 1
+		        });
+		    	
+		    	this.tbar = new Ext.Toolbar({
+		            items: this.comboPanel,
+		            layout: 'column'
+		        });
+		    },
+		    onAddRecordFromCombo: function (recordToAdd) {	        
+		        // check if already in
+		        if (! this.recordStore.getById(recordToAdd.id)) {
+		            this.recordStore.add([recordToAdd]);
+		        }
+		        this.collapse();
+		        this.clearValue();
+		        this.reset();
+		    }
+		}); 
+        
+    	return this.pickerGridRoles; 
+    },
+    
+    /**
+     * Init Fileserver tab items
      * 
      * @return {Array} - array ff fileserver tab items
      */
-    initFileserver: function() {
+    initFileserver: function () {
     	
     	if (this.ldapBackend) {
 
     		return [{
-                title: this.app.i18n._('Unix'),
+                title: this.app.i18n.gettext('Unix'),
                 autoHeight: true,
                 xtype: 'fieldset',
                 checkboxToggle: false,
@@ -164,22 +327,22 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'columnform',
                     labelAlign: 'top',
                     formDefaults: {
-                        xtype:'textfield',
+                        xtype: 'textfield',
                         anchor: '100%',
                         labelSeparator: '',
-                        columnWidth: .333
+                        columnWidth: 0.333
                     },
                     items: [[{
-                        fieldLabel: this.app.i18n._('Home Directory'),
+                        fieldLabel: this.app.i18n.gettext('Home Directory'),
                         name: 'accountHomeDirectory',
-                        columnWidth: .666
+                        columnWidth: 0.666
                     }, {
-                        fieldLabel: this.app.i18n._('Login Shell'),
+                        fieldLabel: this.app.i18n.gettext('Login Shell'),
                         name: 'accountLoginShell'
                     }]]
                 }]
             }, {
-                title: this.app.i18n._('Windows'),
+                title: this.app.i18n.gettext('Windows'),
                 autoHeight: true,
                 xtype: 'fieldset',
                 checkboxToggle: false,
@@ -188,60 +351,60 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'columnform',
                     labelAlign: 'top',
                     formDefaults: {
-                        xtype:'textfield',
+                        xtype: 'textfield',
                         anchor: '100%',
                         labelSeparator: '',
-                        columnWidth: .333
+                        columnWidth: 0.333
                     },
                     items: [[{
-                        fieldLabel: this.app.i18n._('Home Drive'),
+                        fieldLabel: this.app.i18n.gettext('Home Drive'),
                         name: 'homeDrive',
-                        columnWidth: .666
+                        columnWidth: 0.666
                     }, {
                         xtype: 'displayfield',
-                        fieldLabel: this.app.i18n._('Logon Time'),
+                        fieldLabel: this.app.i18n.gettext('Logon Time'),
                         name: 'logonTime',
-                        emptyText: this.app.i18n._('never logged in'),
+                        emptyText: this.app.i18n.gettext('never logged in'),
                         style: this.displayFieldStyle
                     }], [{
-                        fieldLabel: this.app.i18n._('Home Path'),
+                        fieldLabel: this.app.i18n.gettext('Home Path'),
                         name: 'homePath',
-                        columnWidth: .666
+                        columnWidth: 0.666
                     }, {
                         xtype: 'displayfield',
-                        fieldLabel: this.app.i18n._('Logoff Time'),
+                        fieldLabel: this.app.i18n.gettext('Logoff Time'),
                         name: 'logoffTime',
-                        emptyText: this.app.i18n._('never logged off'),
+                        emptyText: this.app.i18n.gettext('never logged off'),
                         style: this.displayFieldStyle
                     }], [{
-                        fieldLabel: this.app.i18n._('Profile Path'),
+                        fieldLabel: this.app.i18n.gettext('Profile Path'),
                         name: 'profilePath',
-                        columnWidth: .666
+                        columnWidth: 0.666
                     }, {
                         xtype: 'displayfield',
-                        fieldLabel: this.app.i18n._('Password Last Set'),
+                        fieldLabel: this.app.i18n.gettext('Password Last Set'),
                         name: 'pwdLastSet',
-                        emptyText: this.app.i18n._('never'),
+                        emptyText: this.app.i18n.gettext('never'),
                         style: this.displayFieldStyle
                     }], [{
-                        fieldLabel: this.app.i18n._('Logon Script'),
+                        fieldLabel: this.app.i18n.gettext('Logon Script'),
                         name: 'logonScript',
-                        columnWidth: .666
+                        columnWidth: 0.666
                     }], [{
                         xtype: 'extuxclearabledatefield',
-                        fieldLabel: this.app.i18n._('Password Can Change'),
+                        fieldLabel: this.app.i18n.gettext('Password Can Change'),
                         name: 'pwdCanChange',
-                        emptyText: this.app.i18n._('not set')
+                        emptyText: this.app.i18n.gettext('not set')
                     }, {
                         xtype: 'extuxclearabledatefield',
-                        fieldLabel: this.app.i18n._('Password Must Change'),
+                        fieldLabel: this.app.i18n.gettext('Password Must Change'),
                         name: 'pwdMustChange',
-                        emptyText: this.app.i18n._('not set')
+                        emptyText: this.app.i18n.gettext('not set')
                     }, {
                         xtype: 'extuxclearabledatefield',
-                        fieldLabel: this.app.i18n._('Kick Off Time'),
+                        fieldLabel: this.app.i18n.gettext('Kick Off Time'),
                         name: 'kickoffTime',
-                        emptyText: this.app.i18n._('not set')
+                        emptyText: this.app.i18n.gettext('not set')
                     }]]
                 }]
             }];
@@ -255,12 +418,12 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      * @return {Array} - array of IMAP tab items
      */
-    initImap: function() {
+    initImap: function () {
     	
     	if (Tine.Admin.registry.get('manageImapEmailUser')) {
     		
     		return [{
-                title: this.app.i18n._('Quota (MB)'),
+                title: this.app.i18n.gettext('Quota (MB)'),
                 autoHeight: true,
                 xtype: 'fieldset',
                 checkboxToggle: true,
@@ -271,26 +434,26 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     formDefaults: {
                         xtype: 'textfield',
                         anchor: '100%',
-                        columnWidth: .666
+                        columnWidth: 0.666
                     },
                     items: [[{
-                        fieldLabel: this.app.i18n._('Quota'),
+                        fieldLabel: this.app.i18n.gettext('Quota'),
                         name: 'emailMailQuota',
-                        xtype:'uxspinner',
+                        xtype: 'uxspinner',
                         strategy: new Ext.ux.form.Spinner.NumberStrategy({
                             incrementValue : 10,
                             allowDecimals : false
                         })
                     }], [{
-                        fieldLabel: this.app.i18n._('Current Mail Size'),
+                        fieldLabel: this.app.i18n.gettext('Current Mail Size'),
                         name: 'emailMailSize',
-                        xtype:'displayfield',
+                        xtype: 'displayfield',
                         style: this.displayFieldStyle
                     }]
                     ]
                 }]
             }, {
-                title: this.app.i18n._('Sieve Quota (MB)'),
+                title: this.app.i18n.gettext('Sieve Quota (MB)'),
                 autoHeight: true,
                 xtype: 'fieldset',
                 checkboxToggle: true,
@@ -301,26 +464,26 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     formDefaults: {
                         xtype: 'textfield',
                         anchor: '100%',
-                        columnWidth: .666
+                        columnWidth: 0.666
                     },
                     items: [[{
-                        fieldLabel: this.app.i18n._('Sieve Quota'),
+                        fieldLabel: this.app.i18n.gettext('Sieve Quota'),
                         name: 'emailSieveQuota',
-                        xtype:'uxspinner',
+                        xtype: 'uxspinner',
                         strategy: new Ext.ux.form.Spinner.NumberStrategy({
                             incrementValue : 10,
                             allowDecimals : false
                         })
                     }], [{
-                        fieldLabel: this.app.i18n._('Sieve Size'),
+                        fieldLabel: this.app.i18n.gettext('Sieve Size'),
                         name: 'emailSieveSize',
-                        xtype:'displayfield',
+                        xtype: 'displayfield',
                         style: this.displayFieldStyle
                     }]
                     ]
                 }]
             }, {
-                title: this.app.i18n._('Information'),
+                title: this.app.i18n.gettext('Information'),
                 autoHeight: true,
                 xtype: 'fieldset',
                 checkboxToggle: false,
@@ -331,11 +494,11 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     formDefaults: {
                         xtype: 'displayfield',
                         anchor: '100%',
-                        columnWidth: .666,
+                        columnWidth: 0.666,
                         style: this.displayFieldStyle
                     },
                     items: [[{
-                        fieldLabel: this.app.i18n._('Last Login'),
+                        fieldLabel: this.app.i18n.gettext('Last Login'),
                         name: 'emailLastLogin'
                     }]]
                 }]
@@ -353,19 +516,19 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO     add ctx menu
      * TODO     make border work
      */
-    initSmtp: function() {
+    initSmtp: function () {
         
     	if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
     	
-    		 var commonConfig = {
-	            autoExpandColumn:'email',
+			var commonConfig = {
+	            autoExpandColumn: 'email',
 	            quickaddMandatory: 'email',
 	            //border: true,
 	            frame: false,
 	            useBBar: true,
 	            dataField: 'email',
 	            height: 200,
-	            columnWidth: .5,
+	            columnWidth: 0.5,
 	            recordClass: Ext.data.Record.create([
 	                { name: 'email' }
 	            ])
@@ -373,16 +536,16 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     		
     		this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
 	            Ext.apply(commonConfig, {
-	                //title:this.app.i18n._('Aliases'),
+	                //title:this.app.i18n.gettext('Aliases'),
 	                cm: new Ext.grid.ColumnModel([{ 
-	                    id:'email', 
-	                    header: this.app.i18n._('Email Alias'), 
+	                    id: 'email', 
+	                    header: this.app.i18n.gettext('Email Alias'), 
 	                    dataIndex: 'email', 
 	                    width: 300, 
 	                    hideable: false, 
 	                    sortable: true,
 	                    quickaddField: new Ext.form.TextField({
-	                        emptyText: this.app.i18n._('Add an alias address...'),
+	                        emptyText: this.app.i18n.gettext('Add an alias address...'),
 	                        vtype: 'email'
 	                    }),
 	                    editor: new Ext.form.TextField({allowBlank: false}) 
@@ -393,16 +556,16 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	
 	        this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
 	            Ext.apply(commonConfig, {
-	                //title:this.app.i18n._('Forwards'),
+	                //title:this.app.i18n.gettext('Forwards'),
 	                cm: new Ext.grid.ColumnModel([{ 
-	                    id:'email', 
-	                    header: this.app.i18n._('Email Forward'), 
+	                    id: 'email', 
+	                    header: this.app.i18n.gettext('Email Forward'), 
 	                    dataIndex: 'email', 
 	                    width: 300, 
 	                    hideable: false, 
 	                    sortable: true,
 	                    quickaddField: new Ext.form.TextField({
-	                        emptyText: this.app.i18n._('Add a forward address...'),
+	                        emptyText: this.app.i18n.gettext('Add a forward address...'),
 	                        vtype: 'email'
 	                    }),
 	                    editor: new Ext.form.TextField({allowBlank: false}) 
@@ -413,13 +576,14 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	        
 	        return [
 	            [this.aliasesGrid, this.forwardsGrid],
-	        [{
-	            fieldLabel: this.app.i18n._('Forward Only'),
-	            name: 'emailForwardOnly',
-	            xtype:'checkbox',
-	            columnWidth: .666,
-	            readOnly: false
-	        }]];
+		        [{
+		            fieldLabel: this.app.i18n.gettext('Forward Only'),
+		            name: 'emailForwardOnly',
+		            xtype: 'checkbox',
+		            columnWidth: 0.666,
+		            readOnly: false
+		        }]
+			];
         }
         
         return [];
@@ -428,7 +592,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @private
      */
-    getFormItems: function() {
+    getFormItems: function () {
         
         this.displayFieldStyle = {
             border: 'silver 1px solid',
@@ -437,7 +601,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };
         
         this.passwordConfirmWindow = new Ext.Window({
-            title: this.app.i18n._('Password confirmation'),
+            title: this.app.i18n.gettext('Password confirmation'),
             closeAction: 'hide',
             modal: true,
             width: 300,
@@ -448,18 +612,18 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 bodyStyle: 'padding:5px;',
                 buttonAlign: 'right',
                 labelAlign: 'top',
-                anchor:'100%',
+                anchor: '100%',
                 items: [{
                     xtype: 'textfield',
                     inputType: 'password',
                     anchor: '100%',
                     id: 'passwordRepeat',
-                    fieldLabel: this.app.i18n._('Repeat password'), 
-                    name:'passwordRepeat',
+                    fieldLabel: this.app.i18n.gettext('Repeat password'), 
+                    name: 'passwordRepeat',
                     listeners: {
                         scope: this,
-                        specialkey: function(field, event){
-                            if(event.getKey() == event.ENTER){
+                        specialkey: function (field, event) {
+                            if (event.getKey() === event.ENTER) {
                                 this.onPasswordConfirm();
                             }
                         }
@@ -468,7 +632,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 buttons: [{
                     text: _('Cancel'),
                     iconCls: 'action_cancel',
-                    handler: function() {
+                    handler: function () {
                         this.passwordConfirmWindow.hide();
                     },
                     scope: this
@@ -481,7 +645,7 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             }),
             listeners: {
                 scope: this,
-                show: function(win) {
+                show: function (win) {
                     var confirmForm = this.passwordConfirmWindow.items.first().getForm();
                     var confirmField = confirmForm.findField('passwordRepeat');
                     
@@ -495,11 +659,10 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
             xtype: 'tabpanel',
             deferredRender: false,
             border: false,
-            plain:true,
+            plain: true,
             activeTab: 0,
-            border: false,
-            items:[{               
-                title: this.app.i18n._('Account'),
+            items: [{               
+                title: this.app.i18n.gettext('Account'),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -508,112 +671,106 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'columnform',
                     labelAlign: 'top',
                     formDefaults: {
-                        xtype:'textfield',
+                        xtype: 'textfield',
                         anchor: '100%',
                         labelSeparator: '',
-                        columnWidth: .333
+                        columnWidth: 0.333
                     },
                     items: [[{
-	                        fieldLabel: this.app.i18n._('First Name'),
-	                        name: 'accountFirstName',
-	                        columnWidth: .5,
-	                        listeners: {
-                    			render: function(field){
-	                    			field.focus(false, 250); 
-	                    			field.selectText();
-                				}
+                        fieldLabel: this.app.i18n.gettext('First Name'),
+                        name: 'accountFirstName',
+                        columnWidth: 0.5,
+                        listeners: {
+                			render: function (field) {
+                    			field.focus(false, 250); 
+                    			field.selectText();
             				}
-	                    }, {
-	                        fieldLabel: this.app.i18n._('Last Name'),
-	                        name: 'accountLastName',
-	                        allowBlank: false,
-	                        columnWidth: .5
-	                    }], [
-		                    {
-		                        fieldLabel: this.app.i18n._('Login Name'),
-		                        name: 'accountLoginName',
-		                        allowBlank: false,
-		                        columnWidth: .5
-		                    }, {
-		                        fieldLabel: this.app.i18n._('Password'),
-                                id: 'accountPassword',
-		                        name: 'accountPassword',
-		                        inputType: 'password',
-		                        emptyText: this.app.i18n._('no password set'),
-		                        columnWidth: .5,
-                                passwordsMatch: true,
-                                enableKeyEvents: true,
-                                listeners: {
-                                    scope: this,
-                                    blur: function(field) {
-                                        var fieldValue = field.getValue();
-                                        if (fieldValue != '') {
-                                            // show password confirmation
-                                            // NOTE: we can't use Ext.Msg.prompt because field has to be of inputType: 'password'
-                                            this.passwordConfirmWindow.show.defer(100, this.passwordConfirmWindow);
-                                        }
-                                    },
-									destroy: function() {
-										// destroy password confirm window
-										this.passwordConfirmWindow.destroy();
-									},
-                                    keydown: function(field) {
-                                        field.passwordsMatch = false;
-                                    }
-                                },
-                                validateValue : function(value) {
-                                    return this.passwordsMatch;
+        				}
+                    }, {
+                        fieldLabel: this.app.i18n.gettext('Last Name'),
+                        name: 'accountLastName',
+                        allowBlank: false,
+                        columnWidth: 0.5
+                    }], [{
+                        fieldLabel: this.app.i18n.gettext('Login Name'),
+                        name: 'accountLoginName',
+                        allowBlank: false,
+                        columnWidth: 0.5
+                    }, {
+                        fieldLabel: this.app.i18n.gettext('Password'),
+                        id: 'accountPassword',
+                        name: 'accountPassword',
+                        inputType: 'password',
+                        emptyText: this.app.i18n.gettext('no password set'),
+                        columnWidth: 0.5,
+                        passwordsMatch: true,
+                        enableKeyEvents: true,
+                        listeners: {
+                            scope: this,
+                            blur: function (field) {
+                                var fieldValue = field.getValue();
+                                if (fieldValue !== '') {
+                                    // show password confirmation
+                                    // NOTE: we can't use Ext.Msg.prompt because field has to be of inputType: 'password'
+                                    this.passwordConfirmWindow.show.defer(100, this.passwordConfirmWindow);
                                 }
-		                    }
-	                    ], [
-	                     	{
-		                        vtype: 'email',
-		                        fieldLabel: this.app.i18n._('Emailaddress'),
-		                        name: 'accountEmailAddress',
-                                id: 'accountEmailAddress',
-		                        columnWidth: .5
-		                    }, {
-		                        //vtype: 'email',
-		                        fieldLabel: this.app.i18n._('OpenID'),
-		                        name: 'openid',
-		                        columnWidth: .5
-		                    }
-	                    ], [
-                            new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-                                fieldLabel: this.app.i18n._('Primary group'),
-                                name: 'accountPrimaryGroup',
-                                blurOnSelect: true,
-                                recordClass: Tine.Tinebase.Model.Group
-                            }), {
-	                            xtype: 'combo',
-	                            fieldLabel: this.app.i18n._('Status'),
-	                            name: 'accountStatus',
-	                            mode: 'local',
-	                            triggerAction: 'all',
-	                            allowBlank: false,
-	                            editable: false,
-	                            store: [['enabled', this.app.i18n._('enabled')],['disabled', this.app.i18n._('disabled')],['expired', this.app.i18n._('expired')]]
-	                        }, {
-                                xtype: 'extuxclearabledatefield',
-	                            fieldLabel: this.app.i18n._('Expires'),
-	                            name: 'accountExpires',
-	                            emptyText: this.app.i18n._('never')
-	                        }
-                        ], [
-							{
-	                            xtype: 'combo',
-	                            fieldLabel: this.app.i18n._('Visibility'),
-	                            name: 'visibility',
-	                            mode: 'local',
-	                            triggerAction: 'all',
-	                            allowBlank: false,
-	                            editable: false,
-	                            store: [['displayed', this.app.i18n._('Display in addressbook')], ['hidden', this.app.i18n._('Hide from addressbook')]]
-							}                            
-                        ]
-                    ] 
-                }, {
-                    title: this.app.i18n._('Information'),
+                            },
+							destroy: function () {
+								// destroy password confirm window
+								this.passwordConfirmWindow.destroy();
+							},
+                            keydown: function (field) {
+                                field.passwordsMatch = false;
+                            }
+                        },
+                        validateValue : function (value) {
+                            return this.passwordsMatch;
+                        }
+                    }], [{
+                        vtype: 'email',
+                        fieldLabel: this.app.i18n.gettext('Emailaddress'),
+                        name: 'accountEmailAddress',
+                        id: 'accountEmailAddress',
+                        columnWidth: 0.5
+                    }, {
+                        //vtype: 'email',
+                        fieldLabel: this.app.i18n.gettext('OpenID'),
+                        name: 'openid',
+                        columnWidth: 0.5
+                    }], [
+                        new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                            fieldLabel: this.app.i18n.gettext('Primary group'),
+                            listWidth: 230,
+                            name: 'accountPrimaryGroup',
+                            blurOnSelect: true,
+                            recordClass: Tine.Tinebase.Model.Group
+                        }), {
+                            xtype: 'combo',
+                            fieldLabel: this.app.i18n.gettext('Status'),
+                            name: 'accountStatus',
+                            mode: 'local',
+                            triggerAction: 'all',
+                            allowBlank: false,
+                            editable: false,
+                            store: [['enabled', this.app.i18n.gettext('enabled')], ['disabled', this.app.i18n.gettext('disabled')], ['expired', this.app.i18n.gettext('expired')]]
+                        }, {
+                            xtype: 'extuxclearabledatefield',
+                            fieldLabel: this.app.i18n.gettext('Expires'),
+                            name: 'accountExpires',
+                            emptyText: this.app.i18n.gettext('never')
+						}
+					], [{
+                        xtype: 'combo',
+                        fieldLabel: this.app.i18n.gettext('Visibility'),
+                        name: 'visibility',
+                        mode: 'local',
+                        triggerAction: 'all',
+                        allowBlank: false,
+                        editable: false,
+                        store: [['displayed', this.app.i18n.gettext('Display in addressbook')], ['hidden', this.app.i18n.gettext('Hide from addressbook')]]
+					}]] 
+				}, {
+                    title: this.app.i18n.gettext('Information'),
                     autoHeight: true,
                     xtype: 'fieldset',
                     checkboxToggle: false,
@@ -625,33 +782,38 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     		xtype: 'displayfield',
 	                        anchor: '100%',
 	                        labelSeparator: '',
-	                        columnWidth: .333,
+	                        columnWidth: 0.333,
                     		style: this.displayFieldStyle
 	                    },
 	                    items: [[{
-		                        fieldLabel: this.app.i18n._('Last login at'),
-		                        name: 'accountLastLogin',
-		                        emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in')
-		                    }, {
-		                        fieldLabel: this.app.i18n._('Last login from'),
-		                        name: 'accountLastLoginfrom',
-		                        emptyText: this.ldapBackend ? this.app.i18n._("don't know") : this.app.i18n._('never logged in')
-		                    }, {
-		                        fieldLabel: this.app.i18n._('Password set'),
-		                        name: 'accountLastPasswordChange',
-		                        emptyText: this.app.i18n._('never')
-		                    }]
-	                    ]
+	                        fieldLabel: this.app.i18n.gettext('Last login at'),
+	                        name: 'accountLastLogin',
+	                        emptyText: this.ldapBackend ? this.app.i18n.gettext("don't know") : this.app.i18n.gettext('never logged in')
+	                    }, {
+	                        fieldLabel: this.app.i18n.gettext('Last login from'),
+	                        name: 'accountLastLoginfrom',
+	                        emptyText: this.ldapBackend ? this.app.i18n.gettext("don't know") : this.app.i18n.gettext('never logged in')
+	                    }, {
+	                        fieldLabel: this.app.i18n.gettext('Password set'),
+	                        name: 'accountLastPasswordChange',
+	                        emptyText: this.app.i18n.gettext('never')
+	                    }]]
 	                }]
                 }]
             }, {
-                title: this.app.i18n._('Fileserver'),
+                title: this.app.i18n.gettext('User memberships'),
+                border: false,
+                frame: false,
+                layout: 'border',
+                items: this.initUserMemberships()
+            }, {
+                title: this.app.i18n.gettext('Fileserver'),
                 disabled: !this.ldapBackend,
                 border: false,
                 frame: true,
                 items: this.initFileserver()
             }, {
-                title: this.app.i18n._('IMAP'),
+                title: this.app.i18n.gettext('IMAP'),
                 disabled: ! Tine.Admin.registry.get('manageImapEmailUser'),
                 autoScroll: true,
                 border: false,
@@ -659,17 +821,17 @@ Tine.Admin.UserEditDialog  = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 layout: 'hfit',
                 items: this.initImap()
 			}, {
-                title: this.app.i18n._('SMTP'),
+                title: this.app.i18n.gettext('SMTP'),
                 disabled: ! Tine.Admin.registry.get('manageSmtpEmailUser'),
                 border: false,
                 frame: true,
                 xtype: 'columnform',
                 labelAlign: 'top',
                 formDefaults: {
-                    xtype:'textfield',
+                    xtype: 'textfield',
                     anchor: '100%',
                     labelSeparator: '',
-                    columnWidth: .333,
+                    columnWidth: 0.333,
                     readOnly: true
                 },
                 items: this.initSmtp()

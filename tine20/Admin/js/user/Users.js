@@ -6,6 +6,9 @@
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
+
+/*global Ext, Tine*/ 
+
 Ext.ns('Tine.Admin.user');
 
 /**
@@ -13,7 +16,7 @@ Ext.ns('Tine.Admin.user');
  * 
  * @static
  */
-Tine.Admin.user.show = function() {
+Tine.Admin.user.show = function () {
     var app = Tine.Tinebase.appMgr.get('Admin');
     if (! Tine.Admin.user.gridPanel) {
         Tine.Admin.user.gridPanel = new Tine.Admin.user.GridPanel({
@@ -44,6 +47,8 @@ Tine.Admin.Model.UserArray = [
     { name: 'accountDisplayName' },
     { name: 'accountFullName' },
     { name: 'accountStatus' },
+	{ name: 'accountGroups' },
+	{ name: 'accountRoles' },
     { name: 'accountPrimaryGroup' },
     { name: 'accountExpires', type: 'date', dateFormat: Date.patterns.ISO8601Long },
     { name: 'accountLastLogin', type: 'date', dateFormat: Date.patterns.ISO8601Long },
@@ -75,7 +80,7 @@ Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserAr
  * @static
  * @return {Object} default data
  */
-Tine.Admin.Model.User.getDefaultData = function() {
+Tine.Admin.Model.User.getDefaultData = function () {
     return {
         sambaSAM: '',
         emailUser: '',

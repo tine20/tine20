@@ -221,15 +221,40 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             // add primary group to account for the group selection combo box
             $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
+            
+            // add user groups
+            $userGroups = Tinebase_Group::getInstance()->getMultiple(Tinebase_Group::getInstance()->getGroupMemberships($user->accountId))->toArray();
+            
+            // add user roles
+            $userRoles = Tinebase_Acl_Roles::getInstance()->getMultiple(Tinebase_Acl_Roles::getInstance()->getRoleMemberships($user->accountId))->toArray();
+            
         } else {
             $userArray = array('accountStatus' => 'enabled', 'visibility' => 'displayed');
             
             // get default primary group for the group selection combo box
             $group = Tinebase_Group::getInstance()->getDefaultGroup();
+            
+            // no user groups by default
+            $userGroups = array();
+            
+            // no user roles by default
+            $userRoles = array();
         }
         
         // encode the account array
         $userArray['accountPrimaryGroup'] = $group->toArray();
+                
+        // encode the groups array
+        $userArray['accountGroups'] = array(
+			'results' 		=> $userGroups,
+			'totalcount' 	=> count($userGroups)
+		);
+		
+		// encode the roles array
+        $userArray['accountRoles'] = array(
+			'results' 		=> $userRoles,
+			'totalcount' 	=> count($userRoles)
+		);
 
         return $userArray;
     }
@@ -316,6 +341,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $account = Admin_Controller_User::getInstance()->create($account, $password, $password);
         } else {
             $account = Admin_Controller_User::getInstance()->update($account, $password, $password);
+        }
+        
+        // after user update or creation add user to selected groups
+        if ($recordData['accountGroups']) {
+			Tinebase_Group::getInstance()->setGroupMemberships($account->accountId, $recordData['accountGroups']);
+        }
+        
+        // after user update or creation add user to selected roles
+        if ($recordData['accountRoles']) {
+			Tinebase_Acl_Roles::getInstance()->setRoleMemberships(array('id' => $account->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $recordData['accountRoles']);
         }
         
         $account->accountPrimaryGroup = Tinebase_Group::getInstance()->getGroupById($account->accountPrimaryGroup);
