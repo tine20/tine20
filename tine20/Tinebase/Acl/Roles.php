@@ -308,6 +308,29 @@ class Tinebase_Acl_Roles
     }
     
     /**
+     * Get multiple roles
+     *
+     * @param string|array $_ids Ids
+     * @return Tinebase_Record_RecordSet
+     */
+    public function getMultiple($_ids)
+    {
+    	$result = new Tinebase_Record_RecordSet('Tinebase_Model_Role');
+    	
+    	if (! empty($_ids)) {
+	        $select = $this->_rolesTable->select();
+	        $select->where($this->_db->quoteIdentifier('id') . ' IN (?)', array_unique((array) $_ids));
+	        
+	        $rows = $this->_rolesTable->fetchAll($select);
+	        foreach ($rows as $row) {
+	        	$result->addRecord(new Tinebase_Model_Role($row->toArray()));
+	        }
+    	}
+    	
+    	return $result;
+    }
+    
+    /**
      * Creates a single role
      * 
      * @param  Tinebase_Model_Role
@@ -482,6 +505,110 @@ class Tinebase_Acl_Roles
             );
             $this->_roleMembersTable->insert($data); 
         }
+    }
+    
+    /**
+     * set all roles an user is member of
+     *
+     * @param  array  $_account as role member ("account_type" => account type, "account_id" => account id)
+     * @param  mixed  $_roleIds
+     * @return array
+     */
+    public function setRoleMemberships($_account, $_roleIds)
+    {
+        if ($_roleIds instanceof Tinebase_Record_RecordSet) {
+            $_roleIds = $_roleIds->getArrayOfIds();
+        }
+        
+        if(count($_roleIds) === 0) {
+            throw new Tinebase_Exception_InvalidArgument('user must belong to at least one role');
+        }
+        
+        $validTypes = array( Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+
+        if (! in_array($_account['type'], $validTypes)) {
+            throw new Tinebase_Exception_InvalidArgument('account_type must be one of ' . 
+                implode(', ', $validTypes) . ' (values given: ' . 
+                print_r($_account, true) . ')');
+        }
+        
+        $roleMemberships = $this->getRoleMemberships($_account['id']);
+        
+        $removeRoleMemberships = array_diff($roleMemberships, $_roleIds);
+        $addRoleMemberships    = array_diff($_roleIds, $roleMemberships);
+        
+        foreach ($addRoleMemberships as $roleId) {
+            $this->addRoleMember($roleId, $_account);
+        }
+        
+        foreach ($removeRoleMemberships as $roleId) {
+            $this->removeRoleMember($roleId, $_account);
+        }
+        
+        return $this->getRoleMemberships($_account['id']);
+    }
+    
+    /**
+     * add a new member to a role
+     *
+     * @param  string  $_roleId
+     * @param  array   $_account as role member ("account_type" => account type, "account_id" => account id)
+     */
+    public function addRoleMember($_roleId, $_account)
+    {
+    	$roleId = (int)$_roleId;
+        if ($roleId != $_roleId && $roleId > 0) {
+            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
+        }
+    	
+        $validTypes = array( Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
+
+        if (! in_array($_account['type'], $validTypes)) {
+            throw new Tinebase_Exception_InvalidArgument('account_type must be one of ' . 
+                implode(', ', $validTypes) . ' (values given: ' . 
+                print_r($_account, true) . ')');
+        }
+        
+        $data = array(
+            'role_id'       => $roleId,
+            'account_type'  => $_account['type'],
+            'account_id'    => $_account['id'],
+        );
+                
+        try {
+        	$this->_roleMembersTable->insert($data);
+            
+            // invalidate cache
+            Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('role'));     
+                   
+        } catch (Zend_Db_Statement_Exception $e) {
+            // account is already member of this group
+        }
+    }
+    
+    /**
+     * remove one member from the role
+     *
+     * @param  mixed  $_groupId
+     * @param  array   $_account as role member ("account_type" => account type, "account_id" => account id)
+     */
+    public function removeRoleMember($_roleId, $_account)
+    {
+        $roleId = (int)$_roleId;
+        if ($roleId != $_roleId && $roleId > 0) {
+            throw new Tinebase_Exception_InvalidArgument('$_roleId must be integer and greater than 0');
+        }
+        
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('role_id') . '= ?', $roleId),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . '= ?', $_account['type']),
+            $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . '= ?', $_account['id']),
+        );
+         
+        $this->_roleMembersTable->delete($where);
+        
+        // invalidate cache
+        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('role'));
     }
     
     /**
