@@ -53,16 +53,20 @@ Tine.Felamimail.setTreeContextMenus = function() {
         scope: this,
         handler: function() {
             this.ctxNode.getUI().addClass("x-tree-node-loading");
+            var folderId = this.ctxNode.attributes.folder_id;
             Ext.Ajax.request({
                 params: {
                     method: 'Felamimail.emptyFolder',
-                    folderId: this.ctxNode.attributes.folder_id
+                    folderId: folderId
                 },
                 scope: this,
                 success: function(result, request){
                     if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
                         var newRecord = Tine.Felamimail.folderBackend.recordReader(result);
                         this.app.getFolderStore().updateFolder(newRecord);
+                    } else {
+                        var folder = this.app.getFolderStore().getById(folderId);
+                        folder.set('cache_unreadcount', 0);
                     }
                     this.ctxNode.getUI().removeClass("x-tree-node-loading");
                 },
