@@ -902,6 +902,16 @@ class Tinebase_Core
     }
 
     /**
+     * get locale from the registry
+     *
+     * @return Zend_Locale
+     */
+    public static function getLocale()
+    {
+        return self::get(self::LOCALE);
+    }
+        
+    /**
      * get current user account
      *
      * @return Tinebase_Model_FullUser the user account record
