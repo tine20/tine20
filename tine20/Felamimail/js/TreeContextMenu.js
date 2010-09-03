@@ -190,6 +190,35 @@ Tine.Felamimail.setTreeContextMenus = function() {
         }
     };
     */
+    
+    var markFolderSeenAction = {
+        text: this.app.i18n._('Mark Folder as read'),
+        iconCls: 'action_mark_read',
+        scope: this,
+        handler: function() {
+            if (this.ctxNode) {
+                var folderId = this.ctxNode.id,
+                    filter = [{
+                    field: 'folder_id',
+                    operator: 'equals',
+                    value: folderId
+                }];
+                
+                var isSelectedNode = (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id);
+                
+                Tine.Felamimail.messageBackend.addFlags(filter, '\\Seen', {
+                    callback: function() {
+                        this.app = Tine.Tinebase.appMgr.get('Felamimail');
+                        var folder = this.app.getFolderStore().getById(folderId);
+                        folder.set('cache_unreadcount', 0);
+                        if (isSelectedNode) {
+                            this.app.getMainScreen().getCenterPanel().loadData(true, true, true);
+                        }
+                    }
+                });
+            }
+        }
+    };
 
     var updateFolderCacheAction = {
         text: this.app.i18n._('Update Folder List'),
@@ -232,15 +261,15 @@ Tine.Felamimail.setTreeContextMenus = function() {
     };
     
     // system folder ctx menu
-    config.actions = ['add'];
+    config.actions = [markFolderSeenAction, 'add'];
     this.contextMenuSystemFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // user folder ctx menu
-    config.actions = ['add', 'rename', 'delete'];
+    config.actions = [markFolderSeenAction, 'add', 'rename', 'delete'];
     this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // trash ctx menu
-    config.actions = ['add', emptyFolderAction];
+    config.actions = [markFolderSeenAction, 'add', emptyFolderAction];
     this.contextMenuTrash = Tine.widgets.tree.ContextMenu.getMenu(config);
     
     // account ctx menu
