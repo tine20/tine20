@@ -358,24 +358,56 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * try to search for Timesheets with date filtering
+     * try to search for Timesheets with date filtering (using 'weekThis' filter)
      *
      */
-    public function testSearchTimesheetsWithDateFilter()
+    public function testSearchTimesheetsWithDateFilterWeekThis()
     {
+        $this->_dateFilterTest();
+    }
+
+    /**
+     * try to search for Timesheets with date filtering (using inweek operator)
+     *
+     */
+    public function testSearchTimesheetsWithDateFilterInWeek()
+    {
+        $this->_dateFilterTest('inweek');
+    }
+    
+    /**
+     * date filter test helper
+     * 
+     * @param string $_type weekThis|inweek
+     */
+    protected function _dateFilterTest($_type = 'weekThis')
+    {
+        $oldLocale = Tinebase_Core::getLocale();
+        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('en_US'));
+        
+        // date is last sunday (1. day of week in the US)
+        $today = new Zend_Date();
+        $dayOfWeek = $today->get(Zend_Date::WEEKDAY_DIGIT);
+        $lastSunday = $today->subDay($dayOfWeek);
+        
         // create
-        $timesheet = $this->_getTimesheet();
+        $timesheet = $this->_getTimesheet(NULL, $lastSunday);
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // search & check
-        $search = $this->_json->searchTimesheets($this->_getTimesheetDateFilter(), $this->_getPaging());
+        $search = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_type), $this->_getPaging());
+        $this->assertEquals(1, $search['totalcount'], 'timesheet not found in english locale');
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
         $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
         $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
-        $this->assertEquals(1, $search['totalcount']);
         
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+        // change locale to de_DE -> timesheet should no longer be found because monday is the first day of the week
+        Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('de_DE'));
+        $search = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_type), $this->_getPaging());
+        $this->assertEquals(0, $search['totalcount'], 'timesheet not found in german locale');
+        
+        Tinebase_Core::set(Tinebase_Core::LOCALE, $oldLocale);
     }
     
     /**
@@ -626,9 +658,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get Timesheet (create timeaccount as well)
      *
+     * @param string $_taId
+     * @param Zend_Date $_startDate
      * @return Timetracker_Model_Timesheet
      */
-    protected function _getTimesheet($_taId = NULL)
+    protected function _getTimesheet($_taId = NULL, $_startDate = NULL)
     {
         if ($_taId === NULL) {
             $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->create($this->_getTimeaccount());
@@ -637,11 +671,13 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             $taId = $_taId;
         }
         
+        $startDate = ($_startDate !== NULL) ? $_startDate : Zend_Date::now()->toString('yyyy-MM-dd');
+        
         return new Timetracker_Model_Timesheet(array(
             'account_id'        => Tinebase_Core::getUser()->getId(),
             'timeaccount_id'    => $taId,
             'description'       => 'blabla',
-            'start_date'        => Zend_Date::now()->toString('yyyy-MM-dd'),
+            'start_date'        => $startDate,
             'duration'          => 30,
         ), TRUE);
     }
@@ -781,11 +817,12 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * get Timesheet filter with date
      *
+     * @param string $_type week filter type
      * @return array
      */
-    protected function _getTimesheetDateFilter()
+    protected function _getTimesheetDateFilter($_type = 'weekThis')
     {
-        return array(
+        $result = array(
             array(
                 'field' => 'query', 
                 'operator' => 'contains', 
@@ -793,15 +830,28 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             ),
             array(
                 'field' => 'start_date', 
-                'operator' => 'within', 
-                'value' => 'weekThis'
-            ),
-            array(
-                'field' => 'start_date', 
                 'operator' => 'after', 
                 'value' => '2008-12-12'
             ),
         );
+        
+        if ($_type == 'inweek') {
+            $date = new Zend_Date();
+            $weekNumber = $date->get(Zend_Date::WEEK);
+            $result[] = array(
+                'field' => 'start_date', 
+                'operator' => 'inweek', 
+                'value' => $weekNumber
+            );
+        } else {
+            $result[] = array(
+                'field' => 'start_date', 
+                'operator' => 'within', 
+                'value' => 'weekThis'
+            );
+        }
+        
+        return $result;
     }
     
     /**

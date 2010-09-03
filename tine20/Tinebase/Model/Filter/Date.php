@@ -107,19 +107,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 case 'weekLast':    
                     $date->sub(7, Zend_Date::DAY);
                 case 'weekThis':
-                    $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
-                    // in german locale sunday is last day of the week
-                    $dayOfWeek = ($dayOfWeek == 0) ? 7 : $dayOfWeek;
-                    $date->sub($dayOfWeek-1, Zend_Date::DAY);
-                    $monday = $date->toString($this->_dateFormat);
-                    
-                    $date->add(6, Zend_Date::DAY);
-                    $sunday = $date->toString($this->_dateFormat);
-                    
-                    $value = array(
-                        $monday, 
-                        $sunday,
-                    );
+                    $value = $this->_getFirstAndLastDayOfWeek($date);
                     break;
                 /******* month *********/
                 case 'monthNext':
@@ -197,19 +185,60 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             if ($_value > 52) {
                 $_value = 52;
             } elseif ($_value < 1) {
-                $_value = $date->toString(Zend_Date::WEEK);
+                $_value = $date->get(Zend_Date::WEEK);
             }
+            $value = $this->_getFirstAndLastDayOfWeek($date, $_value);
             
-            $date->setWeek($_value)
-                 ->setWeekDay(1);
-            
-            $value = array(
-                $date->toString($this->_dateFormat), 
-                $date->setWeekDay(7)->toString($this->_dateFormat), 
-            );
         } else  {
             $value = substr($_value, 0, 10);
         }
         return $value;
+    }
+    
+    /**
+     * get string representation of first and last days of the week defined by date/week number
+     * 
+     * @param Zend_Date $_date
+     * @param integer $_weekNumber optional
+     * @return array
+     */
+    protected function _getFirstAndLastDayOfWeek(Zend_Date $_date, $_weekNumber = NULL)
+    {
+        $firstDayOfWeek = $this->_getFirstDayOfWeek();
+        
+        if ($_weekNumber !== NULL) {
+            $_date->setWeek($_weekNumber);
+        } 
+        
+        $dayOfWeek = $_date->get(Zend_Date::WEEKDAY_DIGIT);
+        // in some locales sunday is last day of the week -> we need to init dayOfWeek with 7
+        $dayOfWeek = ($firstDayOfWeek == 1 && $dayOfWeek == 0) ? 7 : $dayOfWeek;
+        $_date->sub($dayOfWeek - $firstDayOfWeek, Zend_Date::DAY);
+        
+        $firstDay = $_date->toString($this->_dateFormat);
+        $_date->add(6, Zend_Date::DAY);
+        $lastDay = $_date->toString($this->_dateFormat);
+            
+        $result = array(
+            $firstDay,
+            $lastDay, 
+        );
+        
+        return $result;
+    }
+    
+    /**
+     * returns number of the first day of the week (0 = sunday or 1 = monday) depending on locale
+     * 
+     * @return integer
+     */
+    protected function _getFirstDayOfWeek()
+    {
+        $locale = Tinebase_Core::getLocale();
+        $weekInfo = Zend_Locale_Data::getList($locale, 'week');
+        
+        $result = ($weekInfo['firstDay'] == 'sun') ? 0 : 1;
+        
+        return $result;
     }
 }
