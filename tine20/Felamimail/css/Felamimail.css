@@ -53,14 +53,14 @@
 }
 
 
-.action_mark_unread {
-    background-image:url(../../images/oxygen/16x16/actions/mail-mark-unread.png) !important;
+.action_mark_read {
+    background-image:url(../../images/oxygen/16x16/actions/mail-mark-read.png) !important;
 }
-.x-btn-medium .action_mark_unread {
-    background-image:url(../../images/oxygen/22x22/actions/mail-mark-unread.png) !important;
+.x-btn-medium .action_mark_read {
+    background-image:url(../../images/oxygen/22x22/actions/mail-mark-read.png) !important;
 }
-.x-btn-large .action_mark_unread {
-    background-image:url(../../images/oxygen/32x32/actions/mail-mark-unread.png) !important;
+.x-btn-large .action_mark_read {
+    background-image:url(../../images/oxygen/32x32/actions/mail-mark-read.png) !important;
 }
 	
 

@@ -206,7 +206,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             requiredGrant: 'readGrant',
             text: this.app.i18n._('Mark read/unread'),
             handler: this.onToggleFlag.createDelegate(this, ['\\Seen'], true),
-            iconCls: 'action_mark_unread',
+            iconCls: 'action_mark_read',
             allowMultiple: true,
             disabled: true
         });
