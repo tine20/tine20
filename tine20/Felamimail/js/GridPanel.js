@@ -19,16 +19,12 @@ Ext.namespace('Tine.Felamimail');
  * 
  * <p>Message Grid Panel</p>
  * <p><pre>
- * TODO         add flagged/'starred' filter
- * TODO         add show source code function
- * TODO         make doubleclick work again: show mail in new window (no edit dialog)
- * TODO         add pdf export
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor
