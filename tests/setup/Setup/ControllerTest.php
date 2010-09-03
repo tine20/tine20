@@ -153,10 +153,15 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_uit->saveAuthentication($originalRedirectSettings);
     }
     
-    public function testInstallGoupNameOptions()
+    public function testInstallGroupNameOptions()
     {
         $this->_uninstallAllApplications();
-        $this->_installAllApplications(array('defaultAdminGroupName' => 'phpunit-admins', 'defaultUserGroupName' => 'phpunit-users'));
+        $this->_installAllApplications(array(
+            'defaultAdminGroupName' => 'phpunit-admins', 
+            'defaultUserGroupName'  => 'phpunit-users',
+            'adminLoginName'        => Tinebase_Core::get('testconfig')->username,
+            'adminPassword'         => Tinebase_Core::get('testconfig')->password,
+        ));
         $adminUser = Tinebase_Core::get('currentAccount');
         $this->assertEquals('phpunit-admins', Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_ADMIN_GROUP_NAME_KEY));
         $this->assertEquals('phpunit-users', Tinebase_User::getBackendConfiguration(Tinebase_User::DEFAULT_USER_GROUP_NAME_KEY));
