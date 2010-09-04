@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Voipmanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-14 10:06+0100\n"
+"PO-Revision-Date: 2010-09-04 22:11+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -15,14 +15,16 @@ msgstr ""
 
 #: js/CallForwardPanel.js:86
 msgid "Forward immediately"
-msgstr "Przekaż natychmiast"
+msgstr "Przekieruj natychmiast"
 
-#: js/CallForwardPanel.js:96 js/CallForwardPanel.js:139
+#: js/CallForwardPanel.js:96
+#: js/CallForwardPanel.js:139
 #: js/CallForwardPanel.js:181
 msgid "Mode"
 msgstr "Stan"
 
-#: js/CallForwardPanel.js:120 js/CallForwardPanel.js:162
+#: js/CallForwardPanel.js:120
+#: js/CallForwardPanel.js:162
 #: js/CallForwardPanel.js:205
 msgid "Number"
 msgstr "Numer"
@@ -39,7 +41,8 @@ msgstr "Przekieruj z opóźnieniem"
 msgid "Delay time"
 msgstr "Opóźnienie"
 
-#: js/Models.js:79 js/Snom/PhoneEditDialog.js:263
+#: js/Models.js:79
+#: js/Snom/PhoneEditDialog.js:263
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
@@ -53,7 +56,9 @@ msgstr[0] "Lista telefonów"
 msgstr[1] "listy telefonów"
 msgstr[2] "listy telefonów"
 
-#: js/Models.js:130 js/Voipmanager.js:116 js/Snom/PhoneGridPanel.js:103
+#: js/Models.js:130
+#: js/Voipmanager.js:116
+#: js/Snom/PhoneGridPanel.js:103
 msgid "Location"
 msgid_plural "Locations"
 msgstr[0] "Lokalizacja"
@@ -67,7 +72,8 @@ msgstr[0] "Lista lokalizacji"
 msgstr[1] "listy lokalizacji"
 msgstr[2] "listy lokalizacji"
 
-#: js/Models.js:167 js/Snom/PhoneGridPanel.js:112
+#: js/Models.js:167
+#: js/Snom/PhoneGridPanel.js:112
 msgid "Template"
 msgid_plural "Templates"
 msgstr[0] "Szablon"
@@ -81,7 +87,9 @@ msgstr[0] "Lista szablonów"
 msgstr[1] "listy szablonów"
 msgstr[2] "listy szablonów"
 
-#: js/Models.js:205 js/Voipmanager.js:157 js/Snom/PhoneGridPanel.js:127
+#: js/Models.js:205
+#: js/Voipmanager.js:157
+#: js/Snom/PhoneGridPanel.js:127
 msgid "Software"
 msgid_plural "Softwares"
 msgstr[0] "Oprogramowanie"
@@ -109,7 +117,8 @@ msgstr[0] "Lista obrazów oprogramowania"
 msgstr[1] "listy obrazów oprogramowania"
 msgstr[2] "listy obrazów oprogramowania"
 
-#: js/Models.js:279 js/Snom/LineGridPanel.js:236
+#: js/Models.js:279
+#: js/Snom/LineGridPanel.js:236
 msgid "Line"
 msgid_plural "Lines"
 msgstr[0] "Łącze"
@@ -123,7 +132,8 @@ msgstr[0] "Lista łączy"
 msgstr[1] "listy łączy"
 msgstr[2] "listy łączy"
 
-#: js/Models.js:336 js/Voipmanager.js:147
+#: js/Models.js:336
+#: js/Voipmanager.js:147
 msgid "Setting"
 msgid_plural "Settings"
 msgstr[0] "Ustawienie"
@@ -137,7 +147,8 @@ msgstr[0] "Lista ustawień"
 msgstr[1] "listy ustawień"
 msgstr[2] "listy ustawień"
 
-#: js/Models.js:431 js/Voipmanager.js:32
+#: js/Models.js:431
+#: js/Voipmanager.js:32
 msgid "SipPeer"
 msgid_plural "SipPeers"
 msgstr[0] "Urządzenie SIP"
@@ -151,7 +162,9 @@ msgstr[0] "Lista urządzeń SIP"
 msgstr[1] "listy urządzeń SIP"
 msgstr[2] "listy urządzeń SIP"
 
-#: js/Models.js:465 js/Voipmanager.js:53 js/Asterisk/VoicemailEditDialog.js:56
+#: js/Models.js:465
+#: js/Voipmanager.js:53
+#: js/Asterisk/VoicemailEditDialog.js:56
 #: js/Asterisk/SipPeerEditDialog.js:76
 msgid "Context"
 msgid_plural "Contexts"
@@ -166,7 +179,8 @@ msgstr[0] "Lista kontekstów"
 msgstr[1] "listy kontekstów"
 msgstr[2] "listy kontekstów"
 
-#: js/Models.js:521 js/Voipmanager.js:63
+#: js/Models.js:521
+#: js/Voipmanager.js:63
 msgid "Voicemail"
 msgid_plural "Voicemails"
 msgstr[0] "Wiadomość głosowa jako e-mail"
@@ -180,7 +194,8 @@ msgstr[0] "Lista wiadomości głosowych jako poczta"
 msgstr[1] "listy wiadomości głosowych jako poczta"
 msgstr[2] "list wiadomości głosowych jako poczta"
 
-#: js/Models.js:556 js/Voipmanager.js:73
+#: js/Models.js:556
+#: js/Voipmanager.js:73
 msgid "Meetme"
 msgid_plural "Meetmes"
 msgstr[0] "Spotkanie"
@@ -218,7 +233,8 @@ msgstr "Telefony"
 msgid "Templates"
 msgstr "Szablony"
 
-#: js/Voipmanager.js:136 js/Snom/TemplateEditDialog.js:79
+#: js/Voipmanager.js:136
+#: js/Snom/TemplateEditDialog.js:79
 msgid "Keylayout"
 msgstr "Layout przycisków"
 
@@ -226,10 +242,14 @@ msgstr "Layout przycisków"
 msgid "Lines"
 msgstr "Łącza"
 
-#: js/Snom/PhoneEditDialog.js:278 js/Snom/LocationEditDialog.js:42
-#: js/Snom/TemplateEditDialog.js:42 js/Snom/LocationGridPanel.js:131
-#: js/Asterisk/ContextEditDialog.js:41 js/Asterisk/VoicemailEditDialog.js:69
-#: js/Asterisk/SipPeerGridPanel.js:51 js/Asterisk/SipPeerEditDialog.js:68
+#: js/Snom/PhoneEditDialog.js:278
+#: js/Snom/LocationEditDialog.js:42
+#: js/Snom/TemplateEditDialog.js:42
+#: js/Snom/LocationGridPanel.js:131
+#: js/Asterisk/ContextEditDialog.js:41
+#: js/Asterisk/VoicemailEditDialog.js:69
+#: js/Asterisk/SipPeerGridPanel.js:51
+#: js/Asterisk/SipPeerEditDialog.js:68
 #: js/Asterisk/ContextGridPanel.js:76
 msgid "Name"
 msgstr "Nazwa"
@@ -262,169 +282,228 @@ msgstr "Obecna wersja oprogramowania"
 msgid "Settings Loaded at"
 msgstr "Ustawienia wczytano"
 
-#: js/Snom/PhoneEditDialog.js:387 js/Snom/SettingEditDialog.js:92
+#: js/Snom/PhoneEditDialog.js:387
+#: js/Snom/SettingEditDialog.js:92
 #: js/Snom/TemplateEditDialog.js:68
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: js/Snom/PhoneEditDialog.js:405 js/Snom/SettingEditDialog.js:125
+#: js/Snom/PhoneEditDialog.js:405
+#: js/Snom/SettingEditDialog.js:125
 #: js/Snom/SettingGridPanel.js:88
 msgid "web_language"
 msgstr "Język interfejsu WWW"
 
-#: js/Snom/PhoneEditDialog.js:409 js/Snom/PhoneEditDialog.js:427
-#: js/Snom/PhoneEditDialog.js:451 js/Snom/PhoneEditDialog.js:463
-#: js/Snom/PhoneEditDialog.js:474 js/Snom/PhoneEditDialog.js:484
-#: js/Snom/PhoneEditDialog.js:493 js/Snom/PhoneEditDialog.js:502
-#: js/Snom/PhoneEditDialog.js:511 js/Snom/PhoneEditDialog.js:520
-#: js/Snom/PhoneEditDialog.js:529 js/Snom/PhoneEditDialog.js:538
-#: js/Snom/SettingEditDialog.js:132 js/Snom/SettingEditDialog.js:154
-#: js/Snom/SettingEditDialog.js:182 js/Snom/SettingEditDialog.js:198
-#: js/Snom/SettingEditDialog.js:213 js/Snom/SettingEditDialog.js:227
-#: js/Snom/SettingEditDialog.js:240 js/Snom/SettingEditDialog.js:253
-#: js/Snom/SettingEditDialog.js:266 js/Snom/SettingEditDialog.js:279
-#: js/Snom/SettingEditDialog.js:292 js/Snom/SettingEditDialog.js:305
+#: js/Snom/PhoneEditDialog.js:409
+#: js/Snom/PhoneEditDialog.js:427
+#: js/Snom/PhoneEditDialog.js:451
+#: js/Snom/PhoneEditDialog.js:463
+#: js/Snom/PhoneEditDialog.js:474
+#: js/Snom/PhoneEditDialog.js:484
+#: js/Snom/PhoneEditDialog.js:493
+#: js/Snom/PhoneEditDialog.js:502
+#: js/Snom/PhoneEditDialog.js:511
+#: js/Snom/PhoneEditDialog.js:520
+#: js/Snom/PhoneEditDialog.js:529
+#: js/Snom/PhoneEditDialog.js:538
+#: js/Snom/SettingEditDialog.js:132
+#: js/Snom/SettingEditDialog.js:154
+#: js/Snom/SettingEditDialog.js:182
+#: js/Snom/SettingEditDialog.js:198
+#: js/Snom/SettingEditDialog.js:213
+#: js/Snom/SettingEditDialog.js:227
+#: js/Snom/SettingEditDialog.js:240
+#: js/Snom/SettingEditDialog.js:253
+#: js/Snom/SettingEditDialog.js:266
+#: js/Snom/SettingEditDialog.js:279
+#: js/Snom/SettingEditDialog.js:292
+#: js/Snom/SettingEditDialog.js:305
 msgid "- factory default -"
 msgstr "- domyślne ustawienia fabryczne -"
 
-#: js/Snom/PhoneEditDialog.js:423 js/Snom/SettingEditDialog.js:147
-#: js/Snom/SettingGridPanel.js:95 js/Asterisk/SipPeerGridPanel.js:172
+#: js/Snom/PhoneEditDialog.js:423
+#: js/Snom/SettingEditDialog.js:147
+#: js/Snom/SettingGridPanel.js:95
+#: js/Asterisk/SipPeerGridPanel.js:172
 msgid "language"
 msgstr "Język"
 
-#: js/Snom/PhoneEditDialog.js:447 js/Snom/SettingEditDialog.js:175
+#: js/Snom/PhoneEditDialog.js:447
+#: js/Snom/SettingEditDialog.js:175
 #: js/Snom/SettingGridPanel.js:102
 msgid "display_method"
 msgstr "Metoda wyświetlania"
 
-#: js/Snom/PhoneEditDialog.js:452 js/Snom/SettingEditDialog.js:183
+#: js/Snom/PhoneEditDialog.js:452
+#: js/Snom/SettingEditDialog.js:183
 msgid "whole url"
 msgstr "pełny URL"
 
-#: js/Snom/PhoneEditDialog.js:453 js/Snom/SettingEditDialog.js:112
-#: js/Snom/SettingEditDialog.js:184 js/Snom/TemplateGridPanel.js:76
-#: js/Snom/SoftwareGridPanel.js:76 js/Snom/SettingGridPanel.js:76
-#: js/Snom/SoftwareEditDialog.js:61 js/Asterisk/SipPeerGridPanel.js:77
+#: js/Snom/PhoneEditDialog.js:453
+#: js/Snom/SettingEditDialog.js:112
+#: js/Snom/SettingEditDialog.js:184
+#: js/Snom/TemplateGridPanel.js:76
+#: js/Snom/SoftwareGridPanel.js:76
+#: js/Snom/SettingGridPanel.js:76
+#: js/Snom/SoftwareEditDialog.js:61
+#: js/Asterisk/SipPeerGridPanel.js:77
 msgid "name"
 msgstr "Nazwa"
 
-#: js/Snom/PhoneEditDialog.js:454 js/Snom/SettingEditDialog.js:185
+#: js/Snom/PhoneEditDialog.js:454
+#: js/Snom/SettingEditDialog.js:185
 msgid "number"
 msgstr "numer"
 
-#: js/Snom/PhoneEditDialog.js:455 js/Snom/SettingEditDialog.js:186
+#: js/Snom/PhoneEditDialog.js:455
+#: js/Snom/SettingEditDialog.js:186
 msgid "name + number"
 msgstr "nazwa + numer"
 
-#: js/Snom/PhoneEditDialog.js:456 js/Snom/SettingEditDialog.js:187
+#: js/Snom/PhoneEditDialog.js:456
+#: js/Snom/SettingEditDialog.js:187
 msgid "number + name"
 msgstr "numer + nazwa"
 
-#: js/Snom/PhoneEditDialog.js:459 js/Snom/SettingEditDialog.js:191
+#: js/Snom/PhoneEditDialog.js:459
+#: js/Snom/SettingEditDialog.js:191
 #: js/Snom/SettingGridPanel.js:165
 msgid "call_waiting"
 msgstr "Zakolejkowane połączenia"
 
-#: js/Snom/PhoneEditDialog.js:464 js/Snom/PhoneEditDialog.js:503
-#: js/Snom/PhoneEditDialog.js:512 js/Snom/PhoneEditDialog.js:521
-#: js/Snom/PhoneEditDialog.js:530 js/Snom/PhoneEditDialog.js:539
-#: js/Snom/SettingEditDialog.js:199 js/Snom/SettingEditDialog.js:254
-#: js/Snom/SettingEditDialog.js:267 js/Snom/SettingEditDialog.js:280
-#: js/Snom/SettingEditDialog.js:293 js/Snom/SettingEditDialog.js:306
-#: js/Snom/LocationEditDialog.js:163 js/Snom/LocationEditDialog.js:184
-#: js/Asterisk/VoicemailEditDialog.js:113 js/Asterisk/SipPeerEditDialog.js:161
+#: js/Snom/PhoneEditDialog.js:464
+#: js/Snom/PhoneEditDialog.js:503
+#: js/Snom/PhoneEditDialog.js:512
+#: js/Snom/PhoneEditDialog.js:521
+#: js/Snom/PhoneEditDialog.js:530
+#: js/Snom/PhoneEditDialog.js:539
+#: js/Snom/SettingEditDialog.js:199
+#: js/Snom/SettingEditDialog.js:254
+#: js/Snom/SettingEditDialog.js:267
+#: js/Snom/SettingEditDialog.js:280
+#: js/Snom/SettingEditDialog.js:293
+#: js/Snom/SettingEditDialog.js:306
+#: js/Snom/LocationEditDialog.js:163
+#: js/Snom/LocationEditDialog.js:184
+#: js/Asterisk/VoicemailEditDialog.js:113
+#: js/Asterisk/SipPeerEditDialog.js:161
 #: js/Asterisk/SipPeerEditDialog.js:172
 msgid "on"
 msgstr "wł."
 
 # Before you'll make any changes here, please see the german translation.
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetuzng an.
-#: js/Snom/PhoneEditDialog.js:465 js/Snom/SettingEditDialog.js:200
+#: js/Snom/PhoneEditDialog.js:465
+#: js/Snom/SettingEditDialog.js:200
 msgid "visual"
 msgstr "wybieranie"
 
 # Before you'll make any changes here, please see the german translation.
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetuzng an.
-#: js/Snom/PhoneEditDialog.js:466 js/Snom/SettingEditDialog.js:201
+#: js/Snom/PhoneEditDialog.js:466
+#: js/Snom/SettingEditDialog.js:201
 msgid "ringer"
 msgstr "łączenie"
 
-#: js/Snom/PhoneEditDialog.js:467 js/Snom/PhoneEditDialog.js:504
-#: js/Snom/PhoneEditDialog.js:513 js/Snom/PhoneEditDialog.js:522
-#: js/Snom/PhoneEditDialog.js:531 js/Snom/PhoneEditDialog.js:540
-#: js/Snom/SettingEditDialog.js:202 js/Snom/SettingEditDialog.js:255
-#: js/Snom/SettingEditDialog.js:268 js/Snom/SettingEditDialog.js:281
-#: js/Snom/SettingEditDialog.js:294 js/Snom/SettingEditDialog.js:307
-#: js/Snom/LocationEditDialog.js:164 js/Snom/LocationEditDialog.js:185
-#: js/Asterisk/VoicemailEditDialog.js:114 js/Asterisk/SipPeerEditDialog.js:161
+#: js/Snom/PhoneEditDialog.js:467
+#: js/Snom/PhoneEditDialog.js:504
+#: js/Snom/PhoneEditDialog.js:513
+#: js/Snom/PhoneEditDialog.js:522
+#: js/Snom/PhoneEditDialog.js:531
+#: js/Snom/PhoneEditDialog.js:540
+#: js/Snom/SettingEditDialog.js:202
+#: js/Snom/SettingEditDialog.js:255
+#: js/Snom/SettingEditDialog.js:268
+#: js/Snom/SettingEditDialog.js:281
+#: js/Snom/SettingEditDialog.js:294
+#: js/Snom/SettingEditDialog.js:307
+#: js/Snom/LocationEditDialog.js:164
+#: js/Snom/LocationEditDialog.js:185
+#: js/Asterisk/VoicemailEditDialog.js:114
+#: js/Asterisk/SipPeerEditDialog.js:161
 #: js/Asterisk/SipPeerEditDialog.js:172
 msgid "off"
 msgstr "wył."
 
-#: js/Snom/PhoneEditDialog.js:470 js/Snom/SettingEditDialog.js:206
+#: js/Snom/PhoneEditDialog.js:470
+#: js/Snom/SettingEditDialog.js:206
 #: js/Snom/SettingGridPanel.js:109
 msgid "mwi_notification"
 msgstr "Powiadomienie MWI"
 
-#: js/Snom/PhoneEditDialog.js:475 js/Snom/SettingEditDialog.js:214
+#: js/Snom/PhoneEditDialog.js:475
+#: js/Snom/SettingEditDialog.js:214
 msgid "silent"
 msgstr "bezgłośnie"
 
-#: js/Snom/PhoneEditDialog.js:476 js/Snom/SettingEditDialog.js:215
+#: js/Snom/PhoneEditDialog.js:476
+#: js/Snom/SettingEditDialog.js:215
 msgid "beep"
 msgstr "sygnał dźwiękowy"
 
-#: js/Snom/PhoneEditDialog.js:477 js/Snom/SettingEditDialog.js:216
+#: js/Snom/PhoneEditDialog.js:477
+#: js/Snom/SettingEditDialog.js:216
 msgid "reminder"
 msgstr "przypomnienie"
 
-#: js/Snom/PhoneEditDialog.js:480 js/Snom/SettingEditDialog.js:220
+#: js/Snom/PhoneEditDialog.js:480
+#: js/Snom/SettingEditDialog.js:220
 #: js/Snom/SettingGridPanel.js:116
 msgid "mwi_dialtone"
 msgstr "Sygnał MWI"
 
-#: js/Snom/PhoneEditDialog.js:485 js/Snom/SettingEditDialog.js:228
+#: js/Snom/PhoneEditDialog.js:485
+#: js/Snom/SettingEditDialog.js:228
 msgid "normal"
 msgstr "normalny"
 
-#: js/Snom/PhoneEditDialog.js:486 js/Snom/SettingEditDialog.js:229
+#: js/Snom/PhoneEditDialog.js:486
+#: js/Snom/SettingEditDialog.js:229
 msgid "stutter"
 msgstr "przerywany"
 
-#: js/Snom/PhoneEditDialog.js:489 js/Snom/SettingEditDialog.js:233
+#: js/Snom/PhoneEditDialog.js:489
+#: js/Snom/SettingEditDialog.js:233
 #: js/Snom/SettingGridPanel.js:123
 msgid "headset_device"
 msgstr "Zestaw słuchawkowy"
 
-#: js/Snom/PhoneEditDialog.js:494 js/Snom/SettingEditDialog.js:241
+#: js/Snom/PhoneEditDialog.js:494
+#: js/Snom/SettingEditDialog.js:241
 msgid "none"
 msgstr "brak"
 
-#: js/Snom/PhoneEditDialog.js:495 js/Snom/SettingEditDialog.js:242
+#: js/Snom/PhoneEditDialog.js:495
+#: js/Snom/SettingEditDialog.js:242
 msgid "headset_rj"
 msgstr "Zestaw słuchawkowy RJ"
 
-#: js/Snom/PhoneEditDialog.js:498 js/Snom/SettingEditDialog.js:246
+#: js/Snom/PhoneEditDialog.js:498
+#: js/Snom/SettingEditDialog.js:246
 #: js/Snom/SettingGridPanel.js:130
 msgid "message_led_other"
 msgstr "Inne LED"
 
-#: js/Snom/PhoneEditDialog.js:507 js/Snom/SettingEditDialog.js:259
+#: js/Snom/PhoneEditDialog.js:507
+#: js/Snom/SettingEditDialog.js:259
 #: js/Snom/SettingGridPanel.js:137
 msgid "global_missed_counter"
 msgstr "Brakujący licznik"
 
-#: js/Snom/PhoneEditDialog.js:516 js/Snom/SettingEditDialog.js:272
+#: js/Snom/PhoneEditDialog.js:516
+#: js/Snom/SettingEditDialog.js:272
 #: js/Snom/SettingGridPanel.js:144
 msgid "scroll_outgoing"
 msgstr "Przewijanie"
 
-#: js/Snom/PhoneEditDialog.js:525 js/Snom/SettingEditDialog.js:285
+#: js/Snom/PhoneEditDialog.js:525
+#: js/Snom/SettingEditDialog.js:285
 #: js/Snom/SettingGridPanel.js:151
 msgid "show_local_line"
 msgstr "Wyświetlaj mój numer"
 
-#: js/Snom/PhoneEditDialog.js:534 js/Snom/SettingEditDialog.js:298
+#: js/Snom/PhoneEditDialog.js:534
+#: js/Snom/SettingEditDialog.js:298
 #: js/Snom/SettingGridPanel.js:158
 msgid "show_call_status"
 msgstr "Wyświetlaj status połączenia"
@@ -433,25 +512,36 @@ msgstr "Wyświetlaj status połączenia"
 msgid "Users"
 msgstr "Użytkownicy"
 
-#: js/Snom/SettingEditDialog.js:121 js/Snom/TemplateGridPanel.js:82
-#: js/Snom/LocationEditDialog.js:49 js/Snom/TemplateEditDialog.js:49
-#: js/Snom/SoftwareGridPanel.js:82 js/Snom/LocationGridPanel.js:137
-#: js/Snom/SoftwareEditDialog.js:67 js/Asterisk/ContextEditDialog.js:49
+#: js/Snom/SettingEditDialog.js:121
+#: js/Snom/TemplateGridPanel.js:82
+#: js/Snom/LocationEditDialog.js:49
+#: js/Snom/TemplateEditDialog.js:49
+#: js/Snom/SoftwareGridPanel.js:82
+#: js/Snom/LocationGridPanel.js:137
+#: js/Snom/SoftwareEditDialog.js:67
+#: js/Asterisk/ContextEditDialog.js:49
 #: js/Asterisk/ContextGridPanel.js:85
 msgid "Description"
 msgstr "Opis"
 
-#: js/Snom/TemplateGridPanel.js:51 js/Snom/SoftwareGridPanel.js:51
-#: js/Snom/LocationGridPanel.js:50 js/Snom/SettingGridPanel.js:51
-#: js/Snom/PhoneGridPanel.js:67 js/Asterisk/VoicemailGridPanel.js:51
-#: js/Asterisk/SipPeerGridPanel.js:50 js/Asterisk/MeetmeGridPanel.js:51
+#: js/Snom/TemplateGridPanel.js:51
+#: js/Snom/SoftwareGridPanel.js:51
+#: js/Snom/LocationGridPanel.js:50
+#: js/Snom/SettingGridPanel.js:51
+#: js/Snom/PhoneGridPanel.js:67
+#: js/Asterisk/VoicemailGridPanel.js:51
+#: js/Asterisk/SipPeerGridPanel.js:50
+#: js/Asterisk/MeetmeGridPanel.js:51
 #: js/Asterisk/ContextGridPanel.js:51
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/Snom/TemplateGridPanel.js:69 js/Snom/SoftwareGridPanel.js:69
-#: js/Snom/LocationGridPanel.js:124 js/Asterisk/VoicemailGridPanel.js:69
-#: js/Asterisk/MeetmeGridPanel.js:69 js/Asterisk/ContextGridPanel.js:69
+#: js/Snom/TemplateGridPanel.js:69
+#: js/Snom/SoftwareGridPanel.js:69
+#: js/Snom/LocationGridPanel.js:124
+#: js/Asterisk/VoicemailGridPanel.js:69
+#: js/Asterisk/MeetmeGridPanel.js:69
+#: js/Asterisk/ContextGridPanel.js:69
 msgid "id"
 msgstr "id"
 
@@ -467,7 +557,8 @@ msgstr "Id ustawień"
 msgid "Software Id"
 msgstr "Id oprogramowania"
 
-#: js/Snom/LocationEditDialog.js:55 js/Snom/LocationGridPanel.js:82
+#: js/Snom/LocationEditDialog.js:55
+#: js/Snom/LocationGridPanel.js:82
 msgid "Registrar"
 msgstr "Archiwariusz"
 
@@ -475,7 +566,8 @@ msgstr "Archiwariusz"
 msgid "Base Download URL"
 msgstr "Podstawowy URL dla aktualizacji"
 
-#: js/Snom/LocationEditDialog.js:77 js/Snom/LocationGridPanel.js:75
+#: js/Snom/LocationEditDialog.js:77
+#: js/Snom/LocationGridPanel.js:75
 msgid "Update Policy"
 msgstr "Polityka aktualizacji"
 
@@ -495,7 +587,8 @@ msgstr "format daty jak w USA (mm/dd)"
 msgid "time_24_format"
 msgstr "zegar w formacie 24h"
 
-#: js/Snom/LocationEditDialog.js:194 js/Snom/LocationGridPanel.js:96
+#: js/Snom/LocationEditDialog.js:194
+#: js/Snom/LocationGridPanel.js:96
 msgid "NTP Server"
 msgstr "Serwer NTP"
 
@@ -523,7 +616,8 @@ msgstr "Hasło dla trybu administratora"
 msgid "Enable webserver"
 msgstr "Włącz serwer WWW"
 
-#: js/Snom/LocationEditDialog.js:305 js/Snom/LocationGridPanel.js:103
+#: js/Snom/LocationEditDialog.js:305
+#: js/Snom/LocationGridPanel.js:103
 msgid "Webserver Type"
 msgstr "Typ serwera WWW"
 
@@ -531,11 +625,13 @@ msgstr "Typ serwera WWW"
 msgid "HTTP Port"
 msgstr "Port HTTP"
 
-#: js/Snom/LocationEditDialog.js:366 js/Snom/LocationGridPanel.js:110
+#: js/Snom/LocationEditDialog.js:366
+#: js/Snom/LocationGridPanel.js:110
 msgid "HTTPS Port"
 msgstr "Port HTTPS"
 
-#: js/Snom/LocationEditDialog.js:387 js/Snom/LocationGridPanel.js:117
+#: js/Snom/LocationEditDialog.js:387
+#: js/Snom/LocationGridPanel.js:117
 msgid "HTTP User"
 msgstr "Użytkownik HTTP"
 
@@ -571,12 +667,14 @@ msgstr "Informacja o stronie kodowej"
 msgid "Pickup Indic."
 msgstr "Spis odebranych połączeń"
 
-#: js/Snom/SettingGridPanel.js:69 js/Snom/PhoneGridPanel.js:85
+#: js/Snom/SettingGridPanel.js:69
+#: js/Snom/PhoneGridPanel.js:85
 #: js/Asterisk/SipPeerGridPanel.js:70
 msgid "Id"
 msgstr "Id"
 
-#: js/Snom/SettingGridPanel.js:82 js/Snom/PhoneGridPanel.js:98
+#: js/Snom/SettingGridPanel.js:82
+#: js/Snom/PhoneGridPanel.js:98
 msgid "description"
 msgstr "Opis"
 
@@ -620,11 +718,13 @@ msgstr "Ustawienia załadowane"
 msgid "last modified"
 msgstr "Ostatnio zmieniane"
 
-#: js/Asterisk/VoicemailGridPanel.js:76 js/Asterisk/SipPeerGridPanel.js:179
+#: js/Asterisk/VoicemailGridPanel.js:76
+#: js/Asterisk/SipPeerGridPanel.js:179
 msgid "mailbox"
 msgstr "Skrzynka pocztowa"
 
-#: js/Asterisk/VoicemailGridPanel.js:82 js/Asterisk/SipPeerGridPanel.js:117
+#: js/Asterisk/VoicemailGridPanel.js:82
+#: js/Asterisk/SipPeerGridPanel.js:117
 msgid "context"
 msgstr "Kontekst"
 
@@ -632,11 +732,13 @@ msgstr "Kontekst"
 msgid "fullname"
 msgstr "Imię i nazwisko"
 
-#: js/Asterisk/VoicemailGridPanel.js:94 js/Asterisk/VoicemailEditDialog.js:84
+#: js/Asterisk/VoicemailGridPanel.js:94
+#: js/Asterisk/VoicemailEditDialog.js:84
 msgid "email"
 msgstr "e-mail"
 
-#: js/Asterisk/VoicemailGridPanel.js:100 js/Asterisk/VoicemailEditDialog.js:90
+#: js/Asterisk/VoicemailGridPanel.js:100
+#: js/Asterisk/VoicemailEditDialog.js:90
 msgid "pager"
 msgstr "pager"
 
@@ -720,11 +822,13 @@ msgstr "wymuś powitanie"
 msgid "hidefromdir"
 msgstr "ukryj katalog pochodzenia"
 
-#: js/Asterisk/VoicemailEditDialog.js:42 js/Asterisk/SipPeerEditDialog.js:61
+#: js/Asterisk/VoicemailEditDialog.js:42
+#: js/Asterisk/SipPeerEditDialog.js:61
 msgid "General"
 msgstr "Lista ogólna"
 
-#: js/Asterisk/VoicemailEditDialog.js:48 js/Asterisk/SipPeerEditDialog.js:118
+#: js/Asterisk/VoicemailEditDialog.js:48
+#: js/Asterisk/SipPeerEditDialog.js:118
 msgid "Mailbox"
 msgstr "Skrzynka pocztowa"
 
@@ -736,15 +840,18 @@ msgstr "Hasło"
 msgid "Additional"
 msgstr "Dodatkowo"
 
-#: js/Asterisk/MeetmeEditDialog.js:41 js/Asterisk/MeetmeGridPanel.js:76
+#: js/Asterisk/MeetmeEditDialog.js:41
+#: js/Asterisk/MeetmeGridPanel.js:76
 msgid "confno"
 msgstr "nr konferencji"
 
-#: js/Asterisk/MeetmeEditDialog.js:49 js/Asterisk/MeetmeGridPanel.js:85
+#: js/Asterisk/MeetmeEditDialog.js:49
+#: js/Asterisk/MeetmeGridPanel.js:85
 msgid "pin"
 msgstr "Pin"
 
-#: js/Asterisk/MeetmeEditDialog.js:57 js/Asterisk/MeetmeGridPanel.js:94
+#: js/Asterisk/MeetmeEditDialog.js:57
+#: js/Asterisk/MeetmeGridPanel.js:94
 msgid "adminpin"
 msgstr "Pin administratora"
 
@@ -957,12 +1064,14 @@ msgid "Qualify"
 msgstr "Jakość"
 
 #~ msgid "Owner"
+
 #~ msgid_plural "Owners"
 #~ msgstr[0] "Właściciel"
 #~ msgstr[1] "właścicieli"
 #~ msgstr[2] "właścicieli"
 
 #~ msgid "owners list"
+
 #~ msgid_plural "owners lists"
 #~ msgstr[0] "lista właścicieli"
 #~ msgstr[1] "listy właścicieli"

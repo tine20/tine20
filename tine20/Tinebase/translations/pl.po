@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-27 09:44+0100\n"
+"PO-Revision-Date: 2010-09-04 23:01+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -467,7 +467,7 @@ msgstr "Moje ulubione"
 
 #: js/widgets/persistentfilter/PickerPanel.js:180
 msgid "Delete Favorite"
-msgstr "Usuń ulubione"
+msgstr "Usuń z ulubionych"
 
 #: js/widgets/persistentfilter/PickerPanel.js:185
 msgid "Rename Favorite"
@@ -497,7 +497,7 @@ msgstr "Nowa nazwa"
 
 #: js/widgets/persistentfilter/PickerPanel.js:225
 msgid "Please enter the new name for favorite \"{0}\"?"
-msgstr "Proszę wpisać nazwę \"{0}\" do ulubionych."
+msgstr "Proszę zmienić nazwę \"{0}\" w ulubionych."
 
 #: js/widgets/persistentfilter/PickerPanel.js:227
 msgid "Renaming Favorite \"{0}\""
@@ -822,11 +822,11 @@ msgstr "Edytuj uprawnienia dla {0} \"{1}\""
 #: js/widgets/tree/ContextMenu.js:215
 #: js/widgets/grid/GridPanel.js:324
 msgid "Add {0}"
-msgstr "Dodaj {0}"
+msgstr "Dodaj do: {0}"
 
 #: js/widgets/tree/ContextMenu.js:233
 msgid "Rename {0}"
-msgstr "Zmień nazwę {0}"
+msgstr "Zmień nazwę w: {0}"
 
 #: js/widgets/tree/ContextMenu.js:241
 msgid "Manage permissions"
@@ -865,7 +865,7 @@ msgstr "Kopiuj {0}"
 #: js/widgets/grid/GridPanel.js:337
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
-msgstr[0] "Usuń {0}"
+msgstr[0] "Usuń z: {0}"
 msgstr[1] "Usuń {0}"
 msgstr[2] "Usuń {0}"
 
