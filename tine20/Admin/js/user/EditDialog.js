@@ -178,18 +178,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     initUserMemberships: function () {
     
     	return [{
+    		xtype: 'treepanel',
     		region: 'west',
     		layout: 'fit',
     		width: 120,
     		frame: false,
     		border: true,
-    		xtype: 'treepanel',
     		autoScroll: true,
     		rootVisible: false,
     		useArrows: true,
 			loader: new Ext.tree.TreeLoader(),
 			root: new Ext.tree.AsyncTreeNode({
-	            text: '',
 	            expanded: true,
 	            children: [{
 	            	text: Tine.Tinebase.translation.gettext('Groups'),
@@ -224,6 +223,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	        	}
 	        }
     	}, {
+    		xtype: 'container',
     		region: 'center',
     		layout: 'card',
     		frame: false,
@@ -282,7 +282,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 			initActionsAndToolbars: function () {
 		    	Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
 		    	
-		    	this.comboPanel = new Ext.Panel({
+		    	this.comboPanel = new Ext.Container({
 		            layout: 'hfit',
 		            border: false,
 		            items: this.getSearchCombo(),
@@ -318,9 +318,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     	if (this.ldapBackend) {
 
     		return [{
+                xtype: 'fieldset',
                 title: this.app.i18n.gettext('Unix'),
                 autoHeight: true,
-                xtype: 'fieldset',
                 checkboxToggle: false,
                 layout: 'hfit',
                 items: [{
@@ -342,9 +342,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }]]
                 }]
             }, {
+                xtype: 'fieldset',
                 title: this.app.i18n.gettext('Windows'),
                 autoHeight: true,
-                xtype: 'fieldset',
                 checkboxToggle: false,
                 layout: 'hfit',
                 items: [{
@@ -423,9 +423,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     	if (Tine.Admin.registry.get('manageImapEmailUser')) {
     		
     		return [{
+    			xtype: 'fieldset',
                 title: this.app.i18n.gettext('Quota (MB)'),
                 autoHeight: true,
-                xtype: 'fieldset',
                 checkboxToggle: true,
                 layout: 'hfit',
                 items: [{
@@ -453,9 +453,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     ]
                 }]
             }, {
+                xtype: 'fieldset',
                 title: this.app.i18n.gettext('Sieve Quota (MB)'),
                 autoHeight: true,
-                xtype: 'fieldset',
                 checkboxToggle: true,
                 layout: 'hfit',
                 items: [{
@@ -483,9 +483,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     ]
                 }]
             }, {
+                xtype: 'fieldset',
                 title: this.app.i18n.gettext('Information'),
                 autoHeight: true,
-                xtype: 'fieldset',
                 checkboxToggle: false,
                 layout: 'hfit',
                 items: [{
@@ -737,29 +737,28 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('OpenID'),
                         name: 'openid',
                         columnWidth: 0.5
-                    }], [
-                        new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-                            fieldLabel: this.app.i18n.gettext('Primary group'),
-                            listWidth: 230,
-                            name: 'accountPrimaryGroup',
-                            blurOnSelect: true,
-                            recordClass: Tine.Tinebase.Model.Group
-                        }), {
-                            xtype: 'combo',
-                            fieldLabel: this.app.i18n.gettext('Status'),
-                            name: 'accountStatus',
-                            mode: 'local',
-                            triggerAction: 'all',
-                            allowBlank: false,
-                            editable: false,
-                            store: [['enabled', this.app.i18n.gettext('enabled')], ['disabled', this.app.i18n.gettext('disabled')], ['expired', this.app.i18n.gettext('expired')]]
-                        }, {
-                            xtype: 'extuxclearabledatefield',
-                            fieldLabel: this.app.i18n.gettext('Expires'),
-                            name: 'accountExpires',
-                            emptyText: this.app.i18n.gettext('never')
-						}
-					], [{
+                    }], [{
+                    	xtype: 'tinerecordpickercombobox',
+                        fieldLabel: this.app.i18n.gettext('Primary group'),
+                        listWidth: 230,
+                        name: 'accountPrimaryGroup',
+                        blurOnSelect: true,
+                        recordClass: Tine.Tinebase.Model.Group
+                    }, {
+                        xtype: 'combo',
+                        fieldLabel: this.app.i18n.gettext('Status'),
+                        name: 'accountStatus',
+                        mode: 'local',
+                        triggerAction: 'all',
+                        allowBlank: false,
+                        editable: false,
+                        store: [['enabled', this.app.i18n.gettext('enabled')], ['disabled', this.app.i18n.gettext('disabled')], ['expired', this.app.i18n.gettext('expired')]]
+                    }, {
+                        xtype: 'extuxclearabledatefield',
+                        fieldLabel: this.app.i18n.gettext('Expires'),
+                        name: 'accountExpires',
+                        emptyText: this.app.i18n.gettext('never')
+					}], [{
                         xtype: 'combo',
                         fieldLabel: this.app.i18n.gettext('Visibility'),
                         name: 'visibility',
@@ -770,9 +769,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         store: [['displayed', this.app.i18n.gettext('Display in addressbook')], ['hidden', this.app.i18n.gettext('Hide from addressbook')]]
 					}]] 
 				}, {
+                    xtype: 'fieldset',
                     title: this.app.i18n.gettext('Information'),
                     autoHeight: true,
-                    xtype: 'fieldset',
                     checkboxToggle: false,
                     layout: 'hfit',
                     items: [{
@@ -821,11 +820,11 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 layout: 'hfit',
                 items: this.initImap()
 			}, {
+                xtype: 'columnform',
                 title: this.app.i18n.gettext('SMTP'),
                 disabled: ! Tine.Admin.registry.get('manageSmtpEmailUser'),
                 border: false,
                 frame: true,
-                xtype: 'columnform',
                 labelAlign: 'top',
                 formDefaults: {
                     xtype: 'textfield',
