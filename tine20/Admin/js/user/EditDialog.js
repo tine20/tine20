@@ -191,12 +191,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 			root: new Ext.tree.AsyncTreeNode({
 	            expanded: true,
 	            children: [{
-	            	text: Tine.Tinebase.translation.gettext('Groups'),
+	            	text: this.app.i18n.gettext('Groups'),
 		            iconCls: 'admin-node-groups',
 		            id: 'Groups',
 		            leaf: true
 	            }, {
-	            	text: Tine.Tinebase.translation.gettext('Roles'),
+	            	text: this.app.i18n.gettext('Roles'),
 		            iconCls: 'action_permissions',
 		            id: 'Roles',
 		            leaf: true
