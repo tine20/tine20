@@ -344,12 +344,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         // after user update or creation add user to selected groups
-        if ($recordData['accountGroups']) {
+        if (isset($recordData['accountGroups']) && $recordData['accountGroups']) {
 			Tinebase_Group::getInstance()->setGroupMemberships($account->accountId, $recordData['accountGroups']);
         }
         
         // after user update or creation add user to selected roles
-        if ($recordData['accountRoles']) {
+        if (isset($recordData['accountRoles']) && $recordData['accountRoles']) {
 			Tinebase_Acl_Roles::getInstance()->setRoleMemberships(array('id' => $account->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $recordData['accountRoles']);
         }
         

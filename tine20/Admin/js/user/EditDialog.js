@@ -186,7 +186,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     		border: true,
     		autoScroll: true,
     		rootVisible: false,
-    		useArrows: true,
 			loader: new Ext.tree.TreeLoader(),
 			root: new Ext.tree.AsyncTreeNode({
 	            expanded: true,
