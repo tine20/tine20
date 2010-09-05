@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-09-04 22:43+0100\n"
+"PO-Revision-Date: 2010-09-06 00:08+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -169,7 +169,7 @@ msgstr "Ilość"
 #: js/Product.js:187
 #: js/LinkGridPanel.js:56
 msgid "Unlink {0}"
-msgstr "Odłącz {0}"
+msgstr "Usuń {0}"
 
 #: js/Product.js:188
 #: js/LinkGridPanel.js:57

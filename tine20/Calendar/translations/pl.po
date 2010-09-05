@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-09-04 22:49+0100\n"
+"PO-Revision-Date: 2010-09-06 00:03+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -22,9 +22,9 @@ msgstr "%s's kalendarz osobisty"
 #: js/Model.js:68
 msgid "Calendar"
 msgid_plural "Calendars"
-msgstr[0] "kalendarz"
+msgstr[0] "Kalendarz"
 msgstr[1] "kalendarze"
-msgstr[2] "kalendarzy"
+msgstr[2] "kalendarze"
 
 #: Setup/Update/Release3.php:165
 #: Setup/Initialize.php:39
