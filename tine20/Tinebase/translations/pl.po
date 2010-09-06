@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-09-04 23:01+0100\n"
+"PO-Revision-Date: 2010-09-06 16:51+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -805,7 +805,7 @@ msgstr "Usuwanie {0} \"{1}\""
 
 #: js/widgets/tree/ContextMenu.js:134
 msgid "Please enter the new name of the {0}:"
-msgstr "Proszę wprowadzić nową nazwę dla {0}:"
+msgstr "Proszę wprowadzić nową nazwę w kategorii: {0}:"
 
 #: js/widgets/tree/ContextMenu.js:140
 msgid "Not renamed {0}"
