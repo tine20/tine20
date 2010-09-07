@@ -587,8 +587,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             ? $this->_imapConfig['user']
             : $_user->accountEmailAddress;
             
+        if (empty($email)) {
+            $email = $_user->accountLoginName;
+        }
+            
         if (! preg_match('/@/', $email)) {
-            $email .= '@' . $this->_imapConfig['host'];
+            if (isset($this->_imapConfig['domain'])) {
+                $email .= '@' . $this->_imapConfig['domain'];
+            } else {
+                $email .= '@' . $this->_imapConfig['host'];
+            }
         }
         
         return $email;
