@@ -964,6 +964,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  Zend_Mime_Part  $_part
      * @param  array           $_structure
      * @param  string          $_contentType
+     * 
+     * @todo   try to add a fallback if iconv decoding fails (@see http://www.tine20.org/bugtracker/view.php?id=2892)
      */
     protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
     {
@@ -984,7 +986,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $charset = 'iso-8859-15';
         }
         
-        $_part->appendDecodeFilter("convert.iconv.$charset/utf-8//IGNORE");
+        $filter = "convert.iconv.$charset/utf-8//IGNORE";
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
+        $_part->appendDecodeFilter($filter);
     }
     
     /**
