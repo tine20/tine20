@@ -15,7 +15,7 @@
  *
  * @package     Tinebase
  */
-class Tinebase_Frontend_Cli
+class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 {
     /**
      * the internal name of the application
