@@ -885,7 +885,9 @@ class Setup_Controller
     public function saveEmailConfig($_data)
     {
         foreach ($this->_emailConfigKeys as $configName => $configKey) {
-            Tinebase_Config::getInstance()->setConfigForApplication($configKey, Zend_Json::encode($_data[$configName]));
+            if (array_key_exists($configName, $_data)) {
+                Tinebase_Config::getInstance()->setConfigForApplication($configKey, Zend_Json::encode($_data[$configName]));
+            }
         }
     }
     
