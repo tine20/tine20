@@ -174,7 +174,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test search folders (check order of folders as well)
-     *
      */
     public function testSearchFolders()
     {
@@ -191,7 +190,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * clear test folder
-     *
      */
     public function testClearFolder()
     {
@@ -221,7 +219,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * testUpdateFolderCache
-     *
      */
     public function testUpdateFolderCache()
     {
@@ -269,51 +266,57 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test search for accounts and check default account from config
-     *
      */
     public function testSearchAccounts()
+    {
+        $system = $this->_getSystemAccount();
+        
+        $this->assertTrue(! empty($system), 'no accounts found');
+        $this->assertEquals('mail.metaways.net', $system['host']);
+        $this->assertEquals('mail01.metaways.net', $system['sieve_hostname']);
+    }
+    
+    /**
+     * get system account
+     * 
+     * @return array
+     */
+    protected function _getSystemAccount()
     {
         $results = $this->_json->searchAccounts(array());
 
         $this->assertGreaterThan(0, $results['totalcount']);
-        $default = array();
+        $system = array();
         foreach ($results['results'] as $result) {
             if ($result['name'] == 'unittest@tine20.org') {
-                $default = $result;
+                $system = $result;
             }
         }
-        $this->assertTrue(! empty($default), 'no accounts found');
-        $this->assertEquals('mail.metaways.net', $result['host']);
-        $this->assertEquals('mail01.metaways.net', $result['sieve_hostname']);
+        
+        return $system;
     }
-    
+        
     /**
-     * test create / get / delete of account
-     *
+     * test change / delete of account
      */
-    public function testCreateChangeDeleteAccount() 
+    public function testChangeDeleteAccount() 
     {
-        // save & resolve
-        $account = $this->_json->saveAccount($this->_getAccountData());
+        $system = $this->_getSystemAccount();
+        unset($system['id']);
+        $system['type'] = Felamimail_Model_Account::TYPE_USER;
+        $account = $this->_json->saveAccount($system);
         
         $accountRecord = new Felamimail_Model_Account($account, TRUE);
         $accountRecord->resolveCredentials(FALSE);
-        
-        // checks
-        $this->assertEquals(Tinebase_Core::getConfig()->imap->password, $accountRecord->password);
         $this->assertEquals('mail.metaways.net', $account['host']);
         
-        // change credentials & resolve
-        $this->_json->changeCredentials($account['id'], $account['user'], 'neuespasswort');
+        $this->_json->changeCredentials($account['id'], $accountRecord->user, 'neuespasswort');
         $account = $this->_json->getAccount($account['id']);
         
         $accountRecord = new Felamimail_Model_Account($account, TRUE);
         $accountRecord->resolveCredentials(FALSE);
-        
-        // checks
         $this->assertEquals('neuespasswort', $accountRecord->password);
         
-        // delete
         $this->_json->deleteAccounts($account['id']);
     }
     
@@ -713,19 +716,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * get account data
-     *
-     * @return array
-     */
-    protected function _getAccountData()
-    {
-        $account = Tinebase_Core::getConfig()->imap->toArray(); 
-        $account['email'] = $account['user'];
-        
-        return $account;
-    }
-    
     /**
      * send message and return message array
      *
