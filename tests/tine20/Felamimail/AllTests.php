@@ -47,6 +47,7 @@ class Felamimail_AllTests
             $suite->addTestSuite('Felamimail_Controller_MessageTest');
             $suite->addTestSuite('Felamimail_Controller_AccountTest');
             $suite->addTestSuite('Felamimail_Model_MessageTest');
+            $suite->addTestSuite('Felamimail_Model_AccountTest');
         }
         $suite->addTestSuite('Felamimail_Sieve_ScriptTest');
         
