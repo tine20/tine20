@@ -672,6 +672,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $config = ($_configKey == Tinebase_Model_Config::IMAP) ? $this->_imapConfig : Tinebase_Config::getInstance()->getConfigAsArray($_configKey, 'Tinebase', $_defaults);
         $prefix = ($_configKey == Tinebase_Model_Config::IMAP) ? '' : strtolower($_configKey) . '_';
         
+        if (! is_array($config)) {
+            throw new Felamimail_Exception('Invalid config found for ' . $_configKey);
+        }
+        
         foreach ($config as $key => $value) {
             if (in_array($key, $_keysOverwrite) && ! empty($value)) {
                 $_account->{$prefix . $key} = $value;
