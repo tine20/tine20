@@ -118,6 +118,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * clear table as defined in arguments
      * can clear the following tables:
      * - credential_cache
+     * - access_log
+     * - async_job
      * 
      * @param $_opts
      * @return boolean success
@@ -136,6 +138,14 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         foreach ($tables as $table) {
             switch ($table) {
+                case 'access_log':
+                    Tinebase_Core::getDb()->query('TRUNCATE ' . SQL_TABLE_PREFIX . $table);
+                    break;
+                case 'async_job':
+                    Tinebase_Core::getDb()->query(
+                        'delete FROM ' . SQL_TABLE_PREFIX . 'async_job' .
+                        " WHERE status='success'");
+                    break;
                 case 'credential_cache':
                     if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
                         // delete only records that are not related to email accounts
@@ -147,15 +157,13 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         break;
                     } else {
                         // fallthrough
-                    }
-                case 'access_log':
-                    Tinebase_Core::getDb()->query('TRUNCATE ' . SQL_TABLE_PREFIX . $table);
-                    break;
+                    }                    
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
             }
-            echo "Cleared table $table.\n";
+            echo "\nCleared table $table.";
         }
+        echo "\n\n";
         
         return TRUE;
     }
