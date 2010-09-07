@@ -288,7 +288,12 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         
         // system account: overwriting with values from config if set
         if ($this->type == self::TYPE_SYSTEM) {
-            $result = array_merge($result, Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP));
+            $systemAccountConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+            // we don't need username/pass from system config (those are the notification service credentials)
+            // @todo think about renaming config keys (to something like notification_email/pass)
+            unset($systemAccountConfig['username']);
+            unset($systemAccountConfig['password']);
+            $result = array_merge($result, $systemAccountConfig);
         }
         
         // sanitizing some values
@@ -304,7 +309,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             unset($result['ssl']);
         }
         
-        // if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
         
         return $result;
     }
