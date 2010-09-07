@@ -82,7 +82,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
      */
     protected function _parseEmailOptions($_options)
     {
-        $result = array('imap' => array(), 'smtp' => array());
+        $result = array('imap' => array(), 'smtp' => array(), 'sieve' => array());
         
         foreach (array_keys($result) as $group) {
             if (isset($_options[$group])) {
