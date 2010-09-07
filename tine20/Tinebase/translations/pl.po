@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-09-06 16:51+0100\n"
+"PO-Revision-Date: 2010-09-07 20:56+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -822,7 +822,7 @@ msgstr "Edytuj uprawnienia dla {0} \"{1}\""
 #: js/widgets/tree/ContextMenu.js:215
 #: js/widgets/grid/GridPanel.js:324
 msgid "Add {0}"
-msgstr "Dodaj do: {0}"
+msgstr "Dodaj {0}"
 
 #: js/widgets/tree/ContextMenu.js:233
 msgid "Rename {0}"
