@@ -42,8 +42,8 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         $this->_fromAddress = (isset($smtpConfig['from']) && ! empty($smtpConfig['from'])) ? $smtpConfig['from'] : '';
         
         // try to sanitize sender address
-        if (empty($this->_fromAddress) && isset($smtpConfig['domain']) && ! empty($smtpConfig['domain'])) {
-            $this->_fromAddress = 'noreply@' . $smtpConfig['domain'];
+        if (empty($this->_fromAddress) && isset($smtpConfig['primarydomain']) && ! empty($smtpConfig['primarydomain'])) {
+            $this->_fromAddress = 'noreply@' . $smtpConfig['primarydomain'];
         }
     }
     
