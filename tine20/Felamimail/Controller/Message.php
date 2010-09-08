@@ -510,7 +510,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         // get account
-        $account = Felamimail_Controller_Account::getInstance()->get($_message->from);
+        $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
         
         // get original message
         $originalMessage = ($_message->original_id) ? $this->get($_message->original_id) : NULL;
@@ -522,7 +522,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // set transport + send mail
         $smtpConfig = $account->getSmtpConfig();
-        if (! empty($smtpConfig)) {
+        if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
             $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
             
             // send message via smtp
