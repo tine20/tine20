@@ -1000,12 +1000,11 @@ class Setup_Controller
         }
         $applications = $this->_sortInstallableApplications($applications);
                 
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' installing applications: ' . print_r(array_keys($applications), true));
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Installing applications: ' . print_r(array_keys($applications), true));
         
         foreach ($applications as $name => $xml) {
             $this->_installApplication($xml, $_options);
         }
-
     }
 
     /**
