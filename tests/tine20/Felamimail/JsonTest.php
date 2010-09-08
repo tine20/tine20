@@ -549,7 +549,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $fwdSubject = 'Fwd: ' . $subject;
         $forwardMessageData = array(
-            'from'          => $this->_account->getId(),
+            'account_id'    => $this->_account->getId(),
             'subject'       => $fwdSubject,
             'to'            => array('unittest@tine20.org'),
             'body'          => 'aaaaaä <br>',
@@ -707,7 +707,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getMessageData()
     {
         return array(
-            'from'      => $this->_account->getId(),
+            'account_id'=> $this->_account->getId(),
             'subject'   => 'test',
             'to'        => array('unittest@tine20.org'),
             'body'      => 'aaaaaä <br>',

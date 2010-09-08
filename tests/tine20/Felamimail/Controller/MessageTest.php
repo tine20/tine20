@@ -493,7 +493,9 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->_messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        #var_dump($message->toArray());
+        $this->assertEquals('robbat2@gentoo.org', $message->from_email);
+        $this->assertEquals($this->_account->getId(), $message->account_id);
+        $this->assertEquals('Robin H. Johnson', $message->from_name);
         $this->assertEquals('1', $message->text_partid);
         $this->assertEquals('1', $message->has_attachment);
         $this->assertEquals(null, $message->html_partid);
@@ -563,7 +565,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Angebotsformular', $message->subject);
         $this->assertContains('*Formular-Weiterleitungs-Service*', $message->body);
     }
-    
+
     /**
      * validate fetching a complete message with different encodings
      */
@@ -641,7 +643,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         // forward message
         $forwardMessage = new Felamimail_Model_Message(array(
-            'from'          => $this->_account->getId(),
+            'account_id'    => $this->_account->getId(),
             'subject'       => 'test forward',
             'to'            => array('unittest@tine20.org'),
             'body'          => 'aaaaaä <br>',
