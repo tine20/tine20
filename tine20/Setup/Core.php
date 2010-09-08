@@ -202,46 +202,19 @@ class Setup_Core extends Tinebase_Core
      */
     public static function setupSession()
     {
-        $config = self::getConfig();
-        
-        Zend_Session::setOptions(array(
+        self::startSession(array(
             'name'              => 'TINE20SETUPSESSID',
-            'cookie_httponly'   => true,
-            'hash_function'     => 1,
+        ), 'tinesetup');
         
-        ));
-        if(isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
-            Zend_Session::setOptions(array(
-                'cookie_secure'     => true,
-            ));
+    	if (isset(self::get(self::SESSION)->setupuser)) {
+            self::set(self::USER, self::get(self::SESSION)->setupuser);
         }
-        
-        Zend_Session::start();
-        
-        define('TINE20_BUILDTYPE',          strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20SETUP_BUILDTYPE',     TINE20_BUILDTYPE);
-        
+
+        $config = self::getConfig();
+        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
         define('TINE20_CODENAME',      getDevelopmentRevision());
         define('TINE20_PACKAGESTRING', 'none');
         define('TINE20_RELEASETIME',   'none');
-
-        if (TINE20_BUILDTYPE == 'RELEASE') {
-            // set error mode to suppress notices & warnings in release mode
-            error_reporting(E_ERROR);
-        }
-                
-        $session = new Zend_Session_Namespace('tinesetup');
-        
-        if (!isset($session->jsonKey)) {
-            $session->jsonKey = Tinebase_Record_Abstract::generateUID();
-        }
-        self::set('jsonKey', $session->jsonKey);
-
-        if (isset($session->setupuser)) {
-            self::set(self::USER, $session->setupuser);
-        }
-        
-        self::set(self::SESSION, $session);
     }
     
     /**
