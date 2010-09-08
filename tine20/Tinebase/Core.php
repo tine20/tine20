@@ -486,7 +486,6 @@ class Tinebase_Core
 
     /**
      * places user credential cache id from cockie (if present) into registry
-     *
      */
     public static function setupUserCredentialCache()
     {
@@ -500,26 +499,46 @@ class Tinebase_Core
         }
     }
 
-
     /**
      * initializes the session
-     *
      */
     public static function setupSession()
     {
-        $config = self::getConfig();
-
-        Zend_Session::setOptions(array(
+        self::startSession(array(
             'name'              => 'TINE20SESSID',
+        ));
+
+        $config = self::getConfig();
+        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
+        define('TINE20_CODENAME',      getDevelopmentRevision());
+        define('TINE20_PACKAGESTRING', 'none');
+        define('TINE20_RELEASETIME',   'none');
+        
+        if (isset(self::get(self::SESSION)->currentAccount)) {
+            self::set(self::USER, self::get(self::SESSION)->currentAccount);
+        }
+    }
+    
+    /**
+     * start session helper function
+     * 
+     * @param array $_options
+     * @param string $_namespace
+     */
+    public static function startSession($_options = array(), $_namespace = 'tinebase')
+    {
+        Zend_Session::setOptions(array_merge($_options, array(
             'cookie_httponly'   => true,
             'hash_function'     => 1,
-
-        ));
+        )));
+        
         if(isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
             Zend_Session::setOptions(array(
                 'cookie_secure'     => true,
             ));
         }
+        
+        $config = self::getConfig();
 
         // set max session lifetime
         // defaults to one day (86400 seconds)
@@ -551,22 +570,13 @@ class Tinebase_Core
                 throw $zse;
             }
         }
-
-        define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20_CODENAME',      getDevelopmentRevision());
-        define('TINE20_PACKAGESTRING', 'none');
-        define('TINE20_RELEASETIME',   'none');
-
-        $session = new Zend_Session_Namespace('tinebase');
+        
+        $session = new Zend_Session_Namespace($_namespace);
 
         if (!isset($session->jsonKey)) {
             $session->jsonKey = Tinebase_Record_Abstract::generateUID();
         }
         self::set('jsonKey', $session->jsonKey);
-
-        if (isset($session->currentAccount)) {
-            self::set(self::USER, $session->currentAccount);
-        }
 
         self::set(self::SESSION, $session);
     }
