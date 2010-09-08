@@ -287,7 +287,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             filterModels: [
                 {label: this.app.i18n._('Subject/From'),field: 'query',         operators: ['contains']},
                 {label: this.app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
-                {label: this.app.i18n._('From'),        field: 'from',          operators: ['contains']},
+                {label: this.app.i18n._('From (Email)'),field: 'from_email',    operators: ['contains']},
+                {label: this.app.i18n._('From (Name)'), field: 'from_name',     operators: ['contains']},
                 {label: this.app.i18n._('To'),          field: 'to',            operators: ['contains']},
                 {label: this.app.i18n._('Cc'),          field: 'cc',            operators: ['contains']},
                 {label: this.app.i18n._('Bcc'),         field: 'bcc',           operators: ['contains']},
@@ -401,11 +402,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             sortable: true,
             dataIndex: 'subject'
         },{
-            id: 'from',
-            header: this.app.i18n._("From"),
-            width: 200,
+            id: 'from_email',
+            header: this.app.i18n._("From (Email)"),
+            width: 100,
             sortable: true,
-            dataIndex: 'from'
+            dataIndex: 'from_email'
+        },{
+            id: 'from_name',
+            header: this.app.i18n._("From (Name)"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'from_name'
         },{
             id: 'to',
             header: this.app.i18n._("To"),
@@ -605,7 +612,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             affectedMsgs = msgs;
         }
         
-        var composerAccount = Tine.Felamimail.loadAccountStore().getById(composedMsg.get('from')),
+        var composerAccount = Tine.Felamimail.loadAccountStore().getById(composedMsg.get('account_id')),
             sendFolderId = composerAccount ? composerAccount.getSendFolderId() : null,
             sendFolder = sendFolderId ? this.app.getFolderStore().getById(sendFolderId) : null;
             

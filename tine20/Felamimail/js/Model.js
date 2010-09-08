@@ -20,8 +20,10 @@ Ext.ns('Tine.Felamimail.Model');
  */ 
 Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'id' },
+      { name: 'account_id' },
       { name: 'subject' },
-      { name: 'from' },
+      { name: 'from_email' },
+      { name: 'from_name' },
       { name: 'to' },
       { name: 'cc' },
       { name: 'bcc' },

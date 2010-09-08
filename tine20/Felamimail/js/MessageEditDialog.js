@@ -57,10 +57,10 @@ Ext.namespace('Tine.Felamimail');
     forwardMsgs: null,
     
     /**
-     * @cfg {String} from account_id
-     * the accout id this message is send from
+     * @cfg {String} accountId
+     * the accout id this message is sent from
      */
-    from: null,
+    accountId: null,
     
     /**
      * @cfg {Tine.Felamimail.Model.Message} (optionally encoded)
@@ -168,12 +168,12 @@ Ext.namespace('Tine.Felamimail');
                     
                     this.msgBody = message.get('body');
                     
-                    if (Tine.Felamimail.loadAccountStore().getById(this.record.get('from')).get('display_format') == 'plain') {
+                    if (Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id')).get('display_format') == 'plain') {
                         this.msgBody = Ext.util.Format.nl2br(this.msgBody);
                     }
                     
                     if (this.replyTo) {
-                        this.msgBody = '<br/>' + Ext.util.Format.htmlEncode(this.replyTo.get('from')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
+                        this.msgBody = '<br/>' + Ext.util.Format.htmlEncode(this.replyTo.get('from_name')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
                              + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
                     } else if (this.forwardMsgs && this.forwardMsgs.length === 1) {
                         this.msgBody = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
@@ -184,7 +184,7 @@ Ext.namespace('Tine.Felamimail');
                 }
             }
         
-            this.record.set('body', this.msgBody + Tine.Felamimail.getSignature(this.record.get('from')));
+            this.record.set('body', this.msgBody + Tine.Felamimail.getSignature(this.record.get('account_id')));
         }
         
         delete this.msgBody;
@@ -195,20 +195,20 @@ Ext.namespace('Tine.Felamimail');
      * inits / sets sender of message
      */
     initFrom: function() {
-        if (! this.record.get('from')) {
-            if (! this.from) {
+        if (! this.record.get('account_id')) {
+            if (! this.accountId) {
                 var mainApp = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
                     folderId = this.replyTo ? this.replyTo.get('folder_id') : 
                                this.forwardMsgs ? this.forwardMsgs[0].get('folder_id') : null,
                     folder = folderId ? mainApp.getFolderStore().getById(folderId) : null
                     accountId = folder ? folder.get('account_id') : null;
                     
-                this.from = accountId || mainApp.getActiveAccount().id;
+                this.accountId = accountId || mainApp.getActiveAccount().id;
             }
             
-            this.record.set('from', this.from);
+            this.record.set('account_id', this.accountId);
         }
-        delete this.from;
+        delete this.accountId;
     },
     
     /**
@@ -225,7 +225,7 @@ Ext.namespace('Tine.Felamimail');
                 this.cc = this.replyTo.get('cc');
                 
                 // remove own email from to/cc
-                var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('from'));
+                var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id'));
                 var emailRegexp = new RegExp(account.get('email'));
                 Ext.each(['to', 'cc'], function(field) {
                     for (var i=0; i < this[field].length; i++) {
@@ -368,7 +368,7 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
-     * if 'from' is changed we need to update the signature
+     * if 'account_id' is changed we need to update the signature
      * 
      * @param {} combo
      * @param {} newValue
@@ -474,7 +474,7 @@ Ext.namespace('Tine.Felamimail');
                     labelAlign: 'top',
                     items: [{
                         xtype:'combo',
-                        name: 'from',
+                        name: 'account_id',
                         fieldLabel: this.app.i18n._('From'),
                         displayField: 'name',
                         valueField: 'id',

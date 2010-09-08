@@ -26,9 +26,9 @@ Ext.namespace('Tine.Felamimail');
  * TODO         'from' to contact: check for duplicates
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor
@@ -122,7 +122,7 @@ Ext.namespace('Tine.Felamimail');
                 '<div class="preview-panel-felamimail-headers">',
                     '<b>' + this.i18n._('Subject') + ':</b> {[this.encode(values.subject)]}<br/>',
                     '<b>' + this.i18n._('From') + ':</b>',
-                    ' {[this.showFrom(values.from, "' + this.i18n._('Add') + '", "' 
+                    ' {[this.showFrom(values.from_email, values.from_name, "' + this.i18n._('Add') + '", "' 
                         + this.i18n._('Add contact to addressbook') + '")]}<br/>',
                     '<b>' + this.i18n._('Date') + ':</b> {[this.encode(values.received)]}',
                     '{[this.showRecipients(values.headers)]}',
@@ -146,7 +146,30 @@ Ext.namespace('Tine.Felamimail');
                 return value;
             },
             
-            showFrom: function(value, addText, qtip) {
+            showFrom: function(email, name, addText, qtip) {
+
+                var result = this.encode(name + ' <' + email + '>');
+                
+                // add link with 'add to contacts'
+                var id = Ext.id() + ':' + email;
+                
+                var nameSplit = name.match(/^"*([^,^ ]+)(,*) *(.+)/i);
+                
+                var firstname = (nameSplit && nameSplit[1]) ? nameSplit[1] : '';
+                var lastname = (nameSplit && nameSplit[3]) ? nameSplit[3] : '';
+                
+                if (nameSplit && nameSplit[2] == ',') {
+                    firstname = lastname;
+                    lastname = nameSplit[1];
+                }
+                
+                id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(firstname) + ':' + Ext.util.Format.trim(lastname));
+                
+                
+                result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
+                return result;
+
+                /*
                 var result = this.encode(value);
                 
                 var email = value.match(/[a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4}/i);
@@ -170,8 +193,8 @@ Ext.namespace('Tine.Felamimail');
                     
                     result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
                 }
-                
                 return result;
+                */
             },
             
             showBody: function(body, messageData) {
