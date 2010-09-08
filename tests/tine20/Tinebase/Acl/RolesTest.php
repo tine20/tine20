@@ -51,7 +51,7 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
+        $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('CPM');
         $this->objects['user'] = new Tinebase_Model_FullUser(array(
             'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
@@ -67,6 +67,11 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
             'id'                    => 10,
             'name'                  => 'phpunitrole',
             'description'           => 'test role for phpunit',
+        ));
+        $this->objects['role_2'] = new Tinebase_Model_Role(array(
+            'id'                    => 11,
+            'name'                  => 'phpunitrole 2',
+            'description'           => 'test role 2 for phpunit',
         ));
 
         
@@ -124,6 +129,62 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, count($members));
     }    
+    
+    /**
+     * try to remove member from role
+     */
+    public function removeRoleMember()
+    {
+    	Tinebase_Acl_Roles::getInstance()->removeRoleMember(10, $this->objects['user']);
+    	
+    	$members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($this->objects['role']->getId());
+    	
+    	$this->assertEquals(0, count($members));
+    }
+    
+    /**
+     * try to add member to role
+     */
+    public function testAddRoleMember()
+    {
+    	Tinebase_Acl_Roles::getInstance()->addRoleMember($this->objects['role']->getId(), array(
+    		'type' 	=> 'user',
+    		'id'	=> $this->objects['user']->getId()
+    	));
+    	
+    	$members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($this->objects['role']->getId());
+        
+        $this->assertGreaterThan(0, count($members));
+    }
+        
+    /**
+     * try to add member to multiple roles
+     */
+    public function testSetRoleMemberships()
+    {
+    	// create role 2 for test
+    	$role2 = Tinebase_Acl_Roles::getInstance()->createRole($this->objects['role_2']);
+    	
+    	// remove role members
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role']->getId(), array());
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role_2']->getId(), array());
+        
+        Tinebase_Acl_Roles::getInstance()->setRoleMemberships(
+        	array(
+				'type' 	=> 'user', 
+				'id' 	=> $this->objects['user']->getId()
+			), 
+			array(
+				$this->objects['role']->getId(), 
+				$this->objects['role_2']->getId()
+			)
+		);
+        
+        $members = Tinebase_Acl_Roles::getInstance()->getRoleMembers($this->objects['role']->getId());
+        $members_2 = Tinebase_Acl_Roles::getInstance()->getRoleMembers($this->objects['role_2']->getId());
+        
+        $this->assertEquals(2, (count($members) + count($members_2)));
+    }
     
     /**
      * try to add a role right
@@ -204,9 +265,11 @@ class Tinebase_Acl_RolesTest extends PHPUnit_Framework_TestCase
     {
         // remove role members and rights first
         Tinebase_Acl_Roles::getInstance()->setRoleRights($this->objects['role']->getId(), array());
-        Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role']->getId(), array());        
         
-        Tinebase_Acl_Roles::getInstance()->deleteRoles($this->objects['role']->getId());
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role']->getId(), array());        
+        Tinebase_Acl_Roles::getInstance()->setRoleMembers($this->objects['role_2']->getId(), array());
+        
+        Tinebase_Acl_Roles::getInstance()->deleteRoles(array($this->objects['role']->getId(), $this->objects['role_2']->getId()));
                       
         $this->setExpectedException('Exception');
         
