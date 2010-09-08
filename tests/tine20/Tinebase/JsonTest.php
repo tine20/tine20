@@ -59,6 +59,16 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             'backend'    => 'Sql',
         );        
 
+		$this->_objects['group'] = new Tinebase_Model_Group(array(
+			'name'			=> 'phpunit test group',
+			'description'	=> 'phpunit test group'
+		));
+
+		$this->_objects['role'] = new Tinebase_Model_Role(array(
+			'name'			=> 'phpunit test role',
+			'description'	=> 'phpunit test role'
+		));
+
         $this->_objects['note'] = new Tinebase_Model_Note(array(
             'note_type_id'      => 1,
             'note'              => 'phpunit test note',    
@@ -94,6 +104,58 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             $this->_objects['record']['backend'], 
             $this->_objects['record']['id']
         );        
+    }
+    
+    /**
+     * try to add group and then search
+     */
+    public function testSearchGroups()
+    {
+    	$group = Tinebase_Group::getInstance()->addGroup($this->_objects['group']);
+    	
+    	$filter = array(array(
+            'field' 	=> 'query',
+            'operator' 	=> 'contains',
+            'value' 	=> 'phpunit test group'
+        ));
+        $paging = array(
+        	'start'	=> 0,
+        	'limit'	=> 1
+        );
+        
+        $groups = $this->_instance->searchGroups($filter, $paging);
+        
+        $this->assertGreaterThan(0, $groups['totalcount']);        
+        $this->assertEquals($this->_objects['group']->name, $groups['results'][0]['name']);
+        
+        // delete grop
+        Tinebase_Group::getInstance()->deleteGroups($group->id);        
+    }
+    
+    /**
+     * try to delete role and then search
+     */
+    public function testSearchRoles()
+    {
+    	$role = Tinebase_Acl_Roles::getInstance()->createRole($this->_objects['role']);
+    	
+    	$filter = array(array(
+            'field' 	=> 'query',
+            'operator' 	=> 'contains',
+            'value' 	=> 'phpunit test role'
+        ));
+        $paging = array(
+        	'start'	=> 0,
+        	'limit'	=> 1
+        );
+        
+        $roles = $this->_instance->searchRoles($filter, $paging);
+        
+        $this->assertGreaterThan(0, $roles['totalcount']);        
+        $this->assertEquals($this->_objects['role']->name, $roles['results'][0]['name']);
+        
+        // delete role
+        Tinebase_Acl_Roles::getInstance()->deleteRoles($role->id);  
     }
     
     /**
