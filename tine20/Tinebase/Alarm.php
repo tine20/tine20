@@ -72,14 +72,15 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
     /**
      * send pending alarms
      *
+     * @param mixed $_eventName
      * @return void
      * 
      * @todo sort alarms (by model/...)?
      * @todo what to do about Tinebase_Model_Alarm::STATUS_FAILURE alarms?
      */
-    public function sendPendingAlarms($eventName)
+    public function sendPendingAlarms($_eventName)
     {        
-        $eventName = $eventName['eventName'];
+        $eventName = (is_array($_eventName)) ? $_eventName['eventName'] : $_eventName;
         
         if (! Tinebase_AsyncJob::getInstance()->jobIsRunning($eventName)) {
             
