@@ -147,54 +147,22 @@ Ext.namespace('Tine.Felamimail');
             },
             
             showFrom: function(email, name, addText, qtip) {
-
                 var result = this.encode(name + ' <' + email + '>');
                 
                 // add link with 'add to contacts'
                 var id = Ext.id() + ':' + email;
                 
                 var nameSplit = name.match(/^"*([^,^ ]+)(,*) *(.+)/i);
-                
                 var firstname = (nameSplit && nameSplit[1]) ? nameSplit[1] : '';
                 var lastname = (nameSplit && nameSplit[3]) ? nameSplit[3] : '';
-                
                 if (nameSplit && nameSplit[2] == ',') {
                     firstname = lastname;
                     lastname = nameSplit[1];
                 }
                 
                 id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(firstname) + ':' + Ext.util.Format.trim(lastname));
-                
-                
                 result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
                 return result;
-
-                /*
-                var result = this.encode(value);
-                
-                var email = value.match(/[a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4}/i);
-                
-                // add link with 'add to contacts'
-                if (email) {
-                    var id = Ext.id() + ':' + email;
-                    
-                    var name = value.match(/^"*([^,^ ]+)(,*) *([^"^<]+)/i);
-                    
-                    var firstname = (name && name[1]) ? name[1] : '';
-                    var lastname = (name && name[3]) ? name[3] : '';
-                    
-                    if (name && name[2] == ',') {
-                        firstname = lastname;
-                        lastname = name[1];
-                    }
-                    
-                    id += Ext.util.Format.htmlEncode(':' + Ext.util.Format.trim(firstname) + ':' + Ext.util.Format.trim(lastname));
-                    
-                    
-                    result += ' <span ext:qtip="' + qtip + '" id="' + id + '" class="tinebase-addtocontacts-link">[+]</span>';
-                }
-                return result;
-                */
             },
             
             showBody: function(body, messageData) {
