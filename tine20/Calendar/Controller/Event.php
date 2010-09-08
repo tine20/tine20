@@ -410,30 +410,35 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-	        $event = $this->get($_record->getId());
-	        if ($this->_doContainerACLChecks === FALSE || $event->{Tinebase_Model_Grants::GRANT_EDIT}) {
-	            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} ");
-		        
-	            // we need to resolve groupmembers before free/busy checking
+            $event = $this->get($_record->getId());
+            if ($this->_doContainerACLChecks === FALSE || $event->hasGrant(Tinebase_Model_Grants::GRANT_EDIT)) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " updating event: {$_record->id} ");
+    	        
+                // we need to resolve groupmembers before free/busy checking
                 Calendar_Model_Attender::resolveGroupMembers($_record->attendee);
                         
-	            if ($_checkBusyConficts) {
-	                // only do free/busy check if start/endtime changed  or attendee added or rrule changed
-	                if (   ! $event->dtstart->equals($_record->dtstart) || 
-	                       ! $event->dtend->equals($_record->dtend) ||
-	                       count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 || 
-	                       $event->rrule != $_record->rrule // attendee add
+                if ($_checkBusyConficts) {
+                    // only do free/busy check if start/endtime changed  or attendee added or rrule changed
+                    if (   ! $event->dtstart->equals($_record->dtstart) || 
+                           ! $event->dtend->equals($_record->dtend) ||
+                           count(array_diff($_record->attendee->user_id, $event->attendee->user_id)) > 0 || 
+                           $event->rrule != $_record->rrule // attendee add
                        ) {
-    	                
-	                    // ensure that all attendee are free
-    	                $this->checkBusyConficts($_record);
-	                }
-	            }
+                        
+                        // ensure that all attendee are free
+                        $this->checkBusyConficts($_record);
+                    }
+                }
                 
-	            $sendNotifications = $this->_sendNotifications;
-	            $this->_sendNotifications = FALSE;
-	            
+                $sendNotifications = $this->_sendNotifications;
+                $this->_sendNotifications = FALSE;
+                
+                // NOTE: We already checked the ACL above, and we don't wan't to collide with the std. parent checks
+                $doContainerACLChecks = $this->_doContainerACLChecks;
+                $this->_doContainerACLChecks = FALSE;
                 parent::update($_record);
+                $this->_doContainerACLChecks = $doContainerACLChecks;
+                
                 $this->_saveAttendee($_record);
                 
                 $this->_sendNotifications = $sendNotifications;
