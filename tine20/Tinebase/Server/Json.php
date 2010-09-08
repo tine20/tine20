@@ -221,11 +221,11 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
                 && $jsonKey != Tinebase_Core::get('jsonKey')) {
         
             if (! Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
-                Tinebase_Core::getLogger()->INFO('Attempt to request a privileged Json-API method without authorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
+                Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' Attempt to request a privileged Json-API method (' . $method . ') without authorisation from "' . $_SERVER['REMOTE_ADDR'] . '". (session timeout?)');
                 
                 throw new Tinebase_Exception_AccessDenied('Not Authorised', 401);
             } else {
-                Tinebase_Core::getLogger()->WARN('Fatal: got wrong json key! (' . $jsonKey . ') Possible CSRF attempt!' .
+                Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Fatal: got wrong json key! (' . $jsonKey . ') Possible CSRF attempt!' .
                     ' affected account: ' . print_r(Tinebase_Core::getUser()->toArray(), true) .
                     ' request: ' . print_r($_REQUEST, true)
                 );
