@@ -107,7 +107,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         $timeaccount = Timetracker_Controller_Timeaccount::getInstance()->get($_record->timeaccount_id);
         
         if (isset($timeaccount->deadline) && $timeaccount->deadline == Timetracker_Model_Timeaccount::DEADLINE_LASTWEEK) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Check if deadline is exceeded for timeaccount ' . $timeaccount->title);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Check if deadline is exceeded for timeaccount ' . $timeaccount->title);
             
             // it is only on monday allowed to add timesheets for last week
             $date = new Zend_Date();
@@ -126,12 +126,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             // convert start date to Zend_Date
             $startDate = new Zend_Date($_record->start_date, 'yyyy-MM-dd');
             if ($date->compare($startDate) >= 0) {
-                // later
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Deadline exceeded: ' . $startDate . ' < ' . $date);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deadline exceeded: ' . $startDate . ' < ' . $date);
                 
                 if ($this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
                      || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL)) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                         . ' User with admin / manage all rights is allowed to save Timesheet even if it exceeds the deadline.'
                     );
                 } else if ($_throwException) {
