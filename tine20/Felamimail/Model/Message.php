@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  * @todo        add flags as consts here?
  * @todo        add more CONTENT_TYPE_ constants
@@ -17,7 +17,8 @@
  * 
  * @package     Felamimail
  * @property    string  $subject        the subject of the email
- * @property    string  $from           the address of the sender
+ * @property    string  $from_email     the address of the sender
+ * @property    string  $from_name      the name of the sender
  * @property    string  $content_type   the address of the sender
  * @property    array   $to             the to receipients
  * @property    array   $cc             the cc receipients
@@ -96,11 +97,13 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'original_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
         'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
-        'from'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'from_email'            => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'from_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'to'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'cc'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'bcc'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -153,8 +156,6 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * 
      * @param array $_headers
      * @return void
-     * 
-     * @todo save from values in from_email/from_name (see http://www.tine20.org/bugtracker/view.php?id=2870)
      */
     public function parseHeaders(array $_headers)
     {
@@ -173,17 +174,15 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->sent = Felamimail_Message::convertDate($_headers['resent-date']);
         }
         
+        // if sender set the headers twice we only use the first
         foreach (array('to', 'cc', 'bcc', 'from') as $field) {
             if (isset($_headers[$field])) {
-                // if sender set the headers twice we only use the first
-                $this->$field = Felamimail_Message::convertAddresses($_headers[$field]);
+                $value = Felamimail_Message::convertAddresses($_headers[$field]);
                 if ($field == 'from') {
-                    // as we don't save the from field as array yet, we have to make sure that it is converted to a string
-                    if (count($this->from) > 0 && array_key_exists('email', $this->from[0])) {
-                        $this->from = (array_key_exists('name', $this->from[0])) ? $this->from[0]['name'] . ' <' . $this->from[0]['email'] . '>' : $this->from[0]['email'];
-                    } else {
-                        $this->from = '';
-                    }
+                    $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
+                    $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0])) ? $value[0]['name'] : '';
+                } else {
+                    $this->$field = $value;
                 }
             }
         }

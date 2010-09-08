@@ -321,6 +321,44 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_account', '11');
         $this->setApplicationVersion('Felamimail', '3.10');
     }    
+
+    /**
+     * update function (-> 3.11)
+     * - split from into from_email/from_name
+     * - added account_id
+     */    
+    public function update_10()
+    {
+        $this->_clearMessageCache();
+        
+        $newFields = array(
+                '<field>
+                    <name>from_email</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>',
+                '<field>
+                    <name>from_name</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>',
+                '<field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>'
+        );
+        
+        foreach ($newFields as $col) {
+            $this->_backend->addCol('felamimail_cache_message', new Setup_Backend_Schema_Field_Xml($col));
+        }
+        
+        $this->_backend->dropCol('felamimail_cache_message', 'from');
+        
+        $this->setTableVersion('felamimail_cache_message', '3');
+        $this->setApplicationVersion('Felamimail', '3.11');
+    }    
     
     /**
      * clear message cache tables and reset folder status

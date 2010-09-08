@@ -617,12 +617,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @param  Felamimail_Model_Folder  $_folder
      * @param  bool                     $_updateFolderCounter
      * @return Felamimail_Model_Message
-     * 
-     * @todo think about adding the recent flag again
      */
     public function addMessage(array $_message, Felamimail_Model_Folder $_folder, $_updateFolderCounter = true)
     {
         $messageToCache = new Felamimail_Model_Message(array(
+            'account_id'    => $_folder->account_id,
             'messageuid'    => $_message['uid'],
             'folder_id'     => $_folder->getId(),
             'timestamp'     => Zend_Date::now(),
@@ -648,10 +647,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $cacheId = 'getMessageHeaders' . $createdMessage->getId();
         Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
         
-        #if (! $messageToCache->hasSeenFlag()) {
-        #    $this->_backend->addFlag($createdMessage, Zend_Mail_Storage::FLAG_RECENT);
-        #}
-        
         if ($_updateFolderCounter == true) {
             Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
                 'cache_totalcount'  => "+1",
@@ -660,8 +655,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         /*
-        # store in local cache if received during the last day
-        # disabled again for performance reason
+        // store in local cache if received during the last day
+        // disabled again for performance reason
         if($createdMessage->received->compare(Zend_Date::now()->subDay(1)) == 1) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
                 ' prefetch imap message to local cache ' . $createdMessage->getId()
