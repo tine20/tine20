@@ -46,6 +46,13 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @var string
      */
     protected $_modelName = 'Tinebase_Model_Preference';
+    
+    /**
+     * application
+     *
+     * @var string
+     */
+    protected $_application = 'Tinebase';    
 
     /**************************** public abstract functions *********************************/
 
@@ -531,20 +538,35 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
 
         // add options from default preference
         if ($result->type !== Tinebase_Model_Preference::TYPE_DEFAULT) {
-            $defaults = $_preferences->filter('type', Tinebase_Model_Preference::TYPE_DEFAULT);
-            try {
-                if (count($defaults) > 0) {
-                    $defaultPref = $defaults->getFirstRecord();
-                } else {
-                    $defaultPref = $this->getPreferenceDefaults($result->name);
-                }
-                $result->options = $defaultPref->options;
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Preference not found: ' . $result->name);
-            }
+            $defaultPref = $this->_getDefaultPreference($result->name, $_preferences);
+            $result->options = $defaultPref->options;
         }
 
         return $result;
+    }
+    
+    /**
+     * get default preference (from recordset, db or app defaults)
+     * 
+     * @param string $_preferenceName
+     * @param Tinebase_Record_RecordSet $_preferences
+     */
+    protected function _getDefaultPreference($_preferenceName, $_preferences = NULL)
+    {
+        if ($_preferences !== NULL) {
+            $defaults = $_preferences->filter('type', Tinebase_Model_Preference::TYPE_DEFAULT);
+            if (count($defaults) > 0) {
+                $defaultPref = $defaults->getFirstRecord();
+            }
+        } else {
+            // @todo get it from db
+        }
+        
+        if (! isset($defaultPref)) {
+            $defaultPref = $this->getPreferenceDefaults($_preferenceName);
+        }
+        
+        return $defaultPref;
     }
 
     /**
