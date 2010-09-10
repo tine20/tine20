@@ -151,7 +151,7 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             default:
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Default preference with name ' . $_preferenceName . ' not found.');
+                throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
         }
         
         return $preference;
