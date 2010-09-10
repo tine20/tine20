@@ -936,9 +936,10 @@ class Tinebase_Core
      * get preferences instance by application name (create+save it to registry if it doesn't exist)
      *
      * @param string $_application
+     * @param boolean $_throwException throws exception if class does not exist
      * @return Tinebase_Preference_Abstract
      */
-    public static function getPreference($_application = 'Tinebase')
+    public static function getPreference($_application = 'Tinebase', $_throwException = FALSE)
     {
         $result = NULL;
 
@@ -957,6 +958,8 @@ class Tinebase_Core
                 $result = new $prefClassName();
                 $prefs[$_application] = $result;
                 self::set(self::PREFERENCES, $prefs);
+            } else if ($_throwException) {
+                throw new Tinebase_Exception_NotFound('No preference class found for app ' . $_application);
             }
         }
 
