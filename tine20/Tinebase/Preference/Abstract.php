@@ -145,27 +145,27 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         ));
         $allPrefs = parent::search($_filter, $_pagination, $_onlyIds);
         
-        // get single matching preferences for each different pref
-        $records = $this->getMatchingPreferences($allPrefs);
-        
         $allAppPrefs = $this->getAllApplicationPreferences();
         // add default prefs if not already in array (only if no name or type filters are set)
         if (! $_filter->isFilterSet('name') && ! $_filter->isFilterSet('type')) {
-            $missingDefaultPrefs = array_diff($allAppPrefs, $records->name);
+            $missingDefaultPrefs = array_diff($allAppPrefs, $allPrefs->name);
             foreach ($missingDefaultPrefs as $prefName) {
-                $records->addRecord($this->getApplicationPreferenceDefaults($prefName));
+                $allPrefs->addRecord($this->getApplicationPreferenceDefaults($prefName));
             }
         }
         // remove all prefs that are not defined
-        $undefinedPrefs = array_diff($records->name, $allAppPrefs);
+        $undefinedPrefs = array_diff($allPrefs->name, $allAppPrefs);
         if (count($undefinedPrefs) > 0) {
-            $records->addIndices(array('name'));
+            $allPrefs->addIndices(array('name'));
             foreach ($undefinedPrefs as $undefinedPrefName) {
-                $record = $records->find('name', $undefinedPrefName);
-                $records->removeRecord($record);
+                $record = $allPrefs->find('name', $undefinedPrefName);
+                $allPrefs->removeRecord($record);
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removed undefined preference from result: ' . $undefinedPrefName);
             }
         }
+        
+        // get single matching preferences for each different pref
+        $records = $this->getMatchingPreferences($allPrefs);        
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
         
