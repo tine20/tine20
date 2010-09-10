@@ -88,10 +88,11 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         if ($this->_clearPrefs) {
-            Tinebase_Core::getDb()->query(
-                'DELETE FROM table ' . SQL_TABLE_PREFIX . 'preferences WHERE application_id = ?', 
-                Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId()
+            $query = Tinebase_Core::getDb()->quoteInto(
+                'DELETE FROM ' . SQL_TABLE_PREFIX . 'preferences WHERE application_id = ?', 
+                Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId()
             );
+            Tinebase_Core::getDb()->query($query);
         }
     }
     
@@ -403,7 +404,9 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($defaultString));
         $this->assertContains('(auto)', $defaultString);
         
-        // @todo set user pref to 'use default'
+        // set user pref to 'use default'
+        Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = Tinebase_Model_Preference::DEFAULT_VALUE;
+        $this->assertEquals('auto', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
         
         // set new default locale
         $prefData['Tinebase'][$locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
@@ -418,6 +421,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals(count($locale['options']), count($updatedLocale['options']), 'option count has to be equal');
         $this->assertContains('(de)', $defaultString);
+        $this->assertEquals('de', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
     }
     
     /**
