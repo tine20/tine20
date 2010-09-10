@@ -52,13 +52,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      */
     const CONFIRM_LOGOUT = 'confirmLogout';
     
-    /**
-     * application
-     *
-     * @var string
-     */
-    protected $_application = 'Tinebase';    
-        
     /**************************** public functions *********************************/
     
     /**
