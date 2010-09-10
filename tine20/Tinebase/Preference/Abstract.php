@@ -144,25 +144,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             'sort'      => array('name')
         ));
         $allPrefs = parent::search($_filter, $_pagination, $_onlyIds);
-        
-        $allAppPrefs = $this->getAllApplicationPreferences();
-        // add default prefs if not already in array (only if no name or type filters are set)
-        if (! $_filter->isFilterSet('name') && ! $_filter->isFilterSet('type')) {
-            $missingDefaultPrefs = array_diff($allAppPrefs, $allPrefs->name);
-            foreach ($missingDefaultPrefs as $prefName) {
-                $allPrefs->addRecord($this->getApplicationPreferenceDefaults($prefName));
-            }
-        }
-        // remove all prefs that are not defined
-        $undefinedPrefs = array_diff($allPrefs->name, $allAppPrefs);
-        if (count($undefinedPrefs) > 0) {
-            $allPrefs->addIndices(array('name'));
-            foreach ($undefinedPrefs as $undefinedPrefName) {
-                $record = $allPrefs->find('name', $undefinedPrefName);
-                $allPrefs->removeRecord($record);
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removed undefined preference from result: ' . $undefinedPrefName);
-            }
-        }
+        $this->_addDefaultAndRemoveUndefinedPrefs($allPrefs, $_filter);
         
         // get single matching preferences for each different pref
         $records = $this->getMatchingPreferences($allPrefs);        
@@ -170,6 +152,35 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
         
         return $records;
+    }
+    
+    /**
+     * add default preferences to and remove undefined preferences from record set
+     * 
+     * @param Tinebase_Record_RecordSet $_prefs
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     */
+    protected function _addDefaultAndRemoveUndefinedPrefs(Tinebase_Record_RecordSet $_prefs, Tinebase_Model_Filter_FilterGroup $_filter)
+    {
+        $allAppPrefs = $this->getAllApplicationPreferences();
+        
+        // add default prefs if not already in array (only if no name or type filters are set)
+        if (! $_filter->isFilterSet('name') && ! $_filter->isFilterSet('type')) {
+            $missingDefaultPrefs = array_diff($allAppPrefs, $_prefs->name);
+            foreach ($missingDefaultPrefs as $prefName) {
+                $_prefs->addRecord($this->getApplicationPreferenceDefaults($prefName));
+            }
+        }
+        // remove all prefs that are not defined
+        $undefinedPrefs = array_diff($_prefs->name, $allAppPrefs);
+        if (count($undefinedPrefs) > 0) {
+            $_prefs->addIndices(array('name'));
+            foreach ($undefinedPrefs as $undefinedPrefName) {
+                $record = $_prefs->find('name', $undefinedPrefName);
+                $_prefs->removeRecord($record);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removed undefined preference from result: ' . $undefinedPrefName);
+            }
+        }
     }
     
     /**
