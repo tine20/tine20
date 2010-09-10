@@ -40,6 +40,12 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
     const TYPE_FORCED = 'forced';
 
     /**
+     * default preference value
+     *
+     */
+    const DEFAULT_VALUE = '_default_';
+    
+    /**
      * identifier field name
      *
      * @var string
