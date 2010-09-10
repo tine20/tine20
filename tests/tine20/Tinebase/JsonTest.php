@@ -88,7 +88,10 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         if ($this->_clearPrefs) {
-            Tinebase_Core::getDb()->query('TRUNCATE table ' . SQL_TABLE_PREFIX . 'preferences');
+            Tinebase_Core::getDb()->query(
+                'DELETE FROM table ' . SQL_TABLE_PREFIX . 'preferences WHERE application_id = ?', 
+                Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId()
+            );
         }
     }
     
