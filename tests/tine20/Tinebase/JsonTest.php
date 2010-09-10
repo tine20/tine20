@@ -369,6 +369,16 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals($prefData, $savedPrefData);
     }
+    
+    /**
+     * tests if 'use default' appears in options and if it can be selected and if it changes if default changes
+     * 
+     * @todo implement
+     */
+    public function testGetSetChangeDefaultPref()
+    {
+        
+    }    
 
     /**
      * save admin prefs
