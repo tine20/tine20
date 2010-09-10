@@ -307,7 +307,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             if ($result['name'] == 'defaultapp') {
                 $this->assertEquals($pref->value, $result['value']);
                 $this->assertTrue(is_array($result['options']));
-                $this->assertEquals(2, count($result['options']));
+                $this->assertEquals(3, count($result['options']));
             }
         }
         
@@ -350,8 +350,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         // search saved prefs
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(FALSE));
         
-        //print_r($results);
-        
         // check results
         $this->assertTrue(isset($results['results']));
         $this->assertGreaterThan(2, $results['totalcount']);
@@ -373,11 +371,18 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * tests if 'use default' appears in options and if it can be selected and if it changes if default changes
      * 
-     * @todo implement
+     * @todo finish
      */
     public function testGetSetChangeDefaultPref()
     {
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter());
+        foreach ($results['results'] as $result) {
+            if ($result['name'] == 'locale') {
+                print_r($result);
+            }
+        }
         
+        //print_r($results);
     }    
 
     /**
