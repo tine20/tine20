@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        use other/shared namespaces
@@ -119,7 +119,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $filterValues = $this->_extractFilter($_filter);
         
         if (empty($filterValues['account_id'])) {
-            throw new Felamimail_Exception('No account id set in search filter.');
+            throw new Felamimail_Exception('No account id set in search filter. Check default account preference!');
         }
         
         // get folders from db
