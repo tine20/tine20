@@ -7,14 +7,14 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
+ * @version     $Id$
  *
  * @todo        make this a real controller + singleton (create extra sql backend)
  * @todo        add getAllprefsForApp (similar to config) to get all prefs for the registry in one request
  * @todo        add getPreference function that returns the complete record
  * @todo        allow free-form preferences
+ * @todo        support group preferences
  */
-
 
 /**
  * abstract backend for preferences
@@ -240,8 +240,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param string $_accountType
      * @return string
      * @throws Tinebase_Exception_NotFound
-     *
-     * @todo add param for getting default value ?
      */
     public function getValueForUser($_preferenceName, $_accountId, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
@@ -279,8 +277,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param string $_value
      * @param array $_limitToUserIds [optional]
      * @return array of user ids
-     *
-     * @todo support group preferences
      */
     public function getUsersWithPref($_preferenceName, $_value, $_limitToUserIds = array())
     {
