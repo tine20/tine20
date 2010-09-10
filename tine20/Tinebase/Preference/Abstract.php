@@ -54,6 +54,13 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     protected $_application = 'Tinebase';    
 
+    /**
+     * do not add default to options for this preferences
+     * 
+     * @var array
+     */
+    protected $_doNotAddDefaultToOptions = array();
+    
     /**************************** public abstract functions *********************************/
 
     /**
@@ -430,23 +437,25 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
              $options = $this->_convertXmlOptionsToArray($_preference->options);
         }
         
-        $translate = Tinebase_Translation::getTranslation($this->_application);
-        
-        // get default pref and add value to string
-        $default = $this->_getDefaultPreference($_preference->name); 
-        $defaultLabel = $translate->_('default');
-        // check if value is in options and use that label
-        $valueLabel = $default->value;
-        foreach ($options as $option) {
-            if ($default->value == $option[0]) {
-                $valueLabel = $option[1];
+        if (! in_array($_preference->name, $this->_doNotAddDefaultToOptions)) {
+            $translate = Tinebase_Translation::getTranslation($this->_application);
+            
+            // get default pref and add value to string
+            $default = $this->_getDefaultPreference($_preference->name); 
+            $defaultLabel = $translate->_('default');
+            // check if value is in options and use that label
+            $valueLabel = $default->value;
+            foreach ($options as $option) {
+                if ($default->value == $option[0]) {
+                    $valueLabel = $option[1];
+                }
             }
+            $defaultLabel .= ' (' . $valueLabel . ')';
+            $options[] = array(
+                Tinebase_Model_Preference::DEFAULT_VALUE,
+                $defaultLabel,
+            );
         }
-        $defaultLabel .= ' (' . $valueLabel . ')';
-        $options[] = array(
-            Tinebase_Model_Preference::DEFAULT_VALUE,
-            $defaultLabel,
-        );
         
         $_preference->options = $options;
     }
