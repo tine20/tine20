@@ -384,15 +384,12 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * tests if 'use default' appears in options and if it can be selected and if it changes if default changes
-     * 
-     * @todo make it work
      */
     public function testGetSetChangeDefaultPref()
     {
         $this->_clearPrefs = TRUE;
         
         $locale = $this->_getLocalePref();
-        //print_r($locale);
         foreach ($locale['options'] as $option) {
             if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
                 $result = $option;
@@ -403,13 +400,13 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($defaultString));
         $this->assertContains('(auto)', $defaultString);
         
-        /*
+        // @todo set user pref to 'use default'
+        
         // set new default locale
         $prefData['Tinebase'][$locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
         $this->_instance->savePreferences($prefData, true);
         
         $updatedLocale = $this->_getLocalePref();
-        print_r($updatedLocale);
         foreach ($updatedLocale['options'] as $option) {
             if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
                 $result = $option;
@@ -418,7 +415,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals(count($locale['options']), count($updatedLocale['options']), 'option count has to be equal');
         $this->assertContains('(de)', $defaultString);
-        */
     }
     
     /**
