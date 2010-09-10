@@ -664,7 +664,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 // create prefs that don't exist in the db
                 foreach($data as $id => $prefData) {
                     if (preg_match('/^default/', $id)) {
-                        $newPref = $backend->getPreferenceDefaults($prefData['name']);
+                        $newPref = $backend->getApplicationPreferenceDefaults($prefData['name']);
                         $newPref->value = $prefData['value'];
                         $newPref->type = $prefData['type'];
                         unset($newPref->id);

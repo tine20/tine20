@@ -76,7 +76,7 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
      * @param string $_preferenceName
      * @return Tinebase_Model_Preference
      */
-    public function getPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    public function getApplicationPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         

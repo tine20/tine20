@@ -79,7 +79,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param string $_accountType
      * @return Tinebase_Model_Preference
      */
-    abstract public function getPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
+    abstract public function getApplicationPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
 
     /**************************** public interceptior functions *********************************/
 
@@ -153,7 +153,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if (! $_filter->isFilterSet('name') && ! $_filter->isFilterSet('type')) {
             $missingDefaultPrefs = array_diff($allAppPrefs, $records->name);
             foreach ($missingDefaultPrefs as $prefName) {
-                $records->addRecord($this->getPreferenceDefaults($prefName));
+                $records->addRecord($this->getApplicationPreferenceDefaults($prefName));
             }
         }
         // remove all prefs that are not defined
@@ -249,7 +249,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if (!$queryResult) {
             //throw new Tinebase_Exception_NotFound("No matching preference for '$_preferenceName' found!");
             // try to get default value
-            $pref = $this->getPreferenceDefaults($_preferenceName, $_accountId, $_accountType);
+            $pref = $this->getApplicationPreferenceDefaults($_preferenceName, $_accountId, $_accountType);
 
         } else {
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
@@ -291,7 +291,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
 
         if (empty($queryResult)) {
             // get default pref
-            $pref = $this->getPreferenceDefaults($_preferenceName);
+            $pref = $this->getApplicationPreferenceDefaults($_preferenceName);
         } else {
             // found
             $pref = new Tinebase_Model_Preference($queryResult[0]);
@@ -563,7 +563,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
         
         if (! isset($defaultPref)) {
-            $defaultPref = $this->getPreferenceDefaults($_preferenceName);
+            $defaultPref = $this->getApplicationPreferenceDefaults($_preferenceName);
         }
         
         return $defaultPref;
