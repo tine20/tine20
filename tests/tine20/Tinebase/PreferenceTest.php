@@ -139,10 +139,11 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
     /**
      * test forced preference
      *
+     * @todo use existant pref
      */
     public function testForcedPreference()
     {
-        $forcedPrefName ='testForcedPref';
+        $forcedPrefName ='locale';
         $forcedPref = $this->_createTestPreference($forcedPrefName);
         
         // set pref for user
