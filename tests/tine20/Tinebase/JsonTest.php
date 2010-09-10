@@ -37,6 +37,13 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     protected $_objects = array();
     
     /**
+     * clear preferences after test?
+     * 
+     * @var boolean
+     */
+    protected $_clearPrefs = FALSE;
+    
+    /**
      * Runs the test methods of this class.
      */
     public static function main()
@@ -76,6 +83,13 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             'record_backend'    => $this->_objects['record']['backend'],       
             'record_id'         => $this->_objects['record']['id']
         ));        
+    }
+    
+    public function tearDown()
+    {
+        if ($this->_clearPrefs) {
+            Tinebase_Core::getDb()->query('TRUNCATE table ' . SQL_TABLE_PREFIX . 'preferences');
+        }
     }
     
     /**
@@ -321,6 +335,8 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchPreferencesOfOtherUsers()
     {
+        $this->_clearPrefs = TRUE;
+        
         // add new default pref
         $pref = $this->_getPreferenceWithOptions();
         $pref->account_id = 2;
@@ -333,8 +349,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         // check results
         $this->assertTrue(isset($results['results']));
         $this->assertEquals(1, $results['totalcount']);
-        
-        Tinebase_Core::getPreference()->delete($pref);
     }
     
     /**
@@ -344,6 +358,8 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSavePreferences()
     {
+        $this->_clearPrefs = TRUE;
+        
         $prefData = $this->_getUserPreferenceData();
         $this->_instance->savePreferences($prefData, false);
 
@@ -361,8 +377,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             
                 $this->assertTrue(is_array($result['options']), 'options missing');
                 $this->assertGreaterThan(100, count($result['options']));
-                // cleanup
-                Tinebase_Core::getPreference()->delete($result['id']);
             }            
         }
         $this->assertEquals($prefData, $savedPrefData);
@@ -371,11 +385,14 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * tests if 'use default' appears in options and if it can be selected and if it changes if default changes
      * 
-     * @todo update and check
+     * @todo make it work
      */
     public function testGetSetChangeDefaultPref()
     {
+        $this->_clearPrefs = TRUE;
+        
         $locale = $this->_getLocalePref();
+        //print_r($locale);
         foreach ($locale['options'] as $option) {
             if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
                 $result = $option;
@@ -384,7 +401,24 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         }
         
         $this->assertTrue(isset($defaultString));
-        $this->assertContains('auto', $defaultString);
+        $this->assertContains('(auto)', $defaultString);
+        
+        /*
+        // set new default locale
+        $prefData['Tinebase'][$locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
+        $this->_instance->savePreferences($prefData, true);
+        
+        $updatedLocale = $this->_getLocalePref();
+        print_r($updatedLocale);
+        foreach ($updatedLocale['options'] as $option) {
+            if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $result = $option;
+                $defaultString = $option[1];
+            }
+        }
+        $this->assertEquals(count($locale['options']), count($updatedLocale['options']), 'option count has to be equal');
+        $this->assertContains('(de)', $defaultString);
+        */
     }
     
     /**
@@ -394,7 +428,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     {
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter());
         foreach ($results['results'] as $result) {
-            if ($result['name'] == 'locale') {
+            if ($result['name'] == Tinebase_Preference::LOCALE) {
                 $locale = $result;
             }
         }
@@ -410,6 +444,8 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveAdminPreferences()
     {
+        $this->_clearPrefs = TRUE;
+        
         // add new default pref
         $pref = $this->_getPreferenceWithOptions();
         $pref = Tinebase_Core::getPreference()->create($pref);        
@@ -426,9 +462,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $results['totalcount']);
         $this->assertEquals($prefData['Tinebase'][$pref->getId()]['value'], $results['results'][0]['value']);
         $this->assertEquals($prefData['Tinebase'][$pref->getId()]['type'], $results['results'][0]['type']);
-                
-        // cleanup
-        Tinebase_Core::getPreference()->delete($pref);
     }
     
     /**
