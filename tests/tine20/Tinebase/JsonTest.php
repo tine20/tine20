@@ -420,7 +420,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             }
         }
         $this->assertEquals(count($locale['options']), count($updatedLocale['options']), 'option count has to be equal');
-        $this->assertContains('(de)', $defaultString);
+        $this->assertContains('(Deutsch)', $defaultString);
         $this->assertEquals('de', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
     }
     
