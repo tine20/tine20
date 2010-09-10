@@ -434,7 +434,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         // get default pref and add value to string
         $default = $this->_getDefaultPreference($_preference->name); 
-        $defaultLabel = $translate->_('use default');
+        $defaultLabel = $translate->_('default');
         // check if value is in options and use that label
         $valueLabel = $default->value;
         foreach ($options as $option) {
