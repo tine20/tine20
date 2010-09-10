@@ -431,13 +431,21 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
         
         $translate = Tinebase_Translation::getTranslation($this->_application);
+        
         // get default pref and add value to string
         $default = $this->_getDefaultPreference($_preference->name); 
-        $defaultString = $translate->_('use default');
-        $defaultString .= ' (' . $default->value . ')';
+        $defaultLabel = $translate->_('use default');
+        // check if value is in options and use that label
+        $valueLabel = $default->value;
+        foreach ($options as $option) {
+            if ($default->value == $option[0]) {
+                $valueLabel = $option[1];
+            }
+        }
+        $defaultLabel .= ' (' . $valueLabel . ')';
         $options[] = array(
             Tinebase_Model_Preference::DEFAULT_VALUE,
-            $defaultString,
+            $defaultLabel,
         );
         
         $_preference->options = $options;
@@ -457,7 +465,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if ($optionsXml->special) {
            $result = $this->_getSpecialOptions($optionsXml->special);
         } else {
-            foreach($optionsXml->option as $option) {
+            foreach ($optionsXml->option as $option) {
                 $result[] = array((string)$option->value, (string)$option->label);
             }
         }
