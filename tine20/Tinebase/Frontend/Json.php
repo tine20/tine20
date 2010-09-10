@@ -803,7 +803,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         $app = Tinebase_Application::getInstance()->getApplicationById($record->application_id);
                     }
                     $preference = Tinebase_Core::getPreference($app->name, TRUE);
-                    $preference->convertOptionsToArray($record);
+                    $preference->resolveOptions($record);
                 }
                 break;
         }

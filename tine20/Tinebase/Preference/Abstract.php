@@ -415,31 +415,39 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     }
 
     /**
+     * resolve preference options and add 'use default'
+     * 
+     * @param Tinebase_Model_Preference $_preference
+     * 
+     * @todo add 'use default' here
+     */
+    public function resolveOptions(Tinebase_Model_Preference $_preference)
+    {
+        if (! empty($_preference->options)) {
+            $_preference->options = $this->_convertXmlOptionsToArray($_preference->options);
+        }
+    }
+    
+    /**
      * convert options xml string to array
      *
-     * @param Tinebase_Model_Preference $_preference
+     * @param string $_xmlOptions
+     * @return array
      */
-    public function convertOptionsToArray(Tinebase_Model_Preference $_preference)
+    protected function _convertXmlOptionsToArray($_xmlOptions)
     {
-        if (empty($_preference->options)) {
-            return;
-        }
-
-        $optionsXml = new SimpleXMLElement($_preference->options);
+        $result = array();
+        $optionsXml = new SimpleXMLElement($_xmlOptions);
 
         if ($optionsXml->special) {
-            $_preference->options = $this->_getSpecialOptions($optionsXml->special);
-
+           $result = $this->_getSpecialOptions($optionsXml->special);
         } else {
-
-            /****************** other options ********************/
-            $result = array();
             foreach($optionsXml->option as $option) {
                 $result[] = array((string)$option->value, (string)$option->label);
             }
-            //$result['totalcount'] = count($result['results']);
-            $_preference->options = $result;
         }
+
+        return $result;
     }
 
     /**
