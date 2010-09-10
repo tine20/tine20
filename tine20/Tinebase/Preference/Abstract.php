@@ -197,14 +197,14 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         $accountId = (Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : '0';
 
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get user preference "' . $_preferenceName . '" for account id ' . $accountId);
+        // if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get user preference "' . $_preferenceName . '" for account id ' . $accountId);
 
         try {
             $result = $this->getValueForUser(
-            $_preferenceName, $accountId,
-            ($accountId === '0')
-            ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
-            : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
+                $_preferenceName, $accountId,
+                ($accountId === '0')
+                ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE
+                : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER
             );
         } catch (Tinebase_Exception_NotFound $tenf) {
             if ($_default !== NULL) {
@@ -212,6 +212,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             } else {
                 throw $tenf;
             }
+        }
+        
+        if ($result == Tinebase_Model_Preference::DEFAULT_VALUE) {
+            $result = $_default;
         }
 
         return $result;
@@ -425,14 +429,24 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * resolve preference options and add 'use default'
      * 
      * @param Tinebase_Model_Preference $_preference
-     * 
-     * @todo add 'use default' here
      */
     public function resolveOptions(Tinebase_Model_Preference $_preference)
     {
+        $options = array();
         if (! empty($_preference->options)) {
-            $_preference->options = $this->_convertXmlOptionsToArray($_preference->options);
+             $options = $this->_convertXmlOptionsToArray($_preference->options);
         }
+        
+        $translate = Tinebase_Translation::getTranslation($this->_application);
+        // @todo get default pref and add value to string
+        //$default = 
+        $defaultString = $translate->_('use default');
+        $options[] = array(
+            Tinebase_Model_Preference::DEFAULT_VALUE,
+            $defaultString,
+        );
+        
+        $_preference->options = $options;
     }
     
     /**
@@ -577,10 +591,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     protected function _getDefaultBasePreference($_preferenceName)
     {
-        if (empty($this->_application)) {
-            throw new Tinebase_Exception_UnexpectedValue('No application name set in preference class.');
-        }
-
         return new Tinebase_Model_Preference(array(
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(),
             'name'              => $_preferenceName,
@@ -591,7 +601,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 <options>
                     <special>' . $_preferenceName . '</special>
                 </options>',
-            'id'                => 'default' . Tinebase_Record_Abstract::generateUID(33)
+            'id'                => 'default' . Tinebase_Record_Abstract::generateUID(33),
+            'value'             => Tinebase_Model_Preference::DEFAULT_VALUE,
         ), TRUE);
     }
 
