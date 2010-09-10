@@ -371,18 +371,26 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * tests if 'use default' appears in options and if it can be selected and if it changes if default changes
      * 
-     * @todo finish
+     * @todo check default string
      */
     public function testGetSetChangeDefaultPref()
     {
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter());
         foreach ($results['results'] as $result) {
             if ($result['name'] == 'locale') {
-                print_r($result);
+                $locale = $result;
             }
         }
         
-        //print_r($results);
+        $this->assertTrue(isset($locale));
+        foreach ($locale['options'] as $option) {
+            if ($option[0] == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $defaultString = $option[1];
+            }
+        }
+        
+        $this->assertTrue(isset($defaultString));
+        //print_r($defaultString);
     }    
 
     /**
