@@ -52,6 +52,13 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      */
     const CONFIRM_LOGOUT = 'confirmLogout';
     
+    /**
+     * do not add default to options for this preferences
+     * 
+     * @var array
+     */
+    protected $_doNotAddDefaultToOptions = array('timezone');
+    
     /**************************** public functions *********************************/
     
     /**
