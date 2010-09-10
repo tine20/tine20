@@ -438,9 +438,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
         
         $translate = Tinebase_Translation::getTranslation($this->_application);
-        // @todo get default pref and add value to string
-        //$default = 
+        // get default pref and add value to string
+        $default = $this->_getDefaultPreference($_preference->name); 
         $defaultString = $translate->_('use default');
+        $defaultString .= ' (' . $default->value . ')';
         $options[] = array(
             Tinebase_Model_Preference::DEFAULT_VALUE,
             $defaultString,
