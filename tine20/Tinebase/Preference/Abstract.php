@@ -137,8 +137,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
-        
         $paging = new Tinebase_Model_Pagination(array(
             'dir'       => 'ASC',
             'sort'      => array('name')
@@ -148,8 +146,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         
         // get single matching preferences for each different pref
         $records = $this->getMatchingPreferences($allPrefs);        
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($records->toArray(), true));
         
         return $records;
     }
@@ -207,8 +203,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     public function getValue($_preferenceName, $_default = NULL)
     {
         $accountId = (Tinebase_Core::getUser()) ? Tinebase_Core::getUser()->getId() : '0';
-
-        // if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get user preference "' . $_preferenceName . '" for account id ' . $accountId);
 
         try {
             $result = $this->getValueForUser(
@@ -295,10 +289,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $queryResult = $stmt->fetchAll();
 
         if (empty($queryResult)) {
-            // get default pref
             $pref = $this->getApplicationPreferenceDefaults($_preferenceName);
         } else {
-            // found
             $pref = new Tinebase_Model_Preference($queryResult[0]);
         }
 
@@ -316,9 +308,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             } else if ($pref->type == Tinebase_Model_Preference::TYPE_DEFAULT) {
                 // default: remove all users/groups who don't have default
                 $filter = new Tinebase_Model_PreferenceFilter(array(
-                array('field'   => 'account_type',    'operator'  => 'equals', 'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
-                array('field'   => 'name',            'operator'  => 'equals', 'value' => $_preferenceName),
-                array('field'   => 'value',           'operator'  => 'not',    'value' => $_value),
+                    array('field'   => 'account_type',    'operator'  => 'equals', 'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
+                    array('field'   => 'name',            'operator'  => 'equals', 'value' => $_preferenceName),
+                    array('field'   => 'value',           'operator'  => 'not',    'value' => $_value),
                 ));
                 $accountsWithOtherValues = $this->search($filter)->account_id;
                 $result = array_diff($result, $accountsWithOtherValues);
@@ -330,9 +322,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         } else {
             // not default or forced: get all users/groups who have the setting
             $filter = new Tinebase_Model_PreferenceFilter(array(
-            array('field'   => 'account_type',    'operator'  => 'equals', 'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
-            array('field'   => 'name',            'operator'  => 'equals', 'value' => $_preferenceName),
-            array('field'   => 'value',           'operator'  => 'equals', 'value' => $_value),
+                array('field'   => 'account_type',    'operator'  => 'equals', 'value' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
+                array('field'   => 'name',            'operator'  => 'equals', 'value' => $_preferenceName),
+                array('field'   => 'value',           'operator'  => 'equals', 'value' => $_value),
             ));
             $result = $this->search($filter)->account_id;
         }
@@ -668,7 +660,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
 
         switch ($_value) {
 
-                /****************** yes / no *******************************/
             case Tinebase_Preference_Abstract::YES_NO_OPTIONS:
                 $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
                 $question = Zend_Locale::getTranslationList('Question', $locale);
@@ -680,7 +671,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 $result[] = array(1, $yes);
                 break;
 
-                /****************** default *********************************/
             default:
                 throw new Tinebase_Exception_NotFound('Special option not found.');
         }
