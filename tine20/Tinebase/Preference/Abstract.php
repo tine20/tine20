@@ -581,14 +581,29 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         if ($_preferences !== NULL) {
             $defaults = $_preferences->filter('type', Tinebase_Model_Preference::TYPE_DEFAULT);
-            if (count($defaults) > 0) {
-                $defaultPref = $defaults->getFirstRecord();
-            }
         } else {
-            // @todo get it from db
+            $defaults = $this->search(new Tinebase_Model_PreferenceFilter(array(array(
+                'field'     => 'type',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_Preference::TYPE_DEFAULT
+            ), array(
+                'field'     => 'name',
+                'operator'  => 'equals',
+                'value'     => $_preferenceName
+            ), array(
+                'field'     => 'account_id',
+                'operator'  => 'equals',
+                'value'     => 0
+            ), array(
+                'field'     => 'application_id',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId()
+            ))));
         }
         
-        if (! isset($defaultPref)) {
+        if (count($defaults) > 0) {
+            $defaultPref = $defaults->getFirstRecord();
+        } else {
             $defaultPref = $this->getApplicationPreferenceDefaults($_preferenceName);
         }
         
