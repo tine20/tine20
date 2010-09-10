@@ -262,14 +262,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $queryResult = $stmt->fetchAll();
 
         if (!$queryResult) {
-            //throw new Tinebase_Exception_NotFound("No matching preference for '$_preferenceName' found!");
-            // try to get default value
             $pref = $this->getApplicationPreferenceDefaults($_preferenceName, $_accountId, $_accountType);
-
         } else {
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
-
-            // get the correct result
             $pref = $this->_getMatchingPreference($this->_rawDataToRecordSet($queryResult));
         }
 
@@ -562,10 +556,13 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
         }
 
-        // add options from default preference
+        // add options and perhaps value from default preference
         if ($result->type !== Tinebase_Model_Preference::TYPE_DEFAULT) {
             $defaultPref = $this->_getDefaultPreference($result->name, $_preferences);
             $result->options = $defaultPref->options;
+            if ($result->value == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $result->value = $defaultPref->value;
+            }
         }
 
         return $result;
