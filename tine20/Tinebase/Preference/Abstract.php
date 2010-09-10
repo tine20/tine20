@@ -420,7 +420,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $uniqueNames = array_unique($_preferences->name);
         foreach ($uniqueNames as $name) {
             $singlePrefSet = $_preferences->filter('name', $name);
-            $result->addRecord($this->_getMatchingPreference($singlePrefSet));
+            $result->addRecord($this->_getMatchingPreference($singlePrefSet, FALSE));
         }
 
         return $result;
@@ -520,9 +520,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * - get options xml from default pref if available
      *
      * @param Tinebase_Record_RecordSet $_preferences
+     * @param boolean $_replaceValueWithDefault i 'use default' is selected, replace value with default
      * @return Tinebase_Model_Preference
      */
-    protected function _getMatchingPreference(Tinebase_Record_RecordSet $_preferences)
+    protected function _getMatchingPreference(Tinebase_Record_RecordSet $_preferences, $_replaceValueWithDefault = TRUE)
     {
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_preferences->toArray(), TRUE));
         $_preferences->addIndices(array('type', 'account_type'));
@@ -556,7 +557,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         if ($result->type !== Tinebase_Model_Preference::TYPE_DEFAULT) {
             $defaultPref = $this->_getDefaultPreference($result->name, $_preferences);
             $result->options = $defaultPref->options;
-            if ($result->value == Tinebase_Model_Preference::DEFAULT_VALUE) {
+            if ($result->value == Tinebase_Model_Preference::DEFAULT_VALUE && $_replaceValueWithDefault) {
                 $result->value = $defaultPref->value;
             }
         }
