@@ -131,7 +131,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         
         var conn = new Ext.data.Connection({
             disableCaching: true,
-            method: 'HTTP',
+            method: 'POST',
             url: this.url + '?method=Tinebase.uploadTempFile',
             defaultHeaders: {
                 "Content-Type"          : "multipart/form-data",
