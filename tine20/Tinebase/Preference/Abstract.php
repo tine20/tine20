@@ -260,6 +260,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
 
         $result = $pref->value;
+        
+        // if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_preferenceName . ' ' . $_accountId . ':' . $result);
 
         return $result;
     }
@@ -342,8 +344,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         $accountId = (Tinebase_Core::isRegistered(Tinebase_Core::USER)) ? Tinebase_Core::getUser()->getId() : '0';
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set ' . $_preferenceName . ' for user ' . $accountId . ':' . $_value);
-
         return $this->setValueForUser($_preferenceName, $_value, $accountId);
     }
 
@@ -380,7 +380,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $stmt->closeCursor();
 
         if (!$queryResult) {
-            if ($_value != Tinebase_Model_Preference::DEFAULT_VALUE) {
+            if ($_value !== Tinebase_Model_Preference::DEFAULT_VALUE) {
                 // no preference yet -> create
                 $preference = new Tinebase_Model_Preference(array(
                     'application_id'    => $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(),
@@ -391,18 +391,25 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                     'type'              => Tinebase_Model_Preference::TYPE_USER
                 ));
                 $this->create($preference);
+                $action = 'Created';
+            } else {
+                $action = 'No action required';
             }
 
         } else {
             $preference = $this->_rawDataToRecord($queryResult);
-            if ($_value == Tinebase_Model_Preference::DEFAULT_VALUE) {
+            if ($_value === Tinebase_Model_Preference::DEFAULT_VALUE) {
                 // delete if new value = use default
                 $this->delete($preference->getId());
+                $action = 'Reset';
             } else {
                 $preference->value = $_value;
                 $this->update($preference);
+                $action = 'Updated';
             }
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $action . ': ' . $_preferenceName . ' for user ' . $_accountId . ' -> ' . $_value);
     }
 
     /**
