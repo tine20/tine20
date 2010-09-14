@@ -97,4 +97,23 @@ class Tinebase_Model_PreferenceAccountFilter extends Tinebase_Model_Filter_Abstr
             Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($_select, $filter, $_backend);
         }
     }
+    
+    /**
+     * returns account id and type
+     * @see tine20/Tinebase/Model/Filter/Tinebase_Model_Filter_Abstract::toArray()
+     * 
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false) 
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        $result['value'] = array(
+            'accountId' => $this->_accountId,
+            'accountType' => $this->_accountType,
+        );
+        
+        return $result;
+    }
 }
