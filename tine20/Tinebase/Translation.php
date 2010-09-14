@@ -49,6 +49,7 @@ class Tinebase_Translation
         'en',      // English              Cornelius Weiss <c.weiss@metaways.de>
         'es',      // Spanish              Enrique Palacios <enriquepalaciosc@gmail.com>
         'fr',      // French               Rémi Peltier <rpeltier@agglo-clermont.fr>
+        'hu',      // Hungarian            Gump <admin@kemenyfem.hu>
         'it',      // Italian              Roberto Rossi <impiastro@gmail.com>
         'ja',      // Japanese             Yuuki Kitamura <ykitamura@clasi-co.jp>
         'nb',      // Norwegian Bokmål     Ronny Gonzales <gonzito@online.no>
