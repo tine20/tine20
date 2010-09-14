@@ -456,7 +456,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
     /**
      * update to 3.14
      * - change type field in preferences table
-     * - change type from normal -> user
+     * - change type from normal -> user / default -> admin
      */
     public function update_13()
     {
@@ -469,8 +469,11 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->_backend->alterCol('preferences', $declaration);
         $this->setTableVersion('preferences', '6');
         
-        $this->_db->update(SQL_TABLE_PREFIX . 'preferences', array('type' => 'user'), array(
+        $this->_db->update(SQL_TABLE_PREFIX . 'preferences', array('type' => Tinebase_Model_Preference::TYPE_USER), array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' = ?', 'normal')
+        ));
+        $this->_db->update(SQL_TABLE_PREFIX . 'preferences', array('type' => Tinebase_Model_Preference::TYPE_ADMIN), array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' = ?', 'default')
         ));
         
         $this->setApplicationVersion('Tinebase', '3.14');
