@@ -600,7 +600,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $backend = Tinebase_Core::getPreference($applicationName);
         if ($backend) {
             $records = $backend->search($filter);
-            $result = $this->_multipleRecordsToJson($records);
+            $result = $this->_multipleRecordsToJson($records, $filter);
             
             // add translated labels and descriptions
             $translations = $backend->getTranslatedPreferences();
@@ -666,7 +666,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     if (preg_match('/^default/', $id) && array_key_exists('name', $prefData)) {
                         $newPref = $backend->getApplicationPreferenceDefaults($prefData['name']);
                         $newPref->value = $prefData['value'];
-                        $newPref->type = $prefData['type'];
+                        $newPref->type = ($prefData['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $prefData['type'] : Tinebase_Model_Preference::TYPE_ADMIN;
                         unset($newPref->id);
                         $backend->create($newPref);
                         
@@ -678,7 +678,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $records = $backend->getMultiple(array_keys($data));
                 foreach ($records as $preference) {
                     $preference->value = $data[$preference->getId()]['value'];
-                    $preference->type = $data[$preference->getId()]['type'];
+                    $preference->type = ($data[$preference->getId()]['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $data[$preference->getId()]['type'] : Tinebase_Model_Preference::TYPE_ADMIN;;
                     $backend->update($preference);
                 }
                 
@@ -788,9 +788,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
     {
         if (count($_records) == 0) {
             return array();
@@ -798,12 +799,17 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         switch ($_records->getRecordClassName()) {
             case 'Tinebase_Model_Preference':
+                $accountFilterArray = $_filter->getFilter('account')->toArray();
+                $adminMode = ($accountFilterArray['value']['accountId'] == 0 && $accountFilterArray['value']['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
                 foreach ($_records as $record) {
                     if (! isset($app) || $record->application_id != $app->getId()) {
                         $app = Tinebase_Application::getInstance()->getApplicationById($record->application_id);
                     }
                     $preference = Tinebase_Core::getPreference($app->name, TRUE);
                     $preference->resolveOptions($record);
+                    if ($record->type == Tinebase_Model_Preference::TYPE_DEFAULT || ! $adminMode && $record->type == Tinebase_Model_Preference::TYPE_ADMIN) {
+                        $record->value = Tinebase_Model_Preference::DEFAULT_VALUE;
+                    }
                 }
                 break;
         }
