@@ -310,6 +310,8 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchPreferencesWithOptions()
     {
+        $this->_clearPrefs = TRUE;
+        
         // add new default pref
         $pref = $this->_getPreferenceWithOptions();
         $pref = Tinebase_Core::getPreference()->create($pref);        
@@ -323,9 +325,10 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         
         foreach ($results['results'] as $result) {
             if ($result['name'] == 'defaultapp') {
-                $this->assertEquals($pref->value, $result['value']);
+                $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $result['value']);
                 $this->assertTrue(is_array($result['options']));
                 $this->assertEquals(3, count($result['options']));
+                $this->assertContains('option1', $result['options'][2][1]);
             }
         }
         
@@ -443,6 +446,35 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * get admin prefs
+     */
+    public function testGetAdminPreferences()
+    {
+        $this->_clearPrefs = TRUE;
+        
+        // set new default locale
+        $locale = $this->_getLocalePref();
+        $prefData['Tinebase'][$locale['id']] = array('value' => 'de', 'type' => 'default', 'name' => Tinebase_Preference::LOCALE);
+        $this->_instance->savePreferences($prefData, true);
+        
+        // check as admin
+        $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(FALSE, TRUE));
+        foreach ($results['results'] as $pref) {
+            if ($pref['name'] !== Tinebase_Preference::LOCALE) {
+                $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $pref['value']);
+            } else {
+                $this->assertEquals(Tinebase_Model_Preference::TYPE_ADMIN, $pref['type']);
+                $this->assertEquals('de', $pref['value']);
+            }
+        }
+
+        // check as user
+        $locale = $this->_getLocalePref();
+        $this->assertEquals(Tinebase_Model_Preference::TYPE_ADMIN, $locale['type']);
+        $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $locale['value']);
+    }
+    
+    /**
      * save admin prefs
      *
      */
@@ -460,7 +492,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
 
         // search saved prefs
         $results = $this->_instance->searchPreferencesForApplication('Tinebase', $this->_getPreferenceFilter(TRUE));
-
+        
         // check results
         $this->assertTrue(isset($results['results']));
         $this->assertEquals(1, $results['totalcount']);
@@ -506,7 +538,6 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             Addressbook_Controller_Contact::getInstance()->getContactByUserId($currentUser->getId())->toArray(), 
             $registryData['Tinebase']['userContact']
         );
-        //print_r($registryData['Tinebase']['userContact']);
     }
     
     public function testGetUserProfile()
@@ -641,7 +672,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
             'value'             => 'value1',
             'account_id'        => 0,
             'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-            'type'              => Tinebase_Model_Preference::TYPE_DEFAULT,
+            'type'              => Tinebase_Model_Preference::TYPE_ADMIN,
             'options'           => '<?xml version="1.0" encoding="UTF-8"?>
                 <options>
                     <option>
