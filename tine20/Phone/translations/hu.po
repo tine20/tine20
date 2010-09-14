@@ -1,134 +1,134 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
-"POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2010-09-11 18:07+0100\n"
+"Last-Translator: Gump <gump@gump.hu>\n"
+"Language-Team: gump <admin@kemenyfem.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Hungarian\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
 msgid "Edit phone settings"
-msgstr ""
+msgstr "Telefon beállítások szerkesztése"
 
 #: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
 msgid "Phone"
 msgid_plural "Phones"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Telefon"
+msgstr[1] "Telefonok"
 
 #: js/Phone.js:69
 msgid "Phones"
-msgstr ""
+msgstr "Telefonok"
 
 #: js/Phone.js:276
 msgid "Line"
-msgstr ""
+msgstr "Vonal"
 
 #: js/Phone.js:285
 msgid "Number"
-msgstr ""
+msgstr "Szám"
 
 #: js/Phone.js:294
 msgid "Cancel"
-msgstr ""
+msgstr "Mégse"
 
 #: js/Phone.js:304
 msgid "Dial"
-msgstr ""
+msgstr "Tárcsázás"
 
 #: js/Phone.js:324
 msgid "Error"
-msgstr ""
+msgstr "Hiba"
 
 #: js/Phone.js:325
 msgid "Not possible to dial."
-msgstr ""
+msgstr "Nem lehetséges tárcsázni."
 
 #: js/Phone.js:468
 msgid "Dial number"
-msgstr ""
+msgstr "Szám tárcsázása"
 
 #: js/Phone.js:469
 msgid "Initiate a new outgoing call"
-msgstr ""
+msgstr "Új kimenő hívás letesítése"
 
 #: js/Phone.js:530
 msgid "Incoming call"
-msgstr ""
+msgstr "Bejövő hívás"
 
 #: js/Phone.js:534
 msgid "Outgoing call"
-msgstr ""
+msgstr "Kimenő hívás"
 
 #: js/Phone.js:542
 msgid "unknown number"
-msgstr ""
+msgstr "ismeretlen szám"
 
 #: js/Phone.js:579
 msgid "Search:"
-msgstr ""
+msgstr "Keresés:"
 
 #: js/Phone.js:664
 msgid "Source or Destination"
-msgstr ""
+msgstr "Forrás vagy Cél"
 
 #: js/Phone.js:680
 msgid "Displaying calls {0} - {1} of {2}"
-msgstr ""
+msgstr "Hívások megjelenítése {0} - {1} / {2}"
 
 #: js/Phone.js:681 js/Phone.js:725
 msgid "No calls to display"
-msgstr ""
+msgstr "Nincs megjeleníthető hívás"
 
 #: js/Phone.js:691
 msgid "Direction"
-msgstr ""
+msgstr "Irány"
 
 #: js/Phone.js:692
 msgid "Source"
-msgstr ""
+msgstr "Forrás"
 
 #: js/Phone.js:693
 msgid "Caller Id"
-msgstr ""
+msgstr "Hívó azonosító"
 
 #: js/Phone.js:694
 msgid "Destination"
-msgstr ""
+msgstr "Cél"
 
 #: js/Phone.js:695
 msgid "Start"
-msgstr ""
+msgstr "Kezdés"
 
 #: js/Phone.js:696
 msgid "Connected"
-msgstr ""
+msgstr "Kapcsolódva"
 
 #: js/Phone.js:697
 msgid "Disconnected"
-msgstr ""
+msgstr "Kapcsolat bontva"
 
 #: js/Phone.js:698
 msgid "Duration"
-msgstr ""
+msgstr "Időtartam"
 
 #: js/Phone.js:699
 msgid "Ringing"
-msgstr ""
+msgstr "Csörgés"
 
 #: js/Phone.js:700
 msgid "Call ID"
-msgstr ""
+msgstr "Hívás azonosító"
 
 #: js/Models.js:74
 msgid "phones list"
 msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "telefon lista"
+msgstr[1] "telefon listák"

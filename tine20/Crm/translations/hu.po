@@ -2,538 +2,538 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2008-07-29 21:14+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
-"Language-Team: Tine 2.0 Translators\n"
+"PO-Revision-Date: 2010-09-11 18:04+0100\n"
+"Last-Translator: Gump <gump@gump.hu>\n"
+"Language-Team: gump <admin@kemenyfem.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: Hungarian\n"
-"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: Controller.php:113
 #, python-format
 msgid "%s's personal leads"
-msgstr ""
+msgstr "%s személyes ügyletei"
 
 #: Controller.php:152 js/LeadGridDetailsPanel.js:47
 #: js/LeadGridDetailsPanel.js:514 js/Contact.js:169 js/Contact.js:357
 #: js/Contact.js:397 js/LeadGridPanel.js:180
 msgid "Customer"
-msgstr ""
+msgstr "Vásárló"
 
 #: Controller.php:153 js/LeadGridDetailsPanel.js:47
 #: js/LeadGridDetailsPanel.js:497 js/Contact.js:189 js/Contact.js:358
 #: js/Contact.js:401 js/LeadGridPanel.js:179
 msgid "Partner"
-msgstr ""
+msgstr "Partner"
 
 #: Controller.php:154
 msgid "Reseller"
-msgstr ""
+msgstr "Viszonteladó"
 
 #: Controller.php:157
 msgid "open"
-msgstr ""
+msgstr "nyitott"
 
 #: Controller.php:158
 msgid "contacted"
-msgstr ""
+msgstr "kapcsolatban"
 
 #: Controller.php:159
 msgid "waiting for feedback"
-msgstr ""
+msgstr "visszajelzésre vár"
 
 #: Controller.php:160
 msgid "quote sent"
-msgstr ""
+msgstr "árajánlat elküldve"
 
 #: Controller.php:161
 msgid "accepted"
-msgstr ""
+msgstr "elfogadva"
 
 #: Controller.php:162
 msgid "lost"
-msgstr ""
+msgstr "elveszítve"
 
 #: Controller.php:165
 msgid "Market"
-msgstr ""
+msgstr "Piac"
 
 #: Controller.php:166 Export/Pdf.php:218
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: Controller.php:167 Export/Pdf.php:217
 msgid "Telephone"
-msgstr ""
+msgstr "Telefon"
 
 #: Controller.php:168
 msgid "Website"
-msgstr ""
+msgstr "Weboldal"
 
 #: Export/Pdf.php:76
 msgid "Lead Data"
-msgstr ""
+msgstr "Ügylet adatok"
 
 #: Export/Pdf.php:79 js/LeadStateFilterModel.js:32 js/AdminPanel.js:159
 #: js/LeadEditDialog.js:350 js/LeadGridPanel.js:181
 msgid "Leadstate"
-msgstr ""
+msgstr "Ügylet állapot"
 
 #: Export/Pdf.php:82 js/LeadGridDetailsPanel.js:481 js/AdminPanel.js:173
 #: js/LeadEditDialog.js:369
 msgid "Leadtype"
-msgstr ""
+msgstr "Ügylet típus"
 
 #: Export/Pdf.php:85 js/LeadGridDetailsPanel.js:486 js/AdminPanel.js:166
 #: js/LeadEditDialog.js:376
 msgid "Leadsource"
-msgstr ""
+msgstr "Ügylet forrás"
 
 #: Export/Pdf.php:88 js/LeadGridPanel.js:138 js/LeadGridPanel.js:183
 #: Controller/Lead.php:190
 msgid "Turnover"
-msgstr ""
+msgstr "Bevétel"
 
 #: Export/Pdf.php:91 js/LeadEditDialog.js:236 js/LeadGridPanel.js:137
 #: js/LeadGridPanel.js:182 Controller/Lead.php:191
 msgid "Probability"
-msgstr ""
+msgstr "Esély"
 
 #: Export/Pdf.php:94 js/LeadGridDetailsPanel.js:471 js/LeadEditDialog.js:408
 #: Controller/Lead.php:187
 msgid "Start"
-msgstr ""
+msgstr "Kezdet"
 
 #: Export/Pdf.php:97 js/LeadEditDialog.js:243 Controller/Lead.php:189
 msgid "End"
-msgstr ""
+msgstr "Vég"
 
 #: Export/Pdf.php:100
 msgid "End Scheduled"
-msgstr ""
+msgstr "Tervezett vég"
 
 #: Export/Pdf.php:183
 msgid "Contacts"
-msgstr ""
+msgstr "Kapcsolatok"
 
 #: Export/Pdf.php:210 js/Contact.js:239
 msgid "Address"
-msgstr ""
+msgstr "Cím"
 
 #: Export/Pdf.php:231 js/Task.js:87 js/LeadEditDialog.js:259
 msgid "Tasks"
-msgstr ""
+msgstr "Feladatok"
 
 #: Export/Pdf.php:250 js/Task.js:180
 msgid "Due Date"
-msgstr ""
+msgstr "Lejárati idő"
 
 #: Export/Pdf.php:255 js/Task.js:193
 msgid "Priority"
-msgstr ""
+msgstr "Prioritás"
 
 #: Export/Pdf.php:270 js/Product.js:87 js/LeadEditDialog.js:270
 msgid "Products"
-msgstr ""
+msgstr "Termékek"
 
 #: Export/Pdf.php:311
 msgid "low"
-msgstr ""
+msgstr "alacsony"
 
 #: Export/Pdf.php:312
 msgid "normal"
-msgstr ""
+msgstr "normál"
 
 #: Export/Pdf.php:313
 msgid "high"
-msgstr ""
+msgstr "magas"
 
 #: Export/Pdf.php:314
 msgid "urgent"
-msgstr ""
+msgstr "sürgős"
 
 #: Acl/Rights.php:107
 msgid "manage leads"
-msgstr ""
+msgstr "ügyletek kezelése"
 
 #: Acl/Rights.php:108
 msgid "add, edit and delete leads"
-msgstr ""
+msgstr "ügyletek hozzáadása, szerkesztése és törlése"
 
 #: Acl/Rights.php:111
 msgid "manage shared lead folders"
-msgstr ""
+msgstr "megosztott ügylet mappák kezelése"
 
 #: Acl/Rights.php:112
 msgid "Create new shared lead folders"
-msgstr ""
+msgstr "Új megosztott ügylet mappa létrehozása"
 
 #: Acl/Rights.php:115
 msgid "manage shared leads favorites"
-msgstr ""
+msgstr "kedvenc megosztott ügyletek kezelése"
 
 #: Acl/Rights.php:116
 msgid "Create or update shared leads favorites"
-msgstr ""
+msgstr "Kedvenc megosztott ügyletek hozzáadása vagy frissítése"
 
 #: js/Product.js:136
 msgid "Product"
-msgstr ""
+msgstr "Termék"
 
 #: js/Product.js:141 js/LeadEditDialog.js:446
 msgid "Description"
-msgstr ""
+msgstr "Leírás"
 
 #: js/Product.js:148
 msgid "Price"
-msgstr ""
+msgstr "Ár"
 
 #: js/Product.js:160
 msgid "Quantity"
-msgstr ""
+msgstr "Mennyiség"
 
 #: js/Product.js:187 js/LinkGridPanel.js:56
 msgid "Unlink {0}"
-msgstr ""
+msgstr "{0} törlése"
 
 #: js/Product.js:188 js/LinkGridPanel.js:57
 msgid "Unlink selected {0}"
-msgstr ""
+msgstr "Kiválasztott {0} törlése"
 
 #: js/Product.js:218
 msgid "Search for Products to add ..."
-msgstr ""
+msgstr "Termék keresése hozzáadáshoz..."
 
 #: js/LeadStateFilterModel.js:37 js/LeadGridPanel.js:278
 msgid "Show closed"
-msgstr ""
+msgstr "Lezártak mutatása"
 
 #: js/Model.js:57 js/LeadEditDialog.js:282
 msgid "Lead"
 msgid_plural "Leads"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ügylet"
+msgstr[1] "Ügyletek"
 
 #: js/Model.js:61
 msgid "lead list"
 msgid_plural "lead lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "ügylet lista"
+msgstr[1] "ügylet listák"
 
 #: js/Model.js:61
 msgid "lead lists"
-msgstr ""
+msgstr "ügylet listák"
 
 #: js/Model.js:124
 msgid "Settings"
 msgid_plural "Settings"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Beállítások"
+msgstr[1] "Beállítások"
 
 #: js/Model.js:128
 msgid "record list"
 msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "adat lista"
+msgstr[1] "adat listák"
 
 #: js/LeadGridDetailsPanel.js:50 js/Contact.js:253
 msgid "Phone"
-msgstr ""
+msgstr "Telefon"
 
 #: js/LeadGridDetailsPanel.js:53
 msgid "Mobile"
-msgstr ""
+msgstr "Mobil"
 
 #: js/LeadGridDetailsPanel.js:56
 msgid "Fax"
-msgstr ""
+msgstr "Fax"
 
 #: js/LeadGridDetailsPanel.js:59
 msgid "E-Mail"
-msgstr ""
+msgstr "E-Mail"
 
 #: js/LeadGridDetailsPanel.js:62
 msgid "Web"
-msgstr ""
+msgstr "Web"
 
 #: js/LeadGridDetailsPanel.js:220 js/LeadGridDetailsPanel.js:253
 #: js/AdminPanel.js:124
 msgid "Leadstates"
-msgstr ""
+msgstr "Ügylet állapotok"
 
 #: js/LeadGridDetailsPanel.js:231 js/AdminPanel.js:132
 msgid "Leadsources"
-msgstr ""
+msgstr "Ügylet források"
 
 #: js/LeadGridDetailsPanel.js:242 js/AdminPanel.js:128
 msgid "Leadtypes"
-msgstr ""
+msgstr "Ügylet típusok"
 
 #: js/LeadGridDetailsPanel.js:466 js/Task.js:220
 msgid "Status"
-msgstr ""
+msgstr "Állapot"
 
 #: js/LeadGridDetailsPanel.js:476 js/LeadEditDialog.js:414
 msgid "Estimated end"
-msgstr ""
+msgstr "Becsült vég"
 
 #: js/LinkGridPanel.js:37 js/LinkGridPanel.js:38
 msgid "Add new {0}"
-msgstr ""
+msgstr "Új {0} hozzáadása"
 
 #: js/LinkGridPanel.js:72
 msgid "Edit {0}"
-msgstr ""
+msgstr "{0} szerkesztése"
 
 #: js/LinkGridPanel.js:73
 msgid "Edit selected {0}"
-msgstr ""
+msgstr "Kiválasztott {0} szerkesztése"
 
 #: js/LeadType.js:30
 msgid "Lead Type"
 msgid_plural "Lead Types"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ügylet típus"
+msgstr[1] "Ügylet típusok"
 
 #: js/LeadType.js:136
 msgid "Add a Leadtype..."
-msgstr ""
+msgstr "Ügylet típus hozzáadása..."
 
 #: js/LeadGridContactFilter.js:46
 msgid "Contact"
-msgstr ""
+msgstr "Kapcsolat"
 
 #: js/LeadGridContactFilter.js:54
 msgid "CRM Role"
-msgstr ""
+msgstr "CRM szerep"
 
 #: js/Task.js:113
 msgid "No Tasks to display"
-msgstr ""
+msgstr "Nincs megjeleníthető feladat"
 
 #: js/Task.js:172
 msgid "Summary"
-msgstr ""
+msgstr "Összegzés"
 
 #: js/Task.js:176
 msgid "Add a task..."
-msgstr ""
+msgstr "Feladat hozzáadása..."
 
 #: js/Task.js:207
 msgid "Percent"
-msgstr ""
+msgstr "Százalék"
 
 #: js/AdminPanel.js:140
 msgid "Defaults"
-msgstr ""
+msgstr "Alapértelmezett"
 
 #: js/LeadEditDialog.js:260
 msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr ""
+msgstr "Nincs futtatási jogod a Feladatok alkalmazáshoz vagy nincs aktiválva."
 
 #: js/LeadEditDialog.js:271
 msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr ""
+msgstr "Nincs futtatási jogod a Sales alkalmazáshoz vagy nincs aktiválva."
 
 #: js/LeadEditDialog.js:309
 msgid "Enter short name"
-msgstr ""
+msgstr "Rövid név megadása"
 
 #: js/LeadEditDialog.js:392
 msgid "Expected turnover"
-msgstr ""
+msgstr "Elfogadható bevétel"
 
 #: js/LeadEditDialog.js:460
 msgid "Enter description"
-msgstr ""
+msgstr "Leírás megadása"
 
 #: js/Contact.js:170
 msgid "Change type to Customer"
-msgstr ""
+msgstr "Típus megváltoztatása Vevőre"
 
 #: js/Contact.js:179 js/Contact.js:356 js/Contact.js:393
 msgid "Responsible"
-msgstr ""
+msgstr "Felelős"
 
 #: js/Contact.js:180
 msgid "Change type to Responsible"
-msgstr ""
+msgstr "Típus megváltoztatása Felelősre"
 
 #: js/Contact.js:190
 msgid "Change type to Partner"
-msgstr ""
+msgstr "Típus megváltoztatása Partnerra"
 
 #: js/Contact.js:201
 msgid "Change contact type"
-msgstr ""
+msgstr "Kapcsolat típus megváltoztatása"
 
 #: js/Contact.js:213
 msgid "Search for Contacts to add ..."
-msgstr ""
+msgstr "Kapcsolat keresés hozzáadáshoz..."
 
 #: js/Contact.js:230
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: js/Contact.js:250
 msgid "Data"
-msgstr ""
+msgstr "Adat"
 
 #: js/Contact.js:254
 msgid "Cellphone"
-msgstr ""
+msgstr "Mobil telefon"
 
 #: js/Contact.js:260 Controller/Lead.php:185
 msgid "Role"
-msgstr ""
+msgstr "Szerep"
 
 #: js/LeadState.js:33
 msgid "Lead State"
 msgid_plural "Lead States"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ügylet állapot"
+msgstr[1] "Ügylet állapotok"
 
 #: js/LeadState.js:168
 msgid "Add a Leadstate..."
-msgstr ""
+msgstr "Ügylet állapot hozzáadása..."
 
 #: js/LeadSource.js:30
 msgid "Lead Source"
 msgid_plural "Lead Sources"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Ügylet forrás"
+msgstr[1] "Ügylet források"
 
 #: js/LeadSource.js:138
 msgid "Add a Leadsource..."
-msgstr ""
+msgstr "Ügylet forrás hozzáadása..."
 
 #: js/LeadGridPanel.js:133
 msgid "Quick search"
-msgstr ""
+msgstr "Gyors keresés"
 
 #: js/LeadGridPanel.js:135 js/LeadGridPanel.js:178
 msgid "Lead name"
-msgstr ""
+msgstr "Ügylet név"
 
 #: js/LeadGridPanel.js:176
 msgid "Lead id"
-msgstr ""
+msgstr "Ügylet azonosító"
 
 #: js/LeadGridPanel.js:177
 msgid "Tags"
-msgstr ""
+msgstr "Címkék"
 
 #: js/LeadGridPanel.js:184
 msgid "Probable Turnover"
-msgstr ""
+msgstr "Lehetséges bevétel"
 
 #: js/LeadGridPanel.js:185
 msgid "Creation Time"
-msgstr ""
+msgstr "Készítés ideje"
 
 #: js/LeadGridPanel.js:186
 msgid "Last Modified Time"
-msgstr ""
+msgstr "Utolsó módosítás ideje"
 
 #: js/LeadGridPanel.js:225
 msgid "Add task"
-msgstr ""
+msgstr "Feladat hozzáadása"
 
 #: js/LeadGridPanel.js:226
 msgid "Add task for selected lead"
-msgstr ""
+msgstr "Feladat hozzáadása a kiválasztott ügylethez"
 
 #: js/LeadGridPanel.js:236
 msgid "Export Lead"
-msgstr ""
+msgstr "Ügylet exportálása"
 
 #: js/LeadGridPanel.js:245
 msgid "Export as PDF"
-msgstr ""
+msgstr "Exportálás PDF-be"
 
 #: js/LeadGridPanel.js:252
 msgid "Export as CSV"
-msgstr ""
+msgstr "Exportálás CSV-be"
 
 #: js/LeadGridPanel.js:259
 msgid "Export as ODS"
-msgstr ""
+msgstr "Exportálás ODS-be"
 
 #: js/LeadGridPanel.js:266
 msgid "Export as XLS"
-msgstr ""
+msgstr "Exportálás XLS-be"
 
 #: Preference.php:36
 msgid "All leads"
-msgstr ""
+msgstr "Minden ügylet"
 
 #: Preference.php:80
 msgid "Get Notification Emails"
-msgstr ""
+msgstr "Kérek értesítő emaileket"
 
 #: Preference.php:81
 msgid "The level of actions you want to be notified about."
-msgstr ""
+msgstr "Tevékenységi szintek, amikről értesítést kérsz."
 
 #: Preference.php:85
 msgid "Send Notifications Emails for own actions"
-msgstr ""
+msgstr "Értesítő emailek küldése a saját tevékenységekhez"
 
 #: Preference.php:86
 msgid "Get notifications emails for actions you did yourself"
-msgstr ""
+msgstr "Kérek értesítő emaileket a magamnak készített tevékenységekről"
 
 #: Preference.php:89
 msgid "Default Favorite"
-msgstr ""
+msgstr "Alapértelmezett kedvenc"
 
 #: Preference.php:90
 msgid "The default favorite which is loaded on crm startup"
-msgstr ""
+msgstr "Alapértelmezett kedvenc, ami a Crm indításakor betöltődik"
 
 #: Controller/Lead.php:184
 msgid "State"
-msgstr ""
+msgstr "Állapot"
 
 #: Controller/Lead.php:186
 msgid "Source"
-msgstr ""
+msgstr "Forrás"
 
 #: Controller/Lead.php:188
 msgid "Scheduled end"
-msgstr ""
+msgstr "Tervezett vég"
 
 #: Controller/Lead.php:192
 msgid "Folder"
-msgstr ""
+msgstr "Mappa"
 
 #: Controller/Lead.php:193
 msgid "Updated by"
-msgstr ""
+msgstr "Frissítette"
 
 #: Controller/Lead.php:194
 msgid "Updated Fields:"
-msgstr ""
+msgstr "Frissített mezők:"
 
 #: Controller/Lead.php:195
 #, python-format
 msgid "%s changed from %s to %s."
-msgstr ""
+msgstr "%s erről:%s erre:%s változott."
 
 #: Controller/Lead.php:201
 #, python-format
 msgid "Lead %s has been changed"
-msgstr ""
+msgstr "Ügylet %s megváltozott"
 
 #: Controller/Lead.php:203
 #, python-format
 msgid "Lead %s has been creaded"
-msgstr ""
+msgstr "Ügylet %s elkészült"
 
 #: Setup/Update/Release3.php:38 Setup/Initialize.php:48
 msgid "All leads I have read grants for"
-msgstr ""
+msgstr "Minden ügylet amikhez olvasási engedélyem van"
