@@ -663,7 +663,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
                 // create prefs that don't exist in the db
                 foreach($data as $id => $prefData) {
-                    if (preg_match('/^default/', $id) && array_key_exists('name', $prefData)) {
+                    if (preg_match('/^default/', $id) && array_key_exists('name', $prefData) && $prefData['value'] != Tinebase_Model_Preference::DEFAULT_VALUE) {
                         $newPref = $backend->getApplicationPreferenceDefaults($prefData['name']);
                         $newPref->value = $prefData['value'];
                         $newPref->type = ($prefData['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $prefData['type'] : Tinebase_Model_Preference::TYPE_ADMIN;
@@ -677,9 +677,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 // update default/forced preferences
                 $records = $backend->getMultiple(array_keys($data));
                 foreach ($records as $preference) {
-                    $preference->value = $data[$preference->getId()]['value'];
-                    $preference->type = ($data[$preference->getId()]['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $data[$preference->getId()]['type'] : Tinebase_Model_Preference::TYPE_ADMIN;;
-                    $backend->update($preference);
+                    if ($data[$preference->getId()]['value'] == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                        $backend->delete($preference->getId());
+                    } else {
+                        $preference->value = $data[$preference->getId()]['value'];
+                        $preference->type = ($data[$preference->getId()]['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $data[$preference->getId()]['type'] : Tinebase_Model_Preference::TYPE_ADMIN;;
+                        $backend->update($preference);
+                    }
                 }
                 
             } else {
