@@ -12,36 +12,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 
-#: js/Setup.js:55
-msgid "Terms and Conditions"
-msgstr "Conditions générales"
-
-#: js/Setup.js:60
-msgid "Setup Checks"
-msgstr "Vérifications de l'installation"
-
-#: js/Setup.js:66
-msgid "Config Manager"
-msgstr "Gestionnaire de configuration"
-
-#: js/Setup.js:72
-msgid "Authentication/Accounts"
-msgstr "Authentification/Comptes"
-
-#: js/Setup.js:78
-msgid "Email"
-msgstr "Email"
-
-#: js/Setup.js:84
-msgid "Application Manager"
-msgstr "Gestionnaire d'application"
-
-#: js/Setup.js:187
-msgid "Application"
-msgid_plural "Applications"
-msgstr[0] "Application"
-msgstr[1] "Applications"
-
 #: js/ConfigManagerPanel.js:60
 msgid "Informations"
 msgstr "Informations"
@@ -55,8 +25,8 @@ msgid "Username"
 msgstr "Nom d'utilisateur"
 
 #: js/ConfigManagerPanel.js:77 js/ConfigManagerPanel.js:113
-#: js/EmailPanel.js:196 js/AuthenticationPanel.js:317
-#: js/AuthenticationPanel.js:424
+#: js/AuthenticationPanel.js:317 js/AuthenticationPanel.js:424
+#: js/EmailPanel.js:196
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -73,8 +43,8 @@ msgstr "Connecteur"
 msgid "Hostname"
 msgstr "Nom d'hôte"
 
-#: js/ConfigManagerPanel.js:97 js/EmailPanel.js:201 js/EmailPanel.js:300
-#: js/EmailPanel.js:412 js/AuthenticationPanel.js:310
+#: js/ConfigManagerPanel.js:97 js/AuthenticationPanel.js:310
+#: js/EmailPanel.js:201 js/EmailPanel.js:300 js/EmailPanel.js:412
 msgid "Port"
 msgstr "Port"
 
@@ -154,182 +124,25 @@ msgstr "Enregistrer la configuration"
 msgid "Download config file"
 msgstr "Télécharger la configuration"
 
-#: js/EmailPanel.js:156 js/AuthenticationPanel.js:186
-#: js/AuthenticationPanel.js:207
-msgid "Backend"
-msgstr "Système en arrière-plan"
+#: js/TermsPanel.js:31
+msgid "I have read the license agreement and accept it"
+msgstr "J'ai lu et j'accepte le contrat de licence."
 
-#: js/EmailPanel.js:160
-msgid "Standard IMAP"
-msgstr "Standard IMAP"
+#: js/TermsPanel.js:38
+msgid "License Agreement"
+msgstr "Contrat de licence"
 
-#: js/EmailPanel.js:170
-msgid "Standard SMTP"
-msgstr "Standard SMTP"
+#: js/TermsPanel.js:57
+msgid "I have read the privacy agreement and accept it"
+msgstr "J'ai lu et j'accepte la politique de confidentialité"
 
-#: js/EmailPanel.js:180
-msgid "Imap"
-msgstr "Imap"
+#: js/TermsPanel.js:64
+msgid "Privacy Agreement"
+msgstr "Politique de confidentialité"
 
-#: js/EmailPanel.js:204 js/EmailPanel.js:303
-msgid "Secure Connection"
-msgstr "Connexion sécurisée"
-
-#: js/EmailPanel.js:215 js/EmailPanel.js:314 js/EmailPanel.js:330
-msgid "None"
-msgstr "Aucun"
-
-#: js/EmailPanel.js:216 js/EmailPanel.js:315
-msgid "TLS"
-msgstr "TLS"
-
-#: js/EmailPanel.js:217 js/EmailPanel.js:316
-msgid "SSL"
-msgstr "SSL"
-
-#: js/EmailPanel.js:228
-msgid "No"
-msgstr "Non"
-
-#: js/EmailPanel.js:228
-msgid "Yes"
-msgstr "Oui"
-
-#: js/EmailPanel.js:230
-msgid "Use system account"
-msgstr ""
-
-#: js/EmailPanel.js:233
-msgid "Append domain to login name"
-msgstr ""
-
-#: js/EmailPanel.js:279
-msgid "Cyrus Admin"
-msgstr ""
-
-#: js/EmailPanel.js:282
-msgid "Cyrus Admin Password"
-msgstr ""
-
-#: js/EmailPanel.js:288
-msgid "Smtp"
-msgstr "Smtp"
-
-#: js/EmailPanel.js:319
-msgid "Authentication"
-msgstr "Authentification"
-
-#: js/EmailPanel.js:331
-msgid "Login"
-msgstr "Login"
-
-#: js/EmailPanel.js:332
-msgid "Plain"
-msgstr "Plein"
-
-#: js/EmailPanel.js:336
-msgid "Primary Domain"
-msgstr ""
-
-#: js/EmailPanel.js:340
-msgid "Secondary Domains (comma separated)"
-msgstr ""
-
-#: js/EmailPanel.js:344
-msgid "Notifications service address"
-msgstr "Adresse du service de notification"
-
-#: js/EmailPanel.js:348
-msgid "Notification Username"
-msgstr ""
-
-#: js/EmailPanel.js:352
-msgid "Notification Password"
-msgstr ""
-
-#: js/EmailPanel.js:402
-msgid "SIEVE"
-msgstr ""
-
-#: js/EmailPanel.js:436
-msgid "MySql Hostname"
-msgstr "Nom d'hôte MySql"
-
-#: js/EmailPanel.js:439
-msgid "MySql Database"
-msgstr "Base MySql"
-
-#: js/EmailPanel.js:442
-msgid "MySql User"
-msgstr "Utilisateur MySql"
-
-#: js/EmailPanel.js:445
-msgid "MySql Password"
-msgstr "Mot de passe MySql"
-
-#: js/EmailPanel.js:449
-msgid "MySql Port"
-msgstr "Port MySql"
-
-#: js/ApplicationGridPanel.js:67
-msgid "Name"
-msgstr "Nom"
-
-#: js/ApplicationGridPanel.js:68
-msgid "Enabled"
-msgstr "Activé"
-
-#: js/ApplicationGridPanel.js:69
-msgid "Order"
-msgstr "Ordre"
-
-#: js/ApplicationGridPanel.js:70
-msgid "Installed Version"
-msgstr "Version installée"
-
-#: js/ApplicationGridPanel.js:71
-msgid "Available Version"
-msgstr "Version disponible"
-
-#: js/ApplicationGridPanel.js:72
-msgid "Status"
-msgstr "Statut"
-
-#: js/ApplicationGridPanel.js:73
-msgid "Depends on"
-msgstr "Dépend de"
-
-#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
-msgid "Install application"
-msgstr "Installer"
-
-#: js/ApplicationGridPanel.js:91
-msgid "Uninstall application"
-msgstr "désinstaller"
-
-#: js/ApplicationGridPanel.js:100
-msgid "Update application"
-msgstr "Mettre à jour"
-
-#: js/ApplicationGridPanel.js:109
-msgid "Go to {0} login"
-msgstr "Aller à la page de login de {0}"
-
-#: js/ApplicationGridPanel.js:172
-msgid "uninstall"
-msgstr "désinstaller"
-
-#: js/ApplicationGridPanel.js:172
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Êtes-vous sûr de vouloir désinstaller l'application?"
-
-#: js/ApplicationGridPanel.js:232
-msgid "This may take a while"
-msgstr "Cela peut être long"
-
-#: js/ApplicationGridPanel.js:262
-msgid "Dependency Violation"
-msgstr "Violation de dépendances"
+#: js/TermsPanel.js:81
+msgid "Accept Terms and Conditions"
+msgstr "Accepter les conditions générales"
 
 #: js/AuthenticationPanel.js:123
 msgid "Delete all existing users and groups"
@@ -338,6 +151,11 @@ msgstr "Supprimer tous les groupes et utilisateurs existants"
 #: js/AuthenticationPanel.js:123
 msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
 msgstr "Basculer du SQL en LDAP supprimera tous les comptes, groupes et rôles. Êtes-vous sûrs de vouloir basculer en authentification LDAP? "
+
+#: js/AuthenticationPanel.js:186 js/AuthenticationPanel.js:207
+#: js/EmailPanel.js:156
+msgid "Backend"
+msgstr "Système en arrière-plan"
 
 #: js/AuthenticationPanel.js:220
 msgid "Authentication provider"
@@ -497,6 +315,96 @@ msgstr "Les mots de passes ne correspondent pas!"
 msgid "Should not be empty"
 msgstr ""
 
+#: js/ApplicationGridPanel.js:67
+msgid "Name"
+msgstr "Nom"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Enabled"
+msgstr "Activé"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Order"
+msgstr "Ordre"
+
+#: js/ApplicationGridPanel.js:70
+msgid "Installed Version"
+msgstr "Version installée"
+
+#: js/ApplicationGridPanel.js:71
+msgid "Available Version"
+msgstr "Version disponible"
+
+#: js/ApplicationGridPanel.js:72
+msgid "Status"
+msgstr "Statut"
+
+#: js/ApplicationGridPanel.js:73
+msgid "Depends on"
+msgstr "Dépend de"
+
+#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
+msgid "Install application"
+msgstr "Installer"
+
+#: js/ApplicationGridPanel.js:91
+msgid "Uninstall application"
+msgstr "désinstaller"
+
+#: js/ApplicationGridPanel.js:100
+msgid "Update application"
+msgstr "Mettre à jour"
+
+#: js/ApplicationGridPanel.js:109
+msgid "Go to {0} login"
+msgstr "Aller à la page de login de {0}"
+
+#: js/ApplicationGridPanel.js:172
+msgid "uninstall"
+msgstr "désinstaller"
+
+#: js/ApplicationGridPanel.js:172
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Êtes-vous sûr de vouloir désinstaller l'application?"
+
+#: js/ApplicationGridPanel.js:232
+msgid "This may take a while"
+msgstr "Cela peut être long"
+
+#: js/ApplicationGridPanel.js:262
+msgid "Dependency Violation"
+msgstr "Violation de dépendances"
+
+#: js/Setup.js:55
+msgid "Terms and Conditions"
+msgstr "Conditions générales"
+
+#: js/Setup.js:60
+msgid "Setup Checks"
+msgstr "Vérifications de l'installation"
+
+#: js/Setup.js:66
+msgid "Config Manager"
+msgstr "Gestionnaire de configuration"
+
+#: js/Setup.js:72
+msgid "Authentication/Accounts"
+msgstr "Authentification/Comptes"
+
+#: js/Setup.js:78
+msgid "Email"
+msgstr "Email"
+
+#: js/Setup.js:84
+msgid "Application Manager"
+msgstr "Gestionnaire d'application"
+
+#: js/Setup.js:187
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] "Application"
+msgstr[1] "Applications"
+
 #: js/EnvCheckGridPanel.js:92
 msgid "Performing Environment Checks..."
 msgstr "Vérification en cours..."
@@ -525,25 +433,117 @@ msgstr "Lancer les tests d'installation"
 msgid "Ignore setup tests"
 msgstr "ignorer les tests d'installation"
 
-#: js/TermsPanel.js:31
-msgid "I have read the license agreement and accept it"
-msgstr "J'ai lu et j'accepte le contrat de licence."
+#: js/EmailPanel.js:160
+msgid "Standard IMAP"
+msgstr "Standard IMAP"
 
-#: js/TermsPanel.js:38
-msgid "License Agreement"
-msgstr "Contrat de licence"
+#: js/EmailPanel.js:170
+msgid "Standard SMTP"
+msgstr "Standard SMTP"
 
-#: js/TermsPanel.js:57
-msgid "I have read the privacy agreement and accept it"
-msgstr "J'ai lu et j'accepte la politique de confidentialité"
+#: js/EmailPanel.js:180
+msgid "Imap"
+msgstr "Imap"
 
-#: js/TermsPanel.js:64
-msgid "Privacy Agreement"
-msgstr "Politique de confidentialité"
+#: js/EmailPanel.js:204 js/EmailPanel.js:303
+msgid "Secure Connection"
+msgstr "Connexion sécurisée"
 
-#: js/TermsPanel.js:81
-msgid "Accept Terms and Conditions"
-msgstr "Accepter les conditions générales"
+#: js/EmailPanel.js:215 js/EmailPanel.js:314 js/EmailPanel.js:330
+msgid "None"
+msgstr "Aucun"
+
+#: js/EmailPanel.js:216 js/EmailPanel.js:315
+msgid "TLS"
+msgstr "TLS"
+
+#: js/EmailPanel.js:217 js/EmailPanel.js:316
+msgid "SSL"
+msgstr "SSL"
+
+#: js/EmailPanel.js:228
+msgid "No"
+msgstr "Non"
+
+#: js/EmailPanel.js:228
+msgid "Yes"
+msgstr "Oui"
+
+#: js/EmailPanel.js:230
+msgid "Use system account"
+msgstr ""
+
+#: js/EmailPanel.js:233
+msgid "Append domain to login name"
+msgstr ""
+
+#: js/EmailPanel.js:279
+msgid "Cyrus Admin"
+msgstr ""
+
+#: js/EmailPanel.js:282
+msgid "Cyrus Admin Password"
+msgstr ""
+
+#: js/EmailPanel.js:288
+msgid "Smtp"
+msgstr "Smtp"
+
+#: js/EmailPanel.js:319
+msgid "Authentication"
+msgstr "Authentification"
+
+#: js/EmailPanel.js:331
+msgid "Login"
+msgstr "Login"
+
+#: js/EmailPanel.js:332
+msgid "Plain"
+msgstr "Plein"
+
+#: js/EmailPanel.js:336
+msgid "Primary Domain"
+msgstr ""
+
+#: js/EmailPanel.js:340
+msgid "Secondary Domains (comma separated)"
+msgstr ""
+
+#: js/EmailPanel.js:344
+msgid "Notifications service address"
+msgstr "Adresse du service de notification"
+
+#: js/EmailPanel.js:348
+msgid "Notification Username"
+msgstr ""
+
+#: js/EmailPanel.js:352
+msgid "Notification Password"
+msgstr ""
+
+#: js/EmailPanel.js:402
+msgid "SIEVE"
+msgstr ""
+
+#: js/EmailPanel.js:436
+msgid "MySql Hostname"
+msgstr "Nom d'hôte MySql"
+
+#: js/EmailPanel.js:439
+msgid "MySql Database"
+msgstr "Base MySql"
+
+#: js/EmailPanel.js:442
+msgid "MySql User"
+msgstr "Utilisateur MySql"
+
+#: js/EmailPanel.js:445
+msgid "MySql Password"
+msgstr "Mot de passe MySql"
+
+#: js/EmailPanel.js:449
+msgid "MySql Port"
+msgstr "Port MySql"
 
 #~ msgid "Domain"
 #~ msgstr "Domaine"

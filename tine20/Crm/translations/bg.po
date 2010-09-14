@@ -18,15 +18,15 @@ msgstr ""
 msgid "%s's personal leads"
 msgstr "%s's лични предложения"
 
-#: Controller.php:152 js/Contact.js:169 js/Contact.js:357 js/Contact.js:397
-#: js/LeadGridDetailsPanel.js:47 js/LeadGridDetailsPanel.js:514
-#: js/LeadGridPanel.js:180
+#: Controller.php:152 js/LeadGridDetailsPanel.js:47
+#: js/LeadGridDetailsPanel.js:514 js/Contact.js:169 js/Contact.js:357
+#: js/Contact.js:397 js/LeadGridPanel.js:180
 msgid "Customer"
 msgstr "Клиент"
 
-#: Controller.php:153 js/Contact.js:189 js/Contact.js:358 js/Contact.js:401
-#: js/LeadGridDetailsPanel.js:47 js/LeadGridDetailsPanel.js:497
-#: js/LeadGridPanel.js:179
+#: Controller.php:153 js/LeadGridDetailsPanel.js:47
+#: js/LeadGridDetailsPanel.js:497 js/Contact.js:189 js/Contact.js:358
+#: js/Contact.js:401 js/LeadGridPanel.js:179
 msgid "Partner"
 msgstr "Партньор/Съдружник"
 
@@ -76,37 +76,87 @@ msgstr "Телефон"
 msgid "Website"
 msgstr "вебсайт"
 
-#: Setup/Update/Release3.php:38 Setup/Initialize.php:48
-msgid "All leads I have read grants for"
-msgstr ""
+#: Export/Pdf.php:76
+msgid "Lead Data"
+msgstr "Данни за предложението"
 
-#: Preference.php:36
-msgid "All leads"
-msgstr ""
+#: Export/Pdf.php:79 js/LeadStateFilterModel.js:32 js/AdminPanel.js:159
+#: js/LeadEditDialog.js:350 js/LeadGridPanel.js:181
+msgid "Leadstate"
+msgstr "Статус на предложение"
 
-#: Preference.php:80
-msgid "Get Notification Emails"
-msgstr ""
+#: Export/Pdf.php:82 js/LeadGridDetailsPanel.js:481 js/AdminPanel.js:173
+#: js/LeadEditDialog.js:369
+msgid "Leadtype"
+msgstr "Тип на предложението"
 
-#: Preference.php:81
-msgid "The level of actions you want to be notified about."
-msgstr ""
+#: Export/Pdf.php:85 js/LeadGridDetailsPanel.js:486 js/AdminPanel.js:166
+#: js/LeadEditDialog.js:376
+msgid "Leadsource"
+msgstr "Източник на предложението"
 
-#: Preference.php:85
-msgid "Send Notifications Emails for own actions"
-msgstr ""
+#: Export/Pdf.php:88 js/LeadGridPanel.js:138 js/LeadGridPanel.js:183
+#: Controller/Lead.php:190
+msgid "Turnover"
+msgstr "Оборот"
 
-#: Preference.php:86
-msgid "Get notifications emails for actions you did yourself"
-msgstr ""
+#: Export/Pdf.php:91 js/LeadEditDialog.js:236 js/LeadGridPanel.js:137
+#: js/LeadGridPanel.js:182 Controller/Lead.php:191
+msgid "Probability"
+msgstr "Вероятност"
 
-#: Preference.php:89
-msgid "Default Favorite"
-msgstr ""
+#: Export/Pdf.php:94 js/LeadGridDetailsPanel.js:471 js/LeadEditDialog.js:408
+#: Controller/Lead.php:187
+msgid "Start"
+msgstr "Старт"
 
-#: Preference.php:90
-msgid "The default favorite which is loaded on crm startup"
-msgstr ""
+#: Export/Pdf.php:97 js/LeadEditDialog.js:243 Controller/Lead.php:189
+msgid "End"
+msgstr "Крайна дата"
+
+#: Export/Pdf.php:100
+msgid "End Scheduled"
+msgstr "Краен срок"
+
+#: Export/Pdf.php:183
+msgid "Contacts"
+msgstr "Контакти"
+
+#: Export/Pdf.php:210 js/Contact.js:239
+msgid "Address"
+msgstr "Адрес"
+
+#: Export/Pdf.php:231 js/Task.js:87 js/LeadEditDialog.js:259
+msgid "Tasks"
+msgstr "Задачи"
+
+#: Export/Pdf.php:250 js/Task.js:180
+msgid "Due Date"
+msgstr "Краен срок"
+
+#: Export/Pdf.php:255 js/Task.js:193
+msgid "Priority"
+msgstr "Приоритет"
+
+#: Export/Pdf.php:270 js/Product.js:87 js/LeadEditDialog.js:270
+msgid "Products"
+msgstr "Продукти"
+
+#: Export/Pdf.php:311
+msgid "low"
+msgstr "ниска"
+
+#: Export/Pdf.php:312
+msgid "normal"
+msgstr "нормална"
+
+#: Export/Pdf.php:313
+msgid "high"
+msgstr "висока"
+
+#: Export/Pdf.php:314
+msgid "urgent"
+msgstr "важност"
 
 #: Acl/Rights.php:107
 msgid "manage leads"
@@ -131,10 +181,6 @@ msgstr ""
 #: Acl/Rights.php:116
 msgid "Create or update shared leads favorites"
 msgstr ""
-
-#: js/Product.js:87 js/LeadEditDialog.js:270 Export/Pdf.php:270
-msgid "Products"
-msgstr "Продукти"
 
 #: js/Product.js:136
 msgid "Product"
@@ -166,6 +212,161 @@ msgstr "Прекъсни връзката към селектираните ко
 msgid "Search for Products to add ..."
 msgstr "Търси да прибави контакти"
 
+#: js/LeadStateFilterModel.js:37 js/LeadGridPanel.js:278
+#, fuzzy
+msgid "Show closed"
+msgstr "Покажи вече приключени предложения"
+
+#: js/Model.js:57 js/LeadEditDialog.js:282
+#, fuzzy
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Предложениe"
+msgstr[1] "Предложениe"
+
+#: js/Model.js:61
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:61
+msgid "lead lists"
+msgstr ""
+
+#: js/Model.js:124
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:128
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadGridDetailsPanel.js:50 js/Contact.js:253
+msgid "Phone"
+msgstr "Телефон"
+
+#: js/LeadGridDetailsPanel.js:53
+msgid "Mobile"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:56
+msgid "Fax"
+msgstr ""
+
+#: js/LeadGridDetailsPanel.js:59
+#, fuzzy
+msgid "E-Mail"
+msgstr "Имейл"
+
+#: js/LeadGridDetailsPanel.js:62
+#, fuzzy
+msgid "Web"
+msgstr "вебсайт"
+
+#: js/LeadGridDetailsPanel.js:220 js/LeadGridDetailsPanel.js:253
+#: js/AdminPanel.js:124
+#, fuzzy
+msgid "Leadstates"
+msgstr "Статус на предложението"
+
+#: js/LeadGridDetailsPanel.js:231 js/AdminPanel.js:132
+#, fuzzy
+msgid "Leadsources"
+msgstr "Източник на предложение"
+
+#: js/LeadGridDetailsPanel.js:242 js/AdminPanel.js:128
+#, fuzzy
+msgid "Leadtypes"
+msgstr "Тип предложение"
+
+#: js/LeadGridDetailsPanel.js:466 js/Task.js:220
+msgid "Status"
+msgstr "Статус"
+
+#: js/LeadGridDetailsPanel.js:476 js/LeadEditDialog.js:414
+msgid "Estimated end"
+msgstr "Пресметната продължителност"
+
+#: js/LinkGridPanel.js:37 js/LinkGridPanel.js:38
+#, fuzzy
+msgid "Add new {0}"
+msgstr "Добави ново предложение"
+
+#: js/LinkGridPanel.js:72
+#, fuzzy
+msgid "Edit {0}"
+msgstr "Редактира предложение \"{0}\""
+
+#: js/LinkGridPanel.js:73
+#, fuzzy
+msgid "Edit selected {0}"
+msgstr "Редактирай селектирано предложение"
+
+#: js/LeadType.js:30
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadType.js:136
+#, fuzzy
+msgid "Add a Leadtype..."
+msgstr "Добави продукт"
+
+#: js/LeadGridContactFilter.js:46
+#, fuzzy
+msgid "Contact"
+msgstr "Контакти"
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr ""
+
+#: js/Task.js:113
+msgid "No Tasks to display"
+msgstr "Няма намерени задачи"
+
+#: js/Task.js:172
+msgid "Summary"
+msgstr "Заключение"
+
+#: js/Task.js:176
+msgid "Add a task..."
+msgstr "Добави задача"
+
+#: js/Task.js:207
+msgid "Percent"
+msgstr "Процент"
+
+#: js/AdminPanel.js:140
+msgid "Defaults"
+msgstr ""
+
+#: js/LeadEditDialog.js:260
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:271
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr ""
+
+#: js/LeadEditDialog.js:309
+msgid "Enter short name"
+msgstr "Задай съкратено име"
+
+#: js/LeadEditDialog.js:392
+msgid "Expected turnover"
+msgstr "Очакван оборот"
+
+#: js/LeadEditDialog.js:460
+msgid "Enter description"
+msgstr "Напиши описание"
+
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Сменя типа контакт с Клиент"
@@ -194,18 +395,10 @@ msgstr "Търси да прибави контакти"
 msgid "Name"
 msgstr "Име"
 
-#: js/Contact.js:239 Export/Pdf.php:210
-msgid "Address"
-msgstr "Адрес"
-
 #: js/Contact.js:250
 #, fuzzy
 msgid "Data"
 msgstr "Данни за предложението"
-
-#: js/Contact.js:253 js/LeadGridDetailsPanel.js:50
-msgid "Phone"
-msgstr "Телефон"
 
 #: js/Contact.js:254
 msgid "Cellphone"
@@ -214,118 +407,6 @@ msgstr "Мобилен"
 #: js/Contact.js:260 Controller/Lead.php:185
 msgid "Role"
 msgstr ""
-
-#: js/LeadSource.js:30
-msgid "Lead Source"
-msgid_plural "Lead Sources"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/LeadSource.js:138
-#, fuzzy
-msgid "Add a Leadsource..."
-msgstr "Източник на предложението"
-
-#: js/LinkGridPanel.js:37 js/LinkGridPanel.js:38
-#, fuzzy
-msgid "Add new {0}"
-msgstr "Добави ново предложение"
-
-#: js/LinkGridPanel.js:72
-#, fuzzy
-msgid "Edit {0}"
-msgstr "Редактира предложение \"{0}\""
-
-#: js/LinkGridPanel.js:73
-#, fuzzy
-msgid "Edit selected {0}"
-msgstr "Редактирай селектирано предложение"
-
-#: js/AdminPanel.js:124 js/LeadGridDetailsPanel.js:220
-#: js/LeadGridDetailsPanel.js:253
-#, fuzzy
-msgid "Leadstates"
-msgstr "Статус на предложението"
-
-#: js/AdminPanel.js:128 js/LeadGridDetailsPanel.js:242
-#, fuzzy
-msgid "Leadtypes"
-msgstr "Тип предложение"
-
-#: js/AdminPanel.js:132 js/LeadGridDetailsPanel.js:231
-#, fuzzy
-msgid "Leadsources"
-msgstr "Източник на предложение"
-
-#: js/AdminPanel.js:140
-msgid "Defaults"
-msgstr ""
-
-#: js/AdminPanel.js:159 js/LeadGridPanel.js:181 js/LeadStateFilterModel.js:32
-#: js/LeadEditDialog.js:350 Export/Pdf.php:79
-msgid "Leadstate"
-msgstr "Статус на предложение"
-
-#: js/AdminPanel.js:166 js/LeadGridDetailsPanel.js:486
-#: js/LeadEditDialog.js:376 Export/Pdf.php:85
-msgid "Leadsource"
-msgstr "Източник на предложението"
-
-#: js/AdminPanel.js:173 js/LeadGridDetailsPanel.js:481
-#: js/LeadEditDialog.js:369 Export/Pdf.php:82
-msgid "Leadtype"
-msgstr "Тип на предложението"
-
-#: js/LeadGridContactFilter.js:46
-#, fuzzy
-msgid "Contact"
-msgstr "Контакти"
-
-#: js/LeadGridContactFilter.js:54
-msgid "CRM Role"
-msgstr ""
-
-#: js/LeadGridDetailsPanel.js:53
-msgid "Mobile"
-msgstr ""
-
-#: js/LeadGridDetailsPanel.js:56
-msgid "Fax"
-msgstr ""
-
-#: js/LeadGridDetailsPanel.js:59
-#, fuzzy
-msgid "E-Mail"
-msgstr "Имейл"
-
-#: js/LeadGridDetailsPanel.js:62
-#, fuzzy
-msgid "Web"
-msgstr "вебсайт"
-
-#: js/LeadGridDetailsPanel.js:466 js/Task.js:220
-msgid "Status"
-msgstr "Статус"
-
-#: js/LeadGridDetailsPanel.js:471 js/LeadEditDialog.js:408
-#: Controller/Lead.php:187 Export/Pdf.php:94
-msgid "Start"
-msgstr "Старт"
-
-#: js/LeadGridDetailsPanel.js:476 js/LeadEditDialog.js:414
-msgid "Estimated end"
-msgstr "Пресметната продължителност"
-
-#: js/LeadType.js:30
-msgid "Lead Type"
-msgid_plural "Lead Types"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/LeadType.js:136
-#, fuzzy
-msgid "Add a Leadtype..."
-msgstr "Добави продукт"
 
 #: js/LeadState.js:33
 msgid "Lead State"
@@ -338,6 +419,17 @@ msgstr[1] ""
 msgid "Add a Leadstate..."
 msgstr "Добави задача"
 
+#: js/LeadSource.js:30
+msgid "Lead Source"
+msgid_plural "Lead Sources"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/LeadSource.js:138
+#, fuzzy
+msgid "Add a Leadsource..."
+msgstr "Източник на предложението"
+
 #: js/LeadGridPanel.js:133
 msgid "Quick search"
 msgstr ""
@@ -345,16 +437,6 @@ msgstr ""
 #: js/LeadGridPanel.js:135 js/LeadGridPanel.js:178
 msgid "Lead name"
 msgstr "Име на предложение"
-
-#: js/LeadGridPanel.js:137 js/LeadGridPanel.js:182 js/LeadEditDialog.js:236
-#: Controller/Lead.php:191 Export/Pdf.php:91
-msgid "Probability"
-msgstr "Вероятност"
-
-#: js/LeadGridPanel.js:138 js/LeadGridPanel.js:183 Controller/Lead.php:190
-#: Export/Pdf.php:88
-msgid "Turnover"
-msgstr "Оборот"
 
 #: js/LeadGridPanel.js:176
 msgid "Lead id"
@@ -408,91 +490,33 @@ msgstr "Експортирай като PDF"
 msgid "Export as XLS"
 msgstr ""
 
-#: js/LeadGridPanel.js:278 js/LeadStateFilterModel.js:37
-#, fuzzy
-msgid "Show closed"
-msgstr "Покажи вече приключени предложения"
-
-#: js/LeadEditDialog.js:243 Controller/Lead.php:189 Export/Pdf.php:97
-msgid "End"
-msgstr "Крайна дата"
-
-#: js/LeadEditDialog.js:259 js/Task.js:87 Export/Pdf.php:231
-msgid "Tasks"
-msgstr "Задачи"
-
-#: js/LeadEditDialog.js:260
-msgid "You do not have the run right for the Tasks application or it is not activated."
+#: Preference.php:36
+msgid "All leads"
 msgstr ""
 
-#: js/LeadEditDialog.js:271
-msgid "You do not have the run right for the Sales application or it is not activated."
+#: Preference.php:80
+msgid "Get Notification Emails"
 msgstr ""
 
-#: js/LeadEditDialog.js:282 js/Model.js:57
-#, fuzzy
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Предложениe"
-msgstr[1] "Предложениe"
-
-#: js/LeadEditDialog.js:309
-msgid "Enter short name"
-msgstr "Задай съкратено име"
-
-#: js/LeadEditDialog.js:392
-msgid "Expected turnover"
-msgstr "Очакван оборот"
-
-#: js/LeadEditDialog.js:460
-msgid "Enter description"
-msgstr "Напиши описание"
-
-#: js/Model.js:61
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:61
-msgid "lead lists"
+#: Preference.php:81
+msgid "The level of actions you want to be notified about."
 msgstr ""
 
-#: js/Model.js:124
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] ""
-msgstr[1] ""
+#: Preference.php:85
+msgid "Send Notifications Emails for own actions"
+msgstr ""
 
-#: js/Model.js:128
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
+#: Preference.php:86
+msgid "Get notifications emails for actions you did yourself"
+msgstr ""
 
-#: js/Task.js:113
-msgid "No Tasks to display"
-msgstr "Няма намерени задачи"
+#: Preference.php:89
+msgid "Default Favorite"
+msgstr ""
 
-#: js/Task.js:172
-msgid "Summary"
-msgstr "Заключение"
-
-#: js/Task.js:176
-msgid "Add a task..."
-msgstr "Добави задача"
-
-#: js/Task.js:180 Export/Pdf.php:250
-msgid "Due Date"
-msgstr "Краен срок"
-
-#: js/Task.js:193 Export/Pdf.php:255
-msgid "Priority"
-msgstr "Приоритет"
-
-#: js/Task.js:207
-msgid "Percent"
-msgstr "Процент"
+#: Preference.php:90
+msgid "The default favorite which is loaded on crm startup"
+msgstr ""
 
 #: Controller/Lead.php:184
 msgid "State"
@@ -533,33 +557,9 @@ msgstr "Предложението е %s променено"
 msgid "Lead %s has been creaded"
 msgstr "Предложението е %s готово"
 
-#: Export/Pdf.php:76
-msgid "Lead Data"
-msgstr "Данни за предложението"
-
-#: Export/Pdf.php:100
-msgid "End Scheduled"
-msgstr "Краен срок"
-
-#: Export/Pdf.php:183
-msgid "Contacts"
-msgstr "Контакти"
-
-#: Export/Pdf.php:311
-msgid "low"
-msgstr "ниска"
-
-#: Export/Pdf.php:312
-msgid "normal"
-msgstr "нормална"
-
-#: Export/Pdf.php:313
-msgid "high"
-msgstr "висока"
-
-#: Export/Pdf.php:314
-msgid "urgent"
-msgstr "важност"
+#: Setup/Update/Release3.php:38 Setup/Initialize.php:48
+msgid "All leads I have read grants for"
+msgstr ""
 
 #, fuzzy
 #~ msgid "Lead Name"

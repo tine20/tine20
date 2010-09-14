@@ -13,10 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "共享的联系人"
-
 #: Acl/Rights.php:104
 msgid "manage products"
 msgstr ""
@@ -25,63 +21,22 @@ msgstr ""
 msgid "add, edit and delete products"
 msgstr ""
 
-#: js/ProductEditDialog.js:105 js/ProductGridPanel.js:125
-msgid "Name"
-msgstr ""
-
-#: js/ProductEditDialog.js:111 js/ProductGridPanel.js:129
-msgid "Price"
-msgstr ""
-
-#: js/ProductEditDialog.js:118 js/ProductGridPanel.js:126
-msgid "Manufacturer"
-msgstr ""
-
-#: js/ProductEditDialog.js:122 js/ProductGridPanel.js:127
-msgid "Category"
-msgstr ""
-
-#: js/ProductEditDialog.js:126 js/ContractEditDialog.js:109
-#: js/ProductGridPanel.js:128
-msgid "Description"
-msgstr "描述"
-
-#: js/ProductEditDialog.js:127 js/ContractEditDialog.js:110
-msgid "Enter description..."
-msgstr "输入描述 ..."
-
-#: js/Models.js:41
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] ""
-
-#: js/Models.js:45
-#, fuzzy
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "联系人列表"
-
-#: js/Models.js:79 js/ContractGridPanel.js:63
-msgid "Quick search"
-msgstr ""
-
-#: js/Models.js:80
-msgid "Product name"
-msgstr ""
-
-#: js/Models.js:113
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "联系人"
-
-#: js/Models.js:117
-msgid "contracts list"
-msgid_plural "contracts lists"
-msgstr[0] "联系人列表"
-
 #: js/ContractEditDialog.js:103 js/ContractGridPanel.js:113
 msgid "Title"
 msgstr "头衔"
+
+#: js/ContractEditDialog.js:109 js/ProductGridPanel.js:128
+#: js/ProductEditDialog.js:126
+msgid "Description"
+msgstr "描述"
+
+#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:127
+msgid "Enter description..."
+msgstr "输入描述 ..."
+
+#: js/ContractGridPanel.js:63 js/Models.js:79
+msgid "Quick search"
+msgstr ""
 
 #: js/ContractGridPanel.js:64
 msgid "Summary"
@@ -115,6 +70,51 @@ msgstr "联系人"
 #: js/ProductGridPanel.js:124
 msgid "Tags"
 msgstr ""
+
+#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:105
+msgid "Name"
+msgstr ""
+
+#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:118
+msgid "Manufacturer"
+msgstr ""
+
+#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:122
+msgid "Category"
+msgstr ""
+
+#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:111
+msgid "Price"
+msgstr ""
+
+#: js/Models.js:41
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] ""
+
+#: js/Models.js:45
+#, fuzzy
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "联系人列表"
+
+#: js/Models.js:80
+msgid "Product name"
+msgstr ""
+
+#: js/Models.js:113
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "联系人"
+
+#: js/Models.js:117
+msgid "contracts list"
+msgid_plural "contracts lists"
+msgstr[0] "联系人列表"
+
+#: Setup/setup.xml:243
+msgid "Shared Contracts"
+msgstr "共享的联系人"
 
 #~ msgid "Due date"
 #~ msgstr "过期日"

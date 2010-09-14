@@ -12,46 +12,6 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Preference.php:97
-msgid "Default Email Account"
-msgstr "Compte de correu electrònic per defecte"
-
-#: Preference.php:98
-msgid "The default email account to use when sending mails."
-msgstr "Compte de correu electrònic a utilitzar per defecte per a l'enviament de correus."
-
-#: Preference.php:101
-msgid "Email Update Interval"
-msgstr "Interval d'actualització de correu electrònic"
-
-#: Preference.php:102
-msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
-msgstr "Amb quina periodicitat hauria el Felamimail de comprovar si hi ha nous correus electrònics (en minuts). \"0\" significa mai."
-
-#: Preference.php:105
-msgid "Use in Addressbook"
-msgstr "Utilitza-ho a la llibreta d'adreces"
-
-#: Preference.php:106
-msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr "Redacta correus electrònics des de la llibreta d'adreces amb el Felamimail."
-
-#: Preference.php:109
-msgid "Use for NOTES"
-msgstr "Utilitzeu per a NOTES"
-
-#: Preference.php:110
-msgid "Save Note default Value."
-msgstr "Desa el valor per defecte Nota."
-
-#: Preference.php:113
-msgid "Confirm Delete"
-msgstr "Confirma l'eliminació"
-
-#: Preference.php:114
-msgid "Show confirmation dialog when deleting mails."
-msgstr "Mostra un diàleg de confirmació quan s'eliminin correus electrònics."
-
 #: Acl/Rights.php:107
 msgid "manage email accounts"
 msgstr "gestiona els comptes de correu electrònic"
@@ -68,122 +28,76 @@ msgstr "Afegeix comptes de correu electrònic"
 msgid "Create new email accounts"
 msgstr "Crea noves comptes de correu electrònic"
 
-#: js/GridPanel.js:116
-msgid "No Messages found or the cache is empty."
-msgstr "No s'ha trobat cap missatge o bé la cau és buida."
+#: js/Model.js:46 js/TreeContextMenu.js:29
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] "Missatge"
+msgstr[1] "Missatges"
 
-#: js/GridPanel.js:168
-msgid "Write"
-msgstr "Escriu"
+#: js/Model.js:50 js/Model.js:418 js/TreeContextMenu.js:88
+#: js/TreeContextMenu.js:91 js/TreeContextMenu.js:94 js/TreeContextMenu.js:186
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "Carpeta"
+msgstr[1] "Carpetes"
 
-#: js/GridPanel.js:176 js/MessageDisplayDialog.js:46
-msgid "Reply"
-msgstr "Respon"
+#: js/Model.js:277 js/AccountEditDialog.js:107
+msgid "Account"
+msgid_plural "Accounts"
+msgstr[0] "Compte"
+msgstr[1] "Comptes"
 
-#: js/GridPanel.js:185 js/MessageDisplayDialog.js:53
-msgid "Reply To All"
-msgstr "Respon a tots"
+#: js/Model.js:281 js/Model.js:421 js/Model.js:525 js/Model.js:577
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "llista de registres"
+msgstr[1] "llistes de registres"
 
-#: js/GridPanel.js:194 js/MessageDisplayDialog.js:60
-msgid "Forward"
-msgstr "Reenvia"
+#: js/Model.js:412
+msgid "INBOX"
+msgstr ""
 
-#: js/GridPanel.js:202
-msgid "Toggle Flag"
-msgstr "Commuta bandera"
+#: js/Model.js:412
+msgid "Drafts"
+msgstr ""
 
-#: js/GridPanel.js:211
-msgid "Mark read/unread"
-msgstr "Marca com a llegit/no llegit"
-
-#: js/GridPanel.js:221 js/GridPanel.js:222 js/GridPanel.js:224
-#: js/MessageDisplayDialog.js:39
-msgid "Delete"
-msgstr "Elimina"
-
-#: js/GridPanel.js:232
-msgid "Add Account"
-msgstr "Afegeix un compte"
-
-#: js/GridPanel.js:240 js/GridPanel.js:914 js/GridPanel.js:924
-#: js/GridPanel.js:928 js/MessageDisplayDialog.js:73
-msgid "Print Preview"
-msgstr "Previsualitza la impressió"
-
-#: js/GridPanel.js:248 js/MessageDisplayDialog.js:67
-msgid "Print Message"
-msgstr "Imprimeix el missatge"
-
-#: js/GridPanel.js:292
-msgid "Subject/From"
-msgstr "Assumpte/Des de"
-
-#: js/GridPanel.js:293 js/GridPanel.js:403 js/RuleConditionsPanel.js:57
-#: js/GridDetailsPanel.js:123 js/MessageEditDialog.js:490
-#: Controller/Message.php:580
-msgid "Subject"
-msgstr "Assumpte"
-
-#: js/GridPanel.js:294 js/GridPanel.js:409 js/RuleConditionsPanel.js:55
-#: js/GridDetailsPanel.js:124 js/MessageEditDialog.js:467
-msgid "From"
-msgstr "Des de"
-
-#: js/GridPanel.js:295 js/GridPanel.js:415 js/RuleConditionsPanel.js:56
-msgid "To"
-msgstr "A"
-
-#: js/GridPanel.js:296
-msgid "Cc"
-msgstr "Cc"
-
-#: js/GridPanel.js:297
-msgid "Bcc"
-msgstr "Bcc"
-
-#: js/GridPanel.js:298 js/GridPanel.js:430
-msgid "Received"
-msgstr "Rebut"
-
-#: js/GridPanel.js:384
-msgid "Id"
-msgstr "Identificador"
-
-#: js/GridPanel.js:422 js/Model.js:406
+#: js/Model.js:412 js/GridPanel.js:425
 msgid "Sent"
 msgstr "Enviat"
 
-#: js/GridPanel.js:437 js/RuleConditionsPanel.js:58
-msgid "Size"
-msgstr "Mida"
-
-#: js/GridPanel.js:477
-msgid "Answered"
-msgstr "Contestat"
-
-#: js/GridPanel.js:480
-msgid "Forwarded"
-msgstr "Reenviat"
-
-#: js/GridPanel.js:483
-msgid "Recent"
-msgstr "Recent"
-
-#: js/RulesGridPanel.js:58
-msgid "Enabled"
+#: js/Model.js:412
+msgid "Templates"
 msgstr ""
 
-#: js/RulesGridPanel.js:65
-msgid "ID"
+#: js/Model.js:412
+msgid "Junk"
 msgstr ""
 
-#: js/RulesGridPanel.js:71 js/RuleEditDialog.js:174
-msgid "Conditions"
+#: js/Model.js:412
+msgid "Trash"
 msgstr ""
 
-#: js/RulesGridPanel.js:78 js/RuleEditDialog.js:188
-msgid "Action"
-msgstr ""
+#: js/Model.js:521
+msgid "Vacation"
+msgid_plural "Vacations"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:573
+msgid "Rule"
+msgid_plural "Rules"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/GridDetailsPanel.js:123 js/RuleConditionsPanel.js:77 js/GridPanel.js:289
+#: js/GridPanel.js:400 js/MessageEditDialog.js:501 Controller/Message.php:580
+msgid "Subject"
+msgstr "Assumpte"
+
+#: js/GridDetailsPanel.js:124 js/RuleConditionsPanel.js:75
+#: js/MessageEditDialog.js:478
+msgid "From"
+msgstr "Des de"
 
 #: js/GridDetailsPanel.js:125
 msgid "Add"
@@ -197,106 +111,145 @@ msgstr "Afegeix un contacte a la llibreta d'adreces"
 msgid "Date"
 msgstr "Data"
 
-#: js/GridDetailsPanel.js:129 js/GridDetailsPanel.js:347
+#: js/GridDetailsPanel.js:129 js/GridDetailsPanel.js:338
 msgid "Show or hide header information"
 msgstr "Mostra o amaga la informació de capçalera"
 
-#: js/GridDetailsPanel.js:220 js/MessageEditDialog.js:401
+#: js/GridDetailsPanel.js:211 js/MessageEditDialog.js:412
 msgid "Attachments"
 msgstr "Adjunts"
 
-#: js/TreeContextMenu.js:29
-msgid "Update {0} Cache"
-msgstr "Actualitza la cau {0}"
+#: js/AccountEditDialog.js:87 js/AccountEditDialog.js:136
+msgid "Signature"
+msgstr "Signatura"
 
-#: js/TreeContextMenu.js:29 js/Model.js:44
-msgid "Message"
-msgid_plural "Messages"
-msgstr[0] "Missatge"
-msgstr[1] "Missatges"
+#: js/AccountEditDialog.js:120
+msgid "Account Name"
+msgstr "Nom de compte"
 
-#: js/TreeContextMenu.js:51
-msgid "Empty Folder"
-msgstr "Carpeta buida"
+#: js/AccountEditDialog.js:124
+msgid "User Email"
+msgstr "Correu electrònic de l'usuari"
 
-#: js/TreeContextMenu.js:79
-msgid "Add Folder"
-msgstr "Afegeix una carpeta"
+#: js/AccountEditDialog.js:129
+msgid "User Name (From)"
+msgstr "Nom de l'usuari (des de)"
 
-#: js/TreeContextMenu.js:84
-msgid "New {0}"
-msgstr "Nou {0}"
+#: js/AccountEditDialog.js:132
+msgid "Organization"
+msgstr "Organització"
 
-#: js/TreeContextMenu.js:84 js/TreeContextMenu.js:87 js/TreeContextMenu.js:90
-#: js/TreeContextMenu.js:182 js/Model.js:48 js/Model.js:412
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "Carpeta"
-msgstr[1] "Carpetes"
+#: js/AccountEditDialog.js:143
+msgid "IMAP"
+msgstr "IMAP"
 
-#: js/TreeContextMenu.js:84
-msgid "Please enter the name of the new {0}:"
-msgstr "Introduïu el nom del nou {0}:"
+#: js/AccountEditDialog.js:156 js/AccountEditDialog.js:205
+#: js/AccountEditDialog.js:266
+msgid "Host"
+msgstr "Amfitrió"
 
-#: js/TreeContextMenu.js:87
-msgid "No {0} added"
-msgstr "No s'ha afegit cap {0}"
+#: js/AccountEditDialog.js:160
+msgid "Port (Default: 143 / SSL: 993)"
+msgstr "Port (per defecte: 143 / SSL: 993)"
 
-#: js/TreeContextMenu.js:87
-msgid "You have to supply a {0} name!"
-msgstr "Heu de proporcionar un nom de {0}!"
+#: js/AccountEditDialog.js:166 js/AccountEditDialog.js:214
+#: js/AccountEditDialog.js:275
+msgid "Secure Connection"
+msgstr "Connexió segura"
 
-#: js/TreeContextMenu.js:90
-msgid "Please wait"
-msgstr "Espereu"
+#: js/AccountEditDialog.js:177 js/AccountEditDialog.js:224
+#: js/AccountEditDialog.js:239 js/AccountEditDialog.js:285
+msgid "None"
+msgstr "Cap"
 
-#: js/TreeContextMenu.js:90
-msgid "Creating {0}..."
-msgstr "Es crea el {0}..."
+#: js/AccountEditDialog.js:178 js/AccountEditDialog.js:225
+#: js/AccountEditDialog.js:286
+msgid "TLS"
+msgstr "TLS"
 
-#: js/TreeContextMenu.js:119
-msgid "Edit Account"
-msgstr "Edita compte"
+#: js/AccountEditDialog.js:179 js/AccountEditDialog.js:226
+msgid "SSL"
+msgstr "SSL"
 
-#: js/TreeContextMenu.js:148
-msgid "Set Vacation Message"
+#: js/AccountEditDialog.js:182
+msgid "Username"
+msgstr "Nom d'usuari"
+
+#: js/AccountEditDialog.js:186
+msgid "Password"
+msgstr "Contrasenya"
+
+#: js/AccountEditDialog.js:192
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/AccountEditDialog.js:208
+msgid "Port (Default: 25)"
+msgstr "Port (per defecte: 25)"
+
+#: js/AccountEditDialog.js:229
+msgid "Authentication"
+msgstr "Autenticació"
+
+#: js/AccountEditDialog.js:240
+msgid "Login"
+msgstr "Inici de sessió"
+
+#: js/AccountEditDialog.js:241
+msgid "Plain"
+msgstr "Pla"
+
+#: js/AccountEditDialog.js:244
+msgid "Username (optional)"
+msgstr "Nom d'usuari (opcional)"
+
+#: js/AccountEditDialog.js:247
+msgid "Password (optional)"
+msgstr "Contrasenya (opcional)"
+
+#: js/AccountEditDialog.js:253
+msgid "Sieve"
 msgstr ""
 
-#: js/TreeContextMenu.js:164
-msgid "Set Filter Rules"
+#: js/AccountEditDialog.js:270
+msgid "Port (Default: 2000)"
 msgstr ""
 
-#: js/TreeContextMenu.js:182
-msgid "Reload {0}"
-msgstr "Torna a carregar el {0}"
+#: js/AccountEditDialog.js:290
+msgid "Other Settings"
+msgstr "Altres paràmetres"
 
-#: js/TreeContextMenu.js:195
-msgid "Reload Folder List"
-msgstr ""
+#: js/AccountEditDialog.js:303
+msgid "Sent Folder Name"
+msgstr "Nom de la carpeta Enviats"
 
-#: js/RecipientGrid.js:153 js/RecipientGrid.js:174
-msgid "To:"
-msgstr "A:"
+#: js/AccountEditDialog.js:307
+msgid "Trash Folder Name"
+msgstr "Nom de la carpeta Paperera"
 
-#: js/RecipientGrid.js:156 js/RecipientGrid.js:175
-msgid "Cc:"
-msgstr "Cc:"
+#: js/AccountEditDialog.js:311
+msgid "Show Intelligent Folders"
+msgstr "Mostra les carpetes inteligents"
 
-#: js/RecipientGrid.js:159 js/RecipientGrid.js:176
-msgid "Bcc:"
-msgstr "Bcc:"
+#: js/AccountEditDialog.js:322
+msgid "No"
+msgstr "No"
 
-#: js/RecipientGrid.js:197
-msgid "Remove"
-msgstr "Elimina"
+#: js/AccountEditDialog.js:323
+msgid "Yes"
+msgstr "Sí"
 
-#: js/RuleEditDialog.js:71
-msgid "Edit Filter Rule"
-msgstr ""
+#: js/AccountEditDialog.js:326
+msgid "Display Format"
+msgstr "Format de visualització"
 
-#: js/RuleEditDialog.js:200
-msgid "Move to folder"
-msgstr ""
+#: js/AccountEditDialog.js:337
+msgid "HTML"
+msgstr "HTML"
+
+#: js/AccountEditDialog.js:338
+msgid "Plain Text"
+msgstr "Text pla"
 
 #: js/VacationEditDialog.js:82
 msgid "Vacation Message for {0}"
@@ -328,6 +281,364 @@ msgstr ""
 
 #: js/VacationEditDialog.js:165
 msgid "Only send all X days to the same sender"
+msgstr ""
+
+#: js/RecipientGrid.js:153 js/RecipientGrid.js:174
+msgid "To:"
+msgstr "A:"
+
+#: js/RecipientGrid.js:156 js/RecipientGrid.js:175
+msgid "Cc:"
+msgstr "Cc:"
+
+#: js/RecipientGrid.js:159 js/RecipientGrid.js:176
+msgid "Bcc:"
+msgstr "Bcc:"
+
+#: js/RecipientGrid.js:197
+msgid "Remove"
+msgstr "Elimina"
+
+#: js/RulesGridPanel.js:57
+msgid "Move up"
+msgstr ""
+
+#: js/RulesGridPanel.js:64
+msgid "Move down"
+msgstr ""
+
+#: js/RulesGridPanel.js:157
+msgid "Enabled"
+msgstr ""
+
+#: js/RulesGridPanel.js:165
+msgid "ID"
+msgstr ""
+
+#: js/RulesGridPanel.js:172
+msgid "Conditions"
+msgstr ""
+
+#: js/RulesGridPanel.js:180
+msgid "Action"
+msgstr ""
+
+#: js/RulesGridPanel.js:188
+msgid "Argument"
+msgstr ""
+
+#: js/RulesGridPanel.js:281
+msgid "is greater than"
+msgstr ""
+
+#: js/RulesGridPanel.js:281
+msgid "is less than"
+msgstr ""
+
+#: js/RuleConditionsPanel.js:76 js/GridPanel.js:292 js/GridPanel.js:418
+msgid "To"
+msgstr "A"
+
+#: js/RuleConditionsPanel.js:78 js/GridPanel.js:440
+msgid "Size"
+msgstr "Mida"
+
+#: js/Felamimail.js:69
+msgid "Email"
+msgstr "Correu electrònic"
+
+#: js/Felamimail.js:105
+msgid "Active Vacation Message"
+msgstr ""
+
+#: js/Felamimail.js:106
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr ""
+
+#: js/Felamimail.js:307
+msgid "New mails"
+msgstr "Nous correus"
+
+#: js/Felamimail.js:308
+msgid "You got {0} new mail(s) in Folder {1}."
+msgstr "Heu rebut {0} nou(s) correu(s) a la carpeta {1}."
+
+#: js/Felamimail.js:432 js/Felamimail.js:470
+msgid "IMAP Error"
+msgstr ""
+
+#: js/Felamimail.js:433
+msgid "No connection to IMAP server."
+msgstr "Sense connexió amb el servidor IMAP."
+
+#: js/Felamimail.js:446
+msgid "IMAP Credentials for {0}"
+msgstr "Credencials IMAP per a {0}"
+
+#: js/Felamimail.js:449
+msgid "Credentials"
+msgstr "Credencials"
+
+#: js/Felamimail.js:471
+msgid "One of your folders was deleted from an other client, please reload you browser"
+msgstr ""
+
+#: js/Felamimail.js:486
+msgid "SMTP Error"
+msgstr ""
+
+#: js/Felamimail.js:487
+msgid "No connection to SMTP server."
+msgstr ""
+
+#: js/Felamimail.js:495
+msgid "Sieve Error"
+msgstr ""
+
+#: js/Felamimail.js:496
+msgid "No connection to Sieve server."
+msgstr ""
+
+#: js/GridPanel.js:112
+msgid "No Messages found or the cache is empty."
+msgstr "No s'ha trobat cap missatge o bé la cau és buida."
+
+#: js/GridPanel.js:164
+msgid "Write"
+msgstr "Escriu"
+
+#: js/GridPanel.js:172 js/MessageDisplayDialog.js:46
+msgid "Reply"
+msgstr "Respon"
+
+#: js/GridPanel.js:181 js/MessageDisplayDialog.js:53
+msgid "Reply To All"
+msgstr "Respon a tots"
+
+#: js/GridPanel.js:190 js/MessageDisplayDialog.js:60
+msgid "Forward"
+msgstr "Reenvia"
+
+#: js/GridPanel.js:198
+msgid "Toggle Flag"
+msgstr "Commuta bandera"
+
+#: js/GridPanel.js:207
+msgid "Mark read/unread"
+msgstr "Marca com a llegit/no llegit"
+
+#: js/GridPanel.js:217 js/GridPanel.js:218 js/GridPanel.js:220
+#: js/MessageDisplayDialog.js:39
+msgid "Delete"
+msgstr "Elimina"
+
+#: js/GridPanel.js:228
+msgid "Add Account"
+msgstr "Afegeix un compte"
+
+#: js/GridPanel.js:236 js/GridPanel.js:917 js/GridPanel.js:927
+#: js/GridPanel.js:931 js/MessageDisplayDialog.js:73
+msgid "Print Preview"
+msgstr "Previsualitza la impressió"
+
+#: js/GridPanel.js:244 js/MessageDisplayDialog.js:67
+msgid "Print Message"
+msgstr "Imprimeix el missatge"
+
+#: js/GridPanel.js:288
+msgid "Subject/From"
+msgstr "Assumpte/Des de"
+
+#: js/GridPanel.js:290 js/GridPanel.js:406
+msgid "From (Email)"
+msgstr ""
+
+#: js/GridPanel.js:291 js/GridPanel.js:412
+msgid "From (Name)"
+msgstr ""
+
+#: js/GridPanel.js:293
+msgid "Cc"
+msgstr "Cc"
+
+#: js/GridPanel.js:294
+msgid "Bcc"
+msgstr "Bcc"
+
+#: js/GridPanel.js:295 js/GridPanel.js:433
+msgid "Received"
+msgstr "Rebut"
+
+#: js/GridPanel.js:381
+msgid "Id"
+msgstr "Identificador"
+
+#: js/GridPanel.js:480
+msgid "Answered"
+msgstr "Contestat"
+
+#: js/GridPanel.js:483
+msgid "Forwarded"
+msgstr "Reenviat"
+
+#: js/GridPanel.js:486
+msgid "Recent"
+msgstr "Recent"
+
+#: js/MessageEditDialog.js:97
+msgid "Send"
+msgstr "Envia"
+
+#: js/MessageEditDialog.js:176
+msgid "wrote"
+msgstr "ha escrit"
+
+#: js/MessageEditDialog.js:179
+msgid "Original message"
+msgstr "missatge original"
+
+#: js/MessageEditDialog.js:256
+msgid "Re:"
+msgstr ""
+
+#: js/MessageEditDialog.js:258
+msgid "Fwd:"
+msgstr ""
+
+#: js/MessageEditDialog.js:261
+msgid "{0} Message"
+msgstr ""
+
+#: js/MessageEditDialog.js:304 js/MessageEditDialog.js:512
+msgid "Compose email:"
+msgstr "Redacta correu electrònic:"
+
+#: js/MessageEditDialog.js:335
+msgid "Add Note"
+msgstr "Afegeix una nota"
+
+#: js/MessageEditDialog.js:336
+msgid "Edit Email Note Text:"
+msgstr "Edita la nota del correu electrònic:"
+
+#: js/MessageEditDialog.js:363
+msgid "Failed"
+msgstr "Ha fallat"
+
+#: js/MessageEditDialog.js:364
+msgid "Could not send {0}."
+msgstr "No s'ha pogut enviar {0}."
+
+#: js/MessageEditDialog.js:365
+msgid "Error:"
+msgstr "Error:"
+
+#: js/MessageEditDialog.js:404
+msgid "Recipients"
+msgstr "Destinataris"
+
+#: js/MessageEditDialog.js:420 Controller/Message.php:580
+msgid "Body"
+msgstr "Cos"
+
+#: js/MessageEditDialog.js:536
+msgid "Save contact note"
+msgstr "Desa la nota de contacte"
+
+#: js/TreeContextMenu.js:29
+msgid "Update {0} Cache"
+msgstr "Actualitza la cau {0}"
+
+#: js/TreeContextMenu.js:51
+msgid "Empty Folder"
+msgstr "Carpeta buida"
+
+#: js/TreeContextMenu.js:83
+msgid "Add Folder"
+msgstr "Afegeix una carpeta"
+
+#: js/TreeContextMenu.js:88
+msgid "New {0}"
+msgstr "Nou {0}"
+
+#: js/TreeContextMenu.js:88
+msgid "Please enter the name of the new {0}:"
+msgstr "Introduïu el nom del nou {0}:"
+
+#: js/TreeContextMenu.js:91
+msgid "No {0} added"
+msgstr "No s'ha afegit cap {0}"
+
+#: js/TreeContextMenu.js:91
+msgid "You have to supply a {0} name!"
+msgstr "Heu de proporcionar un nom de {0}!"
+
+#: js/TreeContextMenu.js:94
+msgid "Please wait"
+msgstr "Espereu"
+
+#: js/TreeContextMenu.js:94
+msgid "Creating {0}..."
+msgstr "Es crea el {0}..."
+
+#: js/TreeContextMenu.js:123
+msgid "Edit Account"
+msgstr "Edita compte"
+
+#: js/TreeContextMenu.js:152
+msgid "Set Vacation Message"
+msgstr ""
+
+#: js/TreeContextMenu.js:168
+msgid "Set Filter Rules"
+msgstr ""
+
+#: js/TreeContextMenu.js:186
+msgid "Reload {0}"
+msgstr "Torna a carregar el {0}"
+
+#: js/TreeContextMenu.js:199
+msgid "Mark Folder as read"
+msgstr ""
+
+#: js/TreeContextMenu.js:228
+msgid "Update Folder List"
+msgstr ""
+
+#: js/RuleEditDialog.js:95
+msgid "Edit Filter Rule"
+msgstr ""
+
+#: js/RuleEditDialog.js:233
+msgid "If all of the following conditions are met:"
+msgstr ""
+
+#: js/RuleEditDialog.js:250
+msgid "Do this action:"
+msgstr ""
+
+#: js/RuleEditDialog.js:338
+msgid "Move mail to folder"
+msgstr ""
+
+#: js/RuleEditDialog.js:339
+msgid "Redirect mail to address"
+msgstr ""
+
+#: js/RuleEditDialog.js:340
+msgid "Reject mail with this text"
+msgstr ""
+
+#: js/RuleEditDialog.js:341
+msgid "Discard mail"
+msgstr ""
+
+#: js/RuleEditDialog.js:342
+msgid "Keep mail"
+msgstr ""
+
+#: js/RulesDialog.js:80
+msgid "Sieve Filter Rules for {0}"
 msgstr ""
 
 #: js/TreePanel.js:412
@@ -371,293 +682,45 @@ msgstr "No llegit"
 msgid "Contains unread messages"
 msgstr "Conté missatges no llegits"
 
-#: js/RulesDialog.js:80
-msgid "Sieve Filter Rules for {0}"
-msgstr ""
-
-#: js/Felamimail.js:69
-msgid "Email"
-msgstr "Correu electrònic"
-
-#: js/Felamimail.js:288
-msgid "New mails"
-msgstr "Nous correus"
-
-#: js/Felamimail.js:289
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "Heu rebut {0} nou(s) correu(s) a la carpeta {1}."
-
-#: js/Felamimail.js:413 js/Felamimail.js:451
-msgid "IMAP Error"
-msgstr ""
-
-#: js/Felamimail.js:414
-msgid "No connection to IMAP server."
-msgstr "Sense connexió amb el servidor IMAP."
-
-#: js/Felamimail.js:427
-msgid "IMAP Credentials for {0}"
-msgstr "Credencials IMAP per a {0}"
-
-#: js/Felamimail.js:430
-msgid "Credentials"
-msgstr "Credencials"
-
-#: js/Felamimail.js:452
-msgid "One of your folders was deleted from an other client, please reload you browser"
-msgstr ""
-
-#: js/Felamimail.js:467
-msgid "SMTP Error"
-msgstr ""
-
-#: js/Felamimail.js:468
-msgid "No connection to SMTP server."
-msgstr ""
-
-#: js/Felamimail.js:476
-msgid "Sieve Error"
-msgstr ""
-
-#: js/Felamimail.js:477
-msgid "No connection to Sieve server."
-msgstr ""
-
-#: js/Model.js:272 js/AccountEditDialog.js:108
-msgid "Account"
-msgid_plural "Accounts"
-msgstr[0] "Compte"
-msgstr[1] "Comptes"
-
-#: js/Model.js:276 js/Model.js:415 js/Model.js:516 js/Model.js:569
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "llista de registres"
-msgstr[1] "llistes de registres"
-
-#: js/Model.js:406
-msgid "INBOX"
-msgstr ""
-
-#: js/Model.js:406
-msgid "Drafts"
-msgstr ""
-
-#: js/Model.js:406
-msgid "Templates"
-msgstr ""
-
-#: js/Model.js:406
-msgid "Junk"
-msgstr ""
-
-#: js/Model.js:406
-msgid "Trash"
-msgstr ""
-
-#: js/Model.js:512
-msgid "Vacation"
-msgid_plural "Vacations"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:565
-msgid "Rule"
-msgid_plural "Rules"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/MessageEditDialog.js:97
-msgid "Send"
-msgstr "Envia"
-
-#: js/MessageEditDialog.js:176
-msgid "wrote"
-msgstr "ha escrit"
-
-#: js/MessageEditDialog.js:179
-msgid "Original message"
-msgstr "missatge original"
-
-#: js/MessageEditDialog.js:245
-msgid "Re:"
-msgstr ""
-
-#: js/MessageEditDialog.js:247
-msgid "Fwd:"
-msgstr ""
-
-#: js/MessageEditDialog.js:250
-msgid "{0} Message"
-msgstr ""
-
-#: js/MessageEditDialog.js:293 js/MessageEditDialog.js:501
-msgid "Compose email:"
-msgstr "Redacta correu electrònic:"
-
-#: js/MessageEditDialog.js:324
-msgid "Add Note"
-msgstr "Afegeix una nota"
-
-#: js/MessageEditDialog.js:325
-msgid "Edit Email Note Text:"
-msgstr "Edita la nota del correu electrònic:"
-
-#: js/MessageEditDialog.js:352
-msgid "Failed"
-msgstr "Ha fallat"
-
-#: js/MessageEditDialog.js:353
-msgid "Could not send {0}."
-msgstr "No s'ha pogut enviar {0}."
-
-#: js/MessageEditDialog.js:354
-msgid "Error:"
-msgstr "Error:"
-
-#: js/MessageEditDialog.js:393
-msgid "Recipients"
-msgstr "Destinataris"
-
-#: js/MessageEditDialog.js:409 Controller/Message.php:580
-msgid "Body"
-msgstr "Cos"
-
-#: js/MessageEditDialog.js:525
-msgid "Save contact note"
-msgstr "Desa la nota de contacte"
-
-#: js/AccountEditDialog.js:88 js/AccountEditDialog.js:137
-msgid "Signature"
-msgstr "Signatura"
-
-#: js/AccountEditDialog.js:121
-msgid "Account Name"
-msgstr "Nom de compte"
-
-#: js/AccountEditDialog.js:125
-msgid "User Email"
-msgstr "Correu electrònic de l'usuari"
-
-#: js/AccountEditDialog.js:130
-msgid "User Name (From)"
-msgstr "Nom de l'usuari (des de)"
-
-#: js/AccountEditDialog.js:133
-msgid "Organization"
-msgstr "Organització"
-
-#: js/AccountEditDialog.js:144
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/AccountEditDialog.js:157 js/AccountEditDialog.js:206
-#: js/AccountEditDialog.js:267
-msgid "Host"
-msgstr "Amfitrió"
-
-#: js/AccountEditDialog.js:161
-msgid "Port (Default: 143 / SSL: 993)"
-msgstr "Port (per defecte: 143 / SSL: 993)"
-
-#: js/AccountEditDialog.js:167 js/AccountEditDialog.js:215
-#: js/AccountEditDialog.js:276
-msgid "Secure Connection"
-msgstr "Connexió segura"
-
-#: js/AccountEditDialog.js:178 js/AccountEditDialog.js:225
-#: js/AccountEditDialog.js:240 js/AccountEditDialog.js:286
-msgid "None"
-msgstr "Cap"
-
-#: js/AccountEditDialog.js:179 js/AccountEditDialog.js:226
-#: js/AccountEditDialog.js:287
-msgid "TLS"
-msgstr "TLS"
-
-#: js/AccountEditDialog.js:180 js/AccountEditDialog.js:227
-msgid "SSL"
-msgstr "SSL"
-
-#: js/AccountEditDialog.js:183
-msgid "Username"
-msgstr "Nom d'usuari"
-
-#: js/AccountEditDialog.js:187
-msgid "Password"
-msgstr "Contrasenya"
-
-#: js/AccountEditDialog.js:193
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/AccountEditDialog.js:209
-msgid "Port (Default: 25)"
-msgstr "Port (per defecte: 25)"
-
-#: js/AccountEditDialog.js:230
-msgid "Authentication"
-msgstr "Autenticació"
-
-#: js/AccountEditDialog.js:241
-msgid "Login"
-msgstr "Inici de sessió"
-
-#: js/AccountEditDialog.js:242
-msgid "Plain"
-msgstr "Pla"
-
-#: js/AccountEditDialog.js:245
-msgid "Username (optional)"
-msgstr "Nom d'usuari (opcional)"
-
-#: js/AccountEditDialog.js:248
-msgid "Password (optional)"
-msgstr "Contrasenya (opcional)"
-
-#: js/AccountEditDialog.js:254
-msgid "Sieve"
-msgstr ""
-
-#: js/AccountEditDialog.js:271
-msgid "Port (Default: 2000)"
-msgstr ""
-
-#: js/AccountEditDialog.js:291
-msgid "Other Settings"
-msgstr "Altres paràmetres"
-
-#: js/AccountEditDialog.js:304
-msgid "Sent Folder Name"
-msgstr "Nom de la carpeta Enviats"
-
-#: js/AccountEditDialog.js:308
-msgid "Trash Folder Name"
-msgstr "Nom de la carpeta Paperera"
-
-#: js/AccountEditDialog.js:312
-msgid "Show Intelligent Folders"
-msgstr "Mostra les carpetes inteligents"
-
-#: js/AccountEditDialog.js:323
-msgid "No"
-msgstr "No"
-
-#: js/AccountEditDialog.js:324
-msgid "Yes"
-msgstr "Sí"
-
-#: js/AccountEditDialog.js:327
-msgid "Display Format"
-msgstr "Format de visualització"
-
-#: js/AccountEditDialog.js:338
-msgid "HTML"
-msgstr "HTML"
-
-#: js/AccountEditDialog.js:339
-msgid "Plain Text"
-msgstr "Text pla"
+#: Preference.php:97
+msgid "Default Email Account"
+msgstr "Compte de correu electrònic per defecte"
+
+#: Preference.php:98
+msgid "The default email account to use when sending mails."
+msgstr "Compte de correu electrònic a utilitzar per defecte per a l'enviament de correus."
+
+#: Preference.php:101
+msgid "Email Update Interval"
+msgstr "Interval d'actualització de correu electrònic"
+
+#: Preference.php:102
+msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
+msgstr "Amb quina periodicitat hauria el Felamimail de comprovar si hi ha nous correus electrònics (en minuts). \"0\" significa mai."
+
+#: Preference.php:105
+msgid "Use in Addressbook"
+msgstr "Utilitza-ho a la llibreta d'adreces"
+
+#: Preference.php:106
+msgid "Compose Emails from the Addressbook with Felamimail."
+msgstr "Redacta correus electrònics des de la llibreta d'adreces amb el Felamimail."
+
+#: Preference.php:109
+msgid "Use for NOTES"
+msgstr "Utilitzeu per a NOTES"
+
+#: Preference.php:110
+msgid "Save Note default Value."
+msgstr "Desa el valor per defecte Nota."
+
+#: Preference.php:113
+msgid "Confirm Delete"
+msgstr "Confirma l'eliminació"
+
+#: Preference.php:114
+msgid "Show confirmation dialog when deleting mails."
+msgstr "Mostra un diàleg de confirmació quan s'eliminin correus electrònics."
 
 #~ msgid "Error"
 #~ msgstr "Error"

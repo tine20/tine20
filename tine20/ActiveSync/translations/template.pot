@@ -1,11 +1,3 @@
-#: Setup/setup.xml:465
-msgid "Default Policy"
-msgstr ""
-
-#: Setup/setup.xml:470
-msgid "Default Policy installed during setup"
-msgstr ""
-
 #: js/Model.js:47
 msgid "Device"
 msgid_plural "Devices"
@@ -46,4 +38,12 @@ msgstr ""
 
 #: js/Application.js:107
 msgid "Set Sync Filter"
+msgstr ""
+
+#: Setup/setup.xml:465
+msgid "Default Policy"
+msgstr ""
+
+#: Setup/setup.xml:470
+msgid "Default Policy installed during setup"
 msgstr ""

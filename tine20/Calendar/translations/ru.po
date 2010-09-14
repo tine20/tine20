@@ -17,55 +17,6 @@ msgstr ""
 msgid "%s's personal calendar"
 msgstr "личный календарь %s"
 
-#: Setup/setup.xml:4 js/Calendar.js:36 js/Model.js:68
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] "Календарь"
-msgstr[1] "Календаря"
-msgstr[2] "Календарей"
-
-#: Setup/Update/Release3.php:165 Setup/Initialize.php:39
-msgid "All events I attend"
-msgstr ""
-
-#: Preference.php:34
-msgid "All my events"
-msgstr ""
-
-#: Preference.php:84
-msgid "Default Calendar"
-msgstr "Календарь по умолчанию"
-
-#: Preference.php:85
-#, fuzzy
-msgid "The default calendar for invitations and new events"
-msgstr "Календарь по умолчанию для приглашений и новые событий"
-
-#: Preference.php:88
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:89
-msgid "The default favorite which is loaded on calendar startup"
-msgstr ""
-
-#: Preference.php:92
-#, fuzzy
-msgid "Get Notification Emails"
-msgstr "Напоминание о событии"
-
-#: Preference.php:93
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr ""
-
-#: Preference.php:96
-msgid "Send Notifications Emails of own Actions"
-msgstr ""
-
-#: Preference.php:97
-msgid "Get notifications emails for actions you did yourself"
-msgstr ""
-
 #: Acl/Rights.php:97
 msgid "manage shared calendars"
 msgstr ""
@@ -90,53 +41,147 @@ msgstr ""
 msgid "All Rights to administrate resources"
 msgstr ""
 
-#: js/EventDetailsPanel.js:51
-msgid "Unknown calendar"
+#: Model/Attender.php:45 js/Model.js:443 js/AttendeeGridPanel.js:513
+msgid "No response"
+msgstr "Без ответа"
+
+#: Model/Attender.php:46 js/Model.js:444 js/AttendeeGridPanel.js:516
+msgid "Accepted"
+msgstr "Принято"
+
+#: Model/Attender.php:47 js/Model.js:445 js/AttendeeGridPanel.js:519
+msgid "Declined"
+msgstr "Отклонено"
+
+#: Model/Attender.php:48 js/Model.js:446 js/AttendeeGridPanel.js:522
+msgid "Tentative"
+msgstr "Предполагается"
+
+#: Model/Attender.php:167
+msgid "unknown"
 msgstr ""
 
-#: js/EventDetailsPanel.js:62
-msgid "{0} {1} o'clock"
+#: Model/Attender.php:313
+msgid "This contact has been automatically added by the system as an event attender"
 msgstr ""
 
-#: js/EventDetailsPanel.js:179 js/EventEditDialog.js:89 Model/Event.php:208
-msgid "Summary"
-msgstr "Сводка"
+#: Model/Attender.php:203
+msgid "unknown)"
+msgstr ""
 
-#: js/EventDetailsPanel.js:215 js/EventEditDialog.js:101
-msgid "Start Time"
-msgstr "Начало"
+#: Model/Event.php:199
+#, fuzzy
+msgid "Start"
+msgstr "Состояние"
 
-#: js/EventDetailsPanel.js:220 js/EventEditDialog.js:116
-msgid "End Time"
-msgstr "Окончание"
+#: Model/Event.php:200
+msgid "End"
+msgstr ""
 
-#: js/EventDetailsPanel.js:225 Model/Event.php:201
+#: Model/Event.php:201 js/EventDetailsPanel.js:225
 msgid "Blocking"
 msgstr ""
 
-#: js/EventDetailsPanel.js:230 js/ResourcesGridPanel.js:54
-#: js/EventEditDialog.js:96 Model/Event.php:204
+#: Model/Event.php:202
+msgid "Classification"
+msgstr ""
+
+#: Model/Event.php:203 js/ResourceEditDialog.js:74 js/EventEditDialog.js:198
+msgid "Description"
+msgstr "Описание"
+
+#: Model/Event.php:204 js/EventDetailsPanel.js:230 js/EventEditDialog.js:96
+#: js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "Местоположение"
 
-#: js/EventDetailsPanel.js:234 Model/Event.php:205
+#: Model/Event.php:205 js/EventDetailsPanel.js:234
 msgid "Organizer"
 msgstr ""
 
-#: js/EventDetailsPanel.js:251 js/AttendeeGridPanel.js:77
-#: js/AttendeeFilterModel.js:37 js/Model.js:299
-msgid "Attendee"
-msgstr "Участник"
+#: Model/Event.php:206
+msgid "Priority"
+msgstr ""
 
-#: js/ResourcesGridPanel.js:43 js/AttendeeGridPanel.js:174
-#: js/ResourceEditDialog.js:58
-msgid "Name"
-msgstr "Название"
+#: Model/Event.php:207 js/AttendeeGridPanel.js:182
+msgid "Status"
+msgstr "Состояние"
 
-#: js/ResourcesGridPanel.js:49 js/ResourceEditDialog.js:63
+#: Model/Event.php:208 js/EventDetailsPanel.js:179 js/EventEditDialog.js:89
+msgid "Summary"
+msgstr "Сводка"
+
+#: Model/Event.php:209
+msgid "Url"
+msgstr ""
+
+#: Model/Event.php:210
 #, fuzzy
-msgid "Email"
-msgstr "Ежедневно"
+msgid "Recurrance rule"
+msgstr "Повторения"
+
+#: Model/Event.php:211
+msgid "Is all day event"
+msgstr ""
+
+#: Model/Event.php:212
+msgid "Organizer timezone"
+msgstr ""
+
+#: Model/Event.php:237
+msgid "Yes"
+msgstr ""
+
+#: Model/Event.php:237
+#, fuzzy
+msgid "No"
+msgstr "Нет"
+
+#: views/eventNotification.php:13
+#, fuzzy
+msgid "Updates"
+msgstr "Обновить событие"
+
+#: views/eventNotification.php:21
+msgid "%1$s changed from \"%2$s\" to \"%3$s\""
+msgstr ""
+
+#: views/eventNotification.php:28
+msgid "%1$s has been invited"
+msgstr ""
+
+#: views/eventNotification.php:33
+msgid "%1$s has been removed"
+msgstr ""
+
+#: views/eventNotification.php:40
+msgid "%1$s accepted invitation"
+msgstr ""
+
+#: views/eventNotification.php:44
+msgid "%1$s declined invitation"
+msgstr ""
+
+#: views/eventNotification.php:48
+msgid "Tentative response from %1$s"
+msgstr ""
+
+#: views/eventNotification.php:52
+#, fuzzy
+msgid "No response from %1$s"
+msgstr "Без ответа"
+
+#: views/eventNotification.php:61
+#, fuzzy
+msgid "Event details"
+msgstr "События"
+
+#: js/Calendar.js:36 js/Model.js:68 Setup/setup.xml:4
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Календарь"
+msgstr[1] "Календаря"
+msgstr[2] "Календарей"
 
 #: js/MainScreenCenterPanel.js:111
 msgid "Day"
@@ -189,31 +234,47 @@ msgstr[0] "Вы действительно хотите удалить это с
 msgstr[1] "Вы действительно хотите удалить {0} выделенных события?"
 msgstr[2] "Вы действительно хотите удалить {0} выделенных событий?"
 
-#: js/AttendeeGridPanel.js:103
-msgid "Role"
-msgstr "Роль"
-
-#: js/AttendeeGridPanel.js:112
-msgid "Quantity"
-msgstr "Количество"
-
-#: js/AttendeeGridPanel.js:121
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "Это календарь в котором участник сохранил событие"
-
-#: js/AttendeeGridPanel.js:157
-msgid "Type"
-msgstr "Тип"
-
-#: js/AttendeeGridPanel.js:164
-msgid "User"
+#: js/AttendeeStatusFilterModel.js:33
+msgid "Attendee Status"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:165
-msgid "Group"
+#: js/Model.js:64 js/Model.js:303
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Событие"
+msgstr[1] "События"
+msgstr[2] "Событий"
+
+#: js/Model.js:64 js/Model.js:303
+msgid "Events"
+msgstr "События"
+
+#: js/Model.js:68
+msgid "Calendars"
+msgstr "Календари"
+
+#: js/Model.js:171
+msgid "Quick search"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:166 js/Model.js:473
+#: js/Model.js:299
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] "Участник"
+msgstr[1] "Участника"
+msgstr[2] "Участников"
+
+#: js/Model.js:299 js/EventDetailsPanel.js:251 js/AttendeeFilterModel.js:37
+#: js/AttendeeGridPanel.js:77
+msgid "Attendee"
+msgstr "Участник"
+
+#: js/Model.js:315 js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
+#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476
+msgid "No Information"
+msgstr "Нет информации"
+
+#: js/Model.js:473 js/AttendeeGridPanel.js:166
 #, fuzzy
 msgid "Resource"
 msgid_plural "Resources"
@@ -221,50 +282,22 @@ msgstr[0] "Повторения"
 msgstr[1] "Повторения"
 msgstr[2] "Повторения"
 
-#: js/AttendeeGridPanel.js:182 Model/Event.php:207
-msgid "Status"
-msgstr "Состояние"
+#: js/Model.js:473
+#, fuzzy
+msgid "Resources"
+msgstr "Повторения"
 
-#: js/AttendeeGridPanel.js:320
-msgid "Remove Attender"
-msgstr "Удалить участника"
+#: js/CalendarSelectWidget.js:121
+msgid "Originally"
+msgstr "Изначально"
 
-#: js/AttendeeGridPanel.js:415
-msgid "Click here to invite another attender..."
-msgstr "Нажмите здесь, чтобы пригласить другого участника..."
+#: js/DaysView.js:90 js/MonthView.js:82
+msgid "New Event"
+msgstr "Новое событие"
 
-#: js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
-#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:315
-msgid "No Information"
-msgstr "Нет информации"
-
-#: js/AttendeeGridPanel.js:438
-msgid "(as a group member)"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:488
-msgid "Required"
-msgstr "Необходимый"
-
-#: js/AttendeeGridPanel.js:491
-msgid "Optional"
-msgstr "Дополнительный"
-
-#: js/AttendeeGridPanel.js:513 js/Model.js:443 Model/Attender.php:45
-msgid "No response"
-msgstr "Без ответа"
-
-#: js/AttendeeGridPanel.js:516 js/Model.js:444 Model/Attender.php:46
-msgid "Accepted"
-msgstr "Принято"
-
-#: js/AttendeeGridPanel.js:519 js/Model.js:445 Model/Attender.php:47
-msgid "Declined"
-msgstr "Отклонено"
-
-#: js/AttendeeGridPanel.js:522 js/Model.js:446 Model/Attender.php:48
-msgid "Tentative"
-msgstr "Предполагается"
+#: js/DaysView.js:95
+msgid "{0}, the {1}. of {2}"
+msgstr "{0},{1} {2}"
 
 #: js/MainScreenWestPanel.js:32
 msgid "Mini Calendar"
@@ -273,6 +306,50 @@ msgstr ""
 #: js/MainScreenWestPanel.js:54 js/MonthView.js:87
 msgid "WK"
 msgstr "НЕД"
+
+#: js/ResourceEditDialog.js:58 js/AttendeeGridPanel.js:174
+#: js/ResourcesGridPanel.js:43
+msgid "Name"
+msgstr "Название"
+
+#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
+#, fuzzy
+msgid "Email"
+msgstr "Ежедневно"
+
+#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
+#, fuzzy
+msgid "Is a location"
+msgstr "Местоположение"
+
+#: js/ResourceEditDialog.js:75
+#, fuzzy
+msgid "Enter description..."
+msgstr "Введите описание"
+
+#: js/EventDetailsPanel.js:51
+msgid "Unknown calendar"
+msgstr ""
+
+#: js/EventDetailsPanel.js:62
+msgid "{0} {1} o'clock"
+msgstr ""
+
+#: js/EventDetailsPanel.js:215 js/EventEditDialog.js:101
+msgid "Start Time"
+msgstr "Начало"
+
+#: js/EventDetailsPanel.js:220 js/EventEditDialog.js:116
+msgid "End Time"
+msgstr "Окончание"
+
+#: js/MonthView.js:92
+msgid "{0} more..."
+msgstr "{0} ещё..."
+
+#: js/AttendeeFilterModel.js:104
+msgid "Select Attendee"
+msgstr ""
 
 #: js/AdminPanel.js:46
 msgid "Manage Resources"
@@ -290,10 +367,6 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
-#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:74 Model/Event.php:203
-msgid "Description"
-msgstr "Описание"
-
 #: js/EventEditDialog.js:212
 msgid "Enter description"
 msgstr "Введите описание"
@@ -309,36 +382,6 @@ msgstr "Дата окончания должна быть после даты н
 #: js/EventEditDialog.js:358
 msgid "Start date is not valid"
 msgstr "Дата начала неверна"
-
-#: js/CalendarSelectWidget.js:121
-msgid "Originally"
-msgstr "Изначально"
-
-#: js/MonthView.js:82 js/DaysView.js:90
-msgid "New Event"
-msgstr "Новое событие"
-
-#: js/MonthView.js:92
-msgid "{0} more..."
-msgstr "{0} ещё..."
-
-#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
-#, fuzzy
-msgid "Is a location"
-msgstr "Местоположение"
-
-#: js/ResourceEditDialog.js:75
-#, fuzzy
-msgid "Enter description..."
-msgstr "Введите описание"
-
-#: js/AttendeeFilterModel.js:104
-msgid "Select Attendee"
-msgstr ""
-
-#: js/AttendeeStatusFilterModel.js:33
-msgid "Attendee Status"
-msgstr ""
 
 #: js/CalendarPanel.js:41
 msgid "Loading events, please wait..."
@@ -384,41 +427,6 @@ msgstr "Обновить всю серию"
 #: js/CalendarPanel.js:292
 msgid "Update this event only"
 msgstr "Обновить только это событие"
-
-#: js/Model.js:64 js/Model.js:303
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Событие"
-msgstr[1] "События"
-msgstr[2] "Событий"
-
-#: js/Model.js:64 js/Model.js:303
-msgid "Events"
-msgstr "События"
-
-#: js/Model.js:68
-msgid "Calendars"
-msgstr "Календари"
-
-#: js/Model.js:171
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:299
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] "Участник"
-msgstr[1] "Участника"
-msgstr[2] "Участников"
-
-#: js/Model.js:473
-#, fuzzy
-msgid "Resources"
-msgstr "Повторения"
-
-#: js/DaysView.js:95
-msgid "{0}, the {1}. of {2}"
-msgstr "{0},{1} {2}"
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
@@ -513,59 +521,86 @@ msgstr ""
 msgid "of"
 msgstr "из"
 
-#: Model/Event.php:199
+#: js/AttendeeGridPanel.js:103
+msgid "Role"
+msgstr "Роль"
+
+#: js/AttendeeGridPanel.js:112
+msgid "Quantity"
+msgstr "Количество"
+
+#: js/AttendeeGridPanel.js:121
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "Это календарь в котором участник сохранил событие"
+
+#: js/AttendeeGridPanel.js:157
+msgid "Type"
+msgstr "Тип"
+
+#: js/AttendeeGridPanel.js:164
+msgid "User"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:165
+msgid "Group"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:320
+msgid "Remove Attender"
+msgstr "Удалить участника"
+
+#: js/AttendeeGridPanel.js:415
+msgid "Click here to invite another attender..."
+msgstr "Нажмите здесь, чтобы пригласить другого участника..."
+
+#: js/AttendeeGridPanel.js:438
+msgid "(as a group member)"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:488
+msgid "Required"
+msgstr "Необходимый"
+
+#: js/AttendeeGridPanel.js:491
+msgid "Optional"
+msgstr "Дополнительный"
+
+#: Preference.php:34
+msgid "All my events"
+msgstr ""
+
+#: Preference.php:84
+msgid "Default Calendar"
+msgstr "Календарь по умолчанию"
+
+#: Preference.php:85
 #, fuzzy
-msgid "Start"
-msgstr "Состояние"
+msgid "The default calendar for invitations and new events"
+msgstr "Календарь по умолчанию для приглашений и новые событий"
 
-#: Model/Event.php:200
-msgid "End"
+#: Preference.php:88
+msgid "Default Favorite"
 msgstr ""
 
-#: Model/Event.php:202
-msgid "Classification"
+#: Preference.php:89
+msgid "The default favorite which is loaded on calendar startup"
 msgstr ""
 
-#: Model/Event.php:206
-msgid "Priority"
-msgstr ""
-
-#: Model/Event.php:209
-msgid "Url"
-msgstr ""
-
-#: Model/Event.php:210
+#: Preference.php:92
 #, fuzzy
-msgid "Recurrance rule"
-msgstr "Повторения"
+msgid "Get Notification Emails"
+msgstr "Напоминание о событии"
 
-#: Model/Event.php:211
-msgid "Is all day event"
+#: Preference.php:93
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 msgstr ""
 
-#: Model/Event.php:212
-msgid "Organizer timezone"
+#: Preference.php:96
+msgid "Send Notifications Emails of own Actions"
 msgstr ""
 
-#: Model/Event.php:237
-msgid "Yes"
-msgstr ""
-
-#: Model/Event.php:237
-#, fuzzy
-msgid "No"
-msgstr "Нет"
-
-#: Model/Attender.php:167
-msgid "unknown"
-msgstr ""
-
-#: Model/Attender.php:313
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr ""
-
-#: Model/Attender.php:203
-msgid "unknown)"
+#: Preference.php:97
+msgid "Get notifications emails for actions you did yourself"
 msgstr ""
 
 #: Controller/EventNotifications.php:257
@@ -608,44 +643,9 @@ msgstr ""
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr ""
 
-#: views/eventNotification.php:13
-#, fuzzy
-msgid "Updates"
-msgstr "Обновить событие"
-
-#: views/eventNotification.php:21
-msgid "%1$s changed from \"%2$s\" to \"%3$s\""
+#: Setup/Update/Release3.php:165 Setup/Initialize.php:39
+msgid "All events I attend"
 msgstr ""
-
-#: views/eventNotification.php:28
-msgid "%1$s has been invited"
-msgstr ""
-
-#: views/eventNotification.php:33
-msgid "%1$s has been removed"
-msgstr ""
-
-#: views/eventNotification.php:40
-msgid "%1$s accepted invitation"
-msgstr ""
-
-#: views/eventNotification.php:44
-msgid "%1$s declined invitation"
-msgstr ""
-
-#: views/eventNotification.php:48
-msgid "Tentative response from %1$s"
-msgstr ""
-
-#: views/eventNotification.php:52
-#, fuzzy
-msgid "No response from %1$s"
-msgstr "Без ответа"
-
-#: views/eventNotification.php:61
-#, fuzzy
-msgid "Event details"
-msgstr "События"
 
 #~ msgid "Publish Free/Busy Information"
 #~ msgstr "Публиковать информацию Свободен/Занят"

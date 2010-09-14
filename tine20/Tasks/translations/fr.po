@@ -20,38 +20,6 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "Tâches personnelles de %s"
 
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "ACTION-REQUISE"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "TERMINE"
-
-#: Setup/setup.xml:339 js/Status.js:187
-msgid "IN-PROCESS"
-msgstr "EN-COURS"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "ANNULE"
-
-#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
-msgid "All tasks of my taskslists"
-msgstr ""
-
-#: Preference.php:29
-msgid "All my tasks"
-msgstr ""
-
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "gérer les listes de tâches partagées"
@@ -68,96 +36,42 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
-#: Model/Task.php:187
-msgid "Status"
-msgstr "Statut"
+#: Model/Task.php:183
+msgid "Due"
+msgstr "Date de fin prévue "
 
-#: js/GridPanel.js:56
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Êtes-vous sûr de vouloir supprimer la tâche sélectionnée?"
-msgstr[1] "Êtes-vous sûr de vouloir supprimer les tâches sélectionnées?"
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr "Organisateur"
 
-#: js/GridPanel.js:91
-msgid "Quick search"
-msgstr "Recherche rapide"
+#: Model/Task.php:185
+msgid "Description"
+msgstr "Description"
 
-#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
-msgid "Summary"
-msgstr "Résumé"
-
-#: js/GridPanel.js:94 js/GridPanel.js:155
-msgid "Due Date"
-msgstr "Date de fin"
-
-#: js/GridPanel.js:96 js/GridPanel.js:218
-msgid "Responsible"
-msgstr "Responsable"
-
-#: js/GridPanel.js:121
-msgid "Failed"
-msgstr "Échoué"
-
-#: js/GridPanel.js:121
-msgid "Could not save task."
-msgstr "Erreur de sauvegarde."
-
-#: js/GridPanel.js:140
-msgid "Tags"
-msgstr "Marqueur"
-
-#: js/GridPanel.js:141 Model/Task.php:195
-msgid "Lead"
-msgstr ""
-
-#: js/GridPanel.js:151
-msgid "Add a task..."
-msgstr "Ajouter"
-
-#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+#: Model/Task.php:186 js/TaskEditDialog.js:189 js/GridPanel.js:163
 msgid "Priority"
 msgstr "Priorité"
 
-#: js/GridPanel.js:177 Model/Task.php:188
+#: Model/Task.php:187 js/TaskEditDialog.js:209 js/GridPanel.js:190
+#: js/Status.js:33
+msgid "Status"
+msgstr "Statut"
+
+#: Model/Task.php:188 js/GridPanel.js:177
 msgid "Percent"
 msgstr "Pourcent"
 
-#: js/GridPanel.js:204
-msgid "Creation Time"
-msgstr "Date de création"
-
-#: js/GridPanel.js:211 js/TaskEditDialog.js:213
-msgid "Completed"
-msgstr "Terminé"
-
-#: js/GridPanel.js:267
-msgid "Show closed"
-msgstr "Afficher terminées"
-
-#: js/TaskEditDialog.js:142
-msgid "You have to supply a due date, because an alarm ist set!"
+#: Model/Task.php:195 js/GridPanel.js:141
+msgid "Lead"
 msgstr ""
 
-#: js/TaskEditDialog.js:186
-msgid "Due date"
-msgstr "Date de fin"
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr ""
 
-#: js/TaskEditDialog.js:192
-msgid "Add Responsible ..."
-msgstr "Ajouter un responsable..."
-
-#: js/TaskEditDialog.js:199
-msgid "Notes"
-msgstr "Notes"
-
-#: js/TaskEditDialog.js:200
-msgid "Enter description..."
-msgstr "Saisissez une description..."
-
-#: js/TaskEditDialog.js:205
-msgid "Percentage"
-msgstr "Pourcentage"
+#: Model/Task.php:202
+msgid "Email"
+msgstr ""
 
 #: js/Tasks.js:99
 msgid "Task"
@@ -179,26 +93,112 @@ msgstr[1] "tâches à faire"
 msgid "to do lists"
 msgstr "tâches à faire"
 
-#: Model/Task.php:183
-msgid "Due"
-msgstr "Date de fin prévue "
-
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Organisateur"
-
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Description"
-
-#: Model/Task.php:201
-msgid "Telephone"
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: Model/Task.php:202
-msgid "Email"
+#: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
+msgid "Summary"
+msgstr "Résumé"
+
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr "Date de fin"
+
+#: js/TaskEditDialog.js:192
+msgid "Add Responsible ..."
+msgstr "Ajouter un responsable..."
+
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr "Notes"
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr "Saisissez une description..."
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr "Pourcentage"
+
+#: js/TaskEditDialog.js:213 js/GridPanel.js:211
+msgid "Completed"
+msgstr "Terminé"
+
+#: js/GridPanel.js:56
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Êtes-vous sûr de vouloir supprimer la tâche sélectionnée?"
+msgstr[1] "Êtes-vous sûr de vouloir supprimer les tâches sélectionnées?"
+
+#: js/GridPanel.js:91
+msgid "Quick search"
+msgstr "Recherche rapide"
+
+#: js/GridPanel.js:94 js/GridPanel.js:155
+msgid "Due Date"
+msgstr "Date de fin"
+
+#: js/GridPanel.js:96 js/GridPanel.js:218
+msgid "Responsible"
+msgstr "Responsable"
+
+#: js/GridPanel.js:121
+msgid "Failed"
+msgstr "Échoué"
+
+#: js/GridPanel.js:121
+msgid "Could not save task."
+msgstr "Erreur de sauvegarde."
+
+#: js/GridPanel.js:140
+msgid "Tags"
+msgstr "Marqueur"
+
+#: js/GridPanel.js:151
+msgid "Add a task..."
+msgstr "Ajouter"
+
+#: js/GridPanel.js:204
+msgid "Creation Time"
+msgstr "Date de création"
+
+#: js/GridPanel.js:267
+msgid "Show closed"
+msgstr "Afficher terminées"
+
+#: js/Status.js:187 Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "EN-COURS"
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr ""
+
+#: Preference.php:65
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:66
+msgid "The default favorite which is loaded on Tasks startup"
 msgstr ""
 
 #: Controller/Task.php:166
 msgid "Notification for Task "
 msgstr "Notification"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr ""
+
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "ACTION-REQUISE"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "TERMINE"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "ANNULE"
