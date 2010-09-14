@@ -128,9 +128,9 @@ Tine.Tinebase.common = {
                 if (tags[i].description) {
                     qtipText += ' | ' + tags[i].description;
                 }
-                result += '<div ext:qtip="' + qtipText + '" style="width: 8px; height: 8px; background-color:' 
+                result += '<div ext:qtip="' + qtipText + '" class="tb-grid-tags" style="background-color:' 
                     + tags[i].color 
-                    + '; border: 1px solid black; float: left; margin-right: 2px; margin-bottom: 1px;">&#160;</div>';
+                    + ';">&#160;</div>';
             }
         }
         return result;

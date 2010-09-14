@@ -374,6 +374,22 @@ html, body {
     margin-top: 50px;
 }
 
+/* -------- tags renderer ------------------------------------------------------------*/
+.tb-grid-tags {
+    width: 8px; 
+    height: 8px; 
+    border: 1px solid black; 
+    float: left;
+    margin-right: 2px;
+    margin-top: 1px;
+    border-radius: 5px;
+}
+
+.ext-gecko .tb-grid-tags {
+    -moz-border-radius: 5px;
+    margin-top: 2px;
+}
+
 /* ----- account renderer ------------------------------------------------------------*/
 .renderer {
     width: 12px;
