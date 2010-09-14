@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>3.13</version>
+	<version>3.14</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -1659,10 +1659,9 @@
 				</index>
 			</declaration>
 		</table>
-
 		<table>
 			<name>preferences</name>
-			<version>5</version>
+			<version>6</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -1703,11 +1702,8 @@
 				</field>
 				<field>
 					<name>type</name>
-					<type>enum</type>
-					<value>normal</value>
-					<value>default</value>
-					<value>forced</value>
-					<notnull>true</notnull>
+					<type>text</type>
+                    <length>40</length>
 				</field>
 				<field>
 					<name>options</name>

@@ -403,8 +403,9 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(isset($defaultString));
         $this->assertContains('(auto)', $defaultString);
-        
-        // set user pref to 'use default'
+
+        // set user pref to en first then to 'use default'
+        Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = 'en';
         Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE} = Tinebase_Model_Preference::DEFAULT_VALUE;
         $this->assertEquals('auto', Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE});
         

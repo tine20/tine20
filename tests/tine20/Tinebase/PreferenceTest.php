@@ -211,7 +211,7 @@ class Tinebase_PreferenceTest extends PHPUnit_Framework_TestCase
      * @param string $_type
      * @return Tinebase_Model_PreferenceFilter
      */
-    protected function _getPreferenceFilter($_type = Tinebase_Model_Preference::TYPE_NORMAL)
+    protected function _getPreferenceFilter($_type = Tinebase_Model_Preference::TYPE_USER)
     {
         return new Tinebase_Model_PreferenceFilter(array(
             array(

@@ -453,4 +453,26 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setApplicationVersion('Tinebase', '3.13');
     }
 
+    /**
+     * update to 3.14
+     * - change type field in preferences table
+     * - change type from normal -> user
+     */
+    public function update_13()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>type</name>
+                <type>text</type>
+                <length>40</length>
+            </field>');
+        $this->_backend->alterCol('preferences', $declaration);
+        $this->setTableVersion('preferences', '6');
+        
+        $this->_db->update(SQL_TABLE_PREFIX . 'preferences', array('type' => 'user'), array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' = ?', 'normal')
+        ));
+        
+        $this->setApplicationVersion('Tinebase', '3.14');
+    }
 }

@@ -9,7 +9,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        add 'reload required' property?
  * @todo        add 'grouping' property?
  */
 
@@ -25,7 +24,7 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
      * normal user/group preference
      *
      */
-    const TYPE_NORMAL = 'normal';
+    const TYPE_USER = 'user';
     
     /**
      * default preference for anyone who has no specific preference
@@ -34,7 +33,13 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
     const TYPE_DEFAULT = 'default';
 
     /**
-     * forced preference (can not be changed by users)
+     * admin default preference
+     *
+     */
+    const TYPE_ADMIN = 'admin';
+    
+    /**
+     * admin forced preference (can not be changed by users)
      *
      */
     const TYPE_FORCED = 'forced';
@@ -76,9 +81,10 @@ class Tinebase_Model_Preference extends Tinebase_Record_Abstract
         'name'              => array('presence' => 'required', 'allowEmpty' => FALSE, 'Alnum'),
         'value'             => array('presence' => 'required', 'allowEmpty' => TRUE),
         'type'              => array('presence' => 'required', 'allowEmpty' => FALSE, 'InArray' => array(
-            self::TYPE_NORMAL, 
-            self::TYPE_DEFAULT, 
-            self::TYPE_FORCED,
+            self::TYPE_USER,        // user defined
+            self::TYPE_DEFAULT,     // code default
+            self::TYPE_ADMIN,       // admin default
+            self::TYPE_FORCED,      // admin forced
         )),
     // xml field with select options for this preference => only available in TYPE_DEFAULT prefs
         'options'            => array('allowEmpty' => TRUE),

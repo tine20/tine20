@@ -178,7 +178,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
      * @return array
      *
      * @todo add application title translations?
-     * @todo add timezone translations?
      */
     protected function _getSpecialOptions($_value)
     {
@@ -192,9 +191,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
 
                 $availableTimezonesTranslations = Zend_Locale::getTranslationList('citytotimezone', $locale);
                 $availableTimezones = DateTimeZone::listIdentifiers();
-                //foreach ($availableTimezones as $timezone) {
-                //    $result[] = array($timezone, array_key_exists($timezone, $availableTimezonesTranslations) ? $availableTimezonesTranslations[$timezone] : NULL);
-                //}
 
                 $result = $availableTimezones;
                 break;

@@ -355,13 +355,13 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     }
 
     /**
-     * get value of preference for a user/group
+     * set value of preference for a user/group
      *
      * @param string $_preferenceName
      * @param string $_value
      * @param integer $_userId
      * @param boolean $_ignoreAcl
-     * @return string
+     * @return void
      */
     public function setValueForUser($_preferenceName, $_value, $_accountId, $_ignoreAcl = FALSE)
     {
@@ -387,21 +387,28 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $stmt->closeCursor();
 
         if (!$queryResult) {
-            // no preference yet -> create
-            $preference = new Tinebase_Model_Preference(array(
-                'application_id'    => $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(),
-                'name'              => $_preferenceName,
-                'value'             => $_value,
-                'account_id'        => $_accountId,
-                'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                'type'              => Tinebase_Model_Preference::TYPE_NORMAL
-            ));
-            $this->create($preference);
+            if ($_value != Tinebase_Model_Preference::DEFAULT_VALUE) {
+                // no preference yet -> create
+                $preference = new Tinebase_Model_Preference(array(
+                    'application_id'    => $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId(),
+                    'name'              => $_preferenceName,
+                    'value'             => $_value,
+                    'account_id'        => $_accountId,
+                    'account_type'      => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                    'type'              => Tinebase_Model_Preference::TYPE_USER
+                ));
+                $this->create($preference);
+            }
 
         } else {
             $preference = $this->_rawDataToRecord($queryResult);
-            $preference->value = $_value;
-            $this->update($preference);
+            if ($_value == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                // delete if new value = use default
+                $this->delete($preference->getId());
+            } else {
+                $preference->value = $_value;
+                $this->update($preference);
+            }
         }
     }
 
