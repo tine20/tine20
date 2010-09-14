@@ -319,9 +319,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * @param string $_field
      * @return Tinebase_Model_Filter_Abstract
      */
-    public function getFilter($_filed)
+    public function getFilter($_field)
     {
-        return $this->_findFilter($_filed);
+        return $this->_findFilter($_field);
     }
     
     /**
