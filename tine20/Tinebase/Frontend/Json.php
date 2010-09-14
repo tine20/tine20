@@ -628,13 +628,12 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string    $data       json encoded preferences data
      * @param bool      $adminMode  submit in admin mode?
      * @return array with the changed prefs
+     * 
+     * @todo move saving of user values to preferences controller
      */
     public function savePreferences($data, $adminMode)
     {
         $decodedData = is_array($data) ? $data : Zend_Json::decode($data);
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($decodedData, true));
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($adminMode, true));
         
         $result = array();
         foreach ($decodedData as $applicationName => $data) {
@@ -645,55 +644,20 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $userProfileData[$fieldName] = $valueArray['value'];
                 }
                 $this->updateUserPofile($userProfileData);
-                continue;
-            }
-            
-            $backend = Tinebase_Core::getPreference($applicationName); 
-            
-            if (! $backend instanceof Tinebase_Preference_Abstract) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No preferences class found for app ' . $applicationName);
-                continue;
-            }
-            
-            if ($adminMode == TRUE) {
-                // only admins are allowed to update app pref defaults/forced prefs
-                if (!Tinebase_Acl_Roles::getInstance()->hasRight($applicationName, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
-                    throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preference defaults.');
-                }
-                
-                // create prefs that don't exist in the db
-                foreach($data as $id => $prefData) {
-                    if (preg_match('/^default/', $id) && array_key_exists('name', $prefData) && $prefData['value'] != Tinebase_Model_Preference::DEFAULT_VALUE) {
-                        $newPref = $backend->getApplicationPreferenceDefaults($prefData['name']);
-                        $newPref->value = $prefData['value'];
-                        $newPref->type = ($prefData['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $prefData['type'] : Tinebase_Model_Preference::TYPE_ADMIN;
-                        unset($newPref->id);
-                        $backend->create($newPref);
-                        
-                        unset($data[$id]);
-                    }
-                }
-                
-                // update default/forced preferences
-                $records = $backend->getMultiple(array_keys($data));
-                foreach ($records as $preference) {
-                    if ($data[$preference->getId()]['value'] == Tinebase_Model_Preference::DEFAULT_VALUE) {
-                        $backend->delete($preference->getId());
-                    } else {
-                        $preference->value = $data[$preference->getId()]['value'];
-                        $preference->type = ($data[$preference->getId()]['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $data[$preference->getId()]['type'] : Tinebase_Model_Preference::TYPE_ADMIN;;
-                        $backend->update($preference);
-                    }
-                }
                 
             } else {
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($data, true));
-
-                // set user prefs
-                foreach ($data as $name => $value) {
-                    $backend->doSpecialJsonFrontendActions($this, $name, $value['value'], $applicationName);
-                    $backend->$name = $value['value'];
-                    $result[$applicationName][] = array('name' => $name, 'value' => $value['value']);
+                $backend = Tinebase_Core::getPreference($applicationName);
+                if ($backend !== NULL) {
+                    if ($adminMode) {
+                        $result = $backend->saveAdminPreferences($data);
+                    } else {
+                        // set user prefs
+                        foreach ($data as $name => $value) {
+                            $backend->doSpecialJsonFrontendActions($this, $name, $value['value'], $applicationName);
+                            $backend->$name = $value['value'];
+                            $result[$applicationName][] = array('name' => $name, 'value' => $value['value']);
+                        }
+                    }
                 }
             }
         }

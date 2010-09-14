@@ -131,7 +131,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             $accountFilter = $_filter->getAccountFilter();
             $accountFilterValue = $accountFilter->getValue(); 
             if ($accountFilterValue['accountId'] != $userId && $accountFilterValue['accountType'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
-                if (!Tinebase_Acl_Roles::getInstance()->hasRight($applicationName, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
+                if (!Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
                     return new Tinebase_Record_RecordSet('Tinebase_Model_Preference');
                 }
             }
@@ -355,6 +355,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param integer $_userId
      * @param boolean $_ignoreAcl
      * @return void
+     * 
+     * @todo use generic savePreference fn
      */
     public function setValueForUser($_preferenceName, $_value, $_accountId, $_ignoreAcl = FALSE)
     {
@@ -525,6 +527,46 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         return parent::create($_record);
     }
 
+    /**
+     * save admin preferences for this app
+     * 
+     * @param array $_data
+     * @param boolean $_adminMode
+     * 
+     * @todo use generic savePreference fn
+     */
+    public function saveAdminPreferences($_data)
+    {
+        // only admins are allowed to update app pref defaults/forced prefs
+        if (!Tinebase_Acl_Roles::getInstance()->hasRight($this->_application, Tinebase_Core::getUser()->getId(), Tinebase_Acl_Rights_Abstract::ADMIN)) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to change the preference defaults.');
+        }
+        
+        // create prefs that don't exist in the db
+        foreach($_data as $id => $prefData) {
+            if (preg_match('/^default/', $id) && array_key_exists('name', $prefData) && $prefData['value'] != Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $newPref = $this->getApplicationPreferenceDefaults($prefData['name']);
+                $newPref->value = $prefData['value'];
+                $newPref->type = ($prefData['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $prefData['type'] : Tinebase_Model_Preference::TYPE_ADMIN;
+                unset($newPref->id);
+                $this->create($newPref);
+                
+                unset($_data[$id]);
+            }
+        }
+        
+        // update default/forced preferences
+        $records = $this->getMultiple(array_keys($_data));
+        foreach ($records as $preference) {
+            if ($_data[$preference->getId()]['value'] == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $this->delete($preference->getId());
+            } else {
+                $preference->value = $_data[$preference->getId()]['value'];
+                $preference->type = ($_data[$preference->getId()]['type'] == Tinebase_Model_Preference::TYPE_FORCED) ? $_data[$preference->getId()]['type'] : Tinebase_Model_Preference::TYPE_ADMIN;;
+                $this->update($preference);
+            }
+        }
+    }
 
     /**************************** protected functions *********************************/
 
