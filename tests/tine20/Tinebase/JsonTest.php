@@ -329,6 +329,8 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
                 $this->assertTrue(is_array($result['options']));
                 $this->assertEquals(3, count($result['options']));
                 $this->assertContains('option1', $result['options'][2][1]);
+            } else if ($result['name'] == Tinebase_Preference::TIMEZONE) {
+                $this->assertTrue(is_array($result['options'][0]), 'options should be arrays');
             }
         }
         

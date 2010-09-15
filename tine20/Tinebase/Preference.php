@@ -178,17 +178,16 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
 
         switch ($_value) {
 
-            /****************** timezone options ************************/
             case Tinebase_Preference::TIMEZONE:
                 $locale =  Tinebase_Core::get(Tinebase_Core::LOCALE);
 
                 $availableTimezonesTranslations = Zend_Locale::getTranslationList('citytotimezone', $locale);
                 $availableTimezones = DateTimeZone::listIdentifiers();
-
-                $result = $availableTimezones;
+                foreach ($availableTimezones as $timezone) {
+                    $result[] = array($timezone, $timezone);
+                }
                 break;
 
-                /****************** locale options *************************/
             case Tinebase_Preference::LOCALE:
                 $availableTranslations = Tinebase_Translation::getAvailableTranslations();
                 foreach ($availableTranslations as $lang) {
@@ -197,7 +196,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 }
                 break;
 
-                /****************** application options ********************/
             case Tinebase_Preference::DEFAULT_APP:
                 $applications = Tinebase_Application::getInstance()->getApplications();
                 foreach ($applications as $app) {
@@ -211,7 +209,6 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 }
                 break;
 
-                /****************** default *********************************/
             default:
                 $result = parent::_getSpecialOptions($_value);
                 break;
