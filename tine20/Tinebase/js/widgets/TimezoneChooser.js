@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @deprecated  is replaced by preferences dialog / do we need this elsewhere?
+ * @deprecated  is replaced by preferences dialog / perhaps we need this again in calendar (event edit dialog)
  */
 
 Ext.ns('Tine.widgets');
