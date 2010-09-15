@@ -118,6 +118,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     public function updateCache($_folder, $_time = 10)
     {
+        Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        
         // always read folder from database
         $folder = Felamimail_Controller_Folder::getInstance()->get($_folder);
         
