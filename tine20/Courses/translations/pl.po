@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-13 19:02+0100\n"
+"PO-Revision-Date: 2010-09-15 07:46+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -24,11 +24,13 @@ msgstr "Nazwa"
 msgid "Type"
 msgstr "Typ"
 
-#: js/CourseGridPanel.js:86 js/CourseEditDialog.js:183
+#: js/CourseGridPanel.js:86
+#: js/CourseEditDialog.js:183
 msgid "Internet Access"
 msgstr "Internet"
 
-#: js/CourseGridPanel.js:93 js/CourseEditDialog.js:189
+#: js/CourseGridPanel.js:93
+#: js/CourseEditDialog.js:189
 msgid "Fileserver Access"
 msgstr "Serwer plików"
 
@@ -56,7 +58,8 @@ msgstr "Błąd"
 msgid "Some error occured while trying to update the courses."
 msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
 
-#: js/Courses.js:33 Setup/setup.xml:4
+#: js/Courses.js:33
+#: Setup/setup.xml:4
 msgid "Courses"
 msgstr "Kursy"
 
@@ -68,7 +71,9 @@ msgstr "Wszystkie kursy"
 msgid "Import course members"
 msgstr "Importuj uczestników kursu"
 
-#: js/CourseEditDialog.js:138 js/Models.js:42 Frontend/Json.php:245
+#: js/CourseEditDialog.js:138
+#: js/Models.js:42
+#: Frontend/Json.php:245
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurs"
@@ -79,7 +84,8 @@ msgstr[2] "kursy"
 msgid "Course Name"
 msgstr "Nazwa kursu"
 
-#: js/CourseEditDialog.js:158 js/CourseEditDialog.js:165
+#: js/CourseEditDialog.js:158
+#: js/CourseEditDialog.js:165
 msgid "Course / School Type"
 msgstr "Kurs / Typ szkoły"
 
@@ -97,7 +103,7 @@ msgstr "Login"
 
 #: js/CourseEditDialog.js:250
 msgid "unknown"
-msgstr ""
+msgstr "nieznany"
 
 #: js/CourseEditDialog.js:255
 msgid "Reset Password"
@@ -136,3 +142,4 @@ msgstr "Nauczyciel"
 #: Controller/Course.php:117
 msgid "Teacher Account"
 msgstr "Konto nauczyciela"
+
