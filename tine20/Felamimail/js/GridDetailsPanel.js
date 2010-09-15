@@ -251,18 +251,18 @@ Ext.namespace('Tine.Felamimail');
                 var idx = target.id.split(':')[1];
                     attachment = this.record.get('attachments')[idx];
                     
+                // remove part id if set (that is the case in message/rfc822 attachments)
+                var messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
+                    
                 if (attachment['content-type'] === 'message/rfc822') {
                     // display message
                     Tine.Felamimail.MessageDisplayDialog.openWindow({
                         record: new Tine.Felamimail.Model.Message({
-                            id: this.record.id + '_' + attachment.partId
+                            id: messageId + '_' + attachment.partId
                         })
                     });
                     
                 } else {
-                    // remove part id if set (that is the case in message/rfc822 attachments)
-                    var messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
-                    
                     // download attachment
                     new Ext.ux.file.Download({
                         params: {
