@@ -48,7 +48,7 @@ class Tinebase_Smtp
         ));
         
         // set default transport none is set yet
-        if (! self::getDefaultTransport()) {
+        if (! self::getDefaultTransport() && array_key_exists('hostname', $config)) {
             // don't try to login if no username is given or if auth set to 'none'
             if (! isset($config['auth']) || $config['auth'] == 'none' || empty($config['username'])) {
                 unset($config['username']);
