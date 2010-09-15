@@ -65,7 +65,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     initComponent: function() {
-        
+        this.record = this.record || null;
         this.id = this.id + Ext.id();
         
         this.initToolbar();
@@ -140,9 +140,17 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             fields: Ext.ux.file.Uploader.file
         });
         
-        // init files
-        if (this.record.get(this.filesProperty)) {
-            var files = this.record.get(this.filesProperty);
+        this.loadRecord(this.record);
+    },
+    
+    /**
+     * populate grid store
+     * 
+     * @param {} record
+     */
+    loadRecord: function(record) {
+        if (record && record.get(this.filesProperty)) {
+            var files = record.get(this.filesProperty);
             for (var i=0; i < files.length; i++) {
                 var file = new Ext.ux.file.Uploader.file(files[i]);
                 file.data.status = 'complete';
