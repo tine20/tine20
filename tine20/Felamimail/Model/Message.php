@@ -180,7 +180,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
                 $value = Felamimail_Message::convertAddresses($_headers[$field]);
                 if ($field == 'from') {
                     $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
-                    $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0])) ? $value[0]['name'] : '';
+                    $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
                 } else {
                     $this->$field = $value;
                 }
