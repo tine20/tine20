@@ -229,6 +229,11 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
     public function doSpecialJsonFrontendActions(Tinebase_Frontend_Json_Abstract $_jsonFrontend, $name, $value, $appName)
     {
         if ($appName == $this->_application) {
+            // get default prefs if value = use default
+            if ($value == Tinebase_Model_Preference::DEFAULT_VALUE) {
+                $value = $this->{$name};
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using default (' . $value . ') for ' . $name);
+            }
             switch ($name) {
                 case Tinebase_Preference::LOCALE:
                     $_jsonFrontend->setLocale($value, FALSE, TRUE);
