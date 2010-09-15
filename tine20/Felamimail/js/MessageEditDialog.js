@@ -118,8 +118,7 @@ Ext.namespace('Tine.Felamimail');
         this.initFrom();
         this.initRecipients();
         this.initSubject();
-        this.initAttachements();
-        this.initBody();
+        this.initContent();
         
         // legacy handling:...
         if (this.replyTo) {
@@ -129,41 +128,38 @@ Ext.namespace('Tine.Felamimail');
             this.record.set('flags', 'Passed');
             this.record.set('original_id', this.forwardMsgs[0].id);
         }
-        
     },
     
     /**
      * init attachments when forwarding message
+     * 
+     * @param {Tine.Felamimail.Model.Message} message
      */
-    initAttachements: function() {
-        if (this.forwardMsgs) {
-            var fwdMessage = this.forwardMsgs[0];
-            if (fwdMessage.get('attachments').length > 0) {
-                this.record.set('attachments', [{
-                    name: fwdMessage.get('subject'),
-                    type: 'message/rfc822',
-                    size: fwdMessage.get('size'),
-                    id: fwdMessage.id
-                }]);
-            }
+    initAttachements: function(message) {
+        if (message.get('attachments').length > 0) {
+            this.record.set('attachments', [{
+                name: message.get('subject'),
+                type: 'message/rfc822',
+                size: message.get('size'),
+                id: message.id
+            }]);
         }
     },
     
     /**
-     * inits body from reply/forward/template
-     * 
-     * @param {Tine.Felamimail.Model.Message} [message] optional self callback when body needs to be fetched
+     * inits body and attachments from reply/forward/template
      */
-    initBody: function(message) {
+    initContent: function() {
         if (! this.record.get('body')) {
             if (! this.msgBody) {
-                message = this.replyTo ? this.replyTo : 
+                var message = this.replyTo ? this.replyTo : 
                           this.forwardMsgs && this.forwardMsgs.length === 1 ? this.forwardMsgs[0] :
                           null;
                           
                 if (message) {
                     if (! message.bodyIsFetched()) {
-                        return this.recordProxy.fetchBody(message, this.initBody.createDelegate(this, [message]));
+                        // self callback when body needs to be fetched
+                        return this.recordProxy.fetchBody(message, this.initContent.createDelegate(this));
                     }
                     
                     this.msgBody = message.get('body');
@@ -179,8 +175,10 @@ Ext.namespace('Tine.Felamimail');
                         this.msgBody = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
                             + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
                             + this.msgBody + '<br/>';
+                            
+                        // set record attachments when forwarding
+                        this.initAttachements(message);
                     }
-                                
                 }
             }
         
@@ -308,6 +306,7 @@ Ext.namespace('Tine.Felamimail');
         this.window.setTitle(title);
         
         this.getForm().loadRecord(this.record);
+        this.attachmentGrid.loadRecord(this.record);
         
         this.loadMask.hide();
     },
@@ -337,7 +336,6 @@ Ext.namespace('Tine.Felamimail');
                 function(btn, text) {
                     if (btn == 'ok'){
                         record.data.note = text;
-                        // TODO set email note on contact
                     }
                 }, 
                 this,
@@ -410,7 +408,6 @@ Ext.namespace('Tine.Felamimail');
         
         this.attachmentGrid = new Tine.widgets.grid.FileUploadGrid({
             fieldLabel: this.app.i18n._('Attachments'),
-            record: this.record,
             hideLabel: true,
             filesProperty: 'attachments',
             anchor: '100% 80%'
