@@ -60,10 +60,13 @@ class Tinebase_Controller
      * @param   string $_loginname
      * @param   string $_password
      * @param   string $_ipAddress
+     * @param   string $_clientIdString
      * @return  bool
      * @throws  Tinebase_Exception_NotFound
+     * 
+     * @todo    pass client id string to access log
      */
-    public function login($_loginname, $_password, $_ipAddress)
+    public function login($_loginname, $_password, $_ipAddress, $_clientIdString = NULL)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
         
@@ -108,6 +111,7 @@ class Tinebase_Controller
             
             return true;
         } else {
+            // @todo only call create() fn
             Tinebase_AccessLog::getInstance()->addLoginEntry(
                 session_id(),
                 $_loginname,
