@@ -29,6 +29,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @param string $_username
      * @param string $_password
+     * 
+     * @todo add 'TineCli' to access log entry (as $_clientIdString)
      */
     public function authenticate($_username, $_password)
     {
