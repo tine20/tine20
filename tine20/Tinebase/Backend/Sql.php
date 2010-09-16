@@ -22,12 +22,12 @@ class Tinebase_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     /**
      * the constructor
      *
-     * @param string $_modelName
-     * @param string $_tableName
-     * @param Zend_Db_Adapter_Abstract $_db (optional)
-     * @param string $_tablePrefix (optional)
-     * @param boolean $_modlogActive (optional)
-     * @param boolean $_useSubselectForCount (optional)
+     * @param string $_modelName record model name of this backend
+     * @param string $_tableName table name of this backend
+     * @param Zend_Db_Adapter_Abstract $_db (optional) the db adapter
+     * @param string $_tablePrefix (optional) table prefix
+     * @param boolean $_modlogActive (optional) is modlog activated
+     * @param boolean $_useSubselectForCount (optional) use subselect when counting
      */
     public function __construct ($_modelName, $_tableName, $_dbAdapter = NULL, $_tablePrefix = NULL, $_modlogActive = NULL, $_useSubselectForCount = NULL)
     {
