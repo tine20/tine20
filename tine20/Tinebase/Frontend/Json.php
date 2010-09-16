@@ -397,7 +397,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function login($username, $password)
     {
         // try to login user
-        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === TRUE); 
+        $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineJson') === TRUE); 
         
         if ($success) {
             $response = array(

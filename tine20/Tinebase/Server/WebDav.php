@@ -87,7 +87,7 @@ class Tinebase_Server_WebDav extends Tinebase_Server_Abstract
             list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(":", $basicAuthData);
         }
         
-        if(Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR']) !== true) {
+        if(Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR'], 'TineWebDav') !== true) {
             header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;                            

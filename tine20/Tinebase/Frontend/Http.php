@@ -482,7 +482,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             #Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKEND, null, $_SERVER["HTTP_REFERER"])->value;
             
             // try to login user
-            $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR']) === TRUE); 
+            $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineHttpPost') === TRUE); 
         } else {
             $success = FALSE;
         }

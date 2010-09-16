@@ -59,7 +59,7 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $username = $_username;
         }
         
-        return Tinebase_Controller::getInstance()->login($username, $_password, $_ipAddress);
+        return Tinebase_Controller::getInstance()->login($username, $_password, $_ipAddress, 'TineActiveSync');
     }
     
     /**

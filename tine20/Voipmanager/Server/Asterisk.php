@@ -29,7 +29,7 @@ class Voipmanager_Server_Asterisk extends Tinebase_Server_Abstract
         $this->_initFramework();
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is Asterisk curl request: ' . print_r($_REQUEST, true));
         
-        if(Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR']) === true) {
+        if(Tinebase_Controller::getInstance()->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'], $_SERVER['REMOTE_ADDR'], 'TineAsterisk') === true) {
             $server = new Tinebase_Http_Server();
             $server->setClass('Voipmanager_Frontend_Asterisk_SipPeers',    'Voipmanager_SipPeers');
             $server->setClass('Voipmanager_Frontend_Asterisk_SipRegs',     'Voipmanager_SipRegs');
