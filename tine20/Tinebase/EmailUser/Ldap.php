@@ -115,7 +115,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser
      */
-	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
+	public function addUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
 	{
 	    return $this->updateUser($_user, $_emailUser);
 	}

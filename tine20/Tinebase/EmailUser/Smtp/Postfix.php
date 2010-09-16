@@ -207,7 +207,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_EmailUser_Abstract
      * @param  Tinebase_Model_EmailUser  $_emailUser
      * @return Tinebase_Model_EmailUser|NULL
      */
-	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
+	public function addUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
 	{
 	    try {
 	        $this->_tineUserToEmailUser($_user, $_emailUser);

@@ -44,7 +44,7 @@ abstract class Tinebase_EmailUser_Abstract
      * @return Tinebase_Model_EmailUser
      * 
      */
-	abstract public function addUser($_user, Tinebase_Model_EmailUser $_emailUser);
+	abstract public function addUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser);
 	
 	/**
      * updates email properties for an existing user

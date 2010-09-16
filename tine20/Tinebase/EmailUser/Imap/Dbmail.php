@@ -158,7 +158,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_EmailUser_Abstract
      * @return Tinebase_Model_EmailUser
      * 
      */
-	public function addUser($_user, Tinebase_Model_EmailUser $_emailUser)
+	public function addUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
 	{
         $_emailUser->emailUserId    = $this->_generateUserId($_user->accountLoginName);
         $_emailUser->emailUID       = $_user->getId();
