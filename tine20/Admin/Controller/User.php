@@ -324,14 +324,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         try {
-            $imapUser = ($this->_manageImapEmailUser) ? $this->_imapUserBackend->getUserById($_user->getId()) : NULL;
+            $imapUser = ($this->_manageImapEmailUser) ? $this->_imapUserBackend->getUserById($_user) : NULL;
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No imap email user settings yet');
             $imapUser = NULL;
         }            
         
         try {
-            $smtpUser = ($this->_manageSmtpEmailUser) ? $this->_smtpUserBackend->getUserById($_user->getId()) : NULL;
+            $smtpUser = ($this->_manageSmtpEmailUser) ? $this->_smtpUserBackend->getUserById($_user) : NULL;
         } catch (Tinebase_Exception_NotFound $tenf) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No smtp email user settings yet');
             $smtpUser = NULL;
@@ -384,24 +384,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_emailUser = new Tinebase_Model_EmailUser();
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->emailUser->toArray(), true));
-        
         // update email user data here
         if ($this->_manageImapEmailUser) {
-            if ($_emailUser->emailUsername) {
-                $this->_imapUserBackend->updateUser($_user, $_emailUser);
-            } else {
-                $this->_imapUserBackend->addUser($_user, $_emailUser);
-            }
+            $this->_imapUserBackend->updateUser($_user, $_emailUser);
         }
         if ($this->_manageSmtpEmailUser) {
-            if ($_emailUser->emailAddress) {
-                $this->_smtpUserBackend->updateUser($_user, $_emailUser);
-            } else {
-                $this->_smtpUserBackend->addUser($_user, $_emailUser);
-            }
+            $this->_smtpUserBackend->updateUser($_user, $_emailUser);
         }
-
+        
         $_user->emailUser = $this->_getEmailUser($_user);
     }
     
