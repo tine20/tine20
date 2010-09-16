@@ -4,11 +4,12 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
  * @todo        refactor this -> use abstract sql backend / tine filter logic
+ * @todo        remove legacy code
  */ 
 
 /**
@@ -16,12 +17,26 @@
  * 
  * @package     Tinebase
  */
-class Tinebase_AccessLog
+class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
 {
     /**
-     * @var Zend_Db_Adapter_Abstract
+     * @var Tinebase_Backend_Sql
      */
-    protected $_db;
+    protected $_backend;
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Tinebase_Model_AccessLog';
+    
+    /**
+     * check for container ACLs?
+     *
+     * @var boolean
+     */
+    protected $_doContainerACLChecks = FALSE;
     
     /**
      * holds the instance of the singleton
@@ -30,21 +45,28 @@ class Tinebase_AccessLog
      */
     private static $_instance = NULL;
     
-    /**
+    // legacy
+    // @todo remove it!
+	/**
+     * @var Zend_Db_Adapter_Abstract
+     */
+    protected $_db;
+	/**
      * the table object for the SQL_TABLE_PREFIX . applications table
      *
      * @var Tinebase_Db_Table
      */
     protected $_accessLogTable;
-
+    
     /**
      * the constructor
      *
      */
     private function __construct()
     {
-        $this->_accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log'));
+	    $this->_accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log'));
         $this->_db = Tinebase_Core::getDb();
+        $this->_backend = new Tinebase_Backend_Sql($this->_modelName, 'access_log');
     }
     
     /**
@@ -69,6 +91,8 @@ class Tinebase_AccessLog
      * @param string $_ipAddress the ip address the user connects from
      * @param int $_result the result of the login
      * @param int $_accountId OPTIONAL the accountId of the user, if the login was successfull
+     * 
+     * @todo remove legacy code
      */
     public function addLoginEntry($_sessionId, $_loginId, $_ipAddress, $_result, $_accountId = NULL)
     {
@@ -91,7 +115,8 @@ class Tinebase_AccessLog
      *
      * @param string $_sessionId the session id
      * @param string $_ipAddress the ip address the user connects from
-     *      
+     * 
+     * @todo remove legacy code
      */
     public function addLogoutEntry($_sessionId, $_ipAddress)
     {
@@ -113,6 +138,8 @@ class Tinebase_AccessLog
      * @param array $_logIds the id of the rows which should get deleted
      * 
      * @return int the number of deleted rows
+     * 
+     * @todo remove legacy code
      */
     public function deleteEntries(array $_logIds)
     {
@@ -138,6 +165,8 @@ class Tinebase_AccessLog
      * @param int $_start OPTIONAL offset for applications
      * 
      * @return Tinebase_RecordSet_AccessLog set of matching access log entries
+     * 
+     * @todo remove legacy code
      */
     public function getEntries($_filter = NULL, $_pagination = NULL, $_from = NULL, $_to = NULL)
     {
@@ -190,6 +219,8 @@ class Tinebase_AccessLog
      * @param string $_filter OPTIONAL search parameter
      * 
      * @return int
+     * 
+     * @todo remove legacy code
      */
     public function getTotalCount(Zend_Date $_from, Zend_Date $_to, $_filter = NULL)
     {
