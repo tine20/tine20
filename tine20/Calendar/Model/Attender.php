@@ -400,19 +400,15 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     public static function resolveAttendee($_eventAttendee, $_resolveDisplayContainers = TRUE) {
         $eventAttendee = $_eventAttendee instanceof Tinebase_Record_RecordSet ? array($_eventAttendee) : $_eventAttendee;
         
-        // build type map 
+        // set containing all attendee
+        $allAttendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         $typeMap = array();
         
+        // build type map 
         foreach ($eventAttendee as $attendee) {
-            // resolve displaycontainers only if they are present... -> only users have displaycontainer
-            // ... they are not when used in filter context
-            $displaycontainerId = array_diff($attendee->displaycontainer_id, array(''));
-            
-            if ($_resolveDisplayContainers && ! empty($displaycontainerId)) {
-                Tinebase_Container::getInstance()->getGrantsOfRecords($attendee, Tinebase_Core::getUser(), 'displaycontainer_id');
-            }
-            
             foreach ($attendee as $attender) {
+                $allAttendee->addRecord($attender);
+            
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
                     // already resolved
                     continue;
@@ -425,12 +421,14 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     }
                     $typeMap[$attender->user_type][] = $attender->user_id;
                 }
-                
-                // remove status_authkey when editGrant for displaycontainer_id is missing
-                if (! isset($attender['displaycontainer_id']) || is_scalar($attender['displaycontainer_id']) || ! (bool) $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
-                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug('clearing status_authkey for '. print_r($attender->toArray(), TRUE));
-                    $attender->status_authkey = NULL;
-                }
+            }
+        }
+        
+        // resolve display containers
+        if ($_resolveDisplayContainers) {
+            $displaycontainerIds = array_diff($allAttendee->displaycontainer_id, array(''));
+            if (! empty($displaycontainerIds)) {
+                Tinebase_Container::getInstance()->getGrantsOfRecords($allAttendee, Tinebase_Core::getUser(), 'displaycontainer_id');
             }
         }
         
@@ -457,6 +455,12 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         // sort entries in
         foreach ($eventAttendee as $attendee) {
             foreach ($attendee as $attender) {
+                // remove status_authkey when editGrant for displaycontainer_id is missing
+                if (! isset($attender['displaycontainer_id']) || is_scalar($attender['displaycontainer_id']) || ! (bool) $attender['displaycontainer_id']['account_grants'][Tinebase_Model_Grants::GRANT_EDIT]) {
+                    //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug('clearing status_authkey for '. print_r($attender->toArray(), TRUE));
+                    $attender->status_authkey = NULL;
+                }
+                
                 if ($attender->user_id instanceof Tinebase_Record_Abstract) {
                     // allready resolved from cache
                     continue;
