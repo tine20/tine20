@@ -359,6 +359,27 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_cache_message', '3');
         $this->setApplicationVersion('Felamimail', '3.11');
     }    
+
+    /**
+     * update function (-> 3.12)
+     * - added another display option (content_type) to display_format (account table)
+     */    
+    public function update_11()
+    {
+        $field = new Setup_Backend_Schema_Field_Xml( 
+            '<field>
+                <name>display_format</name>
+                <type>text</type>
+                <length>64</length>
+                <default>html</default>
+            </field>'
+        );
+        
+        $this->_backend->alterCol('felamimail_account', $field);
+        
+        $this->setTableVersion('felamimail_account', '12');
+        $this->setApplicationVersion('Felamimail', '3.12');
+    }    
     
     /**
      * clear message cache tables and reset folder status
