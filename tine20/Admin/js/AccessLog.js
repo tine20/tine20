@@ -39,7 +39,6 @@ Tine.Admin.accessLog.show = function () {
  * @class       Tine.Admin.accessLog.GridPanel
  * @extends     Tine.widgets.grid.GridPanel
  * 
- * TODO         add default filter (last week)
  * TODO         add client type (@see http://www.tine20.org/bugtracker/view.php?id=2924)
  */
 Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
@@ -113,8 +112,9 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {label: this.app.i18n._('Login Time'),  field: 'li',            valueType: 'date', pastOnly: true        },
                 {label: this.app.i18n._('Logout Time'), field: 'lo',            valueType: 'date', pastOnly: true        }
             ],
-            defaultFilter: 'query',
-            filters: [],
+            filters: [
+                {field: 'li', operator: 'within', value: 'weekThis'}
+            ],
             plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
