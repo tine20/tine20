@@ -32,7 +32,7 @@ Tine.Admin.Model.TagRight = Ext.data.Record.create([
  * @class       Tine.Admin.Model.AccessLog
  * @extends     Tine.Tinebase.data.Record
  * 
- * TagRight Record Definition
+ * AccessLog Record Definition
  */ 
 Tine.Admin.Model.AccessLog = Tine.Tinebase.data.Record.create([
     {name: 'sessionid'},
@@ -53,10 +53,14 @@ Tine.Admin.Model.AccessLog = Tine.Tinebase.data.Record.create([
     recordsName: 'AccessLogs'
 });
 
+/**
+ * AccessLog data proxy
+ * 
+ * @type Tine.Tinebase.data.RecordProxy
+ */ 
 Tine.Admin.accessLogBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'AccessLog',
     recordClass: Tine.Admin.Model.AccessLog,
     idProperty: 'id'
 });
-
