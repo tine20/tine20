@@ -164,7 +164,8 @@ Ext.namespace('Tine.Felamimail');
                     
                     this.msgBody = message.get('body');
                     
-                    if (Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id')).get('display_format') == 'plain') {
+                    var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id'));
+                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('content_type') == 'text/plain')) {
                         this.msgBody = Ext.util.Format.nl2br(this.msgBody);
                     }
                     
