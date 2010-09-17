@@ -76,8 +76,6 @@ TestServer::getInstance()->initFramework();
 Zend_Registry::set('locale', new Zend_Locale($config->locale));
 
 $tinebaseController = Tinebase_Controller::getInstance();
-if (!$tinebaseController->login($config->username, $config->password, $config->ip)){
+if (!$tinebaseController->login($config->username, $config->password, $config->ip, 'TineUnittest')){
     throw new Exception("Couldn't login, user session required for tests! \n");
 }
-
- 
