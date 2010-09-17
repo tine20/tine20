@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        update account credentials if user password changed
@@ -74,7 +74,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     
     /**
      * key in $_validators/$_properties array for the field which 
-     * represents the identifiergetMessageBody
+     * represents the identifier
      * 
      * @var string
      */    
