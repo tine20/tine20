@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>3.14</version>
+	<version>3.15</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -658,7 +658,7 @@
 
 		<table>
 			<name>access_log</name>
-			<version>1</version>
+			<version>2</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -704,7 +704,12 @@
 					<notnull>true</notnull>
 					<unsigned>false</unsigned>
 				</field>
-
+                <field>
+                    <name>clienttype</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>false</notnull>
+                </field>
 				<index>
 					<name>id</name>
 					<primary>true</primary>

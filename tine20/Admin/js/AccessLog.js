@@ -38,8 +38,6 @@ Tine.Admin.accessLog.show = function () {
  * @namespace   Tine.Admin.accessLog
  * @class       Tine.Admin.accessLog.GridPanel
  * @extends     Tine.widgets.grid.GridPanel
- * 
- * TODO         add client type (@see http://www.tine20.org/bugtracker/view.php?id=2924)
  */
 Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
@@ -110,10 +108,13 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {label: this.app.i18n._('IP Address'),  field: 'ip'},
                 {label: this.app.i18n._('User'),        field: 'account_id',    valueType: 'user'},
                 {label: this.app.i18n._('Login Time'),  field: 'li',            valueType: 'date', pastOnly: true        },
-                {label: this.app.i18n._('Logout Time'), field: 'lo',            valueType: 'date', pastOnly: true        }
+                {label: this.app.i18n._('Logout Time'), field: 'lo',            valueType: 'date', pastOnly: true        },
+                {label: this.app.i18n._('Client Type'), field: 'clienttype'}
             ],
+            defaultFilter: 'query',
             filters: [
-                {field: 'li', operator: 'within', value: 'weekThis'}
+                {field: 'li',           operator: 'within', value: 'weekThis'},
+                {field: 'clienttype',   operator: 'equals', value: 'TineJson'}
             ],
             plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
@@ -133,7 +134,8 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { header: this.app.i18n._('IP Address'), id: 'ip', dataIndex: 'ip', width: 150},
             { header: this.app.i18n._('Login Time'), id: 'li', dataIndex: 'li', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Logout Time'), id: 'lo', dataIndex: 'lo', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
-            { header: this.app.i18n._('Result'), id: 'result', dataIndex: 'result', width: 110, renderer: this.resultRenderer, scope: this}
+            { header: this.app.i18n._('Result'), id: 'result', dataIndex: 'result', width: 110, renderer: this.resultRenderer, scope: this},
+            { header: this.app.i18n._('Client Type'), id: 'clienttype', dataIndex: 'clienttype', width: 50}
         ];
     },
     

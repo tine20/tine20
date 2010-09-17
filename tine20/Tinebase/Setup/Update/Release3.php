@@ -478,4 +478,23 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '3.14');
     }
+    
+/**
+     * update to 3.15
+     * - add client type to access log
+     */
+    public function update_14()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>clienttype</name>
+                <type>text</type>
+                <length>128</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->addCol('access_log', $declaration);
+        
+        $this->setTableVersion('access_log', '2');
+        $this->setApplicationVersion('Tinebase', '3.15');
+    }
 }

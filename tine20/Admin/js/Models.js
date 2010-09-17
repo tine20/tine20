@@ -42,7 +42,8 @@ Tine.Admin.Model.AccessLog = Tine.Tinebase.data.Record.create([
     {name: 'lo', type: 'date', dateFormat: Date.patterns.ISO8601Long},
     {name: 'id'},
     {name: 'account_id'},
-    {name: 'result'}
+    {name: 'result'},
+    {name: 'clienttype'}
 ], {
     appName: 'Admin',
     modelName: 'AccessLog',
