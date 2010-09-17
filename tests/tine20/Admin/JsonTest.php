@@ -348,9 +348,10 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      * get access log filter helper
      * 
      * @param string $_loginname
+     * @param string $_clienttype
      * @return array
      */
-    protected function _getAccessLogFilter($_loginname = NULL)
+    protected function _getAccessLogFilter($_loginname = NULL, $_clienttype = NULL)
     {
         $result = array(
             array(
@@ -367,6 +368,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
                 'value' => $_loginname
             );
         }
+
+        if ($_clienttype !== NULL) {
+            $result[] = array(
+                'field' => 'clienttype', 
+                'operator' => 'equals', 
+                'value' => $_clienttype
+            );
+        }
         
         return $result;
     }
@@ -379,23 +388,26 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
     	$user = $this->objects['user'];
 
+    	$clienttype = 'Unittest';
         Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
             'sessionid'     => 'test_session_id',
             'login_name'    => $user->accountLoginName,
             'ip'            => '127.0.0.1',
             'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'result'        => Zend_Auth_Result::SUCCESS,
-            'account_id'    => $user->getId(),                
+            'account_id'    => $user->getId(),
+            'clienttype'    => $clienttype,
         )));
                 
     	Tinebase_User::getInstance()->deleteUser($user->getId());
     	
-        $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter($user->accountLoginName), array());
+        $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter($user->accountLoginName, $clienttype), array());
 
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
         $this->assertGreaterThan(0, $accessLogs['totalcount']);
         $testLogEntry = $accessLogs['results'][0];
         $this->assertEquals(Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName, $testLogEntry['account_id']['accountDisplayName']);
+        $this->assertEquals($clienttype, $testLogEntry['clienttype']);
         
         $this->_backend->deleteAccessLogs(array($testLogEntry['id']));
     }    
