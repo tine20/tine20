@@ -327,19 +327,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             scope: this
         });
         
-        // note: unprecise plural form here, but this is hard to change
-        this.action_deleteRecord = new Ext.Action({
-            requiredGrant: 'deleteGrant',
-            allowMultiple: true,
-            singularText: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
-            pluralText: this.i18nDeleteActionText ? this.i18nDeleteActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
-            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
-            handler: this.onDeleteRecords,
-            disabled: true,
-            iconCls: 'action_delete',
-            scope: this
-        });
+        this.initDeleteAction();
         
         //if (this.recordClass.getField('tags')) {
         this.action_tagsMassAttach = new Tine.widgets.tags.TagsMassAttachAction({
@@ -359,8 +347,24 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.action_editCopyInNewWindow
         ]);
         
-        // init actionToolbar (neeted for corrent fitertoolbar init yet -> fixme)
+        // init actionToolbar (needed for correct fitertoolbar init atm -> fixme)
         this.getActionToolbar();
+    },
+    
+    initDeleteAction: function() {
+        // note: unprecise plural form here, but this is hard to change
+        this.action_deleteRecord = new Ext.Action({
+            requiredGrant: 'deleteGrant',
+            allowMultiple: true,
+            singularText: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            pluralText: this.i18nDeleteActionText ? this.i18nDeleteActionText[1] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordsName),
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            text: this.i18nDeleteActionText ? this.i18nDeleteActionText[0] : String.format(Tine.Tinebase.translation.ngettext('Delete {0}', 'Delete {0}', 1), this.i18nRecordName),
+            handler: this.onDeleteRecords,
+            disabled: true,
+            iconCls: 'action_delete',
+            scope: this
+        });
     },
     
     /**
