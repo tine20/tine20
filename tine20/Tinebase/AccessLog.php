@@ -94,26 +94,6 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * delete entries from the access log
-     *
-     * @param array $_logIds the id of the rows which should get deleted
-     * 
-     * @return int the number of deleted rows
-     * 
-     * @todo remove legacy code
-     */
-    public function deleteEntries(array $_logIds)
-    {
-        $where  = array(
-            $this->_accessLogTable->getAdapter()->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('id') . ' IN (?)', $_logIds, 'INTEGER')
-        );
-         
-        $result = $this->_accessLogTable->delete($where);
-
-        return $result;
-    }
-    
-    /**
      * Search for acceslog entries
      *
      * @param Zend_Date $_from the date from which to fetch the access log entries from
