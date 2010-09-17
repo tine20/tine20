@@ -29,8 +29,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @param string $_username
      * @param string $_password
-     * 
-     * @todo add 'TineCli' to access log entry (as $_clientIdString)
      */
     public function authenticate($_username, $_password)
     {
@@ -57,7 +55,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                 'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
                 'lo'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
                 'result'        => $authResult->getCode(),
-                'account_id'    => Tinebase_Core::getUser()->getId(),                
+                'account_id'    => Tinebase_Core::getUser()->getId(),
+                'clienttype'    => 'TineCli',
             )));
             
         } else {

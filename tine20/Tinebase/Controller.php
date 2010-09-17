@@ -63,12 +63,18 @@ class Tinebase_Controller
      * @param   string $_clientIdString
      * @return  bool
      * @throws  Tinebase_Exception_NotFound
-     * 
-     * @todo    pass client id string to access log
      */
     public function login($_loginname, $_password, $_ipAddress, $_clientIdString = NULL)
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
+        
+        $accessLog = new Tinebase_Model_AccessLog(array(
+            'sessionid'     => session_id(),
+            'ip'            => $_ipAddress,
+            'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'result'        => $authResult->getCode(),
+            'clienttype'    => $_clientIdString,   
+        ));
         
         if ($authResult->isValid()) {
             $accountName = $authResult->getIdentity();
@@ -101,33 +107,23 @@ class Tinebase_Controller
             
             $account->setLoginTime($_ipAddress);
             
-            Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
-                'sessionid'     => session_id(),
-                'login_name'    => $authResult->getIdentity(),
-                'ip'            => $_ipAddress,
-                'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-                'result'        => $authResult->getCode(),
-                'account_id'    => Tinebase_Core::getUser()->getId(),                
-            )));
+            $accessLog->login_name = $accountName;
+            $accessLog->account_id = $account->getId();
             
-            return true;
+            $result = true;
+            
         } else {
-            Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
-                'sessionid'     => session_id(),
-                'login_name'    => $_loginname,
-                'ip'            => $_ipAddress,
-                'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-                'lo'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-                'result'        => $authResult->getCode(),
-                'account_id'    => Tinebase_Core::getUser()->getId(),                
-            )));
+            $accessLog->login_name = $_loginname;
+            $accessLog->lo = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
             
             Zend_Session::destroy();
             
             sleep(2);
-            
-            return false;
+            $result = false;
         }
+        
+        Tinebase_AccessLog::getInstance()->create($accessLog);
+        return $result;
     }
     
     /**
