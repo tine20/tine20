@@ -292,11 +292,11 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 // if the email contains non 7bit ascii characters we can't transfer them via MIMEData xml and we need to fall back to plain text
                 if (preg_match('/(?:[^\x00-\x7F])/', $messageBody)) {
                     $airSyncBaseType = 1;
-                    $messageBody     = $this->_contentController->getMessageBody($_serverId, null, Zend_Mime::TYPE_TEXT, true);
+                    $messageBody     = $this->_contentController->getMessageBody($_serverId, null, Zend_Mime::TYPE_TEXT, NULL, true);
                 }
             }
         } else {
-            $messageBody = $this->_contentController->getMessageBody($_serverId, null, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, true);
+            $messageBody = $this->_contentController->getMessageBody($_serverId, null, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, NULL, true);
         }
         
         if($truncateAt !== null && strlen($messageBody) > $truncateAt) {

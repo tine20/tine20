@@ -431,7 +431,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
 
-        $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT);
+        $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, $this->_account);
         
         $this->assertContains('würde', $body);
     }
@@ -443,7 +443,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
 
-        $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, true);
+        $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, $this->_account, true);
         
         $this->assertContains('würde', $body);
         
@@ -457,7 +457,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->_messageTestHelper('text_plain.eml', 'text/plain');
         
-        $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT);
+        $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, $this->_account);
         
         $this->assertContains('a converter script be written to', $body);
     }
