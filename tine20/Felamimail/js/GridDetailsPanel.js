@@ -169,7 +169,8 @@ Ext.namespace('Tine.Felamimail');
             showBody: function(body, messageData) {
                 body = body || '';
                 if (body) {
-                    if (this.app.getActiveAccount().get('display_format') == 'plain'/* || messageData.content_type == 'text/plain' */) {
+                    var account = this.app.getActiveAccount();
+                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && messageData.content_type == 'text/plain')) {
                         var width = this.panel.body.getWidth()-25,
                             height = this.panel.body.getHeight()-90,
                             id = Ext.id();
