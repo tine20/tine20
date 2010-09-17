@@ -101,28 +101,26 @@ class Tinebase_Controller
             
             $account->setLoginTime($_ipAddress);
             
-            Tinebase_AccessLog::getInstance()->addLoginEntry(
-                session_id(),
-                $authResult->getIdentity(),
-                $_ipAddress,
-                $authResult->getCode(),
-                Tinebase_Core::getUser()
-            );
+            Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
+                'sessionid'     => session_id(),
+                'login_name'    => $authResult->getIdentity(),
+                'ip'            => $_ipAddress,
+                'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                'result'        => $authResult->getCode(),
+                'account_id'    => Tinebase_Core::getUser()->getId(),                
+            )));
             
             return true;
         } else {
-            // @todo only call create() fn
-            Tinebase_AccessLog::getInstance()->addLoginEntry(
-                session_id(),
-                $_loginname,
-                $_ipAddress,
-                $authResult->getCode()
-           );
-            
-            Tinebase_AccessLog::getInstance()->addLogoutEntry(
-                session_id(),
-                $_ipAddress
-           );
+            Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
+                'sessionid'     => session_id(),
+                'login_name'    => $_loginname,
+                'ip'            => $_ipAddress,
+                'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                'lo'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                'result'        => $authResult->getCode(),
+                'account_id'    => Tinebase_Core::getUser()->getId(),                
+            )));
             
             Zend_Session::destroy();
             
@@ -170,11 +168,7 @@ class Tinebase_Controller
             $currentAccount = Tinebase_Core::getUser();
     
             if (is_object($currentAccount)) {
-                Tinebase_AccessLog::getInstance()->addLogoutEntry(
-                    session_id(),
-                    $_ipAddress,
-                    $currentAccount->accountId
-                );                
+                Tinebase_AccessLog::getInstance()->setLogout(session_id(), $_ipAddress);                
             }
         }
         

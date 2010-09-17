@@ -52,13 +52,13 @@ class Tinebase_Model_AccessLog extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_validators = array(
+        'id'            => array('allowEmpty' => true),
         'sessionid'     => array('presence' => 'required'),
         'login_name'    => array('allowEmpty' => true),
         'ip'            => array('presence' => 'required', 'allowEmpty' => true),
         'li'            => array('presence' => 'required', 'allowEmpty' => true),
-        'lo'            => array('presence' => 'required', 'allowEmpty' => true),
-        'id'            => array('presence' => 'required'),
-        'result'        => array('presence' => 'required'),
+        'lo'            => array('allowEmpty' => true),
+        'result'        => array('allowEmpty' => true),
         'account_id'    => array('allowEmpty' => true)
     );
     

@@ -358,7 +358,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
     	$user = $this->objects['user'];
 
-        Tinebase_AccessLog::getInstance()->addLoginEntry('test_session_id', $user->accountLoginName, '127.0.0.1', Zend_Auth_Result::SUCCESS, $user->getId());
+        Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
+            'sessionid'     => 'test_session_id',
+            'login_name'    => $user->accountLoginName,
+            'ip'            => '127.0.0.1',
+            'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'result'        => Zend_Auth_Result::SUCCESS,
+            'account_id'    => $user->getId(),                
+        )));
                 
     	Tinebase_User::getInstance()->deleteUser($user->getId());
     	

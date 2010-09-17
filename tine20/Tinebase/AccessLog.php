@@ -25,20 +25,6 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
     protected $_backend;
     
     /**
-     * Model name
-     *
-     * @var string
-     */
-    protected $_modelName = 'Tinebase_Model_AccessLog';
-    
-    /**
-     * check for container ACLs?
-     *
-     * @var boolean
-     */
-    protected $_doContainerACLChecks = FALSE;
-    
-    /**
      * holds the instance of the singleton
      *
      * @var Tinebase_AccessLog
@@ -66,6 +52,11 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
     {
 	    $this->_accessLogTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'access_log'));
         $this->_db = Tinebase_Core::getDb();
+        
+        $this->_modelName = 'Tinebase_Model_AccessLog';
+        $this->_omitModLog = TRUE;
+        $this->_doContainerACLChecks = FALSE;
+        
         $this->_backend = new Tinebase_Backend_Sql($this->_modelName, 'access_log');
     }
     
@@ -82,54 +73,24 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }
-    
-    /**
-     * add login entry to the access log
-     *
-     * @param string $_sessionId the session id
-     * @param string $_loginId the loginname as provided by the user
-     * @param string $_ipAddress the ip address the user connects from
-     * @param int $_result the result of the login
-     * @param int $_accountId OPTIONAL the accountId of the user, if the login was successfull
-     * 
-     * @todo remove legacy code
-     */
-    public function addLoginEntry($_sessionId, $_loginId, $_ipAddress, $_result, $_accountId = NULL)
-    {
-        $data = array(
-            'sessionid'     => $_sessionId,
-            'login_name'    => $_loginId,
-            'ip'            => $_ipAddress,
-            'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'result'        => $_result
-        );
-        if ($_accountId !== NULL) {
-            $data['account_id'] = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        }
-        
-        $this->_accessLogTable->insert($data);
-    }
 
     /**
      * add logout entry to the access log
      *
      * @param string $_sessionId the session id
      * @param string $_ipAddress the ip address the user connects from
-     * 
-     * @todo remove legacy code
+     * @return Tinebase_Model_AccessLog
      */
-    public function addLogoutEntry($_sessionId, $_ipAddress)
+    public function setLogout($_sessionId, $_ipAddress = NULL)
     {
-        $data = array(
-            'lo' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-        );
+        $loginRecord = $this->_backend->getByProperty($_sessionId, 'sessionid');
         
-        $where = array(
-            $this->_accessLogTable->getAdapter()->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('sessionid') . ' = ?', $_sessionId),
-            $this->_accessLogTable->getAdapter()->quoteInto($this->_accessLogTable->getAdapter()->quoteIdentifier('ip') . ' = ?', $_ipAddress)
-        );
+        $loginRecord->lo = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        if ($_ipAddress !== NULL) {
+            $loginRecord->ip = $_ipAddress;
+        }
         
-        $this->_accessLogTable->update($data, $where);
+        return $this->update($loginRecord);
     }
     
     /**

@@ -49,14 +49,17 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 
             $ipAddress = '127.0.0.1';
             $account->setLoginTime($ipAddress);
-                        
-            Tinebase_AccessLog::getInstance()->addLoginEntry(
-                'cli call', // session id not available
-                $authResult->getIdentity(),
-                $ipAddress,
-                $authResult->getCode(),
-                Tinebase_Core::getUser()
-            ); 
+
+            Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
+                'sessionid'     => 'cli call',
+                'login_name'    => $authResult->getIdentity(),
+                'ip'            => $ipAddress,
+                'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                'lo'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                'result'        => $authResult->getCode(),
+                'account_id'    => Tinebase_Core::getUser()->getId(),                
+            )));
+            
         } else {
             echo "Wrong username and/or password.\n";
             exit();            
