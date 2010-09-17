@@ -40,7 +40,7 @@ class Tinebase_Model_AccessLogFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'query'         => array('filter' => 'Tinebase_Model_Filter_Query',        'options' => array('fields' => array('login_name', 'result', 'ip'))),
+        'query'         => array('filter' => 'Tinebase_Model_Filter_Query',        'options' => array('fields' => array('login_name', 'ip'))),
         'sessionid'     => array('filter' => 'Tinebase_Model_Filter_Text'),
         'li'            => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'lo'            => array('filter' => 'Tinebase_Model_Filter_DateTime'),
