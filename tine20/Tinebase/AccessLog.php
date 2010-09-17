@@ -60,11 +60,16 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
      *
      * @param string $_sessionId the session id
      * @param string $_ipAddress the ip address the user connects from
-     * @return Tinebase_Model_AccessLog
+     * @return void|Tinebase_Model_AccessLog
      */
     public function setLogout($_sessionId, $_ipAddress = NULL)
     {
-        $loginRecord = $this->_backend->getByProperty($_sessionId, 'sessionid');
+        try {
+            $loginRecord = $this->_backend->getByProperty($_sessionId, 'sessionid');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not find access log login record for session id ' . $_sessionId);
+            return;
+        }
         
         $loginRecord->lo = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         if ($_ipAddress !== NULL) {
