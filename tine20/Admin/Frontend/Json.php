@@ -83,12 +83,12 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * delete access log entries
      *
-     * @param array $logIds list of logIds to delete
+     * @param array $ids list of logIds to delete
      * @return array with success flag
      */
-    public function deleteAccessLogEntries($logIds)
+    public function deleteAccessLogs($ids)
     {
-        return $this->_delete($logIds, Admin_Controller_AccessLog::getInstance());
+        return $this->_delete($ids, Admin_Controller_AccessLog::getInstance());
     }
     
     /**

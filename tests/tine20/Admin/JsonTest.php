@@ -397,7 +397,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $testLogEntry = $accessLogs['results'][0];
         $this->assertEquals(Tinebase_User::getInstance()->getNonExistentUser()->accountDisplayName, $testLogEntry['account_id']['accountDisplayName']);
         
-        $this->_backend->deleteAccessLogEntries(array($testLogEntry['id']));
+        $this->_backend->deleteAccessLogs(array($testLogEntry['id']));
     }    
     
     /**
@@ -415,7 +415,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         // delete logs
         if (!empty($deleteLogIds)) {
-            $this->_backend->deleteAccessLogEntries($deleteLogIds);
+            $this->_backend->deleteAccessLogs($deleteLogIds);
         }
         
         $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter('tine20admin'), array());
