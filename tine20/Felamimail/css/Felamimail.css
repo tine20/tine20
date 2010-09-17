@@ -185,6 +185,11 @@
     overflow: 'auto';	
 }
 
+.preview-panel-felamimail-body .x-form-textarea {
+	margin-top: 5px;
+	font: normal 12px courier;
+}
+
 /***** node classes ******/
 
 .felamimail-node-unread span {

@@ -132,6 +132,7 @@ Ext.namespace('Tine.Felamimail');
                 '<div class="preview-panel-felamimail-body">{[this.showBody(values.body, values)]}</div>',
             '</div>',{
             app: this.app,
+            panel: this,
             encode: function(value) {
                 if (value) {
                     var encoded = Ext.util.Format.htmlEncode(value);
@@ -168,8 +169,14 @@ Ext.namespace('Tine.Felamimail');
             showBody: function(body, messageData) {
                 body = body || '';
                 if (body) {
-                    if (this.app.getActiveAccount().get('display_format') == 'plain') {
-                        body = Ext.util.Format.nl2br(body);
+                    if (this.app.getActiveAccount().get('display_format') == 'plain'/* || messageData.content_type == 'text/plain' */) {
+                        var width = this.panel.body.getWidth()-25,
+                            height = this.panel.body.getHeight()-90,
+                            id = Ext.id();
+                        body = '<textarea ' +
+                            'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
+                            'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
+                            body + '</textarea>';
                     }
                     
                     // add images inline
