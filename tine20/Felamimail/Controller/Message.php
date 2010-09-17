@@ -127,10 +127,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // get account
         $folder = Felamimail_Controller_Folder::getInstance()->get($message->folder_id);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
-        $mimeType = $account->display_format == 'html' ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT;
+        $mimeType = ($account->display_format == Felamimail_Model_Account::DISPLAY_HTML || $account->display_format == Felamimail_Model_Account::DISPLAY_CONTENT_TYPE) 
+            ? Zend_Mime::TYPE_HTML 
+            : Zend_Mime::TYPE_TEXT;
         
         $headers     = $this->getMessageHeaders($message, $_partId, true);
-        $body        = $this->getMessageBody($message, $_partId, $mimeType, true);
+        $body        = $this->getMessageBody($message, $_partId, $mimeType, $account, true);
         $attachments = $this->getAttachments($message, $_partId);
         
         // set \Seen flag
@@ -904,12 +906,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get message body
      * 
      * @param string|Felamimail_Model_Message $_messageId
+     * @param string $_partId
      * @param string $_contentType
+     * @param Felamimail_Model_Account $_account
      * @param boolean $_readOnly
      * @return string
      */
-    public function getMessageBody($_messageId, $_partId, $_contentType, $_readOnly = false)
+    public function getMessageBody($_messageId, $_partId, $_contentType, $_account = NULL, $_readOnly = false)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get Message body of content type ' . $_contentType);
+        
         if ($_messageId instanceof Felamimail_Model_Message) {
             $message = $_messageId;
         } else {
@@ -943,11 +949,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $body = $this->_purifyBodyContent($body);
             }
             
-            $body = Felamimail_Message::convertContentType($partStructure['contentType'], $_contentType, $body);
-            
-            if ($bodyPart->type == Zend_Mime::TYPE_TEXT && $_contentType == Zend_Mime::TYPE_HTML) {
-                $body = Felamimail_Message::replaceUriAndSpaces($body);
-                $body = Felamimail_Message::replaceEmails($body);
+            if (! ($_account !== NULL && $_account->display_format === Felamimail_Model_Account::DISPLAY_CONTENT_TYPE && $bodyPart->type == Zend_Mime::TYPE_TEXT)) {
+                $body = Felamimail_Message::convertContentType($partStructure['contentType'], $_contentType, $body);
+                if ($bodyPart->type == Zend_Mime::TYPE_TEXT && $_contentType == Zend_Mime::TYPE_HTML) {
+                    $body = Felamimail_Message::replaceUriAndSpaces($body);
+                    $body = Felamimail_Message::replaceEmails($body);
+                }
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not convert plain text part to ' . Zend_Mime::TYPE_HTML);
             }
             
             $messageBody .= $body;

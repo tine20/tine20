@@ -18,6 +18,7 @@
  * 
  * @property  string  trash_folder
  * @property  string  sieve_vacation_active
+ * @property  string  display_format
  * @package     Felamimail
  */
 class Felamimail_Model_Account extends Tinebase_Record_Abstract
@@ -51,10 +52,29 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      *
      */
     const TYPE_USER = 'user';
+
+    /**
+     * display format: plain
+     *
+     */
+    const DISPLAY_PLAIN = 'plain';
+    
+    /**
+     * display format: html
+     *
+     */
+    const DISPLAY_HTML = 'html';
+    
+    /**
+     * display format: content type
+     *
+     * -> depending on content_type => text/plain show as plain text
+     */
+    const DISPLAY_CONTENT_TYPE = 'content_type';
     
     /**
      * key in $_validators/$_properties array for the field which 
-     * represents the identifier
+     * represents the identifiergetMessageBody
      * 
      * @var string
      */    
@@ -103,8 +123,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => '/'),
         'display_format'        => array(
             Zend_Filter_Input::ALLOW_EMPTY => true, 
-            Zend_Filter_Input::DEFAULT_VALUE => 'html',
-            'InArray' => array('html', 'plain')
+            Zend_Filter_Input::DEFAULT_VALUE => self::DISPLAY_HTML,
+            'InArray' => array(self::DISPLAY_HTML, self::DISPLAY_PLAIN, self::DISPLAY_CONTENT_TYPE)
         ),
     // namespaces
         'ns_personal'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
