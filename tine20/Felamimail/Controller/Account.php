@@ -197,6 +197,10 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         $result = parent::update($_record);
         
+        // delete message body cache because display format could have changed
+        // @ŧodo only do this if display_format field changed (check modlog)
+        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
+        
         // update account capabilities
         return $this->updateCapabilities($result);
     }
