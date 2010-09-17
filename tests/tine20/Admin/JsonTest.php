@@ -337,7 +337,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccessLogs()
     {
-        $accessLogs = $this->_backend->searchAccessLog($this->_getAccessLogFilter(), array());
+        $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter(), array());
       
         // check total count
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
@@ -390,7 +390,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
                 
     	Tinebase_User::getInstance()->deleteUser($user->getId());
     	
-        $accessLogs = $this->_backend->searchAccessLog($this->_getAccessLogFilter($user->accountLoginName), array());
+        $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter($user->accountLoginName), array());
 
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
         $this->assertGreaterThan(0, $accessLogs['totalcount']);
@@ -406,7 +406,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteAccessLogs()
     {
-        $accessLogs = $this->_backend->searchAccessLog($this->_getAccessLogFilter('tine20admin'), array());
+        $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter('tine20admin'), array());
         
         $deleteLogIds = array();
         foreach ($accessLogs['results'] as $log) {
@@ -418,7 +418,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             $this->_backend->deleteAccessLogEntries($deleteLogIds);
         }
         
-        $accessLogs = $this->_backend->searchAccessLog($this->_getAccessLogFilter('tine20admin'), array());
+        $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter('tine20admin'), array());
         $this->assertEquals(0, sizeof($accessLogs['results']), 'results not matched');
         $this->assertEquals(0, $accessLogs['totalcount'], 'totalcount not matched');
     }        

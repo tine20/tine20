@@ -98,7 +98,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param array $paging 
      * @return array
      */
-    public function searchAccessLog($filter, $paging)
+    public function searchAccessLogs($filter, $paging)
     {
         $result = $this->_search($filter, $paging, Admin_Controller_AccessLog::getInstance(), 'Tinebase_Model_AccessLogFilter');
         
