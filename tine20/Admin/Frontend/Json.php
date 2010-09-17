@@ -91,45 +91,20 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_delete($logIds, Admin_Controller_AccessLog::getInstance());
     }
     
-    
     /**
-     * get list of access log entries
+     * Search for records matching given arguments
      *
-     * @param string $from (date format example: 2008-03-31T00:00:00)
-     * @param string $to (date format example: 2008-03-31T00:00:00)
-     * @param string $filter
-     * @param array $paging paging data (Tinebase_Model_Pagination)
-     * @return array with results array & totalcount (int)
-     * 
-     * @todo switch to new api with only filter and paging params
+     * @param array $filter 
+     * @param array $paging 
+     * @return array
      */
-    public function getAccessLogEntries($from, $to, $filter, $paging)
+    public function searchAccessLog($filter, $paging)
     {
-        $fromDateObject = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
-        $toDateObject = new Zend_Date($to, Tinebase_Record_Abstract::ISO8601LONG);
-        $pagination = new Tinebase_Model_Pagination($paging);
+        $result = $this->_search($filter, $paging, Admin_Controller_AccessLog::getInstance(), 'Tinebase_Model_AccessLogFilter');
         
-        $accessLogSet = Admin_Controller_AccessLog::getInstance()->search_($filter, $pagination, $fromDateObject, $toDateObject);
-        
-        $result = $this->_multipleRecordsToJson($accessLogSet);
-
-        foreach ($result as $key => &$value) {
-            if (! empty($value['account_id'])) {
-            	try {
-            		$accountObject = Admin_Controller_User::getInstance()->get($value['account_id'])->toArray();
-            	} catch (Tinebase_Exception_NotFound $e) {
-            		$accountObject = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
-            	}
-                $value['accountObject'] = $accountObject;
-            }
-        }
-
-        return array(
-            'results'       => $result,
-            'totalcount'    => Admin_Controller_AccessLog::getInstance()->searchCount_($fromDateObject, $toDateObject, $filter),
-        );
+        return $result;
     }
-    
+
     /****************************** Applications ******************************/
     
     /**
@@ -155,6 +130,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param int $start
      * @param int $limit
      * @return array with results array & totalcount (int)
+     * 
+     * @todo switch to new api with only filter and paging params
      */
     public function getApplications($filter, $sort, $dir, $start, $limit)
     {
@@ -268,6 +245,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param int $_start
      * @param int $_limit
      * @return array with results array & totalcount (int)
+     * 
+     * @todo switch to new api with only filter and paging params
      */
     public function getUsers($filter, $sort, $dir, $start, $limit)
     {
@@ -496,6 +475,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param int $_start
      * @param int $_limit
      * @return array with results array & totalcount (int)
+     * 
+     * @todo switch to new api with only filter and paging params
      */
     public function getGroups($filter, $sort, $dir, $start, $limit)
     {
@@ -931,4 +912,34 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
     
+    /**
+     * returns multiple records prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return array data
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
+    {
+        if (count($_records) == 0) {
+            return array();
+        }
+        
+        switch ($_records->getRecordClassName()) {
+            case 'Tinebase_Model_AccessLog':
+                foreach ($_records as $record) {
+                    if (! empty($record->account_id)) {
+                        try {
+                            $record->account_id = Admin_Controller_User::getInstance()->get($record->account_id)->toArray();
+                        } catch (Tinebase_Exception_NotFound $e) {
+                            $record->account_id = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
+                        }
+                    }
+                }                
+                break;
+        }
+        
+        $result = parent::_multipleRecordsToJson($_records, $_filter);
+        return $result;
+    }
 }

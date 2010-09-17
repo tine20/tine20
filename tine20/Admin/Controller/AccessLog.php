@@ -6,10 +6,8 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo        refactoring: use functions from Tinebase_Controller_Record_Abstract
  */
 
 /**
@@ -62,23 +60,18 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
     /**
      * get list of access log entries
      *
-     * @param string $_filter string to search accounts for
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
      * @param Tinebase_Model_Pagination|optional $_pagination
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return Tinebase_RecordSet_AccessLog set of matching access log entries
-     * 
-     * @todo replace with search (use the same fn signature first)
+     * @param boolean $_getRelations
+     * @param boolean $_onlyIds
+     * @param string $_action for right/acl check
+     * @return Tinebase_Record_RecordSet|array
      */
-    public function search_($_filter = NULL, $_pagination = NULL, $_from = NULL, $_to = NULL)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        $this->checkRight('VIEW_ACCESS_LOG');        
+        $this->checkRight('VIEW_ACCESS_LOG');
         
-        $tineAccessLog = Tinebase_AccessLog::getInstance();
-
-        $result = $tineAccessLog->getEntries($_filter, $_pagination, $_from, $_to);
+        $result = Tinebase_AccessLog::getInstance()->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
         return $result;
     }
@@ -86,16 +79,13 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
     /**
      * returns the total number of access logs
      * 
-     * @param Zend_Date $_from the date from which to fetch the access log entries from
-     * @param Zend_Date $_to the date to which to fetch the access log entries to
-     * @param string $_filter OPTIONAL search parameter
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action for right/acl check
      * @return int
-     * 
-     * @todo replace with searchCount (use the same fn signature first)
      */
-    public function searchCount_($_from, $_to, $_filter)
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
-        return Tinebase_AccessLog::getInstance()->getTotalCount($_from, $_to, $_filter);
+        return Tinebase_AccessLog::getInstance()->searchCount($_filter, $_action);
     }
     
     /**
