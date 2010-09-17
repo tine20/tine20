@@ -69,7 +69,6 @@ class Tinebase_Controller
         $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
         
         $accessLog = new Tinebase_Model_AccessLog(array(
-            'sessionid'     => session_id(),
             'ip'            => $_ipAddress,
             'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'result'        => $authResult->getCode(),
@@ -107,12 +106,14 @@ class Tinebase_Controller
             
             $account->setLoginTime($_ipAddress);
             
+            $accessLog->sessionid = session_id();
             $accessLog->login_name = $accountName;
             $accessLog->account_id = $account->getId();
             
             $result = true;
             
         } else {
+            $accessLog->sessionid = session_id();
             $accessLog->login_name = $_loginname;
             $accessLog->lo = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
             
