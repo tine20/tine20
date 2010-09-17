@@ -103,14 +103,15 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * initialises filter toolbar
-     * 
-     * TODO add more filters
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('AccessLog'),    field: 'query',       operators: ['contains']}
-                //{label: this.app.i18n._('Description'),    field: 'description', operators: ['contains']},
+                {label: this.app.i18n._('AccessLog'),   field: 'query',         operators: ['contains']},
+                {label: this.app.i18n._('IP Address'),  field: 'ip'},
+                {label: this.app.i18n._('User'),        field: 'account_id',    valueType: 'user'},
+                {label: this.app.i18n._('Login Time'),  field: 'li',            valueType: 'date', pastOnly: true        },
+                {label: this.app.i18n._('Logout Time'), field: 'lo',            valueType: 'date', pastOnly: true        }
             ],
             defaultFilter: 'query',
             filters: [],
