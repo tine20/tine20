@@ -3,8 +3,8 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: TagsPanel.js 2156 2008-04-25 09:42:05Z nelius_weiss $
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
  * @todo        refactor this (split file, use new windows, ...)
  */
@@ -177,7 +177,7 @@ Tine.Admin = function () {
         	switch (node.attributes.dataPanelType) 
         	{
             case 'accesslog':
-				Tine.Admin.AccessLog.Main.show();
+                Tine.Admin.accessLog.show();
                 break;
                 
             case 'accounts':

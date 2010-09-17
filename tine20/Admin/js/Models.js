@@ -27,3 +27,36 @@ Tine.Admin.Model.TagRight = Ext.data.Record.create([
     {name: 'use_right',  type: 'boolean'}
 ]);
 
+/**
+ * @namespace   Tine.Admin.Model
+ * @class       Tine.Admin.Model.AccessLog
+ * @extends     Tine.Tinebase.data.Record
+ * 
+ * TagRight Record Definition
+ */ 
+Tine.Admin.Model.AccessLog = Tine.Tinebase.data.Record.create([
+    {name: 'sessionid'},
+    {name: 'login_name'},
+    {name: 'ip'},
+    {name: 'li', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'lo', type: 'date', dateFormat: Date.patterns.ISO8601Long},
+    {name: 'id'},
+    {name: 'account_id'},
+    {name: 'result'}
+], {
+    appName: 'Admin',
+    modelName: 'AccessLog',
+    idProperty: 'id',
+    titleProperty: 'login_name',
+    // ngettext('AccessLog', 'AccessLogs', n);
+    recordName: 'AccessLog',
+    recordsName: 'AccessLogs'
+});
+
+Tine.Admin.accessLogBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Admin',
+    modelName: 'AccessLog',
+    recordClass: Tine.Admin.Model.AccessLog,
+    idProperty: 'id'
+});
+
