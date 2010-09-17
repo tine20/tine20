@@ -922,7 +922,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $this->get($_messageId);
         }
         
-        $cache = Tinebase_Core::get('cache');
+        $cache = Tinebase_Core::getCache();
         $cacheId = 'getMessageBody_' . $message->getId() . str_replace('.', '', $_partId) . substr($_contentType, -4);
         
         if ($cache->test($cacheId)) {
