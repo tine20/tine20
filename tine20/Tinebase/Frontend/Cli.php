@@ -125,35 +125,56 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - access_log
      * - async_job
      * 
+     * if param data is given (for example: -- date=2010-09-17), all records before this date are deleted (if the table has a date field)
+     * 
      * @param $_opts
      * @return boolean success
      */
     public function clearTable(Zend_Console_Getopt $_opts)
     {
-        $tables = $_opts->getRemainingArgs();
-        if (empty($tables)) {
+        $args = $_opts->getRemainingArgs();
+
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
+        // check for date in args
+        foreach ($args as $idx => $arg) {
+            $split = explode('=', $arg);
+            if (is_array($split) && $split[0] == 'date') {
+                unset($args[$idx]);
+                $date = $split[1];
+            }
+        }
+
+        if (empty($args)) {
             echo "No table given.\n";
             return FALSE;
         }
         
-        if (! $this->_checkAdminRight()) {
-            return FALSE;
-        }
-        
-        foreach ($tables as $table) {
+        $db = Tinebase_Core::getDb();
+        foreach ($args as $table) {
             switch ($table) {
                 case 'access_log':
-                    Tinebase_Core::getDb()->query('TRUNCATE ' . SQL_TABLE_PREFIX . $table);
+                    if (isset($date)) {
+                        echo "\nRemoving all access log entries before $date ...";
+                        $where = array(
+                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $date)
+                        );
+                        $db->delete(SQL_TABLE_PREFIX . $table, $where);
+                    } else {
+                        $db->query('TRUNCATE ' . SQL_TABLE_PREFIX . $table);
+                    }
                     break;
                 case 'async_job':
-                    Tinebase_Core::getDb()->query(
+                    $db->query(
                         'delete FROM ' . SQL_TABLE_PREFIX . 'async_job' .
                         " WHERE status='success'");
                     break;
                 case 'credential_cache':
                     if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
                         // delete only records that are not related to email accounts
-                        Tinebase_Core::getDb()->query(
+                        $db->query(
                             'delete ' . SQL_TABLE_PREFIX . 'credential_cache FROM `' . SQL_TABLE_PREFIX . 'credential_cache`' .
                             ' LEFT JOIN ' . SQL_TABLE_PREFIX . 'felamimail_account ON ' . SQL_TABLE_PREFIX . 'credential_cache.id = ' . 
                                 SQL_TABLE_PREFIX . 'felamimail_account.credentials_id' .
