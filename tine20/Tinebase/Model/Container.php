@@ -84,6 +84,7 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
         'color'             => array('allowEmpty' => true, array('regex', '/^#[0-9a-fA-F]{6}$/')),
         'application_id'    => array('Alnum', 'presence' => 'required'),
         'account_grants'    => array('allowEmpty' => true), // non persistent
+        'owner_id'          => array('allowEmpty' => true), // non persistent
         'path'              => array('allowEmpty' => true), // non persistent
     // modlog fields
         'created_by'             => array('allowEmpty' => true),
@@ -146,21 +147,22 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
                 $path .= "/{$this->getId()}";
                 break;
             case 'personal':
-                // we need to find out who has admin grant
-                $allGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($this, true);
-                
-                $userId = NULL;
-                foreach ($allGrants as $grants) {
-                    if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN} === true) {
-                        $userId = $grants->account_id;
-                        break;
+                if (! $this->owner_id) {
+                    // we need to find out who has admin grant
+                    $allGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($this, true);
+                    
+                    foreach ($allGrants as $grants) {
+                        if ($grants->{Tinebase_Model_Grants::GRANT_ADMIN} === true) {
+                            $this->owner_id = $grants->account_id;
+                            break;
+                        }
+                    }
+                    if (! $this->owner_id) {
+                        throw new Exception('could not find container admin');
                     }
                 }
-                if (! $userId) {
-                    throw new Exception('could not find container admin');
-                }
                 
-                $path .= "/$userId/{$this->getId()}";
+                $path .= "/{$this->owner_id}/{$this->getId()}";
                 break;
             default:
                 throw new Exception("unknown container type: '{$this->type}'");
