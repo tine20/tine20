@@ -84,6 +84,11 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
      */
     public function getAclForIds($_accountId, $_ids)
     {
+        $result = array();
+        if (empty($_ids)) {
+            return $result;
+        }
+        
         $select = $this->_getAclSelect(array('id' => 'customfield_config.id', 'account_grants' => "GROUP_CONCAT(customfield_acl.account_grant)"));
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('customfield_config.id') . ' IN (?)', (array)$_ids))
                ->group(array('customfield_config.id', 'customfield_acl.account_type', 'customfield_acl.account_id'));
@@ -94,7 +99,6 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        $result = array();
         foreach ($rows as $row) {
             $result[$row['id']] = $row['account_grants'];
         }
