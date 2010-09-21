@@ -106,7 +106,9 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         
         // check if grants are returned
         $this->_instance->resolveConfigGrants($appCustomFields);
-        $this->assertEquals(Tinebase_Model_CustomField_Grant::getAllGrants(), $appCustomFields->getFirstRecord()->account_grants);
+        $accountGrants = $appCustomFields->getFirstRecord()->account_grants;
+        sort($accountGrants);
+        $this->assertEquals(Tinebase_Model_CustomField_Grant::getAllGrants(), $accountGrants);
         
         // delete
         $this->_instance->deleteCustomField($createdCustomField);
