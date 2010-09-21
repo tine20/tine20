@@ -177,11 +177,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * resolve config grants
      * 
      * @param Tinebase_Record_RecordSet $_cfConfigs
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
      */
-    public function resolveConfigGrants($_cfConfigs, $_filter)
+    public function resolveConfigGrants($_cfConfigs)
     {
-        $cfAcl = $this->_backendConfig->getAclByFilter(Tinebase_Core::getUser()->getId(), $_filter);
+        $cfAcl = $this->_backendConfig->getAclForIds(Tinebase_Core::getUser()->getId(), $_cfConfigs->getArrayOfIds());
+        
+        foreach ($_cfConfigs as $config) {
+            $config->account_grants = (array_key_exists($config->getId(), $cfAcl)) ? explode(',', $cfAcl[$config->getId()]) : array();
+        }
     }
     
     /**

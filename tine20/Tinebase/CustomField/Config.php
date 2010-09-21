@@ -77,21 +77,28 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
-     * all grants for configs defined by filter
+     * all grants for configs given by array of ids
      * 
-     * @param $_accountId
-     * @param $_filter
+     * @param string $_accountId
+     * @param array $_id => account_grants
      */
-    public function getAclByFilter($_accountId, $_filter)
+    public function getAclForIds($_accountId, $_ids)
     {
-        $select = $this->_getAclSelect();
-        $this->_addFilter($select, $_filter);
+        $select = $this->_getAclSelect(array('id' => 'customfield_config.id', 'account_grants' => "GROUP_CONCAT(customfield_acl.account_grant)"));
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('customfield_config.id') . ' IN (?)', (array)$_ids))
+               ->group(array('customfield_config.id', 'customfield_acl.account_type', 'customfield_acl.account_id'));
+        Tinebase_Container::addGrantsSql($select, $_accountId, Tinebase_Model_CustomField_Grant::getAllGrants(), 'customfield_acl');
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        return $rows;
+        $result = array();
+        foreach ($rows as $row) {
+            $result[$row['id']] = $row['account_grants'];
+        }
+        
+        return $result;
     }
 }

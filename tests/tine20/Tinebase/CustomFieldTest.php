@@ -78,8 +78,6 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      * - add custom field
      * - get custom fields for app
      * - delete custom field
-     * 
-     * @todo check if grants are returned
      */
     public function testCustomFields()
     {
@@ -105,6 +103,10 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         );
         $this->assertGreaterThan(0, count($appCustomFieldsWithModelName));
         $this->assertEquals($customField->model, $appCustomFieldsWithModelName[0]->model, 'didn\'t get correct model name');
+        
+        // check if grants are returned
+        $this->_instance->resolveConfigGrants($appCustomFields);
+        $this->assertEquals(Tinebase_Model_CustomField_Grant::getAllGrants(), $appCustomFields->getFirstRecord()->account_grants);
         
         // delete
         $this->_instance->deleteCustomField($createdCustomField);
