@@ -37,11 +37,11 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
      * 
      * @param string $_grant
      * @param int $_accountId
-     * @return array of ids
+     * @return array
      */
-    public function getIdsByAcl($_grant, $_accountId)
+    public function getByAcl($_grant, $_accountId, $_onlyIds = FALSE, $_applicationId = NULL)
     {
-        $select = $this->_getSelect('id')
+        $select = $this->_getSelect(($_onlyIds) ? 'id' : '*')
             ->join(array(
                 /* table  */ 'customfield_acl' => SQL_TABLE_PREFIX . 'customfield_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('customfield_acl.customfield_id')} = {$this->_db->quoteIdentifier('customfield_config.id')}",
@@ -49,6 +49,10 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
             )
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('customfield_acl.account_grant') . ' = ?', $_grant));
         
+        if ($_applicationId !== NULL) {
+            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('customfield_config.application_id') . ' = ?', $_applicationId));
+        }
+            
         // use grants sql helper fn of Tinebase_Container to add account and grant values
         Tinebase_Container::addGrantsSql($select, $_accountId, $_grant, 'customfield_acl');
 
