@@ -125,14 +125,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      *
      * @param string|Tinebase_Model_Application $_applicationId
      * @param string                            $_modelName
-     * @param boolean                           $_onlyWritable get only writable custom fields (readable by default)
+     * @param string                            $_requiredGrant (read grant by default)
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Config records
      */
-    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL, $_onlyWritable = FALSE)
+    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL, $_requiredGrant = Tinebase_Model_CustomField_Grant::GRANT_READ)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        $cfIndex = $applicationId . (($_modelName !== NULL) ? $_modelName : '') . (($_onlyWritable) ? 'writable' : '');
+        $cfIndex = $applicationId . (($_modelName !== NULL) ? $_modelName : '') . $_requiredGrant;
         
         if (isset($this->_cfByApplicationCache[$cfIndex])) {
             return $this->_cfByApplicationCache[$cfIndex];
@@ -158,9 +158,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             }
             
             $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
-            if ($_onlyWritable) {
-                $filter->setRequiredGrants(array(Tinebase_Model_CustomField_Grant::GRANT_WRITE));
-            }
+            $filter->setRequiredGrants((array)$_requiredGrant);
             $result = $this->_backendConfig->search($filter);
         
             if (count($result) > 0) {
@@ -219,7 +217,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     public function saveRecordCustomFields(Tinebase_Record_Interface $_record)
     {
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
-        $appCustomFields = $this->getCustomFieldsForApplication($applicationId, get_class($_record), TRUE);
+        $appCustomFields = $this->getCustomFieldsForApplication($applicationId, get_class($_record), Tinebase_Model_CustomField_Grant::GRANT_WRITE);
         $this->resolveConfigGrants($appCustomFields);
         
         $existingCustomFields = $this->_getCustomFields($_record->getId());
