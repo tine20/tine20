@@ -19,7 +19,7 @@
 /**
  * abstract backend for preferences
  *
- * @package     Timetracker
+ * @package     Tinebase
  * @subpackage  Backend
  */
 abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstract
