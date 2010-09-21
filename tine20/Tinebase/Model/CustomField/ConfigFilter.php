@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Filter 
  */
-class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_FilterGroup
+class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_FilterGroup implements Tinebase_Model_Filter_AclFilter 
 {
     /**
      * @var string application of this filter group
@@ -31,6 +31,13 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
      */
     protected $_className = 'Tinebase_Model_CustomField_ConfigFilter';
     
+/**
+     * @var array one of theese grants must be met
+     */
+    protected $_requiredGrants = array(
+        Tinebase_Model_CustomField_Grant::GRANT_READ
+    );
+        
     /**
      * @var array filter model fieldName => definition
      */
@@ -39,4 +46,49 @@ class Tinebase_Model_CustomField_ConfigFilter extends Tinebase_Model_Filter_Filt
         'name'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'model'             => array('filter' => 'Tinebase_Model_Filter_Text'),
     );
+    
+    /**
+     * is acl filter resolved?
+     *
+     * @var boolean
+     */
+    protected $_isResolved = FALSE;
+    
+    /**
+     * sets the grants this filter needs to assure
+     *
+     * @param array $_grants
+     */
+    public function setRequiredGrants(array $_grants)
+    {
+        $this->_requiredGrants = $_grants;
+        $this->_isResolved = FALSE;
+    }
+    
+    /**
+     * appends sql to given select statement
+     *
+     * @param  Zend_Db_Select                $_select
+     * @param  Tinebase_Backend_Sql_Abstract $_backend
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public function appendFilterSql($_select, $_backend)
+    {
+        // only search for ids for which the user has the required grants
+        if (! $this->_isResolved) {
+            $result = array();
+            foreach ($this->_requiredGrants as $grant) {
+                $result = array_merge($result, Tinebase_CustomField::getInstance()->getCustomfieldConfigIdsByAcl($grant));
+            }
+            $this->_validCustomfields = array_unique($result);
+            $this->_isResolved = TRUE;
+        }
+        
+        $db = Tinebase_Core::getDb();
+        
+        $field = $db->quoteIdentifier('id');
+        $where = $db->quoteInto("$field IN (?)", empty($this->_validCustomfields) ? array('') : $this->_validCustomfields);
+        
+        $_select->where($where);
+    }
 }

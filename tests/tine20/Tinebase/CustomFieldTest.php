@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -32,7 +32,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     /**
      * @var array test objects
      */
-    protected $objects = array();
+    protected $_objects = array();
 
     /**
      * Runs the test methods of this class.
@@ -64,7 +64,12 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {      
+    {
+        if (count($this->_objects) > 0) {
+            foreach($this->_objects as $cf) {
+                $this->_instance->deleteCustomField($cf);
+            }
+        }
     }
     
     /**
@@ -73,12 +78,15 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
      * - add custom field
      * - get custom fields for app
      * - delete custom field
+     * 
+     * @todo check if grants are returned
      */
     public function testCustomFields()
     {
         // create
         $customField = $this->_getCustomField();
         $createdCustomField = $this->_instance->addCustomField($customField);
+        $this->_objects = $createdCustomField;
         $this->assertEquals($customField->name, $createdCustomField->name);
         $this->assertNotNull($createdCustomField->getId());
         
@@ -102,6 +110,28 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         $this->_instance->deleteCustomField($createdCustomField);
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_instance->getCustomField($createdCustomField->getId());
+        $this->_objects = array();
+    }
+    
+    /**
+     * test custom field acl
+     *
+     * - add custom field
+     * - remove grants
+     * - cf should no longer be returned
+     */
+    public function testCustomFieldAcl()
+    {
+        $createdCustomField = $this->_instance->addCustomField($this->_getCustomField());
+        $this->_objects = $createdCustomField;
+        $this->_instance->setGrants($createdCustomField);
+        
+        $application = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        $appCustomFields = $this->_instance->getCustomFieldsForApplication(
+            $application->getId()
+        );
+        
+        $this->assertEquals(0, count($appCustomFields));
     }
     
     /**

@@ -27,7 +27,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     /**
      * custom field config backend
      * 
-     * @var Tinebase_Backend_Sql
+     * @var Tinebase_CustomField_Config
      */
     protected $_backendConfig;
     
@@ -66,7 +66,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */    
     private function __construct() 
     {
-        $this->_backendConfig = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Config', 'customfield_config');
+        $this->_backendConfig = new Tinebase_CustomField_Config();
         $this->_backendValue = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Value', 'customfield', NULL, NULL, NULL, TRUE);
         $this->_backendACL = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Grant', 'customfield_acl');
     }
@@ -329,6 +329,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             Tinebase_TransactionManager::getInstance()->rollBack();            
             throw new Tinebase_Exception_Backend($e->getMessage());
         }
+    }
+    
+    /**
+     * get customfield config ids by grant
+     */
+    public function getCustomfieldConfigIdsByAcl($_grant)
+    {
+        return $this->_backendConfig->getIdsByAcl($_grant, Tinebase_Core::getUser()->getId());
     }
     
     /**
