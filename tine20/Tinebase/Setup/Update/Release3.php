@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -496,5 +496,106 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setTableVersion('access_log', '2');
         $this->setApplicationVersion('Tinebase', '3.15');
+    }
+    
+    /**
+     * update to 3.16
+     * - add customfield_acl table
+     */
+    public function update_15()
+    {
+        $declaration = new Setup_Backend_Schema_Table_Xml(
+        '<table>
+            <name>customfield_acl</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>customfield_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_type</name>
+                    <type>enum</type>
+                    <value>anyone</value>
+                    <value>user</value>
+                    <value>group</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_grant</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>customfield_id-account-type-account_id-account_grant</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>customfield_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+                <index>
+                    <name>id-account_type-account_id</name>
+                    <field>
+                        <name>customfield_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>customfield_acl::customfield_id--customfield_config::id</name>
+                    <field>
+                        <name>customfield_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>customfield_config</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            </declaration>
+        </table>');
+        $this->createTable('customfield_acl', $declaration);
+        
+        // add grants to existing customfields
+        foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
+            $allCfConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($app);
+            foreach ($allCfConfigs as $cfConfig) {
+                Tinebase_CustomField::getInstance()->setGrants($cfConfig, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, 0, Tinebase_Model_CustomField_Grant::getAllGrants());
+            }
+        }
+                
+        $this->setApplicationVersion('Tinebase', '3.16');
     }
 }

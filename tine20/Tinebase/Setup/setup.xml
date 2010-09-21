@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>3.15</version>
+	<version>3.16</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -572,7 +572,6 @@
 				</index>
 			</declaration>
 		</table>
-
 		<table>
 			<name>container_acl</name>
 			<version>2</version>
@@ -655,7 +654,6 @@
 				</index>
 			</declaration>
 		</table>
-
 		<table>
 			<name>access_log</name>
 			<version>2</version>
@@ -1898,7 +1896,87 @@
 				</index>
 			</declaration>
 		</table>
-
+        <table>
+            <name>customfield_acl</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>customfield_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_type</name>
+                    <type>enum</type>
+                    <value>anyone</value>
+                    <value>user</value>
+                    <value>group</value>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>account_grant</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <index>
+                    <name>customfield_id-account-type-account_id-account_grant</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                    <field>
+                        <name>customfield_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <field>
+                        <name>account_grant</name>
+                    </field>
+                </index>
+                <index>
+                    <name>id-account_type-account_id</name>
+                    <field>
+                        <name>customfield_id</name>
+                    </field>
+                    <field>
+                        <name>account_type</name>
+                    </field>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>customfield_acl::customfield_id--customfield_config::id</name>
+                    <field>
+                        <name>customfield_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>customfield_config</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
 		<table>
 			<name>note_types</name>
 			<version>2</version>
