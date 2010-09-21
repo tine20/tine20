@@ -50,7 +50,7 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
             ->where($this->_db->quoteInto($this->_db->quoteIdentifier('customfield_acl.account_grant') . ' = ?', $_grant));
         
         // use grants sql helper fn of Tinebase_Container to add account and grant values
-        Tinebase_Container::_addGrantsSql($select, $_accountId, $_grant, 'customfield_acl');
+        Tinebase_Container::addGrantsSql($select, $_accountId, $_grant, 'customfield_acl');
 
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
