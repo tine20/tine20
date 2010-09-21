@@ -333,10 +333,20 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     
     /**
      * get customfield config ids by grant
+     * 
+     * @param string $_grant
+     * @return array of ids
      */
     public function getCustomfieldConfigIdsByAcl($_grant)
     {
-        return $this->_backendConfig->getByAcl($_grant, Tinebase_Core::getUser()->getId(), TRUE);
+        $user = Tinebase_Core::getUser();
+        if (is_object($user)) {
+            $result = $this->_backendConfig->getByAcl($_grant, $user->getId(), TRUE); 
+        } else {
+            $result = array();
+        }
+        
+        return $result;
     }
     
     /**
