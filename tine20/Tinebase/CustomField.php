@@ -103,7 +103,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     {
         $this->_clearCache();
         $result = $this->_backendConfig->create($_record);
-        Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, 0, Tinebase_Model_CustomField_Grant::getAllGrants());
+        Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
         return $result;
     }
 
@@ -127,17 +127,18 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param string                            $_modelName
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Config records
      */
-    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL)
+    public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL, $_onlyWritable = FALSE)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        $cfIndex = $applicationId . (($_modelName !== NULL) ? $_modelName : '');
+        $cfIndex = $applicationId . (($_modelName !== NULL) ? $_modelName : '') . (($_onlyWritable) ? 'writable' : '');
+        
         if (isset($this->_cfByApplicationCache[$cfIndex])) {
             return $this->_cfByApplicationCache[$cfIndex];
         } 
         
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = 'getCustomFieldsForApplication' . $cfIndex;
+        $cache = Tinebase_Core::getCache();
+        $cacheId = convertCacheId('getCustomFieldsForApplication' . $cfIndex);
         $result = $cache->load($cacheId);
         
         if (!$result) {
@@ -156,6 +157,9 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             }
             
             $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
+            if ($_onlyWritable) {
+                $filter->setRequiredGrants(array(Tinebase_Model_CustomField_Grant::GRANT_WRITE));
+            }
             $result = $this->_backendConfig->search($filter);
         
             if (count($result) > 0) {
@@ -180,7 +184,12 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function resolveConfigGrants($_cfConfigs)
     {
-        $cfAcl = $this->_backendConfig->getAclForIds(Tinebase_Core::getUser()->getId(), $_cfConfigs->getArrayOfIds());
+        $user = Tinebase_Core::getUser();
+        if (! is_object($user)) {
+            return; // do nothing
+        }
+        
+        $cfAcl = $this->_backendConfig->getAclForIds($user->getId(), $_cfConfigs->getArrayOfIds());
         
         foreach ($_cfConfigs as $config) {
             $config->account_grants = (array_key_exists($config->getId(), $cfAcl)) ? explode(',', $cfAcl[$config->getId()]) : array();
@@ -194,8 +203,11 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function deleteCustomField($_customField)
     {
+        $cfId = ($_customField instanceof Tinebase_Model_CustomField_Config) ? $_customField->getId() : $_customField;
+        
         $this->_clearCache();
-        $this->_backendConfig->delete($_customField);
+        $this->_backendConfig->delete($cfId);
+        $this->_backendValue->deleteByProperty($cfId, 'customfield_id');
     }
     
     /**
@@ -207,42 +219,36 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     {
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
         $appCustomFields = $this->getCustomFieldsForApplication($applicationId, get_class($_record));
+        $this->resolveConfigGrants($appCustomFields);
         
         $existingCustomFields = $this->_getCustomFields($_record->getId());
         $existingCustomFields->addIndices(array('customfield_id'));
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Updating custom fields for record of class ' . get_class($_record)
-        );
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating custom fields for record of class ' . get_class($_record));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_record->customfields, TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($appCustomFields->toArray(), TRUE));
         
         foreach ($appCustomFields as $customField) {
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . print_r($_record->customfields, TRUE)
-            );
-                
-            $value = (is_array($_record->customfields) && array_key_exists($customField->name, $_record->customfields) )
-                ? $_record->customfields[$customField->name]
-                : '';
-                
-            $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
-            if (count($filtered) == 1) {
-                // update
-                $cf = $filtered->getFirstRecord();
-                $cf->value = $value;
-                $this->_backendValue->update($cf);
-                
-            } else if (count($filtered) == 0) {
-                // create
-                $cf = new Tinebase_Model_CustomField_Value(array(
-                    'record_id'         => $_record->getId(),
-                    'customfield_id'    => $customField->getId(),
-                    'value'             => $value
-                ));
-                $this->_backendValue->create($cf);
-
-            } else {
-                throw new Tinebase_Exception_UnexpectedValue('Oops, there should be only one custom field value here!');
+            if (is_array($_record->customfields) && array_key_exists($customField->name, $_record->customfields)) {
+                $value = $_record->customfields[$customField->name];
+                    
+                $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
+                if (count($filtered) == 1) {
+                    $cf = $filtered->getFirstRecord();
+                    $cf->value = $value;
+                    $this->_backendValue->update($cf);
+                    
+                } else if (count($filtered) == 0) {
+                    $cf = new Tinebase_Model_CustomField_Value(array(
+                        'record_id'         => $_record->getId(),
+                        'customfield_id'    => $customField->getId(),
+                        'value'             => $value
+                    ));
+                    $this->_backendValue->create($cf);
+    
+                } else {
+                    throw new Tinebase_Exception_UnexpectedValue('Oops, there should be only one custom field value here!');
+                }
             }
         }
     }
@@ -252,7 +258,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      *
      * @param Tinebase_Record_Interface $_record
      * @param Tinebase_Record_RecordSet $_customFields
-     * @param Tinebase_Record_RecordSet $configs
+     * @param Tinebase_Record_RecordSet $_configs
      */
     public function resolveRecordCustomFields(Tinebase_Record_Interface $_record, $_customFields = NULL, $_configs = NULL)
     {
@@ -260,11 +266,18 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         if ($_configs === NULL) {
             $_configs = $this->_backendConfig->getMultiple($customFields->customfield_id);  
         };
-            
+        $this->resolveConfigGrants($_configs);
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_record->toArray(), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($customFields->toArray(), TRUE));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_configs->toArray(), TRUE));
+        
         $result = array();
-        foreach ($customFields as $customField) {            
+        foreach ($customFields as $customField) {
             $config = $_configs[$_configs->getIndexById($customField->customfield_id)];
-            $result[$config->name] = $customField->value;
+            if (in_array(Tinebase_Model_CustomField_Grant::GRANT_READ, $config->account_grants)) {
+                $result[$config->name] = $customField->value;
+            }
         }
         $_record->customfields = $result;
     }
@@ -309,17 +322,19 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * set grants for custom field
      *
      * @param   string|Tinebase_Model_CustomField_Config $_customfieldId
+     * @param   array $_grants list of grants to add
      * @param   string $_accountType
      * @param   int $_accountId
-     * @param   array $_grants list of grants to add
      * @return  void
      */
-    public function setGrants($_customfieldId, $_accountType = NULL, $_accountId = NULL, $_grants = array())
+    public function setGrants($_customfieldId, $_grants = array(), $_accountType = NULL, $_accountId = NULL)
     {
         $cfId = ($_customfieldId instanceof Tinebase_Model_CustomField_Config) ? $_customfieldId->getId() : $_customfieldId;
         
         try {
-
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Setting grants for custom field ' . $cfId . ' -> ' . print_r($_grants, TRUE));
+            
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             $this->_backendACL->deleteByProperty($cfId, 'customfield_id');
             
@@ -327,8 +342,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                 if (in_array($grant, Tinebase_Model_CustomField_Grant::getAllGrants())) {
                     $newGrant = new Tinebase_Model_CustomField_Grant(array(
                         'customfield_id'=> $cfId,
-                        'account_type'  => $_accountType,
-                        'account_id'    => $_accountId,
+                        'account_type'  => ($_accountType !== NULL) ? $_accountType : Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                        'account_id'    => ($_accountId !== NULL) ? $_accountId : 0,
                         'account_grant' => $grant                    
                     ));
                     $this->_backendACL->create($newGrant);
@@ -336,7 +351,6 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
             $this->_clearCache();
             
         } catch (Exception $e) {
