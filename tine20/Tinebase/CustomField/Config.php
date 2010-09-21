@@ -52,7 +52,12 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
         $stmt = $this->_db->query($select);
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
-        return $rows;
+        $result = array();
+        foreach ($rows as $row) {
+            $result[] = $row['id'];
+        }
+        
+        return $result;
     }
     
     /**
