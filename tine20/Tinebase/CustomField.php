@@ -300,7 +300,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      * @param   array $_grants list of grants to add
      * @return  void
      */
-    public function setGrants($_customfieldId, $_accountType, $_accountId, array $_grants)
+    public function setGrants($_customfieldId, $_accountType = NULL, $_accountId = NULL, $_grants = array())
     {
         $cfId = ($_customfieldId instanceof Tinebase_Model_CustomField_Config) ? $_customfieldId->getId() : $_customfieldId;
         
@@ -317,7 +317,6 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
                         'account_id'    => $_accountId,
                         'account_grant' => $grant                    
                     ));
-                    print_r($newGrant->toArray());
                     $this->_backendACL->create($newGrant);
                 }
             }
