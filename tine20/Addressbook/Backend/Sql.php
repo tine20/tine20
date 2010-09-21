@@ -65,11 +65,6 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         $contact = $this->_rawDataToRecord($queryResult);
                
-        // get custom fields
-        if ($contact->has('customfields')) {
-            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
-        }
-               
         return $contact;
     }
     

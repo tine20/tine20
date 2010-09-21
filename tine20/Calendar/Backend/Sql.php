@@ -110,8 +110,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param  bool   $_getDeleted
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
-     * 
-     * @todo move resolveRecordCustomFields to abstract record controller get() fn
      */
     public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
     {
@@ -135,11 +133,6 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 break;
             default:
                 throw new Tinebase_Exception_UnexpectedValue(' in total ' . count($resultSet) . ' where found. But only one should!');
-        }
-        
-        // get custom fields
-        if ($result->has('customfields')) {
-            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($result);
         }
         
         return $result;

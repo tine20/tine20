@@ -154,8 +154,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param  bool   $_getDeleted
      * @return Tinebase_Record_Interface
      * @throws Tinebase_Exception_NotFound
-     * 
-     * @todo move resolveRecordCustomFields to abstract record controller get() fn
      */
     public function getByProperty($_value, $_property = 'name', $_getDeleted = FALSE) 
     {
@@ -175,11 +173,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));        
         $result = $this->_rawDataToRecord($queryResult);
-               
-        // get custom fields
-        if ($result->has('customfields')) {
-            Tinebase_CustomField::getInstance()->resolveRecordCustomFields($result);
-        }
         
         return $result;
     }
