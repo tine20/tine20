@@ -197,10 +197,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         $result = parent::update($_record);
         
-        // delete message body cache because display format could have changed
-        // @ŧodo only do this if display_format field changed (check modlog)
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
-        
         // update account capabilities
         return $this->updateCapabilities($result);
     }
@@ -311,9 +307,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                     $_record->$key = $_oldRecord->$key;
                 }
             } 
-            
         } else {
-        
             // get old credentials
             $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
             $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
@@ -364,6 +358,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             ) {
                 // use imap credentials for smtp auth as well
                 $_record->smtp_credentials_id = $_record->credentials_id;
+            }
+            
+            $diff = $_record->diff($_oldRecord);
+            if (array_key_exists('display_format', $diff)) {
+                // delete message body cache because display format has changed
+                Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
             }
         }
     }
