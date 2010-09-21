@@ -174,6 +174,17 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     }
     
     /**
+     * resolve config grants
+     * 
+     * @param Tinebase_Record_RecordSet $_cfConfigs
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     */
+    public function resolveConfigGrants($_cfConfigs, $_filter)
+    {
+        $cfAcl = $this->_backendConfig->getAclByFilter(Tinebase_Core::getUser()->getId(), $_filter);
+    }
+    
+    /**
      * delete a custom field
      *
      * @param string|Tinebase_Model_CustomField_Config $_customField
@@ -341,7 +352,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     {
         $user = Tinebase_Core::getUser();
         if (is_object($user)) {
-            $result = $this->_backendConfig->getByAcl($_grant, $user->getId(), TRUE); 
+            $result = $this->_backendConfig->getByAcl($_grant, $user->getId()); 
         } else {
             $result = array();
         }
