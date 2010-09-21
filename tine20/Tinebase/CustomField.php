@@ -125,6 +125,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      *
      * @param string|Tinebase_Model_Application $_applicationId
      * @param string                            $_modelName
+     * @param boolean                           $_onlyWritable get only writable custom fields (readable by default)
      * @return Tinebase_Record_RecordSet of Tinebase_Model_CustomField_Config records
      */
     public function getCustomFieldsForApplication($_applicationId, $_modelName = NULL, $_onlyWritable = FALSE)
@@ -218,7 +219,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     public function saveRecordCustomFields(Tinebase_Record_Interface $_record)
     {
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication())->getId();
-        $appCustomFields = $this->getCustomFieldsForApplication($applicationId, get_class($_record));
+        $appCustomFields = $this->getCustomFieldsForApplication($applicationId, get_class($_record), TRUE);
         $this->resolveConfigGrants($appCustomFields);
         
         $existingCustomFields = $this->_getCustomFields($_record->getId());
