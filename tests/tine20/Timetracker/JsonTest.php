@@ -903,6 +903,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->_toDeleteIds['cf'] = array($_customField1->getId(), $customField2->getId());
         
         // checks
+        $this->assertTrue(array_key_exists($_customField1->name, $timesheetData['customfields']), 'cf 1 not found');
+        $this->assertTrue(array_key_exists($customField2->name, $timesheetData['customfields']), 'cf 2 not found');
         $this->assertGreaterThan(0, count($timesheetData['customfields']));
         $this->assertEquals($timesheetArray[$_customField1->name], $timesheetData['customfields'][$_customField1->name]);
         $this->assertEquals($timesheetArray[$customField2->name], $timesheetData['customfields'][$customField2->name]);
@@ -916,6 +918,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             }
         }
         $this->assertTrue(isset($ts));
+        $this->assertTrue(array_key_exists($_customField1->name, $ts['customfields']));
+        $this->assertTrue(array_key_exists($customField2->name, $ts['customfields']));
         $this->assertEquals($timesheetArray[$_customField1->name], $ts['customfields'][$_customField1->name]);
         $this->assertEquals($timesheetArray[$customField2->name], $ts['customfields'][$customField2->name]);
         
