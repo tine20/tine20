@@ -988,7 +988,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     $record[$_containerProperty]['path'] = $containers[$containerId]->getPath();
                 }
             } catch (Exception $e) {
-                // if path is not determinable, sktip this container
+                // if path is not determinable, skip this container
                 $_records->removeRecord($record);
             }
         }
