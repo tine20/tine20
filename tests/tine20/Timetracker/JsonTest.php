@@ -253,20 +253,34 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         Tinebase_CustomField::getInstance()->setGrants($cf, array());
         $ts = $this->_json->getTimesheet($ts['id']);
         $this->assertTrue(! array_key_exists($cf->name, $ts['customfields']), 'customfield should not be readable');
-        $ts[$cf->name] = 'try to update';
-        $ts = $this->_json->saveTimesheet($timesheetArray);
+        $ts = $this->_updateCfOfTs($ts, $cf->name, 'try to update');
         
         // only read allowed
-        // @todo make this work
-        /*
         Tinebase_CustomField::getInstance()->setGrants($cf, array(Tinebase_Model_CustomField_Grant::GRANT_READ));
         $ts = $this->_json->getTimesheet($ts['id']);
         $this->assertTrue(array_key_exists($cf->name, $ts['customfields']), 'customfield should be readable again');
         $this->assertEquals($value, $ts['customfields'][$cf->name], 'value should not have changed'); 
-        $ts[$cf->name] = 'try to update';
-        $ts = $this->_json->saveTimesheet($timesheetArray);
+        $ts = $this->_updateCfOfTs($ts, $cf->name, 'try to update');
         $this->assertEquals($value, $ts['customfields'][$cf->name], 'value should still not have changed');
-        */ 
+    }
+    
+    /**
+     * update timesheet customfields and return saved ts
+     * 
+     * @param array $_ts
+     * @param string $_cfName
+     * @param string $_cfValue
+     * @return array
+     */
+    protected function _updateCfOfTs($_ts, $_cfName, $_cfValue)
+    {
+        $_ts[$_cfName] = $_cfValue;
+        $_ts['timeaccount_id'] = $_ts['timeaccount_id']['id'];
+        $_ts['account_id'] = $_ts['account_id']['accountId'];
+        unset($_ts['customfields']);
+        $ts = $this->_json->saveTimesheet($_ts);
+        
+        return $ts;
     }
     
     /**
