@@ -35,27 +35,53 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
     /**
      * get customfield config ids by grant
      * 
-     * @param string $_grant
      * @param int $_accountId
+     * @param string $_grant if grant is empty, all grants are returned
      * @return array
      */
-    public function getByAcl($_grant, $_accountId, $_onlyIds = FALSE, $_applicationId = NULL)
+    public function getByAcl($_grant, $_accountId)
     {
-        $select = $this->_getSelect(($_onlyIds) ? 'id' : '*')
+        $select = $this->_getAclSelect('id');
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('customfield_acl.account_grant') . ' = ?', $_grant));
+        
+        // use grants sql helper fn of Tinebase_Container to add account and grant values
+        Tinebase_Container::addGrantsSql($select, $_accountId, $_grant, 'customfield_acl');
+
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
+        $stmt = $this->_db->query($select);
+        $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        return $rows;
+    }
+    
+    /**
+     * get acl select
+     * 
+     * @param string $_cols
+     * @return Zend_Db_Select
+     */
+    protected function _getAclSelect($_cols = '*')
+    {
+        return $this->_getSelect($_cols)
             ->join(array(
                 /* table  */ 'customfield_acl' => SQL_TABLE_PREFIX . 'customfield_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('customfield_acl.customfield_id')} = {$this->_db->quoteIdentifier('customfield_config.id')}",
                 /* select */ array()
-            )
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('customfield_acl.account_grant') . ' = ?', $_grant));
+            );
+    }
+    
+    /**
+     * all grants for configs defined by filter
+     * 
+     * @param $_accountId
+     * @param $_filter
+     */
+    public function getAclByFilter($_accountId, $_filter)
+    {
+        $select = $this->_getAclSelect();
+        $this->_addFilter($select, $_filter);
         
-        if ($_applicationId !== NULL) {
-            $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('customfield_config.application_id') . ' = ?', $_applicationId));
-        }
-            
-        // use grants sql helper fn of Tinebase_Container to add account and grant values
-        Tinebase_Container::addGrantsSql($select, $_accountId, $_grant, 'customfield_acl');
-
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
         $stmt = $this->_db->query($select);
