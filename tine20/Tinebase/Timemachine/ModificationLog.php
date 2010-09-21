@@ -204,7 +204,9 @@ class Tinebase_Timemachine_ModificationLog
             $_modification->setId($id);
             $_modification->convertDates = true;
             $modificationArray = $_modification->toArray();
-            
+            if (is_array($modificationArray['new_value'])) {
+                throw new Tinebase_Exception_Record_Validation("New value is an array! \n" . print_r($modificationArray['new_value'], true));
+            }
             $this->_table->insert($modificationArray);
         } else {
             throw new Tinebase_Exception_Record_Validation(
