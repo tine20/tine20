@@ -229,6 +229,45 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($value, $cfValues['results'][0]['value'], 'value mismatch');
         $this->assertEquals(2, $cfValues['totalcount'], 'wrong totalcount');
     }
+
+    /**
+     * try to add a Timesheet with custom fields (check grants)
+     */
+    public function testAddTimesheetWithCustomFieldGrants()
+    {
+        $value = 'test';
+        $cf = $this->_getCustomField();
+        
+        $timesheetArray = $this->_getTimesheet()->toArray();
+        $timesheetArray[$cf->name] = $value;
+        $ts = $this->_json->saveTimesheet($timesheetArray);
+        
+        // tearDown settings
+        $this->_toDeleteIds['ta'][] = $ts['timeaccount_id']['id'];
+        
+        // test with default grants
+        $this->assertTrue(array_key_exists($cf->name, $ts['customfields']), 'customfield should be readable');
+        $this->assertEquals($value, $ts['customfields'][$cf->name]);
+        
+        // remove all grants
+        Tinebase_CustomField::getInstance()->setGrants($cf, array());
+        $ts = $this->_json->getTimesheet($ts['id']);
+        $this->assertTrue(! array_key_exists($cf->name, $ts['customfields']), 'customfield should not be readable');
+        $ts[$cf->name] = 'try to update';
+        $ts = $this->_json->saveTimesheet($timesheetArray);
+        
+        // only read allowed
+        // @todo make this work
+        /*
+        Tinebase_CustomField::getInstance()->setGrants($cf, array(Tinebase_Model_CustomField_Grant::GRANT_READ));
+        $ts = $this->_json->getTimesheet($ts['id']);
+        $this->assertTrue(array_key_exists($cf->name, $ts['customfields']), 'customfield should be readable again');
+        $this->assertEquals($value, $ts['customfields'][$cf->name], 'value should not have changed'); 
+        $ts[$cf->name] = 'try to update';
+        $ts = $this->_json->saveTimesheet($timesheetArray);
+        $this->assertEquals($value, $ts['customfields'][$cf->name], 'value should still not have changed');
+        */ 
+    }
     
     /**
      * try to get a Timesheet
@@ -698,7 +737,11 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             'length'            => 10,        
         ));
         
-        return Tinebase_CustomField::getInstance()->addCustomField($record);
+        $result = Tinebase_CustomField::getInstance()->addCustomField($record);
+        
+        $this->_toDeleteIds['cf'][] = $result->getId();
+        
+        return $result;
     }
     
     /**
@@ -900,7 +943,6 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         
         // tearDown settings
         $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
-        $this->_toDeleteIds['cf'] = array($_customField1->getId(), $customField2->getId());
         
         // checks
         $this->assertTrue(array_key_exists($_customField1->name, $timesheetData['customfields']), 'cf 1 not found');
@@ -929,6 +971,5 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
             $this->_getPaging()
         );
         $this->assertGreaterThan(0, $searchResult['totalcount'], 'cf filter not working');
-        
     }
 }
