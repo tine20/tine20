@@ -586,7 +586,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 </index>
             </declaration>
         </table>');
-        //$this->createTable('customfield_acl', $declaration);
+        $this->createTable('customfield_acl', $declaration);
         
         // add grants to existing customfields
         $configBackend = new Tinebase_CustomField_Config();
