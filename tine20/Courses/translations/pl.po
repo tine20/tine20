@@ -12,6 +12,18 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: Controller/Course.php:108
+msgid "teacher"
+msgstr "nauczyciel"
+
+#: Controller/Course.php:116
+msgid "Teacher"
+msgstr "Nauczyciel"
+
+#: Controller/Course.php:117
+msgid "Teacher Account"
+msgstr "Konto nauczyciela"
+
 #: js/CourseGridPanel.js:51
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
@@ -24,13 +36,11 @@ msgstr "Nazwa"
 msgid "Type"
 msgstr "Typ"
 
-#: js/CourseGridPanel.js:86
-#: js/CourseEditDialog.js:183
+#: js/CourseGridPanel.js:86 js/CourseEditDialog.js:183
 msgid "Internet Access"
 msgstr "Internet"
 
-#: js/CourseGridPanel.js:93
-#: js/CourseEditDialog.js:189
+#: js/CourseGridPanel.js:93 js/CourseEditDialog.js:189
 msgid "Fileserver Access"
 msgstr "Serwer plików"
 
@@ -58,22 +68,11 @@ msgstr "Błąd"
 msgid "Some error occured while trying to update the courses."
 msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
 
-#: js/Courses.js:33
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kursy"
-
-#: js/Courses.js:38
-msgid "All Courses"
-msgstr "Wszystkie kursy"
-
 #: js/CourseEditDialog.js:32
 msgid "Import course members"
 msgstr "Importuj uczestników kursu"
 
-#: js/CourseEditDialog.js:138
-#: js/Models.js:42
-#: Frontend/Json.php:245
+#: js/CourseEditDialog.js:138 js/Models.js:42 Frontend/Json.php:245
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurs"
@@ -84,8 +83,7 @@ msgstr[2] "kursy"
 msgid "Course Name"
 msgstr "Nazwa kursu"
 
-#: js/CourseEditDialog.js:158
-#: js/CourseEditDialog.js:165
+#: js/CourseEditDialog.js:158 js/CourseEditDialog.js:165
 msgid "Course / School Type"
 msgstr "Kurs / Typ szkoły"
 
@@ -117,6 +115,14 @@ msgstr "Ustaw nowe hasło"
 msgid "Please enter the new password:"
 msgstr "Proszę wprowadzić nowe hasło:"
 
+#: js/Courses.js:33 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kursy"
+
+#: js/Courses.js:38
+msgid "All Courses"
+msgstr "Wszystkie kursy"
+
 #: js/Models.js:46
 msgid "record list"
 msgid_plural "record lists"
@@ -130,16 +136,3 @@ msgid_plural "Course Types"
 msgstr[0] "Rodzaj kursu"
 msgstr[1] "rodzaje kursu"
 msgstr[2] "rodzaje kursu"
-
-#: Controller/Course.php:108
-msgid "teacher"
-msgstr "nauczyciel"
-
-#: Controller/Course.php:116
-msgid "Teacher"
-msgstr "Nauczyciel"
-
-#: Controller/Course.php:117
-msgid "Teacher Account"
-msgstr "Konto nauczyciela"
-
