@@ -84,7 +84,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
         // create
         $customField = $this->_getCustomField();
         $createdCustomField = $this->_instance->addCustomField($customField);
-        $this->_objects = $createdCustomField;
+        $this->_objects[] = $createdCustomField;
         $this->assertEquals($customField->name, $createdCustomField->name);
         $this->assertNotNull($createdCustomField->getId());
         
@@ -127,7 +127,7 @@ class Tinebase_CustomFieldTest extends PHPUnit_Framework_TestCase
     public function testCustomFieldAcl()
     {
         $createdCustomField = $this->_instance->addCustomField($this->_getCustomField());
-        $this->_objects = $createdCustomField;
+        $this->_objects[] = $createdCustomField;
         $this->_instance->setGrants($createdCustomField);
         
         $application = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
