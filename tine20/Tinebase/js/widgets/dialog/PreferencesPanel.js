@@ -171,6 +171,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
             	var field = this.items.items[i];
                 Ext.QuickTips.register({
                     target: field,
+                    dismissDelay: 30000,
                     title: field.fieldLabel,
                     text: field.description,
                     width: 200
