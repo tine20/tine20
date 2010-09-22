@@ -44,7 +44,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     );
     
     /**
-     * @var array one of theese grants must be met
+     * @var array one of these grants must be met
      */
     protected $_requiredGrants = array(
         Timetracker_Model_TimeaccountGrants::BOOK_OWN

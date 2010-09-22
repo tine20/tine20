@@ -61,7 +61,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
     protected $_isResolved = FALSE;
     
     /**
-     * @var array one of theese grants must be met
+     * @var array one of these grants must be met
      */
     protected $_requiredGrants = array(
         Timetracker_Model_TimeaccountGrants::BOOK_OWN
