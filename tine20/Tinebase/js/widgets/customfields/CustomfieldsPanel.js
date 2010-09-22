@@ -76,10 +76,13 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                     name: 'customfield_' + def.get('name'),
                     xtype: (def.get('value_search') == 1) ? 'customfieldsearchcombo' : def.get('type'),
                     customfieldId: def.id,
-                    maxLength: def.get('length'),
                     anchor: '95%',
                     readOnly: def.get('account_grants').indexOf('writeGrant') < 0
                 };
+                
+                if (def.get('length')) {
+                    fieldDef.maxLength = def.get('length');
+                }
                 
                 try {
                     var fieldObj = Ext.ComponentMgr.create(fieldDef);
@@ -204,13 +207,6 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
     name: 'customfields',
     hidden: true,
     labelSeparator: '',
-    /*
-    // @private
-    initComponent: function() {
-        Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField.superclass.initComponent.call(this);
-        //this.hide();
-    },
-    */
     
     /**
      * returns cf data of the current record
@@ -230,7 +226,11 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
     setValue: function(values){
         if (values) {
             this.cfStore.each(function(def) {
-                def.fieldObj.setValue(values[def.get('name')]);
+                value = values[def.get('name')];
+                if (def.get('type') == 'datefield' || def.get('type') == 'datetimefield') {
+                    value = new Date(value);
+                }
+                def.fieldObj.setValue(value);
             });
         }
     }
