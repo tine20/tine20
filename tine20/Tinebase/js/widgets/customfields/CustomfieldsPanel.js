@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -24,7 +24,7 @@ Ext.ns('Tine.Tinebase', 'Tine.Tinebase.widgets', 'Tine.Tinebase.widgets.customfi
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @param       {Object} config
@@ -70,13 +70,15 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
             this.items = [];
             this.getFieldSet(_('General'));
             cfStore.each(function(def) {
+                
                 var fieldDef = {
                     fieldLabel: def.get('label'),
                     name: 'customfield_' + def.get('name'),
                     xtype: (def.get('value_search') == 1) ? 'customfieldsearchcombo' : def.get('type'),
                     customfieldId: def.id,
                     maxLength: def.get('length'),
-                    anchor: '95%'
+                    anchor: '95%',
+                    readOnly: def.get('account_grants').indexOf('writeGrant') < 0
                 };
                 
                 try {
@@ -92,8 +94,8 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                     // ugh a bit ugly
                     def.fieldObj = fieldObj;
                 } catch (e) {
-                    //console.log(e);
-                    console.error('unable to create custom field "' + def.get('name') + '". Check definition!');
+                    Tine.log.debug(e);
+                    Tine.log.err('Unable to create custom field "' + def.get('name') + '". Check definition!');
                     cfStore.remove(def);
                 }
                 
