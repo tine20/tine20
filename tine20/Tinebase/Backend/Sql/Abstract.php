@@ -284,6 +284,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
+
+        if ($_filter === NULL) {
+            $_filter = new Tinebase_Model_Filter_FilterGroup();
+        }
         
         // build query
         $selectCols = ($_onlyIds) ? $this->_tableName . '.id' : '*';
