@@ -67,6 +67,11 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     showSearchButton: true,
     
+    /**
+     * @cfg {String} row prefix (defaults to _('Show'))
+     */
+    rowPrefix: null,
+    
     border: false,
     monitorResize: true,
     region: 'north',
@@ -315,7 +320,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             }
             
             if (filter.id == firstId) {
-                tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = _('Show');
+                tr.child('td[class=tw-ftb-frow-prefix]').dom.innerHTML = this.rowPrefix;
                 
                 // hack for the save/delete all btns which are now in the first row
                 //if (Ext.isSafari) {
@@ -423,6 +428,10 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         this.on('show', function() {
             this.doLayout();
         }, this);
+        
+        if (this.rowPrefix === null) { 
+            this.rowPrefix = _('Show');
+        }
         
         this.initTemplates();
         this.initActions();

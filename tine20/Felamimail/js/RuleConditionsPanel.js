@@ -48,6 +48,7 @@ Tine.Felamimail.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
+        this.rowPrefix = '';
         
         this.filterModels = Tine.Felamimail.RuleConditionsPanel.getFilterModel(this.app);
         
