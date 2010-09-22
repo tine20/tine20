@@ -197,7 +197,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * add new customfield config
      * 
      * needs args like this:
-     * application="Addressbook" name="datefield" label="Date" model="Addressbook_Model_Contact" type="datetime"
+     * application="Addressbook" name="datefield" label="Date" model="Addressbook_Model_Contact" type="datefield"
      * @see Tinebase_Model_CustomField_Config for full list 
      * 
      * @param $_opts
