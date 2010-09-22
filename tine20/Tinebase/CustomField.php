@@ -161,14 +161,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $filter->setRequiredGrants((array)$_requiredGrant);
             $result = $this->_backendConfig->search($filter);
         
-            if (count($result) > 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
-                    . print_r($result->toArray(), TRUE)
-                );
-            }
-
             $cache->save($result, $cacheId, array('customfields'));
+        }
+        
+        if (count($result) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
+                . print_r($result->toArray(), TRUE)
+            );
         }
         
         $this->_cfByApplicationCache[$cfIndex] = $result;
@@ -263,18 +263,18 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     {
         $customFields = ($_customFields === NULL) ? $this->_getCustomFields($_record->getId()) : $_customFields;
         if ($_configs === NULL) {
-            $_configs = $this->_backendConfig->getMultiple($customFields->customfield_id);  
+            // use filter to make sure read grant is forced
+            $filter = new Tinebase_Model_CustomField_ConfigFilter(array(
+                array('field' => 'id', 'operator' => 'in', 'value' => $customFields->customfield_id)
+            ));
+            $_configs = $this->_backendConfig->search($filter);
         };
-        $this->resolveConfigGrants($_configs);
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_record->toArray(), TRUE));
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($customFields->toArray(), TRUE));
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_configs->toArray(), TRUE));
         
         $result = array();
         foreach ($customFields as $customField) {
-            $config = $_configs[$_configs->getIndexById($customField->customfield_id)];
-            if (in_array(Tinebase_Model_CustomField_Grant::GRANT_READ, $config->account_grants)) {
+            $idx = $_configs->getIndexById($customField->customfield_id);
+            if ($idx !== FALSE) {
+                $config = $_configs[$idx];
                 $result[$config->name] = $customField->value;
             }
         }
