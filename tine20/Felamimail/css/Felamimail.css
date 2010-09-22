@@ -374,3 +374,10 @@
     background-repeat: no-repeat;
     padding-left: 19px;
 }
+
+/***** sieve rules ******/
+
+.felamimail-sieverule-disabled {
+    color: #aaaaaa;
+}
+

@@ -48,6 +48,23 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
+     * Return CSS class to apply to rows depending on enabled status
+     * 
+     * @param {Tine.Felamimail.Model.Rule} record
+     * @param {Integer} index
+     * @return {String}
+     */
+    getViewRowClass: function(record, index) {
+        var className = '';
+        
+        if (! record.get('enabled')) {
+            className += ' felamimail-sieverule-disabled';
+        }
+        
+        return className;
+    },
+    
+    /**
      * init actions with actionToolbar, contextMenu and actionUpdater
      * 
      * @private
