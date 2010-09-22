@@ -588,6 +588,8 @@ Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
  */
 Tine.Felamimail.Model.Rule.getDefaultData = function() { 
     return {
+        enabled: true,
+        // remove these default later
         conditions: [{
             test: 'address',
             header: 'from',
