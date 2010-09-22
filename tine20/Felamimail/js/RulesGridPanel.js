@@ -234,12 +234,12 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     actionTypeRenderer: function(value) {
-        var conditions = Tine.Felamimail.RuleEditDialog.getConditions(this.app),
+        var types = Tine.Felamimail.RuleEditDialog.getActionTypes(this.app),
             result = value;
         
-        for (i=0; i < conditions.length; i++) {
-            if (conditions[i][0] == value) {
-                result =  conditions[i][1];
+        for (i=0; i < types.length; i++) {
+            if (types[i][0] == value) {
+                result = types[i][1];
             }
         }
             
