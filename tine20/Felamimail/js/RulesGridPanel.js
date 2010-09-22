@@ -178,18 +178,11 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, {
             id: 'action',
             header: this.app.i18n._("Action"),
-            width: 150,
+            width: 250,
             sortable: false,
             dataIndex: 'action_type',
             scope: this,
-            renderer: this.actionTypeRenderer
-        }, {
-            id: 'action',
-            header: this.app.i18n._("Argument"),
-            width: 100,
-            sortable: false,
-            dataIndex: 'action_argument',
-            renderer: this.actionArgumentRenderer
+            renderer: this.actionRenderer
         }, cb];
         
         this.gridConfig.plugins = [cb]; 
@@ -230,32 +223,28 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * action renderer
      * 
-     * @param {Object} value
+     * @param {Object} type
+     * @param {Object} metadata
+     * @param {Object} record
      * @return {String}
      */
-    actionTypeRenderer: function(value) {
+    actionRenderer: function(type, metadata, record) {
         var types = Tine.Felamimail.RuleEditDialog.getActionTypes(this.app),
-            result = value;
+            result = type;
         
         for (i=0; i < types.length; i++) {
-            if (types[i][0] == value) {
+            if (types[i][0] == type) {
                 result = types[i][1];
             }
+        }
+        
+        if (record.get('action_argument') != '') {
+            result += ' ' + record.get('action_argument');
         }
             
         return result;
     },
 
-    /**
-     * action renderer
-     * 
-     * @param {Object} value
-     * @return {String}
-     */
-    actionArgumentRenderer: function(value) {
-        return Ext.util.Format.ellipsis(value, 30);
-    },
-    
     /**
      * conditions renderer
      * 
