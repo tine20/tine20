@@ -586,14 +586,13 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 </index>
             </declaration>
         </table>');
-        $this->createTable('customfield_acl', $declaration);
+        //$this->createTable('customfield_acl', $declaration);
         
         // add grants to existing customfields
-        foreach (Tinebase_Application::getInstance()->getApplications() as $app) {
-            $allCfConfigs = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($app);
-            foreach ($allCfConfigs as $cfConfig) {
-                Tinebase_CustomField::getInstance()->setGrants($cfConfig, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, 0, Tinebase_Model_CustomField_Grant::getAllGrants());
-            }
+        $configBackend = new Tinebase_CustomField_Config();
+        $allCfConfigs = $configBackend->search();
+        foreach ($allCfConfigs as $cfConfig) {
+            Tinebase_CustomField::getInstance()->setGrants($cfConfig, Tinebase_Model_CustomField_Grant::getAllGrants());
         }
                 
         $this->setApplicationVersion('Tinebase', '3.16');
