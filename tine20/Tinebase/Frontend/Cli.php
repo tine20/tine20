@@ -192,4 +192,43 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         return TRUE;
     }
+    
+    /**
+     * add new customfield config
+     * 
+     * needs args like this:
+     * application="Addressbook" name="datefield" label="Date" model="Addressbook_Model_Contact" type="datetime"
+     * @see Tinebase_Model_CustomField_Config for full list 
+     * 
+     * @param $_opts
+     * @return boolean success
+     */
+    public function addCustomfield(Zend_Console_Getopt $_opts)
+    {
+        $args = $_opts->getRemainingArgs();
+
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
+        // parse args
+        $data = array();
+        foreach ($args as $idx => $arg) {
+            list($key, $value) = explode('=', $arg);
+            if ($key == 'application') {
+                $key = 'application_id';
+                $value = Tinebase_Application::getInstance()->getApplicationByName($value)->getId();
+            }
+            $data[$key] = $value;
+        }
+        
+        $customfieldConfig = new Tinebase_Model_CustomField_Config($data);
+        $cf = Tinebase_CustomField::getInstance()->addCustomField($customfieldConfig);
+
+        echo "\nCreated customfield: ";
+        print_r($cf->toArray());
+        echo "\n";
+        
+        return TRUE;
+    }
 }
