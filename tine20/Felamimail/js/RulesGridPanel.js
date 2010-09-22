@@ -72,27 +72,45 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initActions: function() {
         this.action_moveup = new Ext.Action({
             text: this.app.i18n._('Move up'),
-            handler: this.onMoveUp,
+            handler: this.onMoveRecord.createDelegate(this, ['up']),
             scope: this,
             iconCls: 'action_move_up'
         });
 
         this.action_movedown = new Ext.Action({
             text: this.app.i18n._('Move down'),
-            handler: this.onMoveDown,
+            handler: this.onMoveRecord.createDelegate(this, ['down']),
             scope: this,
             iconCls: 'action_move_down'
         });
 
+        this.action_enable = new Ext.Action({
+            text: this.app.i18n._('Enable'),
+            handler: this.onEnableDisable.createDelegate(this, [true]),
+            scope: this,
+            iconCls: 'action_enable'
+        });
+
+        this.action_disable = new Ext.Action({
+            text: this.app.i18n._('Disable'),
+            handler: this.onEnableDisable.createDelegate(this, [false]),
+            scope: this,
+            iconCls: 'action_disable'
+        });
+        
         this.supr().initActions.call(this);
     },
     
-    onMoveUp: function() {
-        this.moveRecord('up');
-    },
-    
-    onMoveDown: function() {
-        this.moveRecord('down');
+    /**
+     * enable / disable rule
+     * 
+     * @param {Boolean} state
+     */
+    onEnableDisable: function(state) {
+        var selectedRows = this.grid.getSelectionModel().getSelections();
+        for (var i = 0; i < selectedRows.length; i++) {
+            selectedRows[i].set('enabled', state);
+        }
     },
     
     /**
@@ -100,7 +118,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * @param {String} dir (up|down)
      */
-    moveRecord: function(dir) {
+    onMoveRecord: function(dir) {
         var sm = this.grid.getSelectionModel();
             
         if (sm.getCount() == 1) {
@@ -159,7 +177,10 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var items = [
             '-',
             this.action_moveup,
-            this.action_movedown
+            this.action_movedown,
+            '-',
+            this.action_enable,
+            this.action_disable
         ];
         
         return items;
@@ -169,13 +190,6 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * init columns
      */
     initColumns: function() {
-        this.gridConfig = {};
-        var cb = new Ext.ux.grid.CheckColumn({
-            header: this.app.i18n._('Enabled'),
-            dataIndex: 'enabled',
-            width: 70
-        });
-        
         this.gridConfig.columns = [
         {
             id: 'id',
@@ -200,9 +214,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dataIndex: 'action_type',
             scope: this,
             renderer: this.actionRenderer
-        }, cb];
-        
-        this.gridConfig.plugins = [cb]; 
+        }];
     },
     
     /**
