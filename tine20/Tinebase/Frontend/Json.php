@@ -538,7 +538,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $registryData[$application->name] = $applicationJson->getRegistryData();
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
                     $registryData[$application->name]['config'] = Tinebase_Config::getInstance()->getConfigForApplication($application);
-                    $registryData[$application->name]['customfields'] = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application)->toArray();
+                    
+                    $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
+                    Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
+                    $registryData[$application->name]['customfields'] = $customfields->toArray();
                     
                     // add preferences for app
                     $appPrefs = Tinebase_Core::getPreference($application->name);
@@ -561,8 +564,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return $registryData;
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' returning registry data by dying to avoid servers success property to be part of the registry.');
-        //die(Zend_Json::encode($registryData));
     }
 
     /**
