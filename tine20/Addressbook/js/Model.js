@@ -150,6 +150,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('First Name'),                                               field: 'n_given' },
         {label: app.i18n._('Last Name'),                                                field: 'n_family'},
         {label: app.i18n._('Company'),                                                  field: 'org_name'},
+        {label: app.i18n._('Unit'),                                                     field: 'org_unit'},
         {label: app.i18n._('Phone'),                                                    field: 'telephone',          operators: ['contains']},
         {label: app.i18n._('Job Title'),                                                field: 'title'},
         {label: app.i18n._('Job Role'),                                                 field: 'role'},
