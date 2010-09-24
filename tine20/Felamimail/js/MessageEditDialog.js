@@ -252,7 +252,14 @@ Ext.namespace('Tine.Felamimail');
         if (! this.record.get('subject')) {
             if (! this.subject) {
                 if (this.replyTo) {
-                    this.subject = this.app.i18n._('Re:') + ' ' +  this.replyTo.get('subject');
+                    // check if there is already a 'Re:' prefix
+                    var replyPrefix = this.app.i18n._('Re:');
+                    var signatureRegexp = new RegExp('^' + replyPrefix);
+                    if (! this.replyTo.get('subject').match(signatureRegexp)) {
+                        this.subject = replyPrefix + ' ' +  this.replyTo.get('subject');
+                    } else {
+                        this.subject = this.replyTo.get('subject');
+                    }
                 } else if (this.forwardMsgs) {
                     this.subject =  this.app.i18n._('Fwd:') + ' ';
                     this.subject += this.forwardMsgs.length === 1 ?
