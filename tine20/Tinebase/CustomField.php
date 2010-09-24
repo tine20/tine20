@@ -177,6 +177,19 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     }
     
     /**
+     * check if app has customfield configs
+     * 
+     * @param string $_applicationName
+     * @return boolean 
+     */
+    public function appHasCustomFields($_applicationName)
+    {
+        $app = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
+        $result = $this->getCustomFieldsForApplication($app);
+        return (count($result) > 0);
+    }
+    
+    /**
      * resolve config grants
      * 
      * @param Tinebase_Record_RecordSet $_cfConfigs
@@ -263,6 +276,8 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function resolveRecordCustomFields(Tinebase_Record_Interface $_record, $_customFields = NULL, $_configs = NULL)
     {
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving custom fields for ' . get_class($_record));
+        
         $customFields = ($_customFields === NULL) ? $this->_getCustomFields($_record->getId()) : $_customFields;
         
         if (count($customFields) == 0) {
@@ -291,7 +306,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
      */
     public function resolveMultipleCustomfields(Tinebase_Record_RecordSet $_records)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Resolving custom fields for ' . count($_records) . ' records');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Resolving custom fields for ' . count($_records) . ' records');
         
         $customFields = $this->_getCustomFields($_records->getArrayOfIds());
         $customFields->addIndices(array('record_id'));
