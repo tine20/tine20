@@ -270,11 +270,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         }
         
         if ($_configs === NULL) {
-            // use filter to make sure read grant is forced
-            $filter = new Tinebase_Model_CustomField_ConfigFilter(array(
-                array('field' => 'id', 'operator' => 'in', 'value' => $customFields->customfield_id)
-            ));
-            $_configs = $this->_backendConfig->search($filter);
+            $_configs = $this->getCustomFieldsForApplication(Tinebase_Application::getInstance()->getApplicationByName($_record->getApplication()));
         };
         
         $result = array();
@@ -318,7 +314,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             'field'     => 'record_id', 
             'operator'  => 'in', 
             'value'     => (array) $_recordId
-        ));
+        )); // applicaton _id 
         $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
         
         return $this->_backendValue->search($filter);
