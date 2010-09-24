@@ -94,8 +94,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
 
-    /******************************** overwritten funcs *********************************/
-    
     /**
      * get list of records
      *
@@ -398,8 +396,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
     }
     
-    /******************************** public funcs ************************************/
-    
     /**
      * change account password
      *
@@ -440,25 +436,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     public function updateCapabilities($_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL, $_delimiter = NULL)
     {
         if ($_imapBackend === NULL) {
-            try {
-                $_imapBackend = Felamimail_Backend_ImapFactory::factory($_account);
-            } catch (Zend_Mail_Storage_Exception $zmse) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Wrong user credentials ... '
-                    . '(' . $zmse->getMessage() . ')'
-                );
-                return $_account;
-            } catch (Zend_Mail_Protocol_Exception $zmpe) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' No connection to imap server ...'
-                    . '(' . $zmpe->getMessage() . ')'
-                );
-                return $_account;
-            } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                    . ' Wrong user credentials ... '
-                    . '(' . $feiic->getMessage() . ')'
-                );
+            $_imapBackend = $this->_getIMAPBackend($_account);
+            if (! $_imapBackend) {
                 return $_account;
             }
         }
@@ -508,6 +487,68 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * get imap backend and catch exceptions
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param boolean $_throwException
+     * @return boolean|Felamimail_Backend_ImapProxy
+     * @throws Felamimail_Exception_IMAP|Felamimail_Exception_IMAPInvalidCredentials
+     */
+    protected function _getIMAPBackend(Felamimail_Model_Account $_account, $_throwException = FALSE)
+    {
+        $result = FALSE;
+        try {
+            $result = Felamimail_Backend_ImapFactory::factory($_account);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            $message = 'Wrong user credentials ... ' . '(' . $zmse->getMessage() . ')';
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            $message =  'No connection to imap server ...' . '(' . $zmpe->getMessage() . ')';
+        } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
+            $message = 'Wrong user credentials ... ' . '(' . $feiic->getMessage() . ')';
+        }
+        
+        if (! $result) {
+            if ($_throwException) {
+                throw (isset($feiic)) ? $feiic : new Felamimail_Exception_IMAP($message);
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * check if sent/trash folders exists and create them if not
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @return void
+     */
+    public function checkSentTrash(Felamimail_Model_Account $_account)
+    {
+        $imapBackend = $this->_getIMAPBackend($_account);
+        if (! $imapBackend) {
+            return;
+        }
+        
+        $foldersToCheck = array($_account->sent_folder, $_account->trash_folder);
+        foreach ($foldersToCheck as $folderName) {
+            if ($imapBackend->getFolderStatus($folderName) === false) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $folderName . '. Trying to add it.');
+                
+                // get localname + parentfolder
+                $globalNameParts = explode($_account->delimiter, $folderName);
+                $localname = array_pop($globalNameParts);
+                $parent = (count($globalNameParts) > 0) ? implode($_account->delimiter, $globalNameParts) : '';
+                
+                Felamimail_Controller_Folder::getInstance()->create($_account, $localname, $parent);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder ' . $folderName . ' exists.');
+            }
+        }
+    }
+    
+    /**
      * set vacation active field for account
      * 
      * @param string|Felamimail_Model_Account $_account
@@ -529,8 +570,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         return $account;
     }
     
-    /******************************** protected funcs *********************************/
-
     /**
      * add system account with tine user credentials (from config.inc.php or config db) 
      *
