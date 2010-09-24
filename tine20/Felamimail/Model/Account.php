@@ -16,10 +16,13 @@
 /**
  * class to hold Account data
  * 
- * @property  string  trash_folder
- * @property  string  sieve_vacation_active
- * @property  string  display_format
- * @package     Felamimail
+ * @property  string    trash_folder
+ * @property  string    sent_folder
+ * @property  string    sieve_vacation_active
+ * @property  string    display_format
+ * @property  string    delimiter
+ * @property  string    type
+ * @package   Felamimail
  */
 class Felamimail_Model_Account extends Tinebase_Record_Abstract
 {  
