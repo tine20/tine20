@@ -91,6 +91,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'tel_work'             => array('filter' => 'Tinebase_Model_Filter_Text'),
         'note'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'role'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'assistent'		       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'                  => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'addressbook.id')),
         //'bday'               => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
