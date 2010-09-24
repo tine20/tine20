@@ -74,6 +74,8 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
      * @param {Object} options
      */
     onBeforeLoad: function (store, options) {
+    	this.supr().onBeforeLoad.call(this, store, options);
+    	
         options.params.paging = {
             start: options.params.start,
             limit: options.params.limit
