@@ -153,11 +153,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $_pagination = new Tinebase_Model_Pagination();
         }
         
-        // we use a subselect to reduce data amount where grants etc. have to be computed for
-        $subselect = parent::_getSelect('*', $_getDeleted);
+        // we use a an extra select to reduce data amount where grants etc. have to be computed for.
+        // the exdate is already appended here, to reduce virtual row numbers later
+        $subselect = parent::_getSelect('id', $_getDeleted);
         
         $subselect->joinLeft(
-            /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'), 
+            /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'),
             /* on     */ $this->_db->quoteIdentifier('exdate.cal_event_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
             /* select */ array('exdate' => 'GROUP_CONCAT( DISTINCT ' . $this->_db->quoteIdentifier('exdate.exdate') . ')'));
         
@@ -176,10 +177,18 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $this->_addFilter($subselect, $_filter);
         $_pagination->appendPaginationSql($subselect);
         $subselect->group($this->_tableName . '.' . 'id');
-        
-        $select = $this->_db->select();
-        $selectCols = ($_onlyIds) ? $this->_tableName . '.id' : '*';
-        $select->from(array($this->_tableName => new Zend_Db_Expr("({$subselect->__toString()})")), $selectCols);
+
+        $stmt = $this->_db->query($subselect);
+        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        $ids = array();
+        $exdates = array();
+        foreach($rows as $row) {
+            $ids[] = $row['id'];
+            $exdates[$row['id']] = $row['exdate'];
+        }
+
+        $select = parent::_getSelect('*', $_getDeleted);
+        $select->where($this->_db->quoteInto("{$this->_db->quoteIdentifier('cal_events.id')} IN (?)", !empty($ids) ? $ids : ' ' ));
         
         // append grants filters : only take limited set of attendee into account for grants computation
         $attenderFilter = $_filter->getFilter('attender');
@@ -201,7 +210,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $grantsFilter->appendFilterSql($select, $this);
         }
         $select->group($this->_tableName . '.' . 'id');
-        
+
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
@@ -211,6 +220,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 $result[] = $row[$this->_getRecordIdentifier()];
             }
         } else {
+            foreach ($rows as &$row) {
+                $row['exdate'] = $exdates[$row[$this->_getRecordIdentifier()]];
+            }
+
             $result = $this->_rawDataToRecordSet($rows);
         }
         
