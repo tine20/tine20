@@ -103,20 +103,31 @@ class Setup_Update_Abstract
 	 * version is stored in database table "applications_tables"
 	 *
 	 * @param string tableName
-	 * @return int version number
+	 * @param int|string $_version
+	 * @param boolean $_createIfNotExist
+	 * @param string $_application
+	 * @return void
 	 * @throws Setup_Exception_NotFound
 	 */	 
-    public function setTableVersion($_tableName, $_version)
+    public function setTableVersion($_tableName, $_version, $_createIfNotExist = FALSE, $_application = 'Tinebase')
     {
         if ($this->getTableVersion($_tableName) == 0) {
-            throw new Setup_Exception_NotFound('Table ' . $_tableName . ' not found in applications table or previous version number invalid.');
+            if ($_createIfNotExist) {
+                Tinebase_Application::getInstance()->addApplicationTable(
+                    Tinebase_Application::getInstance()->getApplicationByName($_application), 
+                    $_tableName,
+                    $_version
+                );
+            } else {
+                throw new Setup_Exception_NotFound('Table ' . $_tableName . ' not found in application tables or previous version number invalid.');
+            }
+        } else {
+            $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
+            $where  = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_tableName),
+            );
+            $result = $applicationsTables->update(array('version' => $_version), $where);
         }
-        
-        $applicationsTables = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'application_tables'));
-        $where  = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_tableName),
-        );
-        $result = $applicationsTables->update(array('version' => $_version), $where);
     }
     
     /**

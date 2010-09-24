@@ -467,7 +467,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 <length>40</length>
             </field>');
         $this->_backend->alterCol('preferences', $declaration);
-        $this->setTableVersion('preferences', '6');
+        $this->setTableVersion('preferences', '6', TRUE);
         
         $this->_db->update(SQL_TABLE_PREFIX . 'preferences', array('type' => Tinebase_Model_Preference::TYPE_USER), array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('type') . ' = ?', 'normal')
