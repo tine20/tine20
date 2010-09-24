@@ -252,7 +252,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         // remove all grants
         Tinebase_CustomField::getInstance()->setGrants($cf, array());
         $ts = $this->_json->getTimesheet($ts['id']);
-        $this->assertTrue(! array_key_exists($cf->name, $ts['customfields']), 'customfield should not be readable');
+        
+        $this->assertTrue(! array_key_exists('customfields', $ts), 'customfields should not be readable');
         $ts = $this->_updateCfOfTs($ts, $cf->name, 'try to update');
         
         // only read allowed
