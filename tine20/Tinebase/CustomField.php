@@ -264,6 +264,11 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     public function resolveRecordCustomFields(Tinebase_Record_Interface $_record, $_customFields = NULL, $_configs = NULL)
     {
         $customFields = ($_customFields === NULL) ? $this->_getCustomFields($_record->getId()) : $_customFields;
+        
+        if (count($customFields) == 0) {
+            return;
+        }
+        
         if ($_configs === NULL) {
             // use filter to make sure read grant is forced
             $filter = new Tinebase_Model_CustomField_ConfigFilter(array(
