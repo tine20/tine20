@@ -4,9 +4,9 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id:JsonTest.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  */
 
@@ -20,7 +20,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 }
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Felamimail_Controller_Account
  */
 class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
 {
@@ -28,6 +28,11 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      * @var Felamimail_Controller_Account
      */
     protected $_controller = array();
+    
+    /**
+     * @var Felamimail_Model_Account
+     */
+    protected $_account = NULL;
     
     /**
      * Runs the test methods of this class.
@@ -49,7 +54,8 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_controller = Felamimail_Controller_Account::getInstance();        
+        $this->_controller = Felamimail_Controller_Account::getInstance();
+        $this->_account = $this->_controller->search()->getFirstRecord();
     }
 
     /**
@@ -59,19 +65,17 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      * @access protected
      */
     protected function tearDown()
-    {        
+    {
+        // reset old account settings
+        $this->_controller->update($this->_account);
     }
 
     /**
-     * get folders from the server
-     *
+     * test account capabilities
      */
     public function testGetAccountCapabilities()
     {
-        $account = $this->_controller->search()->getFirstRecord();;
-        $account = $this->_controller->updateCapabilities($account);
-        
-        //print_r($account->toArray());
+        $account = $this->_controller->updateCapabilities($this->_account);
         
         $this->assertEquals('', $account->ns_personal);
         $this->assertEquals('/', $account->delimiter);
