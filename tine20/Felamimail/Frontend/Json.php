@@ -446,6 +446,12 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         try {
             $accounts = $this->searchAccounts('');
+            foreach ($accounts['results'] as $account) {
+                if ($account['type'] == Felamimail_Model_Account::TYPE_SYSTEM) {
+                    // check existance of sent/trash folder only for system accounts atm
+                    Felamimail_Controller_Account::getInstance()->checkSentTrash($account['id']);
+                }
+            }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
