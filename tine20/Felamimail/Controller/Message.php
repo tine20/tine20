@@ -596,7 +596,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
     }
     
-    
     /**
      * append mail to send folder
      * 
@@ -612,12 +611,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             // convert \n to \r\n
             $mailAsString = preg_replace("/(?<!\\r)\\n(?!\\r)/", "\r\n", $mailAsString);
             
-            if (($_account->sent_folder && ! empty($_account->sent_folder))) {
-                $sentFolder = $_account->sent_folder;
-                $this->_createFolderIfNotExists($_account, $sentFolder);
-            } else {
-                $sentFolder = 'Sent';
-            }
+            $sentFolder = ($_account->sent_folder && ! empty($_account->sent_folder)) ? $_account->sent_folder : 'Sent';
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder (' . $sentFolder . ') ...');
             Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder);
@@ -637,20 +631,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 . ' Please check if a folder with this name exists.'
                 . '(' . $zmse->getMessage() . ')'
             );
-        }
-    }   
-    
-    /**
-     * insert folder in imap if not exist
-     *
-     * @param Felamimail_Model_Account $_account
-     * @return boolean
-     */
-    protected function _createFolderIfNotExists(Felamimail_Model_Account $_account, $folderName){
-        $imap = Felamimail_Backend_ImapFactory::factory($_account);
-        if ($imap->getFolderStatus($folderName) === false) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no Sent Folder (' . $folderName . '), trying to add it.');
-            $Felamimail_Controller_Folder = Felamimail_Controller_Folder::getInstance()->create($_account->id, $folderName);
         }
     }
     
