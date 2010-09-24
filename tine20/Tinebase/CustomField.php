@@ -314,7 +314,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             'field'     => 'record_id', 
             'operator'  => 'in', 
             'value'     => (array) $_recordId
-        )); // applicaton _id 
+        ));
         $filter = new Tinebase_Model_CustomField_ValueFilter($filterValues);
         
         return $this->_backendValue->search($filter);
