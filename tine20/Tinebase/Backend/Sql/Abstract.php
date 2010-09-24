@@ -284,16 +284,14 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination();
         }
-
-        if ($_filter === NULL) {
-            $_filter = new Tinebase_Model_Filter_FilterGroup();
-        }
         
         // build query
         $selectCols = ($_onlyIds) ? $this->_tableName . '.id' : '*';
         $select = $this->_getSelect($selectCols);
         
-        $this->_addFilter($select, $_filter);
+        if ($_filter !== NULL) {
+            $this->_addFilter($select, $_filter);
+        }
         $_pagination->appendPaginationSql($select);
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
