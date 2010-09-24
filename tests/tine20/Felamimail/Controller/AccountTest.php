@@ -35,6 +35,13 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     protected $_account = NULL;
     
     /**
+     * folders to delete in tearDown
+     * 
+     * @var array
+     */
+    protected $_foldersToDelete = array();
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -67,7 +74,16 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // reset old account settings
-        $this->_controller->update($this->_account);
+        $accountBackend = new Felamimail_Backend_Account();
+        $accountBackend->update($this->_account);
+        
+        foreach ($this->_foldersToDelete as $foldername) {
+            try {
+                Felamimail_Controller_Folder::getInstance()->delete($this->_account->getId(), $foldername);
+            } catch (Felamimail_Exception_IMAP $fei) {
+                // do nothing
+            }
+        }
     }
 
     /**
@@ -81,5 +97,39 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/', $account->delimiter);
         $this->assertEquals('#Users', $account->ns_other);
         $this->assertEquals('#Public', $account->ns_shared);
+    }
+    
+    /**
+     * check for sent/trash folders and create them if they do not exist
+     */
+    public function testCheckSentTrashFolders()
+    {
+        // make sure, folder cache is filled
+        Felamimail_Controller_Folder::getInstance()->search(new Felamimail_Model_FolderFilter(array(
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
+        )));
+        
+        $account = clone($this->_account);
+        $account->sent_folder = 'INBOX' . $account->delimiter . 'testsent';
+        $account->trash_folder = 'INBOX' . $account->delimiter . 'testtrash';
+        $this->_foldersToDelete = array($account->sent_folder, $account->trash_folder);
+        
+        $accountBackend = new Felamimail_Backend_Account();
+        $account = $accountBackend->update($account);
+        $this->_controller->checkSentTrash($account);
+        
+        $inboxSubfolders = Felamimail_Controller_Folder::getInstance()->search(new Felamimail_Model_FolderFilter(array(
+            array('field' => 'globalname', 'operator' => 'equals', 'value' => 'INBOX'),
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
+        )));
+        
+        $folderFoundCount = 0;
+        foreach ($inboxSubfolders as $folder) {
+            if ($folder->globalname == $account->sent_folder || $folder->globalname == $account->trash_folder) {
+                $folderFoundCount++;
+            }
+        }
+        
+        $this->assertEquals(2, $folderFoundCount, 'sent/trash folders not found');
     }
 }
