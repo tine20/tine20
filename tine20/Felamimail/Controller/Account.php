@@ -521,27 +521,28 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     /**
      * check if sent/trash folders exists and create them if not
      * 
-     * @param Felamimail_Model_Account $_account
+     * @param string|Felamimail_Model_Account $_account account record or id
      * @return void
      */
-    public function checkSentTrash(Felamimail_Model_Account $_account)
+    public function checkSentTrash($_account)
     {
-        $imapBackend = $this->_getIMAPBackend($_account);
+        $account = ($_account instanceof Felamimail_Model_Account) ? $_account : $this->get($_account);
+        $imapBackend = $this->_getIMAPBackend($account);
         if (! $imapBackend) {
             return;
         }
         
-        $foldersToCheck = array($_account->sent_folder, $_account->trash_folder);
+        $foldersToCheck = array($account->sent_folder, $account->trash_folder);
         foreach ($foldersToCheck as $folderName) {
             if ($imapBackend->getFolderStatus($folderName) === false) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $folderName . '. Trying to add it.');
                 
                 // get localname + parentfolder
-                $globalNameParts = explode($_account->delimiter, $folderName);
+                $globalNameParts = explode($account->delimiter, $folderName);
                 $localname = array_pop($globalNameParts);
-                $parent = (count($globalNameParts) > 0) ? implode($_account->delimiter, $globalNameParts) : '';
+                $parent = (count($globalNameParts) > 0) ? implode($account->delimiter, $globalNameParts) : '';
                 
-                Felamimail_Controller_Folder::getInstance()->create($_account, $localname, $parent);
+                Felamimail_Controller_Folder::getInstance()->create($account, $localname, $parent);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder ' . $folderName . ' exists.');
             }
