@@ -108,7 +108,10 @@
             <identifier>n_fn</identifier>
         </column>
         <column>
-            <identifier>n_given n_middle</identifier>
+            <identifier>n_given</identifier>
+        </column>
+        <column>
+            <identifier>n_middle</identifier>
         </column>
         <column>
             <identifier>n_prefix</identifier>
