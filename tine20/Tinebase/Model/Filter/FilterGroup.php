@@ -157,7 +157,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $fieldModel = (isset($this->_filterModel[$filterData['field']])) ? $this->_filterModel[$filterData['field']] : '';
                 
                 if (empty($fieldModel)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' skipping filter (no filter model defined) ' . print_r($filterData, true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . '[' . $this->_className . '] Skipping filter (no filter model defined) ' . print_r($filterData, true));
                 
                 } elseif (array_key_exists('filter', $fieldModel) && array_key_exists('value', $filterData)) {
                     // create a 'single' filter
