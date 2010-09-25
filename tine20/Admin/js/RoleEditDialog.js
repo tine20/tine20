@@ -8,7 +8,9 @@
  *
  * TODO         refactor this (don't use Ext.getCmp, etc.)
  */
- 
+
+/*global Ext, Tine, Locale*/
+
 Ext.ns('Tine.Admin.Roles');
 
 /**
@@ -36,7 +38,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     windowNamePrefix: 'rolesEditWindow_',
     
     layout: 'fit',
-    id : 'roleDialog',
+    id: 'roleDialog',
     labelWidth: 120,
     labelAlign: 'top',
     
@@ -44,13 +46,12 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * check if right is set for application and get the record id
      * @private
      */
-    getRightId: function(applicationId, right) {
+    getRightId: function (applicationId, right) {
+        var id = false,
+        	result = null;
         
-        var id = false;
-        var result = null;
-        
-        this.rightsDataStore.each(function(item){
-            if (item.data.application_id == applicationId && item.data.right == right ) {
+        this.rightsDataStore.each(function (item) {
+            if (item.data.application_id === applicationId && item.data.right === right) {
                 result = item.id;
                 return;
             }
@@ -59,26 +60,26 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         return result;
     },  
     
-     handlerApplyChanges: function(_button, _event, _closeWindow) {
+	handlerApplyChanges: function (button, event, closeWindow) {
         var form = this.getForm();
         
-        if(form.isValid()) {
+        if (form.isValid()) {
             // get role members
             var roleGrid = Ext.getCmp('roleMembersGrid');
 
             Ext.MessageBox.wait(this.translation.gettext('Please wait'), this.translation.gettext('Updating Memberships'));
             
             var roleMembers = [];
-            this.membersStore.each(function(_record){
-                roleMembers.push(_record.data);
+            this.membersStore.each(function (record) {
+                roleMembers.push(record.data);
             });
 
             // get role rights                
-            var roleRights = [];
-            var rightsStore = Ext.StoreMgr.get('RoleRightsStore');
+            var roleRights = [],
+            	rightsStore = this.rightsDataStore;
             
-            rightsStore.each(function(_record){
-                roleRights.push(_record.data);
+            rightsStore.each(function (record) {
+                roleRights.push(record.data);
             });
 
             // update form               
@@ -93,16 +94,16 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     roleMembers: roleMembers,
                     roleRights: roleRights
                 },
-                success: function(response) {
+                success: function (response) {
                     this.fireEvent('update', Ext.util.JSON.encode(this.role.data));
                     Ext.MessageBox.hide();
-                    if(_closeWindow === true) {
+                    if (closeWindow === true) {
                         this.window.close();
                     } else {
                         this.onRecordLoad(response);
                     }
                 },
-                failure: function ( result, request) { 
+                failure: function (result, request) { 
                     Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save role.')); 
                 },
                 scope: this 
@@ -114,7 +115,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
     },
     
-    handlerDelete: function(_button, _event) {
+    handlerDelete: function (button, event) {
         var roleIds = [this.role.id];
             
         Ext.Ajax.request({
@@ -124,30 +125,24 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 roleIds: roleIds
             },
             text: this.translation.gettext('Deleting role...'),
-            success: function(_result, _request) {
-                if(window.opener.Tine.Admin.Roles) {
+            success: function (result, request) {
+                if (window.opener.Tine.Admin.Roles) {
                     window.opener.Tine.Admin.Roles.Main.reload();
                 }
                 window.close();
             },
-            failure: function ( result, request) { 
+            failure: function (result, request) { 
                 Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the role.')); 
             } 
         });                           
     },
-    
-    
-    /**
-     * var rights storage
-     */
-    rightsDataStore: null,
 
-    updateRecord: function(_roleData) {
+    updateRecord: function (roleData) {
         // if roleData is empty (=array), set to empty object because array won't work!
-        if (_roleData.length === 0) {
-            _roleData = {};
+        if (roleData.length === 0) {
+            roleData = {};
         }
-        this.role = new Tine.Tinebase.Model.Role(_roleData, _roleData.id ? _roleData.id : 0);
+        this.role = new Tine.Tinebase.Model.Role(roleData, roleData.id ? roleData.id : 0);
         
         this.membersStore.loadData(this.role.get('roleMembers'));
         this.rightsDataStore.loadData(this.role.get('roleRights'));
@@ -159,17 +154,16 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * creates the rights tree
      *
      */
-    initRightsTree: function() {
-        
+    initRightsTree: function () {
         this.rightsTreePanel = new Ext.tree.TreePanel({
-            id: 'rightsTree',
-            iconCls: 'AdminTreePanel',
+        	title: this.translation.gettext('Rights'),
+        	autoScroll: true,
             rootVisible: false,
             border: false
         });
         
         // sort nodes by text property
-        new Ext.tree.TreeSorter(this.rightsTreePanel, {
+        this.treeSorter = new Ext.tree.TreeSorter(this.rightsTreePanel, {
             folderSort: true,
             dir: "asc"
         });        
@@ -177,9 +171,9 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         // set the root node
         var treeRoot = new Ext.tree.TreeNode({
             text: 'root',
-            draggable:false,
-            allowDrop:false,
-            id:'root'
+            draggable: false,
+            allowDrop: false,
+            id: 'root'
         });
 
         this.rightsTreePanel.setRootNode(treeRoot);
@@ -194,16 +188,16 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         var treeRoot = this.rightsTreePanel.getRootNode();
         
         var toRemove = [];
-        treeRoot.eachChild(function(node){
+        treeRoot.eachChild(function (node) {
             toRemove.push(node);
         });
         
         var expandNode = (this.allRights.length > 5) ? false : true;
         
         // add nodes to tree        
-        for (var i=0; i < this.allRights.length; i++) {
+        for (var i = 0; i < this.allRights.length; i += 1) {
             // don't duplicate tree nodes on 'apply changes'
-            toRemove[i] ? toRemove[i].remove() : null;
+            var remove = toRemove[i] ? toRemove[i].remove() : null;
             this.allRights[i].text = this.translateAppTitle(this.allRights[i].text);
             var node = new Ext.tree.TreeNode(this.allRights[i]);
             node.attributes.application_id = this.allRights[i].application_id;
@@ -212,34 +206,33 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             
             // append children          
             if (this.allRights[i].children) {
-                for (var j=0; j < this.allRights[i].children.length; j++) {
-                
+                for (var j = 0; j < this.allRights[i].children.length; j += 1) {
                     var childData = this.allRights[i].children[j];
                     childData.leaf = true;
                     childData.icon = "library/ExtJS/resources/images/default/s.gif";                    
                     
                     // check if right is set
-                    childData.checked = !!this.getRightId(this.allRights[i].application_id,childData.right);
+                    childData.checked = !!this.getRightId(this.allRights[i].application_id, childData.right);
                     childData.iconCls = "x-tree-node-leaf-roles";
                     var child = new Ext.tree.TreeNode(childData);
                     child.attributes.right = childData.right;
                     
-                    child.on('checkchange', function(node, checked) {
+                    child.on('checkchange', function (node, checked) {
                         var applicationId = node.parentNode.attributes.application_id;
                     
                         // put it in the storage or remove it                        
                         if (checked) {
-                            this.rightsDataStore.add (
+                            this.rightsDataStore.add(
                                 new Ext.data.Record({
                                     right: node.attributes.right,
                                     application_id: applicationId
                                 })
                             );
                         } else {
-                            var rightId = this.getRightId(applicationId,node.attributes.right);
-                            this.rightsDataStore.remove ( this.rightsDataStore.getById(rightId) );                                                                                         
+                            var rightId = this.getRightId(applicationId, node.attributes.right);
+                            this.rightsDataStore.remove(this.rightsDataStore.getById(rightId));                                                                                         
                         }   
-                    },this);
+                    }, this);
                     
                     node.appendChild(child);                    
                 }       
@@ -255,8 +248,8 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * TODO try to generalize this fn as this gets used in Tags.js + Applications.js as well 
      *      -> this could be moved to Tine.Admin.Application after Admin js refactoring
      */
-    translateAppTitle: function(appName) {
-        var app = Tine.Tinebase.appMgr.get(appName)
+    translateAppTitle: function (appName) {
+        var app = Tine.Tinebase.appMgr.get(appName);
         return (app) ? app.getTitle() : appName;
     },
     
@@ -264,10 +257,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * returns form
      * 
      */
-    getFormContents: function() {
-        
-        this.initRightsTree();
-        
+    getFormContents: function () {
         this.accountPickerGridPanel = new Tine.widgets.account.PickerGridPanel({
             title: this.translation.gettext('Members'),
             store: this.membersStore,
@@ -277,78 +267,60 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             selectTypeDefault: 'group'
         });
         
-        var tabPanelRights = {
-            title:this.translation.gettext('Rights'),
-            layout:'form',
-            layoutOnTabChange:true,            
-            deferredRender:false,
-            autoScroll: true,
-            anchor:'100% 100%',
-            border:false,
-            items:[
-                this.rightsTreePanel
-            ]
-        };
+        this.initRightsTree();
         
         /******* THE edit dialog ********/
         
         var editRoleDialog = {
-            layout:'border',
-            border:false,
-            width: 600,
-            height: 500,
-            items:[{
-                    region: 'north',
-                    layout:'column',
+            layout: 'border',
+            border: false,
+            items: [{
+                region: 'north',
+                layout: 'column',
+                border: false,
+                autoHeight: true,
+                items: [{
+                    columnWidth: 1,
+                    layout: 'form',
                     border: false,
-                    autoHeight: true,
-                    items:[{
-                        columnWidth: 1,
-                        layout: 'form',
-                        border: false,
-                        items:[{
-                            xtype:'textfield',
-                            fieldLabel: this.translation.gettext('Role Name'), 
-                            name:'name',
-                            anchor:'100%',
-                            allowBlank: false,
-                            maxLength: 128
-                        }, {
-                            xtype:'textarea',
-                            name: 'description',
-                            fieldLabel: this.translation.gettext('Description'),
-                            grow: false,
-                            preventScrollbars:false,
-                            anchor:'100%',
-                            height: 60
-                        }]        
-                    }]
-                },
-                new Ext.TabPanel({
-                    plain:true,
-                    region: 'center',
-                    activeTab: 0,
-                    id: 'editMainTabPanel',
-                    layoutOnTabChange:true,  
-                    items:[
-                        //tabPanelMembers,
-                        this.accountPickerGridPanel,
-                        tabPanelRights
-                    ]
-                })
-            ]
+                    items: [{
+                        xtype: 'textfield',
+                        fieldLabel: this.translation.gettext('Role Name'), 
+                        name: 'name',
+                        anchor: '100%',
+                        allowBlank: false,
+                        maxLength: 128
+                    }, {
+                        xtype: 'textarea',
+                        name: 'description',
+                        fieldLabel: this.translation.gettext('Description'),
+                        grow: false,
+                        preventScrollbars: false,
+                        anchor: '100%',
+                        height: 60
+                    }]        
+                }]
+            }, {
+            	xtype: 'tabpanel',
+                plain: true,
+                region: 'center',
+                activeTab: 0,
+                items: [
+                    this.accountPickerGridPanel,
+                    this.rightsTreePanel
+                ]
+            }]
         };
         
         return editRoleDialog;
     },
     
-    initComponent: function() {
+    initComponent: function () {
         this.role = this.role ? this.role : new Tine.Tinebase.Model.Role({}, 0);
         
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         
-//        Ext.MessageBox.wait(this.translation._('Loading Role...'), this.translation._('Please Wait'));
         Ext.Ajax.request({
             scope: this,
             success: this.onRecordLoad,
@@ -372,31 +344,28 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             totalProperty: 'totalcount',
             fields: Tine.Admin.Roles.Right
         });
-        Ext.StoreMgr.add('RoleRightsStore', this.rightsDataStore);
-        //this.rightsDataStore.setDefaultSort('right', 'asc');
         
         this.items = this.getFormContents();
+        
         Tine.Admin.Groups.EditDialog.superclass.initComponent.call(this);
     },
     
-    onRender : function(ct, position){
+    onRender: function (ct, position) {
         Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
         
         // generalized keybord map for edit dlgs
-        var map = new Ext.KeyMap(this.el, [
-            {
-                key: [10,13], // ctrl + return
-                ctrl: true,
-                fn: this.handlerApplyChanges.createDelegate(this, [true], true),
-                scope: this
-            }
-        ]);
+        var map = new Ext.KeyMap(this.el, [{
+            key: [10, 13], // ctrl + return
+            ctrl: true,
+            fn: this.handlerApplyChanges.createDelegate(this, [true], true),
+            scope: this
+		}]);
 
-        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transfering {0}...'), this.translation.gettext('Role'))});
-       	this.loadMask.show();
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(Tine.Tinebase.translation.gettext('Transfering {0}...'), this.translation.gettext('Role'))});
+		this.loadMask.show();
     },
     
-    onRecordLoad: function(response) {
+    onRecordLoad: function (response) {
         this.getForm().findField('name').focus(false, 250);
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
@@ -408,7 +377,6 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
         
         this.getForm().loadRecord(this.role);
-//        Ext.MessageBox.hide();
         
         this.loadMask.hide();
     }
