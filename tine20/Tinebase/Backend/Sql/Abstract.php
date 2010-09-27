@@ -560,8 +560,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
       * 
       * @param string|integer|Tinebase_Record_Interface|array $_id
       * @return void
-      * 
-      * @todo   delete custom fields?
+      * @return int The number of affected rows.
       */
     public function delete($_id) 
     {
@@ -579,7 +578,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id)
         );
         
-        $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
+        return $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
     }
     
     /**
