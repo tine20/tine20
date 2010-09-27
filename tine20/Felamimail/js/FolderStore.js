@@ -172,6 +172,7 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
      * @param {String} value
      */
     resetQueryAndRemoveRecords: function(field, value) {
+        this.queriesPending.remove(this.getKey(field, value));
         var toRemove = this.query(field, value);
         toRemove.each(function(record) {
             this.remove(record);
