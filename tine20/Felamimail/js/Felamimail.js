@@ -455,7 +455,24 @@ Tine.Felamimail.handleRequestException = function(exception) {
                     listeners: {
                         scope: this,
                         'update': function(data) {
-                            app.checkMailsDelayedTask.delay(0);
+                            var folderStore = app.getFolderStore();
+                            if (folderStore.queriesPending.length > 0) {
+                                // reload all folders of account and try to select inbox
+                                var accountId = folderStore.queriesPending[0].substring(16, 56);
+                                folderStore.resetQueryAndRemoveRecords('parent_path', '/' + accountId);
+                                var accountNode = app.getMainScreen().getTreePanel().getNodeById(accountId);
+                                accountNode.loading = false;
+                                accountNode.reload(function(callback) {
+                                    Ext.each(accountNode.childNodes, function(node) {
+                                        if (Ext.util.Format.lowercase(node.attributes.localname) == 'inbox') {
+                                            node.select();
+                                            return false;
+                                        }
+                                    }, this);
+                                });
+                            } else {
+                                app.checkMailsDelayedTask.delay(0);
+                            }
                         }
                     }
                 });
