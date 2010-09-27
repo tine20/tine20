@@ -564,18 +564,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
       */
     public function delete($_id) 
     {
-        if (is_array($_id)) {
-            foreach ($_id as $id) {
-                $this->delete($id);
-            }
-            return;
-        }
-        
-        $id = $this->_convertId($_id);
+        $idArray = (! is_array($_id)) ? array($this->_convertId($_id)) : $_id;
         $identifier = $this->_getRecordIdentifier();
         
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' = ?', $id)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($identifier) . ' IN (?)', $idArray)
         );
         
         return $this->_db->delete($this->_tablePrefix . $this->_tableName, $where);
