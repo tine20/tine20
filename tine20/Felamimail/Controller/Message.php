@@ -442,7 +442,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Move ' . count($_uids) . ' messages on imap server');
         $_imap->copyMessage($_uids, $_targetFolder);
-        $_imap->removeMessage($_uids);
+        $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
     }
     
     /**
