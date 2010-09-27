@@ -384,13 +384,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $imapBackend   = null;
         $folderIds    = array();
         
-        // delete messages on imap server
+        // move + delete messages on imap server
         foreach ($messages as $message) {
-            if($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' move messages on imap server');
-                $imapBackend->copyMessage($imapMessageUids, $targetFolder->globalname);
-                $imapBackend->removeMessage($imapMessageUids);
-                
+            if ($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
+                $this->_moveBatchOfMessages($imapMessageUids, $targetFolder->globalname, $imapBackend);
                 $imapMessageUids = array();
             }
             
@@ -404,14 +401,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
             
             $imapMessageUids[] = $message->messageuid;
-            
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' moved messages on imap server');
-        
-        if($imapBackend !== null && count($imapMessageUids) > 0) {
-            $imapBackend->copyMessage($imapMessageUids, $targetFolder->globalname);
-            $imapBackend->removeMessage($imapMessageUids);
+        // move remaining
+        if ($imapBackend !== null && count($imapMessageUids) > 0) {
+            $this->_moveBatchOfMessages($imapMessageUids, $targetFolder->globalname, $imapBackend);
         }    
 
         // delete messages in local cache
@@ -435,6 +429,20 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $affectedFolders = $this->_updateFolderCounts($folderIds);
         
         return Felamimail_Controller_Folder::getInstance()->get($targetFolder);
+    }
+    
+    /**
+     * move messages on imap server
+     * 
+     * @param array $_uids
+     * @param string $_targetFolder
+     * @param Felamimail_Backend_ImapProxy $_imap
+     */
+    protected function _moveBatchOfMessages($_uids, $_targetFolder, Felamimail_Backend_ImapProxy $_imap)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Move ' . count($_uids) . ' messages on imap server');
+        $_imap->copyMessage($_uids, $_targetFolder);
+        $_imap->removeMessage($_uids);
     }
     
     /**
