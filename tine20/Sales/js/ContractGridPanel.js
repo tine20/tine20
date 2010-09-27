@@ -4,7 +4,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -24,7 +24,7 @@ Ext.namespace('Tine.Sales');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @param       {Object} config
@@ -45,7 +45,6 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         this.recordProxy = Tine.Sales.contractBackend;
         
-        //this.actionToolbarItems = this.getToolbarItems();
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
         
@@ -70,30 +69,6 @@ Tine.Sales.ContractGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ]
         });
     },    
-    
-    /**
-     * open contract edit dialog
-     */
-    onEditInNewWindow: function(_button, _event) {
-        if (_button.actionType == 'edit') {
-            var selectedRows = this.grid.getSelectionModel().getSelections();
-            var record = selectedRows[0];
-        } else {
-        	var record = {};
-        }
-        var containerId = Tine.Sales.registry.get('containerId'); 
-        
-        var popupWindow = Tine.Sales.ContractEditDialog.openWindow({
-            record: record,
-            containerId: containerId,
-            listeners: {
-                scope: this,
-                'update': function(record) {
-                    this.store.load({});
-                }
-            }
-        });    	
-    },
     
     /**
      * returns cm
