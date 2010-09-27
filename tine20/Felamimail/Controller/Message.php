@@ -365,6 +365,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  mixed  $_messages
      * @param  mixed  $_targetFolder
      * @return Felamimail_Model_Folder
+     * 
+     * @todo return list of affected folders
      */
     public function moveMessages($_messages, $_targetFolder)
     {
@@ -409,23 +411,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }    
 
         // delete messages in local cache
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $number = $this->_backend->delete($messages->getArrayOfIds());
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number .' messages from cache');
         
+        // update counts
         foreach($messages as $message) {
             if (!is_array($message->flags) || !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
                 // count messages with seen flag for the first time
                 $folderIds[$message->folder_id]['decrementUnreadCounter']++;
             }
             $folderIds[$message->folder_id]['decrementMessagesCounter']++;
-            
-            $this->_backend->delete($messages->getId());
         }
-                        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' deleted messages on cache');
-        
-        // @todo return list of affected folders
         $affectedFolders = $this->_updateFolderCounts($folderIds);
         
         return Felamimail_Controller_Folder::getInstance()->get($targetFolder);
