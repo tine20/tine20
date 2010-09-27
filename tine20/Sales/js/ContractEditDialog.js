@@ -4,7 +4,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -24,7 +24,7 @@ Ext.namespace('Tine.Sales');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @param       {Object} config
@@ -32,10 +32,6 @@ Ext.namespace('Tine.Sales');
  * Create a new Tine.Sales.ContractGridPanel
  */
 Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-    /**
-     * @cfg {Number}
-     */
-    containerId: -1,
     /**
      * @private
      */
@@ -48,7 +44,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Sales',
     recordClass: Tine.Sales.Model.Contract,
     recordProxy: Tine.Sales.contractBackend,
-    //showContainerSelector: true,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     
     /**
@@ -64,7 +59,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             params: {
                 method: 'Sales.getContract',
                 id: this.record.id
-                //containerId: this.containerId
             }
         });
     },
@@ -102,7 +96,6 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 1,
                         fieldLabel: this.app.i18n._('Title'),
                         name: 'title',
-                        //listeners: {render: function(field){field.focus(false, 250);}},
                         allowBlank: false
                     }], [{
                         columnWidth: 1,
@@ -151,11 +144,10 @@ Tine.Sales.ContractEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * Sales Edit Popup
  */
 Tine.Sales.ContractEditDialog.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 470,
-        name: Tine.Sales.ContractEditDialog.prototype.windowNamePrefix + id,
+        name: Tine.Sales.ContractEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Sales.ContractEditDialog',
         contentPanelConstructorConfig: config
     });
