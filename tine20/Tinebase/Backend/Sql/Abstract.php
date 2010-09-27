@@ -564,6 +564,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
       */
     public function delete($_id) 
     {
+        if (empty($_id)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No records deleted.');
+            return 0;
+        }
+        
         $idArray = (! is_array($_id)) ? array($this->_convertId($_id)) : $_id;
         $identifier = $this->_getRecordIdentifier();
         
