@@ -231,6 +231,28 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * search Timesheet with empty custom fields
+     */
+    public function testSearchTimesheetWithEmptyCustomField()
+    {
+        $cf = $this->_getCustomField();
+                
+        $timesheet = $this->_getTimesheet();
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
+
+        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(array(
+            'field'     => 'customfield', 
+            'operator'  => 'equals', 
+            'value'     => array(
+                'cfId'  => $cf->getId(),
+                'value' => '',
+            )
+        )), $this->_getPaging());
+        $this->assertEquals(1, $search['totalcount']);
+    }
+    
+    /**
      * try to add a Timesheet with custom fields (check grants)
      */
     public function testAddTimesheetWithCustomFieldGrants()
@@ -781,7 +803,7 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _getTimeaccountFilter()
     {
-        return array(
+        $result = array(
             array(
                 'field' => 'description', 
                 'operator' => 'contains', 
@@ -792,24 +814,33 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
                 'operator' => 'equals', 
                 'value' => Tinebase_Model_Container::TYPE_SHARED
             ),     
-        );        
+        );
+
+        return $result;
     }
     
     
     /**
      * get Timesheet filter
      *
+     * @param array $_cfFilter
      * @return array
      */
-    protected function _getTimesheetFilter()
+    protected function _getTimesheetFilter($_cfFilter = NULL)
     {
-        return array(
+        $result = array(
             array(
                 'field' => 'query', 
                 'operator' => 'contains', 
                 'value' => 'blabla'
             ),
-        );        
+        );
+        
+        if ($_cfFilter !== NULL) {
+            $result[] = $_cfFilter;
+        }
+        
+        return $result;
     }
 
     /**

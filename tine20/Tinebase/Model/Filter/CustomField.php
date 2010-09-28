@@ -51,7 +51,7 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Text
     {
         // don't take empty filter into account
         if (     empty($this->_value)          || ! is_array($this->_value)    || ! isset($this->_value['cfId'])  || empty($this->_value['cfId']) 
-            || ! isset($this->_value['value']) || empty($this->_value['value'])) 
+            || ! isset($this->_value['value'])) 
         {
             return;
         } else if ($this->_operator == 'in') {
@@ -61,8 +61,6 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Text
         // make sure $correlationName is a string
         $correlationName = Tinebase_Record_Abstract::generateUID() . $this->_value['cfId'] . 'cf';
         
-        $value = $this->_replaceWildcards($this->_value['value']);
-        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom field filter: ' . print_r($this->_value, true));
         
         $db = Tinebase_Core::getDb();
@@ -70,11 +68,18 @@ class Tinebase_Model_Filter_CustomField extends Tinebase_Model_Filter_Text
         
         // per left join we add a customfield column named as the customfield and filter this joined column
         // NOTE: we name the column we join like the customfield, to be able to join multiple customfield criteria (multiple invocations of this function)
-        $_select->joinLeft(
-            /* what */    array($correlationName => SQL_TABLE_PREFIX . 'customfield'), 
-            /* on   */    $db->quoteIdentifier("{$correlationName}.record_id")      . " = $idProperty AND " 
-                        . $db->quoteIdentifier("{$correlationName}.customfield_id") . " = " . $db->quote($this->_value['cfId']),
-            /* select */  array());
-        $_select->where($db->quoteInto($db->quoteIdentifier("{$correlationName}.value") . $this->_opSqlMap[$this->_operator]['sqlop'], $value) . ' /* add cf filter */');
+        $what = array($correlationName => SQL_TABLE_PREFIX . 'customfield');
+        $on = $db->quoteIdentifier("{$correlationName}.record_id")      . " = $idProperty AND " 
+            . $db->quoteIdentifier("{$correlationName}.customfield_id") . " = " . $db->quote($this->_value['cfId']);
+        $_select->joinLeft($what, $on, array());
+
+        $valueIdentifier = $db->quoteIdentifier("{$correlationName}.value");
+        if ($this->_value['value'] === '') {
+            $where = $db->quoteInto($valueIdentifier. ' IS NULL OR ' . $valueIdentifier . ' = ?', $this->_value['value']);
+        } else {
+            $value = $this->_replaceWildcards($this->_value['value']);
+            $where = $db->quoteInto($valueIdentifier . $this->_opSqlMap[$this->_operator]['sqlop'], $value);
+        }
+        $_select->where($where . ' /* add cf filter */');
     }
 }
