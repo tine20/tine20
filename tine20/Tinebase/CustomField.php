@@ -161,14 +161,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $filter->setRequiredGrants((array)$_requiredGrant);
             $result = $this->_backendConfig->search($filter);
         
+            if (count($result) > 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
+                    . print_r($result->toArray(), TRUE)
+                );
+            }
+            
             $cache->save($result, $cacheId, array('customfields'));
-        }
-        
-        if (count($result) > 0) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
-                . print_r($result->toArray(), TRUE)
-            );
         }
         
         $this->_cfByApplicationCache[$cfIndex] = $result;
