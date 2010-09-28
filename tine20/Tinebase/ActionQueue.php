@@ -12,7 +12,7 @@
 /**
  * Action Queue
  * 
- * Method queue for defered/async execution of Tine 2.0 application actions as defined 
+ * Method queue for deferred/async execution of Tine 2.0 application actions as defined 
  * in the application controllers 
  *
  * @package     Tinebase
@@ -113,7 +113,7 @@
         if ($this->_queue) {
             $this->_queue->send($message);
         } else {
-            // execute action imideately if no queue service is available
+            // execute action immediately if no queue service is available
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue configured -> directly execute action: '{$action}'");
             $this->_executeAction($message);
         }
@@ -130,7 +130,7 @@
         try {
             $decodedMessage = unserialize($_message);
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not decode message -> aboarting execution");
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not decode message -> aborting execution");
             return;
         }
         
@@ -150,4 +150,4 @@
         
         call_user_func_array(array($controller, $actionName), $decodedMessage['params']);
     }
- }
+}
