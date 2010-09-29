@@ -23,7 +23,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         #'Body'              => 'body',
         'Cc'                => 'cc',
         'DateReceived'      => 'received',
-        'From'              => 'from',
+        'From'              => 'from_email',
         #'Sender'            => 'sender',
         'Subject'           => 'subject',
         'To'                => 'to'
@@ -181,6 +181,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 switch($value) {
                     case 'received':
                         $nodeContent = $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
+                        break;
+                        
+                    case 'from_email':
+                        $nodeContent = !empty($data->from_name) ? "\"{$data->from_name}\" <{$data->from_email}>" : $data->from_email; 
                         break;
                         
                     default:
@@ -442,49 +446,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * convert contact from xml to Addressbook_Model_Contact
+     * convert email from xml to Felamimail_Model_Message
      *
-     * @todo handle images
-     * @param SimpleXMLElement $_data
-     * @return Addressbook_Model_Contact
+     * @param  SimpleXMLElement  $_data
+     * @param  mixed             $_entry
      */
     protected function _toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
-        if($_entry instanceof Tasks_Model_Task) {
-            $task = $_entry;
-        } else {
-            $task = new Tasks_Model_Task(null, true);
-        }
-        
-        $xmlData = $_data->children('uri:Tasks');
-
-        foreach($this->_mapping as $fieldName => $value) {
-            switch($value) {
-                case 'completed':
-                    if((int)$_data->$fieldName === 1) {
-                        $task->status_id = 2;
-                        $task->completed = (string)$_data->DateCompleted;
-                    } else {
-                        $task->status_id = 3; 
-                        $task->completed = NULL;
-                    }
-                    break;
-                default:
-                    if(isset($xmlData->$fieldName)) {
-                        $task->$value = (string)$xmlData->$fieldName;
-                    } else {
-                        $task->$value = null;
-                    }
-                    break;
-            }
-        }
-        
-        // contact should be valid now
-        $task->isValid();
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " contactData " . print_r($task->toArray(), true));
-        
-        return $task;
+        // does nothing => you can't add emails via ActiveSync
     }
     
     /**
