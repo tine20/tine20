@@ -30,14 +30,16 @@ Tine.Felamimail.FolderSelectTriggerField = Ext.extend(Ext.form.TriggerField, {
      * @param e
      */
     onTriggerClick: function(e) {
-        this.selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
-            account: this.account,
-            listeners: {
-                // NOTE: scope has to be first item in listeners! @see Ext.ux.WindowFactory
-                scope: this,
-                'folderselect': this.onSelectFolder
-            }
-        });
+        if (this.account && this.account.id !== 0) {
+            this.selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
+                account: this.account,
+                listeners: {
+                    // NOTE: scope has to be first item in listeners! @see Ext.ux.WindowFactory
+                    scope: this,
+                    'folderselect': this.onSelectFolder
+                }
+            });
+        }
     },
     
     /**
