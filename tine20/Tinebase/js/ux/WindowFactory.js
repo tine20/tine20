@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -110,14 +110,14 @@ Ext.ux.WindowFactory.prototype = {
              *    in an other window.
              *    
              * To work around this, we create new fresh listeners in the new window and proxy the event calls
+             * 
+             * TODO there is a bug in this function -> it does not work correctly if scope is defined in listeners object and is not the first entry ... :(
              */
             var ls = config.contentPanelConstructorConfig.listeners;
             if (ls /* && Ext.isIE */) {
                 var lsProxy = {};
                 for (var p in ls) {
                     if (ls.hasOwnProperty(p) && p !== 'scope') {
-                        console.log(p);
-                        
                         // NOTE apply dosn't work here for some strange reason, so we hope that there are not more than 5 params
                         if (ls[p].fn) {
                             lsProxy[p] = function() {ls[p].fn.call(ls[p].scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);};
