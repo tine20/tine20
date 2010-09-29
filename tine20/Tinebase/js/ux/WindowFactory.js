@@ -115,7 +115,9 @@ Ext.ux.WindowFactory.prototype = {
             if (ls /* && Ext.isIE */) {
                 var lsProxy = {};
                 for (var p in ls) {
-                    if (ls.hasOwnProperty(p)) {
+                    if (ls.hasOwnProperty(p) && p !== 'scope') {
+                        console.log(p);
+                        
                         // NOTE apply dosn't work here for some strange reason, so we hope that there are not more than 5 params
                         if (ls[p].fn) {
                             lsProxy[p] = function() {ls[p].fn.call(ls[p].scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);};
