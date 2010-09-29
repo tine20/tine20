@@ -56,9 +56,36 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
 
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.account = this.account || this.app.getActiveAccount();
-        
         this.title = String.format(this.app.i18n._('Folders of account {0}'), this.account.get('name'));
         
+        this.initActions();
+        this.initFolderTree();
+        
+        Tine.Felamimail.FolderSelectPanel.superclass.initComponent.call(this);
+	},
+    
+    /**
+     * init actions
+     */
+    initActions: function() {
+        this.action_cancel = new Ext.Action({
+            text: _('Cancel'),
+            minWidth: 70,
+            scope: this,
+            handler: this.onCancel,
+            iconCls: 'action_cancel'
+        });
+        
+        this.fbar = [
+            '->',
+            this.action_cancel
+        ];        
+    },
+        
+    /**
+     * init folder tree
+     */
+    initFolderTree: function() {
         this.folderTree = new Ext.tree.TreePanel({
             id: 'felamimail-foldertree',
             rootVisible: true,
@@ -82,9 +109,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
         this.folderTree.on('click', this.onFolderSelect, this);
         
         this.items = [this.folderTree];
-        
-        Tine.Felamimail.FolderSelectPanel.superclass.initComponent.call(this);
-	},
+    },
     
     /**
      * @private
@@ -102,7 +127,15 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
      */
     onFolderSelect: function(node) {
         this.fireEvent('folderselect', node);
-    }
+    },
+    
+    /**
+     * @private
+     */
+    onCancel: function(){
+        this.purgeListeners();
+        this.window.close();
+    }    
 });
 
 /**
