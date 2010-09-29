@@ -302,10 +302,14 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 items: [[{
                     fieldLabel: this.app.i18n._('Sent Folder Name'),
                     name: 'sent_folder',
+                    xtype: 'felamimailfolderselect',
+                    account: this.record,
                     maxLength: 64
                 }, {
                     fieldLabel: this.app.i18n._('Trash Folder Name'),
                     name: 'trash_folder',
+                    xtype: 'felamimailfolderselect',
+                    account: this.record,
                     maxLength: 64
                 }, {
                     fieldLabel: this.app.i18n._('Show Intelligent Folders'),
