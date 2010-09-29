@@ -564,7 +564,8 @@ Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
     { name: 'action_type' },
     { name: 'action_argument' },
     { name: 'enabled', type: 'boolean'},
-    { name: 'conditions' }
+    { name: 'conditions' },
+    { name: 'account_id' }
 ]), {
     appName: 'Felamimail',
     modelName: 'Rule',

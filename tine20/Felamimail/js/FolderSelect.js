@@ -17,18 +17,37 @@ Ext.ns('Tine.Felamimail');
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * TODO         make it work
  */
 Tine.Felamimail.FolderSelectTriggerField = Ext.extend(Ext.form.TriggerField, {
     
     triggerClass: 'x-form-search-trigger',
+    account: null,
     
     /**
      * onTriggerClick
+     * open ext window with (folder-)select panel that fires event on select
+     * 
+     * @param e
      */
     onTriggerClick: function(e) {
-        //Tine.log.debug('click');
-        // TODO open ext window with (folder-)tree panel that fires event on select
+        this.selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
+            account: this.account,
+            listeners: {
+                // NOTE: scope has to be first item in listeners! @see Ext.ux.WindowFactory
+                scope: this,
+                'folderselect': this.onSelectFolder
+            }
+        });
+    },
+    
+    /**
+     * select folder event listener
+     * 
+     * @param {Ext.tree.AsyncTreeNode} node
+     */
+    onSelectFolder: function(node) {
+        this.selectPanel.close();
+        this.setValue(node.attributes.globalname);
         this.el.focus();
     }
 });

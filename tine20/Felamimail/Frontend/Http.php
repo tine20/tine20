@@ -31,6 +31,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Felamimail/js/Model.js',
             'Felamimail/js/FolderStore.js',
             'Felamimail/js/FolderSelect.js',
+            'Felamimail/js/FolderSelectPanel.js',
             'Felamimail/js/TreeContextMenu.js',
             'Felamimail/js/TreeLoader.js',
             'Felamimail/js/TreePanel.js',
