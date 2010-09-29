@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ActiveSync\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-06-09 20:59+0100\n"
+"PO-Revision-Date: 2010-09-29 19:39+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 
 #: js/Application.js:32
 msgid "Active Sync"
-msgstr "Active Sync"
+msgstr "Zdalna synchronizacja"
 
 #: js/Application.js:48
 msgid "Select a Device"
@@ -32,7 +32,8 @@ msgstr "Ustaw jako filtr {0}"
 msgid "Resetted Sync Filter"
 msgstr "Zresetowany filtr synchronizacji"
 
-#: js/Application.js:96 js/Application.js:108
+#: js/Application.js:96
+#: js/Application.js:108
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr "Filtrem {0} dla urządzenia \"{1}\"  jest teraz \"{2}\""
 
@@ -62,3 +63,4 @@ msgstr "Domyślna polityka"
 #: Setup/setup.xml:470
 msgid "Default Policy installed during setup"
 msgstr "Domyślna polityka określona podczas definiowania ustawień"
+
