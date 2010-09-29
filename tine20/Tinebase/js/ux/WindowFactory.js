@@ -103,13 +103,13 @@ Ext.ux.WindowFactory.prototype = {
             /*
              * IE fix for listeners
              * 
-             * In IE we have two problems when dealing with listeners accros windows
+             * In IE we have two problems when dealing with listeners across windows
              * 1. listeners (functions) are defined in the parent window. a typeof (some function from parent) returns object in IE
              *    the Ext.Observable code can't deal with this
              * 2. listeners get executed by fn.apply(scope, arguments). For some reason in IE this dosn't work with functions defined
              *    in an other window.
              *    
-             * To work araoud this, we create new fresh listeners in the new window and proxy the event calls
+             * To work around this, we create new fresh listeners in the new window and proxy the event calls
              */
             var ls = config.contentPanelConstructorConfig.listeners;
             if (ls /* && Ext.isIE */) {
@@ -127,7 +127,7 @@ Ext.ux.WindowFactory.prototype = {
                 config.contentPanelConstructorConfig.listeners = lsProxy;
             }
             
-            // place a referece to current window class in the itemConsturctor.
+            // place a reference to current window class in the itemConstructor.
             // this may be overwritten depending on concrete window implementation
             config.contentPanelConstructorConfig.window = config;
             
