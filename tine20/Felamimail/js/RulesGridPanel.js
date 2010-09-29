@@ -44,6 +44,10 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.initColumns();
         
+        this.editDialogConfig = {
+            account: this.account
+        };
+        
         this.supr().initComponent.call(this);
     },
     

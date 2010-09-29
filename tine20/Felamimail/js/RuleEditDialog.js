@@ -31,7 +31,11 @@ Ext.namespace('Tine.Felamimail');
  * Create a new RuleEditDialog
  */
 Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
-
+    /**
+     * @cfg {Tine.Felamimail.Model.Account}
+     */
+    account: null,
+    
     /**
      * @private
      */
@@ -95,7 +99,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var title = this.app.i18n._('Edit Filter Rule');
         this.window.setTitle(title);
         
-        Tine.log.debug(this.record);
         this.getForm().loadRecord(this.record);
         
         this.loadMask.hide();
@@ -277,7 +280,8 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             name: 'action_argument_fileinto',
                             xtype: 'felamimailfolderselect',
                             width: 200,
-                            hideLabel: true
+                            hideLabel: true,
+                            account: this.account
                         }]
                     }, {
                         // TODO add email validator
