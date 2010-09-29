@@ -129,6 +129,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     i18nDeleteActionText: null,
     
+    /**
+     * @cfg {Object} editDialogConfig 
+     * config passed to edit dialog
+     */
+    editDialogConfig: null,
+    
     i18nEmptyText: null,
     
     /**
@@ -209,6 +215,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
         this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
         this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName)
+        this.editDialogConfig = this.editDialogConfig || {};
         
         // init store
         this.initStore();
@@ -921,13 +928,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
         
-        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow({
-            record: record,
-            listeners: {
-                scope: this,
-                'update': this.onUpdateRecord
-            }
-        });
+        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow(Ext.copyTo(
+            this.editDialogConfig, {
+                record: record,
+                listeners: {
+                    scope: this,
+                    'update': this.onUpdateRecord
+                }
+            }, 'record,listeners')
+        );
     },
     
     /**
