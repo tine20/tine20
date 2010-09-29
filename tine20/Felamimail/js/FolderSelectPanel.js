@@ -19,6 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
+ * TODO         make it possible to preselect folder
  * TODO         use it for folder subscriptions
  * </pre>
  * 
