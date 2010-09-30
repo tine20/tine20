@@ -229,10 +229,12 @@ class Tinebase_Frontend_Json_Container
         $filter = new $filterModel(array());
         $filter->setFromArrayInUsersTimezone($filterData);
         
-        Tinebase_Container::getInstance()->moveRecordsToContainer($targetContainerId, $filter, $applicationName, $model);
+        $recordController = Tinebase_Core::getApplicationInstance($applicationName, $model);
+        $result = $recordController->move($filter, $targetContainerId);
         
         return array(
-            'status'    => 'success'
+            'status'    => 'success',
+            'results'   => $result,
         );
     }
 }

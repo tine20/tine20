@@ -112,7 +112,7 @@ abstract class Tinebase_Controller_Record_Abstract
         return Tinebase_Core::getApplicationInstance($appName, $modelName);
     }
     
-    /*********** get / search / count leads **************/
+    /*********** get / search / count **************/
     
     /**
      * get list of records
@@ -271,7 +271,7 @@ abstract class Tinebase_Controller_Record_Abstract
         return $records;
     }
     
-    /*************** add / update / delete lead *****************/    
+    /*************** add / update / delete / move *****************/    
 
     /**
      * add one record
@@ -540,6 +540,55 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectDelete(array $_ids) {
         return $_ids;
+    }
+    
+    /**
+     * move records to new container / folder / whatever
+     * 
+     * @param mixed $_records (can be record set, filter, array, string)
+     * @param mixed $_target (string, container record, ...)
+     * @return array
+     */
+    public function move($_records, $_target, $_containerProperty = 'container_id')
+    {
+        $records = $this->_convertToRecordSet($_records);
+        $targetContainerId = ($_target instanceof Tinebase_Model_Container) ? $_target->getId() : $_target;
+        
+        if ($this->_doContainerACLChecks) {
+            // check add grant in target container
+            if (! $this->_currentAccount->hasGrant($targetContainerId, Tinebase_Model_Grants::GRANT_ADD)) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Permission denied to add records to container.');
+                throw new Tinebase_Exception_AccessDenied('You are not allowed to move records to this container');
+            }
+            
+            // check delete grant in source container
+            $containerIdsWithDeleteGrant = Tinebase_Container::getInstance()->getContainerByACL($this->_currentAccount, $this->_applicationName, Tinebase_Model_Grants::GRANT_DELETE, TRUE);
+            foreach ($records as $index => $record) {
+                if (! in_array($record->{$_containerProperty}, $containerIdsWithDeleteGrant)) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                        . ' Permission denied to remove record ' . $record->getId() . ' from container ' . $record->{$_containerProperty}
+                    ); 
+                    unset($records[$index]);
+                }
+            }
+        }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Moving ' . count($records) . ' ' . $this->_modelName . '(s) to container ' . $targetContainerId);
+        
+        // move (update container id)
+        $idsToMove = $records->getArrayOfIds();
+        $filterClass = $this->_modelName . 'Filter';
+        if (! class_exists($filterClass)) {
+            throw new Tinebase_Exception_NotFound('Filter class ' . $filterClass . ' not found!');
+        }
+        $filter = new $filterClass(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => $idsToMove)
+        ));
+        $this->updateMultiple($filter, array(
+            $_containerProperty => $targetContainerId
+        ));
+        
+        return $idsToMove;
     }
     
     /*********** helper funcs **************/

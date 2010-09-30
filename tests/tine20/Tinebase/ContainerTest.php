@@ -359,7 +359,8 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $filter = array(array('field' => 'id', 'operator' => 'in', 'value' => array($contact->getId())));
         $containerJson = new Tinebase_Frontend_Json_Container();
-        $containerJson->moveRecordsToContainer($this->objects['initialContainer']->getId(), $filter, 'Addressbook', 'Contact');
+        $result = $containerJson->moveRecordsToContainer($this->objects['initialContainer']->getId(), $filter, 'Addressbook', 'Contact');
+        $this->assertEquals($contact->getId(), $result['results'][0]);
         
         $movedContact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
         
