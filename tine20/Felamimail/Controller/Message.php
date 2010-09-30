@@ -270,11 +270,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_uids
      * @param array $_flags
      * @param Felamimail_Backend_ImapProxy $_imap
+     * @throws Felamimail_Exception_IMAP
      */
     protected function _addFlagsOnImap($_uids, $_flags, Felamimail_Backend_ImapProxy $_imap)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set flags on imap server for ' . count($_uids) . ' messages.');
-        $_imap->addFlags($_uids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+        try {
+            $_imap->addFlags($_uids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            throw new Felamimail_Exception_IMAP($zmse->getMessage());
+        }
     }
     
     /**
