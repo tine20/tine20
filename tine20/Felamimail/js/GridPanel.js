@@ -901,8 +901,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });        
     },
     
-    onPrint:function() {
-        if(!Ext.get('felamimailPrintHelperIframe')) {
+    /**
+     * print handler
+     */
+    onPrint: function() {
+        if (!Ext.get('felamimailPrintHelperIframe')) {
             Ext.getBody().createChild({
                 id: 'felamimailPrintHelper',
                 tag:'div',
@@ -913,24 +916,39 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }]
             });
         }
-        var buffer = '<html><head>';
-        buffer+= '<title>'+this.app.i18n._('Print Preview')+'</title>';
-        buffer+= '</head><body>';
-        buffer+= this.detailsPanel.getEl().child('.preview-panel-felamimail').dom.innerHTML;
-        buffer+= '</body></html>';
-        Ext.get('felamimailPrintHelperIframe').dom.contentWindow.document.documentElement.innerHTML = buffer;
+        var content = this.getDetailsPanelContentForPrinting();
+        Ext.get('felamimailPrintHelperIframe').dom.contentWindow.document.documentElement.innerHTML = content;
         Ext.get('felamimailPrintHelperIframe').dom.contentWindow.print();
     },
     
-    onPrintPreview:function() {
+    /**
+     * get detail panel content
+     * 
+     * @return {String}
+     */
+    getDetailsPanelContentForPrinting: function() {
+        // TODO somehow we have two <div class="preview-panel-felamimail"> -> we need to fix that and get the first element found
+        var detailsPanels = this.detailsPanel.getEl().query('.preview-panel-felamimail');
+        var detailsPanelContent = detailsPanels[1].innerHTML;
+        
         var buffer = '<html><head>';
-        buffer+= '<title>'+this.app.i18n._('Print Preview')+'</title>';
-        buffer+= '</head><body>';
-        buffer= this.detailsPanel.getEl().child('.preview-panel-felamimail').dom.innerHTML;
-        buffer+= '</body></html>';
+        buffer += '<title>' + this.app.i18n._('Print Preview') + '</title>';
+        buffer += '</head><body>';
+        buffer += detailsPanelContent;
+        buffer += '</body></html>';
+        
+        return buffer;
+    },
+    
+    /**
+     * print preview handler
+     */
+    onPrintPreview: function() {
+        var content = this.getDetailsPanelContentForPrinting();
+        
         var win = window.open('about:blank',this.app.i18n._('Print Preview'),'width=500,height=500,scrollbars=yes,toolbar=yes,status=yes,menubar=yes');
         win.document.open()
-        win.document.write(buffer);
+        win.document.write(content);
         win.document.close();
         win.focus();
     },
