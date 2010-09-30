@@ -868,18 +868,23 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _convertToRecordSet($_mixed, $_refresh = FALSE)
     {
         if ($_mixed instanceof Tinebase_Model_Filter_FilterGroup) {
+            // FILTER (Tinebase_Model_Filter_FilterGroup)
             $result = $this->search($_mixed);
         } elseif ($_mixed instanceof Tinebase_Record_RecordSet) {
+            // RECORDSET (Tinebase_Record_RecordSet)
             $result = ($_refresh) ? $this->_backend->getMultiple($_mixed->getArrayOfIds()) : $_mixed;
         } elseif ($_mixed instanceof Tinebase_Record_Abstract) {
+            // RECORD (Tinebase_Record_Abstract)
             if ($_refresh) {
                 $result = $this->_backend->getMultiple($_mixed->getId());
             } else {
                 $result = new Tinebase_Record_RecordSet(get_class($_mixed), array($_mixed));
             }
         } elseif (is_string($_mixed) || is_array($_mixed)) {
+            // SINGLE ID or ARRAY OF IDS 
             $result = $this->_backend->getMultiple($_mixed);
         } else {
+            // UNSUPPORTED TYPE
             throw new Tinebase_Exception_InvalidArgument('Wrong type.');
         }
         
