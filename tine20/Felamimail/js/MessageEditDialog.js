@@ -215,8 +215,6 @@ Ext.namespace('Tine.Felamimail');
      */
     initRecipients: function() {
         if (this.replyTo) {
-            Tine.log.debug(this.replyTo);
-            
             var replyTo = this.replyTo.get('headers')['reply-to'];
             
             this.to = [replyTo ? replyTo : this.replyTo.get('from_email')];
@@ -282,8 +280,6 @@ Ext.namespace('Tine.Felamimail');
         if (Ext.isString(this.record)) {
             this.recordClass = new this.recordClass(Ext.decode(this.record));
         }
-        
-        Tine.log.debug(this.replyTo);
         
         if (Ext.isString(this.replyTo)) {
             this.replyTo = new this.recordClass(Ext.decode(this.replyTo));
