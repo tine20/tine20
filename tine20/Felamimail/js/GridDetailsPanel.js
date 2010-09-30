@@ -80,8 +80,8 @@ Ext.namespace('Tine.Felamimail');
     /**
      * (on) update details
      * 
-     * @param {} record
-     * @param {} body
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {String} body
      * @private
      */
     updateDetails: function(record, body) {
@@ -91,13 +91,7 @@ Ext.namespace('Tine.Felamimail');
         }
         
         if (! record.bodyIsFetched()) {
-            // cancel old request first
-            if (this.fetchBodyTransactionId && ! Tine.Felamimail.messageBackend.isLoading(this.fetchBodyTransactionId)) {
-                Tine.log.debug('Tine.Felamimail.GridDetailsPanel::updateDetails canceling current fetchBody request');
-                Tine.Felamimail.messageBackend.abort(this.fetchBodyTransactionId);
-            }
-            this.fetchBodyTransactionId = Tine.Felamimail.messageBackend.fetchBody(record, this.updateDetails.createDelegate(this, [record, body]));
-
+            this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
             this.defaultTpl.overwrite(body, {msg: ''});
             this.getLoadMask().show();
             return;
@@ -109,6 +103,22 @@ Ext.namespace('Tine.Felamimail');
             this.getLoadMask().hide();
             this.getEl().down('div').down('div').scrollTo('top', 0, false);
         }
+    },
+    
+    /**
+     * refetch message body
+     * 
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {Function} callback
+     * @param {String} fnName
+     */
+    refetchBody: function(record, callback, fnName) {
+        // cancel old request first
+        if (this.fetchBodyTransactionId && ! Tine.Felamimail.messageBackend.isLoading(this.fetchBodyTransactionId)) {
+            Tine.log.debug('Tine.Felamimail.GridDetailsPanel::' + fnName + '() cancelling current fetchBody request.');
+            Tine.Felamimail.messageBackend.abort(this.fetchBodyTransactionId);
+        }
+        this.fetchBodyTransactionId = Tine.Felamimail.messageBackend.fetchBody(record, callback);
     },
     
     /**
@@ -254,10 +264,15 @@ Ext.namespace('Tine.Felamimail');
         }
         
         switch (selector) {
-            
             case 'span[class=tinebase-download-link]':
                 var idx = target.id.split(':')[1];
                     attachment = this.record.get('attachments')[idx];
+                    
+                if (! this.record.bodyIsFetched()) {
+                    // sometimes there is bad timing and we do not have the attachments available -> refetch body
+                    this.refetchBody(this.record, this.onClick.createDelegate(this, [e]), 'onClick');
+                    return;
+                }
                     
                 // remove part id if set (that is the case in message/rfc822 attachments)
                 var messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
