@@ -128,6 +128,11 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         return $index;
     }
     
+    /**
+     * remove record from set
+     * 
+     * @param Tinebase_Record_Interface $_record
+     */
     public function removeRecord(Tinebase_Record_Interface $_record)
     {
         $idx = array_search($_record, $this->_listOfRecords);
