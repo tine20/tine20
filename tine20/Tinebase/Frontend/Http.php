@@ -503,8 +503,11 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // authentication failed
         // redirect back to loginurl
         if ($success !== TRUE) {
-            $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, $_SERVER["HTTP_REFERER"])->value;
-            header('Location: ' . $redirectUrl);
+            $defaultUrl = (array_key_exists('HTTP_REFERER', $_SERVER)) ? $_SERVER['HTTP_REFERER'] : '';
+            $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, $defaultUrl)->value;
+            if (! empty($redirectUrl)) {
+                header('Location: ' . $redirectUrl);
+            }
             return;
         }
 
