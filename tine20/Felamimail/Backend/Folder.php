@@ -149,7 +149,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
                 $data[$counter] = new Zend_Db_Expr($this->_db->quoteIdentifier($counter) . ' ' . $value{0} . ' ' . substr($value, 1));
             } else {
                 // set values
-                $data[$counter] = (int)$value;
+                $data[$counter] = ($value >= 0) ? (int)$value : 0;
             }
         }
         
