@@ -45,7 +45,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
-
 		
     /**
      * the table object for the container_acl table
@@ -231,7 +230,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         return true;
     }
-    
     
     /**
      * return all container, which the user has the requested right for
@@ -1135,8 +1133,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param string $_containerProperty
      * @return array of moved ids
      * @throws Tinebase_Exception_AccessDenied|Tinebase_Exception_NotFound
-     * 
-     * @todo should return the ids of the moved records
      */
     public function moveRecordsToContainer($_targetContainerId, Tinebase_Model_Filter_FilterGroup $_filter, $_applicationName, $_modelName, $_containerProperty = 'container_id')
     {
