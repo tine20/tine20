@@ -1133,8 +1133,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param string $_applicationName
      * @param string $_modelName
      * @param string $_containerProperty
-     * @return void
+     * @return array of moved ids
      * @throws Tinebase_Exception_AccessDenied|Tinebase_Exception_NotFound
+     * 
+     * @todo should return the ids of the moved records
      */
     public function moveRecordsToContainer($_targetContainerId, Tinebase_Model_Filter_FilterGroup $_filter, $_applicationName, $_modelName, $_containerProperty = 'container_id')
     {
@@ -1166,14 +1168,17 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         // move (update container id)
+        $idsToMove = $records->getArrayOfIds();
         $filterClass = $_applicationName . '_Model_' . $_modelName . 'Filter';
         if (! class_exists($filterClass)) {
             throw new Tinebase_Exception_NotFound('Filter class ' . $filterClass . ' not found!');
         }
         $filter = new $filterClass(array(
-            array('field' => 'id', 'operator' => 'in', 'value' => $records->getArrayOfIds())
+            array('field' => 'id', 'operator' => 'in', 'value' => $idsToMove)
         ));
         $data[$_containerProperty] = $_targetContainerId;
         $recordController->updateMultiple($filter, $data);
+        
+        return $idsToMove;
     }
 }
