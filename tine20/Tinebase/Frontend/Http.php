@@ -670,7 +670,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	       'tempFile' => $tempFile->toArray(),
     	    )));
 	    } catch (Tinebase_Exception $exception) {
-	        Tinebase_Core::getLogger()->WARN("File upload could not done, due to the following exception: \n" . $exception);
+	        Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " File upload could not be done, due to the following exception: \n" . $exception);
 	        
 	        if (! headers_sent()) {
 	           header("HTTP/1.0 500 Internal Server Error");
