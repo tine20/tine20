@@ -129,7 +129,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             throw new Addressbook_Exception_AccessDenied('read access to contact denied');
         }
         
-        if ($this->_doResolveCustomfields()) {
+        if ($this->_resolveCustomFields && $contact->has('customfields')) {
             Tinebase_CustomField::getInstance()->resolveRecordCustomFields($contact);
         }
         
