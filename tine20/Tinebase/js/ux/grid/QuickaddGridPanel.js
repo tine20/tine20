@@ -93,12 +93,25 @@ Ext.ux.grid.QuickaddGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.doBlur.defer(250, this);
             },
             specialkey: function(f, e){
-                if(e.getKey()==e.ENTER){
-                    e.stopEvent();
-                    f.el.blur();
-                    if(f.triggerBlur){
-                        f.triggerBlur();
-                    }
+                var key = e.getKey(); 
+                switch (key) {
+                    case e.ENTER:
+                        e.stopEvent();
+                        f.el.blur();
+                        if (f.triggerBlur){
+                            f.triggerBlur();
+                        }
+                        break;
+                    case e.BACKSPACE:
+                        e.stopEvent();
+                        var value = f.getValue();
+                        f.setValue(value.substring(0, value.length - 1));
+                        break;
+                    case e.ESC:
+                        e.stopEvent();
+                        f.setValue('');
+                        f.el.blur();
+                        break;
                 }
             }
         };
