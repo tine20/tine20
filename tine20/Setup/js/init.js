@@ -9,15 +9,17 @@
  *
  */
 
+/*global Ext, Tine*/
+
 Ext.ns('Tine', 'Tine.Setup');
  
 /**
  * init ajax
  */
-Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createInterceptor(function() {
+Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createInterceptor(function () {
     // setup calls can take quite a while
     Ext.Ajax.timeout = 300000;
-    Tine.Tinebase.tineInit.requestUrl = 'setup.php'
+    Tine.Tinebase.tineInit.requestUrl = 'setup.php';
     
     return true;
 });
@@ -25,7 +27,7 @@ Tine.Tinebase.tineInit.initAjax = Tine.Tinebase.tineInit.initAjax.createIntercep
 /**
  * init registry
  */
-Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.createInterceptor(function() {
+Tine.Tinebase.tineInit.initRegistry = Tine.Tinebase.tineInit.initRegistry.createInterceptor(function () {
     Tine.Tinebase.tineInit.getAllRegistryDataMethod = 'Setup.getAllRegistryData';
     Tine.Tinebase.tineInit.stateful = false;
     
@@ -37,8 +39,8 @@ Tine.Tinebase.tineInit.checkSelfUpdate = Ext.emptyFn;
 /**
  * render window
  */
-Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.createInterceptor(function() {
-    var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
+Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.createInterceptor(function () {
+    var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
     
     // if a config file exists, the admin needs to login!        
     if (Tine.Setup.registry.get('configExists') && !Tine.Setup.registry.get('currentAccount')) {
@@ -47,10 +49,10 @@ Tine.Tinebase.tineInit.renderWindow = Tine.Tinebase.tineInit.renderWindow.create
                 loginMethod: 'Setup.login',
                 loginLogo: 'images/tine_logo_setup.png',
                 scope: this,
-                onLogin: function(response) {
+                onLogin: function (response) {
                     Tine.Tinebase.tineInit.initList.initRegistry = false;
                     Tine.Tinebase.tineInit.initRegistry();
-                    var waitForRegistry = function() {
+                    var waitForRegistry = function () {
                         if (Tine.Tinebase.tineInit.initList.initRegistry) {
                             Ext.MessageBox.hide();
                             Tine.Tinebase.tineInit.renderWindow();

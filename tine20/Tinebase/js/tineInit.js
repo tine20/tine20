@@ -14,29 +14,6 @@
 
 /*global Ext, Tine, google, OpenLayers, Locale, */
 
-Ext.onReady(function () {
-    Tine.Tinebase.tineInit.initWindow();
-    Tine.Tinebase.tineInit.initDebugConsole();
-    Tine.Tinebase.tineInit.initBootSplash();
-    Tine.Tinebase.tineInit.initLocale();
-    Tine.Tinebase.tineInit.initAjax();
-    Tine.Tinebase.tineInit.initRegistry();
-    Tine.Tinebase.tineInit.initLibs();
-    var waitForInits = function () {
-        if (! Tine.Tinebase.tineInit.initList.initRegistry) {
-            waitForInits.defer(100);
-        } else {
-            Tine.Tinebase.tineInit.initExtDirect();
-            Tine.Tinebase.tineInit.initState();
-            Tine.Tinebase.tineInit.initWindowMgr();
-            //Tine.Tinebase.tineInit.onLangFilesLoad();
-            //Tine.Tinebase.tineInit.checkSelfUpdate();
-            Tine.Tinebase.tineInit.renderWindow();
-        }
-    };
-    waitForInits();
-});
-
 /** ------------------------ Tine 2.0 Initialisation ----------------------- **/
 
 /**
@@ -44,7 +21,6 @@ Ext.onReady(function () {
  * @singleton
  */
 Ext.namespace('Tine', 'Tine.Tinebase', 'Tine.Calendar');
-
 
 /**
  * version of Tine 2.0 javascript client version, gets set a build time <br>
@@ -186,6 +162,7 @@ Tine.Tinebase.tineInit = {
             items: {
             	xtype: 'container',
                 id: 'tine-viewport-maincardpanel',
+                ref: 'tineViewportMaincardpanel',
                 layout: 'card',
                 border: false,
                 activeItem: 0,
@@ -201,10 +178,10 @@ Tine.Tinebase.tineInit = {
     },
     
     renderWindow: function () {
-        var mainCardPanel = Ext.getCmp('tine-viewport-maincardpanel');
+        var mainCardPanel = Tine.Tinebase.viewport.tineViewportMaincardpanel;
         
         // check if user is already logged in        
-        if (!Tine.Tinebase.registry.get('currentAccount')) {
+        if (! Tine.Tinebase.registry.get('currentAccount')) {
             if (! Tine.loginPanel) {
                 Tine.loginPanel = new Tine.Tinebase.LoginPanel({
                     defaultUsername: Tine.Tinebase.registry.get('defaultUsername'),
@@ -714,3 +691,26 @@ Tine.Tinebase.tineInit = {
     	//Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
     }
 };
+
+Ext.onReady(function () {
+    Tine.Tinebase.tineInit.initWindow();
+    Tine.Tinebase.tineInit.initDebugConsole();
+    Tine.Tinebase.tineInit.initBootSplash();
+    Tine.Tinebase.tineInit.initLocale();
+    Tine.Tinebase.tineInit.initAjax();
+    Tine.Tinebase.tineInit.initRegistry();
+    Tine.Tinebase.tineInit.initLibs();
+    var waitForInits = function () {
+        if (! Tine.Tinebase.tineInit.initList.initRegistry) {
+            waitForInits.defer(100);
+        } else {
+            Tine.Tinebase.tineInit.initExtDirect();
+            Tine.Tinebase.tineInit.initState();
+            Tine.Tinebase.tineInit.initWindowMgr();
+            //Tine.Tinebase.tineInit.onLangFilesLoad();
+            //Tine.Tinebase.tineInit.checkSelfUpdate();
+            Tine.Tinebase.tineInit.renderWindow();
+        }
+    };
+    waitForInits();
+});
