@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -133,8 +133,9 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             disableCaching: true,
             method: 'POST',
             url: this.url + '?method=Tinebase.uploadTempFile',
+            timeout: 300000, // 5 mins
             defaultHeaders: {
-                "Content-Type"          : "multipart/form-data",
+                "Content-Type"          : "application/x-www-form-urlencoded",
                 "X-Tine20-Request-Type" : "HTTP",
                 "X-Requested-With"      : "XMLHttpRequest"
             }
@@ -154,7 +155,6 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         
         var upload = transaction.conn.upload;
         
-        //upload['onloadstart'] = this.onLoadStart.createDelegate(this, [fileRecord], true);
         upload['onprogress'] = this.onUploadProgress.createDelegate(this, [fileRecord], true);
         
         return fileRecord;
