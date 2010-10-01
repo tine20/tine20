@@ -53,7 +53,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     /**
      * @cfg {Int} maxFileSize the maximum file size in bytes
      */
-    maxFileSize: 2097152,
+    maxFileSize: 20971520, // 20 MB
     /**
      * @cfg {String} url the url we upload to
      */
