@@ -140,7 +140,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     name: 'title'
                                 }, {
                                     width: 100,
-                                    xtype: 'datefield',
+                                    xtype: 'extuxclearabledatefield',
                                     fieldLabel: this.app.i18n._('Birthday'),
                                     name: 'bday'
                                 }]/* move to seperate tab, [{
