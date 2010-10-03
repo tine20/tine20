@@ -47,4 +47,20 @@ class Tinebase_Model_CustomField_Config extends Tinebase_Record_Abstract
         'value_search'      => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 0 ),
     );
     
+    /**
+     * checks if customfield value is empty
+     * 
+     * @param string $_value
+     * @return boolean
+     */
+    public function valueIsEmpty($_value)
+    {
+        if ($this->type == 'checkbox') {
+            $result = empty($_value);
+        } else {
+            $result = ($_value === '' || $_value === NULL);
+        }
+        
+        return $result;
+    }
 }

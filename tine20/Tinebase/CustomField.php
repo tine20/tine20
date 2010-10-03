@@ -245,23 +245,33 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         foreach ($appCustomFields as $customField) {
             if (is_array($_record->customfields) && array_key_exists($customField->name, $_record->customfields)) {
                 $value = $_record->customfields[$customField->name];
-                    
                 $filtered = $existingCustomFields->filter('customfield_id', $customField->id);
-                if (count($filtered) == 1) {
-                    $cf = $filtered->getFirstRecord();
-                    $cf->value = $value;
-                    $this->_backendValue->update($cf);
-                    
-                } else if (count($filtered) == 0) {
-                    $cf = new Tinebase_Model_CustomField_Value(array(
-                        'record_id'         => $_record->getId(),
-                        'customfield_id'    => $customField->getId(),
-                        'value'             => $value
-                    ));
-                    $this->_backendValue->create($cf);
-    
-                } else {
-                    throw new Tinebase_Exception_UnexpectedValue('Oops, there should be only one custom field value here!');
+                
+                switch (count($filtered)) {
+                    case 1:
+                        $cf = $filtered->getFirstRecord();
+                        if ($customField->valueIsEmpty($value)) {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting cf value for ' . $customField->name);
+                            $this->_backendValue->delete($cf);
+                        } else {
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updateing value for ' . $customField->name . ' to ' . $value);
+                            $cf->value = $value;
+                            $this->_backendValue->update($cf);
+                        }
+                        break;
+                    case 0:
+                        if (! $customField->valueIsEmpty($value)) {
+                            $cf = new Tinebase_Model_CustomField_Value(array(
+                                'record_id'         => $_record->getId(),
+                                'customfield_id'    => $customField->getId(),
+                                'value'             => $value
+                            ));
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Creating value for ' . $customField->name . ' -> ' . $value);
+                            $this->_backendValue->create($cf);
+                        }
+                        break;
+                    default:
+                        throw new Tinebase_Exception_UnexpectedValue('Oops, there should be only one custom field value here!');
                 }
             }
         }
