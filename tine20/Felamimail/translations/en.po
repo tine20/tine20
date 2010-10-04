@@ -48,7 +48,7 @@ msgid_plural "Accounts"
 msgstr[0] "Account"
 msgstr[1] "Accounts"
 
-#: js/Model.js:281 js/Model.js:421 js/Model.js:525 js/Model.js:577
+#: js/Model.js:281 js/Model.js:421 js/Model.js:525 js/Model.js:578
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "record list"
@@ -84,39 +84,39 @@ msgid_plural "Vacations"
 msgstr[0] "Vacation"
 msgstr[1] "Vacations"
 
-#: js/Model.js:573
+#: js/Model.js:574
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Rule"
 msgstr[1] "Rules"
 
-#: js/GridDetailsPanel.js:123 js/RuleConditionsPanel.js:77 js/GridPanel.js:289
-#: js/GridPanel.js:400 js/MessageEditDialog.js:501 Controller/Message.php:580
+#: js/GridDetailsPanel.js:133 js/RuleConditionsPanel.js:76 js/GridPanel.js:289
+#: js/GridPanel.js:400 js/MessageEditDialog.js:506 Controller/Message.php:591
 msgid "Subject"
 msgstr "Subject"
 
-#: js/GridDetailsPanel.js:124 js/RuleConditionsPanel.js:75
-#: js/MessageEditDialog.js:478
+#: js/GridDetailsPanel.js:134 js/RuleConditionsPanel.js:74
+#: js/MessageEditDialog.js:483
 msgid "From"
 msgstr "From"
 
-#: js/GridDetailsPanel.js:125
+#: js/GridDetailsPanel.js:135
 msgid "Add"
 msgstr "Add"
 
-#: js/GridDetailsPanel.js:126
+#: js/GridDetailsPanel.js:136
 msgid "Add contact to addressbook"
 msgstr "Add contact to addressbook"
 
-#: js/GridDetailsPanel.js:127
+#: js/GridDetailsPanel.js:137
 msgid "Date"
 msgstr "Date"
 
-#: js/GridDetailsPanel.js:129 js/GridDetailsPanel.js:338
+#: js/GridDetailsPanel.js:139 js/GridDetailsPanel.js:361
 msgid "Show or hide header information"
 msgstr "Show or hide header information"
 
-#: js/GridDetailsPanel.js:211 js/MessageEditDialog.js:412
+#: js/GridDetailsPanel.js:229 js/MessageEditDialog.js:418
 msgid "Attachments"
 msgstr "Attachments"
 
@@ -224,33 +224,37 @@ msgstr "Other Settings"
 msgid "Sent Folder Name"
 msgstr "Sent Folder Name"
 
-#: js/AccountEditDialog.js:307
+#: js/AccountEditDialog.js:309
 msgid "Trash Folder Name"
 msgstr "Trash Folder Name"
 
-#: js/AccountEditDialog.js:311
+#: js/AccountEditDialog.js:315
 msgid "Show Intelligent Folders"
 msgstr "Show Intelligent Folders"
 
-#: js/AccountEditDialog.js:322
+#: js/AccountEditDialog.js:326
 msgid "No"
 msgstr "No"
 
-#: js/AccountEditDialog.js:323
+#: js/AccountEditDialog.js:327
 msgid "Yes"
 msgstr "Yes"
 
-#: js/AccountEditDialog.js:326
+#: js/AccountEditDialog.js:330
 msgid "Display Format"
 msgstr "Display Format"
 
-#: js/AccountEditDialog.js:337
+#: js/AccountEditDialog.js:341
 msgid "HTML"
 msgstr "HTML"
 
-#: js/AccountEditDialog.js:338
+#: js/AccountEditDialog.js:342
 msgid "Plain Text"
 msgstr "Plain Text"
+
+#: js/AccountEditDialog.js:343
+msgid "Depending on content type"
+msgstr "Depending on content type"
 
 #: js/VacationEditDialog.js:82
 msgid "Vacation Message for {0}"
@@ -300,49 +304,61 @@ msgstr "Bcc:"
 msgid "Remove"
 msgstr "Remove"
 
-#: js/RulesGridPanel.js:57
+#: js/RulesGridPanel.js:78
 msgid "Move up"
 msgstr "Move up"
 
-#: js/RulesGridPanel.js:64
+#: js/RulesGridPanel.js:85
 msgid "Move down"
 msgstr "Move down"
 
-#: js/RulesGridPanel.js:157
-msgid "Enabled"
-msgstr "Enabled"
+#: js/RulesGridPanel.js:92
+msgid "Enable"
+msgstr "Enable"
 
-#: js/RulesGridPanel.js:165
+#: js/RulesGridPanel.js:99
+msgid "Disable"
+msgstr "Disable"
+
+#: js/RulesGridPanel.js:200
 msgid "ID"
 msgstr "ID"
 
-#: js/RulesGridPanel.js:172
+#: js/RulesGridPanel.js:207
 msgid "Conditions"
 msgstr "Conditions"
 
-#: js/RulesGridPanel.js:180
+#: js/RulesGridPanel.js:215
 msgid "Action"
 msgstr "Action"
 
-#: js/RulesGridPanel.js:188
-msgid "Argument"
-msgstr "Argument"
-
-#: js/RulesGridPanel.js:281
+#: js/RulesGridPanel.js:303
 msgid "is greater than"
 msgstr "is greater than"
 
-#: js/RulesGridPanel.js:281
+#: js/RulesGridPanel.js:303
 msgid "is less than"
 msgstr "is less than"
 
-#: js/RuleConditionsPanel.js:76 js/GridPanel.js:292 js/GridPanel.js:418
+#: js/RuleConditionsPanel.js:75 js/GridPanel.js:292 js/GridPanel.js:418
 msgid "To"
 msgstr "To"
 
-#: js/RuleConditionsPanel.js:78 js/GridPanel.js:440
+#: js/RuleConditionsPanel.js:77 js/GridPanel.js:440
 msgid "Size"
 msgstr "Size"
+
+#: js/FolderSelectPanel.js:60
+msgid "Folders of account {0}"
+msgstr "Folders of account {0}"
+
+#: js/FolderSelectPanel.js:73
+msgid "Cancel"
+msgstr "Cancel"
+
+#: js/FolderSelectPanel.js:120
+msgid "Folder Selection"
+msgstr "Folder Selection"
 
 #: js/Felamimail.js:69
 msgid "Email"
@@ -364,39 +380,39 @@ msgstr "New mails"
 msgid "You got {0} new mail(s) in Folder {1}."
 msgstr "You got {0} new mail(s) in Folder {1}."
 
-#: js/Felamimail.js:432 js/Felamimail.js:470
-msgid "IMAP Error"
-msgstr "IMAP Error"
-
-#: js/Felamimail.js:433
-msgid "No connection to IMAP server."
-msgstr "No connection to IMAP server."
-
-#: js/Felamimail.js:446
+#: js/Felamimail.js:342
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Credentials for {0}"
 
-#: js/Felamimail.js:449
+#: js/Felamimail.js:345
 msgid "Credentials"
 msgstr "Credentials"
 
-#: js/Felamimail.js:471
+#: js/Felamimail.js:475 js/Felamimail.js:497
+msgid "IMAP Error"
+msgstr "IMAP Error"
+
+#: js/Felamimail.js:476
+msgid "No connection to IMAP server."
+msgstr "No connection to IMAP server."
+
+#: js/Felamimail.js:498
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr "One of your folders was deleted from an other client, please reload you browser"
 
-#: js/Felamimail.js:486
+#: js/Felamimail.js:513
 msgid "SMTP Error"
 msgstr "SMTP Error"
 
-#: js/Felamimail.js:487
+#: js/Felamimail.js:514
 msgid "No connection to SMTP server."
 msgstr "No connection to SMTP server."
 
-#: js/Felamimail.js:495
+#: js/Felamimail.js:522
 msgid "Sieve Error"
 msgstr "Sieve Error"
 
-#: js/Felamimail.js:496
+#: js/Felamimail.js:523
 msgid "No connection to Sieve server."
 msgstr "No connection to Sieve server."
 
@@ -437,8 +453,8 @@ msgstr "Delete"
 msgid "Add Account"
 msgstr "Add Account"
 
-#: js/GridPanel.js:236 js/GridPanel.js:917 js/GridPanel.js:927
-#: js/GridPanel.js:931 js/MessageDisplayDialog.js:73
+#: js/GridPanel.js:236 js/GridPanel.js:935 js/GridPanel.js:949
+#: js/MessageDisplayDialog.js:73
 msgid "Print Preview"
 msgstr "Print Preview"
 
@@ -490,11 +506,11 @@ msgstr "Recent"
 msgid "Send"
 msgstr "Send"
 
-#: js/MessageEditDialog.js:176
+#: js/MessageEditDialog.js:173
 msgid "wrote"
 msgstr "wrote"
 
-#: js/MessageEditDialog.js:179
+#: js/MessageEditDialog.js:176
 msgid "Original message"
 msgstr "Original message"
 
@@ -502,47 +518,47 @@ msgstr "Original message"
 msgid "Re:"
 msgstr "Re:"
 
-#: js/MessageEditDialog.js:258
+#: js/MessageEditDialog.js:264
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#: js/MessageEditDialog.js:261
+#: js/MessageEditDialog.js:267
 msgid "{0} Message"
 msgstr "{0} Message"
 
-#: js/MessageEditDialog.js:304 js/MessageEditDialog.js:512
+#: js/MessageEditDialog.js:310 js/MessageEditDialog.js:517
 msgid "Compose email:"
 msgstr "Compose email:"
 
-#: js/MessageEditDialog.js:335
+#: js/MessageEditDialog.js:342
 msgid "Add Note"
 msgstr "Add Note"
 
-#: js/MessageEditDialog.js:336
+#: js/MessageEditDialog.js:343
 msgid "Edit Email Note Text:"
 msgstr "Edit Email Note Text:"
 
-#: js/MessageEditDialog.js:363
+#: js/MessageEditDialog.js:369
 msgid "Failed"
 msgstr "Failed"
 
-#: js/MessageEditDialog.js:364
+#: js/MessageEditDialog.js:370
 msgid "Could not send {0}."
 msgstr "Could not send {0}."
 
-#: js/MessageEditDialog.js:365
+#: js/MessageEditDialog.js:371
 msgid "Error:"
 msgstr "Error:"
 
-#: js/MessageEditDialog.js:404
+#: js/MessageEditDialog.js:410
 msgid "Recipients"
 msgstr "Recipients"
 
-#: js/MessageEditDialog.js:420 Controller/Message.php:580
+#: js/MessageEditDialog.js:425 Controller/Message.php:591
 msgid "Body"
 msgstr "Body"
 
-#: js/MessageEditDialog.js:536
+#: js/MessageEditDialog.js:541
 msgid "Save contact note"
 msgstr "Save contact note"
 
@@ -606,35 +622,35 @@ msgstr "Mark Folder as read"
 msgid "Update Folder List"
 msgstr "Update Folder List"
 
-#: js/RuleEditDialog.js:95
+#: js/RuleEditDialog.js:99
 msgid "Edit Filter Rule"
 msgstr "Edit Filter Rule"
 
-#: js/RuleEditDialog.js:233
+#: js/RuleEditDialog.js:236
 msgid "If all of the following conditions are met:"
 msgstr "If all of the following conditions are met:"
 
-#: js/RuleEditDialog.js:250
+#: js/RuleEditDialog.js:253
 msgid "Do this action:"
 msgstr "Do this action:"
 
-#: js/RuleEditDialog.js:338
+#: js/RuleEditDialog.js:342
 msgid "Move mail to folder"
 msgstr "Move mail to folder"
 
-#: js/RuleEditDialog.js:339
+#: js/RuleEditDialog.js:343
 msgid "Redirect mail to address"
 msgstr "Redirect mail to address"
 
-#: js/RuleEditDialog.js:340
+#: js/RuleEditDialog.js:344
 msgid "Reject mail with this text"
 msgstr "Reject mail with this text"
 
-#: js/RuleEditDialog.js:341
+#: js/RuleEditDialog.js:345
 msgid "Discard mail"
 msgstr "Discard mail"
 
-#: js/RuleEditDialog.js:342
+#: js/RuleEditDialog.js:346
 msgid "Keep mail"
 msgstr "Keep mail"
 

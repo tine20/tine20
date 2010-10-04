@@ -106,7 +106,7 @@ msgstr "Nom de l'ordinador"
 
 #: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/Roles.js:240
 #: js/Groups.js:239 js/Groups.js:475 js/Tags.js:224 js/Tags.js:550
-#: js/user/GridPanel.js:101 js/RoleEditDialog.js:319
+#: js/user/GridPanel.js:101 js/RoleEditDialog.js:296
 msgid "Description"
 msgstr "Descripció"
 
@@ -116,12 +116,12 @@ msgid "ID"
 msgstr "Identificador"
 
 #: js/SambaMachineGrid.js:93 js/Roles.js:239 js/Applications.js:286
-#: js/Groups.js:238 js/AccessLog.js:329 js/Tags.js:223
+#: js/Groups.js:238 js/AccessLog.js:133 js/Tags.js:223
 #: js/user/EditDialog.js:280
 msgid "Name"
 msgstr "Nom"
 
-#: js/Roles.js:48 js/Groups.js:54 js/AccessLog.js:27 js/Tags.js:62
+#: js/Roles.js:48 js/Groups.js:54 js/Tags.js:62
 msgid "Confirm"
 msgstr "Confirma"
 
@@ -134,11 +134,11 @@ msgid "Deleting role(s)..."
 msgstr "Eliminant el(s) rol(s)..."
 
 #: js/Roles.js:70 js/Groups.js:75 js/Groups.js:410 js/Tags.js:406
-#: js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
+#: js/RoleEditDialog.js:107 js/RoleEditDialog.js:135
 msgid "Failed"
 msgstr "Ha fallat"
 
-#: js/Roles.js:70 js/RoleEditDialog.js:134
+#: js/Roles.js:70 js/RoleEditDialog.js:135
 msgid "Some error occurred while trying to delete the role."
 msgstr "S'ha produït un error quan s'intentava eliminar el rol."
 
@@ -154,8 +154,7 @@ msgstr "edita rol"
 msgid "delete role"
 msgstr "elimina rol"
 
-#: js/Roles.js:177 js/Applications.js:191 js/Groups.js:178 js/AccessLog.js:200
-#: js/Tags.js:167
+#: js/Roles.js:177 js/Applications.js:191 js/Groups.js:178 js/Tags.js:167
 msgid "Search:"
 msgstr "Cerca:"
 
@@ -247,11 +246,11 @@ msgstr "Es mostren els grups {0} - {1} de {2}"
 msgid "No groups to display"
 msgstr "Cap grup a mostrar"
 
-#: js/Groups.js:375 js/Tags.js:361 js/RoleEditDialog.js:69
+#: js/Groups.js:375 js/Tags.js:361 js/RoleEditDialog.js:70
 msgid "Please wait"
 msgstr "Espereu"
 
-#: js/Groups.js:375 js/RoleEditDialog.js:69
+#: js/Groups.js:375 js/RoleEditDialog.js:70
 msgid "Updating Memberships"
 msgstr "S'actualitzen les pertanyences com a membres"
 
@@ -259,11 +258,11 @@ msgstr "S'actualitzen les pertanyences com a membres"
 msgid "Could not save group."
 msgstr "No s'ha pogut desar el grup."
 
-#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
+#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:114
 msgid "Errors"
 msgstr "Errors"
 
-#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:113
+#: js/Groups.js:415 js/Tags.js:411 js/RoleEditDialog.js:114
 msgid "Please fix the errors noted."
 msgstr "Solventeu els errors citats."
 
@@ -275,7 +274,7 @@ msgstr "Membres de grup"
 msgid "Group Name"
 msgstr "Nom del grup"
 
-#: js/Groups.js:534 js/Tags.js:620 js/RoleEditDialog.js:395
+#: js/Groups.js:534 js/Tags.js:620 js/RoleEditDialog.js:364
 msgid "Transfering {0}..."
 msgstr "Transferint {0}..."
 
@@ -297,81 +296,66 @@ msgid_plural "Computers"
 msgstr[0] "Ordinador"
 msgstr[1] "Ordinadors"
 
-#: js/AccessLog.js:27
-msgid "Do you really want to delete the selected access log entries?"
-msgstr "Esteu segur que voleu eliminar les entrades del registre d'accessos seleccionades?"
+#: js/AccessLog.js:107 js/Models.js:52
+msgid "AccessLog"
+msgid_plural "AccessLogs"
+msgstr[0] ""
+msgstr[1] ""
 
-#: js/AccessLog.js:146
-msgid "delete entry"
-msgstr "elimina entrada"
-
-#: js/AccessLog.js:147
-msgid "select all"
-msgstr "elimina-ho tot"
-
-#: js/AccessLog.js:191
-msgid "Display from:"
-msgstr "Mostra des de:"
-
-#: js/AccessLog.js:195
-msgid "to:"
-msgstr "fins a:"
-
-#: js/AccessLog.js:273
-msgid "invalid password"
-msgstr "contrasenya incorrecta"
-
-#: js/AccessLog.js:277
-msgid "ambiguous username"
-msgstr "nom d'usuari ambigu"
-
-#: js/AccessLog.js:281
-msgid "user not found"
-msgstr "no s'ha trobat l'usuari"
-
-#: js/AccessLog.js:285
-msgid "failure"
-msgstr "errada"
-
-#: js/AccessLog.js:289
-msgid "success"
-msgstr "èxit"
-
-#: js/AccessLog.js:317
-msgid "Displaying access log entries {0} - {1} of {2}"
-msgstr "Es mostren les entrades del registre d'accessos {0} - {1} de {2}"
-
-#: js/AccessLog.js:318
-msgid "No access log entries to display"
-msgstr "Cap entrada del registre d'accessos a mostrar"
-
-#: js/AccessLog.js:327
-msgid "Session ID"
-msgstr "Identificador de sessió"
-
-#: js/AccessLog.js:328 js/user/EditDialog.js:694
-msgid "Login Name"
-msgstr "Nom d'usuari d'inici de sessió"
-
-#: js/AccessLog.js:330
+#: js/AccessLog.js:108 js/AccessLog.js:134
 msgid "IP Address"
 msgstr "Adreça IP"
 
-#: js/AccessLog.js:331
+#: js/AccessLog.js:109 js/Admin.js:24 js/user/GridPanel.js:100
+#: js/user/Users.js:71
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "Usuari"
+msgstr[1] "Usuaris"
+
+#: js/AccessLog.js:110 js/AccessLog.js:135
 msgid "Login Time"
 msgstr "Hora de l'inici de sessió"
 
-#: js/AccessLog.js:332
+#: js/AccessLog.js:111 js/AccessLog.js:136
 msgid "Logout Time"
 msgstr "Hora de la finalització de sessió"
 
-#: js/AccessLog.js:333
-msgid "Account ID"
-msgstr "Identificador de compte"
+#: js/AccessLog.js:112 js/AccessLog.js:138
+msgid "Client Type"
+msgstr ""
 
-#: js/AccessLog.js:334
+#: js/AccessLog.js:131
+msgid "Session ID"
+msgstr "Identificador de sessió"
+
+#: js/AccessLog.js:132 js/user/EditDialog.js:694
+msgid "Login Name"
+msgstr "Nom d'usuari d'inici de sessió"
+
+#: js/AccessLog.js:137
 msgid "Result"
 msgstr "Resultat"
+
+#: js/AccessLog.js:158
+msgid "invalid password"
+msgstr "contrasenya incorrecta"
+
+#: js/AccessLog.js:162
+msgid "ambiguous username"
+msgstr "nom d'usuari ambigu"
+
+#: js/AccessLog.js:166
+msgid "user not found"
+msgstr "no s'ha trobat l'usuari"
+
+#: js/AccessLog.js:170
+msgid "failure"
+msgstr "errada"
+
+#: js/AccessLog.js:174
+msgid "success"
+msgstr "èxit"
 
 #: js/Tags.js:62
 msgid "Do you really want to delete the selected tags?"
@@ -441,7 +425,7 @@ msgstr "Nom d'etiqueta"
 msgid "Loading Tag..."
 msgstr "Carregant etiqueta..."
 
-#: js/Tags.js:586 js/RoleEditDialog.js:351
+#: js/Tags.js:586
 msgid "Please Wait"
 msgstr "Espereu"
 
@@ -456,12 +440,6 @@ msgstr "Afegeix una nova etiqueta"
 #: js/Tags.js:632
 msgid "Edit Tag \"{0}\""
 msgstr "Edita l'etiqueta \"{0}\""
-
-#: js/Admin.js:24 js/user/GridPanel.js:100 js/user/Users.js:71
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "Usuari"
-msgstr[1] "Usuaris"
 
 #: js/Admin.js:37 js/user/EditDialog.js:193
 msgid "Groups"
@@ -786,38 +764,61 @@ msgid_plural "Email Users"
 msgstr[0] "Usuari de correu electrònic"
 msgstr[1] "Usuaris de correu electrònic"
 
-#: js/RoleEditDialog.js:106
+#: js/RoleEditDialog.js:107
 msgid "Could not save role."
 msgstr "No s'ha pogut desar el rol."
 
-#: js/RoleEditDialog.js:126
+#: js/RoleEditDialog.js:127
 msgid "Deleting role..."
 msgstr "Eliminant el rol..."
 
-#: js/RoleEditDialog.js:272
-msgid "Members"
-msgstr "Membres"
-
-#: js/RoleEditDialog.js:281
+#: js/RoleEditDialog.js:159
 msgid "Rights"
 msgstr "Permisos"
 
-#: js/RoleEditDialog.js:311
+#: js/RoleEditDialog.js:262
+msgid "Members"
+msgstr "Membres"
+
+#: js/RoleEditDialog.js:288
 msgid "Role Name"
 msgstr "Nom del rol"
 
-#: js/RoleEditDialog.js:351
-msgid "Loading Role..."
-msgstr "Carregant el rol..."
-
-#: js/RoleEditDialog.js:395
+#: js/RoleEditDialog.js:364
 msgid "Role"
 msgstr "Rol"
 
-#: js/RoleEditDialog.js:405
+#: js/RoleEditDialog.js:374
 msgid "Add New Role"
 msgstr "Afegeix un nou rol"
 
-#: js/RoleEditDialog.js:407
+#: js/RoleEditDialog.js:376
 msgid "Edit Role \"{0}\""
 msgstr "Edita el rol \"{0}\""
+
+#~ msgid "Do you really want to delete the selected access log entries?"
+#~ msgstr "Esteu segur que voleu eliminar les entrades del registre d'accessos seleccionades?"
+
+#~ msgid "delete entry"
+#~ msgstr "elimina entrada"
+
+#~ msgid "select all"
+#~ msgstr "elimina-ho tot"
+
+#~ msgid "Display from:"
+#~ msgstr "Mostra des de:"
+
+#~ msgid "to:"
+#~ msgstr "fins a:"
+
+#~ msgid "Displaying access log entries {0} - {1} of {2}"
+#~ msgstr "Es mostren les entrades del registre d'accessos {0} - {1} de {2}"
+
+#~ msgid "No access log entries to display"
+#~ msgstr "Cap entrada del registre d'accessos a mostrar"
+
+#~ msgid "Account ID"
+#~ msgstr "Identificador de compte"
+
+#~ msgid "Loading Role..."
+#~ msgstr "Carregant el rol..."

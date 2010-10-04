@@ -52,7 +52,7 @@ msgstr[0] "Учетная запись"
 msgstr[1] "Учетные записи"
 msgstr[2] "Учетных записей"
 
-#: js/Model.js:281 js/Model.js:421 js/Model.js:525 js/Model.js:577
+#: js/Model.js:281 js/Model.js:421 js/Model.js:525 js/Model.js:578
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "список записей"
@@ -90,41 +90,41 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Model.js:573
+#: js/Model.js:574
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/GridDetailsPanel.js:123 js/RuleConditionsPanel.js:77 js/GridPanel.js:289
-#: js/GridPanel.js:400 js/MessageEditDialog.js:501 Controller/Message.php:580
+#: js/GridDetailsPanel.js:133 js/RuleConditionsPanel.js:76 js/GridPanel.js:289
+#: js/GridPanel.js:400 js/MessageEditDialog.js:506 Controller/Message.php:591
 msgid "Subject"
 msgstr "Тема"
 
-#: js/GridDetailsPanel.js:124 js/RuleConditionsPanel.js:75
-#: js/MessageEditDialog.js:478
+#: js/GridDetailsPanel.js:134 js/RuleConditionsPanel.js:74
+#: js/MessageEditDialog.js:483
 msgid "From"
 msgstr "От"
 
-#: js/GridDetailsPanel.js:125
+#: js/GridDetailsPanel.js:135
 msgid "Add"
 msgstr "Добавить"
 
-#: js/GridDetailsPanel.js:126
+#: js/GridDetailsPanel.js:136
 msgid "Add contact to addressbook"
 msgstr "Добавить контакт в адресную книгу"
 
-#: js/GridDetailsPanel.js:127
+#: js/GridDetailsPanel.js:137
 #, fuzzy
 msgid "Date"
 msgstr "Удалить"
 
-#: js/GridDetailsPanel.js:129 js/GridDetailsPanel.js:338
+#: js/GridDetailsPanel.js:139 js/GridDetailsPanel.js:361
 msgid "Show or hide header information"
 msgstr "Показать или скрыть заголовки"
 
-#: js/GridDetailsPanel.js:211 js/MessageEditDialog.js:412
+#: js/GridDetailsPanel.js:229 js/MessageEditDialog.js:418
 msgid "Attachments"
 msgstr "Вложения"
 
@@ -232,34 +232,38 @@ msgstr "Прочие параметры"
 msgid "Sent Folder Name"
 msgstr "Название папки Отправленные"
 
-#: js/AccountEditDialog.js:307
+#: js/AccountEditDialog.js:309
 msgid "Trash Folder Name"
 msgstr "Название папки Корзина"
 
-#: js/AccountEditDialog.js:311
+#: js/AccountEditDialog.js:315
 msgid "Show Intelligent Folders"
 msgstr "Показать интеллектуальные папки"
 
-#: js/AccountEditDialog.js:322
+#: js/AccountEditDialog.js:326
 msgid "No"
 msgstr "Нет"
 
-#: js/AccountEditDialog.js:323
+#: js/AccountEditDialog.js:327
 msgid "Yes"
 msgstr "Да"
 
-#: js/AccountEditDialog.js:326
+#: js/AccountEditDialog.js:330
 msgid "Display Format"
 msgstr ""
 
-#: js/AccountEditDialog.js:337
+#: js/AccountEditDialog.js:341
 msgid "HTML"
 msgstr ""
 
-#: js/AccountEditDialog.js:338
+#: js/AccountEditDialog.js:342
 #, fuzzy
 msgid "Plain Text"
 msgstr "Обычная"
+
+#: js/AccountEditDialog.js:343
+msgid "Depending on content type"
+msgstr ""
 
 #: js/VacationEditDialog.js:82
 msgid "Vacation Message for {0}"
@@ -309,49 +313,61 @@ msgstr "Bcc:"
 msgid "Remove"
 msgstr ""
 
-#: js/RulesGridPanel.js:57
+#: js/RulesGridPanel.js:78
 msgid "Move up"
 msgstr ""
 
-#: js/RulesGridPanel.js:64
+#: js/RulesGridPanel.js:85
 msgid "Move down"
 msgstr ""
 
-#: js/RulesGridPanel.js:157
-msgid "Enabled"
+#: js/RulesGridPanel.js:92
+msgid "Enable"
 msgstr ""
 
-#: js/RulesGridPanel.js:165
+#: js/RulesGridPanel.js:99
+msgid "Disable"
+msgstr ""
+
+#: js/RulesGridPanel.js:200
 msgid "ID"
 msgstr ""
 
-#: js/RulesGridPanel.js:172
+#: js/RulesGridPanel.js:207
 msgid "Conditions"
 msgstr ""
 
-#: js/RulesGridPanel.js:180
+#: js/RulesGridPanel.js:215
 msgid "Action"
 msgstr ""
 
-#: js/RulesGridPanel.js:188
-msgid "Argument"
-msgstr ""
-
-#: js/RulesGridPanel.js:281
+#: js/RulesGridPanel.js:303
 msgid "is greater than"
 msgstr ""
 
-#: js/RulesGridPanel.js:281
+#: js/RulesGridPanel.js:303
 msgid "is less than"
 msgstr ""
 
-#: js/RuleConditionsPanel.js:76 js/GridPanel.js:292 js/GridPanel.js:418
+#: js/RuleConditionsPanel.js:75 js/GridPanel.js:292 js/GridPanel.js:418
 msgid "To"
 msgstr "To"
 
-#: js/RuleConditionsPanel.js:78 js/GridPanel.js:440
+#: js/RuleConditionsPanel.js:77 js/GridPanel.js:440
 msgid "Size"
 msgstr "Размер"
+
+#: js/FolderSelectPanel.js:60
+msgid "Folders of account {0}"
+msgstr ""
+
+#: js/FolderSelectPanel.js:73
+msgid "Cancel"
+msgstr ""
+
+#: js/FolderSelectPanel.js:120
+msgid "Folder Selection"
+msgstr ""
 
 #: js/Felamimail.js:69
 msgid "Email"
@@ -374,39 +390,39 @@ msgstr "Электронная почта пользователя"
 msgid "You got {0} new mail(s) in Folder {1}."
 msgstr ""
 
-#: js/Felamimail.js:432 js/Felamimail.js:470
-msgid "IMAP Error"
-msgstr ""
-
-#: js/Felamimail.js:433
-msgid "No connection to IMAP server."
-msgstr ""
-
-#: js/Felamimail.js:446
+#: js/Felamimail.js:342
 msgid "IMAP Credentials for {0}"
 msgstr "Учётные данные IMAP для {0}"
 
-#: js/Felamimail.js:449
+#: js/Felamimail.js:345
 msgid "Credentials"
 msgstr "Учётные данные"
 
-#: js/Felamimail.js:471
+#: js/Felamimail.js:475 js/Felamimail.js:497
+msgid "IMAP Error"
+msgstr ""
+
+#: js/Felamimail.js:476
+msgid "No connection to IMAP server."
+msgstr ""
+
+#: js/Felamimail.js:498
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr ""
 
-#: js/Felamimail.js:486
+#: js/Felamimail.js:513
 msgid "SMTP Error"
 msgstr ""
 
-#: js/Felamimail.js:487
+#: js/Felamimail.js:514
 msgid "No connection to SMTP server."
 msgstr ""
 
-#: js/Felamimail.js:495
+#: js/Felamimail.js:522
 msgid "Sieve Error"
 msgstr ""
 
-#: js/Felamimail.js:496
+#: js/Felamimail.js:523
 msgid "No connection to Sieve server."
 msgstr ""
 
@@ -448,8 +464,8 @@ msgstr "Удалить"
 msgid "Add Account"
 msgstr "Добавить учетную запись"
 
-#: js/GridPanel.js:236 js/GridPanel.js:917 js/GridPanel.js:927
-#: js/GridPanel.js:931 js/MessageDisplayDialog.js:73
+#: js/GridPanel.js:236 js/GridPanel.js:935 js/GridPanel.js:949
+#: js/MessageDisplayDialog.js:73
 msgid "Print Preview"
 msgstr ""
 
@@ -502,11 +518,11 @@ msgstr "Последние"
 msgid "Send"
 msgstr "Отправить"
 
-#: js/MessageEditDialog.js:176
+#: js/MessageEditDialog.js:173
 msgid "wrote"
 msgstr "писал"
 
-#: js/MessageEditDialog.js:179
+#: js/MessageEditDialog.js:176
 msgid "Original message"
 msgstr "Исходное сообщение"
 
@@ -514,48 +530,48 @@ msgstr "Исходное сообщение"
 msgid "Re:"
 msgstr ""
 
-#: js/MessageEditDialog.js:258
+#: js/MessageEditDialog.js:264
 msgid "Fwd:"
 msgstr ""
 
-#: js/MessageEditDialog.js:261
+#: js/MessageEditDialog.js:267
 msgid "{0} Message"
 msgstr ""
 
-#: js/MessageEditDialog.js:304 js/MessageEditDialog.js:512
+#: js/MessageEditDialog.js:310 js/MessageEditDialog.js:517
 msgid "Compose email:"
 msgstr "Создать сообщение:"
 
-#: js/MessageEditDialog.js:335
+#: js/MessageEditDialog.js:342
 #, fuzzy
 msgid "Add Note"
 msgstr "Добавить папку"
 
-#: js/MessageEditDialog.js:336
+#: js/MessageEditDialog.js:343
 msgid "Edit Email Note Text:"
 msgstr ""
 
-#: js/MessageEditDialog.js:363
+#: js/MessageEditDialog.js:369
 msgid "Failed"
 msgstr "Сбой"
 
-#: js/MessageEditDialog.js:364
+#: js/MessageEditDialog.js:370
 msgid "Could not send {0}."
 msgstr "Не отправлено {0}."
 
-#: js/MessageEditDialog.js:365
+#: js/MessageEditDialog.js:371
 msgid "Error:"
 msgstr "Ошибка:"
 
-#: js/MessageEditDialog.js:404
+#: js/MessageEditDialog.js:410
 msgid "Recipients"
 msgstr "Получатели"
 
-#: js/MessageEditDialog.js:420 Controller/Message.php:580
+#: js/MessageEditDialog.js:425 Controller/Message.php:591
 msgid "Body"
 msgstr "Тело"
 
-#: js/MessageEditDialog.js:536
+#: js/MessageEditDialog.js:541
 msgid "Save contact note"
 msgstr ""
 
@@ -619,35 +635,35 @@ msgstr ""
 msgid "Update Folder List"
 msgstr ""
 
-#: js/RuleEditDialog.js:95
+#: js/RuleEditDialog.js:99
 msgid "Edit Filter Rule"
 msgstr ""
 
-#: js/RuleEditDialog.js:233
+#: js/RuleEditDialog.js:236
 msgid "If all of the following conditions are met:"
 msgstr ""
 
-#: js/RuleEditDialog.js:250
+#: js/RuleEditDialog.js:253
 msgid "Do this action:"
 msgstr ""
 
-#: js/RuleEditDialog.js:338
+#: js/RuleEditDialog.js:342
 msgid "Move mail to folder"
 msgstr ""
 
-#: js/RuleEditDialog.js:339
+#: js/RuleEditDialog.js:343
 msgid "Redirect mail to address"
 msgstr ""
 
-#: js/RuleEditDialog.js:340
+#: js/RuleEditDialog.js:344
 msgid "Reject mail with this text"
 msgstr ""
 
-#: js/RuleEditDialog.js:341
+#: js/RuleEditDialog.js:345
 msgid "Discard mail"
 msgstr ""
 
-#: js/RuleEditDialog.js:342
+#: js/RuleEditDialog.js:346
 msgid "Keep mail"
 msgstr ""
 

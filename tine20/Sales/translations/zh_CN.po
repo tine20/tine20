@@ -21,32 +21,32 @@ msgstr ""
 msgid "add, edit and delete products"
 msgstr ""
 
-#: js/ContractEditDialog.js:103 js/ContractGridPanel.js:113
+#: js/ContractEditDialog.js:97 js/ContractGridPanel.js:88
 msgid "Title"
 msgstr "头衔"
 
-#: js/ContractEditDialog.js:109 js/ProductGridPanel.js:128
+#: js/ContractEditDialog.js:102 js/ProductGridPanel.js:128
 #: js/ProductEditDialog.js:126
 msgid "Description"
 msgstr "描述"
 
-#: js/ContractEditDialog.js:110 js/ProductEditDialog.js:127
+#: js/ContractEditDialog.js:103 js/ProductEditDialog.js:127
 msgid "Enter description..."
 msgstr "输入描述 ..."
 
-#: js/ContractGridPanel.js:63 js/Models.js:79
+#: js/ContractGridPanel.js:62 js/Models.js:79
 msgid "Quick search"
 msgstr ""
 
-#: js/ContractGridPanel.js:64
+#: js/ContractGridPanel.js:63
 msgid "Summary"
 msgstr "摘要"
 
-#: js/ContractGridPanel.js:107
+#: js/ContractGridPanel.js:82
 msgid "Contract number"
 msgstr "联系号码"
 
-#: js/ContractGridPanel.js:119
+#: js/ContractGridPanel.js:94
 msgid "Status"
 msgstr "状态"
 

@@ -13,7 +13,7 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: Preference/Abstract.php:444
+#: Preference/Abstract.php:453
 msgid "default"
 msgstr ""
 
@@ -216,7 +216,7 @@ msgstr "恭喜！"
 msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
 msgstr "你已经输入了所需信息，如果你按完成按钮我们将给你发送注册邮件。"
 
-#: js/ExceptionHandler.js:127 Frontend/Http.php:550
+#: js/ExceptionHandler.js:127 Frontend/Http.php:553
 msgid "Authorisation Required"
 msgstr "需要授权"
 
@@ -355,7 +355,7 @@ msgstr "失败"
 msgid "The new passwords mismatch, please correct them."
 msgstr "新密码不匹配，请纠正"
 
-#: js/tineInit.js:593
+#: js/tineInit.js:570
 msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 msgstr ""
 
@@ -448,7 +448,7 @@ msgid "About Tine 2.0"
 msgstr "从 Tine 2.0 登出"
 
 #: js/MainMenu.js:228 js/widgets/persistentfilter/PickerPanel.js:200
-#: js/widgets/grid/GridPanel.js:982 js/widgets/dialog/EditDialog.js:449
+#: js/widgets/grid/GridPanel.js:995 js/widgets/dialog/EditDialog.js:449
 #: js/widgets/tree/ContextMenu.js:85
 msgid "Confirm"
 msgstr "确认"
@@ -569,32 +569,32 @@ msgstr[0] ""
 msgid "Groups"
 msgstr ""
 
-#: js/Models.js:281
+#: js/Models.js:282
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] ""
 
-#: js/Models.js:314
+#: js/Models.js:315
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 
-#: js/Models.js:341
+#: js/Models.js:342
 #, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "正加载"
 
-#: js/Models.js:363
+#: js/Models.js:364
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] ""
 
-#: js/Models.js:371 js/widgets/account/PickerGridPanel.js:250
+#: js/Models.js:372 js/widgets/account/PickerGridPanel.js:250
 msgid "Name"
 msgstr "名子"
 
-#: js/ExceptionDialog.js:51 Frontend/Http.php:577
+#: js/ExceptionDialog.js:51 Frontend/Http.php:580
 msgid "Abnormal End"
 msgstr "非正常结束"
 
@@ -602,7 +602,7 @@ msgstr "非正常结束"
 msgid "Send Report"
 msgstr "发送报告"
 
-#: js/ExceptionDialog.js:76 Frontend/Http.php:578
+#: js/ExceptionDialog.js:76 Frontend/Http.php:581
 msgid "An error occurred, the program ended abnormal."
 msgstr "有错误发生，程序非正常终止"
 
@@ -782,37 +782,37 @@ msgstr "高"
 msgid "urgent"
 msgstr "紧急"
 
-#: js/widgets/grid/FilterToolbar.js:132
+#: js/widgets/grid/FilterToolbar.js:71 js/widgets/grid/FilterToolbar.js:433
+msgid "Show"
+msgstr "显示"
+
+#: js/widgets/grid/FilterToolbar.js:137
 msgid "add new filter"
 msgstr "添加新的过滤器"
 
-#: js/widgets/grid/FilterToolbar.js:138
+#: js/widgets/grid/FilterToolbar.js:143
 msgid "reset all filters"
 msgstr "重置所有的过滤器"
 
-#: js/widgets/grid/FilterToolbar.js:144
+#: js/widgets/grid/FilterToolbar.js:149
 msgid "start search"
 msgstr "开始搜索"
 
-#: js/widgets/grid/FilterToolbar.js:152
+#: js/widgets/grid/FilterToolbar.js:157
 msgid "save as favorite"
 msgstr ""
 
-#: js/widgets/grid/FilterToolbar.js:241
+#: js/widgets/grid/FilterToolbar.js:246
 msgid "select a field"
 msgstr "选择一个字段"
 
-#: js/widgets/grid/FilterToolbar.js:266
+#: js/widgets/grid/FilterToolbar.js:271
 msgid "Delete this filter"
 msgstr "删除这个过滤器"
 
-#: js/widgets/grid/FilterToolbar.js:297
+#: js/widgets/grid/FilterToolbar.js:302
 msgid "and"
 msgstr "和"
-
-#: js/widgets/grid/FilterToolbar.js:318
-msgid "Show"
-msgstr "显示"
 
 #: js/widgets/grid/FilterModel.js:154
 msgid "contains"
@@ -942,69 +942,69 @@ msgstr "下个季度"
 msgid "next year"
 msgstr "明年"
 
-#: js/widgets/grid/GridPanel.js:211
+#: js/widgets/grid/GridPanel.js:217
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "没有找到 {0}，请修改过滤条件，视图选项或搜索词 {1}"
 
-#: js/widgets/grid/GridPanel.js:302
+#: js/widgets/grid/GridPanel.js:309
 msgid "Edit {0}"
 msgstr "编辑{0}"
 
-#: js/widgets/grid/GridPanel.js:313
+#: js/widgets/grid/GridPanel.js:320
 msgid "Copy {0}"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:324 js/widgets/tree/ContextMenu.js:243
+#: js/widgets/grid/GridPanel.js:331 js/widgets/tree/ContextMenu.js:243
 msgid "Add {0}"
 msgstr "添加{0}"
 
-#: js/widgets/grid/GridPanel.js:334 js/widgets/grid/GridPanel.js:335
-#: js/widgets/grid/GridPanel.js:337
+#: js/widgets/grid/GridPanel.js:366 js/widgets/grid/GridPanel.js:367
+#: js/widgets/grid/GridPanel.js:369
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "删除"
 
-#: js/widgets/grid/GridPanel.js:431
+#: js/widgets/grid/GridPanel.js:442
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "显示记录 {0} - {1} of {2}"
 
-#: js/widgets/grid/GridPanel.js:432
+#: js/widgets/grid/GridPanel.js:443
 msgid "No {0} to display"
 msgstr "没有{0}要显示"
 
-#: js/widgets/grid/GridPanel.js:640
+#: js/widgets/grid/GridPanel.js:651
 #, fuzzy
 msgid "Tagging"
 msgstr "标签"
 
-#: js/widgets/grid/GridPanel.js:962
+#: js/widgets/grid/GridPanel.js:975
 msgid "Not Allowed"
 msgstr "不允许"
 
-#: js/widgets/grid/GridPanel.js:963
+#: js/widgets/grid/GridPanel.js:976
 msgid "You are not allowed to delete all pages at once"
 msgstr "你不允许一次地删除所有页面"
 
-#: js/widgets/grid/GridPanel.js:981
+#: js/widgets/grid/GridPanel.js:994
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "真的想删除选中的记录？"
 
-#: js/widgets/grid/GridPanel.js:1002 js/widgets/dialog/EditDialog.js:451
+#: js/widgets/grid/GridPanel.js:1015 js/widgets/dialog/EditDialog.js:451
 msgid "Deleting {0}"
 msgstr "正删除{0}"
 
-#: js/widgets/grid/GridPanel.js:1004
+#: js/widgets/grid/GridPanel.js:1017
 msgid " ... This may take a long time!"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1021 js/widgets/tags/TagsPanel.js:292
+#: js/widgets/grid/GridPanel.js:1034 js/widgets/tags/TagsPanel.js:292
 #: js/widgets/tags/TagsPanel.js:402 js/widgets/tags/TagsPanel.js:435
 #: js/widgets/dialog/EditDialog.js:461
 msgid "Failed"
 msgstr "失败"
 
-#: js/widgets/grid/GridPanel.js:1021 js/widgets/dialog/EditDialog.js:461
+#: js/widgets/grid/GridPanel.js:1034 js/widgets/dialog/EditDialog.js:461
 msgid "Could not delete {0}."
 msgstr "不能删除{0}"
 
@@ -1020,15 +1020,15 @@ msgstr ""
 msgid "Remove file"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:165
+#: js/widgets/grid/FileUploadGrid.js:173
 msgid "name"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:180
+#: js/widgets/grid/FileUploadGrid.js:188
 msgid "size"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:187
+#: js/widgets/grid/FileUploadGrid.js:195
 msgid "type"
 msgstr ""
 
@@ -1426,12 +1426,12 @@ msgid "Custom Fields"
 msgstr "定制字段"
 
 #: js/widgets/customfields/CustomfieldsPanel.js:71
-#: js/widgets/customfields/CustomfieldsPanel.js:87
+#: js/widgets/customfields/CustomfieldsPanel.js:92
 #, fuzzy
 msgid "General"
 msgstr "正常"
 
-#: js/widgets/customfields/CustomfieldsPanel.js:109
+#: js/widgets/customfields/CustomfieldsPanel.js:114
 msgid "There are no custom fields yet"
 msgstr "没有定制字段"
 
@@ -1730,47 +1730,47 @@ msgstr "由"
 msgid "Changed fields:"
 msgstr "已修改的字段："
 
-#: Frontend/Http.php:551
+#: Frontend/Http.php:554
 msgid "Your session is not valid. You need to login again."
 msgstr "会话无效，需要重新登录"
 
-#: Setup/setup.xml:2646
+#: Setup/setup.xml:2729
 msgid "note"
 msgstr "注释"
 
-#: Setup/setup.xml:2651
+#: Setup/setup.xml:2734
 msgid "default note type"
 msgstr "缺省注释类型"
 
-#: Setup/setup.xml:2677
+#: Setup/setup.xml:2760
 msgid "telephone"
 msgstr "电话"
 
-#: Setup/setup.xml:2682
+#: Setup/setup.xml:2765
 msgid "telephone call"
 msgstr "电话呼叫"
 
-#: Setup/setup.xml:2708
+#: Setup/setup.xml:2791
 msgid "email"
 msgstr "电子邮件"
 
-#: Setup/setup.xml:2713
+#: Setup/setup.xml:2796
 msgid "email contact"
 msgstr "电子邮件联系"
 
-#: Setup/setup.xml:2739
+#: Setup/setup.xml:2822
 msgid "created"
 msgstr "生成的"
 
-#: Setup/setup.xml:2744
+#: Setup/setup.xml:2827
 msgid "record created"
 msgstr "记录已生成"
 
-#: Setup/setup.xml:2770
+#: Setup/setup.xml:2853
 msgid "changed"
 msgstr "已修改"
 
-#: Setup/setup.xml:2775
+#: Setup/setup.xml:2858
 msgid "record changed"
 msgstr "记录已修改"
 

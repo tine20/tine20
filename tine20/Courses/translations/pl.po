@@ -12,18 +12,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: Controller/Course.php:108
-msgid "teacher"
-msgstr "nauczyciel"
-
-#: Controller/Course.php:116
-msgid "Teacher"
-msgstr "Nauczyciel"
-
-#: Controller/Course.php:117
-msgid "Teacher Account"
-msgstr "Konto nauczyciela"
-
 #: js/CourseGridPanel.js:51
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
@@ -67,6 +55,14 @@ msgstr "Błąd"
 #: js/CourseGridPanel.js:215
 msgid "Some error occured while trying to update the courses."
 msgstr "Podczas próby aktualizacji kursów wystąpił błąd."
+
+#: js/Courses.js:33 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kursy"
+
+#: js/Courses.js:38
+msgid "All Courses"
+msgstr "Wszystkie kursy"
 
 #: js/CourseEditDialog.js:32
 msgid "Import course members"
@@ -115,14 +111,6 @@ msgstr "Ustaw nowe hasło"
 msgid "Please enter the new password:"
 msgstr "Proszę wprowadzić nowe hasło:"
 
-#: js/Courses.js:33 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kursy"
-
-#: js/Courses.js:38
-msgid "All Courses"
-msgstr "Wszystkie kursy"
-
 #: js/Models.js:46
 msgid "record list"
 msgid_plural "record lists"
@@ -136,3 +124,15 @@ msgid_plural "Course Types"
 msgstr[0] "Rodzaj kursu"
 msgstr[1] "rodzaje kursu"
 msgstr[2] "rodzaje kursu"
+
+#: Controller/Course.php:108
+msgid "teacher"
+msgstr "nauczyciel"
+
+#: Controller/Course.php:116
+msgid "Teacher"
+msgstr "Nauczyciel"
+
+#: Controller/Course.php:117
+msgid "Teacher Account"
+msgstr "Konto nauczyciela"

@@ -82,7 +82,7 @@ msgstr "Assistent Telefon"
 msgid "Private Contact Data"
 msgstr "Private Kontakt Detaljer"
 
-#: Export/Pdf.php:89 js/Model.js:162 js/Model.js:163 js/Model.js:164
+#: Export/Pdf.php:89 js/Model.js:163 js/Model.js:164 js/Model.js:165
 #: js/ContactEditDialog.js:258
 msgid "Private Address"
 msgstr "Privat Adresse"
@@ -111,12 +111,12 @@ msgstr "URL Hjemme"
 msgid "Other Data"
 msgstr "Andre Data"
 
-#: Export/Pdf.php:115 js/Model.js:26 js/Model.js:158
+#: Export/Pdf.php:115 js/Model.js:26 js/Model.js:159
 #: js/ContactEditDialog.js:144 js/ContactGrid.js:128
 msgid "Birthday"
 msgstr "Bursdag"
 
-#: Export/Pdf.php:118 js/Model.js:30 js/Model.js:154
+#: Export/Pdf.php:118 js/Model.js:30 js/Model.js:155
 #: js/ContactEditDialog.js:139 js/ContactGrid.js:100
 msgid "Job Title"
 msgstr "Jobb Tittel"
@@ -163,7 +163,7 @@ msgid "Company"
 msgstr "Firma"
 
 #: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/Model.js:47 js/Model.js:153 js/ContactEditDialog.js:168
+#: js/Model.js:47 js/Model.js:154 js/ContactEditDialog.js:168
 #: js/ContactGrid.js:114
 msgid "Phone"
 msgstr "Telefon"
@@ -226,7 +226,8 @@ msgstr "Etternavn"
 msgid "Display Name"
 msgstr "Visnings Navn"
 
-#: js/Model.js:28 js/ContactEditDialog.js:125 js/ContactGrid.js:99
+#: js/Model.js:28 js/Model.js:153 js/ContactEditDialog.js:125
+#: js/ContactGrid.js:99
 msgid "Unit"
 msgstr "Enhet"
 
@@ -234,7 +235,7 @@ msgstr "Enhet"
 msgid "Salutation"
 msgstr "Hilsen"
 
-#: js/Model.js:31 js/Model.js:155 js/ContactEditDialog.js:152
+#: js/Model.js:31 js/Model.js:156 js/ContactEditDialog.js:152
 #: js/ContactGrid.js:101
 msgid "Job Role"
 msgstr "Stilling"
@@ -329,46 +330,46 @@ msgstr "Bruker Konto"
 msgid "Quick search"
 msgstr "Hurtig Søk"
 
-#: js/Model.js:156 js/ContactGrid.js:125
+#: js/Model.js:157 js/ContactGrid.js:125
 msgid "Note"
 msgstr "Notat"
 
-#: js/Model.js:159 js/Model.js:162 js/ContactEditDialog.js:238
+#: js/Model.js:160 js/Model.js:163 js/ContactEditDialog.js:238
 #: js/ContactEditDialog.js:261 js/ContactGrid.js:103
 msgid "Street"
 msgstr "Gate"
 
-#: js/Model.js:159 js/Model.js:160 js/Model.js:161 js/ContactEditDialog.js:235
+#: js/Model.js:160 js/Model.js:161 js/Model.js:162 js/ContactEditDialog.js:235
 msgid "Company Address"
 msgstr "Firma Adresse"
 
-#: js/Model.js:160 js/Model.js:163 js/ContactEditDialog.js:247
+#: js/Model.js:161 js/Model.js:164 js/ContactEditDialog.js:247
 #: js/ContactEditDialog.js:270
 msgid "Postal Code"
 msgstr "Post Nummer"
 
-#: js/Model.js:161 js/Model.js:164 js/ContactEditDialog.js:250
+#: js/Model.js:162 js/Model.js:165 js/ContactEditDialog.js:250
 #: js/ContactEditDialog.js:273 js/ContactGrid.js:104
 msgid "City"
 msgstr "By"
 
-#: js/Model.js:165 js/ContactGrid.js:92
+#: js/Model.js:166 js/ContactGrid.js:92
 msgid "Type"
 msgstr "Type"
 
-#: js/Model.js:166
+#: js/Model.js:167
 msgid "Last modified"
 msgstr ""
 
-#: js/Model.js:167
+#: js/Model.js:168
 msgid "Last modifier"
 msgstr ""
 
-#: js/Model.js:168 js/ContactGrid.js:129
+#: js/Model.js:169 js/ContactGrid.js:129
 msgid "Creation Time"
 msgstr "Opprettelses dato"
 
-#: js/Model.js:169
+#: js/Model.js:170
 msgid "Creator"
 msgstr ""
 
