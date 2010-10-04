@@ -929,7 +929,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         
         var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow(Ext.copyTo(
-            this.editDialogConfig, {
+            this.editDialogConfig || {}, {
                 record: record,
                 listeners: {
                     scope: this,
