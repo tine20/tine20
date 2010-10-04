@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-09-11 18:15+0100\n"
+"PO-Revision-Date: 2010-09-22 22:52+0100\n"
 "Last-Translator: Gump <gump@gump.hu>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 
 #: Preference/Abstract.php:453
 msgid "default"
-msgstr ""
+msgstr "alapértelmezett"
 
 #: Export/Pdf.php:206 js/widgets/tags/TagsPanel.js:58
 msgid "Tags"
@@ -276,14 +276,12 @@ msgid "Sorry, the Server did not respond any data. Please reload your browser, t
 msgstr "Bocsánat, a szerver nem adott vissza adatot. Töltsd újra a böngésződet, próbáld újra vagy lépj kapcsolatba a rendszergazdával."
 
 #: js/ExceptionHandler.js:210
-#, fuzzy
 msgid "No Role Memberships"
-msgstr "No Role Memberships"
+msgstr "Nincsenek Szerep tagságok"
 
 #: js/ExceptionHandler.js:211
-#, fuzzy
 msgid "Your user account has no role memberships. Please contact your administrator."
-msgstr "Your user account has no role memberships. Please contact your administrator."
+msgstr "A felhasználó nevedhez nem tartoznak szerep tagságok. Lépj kapcsolatba a rendszergazdával."
 
 #: js/data/Record.js:115
 msgid "Task"
@@ -392,9 +390,8 @@ msgid "The field is editable part of the profile"
 msgstr "A mező a profil szerkeszthető része"
 
 #: js/AdminPanel.js:182
-#, fuzzy
 msgid "Field Name"
-msgstr "Családi név"
+msgstr "Mező név"
 
 #: js/common.js:150
 msgid "{0} minute"
@@ -432,7 +429,7 @@ msgstr "Tulajdonságok"
 
 #: js/MainMenu.js:140
 msgid "Edit Profile"
-msgstr ""
+msgstr "Profil szerkesztése"
 
 #: js/MainMenu.js:147
 msgid "Change password"
@@ -551,7 +548,6 @@ msgstr "Hibák"
 
 #: js/LoginPanel.js:300 js/widgets/dialog/CredentialsDialog.js:109
 #: js/widgets/dialog/EditDialog.js:441 js/widgets/dialog/ImportDialog.js:194
-#, fuzzy
 msgid "Please fix the errors noted."
 msgstr "Javítsd a jegyzett hibákat."
 
@@ -580,14 +576,12 @@ msgstr[0] "Importálás"
 msgstr[1] "Importálások"
 
 #: js/Models.js:315
-#, fuzzy
 msgid "Credentials"
 msgid_plural "Credentials"
-msgstr[0] "Credentials"
-msgstr[1] "Credentials"
+msgstr[0] "Belépési adat"
+msgstr[1] "Belépési adatok"
 
 #: js/Models.js:342
-#, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Kapcsolat"
@@ -596,8 +590,8 @@ msgstr[1] "Kapcsolatok"
 #: js/Models.js:364
 msgid "Department"
 msgid_plural "Departments"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Osztály"
+msgstr[1] "Osztályok"
 
 #: js/Models.js:372 js/widgets/account/PickerGridPanel.js:250
 msgid "Name"
@@ -1210,7 +1204,6 @@ msgid "Save current view as favorite"
 msgstr "Jelenlegi nézet mentése kedvencként"
 
 #: js/widgets/container/FilterModel.js:130
-#, fuzzy
 msgid "is personal of"
 msgstr "személyes"
 
@@ -1322,7 +1315,6 @@ msgstr[0] "konténer"
 msgstr[1] "konténerek"
 
 #: js/widgets/container/ContainerTree.js:435
-#, fuzzy
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr "Nem választhatod a {0} '{1}':"
 
@@ -1659,7 +1651,7 @@ msgstr "{0} átnevezése"
 
 #: js/widgets/tree/ContextMenu.js:269
 msgid "Set color for {0}"
-msgstr ""
+msgstr "{0} színének beállítása"
 
 #: js/widgets/tree/ContextMenu.js:282
 msgid "Manage permissions"
@@ -1711,7 +1703,7 @@ msgstr "Megerősítő ablak muitatása kijelentkezéskor."
 
 #: Notes.php:363
 msgid "by"
-msgstr ""
+msgstr "által"
 
 #: Notes.php:370
 msgid "Changed fields:"

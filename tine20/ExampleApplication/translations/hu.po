@@ -16,52 +16,52 @@ msgstr ""
 #: Controller.php:97
 #, python-format
 msgid "%s's personal example records"
-msgstr ""
+msgstr "%s személyes példa rekordjai"
 
 #: js/Model.js:33
 msgid "example record"
 msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "példa rekord"
+msgstr[1] "példa rekordok"
 
 #: js/Model.js:37
 msgid "example record list"
 msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "példa rekord lista"
+msgstr[1] "példa rekord listák"
 
 #: js/ExampleRecordEditDialog.js:89
 msgid "ExampleRecord"
-msgstr ""
+msgstr "PéldaRekord"
 
 #: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
 msgid "Name"
-msgstr ""
+msgstr "Név"
 
 #: js/ExampleApplication.js:27
 msgid "Example Application"
-msgstr ""
+msgstr "Példa Alkalmazás"
 
 #: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
-msgstr ""
+msgstr "Gyors keresés"
 
 #: js/ExampleRecordGridPanel.js:111
 msgid "Title"
-msgstr ""
+msgstr "Beosztás"
 
 #: js/ExampleRecordGridPanel.js:117
 msgid "Status"
-msgstr ""
+msgstr "Státusz"
 
 #: js/ExampleRecordGridPanel.js:124
 msgid "Budget"
-msgstr ""
+msgstr "Költség"
 
 #: js/ExampleRecordGridPanel.js:148
 msgid "Show closed"
-msgstr ""
+msgstr "Mutasd a lezártakat"
 
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
-msgstr ""
+msgstr "PéldaAlkalmazás"

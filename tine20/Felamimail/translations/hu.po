@@ -258,7 +258,7 @@ msgstr ""
 
 #: js/VacationEditDialog.js:82
 msgid "Vacation Message for {0}"
-msgstr "Sabadság üzenet ehhez: {0}"
+msgstr "Szabadság üzenet ehhez: {0}"
 
 #: js/VacationEditDialog.js:100
 msgid "Incoming mails will be answered with this text:"
@@ -294,11 +294,11 @@ msgstr "Címzett:"
 
 #: js/RecipientGrid.js:156 js/RecipientGrid.js:175
 msgid "Cc:"
-msgstr "Cc:"
+msgstr "Másolat:"
 
 #: js/RecipientGrid.js:159 js/RecipientGrid.js:176
 msgid "Bcc:"
-msgstr "Bcc:"
+msgstr "Titkos másolat:"
 
 #: js/RecipientGrid.js:197
 msgid "Remove"
@@ -306,11 +306,11 @@ msgstr "Eltávolítás"
 
 #: js/RulesGridPanel.js:78
 msgid "Move up"
-msgstr ""
+msgstr "Mozgatás le"
 
 #: js/RulesGridPanel.js:85
 msgid "Move down"
-msgstr ""
+msgstr "Mozgatás le"
 
 #: js/RulesGridPanel.js:92
 msgid "Enable"
@@ -334,11 +334,11 @@ msgstr "Művelet"
 
 #: js/RulesGridPanel.js:303
 msgid "is greater than"
-msgstr ""
+msgstr "nagyobb, mint"
 
 #: js/RulesGridPanel.js:303
 msgid "is less than"
-msgstr ""
+msgstr "kisebb, mint"
 
 #: js/RuleConditionsPanel.js:75 js/GridPanel.js:292 js/GridPanel.js:418
 msgid "To"
@@ -366,11 +366,11 @@ msgstr "Email"
 
 #: js/Felamimail.js:105
 msgid "Active Vacation Message"
-msgstr ""
+msgstr "Aktív szabadság üzenet"
 
 #: js/Felamimail.js:106
 msgid "Email account \"{0}\" has an active vacation message."
-msgstr ""
+msgstr "Email fiók \"{0}\" rendelkezik aktív szabadság üzenettel."
 
 #: js/Felamimail.js:307
 msgid "New mails"
@@ -382,11 +382,11 @@ msgstr "{0} új üzeneted van a {1} mappában."
 
 #: js/Felamimail.js:342
 msgid "IMAP Credentials for {0}"
-msgstr ""
+msgstr "{0} IMAP belépési adatai"
 
 #: js/Felamimail.js:345
 msgid "Credentials"
-msgstr ""
+msgstr "Belépési adatok"
 
 #: js/Felamimail.js:475 js/Felamimail.js:497
 msgid "IMAP Error"
@@ -468,11 +468,11 @@ msgstr "Tárgy/Feladó"
 
 #: js/GridPanel.js:290 js/GridPanel.js:406
 msgid "From (Email)"
-msgstr ""
+msgstr "Feladó (Email)"
 
 #: js/GridPanel.js:291 js/GridPanel.js:412
 msgid "From (Name)"
-msgstr ""
+msgstr "Feladó (Név)"
 
 #: js/GridPanel.js:293
 msgid "Cc"
@@ -516,14 +516,12 @@ msgid "Original message"
 msgstr "Eredeti üzenet"
 
 #: js/MessageEditDialog.js:256
-#, fuzzy
 msgid "Re:"
-msgstr "Re:"
+msgstr "Válasz:"
 
 #: js/MessageEditDialog.js:264
-#, fuzzy
 msgid "Fwd:"
-msgstr "Fwd:"
+msgstr "Továbbítás:"
 
 #: js/MessageEditDialog.js:267
 msgid "{0} Message"
@@ -539,7 +537,7 @@ msgstr "Megjegyzés hozzáadása"
 
 #: js/MessageEditDialog.js:343
 msgid "Edit Email Note Text:"
-msgstr ""
+msgstr "Email megjegyzés szerkesztése:"
 
 #: js/MessageEditDialog.js:369
 msgid "Failed"
@@ -619,11 +617,11 @@ msgstr "{0} újratöltése"
 
 #: js/TreeContextMenu.js:199
 msgid "Mark Folder as read"
-msgstr ""
+msgstr "Mappa megjelölése olvasottként"
 
 #: js/TreeContextMenu.js:228
 msgid "Update Folder List"
-msgstr ""
+msgstr "Mappa lista újratöltése"
 
 #: js/RuleEditDialog.js:99
 msgid "Edit Filter Rule"
@@ -631,40 +629,39 @@ msgstr "Szűrő szabály szerkesztése"
 
 #: js/RuleEditDialog.js:236
 msgid "If all of the following conditions are met:"
-msgstr ""
+msgstr "Ha az összes következő feltételek találkoznak:"
 
 #: js/RuleEditDialog.js:253
 msgid "Do this action:"
-msgstr ""
+msgstr "Tegye ezt a műveletet:"
 
 #: js/RuleEditDialog.js:342
 msgid "Move mail to folder"
-msgstr ""
+msgstr "Levél áthelyezése mappába"
 
 #: js/RuleEditDialog.js:343
 msgid "Redirect mail to address"
-msgstr ""
+msgstr "Levél továbbküldése"
 
 #: js/RuleEditDialog.js:344
 msgid "Reject mail with this text"
-msgstr ""
+msgstr "Levél visszaküldése ezzel a szöveggel"
 
 #: js/RuleEditDialog.js:345
 msgid "Discard mail"
-msgstr ""
+msgstr "Levél eldobása"
 
 #: js/RuleEditDialog.js:346
 msgid "Keep mail"
-msgstr ""
+msgstr "Levél megtartása"
 
 #: js/RulesDialog.js:80
 msgid "Sieve Filter Rules for {0}"
 msgstr "Sieve szűrő feltételek ehhez:{0}"
 
 #: js/TreePanel.js:412
-#, fuzzy
 msgid "Invalid drop target"
-msgstr "Invalid drop target"
+msgstr "Érvénytelen áthelyezési cél"
 
 #: js/TreePanel.js:412
 msgid "Could not move message(s)."
@@ -743,11 +740,15 @@ msgstr "Törlés megerősítése"
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Megerősítés ablak mutatása üzenetek törlésekor."
 
-#~ msgid "Enabled"
-#~ msgstr "Engedélyezve"
-
 #~ msgid "Reload Folder List"
 #~ msgstr "Mappa lista újratöltése"
 
 #~ msgid "Move to folder"
 #~ msgstr "Áthelyezés mappába"
+
+#~ msgid "Enabled"
+#~ msgstr "Engedélyezve"
+
+#, fuzzy
+#~ msgid "Argument"
+#~ msgstr "Indok"
