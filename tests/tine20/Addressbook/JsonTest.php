@@ -123,6 +123,22 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }    
 
     /**
+     * try to get contacts by missing container
+     *
+     */
+    public function testGetMissingContainerContacts()
+    {
+        $paging = $this->objects['paging'];
+                
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'equals',   'value' => ''),
+        );
+        $contacts = $this->_instance->searchContacts($filter, $paging);
+        
+        $this->assertGreaterThan(0, $contacts['totalcount']);
+    }    
+    
+    /**
      * try to get other people contacts
      *
      */
