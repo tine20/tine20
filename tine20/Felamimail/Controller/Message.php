@@ -260,16 +260,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        foreach($_messagesToFlag as $message) {
+        $idsToDelete = array();
+        foreach ($_messagesToFlag as $message) {
             foreach ($_flags as $flag) {
                 if ($flag == Zend_Mail_Storage::FLAG_DELETED) {
                     if (is_array($message->flags) && !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
                         $_folderCounts[$message->folder_id]['decrementUnreadCounter']++;
                     }
                     $_folderCounts[$message->folder_id]['decrementMessagesCounter']++;
-                    
-                    $this->_backend->delete($message->getId());
-                    $_messagesToFlag->removeRecord($message);
+                    $idsToDelete[] = $message->getId();
                 } elseif (!is_array($message->flags) || !in_array($flag, $message->flags)) {
                     $this->_backend->addFlag($message, $flag);
                     if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
@@ -280,13 +279,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             }
         }
         
-        // mark message as changed in the cache backend
-        $this->_backend->updateMultiple(
-            $_messagesToFlag->getArrayOfIds(), 
-            array(
-                'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-            )
-        );
+        $this->_backend->delete($idsToDelete);
+        
+        $idsToMarkAsChanged = array_diff($_messagesToFlag->getArrayOfIds(), $idsToDelete);
+        $this->_backend->updateMultiple($idsToMarkAsChanged, array(
+            'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+        ));
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
