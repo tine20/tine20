@@ -224,42 +224,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $this->_addFlagsOnImap($imapMessageUids, $flags, $imapBackend);
         }    
 
-        // set flags in local database
-        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        
-        foreach($messagesToFlag as $message) {
-            foreach ($flags as $flag) {
-                if ($flag == Zend_Mail_Storage::FLAG_DELETED) {
-                    if (is_array($message->flags) && !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
-                        $folderIds[$message->folder_id]['decrementUnreadCounter']++;
-                    }
-                    $folderIds[$message->folder_id]['decrementMessagesCounter']++;
-                    
-                    $this->_backend->delete($message->getId());
-                    $messagesToFlag->removeRecord($message);
-                } elseif (!is_array($message->flags) || !in_array($flag, $message->flags)) {
-                    $this->_backend->addFlag($message, $flag);
-                    if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
-                        // count messages with seen flag for the first time
-                        $folderIds[$message->folder_id]['decrementUnreadCounter']++;
-                    }
-                }
-            }
-        }
-        
-        // mark message as changed in the cache backend
-        $this->_backend->updateMultiple(
-            $messagesToFlag->getArrayOfIds(), 
-            array(
-                'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
-            )
-        );
-        
-        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set flags on cache');
-        
-        $affectedFolders = $this->_updateFolderCounts($folderIds);
+        $folderCounts = $this->_addFlagsOnCache($messagesToFlag, $flags, $folderIds);
+        $affectedFolders = $this->_updateFolderCounts($folderCounts);
         
         return $affectedFolders;
     }
@@ -280,6 +246,53 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         } catch (Zend_Mail_Storage_Exception $zmse) {
             throw new Felamimail_Exception_IMAP($zmse->getMessage());
         }
+    }
+    
+    /**
+     * set flags in local database
+     * 
+     * @param Tinebase_Record_RecordSet $_messagesToFlag
+     * @param array $_flags
+     * @param array $_folderCounts
+     * @return array folder counts
+     */
+    protected function _addFlagsOnCache(Tinebase_Record_RecordSet $_messagesToFlag, $_flags, $_folderCounts)
+    {
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        foreach($_messagesToFlag as $message) {
+            foreach ($_flags as $flag) {
+                if ($flag == Zend_Mail_Storage::FLAG_DELETED) {
+                    if (is_array($message->flags) && !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
+                        $_folderCounts[$message->folder_id]['decrementUnreadCounter']++;
+                    }
+                    $_folderCounts[$message->folder_id]['decrementMessagesCounter']++;
+                    
+                    $this->_backend->delete($message->getId());
+                    $_messagesToFlag->removeRecord($message);
+                } elseif (!is_array($message->flags) || !in_array($flag, $message->flags)) {
+                    $this->_backend->addFlag($message, $flag);
+                    if ($flag == Zend_Mail_Storage::FLAG_SEEN) {
+                        // count messages with seen flag for the first time
+                        $_folderCounts[$message->folder_id]['decrementUnreadCounter']++;
+                    }
+                }
+            }
+        }
+        
+        // mark message as changed in the cache backend
+        $this->_backend->updateMultiple(
+            $_messagesToFlag->getArrayOfIds(), 
+            array(
+                'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+            )
+        );
+        
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' set flags on cache');
+        
+        return $_folderCounts;
     }
     
     /**
