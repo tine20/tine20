@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-10-09 19:35+0100\n"
+"PO-Revision-Date: 2010-10-09 23:24+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -557,7 +557,7 @@ msgstr "Wyślij"
 
 #: js/MessageEditDialog.js:173
 msgid "wrote"
-msgstr "zapisane"
+msgstr "napisał(a)"
 
 #: js/MessageEditDialog.js:176
 msgid "Original message"
