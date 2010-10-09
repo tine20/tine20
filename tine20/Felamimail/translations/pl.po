@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-09-29 19:41+0100\n"
+"PO-Revision-Date: 2010-10-09 19:26+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -28,29 +28,38 @@ msgstr "dodawanie kont pocztowych"
 msgid "Create new email accounts"
 msgstr "tworzenie nowych kont pocztowych"
 
-#: js/Model.js:46 js/TreeContextMenu.js:29
+#: js/Model.js:46
+#: js/TreeContextMenu.js:29
 msgid "Message"
 msgid_plural "Messages"
 msgstr[0] "Wiadomość"
 msgstr[1] "wiadomości"
 msgstr[2] "wiadomości"
 
-#: js/Model.js:50 js/Model.js:418 js/TreeContextMenu.js:88
-#: js/TreeContextMenu.js:91 js/TreeContextMenu.js:94 js/TreeContextMenu.js:186
+#: js/Model.js:50
+#: js/Model.js:418
+#: js/TreeContextMenu.js:88
+#: js/TreeContextMenu.js:91
+#: js/TreeContextMenu.js:94
+#: js/TreeContextMenu.js:186
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Katalog"
 msgstr[1] "Katalog"
 msgstr[2] "Katalog"
 
-#: js/Model.js:277 js/AccountEditDialog.js:107
+#: js/Model.js:277
+#: js/AccountEditDialog.js:107
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "Konto"
 msgstr[1] "konta"
 msgstr[2] "konta"
 
-#: js/Model.js:281 js/Model.js:421 js/Model.js:525 js/Model.js:578
+#: js/Model.js:281
+#: js/Model.js:421
+#: js/Model.js:525
+#: js/Model.js:578
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Lista wiadomości"
@@ -65,7 +74,8 @@ msgstr "Pobrane"
 msgid "Drafts"
 msgstr "Szkice"
 
-#: js/Model.js:412 js/GridPanel.js:425
+#: js/Model.js:412
+#: js/GridPanel.js:425
 msgid "Sent"
 msgstr "Wysłane"
 
@@ -95,12 +105,17 @@ msgstr[0] "Reguła"
 msgstr[1] "reguły"
 msgstr[2] "reguły"
 
-#: js/GridDetailsPanel.js:133 js/RuleConditionsPanel.js:76 js/GridPanel.js:289
-#: js/GridPanel.js:400 js/MessageEditDialog.js:506 Controller/Message.php:591
+#: js/GridDetailsPanel.js:133
+#: js/RuleConditionsPanel.js:76
+#: js/GridPanel.js:289
+#: js/GridPanel.js:400
+#: js/MessageEditDialog.js:506
+#: Controller/Message.php:591
 msgid "Subject"
 msgstr "Temat"
 
-#: js/GridDetailsPanel.js:134 js/RuleConditionsPanel.js:74
+#: js/GridDetailsPanel.js:134
+#: js/RuleConditionsPanel.js:74
 #: js/MessageEditDialog.js:483
 msgid "From"
 msgstr "Od"
@@ -117,15 +132,18 @@ msgstr "Dodaj kontakt do książki adresowej"
 msgid "Date"
 msgstr "Data"
 
-#: js/GridDetailsPanel.js:139 js/GridDetailsPanel.js:361
+#: js/GridDetailsPanel.js:139
+#: js/GridDetailsPanel.js:361
 msgid "Show or hide header information"
 msgstr "Pokazuj albo ukrywaj informacje nagłówkowe"
 
-#: js/GridDetailsPanel.js:229 js/MessageEditDialog.js:418
+#: js/GridDetailsPanel.js:229
+#: js/MessageEditDialog.js:418
 msgid "Attachments"
 msgstr "Załączniki"
 
-#: js/AccountEditDialog.js:87 js/AccountEditDialog.js:136
+#: js/AccountEditDialog.js:87
+#: js/AccountEditDialog.js:136
 msgid "Signature"
 msgstr "Podpis"
 
@@ -149,7 +167,8 @@ msgstr "Organizacja"
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/AccountEditDialog.js:156 js/AccountEditDialog.js:205
+#: js/AccountEditDialog.js:156
+#: js/AccountEditDialog.js:205
 #: js/AccountEditDialog.js:266
 msgid "Host"
 msgstr "Host"
@@ -158,22 +177,27 @@ msgstr "Host"
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr "Port (domyślnie 143 / SSL: 993)"
 
-#: js/AccountEditDialog.js:166 js/AccountEditDialog.js:214
+#: js/AccountEditDialog.js:166
+#: js/AccountEditDialog.js:214
 #: js/AccountEditDialog.js:275
 msgid "Secure Connection"
 msgstr "Bezpieczne połączenie"
 
-#: js/AccountEditDialog.js:177 js/AccountEditDialog.js:224
-#: js/AccountEditDialog.js:239 js/AccountEditDialog.js:285
+#: js/AccountEditDialog.js:177
+#: js/AccountEditDialog.js:224
+#: js/AccountEditDialog.js:239
+#: js/AccountEditDialog.js:285
 msgid "None"
 msgstr "Brak"
 
-#: js/AccountEditDialog.js:178 js/AccountEditDialog.js:225
+#: js/AccountEditDialog.js:178
+#: js/AccountEditDialog.js:225
 #: js/AccountEditDialog.js:286
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AccountEditDialog.js:179 js/AccountEditDialog.js:226
+#: js/AccountEditDialog.js:179
+#: js/AccountEditDialog.js:226
 msgid "SSL"
 msgstr "SSL"
 
@@ -295,15 +319,18 @@ msgstr "Zaawansowane"
 msgid "Only send all X days to the same sender"
 msgstr "Wysyłaj zawsze co X dni do tego samego nadawcy"
 
-#: js/RecipientGrid.js:153 js/RecipientGrid.js:174
+#: js/RecipientGrid.js:153
+#: js/RecipientGrid.js:174
 msgid "To:"
 msgstr "Do:"
 
-#: js/RecipientGrid.js:156 js/RecipientGrid.js:175
+#: js/RecipientGrid.js:156
+#: js/RecipientGrid.js:175
 msgid "Cc:"
 msgstr "DW:"
 
-#: js/RecipientGrid.js:159 js/RecipientGrid.js:176
+#: js/RecipientGrid.js:159
+#: js/RecipientGrid.js:176
 msgid "Bcc:"
 msgstr "UDW:"
 
@@ -347,11 +374,14 @@ msgstr "większy od"
 msgid "is less than"
 msgstr "mniejszy od"
 
-#: js/RuleConditionsPanel.js:75 js/GridPanel.js:292 js/GridPanel.js:418
+#: js/RuleConditionsPanel.js:75
+#: js/GridPanel.js:292
+#: js/GridPanel.js:418
 msgid "To"
 msgstr "Do"
 
-#: js/RuleConditionsPanel.js:77 js/GridPanel.js:440
+#: js/RuleConditionsPanel.js:77
+#: js/GridPanel.js:440
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -395,7 +425,8 @@ msgstr "Dane dostępowe IMAP dla {0}"
 msgid "Credentials"
 msgstr "Dane dostępowe"
 
-#: js/Felamimail.js:475 js/Felamimail.js:497
+#: js/Felamimail.js:475
+#: js/Felamimail.js:497
 msgid "IMAP Error"
 msgstr "Błąd IMAP"
 
@@ -431,15 +462,18 @@ msgstr "Brak wiadomości lub pusta pamięć podręczna"
 msgid "Write"
 msgstr "Napisz"
 
-#: js/GridPanel.js:172 js/MessageDisplayDialog.js:46
+#: js/GridPanel.js:172
+#: js/MessageDisplayDialog.js:46
 msgid "Reply"
 msgstr "Odpowiedz"
 
-#: js/GridPanel.js:181 js/MessageDisplayDialog.js:53
+#: js/GridPanel.js:181
+#: js/MessageDisplayDialog.js:53
 msgid "Reply To All"
 msgstr "Odpowiedz wszystkim"
 
-#: js/GridPanel.js:190 js/MessageDisplayDialog.js:60
+#: js/GridPanel.js:190
+#: js/MessageDisplayDialog.js:60
 msgid "Forward"
 msgstr "Prześlij dalej"
 
@@ -451,7 +485,9 @@ msgstr "Ustaw flagę"
 msgid "Mark read/unread"
 msgstr "Oznacz jako (nie)przeczytane"
 
-#: js/GridPanel.js:217 js/GridPanel.js:218 js/GridPanel.js:220
+#: js/GridPanel.js:217
+#: js/GridPanel.js:218
+#: js/GridPanel.js:220
 #: js/MessageDisplayDialog.js:39
 msgid "Delete"
 msgstr "Usuń"
@@ -460,12 +496,15 @@ msgstr "Usuń"
 msgid "Add Account"
 msgstr "Dodaj konto"
 
-#: js/GridPanel.js:236 js/GridPanel.js:935 js/GridPanel.js:949
+#: js/GridPanel.js:236
+#: js/GridPanel.js:935
+#: js/GridPanel.js:949
 #: js/MessageDisplayDialog.js:73
 msgid "Print Preview"
 msgstr "Drukuj podgląd"
 
-#: js/GridPanel.js:244 js/MessageDisplayDialog.js:67
+#: js/GridPanel.js:244
+#: js/MessageDisplayDialog.js:67
 msgid "Print Message"
 msgstr "Drukuj wiadomość"
 
@@ -473,11 +512,13 @@ msgstr "Drukuj wiadomość"
 msgid "Subject/From"
 msgstr "Temat / Od"
 
-#: js/GridPanel.js:290 js/GridPanel.js:406
+#: js/GridPanel.js:290
+#: js/GridPanel.js:406
 msgid "From (Email)"
 msgstr "Od (e-mail)"
 
-#: js/GridPanel.js:291 js/GridPanel.js:412
+#: js/GridPanel.js:291
+#: js/GridPanel.js:412
 msgid "From (Name)"
 msgstr "Od (nazwa)"
 
@@ -489,7 +530,8 @@ msgstr "DW"
 msgid "Bcc"
 msgstr "UDW"
 
-#: js/GridPanel.js:295 js/GridPanel.js:433
+#: js/GridPanel.js:295
+#: js/GridPanel.js:433
 msgid "Received"
 msgstr "Odebrane"
 
@@ -533,9 +575,10 @@ msgstr "Prześlij dalej:"
 msgid "{0} Message"
 msgstr "Wiadomość {0}"
 
-#: js/MessageEditDialog.js:310 js/MessageEditDialog.js:517
+#: js/MessageEditDialog.js:310
+#: js/MessageEditDialog.js:517
 msgid "Compose email:"
-msgstr "Redaguj wiadomość:"
+msgstr "Nowa wiadomość:"
 
 #: js/MessageEditDialog.js:342
 msgid "Add Note"
@@ -563,7 +606,8 @@ msgstr "Błąd:"
 msgid "Recipients"
 msgstr "Odbiorcy"
 
-#: js/MessageEditDialog.js:425 Controller/Message.php:591
+#: js/MessageEditDialog.js:425
+#: Controller/Message.php:591
 msgid "Body"
 msgstr "Wiadomość"
 
@@ -692,7 +736,9 @@ msgstr "Nazwa serwera:"
 msgid "Fetching messages... ({0}% done)"
 msgstr "Pobieranie wiadomości... ({0}% pobrano)"
 
-#: js/TreePanel.js:671 js/TreePanel.js:676 js/TreePanel.js:687
+#: js/TreePanel.js:671
+#: js/TreePanel.js:676
+#: js/TreePanel.js:687
 msgid "Marked"
 msgstr "Zaznaczone"
 
