@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <name>adb_mac_import_csv</name>
     <model>Addressbook_Model_Contact</model>
     <plugin>Addressbook_Import_Csv</plugin>
     <type>import</type>
