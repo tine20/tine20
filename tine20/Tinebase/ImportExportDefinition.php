@@ -84,10 +84,15 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             
             $content = file_get_contents($_filename);
             $config = new Zend_Config_Xml($_filename);
+            if ($_name === NULL) {
+                $name = ($config->name) ? $config->name : $_filename;
+            } else {
+                $name = $_name;
+            }
                     
             $definition = new Tinebase_Model_ImportExportDefinition(array(
                 'application_id'    => $_applicationId,
-                'name'              => ($_name !== NULL) ? $_name : $config->name,
+                'name'              => $name,
                 'description'       => $config->description,
                 'type'              => $config->type,
                 'model'             => $config->model,
