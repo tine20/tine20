@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+    <name>adb_tine_import_csv</name>
     <model>Addressbook_Model_Contact</model>
     <plugin>Addressbook_Import_Csv</plugin>
     <type>import</type>
@@ -195,6 +196,10 @@
         <field>
             <source>tel_work</source>
             <destination>tel_work</destination>
+        </field>
+        <field>
+            <source>tags</source>
+            <destination>tags</destination>
         </field>
     </mapping>
 </config>
