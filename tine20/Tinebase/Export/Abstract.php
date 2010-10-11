@@ -12,7 +12,7 @@
  */
 
 /**
- * Timetracker Abstract export class
+ * Tinebase Abstract export class
  * 
  * @package     Tinebase
  * @subpackage	Export
@@ -150,7 +150,7 @@ abstract class Tinebase_Export_Abstract
     abstract public function generate();
     
     /**
-     * get export document object
+     * get export document object / filename
      * 
      * @return Object the generated document
      */
@@ -204,11 +204,15 @@ abstract class Tinebase_Export_Abstract
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
         // get field types from config
-        $types = array();
-        foreach ($this->_config->columns->column as $column) {
-            $types[] = $column->type;
+        if ($this->_config->columns) {
+            $types = array();
+            foreach ($this->_config->columns->column as $column) {
+                $types[] = $column->type;
+            }
+            $types = array_unique($types);
+        } else {
+            $types = $this->_resolvedFields;
         }
-        $types = array_unique($types);
         
         // resolve users
         foreach ($this->_userFields as $field) {
@@ -364,8 +368,7 @@ abstract class Tinebase_Export_Abstract
                 }
                 break;
             case 'tags':
-                $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($_record);
-                $result = implode(', ', $tags->name);
+                $result = $this->_getTags($_record);
                 break;
             case 'currency':
                 $currency = ($_field->currency) ? $_field->currency : 'EUR';
@@ -376,8 +379,7 @@ abstract class Tinebase_Export_Abstract
                 $result    = $_record->{$_field->identifier} / 100;
                 break;
             case 'container_id':
-                $container = $_record->{$_field->type}; 
-                $result = $container[$_field->field];
+                $result = $this->_getContainer($_record, $_field->field, $_field->type);
                 break;
                 /*
             case 'config':
@@ -429,26 +431,78 @@ abstract class Tinebase_Export_Abstract
     }
     
     /**
+     * return tag names of record
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @return string
+     */
+    protected function _getTags(Tinebase_Record_Abstract $_record)
+    {
+        $tags = Tinebase_Tags::getInstance()->getTagsOfRecord($_record);
+        return implode(', ', $tags->name);
+    }
+    
+    /**
+     * 
+     * return container name (or other field)
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_field
+     * @param string $_property
+     * @return string
+     */
+    protected function _getContainer(Tinebase_Record_Abstract $_record, $_field = 'id', $_property = 'container_id')
+    {
+        $container = $_record->{$_property}; 
+        return $container[$_field];
+    }
+    
+    
+    /**
      * add relation values from related records
      * 
      * @param Tinebase_Record_Abstract $_record
      * @param string $_fieldName
      * @param string $_recordField
      * @return string
-     * 
-     * @todo    add _getSummary()?
      */
-    protected function _addRelations(Tinebase_Record_Abstract $_record, $_fieldName, $_recordField)
+    protected function _addRelations(Tinebase_Record_Abstract $_record, $_fieldName, $_recordField = NULL)
     {
         $_record->relations->addIndices(array('type'));
         $matchingRelations = $_record->relations->filter('type', $_fieldName);
         
         $resultArray = array();
         foreach ($matchingRelations as $relation) {
-            $resultArray[] = $relation->related_record->{$_recordField};
+            if ($_recordField !== NULL) {
+                $resultArray[] = $relation->related_record->{$_recordField};
+            } else {
+                $resultArray[] = $this->_getRelationSummary($relation->related_record);
+            }
         }
         
         $result = implode(';', $resultArray);
+        
+        return $result;
+    }
+    
+    /**
+     * add relation summary (such as n_fileas, title, ...)
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @param string $_type
+     * @return string
+     */
+    protected function _getRelationSummary(Tinebase_Record_Abstract $_record)
+    {
+        $result = '';
+        switch(get_class($_record)) {
+            case 'Addressbook_Model_Contact':
+                $result = $_record->n_fileas;
+                break;
+            case 'Tasks_Model_Task':
+                $result = $_record->summary;
+                break;
+        }
         
         return $result;
     }

@@ -6,7 +6,7 @@
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        add products
@@ -22,6 +22,18 @@
 class Crm_Export_Csv extends Tinebase_Export_Csv
 {
     /**
+     * @var string application name of this export class
+     */
+    protected $_applicationName = 'Crm';
+    
+    /**
+     * the record model
+     *
+     * @var string
+     */
+    protected $_modelName = 'Crm_Model_Lead';
+    
+    /**
      * lead relation types
      * 
      * @var array
@@ -36,42 +48,29 @@ class Crm_Export_Csv extends Tinebase_Export_Csv
     protected $_specialFields = array('leadstate_id' => 'Leadstate', 'leadtype_id' => 'Leadtype', 'leadsource_id' => 'Leadsource');
     
     /**
-     * export leads to csv file
-     *
-     * @param Crm_Model_LeadFilter $_filter
-     * @return string filename
+     * get record relations
+     * 
+     * @var boolean
      */
-    public function generate(Crm_Model_LeadFilter $_filter, $_toStdout = FALSE) {
-        
-        $pagination = new Tinebase_Model_Pagination(array(
-            'start' => 0,
-            'limit' => 0,
-            'sort' => 'lead_name',
-            'dir' => 'ASC',
-        ));
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
-        
-        $leads = Crm_Controller_Lead::getInstance()->search($_filter, $pagination, TRUE, FALSE, 'export');
-        if (count($leads) < 1) {
-            throw new Tinebase_Exception_NotFound('No Leads found.');
-        }
-
-        $skipFields = array(
-            'id'                    ,
-            'created_by'            ,
-            'creation_time'         ,
-            'last_modified_by'      ,
-            'last_modified_time'    ,
-            'is_deleted'            ,
-            'deleted_time'          ,
-            'deleted_by'            ,
-        );
-        
-        $filename = $this->exportRecords($leads, $_toStdout, $skipFields);
-        return $filename;
-    }
+    protected $_getRelations = TRUE;    
     
+    /**
+     * fields to skip
+     * 
+     * @var array
+     */
+    protected $_skipFields = array(
+        'id'                    ,
+        'created_by'            ,
+        'creation_time'         ,
+        'last_modified_by'      ,
+        'last_modified_time'    ,
+        'is_deleted'            ,
+        'deleted_time'          ,
+        'deleted_by'            ,
+        'relations'             ,
+    );
+        
     /**
      * special field value function
      * 

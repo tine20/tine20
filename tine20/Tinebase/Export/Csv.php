@@ -1,25 +1,22 @@
 <?php
 /**
- * csv generation class
+ * Tinebase Csv Export class
  *
  * @package     Tinebase
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo        extend Tinebase_Export_Abstract
  */
 
 /**
- * defines the datatype for simple registration object
+ * Tinebase Csv Export class
  * 
  * @package     Tinebase
  * @subpackage	Export
- * 
  */
-class Tinebase_Export_Csv
+class Tinebase_Export_Csv extends Tinebase_Export_Abstract
 {
     /**
      * relation types
@@ -36,6 +33,29 @@ class Tinebase_Export_Csv
     protected $_specialFields = array();
     
     /**
+     * fields to skip
+     * 
+     * @var array
+     */
+    protected $_skipFields = array(
+        'id'                    ,
+        'created_by'            ,
+        'creation_time'         ,
+        'last_modified_by'      ,
+        'last_modified_time'    ,
+        'is_deleted'            ,
+        'deleted_time'          ,
+        'deleted_by'            ,
+    );
+    
+    /**
+     * write export to stdout?
+     * 
+     * @var boolean
+     */
+    protected $_toStdout = FALSE;
+    
+    /**
      * The php build in fputcsv function is buggy, so we need an own one :-(
      *
      * @param resource $filePointer
@@ -48,8 +68,10 @@ class Tinebase_Export_Csv
         $string = "";
         $writeDelimiter = false;
         foreach($dataArray as $dataElement) {
-            if($writeDelimiter) $string .= $delimiter;
-            $escapedDataElement = preg_replace("/$enclosure/", $escapeEnclosure . $enclosure , $dataElement);
+            if ($writeDelimiter) { 
+                $string .= $delimiter;
+            }
+            $escapedDataElement = (! is_array($dataElement)) ? preg_replace("/$enclosure/", $escapeEnclosure . $enclosure , $dataElement) : '';
             $string .= $enclosure . $escapedDataElement . $enclosure;
             $writeDelimiter = true;
         } 
@@ -59,83 +81,109 @@ class Tinebase_Export_Csv
     }
 
     /**
-     * export records to csv file
-     *
-     * @param Tinebase_Record_RecordSet $_records
-     * @param boolean $_toStdout
-     * @param array $_skipFields
-     * @return string filename
+     * generate export
      * 
-     * @todo add specific export values
+     * @return string|boolean filename
      */
-    public function exportRecords(Tinebase_Record_RecordSet $_records, $_toStdout = FALSE, $_skipFields = array()) {
-        
-        $filename = ($_toStdout) ? 'STDOUT' : Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.csv';
-        
-        if (count($_records) < 1) {
+    public function generate()
+    {
+        $records = $this->_getRecords();
+        $records->setTimezone(Tinebase_Core::get('userTimeZone'));
+        if (count($records) < 1) {
             return FALSE;
         }
-                
-        // to ensure the order of fields we need to sort it ourself!
-        $fields = array();
-        if (empty($_skipFields)) {
-            $skipFields = array(
-                'id'                    ,
-                'created_by'            ,
-                'creation_time'         ,
-                'last_modified_by'      ,
-                'last_modified_time'    ,
-                'is_deleted'            ,
-                'deleted_time'          ,
-                'deleted_by'            ,
-            );
-        } else {
-            $skipFields = $_skipFields;
+                        
+        $filename = $this->getDocument();
+        $filehandle = ($this->_toStdout) ? STDOUT : fopen($filename, 'w');
+        
+        $fields = $this->_getFields($records->getFirstRecord());
+        self::fputcsv($filehandle, $fields);
+        $this->_addBody($filehandle, $records, $fields);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exported ' . count($records) . ' records to csv file.');
+        
+        if (!$this->_toStdout) {
+            fclose($filehandle);
         }
         
-        foreach ($_records[0] as $fieldName => $value) {
-            if (! in_array($fieldName, $skipFields)) {
-                if ($fieldName == 'relations') {
-                    $this->_addRelationTypes($fields);
-                } else {
-                    $fields[] = $fieldName;
-                    if (in_array($fieldName, array_keys($this->_specialFields))) {
-                        // add special field headline afterwards
-                        $fields[] = $this->_specialFields[$fieldName];
-                    }
-                }
+        return $filename;
+    }
+
+    /**
+     * get record / export fields
+     * 
+     * @param Tinebase_Record_Abstract $_record
+     * @return array
+     */
+    protected function _getFields(Tinebase_Record_Abstract $_record)
+    {
+        $fields = array();
+        foreach (array_keys($_record->toArray()) as $key) {
+            $fields[] = $key;
+            if (in_array($key, array_keys($this->_specialFields))) {
+                $fields[] = $this->_specialFields[$key];
             }
         }
         
-        $filehandle = ($_toStdout) ? STDOUT : fopen($filename, 'w');
+        if ($_record->has('tags')) {
+            $fields[] = 'tags';
+        }
+        $fields = array_diff($fields, $this->_skipFields);
+        $fields = array_merge($fields, $this->_relationsTypes);
         
-        self::fputcsv($filehandle, $fields);
-        
-        // fill file with records
-        $_records->setTimezone(Tinebase_Core::get('userTimeZone'));
+        return $fields;
+    }
+    
+    /**
+     * add rows to csv body
+     * 
+     * @param handle $_filehandle
+     * @param Tinebase_Record_RecordSet $_records
+     * @param array $_fields
+     */
+    protected function _addBody($_filehandle, $_records, $_fields)
+    {
         foreach ($_records as $record) {
-            $recordArray = $record->toArray();
             $csvArray = array();
-            foreach ($fields as $fieldName) {
+            foreach ($_fields as $fieldName) {
                 if (in_array($fieldName, $this->_relationsTypes)) {
                     $csvArray[] = $this->_addRelations($record, $fieldName);
                 } else if (in_array($fieldName, $this->_specialFields)) {
                     $arrayFlipped = array_flip($this->_specialFields);
                     $csvArray[] = $this->_addSpecialValue($record, $arrayFlipped[$fieldName]);
+                } else if ($fieldName == 'tags') {
+                    $csvArray[] = $this->_getTags($record);
+                } else if ($fieldName == 'notes') {
+                    $csvArray[] = $this->_addNotes($record);
+                } else if ($fieldName == 'container_id') {
+                    $csvArray[] = $this->_getContainer($record, 'id');
                 } else {
-                    $csvArray[] = $recordArray[$fieldName];
+                    $csvArray[] = $record->{$fieldName};
                 }
             }
-            self::fputcsv($filehandle, $csvArray);
+            self::fputcsv($_filehandle, $csvArray);
         }
+    }
+    
+    /**
+     * get export document filename
+     * 
+     * @return string filename
+     */
+    public function getDocument()
+    {
+        return ($this->_toStdout) ? 'STDOUT' : Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.csv';
+    }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exported ' . count($_records) . ' records to csv file.');
-        
-        if (!$_toStdout) {
-            fclose($filehandle);
-        }
-        
-        return $filename;
+    /**
+     * get export config / csv export does not use export definitions atm
+     *
+     * @param array $_additionalOptions additional options
+     * @return Zend_Config_Xml
+     */
+    protected function _getExportConfig($_additionalOptions = array())
+    {
+        return new Zend_Config($_additionalOptions);
     }
     
     /**
@@ -146,91 +194,5 @@ class Tinebase_Export_Csv
     public function getDownloadContentType()
     {
         return 'text/csv';
-    }
-
-    /**
-     * return download filename
-     * 
-     * @param string $_appName
-     * @param string $_format
-     * 
-     * @todo remove this when we extend Tinebase_Export_Abstract
-     */
-    public function getDownloadFilename($_appName, $_format)
-    {
-        return 'export_' . strtolower($_appName) . '.' . $_format;
-    }
-        
-    /**
-     * add relation types
-     * 
-     * @param array $_fields
-     * @return void
-     */
-    protected function _addRelationTypes(array &$_fields)
-    {
-        if (count($this->_relationsTypes) > 0) {
-            foreach ($this->_relationsTypes as $type) {
-                $_fields[] = $type;
-            }
-        } else {
-            $_fields[] = 'relations';
-        }
-    }
-
-    /**
-     * add relation values from related records
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @return string
-     * 
-     * @todo    add index to recordset for type/fieldname?
-     */
-    protected function _addRelations(Tinebase_Record_Abstract $_record, $_fieldName)
-    {
-        $matchingRelations = $_record->relations->filter('type', $_fieldName);
-        
-        $result = '';
-        foreach ($matchingRelations as $relation) {
-            $result .= $this->_getSummary($relation->related_record);
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * add relation summary (such as n_fileas, title, ...)
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_type
-     * @return string
-     */
-    protected function _getSummary(Tinebase_Record_Abstract $_record)
-    {
-        $result = '';
-        switch(get_class($_record)) {
-            case 'Addressbook_Model_Contact':
-                $result = $_record->n_fileas . "\n";
-                break;
-            case 'Tasks_Model_Task':
-                $result = $_record->summary . "\n";
-                break;
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * special field value function
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @param string $_fieldName
-     * @return string
-     */
-    protected function _addSpecialValue(Tinebase_Record_Abstract $_record, $_fieldName)
-    {
-        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Should not be here.');
-        return '';
     }
 }

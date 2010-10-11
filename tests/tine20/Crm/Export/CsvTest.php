@@ -52,7 +52,7 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
      */
     protected function setUp()
     {
-        $this->_instance = new Crm_Export_Csv();
+        $this->_instance = new Crm_Export_Csv(new Crm_Model_LeadFilter($this->_getLeadFilter()), Crm_Controller_Lead::getInstance());
         parent::setUp();
     }
 
@@ -63,7 +63,7 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
      */
     public function testExportCsv()
     {
-        $csvFilename = $this->_instance->generate(new Crm_Model_LeadFilter($this->_getLeadFilter()));
+        $csvFilename = $this->_instance->generate();
         
         $export = file_get_contents($csvFilename);
         //echo $export;
@@ -71,13 +71,12 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         $translate = Tinebase_Translation::getTranslation('Crm');
         
         $defaultContainerId = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId();
-        $this->assertEquals('"lead_name","leadstate_id","Leadstate","leadtype_id","Leadtype","leadsource_id","Leadsource","container_id",'
-            . '"description","turnover","probability","start","end","end_scheduled","probableTurnover","CUSTOMER","PARTNER","RESPONSIBLE","TASK"
-"PHPUnit","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market') . '","' .$defaultContainerId . '","Description","200000","70","' . $this->_objects['lead']['start'] 
-            . '","","","140000","","Kneschke, Lars
-","","phpunit: crm test task
-"
-', $export);
+        $this->assertContains('"lead_name","leadstate_id","Leadstate","leadtype_id","Leadtype","leadsource_id","Leadsource","container_id",'
+            . '"description","turnover","probability","start","end","end_scheduled","probableTurnover","notes","tags","CUSTOMER","PARTNER","RESPONSIBLE","TASK"', $export, 'headline wrong');
+        $this->assertContains('"PHPUnit","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market') . '","' 
+            . $defaultContainerId . '","Description","200000","70","', $export, 'data wrong');
+        $this->assertContains('"Kneschke, Lars","","phpunit: crm test task"', $export, 'relations wrong');
+
         unlink($csvFilename);
     }
 }       

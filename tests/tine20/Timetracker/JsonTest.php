@@ -529,8 +529,8 @@ class Timetracker_JsonTest extends PHPUnit_Framework_TestCase
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
         
         // export & check
-        $csvExportClass = new Timetracker_Export_Csv();
-        $result = $csvExportClass->generate(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
+        $csvExportClass = new Timetracker_Export_Csv(new Timetracker_Model_TimesheetFilter($this->_getTimesheetFilter()));
+        $result = $csvExportClass->generate();
         
         $this->assertTrue(file_exists($result));
         

@@ -118,8 +118,8 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         $this->_instance = new Addressbook_Import_Csv($definition, Addressbook_Controller_Contact::getInstance(), $_options);
         
         // export first
-        $exporter = new Addressbook_Export_Csv();
-        $this->_filename = $exporter->generate($_exportFilter);
+        $exporter = new Addressbook_Export_Csv($_exportFilter, Addressbook_Controller_Contact::getInstance());
+        $this->_filename = $exporter->generate();
         
         // then import
         $result = $this->_instance->import($this->_filename);

@@ -46,11 +46,11 @@ class Tinebase_Export
                 throw new Tinebase_Exception_NotFound('No ' . $_format . ' export class found for ' . $appName . ' / ' . $model);
             }
         }
-        if ($_format == 'ods' || $_format == 'xls') {
-            $result = new $exportClass($_filter, $_controller, $_additionalOptions);
-        } else {
+        if ($_format == 'pdf') {
             // legacy
             $result = new $exportClass($_additionalOptions);
+        } else {
+            $result = new $exportClass($_filter, $_controller, $_additionalOptions);
         }
         
         return $result;
