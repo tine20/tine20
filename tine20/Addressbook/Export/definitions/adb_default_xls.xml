@@ -148,5 +148,9 @@
         <column>
             <identifier>lat</identifier>
         </column>
+        <column>
+            <identifier>tags</identifier>
+            <type>tags</type>
+        </column>
     </columns>
 </config>
