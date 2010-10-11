@@ -10,9 +10,9 @@
  *
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
  * @todo        add more conversions e.g. date/accounts
- * @todo        add tests for tags + notes
+ * @todo        add tests for notes
  * @todo        add more documentation
- * @todo        make it possible to import custom fields?
+ * @todo        make it possible to import custom fields
  */
 
 /**
