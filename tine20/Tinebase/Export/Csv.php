@@ -129,6 +129,8 @@ class Tinebase_Export_Csv
             self::fputcsv($filehandle, $csvArray);
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exported ' . count($_records) . ' records to csv file.');
+        
         if (!$_toStdout) {
             fclose($filehandle);
         }
