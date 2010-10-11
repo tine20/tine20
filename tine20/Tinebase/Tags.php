@@ -279,7 +279,7 @@ class Tinebase_Tags
             ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
         $tags = $this->getTagsById($_ids);
         if (count($tags) != count((array)$_ids)) {
-            throw new Tinebase_Exception_AccessDenied('You are not allowed to delete this tags');
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to delete the tag(s).');
         }
         
         foreach ($tags as $tag) {
