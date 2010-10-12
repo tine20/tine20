@@ -299,8 +299,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
             return $_folderCounts;
         }
         
