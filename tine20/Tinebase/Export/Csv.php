@@ -8,6 +8,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        use export definitions
  */
 
 /**
@@ -93,7 +95,7 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract
             return FALSE;
         }
                         
-        $filename = $this->getDocument();
+        $filename = $this->_getFilename();
         $filehandle = ($this->_toStdout) ? STDOUT : fopen($filename, 'w');
         
         $fields = $this->_getFields($records->getFirstRecord());
@@ -166,11 +168,11 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract
     }
     
     /**
-     * get export document filename
+     * get export filename
      * 
      * @return string filename
      */
-    public function getDocument()
+    public function _getFilename()
     {
         return ($this->_toStdout) ? 'STDOUT' : Tinebase_Core::getTempDir() . DIRECTORY_SEPARATOR . md5(uniqid(rand(), true)) . '.csv';
     }

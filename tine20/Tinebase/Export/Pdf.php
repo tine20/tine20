@@ -10,8 +10,8 @@
  * @version     $Id$
  * 
  * @todo        extend Tinebase_Export_Abstract
+ * @todo        use export definition
  */
-
 
 /**
  * defines the datatype for simple registration object
@@ -278,11 +278,11 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
         
         // create table
         if ( !empty($data) ) {
-            $this->_CreateTable($data, 50, 710, $_tableBorder);
+            $this->_createTable($data, 50, 710, $_tableBorder);
         }
                 
         // write footer
-        $this->_CreateFooter();
+        $this->_createFooter();
         
         // increase page number
         $this->_pageNumber++;
@@ -322,7 +322,7 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
      * @param   bool    $_border    activate border
      * 
      */
-    protected function _CreateTable ( $_content, $_posX = 100, $_posY = 700, $_border = true )
+    protected function _createTable($_content, $_posX = 100, $_posY = 700, $_border = true)
     {
         $cellWidth = 150;
         $padding = 5;
@@ -413,9 +413,8 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	
 	/**
      * create footer on all pages
-     * 
 	 */
-	protected function _CreateFooter ()
+	protected function _createFooter()
 	{
 		// get translations from tinebase
 		$translate = Tinebase_Translation::getTranslation('Tinebase');
