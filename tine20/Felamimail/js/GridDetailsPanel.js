@@ -158,6 +158,10 @@ Ext.namespace('Tine.Felamimail');
             },
             
             showFrom: function(email, name, addText, qtip) {
+                if (name === null) {
+                    return '';
+                }
+                
                 var result = this.encode(name + ' <' + email + '>');
                 
                 // add link with 'add to contacts'
