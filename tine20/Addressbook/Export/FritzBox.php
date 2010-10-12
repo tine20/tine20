@@ -1,4 +1,22 @@
 <?php
+/**
+ * Addressbook_Export_FritzBox
+ *
+ * @package     Addressbook
+ * @subpackage  Export
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ */
+
+/**
+ * Addressbook_Export_FritzBox
+ * 
+ * @package     Addressbook
+ * @subpackage  Export
+ */
 class Addressbook_Export_FritzBox extends Tinebase_Export_Abstract
 {
     /**
@@ -73,13 +91,6 @@ class Addressbook_Export_FritzBox extends Tinebase_Export_Abstract
         $this->_writer->endDocument();
         $this->_writer->flush();
     }
-     
-    /**
-     * get export document object
-     * 
-     * @return Object the generated document
-     */
-    public function getDocument() {}
     
     /**
      * get download content type
@@ -90,5 +101,4 @@ class Addressbook_Export_FritzBox extends Tinebase_Export_Abstract
     {
         return 'text/xml';
     }
-    
 }
