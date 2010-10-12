@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>3.31</version>
+    <version>3.4</version>
     <order>10</order>
     <depends>
         <application>Admin</application>

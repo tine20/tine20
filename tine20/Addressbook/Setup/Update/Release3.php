@@ -96,6 +96,6 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         $where = $salutationTable->getAdapter()->quoteInto('gender = ?', 'other');
         $salutationTable->update(array('image_path' => 'images/empty_photo_company.png'), $where);
         
-        $this->setApplicationVersion('Addressbook', '3.31');
+        $this->setApplicationVersion('Addressbook', '3.4');
     }
 }
