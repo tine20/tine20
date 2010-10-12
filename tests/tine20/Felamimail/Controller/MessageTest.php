@@ -710,7 +710,18 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
         $this->assertEquals('2.1', $cachedMessage->html_partid, 'did not find all partIds');
     }
-            
+
+    /**
+     * testGetMessageWithoutFromHeader
+     */
+    public function testGetMessageWithoutFromHeader()
+    {
+        $cachedMessage = $this->_messageTestHelper('withoutfrom.eml', 'text/withoutfrom');
+        $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertContains('Hier ist Ihr Hot Web Email-Deal Angebot von M&amp;M Computer.', $completeMessage->body);
+    }
+    
     /********************************* protected helper funcs *************************************/
     
     /**
