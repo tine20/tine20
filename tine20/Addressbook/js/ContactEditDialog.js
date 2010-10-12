@@ -94,6 +94,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 displayField: 'name',
                                 valueField: 'id',
                                 triggerAction: 'all',
+                                forceSelection: true,
                                 listeners: {
                                 	scope: this,
                                 	'select': function (combo, record, index) {
