@@ -69,4 +69,33 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('addressbook', '8');
         $this->setApplicationVersion('Addressbook', '3.3');
     }
+    
+    /**
+     * add salutation image path
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>image_path</name>
+                <type>text</type>
+                <length>255</length>
+            </field>');
+        $this->_backend->addCol('addressbook_salutations', $declaration);
+        $this->setTableVersion('addressbook_salutations', '2');
+        
+        // update image paths
+        $salutationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook_salutations'));
+        
+        $where = $salutationTable->getAdapter()->quoteInto('gender = ?', 'male');
+        $salutationTable->update(array('image_path' => 'images/empty_photo_male.png'), $where);
+        
+        $where = $salutationTable->getAdapter()->quoteInto('gender = ?', 'female');
+        $salutationTable->update(array('image_path' => 'images/empty_photo_female.png'), $where);
+        
+        $where = $salutationTable->getAdapter()->quoteInto('gender = ?', 'other');
+        $salutationTable->update(array('image_path' => 'images/empty_photo_company.png'), $where);
+        
+        $this->setApplicationVersion('Addressbook', '3.31');
+    }
 }

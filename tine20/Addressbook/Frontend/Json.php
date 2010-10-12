@@ -196,10 +196,19 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _getImageLink($contact)
     {
-        if (!empty($contact->jpegphoto)) {
-            $link =  'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contact['id'] . '&width=90&height=90&ratiomode=0';
+        if (! empty($contact->jpegphoto)) {
+            $link = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contact['id'] . '&width=90&height=90&ratiomode=0';
         } else {
-            $link = 'images/empty_photo.png';
+        	if (isset($contact['salutation_id']) && $contact['salutation_id']) {
+        		$salutation = Addressbook_Controller_Salutation::getInstance()->getSalutation($contact['salutation_id'])->toArray();
+				$link = $salutation['image_path'];	
+				if (empty($link)) {
+					$link = 'images/empty_photo_blank.png';
+				}
+        	}
+        	else {        	
+            	$link = 'images/empty_photo_blank.png';
+        	}
         }
         return $link;
     }

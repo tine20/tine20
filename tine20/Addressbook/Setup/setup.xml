@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>3.3</version>
+    <version>3.31</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -469,7 +469,7 @@
         </table>
         <table>
             <name>addressbook_salutations</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -490,6 +490,11 @@
                     <value>female</value>
                     <value>other</value>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>image_path</name>
+                    <type>text</type>
+                    <length>255</length>
                 </field>
                 <index>
                     <name>id</name>
@@ -577,6 +582,10 @@
                 <name>gender</name>
                 <value>male</value>
             </field>
+            <field>
+                <name>image_path</name>
+                <value>images/empty_photo_male.png</value>
+            </field>
         </record>
         <record>
             <table>
@@ -595,6 +604,10 @@
                 <name>gender</name>
                 <value>female</value>
             </field>
+            <field>
+                <name>image_path</name>
+                <value>images/empty_photo_female.png</value>
+            </field>
         </record>
         <record>
             <table>
@@ -612,6 +625,10 @@
             <field>
                 <name>gender</name>
                 <value>other</value>
+            </field>
+            <field>
+                <name>image_path</name>
+                <value>images/empty_photo_company.png</value>
             </field>
         </record>
     </defaultRecords>

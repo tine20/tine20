@@ -6,6 +6,9 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
+ 
+/*global Ext, Tine*/
+ 
 Ext.ns('Tine.Addressbook.Model');
 
 
@@ -23,7 +26,7 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'n_suffix', label: 'Suffix' }, //_('Suffix')
     {name: 'n_fn', label: 'Display Name' }, //_('Display Name')
     {name: 'n_fileas' },
-    {name: 'bday', label: 'Birthday' , type: 'date', dateFormat: Date.patterns.ISO8601Long }, //_('Birthday')
+    {name: 'bday', label: 'Birthday', type: 'date', dateFormat: Date.patterns.ISO8601Long }, //_('Birthday')
     {name: 'org_name', label: 'Company' }, //_('Company')
     {name: 'org_unit', label: 'Unit' }, //_('Unit')
     {name: 'salutation_id', label: 'Salutation' }, //_('Salutation')
@@ -165,9 +168,9 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('City') + ' (' + app.i18n._('Private Address') + ')',        field: 'adr_two_locality'},
         {label: app.i18n._('Type'), defaultValue: 'contact', valueType: 'combo',        field: 'type',               store: typeStore},
         {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},
-        {label: app.i18n._('Last modifier'),                                            field: 'last_modified_by', valueType: 'user'},
-        {label: app.i18n._('Creation Time'),                                            field: 'creation_time', valueType: 'date'},
-        {label: app.i18n._('Creator'),                                                  field: 'created_by', valueType: 'user'}
+        {label: app.i18n._('Last modifier'),                                            field: 'last_modified_by', 	 valueType: 'user'},
+        {label: app.i18n._('Creation Time'),                                            field: 'creation_time', 	 valueType: 'date'},
+        {label: app.i18n._('Creator'),                                                  field: 'created_by', 		 valueType: 'user'}
     ];
 };
     
@@ -184,9 +187,10 @@ Tine.Addressbook.contactBackend = new Tine.Tinebase.data.RecordProxy({
  * salutation model
  */
 Tine.Addressbook.Model.Salutation = Ext.data.Record.create([
-   {name: 'id'},
-   {name: 'name'},
-   {name: 'gender'}
+	{name: 'id'},
+	{name: 'name'},
+	{name: 'gender'},
+	{name: 'image_path'}
 ]);
 
 
@@ -196,11 +200,10 @@ Tine.Addressbook.Model.Salutation = Ext.data.Record.create([
  * 
  * @return Ext.data.JsonStore with salutations
  */
-Tine.Addressbook.getSalutationStore = function() {
+Tine.Addressbook.getSalutationStore = function () {
     
     var store = Ext.StoreMgr.get('AddressbookSalutationStore');
-    if (!store) {
-
+    if (! store) {
         store = new Ext.data.JsonStore({
             fields: Tine.Addressbook.Model.Salutation,
             baseParams: {
@@ -215,7 +218,6 @@ Tine.Addressbook.getSalutationStore = function() {
         if (Tine.Addressbook.registry.get('Salutations')) {
             store.loadData(Tine.Addressbook.registry.get('Salutations'));
         }
-        
             
         Ext.StoreMgr.add('AddressbookSalutationStore', store);
     }

@@ -69,6 +69,7 @@ class Addressbook_Model_Salutation extends Tinebase_Record_Abstract
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => NULL),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => false),
         'gender'                => array('InArray' => array(self::GENDER_MALE, self::GENDER_FEMALE, self::GENDER_OTHER)),
+        'image_path'            => array(Zend_Filter_Input::ALLOW_EMPTY => false)
     );    
 
     /**
