@@ -1,0 +1,147 @@
+<?php
+/**
+ * Tinebase Abstract spreadsheet export class
+ *
+ * @package     Tinebase
+ * @subpackage	Export
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
+ * 
+ */
+
+/**
+ * Tinebase Abstract spreadsheet export class
+ * 
+ * @package     Tinebase
+ * @subpackage	Export
+ * 
+ */
+abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abstract
+{
+    /**
+     * get export document object
+     * 
+     * @return Object the generated document
+     */
+    abstract public function getDocument();
+    
+    /**
+     * get cell value
+     * 
+     * @param Zend_Config $_field
+     * @param Tinebase_Record_Interface $_record
+     * @param string $_cellType
+     * @return string
+     * 
+     * @todo check string type for translated fields?
+     * @todo add 'config' type again?
+     */
+    protected function _getCellValue(Zend_Config $_field, Tinebase_Record_Interface $_record, &$_cellType)
+    {
+        $result = NULL;
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_field->toArray(), TRUE));
+        
+        if (in_array($_field->type, $this->_specialFields)) {
+            // special field handling
+            $result = $this->_getSpecialFieldValue($_record, $_field->toArray(), $_field->identifier, $_cellType);
+            $result = $this->_replaceAndMatchvalue($result, $_field);
+            return $result;
+            
+        } else if (isset($field->formula) 
+            || (! isset($_record->{$_field->identifier}) 
+                && ! in_array($_field->type, $this->_resolvedFields) 
+                && ! isset($_field->custom)
+            )
+        ) {
+            // check if empty -> use alternative field
+            if (isset($_field->empty)) {
+                $fieldConfig = $_field->toArray();
+                unset($fieldConfig['empty']);
+                $fieldConfig['identifier'] = $_field->empty;
+                $result = $this->_getCellValue(new Zend_Config($fieldConfig), $_record, $_cellType);
+            }            
+            // don't add value for formula or undefined fields
+            return $result;
+        }
+        
+        switch($_field->type) {
+            case 'datetime':
+                $result = $_record->{$_field->identifier}->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale);
+                // empty date cells, get displayed as 30.12.1899
+                if(empty($result)) {
+                    $result = NULL;
+                }
+                break;
+            case 'date':
+                $result = ($_record->{$_field->identifier} instanceof Zend_Date) ? $_record->{$_field->identifier}->toString('yyyy-MM-dd') : $_record->{$_field->identifier};
+                // empty date cells, get displayed as 30.12.1899
+                if(empty($result)) {
+                    $result = NULL;
+                }
+                break;
+            case 'tags':
+                $result = $this->_getTags($_record);
+                break;
+            case 'currency':
+                $currency = ($_field->currency) ? $_field->currency : 'EUR';
+                $result =  ($_record->{$_field->identifier}) ? $_record->{$_field->identifier} : '0';
+                $result .= ' ' . $currency;
+                break;
+            case 'percentage':
+                $result    = $_record->{$_field->identifier} / 100;
+                break;
+            case 'container_id':
+                $result = $this->_getContainer($_record, $_field->field, $_field->type);
+                break;
+                /*
+            case 'config':
+                $result = Tinebase_Config::getOptionString($_record, $_field->identifier);
+                break;
+                */
+            case 'relation':
+                $result = $this->_addRelations($_record, $_field->identifier, $_field->field);
+                break;
+            case 'notes':
+                $result = $this->_addNotes($_record);
+                break;
+            default:
+                if (isset($_field->custom) && $_field->custom) {
+                    // add custom fields
+                    if (isset($_record->customfields[$_field->identifier])) {
+                        $result = $_record->customfields[$_field->identifier];
+                    }
+                    
+                } elseif (isset($_field->divisor)) {
+                    // divisor
+                    $result = $_record->{$_field->identifier} / $_field->divisor;
+                } elseif (in_array($_field->type, $this->_userFields)) {
+                    // resolved user
+                    $result = (! empty($_record->{$_field->type})) ? $_record->{$_field->type}->{$_field->field} : '';
+                } else {
+                    // all remaining
+                    $result = $_record->{$_field->identifier};
+                }
+                
+                // set special value from params
+                if (isset($_field->values)) {
+                    $values = $_field->values->value->toArray();
+                    if (isset($values[$result])) {
+                        $result = $values[$result];
+                    }
+                }
+                
+                // translate strings
+                if (isset($_field->translate) && $_field->translate/* && $_cellType === OpenDocument_SpreadSheet_Cell::TYPE_STRING*/) {
+                    $result = $this->_translate->_($result);
+                }
+                
+                // do replacements
+                $result = $this->_replaceAndMatchvalue($result, $_field);
+        }
+        
+        return $result;
+    }
+}

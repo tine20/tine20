@@ -17,7 +17,7 @@
  * @package     Crm
  * @subpackage  Export
  */
-class Crm_Export_Xls extends Tinebase_Export_Xls
+class Crm_Export_Xls extends Tinebase_Export_Spreadsheet_Xls
 {
     /**
      * @var string $_applicationName

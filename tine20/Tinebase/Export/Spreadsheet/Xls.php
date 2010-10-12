@@ -7,12 +7,12 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Ods.php 10912 2009-10-12 14:40:25Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  */
 
 // set include path for phpexcel
-set_include_path(dirname(dirname(dirname(__FILE__))) . '/library/PHPExcel' . PATH_SEPARATOR . get_include_path() );
+set_include_path(dirname(dirname(dirname(dirname(__FILE__)))) . '/library/PHPExcel' . PATH_SEPARATOR . get_include_path() );
 
 /**
  * Tinebase xls generation class
@@ -21,7 +21,7 @@ set_include_path(dirname(dirname(dirname(__FILE__))) . '/library/PHPExcel' . PAT
  * @subpackage  Export
  * 
  */
-class Tinebase_Export_Xls extends Tinebase_Export_Abstract
+class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstract
 {
     /**
      * current row number

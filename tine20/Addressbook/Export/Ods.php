@@ -18,7 +18,7 @@
  * @subpackage	Export
  * 
  */
-class Addressbook_Export_Ods extends Tinebase_Export_Ods
+class Addressbook_Export_Ods extends Tinebase_Export_Spreadsheet_Ods
 {
     /**
      * @var string application of this export class

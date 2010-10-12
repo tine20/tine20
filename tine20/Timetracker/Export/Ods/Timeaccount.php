@@ -16,7 +16,7 @@
  * @package     Timetracker
  * @subpackage  Export
  */
-class Timetracker_Export_Ods_Timeaccount extends Tinebase_Export_Ods
+class Timetracker_Export_Ods_Timeaccount extends Tinebase_Export_Spreadsheet_Ods
 {
     /**
      * default export definition name

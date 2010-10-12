@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage	Export
  */
-class Tinebase_Export_Ods extends Tinebase_Export_Abstract
+class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstract
 {
     /**
      * user styles

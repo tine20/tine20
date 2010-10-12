@@ -18,7 +18,7 @@
  * @subpackage	Export
  * 
  */
-class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Ods
+class Timetracker_Export_Ods_Timesheet extends Tinebase_Export_Spreadsheet_Ods
 {
     /**
      * @var string application of this export class
