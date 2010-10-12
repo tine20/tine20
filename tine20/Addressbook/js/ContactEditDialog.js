@@ -4,7 +4,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -100,7 +100,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 	'select': function (combo, record, index) {
                                 		var jpegphoto = this.getForm().findField('jpegphoto');
                                 		
-                                		// set new empty photo depending on choosen salutation only if user doen't have own image
+                                		// set new empty photo depending on chosen salutation only if user doesn't have own image
                                 		if (Ext.isEmpty(jpegphoto.getValue()) && ! Ext.isEmpty(record.get('image_path'))) {
                                 			jpegphoto.setDefaultImage(record.get('image_path'));
                                 		}
