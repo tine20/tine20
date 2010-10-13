@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
  
@@ -11,12 +11,10 @@
  
 Ext.ns('Tine.Addressbook.Model');
 
-
-// todo: move this into model definition and replce uscases with getter fn
-Tine.Addressbook.Model.ContactArray = [
+// TODO: move this into model definition and replace uscases (?) with getter fn
+Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'id'},
     {name: 'tid'},
-    {name: 'container_id'},
     {name: 'private'},
     {name: 'cat_id'},
     {name: 'n_family', label: 'Last Name' },//_('Last Name')
@@ -69,13 +67,6 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'lon'},
     {name: 'lat'},
     {name: 'pubkey'},
-    {name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    {name: 'created_by'},
-    {name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    {name: 'last_modified_by'},
-    {name: 'is_deleted',         type: 'boolean'              },
-    {name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    {name: 'deleted_by',         type: 'int'                  },
     {name: 'jpegphoto'},
     {name: 'account_id'},
     {name: 'tags'},
@@ -83,7 +74,7 @@ Tine.Addressbook.Model.ContactArray = [
     {name: 'relations'},
     {name: 'customfields'},
     {name: 'type'}
-];
+]);
 
 /**
  * @namespace   Tine.Addressbook.Model
