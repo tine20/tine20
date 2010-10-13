@@ -167,8 +167,9 @@ Tine.Tinebase.common = {
      * @param {object} account object 
      * @return {string} formated user display name
      */
-    usernameRenderer: function(_accountObject, _metadata, _record, _rowIndex, _colIndex, _store){
-        return Ext.util.Format.htmlEncode(_accountObject.accountDisplayName);
+    usernameRenderer: function(accountObject){
+        var result = (accountObject) ? accountObject.accountDisplayName : '';
+        return Ext.util.Format.htmlEncode(result);
     },
     
     /**
