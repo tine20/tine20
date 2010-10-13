@@ -69,23 +69,35 @@ class Setup_Initialize
      */
     protected function _createInitialRights(Tinebase_Model_Application $_application)
     {   
-    	$roles = Tinebase_Acl_Roles::getInstance();
-    	$userRole = $roles->getRoleByName('user role');
-        //run right for user role
-		$roles->addSingleRight(
-		    $userRole->getId(), 
-		    $_application->getId(), 
-		    Tinebase_Acl_Rights::RUN
-		);
+    	try {
+	    	$roles = Tinebase_Acl_Roles::getInstance();
+	    	$userRole = $roles->getRoleByName('user role');
+	        //run right for user role
+			$roles->addSingleRight(
+			    $userRole->getId(), 
+			    $_application->getId(), 
+			    Tinebase_Acl_Rights::RUN
+			);
+    	} catch(Exception $e) {
+    		Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Cannot add right: ' . Tinebase_Acl_Rights::RUN . ' for application: ' . $_application->name . 
+    			' - user role - ' . print_r($e->getMessage(), true)
+    		);
+    	}
 		
-		$adminRole = $roles->getRoleByName('admin role');
-		$allRights = Tinebase_Application::getInstance()->getAllRights($_application->getId());
-		foreach ( $allRights as $right ) {
-		    $roles->addSingleRight(
-		        $adminRole->getId(), 
-		        $_application->getId(), 
-		        $right
-		    );
+		try {
+			$adminRole = $roles->getRoleByName('admin role');
+			$allRights = Tinebase_Application::getInstance()->getAllRights($_application->getId());
+			foreach ( $allRights as $right ) {
+			    $roles->addSingleRight(
+			        $adminRole->getId(), 
+			        $_application->getId(), 
+			        $right
+			    );
+			}
+		} catch(Exception $e) {
+			Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Cannot add all right rights for application: ' . $_application->name . 
+    			' - admin role - ' . print_r($e->getMessage(), true)
+    		);
 		}
     }
 
