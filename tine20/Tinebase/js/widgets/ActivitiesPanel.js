@@ -361,13 +361,12 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
         this.translation.textdomain('Tinebase');
 
         // get types for split button
-        var subMenu = [];
-        var typesStore = Tine.widgets.activities.getTypesStore();
-        var defaultTypeRecord = typesStore.getAt(typesStore.find('is_user_type', '1')); 
+        var subMenu = [],
+        	typesStore = Tine.widgets.activities.getTypesStore(),
+        	defaultTypeRecord = typesStore.getAt(typesStore.find('is_user_type', '1')); 
         
         typesStore.each(function (record) {
-            if (record.data.is_user_type === 1) {
-            	
+            if (record.data.is_user_type === '1') {
                 var action = new Ext.Action({
                     requiredGrant: 'editGrant',
                     text: String.format(this.translation.gettext('Add a {0} Note'), record.data.name),
