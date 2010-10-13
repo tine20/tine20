@@ -500,14 +500,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         try {
             $result = Felamimail_Backend_ImapFactory::factory($_account);
         } catch (Zend_Mail_Storage_Exception $zmse) {
-            $message = 'Wrong user credentials ... ' . '(' . $zmse->getMessage() . ')';
+            $message = 'Wrong user credentials (' . $zmse->getMessage() . ')';
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            $message =  'No connection to imap server ...' . '(' . $zmpe->getMessage() . ')';
+            $message =  'No connection to imap server (' . $zmpe->getMessage() . ')';
         } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
-            $message = 'Wrong user credentials ... ' . '(' . $feiic->getMessage() . ')';
+            $message = 'Wrong user credentials (' . $feiic->getMessage() . ')';
         }
         
         if (! $result) {
+            $message .= ' for account ' . $_account->name;
+            
             if ($_throwException) {
                 throw (isset($feiic)) ? $feiic : new Felamimail_Exception_IMAP($message);
             } else {
