@@ -643,11 +643,16 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($messageToCache->toArray(), TRUE));
         
-        $createdMessage = $this->_backend->create($messageToCache);
-
-        // store haeders in cache / we need them later anyway
-        $cacheId = 'getMessageHeaders' . $createdMessage->getId();
-        Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
+        try {
+            $result = $this->_backend->create($messageToCache);
+            // store headers in cache / we need them later anyway
+            $cacheId = 'getMessageHeaders' . $result->getId();
+            Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // perhaps we already have this message in our cache (duplicate)
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
+            $result = $messageToCache;
+        }
         
         if ($_updateFolderCounter == true) {
             Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
@@ -667,7 +672,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         */
 
-        return $createdMessage;
+        return $result;
     }
     
     /**
