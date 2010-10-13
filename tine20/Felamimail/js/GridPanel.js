@@ -385,12 +385,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             hidden: true
         }, {
             id: 'content_type',
+            header: this.app.i18n._("Attachments"),
             width: 12,
             sortable: true,
             dataIndex: 'content_type',
             renderer: this.attachmentRenderer
         }, {
             id: 'flags',
+            header: this.app.i18n._("Flags"),
             width: 24,
             sortable: true,
             dataIndex: 'flags',
