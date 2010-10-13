@@ -15,12 +15,12 @@ Ext.ns('Tine.Tinebase.Model');
 Tine.Tinebase.Model.genericFields = [
     { name: 'container_id', header: 'Container'                                     },
     { name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'created_by',         type: 'int'                  },
+    { name: 'created_by'},
     { name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'last_modified_by',   type: 'int'                  },
+    { name: 'last_modified_by'},
     { name: 'is_deleted',         type: 'boolean'              },
     { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'deleted_by',         type: 'int'                  }
+    { name: 'deleted_by'}
 ];
     
 /**
