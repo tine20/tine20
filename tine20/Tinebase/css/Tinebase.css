@@ -432,7 +432,6 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/user-female.png) !important;
 }
 
-
 .tinebase-accounttype-group {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
@@ -443,7 +442,6 @@ html, body {
     background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
 }
 
-
 .tinebase-accounttype-addanyone {
     background-image:url(../../images/oxygen/16x16/actions/users.png) !important;
 }
@@ -453,7 +451,6 @@ html, body {
 .x-btn-large .tinebase-accounttype-addanyone {
     background-image:url(../../images/oxygen/32x32/actions/users.png) !important;
 }
-
 
 /* ----- notes ------------------------------------------------------------*/
 .notes_noteIcon {
@@ -466,7 +463,6 @@ html, body {
    background-image:url(../../images/oxygen/32x32/actions/note.png) !important;
 }
 
-
 .notes_telephoneIcon {
    background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;
 }
@@ -477,6 +473,15 @@ html, body {
    background-image:url(../../images/oxygen/32x32/apps/kcall.png) !important;
 }
 
+.notes_emailIcon {
+   background-image:url(../../images/oxygen/16x16/actions/kontact-mail.png) !important;
+}
+.x-btn-medium .notes_emailIcon {
+   background-image:url(../../images/oxygen/22x22/actions/kontact-mail.png) !important;
+}
+.x-btn-large .notes_emailIcon {
+   background-image:url(../../images/oxygen/32x32/actions/kontact-mail.png) !important;
+}
 
 .descriptionIcon {
    background-image:url(../../images/oxygen/16x16/apps/kwrite.png) !important;
