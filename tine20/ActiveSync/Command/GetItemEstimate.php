@@ -105,12 +105,24 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
                 
                 if($collectionData['syncKeyValid'] !== true) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey ${collectionData['syncKey']} provided");
-                    $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_SYNC_KEY));
+                    /*
+                     * Android phones (and maybe others) don't take care about status 4(INVALID_SYNC_KEY)
+                     * To solve the problem we always return status 1(SUCCESS) even the sync key is invalid with Estimate set to 1.
+                     * This way the phone gets forced to sync. Handling invalid synckeys during sync command works without any problems.
+                     * 
+                        $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_INVALID_SYNC_KEY));
+                        $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));  
+                        $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));
+                     */
+                                                                  
+                    $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Status', self::STATUS_SUCCESS));
                     $collection = $response->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Collection'));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Class', $collectionData['class']));
                     $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'CollectionId', $collectionData['collectionId']));  
-                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 0));                                              
-                } else {
+                    $collection->appendChild($this->_outputDom->createElementNS('uri:ItemEstimate', 'Estimate', 1));                                              
+            } else {
                     $dataController = ActiveSync_Controller::dataFactory($collectionData['class'], $this->_device, $this->_syncTimeStamp);
                     
                     try {
