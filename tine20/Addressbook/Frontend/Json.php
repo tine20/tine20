@@ -165,25 +165,17 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
-    
 
     /**
      * returns contact prepared for json transport
      *
      * @param Addressbook_Model_Contact $_contact
      * @return array contact data
-     * 
-     * @deprecated
      */
     protected function _contactToJson($_contact)
     {   
-        $_contact->setTimezone(Tinebase_Core::get('userTimeZone'));
-        $result = $_contact->toArray();
-        
-        $result['container_id'] = Tinebase_Container::getInstance()->getContainerById($_contact->container_id)->toArray();
-        $result['container_id']['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::get('currentAccount'), $_contact->container_id)->toArray();
-        
-        $result['jpegphoto'] = $this->_getImageLink($_contact);
+        $result = parent::_recordToJson($_contact);
+        $result['jpegphoto'] = $this->_getImageLink($result);
         
         return $result;
     }
@@ -191,16 +183,16 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns a image link
      * 
-     * @param  Addressbook_Model_Contact|array
+     * @param  array $contactArray
      * @return string
      */
-    protected function _getImageLink($contact)
+    protected function _getImageLink($contactArray)
     {
-        if (! empty($contact['jpegphoto'])) {
-            $link = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contact['id'] . '&width=90&height=90&ratiomode=0';
+        if (! empty($contactArray['jpegphoto'])) {
+            $link = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contactArray['id'] . '&width=90&height=90&ratiomode=0';
         } else {
-        	if (isset($contact['salutation_id']) && $contact['salutation_id']) {
-        		$salutation = Addressbook_Controller_Salutation::getInstance()->getSalutation($contact['salutation_id'])->toArray();
+        	if (isset($contactArray['salutation_id']) && $contactArray['salutation_id']) {
+        		$salutation = Addressbook_Controller_Salutation::getInstance()->getSalutation($contactArray['salutation_id'])->toArray();
 				$link = $salutation['image_path'];	
 				if (empty($link)) {
 					$link = 'images/empty_photo_blank.png';
