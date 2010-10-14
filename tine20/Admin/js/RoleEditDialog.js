@@ -361,7 +361,7 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             scope: this
 		}]);
 
-        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(Tine.Tinebase.translation.gettext('Transfering {0}...'), this.translation.gettext('Role'))});
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(Tine.Tinebase.translation.gettext('Transferring {0}...'), this.translation.gettext('Role'))});
 		this.loadMask.show();
     },
     

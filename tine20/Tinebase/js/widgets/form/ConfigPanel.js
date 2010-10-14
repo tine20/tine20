@@ -130,7 +130,7 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
         
         Tine.Setup.registry.on('replace', this.applyRegistryState, this);
         
-        this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Transfering Configuration...')});
+        this.loadMask = new Ext.LoadMask(ct, {msg: this.app.i18n._('Transferring Configuration...')});
     },
     
     /**

@@ -617,7 +617,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             }
         ]);
 
-        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transfering {0}...'), this.translation.gettext('Tag'))});
+        this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.translation.gettext('Tag'))});
        	this.loadMask.show();
     },
     
