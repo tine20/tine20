@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-10-14 19:42+0100\n"
+"PO-Revision-Date: 2010-10-15 18:51+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -107,11 +107,11 @@ msgstr "Odznacz wszystko"
 
 #: js/ux/grid/PagingToolbar.js:51
 msgid "Select all visible ({0} records)"
-msgstr "Zaznacz wszystkie widoczne ({0} wiersze/y)"
+msgstr "Zaznacz wszystkie widoczne ({0} wiersze /-y)"
 
 #: js/ux/grid/PagingToolbar.js:52
 msgid "Select all pages ({0} records)"
-msgstr "Zaznacz wszystkie strony ({0} wiersze/y)"
+msgstr "Zaznacz wszystkie strony ({0} wiersze /-y)"
 
 #: js/ux/grid/PagingToolbar.js:53
 msgid "Toggle selection"
@@ -1428,7 +1428,7 @@ msgstr "Notatki"
 
 #: js/widgets/ActivitiesPanel.js:283
 msgid "Enter new note:"
-msgstr "Wpisz tekst nowej notatki:"
+msgstr "Napisz nową notatkę"
 
 #: js/widgets/ActivitiesPanel.js:320
 #: js/widgets/ActivitiesPanel.js:386
