@@ -94,7 +94,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     initComponent: function() {
         
-        //this.view = new Ext.grid.GridView({});
         this.initStore();
         this.initColumnModel();
         this.initActions();
@@ -119,9 +118,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initStore: function() {
-        //this.store = new Ext.data.JsonStore({
         this.store = new Ext.data.SimpleStore({
-            //id       : 'id',
             fields   : ['type', 'address']
         });
         
@@ -144,7 +141,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 resizable: true,
                 id: 'type',
                 dataIndex: 'type',
-                width: 80,
+                width: 103,
                 menuDisabled: true,
                 header: 'type',
                 renderer: function(value) {
@@ -181,7 +178,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 menuDisabled: true,
                 id: 'address',
                 dataIndex: 'address',
-                width: 40,
                 header: 'address',
                 editor: new Tine.Felamimail.ContactSearchCombo({})
             }
@@ -251,7 +247,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.store.add(new Ext.data.Record({type: o.record.data.type, 'address': ''}));
                 this.store.commitChanges();
                 this.startEditing(o.row +1, o.column);
-            }            
+            } else if (o.value == '') {
+                this.store.remove(o.record);
+            }
+            this.ownerCt.doLayout();
         }
     },    
     
@@ -266,7 +265,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.store.remove(record);
                 this.store.fireEvent('update', this.store);
             }
-        });
+        }, this);
+        this.ownerCt.doLayout();
     },
     
     /**
@@ -374,3 +374,4 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
         this.fireEvent('blur', this);
     }    
 });
+Ext.reg('felamimailcontactcombo', Tine.Felamimail.ContactSearchCombo);
