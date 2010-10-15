@@ -32,6 +32,11 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Felamimail/js/FolderStore.js',
             'Felamimail/js/FolderSelect.js',
             'Felamimail/js/FolderSelectPanel.js',
+            'Felamimail/js/sieve/VacationEditDialog.js',
+            'Felamimail/js/sieve/RuleEditDialog.js',
+            'Felamimail/js/sieve/RulesGridPanel.js',
+            'Felamimail/js/sieve/RulesDialog.js',
+            'Felamimail/js/sieve/RuleConditionsPanel.js',
             'Felamimail/js/TreeContextMenu.js',
             'Felamimail/js/TreeLoader.js',
             'Felamimail/js/TreePanel.js',
@@ -44,11 +49,6 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Felamimail/js/ContactSearchCombo.js',
             'Felamimail/js/RecipientGrid.js',
             'Felamimail/js/Felamimail.js',
-            'Felamimail/js/sieve/VacationEditDialog.js',
-            'Felamimail/js/sieve/RulesGridPanel.js',
-            'Felamimail/js/sieve/RulesDialog.js',
-            'Felamimail/js/sieve/RuleEditDialog.js',
-            'Felamimail/js/sieve/RuleConditionsPanel.js',
         );
     }
 

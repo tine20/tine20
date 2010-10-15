@@ -39,6 +39,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     usePagingToolbar: false,
     
     newRecordIcon: 'action_new_rule',
+    editDialogClass: Tine.Felamimail.sieve.RuleEditDialog,
     
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Felamimail');

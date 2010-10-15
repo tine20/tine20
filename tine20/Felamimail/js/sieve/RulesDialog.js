@@ -129,8 +129,8 @@ Tine.Felamimail.sieve.RulesDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 400,
-        name: Tine.Felamimail.RulesDialog.prototype.windowNamePrefix + Ext.id(),
-        contentPanelConstructor: 'Tine.Felamimail.RulesDialog',
+        name: Tine.Felamimail.sieve.RulesDialog.prototype.windowNamePrefix + Ext.id(),
+        contentPanelConstructor: 'Tine.Felamimail.sieve.RulesDialog',
         contentPanelConstructorConfig: config
     });
     return window;
