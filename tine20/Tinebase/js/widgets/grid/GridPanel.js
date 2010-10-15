@@ -135,6 +135,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     editDialogConfig: null,
     
+    /**
+     * @cfg {String} editDialogClass 
+     */
+    editDialogClass: null,
+    
     i18nEmptyText: null,
     
     /**
@@ -928,7 +933,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
         
-        var popupWindow = Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'].openWindow(Ext.copyTo(
+        var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'];
+        var popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
                 record: record,
                 listeners: {
