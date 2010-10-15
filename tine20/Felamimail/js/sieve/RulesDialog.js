@@ -9,11 +9,11 @@
  *
  */
  
-Ext.namespace('Tine.Felamimail');
+Ext.namespace('Tine.Felamimail.sieve');
 
 /**
  * @namespace   Tine.Felamimail
- * @class       Tine.Felamimail.RulesDialog
+ * @class       Tine.Felamimail.sieve.RulesDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * 
  * <p>Sieve Filter Dialog</p>
@@ -30,7 +30,7 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new RulesDialog
  */
-Tine.Felamimail.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     /**
      * @cfg {Tine.Felamimail.Model.Account}
@@ -93,7 +93,7 @@ Tine.Felamimail.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * 
      */
     getFormItems: function() {
-        this.rulesGrid = new Tine.Felamimail.RulesGridPanel({
+        this.rulesGrid = new Tine.Felamimail.sieve.RulesGridPanel({
             account: this.account
         }); 
         
@@ -125,7 +125,7 @@ Tine.Felamimail.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @param   {Object} config
  * @return  {Ext.ux.Window}
  */
-Tine.Felamimail.RulesDialog.openWindow = function (config) {
+Tine.Felamimail.sieve.RulesDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 800,
         height: 400,

@@ -9,11 +9,11 @@
  *
  */
  
-Ext.namespace('Tine.Felamimail');
+Ext.namespace('Tine.Felamimail.sieve');
 
 /**
  * @namespace   Tine.Felamimail
- * @class       Tine.Felamimail.VacationEditDialog
+ * @class       Tine.Felamimail.sieve.VacationEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * 
  * <p>Sieve Filter Dialog</p>
@@ -32,7 +32,7 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new VacationEditDialog
  */
- Tine.Felamimail.VacationEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+ Tine.Felamimail.sieve.VacationEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
     /**
      * @cfg {Tine.Felamimail.Model.Account}
@@ -180,12 +180,12 @@ Ext.namespace('Tine.Felamimail');
  * @param   {Object} config
  * @return  {Ext.ux.Window}
  */
-Tine.Felamimail.VacationEditDialog.openWindow = function (config) {
+Tine.Felamimail.sieve.VacationEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 640,
         height: 480,
-        name: Tine.Felamimail.VacationEditDialog.prototype.windowNamePrefix + Ext.id(),
-        contentPanelConstructor: 'Tine.Felamimail.VacationEditDialog',
+        name: Tine.Felamimail.sieve.VacationEditDialog.prototype.windowNamePrefix + Ext.id(),
+        contentPanelConstructor: 'Tine.Felamimail.sieve.VacationEditDialog',
         contentPanelConstructorConfig: config
     });
     return window;

@@ -9,11 +9,11 @@
  *
  */
  
-Ext.namespace('Tine.Felamimail');
+Ext.namespace('Tine.Felamimail.sieve');
 
 /**
- * @namespace   Tine.Felamimail
- * @class       Tine.Felamimail.RuleEditDialog
+ * @namespace   Tine.Felamimail.sieve
+ * @class       Tine.Felamimail.sieve.RuleEditDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * 
  * <p>Sieve Filter Dialog</p>
@@ -30,7 +30,7 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new RuleEditDialog
  */
-Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * @cfg {Tine.Felamimail.Model.Account}
      */
@@ -42,7 +42,6 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     windowNamePrefix: 'RuleEditWindow_',
     appName: 'Felamimail',
     recordClass: Tine.Felamimail.Model.Rule,
-    //recordProxy: Tine.Felamimail.vacationBackend,
     mode: 'local',
     loadRecord: true,
     tbarItems: [],
@@ -61,7 +60,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRender: function(ct, position) {
-        Tine.Felamimail.RuleEditDialog.superclass.onRender.call(this, ct, position);
+        Tine.Felamimail.sieve.RuleEditDialog.superclass.onRender.call(this, ct, position);
         
         this.onChangeType.defer(250, this);
     },
@@ -108,7 +107,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordUpdate: function() {
-        Tine.Felamimail.RuleEditDialog.superclass.onRecordUpdate.call(this);
+        Tine.Felamimail.sieve.RuleEditDialog.superclass.onRecordUpdate.call(this);
         
         this.record.set('conditions', this.getConditions());
         
@@ -202,7 +201,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         
-        this.conditionsPanel = new Tine.Felamimail.RuleConditionsPanel({
+        this.conditionsPanel = new Tine.Felamimail.sieve.RuleConditionsPanel({
             filters: this.getConditionsFilter()
         });
         
@@ -217,7 +216,7 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             forceSelection  : true,
             value           : 'discard',
             columnWidth     : 0.4,
-            store: Tine.Felamimail.RuleEditDialog.getActionTypes(this.app),
+            store: Tine.Felamimail.sieve.RuleEditDialog.getActionTypes(this.app),
             listeners: {
                 scope: this,
                 change: this.onChangeType,
@@ -320,12 +319,12 @@ Tine.Felamimail.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @param   {Object} config
  * @return  {Ext.ux.Window}
  */
-Tine.Felamimail.RuleEditDialog.openWindow = function (config) {
+Tine.Felamimail.sieve.RuleEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 700,
         height: 300,
-        name: Tine.Felamimail.RuleEditDialog.prototype.windowNamePrefix + Ext.id(),
-        contentPanelConstructor: 'Tine.Felamimail.RuleEditDialog',
+        name: Tine.Felamimail.sieve.RuleEditDialog.prototype.windowNamePrefix + Ext.id(),
+        contentPanelConstructor: 'Tine.Felamimail.sieve.RuleEditDialog',
         contentPanelConstructorConfig: config
     });
     return window;
@@ -337,7 +336,7 @@ Tine.Felamimail.RuleEditDialog.openWindow = function (config) {
  * @param {} app
  * @return {Array}
  */
-Tine.Felamimail.RuleEditDialog.getActionTypes = function(app) {
+Tine.Felamimail.sieve.RuleEditDialog.getActionTypes = function(app) {
     return [
         ['fileinto',    app.i18n._('Move mail to folder')],
         ['redirect',    app.i18n._('Redirect mail to address')],

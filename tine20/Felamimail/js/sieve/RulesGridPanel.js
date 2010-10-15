@@ -9,18 +9,18 @@
  *
  */
  
-Ext.ns('Tine.Felamimail');
+Ext.ns('Tine.Felamimail.sieve');
 
 /**
  * @namespace Tine.Felamimail
- * @class     Tine.Felamimail.RulesGridPanel
+ * @class     Tine.Felamimail.sieve.RulesGridPanel
  * @extends   Tine.widgets.grid.GridPanel
  * Rules Grid Panel <br>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
-Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * @cfg {Tine.Felamimail.Model.Account}
      */
@@ -248,7 +248,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * called before store queries for data
      */
     onStoreBeforeload: function(store, options) {
-        Tine.Felamimail.RulesGridPanel.superclass.onStoreBeforeload.call(this, store, options);
+        Tine.Felamimail.sieve.RulesGridPanel.superclass.onStoreBeforeload.call(this, store, options);
         
         options.params.filter = this.account.id;
     },
@@ -262,7 +262,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     actionRenderer: function(type, metadata, record) {
-        var types = Tine.Felamimail.RuleEditDialog.getActionTypes(this.app),
+        var types = Tine.Felamimail.sieve.RuleEditDialog.getActionTypes(this.app),
             result = type;
         
         for (i=0; i < types.length; i++) {
@@ -294,7 +294,7 @@ Tine.Felamimail.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var condition = value[0]; 
             
             // get header/comperator translation
-            var filterModel = Tine.Felamimail.RuleConditionsPanel.getFilterModel(this.app),
+            var filterModel = Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel(this.app),
                 header, comperator, i;
             for (i=0; i < filterModel.length; i++) {
                 if (condition.header == filterModel[i].field) {

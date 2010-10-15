@@ -9,11 +9,11 @@
  *
  */
  
-Ext.namespace('Tine.Felamimail');
+Ext.namespace('Tine.Felamimail.sieve');
 
 /**
- * @namespace   Tine.Felamimail
- * @class       Tine.Felamimail.RuleConditionsPanel
+ * @namespace   Tine.Felamimail.sieve
+ * @class       Tine.Felamimail.sieve.RuleConditionsPanel
  * @extends     Tine.widgets.grid.FilterToolbar
  * 
  * <p>Sieve Filter Conditions Panel</p>
@@ -35,7 +35,7 @@ Ext.namespace('Tine.Felamimail');
  * @constructor
  * Create a new RuleConditionsPanel
  */
-Tine.Felamimail.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar, {
+Tine.Felamimail.sieve.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar, {
     
     defaultFilter: 'from',
     allowSaving: false,
@@ -48,7 +48,7 @@ Tine.Felamimail.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
         this.rowPrefix = '';
         
-        this.filterModels = Tine.Felamimail.RuleConditionsPanel.getFilterModel(this.app);
+        this.filterModels = Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel(this.app);
         
         this.supr().initComponent.call(this);
     },
@@ -69,7 +69,7 @@ Tine.Felamimail.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar
  * @param {} app
  * @return {Array}
  */
-Tine.Felamimail.RuleConditionsPanel.getFilterModel = function(app) {
+Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel = function(app) {
     return [
         {label: app.i18n._('From'),     field: 'from',     operators: ['contains']},
         {label: app.i18n._('To'),       field: 'to',       operators: ['contains']},
