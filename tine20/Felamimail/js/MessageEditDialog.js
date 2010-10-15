@@ -25,7 +25,7 @@ Ext.namespace('Tine.Felamimail');
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id$
  * 
@@ -93,17 +93,44 @@ Ext.namespace('Tine.Felamimail');
     recordClass: Tine.Felamimail.Model.Message,
     recordProxy: Tine.Felamimail.messageBackend,
     loadRecord: false,
-    tbarItems: [],
     evalGrants: false,
-    saveAndCloseButtonText: 'Send', // _('Send')
     
     /**
      * overwrite update toolbars function (we don't have record grants)
-     * 
      * @private
      */
-    updateToolbars: function() {
-
+    updateToolbars: Ext.emptyFn,
+    
+    /**
+     * init buttons
+     * 
+     * TODO add save in drafts button
+     */
+    initButtons: function() {
+        this.fbar = [];
+        
+        this.action_send = new Ext.Action({
+            text: this.app.i18n._('Send'),
+            handler: this.onSaveAndClose,
+            iconCls: 'FelamimailIconCls',
+            disabled: false,
+            scope: this
+        });
+        
+        this.tbar = new Ext.Toolbar({
+            defaults: {height: 55},
+            items: [{
+                xtype: 'buttongroup',
+                columns: 1,
+                items: [
+                    Ext.apply(new Ext.Button(this.action_send), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    })
+                ]
+            }]
+        });
     },
     
     /**
@@ -408,10 +435,10 @@ Ext.namespace('Tine.Felamimail');
     getFormItems: function() {
         
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
-            fieldLabel: this.app.i18n._('Recipients'),
             record: this.record,
             i18n: this.app.i18n,
-            hideLabel: true
+            hideLabel: true,
+            boxMaxHeight: 150 // TODO make this work
         });
         
         this.attachmentGrid = new Tine.widgets.grid.FileUploadGrid({
@@ -426,7 +453,7 @@ Ext.namespace('Tine.Felamimail');
             name: 'body',
             allowBlank: true,
             flex: 1,  // Take up all *remaining* vertical space
-            boxMinHeight: 150,
+            boxMinHeight: 150, // TODO make this work
             getDocMarkup: function(){
                 var markup = '<html>'
                     + '<head>'
@@ -446,7 +473,7 @@ Ext.namespace('Tine.Felamimail');
                 return markup;
             },
             plugins: [
-            // TODO which plugins to activate?
+                // TODO which plugins to activate?
                 //new Ext.ux.form.HtmlEditor.Word(),  
                 //new Ext.ux.form.HtmlEditor.Divider(),  
                 //new Ext.ux.form.HtmlEditor.Table(),  
@@ -466,7 +493,7 @@ Ext.namespace('Tine.Felamimail');
             items: [
                 {
                 region: 'center',
-                autoScroll: true, // TODO make scrollbar appear!!
+                autoScroll: true, // TODO make scrollbar appear!! -> but only for recipients or only if recipients height reaches a certain amount
                 layout: {
                     type: 'vbox',
                     align: 'stretch'  // Child items are stretched to full width
@@ -548,7 +575,7 @@ Ext.namespace('Tine.Felamimail');
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 700,
-        height: 600,
+        height: 700,
         name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',
         contentPanelConstructorConfig: config
