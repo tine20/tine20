@@ -207,6 +207,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'library/GeoExt/script/GeoExt.js', 
             'Tinebase/js/widgets/MapPanel.js',
         // Ext user extensions
+            'Tinebase/js/ux/FieldLabeler.js',
+            'Tinebase/js/ux/Log.js',
             'Tinebase/js/ux/Array.js',
             'Tinebase/js/ux/Log.js',
             'Tinebase/js/ux/ConnectionStatus.js',
