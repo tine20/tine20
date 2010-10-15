@@ -157,7 +157,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
             var account = this.accountStore.getById(accountId);
             var record = new Tine.Felamimail.Model.Vacation({id: accountId}, accountId);
             
-            var popupWindow = Tine.Felamimail.VacationEditDialog.openWindow({
+            var popupWindow = Tine.Felamimail.sieve.VacationEditDialog.openWindow({
                 account: account,
                 record: record
             });
@@ -173,7 +173,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
             var account = this.accountStore.getById(accountId);
             //var record = new Tine.Felamimail.Model.Vacation({id: accountId}, accountId);
             
-            var popupWindow = Tine.Felamimail.RulesDialog.openWindow({
+            var popupWindow = Tine.Felamimail.sieve.RulesDialog.openWindow({
                 account: account
                 //record: record
             });
