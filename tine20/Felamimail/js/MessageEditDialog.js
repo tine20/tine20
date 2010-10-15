@@ -20,6 +20,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>This dialog is for composing emails with recipients, body and attachments. 
  * you can choose from which account you want to send the mail.</p>
  * <p>
+ * TODO         jump with one tab from subject to htmleditor textarea
  * TODO         make email note editable
  * </p>
  * 
@@ -97,7 +98,7 @@ Ext.namespace('Tine.Felamimail');
     saveAndCloseButtonText: 'Send', // _('Send')
     
     /**
-     * overwrite update toolbars function (we don't have record grants yet)
+     * overwrite update toolbars function (we don't have record grants)
      * 
      * @private
      */
@@ -410,8 +411,7 @@ Ext.namespace('Tine.Felamimail');
             fieldLabel: this.app.i18n._('Recipients'),
             record: this.record,
             i18n: this.app.i18n,
-            hideLabel: true,
-            anchor: '100% 90%'
+            hideLabel: true
         });
         
         this.attachmentGrid = new Tine.widgets.grid.FileUploadGrid({
@@ -425,7 +425,8 @@ Ext.namespace('Tine.Felamimail');
             fieldLabel: this.app.i18n._('Body'),
             name: 'body',
             allowBlank: true,
-            anchor: '100% 100%',
+            flex: 1,  // Take up all *remaining* vertical space
+            boxMinHeight: 150,
             getDocMarkup: function(){
                 var markup = '<html>'
                     + '<head>'
@@ -459,55 +460,38 @@ Ext.namespace('Tine.Felamimail');
         var accountStore = Tine.Felamimail.loadAccountStore();
         
         return {
-            autoScroll: true,
             border: false,
             frame: true,
             layout: 'border',
-            items: [{
-                region: 'north',
-                height: 160,
-                resizable: true,
-                layout: 'border',
-                split: true,
-                collapseMode: 'mini',
-                header: false,
-                collapsible: true,
-                items: [{
-                    region: 'north',
-                    height: 40,
-                    layout: 'form',
-                    labelAlign: 'top',
-                    items: [{
-                        xtype:'combo',
-                        name: 'account_id',
-                        fieldLabel: this.app.i18n._('From'),
-                        displayField: 'name',
-                        valueField: 'id',
-                        editable: false,
-                        triggerAction: 'all',
-                        anchor: '100%',
-                        store: accountStore,
-                        listeners: {
-                            scope: this,
-                            select: this.onFromSelect
-                        }
-                    }]
-                }, {
-                    region: 'center',
-                    layout: 'form',
-                    items: [this.recipientGrid]
-                }, {
-                    region: 'south',
-                    layout: 'form',
-                    height: 40,
-                    labelAlign: 'top',
-                    items: [{
+            items: [
+                {
+                region: 'center',
+                autoScroll: true, // TODO make scrollbar appear!!
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'  // Child items are stretched to full width
+                },
+                items: [
+                    {
+                    xtype:'combo',
+                    name: 'account_id',
+                    plugins: [ Ext.ux.FieldLabeler ],
+                    fieldLabel: this.app.i18n._('From'),
+                    displayField: 'name',
+                    valueField: 'id',
+                    editable: false,
+                    triggerAction: 'all',
+                    store: accountStore,
+                    listeners: {
+                        scope: this,
+                        select: this.onFromSelect
+                    }
+                }, this.recipientGrid, {
                         xtype:'textfield',
+                        plugins: [ Ext.ux.FieldLabeler ],
                         fieldLabel: this.app.i18n._('Subject'),
                         name: 'subject',
-                        //allowBlank: false,
                         enableKeyEvents: true,
-                        anchor: '100%',
                         listeners: {
                             scope: this,
                             // update title on keyup event
@@ -520,17 +504,12 @@ Ext.namespace('Tine.Felamimail');
                                 }
                             }
                         }
-                    }]
-                }]
-            }, {
-                region: 'center',
-                layout: 'form',
-                labelAlign: 'top',
-                items: [this.htmlEditor]
+                    }, this.htmlEditor
+                ]
             }, {
                 region: 'south',
                 layout: 'form',
-                height: 130,
+                height: 150,
                 split: true,
                 collapseMode: 'mini',
                 header: false,
@@ -568,8 +547,8 @@ Ext.namespace('Tine.Felamimail');
  */
 Tine.Felamimail.MessageEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 700,
+        width: 700,
+        height: 600,
         name: Tine.Felamimail.MessageEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.MessageEditDialog',
         contentPanelConstructorConfig: config
