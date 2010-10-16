@@ -70,7 +70,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         )); 
             	
         $this->objects['user'] = new Tinebase_Model_FullUser(array(
-            'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
@@ -81,27 +80,25 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
-        $this->objects['accountUpdate'] = new Tinebase_Model_FullUser(array(
-            'accountId'             => 10,
-            'accountLoginName'      => 'tine20phpunit',
-            'accountDisplayName'    => 'tine20phpunit',
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnitup',
-            'accountEmailAddress'   => 'phpunit@metaways.de',
-        )); 
+        #$this->objects['accountUpdate'] = new Tinebase_Model_FullUser(array(
+        #    'accountLoginName'      => 'tine20phpunit',
+        #    'accountDisplayName'    => 'tine20phpunit',
+        #    'accountStatus'         => 'enabled',
+        #    'accountExpires'        => NULL,
+        #    'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
+        #    'accountLastName'       => 'Tine 2.0',
+        #    'accountFirstName'      => 'PHPUnitup',
+        #    'accountEmailAddress'   => 'phpunit@metaways.de',
+        #)); 
         
-        /*
-        $this->objects['application'] = new Tinebase_Model_Application (array(
-            'id'                    => 5,
-            'name'                  => 'Crm',
-            'status'                => 'enabled',
-            'version'               => '0.1',
-            'order'                 => '99',
-        ));
-        */
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+            $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+
+            $this->objects['initialGroup']->container_id = $internalAddressbook->getId();
+            $this->objects['updatedGroup']->container_id = $internalAddressbook->getId();
+            $this->objects['user']->container_id = $internalAddressbook->getId();
+            #$this->objects['accountUpdate']->container_id = $internalAddressbook->getId();
+        }
 
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
        
@@ -114,9 +111,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         // add account for group / role member tests
         try {
-            $user = Tinebase_User::getInstance()->getUserById($this->objects['user']->accountId) ;
+            $user = Tinebase_User::getInstance()->getUserByLoginName($this->objects['user']->accountLoginName);
         } catch (Tinebase_Exception_NotFound $e) {
-            Tinebase_User::getInstance()->addUser($this->objects['user']);
+            $this->objects['user'] = Admin_Controller_User::getInstance()->create($this->objects['user'], 'lars', 'lars');
         }
         
         return;
@@ -133,7 +130,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         // remove accounts for group member tests
         try {
-            Tinebase_User::getInstance()->deleteUser($this->objects['user']->accountId);
+            Admin_Controller_User::getInstance()->delete($this->objects['user']->accountId);
         } catch (Exception $e) {
             // do nothing
         }
@@ -206,10 +203,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveAccount()
     {
-        $accountData = $this->objects['accountUpdate']->toArray();
+        $accountData = $this->objects['user']->toArray();
         $accountData['accountPrimaryGroup'] = Tinebase_Group::getInstance()->getGroupByName('tine20phpunit')->getId();
         $accountData['accountPassword'] = 'test';
         $accountData['accountPassword2'] = 'test';
+        $accountData['accountFirstName'] = 'PHPUnitup';
         
         $account = $this->_backend->saveUser($accountData);
         
@@ -227,7 +225,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteAccounts()
     {
-        $this->_backend->deleteUsers(array($this->objects['user']->accountId));
+        #$this->_backend->deleteUsers(array($this->objects['user']->accountId));
+        Admin_Controller_User::getInstance()->delete($this->objects['user']->accountId);
         
         $this->setExpectedException('Exception');
         Tinebase_User::getInstance()->getUserById($this->objects['user']->getId);
@@ -399,8 +398,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'clienttype'    => $clienttype,
         )));
                 
-    	Tinebase_User::getInstance()->deleteUser($user->getId());
-    	
+    	Admin_Controller_User::getInstance()->delete($user->getId());
         $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter($user->accountLoginName, $clienttype), array());
 
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));

@@ -53,13 +53,13 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
         $this->objects['initialGroup'] = new Tinebase_Model_Group(array(
             'id'            => 'test-controller-group',
             'name'          => 'tine20phpunit',
-            'description'   => 'initial group'
+            'description'   => 'initial test group'
         )); 
         
         $this->objects['updatedGroup'] = new Tinebase_Model_Group(array(
             'id'            => 'test-controller-group',
             'name'          => 'tine20phpunit updated',
-            'description'   => 'updated group'
+            'description'   => 'updated test group'
         ));
          
         $this->objects['initialAccount'] = new Tinebase_Model_FullUser(array(
@@ -83,6 +83,15 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@tine20.org'
         ));         
         
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+
+                $this->objects['initialGroup']->container_id = $internalAddressbook->getId();
+                $this->objects['updatedGroup']->container_id = $internalAddressbook->getId();
+                $this->objects['initialAccount']->container_id = $internalAddressbook->getId();
+                $this->objects['updatedAccount']->container_id = $internalAddressbook->getId();
+            }
+
         return;
         
     }
