@@ -375,7 +375,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function getInternalContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
+    /*public function getInternalContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
     {
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         
@@ -394,7 +394,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         return $container;        
-    }
+    }*/
     
     /**
      * returns the personal container of a given account accessible by a another given account
@@ -631,15 +631,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 /* on     */ "{$this->_db->quoteIdentifier('owner.container_id')} = {$this->_db->quoteIdentifier('container.id')}"
             )
             ->join(array(
-                /* table  */ 'contacts' => SQL_TABLE_PREFIX . 'addressbook'),
-                /* on     */ "{$this->_db->quoteIdentifier('owner.account_id')} = {$this->_db->quoteIdentifier('contacts.account_id')}",
-                /* select */ array()
-            )
-            ->join(array(
                 /* table  */ 'accounts' => SQL_TABLE_PREFIX . 'accounts'),
                 /* on     */ "{$this->_db->quoteIdentifier('owner.account_id')} = {$this->_db->quoteIdentifier('accounts.id')}",
                 /* select */ array()
             )
+            #->join(array(
+            #    /* table  */ 'contacts' => SQL_TABLE_PREFIX . 'addressbook'),
+            #    /* on     */ "{$this->_db->quoteIdentifier('owner.account_id')} = {$this->_db->quoteIdentifier('contacts.account_id')}",
+            #    /* select */ array()
+            #)
             ->where("{$this->_db->quoteIdentifier('owner.account_id')} != ?", $accountId)
             ->where("{$this->_db->quoteIdentifier('owner.account_grant')} = ?", Tinebase_Model_Grants::GRANT_ADMIN)
             
@@ -648,9 +648,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->where("{$this->_db->quoteIdentifier('container.is_deleted')} = ?", 0, Zend_Db::INT_TYPE)
             ->where("{$this->_db->quoteIdentifier('accounts.status')} = ?", 'enabled')
             
-            ->order('contacts.n_fileas')
+            ->order('accounts.display_name')
             ->group('owner.account_id');
-        
+                
         $this->addGrantsSql($select, $accountId, $grant, 'user');
         
         $stmt = $this->_db->query($select);
@@ -980,6 +980,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         // add container & grants to records
         foreach ($_records as &$record) {
             try {
+                if (!isset($record->$_containerProperty)) {
+                    continue;
+                }
+                
                 $containerId = $record[$_containerProperty];
                 if (! is_array($containerId) && ! $containerId instanceof Tinebase_Record_Abstract && ! empty($containers[$containerId])) {
                     $record[$_containerProperty] = $containers[$containerId];
