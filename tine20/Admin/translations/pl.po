@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-10-15 18:47+0100\n"
+"PO-Revision-Date: 2010-10-16 18:21+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -243,7 +243,7 @@ msgstr "Brak aplikacji"
 
 #: js/Applications.js:285
 msgid "Order"
-msgstr "L.p."
+msgstr "lp"
 
 #: js/Applications.js:287
 #: js/user/GridPanel.js:160
