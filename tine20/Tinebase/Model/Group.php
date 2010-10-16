@@ -19,6 +19,7 @@
  * @property    string  name
  * @property    string  name
  * @property    array   members
+ * @property	string  visibility
  */
 class Tinebase_Model_Group extends Tinebase_Record_Abstract
 {
@@ -35,20 +36,6 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
         'description'   => 'StringTrim',
     );
     
-    /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Input_Filter
-     *
-     * @var array
-     */
-    protected $_validators = array(
-        'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'name'          => array('presence' => 'required'),
-        'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'members'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
-    );
-    
    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
@@ -56,6 +43,25 @@ class Tinebase_Model_Group extends Tinebase_Record_Abstract
      * @var string
      */    
     protected $_identifier = 'id';    
+    
+    /**
+     * @see Tinebase_Record_Abstract
+     */
+    public function __construct($_data = NULL, $_bypassFilters = false, $_convertDates = true)
+    {
+        $this->_validators = array(
+            'id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'container_id'  => array('allowEmpty' => true),
+            'list_id'       => array('allowEmpty' => true),
+            'name'          => array('presence' => 'required'),
+            'description'   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+            'members'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
+            'email'         => array('allowEmpty' => true),
+            'visibility'    => array(new Zend_Validate_InArray(array('hidden', 'displayed')), Zend_Filter_Input::DEFAULT_VALUE => 'displayed')
+        );
+        
+        parent::__construct($_data, $_bypassFilters, $_convertDates);
+    }
     
     /**
      * converts a int, string or Tinebase_Model_Group to a groupid
