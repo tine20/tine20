@@ -461,7 +461,6 @@ class Tinebase_User
             'accountEmailAddress'   => NULL,
         ));
 
-        #$groupsBackend->addOrUpdateUser($account);
         // update or create user in local sql backend
         try {
             $userBackend->getUserByProperty('accountId', $_options['adminLoginName']);
