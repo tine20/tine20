@@ -92,6 +92,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'sambaSAM'              => array('allowEmpty' => true),
             'openid'                => array('allowEmpty' => true),
             'contact_id'            => array('allowEmpty' => true),
+            'container_id'          => array('allowEmpty' => true),
             'emailUser'             => array('allowEmpty' => true),
             'visibility'            => array(new Zend_Validate_InArray(array('hidden', 'displayed')), Zend_Filter_Input::DEFAULT_VALUE => 'displayed'),
             
