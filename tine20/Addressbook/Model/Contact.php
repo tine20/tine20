@@ -15,6 +15,13 @@
 /**
  * class to hold contact data
  * 
+ * @property	account_id	id of associated user
+ * @property	email		the email address of the contact
+ * @property	n_family
+ * @property	n_fileas 	display name
+ * @property	n_fn		the full name
+ * @property	n_given		
+ * @property	type		type of contact
  * @package     Addressbook
  */
 class Addressbook_Model_Contact extends Tinebase_Record_Abstract
@@ -158,7 +165,8 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'relations'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'customfields'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => array()),
         'type'                  => array(
-            Zend_Filter_Input::ALLOW_EMPTY => true, 
+            Zend_Filter_Input::ALLOW_EMPTY => true,
+            Zend_Filter_Input::DEFAULT_VALUE => self::CONTACTTYPE_CONTACT,
             'InArray' => array(self::CONTACTTYPE_USER, self::CONTACTTYPE_CONTACT)
         )
     );
