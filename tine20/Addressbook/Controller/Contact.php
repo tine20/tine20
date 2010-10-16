@@ -125,6 +125,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     public function getContactByUserId($_userId, $_ignoreACL = FALSE)
     {
         $contact = $this->_backend->getByUserId($_userId);
+        
         if ($_ignoreACL === FALSE && !$this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
             throw new Addressbook_Exception_AccessDenied('read access to contact denied');
         }
@@ -191,6 +192,24 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Addressbook_Model_Contact
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $contact = parent::update($_record);
+        
+        if ($contact->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
+            Tinebase_User::getInstance()->updateContact($contact);
+        }
+        
+        return $contact;
+    }
+    
+    /**
      * delete one record
      * - don't delete if it belongs to an user account
      *
@@ -215,6 +234,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     protected function _inspectCreate(Tinebase_Record_Interface $_record)
     {
         $this->_setGeoData($_record);
+        
+        if (isset($_record->type) &&  $_record->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
+            throw new Addressbook_Exception_InvalidArgument('can not add contact of type user');
+        }
     }
     
     /**
@@ -229,6 +252,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     protected function _inspectUpdate($_record, $_oldRecord)
     {
         $this->_setGeoData($_record);
+        
+        if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
+            $_record->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
+        }
     }
     
     /**
