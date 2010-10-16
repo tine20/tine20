@@ -21,38 +21,43 @@
 class Tinebase_User_Sql extends Tinebase_User_Abstract
 {
     /**
-     * the constructor
-     */
-    public function __construct() {
-        $this->_db = Tinebase_Core::getDb();
-    }
-    
-    /**
      * copy of Tinebase_Core::get('dbAdapter')
      *
      * @var Zend_Db_Adapter_Abstract
      */
     private $_db;
     
+    /**
+     * row name mapping 
+     * 
+     * @var array
+     */
     protected $rowNameMapping = array(
-        'accountId'             => 'id',
-        'accountDisplayName'    => 'n_fileas',
-        'accountFullName'       => 'n_fn',
-        'accountFirstName'      => 'n_given',
-        'accountLastName'       => 'n_family',
-        'accountLoginName'      => 'login_name',
-        'accountLastLogin'      => 'last_login',
-        'accountLastLoginfrom'  => 'last_login_from',
+        'accountId'                 => 'id',
+        'accountDisplayName'        => 'display_name',
+        'accountFullName'           => 'full_name',
+        'accountFirstName'          => 'first_name',
+        'accountLastName'           => 'last_name',
+        'accountLoginName'          => 'login_name',
+        'accountLastLogin'          => 'last_login',
+        'accountLastLoginfrom'      => 'last_login_from',
         'accountLastPasswordChange' => 'last_password_change',
-        'accountStatus'         => 'status',
-        'accountExpires'        => 'expires_at',
-        'accountPrimaryGroup'   => 'primary_group_id',
-        'accountEmailAddress'   => 'email',
-        'accountHomeDirectory'  => 'home_dir',
-        'accountLoginShell'     => 'login_shell',
-        'openid'                => 'openid',
-        'visibility'            => 'visibility'
+        'accountStatus'             => 'status',
+        'accountExpires'            => 'expires_at',
+        'accountPrimaryGroup'       => 'primary_group_id',
+        'accountEmailAddress'       => 'email',
+        'accountHomeDirectory'      => 'home_dir',
+        'accountLoginShell'         => 'login_shell',
+        'openid'                    => 'openid',
+        'visibility'                => 'visibility'
     );
+    
+    /**
+     * the constructor
+     */
+    public function __construct() {
+        $this->_db = Tinebase_Core::getDb();
+    }
     
     /**
      * get list of users
@@ -68,28 +73,31 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL, $_accountClass = 'Tinebase_Model_User')
     {        
         $select = $this->_getUserSelectObject()
-        	->where('account_id IS NOT NULL')
             ->limit($_limit, $_start);
             
-        if($_sort !== NULL) {
+        if ($_sort !== NULL && isset($this->rowNameMapping[$_sort])) {
             $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
         }
 
-        if($_filter !== NULL) {
-        
+        if (!empty($_filter)) {
             $whereStatement = array();
-            $defaultValues = array('n_family', 'n_given', 'login_name');
+            $defaultValues = array(
+                $this->rowNameMapping['accountLastName'], 
+                $this->rowNameMapping['accountFirstName'], 
+                $this->rowNameMapping['accountLoginName']
+            );
             foreach ($defaultValues as $defaultValue) {
                 $whereStatement[] = $this->_db->quoteIdentifier($defaultValue) . 'LIKE ?';
             }
         
             $select->where('(' . implode(' OR ', $whereStatement) . ')', '%' . $_filter . '%');
         }
+        
+        // @todo still needed?? either we use contacts from addressboook or full users now
         // return only active users, when searching for simple users
-        if($_accountClass == 'Tinebase_Model_User') {
+        if ($_accountClass == 'Tinebase_Model_User') {
             $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('status') . ' = ?', 'enabled'));
         }
-        //error_log("getUsers:: " . $select->__toString());
 
         $stmt = $select->query();
 
@@ -197,21 +205,23 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
                     'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
                     'accountLoginShell'     => $this->rowNameMapping['accountLoginShell'],
-                    'openid',
-                    'visibility'
-                )
-            )
-            ->join(
-               SQL_TABLE_PREFIX . 'addressbook',
-               $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.id') . ' = ' 
-                . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'addressbook.account_id'), 
-                array(
+                
                     'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
                     'accountFullName'       => $this->rowNameMapping['accountFullName'],
                     'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
                     'accountLastName'       => $this->rowNameMapping['accountLastName'],
                     'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress'],
-                    'contact_id'            => 'id'
+                    'contact_id',
+                	'openid',
+                    'visibility'
+                )
+            )
+            ->joinLeft(
+               SQL_TABLE_PREFIX . 'addressbook',
+               $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'accounts.contact_id') . ' = ' 
+                . $this->_db->quoteIdentifier(SQL_TABLE_PREFIX . 'addressbook.id'), 
+                array(
+                    'container_id'            => 'container_id'
                 )
             );
                 
@@ -376,6 +386,53 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     }
     
     /**
+     * update contact data(first name, last name, ...) of user
+     * 
+     * @param Addressbook_Model_Contact $contact
+     */
+    public function updateContact(Addressbook_Model_Contact $_contact)
+    {
+        if($this instanceof Tinebase_User_Interface_SyncAble) {
+            $this->updateContactInSyncBackend($_contact);
+        }
+        
+        return $this->updateContactInSqlBackend($_contact);
+    }
+    
+    /**
+     * update contact data(first name, last name, ...) of user in local sql storage
+     * 
+     * @param Addressbook_Model_Contact $contact
+     */
+    public function updateContactInSqlBackend(Addressbook_Model_Contact $_contact)
+    {
+        $contactId = $_contact->getId();
+
+        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+
+        $accountData = array(
+            $this->rowNameMapping['accountDisplayName']  => $_contact->n_fileas,
+            $this->rowNameMapping['accountFullName']     => $_contact->n_fn,
+            $this->rowNameMapping['accountFirstName']    => $_contact->n_given,
+            $this->rowNameMapping['accountLastName']     => $_contact->n_family,
+            $this->rowNameMapping['accountEmailAddress'] => $_contact->email
+        );
+        
+        try {
+            $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+            
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $contactId)
+            );
+            $accountsTable->update($accountData, $where);
+
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            throw($e);
+        }
+    }
+    
+    /**
      * updates an user
      * 
      * this function updates an user 
@@ -409,7 +466,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
 
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-
+        
+        if (empty($_user->contact_id)) {
+            $_user->visibility = 'hidden';
+            $_user->contact_id = null;
+        }
+        
         $accountData = array(
             'login_name'        => $_user->accountLoginName,
             'status'            => $_user->accountStatus,
@@ -419,34 +481,21 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'login_shell'       => $_user->accountLoginShell,
             'openid'            => $_user->openid,
             'visibility'        => $_user->visibility,
+        	'contact_id'		=> $_user->contact_id,
+            $this->rowNameMapping['accountDisplayName']  => $_user->accountDisplayName,
+            $this->rowNameMapping['accountFullName']     => $_user->accountFullName,
+            $this->rowNameMapping['accountFirstName']    => $_user->accountFirstName,
+            $this->rowNameMapping['accountLastName']     => $_user->accountLastName,
+            $this->rowNameMapping['accountEmailAddress'] => $_user->accountEmailAddress,
         );
         
-        $contactData = array(
-            'n_family'      => $_user->accountLastName,
-            'n_given'       => $_user->accountFirstName,
-            'n_fn'          => $_user->accountFullName,
-            'n_fileas'      => $_user->accountDisplayName,
-            'email'         => $_user->accountEmailAddress
-        );
-
         try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-            $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
-            
             
             $where = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
             );
             $accountsTable->update($accountData, $where);
-            
-            $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId)
-            );
-            $contactsTable->update($contactData, $where);
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -494,6 +543,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $_user->setId($userId);
         }
         
+        if (empty($_user->contact_id)) {
+            $_user->visibility = 'hidden';
+            $_user->contact_id = null;
+        }
+        
         $accountData = array(
             'id'                => $_user->accountId,
             'login_name'        => $_user->accountLoginName,
@@ -502,35 +556,20 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'primary_group_id'  => $_user->accountPrimaryGroup,
             'home_dir'          => $_user->accountHomeDirectory,
             'login_shell'       => $_user->accountLoginShell,
-            'openid'            => $_user->openid 
+            'openid'            => $_user->openid,
+            'visibility'        => $_user->visibility, 
+            'contact_id'		=> $_user->contact_id,
+            $this->rowNameMapping['accountDisplayName']  => $_user->accountDisplayName,
+            $this->rowNameMapping['accountFullName']     => $_user->accountFullName,
+            $this->rowNameMapping['accountFirstName']    => $_user->accountFirstName,
+            $this->rowNameMapping['accountLastName']     => $_user->accountLastName,
+            $this->rowNameMapping['accountEmailAddress'] => $_user->accountEmailAddress,
+        
         );
         
-        $contact = new Addressbook_Model_Contact(array(
-            'n_family'      => $_user->accountLastName,
-            'n_given'       => $_user->accountFirstName,
-            'n_fn'          => $_user->accountFullName,
-            'n_fileas'      => $_user->accountDisplayName,
-            'email'         => $_user->accountEmailAddress
-        ));
-
         try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            
             // add new user
             $accountsTable->insert($accountData);
-            
-            $contact->account_id = $_user->getId();
-            //$contact->tid = 'n';
-            $contact->container_id = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL)->getId();
-            
-            // add modlog info
-            Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
-
-            // create new contact
-            $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
-            $contactsBackend->create($contact);
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
             Tinebase_TransactionManager::getInstance()->rollBack();
@@ -539,33 +578,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         return $this->getUserById($_user->getId(), 'Tinebase_Model_FullUser');
     }
-    
-    /**
-     * add or update an user
-     *
-     * @param  Tinebase_Model_FullUser  $_user
-     * @return Tinebase_Model_FullUser
-     */
-    /*public function addOrUpdateUser(Tinebase_Model_FullUser $_user)
-    {
-        $result = null;
-        try {
-            $existingUser = $this->getUserByLoginName($_user->accountLoginName);
-            $updatedUser = $_user;
-            $updatedUser->setId($existingUser->getId());
-            $result = $this->updateUser($updatedUser);
-        } catch (Tinebase_Exception_NotFound $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Could not get user by loginName "' . $_user->accountLoginName . '": ' . $e->getMessage() . ' => creating new user');
-            try {
-                $result = $this->addUser($_user);
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .' Failed to add user: ' . print_r($_user->toArray() . 'Error: ' . $e->getMessage(), TRUE));
-            }
-        }
-        
-        return $result;
-        
-    }*/
     
     /**
      * delete a user
@@ -597,7 +609,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-        $contactsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook'));
         $groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
         $roleMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
         $userRegistrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
@@ -605,11 +616,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
-            $where  = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
-            );
-            $contactsTable->delete($where);
-
             $where  = array(
                 $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
             );
