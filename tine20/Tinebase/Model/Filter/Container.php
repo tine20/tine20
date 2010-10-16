@@ -283,7 +283,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             case 'personal':   return Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
             case 'shared':     return Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
             case 'otherUsers': return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
-            case 'internal':   return array(Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId());
+            #case 'internal':   return array(Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId());
             default:           throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
         }
                 
