@@ -536,6 +536,13 @@ abstract class Tinebase_User_Abstract
     abstract public function updateUser(Tinebase_Model_FullUser $_user);
 
     /**
+     * update contact data(first name, last name, ...) of user
+     * 
+     * @param Addressbook_Model_Contact $contact
+     */
+    abstract public function updateContact(Addressbook_Model_Contact $_contact);
+    
+    /**
      * adds a new user
      *
      * @param   Tinebase_Model_FullUser  $_user
