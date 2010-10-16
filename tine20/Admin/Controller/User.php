@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        catch error (and show alert) if postfix email already exists
@@ -211,87 +211,113 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     }
     
     /**
-     * save or update account
+     * update user
      *
-     * @param Tinebase_Model_FullUser $_account the account
-     * @param string $_password the new password
-     * @param string $_passwordRepeat the new password again
+     * @param  Tinebase_Model_FullUser 	$_user 		  	  the user
+     * @param  string 					$_password 		  the new password
+     * @param  string 					$_passwordRepeat  the new password again
+     * 
      * @return Tinebase_Model_FullUser
      */
-    public function update(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function update(Tinebase_Model_FullUser $_user, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        $oldAccount = $this->_userBackend->getUserByProperty('accountId', $_account, 'Tinebase_Model_FullUser');
-        $account    = $this->_userBackend->updateUser($_account);
+        $oldUser = $this->_userBackend->getUserByProperty('accountId', $_user, 'Tinebase_Model_FullUser');
+        
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+            $_user->contact_id = $oldUser->contact_id;
+            $contact = $this->createOrUpdateContact($_user);
+            $_user->contact_id = $contact->getId();
+        }
+        
+        $user = $this->_userBackend->updateUser($_user);
 
         // remove user from primary group, if primary group changes
-        if($oldAccount->accountPrimaryGroup != $account->accountPrimaryGroup) {
-            Tinebase_Group::getInstance()->removeGroupMember($oldAccount->accountPrimaryGroup, $account);
+        if($oldUser->accountPrimaryGroup != $user->accountPrimaryGroup) {
+            Tinebase_Group::getInstance()->removeGroupMember($oldUser->accountPrimaryGroup, $user);
         }
         // always add user to primary group
-        Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
+        Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
+        
+        
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        
         
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
-        $event->account = $account;
+        $event->account = $user;
         Tinebase_Event::fireEvent($event);
         
         // update email user settings
-        $this->_updateEmailUser($account, $_account->emailUser);
+        $this->_updateEmailUser($user, $_user->emailUser);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($_account, $_password, $_passwordRepeat);
+            $this->setAccountPassword($_user, $_password, $_passwordRepeat);
         }
 
-        return $account;
+        return $user;
     }
     
     /**
-     * save or update account
+     * create user
      *
-     * @param Tinebase_Model_FullUser $_account the account
-     * @param string $_password the new password
-     * @param string $_passwordRepeat the new password again
+     * @param  Tinebase_Model_FullUser  $_account 		  the account
+     * @param  string 					$_password 		  the new password
+     * @param  string 					$_passwordRepeat  the new password again
      * @return Tinebase_Model_FullUser
      */
-    public function create(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat)
+    public function create(Tinebase_Model_FullUser $_user, $_password, $_passwordRepeat)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
         // avoid forging accountId, get's created in backend
-        unset($_account->accountId);
+        unset($_user->accountId);
         
-        $account = $this->_userBackend->addUser($_account);
-        Tinebase_Group::getInstance()->addGroupMember($account->accountPrimaryGroup, $account);
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+            $contact = $this->createOrUpdateContact($_user);
+            $_user->contact_id = $contact->getId();
+        }
+        
+        $user = $this->_userBackend->addUser($_user);
+        
+        Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
+        
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         $event = new Admin_Event_AddAccount();
-        $event->account = $account;
+        $event->account = $user;
         Tinebase_Event::fireEvent($event);
         
         // create email user data here
-        $this->_createEmailUser($account, $_account->emailUser);
+        $this->_createEmailUser($user, $_user->emailUser);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
-            $this->setAccountPassword($account, $_password, $_passwordRepeat);
+            $this->setAccountPassword($user, $_password, $_passwordRepeat);
         }
 
-        return $account;
+        return $user;
     }
     
     /**
      * delete accounts
      *
-     * @param   array $_accountIds  array of account ids
+     * @param   mixed $_accountIds  array of account ids
      * @return  array with success flag
      */
-    public function delete(array $_accountIds)
+    public function delete($_accountIds)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
         $groupsBackend = Tinebase_Group::getInstance();
         foreach ((array)$_accountIds as $accountId) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
+            
+            $oldUser = $this->get($accountId);
             
             $memberships = $groupsBackend->getGroupMemberships($accountId);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));
@@ -306,9 +332,27 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             if ($this->_manageSmtpEmailUser) {
                 $this->_smtpUserBackend->deleteUser($accountId);
             }
+
+            if (!empty($oldUser->contact_id)) {
+                $this->_deleteContact($oldUser->contact_id);
+            }
             
             $this->_userBackend->deleteUser($accountId);
         }
+    }
+    
+    /**
+     * returns all shared addressbooks
+     * 
+     * @return Tinebase_Record_RecordSet of shared addressbooks
+     * 
+     * @todo do we need to fetch ALL shared containers here (even if admin user has NO grants for them)?
+     */
+    public function searchSharedAddressbooks()
+    {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
+        return Tinebase_Container::getInstance()->getSharedContainer($this->_currentAccount, 'Addressbook', Tinebase_Model_Grants::GRANT_READ, TRUE);
     }
     
     /**
@@ -369,6 +413,70 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         }
         
         $_user->emailUser = $this->_getEmailUser($_user);
+    }
+    
+    /**
+     * create or update contact in addressbook sql backend
+     * 
+     * @param  Tinebase_Model_FullUser $_user
+     * @return Addressbook_Model_Contact
+     */
+    public function createOrUpdateContact(Tinebase_Model_FullUser $_user)
+    {
+        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        
+        try {
+            if (empty($_user->contact_id)) { // jump to catch block
+                throw new Tinebase_Exception_NotFound('contact_id is empty');
+            }
+            
+            $contact = $contactsBackend->get($_user->contact_id);
+            
+            // update exisiting contact
+            $contact->n_family   = $_user->accountLastName;
+            $contact->n_given    = $_user->accountFirstName;
+            $contact->n_fn       = $_user->accountFullName;
+            $contact->n_fileas   = $_user->accountDisplayName;
+            $contact->email      = $_user->accountEmailAddress;
+            $contact->type       = Addressbook_Model_Contact::CONTACTTYPE_USER;
+            $contact->container_id = $_user->container_id;
+            
+            // add modlog info
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'update');
+            
+            $contact = $contactsBackend->update($contact);
+            
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // add new contact
+            $contact = new Addressbook_Model_Contact(array(
+                'n_family'      => $_user->accountLastName,
+                'n_given'       => $_user->accountFirstName,
+                'n_fn'          => $_user->accountFullName,
+                'n_fileas'      => $_user->accountDisplayName,
+                'email'         => $_user->accountEmailAddress,
+                'type'          => Addressbook_Model_Contact::CONTACTTYPE_USER,
+                'container_id'  => $_user->container_id
+            ));
+            
+            // add modlog info
+            Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
+    
+            $contact = $contactsBackend->create($contact);        
+        }
+        
+        return $contact;
+    }
+    
+    /**
+     * delete contact associated with user
+     * 
+     * @param string  $_contactId
+     */
+    protected function _deleteContact($_contactId)
+    {
+        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        
+        $contactsBackend->delete($_contactId);        
     }
     
     /**
