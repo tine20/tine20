@@ -215,9 +215,8 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             newRecordClass: this.recordClass,
             recordPrefix: this.recordPrefix,
             internalContactsOnly: true,
-            additionalFilters: [{field: 'user_status', operator: 'equals', value: this.userStatus}],
             onSelect: this.onAddRecordFromCombo
-        })
+        });
     },
     
     /**
@@ -228,7 +227,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             //anchor: '100%',
             accountsStore: this.store,
             blurOnSelect: true,
-            recordClass: Tine.Tinebase.Model.Group,
+            recordClass: Tine.Addressbook.Model.List,
             newRecordClass: this.recordClass,
             recordPrefix: this.recordPrefix,
             emptyText: _('Search for groups ...'),
@@ -266,14 +265,16 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             recordData[this.recordPrefix + 'type'] = 'user';
             recordData[this.recordPrefix + 'name'] = recordToAdd.data.n_fileas;
             recordData[this.recordPrefix + 'data'] = recordToAdd.data;
+            recordData['readGrant'] = true;
             var record = new this.newRecordClass(recordData, recordToAdd.data.account_id);
             
-        } else if (recordToAdd.data.name) {
+        } else if (recordToAdd.data.group_id) {
             // group account
-            recordData[this.recordPrefix + 'id'] = recordToAdd.id;
+            recordData[this.recordPrefix + 'id'] = recordToAdd.data.group_id;
             recordData[this.recordPrefix + 'type'] = 'group';
             recordData[this.recordPrefix + 'name'] = recordToAdd.data.name;
             recordData[this.recordPrefix + 'data'] = recordToAdd.data;
+            recordData['readGrant'] = true;
             var record = new this.newRecordClass(recordData, recordToAdd.id);
         } 
         
