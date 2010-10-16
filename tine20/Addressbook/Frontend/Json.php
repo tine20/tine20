@@ -57,6 +57,18 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
     }    
 
+    /**
+     * Search for lists matching given arguments
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchLists($filter, $paging)
+    {
+        return $this->_search($filter, $paging, Addressbook_Controller_List::getInstance(), 'Addressbook_Model_ListFilter');
+    }    
+
     /****************************************** save / delete / import contacts ****************************/
     
     /**
