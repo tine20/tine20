@@ -370,7 +370,7 @@ class Tinebase_Timemachine_ModificationLog
             case 'update':
                 $_newRecord->last_modified_by   = $currentAccountId;
                 $_newRecord->last_modified_time = $currentTime;
-                if ($_curRecord->has('seq')) {
+                if (is_object($_curRecord) && $_curRecord->has('seq')) {
                 	$_newRecord->seq = (int) $_curRecord->seq +1;
                 }
                 break;
@@ -386,4 +386,3 @@ class Tinebase_Timemachine_ModificationLog
     } // end of static function setRecordMetaData
     
 } // end of Tinebase_Timemachine_ModificationLog
-?>
