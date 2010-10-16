@@ -48,13 +48,10 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function getByUserId($_userId)
     {
-        // can't use this anymore because this has to work even if user is hidden from addressbook
-        //$contact = $this->getByProperty($_userId, 'account_id');
+        $select = $this->_getSelect()
+            ->where($this->_db->quoteIdentifier('accounts.id') . ' = ?', $_userId)
+            ->limit(1);
         
-        $select = parent::_getSelect('*');
-        $select->where($this->_db->quoteIdentifier($this->_tableName . '.account_id') . ' = ?', $_userId)
-               ->limit(1);
-
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
@@ -155,17 +152,30 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select = parent::_getSelect($_cols, $_getDeleted);
         
         $select->joinLeft(
-            /* table  */ array('account' => $this->_tablePrefix . 'accounts'), 
-            /* on     */ $this->_db->quoteIdentifier('account.id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.account_id'),
-            /* select */ array()
+            /* table  */ array('accounts' => $this->_tablePrefix . 'accounts'), 
+            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('accounts.contact_id'),
+            /* select */ array('account_id' => 'accounts.id')
         );
         
         if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
-            $where = "ISNULL(account_id) OR (NOT ISNULL(account_id) AND (visibility='displayed' OR account_id = '".Tinebase_Core::getUser()->getId()."'))";
+            $where = "/* is no user */ ISNULL(accounts.id) OR /* is user */ (NOT ISNULL(accounts.id) AND " . 
+                $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
+                " AND " . 
+                '('. $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . ' OR ' . $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.id') . ' = ?', Tinebase_Core::getUser()->getId()) . ')' .
+            ")";
         } else {
-            $where = "ISNULL(account_id) OR (NOT ISNULL(account_id) AND visibility='displayed')";
+            $where = "/* is no user */ ISNULL(accounts.id) OR /* is user */ (NOT ISNULL(accounts.id) AND " . 
+                $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
+                " AND " . 
+                $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . 
+            ")";
         }
         
+        #if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
+        #    $where = "ISNULL(account_id) OR (NOT ISNULL(account_id) AND (visibility='displayed' OR account_id = '".Tinebase_Core::getUser()->getId()."'))";
+        #} else {
+        #    $where = "ISNULL(account_id) OR (NOT ISNULL(account_id) AND visibility='displayed')";
+        #}
         $select->where($where);        
         
         if ($_cols == '*' || array_key_exists('jpegphoto', (array)$_cols)) {
@@ -174,11 +184,6 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                 /* on     */ $this->_db->quoteIdentifier('image.contact_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
                 /* select */ array('jpegphoto' => 'IF(ISNULL('. $this->_db->quoteIdentifier('image.image') .'), 0, 1)')
             );
-        }
-        
-        // return contact type
-        if ($_cols == '*' || array_key_exists('type', (array)$_cols)) {
-            $select->columns(array('type' => "IF(ISNULL(account_id),'contact', 'user')"));
         }
         
         return $select;
@@ -193,9 +198,6 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected function _recordToRawData($_record)
     {
         $result = parent::_recordToRawData($_record);
-
-        // some columns got joined from another table and can't be written
-        unset($result['type']);
 
         return $result;
     }
