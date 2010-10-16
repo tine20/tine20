@@ -38,12 +38,34 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     protected $groupMembersTable;
     
     /**
+     * Table name without prefix
+     *
+     * @var string
+     */
+    protected $_tableName = 'groups';
+    
+    /**
+     * set to true is addressbook table is found
+     * 
+     * @var boolean
+     */
+    protected $_addressBookInstalled = false;
+    
+    /**
      * the constructor
      */
     public function __construct() {
     	$this->_db = Tinebase_Core::getDb();
-        $this->groupsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'groups'));
+    	
+        $this->groupsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . $this->_tableName));
         $this->groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
+        
+        try {
+            $this->_db->describeTable(SQL_TABLE_PREFIX . 'addressbook');
+            $this->_addressBookInstalled = true;
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // nothing to do
+        }
     }
     
     /**
@@ -99,7 +121,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $select->where('group_id = ?', $groupId);
 
             $rows = $this->groupMembersTable->fetchAll($select);
-
+            
             foreach($rows as $member) {
                 $members[] = $member->account_id;
             }
@@ -329,9 +351,15 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $_group->setId($groupId);
         }
         
+        if (empty($_group->list_id)) {
+            $_group->visibility = 'hidden';
+            $_group->list_id    = null;
+        }
+        
         $data = $_group->toArray();
         
         unset($data['members']);
+        unset($data['container_id']);
         
         $this->groupsTable->insert($data);
                 
@@ -364,9 +392,17 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_group);
         
+        if (empty($_group->list_id)) {
+            $_group->visibility = 'hidden';
+            $_group->list_id    = null;
+        }
+        
         $data = array(
             'name'          => $_group->name,
-            'description'   => $_group->description
+            'description'   => $_group->description,
+            'visibility'	=> $_group->visibility,
+            'email'			=> $_group->email,
+            'list_id'		=> $_group->list_id
         );
         
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $groupId);
@@ -438,11 +474,10 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function getGroups($_filter = NULL, $_sort = 'name', $_dir = 'ASC', $_start = NULL, $_limit = NULL)
     {        
-        $select = $this->groupsTable->select();
+        $select = $this->_getSelect();
         
         if($_filter !== NULL) {
-        
-            $select->where($this->_db->quoteIdentifier('name') . ' LIKE ?', '%' . $_filter . '%');
+            $select->where($this->_db->quoteIdentifier($this->_tableName. '.name') . ' LIKE ?', '%' . $_filter . '%');
         }
         if($_sort !== NULL) {
             $select->order("$_sort $_dir");
@@ -451,9 +486,11 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $select->limit($_limit, $_start);
         }
         
-        $rows = $this->groupsTable->fetchAll($select);
-
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group', $rows->toArray());
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+        $stmt->closeCursor();
+        
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group', $queryResult);
         
         return $result;
     }
@@ -467,17 +504,19 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
      */
     public function getGroupByName($_name)
     {        
-        $select = $this->groupsTable->select();
+        $select = $this->_getSelect();
                 
-        $select->where($this->_db->quoteIdentifier('name') . ' = ?', $_name);
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.name') . ' = ?', $_name);
         
-        $row = $this->groupsTable->fetchRow($select);
-
-        if($row === NULL) {
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+        
+        if (!$queryResult) {
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
-        
-        $result = new Tinebase_Model_Group($row->toArray());
+
+        $result = new Tinebase_Model_Group($queryResult);
         
         return $result;
     }
@@ -493,17 +532,19 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     {   
         $groupdId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
         
-        $select = $this->groupsTable->select();
+        $select = $this->_getSelect();
                 
-        $select->where($this->_db->quoteIdentifier('id') . ' = ?', $groupdId);
+        $select->where($this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ?', $groupdId);
         
-        $row = $this->groupsTable->fetchRow($select);
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
         
-        if($row === NULL) {
+        if (!$queryResult) {
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
 
-        $result = new Tinebase_Model_Group($row->toArray());
+        $result = new Tinebase_Model_Group($queryResult);
         
         return $result;
     }
@@ -529,6 +570,32 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     	}
     	
     	return $result;
+    }
+    
+    /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     * 
+     */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {        
+        $select = $this->_db->select();
+
+        $select->from(array($this->_tableName => SQL_TABLE_PREFIX . $this->_tableName), $_cols);
+        
+        if ($this->_addressBookInstalled === true) { 
+            $select->joinLeft(
+                array('addressbook_lists' => SQL_TABLE_PREFIX . 'addressbook_lists'),
+                $this->_db->quoteIdentifier($this->_tableName . '.list_id') . ' = ' . $this->_db->quoteIdentifier('addressbook_lists.id'), 
+                array('container_id')
+            );
+        }
+        
+        
+        return $select;
     }
     
     /**
