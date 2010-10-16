@@ -244,6 +244,24 @@ class Tinebase_Application
     }
     
     /**
+     * return if application is installed
+     *
+     * @param  $_applicationName  the application name
+     * 
+     * @return bool
+     */
+    public function isInstalled($_applicationName)
+    {
+        try {
+            $this->getApplicationByName($_applicationName);
+            
+            return true;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            return false;
+        }
+    }
+    
+    /**
      * set application state
      *
      * @param   array $_applicationIds application ids to set new state for
