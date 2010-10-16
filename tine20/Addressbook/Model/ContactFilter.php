@@ -100,8 +100,8 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
-        'type'                 => array('custom' => true),
-        'user_status'          => array('custom' => true),
+        'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
+        //'user_status'          => array('custom' => true),
         'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'addressbook.id')),
     );
     
@@ -115,27 +115,20 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
      * @todo use group of Tinebase_Model_Filter_Text with OR?
      * @todo user_status: allow array as value and use 'in' operator
      */
-    public function appendFilterSql($_select, $_backend)
+/*    public function appendFilterSql($_select, $_backend)
     {
         $db = $_backend->getAdapter();
         
         foreach ($this->_customData as $customData) {
             switch($customData['field']) {
-                case 'type':
-                    $condition = $customData['value'] == 'user' ? 'NOT' : '';
-                	$_select->where('account_id IS ' . $condition .  ' NULL');
-//                  $_select->where(
-//                  	$db->quoteInto("IF(ISNULL(account_id),'contact', 'user') = ?", $customData['value'])
-//                 	);
-                    break;
                 case 'user_status':
                     $status = explode(' ', $customData['value']);
                     $_select->where(
-                        $db->quoteInto("IF(`status` = 'enabled' AND NOW() > `expires_at`, 'expired', status) IN (?)", $status)
+                        $db->quoteInto("IF(`user_status` = 'enabled' AND NOW() > `expires_at`, 'expired', status) IN (?)", $status)
                     );
                     break;
             }
         }
         
-    }
+    } */
 }
