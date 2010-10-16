@@ -397,7 +397,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
         }
         
+        $this->_updateForeignKeys('create', $_record);
+        
         $result = $this->get($_record->$identifier);
+        
         $this->_inspectAfterCreate($result, $_record);
         
         return $result;
@@ -521,7 +524,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             Tinebase_CustomField::getInstance()->saveRecordCustomFields($_record);
         }
                 
-        return $this->get($id, TRUE);
+        $this->_updateForeignKeys('update', $_record);
+        
+        $result = $this->get($id, true);
+        
+        return $result;
     }
     
     /**
@@ -867,6 +874,17 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @return void
      */
     protected function _inspectAfterCreate(Tinebase_Record_Abstract $_newRecord, Tinebase_Record_Abstract $_recordToCreate)
+    {
+    }
+    
+    /**
+     * do something after update of record
+     * 
+     * @param Tinebase_Record_Abstract $_newRecord
+     * @param Tinebase_Record_Abstract $_recordToCreate
+     * @return void
+     */
+    protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
     {
     }
 }
