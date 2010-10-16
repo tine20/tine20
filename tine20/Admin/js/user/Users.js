@@ -60,7 +60,9 @@ Tine.Admin.Model.UserArray = [
     { name: 'openid'},
     { name: 'visibility'},
     { name: 'sambaSAM' },
-    { name: 'emailUser' }
+    { name: 'emailUser' },
+    { name: 'contact_id' },
+    { name: 'container_id' }
 ];
 
 Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserArray, {
@@ -166,4 +168,11 @@ Tine.Admin.emailUserBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'EmailUser',
     recordClass: Tine.Admin.Model.EmailUser,
     idProperty: 'emailUID'
+});
+
+Tine.Admin.sharedAddressbookBackend = new Tine.Tinebase.data.RecordProxy({
+    appName: 'Admin',
+    modelName: 'SharedAddressbook',
+    recordClass: Tine.Tinebase.Model.Container,
+    idProperty: 'id'
 });

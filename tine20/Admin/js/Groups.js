@@ -400,7 +400,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     this.fireEvent('update', Ext.util.JSON.encode(this.group.data));
                     if(_closeWindow === true) {
                         //window.close();
-                        this.window.close()
+                        this.window.close();
                     } else {
                         this.onRecordLoad(response);
                     }
@@ -455,31 +455,56 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             width: 600,
             height: 500,
             items:[{
-	            	region: 'north',
-	                layout:'column',
-	                border: false,
-	                autoHeight: true,
-	                items:[{
-	                    columnWidth: 1,
-	                    layout: 'form',
-	                    border: false,
-	                    items:[{
-	                        xtype:'textfield',
-	                        fieldLabel: this.translation.gettext('Group Name'), 
-	                        name:'name',
-	                        anchor:'100%',
-	                        allowBlank: false
-	                    }, {
-	                        xtype:'textarea',
-	                        name: 'description',
-	                        fieldLabel: this.translation.gettext('Description'),
-	                        grow: false,
-	                        preventScrollbars:false,
-	                        anchor:'100%',
-	                        height: 60
-	                    }]        
-	                }]
-	            },
+                    region: 'north',
+                    layout:'column',
+                    border: false,
+                    autoHeight: true,
+                    items:[{
+                        columnWidth: 1,
+                        layout: 'form',
+                        border: false,
+                        items:[{
+                            xtype:'textfield',
+                            fieldLabel: this.translation.gettext('Group Name'), 
+                            name:'name',
+                            anchor:'100%',
+                            allowBlank: false
+                        }, {
+                            xtype:'textarea',
+                            name: 'description',
+                            fieldLabel: this.translation.gettext('Description'),
+                            grow: false,
+                            preventScrollbars:false,
+                            anchor:'100%',
+                            height: 60
+                        }, {
+                            layout: 'hbox',
+                            border: false,
+                            height: 40,
+                            layoutConfig: {align: 'stretch'},
+                            items: [{
+                                    flex: 1,
+                                    xtype: 'combo',
+                                    fieldLabel: this.translation.gettext('Visibility'),
+                                    name: 'visibility',
+                                    mode: 'local',
+                                    triggerAction: 'all',
+                                    allowBlank: false,
+                                    editable: false,
+                                    store: [['displayed', this.translation.gettext('Display in addressbook')], ['hidden', this.translation.gettext('Hide from addressbook')]]
+                                },
+                                new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                                    flex: 1,
+                                    fieldLabel: this.translation.gettext('Saved in Addressbook'),
+                                    name: 'container_id',
+                                    blurOnSelect: true,
+                                    recordClass: Tine.Tinebase.Model.Container,
+                                    recordProxy: Tine.Admin.sharedAddressbookBackend
+                                })
+                            ]
+                        }]        
+                    }]
+                },
                 accountPickerGridPanel
             ]
         };

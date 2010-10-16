@@ -765,8 +765,25 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         triggerAction: 'all',
                         allowBlank: false,
                         editable: false,
-                        store: [['displayed', this.app.i18n.gettext('Display in addressbook')], ['hidden', this.app.i18n.gettext('Hide from addressbook')]]
-					}]] 
+                        store: [['displayed', this.app.i18n.gettext('Display in addressbook')], ['hidden', this.app.i18n.gettext('Hide from addressbook')]],
+                        listeners: {
+                            scope: this,
+                            select: function(combo, record) {
+                                // disable container_id combo if hidden
+                                this.getForm().findField('container_id').setDisabled(record.data.field1 == 'hidden');
+                            }
+                        }
+                    },
+                    new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+                        fieldLabel: this.app.i18n._('Saved in Addressbook'),
+                        name: 'container_id',
+                        blurOnSelect: true,
+                        recordClass: Tine.Tinebase.Model.Container,
+                        disabled: this.record.get('visibility') == 'hidden',
+                        recordProxy: Tine.Admin.sharedAddressbookBackend
+                    })
+
+					]] 
 				}, {
                     xtype: 'fieldset',
                     title: this.app.i18n.gettext('Information'),
