@@ -49,6 +49,9 @@ class Felamimail_Message extends Zend_Mail_Message
         fputs($stream, $_addressList);
         rewind($stream);
         
+        // alternative solution to create stream; yet untested
+        #$stream = fopen('data://text/plain;base64,' . base64_encode($_addressList), 'r');
+        
         // split addresses
         $addresses = fgetcsv($stream);
         
