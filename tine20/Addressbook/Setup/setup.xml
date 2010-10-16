@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>3.4</version>
+    <version>3.9</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,17 +11,12 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>8</version>
+            <version>10</version>
             <declaration>
                 <field>
                     <name>id</name>
                     <type>integer</type>
                     <autoincrement>true</autoincrement>
-                </field>
-                <field>
-                    <name>account_id</name>
-                    <type>text</type>
-                    <length>40</length>
                 </field>
                 <field>
                     <name>adr_one_countryname</name>
@@ -378,19 +373,19 @@
                     <type>float</type>
                     <unsigned>false</unsigned>
                 </field>
+                <field>
+                    <name>type</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                    <default>contact</default>
+                </field>
                 <index>
                     <name>id</name>
                     <primary>true</primary>
                     <unique>true</unique>
                     <field>
                         <name>id</name>
-                    </field>
-                </index>
-                <index>
-                    <name>account_id</name>
-                    <unique>true</unique>
-                    <field>
-                        <name>account_id</name>
                     </field>
                 </index>
                 <index>
@@ -453,18 +448,11 @@
                     </reference>
                 </index>   
                 <index>
-                    <name>addressbook::account_id--accounts::id</name>
+                    <name>type</name>
                     <field>
-                        <name>account_id</name>
+                        <name>type</name>
                     </field>
-                    <foreign>true</foreign>
-                    <reference>
-                        <table>accounts</table>
-                        <field>id</field>
-	                    <onupdate>cascade</onupdate>
-	                    <ondelete>cascade</ondelete>
-                    </reference>
-                </index>   
+                </index>
             </declaration>
         </table>
         <table>
@@ -541,6 +529,157 @@
                 </index>
             </declaration>
         </table>
+        <table>
+            <name>addressbook_lists</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>container_id</name>
+                    <type>integer</type>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>name</name>
+                    <type>text</type>
+                    <length>128</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>email</name>
+                    <type>text</type>
+                    <length>64</length>
+                    <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>type</name>
+                    <type>enum</type>
+                    <value>list</value>
+                    <value>group</value>
+                    <notnull>true</notnull>
+                    <default>list</default>
+                </field>
+                <field>
+                    <name>created_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>creation_time</name>
+                    <type>datetime</type>
+                </field> 
+                <field>
+                    <name>last_modified_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>
+                <field>
+                    <name>last_modified_time</name>
+                    <type>datetime</type>
+                </field>
+                <field>
+                    <name>is_deleted</name>
+                    <type>boolean</type>
+                    <default>false</default>
+                </field>
+                <field>
+                    <name>deleted_by</name>
+                    <type>text</type>
+                    <length>40</length>
+                </field>            
+                <field>
+                    <name>deleted_time</name>
+                    <type>datetime</type>
+                </field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>name</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>name</name>
+                    </field>
+                </index>
+            </declaration>
+        </table>
+        <table>
+            <name>addressbook_list_members</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>list_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>contact_id</name>
+                    <type>integer</type>
+                    <!-- <type>text</type> 
+                    <length>40</length> --> 
+                    <notnull>true</notnull>
+                </field>
+
+                <index>
+                    <name>list_id-contact_id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>list_id</name>
+                    </field>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>contact_id</name>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>adressbook_list_members::list_id--addressbook_lists::id</name>
+                    <field>
+                        <name>list_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>addressbook_lists</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <onupdate>CASCADE</onupdate>
+                    </reference>
+                </index>
+                <index>
+                    <name>addressbook_list_members::contact_id--addressbook::id</name>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>addressbook</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                        <onupdate>CASCADE</onupdate>
+                    </reference>
+                </index>
+            </declaration>
+        </table>
     </tables>    
     <defaultRecords>
         <record>
@@ -554,7 +693,7 @@
             </field>
             <field>
                 <name>type</name>
-                <value>internal</value>
+                <value>shared</value>
             </field>
             <field>
                 <name>backend</name>

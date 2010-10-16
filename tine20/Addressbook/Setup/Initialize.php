@@ -40,6 +40,35 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         }
         parent::_initialize($_application, $_options);
         $this->_initializeFavorites();
+        $this->_initializeUserContacts();
+        $this->_initializeGroupLists();
+    }
+    
+    protected function _initializeUserContacts()
+    {
+        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        
+        foreach (Tinebase_User::getInstance()->getFullUsers() as $fullUser) {
+            $fullUser->container_id = $internalAddressbook->getId();
+            $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($fullUser);
+            
+            $fullUser->contact_id = $contact->getId();
+            Tinebase_User::getInstance()->updateUser($fullUser);
+        }
+    }
+    
+    protected function _initializeGroupLists()
+    {
+        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+        
+        foreach (Tinebase_Group::getInstance()->getGroups() as $group) {
+            $group->members = Tinebase_Group::getInstance()->getGroupMembers($group);
+            $group->container_id = $internalAddressbook->getId();
+            $list = Admin_Controller_Group::getInstance()->createOrUpdateList($group);
+            
+            $group->list_id = $list->getId();
+            Tinebase_Group::getInstance()->updateGroup($group);
+      }
     }
     
     protected function _initializeFavorites()
@@ -70,7 +99,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         
         // give anyone read rights to the internal addressbook
         // give Adminstrators group read/edit/admin rights to the internal addressbook
-        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_INTERNAL);
+        $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
         //Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
         Tinebase_Container::getInstance()->addGrants($internalAddressbook, Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, '0', array(
             Tinebase_Model_Grants::GRANT_READ
