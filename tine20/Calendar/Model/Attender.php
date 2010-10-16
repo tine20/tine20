@@ -21,6 +21,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
     const USERTYPE_GROUP       = 'group';
     const USERTYPE_GROUPMEMBER = 'groupmember';
     const USERTYPE_RESOURCE    = 'resource';
+    const USERTYPE_LIST        = 'list';
     
     /**
      * supported roles
@@ -223,6 +224,8 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             if (array_key_exists('accountId', $_data['user_id'])) {
             	// NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
                 $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'])->getId();
+            } elseif (array_key_exists('group_id', $_data['user_id'])) {
+                $_data['user_id'] = $_data['user_id']['group_id'];
             } else if (array_key_exists('id', $_data['user_id'])) {
                 $_data['user_id'] = $_data['user_id']['id'];
             }
@@ -361,11 +364,16 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         
         $allGroupMembersContactIds = array();
         foreach ($groupAttendee as $groupAttender) {
-            $groupAttenderMemberIds = Tinebase_Group::getInstance()->getGroupMembers($groupAttender->user_id);
-            $groupAttenderContactIds = Tinebase_User::getInstance()->getMultiple($groupAttenderMemberIds)->contact_id;
+            #$groupAttenderMemberIds = Tinebase_Group::getInstance()->getGroupMembers($groupAttender->user_id);
+            #$groupAttenderContactIds = Tinebase_User::getInstance()->getMultiple($groupAttenderMemberIds)->contact_id;
+            #$allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
+        
+            $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
+            $groupAttenderContactIds = Addressbook_Controller_List::getInstance()->get($group->list_id)->members;
             $allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
             
             $toAdd = array_diff($groupAttenderContactIds, $allCurrGroupMembersContactIds);
+            
             foreach($toAdd as $userId) {
                 $_attendee->addRecord(new Calendar_Model_Attender(array(
                     'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
@@ -441,7 +449,9 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $typeMap[$type] = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($ids), TRUE);
                     break;
                 case self::USERTYPE_GROUP:
+                    // first fetch the groups, then the lists identified by list_id
                     $typeMap[$type] = Tinebase_Group::getInstance()->getMultiple(array_unique($ids));
+                    $typeMap[self::USERTYPE_LIST] = Addressbook_Controller_List::getInstance()->getMultiple($typeMap[$type]->list_id, true);
                 	break;
                 case self::USERTYPE_RESOURCE:
                 	$typeMap[$type] = Calendar_Controller_Resource::getInstance()->getMultiple(array_unique($ids));
@@ -465,9 +475,24 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     // allready resolved from cache
                     continue;
                 }
+
+                $idx = false;
                 
-                $attendeeTypeSet = $typeMap[$attender->user_type];
-                $idx = $attendeeTypeSet->getIndexById($attender->user_id);
+                if ($attender->user_type == self::USERTYPE_GROUP) {
+                    $attendeeTypeSet = $typeMap[$attender->user_type];
+                    $idx = $attendeeTypeSet->getIndexById($attender->user_id);
+                    if ($idx !== false) {
+                        $group = $attendeeTypeSet[$idx];
+                        
+                        $idx = false;
+                        
+                        $attendeeTypeSet = $typeMap[self::USERTYPE_LIST];
+                        $idx = $attendeeTypeSet->getIndexById($group->list_id);
+                    } 
+                } else {
+                    $attendeeTypeSet = $typeMap[$attender->user_type];
+                    $idx = $attendeeTypeSet->getIndexById($attender->user_id);
+                }
                 if ($idx !== false) {
                     // copy to cache
                     if (! array_key_exists($attender->user_type, self::$_resovedAttendeeCache)) {
