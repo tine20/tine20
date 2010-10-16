@@ -597,4 +597,159 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 
         $this->setApplicationVersion('Tinebase', '3.16');
     }
+
+    /**
+     * update to 3.17
+     * - add new fields to store name(s) and email address in accounts table
+     */
+    public function update_16()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>email</name>
+                <type>text</type>
+                <length>64</length>
+            </field>
+        ');
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>first_name</name>
+                <type>text</type>
+                <length>64</length>
+            </field>
+        ');
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>last_name</name>
+                <type>text</type>
+                <length>64</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>full_name</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>display_name</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>true</notnull>
+            </field>
+        ');        
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $select = $this->_db->select()
+            ->from(
+                array('addressbook' => SQL_TABLE_PREFIX . 'addressbook'), 
+                array('addressbook.n_given', 'addressbook.n_family', 'addressbook.n_fileas', 'addressbook.n_fn', 'addressbook.email', 'addressbook.account_id')
+            )
+            ->where('account_id IS NOT NULL');
+        
+        $result = $this->_db->fetchAll($select);
+        
+        foreach ($result as $row) {
+            // write contact data into accounts table
+            $data = array(
+            	'first_name'   => $row['n_given'], 
+                'last_name'    => $row['n_family'], 
+                'full_name'    => $row['n_fn'], 
+                'display_name' => $row['n_fileas'], 
+                'email'        => $row['email']
+            );
+            $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $data, $this->_db->quoteInto("id = ?", $row['account_id']));
+        }
+        
+        $this->setTableVersion('accounts', '4');
+        $this->setApplicationVersion('Tinebase', '3.17');
+    }
+    
+    /**
+     * update to 3.18
+     * - add contact_id column to accounts table and populate with defaults from addressbook table
+     */
+    public function update_17()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>contact_id</name>
+                <type>text</type>
+                <length>40</length>
+            </field>
+        ');        
+        $this->_backend->addCol('accounts', $declaration);
+        
+        $select = $this->_db->select()
+            ->from(
+                array('addressbook' => SQL_TABLE_PREFIX . 'addressbook'), 
+                array('addressbook.id', 'addressbook.account_id')
+            )
+            ->where('account_id IS NOT NULL');
+        
+        $result = $this->_db->fetchAll($select);
+        
+        foreach ($result as $row) {
+            // write contact data into accounts table
+            $data = array(
+            	'contact_id'   => $row['id'] 
+            );
+            $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $data, $this->_db->quoteInto("id = ?", $row['account_id']));
+        }
+        
+        $this->setTableVersion('accounts', '5');
+        $this->setApplicationVersion('Tinebase', '3.18');
+    }
+    
+    /**
+     * update to 3.19
+     * - add list_id, visibility and email column to groups table
+     */
+    public function update_18()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>visibility</name>
+                <type>enum</type>
+                <value>hidden</value>
+                <value>displayed</value>
+                <default>displayed</default>
+                <notnull>true</notnull>
+            </field>
+        ');        
+        $this->_backend->addCol('groups', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>email</name>
+                <type>text</type>
+                <length>64</length>
+            </field>
+        ');        
+        $this->_backend->addCol('groups', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>list_id</name>
+                <type>text</type>
+                <length>40</length>
+            </field>
+        ');        
+        $this->_backend->addCol('groups', $declaration);
+        
+        $this->setTableVersion('groups', 2);
+        $this->setApplicationVersion('Tinebase', '3.19');
+    }
 }
