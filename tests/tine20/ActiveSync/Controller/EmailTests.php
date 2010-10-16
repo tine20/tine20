@@ -26,6 +26,18 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
 {
     /**
+     * 
+     * @var unknown_type
+     */
+    protected $_domDocument;
+    
+    /**
+     * 
+     * @var Felamimail_Controller_MessageTest
+     */
+    protected $_emailTestClass;
+    
+    /**
      * @var array test objects
      */
     protected $objects = array();
@@ -54,6 +66,23 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {   	
+        $imp = new DOMImplementation;
+        
+        $doctype = $imp->createDocumentType("phpunit", "-//W3C//DTD HTML 4.01//EN", "http://www.w3.org/TR/html4/strict.dtd"); 
+        $this->_domDocument = $imp->createDocument(null, 'phpunit', $doctype);
+        
+        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts'    , 'uri:Contacts');
+        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks'       , 'uri:Tasks');
+        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email'       , 'uri:Email');
+        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar'    , 'uri:Calendar');
+        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase' , 'uri:AirSyncBase');
+        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSync'     , 'uri:AirSync');
+        $this->_domDocument->formatOutput = false;
+        $this->_domDocument->encoding     = 'utf-8';
+        
+        $this->_emailTestClass = new Felamimail_Controller_MessageTest();
+        $this->_emailTestClass->setup();
+        
         ########### define test devices
         $palm = ActiveSync_Backend_DeviceTests::getTestDevice();
         $palm->devicetype = 'palm';
@@ -74,18 +103,68 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $this->_emailTestClass->tearDown();
+        
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['devicePalm']);
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['deviceIPhone']);
     }
     
     /**
-     * validate getFolders for all devices except IPhone
+     * validate fetching email by filereference(hashid-partid)
      */
     public function testAppendFileReference()
     {
     	$controller = new ActiveSync_Controller_Email($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
     	
-        #$this->assertArrayHasKey("addressbook-root", $folders, "key addressbook-root not found");
+    	$message = $this->_emailTestClass->createCachedTestMessage('multipart_mixed.eml', 'multipart/mixed');
+    	
+    	$fileReference = $message->getId() . '-2';
+    	
+    	$properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
+        $controller->appendFileReference($properties, $fileReference);
+        $this->_domDocument->documentElement->appendChild($properties);
+        
+    	#$this->_domDocument->formatOutput = true;
+    	#echo $this->_domDocument->saveXML();
+
+        $this->assertEquals('text/plain', @$this->_domDocument->getElementsByTagNameNS('uri:AirSyncBase', 'ContentType')->item(0)->nodeValue, $this->_domDocument->saveXML());
+        $this->assertEquals(2787, strlen($this->_domDocument->getElementsByTagNameNS('uri:ItemOperations', 'Data')->item(0)->nodeValue), $this->_domDocument->saveXML());
+    }
+    
+    /**
+     * validate fetching email by filereference(hashid-partid)
+     */
+    public function testAppendXML()
+    {
+        $controller = new ActiveSync_Controller_Email($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
+        
+        $message = $this->_emailTestClass->createCachedTestMessage('multipart_mixed.eml', 'multipart/mixed');
+        
+        $options = array();
+        $properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
+        $controller->appendXML($properties, $message->folder_id, $message->getId(), $options);
+        $this->_domDocument->documentElement->appendChild($properties);
+        
+        #$this->_domDocument->formatOutput = true;
+        #echo $this->_domDocument->saveXML();
+
+        $this->assertEquals('[gentoo-dev] Automated Package Removal and Addition Tracker, for the week ending 2009-04-12 23h59 UTC', @$this->_domDocument->getElementsByTagNameNS('uri:Email', 'Subject')->item(0)->nodeValue, $this->_domDocument->saveXML());
+        // size of the attachment
+        $this->assertEquals(2787, @$this->_domDocument->getElementsByTagNameNS('uri:AirSyncBase', 'EstimatedDataSize')->item(0)->nodeValue, $this->_domDocument->saveXML());
+        // size of the body
+        $this->assertEquals(9606, @$this->_domDocument->getElementsByTagNameNS('uri:AirSyncBase', 'EstimatedDataSize')->item(1)->nodeValue, $this->_domDocument->saveXML());
+    }
+    
+    /**
+     * append message (from given filename) to cache
+     *
+     * @param string $_filename
+     * @param string $_folder
+     */
+    protected function _appendMessage($_filename, $_folder)
+    {
+        $message = fopen(dirname(dirname(__FILE__)) . '/files/' . $_filename, 'r');
+        $this->_controller->appendMessage($_folder, $message);
     }
     
 }

@@ -64,7 +64,6 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     	
     	############# TEST USER ##########
     	$user = new Tinebase_Model_FullUser(array(
-            'accountId'             => 10,
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
             'accountStatus'         => 'enabled',
@@ -76,9 +75,9 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         ));
         
         try {
-            $user = Tinebase_User::getInstance()->getUserById($user->accountId) ;
+            $user = Tinebase_User::getInstance()->getUserByLoginName($user->accountLoginName);
         } catch (Tinebase_Exception_NotFound $e) {
-            Tinebase_User::getInstance()->addUser($user);
+            $user = Tinebase_User::getInstance()->addUser($user);
         }
         $this->objects['user'] = $user;
         
