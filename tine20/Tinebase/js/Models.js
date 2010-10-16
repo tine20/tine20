@@ -62,7 +62,9 @@ Tine.Tinebase.Model.Timezone = Ext.data.Record.create([
 Tine.Tinebase.Model.Group = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'name'},
-    {name: 'description'}
+    {name: 'description'},
+    {name: 'container_id'},
+    {name: 'visibility'}
     //{name: 'groupMembers'}
 ], {
     appName: 'Tinebase',
