@@ -100,9 +100,11 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     {
         $account = $this->_backend->addUser($this->objects['initialAccount']);
         $this->assertEquals($this->objects['initialAccount']['accountId'], $account->accountId);
+        $this->assertEquals('hidden', $account->visibility);
         
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->accountId);
-        $this->assertTrue(!empty($contact->creation_time));
+        # user gets created in Admin_Controller_User now
+        #$contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->accountId);
+        #$this->assertTrue(!empty($contact->creation_time));
     }
     
     /**
@@ -134,10 +136,14 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateAccount()
     {
-        $account = $this->_backend->updateUser($this->objects['updatedAccount']);
+        $user = $this->objects['updatedAccount'];
+        $user->contact_id = null;
+        $user->visibility = 'displayed';
+        $account = $this->_backend->updateUser($user);
         
         $this->assertEquals($this->objects['updatedAccount']['accountLoginName'], $account->accountLoginName);
         $this->assertEquals('disabled', $account->accountStatus);
+        $this->assertEquals('hidden', $account->visibility);
     }
     
     /**

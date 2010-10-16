@@ -267,13 +267,13 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
      * try to add an account
      *
      */
-    public function testGetInternalContainer()
+    /*public function testGetInternalContainer()
     {
         $container = $this->_instance->getInternalContainer(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
         
         $this->assertType('Tinebase_Model_Container', $container);
         $this->assertEquals(Tinebase_Model_Container::TYPE_INTERNAL, $container->type);
-    }
+    }*/
     
     /**
      * try to other users who gave grants to current account
@@ -340,7 +340,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($records[0]['container_id'] instanceof Tinebase_Model_Container, 'contaienr_id is not resolved');
         $this->assertTrue(!empty($records[0]['container_id']['path']), 'path is not added');
         $this->assertGreaterThan(0, count($records[0]['container_id']['account_grants']));
-        $this->assertEquals('internal', $records[0]['container_id']['type']);
+        $this->assertEquals('shared', $records[0]['container_id']['type']);
     }
     
     /**

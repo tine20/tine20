@@ -143,6 +143,7 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
         $group = Tinebase_Group::getInstance()->addGroup($this->objects['initialGroup']);
         
         $this->assertEquals($this->objects['initialGroup']->id, $group->id);
+        $this->assertEquals('hidden', $group->visibility);
     }
     
     /**
@@ -184,10 +185,15 @@ class Tinebase_GroupTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateGroup()
     {
-        $group = Tinebase_Group::getInstance()->updateGroup($this->objects['updatedGroup']);
+        $group = $this->objects['updatedGroup'];
+        $group->visibility = 'displayed';
+        $group->list_id = null;
+        
+        $group = Tinebase_Group::getInstance()->updateGroup($group);
         
         $this->assertEquals($this->objects['updatedGroup']->name, $group->name);
         $this->assertEquals($this->objects['updatedGroup']->description, $group->description);
+        $this->assertEquals('hidden', $group->visibility);
     }
     
     /**
