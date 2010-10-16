@@ -98,4 +98,11 @@ interface Tinebase_User_Interface_SyncAble
      * @param  Addressbook_Model_Contact  $_contact
      */
     public function updateContactFromSyncBackend(Tinebase_Model_FullUser $_user, Addressbook_Model_Contact $_contact);   
+
+    /**
+     * update contact data(first name, last name, ...) of user
+     * 
+     * @param Addressbook_Model_Contact $contact
+     */
+    public function updateContactInSyncBackend($_contact);
 }
