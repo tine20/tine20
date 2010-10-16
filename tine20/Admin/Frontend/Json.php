@@ -220,7 +220,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // encode the account array
         $userArray['accountPrimaryGroup'] = $group->toArray();
-                
+        
         // encode the groups array
         $userArray['accountGroups'] = array(
 			'results' 		=> $userGroups,
@@ -232,6 +232,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 			'results' 		=> $userRoles,
 			'totalcount' 	=> count($userRoles)
 		);
+        
+		// encode container id
+		if (!empty($user->container_id)) {
+            $userArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($user->container_id)->toArray();
+        }
 
         return $userArray;
     }
@@ -265,6 +270,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param array $filter
      * @param array $paging
+     * @return array with results array & totalcount (int)
      */
     public function searchUsers($filter, $paging)
     {
@@ -446,6 +452,26 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $return;
     }
     
+    /**
+     * search for shared addressbook containers
+     * 
+     * @param array $filter unused atm
+     * @param array $paging unused atm
+     * @return array
+     * 
+     * @todo add test
+     */
+    public function searchSharedAddressbooks($filter, $paging)
+    {
+        $sharedAddressbooks = Admin_Controller_User::getInstance()->searchSharedAddressbooks();
+        $result = $this->_multipleRecordsToJson($sharedAddressbooks);
+        
+        return array(
+            'results'       => $result,
+            'totalcount'    => count($result),
+        );
+    }
+    
     /********************************* Groups *********************************/
     
     /**
@@ -456,14 +482,22 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getGroup($groupId)
     {
-        $group = array();
+        $groupArray = array();
         
         if ($groupId) {
-            $group = Admin_Controller_Group::getInstance()->get($groupId)->toArray();
+            $group = Admin_Controller_Group::getInstance()->get($groupId);
+            
+            $groupArray = $group->toArray();
+            
+            if (!empty($group->container_id)) {
+                $groupArray['container_id'] = Tinebase_Container::getInstance()->getContainerById($group->container_id)->toArray();
+            }
+            
         }
         
-        $group['groupMembers'] = $this->getGroupMembers($groupId);
-        return $group;
+        $groupArray['groupMembers'] = $this->getGroupMembers($groupId);
+        
+        return $groupArray;
     }
     
     /**
