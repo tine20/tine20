@@ -132,7 +132,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @return array
      * 
      * @todo replace this by Admin.searchGroups / getGroups (without acl check)? or add getGroupCount to Tinebase_Group
-     */
+     *
     public function searchGroups($filter, $paging)
     {
     	$result = array(
@@ -149,7 +149,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result['totalcount'] = Admin_Controller_Group::getInstance()->searchCount($filter[0]['value']);
         
         return $result;
-    }
+    }*/
     
     /**
      * Search for roles
