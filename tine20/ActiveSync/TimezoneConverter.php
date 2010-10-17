@@ -20,7 +20,7 @@
  * 
  * Or generates offsets relative to Coordinated Universal Time UTC for a given timezone
  * 
- * @example
+ * <code>
  * $timezoneGuesser = new ActiveSync_TimezoneGuesser();
  * $matchingTimezones = $timezoneGuesser->getTimezonesForOffsets(array(                                                                                                                            
  *    'bias' => -60,
@@ -48,7 +48,7 @@
  *
  *  This will return an array containing all the timezones belonging to 
  *  CEST/CET (UTC/GMT +2 hours), including "Europe/Berlin"
- * 
+ *  </code>
  */
 class ActiveSync_TimezoneConverter 
 {
