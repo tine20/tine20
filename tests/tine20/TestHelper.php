@@ -79,3 +79,62 @@ $tinebaseController = Tinebase_Controller::getInstance();
 if (!$tinebaseController->login($config->username, $config->password, $config->ip, 'TineUnittest')){
     throw new Exception("Couldn't login, user session required for tests! \n");
 }
+
+initTestUsers();
+
+function initTestUsers() {
+    $personas = array(
+        'jsmith'   => 'John Smith',
+        'sclever'  => 'Susan Clever',
+        'pwulf'    => 'Paul Wulf',
+        'jmcblack' => 'James McBlack',
+        'rwright'  => 'Roberta Wright',
+    );
+    
+    foreach ($personas as $login => $fullName) {
+        try {
+            $user = Tinebase_User::getInstance()->getFullUserByLoginName($login);
+        } catch (Tinebase_Exception_NotFound $e) {
+            list($given, $last) = explode(' ', $fullName);
+            
+            $group   = Tinebase_Group::getInstance()->getGroupByName('Users');
+            $groupId = $group->getId();
+            
+            $user = new Tinebase_Model_FullUser(array(
+                'accountLoginName'      => $login,
+                'accountPrimaryGroup'   => $groupId,
+                'accountDisplayName'    => $fullName,
+                'accountLastName'       => $last,
+                'accountFirstName'      => $given,
+                'accountFullName'       => $fullName,
+                //'accountEmailAddress'   => $login . '@tine-publications.co.uk',
+                'accountEmailAddress'   => $login . '@tine20.org'
+            ));
+            
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+                
+                $user->container_id = $internalAddressbook->getId();
+                
+                $contact = Admin_Controller_User::getInstance()->createOrUpdateContact($user);
+                
+                $user->contact_id = $contact->getId();
+            }
+            
+            $user = Tinebase_User::getInstance()->addUser($user);
+            
+            Tinebase_Group::getInstance()->addGroupMember($groupId, $user);
+            
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $listBackend = new Addressbook_Backend_List();
+                
+                $listBackend->addListMember($group->list_id, $user->contact_id);
+            }
+            
+            // give additional testusers the same password as the primary test account
+            Tinebase_User::getInstance()->setPassword($user, Zend_Registry::get('testConfig')->password);
+        }
+        $personas[$login] = $user;
+    }
+    Zend_Registry::set('personas', $personas);
+}

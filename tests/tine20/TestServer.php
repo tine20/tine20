@@ -55,7 +55,7 @@ class TestServer extends Tinebase_Server_Abstract
     public function initFramework()
     {
         $this->_initFramework();
-        $this->_initTestUsers();
+        #$this->_initTestUsers();
         
         // set default internal encoding
         //ini_set('iconv.internal_encoding', 'utf-8');
