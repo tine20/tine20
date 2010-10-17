@@ -93,6 +93,9 @@ class ActiveSync_Command_GetItemEstimate extends ActiveSync_Command_Wbxml
         }
     }    
     
+    /**
+     * this function generates the response for the client
+     */
     public function getResponse()
     {
         $controller = ActiveSync_Controller::getInstance();
