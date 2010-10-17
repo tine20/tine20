@@ -195,9 +195,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         if (!empty($_filter)) {
             $filter = $filter->addFilter(Zend_Ldap_Filter::orFilter(
-                Zend_Ldap_Filter::equals($this->_rowNameMapping['accountFirstName'], Zend_Ldap::filterEscape($_filter)),
-                Zend_Ldap_Filter::equals($this->_rowNameMapping['accountLastName'], Zend_Ldap::filterEscape($_filter)),
-                Zend_Ldap_Filter::equals($this->_rowNameMapping['accountLoginName'], Zend_Ldap::filterEscape($_filter))
+                Zend_Ldap_Filter::contains($this->_rowNameMapping['accountFirstName'], Zend_Ldap::filterEscape($_filter)),
+                Zend_Ldap_Filter::contains($this->_rowNameMapping['accountLastName'], Zend_Ldap::filterEscape($_filter)),
+                Zend_Ldap_Filter::contains($this->_rowNameMapping['accountLoginName'], Zend_Ldap::filterEscape($_filter))
             ));
         }
 
