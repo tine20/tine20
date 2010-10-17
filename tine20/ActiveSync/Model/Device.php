@@ -17,12 +17,12 @@
  * class to hold device data
  * 
  * @package     ActiveSync
- * @property    string  $acsversion          activesync protocoll version
- * @property    string  $calendarfilter_id   the calendar filter id
- * @property    string  $contactsfilter_id   the contacts filter id
- * @property    string  $emailfilter_id      the email filter id
- * @property    string  $id                 the id
- * @property    string  $tasksfilter_id      the tasks filter id
+ * @property  string  $acsversion         activesync protocoll version
+ * @property  string  $calendarfilter_id  the calendar filter id
+ * @property  string  $contactsfilter_id  the contacts filter id
+ * @property  string  $emailfilter_id     the email filter id
+ * @property  string  $id                 the id
+ * @property  string  $tasksfilter_id     the tasks filter id
  */
 class ActiveSync_Model_Device extends Tinebase_Record_Abstract
 {  
