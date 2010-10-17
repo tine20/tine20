@@ -63,8 +63,8 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      * 
      * @todo move that to *_Acl_Rights
      */    
-    public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE) {
-        
+    public function checkRight($_right, $_throwException = TRUE, $_includeTinebaseAdmin = TRUE) 
+    {
         if (empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('No application name defined!');
         }
