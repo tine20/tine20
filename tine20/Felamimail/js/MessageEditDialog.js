@@ -107,7 +107,6 @@ Ext.namespace('Tine.Felamimail');
     /**
      * init buttons
      * 
-     * TODO add 'add attachment' and 'save email note'-toggle buttons
      * TODO add save in drafts button
      */
     initButtons: function() {
@@ -334,19 +333,6 @@ Ext.namespace('Tine.Felamimail');
         delete this.subject;
     },
     
-    onAddAttachment: function (button, e) {
-        
-        // expand south panel
-        this.southPanel.expand();
-        
-        // TODO make this work
-        //this.attachmentGrid.getAddAction().execute(this.attachmentGrid.getTopToolbar().get(0), e);
-    },
-    
-    onToggleSaveNote: function (button, e) {
-        this.record.set('note', (! this.record.get('note')));
-    },
-    
     /**
      * decode this.replyTo / this.forwardMsgs from interwindow json transport
      */
@@ -367,6 +353,29 @@ Ext.namespace('Tine.Felamimail');
             
             this.forwardMsgs = msgs;
         }
+    },
+    
+    /**
+     * expand attachment panel and execute add file action/button
+     * 
+     * @param {} button
+     * @param {} e
+     */
+    onAddAttachment: function (button, e) {
+        this.southPanel.expand();
+        
+        // TODO make this work
+        //this.attachmentGrid.getAddAction().execute(this.attachmentGrid.getTopToolbar().get(0), e);
+    },
+    
+    /**
+     * toggle save note
+     * 
+     * @param {} button
+     * @param {} e
+     */
+    onToggleSaveNote: function (button, e) {
+        this.record.set('note', (! this.record.get('note')));
     },
     
     /**
