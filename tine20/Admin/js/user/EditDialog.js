@@ -93,6 +93,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.forwardsGrid.setStoreFromArray(this.emailRecord.get('emailForwards'));
         }
         
+        // load stores for memberships
+        if (this.record.id) {
+        	this.storeGroups.loadData(this.record.get('accountGroups'));
+        	this.storeRoles.loadData(this.record.get('accountRoles'));
+        }
+        
         Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
     },
     
@@ -122,21 +128,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var newGroups = [],
         	newRoles = [];
         	
-        if (this.storeGroups) {
-	        this.storeGroups.each(function (rec) {
-	        	newGroups.push(rec.data.id);	        
-	        });
-	        // add selected primary group to new groups if not exists
-	        if (newGroups.indexOf(this.record.get('accountPrimaryGroup')) === -1) {
-	        	newGroups.push(this.record.get('accountPrimaryGroup'));
-	        }   
-        }
-        
-        if (this.storeRoles) { 
-	        this.storeRoles.each(function (rec) {
-	        	newRoles.push(rec.data.id);	        
-	        });
-        }
+        this.storeGroups.each(function (rec) {
+        	newGroups.push(rec.data.id);	        
+        });
+        // add selected primary group to new groups if not exists
+        if (newGroups.indexOf(this.record.get('accountPrimaryGroup')) === -1) {
+        	newGroups.push(this.record.get('accountPrimaryGroup'));
+        }   
+         
+        this.storeRoles.each(function (rec) {
+        	newRoles.push(rec.data.id);	        
+        });
         
         this.record.set('accountGroups', newGroups);
         this.record.set('accountRoles', newRoles);
@@ -177,6 +179,20 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     initUserMemberships: function () {
     
+    	this.storeGroups = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: Tine.Tinebase.Model.Group
+        });
+        
+        this.storeRoles = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: Tine.Tinebase.Model.Role
+        });
+    	
     	return [{
     		xtype: 'treepanel',
     		region: 'west',
@@ -211,10 +227,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	        			centerRegion.add(node.pickerGrid);
         				centerRegion.layout.setActiveItem(node.pickerGrid.id);
         				centerRegion.doLayout();
-        				
-        				if (this.record.id) {
-				        	this['store' + node.id].loadData(this.record.get('account' + node.id));
-				    	}	
 	        		}
 	        		else {
 	        			centerRegion.layout.setActiveItem(node.pickerGrid.id);
@@ -237,14 +249,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Tine.widgets.account.PickerGridPanel}
      */
     initUserGroups: function () {
-    	
-    	this.storeGroups = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            fields: Tine.Tinebase.Model.Group
-        });
-    	
+
         this.pickerGridGroups = new Tine.widgets.account.PickerGridPanel({
         	border: false,
         	frame: false,
@@ -263,14 +268,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Tine.widgets.account.PickerGridPanel}
      */
     initUserRoles: function () {
-    	
-    	this.storeRoles = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            fields: Tine.Tinebase.Model.Role
-        });
-            
+    	    
         this.pickerGridRoles = new Tine.widgets.grid.PickerGridPanel({
         	border: false,
         	frame: false,
