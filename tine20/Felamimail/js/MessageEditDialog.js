@@ -96,6 +96,8 @@ Ext.namespace('Tine.Felamimail');
     loadRecord: false,
     evalGrants: false,
     
+    bodyStyle:'padding:0px',
+    
     /**
      * overwrite update toolbars function (we don't have record grants)
      * @private
