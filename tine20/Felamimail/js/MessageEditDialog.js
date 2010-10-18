@@ -492,7 +492,7 @@ Ext.namespace('Tine.Felamimail');
             fieldLabel: this.app.i18n._('Attachments'),
             hideLabel: true,
             filesProperty: 'attachments',
-            anchor: '100% 80%'
+            anchor: '100% 95%'
         });
         
         // TODO add button from attachmentGrid to toolbar
