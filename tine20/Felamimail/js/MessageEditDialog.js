@@ -129,12 +129,26 @@ Ext.namespace('Tine.Felamimail');
             disabled: false,
             scope: this
         });
+
+        this.action_saveEmailNote = new Ext.Action({
+            text: this.app.i18n._('Save Email Note'),
+            handler: this.onToggleSaveNote,
+            iconCls: 'notes_noteIcon',
+            disabled: false,
+            scope: this,
+            enableToggle: true
+        });
+        this.button_saveEmailNote = Ext.apply(new Ext.Button(this.action_saveEmailNote), {
+            scale: 'medium',
+            rowspan: 2,
+            iconAlign: 'top'
+        });
         
         this.tbar = new Ext.Toolbar({
             defaults: {height: 55},
             items: [{
                 xtype: 'buttongroup',
-                columns: 2,
+                columns: 3,
                 items: [
                     Ext.apply(new Ext.Button(this.action_send), {
                         scale: 'medium',
@@ -145,7 +159,8 @@ Ext.namespace('Tine.Felamimail');
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    })
+                    }), 
+                    this.button_saveEmailNote
                 ]
             }]
         });
@@ -328,6 +343,10 @@ Ext.namespace('Tine.Felamimail');
         //this.attachmentGrid.getAddAction().execute(this.attachmentGrid.getTopToolbar().get(0), e);
     },
     
+    onToggleSaveNote: function (button, e) {
+        this.record.set('note', (! this.record.get('note')));
+    },
+    
     /**
      * decode this.replyTo / this.forwardMsgs from interwindow json transport
      */
@@ -370,6 +389,10 @@ Ext.namespace('Tine.Felamimail');
         
         this.getForm().loadRecord(this.record);
         this.attachmentGrid.loadRecord(this.record);
+        
+        if (this.record.get('note') && this.record.get('note') == '1') {
+            this.button_saveEmailNote.toggle();
+        }
         
         this.loadMask.hide();
     },
@@ -491,14 +514,7 @@ Ext.namespace('Tine.Felamimail');
             header: false,
             collapsible: true,
             collapsed: (! this.record.get('attachments') || this.record.get('attachments').length == 0),
-            items: [
-                this.attachmentGrid, 
-            {
-                boxLabel: this.app.i18n._('Save contact note'),
-                name: 'note',
-                hideLabel: true,
-                xtype: 'checkbox'
-            }]
+            items: [this.attachmentGrid]
         });
         
         this.htmlEditor = new Ext.form.HtmlEditor({
