@@ -276,29 +276,24 @@ Tine.Admin.Roles.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             border: false,
             items: [{
                 region: 'north',
-                layout: 'column',
+                layout: 'form',
                 border: false,
                 autoHeight: true,
                 items: [{
-                    columnWidth: 1,
-                    layout: 'form',
-                    border: false,
-                    items: [{
-                        xtype: 'textfield',
-                        fieldLabel: this.translation.gettext('Role Name'), 
-                        name: 'name',
-                        anchor: '100%',
-                        allowBlank: false,
-                        maxLength: 128
-                    }, {
-                        xtype: 'textarea',
-                        name: 'description',
-                        fieldLabel: this.translation.gettext('Description'),
-                        grow: false,
-                        preventScrollbars: false,
-                        anchor: '100%',
-                        height: 60
-                    }]        
+                    xtype: 'textfield',
+                    fieldLabel: this.translation.gettext('Role Name'), 
+                    name: 'name',
+                    anchor: '100%',
+                    allowBlank: false,
+                    maxLength: 128
+                }, {
+                    xtype: 'textarea',
+                    name: 'description',
+                    fieldLabel: this.translation.gettext('Description'),
+                    grow: false,
+                    preventScrollbars: false,
+                    anchor: '100%',
+                    height: 60
                 }]
             }, {
             	xtype: 'tabpanel',
