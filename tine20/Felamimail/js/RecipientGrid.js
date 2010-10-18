@@ -250,6 +250,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             } else if (o.value == '') {
                 this.store.remove(o.record);
             }
+            if (this.store.getCount() > 6) {
+                // TODO get height dynamically
+                this.setHeight(155);
+            }
             this.ownerCt.doLayout();
         }
     },    
