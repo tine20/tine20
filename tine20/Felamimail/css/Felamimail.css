@@ -369,10 +369,6 @@
     border-color: #DFE8F6;  
 }
 
-#felamimail-recipient-grid td {
-    background-color: #DFE8F6; 	
-}
-
 .felamimail-body-blockquote {
     margin: 5px 10px 0 3px;
     padding-left: 10px;
@@ -383,6 +379,18 @@
     background-image:url(../../library/ExtJS/resources/images/default/grid/wait.gif);
     background-repeat: no-repeat;
     padding-left: 19px;
+}
+
+.felamimail-form-field .x-form-text .x-form-field {
+    padding-right: 10px;
+}
+
+#felamimail-recipient-grid .x-grid3-td-type {
+    background-color: #DFE8F6;
+}
+
+#felamimail-recipient-grid .x-grid3-td-address {
+    background-color: white;
 }
 
 /***** sieve rules ******/
