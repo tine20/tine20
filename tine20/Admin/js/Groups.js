@@ -12,6 +12,8 @@
  * TODO         refactor this (don't use Ext.getCmp, etc.)
  */
 
+/*global Ext, Tine, Locale*/
+
 Ext.ns('Tine.Admin.Groups');
 
 /*********************************** MAIN DIALOG ********************************************/
@@ -32,7 +34,7 @@ Tine.Admin.Groups.Main = {
         /**
          * onclick handler for addBtn
          */
-        addGroup: function(_button, _event) {
+        addGroup: function (button, event) {
             //Tine.Admin.Groups.EditDialog.openWindow({});
             this.openEditWindow(null);
         },
@@ -40,7 +42,7 @@ Tine.Admin.Groups.Main = {
         /**
          * onclick handler for editBtn
          */
-        editGroup: function(_button, _event) {
+        editGroup: function (button, event) {
             var selectedRows = Ext.getCmp('AdminGroupsGrid').getSelectionModel().getSelections();
             //Tine.Admin.Groups.EditDialog.openWindow({group: selectedRows[0]});
             this.openEditWindow(selectedRows[0]);
@@ -50,12 +52,13 @@ Tine.Admin.Groups.Main = {
         /**
          * onclick handler for deleteBtn
          */
-        deleteGroup: function(_button, _event) {
-            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected groups?'), function(_button){
-                if (_button == 'yes') {
+        deleteGroup: function (button, event) {
+            Ext.MessageBox.confirm(this.translation.gettext('Confirm'), this.translation.gettext('Do you really want to delete the selected groups?'), function (button) {
+                if (button === 'yes') {
                 
-                    var groupIds = new Array();
-                    var selectedRows = Ext.getCmp('AdminGroupsGrid').getSelectionModel().getSelections();
+                    var groupIds = [],
+                    	selectedRows = Ext.getCmp('AdminGroupsGrid').getSelectionModel().getSelections();
+                    	
                     for (var i = 0; i < selectedRows.length; ++i) {
                         groupIds.push(selectedRows[i].id);
                     }
@@ -68,10 +71,10 @@ Tine.Admin.Groups.Main = {
                         },
                         scope: this,
                         text: this.translation.gettext('Deleting group(s)...'),
-                        success: function(_result, _request){
+                        success: function (result, request) {
                             Ext.getCmp('AdminGroupsGrid').getStore().reload();
                         },
-                        failure: function(result, request){
+                        failure: function (result, request) {
                             Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Some error occurred while trying to delete the group.'));
                         }
                     });
@@ -90,14 +93,14 @@ Tine.Admin.Groups.Main = {
             group: record,
             listeners: {
                 scope: this,
-                'update': function(record) {
+                'update': function (record) {
                     this.reload();
                 }
             }                
         });
     },
     
-    initComponent: function() {
+    initComponent: function () {
         this.translation = new Locale.Gettext();
         this.translation.textdomain('Admin');
         
@@ -127,21 +130,20 @@ Tine.Admin.Groups.Main = {
 
     },
     
-    displayGroupsToolbar: function() {
+    displayGroupsToolbar: function () {
         
     	// if toolbar was allready created set active toolbar and return
-    	if (this.groupsToolbar) 
-    	{
+    	if (this.groupsToolbar) {
     		Tine.Tinebase.MainScreen.setActiveToolbar(this.groupsToolbar, true);
     		return;
     	}
     	
         var GroupsAdminQuickSearchField = new Ext.ux.SearchField({
             id: 'GroupsAdminQuickSearchField',
-            width:240,
+            width: 240,
             emptyText: Tine.Tinebase.translation._hidden('enter searchfilter')
         }); 
-        GroupsAdminQuickSearchField.on('change', function(){
+        GroupsAdminQuickSearchField.on('change', function () {
             Ext.getCmp('AdminGroupsGrid').getStore().load({
                 params: {
                     start: 0,
@@ -184,16 +186,15 @@ Tine.Admin.Groups.Main = {
         Tine.Tinebase.MainScreen.setActiveToolbar(this.groupsToolbar, true);
     },
 
-    displayGroupsGrid: function() {
+    displayGroupsGrid: function () {
     	
     	// if grid panel was allready created set active content panel and return
-    	if (this.gridPanel)
-    	{
+    	if (this.gridPanel)	{
     		Tine.Tinebase.MainScreen.setActiveContentPanel(this.gridPanel, true);
     		return;
     	}
     	
-        if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
+        if (Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts')) {
             this.actions.addGroup.setDisabled(false);
         }
 
@@ -212,10 +213,10 @@ Tine.Admin.Groups.Main = {
         
         dataStore.setDefaultSort('id', 'asc');
 
-        dataStore.on('beforeload', function(_dataStore, _options) {
-            _options = _options || {};
-            _options.params = _options.params || {};
-            _options.params.filter = Ext.getCmp('GroupsAdminQuickSearchField').getValue();
+        dataStore.on('beforeload', function (dataStore, options) {
+            options = options || {};
+            options.params = options.params || {};
+            options.params.filter = Ext.getCmp('GroupsAdminQuickSearchField').getValue();
         }, this);        
         
         // the paging toolbar
@@ -241,17 +242,17 @@ Tine.Admin.Groups.Main = {
         });
         
         // the rowselection model
-        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect:true});
+        var rowSelectionModel = new Ext.grid.RowSelectionModel({multiSelect: true});
 
-        rowSelectionModel.on('selectionchange', function(_selectionModel) {
-            var rowCount = _selectionModel.getCount();
+        rowSelectionModel.on('selectionchange', function (selectionModel) {
+            var rowCount = selectionModel.getCount();
 
-            if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
-                if(rowCount < 1) {
+            if (Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts')) {
+                if (rowCount < 1) {
                     // no row selected
                     this.actions.deleteGroup.setDisabled(true);
                     this.actions.editGroup.setDisabled(true);
-                } else if(rowCount > 1) {
+                } else if (rowCount > 1) {
                     // more than one row selected
                     this.actions.deleteGroup.setDisabled(false);
                     this.actions.editGroup.setDisabled(true);
@@ -271,23 +272,23 @@ Tine.Admin.Groups.Main = {
             tbar: pagingToolbar,     
             autoSizeColumns: false,
             selModel: rowSelectionModel,
-            enableColLock:false,
+            enableColLock: false,
             loadMask: true,
             autoExpandColumn: 'n_family',
             border: false,
             view: new Ext.grid.GridView({
                 autoFill: true,
-                forceFit:true,
+                forceFit: true,
                 ignoreAdd: true,
                 emptyText: this.translation.gettext('No groups to display')
             })            
             
         });
         
-        this.gridPanel.on('rowcontextmenu', function(_grid, _rowIndex, _eventObject) {
-            _eventObject.stopEvent();
-            if(!_grid.getSelectionModel().isSelected(_rowIndex)) {
-                _grid.getSelectionModel().selectRow(_rowIndex);
+        this.gridPanel.on('rowcontextmenu', function (grid, rowIndex, eventObject) {
+            eventObject.stopEvent();
+            if (! grid.getSelectionModel().isSelected(rowIndex)) {
+                grid.getSelectionModel().selectRow(rowIndex);
             }
             
             if (! this.contextMenu) {
@@ -301,12 +302,12 @@ Tine.Admin.Groups.Main = {
 	                ]
 	            });
             }
-            this.contextMenu.showAt(_eventObject.getXY());
+            this.contextMenu.showAt(eventObject.getXY());
         }, this);
         
-        this.gridPanel.on('rowdblclick', function(_gridPar, _rowIndexPar, ePar) {
-        	if ( Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts') ) {
-                var record = _gridPar.getStore().getAt(_rowIndexPar);
+        this.gridPanel.on('rowdblclick', function (gridPar, rowIndexPar, ePar) {
+        	if (Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts')) {
+                var record = gridPar.getStore().getAt(rowIndexPar);
                 //Tine.Admin.Groups.EditDialog.openWindow({group: record});
                 this.openEditWindow(record);
         	}
@@ -319,14 +320,12 @@ Tine.Admin.Groups.Main = {
     /**
      * update datastore with node values and load datastore
      */
-    loadData: function() 
-    {
+    loadData: function () {
         var dataStore = Ext.getCmp('AdminGroupsGrid').getStore();
-        dataStore.load({ params: { start:0, limit:50 } });
+        dataStore.load({ params: { start: 0, limit: 50 } });
     },
 
-    show: function() 
-    {	
+    show: function () {	
     	if (this.groupsToolbar === null || this.gridPanel === null) {
         	this.initComponent();
     	}
@@ -337,9 +336,9 @@ Tine.Admin.Groups.Main = {
         this.loadData();
     },
     
-    reload: function() {
-        if(Ext.ComponentMgr.all.containsKey('AdminGroupsGrid')) {
-            setTimeout ("Ext.getCmp('AdminGroupsGrid').getStore().reload()", 200);
+    reload: function () {
+        if (Ext.ComponentMgr.all.containsKey('AdminGroupsGrid')) {
+            setTimeout("Ext.getCmp('AdminGroupsGrid').getStore().reload()", 200);
         }
     }
 };
@@ -368,15 +367,15 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     labelWidth: 120,
     labelAlign: 'top',
     
-    handlerApplyChanges: function(_button, _event, _closeWindow) {
+    handlerApplyChanges: function(button, event, closeWindow) {
         var form = this.getForm();
         
-        if(form.isValid()) {
+        if (form.isValid()) {
             Ext.MessageBox.wait(this.translation.gettext('Please wait'), this.translation.gettext('Updating Memberships'));
             
             // get group members
             var groupMembers = [];
-            this.membersStore.each(function(record){
+            this.membersStore.each(function (record) {
                 groupMembers.push(record.id);
             });
             
@@ -391,14 +390,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     groupData: this.group.data,
                     groupMembers: groupMembers
                 },
-                success: function(response) {
+                success: function (response) {
                     /*
                     if(window.opener.Tine.Admin.Groups) {
                         window.opener.Tine.Admin.Groups.Main.reload();
                     }
                     */
                     this.fireEvent('update', Ext.util.JSON.encode(this.group.data));
-                    if(_closeWindow === true) {
+                    if (closeWindow === true) {
                         //window.close();
                         this.window.close();
                     } else {
@@ -406,7 +405,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     }
                     Ext.MessageBox.hide();
                 },
-                failure: function ( result, request) { 
+                failure: function (result, request) { 
                     Ext.MessageBox.alert(this.translation.gettext('Failed'), this.translation.gettext('Could not save group.')); 
                 },
                 scope: this 
@@ -419,12 +418,12 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     /**
      * function updateRecord
      */
-    updateRecord: function(_groupData) {
+    updateRecord: function (groupData) {
     	// if groupData is empty (=array), set to empty object because array won't work!
-        if (_groupData.length === 0) {
-        	_groupData = {};
+        if (groupData.length === 0) {
+        	groupData = {};
         }
-        this.group = new Tine.Tinebase.Model.Group(_groupData, _groupData.id ? _groupData.id : 0);
+        this.group = new Tine.Tinebase.Model.Group(groupData, groupData.id ? groupData.id : 0);
         
         // tweak, as group members are not in standard form cycle yet
         this.membersStore.loadData(this.group.get('groupMembers'));
@@ -434,14 +433,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
      * function updateToolbarButtons
      * 
      */
-    updateToolbarButtons: function(_rights) {        
+    updateToolbarButtons: function (rights) {        
     },
     
     /**
      * function getFormContents
      * 
      */
-    getFormContents: function() {
+    getFormContents: function () {
         var accountPickerGridPanel = new Tine.widgets.account.PickerGridPanel({
             title: this.translation.gettext('Group Members'),
             store: this.membersStore,
@@ -450,75 +449,62 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         });
         
         var editGroupDialog = {
-            layout:'border',
-            border:false,
+            layout: 'border',
+            border: false,
             width: 600,
             height: 500,
-            items:[{
-                    region: 'north',
-                    layout:'column',
-                    border: false,
-                    autoHeight: true,
-                    items:[{
-                        columnWidth: 1,
-                        layout: 'form',
-                        border: false,
-                        items:[{
-                            xtype:'textfield',
-                            fieldLabel: this.translation.gettext('Group Name'), 
-                            name:'name',
-                            anchor:'100%',
-                            allowBlank: false
-                        }, {
-                            xtype:'textarea',
-                            name: 'description',
-                            fieldLabel: this.translation.gettext('Description'),
-                            grow: false,
-                            preventScrollbars:false,
-                            anchor:'100%',
-                            height: 60
-                        }, {
-                            layout: 'hbox',
-                            border: false,
-                            height: 40,
-                            layoutConfig: {align: 'stretch'},
-                            items: [{
-                                    flex: 1,
-                                    xtype: 'combo',
-                                    fieldLabel: this.translation.gettext('Visibility'),
-                                    name: 'visibility',
-                                    mode: 'local',
-                                    triggerAction: 'all',
-                                    allowBlank: false,
-                                    editable: false,
-                                    store: [['displayed', this.translation.gettext('Display in addressbook')], ['hidden', this.translation.gettext('Hide from addressbook')]]
-                                },
-                                new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-                                    flex: 1,
-                                    fieldLabel: this.translation.gettext('Saved in Addressbook'),
-                                    name: 'container_id',
-                                    blurOnSelect: true,
-                                    recordClass: Tine.Tinebase.Model.Container,
-                                    recordProxy: Tine.Admin.sharedAddressbookBackend
-                                })
-                            ]
-                        }]        
-                    }]
-                },
-                accountPickerGridPanel
-            ]
+            items: [{
+            	region: 'north',
+            	xtype: 'columnform',
+                border: false,
+                autoHeight: true,
+                items: [[{
+                    columnWidth: 1,
+                    xtype: 'textfield',
+                    fieldLabel: this.translation.gettext('Group Name'), 
+                    name: 'name',
+                    anchor: '100%',
+                    allowBlank: false
+                }], [{
+                    columnWidth: 1,
+                    xtype: 'textarea',
+                    name: 'description',
+                    fieldLabel: this.translation.gettext('Description'),
+                    grow: false,
+                    preventScrollbars: false,
+                    anchor: '100%',
+                    height: 60
+                }], [{
+                    columnWidth: 0.5,
+                    xtype: 'combo',
+                    fieldLabel: this.translation.gettext('Visibility'),
+                    name: 'visibility',
+                    mode: 'local',
+                    triggerAction: 'all',
+                    allowBlank: false,
+                    editable: false,
+                    store: [['displayed', this.translation.gettext('Display in addressbook')], ['hidden', this.translation.gettext('Hide from addressbook')]]
+                }, {
+                	columnWidth: 0.5,
+                	xtype: 'tinerecordpickercombobox',
+                	fieldLabel: this.translation.gettext('Saved in Addressbook'),
+                    name: 'container_id',
+                    blurOnSelect: true,
+                    recordClass: Tine.Tinebase.Model.Container,
+                    recordProxy: Tine.Admin.sharedAddressbookBackend
+                }]]
+			}, accountPickerGridPanel]
         };
         
         return editGroupDialog;
     },
     
-    initComponent: function() {
+    initComponent: function () {
         this.group = this.group ? this.group : new Tine.Tinebase.Model.Group({}, 0);
         
         //this.title = title: 'Edit Group ' + ,
         
-        if (this.group.id !== 0)
-        {
+        if (this.group.id !== 0) {
 	        Ext.Ajax.request({
 	            scope: this,
 	            success: this.onRecordLoad,
@@ -543,18 +529,16 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         Tine.Admin.Groups.EditDialog.superclass.initComponent.call(this);
     },
     
-    onRender : function(ct, position){
+    onRender: function (ct, position) {
         Tine.widgets.dialog.EditDialog.superclass.onRender.call(this, ct, position);
         
         // generalized keybord map for edit dlgs
-        var map = new Ext.KeyMap(this.el, [
-            {
-                key: [10,13], // ctrl + return
-                ctrl: true,
-                fn: this.handlerApplyChanges.createDelegate(this, [true], true),
-                scope: this
-            }
-        ]);
+        var map = new Ext.KeyMap(this.el, [{
+            key: [10, 13], // ctrl + return
+            ctrl: true,
+            fn: this.handlerApplyChanges.createDelegate(this, [true], true),
+            scope: this
+        }]);
 
         this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.translation.gettext('Group'))});
         if (this.group.id !== 0) {
@@ -562,7 +546,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         }
     },
     
-    onRecordLoad: function(response) {
+    onRecordLoad: function (response) {
         this.getForm().findField('name').focus(false, 350);
         var recordData = Ext.util.JSON.decode(response.responseText);
         this.updateRecord(recordData);
