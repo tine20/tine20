@@ -120,14 +120,28 @@ Ext.namespace('Tine.Felamimail');
             disabled: false,
             scope: this
         });
+
+        // TODO make this work or add button directly -> @see getFormItems()
+        this.action_addAttachment = new Ext.Action({
+            text: this.app.i18n._('Add Attachment(s)'),
+            handler: this.onAddAttachment,
+            iconCls: 'actionAdd',
+            disabled: false,
+            scope: this
+        });
         
         this.tbar = new Ext.Toolbar({
             defaults: {height: 55},
             items: [{
                 xtype: 'buttongroup',
-                columns: 1,
+                columns: 2,
                 items: [
                     Ext.apply(new Ext.Button(this.action_send), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }),
+                    Ext.apply(new Ext.Button(this.action_addAttachment), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
@@ -305,6 +319,15 @@ Ext.namespace('Tine.Felamimail');
         delete this.subject;
     },
     
+    onAddAttachment: function (button, e) {
+        
+        // expand south panel
+        this.southPanel.expand();
+        
+        // TODO make this work
+        //this.attachmentGrid.getAddAction().execute(this.attachmentGrid.getTopToolbar().get(0), e);
+    },
+    
     /**
      * decode this.replyTo / this.forwardMsgs from interwindow json transport
      */
@@ -449,6 +472,35 @@ Ext.namespace('Tine.Felamimail');
             anchor: '100% 80%'
         });
         
+        // TODO add button from attachmentGrid to toolbar
+        /*
+        this.getTopToolbar().addButton(Ext.apply(new Ext.Button(this.attachmentGrid.actions.add), {
+            scale: 'medium',
+            rowspan: 2,
+            iconAlign: 'top'
+            //scope: this.attachmentGrid
+        }));
+        */
+        
+        this.southPanel = new Ext.Panel({
+            region: 'south',
+            layout: 'form',
+            height: 150,
+            split: true,
+            collapseMode: 'mini',
+            header: false,
+            collapsible: true,
+            collapsed: (! this.record.get('attachments') || this.record.get('attachments').length == 0),
+            items: [
+                this.attachmentGrid, 
+            {
+                boxLabel: this.app.i18n._('Save contact note'),
+                name: 'note',
+                hideLabel: true,
+                xtype: 'checkbox'
+            }]
+        });
+        
         this.htmlEditor = new Ext.form.HtmlEditor({
             fieldLabel: this.app.i18n._('Body'),
             name: 'body',
@@ -532,23 +584,7 @@ Ext.namespace('Tine.Felamimail');
                         }
                     }, this.htmlEditor
                 ]
-            }, {
-                region: 'south',
-                layout: 'form',
-                height: 150,
-                split: true,
-                collapseMode: 'mini',
-                header: false,
-                collapsible: true,
-                items: [
-                    this.attachmentGrid, 
-                {
-                    boxLabel: this.app.i18n._('Save contact note'),
-                    name: 'note',
-                    hideLabel: true,
-                    xtype: 'checkbox'
-                }]
-            }]
+            }, this.southPanel]
         };
     },
 
