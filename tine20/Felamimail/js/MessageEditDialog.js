@@ -605,6 +605,12 @@ Ext.namespace('Tine.Felamimail');
                                         + field.getValue()
                                     );
                                 }
+                            },
+                            'keydown': function(field, e) {
+                                if (e.getKey() == e.TAB) {
+                                    // TODO this should ALWAYS focus the textarea of the html editor
+                                    this.htmlEditor.focus();
+                                }
                             }
                         }
                     }, this.htmlEditor
