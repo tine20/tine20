@@ -21,6 +21,7 @@ Ext.namespace('Tine.Felamimail');
  * you can choose from which account you want to send the mail.</p>
  * <p>
  * TODO         jump with one tab from subject to htmleditor textarea
+ * TODO         fix htmleditor quoting (break quoting with ENTER)
  * TODO         make email note editable
  * </p>
  * 
@@ -104,6 +105,7 @@ Ext.namespace('Tine.Felamimail');
     /**
      * init buttons
      * 
+     * TODO add 'add attachment' and 'save email note'-toggle buttons
      * TODO add save in drafts button
      */
     initButtons: function() {
@@ -407,8 +409,6 @@ Ext.namespace('Tine.Felamimail');
      * @param {} combo
      * @param {} newValue
      * @param {} oldValue
-     * 
-     * TODO improve that by checking first if value/ account id changed
      */
      onFromSelect: function(combo, record, index) {
         // get new signature
@@ -437,8 +437,7 @@ Ext.namespace('Tine.Felamimail');
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
             record: this.record,
             i18n: this.app.i18n,
-            hideLabel: true,
-            boxMaxHeight: 150 // TODO make this work
+            hideLabel: true
         });
         
         this.attachmentGrid = new Tine.widgets.grid.FileUploadGrid({
@@ -453,7 +452,6 @@ Ext.namespace('Tine.Felamimail');
             name: 'body',
             allowBlank: true,
             flex: 1,  // Take up all *remaining* vertical space
-            boxMinHeight: 150, // TODO make this work
             getDocMarkup: function(){
                 var markup = '<html>'
                     + '<head>'
@@ -493,7 +491,6 @@ Ext.namespace('Tine.Felamimail');
             items: [
                 {
                 region: 'center',
-                autoScroll: true, // TODO make scrollbar appear!! -> but only for recipients or only if recipients height reaches a certain amount
                 layout: {
                     type: 'vbox',
                     align: 'stretch'  // Child items are stretched to full width
@@ -560,7 +557,6 @@ Ext.namespace('Tine.Felamimail');
      */
     isValid: function() {
         var result = (! this.attachmentGrid.isUploading());
-        
         return (result && Tine.Felamimail.MessageEditDialog.superclass.isValid.call(this));
     }
         

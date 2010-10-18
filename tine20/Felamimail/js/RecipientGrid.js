@@ -72,6 +72,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     clicksToEdit:1,
     
     /**
+     * @cfg {Number} numberOfRecordsForFixedHeight
+     */
+    numberOfRecordsForFixedHeight: 6,
+
+    /**
      * @cfg {Boolean} header
      * show header
      */
@@ -211,6 +216,22 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (this.store.getCount() == 1) {
             this.startEditing.defer(200, this, [0, 1]);
         }
+        
+        this.setFixedHeight(true);
+    },
+    
+    /**
+     * set grid to fixed height if it has more than X records
+     *  
+     * @param {} doLayout
+     */
+    setFixedHeight: function (doLayout) {
+        if (this.store.getCount() > this.numberOfRecordsForFixedHeight) {
+            this.setHeight(155);
+            if (doLayout && doLayout === true) {
+                this.ownerCt.doLayout();
+            }
+        }
     },
     
     /**
@@ -250,10 +271,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             } else if (o.value == '') {
                 this.store.remove(o.record);
             }
-            if (this.store.getCount() > 6) {
-                // TODO get height dynamically
-                this.setHeight(155);
-            }
+            this.setFixedHeight(false);
             this.ownerCt.doLayout();
         }
     },    
