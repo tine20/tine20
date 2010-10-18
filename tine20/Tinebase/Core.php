@@ -792,11 +792,15 @@ class Tinebase_Core
      */
     public static function setExecutionLifeTime($_seconds)
     {
-        if(ini_get('max_execution_time') < $_seconds || (int)$_seconds === 0) {
-            if((bool)ini_get('safe_mode') === true) {
-                Setup_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' max_execution_time(' . ini_get('max_execution_time') . ') is to low. Can\'t set limit to ' . $_seconds . ' because of safe mode restrictions.');
+        if (ini_get('max_execution_time') < $_seconds || (int)$_seconds === 0) {
+            if ((bool)ini_get('safe_mode') === true) {
+                if (Tinebase_Core::isRegistered(self::LOGGER)) {
+                    Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' max_execution_time(' . ini_get('max_execution_time') . ') is too low. Can\'t set limit to ' . $_seconds . ' because of safe mode restrictions.');    
+                }
             } else {
-            	Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);
+            	if (Tinebase_Core::isRegistered(self::LOGGER)) {
+            	    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' setting execution life time to: ' . $_seconds);    
+            	}
                 set_time_limit($_seconds);
             }
         }
