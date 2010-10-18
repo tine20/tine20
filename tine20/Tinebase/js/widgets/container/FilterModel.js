@@ -52,8 +52,8 @@ Tine.widgets.container.FilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
-        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
-        
+    	Tine.widgets.container.FilterModel.superclass.initComponent.call(this);
+                
         this.containerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
         this.containersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
         
