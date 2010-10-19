@@ -446,8 +446,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'emailMailSize',
                         xtype: 'displayfield',
                         style: this.displayFieldStyle
-                    }]
-                    ]
+                    }]]
                 }]
             }, {
                 xtype: 'fieldset',
@@ -766,22 +765,21 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         store: [['displayed', this.app.i18n.gettext('Display in addressbook')], ['hidden', this.app.i18n.gettext('Hide from addressbook')]],
                         listeners: {
                             scope: this,
-                            select: function(combo, record) {
+                            select: function (combo, record) {
                                 // disable container_id combo if hidden
-                                this.getForm().findField('container_id').setDisabled(record.data.field1 == 'hidden');
+                                this.getForm().findField('container_id').setDisabled(record.data.field1 === 'hidden');
                             }
                         }
-                    },
-                    new Tine.Tinebase.widgets.form.RecordPickerComboBox({
-                        fieldLabel: this.app.i18n._('Saved in Addressbook'),
+                    }, {
+                    	xtype: 'tinerecordpickercombobox',
+                        fieldLabel: this.app.i18n.gettext('Saved in Addressbook'),
                         name: 'container_id',
                         blurOnSelect: true,
+                        listWidth: 250,
                         recordClass: Tine.Tinebase.Model.Container,
-                        disabled: this.record.get('visibility') == 'hidden',
+                        disabled: this.record.get('visibility') === 'hidden',
                         recordProxy: Tine.Admin.sharedAddressbookBackend
-                    })
-
-					]] 
+                    }]] 
 				}, {
                     xtype: 'fieldset',
                     title: this.app.i18n.gettext('Information'),
