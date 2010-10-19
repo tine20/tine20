@@ -66,7 +66,7 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
         
         this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
             readOnly: true,
-            proxy: this.recordProxy || null
+            proxy: this.recordProxy || undefined
         }, this, 'totalProperty,root,recordClass'));
         
         this.on('beforequery', this.onBeforeQuery, this);

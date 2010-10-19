@@ -736,7 +736,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }], [{
                     	xtype: 'tinerecordpickercombobox',
                         fieldLabel: this.app.i18n.gettext('Primary group'),
-                        listWidth: 230,
+                        listWidth: 250,
                         name: 'accountPrimaryGroup',
                         blurOnSelect: true,
                         recordClass: Tine.Tinebase.Model.Group
