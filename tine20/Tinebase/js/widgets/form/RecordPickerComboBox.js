@@ -41,6 +41,12 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
     recordClass: null,
     
     /**
+     * @cfg {Tine.Tinebase.data.RecordProxy} recordProxy
+     * record backend 
+     */
+    recordProxy: null,
+    
+    /**
      * @type Tine.Tinebase.data.Record selectedRecord
      * @property selectedRecord 
      * The last record which was selected
@@ -53,14 +59,15 @@ Tine.Tinebase.widgets.form.RecordPickerComboBox = Ext.extend(Ext.form.ComboBox, 
     forceSelection: true,
     
     initComponent: function () {
-        //this.appName = this.model.getMeta('appName');
-        //this.modelName = this.model.getMeta('modelName');
         this.displayField = this.recordClass.getMeta('titleProperty');
         this.valueField = this.recordClass.getMeta('idProperty');
         
         this.loadingText = _('Searching...');
         
-        this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({readOnly: true}, this, 'totalProperty,root,recordClass'));
+        this.store = new Tine.Tinebase.data.RecordStore(Ext.copyTo({
+            readOnly: true,
+            proxy: this.recordProxy || null
+        }, this, 'totalProperty,root,recordClass'));
         
         this.on('beforequery', this.onBeforeQuery, this);
         
