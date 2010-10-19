@@ -227,11 +227,13 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
         if (values) {
             this.cfStore.each(function(def) {
                 value = values[def.get('name')];
-                var datetimeFields = ['datefield', 'datetimefield', 'extuxclearabledatefield'];
-                if (datetimeFields.indexOf(def.get('type')) != -1) {
-                    value = new Date(value);
+                if (value) {
+                    var datetimeFields = ['datefield', 'datetimefield', 'extuxclearabledatefield'];
+                    if (datetimeFields.indexOf(def.get('type')) != -1) {
+                        value = new Date(value);
+                    }
+                    def.fieldObj.setValue(value);
                 }
-                def.fieldObj.setValue(value);
             });
         }
     }
