@@ -418,18 +418,17 @@ class Tinebase_User
      * 
      * Method is called during Setup Initialization
      *
-     * @param array $_options [hash that may contain override values for admin user name and password]
-     * 
-     * @example $_options may contain the following keys:
-     * <pre>
+     * $_options may contain the following keys:
+     * <code>
      * $options = array(
      *  'adminLoginName'    => 'admin',
      *  'adminPassword'     => 'lars',
      *  'adminFirstName'    => 'Tine 2.0',
      *  'adminLastName'     => 'Admin Account',
      * );
-     * </pre>
-     * 
+     * </code>
+     *
+     * @param array $_options [hash that may contain override values for admin user name and password]
      * @return void
      */
     public static function createInitialAccounts($_options)
