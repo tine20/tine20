@@ -7,7 +7,9 @@
  * @version     $Id$
  *
  */
- 
+
+/*global Ext*/
+
 Ext.ns('Ext.ux');
 
 /**
@@ -17,26 +19,28 @@ Ext.ns('Ext.ux');
  *
  * @cfg {String} windowType type of window {Ext|Browser|Air}
  */
-Ext.ux.WindowFactory = function(config) {
+Ext.ux.WindowFactory = function (config) {
     Ext.apply(this, config);
     
-    switch (this.windowType) {
-        case 'Browser' :
-            this.windowClass = Ext.ux.PopupWindow;
-            this.windowManager = Ext.ux.PopupWindowMgr;
-            break;
-        case 'Ext' :
-            this.windowClass = Ext.Window;
-            this.windowManager = Ext.WindowMgr;
-            break;
-        case 'Air' :
-            this.windowClass = Ext.air.NativeWindow;
-            this.windowManager = Ext.air.NativeWindowManager;
-            break;
-        default :
-            console.error('No such windowType: ' + this.windowType);
-            break;
+    switch (this.windowType) 
+    {
+    case 'Browser' :
+        this.windowClass = Ext.ux.PopupWindow;
+        this.windowManager = Ext.ux.PopupWindowMgr;
+        break;
+    case 'Ext' :
+        this.windowClass = Ext.Window;
+        this.windowManager = Ext.WindowMgr;
+        break;
+    case 'Air' :
+        this.windowClass = Ext.air.NativeWindow;
+        this.windowManager = Ext.air.NativeWindowManager;
+        break;
+    default :
+        console.error('No such windowType: ' + this.windowType);
+        break;
     }
+    
     //Ext.ux.WindowFactory.superclass.constructor.call(this);
 };
 
@@ -57,7 +61,7 @@ Ext.ux.WindowFactory.prototype = {
     /**
      * @rivate
      */
-    getBrowserWindow: function(config) {
+    getBrowserWindow: function (config) {
         var win = Ext.ux.PopupWindowMgr.get(config.name);
         
         if (! win) {
@@ -71,7 +75,7 @@ Ext.ux.WindowFactory.prototype = {
     /**
      * @private
      */
-    getExtWindow: function(c) {
+    getExtWindow: function (c) {
         // add titleBar
         c.height = c.height + 20;
         
@@ -88,6 +92,11 @@ Ext.ux.WindowFactory.prototype = {
         var win = new Ext.Window(c);
         c.items.window = win;
         
+        // if initShow property is present and it is set to false don't show window, just return reference
+        if (c.hasOwnProperty('initShow') && c.initShow === false) {
+	    	return win;
+	    }
+        
         win.show();
         return win;
     },
@@ -95,7 +104,7 @@ Ext.ux.WindowFactory.prototype = {
     /**
      * constructs window items from config properties
      */
-    getCenterPanel: function(config) {
+    getCenterPanel: function (config) {
         var items;
         if (config.contentPanelConstructor) {
             config.contentPanelConstructorConfig = config.contentPanelConstructorConfig || {};
@@ -120,9 +129,13 @@ Ext.ux.WindowFactory.prototype = {
                     if (ls.hasOwnProperty(p) && p !== 'scope') {
                         // NOTE apply dosn't work here for some strange reason, so we hope that there are not more than 5 params
                         if (ls[p].fn) {
-                            lsProxy[p] = function() {ls[p].fn.call(ls[p].scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);};
+							lsProxy[p] = function () {
+								ls[p].fn.call(ls[p].scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
+							};
                         } else {
-                            lsProxy[p] = function() {ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);};
+							lsProxy[p] = function () {
+								ls[p].call(ls.scope, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
+							};
                         }
                     }
                 }
@@ -134,14 +147,15 @@ Ext.ux.WindowFactory.prototype = {
             config.contentPanelConstructorConfig.window = config;
             
             // find the constructor in this context
-            var parts = config.contentPanelConstructor.split('.');
-            var ref = window;
-            for (var i=0; i<parts.length; i++) {
+            var parts = config.contentPanelConstructor.split('.'),
+            	ref = window;
+            	
+            for (var i = 0; i < parts.length; i += 1) {
                 ref = ref[parts[i]];
             }
             
             // finally construct the content panel
-            var items = new ref(config.contentPanelConstructorConfig);
+            items = new ref(config.contentPanelConstructorConfig);
         } else {
             items = config.items ? config.items : {};
         }
@@ -155,8 +169,7 @@ Ext.ux.WindowFactory.prototype = {
      * creates new window if not already exists.
      * brings window to front
      */
-    getWindow: function(config) {
-        
+    getWindow: function (config) {
         var windowType = (config.modal) ? 'Ext' : this.windowType;
         
         // Names are only allowed to be alnum
@@ -167,19 +180,17 @@ Ext.ux.WindowFactory.prototype = {
             delete config.contentPanelConstructorConfig.title;
         }
         
-        switch (windowType) {
-            case 'Browser' :
-                return this.getBrowserWindow(config);
-                break;
-            case 'Ext' :
-                return this.getExtWindow(config);
-                break;
-            case 'Air' :
-                return this.getAirWindow(config);
-                break;
-            default :
-                console.error('No such windowType: ' + this.windowType);
-                break;
+        switch (windowType) 
+        {
+        case 'Browser' :
+            return this.getBrowserWindow(config);
+        case 'Ext' :
+            return this.getExtWindow(config);
+        case 'Air' :
+            return this.getAirWindow(config);
+        default :
+            console.error('No such windowType: ' + this.windowType);
+            break;
         }
     }
 };
