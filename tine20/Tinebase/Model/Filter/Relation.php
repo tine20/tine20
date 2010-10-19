@@ -18,11 +18,12 @@
  * 
  * filters own ids match result of related filter
  * 
- * @example
-        'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
-            'related_model'     => 'Addressbook_Model_Contact',
-            'related_filter'    => 'Addressbook_Model_ContactFilter'
-        )     
+ * <code>
+ *      'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
+ *          'related_model'     => 'Addressbook_Model_Contact',
+ *          'related_filter'    => 'Addressbook_Model_ContactFilter'
+ *      )
+ * </code>     
  */
 class Tinebase_Model_Filter_Relation extends Tinebase_Model_Filter_Abstract
 {

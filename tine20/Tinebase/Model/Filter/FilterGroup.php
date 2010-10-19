@@ -30,7 +30,7 @@
  *       'real' select object (@see $this->appendSql)
  * NOTE: The ACL relevant filters _must_ be checked and set by the controllers!
  * 
- * @example 
+ * <code> 
  * class myFilterGroup {
  *     protected $_className = 'myFilterGroup';
  *     protected $_applicationName = 'myapp';
@@ -56,7 +56,7 @@
  * );
  * 
  * $filterGroup = new myFilterGroup($filterData);
- * 
+ * </code>
  */
 class Tinebase_Model_Filter_FilterGroup implements Iterator
 {
