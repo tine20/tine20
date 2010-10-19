@@ -4,7 +4,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philip Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: RoleEditDialog.js 16711 2010-10-18 17:45:49Z airmike23@gmail.com $
+ * @version     $Id: GroupEditDialog.js 16711 2010-10-18 17:45:49Z airmike23@gmail.com $
  *
  * TODO         refactor this (don't use Ext.getCmp, etc.)
  */
@@ -167,8 +167,6 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     initComponent: function () {
         this.group = this.group ? this.group : new Tine.Tinebase.Model.Group({}, 0);
         
-        //this.title = title: 'Edit Group ' + ,
-        
         if (this.group.id !== 0) {
 	        Ext.Ajax.request({
 	            scope: this,
@@ -178,6 +176,9 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	                groupId: this.group.id
 	            }
 	        });
+        }
+        else {
+        	this.window.setTitle(this.translation.gettext('Add new group'));
         }
         
         this.membersStore = new Ext.data.JsonStore({
@@ -217,9 +218,9 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         this.updateRecord(recordData);
 
         if (! this.group.id) {
-            window.document.title = this.translation.gettext('Add new group');
+            this.window.setTitle(this.translation.gettext('Add new group'));
         } else {
-            window.document.title = String.format(this.translation.gettext('Edit Group "{0}"'), this.group.get('name'));
+            this.window.setTitle(String.format(this.translation.gettext('Edit Group "{0}"'), this.group.get('name')));
         }
 
         this.getForm().loadRecord(this.group);
