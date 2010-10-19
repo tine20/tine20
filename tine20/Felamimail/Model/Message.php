@@ -477,11 +477,10 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $bodyElements = $dom->getElementsByTagName('body');
         if ($bodyElements->length > 0) {
             $result = $this->_addQuotesAndStripTags($bodyElements->item(0));
+            $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
         } else {
-            throw new Felamimail_Exception('No body element found!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No body element found.');
         }
-        
-        $result = html_entity_decode($result, ENT_COMPAT, 'UTF-8');
         
         return $result;
     }
