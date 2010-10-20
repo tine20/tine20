@@ -125,33 +125,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * Search for groups matching given arguments
-     *
-     * @param  array $_filter
-     * @param  array $_paging
-     * @return array
-     * 
-     * @todo replace this by Admin.searchGroups / getGroups (without acl check)? or add getGroupCount to Tinebase_Group
-     *
-    public function searchGroups($filter, $paging)
-    {
-    	$result = array(
-            'results'     => array(),
-            'totalcount'  => 0
-        );
-        
-        // old fn style yet
-        $sort = (isset($paging['sort']))    ? $paging['sort']   : 'name';
-        $dir  = (isset($paging['dir']))     ? $paging['dir']    : 'ASC';
-        $groups = Tinebase_Group::getInstance()->getGroups($filter[0]['value'], $sort, $dir, $paging['start'], $paging['limit']);
-
-        $result['results'] = $groups->toArray();
-        $result['totalcount'] = Admin_Controller_Group::getInstance()->searchCount($filter[0]['value']);
-        
-        return $result;
-    }*/
-    
-    /**
      * Search for roles
      * 
      * @param  array $_filter
