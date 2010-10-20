@@ -739,7 +739,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         listWidth: 250,
                         name: 'accountPrimaryGroup',
                         blurOnSelect: true,
-                        recordClass: Tine.Tinebase.Model.Group
+                        recordClass: Tine.Addressbook.Model.List
                     }, {
                         xtype: 'combo',
                         fieldLabel: this.app.i18n.gettext('Status'),
