@@ -154,7 +154,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select->joinLeft(
             /* table  */ array('accounts' => $this->_tablePrefix . 'accounts'), 
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('accounts.contact_id'),
-            /* select */ array('account_id' => 'accounts.id')
+            /* select */ array_key_exists('count', (array)$_cols) ? array() : array('account_id' => 'accounts.id')
         );
         
         if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
