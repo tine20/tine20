@@ -26,14 +26,14 @@ Tine.Tinebase.Model.genericFields = [
 /**
  * Model of the tine (simple) user account
  */
-Tine.Tinebase.Model.User = Ext.data.Record.create([
+/*Tine.Tinebase.Model.User = Ext.data.Record.create([
     { name: 'accountId' },
     { name: 'accountDisplayName' },
     { name: 'accountLastName' },
     { name: 'accountFirstName' },
     { name: 'accountFullName' },
     { name: 'contact_id' }
-]);
+]);*/
 
 /**
  * Model of a language
@@ -59,7 +59,7 @@ Tine.Tinebase.Model.Timezone = Ext.data.Record.create([
  * 
  * Model of a user group
  */
-Tine.Tinebase.Model.Group = Tine.Tinebase.data.Record.create([
+/*Tine.Tinebase.Model.Group = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'name'},
     {name: 'description'},
@@ -75,7 +75,7 @@ Tine.Tinebase.Model.Group = Tine.Tinebase.data.Record.create([
     recordName: 'Group',
     recordsName: 'Groups',
     containerProperty: null
-});
+});*/
 
 /**
  * Model of a role
