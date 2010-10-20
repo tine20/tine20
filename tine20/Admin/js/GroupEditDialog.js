@@ -87,7 +87,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         if (groupData.length === 0) {
         	groupData = {};
         }
-        this.group = new Tine.Tinebase.Model.Group(groupData, groupData.id ? groupData.id : 0);
+        this.group = new Tine.Admin.Model.Group(groupData, groupData.id ? groupData.id : 0);
         
         // tweak, as group members are not in standard form cycle yet
         this.membersStore.loadData(this.group.get('groupMembers'));
@@ -165,7 +165,10 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
     },
     
     initComponent: function () {
-        this.group = this.group ? this.group : new Tine.Tinebase.Model.Group({}, 0);
+        this.translation = new Locale.Gettext();
+        this.translation.textdomain('Admin');
+        
+        this.group = this.group ? this.group : new Tine.Admin.Model.Group({}, 0);
         
         if (this.group.id !== 0) {
 	        Ext.Ajax.request({
@@ -187,9 +190,6 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
             id: 'id',
             fields: Tine.Tinebase.Model.Account
         });
-        
-        this.translation = new Locale.Gettext();
-        this.translation.textdomain('Admin');
         
         this.items = this.getFormContents();
         Tine.Admin.Groups.EditDialog.superclass.initComponent.call(this);
@@ -236,7 +236,7 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
  * Groups Edit Popup
  */
 Tine.Admin.Groups.EditDialog.openWindow = function (config) {
-    config.group = config.group ? config.group : new Tine.Tinebase.Model.Group({}, 0);
+    config.group = config.group ? config.group : new Tine.Admin.Model.Group({}, 0);
     var window = Tine.WindowFactory.getWindow({
         width: 400,
         height: 600,
