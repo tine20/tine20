@@ -206,7 +206,7 @@ Tine.Admin.Groups.Main = {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Tinebase.Model.Group,
+            fields: Tine.Admin.Model.Group,
             // turn on remote sorting
             remoteSort: true
         });
