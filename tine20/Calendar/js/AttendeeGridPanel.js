@@ -282,7 +282,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 case 'group':
                 colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                     blurOnSelect: true,
-                    /* recordClass: Tine.Tinebase.Model.Group, */
                     recordClass: Tine.Addressbook.Model.List,
                     getValue: function() {
                         return this.selectedRecord ? this.selectedRecord.data : null;
