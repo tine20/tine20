@@ -183,7 +183,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: Tine.Tinebase.Model.Group
+            fields: Tine.Admin.Model.Group
         });
         
         this.storeRoles = new Ext.data.JsonStore({
