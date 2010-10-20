@@ -651,7 +651,18 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $this->_ldap2Contact($userData, $_contact);
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($_contact->toArray(), true));
     }
-
+    
+    /**
+     * update contact data(first name, last name, ...) of user
+     * 
+     * @param Addressbook_Model_Contact $contact
+     * @todo implement logic
+     */
+    public function updateContactInSyncBackend($_contact)
+    {
+        
+    }
+    
     /**
      * Returns a user obj with raw data from ldap
      *
