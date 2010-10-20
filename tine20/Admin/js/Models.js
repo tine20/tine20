@@ -65,3 +65,29 @@ Tine.Admin.accessLogBackend = new Tine.Tinebase.data.RecordProxy({
     recordClass: Tine.Admin.Model.AccessLog,
     idProperty: 'id'
 });
+
+/**
+ * @namespace Tine.Admin.Model
+ * @class     Tine.Admin.Model.Group
+ * @extends   Tine.Admin.data.Record
+ * 
+ * Model of a user group
+ */
+Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'description'},
+    {name: 'container_id'},
+    {name: 'visibility'}
+    //{name: 'groupMembers'}
+], {
+    appName: 'Admin',
+    modelName: 'Group',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Group', 'Groups', n); gettext('Groups');
+    recordName: 'Group',
+    recordsName: 'Groups',
+    containerProperty: null
+});
+
