@@ -361,9 +361,20 @@ class Tinebase_User
         // update or create user in local sql backend
         try {
             $currentUser = $userBackend->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
-            $user->openid = $currentUser->openid;
             
-            $user = $userBackend->updateUserInSqlBackend($user);
+            $currentUser->accountLoginName          = $user->accountLoginName;
+            $currentUser->accountLastPasswordChange = $user->accountLastPasswordChange;
+            $currentUser->accountStatus             = $user->accountStatus;
+            $currentUser->accountPrimaryGroup       = $user->accountPrimaryGroup;
+            $currentUser->accountDisplayName        = $user->accountDisplayName;
+            $currentUser->accountLastName           = $user->accountLastName;
+            $currentUser->accountFirstName          = $user->accountFirstName;
+            $currentUser->accountFullName           = $user->accountFullName;
+            $currentUser->accountEmailAddress       = $user->accountEmailAddress;
+            $currentUser->accountHomeDirectory      = $user->accountHomeDirectory;
+            $currentUser->accountLoginShell         = $user->accountLoginShell;
+            
+            $user = $userBackend->updateUserInSqlBackend($currentUser);
         } catch (Tinebase_Exception_NotFound $ten) {
             try {
                 $invalidUser = $userBackend->getUserByPropertyFromSqlBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
