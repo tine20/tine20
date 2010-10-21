@@ -98,6 +98,10 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         	this.storeGroups.loadData(this.record.get('accountGroups'));
         	this.storeRoles.loadData(this.record.get('accountRoles'));
         }
+        // add to store default primary group
+        else {
+        	this.storeGroups.add(new Tine.Admin.Model.Group(this.record.get('accountPrimaryGroup')));
+        }
         
         Tine.Admin.UserEditDialog.superclass.onRecordLoad.call(this);
     },
@@ -173,12 +177,20 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * Get current primary group (selected from combobox or default primary group)
+     * 
+     * @return {String} - id of current primary group
+     */
+    getCurrentPrimaryGroupId: function () {
+    	return this.getForm().findField('accountPrimaryGroup').getValue() || this.record.get('accountPrimaryGroup').id;
+    },
+    
+    /**
      * Init user memberships tab
      * 
      * @return {Array} - tab items
      */
     initUserMemberships: function () {
-    
     	this.storeGroups = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
@@ -249,15 +261,32 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Tine.widgets.account.PickerGridPanel}
      */
     initUserGroups: function () {
-
+    	var self = this;
+    	
         this.pickerGridGroups = new Tine.widgets.account.PickerGridPanel({
         	border: false,
         	frame: false,
             store: this.storeGroups,
             selectType: 'group',
             selectAnyone: false,
-            selectTypeDefault: 'group'
+            selectTypeDefault: 'group',
+            getColumnModel: function () {
+				return new Ext.grid.ColumnModel({
+		            defaults: { sortable: true },
+		            columns:  [
+		                {id: 'name', header: _('Name'), dataIndex: this.recordPrefix + 'name', renderer: function (val, meta, record) {
+		                	return record.data.id === self.getCurrentPrimaryGroupId() ? (record.data.name + '<span class="x-item-disabled"> (' + _('primary group') + ')<span>') : record.data.name;
+		                }}
+		            ]
+		        });
+		    }
         }); 
+        // disable remove of group if equal to current primary group
+        this.pickerGridGroups.selModel.on('beforerowselect', function (sm, index, keep, record) {
+        	if (record.data.id === this.getCurrentPrimaryGroupId()) {
+        		return false;
+        	}
+        }, this);
         
     	return this.pickerGridGroups;
     },
@@ -268,7 +297,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Tine.widgets.account.PickerGridPanel}
      */
     initUserRoles: function () {
-    	    
         this.pickerGridRoles = new Tine.widgets.grid.PickerGridPanel({
         	border: false,
         	frame: false,
@@ -311,9 +339,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Array} - array ff fileserver tab items
      */
     initFileserver: function () {
-    	
     	if (this.ldapBackend) {
-
     		return [{
                 xtype: 'fieldset',
                 title: this.app.i18n.gettext('Unix'),
@@ -416,9 +442,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Array} - array of IMAP tab items
      */
     initImap: function () {
-    	
     	if (Tine.Admin.registry.get('manageImapEmailUser')) {
-    		
     		return [{
     			xtype: 'fieldset',
                 title: this.app.i18n.gettext('Quota (MB)'),
@@ -513,9 +537,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO     make border work
      */
     initSmtp: function () {
-        
     	if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
-    	
 			var commonConfig = {
 	            autoExpandColumn: 'email',
 	            quickaddMandatory: 'email',
@@ -589,7 +611,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function () {
-        
         this.displayFieldStyle = {
             border: 'silver 1px solid',
             padding: '3px',
@@ -739,7 +760,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         listWidth: 250,
                         name: 'accountPrimaryGroup',
                         blurOnSelect: true,
-                        recordClass: Tine.Admin.Model.Group
+                        allowBlank: false,
+                        recordClass: Tine.Admin.Model.Group,
+                        listeners: {
+                        	scope: this,
+                        	'select': function (combo, record, index) {
+                        		// refresh grid
+                        		if (this.pickerGridGroups) {
+									this.pickerGridGroups.getView().refresh();	
+                        		}
+                        	}
+                        }
                     }, {
                         xtype: 'combo',
                         fieldLabel: this.app.i18n.gettext('Status'),
