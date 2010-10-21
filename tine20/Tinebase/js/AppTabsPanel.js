@@ -135,7 +135,7 @@ Ext.extend(Tine.Tinebase.AppTabsPanel, Ext.TabPanel, {
             },
             items: [{
                 items: this.getAppItems(),
-                style: {'border-right' : '1px solid lightgray'}
+                style: {'border-right': '1px solid #E2E2E3'}
             }, {
                 items: Tine.Tinebase.MainScreen.getMainMenu().getMainActions()
             }]
