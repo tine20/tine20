@@ -97,7 +97,7 @@ class Tinebase_Frontend_Cli_Abstract
      * @param Zend_Console_Getopt $_opts
      * @param Tinebase_Controller_Record_Interface $_controller
      */
-    public function _import($_opts, $_controller)
+    protected function _import($_opts, $_controller)
     {
         $args = $_opts->getRemainingArgs();
             
@@ -153,6 +153,7 @@ class Tinebase_Frontend_Cli_Abstract
 
     /**
      * search for duplicates
+     * 
      * @param Tinebase_Controller_Record_Interface $_controller
      * @param  Tinebase_Model_Filter_FilterGroup
      * @param string $_field
@@ -160,7 +161,7 @@ class Tinebase_Frontend_Cli_Abstract
      * 
      * @todo add more options (like soundex, what do do with duplicates/delete/merge them, ...)
      */
-    function _searchDuplicates(Tinebase_Controller_Record_Abstract $_controller, $_filter, $_field)
+    protected function _searchDuplicates(Tinebase_Controller_Record_Abstract $_controller, $_filter, $_field)
     {
         $pagination = new Tinebase_Model_Pagination(array(
             'start' => 0,
