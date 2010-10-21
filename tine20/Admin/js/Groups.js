@@ -1,15 +1,14 @@
-/**
+/*
  * Tine 2.0
  * 
  * @package     Admin
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philip Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO         split this into two files (grid + edit dlg)
- * TODO         refactor this (don't use Ext.getCmp, etc.)
+ * TODO         refactor this (don't use Ext.getCmp, extend generic grid panel, ...)
  */
 
 /*global Ext, Tine, Locale*/
