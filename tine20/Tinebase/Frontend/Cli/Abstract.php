@@ -74,6 +74,72 @@ class Tinebase_Frontend_Cli_Abstract
         
         return TRUE;
     }
+
+    /**
+     * set container grants
+     * 
+     * @param Zend_Console_Getopt $_opts
+     * @return boolean
+     */
+    public function setContainerGrants(Zend_Console_Getopt $_opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE; 
+        }
+        
+        $data = $this->_parseArgs($_opts, array('accountId', 'containerId', 'grants'));
+        
+        $container = Tinebase_Container::getInstance()->getContainerById($data['containerId']);
+        
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        if ($application->getId() !== $container->application_id) {
+            echo "Container does not belong this Application!\n";
+            return FALSE;
+        }
+        
+        if ($data['accountId'] == '0') {
+            $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
+        } else {
+            $accountType = (array_key_exists('accountType', $data)) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+        }
+        Tinebase_Container::getInstance()->addGrants($data['containerId'], $accountType, $data['accountId'], (array) $data['grants'], TRUE);
+        
+        echo "Added grants to container.\n";
+        
+        return TRUE;
+    }
+    
+    /**
+     * parses arguments (key1=value1 key2=value2 key3=subvalue1,subvalue2 ...)
+     * 
+     * @param Zend_Console_Getopt $_opts
+     * @param array $_requiredKeys
+     * @throws Tinebase_Exception_InvalidArgument
+     * @return array
+     */
+    protected function _parseArgs(Zend_Console_Getopt $_opts, $_requiredKeys = array())
+    {
+        $args = $_opts->getRemainingArgs();
+        
+        $result = array();
+        foreach ($args as $idx => $arg) {
+            list($key, $value) = explode('=', $arg);
+            if (strpos($value, ',') !== false) {
+                $value = explode(',', $value);
+            }
+            $result[$key] = $value;
+        }
+        
+        if (! empty($_requiredKeys)) {
+            foreach ($_requiredKeys as $requiredKey) {
+                if (! array_key_exists($requiredKey, $result)) {
+                    throw new Tinebase_Exception_InvalidArgument('Required parameter not found: ' . $requiredKey);
+                }
+            }
+        }
+        
+        return $result;
+    }
     
     /**
      * check admin right of application
