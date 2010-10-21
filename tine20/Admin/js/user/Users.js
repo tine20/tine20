@@ -87,7 +87,8 @@ Tine.Admin.Model.User.getDefaultData = function () {
         sambaSAM: '',
         emailUser: '',
         accountStatus: 'enabled',
-        visibility: 'displayed',
+        visibility: 'hidden',
+        container_id: null,
         accountPrimaryGroup: Tine.Admin.registry.get('defaultPrimaryGroup')
     };
 };
