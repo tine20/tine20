@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id: JsonTest.php 6967 2009-02-23 16:30:42Z p.schuele@metaways.de $
+ * @version     $Id$
  */
 
 /**
