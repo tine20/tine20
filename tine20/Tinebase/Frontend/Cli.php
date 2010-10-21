@@ -205,13 +205,12 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function addCustomfield(Zend_Console_Getopt $_opts)
     {
-        $args = $_opts->getRemainingArgs();
-
         if (! $this->_checkAdminRight()) {
             return FALSE;
         }
-
+        
         // parse args
+        $args = $_opts->getRemainingArgs();
         $data = array();
         foreach ($args as $idx => $arg) {
             list($key, $value) = explode('=', $arg);
