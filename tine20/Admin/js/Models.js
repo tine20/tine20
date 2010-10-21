@@ -91,3 +91,16 @@ Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create([
     containerProperty: null
 });
 
+/**
+ * returns default group data
+ * 
+ * @namespace Tine.Admin.Model.Group
+ * @static
+ * @return {Object} default data
+ */
+Tine.Admin.Model.Group.getDefaultData = function () {
+    return {
+        visibility: 'hidden',
+        container_id: null
+    };
+};

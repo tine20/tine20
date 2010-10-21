@@ -2,11 +2,11 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philip Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: GroupEditDialog.js 16711 2010-10-18 17:45:49Z airmike23@gmail.com $
  *
- * TODO         refactor this (don't use Ext.getCmp, etc.)
+ * TODO         refactor this (use more methods from Tine.widgets.dialog.EditRecord)
  */
 
 /*global Ext, Tine, Locale*/
@@ -147,7 +147,14 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     triggerAction: 'all',
                     allowBlank: false,
                     editable: false,
-                    store: [['displayed', this.translation.gettext('Display in addressbook')], ['hidden', this.translation.gettext('Hide from addressbook')]]
+                    store: [['displayed', this.translation.gettext('Display in addressbook')], ['hidden', this.translation.gettext('Hide from addressbook')]],
+                    listeners: {
+                        scope: this,
+                        select: function (combo, record) {
+                            // disable container_id combo if hidden
+                            this.getForm().findField('container_id').setDisabled(record.data.field1 === 'hidden');
+                        }
+                    }
                 }, {
                 	columnWidth: 0.5,
                 	xtype: 'tinerecordpickercombobox',
@@ -156,7 +163,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                     blurOnSelect: true,
                     listWidth: 250,
                     recordClass: Tine.Tinebase.Model.Container,
-                    recordProxy: Tine.Admin.sharedAddressbookBackend
+                    recordProxy: Tine.Admin.sharedAddressbookBackend,
+                    disabled: this.group.get('visibility') === 'hidden'
                 }]]
 			}, accountPickerGridPanel]
         };
@@ -179,6 +187,8 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 	                groupId: this.group.id
 	            }
 	        });
+        } else {
+            this.group = new Tine.Admin.Model.Group(Tine.Admin.Model.Group.getDefaultData(), 0);
         }
                 
         this.membersStore = new Ext.data.JsonStore({
@@ -207,9 +217,9 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
         
         if (this.group.id !== 0) {
             this.loadMask.show();
-        }
-        else {
+        } else {
         	this.window.setTitle(this.translation.gettext('Add new group'));
+            this.getForm().loadRecord(this.group);
         }
     },
     
@@ -226,7 +236,6 @@ Tine.Admin.Groups.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
 
         this.getForm().loadRecord(this.group);
         this.updateToolbarButtons();
-        //Ext.MessageBox.hide();
         
         this.loadMask.hide();
     }
