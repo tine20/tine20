@@ -878,9 +878,6 @@ msgstr "Edytuj funkcję \"{0}\""
 #~ msgid "Loading Role..."
 #~ msgstr "Ładowanie funkcji…"
 
-#~ msgid "Loading Role..."
-#~ msgstr "Ładowanie funkcji…"
-
 #~ msgid "Do you really want to delete the selected access log entries?"
 #~ msgstr "Czy na pewno chcesz usunąć wybrane wpisy z dziennika logowania?"
 
