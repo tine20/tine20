@@ -5,7 +5,7 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -43,7 +43,7 @@ Tine.Crm.LeadType.Model = Tine.Tinebase.data.Record.create([
 Tine.Crm.LeadType.Model.getDefaultData = function() {
     
     var data = {
-        id: Math.random().toString().split('.')[1]
+        id: Tine.Crm.Model.getRandomUnusedId(Ext.StoreMgr.get('CrmLeadTypeStore'))
     };
     
     return data;
@@ -119,9 +119,9 @@ Tine.Crm.LeadType.GridPanel = Ext.extend(Tine.Crm.Admin.QuickaddGridPanel, {
     getColumnModel: function() {
         return new Ext.grid.ColumnModel([
         { 
-            id:'id', 
+            id:'leadtype_id', 
             header: "id", 
-            dataIndex: 'leadtype_id', 
+            dataIndex: 'id', 
             width: 25, 
             hidden: true 
         }, { 

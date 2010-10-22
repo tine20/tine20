@@ -4,7 +4,7 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -132,3 +132,12 @@ Tine.Crm.Model.Settings = Tine.Tinebase.data.Record.create([
         return this.recordName;
     }
 });
+
+Tine.Crm.Model.getRandomUnusedId = function(store) {
+    var result;
+    do {
+        result = Tine.Tinebase.common.getRandomNumber(0, 21474836);
+    } while (store.getById(result) != undefined)
+    
+    return result;
+};

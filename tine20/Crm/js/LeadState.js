@@ -5,7 +5,7 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * TODO         don't use json store anymore?
@@ -46,7 +46,7 @@ Tine.Crm.LeadState.Model = Tine.Tinebase.data.Record.create([
 Tine.Crm.LeadState.Model.getDefaultData = function() {
     
     var data = {
-        id: Math.random().toString().split('.')[1]
+        id: Tine.Crm.Model.getRandomUnusedId(Ext.StoreMgr.get('CrmLeadstateStore'))
     };
     
     return data;
