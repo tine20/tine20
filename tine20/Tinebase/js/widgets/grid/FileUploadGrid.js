@@ -73,6 +73,9 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.initColumnModel();
         this.initSelectionModel();
         
+        this.plugins = [ new Ext.ux.grid.GridViewMenuPlugin({}) ];
+        this.enableHdMenu = false;
+        
         Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
     },
     
@@ -141,6 +144,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         });
         
         this.loadRecord(this.record);
+    },
+    
+    getAddAction: function () {
+        return this.actions.add;
     },
     
     /**
@@ -219,6 +226,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @param {} e
      */
     onFilesSelect: function(fileSelector, e) {
+        Tine.log.debug(fileSelector);
+        
         var uploader = new Ext.ux.file.Uploader({
             maxFileSize: 67108864, // 64MB
             fileSelector: fileSelector
