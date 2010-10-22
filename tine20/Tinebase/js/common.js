@@ -5,7 +5,7 @@
  * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Common.js 4995 2008-10-20 10:20:01Z c.weiss@metaways.de $
  */
  
@@ -279,5 +279,21 @@ Tine.Tinebase.common = {
         }
     
         return result;
+    },
+    
+    /**
+     * returns random integer number
+     * @param {Integer} min
+     * @param {Integer} max
+     * @return {Integer}
+     */
+    getRandomNumber: function(min, max) {
+        if (min > max) {
+            return -1;
+        }
+        if (min == max) {
+            return min;
+        }
+        return min + parseInt(Math.random() * (max-min+1));
     }
 };
