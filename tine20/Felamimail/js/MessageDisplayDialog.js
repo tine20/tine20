@@ -31,9 +31,11 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         this.initToolbar();
         
         this.supr().initComponent.apply(this, arguments);
-        
     },
     
+    /**
+     * init actions
+     */
     initActions: function() {
         this.action_deleteRecord = new Ext.Action({
             text: this.app.i18n._('Delete'),
@@ -80,19 +82,17 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         
     },
     
+    /**
+     * init toolbar
+     */
     initToolbar: function() {
         // use toolbar from gridPanel
         this.tbar = new Ext.Toolbar({
             defaults: {height: 55},
             items: [{
                 xtype: 'buttongroup',
-                columns: 5,
+                columns: 4,
                 items: [
-                    Ext.apply(new Ext.Button(this.action_deleteRecord), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
-                    }),
                     Ext.apply(new Ext.Button(this.action_reply), {
                         scale: 'medium',
                         rowspan: 2,
@@ -107,12 +107,22 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
-                    }),
+                    }), 
                     Ext.apply(new Ext.SplitButton(this.action_print), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign:'top',
                         arrowAlign:'right'
+                    })
+                ]
+            }, '->', {
+                xtype: 'buttongroup',
+                columns: 1,
+                items: [
+                    Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
                     })
                 ]
             }]
@@ -123,6 +133,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
         this.showMessage();
+        this.window.setTitle(this.record.get('subject'));
     },
     
     showMessage: function() {
