@@ -193,7 +193,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 dataIndex: 'address',
                 header: 'address',
                 editor: new Tine.Felamimail.ContactSearchCombo({
-                    vtype: 'email'
+                    // removed that again because we want to see the recipient name
+                    //vtype: 'email'
                 })
             }
         ]);
