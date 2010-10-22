@@ -188,7 +188,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 id: 'address',
                 dataIndex: 'address',
                 header: 'address',
-                editor: new Tine.Felamimail.ContactSearchCombo({})
+                editor: new Tine.Felamimail.ContactSearchCombo({
+                    vtype: 'email'
+                })
             }
         ]);
     },
