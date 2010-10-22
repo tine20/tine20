@@ -154,19 +154,23 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 menuDisabled: true,
                 header: 'type',
                 renderer: function(value) {
+                    var result = '',
+                        app = Tine.Tinebase.appMgr.get('Felamimail'),
+                        qtip = app.i18n._('Click here to set To/CC/BCC.');
+
                     switch(value) {
                         case 'to':
-                            return _('To:');
+                            result = app.i18n._('To:');
                             break;
                         case 'cc':
-                            return _('Cc:');
+                            result = app.i18n._('Cc:');
                             break;
                         case 'bcc':
-                            return _('Bcc:');
+                            result = app.i18n._('Bcc:');
                             break;
-                        default:
-                            return '';
                     }
+                    
+                    return '<div qtip="' + qtip +'">' + result + '</div>';
                 },
                 editor: new Ext.form.ComboBox({
                     typeAhead     : false,
