@@ -140,7 +140,8 @@ Ext.namespace('Tine.Felamimail');
         this.button_saveEmailNote = Ext.apply(new Ext.Button(this.action_saveEmailNote), {
             scale: 'medium',
             rowspan: 2,
-            iconAlign: 'top'
+            iconAlign: 'top',
+            tooltip: this.app.i18n._('Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s).')
         });
         
         this.tbar = new Ext.Toolbar({
@@ -574,8 +575,7 @@ Ext.namespace('Tine.Felamimail');
                     type: 'vbox',
                     align: 'stretch'  // Child items are stretched to full width
                 },
-                items: [
-                    {
+                items: [{
                     xtype:'combo',
                     name: 'account_id',
                     plugins: [ Ext.ux.FieldLabeler ],
