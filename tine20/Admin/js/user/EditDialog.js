@@ -275,7 +275,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		            defaults: { sortable: true },
 		            columns:  [
 		                {id: 'name', header: _('Name'), dataIndex: this.recordPrefix + 'name', renderer: function (val, meta, record) {
-		                	return record.data.id === self.getCurrentPrimaryGroupId() ? (record.data.name + '<span class="x-item-disabled"> (' + _('primary group') + ')<span>') : record.data.name;
+		                	return record.data.id === self.getCurrentPrimaryGroupId() ? (record.data.name + '<span class="x-item-disabled"> (' + self.app.i18n.gettext('Primary group') + ')<span>') : record.data.name;
 		                }}
 		            ]
 		        });
