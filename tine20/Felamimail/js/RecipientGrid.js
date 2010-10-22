@@ -109,12 +109,16 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.on('rowcontextmenu', function(grid, row, e) {
             e.stopEvent();
             var selModel = grid.getSelectionModel();
-            if(!selModel.isSelected(row)) {
+            if (!selModel.isSelected(row)) {
                 selModel.selectRow(row);
             }
+            
+            var record = this.store.getAt(row);
+            this.action_remove.setDisabled(record.get('address') == '');
+            
             this.contextMenu.showAt(e.getXY());
         }, this);
-
+            
         this.on('afteredit', this.onAfterEdit, this);
     },
     
