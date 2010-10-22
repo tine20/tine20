@@ -6,6 +6,9 @@
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
+
+/*global Ext, Tine*/
+ 
 Ext.ns('Tine.Tinebase');
 
 /**
@@ -60,27 +63,29 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      * 
      * @return {Ext.FromPanel}
      */
-    getLoginPanel: function() {
+    getLoginPanel: function () {
         if (! this.loginPanel) {
             this.loginPanel = new Ext.FormPanel({
                 width: 460,
                 height: 250,
-                frame:true,
+                frame: true,
                 labelWidth: 90,
                 cls: 'tb-login-panel',
                 items: [{
+                	xtype: 'container',
                     cls: 'tb-login-lobobox',
                     border: false,
-                    html: '<a target="_blank" href="' + Tine.weburl + '" border="0"><img src="' + this.loginLogo +'" /></a>'
+                    html: '<a target="_blank" href="' + Tine.weburl + '" border="0"><img src="' + this.loginLogo + '" /></a>'
                 }, {
                     xtype: 'label',
                     cls: 'tb-login-big-label',
                     text: _('Login')
-                }, new Tine.widgets.LangChooser({
+                }, {
+                    xtype: 'tinelangchooser',
                     name: 'locale',
                     width: 170,
                     tabindex: 1
-                }), {
+                }, {
                     xtype: 'textfield',
                     tabindex: 2,
                     width: 170,
@@ -90,7 +95,11 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     allowBlank: false,
                     selectOnFocus: true,
                     value: this.defaultUsername ? this.defaultUsername : undefined,
-                    listeners: {render: function(field){field.focus(false, 250);}}
+                    listeners: {
+                    	render: function (field) {
+                    		field.focus(false, 250);
+                    	}
+                    }
                 }, {
                     xtype: 'textfield',
                     tabindex: 3,
@@ -117,14 +126,14 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         return this.loginPanel;
     },
     
-    getTinePanel: function() {
+    getTinePanel: function () {
         if (! this.tinePanel) {
-            this.tinePanel = new Ext.Panel({
+            this.tinePanel = new Ext.Container({
                 layout: 'fit',
                 cls: 'tb-login-tinepanel',
                 border: false,
                 defaults: {xtype: 'label'},
-                items:[{
+                items: [{
                     cls: 'tb-login-big-label',
                     html: _('Tine 2.0 is made for you')
                 }, {
@@ -137,15 +146,14 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                         '<li><a target="_blank" href="' + Tine.weburl + '" border="0">' + _('Tine 2.0 Homepage') + '</a></li>' +
                         '<li><a target="_blank" href="' + Tine.weburl + 'forum/" border="0">' + _('Tine 2.0 Forum') + '</a></li>' +
                     '</ul>'
-                }
-                ]
+                }]
             });
         }
         
         return this.tinePanel;
     },
     
-    getSurveyData: function(cb) {
+    getSurveyData: function (cb) {
         var ds = new Ext.data.Store({
             proxy: new Ext.data.ScriptTagProxy({
                 url: 'https://versioncheck.officespot20.com/surveyCheck/surveyCheck.php'
@@ -155,7 +163,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             }, ['title', 'subtitle', 'duration', 'langs', 'link', 'enddate', 'htmlmessage', 'version'])
         });
         
-        ds.on('load', function(store, records) {
+        ds.on('load', function (store, records) {
             var survey = records[0];
             
             cb.call(this, survey);
@@ -163,9 +171,9 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         ds.load({params: {lang: Tine.Tinebase.registry.get('locale').locale}});
     },
     
-    getSurveyPanel: function() {
+    getSurveyPanel: function () {
         if (! this.surveyPanel) {
-            this.surveyPanel = new Ext.Panel({
+            this.surveyPanel = new Ext.Container({
                 layout: 'fit',
                 cls: 'tb-login-surveypanel',
                 border: false,
@@ -174,8 +182,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             });
             
             if (! Tine.Tinebase.registry.get('denySurveys')) {
-                this.getSurveyData(function(survey) {
-                    if (typeof survey.get == 'function') {
+                this.getSurveyData(function (survey) {
+                    if (typeof survey.get === 'function') {
                         var enddate = Date.parseDate(survey.get('enddate'), Date.patterns.ISO8601Long);
                         var version = survey.get('version');
                         
@@ -195,7 +203,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                                 xtype: 'button',
                                 width: 120,
                                 text: _('participate!'),
-                                handler: function() {
+                                handler: function () {
                                     window.open(survey.data.link);
                                 }
                             }]);
@@ -209,7 +217,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         return this.surveyPanel;
     },
     
-    getSurveyTemplate: function() {
+    getSurveyTemplate: function () {
         if (! this.surveyTemplate) {
             this.surveyTemplate = new Ext.XTemplate(
                 '<br/ >',
@@ -218,40 +226,38 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 '<br/>',
                 '<p>', _('Languages'), ': {langs}</p>',
                 '<p>', _('Duration'), ': {lang_duration}</p>',
-                '<br/>'
-                
-            ).compile();
+                '<br/>').compile();
         }
         
         return this.surveyTemplate;
     },
     
-    initComponent: function() {
+    initComponent: function () {
         this.initLayout();
         
         this.supr().initComponent.call(this);
     },
     
-    initLayout: function() {
+    initLayout: function () {
         var infoPanelItems = (this.showInfoBox) ? [
             this.getTinePanel(),
             this.getSurveyPanel()
         ] : [];
         
-        this.infoPanel = new Ext.Panel({
-            layout: 'fit',
+        this.infoPanel = new Ext.Container({
             cls: 'tb-login-infosection',
             border: false,
             width: 300,
             height: 460,
             layout: 'vbox',
             layoutConfig: {
-                align:'stretch'
+                align: 'stretch'
             },
             items: infoPanelItems
         });
         
         this.items = [{
+        	xtype: 'container',
             layout: 'absolute',
             border: false,
             items: [
@@ -264,9 +270,10 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     /**
      * do the actual login
      */
-    onLoginPress: function(){
-        var form = this.getLoginPanel().getForm();
-        var values = form.getValues();
+    onLoginPress: function () {
+        var form = this.getLoginPanel().getForm(),
+        	values = form.getValues();
+        	
         if (form.isValid()) {
             Ext.MessageBox.wait(_('Logging you in...'), _('Please wait'));
             
@@ -277,7 +284,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     username: values.username,
                     password: values.password
                 },
-                callback: function(request, httpStatus, response) {
+                callback: function (request, httpStatus, response) {
                     var responseData = Ext.util.JSON.decode(response.responseText);
                     if (responseData.success === true) {
                         Ext.MessageBox.wait(String.format(_('Login successful. Loading {0}...'), Tine.title), _('Please wait!'));
@@ -289,7 +296,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                             msg: _('Your username and/or your password are wrong!!!'),
                             buttons: Ext.MessageBox.OK,
                             icon: Ext.MessageBox.ERROR,
-                            fn: function() {
+                            fn: function () {
                                 this.getLoginPanel().getForm().findField('password').focus(true);
                             }.createDelegate(this)
                         });
@@ -301,7 +308,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         }
     },
     
-    onRender: function(ct, position) {
+    onRender: function (ct, position) {
         this.supr().onRender.apply(this, arguments);
         
         this.map = new Ext.KeyMap(this.el, [{
@@ -315,21 +322,20 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         window.document.title = Tine.title + postfix + ' - ' + _('Please enter your login data');
     },
     
-    onResize: function() {
+    onResize: function () {
         this.supr().onResize.apply(this, arguments);
 
-        var box = this.getBox();
-        
-        var loginBox = this.getLoginPanel().rendered ? this.getLoginPanel().getBox() : {width : this.getLoginPanel().width, height: this.getLoginPanel().height};
-        var infoBox = this.infoPanel.rendered ? this.infoPanel.getBox() : {width : this.infoPanel.width, height: this.infoPanel.height};
+        var box 	 = this.getBox(),
+        	loginBox = this.getLoginPanel().rendered ? this.getLoginPanel().getBox() : {width : this.getLoginPanel().width, height: this.getLoginPanel().height},
+        	infoBox  = this.infoPanel.rendered ? this.infoPanel.getBox() : {width : this.infoPanel.width, height: this.infoPanel.height};
 
-        var top = (box.height - loginBox.height)/2;
+        var top = (box.height - loginBox.height) / 2;
         if (box.height - top < infoBox.height) {
             top = box.height - infoBox.height;
         }
         
-        var loginLeft = (box.width - loginBox.width)/2;
-        if(loginLeft + loginBox.width + infoBox.width > box.width) {
+        var loginLeft = (box.width - loginBox.width) / 2;
+        if (loginLeft + loginBox.width + infoBox.width > box.width) {
             loginLeft = box.width - loginBox.width - infoBox.width;
         }
                 
@@ -337,7 +343,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         this.infoPanel.setPosition(loginLeft + loginBox.width, top);
     },
     
-    renderSurveyPanel: function(survey) {
+    renderSurveyPanel: function (survey) {
         console.log(survey);
         
         var items = [{
@@ -345,7 +351,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             html: _('Tine 2.0 needs your help')
         }, {
             html: '<p>' + _('We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:') + '</p>'
-        }];
-                
+        }];      
     }
 });
