@@ -195,7 +195,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.action_flag = new Ext.Action({
             requiredGrant: 'readGrant',
-            text: this.app.i18n._('Toggle Flag'),
+            text: this.app.i18n._('Toggle highlighting'),
             handler: this.onToggleFlag.createDelegate(this, ['\\Flagged'], true),
             iconCls: 'action_email_flag',
             allowMultiple: true,
