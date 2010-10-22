@@ -279,7 +279,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
     // account ctx menu
     this.contextMenuAccount = Tine.widgets.tree.ContextMenu.getMenu({
         nodeName: this.app.i18n.n_('Account', 'Accounts', 1),
-        actions: [editAccountAction, 'delete', addFolderToRootAction, updateFolderCacheAction, editVacationAction, editRulesAction],
+        actions: [addFolderToRootAction, updateFolderCacheAction, editVacationAction, editRulesAction, editAccountAction, 'delete'],
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'
