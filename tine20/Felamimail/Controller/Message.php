@@ -517,22 +517,24 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * save message in folder
      * 
-     * @param string $folderName
-     * @param Felamimail_Model_Message $message
+     * @param string $_folderName
+     * @param Felamimail_Model_Message $_message
      * @return Felamimail_Model_Message
      */
-    public function saveMessageInFolder($folderName, $message)
+    public function saveMessageInFolder($_folderName, $_message)
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
         
-        $mailToAppend = $this->_createMailForSending($message, $account);
-        $messageString = $mailToAppend->generateMessage();
+        $mailToAppend = $this->_createMailForSending($_message, $account);
+        
+        $transport = new Felamimail_Transport();
+        $mailAsString = $transport->getRawMessage($mailToAppend);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Appending message ' . $_message->subject . ' to folder ' . $folderName);
-        Felamimail_Backend_ImapFactory::factory($account)->appendMessage($messageString, $folderName);
+            ' Appending message ' . $_message->subject . ' to folder ' . $_folderName);
+        Felamimail_Backend_ImapFactory::factory($account)->appendMessage($mailAsString, $_folderName);
         
-        return $message;
+        return $_message;
     }
     
     /**
@@ -660,11 +662,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _saveInSent(Felamimail_Transport $_transport, Felamimail_Model_Account $_account)
     {
         try {
-            $mailAsString = $_transport->getHeaders() . Zend_Mime::LINEEND . $_transport->getBody();
-            
-            // convert \n to \r\n
-            $mailAsString = preg_replace("/(?<!\\r)\\n(?!\\r)/", "\r\n", $mailAsString);
-            
+            $mailAsString = $transport->getRawMessage($mailToAppend);
             $sentFolder = ($_account->sent_folder && ! empty($_account->sent_folder)) ? $_account->sent_folder : 'Sent';
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder (' . $sentFolder . ') ...');
