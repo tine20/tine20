@@ -397,7 +397,7 @@ Ext.namespace('Tine.Felamimail');
         this.attachmentGrid.loadRecord(this.record);
         
         if (this.record.get('note') && this.record.get('note') == '1') {
-            this.button_saveEmailNote.toggle();
+            this.action_saveEmailNote.toggle();
         }
         
         this.loadMask.hide();
