@@ -24,7 +24,7 @@
             <identifier>adr_one_postalcode</identifier>
         </column>
         <column>
-            <identifier>adr_one_region</identifier>f
+            <identifier>adr_one_region</identifier>
         </column>
         <column>
             <identifier>adr_one_street</identifier>
