@@ -382,6 +382,34 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }    
     
     /**
+     * update function (-> 3.13)
+     * - added templates/drafts folder
+     */    
+    public function update_12()
+    {
+        $fields = array(new Setup_Backend_Schema_Field_Xml( 
+            '<field>
+                <name>drafts_folder</name>
+                <type>text</type>
+                <length>64</length>
+            </field>'),
+            new Setup_Backend_Schema_Field_Xml(
+            '<field>
+                <name>templates_folder</name>
+                <type>text</type>
+                <length>64</length>
+            </field>')
+        );
+        
+        foreach ($fields as $field) {
+            $this->_backend->addCol('felamimail_account', $field, 11);
+        }
+        
+        $this->setTableVersion('felamimail_account', '13');
+        $this->setApplicationVersion('Felamimail', '3.13');
+    }    
+    
+    /**
      * clear message cache tables and reset folder status
      */
     protected function _clearMessageCache()

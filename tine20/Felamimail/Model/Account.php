@@ -18,6 +18,8 @@
  * 
  * @property  string    trash_folder
  * @property  string    sent_folder
+ * @property  string    drafts_folder
+ * @property  string    templates_folder
  * @property  string    sieve_vacation_active
  * @property  string    display_format
  * @property  string    delimiter
@@ -121,6 +123,8 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
     // other settings (add single JSON encoded field for that?)
         'sent_folder'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Sent'),
         'trash_folder'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Trash'),
+        'drafts_folder'         => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Drafts'),
+        'templates_folder'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'Templates'),
         'intelligent_folders'   => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'has_children_support'  => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'delimiter'             => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => '/'),

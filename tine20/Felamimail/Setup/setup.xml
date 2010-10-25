@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>3.12</version>
+    <version>3.13</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>12</version>
+            <version>13</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -77,6 +77,16 @@
                 </field>
                 <field>
                     <name>trash_folder</name>
+                    <type>text</type>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>drafts_folder</name>
+                    <type>text</type>
+                    <length>64</length>
+                </field>
+                <field>
+                    <name>templates_folder</name>
                     <type>text</type>
                     <length>64</length>
                 </field>
