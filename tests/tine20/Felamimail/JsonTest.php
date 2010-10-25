@@ -570,6 +570,21 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardMessage['structure']['parts'][2]['contentType']);
     }
     
+    /**
+     * save message in folder test
+     */
+    public function testSaveMessageInFolder()
+    {
+        $messageToSave = $this->_getMessageData();
+        $returned = $this->_json->saveMessageInFolder($this->_account->drafts_folder, $messageToSave);
+        $this->_foldersToClear = array($this->_account->drafts_folder);
+        
+        // check if message is in drafts folder
+        $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
+        $this->assertEquals($message['subject'],  $messageToSave['subject']);
+        $this->assertEquals($message['to'],       $messageToSave['to'][0], 'recipient not found');
+    }
+    
     /*********************** sieve tests ****************************/
     
     /**

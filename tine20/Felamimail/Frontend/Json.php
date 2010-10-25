@@ -236,8 +236,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string $folderName
      * @param  array $recordData
      * @return array
-     * 
-     * @todo add test
      */
     public function saveMessageInFolder($folderName, $recordData)
     {
