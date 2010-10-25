@@ -107,6 +107,26 @@
     background-image:url(../../images/oxygen/32x32/actions/emptytrash.png) !important;
 }
 
+.x-btn .action_saveAsDraft {
+    background-image:url(../../images/oxygen/16x16/places/folder-txt.png);
+}
+.x-btn-medium .action_saveAsDraft {
+    background-image:url(../../images/oxygen/22x22/places/folder-txt.png);
+}
+.x-btn-large .action_saveAsDraft {
+    background-image:url(../../images/oxygen/32x32/places/folder-txt.png);
+}
+
+.x-btn .action_saveAsTemplate {
+    background-image:url(../../images/oxygen/16x16/places/folder-tar.png);
+}
+.x-btn-medium .action_saveAsTemplate {
+    background-image:url(../../images/oxygen/22x22/places/folder-tar.png);
+}
+.x-btn-large .action_saveAsTemplate {
+    background-image:url(../../images/oxygen/32x32/places/folder-tar.png);
+}
+
 /* rule grid actions */
 
 .action_new_rule {
