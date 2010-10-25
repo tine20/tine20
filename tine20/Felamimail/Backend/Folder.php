@@ -142,20 +142,21 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
         
         $data = array();
-        
+        $where = array();
         foreach ($_counters as $counter => $value) {
             if ($value{0} == '+' || $value{0} == '-') {
                 // increment or decrement values
                 $data[$counter] = new Zend_Db_Expr($this->_db->quoteIdentifier($counter) . ' ' . $value{0} . ' ' . substr($value, 1));
+                if ($value{0} == '-') {
+                    $where[] = $this->_db->quoteIdentifier($counter) . ' > 0';
+                }
             } else {
                 // set values
                 $data[$counter] = ($value >= 0) ? (int)$value : 0;
             }
         }
         
-        $where  = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $folderId),
-        );
+        $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $folderId);
         
         $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
     }
