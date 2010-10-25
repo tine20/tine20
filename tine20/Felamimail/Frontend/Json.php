@@ -231,6 +231,26 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * save message in folder
+     * 
+     * @param  string $folderName
+     * @param  array $recordData
+     * @return array
+     * 
+     * @todo add test
+     */
+    public function saveMessageInFolder($folderName, $recordData)
+    {
+        $message = new Felamimail_Model_Message();
+        $message->setFromJsonInUsersTimezone($recordData);
+        
+        $result = Felamimail_Controller_Message::getInstance()->saveMessageInFolder($folderName, $message);
+        $result = $this->_recordToJson($result);
+        
+        return $result;
+    }
+    
+    /**
      * add given flags to given messages
      *
      * @param  array        $filterData

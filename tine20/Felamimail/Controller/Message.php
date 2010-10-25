@@ -515,6 +515,20 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * save message in folder
+     * 
+     * @param string $folderName
+     * @param Felamimail_Model_Message $message
+     * @return Felamimail_Model_Message
+     * 
+     * @todo implement
+     */
+    public function saveMessageInFolder($folderName, $message)
+    {
+        return $message;
+    }
+    
+    /**
      * append a new message to given folder
      *
      * @param  string|Felamimail_Model_Folder  $_folder   id of target folder
@@ -571,7 +585,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $_message->getPlainTextBody());
             }
         
-            // append mail to sent folder nonPrivateRecipients
+            // append mail to sent folder
             $this->_saveInSent($transport, $account);
             
             // add reply/forward flags if set
