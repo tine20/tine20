@@ -662,7 +662,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _saveInSent(Felamimail_Transport $_transport, Felamimail_Model_Account $_account)
     {
         try {
-            $mailAsString = $transport->getRawMessage($mailToAppend);
+            $mailAsString = $transport->getRawMessage();
             $sentFolder = ($_account->sent_folder && ! empty($_account->sent_folder)) ? $_account->sent_folder : 'Sent';
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder (' . $sentFolder . ') ...');
