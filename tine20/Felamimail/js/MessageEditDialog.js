@@ -129,18 +129,14 @@ Ext.namespace('Tine.Felamimail');
             scope: this
         });
 
+        // TODO think about changing icon onToggle
         this.action_saveEmailNote = new Ext.Action({
             text: this.app.i18n._('Save Email Note'),
             handler: this.onToggleSaveNote,
             iconCls: 'notes_noteIcon',
             disabled: false,
             scope: this,
-            enableToggle: true
-        });
-        this.button_saveEmailNote = Ext.apply(new Ext.Button(this.action_saveEmailNote), {
-            scale: 'medium',
-            rowspan: 2,
-            iconAlign: 'top',
+            enableToggle: true,
             tooltip: this.app.i18n._('Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s).')
         });
         
@@ -160,7 +156,7 @@ Ext.namespace('Tine.Felamimail');
                         rowspan: 2,
                         iconAlign: 'top'
                     }), 
-                    this.button_saveEmailNote
+                    this.action_saveEmailNote
                 ]
             }]
         });
