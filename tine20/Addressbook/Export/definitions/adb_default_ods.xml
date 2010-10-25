@@ -24,7 +24,7 @@
             <identifier>adr_one_postalcode</identifier>
         </column>
         <column>
-            <identifier>adr_one_region</identifier>
+            <identifier>adr_one_region</identifier>f
         </column>
         <column>
             <identifier>adr_one_street</identifier>
@@ -135,7 +135,10 @@
             <identifier>tel_cell_private</identifier>
         </column>
         <column>
-            <identifier>tel_fax tel_fax_home</identifier>
+            <identifier>tel_fax</identifier>
+        </column>
+        <column>
+            <identifier>tel_fax_home</identifier>
         </column>
         <column>
             <identifier>tel_home</identifier>

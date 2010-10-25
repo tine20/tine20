@@ -131,7 +131,10 @@
             <identifier>tel_cell_private</identifier>
         </column>
         <column>
-            <identifier>tel_fax tel_fax_home</identifier>
+            <identifier>tel_fax</identifier>
+        </column>
+        <column>
+            <identifier>tel_fax_home</identifier>
         </column>
         <column>
             <identifier>tel_home</identifier>
