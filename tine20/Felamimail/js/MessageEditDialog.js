@@ -136,7 +136,9 @@ Ext.namespace('Tine.Felamimail');
             iconCls: 'notes_noteIcon',
             disabled: false,
             scope: this,
-            enableToggle: true,
+            enableToggle: true
+        });
+        this.button_saveEmailNote = Ext.apply(new Ext.Button(this.action_saveEmailNote), {
             tooltip: this.app.i18n._('Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s).')
         });
         
@@ -156,7 +158,7 @@ Ext.namespace('Tine.Felamimail');
                         rowspan: 2,
                         iconAlign: 'top'
                     }), 
-                    this.action_saveEmailNote
+                    this.button_saveEmailNote
                 ]
             }]
         });
@@ -397,7 +399,7 @@ Ext.namespace('Tine.Felamimail');
         this.attachmentGrid.loadRecord(this.record);
         
         if (this.record.get('note') && this.record.get('note') == '1') {
-            this.action_saveEmailNote.toggle();
+            this.button_saveEmailNote.toggle();
         }
         
         this.loadMask.hide();
