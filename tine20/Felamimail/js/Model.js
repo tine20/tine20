@@ -178,6 +178,36 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
     },
     
     /**
+     * saves a message into a folder
+     * 
+     * @param   {Ext.data.Record} record
+     * @param   {String} folderName
+     * @param   {Object} options
+     * @return  {Number} Ext.Ajax transaction id
+     * @success {Ext.data.Record}
+     */
+    saveInFolder: function(record, folderName, options) {
+        options = options || {};
+        options.params = options.params || {};
+        options.beforeSuccess = function(response) {
+            return [this.recordReader(response)];
+        };
+        
+        var p = options.params;
+        p.method = this.appName + '.saveMessageInFolder';
+        p.recordData = record.data;
+        p.folderName = folderName;
+        
+        Tine.log.debug(p);
+        
+        // increase timeout as this can take a longer (5 minutes)
+        options.timeout = 300000;
+        
+        return this.doXHTTPRequest(options);
+    },
+
+    
+    /**
      * add given flags to given messages
      *
      * @param  {String/Array} ids
@@ -251,6 +281,8 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     { name: 'imap_status' }, // client only {success|failure}
     { name: 'sent_folder' },
     { name: 'trash_folder' },
+    { name: 'drafts_folder' },
+    { name: 'templates_folder' },
     { name: 'intelligent_folders' },
     { name: 'has_children_support', type: 'bool' },
     { name: 'delimiter' },
