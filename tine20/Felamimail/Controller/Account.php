@@ -595,11 +595,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $this->_addUserValues($systemAccount, $fullUser, $email);
             
             // set some default settings if not set
-            if (empty($systemAccount->sent_folder)) {
-                $systemAccount->sent_folder = 'Sent';
-            }
-            if (empty($systemAccount->trash_folder)) {
-                $systemAccount->trash_folder = 'Trash';
+            $folderDefaults = array(
+                'sent_folder'       => 'Sent',
+                'trash_folder'      => 'Trash',
+                'drafts_folder'     => 'Drafts',
+                'templates_folder'  => 'Templates',
+            );
+            foreach ($folderDefaults as $key => $value) {
+                $systemAccount->{$key} = $value;
             }
             
             // create new account and update capabilities
