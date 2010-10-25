@@ -312,6 +312,18 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     account: this.record,
                     maxLength: 64
                 }, {
+                    fieldLabel: this.app.i18n._('Drafts Folder Name'),
+                    name: 'drafts_folder',
+                    xtype: 'felamimailfolderselect',
+                    account: this.record,
+                    maxLength: 64
+                }, {
+                    fieldLabel: this.app.i18n._('Templates Folder Name'),
+                    name: 'templates_folder',
+                    xtype: 'felamimailfolderselect',
+                    account: this.record,
+                    maxLength: 64
+                }, {
                     fieldLabel: this.app.i18n._('Show Intelligent Folders'),
                     name: 'intelligent_folders',
                     typeAhead     : false,
