@@ -534,9 +534,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  string|Felamimail_Model_Folder  $_folder   id of target folder
      * @param  string  $_message  full message content
      * @param  array   $_flags    flags for new message
-     * @param  string  $_date     date for new message
      */
-    public function appendMessage($_folder, $_message, $_flags = null, $_date = null)
+    public function appendMessage($_folder, $_message, $_flags = null)
     {
         $folder  = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->get($_folder);
         $message = (is_resource($_message)) ? stream_get_contents($_message) : $_message;
