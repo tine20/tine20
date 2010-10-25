@@ -131,17 +131,17 @@ Ext.namespace('Tine.Felamimail');
 
         this.action_saveAsDraft = new Ext.Action({
             text: this.app.i18n._('Save As Draft'),
-            handler: Ext.emptyFn,
+            handler: this.onSaveInFolder.createDelegate(this, ['drafts_folder']),
             iconCls: 'action_saveAsDraft',
-            disabled: true,
+            disabled: false,
             scope: this
         });
 
         this.action_saveAsTemplate = new Ext.Action({
             text: this.app.i18n._('Save As Template'),
-            handler: Ext.emptyFn,
+            handler: this.onSaveInFolder.createDelegate(this, ['templates_folder']),
             iconCls: 'action_saveAsTemplate',
-            disabled: true,
+            disabled: false,
             scope: this
         });
         
@@ -383,6 +383,39 @@ Ext.namespace('Tine.Felamimail');
         
         // TODO make this work
         //this.attachmentGrid.getAddAction().execute(this.attachmentGrid.getTopToolbar().get(0), e);
+    },
+    
+    /**
+     * save message in folder
+     * 
+     * @param {String} folderField
+     */
+    onSaveInFolder: function (folderField) {
+        var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id'));
+        Tine.log.debug(account);
+        var folderName = account.get(folderField);
+        
+        if (! folderName || folderName == '') {
+            Ext.MessageBox.alert(
+                this.app.i18n._('Failed'), 
+                String.format(this.app.i18n._('{0} account setting empty.'), folderField)
+            );
+        } else if (this.isValid()) {
+            this.loadMask.show();
+            this.onRecordUpdate();
+            this.recordProxy.saveInFolder(this.record, folderName, {
+                scope: this,
+                success: function(record) {
+                    this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+                    this.purgeListeners();
+                    this.window.close();
+                },
+                failure: this.onRequestFailed,
+                timeout: 150000 // 3 minutes
+            });
+        } else {
+            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
+        }
     },
     
     /**
