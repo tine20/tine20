@@ -520,11 +520,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $folderName
      * @param Felamimail_Model_Message $message
      * @return Felamimail_Model_Message
-     * 
-     * @todo implement
      */
     public function saveMessageInFolder($folderName, $message)
     {
+        $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
+        
+        $mailToAppend = $this->_createMailForSending($message, $account);
+        $messageString = $mailToAppend->generateMessage();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Appending message ' . $_message->subject . ' to folder ' . $folderName);
+        Felamimail_Backend_ImapFactory::factory($account)->appendMessage($messageString, $folderName);
+        
         return $message;
     }
     
