@@ -230,7 +230,7 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
                 if (value) {
                     var datetimeFields = ['datefield', 'datetimefield', 'extuxclearabledatefield'];
                     if (datetimeFields.indexOf(def.get('type')) != -1) {
-                        value = new Date(value);
+                        value = Date.parseDate(value, Date.patterns.ISO8601Long);
                     }
                     def.fieldObj.setValue(value);
                 }
