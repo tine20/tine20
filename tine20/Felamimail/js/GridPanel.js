@@ -650,7 +650,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * compse new message handler
+     * compose new message handler
      */
     onMessageCompose: function() {
         Tine.Felamimail.MessageEditDialog.openWindow({
@@ -733,33 +733,56 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * row doubleclick handler
-     * - overwrite default behaviour: do nothing
      * 
      * @param {Tine.Felamimail.GridPanel} grid
      * @param {Row} row
      * @param {Event} e
      */
     onRowDblClick: function(grid, row, e) {
-        Tine.Felamimail.MessageDisplayDialog.openWindow({
-            record: this.grid.getSelectionModel().getSelected(),
-            listeners: {
-                scope: this,
-                'update': this.onAfterCompose,
-                'remove': function(msgData) {
-                    var msg = this.getStore().getById(Ext.decode(msgData).id);
-                        folderId = msg ? msg.get('folder_id') : null,
-                        folder = folderId ? this.app.getFolderStore().getById(folderId) : null,
-                        accountId = folder ? folder.get('account_id') : null,
-                        account = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId) : null,
-                        trashId = account ? account.getTrashFolderId() : null,
-                        trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
-                        
-                    this.getStore().remove(msg);
-                    this.onAfterDelete(null, trash);
+        
+        var record = this.grid.getSelectionModel().getSelected(),
+            folder = this.app.getFolderStore().getById(record.get('folder_id')),
+            account = Tine.Felamimail.loadAccountStore().getById(folder.get('account_id'));
+        
+        // check folder to determine if mail should be opened in compose dlg
+        if (folder.get('globalname') == account.get('templates_folder') || folder.get('globalname') == account.get('drafts_folder')) {
+            Tine.Felamimail.MessageEditDialog.openWindow({
+                record: record,
+                listeners: {
+                    scope: this,
+                    'update': this.onAfterCompose.createDelegate(this, ['compose'], 1)
+                    // TODO delete message if send from drafts
                 }
-            }
-        });
-    }, 
+            });
+        } else {
+            Tine.Felamimail.MessageDisplayDialog.openWindow({
+                record: record,
+                listeners: {
+                    scope: this,
+                    'update': this.onAfterCompose,
+                    'remove': this.onRemoveInDisplayDialog
+                }
+            });
+        }
+    },
+    
+    /**
+     * message got removed in display dialog
+     * 
+     * @param {} msgData
+     */
+    onRemoveInDisplayDialog: function (msgData) {
+        var msg = this.getStore().getById(Ext.decode(msgData).id);
+            folderId = msg ? msg.get('folder_id') : null,
+            folder = folderId ? this.app.getFolderStore().getById(folderId) : null,
+            accountId = folder ? folder.get('account_id') : null,
+            account = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId) : null,
+            trashId = account ? account.getTrashFolderId() : null,
+            trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
+            
+        this.getStore().remove(msg);
+        this.onAfterDelete(null, trash);
+    },    
     
     /**
      * called when the store gets updated
