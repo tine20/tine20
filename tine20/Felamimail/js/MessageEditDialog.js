@@ -392,7 +392,6 @@ Ext.namespace('Tine.Felamimail');
      */
     onSaveInFolder: function (folderField) {
         var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id'));
-        Tine.log.debug(account);
         var folderName = account.get(folderField);
         
         if (! folderName || folderName == '') {
