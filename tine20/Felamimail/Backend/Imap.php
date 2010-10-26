@@ -587,10 +587,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * parse non multipart message structure
      * 
-     * Enter description here ...
-     * @param unknown_type $_structure
-     * @param unknown_type $_partId
+     * @param array $_structure
+     * @param integer $_partId
+     * @return array
+     * @throws Felamimail_Exception_IMAP
      */
     protected function _parseStructureNonMultiPart($_structure, $_partId)
     {
@@ -610,6 +612,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             'location'    => null
         );
         
+        if (is_array($_structure[0]) || is_array($_structure[1])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
+            throw new Felamimail_Exception_IMAP('Invalid structure. String expected, got array.');
+        }
+        
         /** basic fields begin **/
         
         // contentType
@@ -624,7 +631,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $parameters = array();
             for($i=0; $i<count($_structure[2]); $i++) {
                 $key   = strtolower($_structure[2][$i]);
-                #$value = strtolower($_structure[2][++$i]);
                 $value = $_structure[2][++$i];
                 $parameters[$key] = $this->_mimeDecodeHeader($value);
             }
