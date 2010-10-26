@@ -595,7 +595,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {String} composedMsg
      * @param {String} action
      * @param {Array}  [affectedMsgs]  messages affected 
-     * 
      */
     onAfterCompose: function(composedMsg, action, affectedMsgs) {
         // mark send folders cache status incomplete
@@ -622,11 +621,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             sendFolder.set('cache_status', 'incomplete');
         }
         
-        if (Ext.isArray(affectedMsgs) && ['reply', 'forward'].indexOf(action) !== -1) {
+        if (Ext.isArray(affectedMsgs)) {
             Ext.each(affectedMsgs, function(msg) {
-                msg.addFlag(action === 'reply' ? '\\Answered' : 'Passed');
+                if (['reply', 'forward'].indexOf(action) !== -1) {
+                    msg.addFlag(action === 'reply' ? '\\Answered' : 'Passed');
+                } else if (action == 'senddraft') {
+                    this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(msg.id, '\\Deleted', { 
+                        callback: this.onAfterDelete.createDelegate(this, [[msg.id]])
+                    });
+                }
             }, this);
-        }
+		}
     },
     
     /**
@@ -734,6 +739,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * row doubleclick handler
      * 
+     * - opens message edit dialog (if draft/template)
+     * - opens message display dialog (everything else)
+     * 
      * @param {Tine.Felamimail.GridPanel} grid
      * @param {Row} row
      * @param {Event} e
@@ -743,15 +751,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var record = this.grid.getSelectionModel().getSelected(),
             folder = this.app.getFolderStore().getById(record.get('folder_id')),
             account = Tine.Felamimail.loadAccountStore().getById(folder.get('account_id'));
+            action = (folder.get('globalname') == account.get('templates_folder')) ? 'senddraft' :
+                     folder.get('globalname') == account.get('drafts_folder') ? 'sendtemplate' : null;
         
         // check folder to determine if mail should be opened in compose dlg
-        if (folder.get('globalname') == account.get('templates_folder') || folder.get('globalname') == account.get('drafts_folder')) {
+        if (action !== null) {
             Tine.Felamimail.MessageEditDialog.openWindow({
-                record: record,
+                draftOrTemplate: Ext.encode(record.data),
                 listeners: {
                     scope: this,
-                    'update': this.onAfterCompose.createDelegate(this, ['compose'], 1)
-                    // TODO delete message if send from drafts
+                    'update': this.onAfterCompose.createDelegate(this, [action, [record]], 1)
                 }
             });
         } else {

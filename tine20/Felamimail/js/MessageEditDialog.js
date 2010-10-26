@@ -69,6 +69,12 @@ Ext.namespace('Tine.Felamimail');
      * message to reply to
      */
     replyTo: null,
+
+    /**
+     * @cfg {Tine.Felamimail.Model.Message} (optionally encoded)
+     * message to use as draft/template
+     */
+    draftOrTemplate: null,
     
     /**
      * @cfg {Boolean} (defaults to false)
@@ -198,12 +204,15 @@ Ext.namespace('Tine.Felamimail');
         this.initContent();
         
         // legacy handling:...
+        // TODO add this information to attachment(s) + flags and remove this
         if (this.replyTo) {
             this.record.set('flags', '\\Answered');
             this.record.set('original_id', this.replyTo.id);
         } else if (this.forwardMsgs) {
             this.record.set('flags', 'Passed');
             this.record.set('original_id', this.forwardMsgs[0].id);
+        } else if (this.draftOrTemplate) {
+            this.record.set('original_id', this.draftOrTemplate.id);
         }
     },
     
@@ -229,9 +238,7 @@ Ext.namespace('Tine.Felamimail');
     initContent: function() {
         if (! this.record.get('body')) {
             if (! this.msgBody) {
-                var message = this.replyTo ? this.replyTo : 
-                          this.forwardMsgs && this.forwardMsgs.length === 1 ? this.forwardMsgs[0] :
-                          null;
+                var message = this.getMessageFromConfig();
                           
                 if (message) {
                     if (! message.bodyIsFetched()) {
@@ -253,14 +260,18 @@ Ext.namespace('Tine.Felamimail');
                         this.msgBody = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
                             + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
                             + this.msgBody + '<br/>';
-                            
-                        // set record attachments when forwarding
+                        this.initAttachements(message);
+                    } else if (this.draftOrTemplate) {
                         this.initAttachements(message);
                     }
                 }
             }
+            
+            if (! this.draftOrTemplate) {
+                this.msgBody += Tine.Felamimail.getSignature(this.record.get('account_id'))
+            }
         
-            this.record.set('body', this.msgBody + Tine.Felamimail.getSignature(this.record.get('account_id')));
+            this.record.set('body', this.msgBody);
         }
         
         delete this.msgBody;
@@ -274,8 +285,8 @@ Ext.namespace('Tine.Felamimail');
         if (! this.record.get('account_id')) {
             if (! this.accountId) {
                 var mainApp = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
-                    folderId = this.replyTo ? this.replyTo.get('folder_id') : 
-                               this.forwardMsgs ? this.forwardMsgs[0].get('folder_id') : null,
+                    message = this.getMessageFromConfig(),
+                    folderId = message ? message.get('folder_id') : null, 
                     folder = folderId ? mainApp.getFolderStore().getById(folderId) : null
                     accountId = folder ? folder.get('account_id') : null;
                     
@@ -285,6 +296,17 @@ Ext.namespace('Tine.Felamimail');
             this.record.set('account_id', this.accountId);
         }
         delete this.accountId;
+    },
+    
+    /**
+     * returns message passed with config
+     * 
+     * @return {Tine.Felamimail.Model.Message}
+     */
+    getMessageFromConfig: function() {
+        return this.replyTo ? this.replyTo : 
+               this.forwardMsgs && this.forwardMsgs.length === 1 ? this.forwardMsgs[0] :
+               this.draftOrTemplate ? this.draftOrTemplate : null;
     },
     
     /**
@@ -314,6 +336,10 @@ Ext.namespace('Tine.Felamimail');
         }
         
         Ext.each(['to', 'cc', 'bcc'], function(field) {
+            if (this.draftOrTemplate) {
+                this[field] = this.draftOrTemplate.get(field);
+            }
+            
             if (! this.record.get(field)) {
                 this[field] = Ext.isArray(this[field]) ? this[field] : Ext.isString(this[field]) ? [this[field]] : [];
                 this.record.set(field, this[field]);
@@ -342,6 +368,8 @@ Ext.namespace('Tine.Felamimail');
                     this.subject += this.forwardMsgs.length === 1 ?
                         this.forwardMsgs[0].get('subject') :
                         String.format(this.app.i18n._('{0} Message', '{0} Messages', this.forwardMsgs.length));
+                } else if (this.draftOrTemplate) {
+                    this.subject = this.draftOrTemplate.get('subject');
                 }
             }
             this.record.set('subject', this.subject);
@@ -354,8 +382,8 @@ Ext.namespace('Tine.Felamimail');
      * decode this.replyTo / this.forwardMsgs from interwindow json transport
      */
     decodeMsgs: function() {
-        if (Ext.isString(this.record)) {
-            this.recordClass = new this.recordClass(Ext.decode(this.record));
+        if (Ext.isString(this.draftOrTemplate)) {
+            this.draftOrTemplate = new this.recordClass(Ext.decode(this.draftOrTemplate));
         }
         
         if (Ext.isString(this.replyTo)) {
@@ -408,6 +436,7 @@ Ext.namespace('Tine.Felamimail');
                     this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
                     this.purgeListeners();
                     this.window.close();
+                    // TODO reload target folder message cache!
                 },
                 failure: this.onRequestFailed,
                 timeout: 150000 // 3 minutes
@@ -571,7 +600,7 @@ Ext.namespace('Tine.Felamimail');
             collapseMode: 'mini',
             header: false,
             collapsible: true,
-            collapsed: (! this.record.get('attachments') || this.record.get('attachments').length == 0),
+            collapsed: (this.record.bodyIsFetched() && (! this.record.get('attachments') || this.record.get('attachments').length == 0)),
             items: [this.attachmentGrid]
         });
         
