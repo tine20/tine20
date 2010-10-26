@@ -57,14 +57,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      * attachment filename regexp 
      *
      */
-    //const ATTACHMENT_FILENAME_REGEXP = "/name=\"*([\w\-\._ ]+)\"*/u";
     const ATTACHMENT_FILENAME_REGEXP = "/name=\"(.*)\"/";
     
     /**
      * email address regexp
      */
-    // '/(?<!mailto:)([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i';
-    const EMAIL_ADDRESS_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,4})/i'; 
+    const EMAIL_ADDRESS_REGEXP = '/([a-z0-9_\+-\.]+@[a-z0-9-\.]+\.[a-z]{2,5})/i'; 
     
     /**
      * quote string ("> ")
