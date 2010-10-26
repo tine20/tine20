@@ -198,8 +198,6 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         p.recordData = record.data;
         p.folderName = folderName;
         
-        Tine.log.debug(p);
-        
         // increase timeout as this can take a longer (5 minutes)
         options.timeout = 300000;
         
