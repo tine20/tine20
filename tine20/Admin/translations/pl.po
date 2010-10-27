@@ -5,10 +5,10 @@ msgstr ""
 "PO-Revision-Date: 2010-10-21 18:11+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -108,130 +108,138 @@ msgstr "wyświetlanie listy komputerów"
 msgid "view computers list and details"
 msgstr "wyświetlanie listy komputerów i szczegółów"
 
-#: js/SambaMachineGrid.js:68
-#: js/SambaMachineEditDialog.js:43
+#: js/SambaMachineEditDialog.js:43 js/SambaMachineGrid.js:68
 msgid "Computer Name"
 msgstr "Nazwa komputera"
 
-#: js/SambaMachineGrid.js:69
-#: js/SambaMachineGrid.js:99
-#: js/Groups.js:240
-#: js/RoleEditDialog.js:292
-#: js/user/GridPanel.js:101
-#: js/GroupEditDialog.js:136
-#: js/TagEditDialog.js:226
-#: js/Roles.js:240
-#: js/Tags.js:227
+#: js/Admin.js:24 js/user/GridPanel.js:100 js/user/Users.js:73
+#: js/AccessLog.js:109
+msgid "User"
+msgid_plural "Users"
+msgstr[0] "użytkownika"
+msgstr[1] "użytkowników"
+msgstr[2] "użytkowników"
+
+#: js/Admin.js:37 js/Models.js:88 js/user/EditDialog.js:221
+msgid "Groups"
+msgstr "Grupy"
+
+# The word "Roles" could not be clearly understood. The word "Funkcje" is the better choice.
+# Das Wort "Roles" koennte missverstanden werden. Das Wort "Funkcje" passt besser.
+#: js/Admin.js:50 js/user/EditDialog.js:226
+msgid "Roles"
+msgstr "Role"
+
+#: js/Admin.js:62
+msgid "Computers"
+msgstr "Komputery"
+
+#: js/Admin.js:75
+msgid "Applications"
+msgstr "Aplikacje"
+
+#: js/Admin.js:88
+msgid "Access Log"
+msgstr "Dziennik logowania"
+
+#: js/Admin.js:101
+msgid "Shared Tags"
+msgstr "Wspólne znaczniki"
+
+#: js/Admin.js:138
+msgid "Admin"
+msgstr "Administrator"
+
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70 js/TagEditDialog.js:38
+msgid "Please wait"
+msgstr "Proszę czekać"
+
+#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
+msgid "Updating Memberships"
+msgstr "Aktualizacja uczestnictwa"
+
+# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
+# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
+#: js/GroupEditDialog.js:73 js/RoleEditDialog.js:107 js/RoleEditDialog.js:135
+#: js/Groups.js:77 js/TagEditDialog.js:83 js/Roles.js:70
+msgid "Failed"
+msgstr "Próba nieudana"
+
+#: js/GroupEditDialog.js:73
+msgid "Could not save group."
+msgstr "Zapisanie grupy było niemożliwe."
+
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:114 js/TagEditDialog.js:88
+msgid "Errors"
+msgstr "Błędy"
+
+#: js/GroupEditDialog.js:78 js/RoleEditDialog.js:114 js/TagEditDialog.js:88
+msgid "Please fix the errors noted."
+msgstr "Proszę poprawić wskazane błędy."
+
+#: js/GroupEditDialog.js:109
+msgid "Group Members"
+msgstr "Uczestnicy przypisani do grupy"
+
+#: js/GroupEditDialog.js:128
+msgid "Group Name"
+msgstr "Nazwa grupy"
+
+#: js/GroupEditDialog.js:136 js/SambaMachineGrid.js:69
+#: js/SambaMachineGrid.js:99 js/RoleEditDialog.js:292 js/user/GridPanel.js:101
+#: js/Groups.js:239 js/TagEditDialog.js:226 js/Tags.js:227 js/Roles.js:240
 msgid "Description"
 msgstr "Opis"
 
-#: js/SambaMachineGrid.js:86
-#: js/Groups.js:238
-#: js/user/GridPanel.js:159
+#: js/GroupEditDialog.js:144 js/user/EditDialog.js:790
+msgid "Visibility"
+msgstr "Widoczność konta"
+
+#: js/GroupEditDialog.js:150 js/user/EditDialog.js:796
+msgid "Display in addressbook"
+msgstr "Wyświetlaj w książce adresowej"
+
+#: js/GroupEditDialog.js:150 js/user/EditDialog.js:796
+msgid "Hide from addressbook"
+msgstr "Ukryj w książce adresowej"
+
+#: js/GroupEditDialog.js:161 js/user/EditDialog.js:806
+msgid "Saved in Addressbook"
+msgstr "Zapisano w książce adresowej"
+
+#: js/GroupEditDialog.js:216 js/RoleEditDialog.js:359 js/TagEditDialog.js:290
+msgid "Transferring {0}..."
+msgstr "Przesyłanie {0}..."
+
+#: js/GroupEditDialog.js:216 js/Models.js:88
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Grupa"
+msgstr[1] "Grupy"
+msgstr[2] "Grupy"
+
+#: js/GroupEditDialog.js:221 js/GroupEditDialog.js:232
+msgid "Add new group"
+msgstr "Dodaj nową grupę"
+
+#: js/GroupEditDialog.js:234
+msgid "Edit Group \"{0}\""
+msgstr "Edytuj grupę \"{0}\""
+
+#: js/SambaMachineGrid.js:86 js/user/GridPanel.js:159 js/Groups.js:237
 #: js/Roles.js:238
 msgid "ID"
 msgstr "ID"
 
-#: js/SambaMachineGrid.js:93
-#: js/Groups.js:239
-#: js/user/EditDialog.js:278
-#: js/Applications.js:286
-#: js/Roles.js:239
-#: js/Tags.js:226
-#: js/AccessLog.js:133
+#: js/SambaMachineGrid.js:93 js/user/EditDialog.js:277
+#: js/user/EditDialog.js:306 js/Groups.js:238 js/Applications.js:286
+#: js/AccessLog.js:133 js/Tags.js:226 js/Roles.js:239
 msgid "Name"
 msgstr "Nazwa"
-
-#: js/Groups.js:56
-#: js/Roles.js:48
-#: js/Tags.js:65
-msgid "Confirm"
-msgstr "Potwierdź"
-
-#: js/Groups.js:56
-msgid "Do you really want to delete the selected groups?"
-msgstr "Czy na pewno chcesz usunąć wybrane grupy?"
-
-#: js/Groups.js:73
-msgid "Deleting group(s)..."
-msgstr "Usuwanie grup(y)..."
-
-# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
-# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
-#: js/Groups.js:78
-#: js/RoleEditDialog.js:107
-#: js/RoleEditDialog.js:135
-#: js/GroupEditDialog.js:73
-#: js/TagEditDialog.js:83
-#: js/Roles.js:70
-msgid "Failed"
-msgstr "Próba nieudana"
-
-#: js/Groups.js:78
-msgid "Some error occurred while trying to delete the group."
-msgstr "Podczas próby usunięcia grupy wystąpił błąd."
-
-#: js/Groups.js:108
-msgid "add group"
-msgstr "Dodaj grupę"
-
-#: js/Groups.js:116
-msgid "edit group"
-msgstr "Edytuj grupę"
-
-#: js/Groups.js:124
-msgid "delete group"
-msgstr "Usuń grupę"
-
-#: js/Groups.js:180
-#: js/Applications.js:191
-#: js/Roles.js:177
-#: js/Tags.js:170
-msgid "Search:"
-msgstr "Znajdź:"
-
-#: js/Groups.js:227
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Wyświetlane grupy {0} - {1} z {2}"
-
-#: js/Groups.js:228
-#: js/Groups.js:283
-msgid "No groups to display"
-msgstr "Brak grup"
-
-#: js/SambaMachineModel.js:40
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Komputer"
-msgstr[1] "komputery"
-msgstr[2] "komputery"
-
-#: js/RoleEditDialog.js:70
-#: js/GroupEditDialog.js:38
-#: js/TagEditDialog.js:38
-msgid "Please wait"
-msgstr "Proszę czekać"
-
-#: js/RoleEditDialog.js:70
-#: js/GroupEditDialog.js:38
-msgid "Updating Memberships"
-msgstr "Aktualizacja uczestnictwa"
 
 #: js/RoleEditDialog.js:107
 msgid "Could not save role."
 msgstr "Zapisanie funkcji było niemożliwe."
-
-#: js/RoleEditDialog.js:114
-#: js/GroupEditDialog.js:78
-#: js/TagEditDialog.js:88
-msgid "Errors"
-msgstr "Błędy"
-
-#: js/RoleEditDialog.js:114
-#: js/GroupEditDialog.js:78
-#: js/TagEditDialog.js:88
-msgid "Please fix the errors noted."
-msgstr "Proszę poprawić wskazane błędy."
 
 #: js/RoleEditDialog.js:127
 msgid "Deleting role..."
@@ -239,8 +247,7 @@ msgstr "Usuwanie funkcji…"
 
 # The word "Roli" could not be clearly understood. The word "funkcji" is the better choice.
 # Das Wort "Roli" koennte missverstanden werden. Das Wort "funkcji" passt besser.
-#: js/RoleEditDialog.js:135
-#: js/Roles.js:70
+#: js/RoleEditDialog.js:135 js/Roles.js:70
 msgid "Some error occurred while trying to delete the role."
 msgstr "Podczas próby usunięcia funkcji wystąpił błąd."
 
@@ -257,12 +264,6 @@ msgid "Role Name"
 msgstr "Nazwa funkcji"
 
 #: js/RoleEditDialog.js:359
-#: js/GroupEditDialog.js:206
-#: js/TagEditDialog.js:290
-msgid "Transferring {0}..."
-msgstr "Przesyłanie {0}..."
-
-#: js/RoleEditDialog.js:359
 msgid "Role"
 msgstr "funkcję"
 
@@ -273,6 +274,13 @@ msgstr "Dodaj nową funkcję"
 #: js/RoleEditDialog.js:371
 msgid "Edit Role \"{0}\""
 msgstr "Edytuj funkcję \"{0}\""
+
+#: js/Models.js:52 js/AccessLog.js:107
+msgid "AccessLog"
+msgid_plural "AccessLogs"
+msgstr[0] "Logi połączeń"
+msgstr[1] "logi połączeń"
+msgstr[2] "logi połączeń"
 
 #: js/user/GridPanel.js:58
 msgid "enable account"
@@ -286,19 +294,7 @@ msgstr "Wyłącz konto"
 msgid "reset password"
 msgstr "Zresetuj hasło"
 
-#: js/user/GridPanel.js:100
-#: js/user/Users.js:73
-#: js/Admin.js:24
-#: js/AccessLog.js:109
-msgid "User"
-msgid_plural "Users"
-msgstr[0] "użytkownika"
-msgstr[1] "użytkowników"
-msgstr[2] "użytkowników"
-
-#: js/user/GridPanel.js:160
-#: js/user/EditDialog.js:745
-#: js/Applications.js:287
+#: js/user/GridPanel.js:160 js/user/EditDialog.js:776 js/Applications.js:287
 msgid "Status"
 msgstr "Status"
 
@@ -322,18 +318,15 @@ msgstr "Imię"
 msgid "Email"
 msgstr "E-mail"
 
-#: js/user/GridPanel.js:166
-#: js/user/EditDialog.js:733
+#: js/user/GridPanel.js:166 js/user/EditDialog.js:754
 msgid "OpenID"
 msgstr "ID uwierzytelnienia (OpenID)"
 
-#: js/user/GridPanel.js:167
-#: js/user/EditDialog.js:800
+#: js/user/GridPanel.js:167 js/user/EditDialog.js:831
 msgid "Last login at"
 msgstr "Czas ostatniego logowania"
 
-#: js/user/GridPanel.js:168
-#: js/user/EditDialog.js:804
+#: js/user/GridPanel.js:168 js/user/EditDialog.js:835
 msgid "Last login from"
 msgstr "Ostatnie zalogowanie z adresu"
 
@@ -341,8 +334,7 @@ msgstr "Ostatnie zalogowanie z adresu"
 msgid "Password changed"
 msgstr "Hasło zostało zmienione"
 
-#: js/user/GridPanel.js:170
-#: js/user/EditDialog.js:754
+#: js/user/GridPanel.js:170 js/user/EditDialog.js:785
 msgid "Expires"
 msgstr "Konto wygasa"
 
@@ -354,303 +346,282 @@ msgstr "Zdefiniuj nowe hasło"
 msgid "Please enter the new password:"
 msgstr "Proszę wprowadzić nowe hasło:"
 
-#: js/user/Users.js:116
+#: js/user/EditDialog.js:165
+msgid "Passwords do not match!"
+msgstr "Nieprawidłowe hasło"
+
+#: js/user/EditDialog.js:278 js/user/EditDialog.js:759
+msgid "Primary group"
+msgstr "Grupa nadrzędna"
+
+#: js/user/EditDialog.js:345
+msgid "Unix"
+msgstr "Unix"
+
+#: js/user/EditDialog.js:359
+msgid "Home Directory"
+msgstr "Katalog domowy"
+
+#: js/user/EditDialog.js:363
+msgid "Login Shell"
+msgstr "Powłoka logowania"
+
+#: js/user/EditDialog.js:369
+msgid "Windows"
+msgstr "Windows"
+
+#: js/user/EditDialog.js:383
+msgid "Home Drive"
+msgstr "Dysk lokalny"
+
+#: js/user/EditDialog.js:388
+msgid "Logon Time"
+msgstr "Czas zalogowania"
+
+#: js/user/EditDialog.js:390 js/user/EditDialog.js:833
+#: js/user/EditDialog.js:837
+msgid "never logged in"
+msgstr "nigdy nie był zalogowany"
+
+#: js/user/EditDialog.js:393
+msgid "Home Path"
+msgstr "Ścieżka do katalogu domowego"
+
+#: js/user/EditDialog.js:398
+msgid "Logoff Time"
+msgstr "Czas wylogowania"
+
+#: js/user/EditDialog.js:400
+msgid "never logged off"
+msgstr "nigdy się nie wylogowywał(a)"
+
+#: js/user/EditDialog.js:403
+msgid "Profile Path"
+msgstr "Ścieżka do katalogu z profilami"
+
+#: js/user/EditDialog.js:408
+msgid "Password Last Set"
+msgstr "Ostatnia zmiana hasła"
+
+#: js/user/EditDialog.js:410 js/user/EditDialog.js:787
+#: js/user/EditDialog.js:841
+msgid "never"
+msgstr "nigdy"
+
+#: js/user/EditDialog.js:413
+msgid "Logon Script"
+msgstr "Skrypt logowania"
+
+#: js/user/EditDialog.js:418
+msgid "Password Can Change"
+msgstr "Możliwa zmiana hasła"
+
+#: js/user/EditDialog.js:420 js/user/EditDialog.js:425
+#: js/user/EditDialog.js:430
+msgid "not set"
+msgstr "nie ustawione"
+
+#: js/user/EditDialog.js:423
+msgid "Password Must Change"
+msgstr "Konieczna zmiana hasła"
+
+#: js/user/EditDialog.js:428
+msgid "Kick Off Time"
+msgstr "Czas wylogowania"
+
+#: js/user/EditDialog.js:448
+msgid "Quota (MB)"
+msgstr "Kwota (MB)"
+
+#: js/user/EditDialog.js:461
+msgid "Quota"
+msgstr "Kwota"
+
+#: js/user/EditDialog.js:469
+msgid "Current Mail Size"
+msgstr "Rozmiar wiadomości"
+
+#: js/user/EditDialog.js:477
+msgid "Sieve Quota (MB)"
+msgstr "Kwota ograniczenia (MB)"
+
+#: js/user/EditDialog.js:490
+msgid "Sieve Quota"
+msgstr "Kwota ograniczenia"
+
+#: js/user/EditDialog.js:498
+msgid "Sieve Size"
+msgstr "Rozmiar ograniczenia"
+
+#: js/user/EditDialog.js:507 js/user/EditDialog.js:816
+msgid "Information"
+msgstr "Informacja"
+
+#: js/user/EditDialog.js:521
+msgid "Last Login"
+msgstr "Ostatnie logowanie o"
+
+#: js/user/EditDialog.js:557
+msgid "Aliases"
+msgstr "Aliasy"
+
+#: js/user/EditDialog.js:560
+msgid "Email Alias"
+msgstr "Alias adresu e-mail"
+
+#: js/user/EditDialog.js:566
+msgid "Add an alias address..."
+msgstr "Dodaj alias dla adresu e-mail..."
+
+#: js/user/EditDialog.js:577
+msgid "Forwards"
+msgstr "Przesłane dalej"
+
+#: js/user/EditDialog.js:580
+msgid "Email Forward"
+msgstr "Przekaż e-mail"
+
+#: js/user/EditDialog.js:586
+msgid "Add a forward address..."
+msgstr "Dodaj adres dla przekazywanych wiadomości..."
+
+#: js/user/EditDialog.js:598
+msgid "Forward Only"
+msgstr "Tylko prześlij dalej"
+
+#: js/user/EditDialog.js:621
+msgid "Password confirmation"
+msgstr "Powtórz hasło"
+
+#: js/user/EditDialog.js:638
+msgid "Repeat password"
+msgstr "Zresetuj hasło"
+
+#: js/user/EditDialog.js:650
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: js/user/EditDialog.js:657
+msgid "Ok"
+msgstr "OK"
+
+#: js/user/EditDialog.js:682
+msgid "Account"
+msgstr "Konto"
+
+#: js/user/EditDialog.js:697
+msgid "First Name"
+msgstr "Imię"
+
+#: js/user/EditDialog.js:707
+msgid "Last Name"
+msgstr "Nazwisko"
+
+#: js/user/EditDialog.js:712 js/AccessLog.js:132
+msgid "Login Name"
+msgstr "Login"
+
+#: js/user/EditDialog.js:717
+msgid "Password"
+msgstr "Hasło"
+
+#: js/user/EditDialog.js:721
+msgid "no password set"
+msgstr "brak hasła"
+
+#: js/user/EditDialog.js:748
+msgid "Emailaddress"
+msgstr "Adres e-mail"
+
+#: js/user/EditDialog.js:782 js/Applications.js:237
+msgid "enabled"
+msgstr "włączone"
+
+#: js/user/EditDialog.js:782 js/Applications.js:234
+msgid "disabled"
+msgstr "wyłączone"
+
+#: js/user/EditDialog.js:782
+msgid "expired"
+msgstr "wygasło"
+
+#: js/user/EditDialog.js:833 js/user/EditDialog.js:837
+msgid "don't know"
+msgstr "nie znam"
+
+#: js/user/EditDialog.js:839
+msgid "Password set"
+msgstr "Hasło ustawiono"
+
+#: js/user/EditDialog.js:846
+msgid "User memberships"
+msgstr "Przynależność użytkownika"
+
+#: js/user/EditDialog.js:852
+msgid "Fileserver"
+msgstr "Serwer plików"
+
+#: js/user/EditDialog.js:858
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/user/EditDialog.js:867
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/user/Users.js:117
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] "Użytkownik Samby"
 msgstr[1] "użytkowników Samby"
 msgstr[2] "użytkowników Samby"
 
-#: js/user/Users.js:142
+#: js/user/Users.js:143
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "E-mail użytkownika"
 msgstr[1] "E-maile użytkowników"
 msgstr[2] "E-maile użytkowników"
 
-#: js/user/EditDialog.js:161
-msgid "Passwords do not match!"
-msgstr "Nieprawidłowe hasło"
-
-#: js/user/EditDialog.js:209
-#: js/Admin.js:37
-#: js/Models.js:88
-msgid "Groups"
-msgstr "Grupy"
-
-# The word "Roles" could not be clearly understood. The word "Funkcje" is the better choice.
-# Das Wort "Roles" koennte missverstanden werden. Das Wort "Funkcje" passt besser.
-#: js/user/EditDialog.js:214
-#: js/Admin.js:50
-msgid "Roles"
-msgstr "Role"
-
-#: js/user/EditDialog.js:319
-msgid "Unix"
-msgstr "Unix"
-
-#: js/user/EditDialog.js:333
-msgid "Home Directory"
-msgstr "Katalog domowy"
-
-#: js/user/EditDialog.js:337
-msgid "Login Shell"
-msgstr "Powłoka logowania"
-
-#: js/user/EditDialog.js:343
-msgid "Windows"
-msgstr "Windows"
-
-#: js/user/EditDialog.js:357
-msgid "Home Drive"
-msgstr "Dysk lokalny"
-
-#: js/user/EditDialog.js:362
-msgid "Logon Time"
-msgstr "Czas zalogowania"
-
-#: js/user/EditDialog.js:364
-#: js/user/EditDialog.js:802
-#: js/user/EditDialog.js:806
-msgid "never logged in"
-msgstr "nigdy nie był zalogowany"
-
-#: js/user/EditDialog.js:367
-msgid "Home Path"
-msgstr "Ścieżka do katalogu domowego"
-
-#: js/user/EditDialog.js:372
-msgid "Logoff Time"
-msgstr "Czas wylogowania"
-
-#: js/user/EditDialog.js:374
-msgid "never logged off"
-msgstr "nigdy się nie wylogowywał(a)"
-
-#: js/user/EditDialog.js:377
-msgid "Profile Path"
-msgstr "Ścieżka do katalogu z profilami"
-
-#: js/user/EditDialog.js:382
-msgid "Password Last Set"
-msgstr "Ostatnia zmiana hasła"
-
-#: js/user/EditDialog.js:384
-#: js/user/EditDialog.js:756
-#: js/user/EditDialog.js:810
-msgid "never"
-msgstr "nigdy"
-
-#: js/user/EditDialog.js:387
-msgid "Logon Script"
-msgstr "Skrypt logowania"
-
-#: js/user/EditDialog.js:392
-msgid "Password Can Change"
-msgstr "Możliwa zmiana hasła"
-
-#: js/user/EditDialog.js:394
-#: js/user/EditDialog.js:399
-#: js/user/EditDialog.js:404
-msgid "not set"
-msgstr "nie ustawione"
-
-#: js/user/EditDialog.js:397
-msgid "Password Must Change"
-msgstr "Konieczna zmiana hasła"
-
-#: js/user/EditDialog.js:402
-msgid "Kick Off Time"
-msgstr "Czas wylogowania"
-
-#: js/user/EditDialog.js:424
-msgid "Quota (MB)"
-msgstr "Kwota (MB)"
-
-#: js/user/EditDialog.js:437
-msgid "Quota"
-msgstr "Kwota"
-
-#: js/user/EditDialog.js:445
-msgid "Current Mail Size"
-msgstr "Rozmiar wiadomości"
-
-#: js/user/EditDialog.js:453
-msgid "Sieve Quota (MB)"
-msgstr "Kwota ograniczenia (MB)"
-
-#: js/user/EditDialog.js:466
-msgid "Sieve Quota"
-msgstr "Kwota ograniczenia"
-
-#: js/user/EditDialog.js:474
-msgid "Sieve Size"
-msgstr "Rozmiar ograniczenia"
-
-#: js/user/EditDialog.js:483
-#: js/user/EditDialog.js:785
-msgid "Information"
-msgstr "Informacja"
-
-#: js/user/EditDialog.js:497
-msgid "Last Login"
-msgstr "Ostatnie logowanie o"
-
-#: js/user/EditDialog.js:535
-msgid "Aliases"
-msgstr "Aliasy"
-
-#: js/user/EditDialog.js:538
-msgid "Email Alias"
-msgstr "Alias adresu e-mail"
-
-#: js/user/EditDialog.js:544
-msgid "Add an alias address..."
-msgstr "Dodaj alias dla adresu e-mail..."
-
-#: js/user/EditDialog.js:555
-msgid "Forwards"
-msgstr "Przesłane dalej"
-
-#: js/user/EditDialog.js:558
-msgid "Email Forward"
-msgstr "Przekaż e-mail"
-
-#: js/user/EditDialog.js:564
-msgid "Add a forward address..."
-msgstr "Dodaj adres dla przekazywanych wiadomości..."
-
-#: js/user/EditDialog.js:576
-msgid "Forward Only"
-msgstr "Tylko prześlij dalej"
-
-#: js/user/EditDialog.js:600
-msgid "Password confirmation"
-msgstr "Powtórz hasło"
-
-#: js/user/EditDialog.js:617
-msgid "Repeat password"
-msgstr "Zresetuj hasło"
-
-#: js/user/EditDialog.js:629
-msgid "Cancel"
-msgstr "Anuluj"
-
-#: js/user/EditDialog.js:636
-msgid "Ok"
-msgstr "OK"
-
-#: js/user/EditDialog.js:661
-msgid "Account"
-msgstr "Konto"
-
-#: js/user/EditDialog.js:676
-msgid "First Name"
-msgstr "Imię"
-
-#: js/user/EditDialog.js:686
-msgid "Last Name"
-msgstr "Nazwisko"
-
-#: js/user/EditDialog.js:691
-#: js/AccessLog.js:132
-msgid "Login Name"
-msgstr "Login"
-
-#: js/user/EditDialog.js:696
-msgid "Password"
-msgstr "Hasło"
-
-#: js/user/EditDialog.js:700
-msgid "no password set"
-msgstr "brak hasła"
-
-#: js/user/EditDialog.js:727
-msgid "Emailaddress"
-msgstr "Adres e-mail"
-
-#: js/user/EditDialog.js:738
-msgid "Primary group"
-msgstr "Grupa nadrzędna"
-
-#: js/user/EditDialog.js:751
-#: js/Applications.js:237
-msgid "enabled"
-msgstr "włączone"
-
-#: js/user/EditDialog.js:751
-#: js/Applications.js:234
-msgid "disabled"
-msgstr "wyłączone"
-
-#: js/user/EditDialog.js:751
-msgid "expired"
-msgstr "wygasło"
-
-#: js/user/EditDialog.js:759
-#: js/GroupEditDialog.js:144
-msgid "Visibility"
-msgstr "Widoczność konta"
-
-#: js/user/EditDialog.js:765
-#: js/GroupEditDialog.js:150
-msgid "Display in addressbook"
-msgstr "Wyświetlaj w książce adresowej"
-
-#: js/user/EditDialog.js:765
-#: js/GroupEditDialog.js:150
-msgid "Hide from addressbook"
-msgstr "Ukryj w książce adresowej"
-
-#: js/user/EditDialog.js:775
-#: js/GroupEditDialog.js:154
-msgid "Saved in Addressbook"
-msgstr "Zapisano w książce adresowej"
-
-#: js/user/EditDialog.js:802
-#: js/user/EditDialog.js:806
-msgid "don't know"
-msgstr "nie znam"
-
-#: js/user/EditDialog.js:808
-msgid "Password set"
-msgstr "Hasło ustawiono"
-
-#: js/user/EditDialog.js:815
-msgid "User memberships"
-msgstr "Przynależność użytkownika"
-
-#: js/user/EditDialog.js:821
-msgid "Fileserver"
-msgstr "Serwer plików"
-
-#: js/user/EditDialog.js:827
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:836
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/Admin.js:62
-msgid "Computers"
-msgstr "Komputery"
-
-#: js/Admin.js:75
-msgid "Applications"
-msgstr "Aplikacje"
-
-#: js/Admin.js:88
-msgid "Access Log"
-msgstr "Dziennik logowania"
-
-#: js/Admin.js:101
-msgid "Shared Tags"
-msgstr "Wspólne znaczniki"
-
-#: js/Admin.js:138
-msgid "Admin"
-msgstr "Administrator"
+#: js/Groups.js:55 js/Tags.js:65 js/Roles.js:48
+msgid "Confirm"
+msgstr "Potwierdź"
+
+#: js/Groups.js:55
+msgid "Do you really want to delete the selected groups?"
+msgstr "Czy na pewno chcesz usunąć wybrane grupy?"
+
+#: js/Groups.js:72
+msgid "Deleting group(s)..."
+msgstr "Usuwanie grup(y)..."
+
+#: js/Groups.js:77
+msgid "Some error occurred while trying to delete the group."
+msgstr "Podczas próby usunięcia grupy wystąpił błąd."
+
+#: js/Groups.js:107
+msgid "add group"
+msgstr "Dodaj grupę"
+
+#: js/Groups.js:115
+msgid "edit group"
+msgstr "Edytuj grupę"
+
+#: js/Groups.js:123
+msgid "delete group"
+msgstr "Usuń grupę"
+
+#: js/Groups.js:179 js/Applications.js:191 js/Tags.js:170 js/Roles.js:177
+msgid "Search:"
+msgstr "Znajdź:"
+
+#: js/Groups.js:226
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Wyświetlane grupy {0} - {1} z {2}"
+
+#: js/Groups.js:227 js/Groups.js:282
+msgid "No groups to display"
+msgstr "Brak grup"
 
 #: js/Applications.js:44
 msgid "{0} Settings"
@@ -688,35 +659,6 @@ msgstr "lp"
 msgid "Version"
 msgstr "Wersja"
 
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Zapisanie grupy było niemożliwe."
-
-#: js/GroupEditDialog.js:109
-msgid "Group Members"
-msgstr "Uczestnicy przypisani do grupy"
-
-#: js/GroupEditDialog.js:128
-msgid "Group Name"
-msgstr "Nazwa grupy"
-
-#: js/GroupEditDialog.js:206
-#: js/Models.js:88
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Grupa"
-msgstr[1] "Grupy"
-msgstr[2] "Grupy"
-
-#: js/GroupEditDialog.js:212
-#: js/GroupEditDialog.js:222
-msgid "Add new group"
-msgstr "Dodaj nową grupę"
-
-#: js/GroupEditDialog.js:224
-msgid "Edit Group \"{0}\""
-msgstr "Edytuj grupę \"{0}\""
-
 #: js/TagEditDialog.js:38
 msgid "Updating Tag"
 msgstr "Aktualizacja znacznika"
@@ -749,8 +691,7 @@ msgstr "Zastosuj"
 msgid "Tag Name"
 msgstr "Nazwa znacznika"
 
-#: js/TagEditDialog.js:232
-#: js/Tags.js:223
+#: js/TagEditDialog.js:232 js/Tags.js:223
 msgid "Color"
 msgstr "Kolor"
 
@@ -766,91 +707,26 @@ msgstr "Dodaj nowy znacznik"
 msgid "Edit Tag \"{0}\""
 msgstr "Edytuj znacznik \"{0}\""
 
-#: js/Models.js:52
-#: js/AccessLog.js:107
-msgid "AccessLog"
-msgid_plural "AccessLogs"
-msgstr[0] "Logi połączeń"
-msgstr[1] "logi połączeń"
-msgstr[2] "logi połączeń"
+#: js/SambaMachineModel.js:40
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Komputer"
+msgstr[1] "komputery"
+msgstr[2] "komputery"
 
-#: js/Roles.js:48
-msgid "Do you really want to delete the selected roles?"
-msgstr "Czy na pewno chcesz usunąć wybrane funkcje?"
-
-#: js/Roles.js:65
-msgid "Deleting role(s)..."
-msgstr "Usuwanie funkcji…"
-
-#: js/Roles.js:103
-msgid "add role"
-msgstr "Dodaj funkcję"
-
-#: js/Roles.js:111
-msgid "edit role"
-msgstr "Edytuj funkcję"
-
-#: js/Roles.js:119
-msgid "delete role"
-msgstr "Usuń funkcję"
-
-# The word "Role" could not be clearly understood. The word "Funkcji" is a better choice.
-# Das Wort "Role" koennte missverstanden werden. Das Wort "Funkcji" passt besser.
-#: js/Roles.js:227
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Wyświetlane funkcje {0} - {1} z {2}"
-
-#: js/Roles.js:228
-#: js/Roles.js:283
-msgid "No roles to display"
-msgstr "Brak funkcji"
-
-#: js/Tags.js:65
-msgid "Do you really want to delete the selected tags?"
-msgstr "Czy na pewno chcesz usunąć wybrane znaczniki?"
-
-#: js/Tags.js:83
-msgid "Deleting tag(s)..."
-msgstr "Usuwanie znacznika / znaczników…"
-
-#: js/Tags.js:98
-msgid "add tag"
-msgstr "Dodaj znacznik"
-
-#: js/Tags.js:106
-msgid "edit tag"
-msgstr "Edytuj znacznik"
-
-#: js/Tags.js:114
-msgid "delete tag"
-msgstr "Usuń znacznik"
-
-#: js/Tags.js:212
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Wyświetl znaczniki {0} - {1} z {2}"
-
-#: js/Tags.js:213
-#: js/Tags.js:270
-msgid "No tags to display"
-msgstr "Brak znaczników"
-
-#: js/AccessLog.js:108
-#: js/AccessLog.js:134
+#: js/AccessLog.js:108 js/AccessLog.js:134
 msgid "IP Address"
 msgstr "Adres IP"
 
-#: js/AccessLog.js:110
-#: js/AccessLog.js:135
+#: js/AccessLog.js:110 js/AccessLog.js:135
 msgid "Login Time"
 msgstr "Czas zalogowania"
 
-#: js/AccessLog.js:111
-#: js/AccessLog.js:136
+#: js/AccessLog.js:111 js/AccessLog.js:136
 msgid "Logout Time"
 msgstr "Czas wylogowania"
 
-#: js/AccessLog.js:112
-#: js/AccessLog.js:138
+#: js/AccessLog.js:112 js/AccessLog.js:138
 msgid "Client Type"
 msgstr "Rodzaj klienta"
 
@@ -881,6 +757,64 @@ msgstr "błąd"
 #: js/AccessLog.js:174
 msgid "success"
 msgstr "zakończone sukcesem"
+
+#: js/Tags.js:65
+msgid "Do you really want to delete the selected tags?"
+msgstr "Czy na pewno chcesz usunąć wybrane znaczniki?"
+
+#: js/Tags.js:83
+msgid "Deleting tag(s)..."
+msgstr "Usuwanie znacznika / znaczników…"
+
+#: js/Tags.js:98
+msgid "add tag"
+msgstr "Dodaj znacznik"
+
+#: js/Tags.js:106
+msgid "edit tag"
+msgstr "Edytuj znacznik"
+
+#: js/Tags.js:114
+msgid "delete tag"
+msgstr "Usuń znacznik"
+
+#: js/Tags.js:212
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Wyświetl znaczniki {0} - {1} z {2}"
+
+#: js/Tags.js:213 js/Tags.js:270
+msgid "No tags to display"
+msgstr "Brak znaczników"
+
+#: js/Roles.js:48
+msgid "Do you really want to delete the selected roles?"
+msgstr "Czy na pewno chcesz usunąć wybrane funkcje?"
+
+#: js/Roles.js:65
+msgid "Deleting role(s)..."
+msgstr "Usuwanie funkcji…"
+
+#: js/Roles.js:103
+msgid "add role"
+msgstr "Dodaj funkcję"
+
+#: js/Roles.js:111
+msgid "edit role"
+msgstr "Edytuj funkcję"
+
+#: js/Roles.js:119
+msgid "delete role"
+msgstr "Usuń funkcję"
+
+# The word "Role" could not be clearly understood. The word "Funkcji" is a better choice.
+# Das Wort "Role" koennte missverstanden werden. Das Wort "Funkcji" passt besser.
+#: js/Roles.js:227
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Wyświetlane funkcje {0} - {1} z {2}"
+
+#: js/Roles.js:228 js/Roles.js:283
+msgid "No roles to display"
+msgstr "Brak funkcji"
 
 #~ msgid "Transfering {0}..."
 #~ msgstr "Transfer {0}..."
