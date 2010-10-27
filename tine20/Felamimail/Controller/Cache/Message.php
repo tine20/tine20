@@ -651,7 +651,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         } catch (Zend_Db_Statement_Exception $zdse) {
             // perhaps we already have this message in our cache (duplicate)
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
-            $result = $messageToCache;
+            $result = $this->_backend->getByProperty($messageToCache->messageuid, 'messageuid');
         }
         
         if ($_updateFolderCounter == true) {
