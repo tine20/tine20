@@ -62,7 +62,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     public function appendFilterSql($_select, $_backend)
     {
         $db = $_backend->getAdapter();
-        $foreignTables = $_backend->getForeignTableNames();
+        $foreignTables = $_backend->getForeignTables();
         
         foreach ($this->_customData as $customData) {
             
@@ -81,7 +81,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             } else {
                 
                 // add conditions
-                $tablename  = $_backend->getTablePrefix() . $foreignTables[$customData['field']];
+                $tablename  = $_backend->getTablePrefix() . $foreignTables[$customData['field']]['table'];
                 if ($customData['field'] == 'flags') {
                     $fieldName = 'flag';
                 } else {
