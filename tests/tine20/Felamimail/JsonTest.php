@@ -370,7 +370,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // check if message is in sent folder
         $message = $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
         $this->assertEquals($message['subject'],  $messageToSend['subject']);
-        $this->assertEquals($message['to'],       $messageToSend['to'][0], 'recipient not found');
+        $this->assertEquals($message['to'][0],    $messageToSend['to'][0], 'recipient not found');
         
         // check if email note has been added to contact(s)
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
@@ -582,7 +582,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // check if message is in drafts folder
         $message = $this->_searchForMessageBySubject($messageToSave['subject'], $this->_account->drafts_folder);
         $this->assertEquals($message['subject'],  $messageToSave['subject']);
-        $this->assertEquals($message['to'],       $messageToSave['to'][0], 'recipient not found');
+        $this->assertEquals($message['to'][0],    $messageToSave['to'][0], 'recipient not found');
     }
     
     /*********************** sieve tests ****************************/
