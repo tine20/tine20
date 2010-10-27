@@ -47,15 +47,13 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         this.action_reply = new Ext.Action({
             text: this.app.i18n._('Reply'),
             handler: this.onMessageReplyTo.createDelegate(this, [false]),
-            iconCls: 'action_email_reply',
-            disabled: this.record.id.match(/_/)
+            iconCls: 'action_email_reply'
         });
 
         this.action_replyAll = new Ext.Action({
             text: this.app.i18n._('Reply To All'),
             handler: this.onMessageReplyTo.createDelegate(this, [true]),
-            iconCls: 'action_email_replyAll',
-            disabled: this.record.id.match(/_/)
+            iconCls: 'action_email_replyAll'
         });
 
         this.action_forward = new Ext.Action({
@@ -130,12 +128,23 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         
     },
     
+    /**
+     * after render
+     */
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
         this.showMessage();
-        this.window.setTitle(this.record.get('subject'));
+
+        var title = this.record.get('subject');
+        if (title !== undefined) {
+            // TODO make this work for attachment mails
+            this.window.setTitle(title);
+        }
     },
     
+    /**
+     * show message
+     */
     showMessage: function() {
         this.layout.setActiveItem(this.getSingleRecordPanel());
         this.updateDetails(this.record, this.getSingleRecordPanel().body);
