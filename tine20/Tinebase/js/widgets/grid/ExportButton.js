@@ -47,6 +47,14 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
      * use this alternativly to sm
      */
     gridPanel: null,
+    /**
+     * @cfg {Boolean} showExportDialog
+     */
+    showExportDialog: false,
+    /**
+     * @cfg {String} appName
+     */
+    appName: null,
     
     /**
      * do export
@@ -64,6 +72,26 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
         
         var filterSettings = this.sm.getSelectionFilter();
         
+        if (this.showExportDialog) {
+            Tine.widgets.dialog.ExportDialog.openWindow({
+                appName: this.appName,
+                record: new Tine.Tinebase.Model.ExportJob({
+                    filter: filterSettings,
+                    format: this.format,
+                    exportFunction: this.exportFunction
+                })
+            });
+        } else {
+            this.startDownload();
+        }
+    },
+    
+    /**
+     * start download
+     * 
+     * @param {Object} filterSettings
+     */
+    startDownload: function(filterSettings) {
         var downloader = new Ext.ux.file.Download({
             params: {
                 method: this.exportFunction,
