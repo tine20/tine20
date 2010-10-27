@@ -288,6 +288,30 @@ Tine.Tinebase.Model.ImportJob = Tine.Tinebase.data.Record.create([
 });
 
 /**
+ * @namespace Tine.Tinebase.Model
+ * @class     Tine.Tinebase.Model.ExportJob
+ * @extends   Tine.Tinebase.data.Record
+ * 
+ * Model of an export job
+ */
+Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
+    {name: 'filter'                 },
+    {name: 'export_definition_id'   },
+    {name: 'format'                 },
+    {name: 'exportFunction'         },
+    {name: 'options'                }
+], {
+    appName: 'Tinebase',
+    modelName: 'Export',
+    idProperty: 'id',
+    titleProperty: 'model',
+    // ngettext('Export', 'Export', n); gettext('Export');
+    recordName: 'Export',
+    recordsName: 'Exports',
+    containerProperty: null
+});
+
+/**
  * Model of an export/import definition
  * 
  * @constructor {Ext.data.Record}
