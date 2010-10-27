@@ -5,10 +5,9 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        move visibility='displayed' check from getSelect to contact filter
  */
 
 /**
@@ -40,7 +39,8 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     protected $_modlogActive = TRUE;
     
     /**
-     * foreign tables (key => tablename)
+     * foreign tables 
+     * name => array(table, joinOn, field)
      *
      * @var array
      */
@@ -63,52 +63,13 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     {        
         $select = parent::_getSelect($_cols, $_getDeleted);
         
-        if (is_array($this->_foreignTables)) {
-            $select->group($this->_tableName . '.id');
-            
-            foreach ($this->_foreignTables as $modelName => $join) {
-                $select->joinLeft(
-                    /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
-                    /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
-                    /* select */ array($modelName => 'GROUP_CONCAT(' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')')
-                );
-            }
-        }
-        
         $select->joinLeft(
             /* table  */ array('groups' => $this->_tablePrefix . 'groups'), 
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('groups.list_id'),
             /* select */ array('group_id' => 'groups.id')
         );
         
-        #if ($_cols == '*' || array_key_exists('jpegphoto', (array)$_cols)) {
-        #    $select->joinLeft(
-        #        /* table  */ array('image' => $this->_tablePrefix . 'addressbook_image'), 
-        #        /* on     */ $this->_db->quoteIdentifier('image.contact_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
-        #        /* select */ array('jpegphoto' => 'IF(ISNULL('. $this->_db->quoteIdentifier('image.image') .'), 0, 1)')
-        #    );
-        #}
-        
         return $select;
-    }
-    
-    /**
-     * converts raw data from adapter into a single record
-     *
-     * @param  array $_rawData
-     * @return Tinebase_Record_Abstract
-     */
-    protected function _rawDataToRecord(array $_rawData)
-    {
-        $result = parent::_rawDataToRecord($_rawData);
-        
-        if (!empty($result->members)) {
-            $result->members = explode(',', $result->members);
-        } else {
-            $result->members = array();
-        }
-        
-        return $result;
     }
     
     /**
@@ -197,90 +158,5 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
         return $this->get($_listId);
-    }
-    
-    /**
-     * convert recordset, array of ids or records to array of ids
-     * 
-     * @param  mixed  $_mixed
-     * @return array
-     */
-    protected function _getIdsFromMixed($_mixed)
-    {
-        if ($_mixed instanceof Tinebase_Record_RecordSet) { // Record set
-            $ids = $_mixed->getArrayOfIds();
-            
-        } elseif (is_array($_mixed)) { // array
-            foreach ($_mixed as $mixed) {
-                if ($mixed instanceof Tinebase_Record_Abstract) {
-                    $ids[] = $mixed->getId();
-                } else {
-                    $ids[] = $mixed;
-                }
-            }
-            
-        } else { // string
-            $ids[] = $_mixed instanceof Tinebase_Record_Abstract ? $_mixed->getId() : $_mixed;
-        }
-        
-        return $ids;
-    }
-    
-    /**
-     * (non-PHPdoc)
-     * @see Tinebase_Backend_Sql_Abstract::_updateForeignKeys()
-     */
-    protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
-    {
-        //echo "Mode: $_mode" . PHP_EOL;
-        
-        if (is_array($this->_foreignTables)) {
-            
-            foreach ($this->_foreignTables as $modelName => $join) {
-                $idsToAdd    = array();
-                $idsToRemove = array();
-                
-                if (!empty($_record->$modelName)) {
-                    $idsToAdd = $this->_getIdsFromMixed($_record->$modelName);
-                }
-                
-                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                
-                if ($_mode == 'update') {
-                    $select = $this->_db->select();
-        
-                    $select->from(array($join['table'] => $this->_tablePrefix . $join['table']), array($join['field']))
-                        ->where($this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']) . ' = ?', $_record->getId());
-                        
-                    $stmt = $this->_db->query($select);
-                    $currentIds = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-                    $stmt->closeCursor();
-                    
-                    $idsToRemove = array_diff($currentIds, $idsToAdd);
-                    $idsToAdd    = array_diff($idsToAdd, $currentIds);
-                }
-                
-                if (!empty($idsToRemove)) {
-                    $where = '(' . 
-                        $this->_db->quoteInto($this->_tablePrefix . $join['table'] . '.' . $join['joinOn'] . ' = ?', $_record->getId()) . 
-                        ' AND ' . 
-                        $this->_db->quoteInto($this->_tablePrefix . $join['table'] . '.' . $join['field'] . ' IN (?)', $idsToRemove) . 
-                    ')';
-                        
-                    $this->_db->delete($this->_tablePrefix . $join['table'], $where);
-                }
-                
-                foreach ($idsToAdd as $id) {
-                    $recordArray = array (
-                        $join['joinOn'] => $_record->getId(),
-                        $join['field']  => $id
-                    );
-                    $this->_db->insert($this->_tablePrefix . $join['table'], $recordArray);
-                }
-                    
-                
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            }
-        }
     }
 }
