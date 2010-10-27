@@ -503,7 +503,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 
                 $jsonAppName = $application->name . '_Frontend_Json';
                 
-                if(class_exists($jsonAppName)) {
+                if (class_exists($jsonAppName)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
                     
                     $applicationJson = new $jsonAppName;
@@ -511,6 +511,13 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $registryData[$application->name] = $applicationJson->getRegistryData();
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
                     $registryData[$application->name]['config'] = Tinebase_Config::getInstance()->getConfigForApplication($application);
+                    
+                    // @todo do we need this for all apps?
+                    $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
+                    $registryData[$application->name]['exportDefinitions'] = array(
+                        'results'               => $exportDefinitions->toArray(),
+                        'totalcount'            => count($exportDefinitions),
+                    );
                     
                     $customfields = Tinebase_CustomField::getInstance()->getCustomFieldsForApplication($application);
                     Tinebase_CustomField::getInstance()->resolveConfigGrants($customfields);
@@ -520,7 +527,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     $appPrefs = Tinebase_Core::getPreference($application->name);
                     if ($appPrefs !== NULL) {
                         $allPrefs = $appPrefs->getAllApplicationPreferences();
-                        foreach($allPrefs as $pref) {
+                        foreach ($allPrefs as $pref) {
                             $registryData[$application->name]['preferences'][$pref] = $appPrefs->{$pref};
                         }
                     }

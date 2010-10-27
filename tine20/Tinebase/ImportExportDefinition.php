@@ -70,6 +70,23 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
     }
     
     /**
+     * get application export definitions 
+     * 
+     * @param Tinebase_Model_Application $_application
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_ImportExportDefinition
+     */
+    public function getExportDefinitionsForApplication(Tinebase_Model_Application $_application)
+    {
+        $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
+            array('field' => 'application_id',  'operator' => 'equals',  'value' => $_application->getId()),
+            array('field' => 'type',            'operator' => 'equals',  'value' => 'export'),
+        ));
+        $result = $this->search($filter);
+        
+        return $result;
+    }    
+    
+    /**
      * get definition from file
      *
      * @param string $_filename
