@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -38,28 +38,30 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @var array
      */
     protected $_foreignTables = array(
-        'to'    => 'felamimail_cache_message_to', 
-        'cc'    => 'felamimail_cache_message_cc', 
-        'bcc'   => 'felamimail_cache_message_bcc', 
-        'flags' => 'felamimail_cache_message_flag'
+        'to'    => array(
+            'table'  => 'felamimail_cache_message_to',
+            'joinOn' => 'message_id',
+            'field'  => 'email'
+        ),
+        'cc'    => array(
+            'table'  => 'felamimail_cache_message_cc',
+            'joinOn' => 'message_id',
+            'field'  => 'email'
+        ),
+        'bcc'    => array(
+            'table'  => 'felamimail_cache_message_bcc',
+            'joinOn' => 'message_id',
+            'field'  => 'email'
+        ),
+        'flags'    => array(
+            'table'         => 'felamimail_cache_message_flag',
+            'joinOn'        => 'message_id',
+            'field'         => 'flag',
+        ),
     );
 
     /******************* overwritten functions *********************/
 
-    /**
-     * do something after creation of record
-     * 
-     * @param Tinebase_Record_Abstract $_record
-     * @return void
-     */
-    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_newRecord, Tinebase_Record_Abstract $_recordToCreate)
-    {
-        // update to/cc/bcc/flags
-        foreach ($this->_foreignTables as $field => $tablename) {
-            $_newRecord->{$field} = $this->createForeignValues($_recordToCreate, $field, $tablename);
-        }
-    }
-    
     /**
      * Gets total count of search with $_filter
      * 
@@ -71,84 +73,45 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         $select = $this->_getSelect(array('count' => 'COUNT(*)'));
         $this->_addFilter($select, $_filter);
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-        
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         return count($rows);        
     }    
         
-    /**
-     * get the basic select object to fetch records from the database
-     *  
-     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
-     * @param boolean $_getDeleted get deleted records (if modlog is active)
-     * @return Zend_Db_Select
-     * 
-     * @todo add name (to, cc, bcc)
-     * @todo try to remove deleted messages from result?
-     */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {        
-        /*
-        if (! $_getDeleted) {
-            $select->where($this->_db->quoteInto(
-                //$this->_db->quoteIdentifier($this->_tablePrefix . $this->_foreignTables['flags'] . '.flag') . ' != ?',
-                $this->_db->quoteIdentifier('flags') . ' NOT LIKE ?',
-                '%\Deleted%'
-            ));
-        }
-        */
-
-        $select = parent::_getSelect($_cols, $_getDeleted);
-        
-        // add to/cc/bcc/flags
-        foreach ($this->_foreignTables as $field => $tablename) {
-            $fieldName = ($field == 'flags') ? 'flag' : 'email';
-            $select->joinLeft(
-                $this->_tablePrefix . $tablename, 
-                $this->_tablePrefix . $tablename . '.message_id = ' . $this->_tableName . '.id', 
-                array($field => 'GROUP_CONCAT(DISTINCT ' . $this->_tablePrefix . $tablename . '.' . $fieldName . ')')
-            );
-        }
-        $select->group($this->_tableName . '.id');
-        
-        return $select;
-    }
-
     /******************* public functions *********************/
     
     /**
-     * create foreign values (to/cc/bcc/flags) 
-     *
-     * @param Felamimail_Model_Message $_message
-     * @param string $_field
-     * @param string $_tablename
-     * @return array
+     * update foreign key values
+     * 
+     * @param string $_mode create|update
+     * @param Tinebase_Record_Abstract $_record
+     * 
+     * @todo support update mode
      */
-    public function createForeignValues(Felamimail_Model_Message $_message, $_field, $_tablename)
+    protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
     {
-        if (!isset($_message->{$_field})) {
-            return array();
-        }
-        
-        $messageId = $_message->getId();
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_field . ': ' . print_r($_message->{$_field}, TRUE));
-        
-        foreach ($_message->{$_field} as $data) {
-            if ($_field == 'flags') {
-                $data = array(
-                    'flag'      => $data,
-                    'folder_id' => $_message->folder_id
-                );
+        if ($_mode == 'create') {
+            
+            foreach ($this->_foreignTables as $key => $foreign) {
+                if (!isset($_record->{$key}) || empty($_record->{$key})) {
+                    continue;
+                }
+                
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_field . ': ' . print_r($_record->{$_field}, TRUE));
+                
+                foreach ($_record->{$key} as $data) {
+                    if ($key == 'flags') {
+                        $data = array(
+                            'flag'      => $data,
+                            'folder_id' => $_record->folder_id
+                        );
+                    }
+                    $data['message_id'] = $_record->getId();
+                    $this->_db->insert($this->_tablePrefix . $foreign['table'], $data);
+                }
             }
-            $data['message_id'] = $messageId;
-            $this->_db->insert($this->_tablePrefix . $_tablename, $data);
         }
-        
-        return $_message->{$_field};
     }
     
     /**
@@ -169,7 +132,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             'message_id'    => $_message->getId(),
             'folder_id'     => $_message->folder_id
         );
-        $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags'], $data);
+        $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags']['table'], $data);
     }
     
     /**
@@ -191,7 +154,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('message_id') . ' IN (?)', $messages->getArrayOfIds())
         );
-        $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags'], $where);
+        $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
         
         $flags = (array) $_flags;
 
@@ -202,7 +165,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                     'message_id'    => $message->getId(),
                     'folder_id'     => $message->folder_id
                 );
-                $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags'], $data);
+                $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags']['table'], $data);
             }
         }
     }
@@ -229,7 +192,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $this->_db->quoteInto($this->_db->quoteIdentifier('flag') . ' IN (?)', $_flag)
         );
         
-        $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags'], $where);
+        $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
     }
     
     /**
@@ -280,7 +243,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         
         $select = $this->_db->select();
         $select->from(
-            array($this->_foreignTables['flags'] => $this->_tablePrefix . $this->_foreignTables['flags']), 
+            array('flags' => $this->_tablePrefix . $this->_foreignTables['flags']['table']), 
             array('count' => 'COUNT(DISTINCT message_id)')
         )->where(
             $this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId)
@@ -306,7 +269,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         $select = $this->_db->select();
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $this->_tableName . '.messageuid')
                 ->where($this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId));
-                //->order($this->_tableName . '.messageuid ASC');
         
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
@@ -343,16 +305,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     }
 
     /**
-     * get foreign table names (to, cc, ...)
-     *
-     * @return array
-     */
-    public function getForeignTableNames()
-    {
-        return $this->_foreignTables;
-    }
-    
-    /**
      * converts record into raw data for adapter
      *
      * @param  Tinebase_Record_Abstract $_record
@@ -381,12 +333,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $_rawData['structure'] = Zend_Json::decode($_rawData['structure']);
         }
         
-        if (isset($_rawData['flags'])) {
-            $_rawData['flags'] = explode(',', $_rawData['flags']);
-        } else {
-            $_rawData['flags'] = array();
-        }
-        
         $result = parent::_rawDataToRecord($_rawData);
                 
         return $result;
@@ -403,10 +349,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         foreach($_rawDatas as &$_rawData) {
             if(isset($_rawData['structure'])) {
                 $_rawData['structure'] = Zend_Json::decode($_rawData['structure']);
-            }
-            
-            if(isset($_rawData['flags'])) {
-                $_rawData['flags'] = explode(',', $_rawData['flags']);
             }
         }
         $result = parent::_rawDataToRecordSet($_rawDatas);
