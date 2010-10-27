@@ -13,6 +13,16 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: Frontend/Json.php:245 js/Models.js:42 js/CourseEditDialog.js:138
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurzus"
+msgstr[1] "Kurzusok"
+
+#: Setup/setup.xml:4 js/Courses.js:33
+msgid "Courses"
+msgstr "Kurzusok"
+
 #: js/CourseGridPanel.js:51
 msgid "Quick search"
 msgstr "Gyors keresés"
@@ -57,9 +67,17 @@ msgstr "Hibás"
 msgid "Some error occured while trying to update the courses."
 msgstr "Néhány hiba történt a kurzus frissítése közben."
 
-#: js/Courses.js:33 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurzusok"
+#: js/Models.js:46
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "rekord lista"
+msgstr[1] "rekord listák"
+
+#: js/Models.js:75
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Kurzus típus"
+msgstr[1] "Kurzus típusok"
 
 #: js/Courses.js:38
 msgid "All Courses"
@@ -68,12 +86,6 @@ msgstr "Minden kurzus"
 #: js/CourseEditDialog.js:32
 msgid "Import course members"
 msgstr "Kurzus tagok importálása"
-
-#: js/CourseEditDialog.js:138 js/Models.js:42 Frontend/Json.php:245
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurzus"
-msgstr[1] "Kurzusok"
 
 #: js/CourseEditDialog.js:154
 msgid "Course Name"
@@ -110,18 +122,6 @@ msgstr "Új jelszó beállítása"
 #: js/CourseEditDialog.js:273
 msgid "Please enter the new password:"
 msgstr "Kérlek írd be az új jelszót:"
-
-#: js/Models.js:46
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "rekord lista"
-msgstr[1] "rekord listák"
-
-#: js/Models.js:75
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Kurzus típus"
-msgstr[1] "Kurzus típusok"
 
 #: Controller/Course.php:108
 msgid "teacher"
