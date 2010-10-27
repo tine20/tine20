@@ -49,7 +49,7 @@ Tine.Admin.Model.AccessLog = Tine.Tinebase.data.Record.create([
     modelName: 'AccessLog',
     idProperty: 'id',
     titleProperty: 'login_name',
-    // ngettext('AccessLog', 'AccessLogs', n);
+    // ngettext('Access Log', 'Access Logs', n);
     recordName: 'AccessLog',
     recordsName: 'AccessLogs'
 });
