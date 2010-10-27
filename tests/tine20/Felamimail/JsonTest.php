@@ -424,15 +424,15 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // check if unread count got decreased
         $inboxAfter = $this->_getFolder('INBOX');
-        $this->assertTrue($inboxBefore->cache_unreadcount - 1 == $inboxAfter->cache_unreadcount);
+        $this->assertTrue($inboxBefore->cache_unreadcount - 1 == $inboxAfter->cache_unreadcount, 'wrong cache unreadcount');
         
         $message = $this->_json->getMessage($message['id']);
-        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']));
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']), 'seen flag not set');
         
         $this->_json->clearFlags(array($message['id']), Zend_Mail_Storage::FLAG_SEEN);
         
         $message = $this->_json->getMessage($message['id']);
-        $this->assertFalse(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']));
+        $this->assertFalse(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']), 'seen flag should not be set');
 
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_json->addFlags(array($message['id']), Zend_Mail_Storage::FLAG_DELETED);

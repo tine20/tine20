@@ -618,7 +618,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->_messageTestHelper('text_plain2.eml', 'text_plain2.eml');
         
-        $this->assertContains('c.weiss@metaways.de', $cachedMessage->to[0]['email'], 'wrong "to" header:' . print_r($cachedMessage->to, TRUE));
+        $this->assertGreaterThan(0, count($cachedMessage->to));
+        $this->assertContains('c.weiss@metaways.de', $cachedMessage->to[0], 'wrong "to" header:' . print_r($cachedMessage->to, TRUE));
         $this->assertContains('online', $cachedMessage->subject);
     }
     
