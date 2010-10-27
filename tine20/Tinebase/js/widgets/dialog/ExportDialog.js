@@ -19,7 +19,11 @@ Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
  * @class       Tine.widgets.dialog.ExportDialog
  * @extends     Tine.widgets.dialog.EditDialog
  * @constructor
- * @param       {Object} config The configuration options.
+ * @param       {Object} config The configuration options
+ * 
+ * TODO         make export work (onApplyChanges)
+ * TODO         add empty value or default value for export def combo
+ * TODO         set title -> add more information (number of records to export)
  * 
  */
 Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -45,7 +49,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.saveAndCloseButtonText = _('Export');
 
         this.definitionsStore = new Ext.data.JsonStore({
-            fields: Tine.Tinebase.Model.ExportExportDefinition,
+            fields: Tine.Tinebase.Model.ImportExportDefinition,
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
@@ -169,7 +173,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 Tine.widgets.dialog.ExportDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 400,
-        height: 250,
+        height: 150,
         name: Tine.widgets.dialog.ExportDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.ExportDialog',
         contentPanelConstructorConfig: config,
