@@ -336,6 +336,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/persistentfilter/Model.js',
             'Tinebase/js/widgets/persistentfilter/Store.js',
             'Tinebase/js/widgets/persistentfilter/PickerPanel.js',
+        // translations for prototypes
+            'Tinebase/js/prototypeTranslations.js',
         // yui stuff
             //'../yui/build/dragdrop/dragdrop-min.js',
             //'../yui/build/resize/resize-beta-min.js',
