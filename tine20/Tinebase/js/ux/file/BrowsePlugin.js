@@ -34,7 +34,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * 
      * enable drops from OS (defaults to true)
      */
-    enableFileDrop: true,
+    enableFileDrop: false,
     /**
      * @cfg {String} inputFileName
      * Name to use for the hidden input file DOM element.  Deaults to "file".
@@ -78,7 +78,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
         
         this.component = cmp;
         
-        cmp.on('render', this.onRender, this);
+        cmp.on('afterrender', this.onRender, this);
         
         // chain fns
         if (typeof cmp.setDisabled == 'function') {
@@ -109,7 +109,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
             cmp.destroy = cmp.destroy.createSequence(function() {
                 var input_file = this.detachInputFile(true);
                 if (input_file) {
-                	input_file.remove();
+                    input_file.remove();
                 }
                 input_file = null;
             }, this);
@@ -123,9 +123,20 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.button_container = this.buttonCt || this.component.el.child('tbody') || this.component.el;
         this.button_container.position('relative');
         this.wrap = this.component.el.wrap({cls:'tbody'});
+
+        // NOTE: wrap a button in a toolbar is complex, the toolbar doLayout moves the wrap at the end
+        if (this.component.ownerCt.el.hasClass('x-toolbar')) {
+            this.component.ownerCt.on('afterlayout', function() {
+                if (this.wrap.first() !== this.component.el) {
+                    this.wrap.insertBefore(this.component.el)
+                    this.wrap.insertFirst(this.component.el);
+                }
+            }, this);
+        }
+        
         this.createInputFile();
         
-        if (this.enableFileDrop) {
+        if (false && this.enableFileDrop) {
             if (! this.dropEl) {
                 if (this.dropElSelector) {
                     this.dropEl = this.wrap.up(this.dropElSelector);
@@ -162,26 +173,25 @@ Ext.ux.file.BrowsePlugin.prototype = {
             type: 'file',
             size: 1,
             name: this.inputFileName || Ext.id(this.component.el),
-            style: "position: absolute; display: block; border: none; cursor: pointer"
+            style: "position: absolute; display: block; border: none; cursor: pointer;"
         }, this.multiple ? {multiple: true} : {}));
         
         var button_box = this.button_container.getBox();
-        this.input_file.setStyle('font-size', Math.max(button_box.height, button_box.width) + 'px');
         
-        var input_box = this.input_file.getBox();
-        var adj = {x: 3, y: 3}
-        if (Ext.isIE) {
-            adj = {x: 0, y: 3}
-        }
+        this.wrap.setBox(button_box);
+
+        this.wrap.applyStyles('overflow: hidden; position: relative;');
         
-        this.input_file.setLeft(button_box.width - input_box.width + adj.x + 'px');
-        this.input_file.setTop(button_box.height - input_box.height + adj.y + 'px');
+        this.wrap.on('mousemove', function(e) {
+            var xy = e.getXY();
+            this.input_file.setXY([xy[0] - this.input_file.getWidth()/4, xy[1] - 10]);
+        }, this);
         this.input_file.setOpacity(0.0);
         
         if (this.component.handleMouseEvents) {
-            this.input_file.on('mouseover', this.component.onMouseOver || Ext.emptyFn, this.component);
-            this.input_file.on('mousedown', this.component.onMouseDown || Ext.emptyFn, this.component);
-            this.input_file.on('contextmenu', this.component.onContextMenu || Ext.emptyFn, this.component);
+            this.wrap.on('mouseover', this.component.onMouseOver || Ext.emptyFn, this.component);
+            this.wrap.on('mousedown', this.component.onMouseDown || Ext.emptyFn, this.component);
+            this.wrap.on('contextmenu', this.component.onContextMenu || Ext.emptyFn, this.component);
         }
         
         if(this.component.tooltip){
@@ -230,13 +240,13 @@ Ext.ux.file.BrowsePlugin.prototype = {
         no_create = no_create || false;
         
         if (this.input_file) {
-	        if (typeof this.component.tooltip == 'object') {
-	            Ext.QuickTips.unregister(this.input_file);
-	        }
-	        else {
-	            this.input_file.dom[this.component.tooltipType] = null;
-	        }
-	        this.input_file.removeAllListeners();
+            if (typeof this.component.tooltip == 'object') {
+                Ext.QuickTips.unregister(this.input_file);
+            }
+            else {
+                this.input_file.dom[this.component.tooltipType] = null;
+            }
+            this.input_file.removeAllListeners();
         }
         this.input_file = null;
         
