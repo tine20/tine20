@@ -564,8 +564,6 @@ Ext.namespace('Tine.Felamimail');
      * 
      * @return {Object}
      * @private
-     * 
-     * TODO get css definitions from external stylesheet?
      */
     getFormItems: function() {
         
