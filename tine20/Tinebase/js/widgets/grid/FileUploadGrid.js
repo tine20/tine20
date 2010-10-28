@@ -113,10 +113,11 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             text: _('Add file'),
             iconCls: 'actionAdd',
             scope: this,
-            plugins: [new Ext.ux.file.BrowsePlugin({
+            plugins: [{
+                ptype: 'ux.browseplugin',
                 multiple: true,
                 dropElSelector: 'div[id=' + this.id + ']'
-            })],
+            }],
             handler: this.onFilesSelect
         });
 
