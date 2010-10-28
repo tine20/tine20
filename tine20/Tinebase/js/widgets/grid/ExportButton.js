@@ -51,10 +51,6 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
      * @cfg {Boolean} showExportDialog
      */
     showExportDialog: false,
-    /**
-     * @cfg {String} appName
-     */
-    appName: null,
     
     /**
      * do export
@@ -74,11 +70,13 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
         
         if (this.showExportDialog) {
             Tine.widgets.dialog.ExportDialog.openWindow({
-                appName: this.appName,
+                appName: this.gridPanel.app.appName,
                 record: new Tine.Tinebase.Model.ExportJob({
                     filter: filterSettings,
                     format: this.format,
-                    exportFunction: this.exportFunction
+                    exportFunction: this.exportFunction,
+                    count: this.sm.getCount(),
+                    recordsName: this.gridPanel.i18nRecordsName
                 })
             });
         } else {

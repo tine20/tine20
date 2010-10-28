@@ -299,6 +299,8 @@ Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
     {name: 'export_definition_id'   },
     {name: 'format'                 },
     {name: 'exportFunction'         },
+    {name: 'recordsName'            },
+    {name: 'count', type: 'int'     },
     {name: 'options'                }
 ], {
     appName: 'Tinebase',
