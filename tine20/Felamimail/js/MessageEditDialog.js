@@ -560,7 +560,7 @@ Ext.namespace('Tine.Felamimail');
     /**
      * returns dialog
      * 
-     * NOTE: when this method gets called, all initalisation is done.
+     * NOTE: when this method gets called, all initialisation is done.
      * 
      * @return {Object}
      * @private
@@ -648,8 +648,8 @@ Ext.namespace('Tine.Felamimail');
                 {
                 region: 'center',
                 layout: {
-                    type: 'vbox',
-                    align: 'stretch'  // Child items are stretched to full width
+                    align: 'stretch',  // Child items are stretched to full width
+                    type: 'vbox'
                 },
                 items: [{
                     xtype:'combo',
@@ -665,31 +665,32 @@ Ext.namespace('Tine.Felamimail');
                         scope: this,
                         select: this.onFromSelect
                     }
-                }, this.recipientGrid, {
-                        xtype:'textfield',
-                        plugins: [ Ext.ux.FieldLabeler ],
-                        fieldLabel: this.app.i18n._('Subject'),
-                        name: 'subject',
-                        enableKeyEvents: true,
-                        listeners: {
-                            scope: this,
-                            // update title on keyup event
-                            'keyup': function(field, e) {
-                                if (! e.isSpecialKey()) {
-                                    this.window.setTitle(
-                                        this.app.i18n._('Compose email:') + ' ' 
-                                        + field.getValue()
-                                    );
-                                }
-                            },
-                            'keydown': function(field, e) {
-                                if (e.getKey() == e.TAB) {
-                                    // TODO this should ALWAYS focus the textarea of the html editor
-                                    this.htmlEditor.focus();
-                                }
+                }, this.recipientGrid, 
+                {
+                    xtype:'textfield',
+                    plugins: [ Ext.ux.FieldLabeler ],
+                    fieldLabel: this.app.i18n._('Subject'),
+                    name: 'subject',
+                    enableKeyEvents: true,
+                    listeners: {
+                        scope: this,
+                        // update title on keyup event
+                        'keyup': function(field, e) {
+                            if (! e.isSpecialKey()) {
+                                this.window.setTitle(
+                                    this.app.i18n._('Compose email:') + ' ' 
+                                    + field.getValue()
+                                );
+                            }
+                        },
+                        'keydown': function(field, e) {
+                            if (e.getKey() == e.TAB) {
+                                // TODO this should ALWAYS focus the textarea of the html editor
+                                this.htmlEditor.focus();
                             }
                         }
-                    }, this.htmlEditor
+                    }
+                }, this.htmlEditor
                 ]
             }, this.southPanel]
         };
