@@ -211,7 +211,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/Array.js',
             'Tinebase/js/ux/Log.js',
             'Tinebase/js/ux/ConnectionStatus.js',
-            'Tinebase/js/ux/Direct/ZendFrameworkProvider.js',
+            'Tinebase/js/ux/Direct/JsonRpcProvider.js',
             'Tinebase/js/ux/DatePickerWeekPlugin.js',
             'Tinebase/js/ux/ButtonLockedToggle.js',
             'Tinebase/js/ux/Percentage.js',
