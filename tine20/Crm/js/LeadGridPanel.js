@@ -4,8 +4,8 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2007-20010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
  */
  
@@ -20,15 +20,13 @@ Ext.namespace('Tine.Crm');
  * 
  * <p>Lead Grid Panel</p>
  * <p><pre>
- * TODO         add 'add task' action again
- * TODO         add manage crm right again
  * TODO         add products to grid?
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor
@@ -67,29 +65,17 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         this.recordProxy = Tine.Crm.leadBackend;
         
-        /*
-        this.actionToolbarItems = this.getToolbarItems();
-        this.contextMenuItems = [
-            '-',
-            this.actions_exportLead
-        ];
-        */
-        
         this.gridConfig.cm = this.getColumnModel();
         this.filterToolbar = this.getFilterToolbar();
         
         this.plugins = this.plugins || [];
-        this.plugins.push(/*this.action_showClosedToggle,*/ this.filterToolbar);
+        this.plugins.push(this.filterToolbar);
         
         this.detailsPanel = new Tine.Crm.LeadGridDetailsPanel({
             grid: this
         });
         
         Tine.Crm.GridPanel.superclass.initComponent.call(this);
-        
-        //this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Crm', 'records'));
-        //this.action_editInNewWindow.requiredGrant = 'editGrant';
-        
     },
     
     /**
@@ -181,10 +167,8 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100, renderer: Tine.Crm.LeadState.Renderer},
                 {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
                 {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney },
-                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.euMoney },
-                { id: 'creation_time', header: this.app.i18n._('Creation Time'), dataIndex: 'creation_time', hidden: true, renderer: Tine.Tinebase.common.dateRenderer },
-                { id: 'last_modified_time', header: this.app.i18n._('Last Modified Time'), dataIndex: 'last_modified_time', hidden: true, renderer: Tine.Tinebase.common.dateRenderer }
-            ]
+                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.euMoney }
+            ].concat(this.getModlogColumns())
         });
     },
 
@@ -212,26 +196,6 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     initActions: function(){
-        
-        /*
-        handlerAddTask: function(){
-            Tine.Tasks.TaskEditDialog.openWindow({
-                relatedApp: 'Crm'
-            });
-        }
-        
-        this.actions.addTask = new Ext.Action({
-            requiredGrant: 'readGrant',
-            text: this.translation._('Add task'),
-            tooltip: this.translation._('Add task for selected lead'),
-            handler: this.handlers.handlerAddTask,
-            iconCls: 'actionAddTask',
-            disabled: true,
-            scope: this
-        });
-
-        */
-        
         this.actions_exportLead = new Ext.Action({
             text: this.app.i18n._('Export Lead'),
             iconCls: 'action_export',
@@ -272,14 +236,6 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 ]
             }
         });
-        
-        /*
-        this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
-            text: this.app.i18n._('Show closed'),
-            iconCls: 'action_showArchived',
-            field: 'showClosed'
-        });
-        */
         
         this.actionUpdater.addActions([
             this.actions_exportLead
