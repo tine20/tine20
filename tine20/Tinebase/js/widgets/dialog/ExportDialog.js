@@ -23,7 +23,6 @@ Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
  * 
  * TODO         make export work (onApplyChanges)
  * TODO         add empty value or default value for export def combo
- * TODO         set title -> add more information (number of records to export)
  * 
  */
 Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -65,6 +64,19 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * executed after record got updated from proxy
+     */
+    onRecordLoad: function() {
+        // interrupt process flow until dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+        
+        this.window.setTitle(String.format(_('Export {0} {1}'), this.record.get('count'), this.record.get('recordsName')));
+    },
+
+    /**
      * returns dialog
      */
     getFormItems: function() {
@@ -102,6 +114,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (form.isValid()) {
             this.onRecordUpdate();
             
+            Tine.log.debug(this.record);
             /*
             if (this.record.get('files').length == 0) {
                 Ext.MessageBox.alert(_('No files added'), _('You need to add files to import.'));
