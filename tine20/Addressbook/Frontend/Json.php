@@ -25,7 +25,19 @@
  */
 class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
+    /**
+     * app name
+     * 
+     * @var string
+     */
     protected $_applicationName = 'Addressbook';
+    
+    /**
+     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
+     *
+     * @var array
+     */
+    protected $_resolveUserFields = array('created_by', 'last_modified_by');
     
     /****************************************** get contacts *************************************/
 
@@ -149,7 +161,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'totalcount'  => 0
         );
         
-        if($rows = Addressbook_Controller_Salutation::getInstance()->getSalutations()) {
+        if ($rows = Addressbook_Controller_Salutation::getInstance()->getSalutations()) {
             $rows->translate();
             $result['results']      = $rows->toArray();
             $result['totalcount']   = count($result['results']);
@@ -169,7 +181,6 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
-        Tinebase_User::getInstance()->resolveMultipleUsers($_records, array('created_by', 'last_modified_by'), TRUE);
         $result = parent::_multipleRecordsToJson($_records, $_filter);
         
         foreach ($result as &$contact) {

@@ -5,11 +5,10 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id:Abstract.php 5090 2008-10-24 10:30:05Z p.schuele@metaways.de $
+ * @version     $Id$
  */
-
 
 /**
  * Abstract class for an Tine 2.0 application with Json interface
@@ -30,6 +29,13 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * get totalcount by just counting resultset
      */
     const TOTALCOUNT_COUNTRESULT = 'countresult';
+    
+    /**
+     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
+     *
+     * @var array
+     */
+    protected $_resolveUserFields = array();
     
     /**
      * Returns registry data of the application.
@@ -319,9 +325,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             return array();
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_records, true));
-        
-        // get acls for records
         if ($_records->getFirstRecord()->has('container_id')) {
             Tinebase_Container::getInstance()->getGrantsOfRecords($_records, Tinebase_Core::getUser());
         }
@@ -330,6 +333,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         }
         
+        if (! empty($this->_resolveUserFields)) {
+            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $this->_resolveUserFields, TRUE);
+        }
+
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
         $_records->convertDates = true;
         
@@ -337,5 +344,4 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         return $result;
     }
-
 }
