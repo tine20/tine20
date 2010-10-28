@@ -5,8 +5,8 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Json.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  * 
  */
 
@@ -27,6 +27,13 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_controller = NULL;
     
     /**
+     * user fields (created_by, ...) to resolve in _multipleRecordsToJson and _recordToJson
+     *
+     * @var array
+     */
+    protected $_resolveUserFields = array('created_by', 'last_modified_by');
+    
+    /**
      * the constructor
      *
      */
@@ -35,7 +42,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $this->_applicationName = 'Crm';
         $this->_controller = Crm_Controller_Lead::getInstance();
     }
-    
     
     /************************************** public API **************************************/
     
@@ -136,7 +142,6 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $registryData;
     }
     
-
     /**
      * Returns settings for crm app
      *
@@ -163,5 +168,4 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
-    
 }
