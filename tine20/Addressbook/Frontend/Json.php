@@ -198,6 +198,8 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param  array $contactArray
      * @return string
+     * 
+     * @todo    get all available salutations first / do not query db for each record
      */
     protected function _getImageLink($contactArray)
     {
