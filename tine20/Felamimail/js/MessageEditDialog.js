@@ -609,6 +609,7 @@ Ext.namespace('Tine.Felamimail');
             name: 'body',
             allowBlank: true,
             flex: 1,  // Take up all *remaining* vertical space
+            // TODO get styles from head with css selector
             getDocMarkup: function(){
                 var markup = '<html>'
                     + '<head>'
@@ -622,7 +623,7 @@ Ext.namespace('Tine.Felamimail');
                         + '} '
                     + '</style>'
                     + '</head>'
-                    + '<body>'
+                    + '<body style="padding: 5px 0px 0px 5px; margin: 0px">'
                     + '</body></html>';
         
                 return markup;
