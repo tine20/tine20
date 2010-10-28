@@ -579,7 +579,16 @@ Tine.Felamimail.Model.Vacation.getDefaultData = function() {
 Tine.Felamimail.vacationBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Felamimail',
     modelName: 'Vacation',
-    recordClass: Tine.Felamimail.Model.Vacation
+    recordClass: Tine.Felamimail.Model.Vacation,
+    
+    /**
+     * exception handler for this proxy
+     * 
+     * @param {Tine.Exception} exception
+     */
+    handleRequestException: function(exception) {
+        Tine.Felamimail.handleRequestException(exception);
+    }
 });
 
 /**
