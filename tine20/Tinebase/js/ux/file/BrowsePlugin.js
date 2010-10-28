@@ -293,3 +293,5 @@ Ext.ux.file.BrowsePlugin.prototype = {
         return (cls == 'jpg' || cls == 'gif' || cls == 'png' || cls == 'jpeg');
     }
 };
+
+Ext.preg('ux.browseplugin', Ext.ux.file.BrowsePlugin);
