@@ -333,8 +333,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($_records);
         }
         
-        if (! empty($this->_resolveUserFields)) {
-            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $this->_resolveUserFields, TRUE);
+        if (array_key_exists($_records->getRecordClassName(), $this->_resolveUserFields)) {
+            Tinebase_User::getInstance()->resolveMultipleUsers($_records, $this->_resolveUserFields[$_records->getRecordClassName()], TRUE);
         }
 
         $_records->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));

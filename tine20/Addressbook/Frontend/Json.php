@@ -37,7 +37,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @var array
      */
-    protected $_resolveUserFields = array('created_by', 'last_modified_by');
+    protected $_resolveUserFields = array(
+        'Addressbook_Model_Contact' => array('created_by', 'last_modified_by')
+    );
     
     /****************************************** get contacts *************************************/
 

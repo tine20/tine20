@@ -31,7 +31,9 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @var array
      */
-    protected $_resolveUserFields = array('created_by', 'last_modified_by');
+    protected $_resolveUserFields = array(
+        'Crm_Model_Lead' => array('created_by', 'last_modified_by')
+    );
     
     /**
      * the constructor
