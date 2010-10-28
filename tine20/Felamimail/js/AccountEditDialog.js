@@ -132,13 +132,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Organization'),
                     name: 'organization'
                 }, this.signatureEditor
-                /*, {
-                    fieldLabel: this.app.i18n._('Signature'),
-                    name: 'signature',
-                    xtype: 'textarea',
-                    height: 120,
-                    maxLength: 2048
-                }*/]]
+                ]]
             }, {
                 title: this.app.i18n._('IMAP'),
                 autoScroll: true,
@@ -378,7 +372,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  */
  Tine.Felamimail.AccountEditDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 400,
+        width: 500,
         height: 550,
         name: Tine.Felamimail.AccountEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.AccountEditDialog',
