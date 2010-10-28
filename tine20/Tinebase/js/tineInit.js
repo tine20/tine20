@@ -647,7 +647,7 @@ Tine.Tinebase.tineInit = {
         var sam = Tine.Tinebase.registry.get('serviceMap');
         
         Ext.Direct.addProvider(Ext.apply(sam, {
-            'type'     : 'zfprovider',
+            'type'     : 'jsonrpcprovider',
             'namespace': 'Tine',
             'url'      : sam.target
         }));
