@@ -18,13 +18,12 @@ Ext.namespace('Tine.Crm', 'Tine.Crm.Model');
  * 
  * Lead Record Definition
  */ 
-Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
+Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
         {name: 'id',            type: 'int'},
         {name: 'lead_name',     type: 'string'},
         {name: 'leadstate_id',  type: 'int'},
         {name: 'leadtype_id',   type: 'int'},
         {name: 'leadsource_id', type: 'int'},
-        {name: 'container_id'              },
         {name: 'start',         type: 'date', dateFormat: Date.patterns.ISO8601Long},
         {name: 'description',   type: 'string'},
         {name: 'end',           type: 'date', dateFormat: Date.patterns.ISO8601Long},
@@ -41,15 +40,8 @@ Tine.Crm.Model.Lead = Tine.Tinebase.data.Record.create([
         {name: 'relations'},
         {name: 'products'},
         {name: 'tags'},
-        {name: 'notes'},
-        {name: 'creation_time',      type: 'date', dateFormat: Date.patterns.ISO8601Long},
-        {name: 'created_by',         type: 'int'                  },
-        {name: 'last_modified_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-        {name: 'last_modified_by',   type: 'int'                  },
-        {name: 'is_deleted',         type: 'boolean'              },
-        {name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
-        {name: 'deleted_by',         type: 'int'                  }
-    ], {
+        {name: 'notes'}
+    ]), {
     appName: 'Crm',
     modelName: 'Lead',
     idProperty: 'id',
