@@ -682,6 +682,7 @@ Tine.Tinebase.tineInit = {
         window._ = function (msgid) {
             return Tine.Tinebase.translation.dgettext('Tinebase', msgid);
         };
+        Tine.Tinebase.prototypeTranslation();
     },
     
     /**
