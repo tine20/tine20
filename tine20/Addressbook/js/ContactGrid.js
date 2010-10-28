@@ -126,7 +126,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { id: 'tz', header: this.app.i18n._('Timezone'), dataIndex: 'tz' },
             { id: 'geo', header: this.app.i18n._('Geo'), dataIndex: 'geo' },
             { id: 'bday', header: this.app.i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer }
-        ].concat(this.getModlogColumns());
+        ].concat(this.getModlogColumns().concat(this.getCustomfieldColumns()));
         
         return new Ext.grid.ColumnModel({ 
             defaults: {
@@ -134,8 +134,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 hidden: true,
                 resizable: true
             },
-            // add custom fields
-            columns: columns.concat(this.getCustomfieldColumns())
+            columns: columns
         });
     },
     
