@@ -42,7 +42,6 @@ Ext.ux.form.HtmlEditor.MidasCommand = Ext.extend(Ext.util.Observable, {
     onRender: function(){
         var midasCmdButton, tb = this.cmp.getToolbar(), btn;
         Ext.each(this.midasBtns, function(b){
-            console.log(b);
             if (Ext.isObject(b)) {
                 midasCmdButton = {
                     iconCls: 'x-edit-' + b.cmd,
@@ -101,7 +100,7 @@ Ext.ux.form.HtmlEditor.MidasCommand = Ext.extend(Ext.util.Observable, {
  */
 Ext.ux.form.HtmlEditor.Divider = Ext.extend(Ext.util.Observable, {
     // private
-    init: function(cmp){b
+    init: function(cmp){
         this.cmp = cmp;
         this.cmp.on('render', this.onRender, this);
     },
@@ -118,38 +117,22 @@ Ext.ux.form.HtmlEditor.Divider = Ext.extend(Ext.util.Observable, {
  * 
  * <p>A plugin that creates two buttons on the HtmlEditor for indenting and outdenting of selected text.</p>
  */
-Ext.ux.form.HtmlEditor.IndentOutdent = function(config) {
-    this.indentText = 'Indent Text';
-    this.outdentText = 'Outdent Text';
-    
-    Ext.apply(this, config);
-    
-    Ext.ux.form.HtmlEditor.IndentOutdent.superclass.constructor.call(this);
-};
-//Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
-Ext.extend(Ext.ux.form.HtmlEditor.IndentOutdent, Ext.ux.form.HtmlEditor.MidasCommand, {
-    indentText: 'i',
-    outdentText: 'j',
-    
+Ext.ux.form.HtmlEditor.IndentOutdent = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
     // private
     midasBtns: ['|', {
         cmd: 'outdent',
         tooltip: {
-            title: this.outdentText
+            title: 'Outdent Text'
         },
-        overflowText: this.outdentText
+        overflowText: 'Outdent Text'
     }, {
         cmd: 'indent',
         tooltip: {
-            title: this.indentText
+            title: 'Indent Text'
         },
-        overflowText: this.indentText
+        overflowText: 'Indent Text'
     }]
 });
-
-//Ext.ux.form.HtmlEditor.IndentOutdent.prototype.outdentText = 'Outdent Text';
-//Ext.ux.form.HtmlEditor.IndentOutdent.prototype.indentText = 'Indent Text';
-
 /**
  * @namespace   Ext.ux.form.HtmlEditor
  * @class       Ext.ux.form.HtmlEditor.RemoveFormat
@@ -159,15 +142,13 @@ Ext.extend(Ext.ux.form.HtmlEditor.IndentOutdent, Ext.ux.form.HtmlEditor.MidasCom
  * <p>A plugin that creates a button on the HtmlEditor that will remove all formatting on selected text.</p>
  */
 Ext.ux.form.HtmlEditor.RemoveFormat = Ext.extend(Ext.ux.form.HtmlEditor.MidasCommand, {
-    labelText: 'Remove Formatting',
-    
     midasBtns: ['|', {
         enableOnSelection: true,
         cmd: 'removeFormat',
         tooltip: {
-            title: this.labelText
+            title: 'Remove Formatting'
         },
-        overflowText: this.labelText
+        overflowText: 'Remove Formatting'
     }]
 });
 /**
