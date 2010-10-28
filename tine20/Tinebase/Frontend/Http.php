@@ -259,6 +259,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/layout/Display.js',
             'Tinebase/js/ux/MessageBox.js',
             'Tinebase/js/ux/TabPanelSortPlugin.js',
+            'Tinebase/js/ux/ItemRegistry.js',
         // Tinebase
             // NOTE: All the data stuff is going to and extra worker build
             //'Tinebase/js/data/sync/Ping.js',
