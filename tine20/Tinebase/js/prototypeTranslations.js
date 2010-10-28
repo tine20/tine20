@@ -13,13 +13,15 @@
 
 Ext.namespace('Tine.Tinebase');
 
+/**
+ * this is called in tineInit::initLocale() to make sure we translate some plugin strings by overwriting prototype values
+ */
 Tine.Tinebase.prototypeTranslation = function() {
     // html editor plugin translations
     Ext.ux.form.HtmlEditor.IndentOutdent.prototype.midasBtns[1].tooltip.title = _('Outdent Text');
     Ext.ux.form.HtmlEditor.IndentOutdent.prototype.midasBtns[1].overflowText = _('Outdent Text');
     Ext.ux.form.HtmlEditor.IndentOutdent.prototype.midasBtns[2].tooltip.title = _('Indent Text');
     Ext.ux.form.HtmlEditor.IndentOutdent.prototype.midasBtns[2].overflowText = _('Indent Text');
-    
-    //Ext.ux.form.HtmlEditor.RemoveFormat.prototype.labelText = _('Remove Formatting');
+    Ext.ux.form.HtmlEditor.RemoveFormat.prototype.midasBtns[1].tooltip.title = _('Remove Formatting');
+    Ext.ux.form.HtmlEditor.RemoveFormat.prototype.midasBtns[1].overflowText = _('Remove Formatting');
 }
-
