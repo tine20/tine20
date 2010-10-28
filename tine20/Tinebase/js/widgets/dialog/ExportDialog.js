@@ -23,6 +23,7 @@ Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
  * 
  * TODO         make export work (onApplyChanges)
  * TODO         add empty value or default value for export def combo
+ * TODO         add template for def combo (shows description, format?, ...)
  * 
  */
 Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
@@ -92,7 +93,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             items: [{
                 xtype: 'combo',
                 fieldLabel: _('Export definition'), 
-                name:'import_definition_id',
+                name:'export_definition_id',
                 store: this.definitionsStore,
                 displayField:'name',
                 mode: 'local',
@@ -114,64 +115,22 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (form.isValid()) {
             this.onRecordUpdate();
             
-            Tine.log.debug(this.record);
-            /*
-            if (this.record.get('files').length == 0) {
-                Ext.MessageBox.alert(_('No files added'), _('You need to add files to import.'));
-                return;
-            }
+            //var definition = this.definitionsStore.getById(this.record.get('export_definition_id'));
+            //Tine.log.debug(definition);
             
-            if (this.sendRequest) {
-                this.loadMask.show();
-                
-                var params = {
-                    method: this.appName + '.import' + this.record.get('model').getMeta('recordsName'),
-                    files: this.record.get('files'),
-                    definitionId: this.record.get('import_definition_id'),
-                    importOptions: {
-                        container_id: this.record.get('container_id'),
-                        dryrun: this.record.get('dry_run')
-                    }
-                };
-                
-                Ext.Ajax.request({
-                    params: params,
-                    scope: this,
-                    timeout: 1800000, // 30 minutes
-                    success: function(_result, _request){
-                        this.loadMask.hide();
-                        
-                        var response = Ext.util.JSON.decode(_result.responseText);
-                        if (this.record.get('dry_run')) {
-                            // uncheck dry run and show results
-                            form.findField('dry_run').setValue(false);
-                            
-                            Ext.MessageBox.alert(
-                                _('Dry run results'), 
-                                String.format(_('Export test successful for {0} records, import test failed for {1} records.'), response.totalcount, response.failcount)
-                            );
-                        } else {
-                            Ext.MessageBox.alert(
-                                _('Export results'), 
-                                String.format(_('Export successful for {0} records / import failed for {1} records / {2} duplicates found'),
-                                    response.totalcount, response.failcount, response.duplicatecount),
-                                function() {
-                                    // import done
-                                    this.fireEvent('update', response);
-                                    if (closeWindow) {
-                                        this.purgeListeners();
-                                        this.window.close();
-                                    }                                    
-                                },
-                                this
-                            );                            
-                        }
-                    }
-                });
-            } else {
-                this.fireEvent('update', values);
-                this.window.close();
-            }
+            Tine.log.debug(this.record);
+            
+            // TODO start download + pass definition id to export function / rename format param to options ({format: '', definitionId: ''})
+            /*
+            var downloader = new Ext.ux.file.Download({
+                params: {
+                    method: this.exportFunction,
+                    requestType: 'HTTP',
+                    _filter: Ext.util.JSON.encode(filterSettings),
+                    _format: this.format
+                }
+            }).start();
+            this.window.close();
             */
             
         } else {
