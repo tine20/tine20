@@ -126,15 +126,6 @@ Ext.namespace('Tine.Felamimail');
             scope: this
         });
 
-        // TODO make this work or add button directly -> @see getFormItems()
-        this.action_addAttachment = new Ext.Action({
-            text: this.app.i18n._('Add Attachment(s)'),
-            handler: this.onAddAttachment,
-            iconCls: 'actionAdd',
-            disabled: false,
-            scope: this
-        });
-
         this.action_saveAsDraft = new Ext.Action({
             text: this.app.i18n._('Save As Draft'),
             handler: this.onSaveInFolder.createDelegate(this, ['drafts_folder']),
@@ -171,11 +162,6 @@ Ext.namespace('Tine.Felamimail');
                 columns: 4,
                 items: [
                     Ext.apply(new Ext.Button(this.action_send), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
-                    }),
-                    Ext.apply(new Ext.Button(this.action_addAttachment), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
@@ -401,19 +387,6 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
-     * expand attachment panel and execute add file action/button
-     * 
-     * @param {} button
-     * @param {} e
-     */
-    onAddAttachment: function (button, e) {
-        this.southPanel.expand();
-        
-        // TODO make this work
-        //this.attachmentGrid.getAddAction().execute(this.attachmentGrid.getTopToolbar().get(0), e);
-    },
-    
-    /**
      * save message in folder
      * 
      * @param {String} folderField
@@ -580,15 +553,17 @@ Ext.namespace('Tine.Felamimail');
             anchor: '100% 95%'
         });
         
-        // TODO add button from attachmentGrid to toolbar
-        /*
-        this.getTopToolbar().addButton(Ext.apply(new Ext.Button(this.attachmentGrid.actions.add), {
+        this.action_addAttachment = this.attachmentGrid.getAddAction();
+        this.action_addAttachment.plugins[0].dropElSelector = null;
+        this.action_addAttachment.plugins[0].onBrowseButtonClick = function() {
+            this.southPanel.expand();
+        }.createDelegate(this);
+        
+        this.tbar.get(0).insert(1, Ext.apply(new Ext.Button(this.action_addAttachment), {
             scale: 'medium',
             rowspan: 2,
             iconAlign: 'top'
-            //scope: this.attachmentGrid
         }));
-        */
         
         this.southPanel = new Ext.Panel({
             region: 'south',
