@@ -49,6 +49,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Felamimail/js/ContactSearchCombo.js',
             'Felamimail/js/RecipientGrid.js',
             'Felamimail/js/Felamimail.js',
+            'Felamimail/js/ComposeEditor.js',
         );
     }
 

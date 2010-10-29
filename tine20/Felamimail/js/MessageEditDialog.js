@@ -576,41 +576,10 @@ Ext.namespace('Tine.Felamimail');
             collapsed: (this.record.bodyIsFetched() && (! this.record.get('attachments') || this.record.get('attachments').length == 0)),
             items: [this.attachmentGrid]
         });
-        
-        this.htmlEditor = new Ext.form.HtmlEditor({
+
+        this.htmlEditor = new Tine.Felamimail.ComposeEditor({
             fieldLabel: this.app.i18n._('Body'),
-            name: 'body',
-            allowBlank: true,
-            flex: 1,  // Take up all *remaining* vertical space
-            // TODO get styles from head with css selector
-            getDocMarkup: function(){
-                var markup = '<html>'
-                    + '<head>'
-                    + '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
-                    + '<title></title>'
-                    + '<style type="text/css">'
-                        + '.felamimail-body-blockquote {'
-                            + 'margin: 5px 10px 0 3px;'
-                            + 'padding-left: 10px;'
-                            + 'border-left: 2px solid #000088;'
-                        + '} '
-                    + '</style>'
-                    + '</head>'
-                    + '<body style="padding: 5px 0px 0px 5px; margin: 0px">'
-                    + '</body></html>';
-        
-                return markup;
-            },
-            plugins: [
-                // TODO which plugins to activate?
-                //new Ext.ux.form.HtmlEditor.Word(),  
-                //new Ext.ux.form.HtmlEditor.Divider(),  
-                //new Ext.ux.form.HtmlEditor.Table(),  
-                //new Ext.ux.form.HtmlEditor.HR(),
-                new Ext.ux.form.HtmlEditor.IndentOutdent(),  
-                //new Ext.ux.form.HtmlEditor.SubSuperScript(),  
-                new Ext.ux.form.HtmlEditor.RemoveFormat()
-            ]
+            flex: 1  // Take up all *remaining* vertical space
         });
         
         var accountStore = Tine.Felamimail.loadAccountStore();
