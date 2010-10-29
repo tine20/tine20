@@ -34,12 +34,16 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * 
      * enable drops from OS (defaults to true)
      */
-    enableFileDrop: false,
+    enableFileDrop: true,
     /**
      * @cfg {String} inputFileName
      * Name to use for the hidden input file DOM element.  Deaults to "file".
      */
     inputFileName: 'file',
+    /**
+     * @cfg {Function} onBrowseButtonClick
+     */
+    onBrowseButtonClick: Ext.emptyFn,
     /**
      * @property inputFileEl
      * @type Ext.Element
@@ -159,6 +163,10 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.dropEl.on('drop', function(e) {
                 e.stopPropagation();
                 e.preventDefault();
+                
+                // a bit hackish, I know...
+                this.onBrowseButtonClick();
+                
                 var dt = e.browserEvent.dataTransfer;
                 var files = dt.files;
                 
@@ -187,6 +195,34 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.input_file.setXY([xy[0] - this.input_file.getWidth()/4, xy[1] - 10]);
         }, this);
         this.input_file.setOpacity(0.0);
+
+        Ext.fly(this.input_file).on('click', function(e) {
+            this.onBrowseButtonClick();
+        }, this);
+        
+        // FIX mouseover / out
+        if (! this.supressOverFix && Ext.isFunction(this.component.onMouseOut)) {
+            this.component.onMouseOut = this.component.onMouseOut.createInterceptor(function(e) {
+                if (this.isMouseOver) {
+                    return false;
+                }
+                this.isMouseOver = false;
+            }, this);
+            
+            this.wrap.on('mouseover', function(e) {
+                this.isMouseOver = true;
+                if (this.component.el.hasClass('x-btn')) {
+                    this.component.el.addClass('x-btn-over');
+                }
+            }, this);
+    
+            this.wrap.on('mouseout', function(e) {
+                this.isMouseOver = false;
+                if (this.component.el.hasClass('x-btn')) {
+                    this.component.el.removeClass('x-btn-over');
+                }
+            }, this);
+        }
         
         if (this.component.handleMouseEvents) {
             this.wrap.on('mouseover', this.component.onMouseOver || Ext.emptyFn, this.component);
