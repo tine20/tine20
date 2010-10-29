@@ -65,9 +65,70 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
             //new Ext.ux.form.HtmlEditor.HR(),
             new Ext.ux.form.HtmlEditor.IndentOutdent(),  
             //new Ext.ux.form.HtmlEditor.SubSuperScript(),  
-            new Ext.ux.form.HtmlEditor.RemoveFormat()
+            new Ext.ux.form.HtmlEditor.RemoveFormat(),
+            new Ext.ux.form.HtmlEditor.EndBlockquote()
         ];
         
         Tine.Felamimail.ComposeEditor.superclass.initComponent.call(this);
+    }
+});
+
+Ext.namespace('Ext.ux.form.HtmlEditor');
+
+/**
+ * @class Ext.ux.form.HtmlEditor.EndBlockquote
+ * @extends Ext.util.Observable
+ * 
+ * plugin for htmleditor that ends blockquotes on ENTER
+ * 
+ * TODO make it work in all cases
+ * TODO make it work for multiple levels of blockquotes
+ * TODO move this to ux dir
+ */
+Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
+
+    // private
+    init: function(cmp){
+        this.cmp = cmp;
+        this.cmp.on('initialize', this.onInit, this);
+    },
+    // private
+    onInit: function(){
+        Ext.EventManager.on(this.cmp.getDoc(), {
+            'keydown': this.onKeydown,
+            scope: this
+        });
+    },
+
+    /**
+     * on keydown 
+     * 
+     * @param {Event} e
+     */
+    onKeydown: function(e) {
+        if (e.getKey() == e.ENTER) {
+            var s = this.cmp.win.getSelection();
+            if (s) {
+//                console.log(s);
+//                console.log(s.anchorNode);
+//                console.log(s.anchorNode.parentElement);
+                // check if in blockquote
+                if ((s.anchorNode && s.anchorNode.parentElement.tagName.toLowerCase() == 'blockquote') ||
+                    (s.anchorNode.tagName && s.anchorNode.tagName.toLowerCase() == 'blockquote')
+                ) {
+                    //console.log('blockquote');
+                    e.stopEvent();
+                    this.cmp.win.focus();
+                    this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote"><br />');
+                    // TODO find out how oftwen we need to do the outdent cmd
+                    this.cmp.execCmd('outdent');
+                    this.cmp.execCmd('outdent');
+                    this.cmp.execCmd('outdent');
+                    this.cmp.execCmd('outdent');
+                    this.cmp.execCmd('outdent');
+                    this.cmp.deferFocus();
+                }
+            }
+        }
     }
 });
