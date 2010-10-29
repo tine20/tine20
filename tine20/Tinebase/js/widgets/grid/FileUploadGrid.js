@@ -109,17 +109,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     initToolbar: function() {
-        this.actions.add = new Ext.Action({
-            text: _('Add file'),
-            iconCls: 'actionAdd',
-            scope: this,
-            plugins: [{
-                ptype: 'ux.browseplugin',
-                multiple: true,
-                dropElSelector: 'div[id=' + this.id + ']'
-            }],
-            handler: this.onFilesSelect
-        });
+        this.actions.add = new Ext.Action(this.getAddAction());
 
         this.actions.remove = new Ext.Action({
             text: _('Remove file'),
@@ -147,8 +137,23 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.loadRecord(this.record);
     },
     
+    /**
+     * returns add action
+     * 
+     * @return {Object} add action config
+     */
     getAddAction: function () {
-        return this.actions.add;
+        return {
+            text: _('Add file'),
+            iconCls: 'actionAdd',
+            scope: this,
+            plugins: [{
+                ptype: 'ux.browseplugin',
+                multiple: true,
+                dropElSelector: 'div[id=' + this.id + ']'
+            }],
+            handler: this.onFilesSelect
+        };
     },
     
     /**
