@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-10-31 09:33+0100\n"
+"PO-Revision-Date: 2010-10-31 09:37+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -1839,7 +1839,7 @@ msgstr "kontakt e-mail"
 
 #: Setup/setup.xml:2873
 msgid "created"
-msgstr "utworzona"
+msgstr "utworzony"
 
 #: Setup/setup.xml:2878
 msgid "record created"
