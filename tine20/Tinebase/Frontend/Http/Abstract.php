@@ -54,34 +54,23 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * generic export function
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string $_format
+     * @param string|array $_options format/definition id
      * @param Tinebase_Controller_Record_Abstract $_controller
      * @return void
      * 
      * @todo support single ids as filter?
      * @todo use stream here instead of temp file?
      */
-    protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_format, Tinebase_Controller_Record_Abstract $_controller = NULL)
+    protected function _export(Tinebase_Model_Filter_FilterGroup $_filter, $_options, Tinebase_Controller_Record_Abstract $_controller = NULL)
     { 
         // get export object
-        $export = Tinebase_Export::factory($_filter, $_format, $_controller);
+        $export = Tinebase_Export::factory($_filter, $_options, $_controller);
+        $format = $export->getFormat();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $_format);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Exporting ' . $_filter->getModelName() . ' in format ' . $format);
 
-        switch ($_format) {
+        switch ($format) {
             case 'pdf':
-                
-                /*
-                if (is_array($decodedFilter)) {
-                    $filter = new Addressbook_Model_ContactFilter($decodedFilter);
-                    $paging = new Tinebase_Model_Pagination();
-                    $contactIds = Addressbook_Controller_Contact::getInstance()->search($filter, $paging, false, true);                
-                } else {
-                    $contactIds = (array) $decodedFilter;
-                }
-                */
-                
-                // get ids by filter
                 $ids = $_controller->search($_filter, NULL, FALSE, TRUE, 'export');
                 
                 // loop records
@@ -110,24 +99,24 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
                 break;
 
             default:
-                if (in_array($_format, array('csv', 'xls'))) {
+                if (in_array($format, array('csv', 'xls'))) {
                     $result = $export->generate($_filter);
                 } else {
-                    throw new Tinebase_Exception_UnexpectedValue('Format ' . $_format . ' not supported.');
+                    throw new Tinebase_Exception_UnexpectedValue('Format ' . $format . ' not supported.');
                 }
         }
 
         // write headers
         $contentType = $export->getDownloadContentType();
-        $filename = $export->getDownloadFilename($_filter->getApplicationName(), $_format);
+        $filename = $export->getDownloadFilename($_filter->getApplicationName(), $format);
         header("Pragma: public");
         header("Cache-Control: max-age=0");
-        header("Content-Disposition: " . (($_format == 'pdf') ? 'inline' : 'attachment') . '; filename=' . $filename);
-        header("Content-Description: $_format File");  
+        header("Content-Disposition: " . (($format == 'pdf') ? 'inline' : 'attachment') . '; filename=' . $filename);
+        header("Content-Description: $format File");  
         header("Content-type: $contentType");
         
         // output export file
-        switch ($_format) {
+        switch ($format) {
             case 'pdf':
                 echo $pdfOutput;
                 break;
