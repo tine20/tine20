@@ -487,6 +487,13 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         iconCls: 'tinebase-action-export-csv',
                         exportFunction: 'Timetracker.exportTimesheets',
                         gridPanel: this
+                    }),
+                    new Tine.widgets.grid.ExportButton({
+                        text: this.app.i18n._('Export as ...'),
+                        iconCls: 'tinebase-action-export-xls',
+                        exportFunction: 'Timetracker.exportTimesheets',
+                        showExportDialog: true,
+                        gridPanel: this
                     })
                 ]
             }
