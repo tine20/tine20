@@ -21,8 +21,6 @@ Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
  * @constructor
  * @param       {Object} config The configuration options
  * 
- * TODO         make export work (onApplyChanges)
- * TODO         add empty value or default value for export def combo
  * TODO         add template for def combo (shows description, format?, ...)
  * 
  */
@@ -101,6 +99,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 editable: false,
                 allowBlank: false,
                 forceSelection: true,
+                emptyText: _('Select Export Definition ...'),
                 valueField:'id'
             }
             ]
@@ -115,23 +114,18 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         if (form.isValid()) {
             this.onRecordUpdate();
             
-            //var definition = this.definitionsStore.getById(this.record.get('export_definition_id'));
-            //Tine.log.debug(definition);
-            
-            Tine.log.debug(this.record);
-            
-            // TODO start download + pass definition id to export function / rename format param to options ({format: '', definitionId: ''})
-            /*
+            // start download + pass definition id to export function
             var downloader = new Ext.ux.file.Download({
                 params: {
-                    method: this.exportFunction,
+                    method: this.record.get('exportFunction'),
                     requestType: 'HTTP',
-                    _filter: Ext.util.JSON.encode(filterSettings),
-                    _format: this.format
+                    filter: Ext.util.JSON.encode(this.record.get('filter')),
+                    options: Ext.util.JSON.encode({
+                        definitionId: this.record.get('export_definition_id')
+                    })
                 }
             }).start();
             this.window.close();
-            */
             
         } else {
             Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
