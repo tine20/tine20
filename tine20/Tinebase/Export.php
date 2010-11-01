@@ -33,11 +33,17 @@ class Tinebase_Export
      */
     public static function factory($_filter, $_options, $_controller = NULL, $_additionalOptions = array()) 
     {
-        if (is_array($_options) && array_key_exists('definitionId', $_options)) {
+        if (! is_array($_options)) {
+            $_options = array(
+                'format' => $_options
+            );
+        }  
+        
+        if (array_key_exists('definitionId', $_options)) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_options['definitionId']);
             $exportClass = $definition->plugin;
             
-        } else if (! is_array($_options) || array_key_exists('format', $_options)) {
+        } else if (array_key_exists('format', $_options)) {
             $appName = $_filter->getApplicationName();
             $model = $_filter->getModelName();
             
@@ -48,7 +54,7 @@ class Tinebase_Export
                 list($a, $b, $modelPart) = explode('_', $model);
                 $exportClass = $exportClass . '_' . $modelPart;
                 
-                if (! class_exists($exportClass)) {
+                if (! @class_exists($exportClass)) {
                     throw new Tinebase_Exception_NotFound('No ' . $_options['format'] . ' export class found for ' . $appName . ' / ' . $model);
                 }
             }
