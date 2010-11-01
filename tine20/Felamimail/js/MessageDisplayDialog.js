@@ -62,6 +62,13 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
             iconCls: 'action_email_forward',
             disabled: this.record.id.match(/_/)
         });
+
+        this.action_download = new Ext.Action({
+            text: this.app.i18n._('Download'),
+            handler: this.onMessageDownload.createDelegate(this),
+            iconCls: 'action_email_download',
+            disabled: this.record.id.match(/_/)
+        });
         
         this.action_print = new Ext.Action({
             text: this.app.i18n._('Print Message'),
@@ -89,7 +96,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
             defaults: {height: 55},
             items: [{
                 xtype: 'buttongroup',
-                columns: 4,
+                columns: 5,
                 items: [
                     Ext.apply(new Ext.Button(this.action_reply), {
                         scale: 'medium',
@@ -107,6 +114,12 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
                         iconAlign: 'top'
                     }), 
                     Ext.apply(new Ext.SplitButton(this.action_print), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign:'top',
+                        arrowAlign:'right'
+                    }), 
+                    Ext.apply(new Ext.Button(this.action_download), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign:'top',
@@ -168,6 +181,19 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
     onAfterDelete: function() {
         this.fireEvent('remove', Ext.encode(this.record.data));
         this.window.close();
+    },
+    
+    /**
+     * download message
+     */
+    onMessageDownload: function() {
+        var downloader = new Ext.ux.file.Download({
+            params: {
+                method: 'Felamimail.downloadMessage',
+                requestType: 'HTTP',
+                messageId: this.record.id
+            }
+        }).start();
     },
     
     /**

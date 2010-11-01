@@ -127,6 +127,16 @@
     background-image:url(../../images/oxygen/32x32/places/folder-tar.png);
 }
 
+.x-btn .action_email_download {
+    background-image:url(../../images/oxygen/16x16/actions/arrow-down.png);
+}
+.x-btn-medium .action_email_download {
+    background-image:url(../../images/oxygen/22x22/actions/arrow-down.png);
+}
+.x-btn-large .action_email_download {
+    background-image:url(../../images/oxygen/32x32/actions/arrow-down.png);
+}
+
 /* rule grid actions */
 
 .action_new_rule {

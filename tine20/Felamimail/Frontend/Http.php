@@ -65,21 +65,51 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             . ' Downloading Attachment ' . $partId . ' of message with id ' . $messageId
         );
         
+        $this->_downloadMessagePart($messageId, $partId);
+    }
+
+    /**
+     * download message
+     *
+     * @param  string  $messageId
+     */
+    public function downloadMessage($messageId)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Downloading Message ' . $messageId);
+        
+        $this->_downloadMessagePart($messageId);
+    }
+    
+    /**
+     * download message part
+     * 
+     * @param string $_messageId
+     * @param string $_partId
+     */
+    protected function _downloadMessagePart($_messageId, $_partId = NULL)
+    {
         // get message part
         try {
-            $part = Felamimail_Controller_Message::getInstance()->getMessagePart($messageId, $partId);
+            $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_messageId, $_partId);
             
             if ($part instanceof Zend_Mime_Part) {
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' ' . $part->filename
+                );
+        
+                $filename = (! empty($part->filename)) ? $part->filename : $_messageId . '.eml';
+                
                 header("Pragma: public");
                 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                 header("Cache-Control: max-age=0");
-                header('Content-Disposition: attachment; filename="' . $part->filename . '"');
+                header('Content-Disposition: attachment; filename="' . $filename . '"');
                 header("Content-Type: " . $part->type);
 
                 fpassthru($part->getDecodedStream());
             }
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' failed to get attachment. ' . $e->getMessage());
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to get message part: ' . $e->getMessage());
         }
         exit;
     }
