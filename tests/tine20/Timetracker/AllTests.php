@@ -30,6 +30,7 @@ class Timetracker_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Timetracker All Tests');
         $suite->addTestSuite('Timetracker_JsonTest');
         $suite->addTestSuite('Timetracker_ControllerTest');
+        $suite->addTestSuite('Timetracker_ExportTest');
         return $suite;
     }
 }
