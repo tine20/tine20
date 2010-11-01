@@ -988,7 +988,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $body = Felamimail_Message::replaceEmails($body);
                 }
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not convert plain text part to ' . Zend_Mime::TYPE_HTML);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Do not convert ' . $bodyPart->type . ' part to ' . $_contentType);
             }
             
             $messageBody .= $body;
