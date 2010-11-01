@@ -56,16 +56,15 @@ class Zend_Date extends Zend_Date_DateObject
         'M'  => 'n',
         'd'  => 'j',
         'h'  => 'g',
-        'm'  => 'm',
-        'H'  => 'g',
+        'H'  => 'G',
         'HH' => 'H',
         's'  => 's',
         'I'  => 'I',
         'z'  => 'T',
         'U'  => 'U',
-        'eee' => 'w',
+        'eee' => 'N',
         'D'  => 'z',
-        'e'  => 'N',
+        'e'  => 'w',
         'X'  => 'Z'
     );
         
@@ -530,13 +529,15 @@ class Zend_Date extends Zend_Date_DateObject
     public function get($part = null, $locale = null)
     {
         /* start of performance patch */
-//        if (! $part) {
-//            return $this->getUnixTimestamp();
-//        }
-//        
-//        if (array_key_exists($part, self::$_dateMap)) {
-//            return date(self::$_dateMap[$part], $this->getUnixTimestamp());
-//        }
+        if (! $part) {
+            $part = self::TIMESTAMP;
+        }
+        
+        if (array_key_exists($part, self::$_dateMap)) {
+            $dt = new DateTime('@' . $this->getUnixTimestamp());
+            $dt->setTimezone(new DateTimeZone($this->getTimezone()));
+            return $dt->format(self::$_dateMap[$part]);
+        }
         /* end of performance patch */
         
         if ($locale === null) {
