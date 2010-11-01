@@ -107,28 +107,43 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
      */
     onKeydown: function(e) {
         if (e.getKey() == e.ENTER) {
-            var s = this.cmp.win.getSelection();
-            if (s) {
-//                console.log(s);
-//                console.log(s.anchorNode);
-//                console.log(s.anchorNode.parentElement);
-                // check if in blockquote
-                if ((s.anchorNode && s.anchorNode.parentElement.tagName.toLowerCase() == 'blockquote') ||
-                    (s.anchorNode.tagName && s.anchorNode.tagName.toLowerCase() == 'blockquote')
-                ) {
-                    //console.log('blockquote');
-                    e.stopEvent();
-                    this.cmp.win.focus();
-                    this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote"><br />');
-                    // TODO find out how oftwen we need to do the outdent cmd
-                    this.cmp.execCmd('outdent');
-                    this.cmp.execCmd('outdent');
-                    this.cmp.execCmd('outdent');
-                    this.cmp.execCmd('outdent');
-                    this.cmp.execCmd('outdent');
-                    this.cmp.deferFocus();
-                }
+            e.stopEvent();
+            this.cmp.win.focus();
+
+            var s = this.cmp.win.getSelection(),
+                r = s.getRangeAt(0),
+                doc = this.cmp.getDoc();
+                
+            if (this.getBlockquoteLevel(s) == 1) {
+                this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote"><br />');
+                this.cmp.execCmd('outdent');
+                this.cmp.execCmd('outdent');
+            } else {
+                var br = doc.createElement('br');
+                r.insertNode(br);
             }
+            
+            this.cmp.deferFocus();
         }
+    },
+    
+    /**
+     * get blockquote level helper
+     * 
+     * @param {Selection} s
+     * @return {Integer}
+     */
+    getBlockquoteLevel: function(s) {
+        var result = 0,
+            node = s.anchorNode;
+            
+        while (node.nodeName == '#text' || node.tagName.toLowerCase() != 'body') {
+            if (node.tagName && node.tagName.toLowerCase() == 'blockquote') {
+                result++;
+            }
+            node = node.parentElement;
+        }
+        
+        return result;
     }
 });
