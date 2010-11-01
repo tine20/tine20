@@ -250,7 +250,7 @@ Ext.namespace('Tine.Felamimail');
                     }
                     
                     if (this.replyTo) {
-                        this.msgBody = '<br/>' + Ext.util.Format.htmlEncode(this.replyTo.get('from_name')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
+                        this.msgBody = /*'<br/>' + */Ext.util.Format.htmlEncode(this.replyTo.get('from_name')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
                              + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
                     } else if (this.forwardMsgs && this.forwardMsgs.length === 1) {
                         this.msgBody = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
