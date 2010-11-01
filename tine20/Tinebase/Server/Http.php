@@ -29,7 +29,8 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract
     {
         try {
             $this->_initFramework();
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' is HTTP request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
+            //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Rawdata: ' . print_r($_REQUEST, true));
             
             $server = new Tinebase_Http_Server();
             
