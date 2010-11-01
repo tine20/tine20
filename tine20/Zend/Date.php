@@ -53,6 +53,7 @@ class Zend_Date extends Zend_Date_DateObject
     private static $_dateMap = array(
         'yyyy-MM-dd HH:mm:ss' => 'Y-m-d H:i:s',
         'MM' => 'm',
+        'm'  => 'i', // spechial handling required!
         'M'  => 'n',
         'd'  => 'j',
         'h'  => 'g',
@@ -535,8 +536,16 @@ class Zend_Date extends Zend_Date_DateObject
         
         if (array_key_exists($part, self::$_dateMap)) {
             $dt = new DateTime('@' . $this->getUnixTimestamp());
-            $dt->setTimezone(new DateTimeZone($this->getTimezone()));
-            return $dt->format(self::$_dateMap[$part]);
+            $dt->setTimezone($this->_dateTimeZone);
+            
+            $s = $dt->format(self::$_dateMap[$part]);
+            switch($part) {
+                case 'm': 
+                    $s = (int) preg_replace('/^0/', '', $s);
+                    break;
+            }
+            
+            return $s; 
         }
         /* end of performance patch */
         

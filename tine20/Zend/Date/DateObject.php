@@ -45,6 +45,10 @@ abstract class Zend_Date_DateObject {
     // turn off DST correction if UTC or GMT
     protected $_dst         = true;
 
+    protected $_dateTimeZone = null;
+    protected static $_dateTimeZones = array();
+    protected static $_dateTimeStart = null;
+    
     /**
      * Table of Monthdays
      */
@@ -992,13 +996,15 @@ abstract class Zend_Date_DateObject {
      */
     public function setTimezone($zone = null)
     {
-        if ($zone === $this->_timezone) {
-            return $this;
-        }
-        
         try {
-            $dtz = new DateTimeZone($zone);
-            $this->_offset   = $dtz->getOffset(new DateTime('1970-02-01 00:00:00'));
+            if (! array_key_exists($zone, self::$_dateTimeZones)) {
+                self::$_dateTimeZones[$zone] = new DateTimeZone($zone);
+            }
+            if (! self::$_dateTimeStart) {
+                self::$_dateTimeStart = new DateTime('1970-02-01 00:00:00');
+            }
+            $this->_dateTimeZone = self::$_dateTimeZones[$zone];
+            $this->_offset   = $this->_dateTimeZone->getOffset(self::$_dateTimeStart);
             $this->_timezone = $zone;
         } catch (Exception $e) {
             require_once 'Zend/Date/Exception.php';
