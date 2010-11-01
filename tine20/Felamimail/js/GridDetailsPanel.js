@@ -184,7 +184,7 @@ Ext.namespace('Tine.Felamimail');
                 body = body || '';
                 if (body) {
                     var account = this.app.getActiveAccount();
-                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && messageData.content_type == 'text/plain')) {
+                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && messageData.body_content_type == 'text/plain')) {
                         var width = this.panel.body.getWidth()-25,
                             height = this.panel.body.getHeight()-90,
                             id = Ext.id();
@@ -193,18 +193,6 @@ Ext.namespace('Tine.Felamimail');
                             'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
                             body + '</textarea>';
                     }
-                    
-                    // add images inline
-                    /*
-                    var inlineAttachments = '';
-                    for (var i=0, id; i < attachments.length; i++) {
-                        console.log(attachments[i]);
-                    }
-                    
-                    if (inlineAttachments != '') {
-                        value = value + '<hr>' + inlineAttachments;
-                    }
-                    */
                 }                    
                 return body;
             },
@@ -233,7 +221,6 @@ Ext.namespace('Tine.Felamimail');
                 var result = (attachements.length > 0) ? '<b>' + this.app.i18n._('Attachments') + ':</b> ' : '';
                 
                 for (var i=0, id, cls; i < attachements.length; i++) {
-                    //cls = attachements[i]['content-type'] === 'message/rfc822' ? 'tinebase-message-rfc822-link' : 'tinebase-download-link';
                     result += '<span id="' + Ext.id() + ':' + i + '" class="tinebase-download-link">' 
                         + '<i>' + attachements[i].filename + '</i>' 
                         + ' (' + Ext.util.Format.fileSize(attachements[i].size) + ')</span> ';
@@ -359,7 +346,6 @@ Ext.namespace('Tine.Felamimail');
                     }
                 
                     target.id = targetId + ':' + 'hide';
-                    //target['ext:qtip'] = 'hide';
                     
                 } else {
                     html = ' <span ext:qtip="' + this.i18n._('Show or hide header information') + '" id="' 

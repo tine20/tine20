@@ -19,7 +19,8 @@
  * @property    string  $subject        the subject of the email
  * @property    string  $from_email     the address of the sender
  * @property    string  $from_name      the name of the sender
- * @property    string  $content_type   the address of the sender
+ * @property    string  $content_type   the content type of the message
+ * @property    string  $body_content_type   the content type of the message body
  * @property    array   $to             the to receipients
  * @property    array   $cc             the cc receipients
  * @property    array   $bcc            the bcc receipients
@@ -116,7 +117,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'html_partid'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'has_attachment'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'headers'               => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'content_type'          => array(
+        'content_type'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'body_content_type'     => array(
             Zend_Filter_Input::ALLOW_EMPTY => true,
             Zend_Filter_Input::DEFAULT_VALUE => self::CONTENT_TYPE_PLAIN,
             'InArray' => array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)
@@ -187,14 +189,37 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     }
     
     /**
-     * parse message structure
+     * parse message structure to get content types
      * 
+     * @param array $_structure
      * @return void
      */
-    public function parseStructure()
+    public function parseStructure($_structure = NULL)
     {
-        $this->structure     = $this->structure;
+        if ($_structure !== NULL) {
+            $this->structure = $_structure;
+        }
         $this->content_type  = isset($this->structure['contentType']) ? $this->structure['contentType'] : Zend_Mime::TYPE_TEXT;
+        $this->_setBodyContentType();
+    }
+    
+    /**
+     * parse parts to set body content type
+     */
+    protected function _setBodyContentType()
+    {
+        if (array_key_exists('parts', $this->structure)) {
+            $bodyContentTypes = array();
+            foreach ($this->structure['parts'] as $part) {
+                if (in_array($part['contentType'], array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)) && ! $this->_partIsAttachment($part)) {
+                    $bodyContentTypes[] = $part['contentType'];
+                }
+            }
+            // HTML > plain
+            $this->body_content_type = (in_array(self::CONTENT_TYPE_HTML, $bodyContentTypes)) ? self::CONTENT_TYPE_HTML : self::CONTENT_TYPE_PLAIN;
+        } else {
+            $this->body_content_type = $this->content_type;
+        }
     }
     
     /**

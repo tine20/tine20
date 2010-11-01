@@ -630,10 +630,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             'received'      => Felamimail_Message::convertDate($_message['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
             'size'          => $_message['size'],
             'flags'         => $_message['flags'],
-            'structure'     => $_message['structure'],
-            'content_type'  => isset($_message['structure']['contentType']) ? $_message['structure']['contentType'] : Zend_Mime::TYPE_TEXT,
         ));
 
+        $messageToCache->parseStructure($_message['structure']);
         $messageToCache->parseHeaders($_message['header']);
         $messageToCache->parseBodyParts();
         

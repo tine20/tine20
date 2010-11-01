@@ -407,7 +407,30 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setTableVersion('felamimail_account', '13');
         $this->setApplicationVersion('Felamimail', '3.13');
-    }    
+    }
+    
+    /**
+     * update function (-> 3.14)
+     * - added body content type
+     */    
+    public function update_13()
+    {
+        $fields = array(new Setup_Backend_Schema_Field_Xml( 
+            '<field>
+                <name>body_content_type</name>
+                <type>text</type>
+                <length>256</length>
+            </field>'),
+        );
+        
+        foreach ($fields as $field) {
+            $this->_backend->addCol('felamimail_cache_message', $field, 5);
+        }
+        
+        $this->setTableVersion('felamimail_cache_message', '4');
+        $this->setApplicationVersion('Felamimail', '3.14');
+        $this->_clearMessageCache();
+    }
     
     /**
      * clear message cache tables and reset folder status
