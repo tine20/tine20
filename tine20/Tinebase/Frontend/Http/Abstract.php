@@ -54,7 +54,7 @@ abstract class Tinebase_Frontend_Http_Abstract extends Tinebase_Frontend_Abstrac
      * generic export function
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @param string|array $_options format/definition id
+     * @param array $_options format/definition id
      * @param Tinebase_Controller_Record_Abstract $_controller
      * @return void
      * 

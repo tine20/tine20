@@ -54,12 +54,12 @@ class Timetracker_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * export records matching given arguments
      *
-     * @param string $_filter json encoded
-     * @param string $_format only csv implemented
+     * @param string $filter json encoded
+     * @param string $options format or export definition id
      */
-    public function exportTimeaccounts($_filter, $_format)
+    public function exportTimeaccounts($filter, $options)
     {
-        $filter = new Timetracker_Model_TimeaccountFilter(Zend_Json::decode($_filter));
-        parent::_export($filter, $_format);
+        $filter = new Timetracker_Model_TimeaccountFilter(Zend_Json::decode($filter));
+        parent::_export($filter, Zend_Json::decode($options));
     }
 }

@@ -6,7 +6,6 @@
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * TODO use Ext.ux.file.Download
  */
 Ext.ns('Tine.widgets.grid');
 
@@ -80,7 +79,7 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                 })
             });
         } else {
-            this.startDownload();
+            this.startDownload(filterSettings);
         }
     },
     
@@ -94,8 +93,10 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
             params: {
                 method: this.exportFunction,
                 requestType: 'HTTP',
-                _filter: Ext.util.JSON.encode(filterSettings),
-                _format: this.format
+                filter: Ext.util.JSON.encode(filterSettings),
+                options: Ext.util.JSON.encode({
+                    format: this.format
+                })
             }
         }).start();
     }

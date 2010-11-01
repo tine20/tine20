@@ -62,12 +62,12 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
    	/**
      * export lead
      * 
-     * @param	string JSON encoded string with lead ids for multi export
-     * @param	format	pdf or csv or ...
+     * @param	string $filter JSON encoded string with lead ids for multi export
+     * @param	string $options format or export definition id
      */
-	public function exportLead($_filter, $_format = 'pdf')
+	public function exportLead($filter, $options)
 	{
-        $filter = new Crm_Model_LeadFilter(Zend_Json::decode($_filter));
-	    parent::_export($filter, $_format, Crm_Controller_Lead::getInstance());
+        $filter = new Crm_Model_LeadFilter(Zend_Json::decode($filter));
+	    parent::_export($filter, Zend_Json::decode($options), Crm_Controller_Lead::getInstance());
 	}    
 }

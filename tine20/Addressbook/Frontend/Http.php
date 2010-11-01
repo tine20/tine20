@@ -30,18 +30,18 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * export contact
      * 
-     * @param string $_filter JSON encoded string with contact ids for multi export or contact filter
-     * @param string $_format pdf or csv or ...
+     * @param string $filter JSON encoded string with contact ids for multi export or contact filter
+     * @param string $options format or export definition id
      */
-    public function exportContacts($_filter, $_format = 'pdf')
+    public function exportContacts($filter, $options)
     {
-        $decodedFilter = Zend_Json::decode($_filter);
+        $decodedFilter = Zend_Json::decode($filter);
         if (! is_array($decodedFilter)) {
             $decodedFilter = array(array('field' => 'id', 'operator' => 'equals', 'value' => $decodedFilter));
         }
         
         $filter = new Addressbook_Model_ContactFilter($decodedFilter);
-        parent::_export($filter, $_format, Addressbook_Controller_Contact::getInstance());
+        parent::_export($filter, Zend_Json::decode($options), Addressbook_Controller_Contact::getInstance());
     }
     
     /**
