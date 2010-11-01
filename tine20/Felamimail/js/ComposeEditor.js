@@ -81,8 +81,6 @@ Ext.namespace('Ext.ux.form.HtmlEditor');
  * 
  * plugin for htmleditor that ends blockquotes on ENTER
  * 
- * TODO make it work in all cases
- * TODO make it work for multiple levels of blockquotes
  * TODO move this to ux dir
  */
 Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
@@ -112,12 +110,21 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
 
             var s = this.cmp.win.getSelection(),
                 r = s.getRangeAt(0),
-                doc = this.cmp.getDoc();
-                
-            if (this.getBlockquoteLevel(s) == 1) {
+                doc = this.cmp.getDoc(),
+                level = this.getBlockquoteLevel(s);
+              
+            if (level == 1) {
                 this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote"><br />');
                 this.cmp.execCmd('outdent');
                 this.cmp.execCmd('outdent');
+            } else if (level > 1) {
+                for (var i=0; i < level; i++) {
+                    this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote">');
+                    this.cmp.execCmd('outdent');
+                    this.cmp.execCmd('outdent');
+                }
+                var br = doc.createElement('br');
+                r.insertNode(br);
             } else {
                 var br = doc.createElement('br');
                 r.insertNode(br);
