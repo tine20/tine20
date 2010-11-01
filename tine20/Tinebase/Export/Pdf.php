@@ -154,6 +154,16 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
 	}
 		
     /**
+     * get export format string (csv, ...)
+     * 
+     * @return string
+     */
+    public function getFormat()
+    {
+        return $this->_format;
+    }
+    
+    /**
      * create pdf
      *
      * @param   array $_record record data
