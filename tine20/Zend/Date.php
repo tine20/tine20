@@ -530,13 +530,13 @@ class Zend_Date extends Zend_Date_DateObject
     public function get($part = null, $locale = null)
     {
         /* start of performance patch */
-        if (! $part) {
-            return $this->getUnixTimestamp();
-        }
-        
-        if (array_key_exists($part, self::$_dateMap)) {
-            return date(self::$_dateMap[$part], $this->getUnixTimestamp());
-        }
+//        if (! $part) {
+//            return $this->getUnixTimestamp();
+//        }
+//        
+//        if (array_key_exists($part, self::$_dateMap)) {
+//            return date(self::$_dateMap[$part], $this->getUnixTimestamp());
+//        }
         /* end of performance patch */
         
         if ($locale === null) {
