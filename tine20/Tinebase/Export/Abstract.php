@@ -97,6 +97,13 @@ abstract class Tinebase_Export_Abstract
     protected $_prefKey = NULL;
     
     /**
+     * format strings
+     * 
+     * @var string
+     */
+    protected $_format = NULL;
+    
+    /**
      * other resolved records
      *
      * @var array of Tinebase_Record_RecordSet
@@ -148,6 +155,20 @@ abstract class Tinebase_Export_Abstract
      * @return mixed filename/generated object/...
      */
     abstract public function generate();
+    
+    /**
+     * get export format string (csv, ...)
+     * 
+     * @return string
+     */
+    public function getFormat()
+    {
+        if ($this->_format === NULL) {
+            throw new Tinebase_Exception_NotFound('Format string not found.');
+        }
+        
+        return $this->_format;
+    }
     
     /**
      * get download content type

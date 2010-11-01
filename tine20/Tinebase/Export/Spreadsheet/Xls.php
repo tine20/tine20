@@ -38,6 +38,13 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
     protected $_excelObject = NULL;
     
     /**
+     * format strings
+     * 
+     * @var string
+     */
+    protected $_format = 'xls';
+    
+    /**
      * generate export
      * 
      * @return string filename

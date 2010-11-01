@@ -96,6 +96,13 @@ abstract class Tinebase_Export_Pdf extends Zend_Pdf
     //protected $_encoding = 'CP1252';
     
     /**
+     * format strings
+     * 
+     * @var string
+     */
+    protected $_format = 'pdf';
+    
+    /**
      * the constructor
      *
      * @param   integer $_contentFontSize

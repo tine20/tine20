@@ -223,6 +223,13 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
     }
     
     /**
+     * format strings
+     * 
+     * @var string
+     */
+    protected $_format = 'ods';
+    
+    /**
      * add body rows
      *
      * @param OpenDocument_SpreadSheet_Table $table
@@ -266,7 +273,6 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
         }
         
     }
-    
     
     /**
      * add style/width to column

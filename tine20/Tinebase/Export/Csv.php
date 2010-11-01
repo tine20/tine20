@@ -58,6 +58,13 @@ class Tinebase_Export_Csv extends Tinebase_Export_Abstract
     protected $_toStdout = FALSE;
     
     /**
+     * format strings
+     * 
+     * @var string
+     */
+    protected $_format = 'csv';
+    
+    /**
      * The php build in fputcsv function is buggy, so we need an own one :-(
      *
      * @param resource $filePointer
