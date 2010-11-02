@@ -130,9 +130,9 @@
 }
 
 
-.x-tree-node-collapsed .x-tree-node-icon.x-tree-node-leaf-roles, 
-.x-tree-node-expanded .x-tree-node-icon.x-tree-node-leaf-roles, 
-.x-tree-node-leaf .x-tree-node-icon.x-tree-node-leaf-roles ,
-.x-tree-node-leaf-roles {
-	width:1px;
+.x-tree-node-collapsed .x-tree-node-icon.x-tree-node-leaf-checkbox, 
+.x-tree-node-expanded .x-tree-node-icon.x-tree-node-leaf-checkbox, 
+.x-tree-node-leaf .x-tree-node-icon.x-tree-node-leaf-checkbox ,
+.x-tree-node-leaf-checkbox {
+	width:0px;
 }

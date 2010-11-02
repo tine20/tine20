@@ -156,7 +156,7 @@ Tine.Admin.Tags.EditDialog = Ext.extend(Tine.widgets.dialog.EditRecord, {
                 id: appData.id,
                 checked: this.anyContext || this.tag.get('contexts').indexOf(appData.id) > -1,
                 leaf: true,
-                icon: "s.gif"
+                iconCls: 'x-tree-node-leaf-checkbox'
             }));
         }
     },
