@@ -1003,7 +1003,7 @@ abstract class Zend_Date_DateObject {
             if (! self::$_dateTimeStart) {
                 self::$_dateTimeStart = new DateTime('1970-02-01 00:00:00');
             }
-            $this->_dateTimeZone = self::$_dateTimeZones[$zone];
+            $this->_dateTimeZone = new DateTimeZone($zone);
             $this->_offset   = $this->_dateTimeZone->getOffset(new DateTime('1970-02-01 00:00:00'));
             $this->_timezone = $zone;
         } catch (Exception $e) {
