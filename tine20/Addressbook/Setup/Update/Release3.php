@@ -404,7 +404,11 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         try {
             $this->_backend->dropForeignKey('addressbook', 'addressbook::account_id--accounts::id');
         } catch (Zend_Db_Statement_Exception $zdse) {
-            $this->_backend->dropForeignKey('addressbook', SQL_TABLE_PREFIX . 'addressbook::account_id--accounts::id');
+            try {
+                $this->_backend->dropForeignKey('addressbook', SQL_TABLE_PREFIX . 'addressbook::account_id--accounts::id');
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // do nothing
+            }
         }
         $this->_backend->dropCol('addressbook', 'account_id');
         
