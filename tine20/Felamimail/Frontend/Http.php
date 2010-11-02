@@ -88,25 +88,28 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected function _downloadMessagePart($_messageId, $_partId = NULL)
     {
-        // get message part
         try {
             $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_messageId, $_partId);
             
             if ($part instanceof Zend_Mime_Part) {
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' ' . $part->filename
+                    . ' ' . $part->filename 
+                    . ' ' . $part->type 
+                    //. ' ' . stream_get_contents($part->getDecodedStream())
                 );
         
                 $filename = (! empty($part->filename)) ? $part->filename : $_messageId . '.eml';
+                $contentType = ($_partId === NULL) ? Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 : $part->type;
                 
                 header("Pragma: public");
                 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
                 header("Cache-Control: max-age=0");
                 header('Content-Disposition: attachment; filename="' . $filename . '"');
-                header("Content-Type: " . $part->type);
+                header("Content-Type: " . $contentType);
 
-                fpassthru($part->getDecodedStream());
+                $stream = ($_partId === NULL) ? $part->getRawStream() : $part->getDecodedStream();
+                fpassthru($stream);
             }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to get message part: ' . $e->getMessage());
