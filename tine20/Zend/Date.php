@@ -536,7 +536,7 @@ class Zend_Date extends Zend_Date_DateObject
         
         if (array_key_exists($part, self::$_dateMap)) {
             $dt = new DateTime('@' . $this->getUnixTimestamp());
-            $dt->setTimezone($this->_dateTimeZone);
+            $dt->setTimezone(new DateTimeZone($this->getTimezone()));
             
             $s = $dt->format(self::$_dateMap[$part]);
             switch($part) {

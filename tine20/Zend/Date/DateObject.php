@@ -997,14 +997,8 @@ abstract class Zend_Date_DateObject {
     public function setTimezone($zone = null)
     {
         try {
-            if (! array_key_exists($zone, self::$_dateTimeZones)) {
-                self::$_dateTimeZones[$zone] = new DateTimeZone($zone);
-            }
-            if (! self::$_dateTimeStart) {
-                self::$_dateTimeStart = new DateTime('1970-02-01 00:00:00');
-            }
-            $this->_dateTimeZone = new DateTimeZone($zone);
-            $this->_offset   = $this->_dateTimeZone->getOffset(new DateTime('1970-02-01 00:00:00'));
+            $dtz = new DateTimeZone($zone);
+            $this->_offset   = $dtz->getOffset(new DateTime('1970-02-01 00:00:00'));
             $this->_timezone = $zone;
         } catch (Exception $e) {
             require_once 'Zend/Date/Exception.php';
