@@ -60,7 +60,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * name of the folder to use for tests
      * @var string
      */
-    #protected $_testFolderName = 'INBOX';
     protected $_testFolderName = 'Junk';
     
     /**
@@ -268,7 +267,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'parts'       => array(
                 1 => array(
                     'partId'      => 1,
-                    'contentType' => 'text/plain',
+                    'contentType' => Felamimail_Model_Message::CONTENT_TYPE_PLAIN,
                     'type'        => 'text',
                     'subType'     => 'plain',
                     'parameters'  => array (
@@ -287,7 +286,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                 ),
                 2 => array(
                     'partId'      => 2,
-                    'contentType' => 'text/plain',
+                    'contentType' => Felamimail_Model_Message::CONTENT_TYPE_PLAIN,
                     'type'        => 'text',
                     'subType'     => 'plain',
                     'parameters'  => array (
@@ -323,6 +322,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $message = $this->_messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
         $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+        $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_PLAIN, $message['body_content_type']);
     }
     
     /**
