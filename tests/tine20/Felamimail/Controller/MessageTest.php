@@ -486,6 +486,22 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testGetCompleteMessageAsPart
+     */
+    public function testGetCompleteMessageAsPart()
+    {
+        $cachedMessage = $this->_messageTestHelper('complete.eml', 'text/service');
+        
+        $messagePart = $this->_controller->getMessagePart($cachedMessage);
+        
+        ob_start();
+        fpassthru($messagePart->getRawStream());
+        $out = ob_get_clean();
+        
+        $this->assertContains('URL: https://service.metaways.net/Ticket/Display.html?id=3D59648', $out);        
+    }
+        
+    /**
      * validate fetching a complete message
      */
     public function testGetCompleteMessage()
