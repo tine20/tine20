@@ -463,11 +463,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function updateGroupInSyncBackend(Tinebase_Model_Group $_group) 
     {
-        $dn = $this->_getDn($_group->getId());
+        $metaData = $this->_getMetaData($_group->getId());
+        $dn = $metaData['dn'];
         
         $ldapData = array(
             'cn'          => $_group->name,
             'description' => $_group->description,
+            'objectclass' => $metaData['objectclass']
         );
         
         foreach ($this->_plugins as $plugin) {
