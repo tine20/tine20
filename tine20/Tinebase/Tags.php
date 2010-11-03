@@ -5,9 +5,11 @@
  * @package     Tinebase
  * @subpackage  Tags
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        this should implement Tinebase_Backend_Sql_Interface or use standard sql backend + refactor this
  */
 
 /**
@@ -99,6 +101,30 @@ class Tinebase_Tags
     }
     
     /**
+     * Return a single record
+     *
+     * @param string|Tinebase_Model_Tag $_id
+     * @param $_getDeleted get deleted records
+     * @return Tinebase_Model_FullTag
+     * 
+     * @todo support $_getDeleted
+     */
+    public function get($_id, $_getDeleted = FALSE)
+    {
+        $tagId = ($_id instanceof Tinebase_Model_Tag) ? $_id->getId() : $_id;
+        
+        $tag = Tinebase_Tags::getInstance()->getTagsById($tagId);
+        
+        if (count($tag) == 0) {
+            throw new Tinebase_Exception_NotFound("Tag $_id not found or insufficient rights.");
+        }
+        
+        $fullTag = new Tinebase_Model_FullTag($tag[0]->toArray(), true);
+        
+        return $fullTag;
+    }
+    
+    /**
      * Returns (bare) tags identified by its id(s)
      * 
      * @param   string|array|Tinebase_Record_RecordSet  $_id
@@ -181,6 +207,10 @@ class Tinebase_Tags
      */
     public function createTag(Tinebase_Model_Tag $_tag)
     {
+        if ($_tag instanceof Tinebase_Model_FullTag) {
+            $_tag = new Tinebase_Model_Tag($_tag->toArray(), TRUE);            
+        }
+        
         $currentAccountId = Tinebase_Core::getUser()->getId();
         
         $newId = $_tag->generateUID();
@@ -229,6 +259,17 @@ class Tinebase_Tags
     }
     
     /**
+     * Creates new entry
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     */
+    public function create(Tinebase_Record_Interface $_record) 
+    {
+        return $this->createTag($_record);
+    }
+    
+    /**
      * updates a single tag
      * 
      * @param   Tinebase_Model_Tag
@@ -237,6 +278,10 @@ class Tinebase_Tags
      */
     public function updateTag(Tinebase_Model_Tag $_tag)
     {
+        if ($_tag instanceof Tinebase_Model_FullTag) {
+            $_tag = new Tinebase_Model_Tag($_tag->toArray(), TRUE);            
+        }
+        
         $currentAccountId = Tinebase_Core::getUser()->getId();
         $manageSharedTagsRight = Tinebase_Acl_Roles::getInstance()
             ->hasRight('Admin', $currentAccountId, Admin_Acl_Rights::MANAGE_SHARED_TAGS);
@@ -266,6 +311,18 @@ class Tinebase_Tags
         }
     }
     
+    /**
+     * Updates existing entry
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @throws Tinebase_Exception_Record_Validation|Tinebase_Exception_InvalidArgument
+     * @return Tinebase_Record_Interface Record|NULL
+     */
+    public function update(Tinebase_Record_Interface $_record) 
+    {
+        return $this->updateTag($_record);
+    }
+        
     /**
      * Deletes (set stated deleted) tags identified by their identifiers
      * 
@@ -655,6 +712,27 @@ class Tinebase_Tags
             ));
         }
     }
+    
+    /**
+     * get db adapter
+     *
+     * @return Zend_Db_Adapter_Abstract
+     */
+    public function getAdapter()
+    {
+        return $this->_db;
+    }
+    
+    /**
+     * get backend type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return 'Sql';
+    }
+    
     
     /**
      * get select for tags query
