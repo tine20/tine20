@@ -150,7 +150,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @param   Tinebase_Record_Interface $_record
      * @return  void
      */
-    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_checkDeadline($_record);
     }
@@ -162,7 +162,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
-    protected function _inspectUpdate($_record, $_oldRecord)
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $this->_checkDeadline($_record);
     }    

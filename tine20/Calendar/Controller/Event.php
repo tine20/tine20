@@ -741,7 +741,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
-    protected function _inspectUpdate($_record, $_oldRecord)
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         // if dtstart of an event changes, we update the originator_tz and alarm times
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {

@@ -305,7 +305,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
             }
             
-            $this->_inspectCreate($_record);
+            $this->_inspectBeforeCreate($_record);
             $record = $this->_backend->create($_record);
             
             // set relations / tags / notes / alarms
@@ -350,7 +350,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record
      * @return  void
      */
-    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         
     }
@@ -396,7 +396,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 }
             }
             
-            $this->_inspectUpdate($_record, $currentRecord);
+            $this->_inspectBeforeUpdate($_record, $currentRecord);
             $record = $this->_backend->update($_record);
     
             // set relations / tags / notes / alarms
@@ -437,7 +437,7 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
-    protected function _inspectUpdate($_record, $_oldRecord)
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         
     }

@@ -249,7 +249,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record
      * @return  void
      */
-    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         // add user id
         $_record->user_id = $this->_currentAccount->getId();
@@ -282,7 +282,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
-    protected function _inspectUpdate($_record, $_oldRecord)
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         if ($_record->type == Felamimail_Model_Account::TYPE_SYSTEM) {
             // only allow to update some values for system accounts

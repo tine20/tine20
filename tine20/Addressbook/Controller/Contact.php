@@ -231,7 +231,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record
      * @return  void
      */
-    protected function _inspectCreate(Tinebase_Record_Interface $_record)
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
         $this->_setGeoData($_record);
         
@@ -249,7 +249,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * 
      * @todo    check if address changes before setting new geodata
      */
-    protected function _inspectUpdate($_record, $_oldRecord)
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         $this->_setGeoData($_record);
         
