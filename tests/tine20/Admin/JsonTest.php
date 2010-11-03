@@ -4,11 +4,10 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
- * @todo        remove deprecated application rights test? 
  */
 
 /**
@@ -80,24 +79,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'accountEmailAddress'   => 'phpunit@metaways.de'
         )); 
         
-        #$this->objects['accountUpdate'] = new Tinebase_Model_FullUser(array(
-        #    'accountLoginName'      => 'tine20phpunit',
-        #    'accountDisplayName'    => 'tine20phpunit',
-        #    'accountStatus'         => 'enabled',
-        #    'accountExpires'        => NULL,
-        #    'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
-        #    'accountLastName'       => 'Tine 2.0',
-        #    'accountFirstName'      => 'PHPUnitup',
-        #    'accountEmailAddress'   => 'phpunit@metaways.de',
-        #)); 
-        
         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
 
             $this->objects['initialGroup']->container_id = $internalAddressbook->getId();
             $this->objects['updatedGroup']->container_id = $internalAddressbook->getId();
             $this->objects['user']->container_id = $internalAddressbook->getId();
-            #$this->objects['accountUpdate']->container_id = $internalAddressbook->getId();
         }
 
         $this->objects['application'] = Tinebase_Application::getInstance()->getApplicationByName('Crm');
