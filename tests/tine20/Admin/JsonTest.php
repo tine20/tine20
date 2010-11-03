@@ -117,7 +117,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         // remove accounts for group member tests
         try {
-            Admin_Controller_User::getInstance()->delete($this->objects['user']->accountId);
+            if (array_key_exists('user', $this->objects)) {
+                Admin_Controller_User::getInstance()->delete($this->objects['user']->accountId);
+            }
+            if (array_key_exists('tag', $this->objects)) {
+                Admin_Controller_Tags::getInstance()->delete($this->objects['tag']['id']);
+            }
         } catch (Exception $e) {
             // do nothing
         }
@@ -568,5 +573,40 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $allRights = $this->_backend->getAllRoleRights();
         
         $this->assertGreaterThan(0, $allRights);
+    }
+    
+    /**
+     * try to save tag
+     */
+    public function testSaveTag()
+    {
+        $tagData = $this->_getTagData();
+        $this->objects['tag'] = $this->_backend->saveTag($tagData);
+        $this->assertEquals($tagData['name'], $this->objects['tag']['name']);
+        //print_r($this->objects['tag']);
+    }
+    
+    /**
+     * get tag data
+     * 
+     * @return array
+     */
+    protected function _getTagData()
+    {
+        return array(
+            'rights' => array(
+                array(
+                    'account_id' => 0,
+                    'account_type' => 'anyone',
+                    'account_name' => 'Anyone',
+                    'view_right' => true,
+                    'use_right' => true
+                )
+            ),
+            'contexts' => array('any'),
+            'name' => 'supertag',
+            'description' => 'xxxx',
+            'color' => '#003300'
+        );
     }
 }
