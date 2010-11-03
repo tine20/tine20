@@ -133,6 +133,14 @@ Ext.namespace('Tine.Felamimail');
             scope: this
         });
 
+        this.action_searchContacts = new Ext.Action({
+            text: this.app.i18n._('Search Recipients'),
+            handler: this.onSearchContacts,
+            iconCls: 'AddressbookIconCls',
+            disabled: false,
+            scope: this
+        });
+        
         this.action_saveAsDraft = new Ext.Action({
             text: this.app.i18n._('Save As Draft'),
             handler: this.onSaveInFolder.createDelegate(this, ['drafts_folder']),
@@ -166,12 +174,18 @@ Ext.namespace('Tine.Felamimail');
             defaults: {height: 55},
             items: [{
                 xtype: 'buttongroup',
-                columns: 4,
+                columns: 5,
                 items: [
                     Ext.apply(new Ext.Button(this.action_send), {
                         scale: 'medium',
                         rowspan: 2,
                         iconAlign: 'top'
+                    }),
+                    Ext.apply(new Ext.Button(this.action_searchContacts), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top',
+                        tooltip: this.app.i18n._('Click to search for and add recipients from the Addressbook.')
                     }),
                     this.action_saveAsDraft,
                     this.button_saveEmailNote,
@@ -486,6 +500,23 @@ Ext.namespace('Tine.Felamimail');
      */
     onToggleSaveNote: function (button, e) {
         this.record.set('note', (! this.record.get('note')));
+    },
+    
+    /**
+     * search for contacts as recipients
+     */
+    onSearchContacts: function() {
+        Tine.Felamimail.RecipientPickerDialog.openWindow({
+            record: this.record,
+            listeners: {
+                scope: this,
+                'update': function(record) {
+                    this.record = Ext.isString(record) ? new this.recordClass(Ext.decode(record)) : record;
+                    // TODO update recipient grid
+                    Tine.log.debug(this.record);
+                }
+            }
+        });
     },
     
     /**
