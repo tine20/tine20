@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-10-21 18:16+0100\n"
+"PO-Revision-Date: 2010-11-03 19:57+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -96,7 +96,7 @@ msgstr "Data"
 
 #: js/TimesheetGridPanel.js:220
 #: js/TimesheetGridPanel.js:252
-#: js/TimesheetGridPanel.js:404
+#: js/TimesheetGridPanel.js:400
 #: js/TimesheetEditDialog.js:174
 #: js/TimeaccountEditDialog.js:93
 #: js/TimeaccountEditDialog.js:169
@@ -133,66 +133,53 @@ msgstr "Konto godzin zamknięte"
 msgid "Duration"
 msgstr "Czas trwania"
 
-#: js/TimesheetGridPanel.js:262
-msgid "Creation Time"
-msgstr "Czas utworzenia"
-
-#: js/TimesheetGridPanel.js:263
-#: js/Models.js:135
-msgid "Created By"
-msgstr "Utworzone przez"
-
-#: js/TimesheetGridPanel.js:264
-msgid "Last Modified Time"
-msgstr "Czas ostatniej modyfikacji"
-
-#: js/TimesheetGridPanel.js:265
-msgid "Last Modified By"
-msgstr "Ostatnio zmieniony przez"
-
-#: js/TimesheetGridPanel.js:317
+#: js/TimesheetGridPanel.js:313
 msgid "timeframe"
 msgstr "przedział czasu"
 
-#: js/TimesheetGridPanel.js:341
+#: js/TimesheetGridPanel.js:337
 msgid "summary"
 msgstr "streszczenie"
 
-#: js/TimesheetGridPanel.js:344
+#: js/TimesheetGridPanel.js:340
 msgid "Total Timesheets"
 msgstr "Wszystkie karty godzin"
 
-#: js/TimesheetGridPanel.js:345
+#: js/TimesheetGridPanel.js:341
 msgid "Billable Timesheets"
 msgstr "Karty godz. do przeliczenia"
 
-#: js/TimesheetGridPanel.js:346
+#: js/TimesheetGridPanel.js:342
 msgid "Total Time"
 msgstr "Łączny czas"
 
-#: js/TimesheetGridPanel.js:347
+#: js/TimesheetGridPanel.js:343
 msgid "Time of Billable Timesheets"
 msgstr "Czas z kart godzin gotowych do przeliczenia"
 
-#: js/TimesheetGridPanel.js:418
+#: js/TimesheetGridPanel.js:414
 msgid "Detail"
 msgstr "Szczegół"
 
-#: js/TimesheetGridPanel.js:473
+#: js/TimesheetGridPanel.js:469
 #: js/TimeaccountEditDialog.js:247
 #: js/TimeaccountGridPanel.js:140
 msgid "Export"
 msgstr "Eksportuj"
 
-#: js/TimesheetGridPanel.js:482
+#: js/TimesheetGridPanel.js:478
 #: js/TimeaccountGridPanel.js:149
 msgid "Export as ODS"
 msgstr "Eksportuj jako ODS"
 
-#: js/TimesheetGridPanel.js:489
+#: js/TimesheetGridPanel.js:485
 #: js/TimeaccountGridPanel.js:156
 msgid "Export as CSV"
 msgstr "Eksportuj jako CSV"
+
+#: js/TimesheetGridPanel.js:492
+msgid "Export as ..."
+msgstr "Eksportuj jako ..."
 
 #: js/DurationSpinner.js:63
 #: js/DurationSpinner.js:73
@@ -430,6 +417,10 @@ msgstr[0] "Lista kont godzin"
 msgstr[1] "listy kont godzin"
 msgstr[2] "listy kont godzin"
 
+#: js/Models.js:135
+msgid "Created By"
+msgstr "Utworzone przez"
+
 #: Setup/setup.xml:4
 msgid "Timetracker"
 msgstr "Zliczanie czasu"
@@ -445,6 +436,15 @@ msgstr "Użyj niniejszej konfiguracji podczas eksportu kart godzin do formatu OD
 #: Preference.php:117
 msgid "default"
 msgstr "domyślnie"
+
+#~ msgid "Creation Time"
+#~ msgstr "Czas utworzenia"
+
+#~ msgid "Last Modified Time"
+#~ msgstr "Czas ostatniej modyfikacji"
+
+#~ msgid "Last Modified By"
+#~ msgstr "Ostatnio zmieniony przez"
 
 #~ msgid "The grant to view Timesheetsof other users"
 #~ msgstr "Uprawnienia do wyświetlania kart godzin innych użytkowników"
