@@ -25,7 +25,7 @@ abstract class Tinebase_Controller_Record_Abstract
    /**
      * application backend class
      *
-     * @var Tinebase_Backend_Interface
+     * @var Tinebase_Backend_Sql_Interface
      */
     protected $_backend;
 
