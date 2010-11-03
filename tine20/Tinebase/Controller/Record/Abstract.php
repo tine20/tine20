@@ -176,8 +176,6 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param int $_containerId
      * @return Tinebase_Record_Interface
      * @throws  Tinebase_Exception_AccessDenied
-     * 
-     * @todo    add get customfields ?
      */
     public function get($_id, $_containerId = NULL)
     {
