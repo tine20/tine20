@@ -307,6 +307,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             $this->_inspectBeforeCreate($_record);
             $record = $this->_backend->create($_record);
+            $this->_inspectAfterCreate($record, $_record);
             
             // set relations / tags / notes / alarms
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
@@ -345,12 +346,24 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * inspect creation of one record
+     * inspect creation of one record (before create)
      * 
      * @param   Tinebase_Record_Interface $_record
      * @return  void
      */
     protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    {
+        
+    }
+    
+    /**
+     * inspect creation of one record (after create)
+     * 
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
         
     }
@@ -398,6 +411,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             $this->_inspectBeforeUpdate($_record, $currentRecord);
             $record = $this->_backend->update($_record);
+            $this->_inspectAfterUpdate($record, $_record);
     
             // set relations / tags / notes / alarms
             if ($record->has('relations') && isset($_record->relations) && is_array($_record->relations)) {
@@ -431,13 +445,25 @@ abstract class Tinebase_Controller_Record_Abstract
     }    
     
     /**
-     * inspect update of one record
+     * inspect update of one record (before update)
      * 
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        
+    }
+    
+    /**
+     * inspect update of one record (after update)
+     * 
+     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $_record          the update record
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($_updatedRecord, $_record)
     {
         
     }

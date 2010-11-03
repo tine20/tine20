@@ -3,52 +3,17 @@
 
                     TINE 2.0 RELEASENOTES
                     
-Release:    Mialena (2010/03)
+Release:    _no codename yet_ (2010/11)
 Date:       $LastChangedDate$
 
 
 Contents
 --
-1. ODS export configs moved to import_export_definitions table
-2. Activate value search for customfields
-3. Email system accounts
+1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
 
 
 --------------------------------------------------------------
-1. ODS export configs moved to import_export_definitions table
+1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
 
-You need to transfer your custom definitions (formerly saved in config.inc.php) 
-into xml format and save them in the import_export_definitions table. You can look 
-at the default definitions to see how that is done.
-
-
---------------------------------------------------------------
-2. Activate value search for customfields
-
-To activate the value search function (and turn the custom field input fields into 
-comboboxes) you need to set the value_search field in the custom field config table 
-to 1.
-
-sql example:
- update tine20_customfield_config set value_search=1 where type='textfield';
-
---------------------------------------------------------------
-3. Email system accounts
- 
- If you want to use system email accounts (you define host/port/... and normal tine
- user credentials are used to connect to the mailserver) for all users you can force 
- the preference 'useSystemAccount' (has been renamed from 'userEmailAccount'). Users 
- with the 'MANAGE_ACCOUNTS' right can change some of the account values (signature, 
- name, ...). 
- 
- --------------------------------------------------------------
-3. Calendar FreeBusy Grant
-
-In previous versions, each user could define if he wants to publish his freebusy info
-for other users in the system, unless the admin forced so via preferences.
-This freebusy preference got removed and users can now define to grant freebusy informations
-to other users via standard calendar grants on calendar basis.
-
-A migration script automatically migrated old rights to new grants and new personal container 
-will grant freebusy to anyone per default. In a future version this default can be forced for
-all personal containers.
+- We have renamed the _inspectUpdate() /_inspectCreate() functions to _inspectBeforeUpdate() / _inspectBeforeCreate().
+- Added new functions _inspectAfterUpdate() / _inspectAfterCreate().
