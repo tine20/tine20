@@ -140,6 +140,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     editDialogClass: null,
     
+    /**
+     * @cfg {String} i18nEmptyText 
+     */
     i18nEmptyText: null,
     
     /**
@@ -199,6 +202,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     getViewRowClass: null,
     
     /**
+     * @cfg {Bool} hasFavoritesPanel 
+     */
+    hasFavoritesPanel: true,
+    
+    /**
+     * @cfg {Bool} hasQuickSearchFilterToolbarPlugin 
+     */
+    hasQuickSearchFilterToolbarPlugin: true,
+    
+    /**
      * @property storeLoadTransactionId 
      * @type String
      */
@@ -209,7 +222,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     stateful: true,
     
     /**
-     * extend standart initComponent chain
+     * extend standard initComponent chain
      * 
      * @private
      */
@@ -412,7 +425,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initialLoad: function() {
         var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName);
-        var favoritesPanel  = typeof this.app.getMainScreen().getWestPanel().getFavoritesPanel === 'function' ? this.app.getMainScreen().getWestPanel().getFavoritesPanel() : null;
+        var favoritesPanel  = typeof this.app.getMainScreen().getWestPanel().getFavoritesPanel === 'function' && this.hasFavoritesPanel 
+            ? this.app.getMainScreen().getWestPanel().getFavoritesPanel() 
+            : null;
         if (defaultFavorite && favoritesPanel) {
             favoritesPanel.selectFilter(defaultFavorite);
         } else {
@@ -749,7 +764,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @private
      */
     getFilterToolbar: function() {
-        this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
+        var plugins = [];
+        if (this.hasQuickSearchFilterToolbarPlugin) {
+            this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
+            plugins.push(this.quickSearchFilterToolbarPlugin);
+        }
         
         return new Tine.widgets.grid.FilterToolbar({
             app: this.app,
@@ -757,9 +776,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
             defaultFilter: 'query',
             filters: this.defaultFilters || [],
-            plugins: [
-                this.quickSearchFilterToolbarPlugin
-            ]
+            plugins: plugins
         });
     },
     
