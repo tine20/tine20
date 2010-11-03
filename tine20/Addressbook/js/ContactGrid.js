@@ -44,12 +44,16 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'n_fileas',
-        // drag n drop
         enableDragDrop: true,
         ddGroup: 'containerDDGroup'
     },
     copyEditAction: true,
     felamimail: false,
+    
+    /**
+     * @cfg {Bool} hasDetailsPanel 
+     */
+    hasDetailsPanel: true,
     
     /**
      * phoneMenu
@@ -72,7 +76,10 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         this.gridConfig.cm = this.getColumnModel();
         this.filterToolbar = this.getFilterToolbar();
-        this.detailsPanel = this.getDetailsPanel();
+
+        if (this.hasDetailsPanel) {
+            this.detailsPanel = this.getDetailsPanel();
+        }
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -233,7 +240,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.actions_import
         ]);
         
-        this.supr().initActions.call(this);
+        Tine.Addressbook.ContactGridPanel.superclass.initActions.call(this);
     },
     
     /**
