@@ -19,8 +19,12 @@ Ext.namespace('Tine.Felamimail');
  * <p>Message Compose Dialog</p>
  * <p>This dialog is for searching contacts in the addressbook and adding them to the recipient list in the email compose dialog.</p>
  * <p>
- * TODO         add recipient + contact grid with filter toolbar (saved filter chooser?) 
- * TODO         make it work
+ * TODO         add toolbar (add as to/cc/bcc)
+ * TODO         filter toolbar should have less width
+ * TODO         make doubleclick work
+ * TODO         add d&d
+ * TODO         make it work (save to pass data)
+ * TODO         add favorites? 
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -43,6 +47,7 @@ Ext.namespace('Tine.Felamimail');
     recordProxy: Tine.Felamimail.messageBackend,
     loadRecord: false,
     evalGrants: false,
+    mode: 'local',
     
     bodyStyle:'padding:0px',
     
@@ -61,18 +66,30 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     getFormItems: function() {
-
-//        this.recipientGrid = new Tine.Felamimail.RecipientGrid({
-//            record: this.record,
-//            i18n: this.app.i18n,
-//            hideLabel: true
-//        });
-        
         return {
             border: false,
             frame: true,
-            layout: 'hbox',
-            items: []
+            layout: {
+                align: 'stretch',
+                type: 'hbox'
+            },
+            items: [{
+                xtype: 'felamimailcontactgrid',
+                title: this.app.i18n._('Contacts'),
+                frame: true,
+                app: Tine.Tinebase.appMgr.get('Addressbook'),
+                flex: 3,
+                ref: '../contactgrid'
+            }, {
+                xtype: 'felamimailrecipientgrid',
+                id: 'felamimail-recipient-grid-picker',
+                record: this.record,
+                i18n: this.app.i18n,
+                title: this.app.i18n._('Recipients'),
+                flex: 2,
+                header: true,
+                ref: '../recipientgrid'
+            }]
         };
     }
 });
@@ -85,8 +102,8 @@ Ext.namespace('Tine.Felamimail');
  */
 Tine.Felamimail.RecipientPickerDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 800,
-        height: 400,
+        width: 1000,
+        height: 600,
         name: Tine.Felamimail.RecipientPickerDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.RecipientPickerDialog',
         contentPanelConstructorConfig: config
