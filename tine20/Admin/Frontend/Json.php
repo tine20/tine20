@@ -774,11 +774,11 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'dir'   => $dir
         ));
         
-        $tags = Admin_Controller_Tags::getInstance()->search($filter, $paging);
+        $tags = Admin_Controller_Tags::getInstance()->search_($filter, $paging);
         
         $result = array(
             'results'     => $this->_multipleRecordsToJson($tags),
-            'totalcount'  => Admin_Controller_Tags::getInstance()->searchCount($filter)
+            'totalcount'  => Admin_Controller_Tags::getInstance()->searchCount_($filter)
         );
         
         return $result;
