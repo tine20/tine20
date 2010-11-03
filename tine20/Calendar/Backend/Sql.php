@@ -210,7 +210,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $grantsFilter->appendFilterSql($select, $this);
         }
         $select->group($this->_tableName . '.' . 'id');
-
+        
+        $stmt = null; // solve PHP bug @see {http://bugs.php.net/bug.php?id=35793}
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
