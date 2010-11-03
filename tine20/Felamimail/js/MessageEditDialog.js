@@ -21,7 +21,6 @@ Ext.namespace('Tine.Felamimail');
  * you can choose from which account you want to send the mail.</p>
  * <p>
  * TODO         jump with one tab from subject to htmleditor textarea
- * TODO         fix htmleditor quoting (break quoting with ENTER)
  * TODO         make email note editable
  * </p>
  * 
@@ -122,8 +121,6 @@ Ext.namespace('Tine.Felamimail');
         
     /**
      * init buttons
-     * 
-     * TODO add save in drafts button
      */
     initButtons: function() {
         this.fbar = [];
