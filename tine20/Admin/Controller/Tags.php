@@ -28,6 +28,10 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
     {
         $this->_currentAccount = Tinebase_Core::getUser();        
         $this->_applicationName = 'Admin';
+        $this->_backend = Tinebase_Tags::getInstance();
+        $this->_doContainerACLChecks = FALSE;
+        $this->_omitModLog = TRUE;
+        $this->_modelName = 'Tinebase_Model_FullTag';
     }
 
     /**
@@ -68,6 +72,8 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      * @param boolean $_onlyIds
      * @param string $_action for right/acl check
      * @return Tinebase_Record_RecordSet|array
+     * 
+     * @todo remove this and use Tinebase_Controller_Record_Abstract::search()
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
@@ -80,6 +86,8 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action for right/acl check
      * @return int
+     * 
+     * @todo remove this and use Tinebase_Controller_Record_Abstract::searchCount()
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
@@ -94,51 +102,51 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     public function get($_tagId)
     {
-        $tag = Tinebase_Tags::getInstance()->getTagsById($_tagId);
-        $fullTag = new Tinebase_Model_FullTag($tag[0]->toArray(), true);
+        $fullTag = parent::get($_tagId);
+        
         $fullTag->rights =  Tinebase_Tags::getInstance()->getRights($_tagId);
         $fullTag->contexts = Tinebase_Tags::getInstance()->getContexts($_tagId);
         
         return $fullTag;
     }  
 
-   /**
-     * add new tag
-     *
-     * @param  Tinebase_Model_FullTag $_tag
-     * @return Tinebase_Model_FullTag
+    /**
+     * inspect creation of one record (before create)
+     * 
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
      */
-    public function create(Tinebase_Record_Interface $_tag)
+    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
     {
-        $this->checkRight('MANAGE_SHARED_TAGS');
-        
-        $_tag->type = Tinebase_Model_Tag::TYPE_SHARED;
-        $newTag = Tinebase_Tags::getInstance()->createTag(new Tinebase_Model_Tag($_tag->toArray(), true));
-
-        $this->_setTagRights($_tag, $newTag->getId());
-        Tinebase_Tags::getInstance()->setContexts($_tag->contexts, $newTag->getId());
-        
-        return $this->get($newTag->getId());
-    }  
-
-   /**
-     * update existing tag
-     *
-     * @param  Tinebase_Model_FullTag $_tag
-     * @return Tinebase_Model_FullTag
+        $_record->type = Tinebase_Model_Tag::TYPE_SHARED;
+    }
+    
+    /**
+     * inspect creation of one record (after create)
+     * 
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
      */
-    public function update(Tinebase_Record_Interface $_tag)
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
     {
-        $this->checkRight('MANAGE_SHARED_TAGS');
-        
-        Tinebase_Tags::getInstance()->updateTag(new Tinebase_Model_Tag($_tag->toArray(), true));
-        
-        $this->_setTagRights($_tag, $_tag->getId(), TRUE);
-        Tinebase_Tags::getInstance()->purgeContexts($_tag->getId());
-        Tinebase_Tags::getInstance()->setContexts($_tag->contexts, $_tag->getId());
-        
-        return $this->get($_tag->getId());
-    }  
+        $this->_setTagRights($_record, $_createdRecord->getId());
+        Tinebase_Tags::getInstance()->setContexts($_record->contexts, $_createdRecord->getId());
+    }
+
+    /**
+     * inspect update of one record (after update)
+     * 
+     * @param   Tinebase_Record_Interface $_updatedRecord   the just updated record
+     * @param   Tinebase_Record_Interface $_record          the update record
+     * @return  void
+     */
+    protected function _inspectAfterUpdate($_updatedRecord, $_record)
+    {
+        $this->_setTagRights($_record, $_record->getId(), TRUE);
+        Tinebase_Tags::getInstance()->purgeContexts($_record->getId());
+        Tinebase_Tags::getInstance()->setContexts($_record->contexts, $_record->getId());
+    }
     
     /**
      * set tag rights
@@ -150,25 +158,14 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     protected function _setTagRights(Tinebase_Model_FullTag $_tag, $_tagId, $_purgeRights = FALSE)
     {
-        if (count($_tag->rights) == 0) {
-            throw new Tinebase_Exception_InvalidArgument('Could not save tag without rights');
+        if (count($_tag->rights) == 0 || empty($_tag->rights->view_right)) {
+            throw new Tinebase_Exception_InvalidArgument('Could not save tag without (view-)rights');
         } 
         
-        // @todo tag needs at least 1 view_right to be usable
-        
-        
-//        $viewRightFound = FALSE;
-//        foreach ($_tag->rights as $right) {
-//            
-//        } 
-        
-        //&& $_tag->rights->getFirstRecord)
-        
-        $_tag->rights->tag_id = $_tagId;
-        
         if ($_purgeRights) {
-            Tinebase_Tags::getInstance()->purgeRights($_tag->getId());
+            Tinebase_Tags::getInstance()->purgeRights($_tagId);
         }
+        $_tag->rights->tag_id = $_tagId;
         Tinebase_Tags::getInstance()->setRights($_tag->rights);        
     }
     
@@ -177,11 +174,33 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      *
      * @param   array $_tagIds
      * @void
+     * 
+     * @todo replace this by parent::delete()
      */
     public function delete($_tagIds)
     {        
         $this->checkRight('MANAGE_SHARED_TAGS');
         
         Tinebase_Tags::getInstance()->deleteTags($_tagIds);
+    }
+    
+    /**
+     * check if user has the right to manage tags
+     * 
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        switch ($_action) {
+            case 'create':
+            case 'update':
+            case 'delete':
+                $this->checkRight('MANAGE_SHARED_TAGS');
+                break;
+            default;
+               break;
+        }
     }
 }
