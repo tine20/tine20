@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-10-31 09:37+0100\n"
+"PO-Revision-Date: 2010-11-03 19:58+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -60,20 +60,20 @@ msgstr "Uprawnienia do zarządzania własnym profilem (zaznaczone dane kontaktow
 msgid "Filter"
 msgstr "Filtr"
 
-#: Export/Spreadsheet/Ods.php:289
+#: Export/Spreadsheet/Ods.php:295
 msgid "Data"
 msgstr "Data"
 
-#: Export/Pdf.php:206
+#: Export/Pdf.php:223
 #: js/widgets/tags/TagsPanel.js:58
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: Export/Pdf.php:427
+#: Export/Pdf.php:444
 msgid "Created by"
 msgstr "Utworzono poprzez"
 
-#: Export/Pdf.php:481
+#: Export/Pdf.php:498
 msgid "Activities"
 msgstr "Aktywności"
 
@@ -266,7 +266,7 @@ msgid "Your username and/or your password are wrong!!!"
 msgstr "Twój login oraz / lub hasło są nieprawidłowe!!!"
 
 #: js/LoginPanel.js:307
-#: js/widgets/dialog/ExportDialog.js:137
+#: js/widgets/dialog/ExportDialog.js:131
 #: js/widgets/dialog/CredentialsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:273
 #: js/widgets/dialog/ImportDialog.js:194
@@ -275,7 +275,7 @@ msgid "Errors"
 msgstr "Błędy"
 
 #: js/LoginPanel.js:307
-#: js/widgets/dialog/ExportDialog.js:137
+#: js/widgets/dialog/ExportDialog.js:131
 #: js/widgets/dialog/CredentialsDialog.js:109
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/EditDialog.js:441
@@ -430,7 +430,7 @@ msgid "The grant to delete records in this container"
 msgstr "Uprawnienia do usuwania wierszy z kontenera"
 
 #: js/widgets/container/GrantsDialog.js:112
-#: js/widgets/dialog/ExportDialog.js:49
+#: js/widgets/dialog/ExportDialog.js:47
 #: js/Models.js:310
 msgid "Export"
 msgid_plural "Export"
@@ -848,23 +848,23 @@ msgstr "Wysyłanie zakończone niepowodzeniem"
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Przesłanie pliku było niemożliwe. Możliwe, że rozmiar pliku jest za duży. Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku:"
 
-#: js/widgets/grid/FileUploadGrid.js:113
-msgid "Add file"
-msgstr "Dodaj plik"
-
-#: js/widgets/grid/FileUploadGrid.js:125
+#: js/widgets/grid/FileUploadGrid.js:115
 msgid "Remove file"
 msgstr "Usuń plik"
 
-#: js/widgets/grid/FileUploadGrid.js:181
+#: js/widgets/grid/FileUploadGrid.js:147
+msgid "Add file"
+msgstr "Dodaj plik"
+
+#: js/widgets/grid/FileUploadGrid.js:186
 msgid "name"
 msgstr "nazwa"
 
-#: js/widgets/grid/FileUploadGrid.js:196
+#: js/widgets/grid/FileUploadGrid.js:201
 msgid "size"
 msgstr "rozmiar"
 
-#: js/widgets/grid/FileUploadGrid.js:203
+#: js/widgets/grid/FileUploadGrid.js:208
 msgid "type"
 msgstr "typ"
 
@@ -1007,13 +1007,17 @@ msgstr "Proszę o podjęcie decyzji:"
 msgid "You need to select an option!"
 msgstr "Należy zaznaczyć opcję."
 
-#: js/widgets/dialog/ExportDialog.js:77
+#: js/widgets/dialog/ExportDialog.js:75
 msgid "Export {0} {1}"
 msgstr "Eksport {0} {1}"
 
-#: js/widgets/dialog/ExportDialog.js:95
+#: js/widgets/dialog/ExportDialog.js:93
 msgid "Export definition"
 msgstr "Definicja eksportu"
+
+#: js/widgets/dialog/ExportDialog.js:102
+msgid "Select Export Definition ..."
+msgstr "Wybierz definicję eksportu ..."
 
 #: js/widgets/dialog/PreferencesDialog.js:126
 msgid "Admin Mode"
