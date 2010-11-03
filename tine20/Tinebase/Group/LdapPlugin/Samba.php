@@ -94,17 +94,29 @@ class Tinebase_Group_LdapPlugin_Samba
     protected function _group2ldap(Tinebase_Model_Group $_group, array &$_ldapData)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ENCRYPT ' . print_r($_ldapData, true));
+        
         if (isset($_ldapData['objectclass'])) {
             $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
         }
+        
         if(isset($_ldapData['gidnumber'])) {
             $gidNumber = $_ldapData['gidnumber'];
         } else {
             $gidNumber = $this->_getGidNumber($_group->getId());
         }
         
-        $_ldapData['sambasid']       = $this->_options[Tinebase_Group_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $gidNumber + 1001);
-        $_ldapData['sambagrouptype'] = 2;
+        // when we try to add a group, $_group has no id which leads to Tinebase_Exception_InvalidArgument in $this->_getGroupMetaData
+        try {        
+            $metaData = $this->_getGroupMetaData($_group);  
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            $metaData = array();
+        }
+        
+        if (!isset($metaData['sambasid'])) {
+            $_ldapData['sambasid']       = $this->_options[Tinebase_Group_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $gidNumber + 1001);
+            $_ldapData['sambagrouptype'] = 2;
+        }
+        
         $_ldapData['displayname']    = $_group->name;
     }
     
@@ -123,7 +135,7 @@ class Tinebase_Group_LdapPlugin_Samba
         $groups = $this->_ldap->search(
             $filter, 
             $this->_options['groupsDn'], 
-            $this->_groupSearchScope, 
+            $this->_options['groupSearchScope'], 
             array('gidnumber')
         );
         
@@ -139,21 +151,6 @@ class Tinebase_Group_LdapPlugin_Samba
         
         return $group['gidnumber'][0];
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     /**
      * get group by id
@@ -205,7 +202,7 @@ class Tinebase_Group_LdapPlugin_Samba
             $filter, 
             $this->_options['groupsDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
-            array('objectclass')
+            array('objectclass', 'sambasid')
         )->getFirst();
         
         return $result;
