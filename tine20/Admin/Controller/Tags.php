@@ -158,9 +158,9 @@ class Admin_Controller_Tags extends Tinebase_Controller_Record_Abstract
      */
     protected function _setTagRights(Tinebase_Model_FullTag $_tag, $_tagId, $_purgeRights = FALSE)
     {
-        if (count($_tag->rights) == 0 || empty($_tag->rights->view_right)) {
+        if (count($_tag->rights) == 0 || count($_tag->rights->view_right) == 0 || $_tag->rights->view_right[0] !== TRUE) {
             throw new Tinebase_Exception_InvalidArgument('Could not save tag without (view-)rights');
-        } 
+        }
         
         if ($_purgeRights) {
             Tinebase_Tags::getInstance()->purgeRights($_tagId);
