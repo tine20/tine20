@@ -319,3 +319,5 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     }
 });
+
+Ext.reg('felamimailrecipientgrid', Tine.Felamimail.RecipientGrid);
