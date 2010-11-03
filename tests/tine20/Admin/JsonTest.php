@@ -576,14 +576,34 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to save tag
+     * try to save tag and update without rights
      */
-    public function testSaveTag()
+    public function testSaveTagAndUpdateWithoutRights()
     {
         $tagData = $this->_getTagData();
         $this->objects['tag'] = $this->_backend->saveTag($tagData);
         $this->assertEquals($tagData['name'], $this->objects['tag']['name']);
-        //print_r($this->objects['tag']);
+        
+        $this->objects['tag']['rights'] = array();
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->objects['tag'] = $this->_backend->saveTag($this->objects['tag']);
+    }
+
+    /**
+     * try to save tag without view right
+     */
+    public function testSaveTagWithoutViewRight()
+    {
+        $tagData = $this->_getTagData();
+        $tagData['rights'] = array(array(
+            'account_id' => 0,
+            'account_type' => 'anyone',
+            'account_name' => 'Anyone',
+            'view_right' => false,
+            'use_right' => false
+        ));
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->objects['tag'] = $this->_backend->saveTag($tagData);
     }
     
     /**
