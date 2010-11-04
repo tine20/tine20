@@ -45,10 +45,6 @@ abstract class Zend_Date_DateObject {
     // turn off DST correction if UTC or GMT
     protected $_dst         = true;
 
-    protected $_dateTimeZone = null;
-    protected static $_dateTimeZones = array();
-    protected static $_dateTimeStart = null;
-    
     /**
      * Table of Monthdays
      */
