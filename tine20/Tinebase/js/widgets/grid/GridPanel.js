@@ -765,7 +765,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     getFilterToolbar: function() {
         var plugins = [];
-        if (this.hasQuickSearchFilterToolbarPlugin) {
+        if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
             this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
             plugins.push(this.quickSearchFilterToolbarPlugin);
         }
