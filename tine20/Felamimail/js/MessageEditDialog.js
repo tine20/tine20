@@ -110,16 +110,6 @@ Ext.namespace('Tine.Felamimail');
     updateToolbars: Ext.emptyFn,
     
     /**
-     * @private
-     */
-//    initComponent: function() {
-//        Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
-//        
-//        this.on('afterlayout', this.onAfterLayout, this);
-//        //this.on('resize', this.onResize, this);
-//    },
-        
-    /**
      * init buttons
      */
     initButtons: function() {
@@ -407,56 +397,18 @@ Ext.namespace('Tine.Felamimail');
         }
     },
     
-//    onAfterLayout: function (ct) {
-//        console.log('after layout');
-//        ct.suspendEvents();
-//        this.resizeInputFields();
-//        if (this.recipientGrid) {
-//            this.recipientGrid.setWidth(600);
-//        }
-//        //this.doLayout();
-//        ct.resumeEvents();
-//        ct.ownerCt.layout.layout();
-//    },
-    
-//    onResize: function() {
-//        console.log('resizing');
-//        this.suspendEvents();
-//        this.resizeInputFields();
-//        this.resumeEvents();
-//        //this.doLayout();
-//        
-//        Tine.Felamimail.MessageEditDialog.superclass.onResize.call(this, arguments);
-//    },
-    
-    resizeInputFields: function() {
-        // TODO get margin from recipient grid
-        // TODO add margin to account combo + subject textfield
+    /**
+     * fix input fields layout
+     */
+    fixLayout: function() {
         
-        //console.log(this.subjectField);
-        //console.log(this.subjectField.getEl());
-        
-        if (this.subjectField.getEl()) {
-            //this.subjectField.getEl().parent().applyStyles('margin-right: 17px; padding-left: 3px;')
-            //this.subjectField.setWidth(this.subjectField.getWidth()-17);
-            //this.subjectField.setWidth(200);
-            //console.log(this.subjectField.getEl().getWidth());
-            //console.log(this.recipientGrid.getWidth());
-            
-            this.subjectField.getEl().setWidth(this.subjectField.getEl().getWidth()-17);
-            //this.subjectField.getEl().applyStyles('margin-right: 17px; padding-left: 3px; width: ')
-            //this.subjectField.getEl().applyStyles('width: ' + this.subjectField.getEl().getWidth()-17 + 'px;')
-            //this.subjectField.getEl().setWidth(400);
-            //this.recipientGrid.getEl().setWidth(this.subjectField.getWidth());
+        if (! this.subjectField.rendered || ! this.accountCombo.rendered || ! this.recipientGrid.rendered) {
+            return;
         }
         
-        /*
-        if (this.accountCombo.getEl()) {
-            //this.accountCombo.getEl().setWidth(this.accountCombo.getEl().getWidth()-17);
-            this.accountCombo.setWidth(this.accountCombo.getWidth()-17);
-            this.accountCombo.getEl().applyStyles('padding-right: 17px; padding-left: 3px;')
-        }
-        */
+        var scrollWidth = this.recipientGrid.getView().getScrollOffset();
+        this.subjectField.setWidth(this.subjectField.getWidth()-scrollWidth);
+        this.accountCombo.setWidth(this.accountCombo.getWidth()-scrollWidth);
     },
     
     /**
@@ -696,6 +648,10 @@ Ext.namespace('Tine.Felamimail');
                     align: 'stretch',  // Child items are stretched to full width
                     type: 'vbox'
                 },
+                listeners: {
+                    'afterlayout': this.fixLayout,
+                    scope: this
+                },
                 items: [{
                     xtype:'combo',
                     name: 'account_id',
@@ -728,12 +684,6 @@ Ext.namespace('Tine.Felamimail');
                                     this.app.i18n._('Compose email:') + ' ' 
                                     + field.getValue()
                                 );
-                            }
-                        },
-                        'keydown': function(field, e) {
-                            if (e.getKey() == e.TAB) {
-                                // TODO this should ALWAYS focus the textarea of the html editor
-                                this.htmlEditor.focus();
                             }
                         }
                     }
