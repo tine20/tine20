@@ -19,9 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Recipient Grid Panel</p>
  * <p>grid panel for to/cc/bcc recipients</p>
  * <pre>
- * TODO         add name to email address for display
- * TODO         disable horizontal scrollbar
- * TODO         use 'standard' template for adb search combo with image and both email addresses
+ * TODO         make drop zone work
  * </pre>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -38,7 +36,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * @private
      */
-    id: 'felamimail-recipient-grid',
+    cls: 'felamimail-recipient-grid',
     
     /**
      * the message record
@@ -145,6 +143,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     initColumnModel: function() {
+        
+        this.searchCombo = new Tine.Felamimail.ContactSearchCombo({
+        });
+        
         this.cm = new Ext.grid.ColumnModel([
             {
                 resizable: true,
@@ -192,10 +194,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 id: 'address',
                 dataIndex: 'address',
                 header: 'address',
-                editor: new Tine.Felamimail.ContactSearchCombo({
-                    // removed that again because we want to see the recipient name
-                    //vtype: 'email'
-                })
+                editor: this.searchCombo
             }
         ]);
     },
@@ -229,6 +228,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
         
         this.setFixedHeight(true);
+        
+        this.relayEvents(this.searchCombo, ['specialkey', 'blur' ]);
     },
     
     /**
@@ -284,6 +285,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }
             this.setFixedHeight(false);
             this.ownerCt.doLayout();
+            this.searchCombo.focus.defer(50, this.searchCombo);
         }
     },    
     

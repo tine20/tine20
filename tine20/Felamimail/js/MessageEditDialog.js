@@ -296,6 +296,41 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
+     * after render
+     */
+    afterRender: function() {
+        Tine.Felamimail.MessageEditDialog.superclass.afterRender.apply(this, arguments);
+        
+        this.getEl().on(Ext.EventManager.useKeydown ? 'keydown' : 'keypress', this.onKeyPress, this);
+        this.recipientGrid.on('specialkey', function(field, e) {
+            this.onKeyPress(e);
+        }, this);
+        
+        this.recipientGrid.on('blur', function(editor) {
+            // do not let the blur event reach the editor grid if we want the subjectField to have focus
+            if (this.subjectField.hasFocus) {
+                return false;
+            }
+        }, this);
+    },
+    
+    /**
+     * on key press
+     * @param {} e
+     * @param {} t
+     * @param {} o
+     */
+    onKeyPress: function(e, t, o) {
+        if (e.getKey() == e.TAB && ! e.shiftKey) {
+            if (e.getTarget('input[name=subject]')) {
+                this.htmlEditor.focus.defer(50, this.htmlEditor);
+            } else if (e.getTarget('input[type=text]')) {
+                this.subjectField.focus.defer(50, this.subjectField);
+            }
+        }
+    },
+    
+    /**
      * returns message passed with config
      * 
      * @return {Tine.Felamimail.Model.Message}
