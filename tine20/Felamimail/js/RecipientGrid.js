@@ -92,6 +92,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     deferredRender: false,
     
+    enableDrop: true,
+    ddGroup: 'recipientDDGroup',
+
     /**
      * @private
      */
@@ -118,6 +121,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
             
         this.on('afteredit', this.onAfterEdit, this);
+        this.on('beforenodedrop', this.onBeforeNodeDrop, this);
     },
     
     /**
@@ -267,6 +271,48 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }, this);
     },
+    
+    /**
+     * record got dropped on container node
+     * 
+     * @param {Object} dropEvent
+     * @private
+     */
+    onBeforeNodeDrop: function(dropEvent) {
+        
+        Tine.log.debug(dropEvent);
+        
+//        var targetContainerId = dropEvent.target.id;
+//        
+//        // get selection filter from grid
+//        var sm = this.app.getMainScreen().getCenterPanel().getGrid().getSelectionModel();
+//        if (sm.getCount() === 0) {
+//            return false;
+//        }
+//        var filter = sm.getSelectionFilter();
+//        
+//        // move messages to folder
+//        Ext.Ajax.request({
+//            params: {
+//                method: 'Tinebase_Container.moveRecordsToContainer',
+//                targetContainerId: targetContainerId,
+//                filterData: filter,
+//                model: this.recordClass.getMeta('modelName'),
+//                applicationName: this.recordClass.getMeta('appName')
+//            },
+//            scope: this,
+//            success: function(result, request){
+//                // update grid
+//                this.filterPlugin.onFilterChange();
+//            }
+//        });
+//        
+//        // prevent repair actions
+//        dropEvent.dropStatus = true;
+
+        return true;
+    },
+    
     
     /**
      * after edit
