@@ -20,6 +20,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>This dialog is for searching contacts in the addressbook and adding them to the recipient list in the email compose dialog.</p>
  * <p>
  * TODO         add toolbar (add as to/cc/bcc)
+ * TODO         update context menu
  * TODO         filter toolbar should have less width
  * TODO         make doubleclick work
  * TODO         add d&d
@@ -82,7 +83,6 @@ Ext.namespace('Tine.Felamimail');
                 ref: '../contactgrid'
             }, {
                 xtype: 'felamimailrecipientgrid',
-                id: 'felamimail-recipient-grid-picker',
                 record: this.record,
                 i18n: this.app.i18n,
                 title: this.app.i18n._('Recipients'),
