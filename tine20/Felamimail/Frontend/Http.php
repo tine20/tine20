@@ -96,14 +96,15 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             
             if ($part instanceof Zend_Mime_Part) {
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                    . ' ' . $part->filename 
-                    . ' ' . $part->type 
+        		$filename = (! empty($part->filename)) ? $part->filename : $_messageId . '.eml';
+                $contentType = ($_partId === NULL) ? Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 : $part->type;
+
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
+                    . ' filename: ' . $filename 
+                    . ' content type' . $contentType 
+                    //. print_r($part, TRUE)
                     //. ' ' . stream_get_contents($part->getDecodedStream())
                 );
-        
-                $filename = (! empty($part->filename)) ? $part->filename : $_messageId . '.eml';
-                $contentType = ($_partId === NULL) ? Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 : $part->type;
                 
                 header("Pragma: public");
                 header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
