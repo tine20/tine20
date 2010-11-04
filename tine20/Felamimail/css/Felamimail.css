@@ -386,16 +386,15 @@
 /***** email composing dialog ******/
 
 /* disable grid headers */
-#felamimail-recipient-grid .x-grid3-hd-row, #felamimail-attachment-grid .x-grid3-hd-row {
+.felamimail-recipient-grid .x-grid3-hd-row, #felamimail-attachment-grid .x-grid3-hd-row {
     display:none;
 }
 
-#felamimail-recipient-grid .x-grid3 {
+.felamimail-recipient-grid .x-grid3 {
     background-color: #DFE8F6;
-    margin-bottom: 3px;
 }
 	
-#felamimail-recipient-grid tr {
+.felamimail-recipient-grid tr {
     border-color: #DFE8F6;  
 }
 
@@ -411,11 +410,11 @@
     padding-left: 19px;
 }
 
-#felamimail-recipient-grid .x-grid3-td-type {
+.felamimail-recipient-grid .x-grid3-td-type {
     background-color: #DFE8F6;
 }
 
-#felamimail-recipient-grid .x-grid3-td-address {
+.felamimail-recipient-grid .x-grid3-td-address {
     background-color: white;
 }
 
