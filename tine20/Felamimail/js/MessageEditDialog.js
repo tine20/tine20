@@ -498,9 +498,8 @@ Ext.namespace('Tine.Felamimail');
             listeners: {
                 scope: this,
                 'update': function(record) {
-                    this.record = Ext.isString(record) ? new this.recordClass(Ext.decode(record)) : record;
-                    // TODO update recipient grid
-                    Tine.log.debug(this.record);
+                    var messageWithRecipients = Ext.isString(record) ? new this.recordClass(Ext.decode(record)) : record;
+                    this.recipientGrid.syncRecipientsToStore(['to', 'cc', 'bcc'], messageWithRecipients, true);
                 }
             }
         });
