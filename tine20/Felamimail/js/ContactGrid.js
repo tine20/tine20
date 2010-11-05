@@ -49,6 +49,10 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      */
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Addressbook');
+        this.filterToolbar = this.getFilterToolbar({
+            filterFieldWidth: 100,
+            filterValueWidth: 100
+        });
         
         Tine.Felamimail.ContactGridPanel.superclass.initComponent.call(this);
     }
