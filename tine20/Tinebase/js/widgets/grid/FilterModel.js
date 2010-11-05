@@ -83,6 +83,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      * @cfg {String} valueField (used by combo valueType)
      */
     valueField: null,
+    filterValueWidth: 200,
     
     /**
      * @private
@@ -285,7 +286,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      */
     valueRenderer: function(filter, el) {
         var value;
-        var fieldWidth = 200;
+        var fieldWidth = this.filterValueWidth;
         
         switch (this.valueType) {
             case 'date':
@@ -469,7 +470,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         filter.withinCombo = new Ext.form.ComboBox({
             hidden: valueType != 'withinCombo',
             filter: filter,
-            width: 200,
+            width: this.filterValueWidth,
             value: comboValue,
             renderTo: el,
             mode: 'local',

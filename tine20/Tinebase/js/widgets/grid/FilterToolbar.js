@@ -67,6 +67,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      */
     showSearchButton: true,
     
+    filterFieldWidth: 240,
+    filterValueWidth: 200,
+    
     /**
      * @cfg {String} row prefix (defaults to _('Show'))
      */
@@ -106,9 +109,9 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
                     '<td class="tw-ftb-frow-pbutton"></td>',
                     '<td class="tw-ftb-frow-mbutton"></td>',
                     '<td class="tw-ftb-frow-prefix">{prefix}</td>',
-                    '<td class="tw-ftb-frow-field" width="240px">{field}</td>',
+                    '<td class="tw-ftb-frow-field" width="' + this.filterFieldWidth + 'px">{field}</td>',
                     '<td class="tw-ftb-frow-operator" width="90px" >{operator}</td>',
-                    '<td class="tw-ftb-frow-value" width="200px">{value}</td>',
+                    '<td class="tw-ftb-frow-value" width="' + this.filterValueWidth + 'px">{value}</td>',
                     '<td class="tw-ftb-frow-searchbutton"></td>',
                     //'<td class="tw-ftb-frow-deleteallfilters"></td>',
                     //'<td class="tw-ftb-frow-savefilterbutton"></td>',
@@ -239,7 +242,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         // field
         filter.formFields.field = new Ext.form.ComboBox({
             filter: filter,
-            width: 240,
+            width: this.filterFieldWidth,
             id: 'tw-ftb-frow-fieldcombo-' + filter.id,
             mode: 'local',
             lazyInit: false,
@@ -679,6 +682,7 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         
         for (var i=0; i<filters.length; i++) {
             filterData = filters[i];
+            filterData.filterValueWidth = this.filterValueWidth;
             
             if (this.filterModelMap[filterData.field]) {
                 filter = new this.record(filterData);
