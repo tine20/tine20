@@ -763,21 +763,22 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * returns filter toolbar
      * @private
      */
-    getFilterToolbar: function() {
+    getFilterToolbar: function(config) {
+        config = config || {};
         var plugins = [];
         if (! Ext.isDefined(this.hasQuickSearchFilterToolbarPlugin) || this.hasQuickSearchFilterToolbarPlugin) {
             this.quickSearchFilterToolbarPlugin = new Tine.widgets.grid.FilterToolbarQuickFilterPlugin();
             plugins.push(this.quickSearchFilterToolbarPlugin);
         }
         
-        return new Tine.widgets.grid.FilterToolbar({
+        return new Tine.widgets.grid.FilterToolbar(Ext.apply(config, {
             app: this.app,
             recordClass: this.recordClass,
             filterModels: this.recordClass.getFilterModel().concat(this.getCustomfieldFilters()),
             defaultFilter: 'query',
             filters: this.defaultFilters || [],
             plugins: plugins
-        });
+        }));
     },
     
     /**
