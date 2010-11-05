@@ -21,10 +21,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>
  * TODO         add toolbar (add as to/cc/bcc)
  * TODO         update context menu
- * TODO         filter toolbar should have less width
  * TODO         make doubleclick work
- * TODO         add d&d
- * TODO         make it work (save to pass data)
  * TODO         add favorites? 
  * </p>
  * 
