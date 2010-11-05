@@ -74,13 +74,7 @@ Tine.Felamimail.ContactSearchCombo = Ext.extend(Tine.Addressbook.SearchCombo, {
      * @private
      */
     onSelect: function(record) {
-        var value = record.get('n_fileas') + ' <';
-        if (record.get('email') != '') {
-            value += record.get('email');
-        } else {
-            value += record.get('email_home');
-        }
-        value += '>';
+        var value = Tine.Felamimail.getEmailStringFromContact(record);
         this.setValue(value);
         
         this.collapse();

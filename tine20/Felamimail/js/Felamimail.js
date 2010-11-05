@@ -455,6 +455,24 @@ Tine.Felamimail.getSignature = function(id) {
 };
 
 /**
+ * get email string (n_fileas <email@host.tld>) from contact
+ * 
+ * @param {Tine.Addressbook.Model.Contact} contact
+ * @return {String}
+ */
+Tine.Felamimail.getEmailStringFromContact = function(contact) {
+    var result = contact.get('n_fileas') + ' <';
+    if (contact.get('email') != '') {
+        result += contact.get('email');
+    } else {
+        result += contact.get('email_home');
+    }
+    result += '>';
+    
+    return result;
+};
+
+/**
  * generic exception handler for felamimail (used by folder and message backends and updateMessageCache)
  * 
  * TODO move all 902 exception handling here!
