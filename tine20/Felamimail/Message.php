@@ -44,16 +44,21 @@ class Felamimail_Message extends Zend_Mail_Message
      */
     public static function parseAdresslist($_addressList)
     {
-    	// create stream to be used with fgetcsv
-        $stream = fopen("php://temp", 'r+');
-        fputs($stream, $_addressList);
-        rewind($stream);
-        
-        // alternative solution to create stream; yet untested
-        #$stream = fopen('data://text/plain;base64,' . base64_encode($_addressList), 'r');
-        
-        // split addresses
-        $addresses = fgetcsv($stream);
+        if (strpos($_addressList, ',') !== FALSE && substr_count($_addressList, '@') == 1) {
+            // we have a comma in the name -> do not split string!
+            $addresses = array($_addressList);
+        } else {
+        	// create stream to be used with fgetcsv
+            $stream = fopen("php://temp", 'r+');
+            fputs($stream, $_addressList);
+            rewind($stream);
+            
+            // alternative solution to create stream; yet untested
+            #$stream = fopen('data://text/plain;base64,' . base64_encode($_addressList), 'r');
+            
+            // split addresses
+            $addresses = fgetcsv($stream);
+        }
         
         foreach ($addresses as $key => $address) {
             if (preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
