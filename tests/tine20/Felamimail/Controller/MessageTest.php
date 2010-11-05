@@ -124,7 +124,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     /**
      * test search with cache
      * - test text_plain.eml message
-     *
+     * - test from header
      */
     public function testSearchWithCache()
     {
@@ -148,18 +148,20 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         // check result
         $firstMessage = $result->getFirstRecord();
+        $this->_createdMessages->addRecord($firstMessage);
+
         $this->assertGreaterThan(0, count($result));
         $this->assertEquals($folder->getId(), $firstMessage->folder_id);
         $this->assertEquals("Re: [gentoo-dev] `paludis --info' is not like `emerge --info'", $firstMessage->subject);
+        $this->assertEquals('Pipping, Sebastian (Luxembourg)', $firstMessage->from_name);
+        $this->assertEquals('webmaster@changchung.org', $firstMessage->from_email);
+        $this->assertEquals(array('gentoo-dev@lists.gentoo.org', 'webmaster@changchung.org') , $firstMessage->to);
         
         // check cache entries
         $cacheBackend = new Felamimail_Backend_Cache_Sql_Message();
         $cachedMessage = $cacheBackend->get($firstMessage->getId());
         $this->assertEquals($folder->getId(), $cachedMessage->folder_id);
         $this->assertEquals(Zend_Date::now()->toString('YYYY-MM-dd'), $cachedMessage->timestamp->toString('YYYY-MM-dd'));
-        
-        // delete message
-        $this->_controller->delete($firstMessage->getId());
         
         // clear cache
         $this->_cache->clear($folder->getId());

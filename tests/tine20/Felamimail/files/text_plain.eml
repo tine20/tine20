@@ -19,7 +19,7 @@ Received: from [85.179.2.185] (helo=[192.168.0.3])
 	Mon, 13 Apr 2009 14:21:37 +0200
 Message-ID: <49E32E51.60204@hartwork.org>
 Date: Mon, 13 Apr 2009 14:21:37 +0200
-From: Sebastian Pipping <webmaster@hartwork.org>
+From: Pipping, Sebastian (Luxembourg) <webmaster@changchung.org>
 User-Agent: Thunderbird 2.0.0.19 (X11/20090216)
 Precedence: bulk
 List-Post: <mailto:gentoo-dev@lists.gentoo.org>
@@ -30,7 +30,7 @@ List-Id: Gentoo Linux mail <gentoo-dev.gentoo.org>
 X-BeenThere: gentoo-dev@lists.gentoo.org
 X-Tine20TestMessage: text/plain
 Reply-to: gentoo-dev@lists.gentoo.org
-To: gentoo-dev@lists.gentoo.org
+To: gentoo-dev@lists.gentoo.org, webmaster@changchung.org
 Subject: Re: [gentoo-dev] `paludis --info' is not like `emerge --info'
 References: <20090218232212.5452b86d@epia.jer-c2.orkz.net>
 	<20090218225506.14b91815@snowcone> <20090404151730.55b89242@gentoo.org>
