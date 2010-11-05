@@ -19,7 +19,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Recipient Grid Panel</p>
  * <p>grid panel for to/cc/bcc recipients</p>
  * <pre>
- * TODO         make drop zone work
  * </pre>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -106,7 +105,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.sm = new Ext.grid.RowSelectionModel();
         
         Tine.Felamimail.RecipientGrid.superclass.initComponent.call(this);
-
+        
         this.on('rowcontextmenu', function(grid, row, e) {
             e.stopEvent();
             var selModel = grid.getSelectionModel();
@@ -121,7 +120,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }, this);
             
         this.on('afteredit', this.onAfterEdit, this);
-        this.on('beforenodedrop', this.onBeforeNodeDrop, this);
     },
     
     /**
@@ -234,6 +232,37 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.setFixedHeight(true);
         
         this.relayEvents(this.searchCombo, ['specialkey', 'blur' ]);
+        
+        this.initDropTarget();
+    },
+    
+    /**
+     * init drop target with notifyDrop fn 
+     * - adds new records from drag data to the recipient store
+     */
+    initDropTarget: function() {
+        var dropTargetEl = this.getView().scroller.dom;
+        var dropTarget = new Ext.dd.DropTarget(dropTargetEl, {
+            ddGroup    : 'recipientDDGroup',
+            notifyDrop : function(ddSource, e, data){
+                    var records = ddSource.dragData.selections,
+                        email,
+                        added = false,
+                        emptyRecord = this.grid.store.getAt(this.grid.store.findExact('address', '')),
+                        type = (emptyRecord) ? emptyRecord.get('type') : 'to';
+                        
+                    Ext.each(records, function(record) {
+                        email = (record.get('email') != '') ? record.get('email') : record.get('email_home');
+                        if (email && email != '') {
+                            this.store.add(new Ext.data.Record({type: type, 'address': email}));
+                            added = true;
+                        }
+                    }, this.grid);
+                    
+                    return true;
+            },
+            grid: this
+        });        
     },
     
     /**
@@ -271,48 +300,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         }, this);
     },
-    
-    /**
-     * record got dropped on container node
-     * 
-     * @param {Object} dropEvent
-     * @private
-     */
-    onBeforeNodeDrop: function(dropEvent) {
-        
-        Tine.log.debug(dropEvent);
-        
-//        var targetContainerId = dropEvent.target.id;
-//        
-//        // get selection filter from grid
-//        var sm = this.app.getMainScreen().getCenterPanel().getGrid().getSelectionModel();
-//        if (sm.getCount() === 0) {
-//            return false;
-//        }
-//        var filter = sm.getSelectionFilter();
-//        
-//        // move messages to folder
-//        Ext.Ajax.request({
-//            params: {
-//                method: 'Tinebase_Container.moveRecordsToContainer',
-//                targetContainerId: targetContainerId,
-//                filterData: filter,
-//                model: this.recordClass.getMeta('modelName'),
-//                applicationName: this.recordClass.getMeta('appName')
-//            },
-//            scope: this,
-//            success: function(result, request){
-//                // update grid
-//                this.filterPlugin.onFilterChange();
-//            }
-//        });
-//        
-//        // prevent repair actions
-//        dropEvent.dropStatus = true;
-
-        return true;
-    },
-    
     
     /**
      * after edit
