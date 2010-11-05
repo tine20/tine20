@@ -246,15 +246,15 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             ddGroup    : 'recipientDDGroup',
             notifyDrop : function(ddSource, e, data){
                     var records = ddSource.dragData.selections,
-                        email,
+                        hasEmail = false,
                         added = false,
                         emptyRecord = this.grid.store.getAt(this.grid.store.findExact('address', '')),
                         type = (emptyRecord) ? emptyRecord.get('type') : 'to';
                         
                     Ext.each(records, function(record) {
-                        email = (record.get('email') != '') ? record.get('email') : record.get('email_home');
-                        if (email && email != '') {
-                            this.store.add(new Ext.data.Record({type: type, 'address': email}));
+                        hasEmail = ((record.get('email') !== null && record.get('email') !== '') || (record.get('email_home') !== null && record.get('email_home') !== ''));
+                        if (hasEmail) {
+                            this.store.add(new Ext.data.Record({type: type, 'address': Tine.Felamimail.getEmailStringFromContact(record)}));
                             added = true;
                         }
                     }, this.grid);
