@@ -42,8 +42,8 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
      */
     ownField: null,
     
-    
     isForeignFilter: true,
+    filterValueWidth: 200,
     
     /**
      * @private
@@ -92,7 +92,7 @@ Tine.widgets.grid.ForeignRecordFilter = Ext.extend(Tine.widgets.grid.FilterModel
             recordClass: this.foreignRecordClass,
             filter: filter,
             blurOnSelect: true,
-            width: 200,
+            width: this.filterValueWidth,
             listWidth: 500,
             listAlign: 'tr-br',
             id: 'tw-ftb-frow-valuefield-' + filter.id,

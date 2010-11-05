@@ -502,7 +502,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         filter.datePicker = new Ext.form.DateField({
             hidden: valueType != 'datePicker',
             filter: filter,
-            width: 200,
+            width: this.filterValueWidth,
             value: pickerValue,
             renderTo: el,
             listeners: {
@@ -519,7 +519,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
         filter.numberfield = new Ext.form.NumberField({
             hidden: valueType != 'numberfield',
             filter: filter,
-            width: 200,
+            width: this.filterValueWidth,
             value: pickerValue,
             renderTo: el,
             minValue: 1,
