@@ -132,12 +132,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         });
         
         // init recipients (on reply/reply to all)
-        this._addRecipients(this.record.get('to'), 'to');
-        this._addRecipients(this.record.get('cc'), 'cc');
+        this.syncRecipientsToStore(['to', 'cc']);
         
         this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
         
         this.store.on('update', this.onUpdateStore, this);
+        this.store.on('add', this.onAddStore, this);
     },
     
     /**
@@ -281,8 +281,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     
     /**
      * store has been updated
-     * -> update record to/cc/bcc (if edit)
-     * -> add additional row (if new address has been added)
      * 
      * @param {} store
      * @param {} record
@@ -290,15 +288,50 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @private
      */
     onUpdateStore: function(store, record, operation) {
+        this.syncRecipientsToRecord();
+    },
+    
+    /**
+     * on add event of store
+     * 
+     * @param {} store
+     * @param {} records
+     * @param {} index
+     */
+    onAddStore: function(store, records, index) {
+        this.syncRecipientsToRecord();
+    },
+    
+    /**
+     * sync grid with record
+     * -> update record to/cc/bcc
+     */
+    syncRecipientsToRecord: function() {
         // update record recipient fields
         this.record.data.to = [];
         this.record.data.cc = [];
         this.record.data.bcc = [];
-        store.each(function(recipient){
+        this.store.each(function(recipient){
             if (recipient.data.address != '') {
                 this.record.data[recipient.data.type].push(recipient.data.address);
             }
         }, this);
+    },
+
+    /**
+     * sync grid with record
+     * -> update store
+     */
+    syncRecipientsToStore: function(fields, record, setHeight) {
+        record = record || this.record;
+        
+        Ext.each(fields, function(field) {
+            this._addRecipients(record.get(field), field);
+        }, this);
+        
+        if (setHeight && setHeight === true) {
+            this.setFixedHeight(true);
+        }
     },
     
     /**
