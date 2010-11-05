@@ -75,7 +75,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             this.felamimail = (Tine.Felamimail.registry.get('preferences').get('useInAdb') == 1);
         }
         this.gridConfig.cm = this.getColumnModel();
-        this.filterToolbar = this.getFilterToolbar();
+        this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
 
         if (this.hasDetailsPanel) {
             this.detailsPanel = this.getDetailsPanel();
