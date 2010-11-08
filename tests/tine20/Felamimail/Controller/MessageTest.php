@@ -161,7 +161,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cacheBackend = new Felamimail_Backend_Cache_Sql_Message();
         $cachedMessage = $cacheBackend->get($firstMessage->getId());
         $this->assertEquals($folder->getId(), $cachedMessage->folder_id);
-        $this->assertEquals(Tinebase_DateTime::now()->toString('Y-m-d'), $cachedMessage->timestamp->toString('YYYY-MM-dd'));
+        $this->assertEquals(Tinebase_DateTime::now()->format('Y-m-d'), $cachedMessage->timestamp->format('Y-m-d'));
         
         // clear cache
         $this->_cache->clear($folder->getId());
