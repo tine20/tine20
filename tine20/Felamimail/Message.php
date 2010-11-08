@@ -110,8 +110,12 @@ class Felamimail_Message extends Zend_Mail_Message
     public static function convertDate($_dateString)
     {
         try {
-            $date = new Tinebase_DateTime($_dateString);
-            $date->setTimezone('UTC');
+            if (! $_dateString) {
+                $date = new Zend_Date(0, Zend_Date::TIMESTAMP);
+            } else {
+                $date = new Tinebase_DateTime($_dateString);
+                $date->setTimezone('UTC');
+            }
 
         } catch (Zend_Date_Exception $zde) {
             $date = new Zend_Date(0, Zend_Date::TIMESTAMP);
