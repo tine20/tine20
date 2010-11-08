@@ -28,7 +28,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-        
+
     }
     
     public function testSetFromString()
