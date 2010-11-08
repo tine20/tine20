@@ -41,7 +41,7 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
         }
         $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
         
-        Tinebase_Core::getDb()->query("FLUSH TABLES;");
+        Tinebase_Core::getDb()->query("RESET QUERY CACHE;");
         
         $this->_json = new Calendar_Frontend_Json();
     }
@@ -79,7 +79,9 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
     public function testSearchEvents()
     {
         $allUsers = Tinebase_User::getInstance()->getFullUsers('');
-        
+
+        xhprof_enable();
+
         $numSearches = 0;
         foreach ($allUsers as $user) {
             if ($numSearches > 5) {
@@ -98,14 +100,24 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
                 )),
             );
             
-            $filter = new Calendar_Model_EventFilter($filterData);
-            $events = Calendar_Controller_Event::getInstance()->search($filter, NULL, FALSE);
+//            $filter = new Calendar_Model_EventFilter($filterData);
+//            $events = Calendar_Controller_Event::getInstance()->search($filter, NULL, FALSE);
             
-            //$this->_json->searchEvents($filterData, array());
+            $this->_json->searchEvents($filterData, array());
             $numSearches += 1;
             
         }
-        Tinebase_Core::getDbProfiling();
+        $xhprof_data = xhprof_disable();
+        //Tinebase_Core::getDbProfiling();
+
+        $XHPROF_ROOT = '/opt/local/www/php5-xhprof';
+        include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_lib.php";
+        include_once $XHPROF_ROOT . "/xhprof_lib/utils/xhprof_runs.php";
+
+        $xhprof_runs = new XHProfRuns_Default();
+        $run_id = $xhprof_runs->save_run($xhprof_data, "xhprof_tine20");
+
+        echo "http://localhost/xhprof_html/index.php?run={$run_id}&source=xhprof_tine20 \n";
     }
     
     public function _testTasks()
