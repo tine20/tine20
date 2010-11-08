@@ -32,7 +32,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     /**
      * timestamp to use for all sync requests
      *
-     * @var Zend_Date
+     * @var Tinebase_DateTime
      */
     protected $_syncTimeStamp;
     
@@ -109,9 +109,9 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     /**
      * the constructor
      *
-     * @param Zend_Date $_syncTimeStamp
+     * @param Tinebase_DateTime $_syncTimeStamp
      */
-    public function __construct(ActiveSync_Model_Device $_device, Zend_Date $_syncTimeStamp)
+    public function __construct(ActiveSync_Model_Device $_device, DateTime $_syncTimeStamp)
     {
         if(empty($this->_applicationName)) {
             throw new Tinebase_Exception_UnexpectedValue('$this->_applicationName can not be empty');
@@ -337,8 +337,8 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         $this->_getContentFilter($filter, 0);
         $this->_getContainerFilter($filter, $_folderId);
 
-        $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
-        $endTimeStamp = ($_endTimeStamp instanceof Zend_Date) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
+        $startTimeStamp = ($_startTimeStamp instanceof DateTime) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
+        $endTimeStamp = ($_endTimeStamp instanceof DateTime) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
         $filter->addFilter(new Tinebase_Model_Filter_DateTime(
             'last_modified_time',

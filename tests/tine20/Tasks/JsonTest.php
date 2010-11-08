@@ -99,11 +99,12 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     public function testCreateTaskWithAlarmTime()
     {
         $task = $this->_getTaskWithAlarm(array(
-            'alarm_time'        => Zend_Date::now(),
+            'alarm_time'        => Tinebase_DateTime::now(),
             'minutes_before'    => 'custom',
         ));
         
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
+        
         $this->_checkAlarm($persistentTaskData);
     }
     
@@ -373,7 +374,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         return new Tasks_Model_Task(array(
             'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
-            'due'           => new Zend_Date()
+            'due'           => new Tinebase_DateTime()
         ));
     }
 
@@ -387,7 +388,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         $task = new Tasks_Model_Task(array(
             'summary'       => 'minimal task with alarm by PHPUnit::Tasks_ControllerTest',
-            'due'           => new Zend_Date()
+            'due'           => new Tinebase_DateTime()
         ));
         $alarmData = ($_alarmData !== NULL) ? $_alarmData : array(
             'minutes_before'    => 0

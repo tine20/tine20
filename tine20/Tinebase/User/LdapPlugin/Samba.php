@@ -122,12 +122,12 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
     /**
      * inspect set expiry date
      * 
-     * @param Zend_Date  $_expiryDate  the expirydate
+     * @param Tinebase_DateTime  $_expiryDate  the expirydate
      * @param array      $_ldapData    the data to be written to ldap
      */
     public function inspectExpiryDate($_expiryDate, array &$_ldapData)
     {
-        if ($_expiryDate instanceof Zend_Date) {
+        if ($_expiryDate instanceof DateTime) {
             // seconds since Jan 1, 1970
             $_ldapData['sambakickofftime'] = $_expiryDate->getTimestamp();
         } else {
@@ -174,7 +174,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
             } else if ($_mustChange === false) {
                 $_ldapData['sambapwdmustchange'] = '2147483647';
                 $_ldapData['sambapwdcanchange']  = '1';
-                $_ldapData['sambapwdlastset']    = Zend_Date::now()->getTimestamp();
+                $_ldapData['sambapwdlastset']    = Tinebase_DateTime::now()->getTimestamp();
                                 
             } else if ($_mustChange === null &&
                 $_userId instanceof Tinebase_Model_FullUser && 
@@ -242,7 +242,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                     case 'kickoffTime':
                     case 'pwdCanChange':
                     case 'pwdMustChange':
-                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
+                        $accountArray[$keyMapping] = new Tinebase_DateTime($value[0]);
                         break;
                     default: 
                         $accountArray[$keyMapping] = $value[0];
@@ -338,7 +338,7 @@ class Tinebase_User_LdapPlugin_Samba implements Tinebase_User_LdapPlugin_Interfa
                         
                     case 'pwdCanChange':
                     case 'pwdMustChange':
-                        if ($value instanceof Zend_Date) {
+                        if ($value instanceof DateTime) {
                             $_ldapData[$this->_rowNameMapping[$key]]     = $value->getTimestamp();
                         } else {
                             $_ldapData[$this->_rowNameMapping[$key]]     = array();

@@ -46,8 +46,8 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
                 return new Zend_Auth_Result($authResult['code'], $result->getIdentity(), $authResult['messages']);
             }
             
-            //if(($this->_resultRow['expires_at'] !== NULL) && $this->_resultRow['expires_at'] < Zend_Date::now()->getTimestamp()) {
-            if(($this->_resultRow['expires_at'] !== NULL) && Zend_Date::now()->isLater($this->_resultRow['expires_at'])) {
+            //if(($this->_resultRow['expires_at'] !== NULL) && $this->_resultRow['expires_at'] < Tinebase_DateTime::now()->getTimestamp()) {
+            if(($this->_resultRow['expires_at'] !== NULL) && Tinebase_DateTime::now()->isLater($this->_resultRow['expires_at'])) {
                 // account is expired
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Account: '. $this->_identity . ' is expired');
                 $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;

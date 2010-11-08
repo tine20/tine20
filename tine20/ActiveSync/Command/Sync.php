@@ -586,7 +586,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 if ($class != 'collectionNotFound') {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
                     // increment sync timestamp by 1 second
-                    $this->_syncTimeStamp->add('1', Zend_Date::SECOND);
+                    $this->_syncTimeStamp->add('1', Tinebase_DateTime::MODIFIER_SECOND);
                     $this->_controller->updateSyncKey($this->_device, $newSyncKey, $this->_syncTimeStamp, $collectionData['class'], $collectionData['collectionId']);
                     
                     // store current filter type

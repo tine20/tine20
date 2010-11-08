@@ -19,7 +19,7 @@
  * @package     Tinebase
  * @property    string                  accountStatus
  * @property    Tinebase_Model_SAMUser  sambaSAM            object holding samba settings
- * @property    Zend_Date               accountExpires      date when account expires  
+ * @property    DateTime                accountExpires      date when account expires  
  * @property    string                  accountFullName     fullname of the account
  * @property    string                  accountDisplayName  displayname of the account
  * @property    string                  accountLoginName    account login name
@@ -124,7 +124,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     }
     
     /**
-     * returns TRUE if user has to change his/her password (compare sambaSAM->pwdMustChange with Zend_Date::now())
+     * returns TRUE if user has to change his/her password (compare sambaSAM->pwdMustChange with Tinebase_DateTime::now())
      * NOTE: this only applies for user with samba settings atm
      * 
      * @return boolean
@@ -135,16 +135,16 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
         
         if ($this->sambaSAM instanceof Tinebase_Model_SAMUser 
             && isset($this->sambaSAM->pwdMustChange) 
-            && $this->sambaSAM->pwdMustChange instanceof Zend_Date) 
+            && $this->sambaSAM->pwdMustChange instanceof DateTime) 
         {
-            if ($this->sambaSAM->pwdMustChange->compare(Zend_Date::now()) < 0) {
+            if ($this->sambaSAM->pwdMustChange->compare(Tinebase_DateTime::now()) < 0) {
                 if (!isset($this->sambaSAM->pwdLastSet)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                         . ' User ' . $this->accountLoginName . ' has to change his pw: it got never set by user');
                         
                     $result = TRUE;
                     
-                } else if (isset($this->sambaSAM->pwdLastSet) && $this->sambaSAM->pwdLastSet instanceof Zend_Date) {
+                } else if (isset($this->sambaSAM->pwdLastSet) && $this->sambaSAM->pwdLastSet instanceof DateTime) {
                     $dateToCompare = $this->sambaSAM->pwdLastSet;
                     
                     if ($this->sambaSAM->pwdMustChange->compare($dateToCompare) > 0) {

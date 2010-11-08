@@ -163,19 +163,19 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         $view->container = Tinebase_Container::getInstance()->getContainerById($_lead->container_id);
         //$view->updates = $_updates;
         
-        if($_lead->start instanceof Zend_Date) {
+        if($_lead->start instanceof DateTime) {
             $view->start = $_lead->start->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale'));
         } else {
             $view->start = '-';
         }
         
-        if($_lead->end instanceof Zend_Date) {
+        if($_lead->end instanceof DateTime) {
             $view->leadEnd = $_lead->end->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale'));
         } else {
             $view->leadEnd = '-';
         }
         
-        if($_lead->end_scheduled instanceof Zend_Date) {
+        if($_lead->end_scheduled instanceof DateTime) {
             $view->ScheduledEnd = $_lead->end_scheduled->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale'));
         } else {
             $view->ScheduledEnd = '-';

@@ -65,7 +65,7 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
     public function testCloneRecordSet()
     {
         $obj = new Tinebase_Record_RecordSet('Tinebase_Record_DummyRecord');
-        $obj->addRecord(new Tinebase_Record_DummyRecord(array('date_single' => Zend_Date::now()), true));
+        $obj->addRecord(new Tinebase_Record_DummyRecord(array('date_single' => new Tinebase_DateTime()), true));
         
         $clone = clone $obj;
         
@@ -205,13 +205,13 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
      */
     public function test__call ()
     {
-        $now = Zend_Date::now();
+        $now = new Tinebase_DateTime();
         $now->setTimezone('Europe/Berlin');
         
         $this->object->date_single = clone ($now);
         $this->object->setTimezone('America/Los_Angeles');
         foreach ($this->object as $record) {
-        	$this->assertNotEquals($record->date_single->get(Tinebase_Record_Abstract::ISO8601LONG), $now->get(Tinebase_Record_Abstract::ISO8601LONG));
+            $this->assertNotEquals($record->date_single->get(Tinebase_Record_Abstract::ISO8601LONG), $now->get(Tinebase_Record_Abstract::ISO8601LONG));
         }
         
     }

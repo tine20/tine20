@@ -22,7 +22,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
 {
     
     /**
-     * @var Zend_Date
+     * @var Tinebase_DateTime
      */
     protected $_migrationStartTime = NULL;
     
@@ -85,7 +85,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
      */
     public function import()
     {
-        $this->_migrationStartTime = Zend_Date::now();
+        $this->_migrationStartTime = Tinebase_DateTime::now();
         $this->_calEventBackend = new Calendar_Backend_Sql();
         
         /*
@@ -202,7 +202,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
         
         // finally create event record
         date_default_timezone_set($this->_config->egwServerTimezone);
-        $tineEvent = new Calendar_Model_Event($tineEventData, FALSE, Zend_Date::TIMESTAMP);
+        $tineEvent = new Calendar_Model_Event($tineEventData, FALSE, 'U');
         
         $tineEvent->dateConversionFormat = Calendar_Model_Event::ISO8601LONG;
         date_default_timezone_set('UTC');
@@ -234,7 +234,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             ));
             
             // NOTE: alarm_time for recur base events is already set at this point
-            if(! $alarm->alarm_time instanceof Zend_Date) {
+            if(! $alarm->alarm_time instanceof DateTime) {
                 $alarm->setTime($_event->dtstart);
             }
             
@@ -629,7 +629,7 @@ class Calendar_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
             
             // detect if container just got created
             $isNewContainer = false;
-            if ($calendar->creation_time instanceof Zend_Date) {
+            if ($calendar->creation_time instanceof DateTime) {
                 $isNewContainer = $this->_migrationStartTime->isEarlier($calendar->creation_time);
             }
             

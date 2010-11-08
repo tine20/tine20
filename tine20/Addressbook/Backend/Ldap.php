@@ -31,7 +31,7 @@ class Addressbook_Backend_Ldap implements Tinebase_Backend_Interface
     /**
      * date representation used by ldap
      */
-    const LDAPDATEFORMAT = 'YYYYmmddHHmmss';
+    const LDAPDATEFORMAT = 'YmdHis';
     
     /**
      * ldap directory connection

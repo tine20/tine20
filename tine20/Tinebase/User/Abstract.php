@@ -507,7 +507,7 @@ abstract class Tinebase_User_Abstract
      * sets/unsets expiry date (calls backend class with the same name)
      *
      * @param   int         $_accountId
-     * @param   Zend_Date   $_expiryDate
+     * @param   Tinebase_DateTime   $_expiryDate
     */
     abstract public function setExpiryDate($_accountId, $_expiryDate);
 
@@ -515,7 +515,7 @@ abstract class Tinebase_User_Abstract
      * blocks/unblocks the user (calls backend class with the same name)
      *
      * @param   int $_accountId
-     * @param   Zend_Date   $_blockedUntilDate
+     * @param   Tinebase_DateTime   $_blockedUntilDate
     */
     abstract public function setBlockedDate($_accountId, $_blockedUntilDate);
     

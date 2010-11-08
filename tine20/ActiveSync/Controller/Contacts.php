@@ -144,7 +144,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                             $data->bday->addHour(12);
                         }
                         
-                        $nodeContent = $data->bday->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
+                        $nodeContent = $data->bday->format("Y-m-d\TH:i:s") . '.000Z';
                         break;
                         
                     case 'jpegphoto':
@@ -314,7 +314,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                 case 'bday':
                     if(isset($xmlData->$fieldName)) {
                         $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
-                        $contact->bday = new Zend_Date($timeStamp, NULL);
+                        $contact->bday = new Tinebase_DateTime($timeStamp);
                         
                         switch(strtolower($this->_device->devicetype)) {
                             // the iphone sends the birthday based noon
@@ -419,7 +419,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     /**
      * converts an iso formated date into a timestamp
      *
-     * @param  string Zend_Date::ISO8601 representation of a datetime filed
+     * @param  string Tinebase_DateTime::ISO8601 representation of a datetime filed
      * @return int    UNIX Timestamp
      */
     protected function _convertISOToTs($_ISO)

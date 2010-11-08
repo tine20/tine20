@@ -54,7 +54,7 @@ interface Tinebase_User_Interface_SyncAble
      * expiryDate is the number of days since Jan 1, 1970
      *
      * @param   mixed      $_accountId
-     * @param   Zend_Date  $_expiryDate
+     * @param   Tinebase_DateTime  $_expiryDate
      */
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate);
     
@@ -62,7 +62,7 @@ interface Tinebase_User_Interface_SyncAble
      * sets blocked until date 
      *
      * @param  mixed      $_accountId
-     * @param  Zend_Date  $_blockedUntilDate set to NULL to disable blockedDate
+     * @param  Tinebase_DateTime  $_blockedUntilDate set to NULL to disable blockedDate
     */
     public function setBlockedDateInSyncBackend($_accountId, $_blockedUntilDate);
         

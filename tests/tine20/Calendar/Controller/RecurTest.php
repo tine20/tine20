@@ -94,8 +94,8 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
     public function testRecurSetCalcLeafOutPersistentExceptionDates()
     {
         // month 
-        $from = new Zend_Date('2010-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2010-06-31 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2010-06-01 00:00:00');
+        $until = new Tinebase_DateTime('2010-06-31 23:59:59');
         
         $event = $this->_getRecurEvent();
         $event->rrule = "FREQ=MONTHLY;INTERVAL=1;BYDAY=3TH";
@@ -109,19 +109,19 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         // get first recurrance
         $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($persistentRecurEvent));
         Calendar_Model_Rrule::mergeRecuranceSet($eventSet, 
-            new Zend_Date('2010-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG),
-            new Zend_Date('2010-06-31 23:59:59', Tinebase_Record_Abstract::ISO8601LONG)
+            new Tinebase_DateTime('2010-06-01 00:00:00'),
+            new Tinebase_DateTime('2010-06-31 23:59:59')
         );
         $firstRecurrance = $eventSet[1];
         
         // create exception of this first occurance: 17.6. -> 24.06.
-        $firstRecurrance->dtstart->add(1, Zend_Date::WEEK);
-        $firstRecurrance->dtend->add(1, Zend_Date::WEEK);
+        $firstRecurrance->dtstart->add(1, Tinebase_DateTime::MODIFIER_WEEK);
+        $firstRecurrance->dtend->add(1, Tinebase_DateTime::MODIFIER_WEEK);
         $this->_controller->createRecurException($firstRecurrance);
         
         // fetch weekview 14.06 - 20.06.
-        $from = new Zend_Date('2010-06-14 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2010-06-20 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2010-06-14 00:00:00');
+        $until = new Tinebase_DateTime('2010-06-20 23:59:59');
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid', 'operator' => 'equals', 'value' => $persistentRecurEvent->uid),
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until),

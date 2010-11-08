@@ -290,7 +290,7 @@ class RequestTracker_Backend_Rest //implements Tinebase_Backend_Interface
                 case 'Resolved':
                 case 'Told':
                 case 'LastUpdated':
-                    $dataArray[$property] = $value == 'Not set' ? NULL : new Zend_Date($value, 'EEE MMM dd HH:mm:ss yyyy');
+                    $dataArray[$property] = $value == 'Not set' ? NULL : new Tinebase_DateTime($value);
                     break;
         	}
         }

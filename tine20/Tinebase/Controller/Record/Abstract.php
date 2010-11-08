@@ -323,7 +323,9 @@ abstract class Tinebase_Controller_Record_Abstract
                 Tinebase_Notes::getInstance()->addSystemNote($record, $this->_currentAccount->getId(), 'created');                
             }
             if ($record->has('alarms') && isset($_record->alarms)) {
+                
                 $record->alarms = $_record->alarms;
+                
                 $this->_saveAlarms($record);
             }
             
@@ -408,6 +410,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             $this->_inspectBeforeUpdate($_record, $currentRecord);
+           
             $record = $this->_backend->update($_record);
             $this->_inspectAfterUpdate($record, $_record);
     
@@ -833,9 +836,9 @@ abstract class Tinebase_Controller_Record_Abstract
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting alarm time for ' . $this->_recordAlarmField);
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' alarm data: ' . print_r($_alarm->toArray(), TRUE));
         
-        // check if alarm field is Zend_Date
-        if (! ($_alarm->alarm_time instanceof Zend_Date && $_alarm->minutes_before == 'custom')) {
-            if ($_record->{$this->_recordAlarmField} instanceof Zend_Date && isset($_alarm->minutes_before)) {
+        // check if alarm field is Tinebase_DateTime
+        if (! ($_alarm->alarm_time instanceof DateTime && $_alarm->minutes_before == 'custom')) {
+            if ($_record->{$this->_recordAlarmField} instanceof DateTime && isset($_alarm->minutes_before)) {
                 $_alarm->setTime($_record->{$this->_recordAlarmField});
             } else {
                 throw new Tinebase_Exception_InvalidArgument('Record has no alarm field, no alarm time set or minutes before are missing.');
@@ -893,7 +896,7 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     protected function _inspectAlarmGet(Tinebase_Record_Abstract $_record)
     {
-        if ($_record->{$this->_recordAlarmField} instanceof Zend_Date) {
+        if ($_record->{$this->_recordAlarmField} instanceof DateTime) {
             $_record->alarms->setMinutesBefore($_record->{$this->_recordAlarmField});
         }
     }

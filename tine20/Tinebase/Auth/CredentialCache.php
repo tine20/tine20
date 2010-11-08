@@ -81,8 +81,8 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
             'key'       => substr($key, 0, 24),
             'username'  => $_username,
             'password'  => $_password,
-            'creation_time' => Zend_Date::now(),
-            'valid_until'   => Zend_Date::now()->addMonth(1)
+            'creation_time' => Tinebase_DateTime::now(),
+            'valid_until'   => Tinebase_DateTime::now()->addMonth(1)
         ), true, false);
         $cache->convertDates = true;
         

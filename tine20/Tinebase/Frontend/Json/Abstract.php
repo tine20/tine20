@@ -145,12 +145,10 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $record->setFromJsonInUsersTimezone($_recordData);
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "recordData: ". print_r($record->toArray(), true));
-        
         $method = (empty($record->$_identifier)) ? 'create' : 'update';
         $args = array_merge(array($record), $_additionalArguments);
-            
         $savedRecord = call_user_func_array(array($_controller, $method), $args);
-
+        
         return $this->_recordToJson($savedRecord);
     }
 

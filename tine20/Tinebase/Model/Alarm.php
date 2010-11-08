@@ -86,9 +86,9 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
     /**
      * set alarm time depending on another date with minutes_before
      *
-     * @param Zend_Date $_date
+     * @param Tinebase_DateTime $_date
      */
-    public function setTime(Zend_Date $_date)
+    public function setTime(DateTime $_date)
     {
         if (! isset($this->minutes_before)) {
             throw new Tinebase_Exception_Record_Validation('minutes_before is needed to set the alarm_time!');
@@ -104,9 +104,9 @@ class Tinebase_Model_Alarm extends Tinebase_Record_Abstract
     /**
      * set minutes_before depending on another date with alarm_time
      *
-     * @param Zend_Date $_date
+     * @param Tinebase_DateTime $_date
      */
-    public function setMinutesBefore(Zend_Date $_date)
+    public function setMinutesBefore(DateTime $_date)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->toArray(), TRUE));
         

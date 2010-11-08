@@ -159,9 +159,9 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
                         $keys = array ( $valueFields );
                     }
                     foreach ( $keys as $key ) {
-                        if ( $_contact->$key instanceof Zend_Date ) { 
-                            $content[] = $_contact->$key->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')),
-                                Tinebase_Core::get('locale'));
+                        if ( $_contact->$key instanceof Tinebase_DateTime ) { 
+                            //echo Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale'));
+                            $content[] = $_contact->$key->toString(Tinebase_DateTime::convertIsoToPhpFormat(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale'))), Tinebase_Core::get('locale'));
                         } elseif (!empty($_contact->$key) ) {
                             if (preg_match("/countryname/", $key)) {
                                 $content[] = Zend_Locale::getTranslation($_contact->$key, 'country', $locale);
@@ -195,5 +195,8 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
                 
         // generate pdf
         $this->generatePdf($record, $title, $subtitle, $tags, $_contact->note, $titleIcon, $contactPhoto, array(), FALSE);
-    }    
+    }  
+
+
+    
 }

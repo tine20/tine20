@@ -45,7 +45,7 @@ class Crm_AbstractTest extends PHPUnit_Framework_TestCase
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
             'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'bday'                  => '1975-01-02 03:04:05', // new Tinebase_DateTime???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'note'                  => 'Bla Bla Bla',
@@ -84,9 +84,9 @@ class Crm_AbstractTest extends PHPUnit_Framework_TestCase
         return new Tasks_Model_Task(array(
             //'container_id'         => $tasksContainer->id,
             'created_by'           => Zend_Registry::get('currentAccount')->getId(),
-            'creation_time'        => Zend_Date::now(),
+            'creation_time'        => Tinebase_DateTime::now(),
             'percent'              => 70,
-            'due'                  => Zend_Date::now()->addMonth(1),
+            'due'                  => Tinebase_DateTime::now()->addMonth(1),
             'summary'              => 'phpunit: crm test task',        
         ));        
     }
@@ -104,7 +104,7 @@ class Crm_AbstractTest extends PHPUnit_Framework_TestCase
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
             'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId(),
-            'start'         => Zend_Date::now(),
+            'start'         => Tinebase_DateTime::now(),
             'description'   => 'Description',
             'end'           => NULL,
             'turnover'      => '200000',

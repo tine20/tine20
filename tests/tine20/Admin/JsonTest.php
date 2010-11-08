@@ -44,9 +44,9 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Json Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Admin Json Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -67,7 +67,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'name'          => 'tine20phpunit',
             'description'   => 'updated group'
         )); 
-            	
+                
         $this->objects['user'] = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunit',
             'accountDisplayName'    => 'tine20phpunit',
@@ -308,18 +308,18 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteGroup()
     {
-    	// delete group with json.php function
-    	$group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
-    	$result = $this->_backend->deleteGroups(array($group->getId()));
-    	
-    	$this->assertTrue($result['success']);
-    	
-    	// try to get deleted group
-    	$this->setExpectedException('Tinebase_Exception_Record_NotDefined');
-    	
+        // delete group with json.php function
+        $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name);
+        $result = $this->_backend->deleteGroups(array($group->getId()));
+        
+        $this->assertTrue($result['success']);
+        
+        // try to get deleted group
+        $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
+        
         // get group by name
         $group = Tinebase_Group::getInstance()->getGroupByName($this->objects['initialGroup']->name); 
-        	
+            
     }    
     
     /**
@@ -377,14 +377,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccessLogsWithDeletedUser()
     {
-    	$user = $this->objects['user'];
+        $user = $this->objects['user'];
 
     	$clienttype = 'Unittest';
         Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
             'sessionid'     => 'test_session_id',
             'login_name'    => $user->accountLoginName,
             'ip'            => '127.0.0.1',
-            'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'li'            => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'result'        => Zend_Auth_Result::SUCCESS,
             'account_id'    => $user->getId(),
             'clienttype'    => $clienttype,
@@ -424,7 +424,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, sizeof($accessLogs['results']), 'results not matched');
         $this->assertEquals(0, $accessLogs['totalcount'], 'totalcount not matched');
     }        
-	
+    
     /**
      * try to get an application
      *
@@ -574,7 +574,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, $allRights);
     }
-    
+
     /**
      * try to save tag and update without rights
      */
@@ -629,4 +629,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'color' => '#003300'
         );
     }
+}
+
+if (PHPUnit_MAIN_METHOD == 'Admin_JsonTest::main') {
+    Admin_JsonTest::main();
 }

@@ -39,9 +39,9 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Controller Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Controller Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -75,15 +75,15 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         $translate = Tinebase_Translation::getTranslation('Tinebase');
         $contact = $this->_createContact();
         
-		$pdf = new Addressbook_Export_Pdf();
-		$pdf->generate($contact);
-		$pdfOutput = $pdf->render();
-		
-		//$pdf->save("test.pdf");
-		
-		$this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), 'no pdf document'); 
-		$this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found'); 
-		
+        $pdf = new Addressbook_Export_Pdf();
+        $pdf->generate($contact);
+        $pdfOutput = $pdf->render();
+        
+        //$pdf->save("test.pdf");
+        
+        $this->assertEquals(1, preg_match("/^%PDF-1.4/", $pdfOutput), 'no pdf document'); 
+        $this->assertEquals(1, preg_match("/Pickhuben 4/", $pdfOutput), 'street not found'); 
+        
         // check name and company name
         $this->assertEquals(1, preg_match("/Metaways Infosystems GmbH/", $pdfOutput), 'name not found');    
 
@@ -104,17 +104,16 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
      */
     public function testContactPdfLocale()
     {
-    	// set de_DE locale
-    	Zend_Registry::set('locale', new Zend_Locale('de'));
-    	
-    	$contact = $this->_createContact();
-    	
+        // set de_DE locale
+        Zend_Registry::set('locale', new Zend_Locale('de'));
+        
+        $contact = $this->_createContact();
+        
         $pdf = new Addressbook_Export_Pdf();
         $pdf->generate($contact);
         $pdfOutput = $pdf->render();
         
         //$pdf->save("test.pdf");
-        
         $this->assertEquals(1, preg_match("/02.01.1975/", $pdfOutput), 'date format wrong or not found'); 
         $this->assertEquals(1, preg_match("/Private Kontaktdaten/", $pdfOutput), 'translation not found');
     }
@@ -152,7 +151,7 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
             'assistent'             => 'Cornelius Weiß',
-            'bday'                  => new Zend_Date ('1975-01-02 03:04:05', Tinebase_Record_Abstract::ISO8601LONG),
+            'bday'                  => new Tinebase_DateTime ('1975-01-02 03:04:05'),
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'note'                  => 'Bla Bla Bla',
@@ -184,8 +183,8 @@ class Addressbook_PdfTest extends PHPUnit_Framework_TestCase
         
         return $this->objects['contact'];
     }
-}		
-	
+}       
+    
 
 if (PHPUnit_MAIN_METHOD == 'Addressbook_ControllerTest::main') {
     Addressbook_ControllerTest::main();

@@ -478,7 +478,6 @@ class Tinebase_Core
 
 
         // some important caches
-        Zend_Date::setOptions(array('cache' => $cache));
         Zend_Locale::setCache($cache);
 
         self::set(self::CACHE, $cache);

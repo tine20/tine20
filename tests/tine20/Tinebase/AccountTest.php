@@ -251,7 +251,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     public function testSetExpiryDate()
     {
-        Tinebase_User::getInstance()->setExpiryDate($this->objects['initialAccount'], Zend_Date::now());
+        Tinebase_User::getInstance()->setExpiryDate($this->objects['initialAccount'], Tinebase_DateTime::now());
     }
 
    /**
@@ -261,7 +261,7 @@ class Tinebase_UserTest extends PHPUnit_Framework_TestCase
      */
     public function testSetBlockedDate()
     {
-    	$date = Zend_Date::now();
+    	$date = Tinebase_DateTime::now();
     	$date->add ( '12:00:00' );
         Tinebase_User::getInstance()->setBlockedDate($this->objects['initialAccount'], $date );
     }

@@ -83,7 +83,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         $folderData = $_folder->toArray();
         
         $data = array(
-            'cache_timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'cache_timestamp' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'cache_status'    => Felamimail_Model_Folder::CACHE_STATUS_UPDATING
         );
         

@@ -318,8 +318,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     'homeDrive'     => $this->_config->samba->homedrive,
                     'logonScript'   => $course->name . $this->_config->samba->logonscript_postfix_member,
                     'profilePath'   => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $course->name . '\\',
-                    'pwdCanChange'  => new Zend_Date(1, Zend_Date::TIMESTAMP),
-                    'pwdMustChange' => new Zend_Date(1, Zend_Date::TIMESTAMP)
+                    'pwdCanChange'  => new Tinebase_DateTime('@1'),
+                    'pwdMustChange' => new Tinebase_DateTime('@1')
                 ) : array(),
             )
         );

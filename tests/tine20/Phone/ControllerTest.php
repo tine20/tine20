@@ -96,7 +96,7 @@ class Phone_ControllerTest extends PHPUnit_Framework_TestCase
         $call = $this->_backend->callStarted($this->_objects['call']);
         
         $this->assertEquals($this->_objects['call']->destination, $call->destination);
-        $this->assertTrue(Zend_Date::now()->sub($call->start) >= 0);
+        $this->assertTrue(Tinebase_DateTime::now()->sub($call->start)->getTimestamp() >= 0);
         
         // sleep for 2 secs (ringing...)
         sleep(2);

@@ -351,7 +351,7 @@ class ActiveSync_TimezoneConverter
      */
     protected function _isNthOcurrenceOfWeekdayInMonth($_timestamp, $_occurence)
     {
-       $original = new Zend_Date($_timestamp, 'UTC');
+       $original = new Tinebase_DateTime($_timestamp);
        $modified = clone($original);
        if ($_occurence == 5) {
         $modified->addWeek(1);

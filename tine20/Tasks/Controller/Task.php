@@ -129,8 +129,8 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
             
             if($status->status_is_open) {
                 $_task->completed = NULL;
-            } elseif (! $_task->completed instanceof Zend_Date) {
-                $_task->completed = Zend_Date::now();
+            } elseif (! $_task->completed instanceof DateTime) {
+                $_task->completed = Tinebase_DateTime::now();
             }
         }
     }

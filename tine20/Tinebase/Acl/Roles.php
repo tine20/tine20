@@ -342,7 +342,7 @@ class Tinebase_Acl_Roles
         if(is_object(Tinebase_Core::getUser())) {
             $data['created_by'] = Tinebase_Core::getUser()->getId();
         }
-        $data['creation_time'] = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $data['creation_time'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $newId = $this->_rolesTable->insert($data); 
         
@@ -364,7 +364,7 @@ class Tinebase_Acl_Roles
     {
         $data = $_role->toArray();
         $data['last_modified_by'] = Tinebase_Core::getUser()->getId();
-        $data['last_modified_time'] = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $data['last_modified_time'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $_role->getId());
         $this->_rolesTable->update($data, $where); 

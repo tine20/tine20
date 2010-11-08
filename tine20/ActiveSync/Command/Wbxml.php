@@ -60,7 +60,7 @@ abstract class ActiveSync_Command_Wbxml
     /**
      * timestamp to use for all sync requests
      *
-     * @var Zend_Date
+     * @var Tinebase_DateTime
      */
     protected $_syncTimeStamp;
         
@@ -97,7 +97,7 @@ abstract class ActiveSync_Command_Wbxml
             $this->_inputDom = NULL;
         }
         
-        $this->_syncTimeStamp = Zend_Date::now();
+        $this->_syncTimeStamp = Tinebase_DateTime::now();
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG));
         
         $dtd = DOMImplementation::createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");

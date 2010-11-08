@@ -29,12 +29,6 @@
  */
 class Felamimail_Model_Message extends Tinebase_Record_Abstract
 {
-    /**
-     * date format constants
-     *
-     */
-    const DATE_FORMAT = 'EEE, d MMM YYYY hh:mm:ss zzz';
-    const DATE_FORMAT_RECEIVED = 'dd-MMM-YYYY hh:mm:ss zzz';
     
     /**
      * message content type (rfc822)

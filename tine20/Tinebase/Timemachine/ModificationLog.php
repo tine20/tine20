@@ -112,15 +112,15 @@ class Tinebase_Timemachine_ModificationLog
      * @param string _id identifier to retreave modification log for
      * @param string _type 
      * @param string _backend 
-     * @param Zend_Date _from beginning point of timespan, excluding point itself
-     * @param Zend_Date _until end point of timespan, including point itself 
+     * @param Tinebase_DateTime _from beginning point of timespan, excluding point itself
+     * @param Tinebase_DateTime _until end point of timespan, including point itself 
      * @param int _modifierId optional
      * @return Tinebase_Record_RecordSet RecordSet of Tinebase_Model_ModificationLog
      */
-    public function getModifications( $_application,  $_id, $_type = NULL, $_backend, Zend_Date $_from, Zend_Date $_until,  $_modifierId = NULL ) {
+    public function getModifications( $_application,  $_id, $_type = NULL, $_backend, DateTime $_from, DateTime $_until,  $_modifierId = NULL ) {
         $application = Tinebase_Application::getInstance()->getApplicationByName($_application);
         
-        $isoDef = 'yyyy-MM-ddTHH:mm:ss';
+        $isoDef = 'Y-m-d\TH:i:s';
         
         $db = $this->_table->getAdapter();
         $select = $db->select()
@@ -177,11 +177,11 @@ class Tinebase_Timemachine_ModificationLog
      * @throws  Tinebase_Exception_NotFound
      */
     public function getModification( $_id ) {
-    	$db = $this->_table->getAdapter();
-    	$stmt = $db->query($db->select()
-    	   ->from($this->_tablename)
-    	   ->where($this->_table->getAdapter()->quoteInto($db->quoteIdentifier('id') . ' = ?', $_id))
-    	);
+        $db = $this->_table->getAdapter();
+        $stmt = $db->query($db->select()
+           ->from($this->_tablename)
+           ->where($this->_table->getAdapter()->quoteInto($db->quoteIdentifier('id') . ' = ?', $_id))
+        );
         $RawLogEntry = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
         
         if (empty($RawLogEntry)) {
@@ -200,7 +200,7 @@ class Tinebase_Timemachine_ModificationLog
      */
     public function setModification(Tinebase_Model_ModificationLog $_modification) {
         if ($_modification->isValid()) {
-        	$id = $_modification->generateUID();
+            $id = $_modification->generateUID();
             $_modification->setId($id);
             $_modification->convertDates = true;
             $modificationArray = $_modification->toArray();
@@ -231,9 +231,9 @@ class Tinebase_Timemachine_ModificationLog
         $resolved = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
         
         // handle concurrent updates on unmodified records
-        if (! $_newRecord->last_modified_time instanceof Zend_Date) {
+        if (! $_newRecord->last_modified_time instanceof DateTime) {
             
-            if ($_curRecord->creation_time instanceof Zend_Date) {
+            if ($_curRecord->creation_time instanceof DateTime) {
                 $_newRecord->last_modified_time = clone $_curRecord->creation_time;    
             } else {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
@@ -244,7 +244,7 @@ class Tinebase_Timemachine_ModificationLog
             }
         }
         
-        if($_curRecord->last_modified_time instanceof Zend_Date && !$_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
+        if($_curRecord->last_modified_time instanceof DateTime && !$_curRecord->last_modified_time->equals($_newRecord->last_modified_time)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  concurrent updates: current record last updated '" .
                 $_curRecord->last_modified_time . "' where record to be updated was last updated '" . $_newRecord->last_modified_time . "'");
             
@@ -257,7 +257,7 @@ class Tinebase_Timemachine_ModificationLog
             
             // we loop over the diffs! -> changes over fields which have no diff in storage are not in the loop!
             foreach ($diffs as $diff) {
-                if (isset($_newRecord[$diff->modified_attribute]) && $_newRecord[$diff->modified_attribute] instanceof Zend_Date) {
+                if (isset($_newRecord[$diff->modified_attribute]) && $_newRecord[$diff->modified_attribute] instanceof Tinebase_DateTime) {
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " we can't deal with dates yet -> non resolvable conflict!");
                     throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
                 }
@@ -351,7 +351,7 @@ class Tinebase_Timemachine_ModificationLog
     {
         $currentAccount   = Tinebase_Core::getUser();
         $currentAccountId = $currentAccount instanceof Tinebase_Record_Abstract ? $currentAccount->getId(): NULL;
-        $currentTime      = Zend_Date::now();
+        $currentTime      = new Tinebase_DateTime();
         
         // spoofing protection
         $_newRecord->created_by         = $_curRecord ? $_curRecord->created_by : NULL;
@@ -371,7 +371,7 @@ class Tinebase_Timemachine_ModificationLog
                 $_newRecord->last_modified_by   = $currentAccountId;
                 $_newRecord->last_modified_time = $currentTime;
                 if (is_object($_curRecord) && $_curRecord->has('seq')) {
-                	$_newRecord->seq = (int) $_curRecord->seq +1;
+                    $_newRecord->seq = (int) $_curRecord->seq +1;
                 }
                 break;
             case 'delete':

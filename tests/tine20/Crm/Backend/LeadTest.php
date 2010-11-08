@@ -80,12 +80,12 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
             'container_id'  => $this->_testContainer->id,
-            'start'         => Zend_Date::now(),
+            'start'         => Tinebase_DateTime::now(),
             'description'   => 'Description',
-            'end'           => Zend_Date::now(),
+            'end'           => Tinebase_DateTime::now(),
             'turnover'      => '200000',
             'probability'   => 70,
-            'end_scheduled' => Zend_Date::now(),
+            'end_scheduled' => Tinebase_DateTime::now(),
         )); 
         
         $this->_objects['updatedLead'] = new Crm_Model_Lead(array(
@@ -95,7 +95,7 @@ class Crm_Backend_LeadTest extends PHPUnit_Framework_TestCase
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
             'container_id'  => $this->_testContainer->id,
-            'start'         => Zend_Date::now(),
+            'start'         => Tinebase_DateTime::now(),
             'description'   => 'Description updated',
             'end'           => NULL,
             'turnover'      => '200000',

@@ -877,7 +877,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
                         'related_id'             => $link->link_id2,
                         'type'                   => $type,
                         'created_by'             => $link->link_owner,
-                        'creation_time'          => Zend_Date::now()
+                        'creation_time'          => Tinebase_DateTime::now()
                     ));                        
                 }
             }

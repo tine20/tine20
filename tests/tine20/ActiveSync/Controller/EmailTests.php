@@ -114,7 +114,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendFileReference()
     {
-    	$controller = new ActiveSync_Controller_Email($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
+    	$controller = new ActiveSync_Controller_Email($this->objects['devicePalm'], Tinebase_DateTime::now());
     	
     	$message = $this->_emailTestClass->createCachedTestMessage('multipart_mixed.eml', 'multipart/mixed');
     	
@@ -136,7 +136,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendXML()
     {
-        $controller = new ActiveSync_Controller_Email($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
+        $controller = new ActiveSync_Controller_Email($this->objects['devicePalm'], Tinebase_DateTime::now());
         
         $message = $this->_emailTestClass->createCachedTestMessage('multipart_mixed.eml', 'multipart/mixed');
         

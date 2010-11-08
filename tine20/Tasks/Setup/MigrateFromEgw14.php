@@ -103,7 +103,7 @@ class Tasks_Setup_MigrateFromTine14
             
             foreach (array('info_datemodified', 'info_datecompleted', 'info_enddate', 'info_startdate' ) as $datefield) {
                 if ((int)$infolog->$datefield == 0) continue;
-                $infolog->$datefield = new Zend_Date($infolog->$datefield, Zend_Date::TIMESTAMP);
+                $infolog->$datefield = new Tinebase_DateTime($infolog->$datefield);
             }
             
             foreach (self::$_mapping as $TaskKey => $InfoKey) {
@@ -194,7 +194,7 @@ class Tasks_Setup_MigrateFromTine14
             if (!$class) {
                 $identifier = $classTable->insert(array(
                     'created_by'    => Tinebase_Core::getUser()->getId(),
-                    'creation_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                    'creation_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
                     'class'         => $oldclass
                 ));
                 $classes[$oldclass] = $identifier;
@@ -224,7 +224,7 @@ class Tasks_Setup_MigrateFromTine14
             if (!$status) {
                 $identifier = $statusTable->insert(array(
                     'created_by'    => Tinebase_Core::getUser()->getId(),
-                    'creation_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                    'creation_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
                     'status'         => $oldstatus
                 ));
                 $stati[$oldstatus] = $identifier;

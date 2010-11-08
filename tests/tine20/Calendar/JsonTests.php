@@ -77,7 +77,6 @@ class Calendar_JsonTests extends Calendar_TestCase
     public function testCreateEventWithAlarm()
     {
         $eventData = $this->_getEventWithAlarm()->toArray();
-        
         $persistentEventData = $this->_uit->saveEvent($eventData);
         $loadedEventData = $this->_uit->getEvent($persistentEventData['id']);
         
@@ -226,7 +225,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $recurEvent = $this->testCreateRecurEvent();
         
         $from = $recurEvent['dtstart'];
-        $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Tinebase_DateTime($from);
         $until->addWeek(5)->addHour(10);
         $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
         
@@ -259,7 +258,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_uit->createRecurException($recurSet[4], TRUE, TRUE);
         
         $from = $recurSet[0]['dtstart'];
-        $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Tinebase_DateTime($from);
         $until->addWeek(5)->addHour(10);
         $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
         
@@ -294,7 +293,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_uit->createRecurException($persistentException, FALSE, FALSE);
         
         // update recurseries 
-        $someRecurInstance = $persistentException = $recurSet[2];
+        $someRecurInstance = $recurSet[2];
         $someRecurInstance['summary'] = 'go fishing';
         $someRecurInstance['dtstart'] = '2009-04-08 10:00:00';
         $someRecurInstance['dtend']   = '2009-04-08 12:30:00';
@@ -302,7 +301,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_uit->updateRecurSeries($someRecurInstance, FALSE, FALSE);
         
         $from = $recurSet[0]['dtstart'];
-        $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Tinebase_DateTime($from);
         $until->addWeek(5)->addHour(10);
         $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
         
@@ -310,7 +309,6 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
-        
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
         
@@ -356,7 +354,7 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_uit->deleteRecurSeries($someRecurInstance);
         
         $from = $recurSet[0]['dtstart'];
-        $until = new Zend_Date($from, Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Tinebase_DateTime($from);
         $until->addWeek(5)->addHour(10);
         $until = $until->get(Tinebase_Record_Abstract::ISO8601LONG);
         

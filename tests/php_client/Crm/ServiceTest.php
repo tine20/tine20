@@ -69,7 +69,7 @@ class Crm_ServiceTest extends PHPUnit_Framework_TestCase
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
             'container_id'     => $containers[0]->getId(),
-            'start'         => Zend_Date::now(),
+            'start'         => Tinebase_DateTime::now(),
             'description'   => 'I want to hire all your tine developers!',
             'end'           => NULL,
             'turnover'      => '15000000',

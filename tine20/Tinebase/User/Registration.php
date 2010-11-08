@@ -93,8 +93,8 @@ class Tinebase_User_Registration
     /**
      * checks if username is unique
      *
-     * @param 	string 	$_username
-     * @return 	bool	true if username is unique
+     * @param   string  $_username
+     * @return  bool    true if username is unique
      * 
      */
     public function checkUniqueUsername ($_username)
@@ -127,9 +127,9 @@ class Tinebase_User_Registration
     /**
      * registers a new user
      *
-     * @param 	array 	$regData 		json data from registration frontend
-     * @param	bool	$_sendMail		send registration mail
-     * @return 	bool
+     * @param   array   $regData        json data from registration frontend
+     * @param   bool    $_sendMail      send registration mail
+     * @return  bool
      * 
      */
     public function registerUser ($regData, $_sendMail = true)
@@ -138,7 +138,7 @@ class Tinebase_User_Registration
             ' call registerUser with regData: ' . print_r($regData, true));
         
         // validate unique username
-        //@todo 	move to frontend later on
+        //@todo     move to frontend later on
         if (! $this->checkUniqueUsername($regData['accountLoginName'])) {
             throw (new Exception('Your chosen username already exists!'));
         }
@@ -182,11 +182,11 @@ class Tinebase_User_Registration
         $regData['accountPrimaryGroup'] = $primaryGroup->getId();
         // add expire date (user has 1 day to click on the activation link)
         if (isset($this->_config->expires) && $this->_config->expires > 0) {
-            $regData['accountExpires'] = new Zend_Date();
+            $regData['accountExpires'] = new Tinebase_DateTime();
             // add 'expires' from config hours
             $timeToAdd = $this->_config->expires . ":00:00";
             TinebaseCore::getLogger()->debug("this account expires in $timeToAdd hours ...");
-            $regData['accountExpires']->add($timeToAdd, Zend_Date::TIMES);
+            $regData['accountExpires']->add($this->_config->expires, Tinebase_DateTime::MODIFIER_HOUR);
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug("this account never expires.");
             $regData['accountExpires'] = NULL;
@@ -223,11 +223,11 @@ class Tinebase_User_Registration
     /**
      * create user hash, send registration mail and save registration in database
      *
-     * @param 	array $_regData
-     * @param 	Tinebase_Model_Registration $_registration
-     * @return 	bool
+     * @param   array $_regData
+     * @param   Tinebase_Model_Registration $_registration
+     * @return  bool
      *
-     * @access	protected
+     * @access  protected
      * 
      */
     protected function sendRegistrationMail ($_regData, $_registration)
@@ -285,10 +285,10 @@ class Tinebase_User_Registration
     /**
      * send lost password mail
      *
-     * @param 	string $_username
-     * @return 	bool
+     * @param   string $_username
+     * @return  bool
      * 
-     * @todo 	add more texts to mail views & translate mails
+     * @todo    add more texts to mail views & translate mails
      */
     public function sendLostPasswordMail ($_username)
     {
@@ -298,7 +298,7 @@ class Tinebase_User_Registration
         $newPassword = $this->generatePassword();
         // save new password in user
         Tinebase_Auth::getInstance()->setPassword($_username, $newPassword, $newPassword);
-        // send lost password mail		
+        // send lost password mail      
         $mail = new Tinebase_Mail('UTF-8');
         $mail->setSubject("New password for Tine 2.0");
         // get name from user
@@ -333,10 +333,10 @@ class Tinebase_User_Registration
     /**
      * generate new random password [a-zA-z0-9]
      *
-     * @param	int	$length
-     * @return 	string
+     * @param   int $length
+     * @return  string
      * 
-     * @access	private
+     * @access  private
      */
     private function generatePassword ($length = 8)
     {
@@ -357,8 +357,8 @@ class Tinebase_User_Registration
     /**
      * activate user
      *
-     * @param 	string $_login_hash
-     * @return	Tinebase_Model_FullUser
+     * @param   string $_login_hash
+     * @return  Tinebase_Model_FullUser
      * 
      */
     public function activateUser($_loginHash)
@@ -378,9 +378,9 @@ class Tinebase_User_Registration
     /**
      * generate captcha
      *
-     * @return 	image	the captcha image
+     * @return  image   the captcha image
      * 
-     * @todo 	save security code in db/session
+     * @todo    save security code in db/session
      */
     public function generateCaptcha ()
     {
@@ -410,10 +410,10 @@ class Tinebase_User_Registration
     /**
      * add new registration
      *
-     * @param	Tinebase_Model_Registration	$_registration
-     * @return 	Tinebase_Model_Registration the new registration object
+     * @param   Tinebase_Model_Registration $_registration
+     * @return  Tinebase_Model_Registration the new registration object
      * 
-     * @access	protected
+     * @access  protected
      */
     protected function addRegistration ($_registration)
     {
@@ -424,7 +424,7 @@ class Tinebase_User_Registration
             "login_name" => $_registration->login_name ,
             "login_hash" => $_registration->login_hash ,
             "email"      => $_registration->email ,
-            "date"       => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            "date"       => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             "status"     => "justregistered"
         );
         // add new user
@@ -435,8 +435,8 @@ class Tinebase_User_Registration
     /**
      * update registration
      *
-     * @param	Tinebase_Model_Registration	$_registration
-     * @return 	Tinebase_Model_Registration the updated registration object
+     * @param   Tinebase_Model_Registration $_registration
+     * @return  Tinebase_Model_Registration the updated registration object
      * 
      */
     public function updateRegistration (Tinebase_Model_Registration $_registration)
@@ -448,7 +448,7 @@ class Tinebase_User_Registration
             "login_name" => $_registration->login_name ,
             "login_hash" => $_registration->login_hash ,
             "email"      => $_registration->email ,
-            "date"       => ($_registration->date instanceof Zend_Date ? 
+            "date"       => ($_registration->date instanceof DateTime ? 
                                 $_registration->date->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL) ,
             "status"     => $_registration->status ,
             "email_sent" => $_registration->email_sent);
@@ -461,8 +461,8 @@ class Tinebase_User_Registration
     /**
      * delete registration by username
      *
-     * @param	string $_username
-     * @return	int		number of rows affected
+     * @param   string $_username
+     * @return  int     number of rows affected
      */
     public function deleteRegistrationByLoginName ($_username)
     {

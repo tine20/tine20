@@ -107,7 +107,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
         $userpassword = $_encrypt ? Tinebase_User_Abstract::encryptPassword($_password, $encryptionType) : $_password;
         $ldapData = array(
             'userpassword'     => $userpassword,
-            'shadowlastchange' => Zend_Date::now()->getTimestamp()
+            'shadowlastchange' => Tinebase_DateTime::now()->getTimestamp()
         );
                 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
@@ -140,7 +140,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      * sets/unsets expiry date (calls backend class with the same name)
      *
      * @param   int         $_accountId
-     * @param   Zend_Date   $_expiryDate
+     * @param   Tinebase_DateTime   $_expiryDate
     */
     public function setExpiryDate($_accountId, $_expiryDate) 
     {
@@ -155,7 +155,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
      * blocks/unblocks the user (calls backend class with the same name)
      *
      * @param   int $_accountId
-     * @param   Zend_Date   $_blockedUntilDate
+     * @param   Tinebase_DateTime   $_blockedUntilDate
     */
     public function setBlockedDate($_accountId, $_blockedUntilDate) 
     {
@@ -310,7 +310,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                 switch($keyMapping) {
                     case 'accountLastPasswordChange':
                     case 'accountExpires':
-                        $accountArray[$keyMapping] = new Zend_Date($value[0], Zend_Date::TIMESTAMP);
+                        $accountArray[$keyMapping] = new Tinebase_DateTime($value[0]);
                         break;
                     case 'accountStatus':
                         break;
@@ -345,7 +345,7 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
                 switch ($key) {
                     case 'accountLastPasswordChange':
                     case 'accountExpires':
-                        $ldapData[$ldapProperty] = $value instanceof Zend_Date ? $value->getTimestamp() : '';
+                        $ldapData[$ldapProperty] = $value instanceof DateTime ? $value->getTimestamp() : '';
                         break;
                     case 'accountStatus':
                         break;

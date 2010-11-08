@@ -83,18 +83,17 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
         $eventName = (is_array($_eventName)) ? $_eventName['eventName'] : $_eventName;
         
         if (! Tinebase_AsyncJob::getInstance()->jobIsRunning($eventName)) {
-            
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No ' . $eventName . ' is running. Starting new one.');
  
             $job = Tinebase_AsyncJob::getInstance()->startJob($eventName);
-         
+            
             try { 
                 // get all pending alarms
                 $filter = new Tinebase_Model_AlarmFilter(array(
                     array(
                         'field'     => 'alarm_time', 
                         'operator'  => 'before', 
-                        'value'     => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+                        'value'     => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
                     ),
                     array(
                         'field'     => 'sent_status', 
@@ -114,7 +113,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                 
                     if ($appController instanceof Tinebase_Controller_Alarm_Interface) {
                     
-                        $alarm->sent_time = Zend_Date::now();
+                        $alarm->sent_time = Tinebase_DateTime::now();
                     
                         try {
                             $appController->sendAlarm($alarm);

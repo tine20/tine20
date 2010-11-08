@@ -53,7 +53,7 @@ interface Tinebase_User_LdapPlugin_Interface
     /**
      * inspect set expiry date
      * 
-     * @param Zend_Date  $_expiryDate  the expirydate
+     * @param Tinebase_DateTime  $_expiryDate  the expirydate
      * @param array      $_ldapData    the data to be written to ldap
      */
     public function inspectExpiryDate($_expiryDate, array &$_ldapData);

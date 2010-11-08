@@ -71,7 +71,7 @@ class Tinebase_Controller
         $accessLog = new Tinebase_Model_AccessLog(array(
             'sessionid'     => session_id(),
             'ip'            => $_ipAddress,
-            'li'            => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'li'            => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'result'        => $authResult->getCode(),
             'clienttype'    => $_clientIdString,   
         ));
@@ -115,7 +115,7 @@ class Tinebase_Controller
             
         } else {
             $accessLog->login_name = $_loginname;
-            $accessLog->lo = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+            $accessLog->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
             
             Zend_Session::destroy();
             

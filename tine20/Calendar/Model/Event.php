@@ -96,7 +96,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         'dtstart'               => array('allowEmpty' => true         ),
         'recurid'               => array('allowEmpty' => true         ),
         // ical scheduleable interface fields with multiple appearance
-        'exdate'                => array('allowEmpty' => true         ), //  array of Zend_Date's
+        'exdate'                => array('allowEmpty' => true         ), //  array of Tinebase_DateTimeTinebase_DateTime's
         //'exrule'                => array('allowEmpty' => true         ),
         //'rdate'                 => array('allowEmpty' => true         ),
         'rrule'                 => array('allowEmpty' => true         ),
@@ -163,7 +163,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if ($_name == 'attendee' && is_array($_value)) {
             $_value = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_value);
         }
-        
+          
         parent::__set($_name, $_value);
     }
     
@@ -227,7 +227,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public static function getTranslatedValue($_field, $_value, $_translation, $_timezone)
     {
-        if ($_value instanceof Zend_Date) {
+        if ($_value instanceof Tinebase_DateTime) {
             $locale = new Zend_Locale($_translation->getAdapter()->getLocale());
             return Tinebase_Translation::dateToStringInTzAndLocaleFormat($_value, $_timezone, $locale);
         }

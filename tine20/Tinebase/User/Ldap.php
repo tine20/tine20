@@ -332,7 +332,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $userpassword = $_encrypt ? Tinebase_User_Abstract::encryptPassword($_password, $encryptionType) : $_password;
         $ldapData = array(
             'userpassword'     => $userpassword,
-            'shadowlastchange' => floor(Zend_Date::now()->getTimestamp() / 86400)
+            'shadowlastchange' => floor(Tinebase_DateTime::now()->getTimestamp() / 86400)
         );
 
         foreach ($this->_plugins as $plugin) {
@@ -382,13 +382,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * expiryDate is the number of days since Jan 1, 1970
      *
      * @param   mixed      $_accountId
-     * @param   Zend_Date  $_expiryDate
+     * @param   Tinebase_DateTime  $_expiryDate
      */
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate)
     {
         $metaData = $this->_getMetaData($_accountId);
 
-        if ($_expiryDate instanceof Zend_Date) {
+        if ($_expiryDate instanceof DateTime) {
             // days since Jan 1, 1970
             $ldapData = array('shadowexpire' => floor($_expiryDate->getTimestamp() / 86400));
         } else {
@@ -408,7 +408,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * sets blocked until date 
      *
      * @param  mixed      $_accountId
-     * @param  Zend_Date  $_blockedUntilDate set to NULL to disable blockedDate
+     * @param  Tinebase_DateTime  $_blockedUntilDate set to NULL to disable blockedDate
     */
     public function setBlockedDateInSyncBackend($_accountId, $_blockedUntilDate)
     {
@@ -683,13 +683,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                 switch($keyMapping) {
                     case 'accountLastPasswordChange':
                     case 'accountExpires':
-                        $accountArray[$keyMapping] = new Zend_Date($value[0] * 86400, Zend_Date::TIMESTAMP);
+                        $accountArray[$keyMapping] = new Tinebase_DateTime($value[0] * 86400);
                         break;
                         
                     case 'accountStatus':
                         if (array_key_exists('shadowmax', $_userData) && array_key_exists('shadowinactive', $_userData)) {
                             $lastChange = array_key_exists('shadowlastchange', $_userData) ? $_userData['shadowlastchange'] : 0;
-                            if (($lastChange + $_userData['shadowmax'] + $_userData['shadowinactive']) * 86400 <= Zend_Date::now()->getTimestamp()) {
+                            if (($lastChange + $_userData['shadowmax'] + $_userData['shadowinactive']) * 86400 <= Tinebase_DateTime::now()->getTimestamp()) {
                                 $accountArray[$keyMapping] = 'enabled';
                             } else {
                                 $accountArray[$keyMapping] = 'disabled';
@@ -754,7 +754,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
                     case 'bday':
-                        $_contact->$keyMapping = new Zend_Date($value[0], 'yyyy-MM-dd');
+                        $_contact->$keyMapping = Tinebase_DateTime::createFromFormat('Y-m-d', $value[0]);
                         break;
                     default:
                         $_contact->$keyMapping = $value[0];
@@ -784,7 +784,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                         // field is readOnly
                         break;
                     case 'accountExpires':
-                        $ldapData[$ldapProperty] = $value instanceof Zend_Date ? floor($value->getTimestamp() / 86400) : array();
+                        $ldapData[$ldapProperty] = $value instanceof DateTime ? floor($value->getTimestamp() / 86400) : array();
                         break;
                     case 'accountStatus':
                         if ($value == 'enabled') {

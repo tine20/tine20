@@ -42,8 +42,8 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-		
-	}
+        
+    }
 
     /**
      * Tears down the fixture
@@ -53,15 +53,15 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
 
-	/**
-	 * Tests if exception is raised when extending class is broken
-	 */
-	public function testConstructorException() {
-		$this->setExpectedException('Exception');
-	    try {
+    /**
+     * Tests if exception is raised when extending class is broken
+     */
+    public function testConstructorException() {
+        $this->setExpectedException('Exception');
+        try {
             $this->objects['TestRecordBroken'] = new Tinebase_Record_DummyRecordBroken();
         }
         catch (Tinebase_Exception_UnexpectedValue $expected) {
@@ -70,86 +70,86 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
         $this->fail('An expected exception has not been raised.');
     }
     
-	/**
-	 * @covers Tinebase_Record_Abstract::setId
-	 */
+    /**
+     * @covers Tinebase_Record_Abstract::setId
+     */
     public function testSetId() {
-    	
-    	if (isset($this->expectFailure['TestRecord']['testSetId'])) {
-			foreach ($this->expectFailure['TestRecord']['testSetId'] as $pair) {
-		    	$this->objects['TestRecord']->setId($pair[0]);
-				$this->assertNotEquals($this->objects['TestRecord']->getId(), $pair[1]) ;
-			}
-    	} else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}
-	
-    	if (isset($this->expectSuccess['TestRecord']['testSetId'])) {
-			foreach ($this->expectSuccess['TestRecord']['testSetId'] as $pair) {
-		    	$this->objects['TestRecord']->setId($pair[0]);
-				$this->assertEquals($this->objects['TestRecord']->getId(), $pair[1]) ;
-			}
-    	} else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}
+        
+        if (isset($this->expectFailure['TestRecord']['testSetId'])) {
+            foreach ($this->expectFailure['TestRecord']['testSetId'] as $pair) {
+                $this->objects['TestRecord']->setId($pair[0]);
+                $this->assertNotEquals($this->objects['TestRecord']->getId(), $pair[1]) ;
+            }
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }
+    
+        if (isset($this->expectSuccess['TestRecord']['testSetId'])) {
+            foreach ($this->expectSuccess['TestRecord']['testSetId'] as $pair) {
+                $this->objects['TestRecord']->setId($pair[0]);
+                $this->assertEquals($this->objects['TestRecord']->getId(), $pair[1]) ;
+            }
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }
     }
 
-	public function testSetIdBypassFilters() {
-		
-		if(isset($this->objects['TestRecordBypassFilters'])) {
-			$this->objects['TestRecordBypassFilters']->setId('8');
-			$this->assertEquals($this->objects['TestRecordBypassFilters']->getId(), '8') ; 
-		} else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}
-	}
+    public function testSetIdBypassFilters() {
+        
+        if(isset($this->objects['TestRecordBypassFilters'])) {
+            $this->objects['TestRecordBypassFilters']->setId('8');
+            $this->assertEquals($this->objects['TestRecordBypassFilters']->getId(), '8') ; 
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }
+    }
 
     /**
      * @covers Tinebase_Record_Abstract::getId()
      */
-	public function testGetId() {
-		foreach ($this->objects as $record ) {
-			$this->assertNotNull($record->getId());
-		}
-	}
+    public function testGetId() {
+        foreach ($this->objects as $record ) {
+            $this->assertNotNull($record->getId());
+        }
+    }
    
-	/**
-	 * @covers Tinebase_Record_Abstract::offsetExists
-	 * @covers Tinebase_Record_Abstract::offsetGet
-	 * @covers Tinebase_Record_Abstract::getIterator
-	 *
-	 */
-	public function testArrayIterator(){
-		foreach($this->objects['TestRecord'] as $key => $val ) {
-			if (isset($this->objects['TestRecord'][$key])) { 
-				$this->objects['TestRecord'][$key] = $this->objects['TestRecord'][$key];
-			}
-		}
-	}
-	
-	/**
+    /**
+     * @covers Tinebase_Record_Abstract::offsetExists
+     * @covers Tinebase_Record_Abstract::offsetGet
+     * @covers Tinebase_Record_Abstract::getIterator
+     *
+     */
+    public function testArrayIterator(){
+        foreach($this->objects['TestRecord'] as $key => $val ) {
+            if (isset($this->objects['TestRecord'][$key])) { 
+                $this->objects['TestRecord'][$key] = $this->objects['TestRecord'][$key];
+            }
+        }
+    }
+    
+    /**
      * @covers Tinebase_Record_Abstract::setFromArray
      */   
     public function testSetFromArray() {
-	    if (isset($this->expectSuccess['TestRecord']['testSetFromArray'])) {	
-    		foreach ($this->expectSuccess['TestRecord']['testSetFromArray'] as $pair) {
-		       	$this->objects['TestRecord']->setFromArray($pair[0], NULL);
-			 	$this->assertTrue($this->objects['TestRecord']->__isset($pair[1]));
-	    	}
-	    } else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}	
+        if (isset($this->expectSuccess['TestRecord']['testSetFromArray'])) {    
+            foreach ($this->expectSuccess['TestRecord']['testSetFromArray'] as $pair) {
+                $this->objects['TestRecord']->setFromArray($pair[0], NULL);
+                $this->assertTrue($this->objects['TestRecord']->__isset($pair[1]));
+            }
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }   
     }
-	
+    
     public function testSetFromArrayWithFilterSet() {
-    	if (isset($this->expectSuccess['TestRecord']['testSetFromArray'])) {
-	        foreach ($this->expectSuccess['TestRecord']['testSetFromArray'] as $pair) {
-		       	$this->objects['TestRecord']->setFromArray($pair[0], true);
-			 	$this->assertTrue($this->objects['TestRecord']->__isset($pair[1]));
-	        }
-	    } else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}
+        if (isset($this->expectSuccess['TestRecord']['testSetFromArray'])) {
+            foreach ($this->expectSuccess['TestRecord']['testSetFromArray'] as $pair) {
+                $this->objects['TestRecord']->setFromArray($pair[0], true);
+                $this->assertTrue($this->objects['TestRecord']->__isset($pair[1]));
+            }
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }
     }
 
     /**
@@ -158,21 +158,21 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      * @todo    implement else branch?
      */
     public function testSetFromArrayException() {
-    	if (isset($this->expectSuccess['TestRecord']['testSetFromArrayException'])) {
-	    
-    		 foreach ($this->expectFailure['TestRecord']['testSetFromArrayException'] as $pair) {
-    			$this->setExpectedException($pair[0]);
-			    try {
-					$this->objects['TestRecord']->setFromArray($pair[1], NULL);
-			    }
-		 	    catch (Tinebase_Exception_UnexpectedValue $expected) {
-		            return;
-		        }
-		      	  $this->fail('An expected exception has not been raised.');
-    		 } 	  
-    	 } /*else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}	*/
+        if (isset($this->expectSuccess['TestRecord']['testSetFromArrayException'])) {
+        
+             foreach ($this->expectFailure['TestRecord']['testSetFromArrayException'] as $pair) {
+                $this->setExpectedException($pair[0]);
+                try {
+                    $this->objects['TestRecord']->setFromArray($pair[1], NULL);
+                }
+                catch (Tinebase_Exception_UnexpectedValue $expected) {
+                    return;
+                }
+                  $this->fail('An expected exception has not been raised.');
+             }    
+         } /*else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }   */
     }
  
     /**
@@ -182,23 +182,23 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      */
     public function testSetTimezone() {
     }
-	
+    
     public function testSetTimezoneException() {
-		if(isset($this->expectFailure['TestRecord']['testSetTimezoneException'])) {
-    		foreach ($this->expectFailure['TestRecord']['testSetTimezoneException'] as $pair) {
-				
-				$this->setExpectedException($pair[0]);
-			    try {
-					$this->objects['TestRecord']->setTimezone($pair[1]);
-				}
-				catch (Tinebase_Exception_UnexpectedValue $expected) {
-		            return;
-		        }
-				$this->fail('An expected exception has not been raised.');
-	    	}
-		} else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}	
+        if(isset($this->expectFailure['TestRecord']['testSetTimezoneException'])) {
+            foreach ($this->expectFailure['TestRecord']['testSetTimezoneException'] as $pair) {
+                
+                $this->setExpectedException($pair[0]);
+                try {
+                    $this->objects['TestRecord']->setTimezone($pair[1]);
+                }
+                catch (Tinebase_Exception_UnexpectedValue $expected) {
+                    return;
+                }
+                $this->fail('An expected exception has not been raised.');
+            }
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }   
     }
 
     /**
@@ -207,106 +207,106 @@ abstract class Tinebase_Record_AbstractTest extends PHPUnit_Framework_TestCase
      * @todo    implement
      */
     public function testGetValidationErrors() {
-	}
-	
+    }
+    
     /**
      * test GetValidationErrorsBypassFilters
      *
      * @todo    implement
      */
-	public function testGetValidationErrorsBypassFilters() {
-		//if(isset($this->objects['TestRecordBypassFilters'])) {        
-	}	
-		
-	public function testToArray() 	{
-		if(isset($this->expectSuccess['TestRecord']['testToArray'])) {	
-			foreach ($this->expectSuccess['TestRecord']['testToArray'] as $pair) {   
-			   $this->assertEquals($this->objects['TestRecord']->toArray(), $pair[0]);
-			}  
-		} else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}		
-	}
-		
+    public function testGetValidationErrorsBypassFilters() {
+        //if(isset($this->objects['TestRecordBypassFilters'])) {        
+    }   
+        
+    public function testToArray()   {
+        if(isset($this->expectSuccess['TestRecord']['testToArray'])) {  
+            foreach ($this->expectSuccess['TestRecord']['testToArray'] as $pair) {   
+                 $this->assertEquals($this->objects['TestRecord']->toArray(), $pair[0]);
+            }  
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }       
+    }
+        
     /**
      * test is valid
      *
      * @todo    implement
      */
-	public function testIsValid() {
-		//foreach ($this->objects as $record ) {
-		//	if (!$record->isValid()) {
-				//echo "Error in " . $record->getId() ;
-		//	}
-		//	$this->assertTrue($record->isValid());
-		//}		
-	}
-	
-	public function test__set() {
-		if(isset($this->expectSuccess['TestRecord']['__set'])) {		
-		 	foreach ($this->expectSuccess['TestRecord']['__set'] as $pair) { 
-				$this->objects['TestRecord']->__set($pair[0], $pair[1]);
-				$this->assertEquals($this->objects['TestRecord']->offsetGet($pair[0]), $pair[1]) ;
-			
-				if(isset($this->objects['TestRecordBypassFilters'])) {
-					$this->objects['TestRecordBypassFilters']->__set($pair[0], $pair[1]);
-					$this->assertEquals($this->objects['TestRecordBypassFilters']->offsetGet($pair[0]), $pair[1]) ;
-	
-				}
-		 	}	
-	 	} else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}
-	}
-	
-	public function test__isset() {
-		if (isset($this->expectSuccess['TestRecord']['test__isset'])) {	
-			foreach ($this->expectSuccess['TestRecord']['test__isset'] as $pair) { 
-				$this->assertTrue($this->objects['TestRecord']->__isset($pair[0]));
-			}
-		} else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}	
+    public function testIsValid() {
+        //foreach ($this->objects as $record ) {
+        //  if (!$record->isValid()) {
+                //echo "Error in " . $record->getId() ;
+        //  }
+        //  $this->assertTrue($record->isValid());
+        //}     
+    }
+    
+    public function test__set() {
+        if(isset($this->expectSuccess['TestRecord']['__set'])) {        
+            foreach ($this->expectSuccess['TestRecord']['__set'] as $pair) { 
+                $this->objects['TestRecord']->__set($pair[0], $pair[1]);
+                $this->assertEquals($this->objects['TestRecord']->offsetGet($pair[0]), $pair[1]) ;
+            
+                if(isset($this->objects['TestRecordBypassFilters'])) {
+                    $this->objects['TestRecordBypassFilters']->__set($pair[0], $pair[1]);
+                    $this->assertEquals($this->objects['TestRecordBypassFilters']->offsetGet($pair[0]), $pair[1]) ;
+    
+                }
+            }   
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }
+    }
+    
+    public function test__isset() {
+        if (isset($this->expectSuccess['TestRecord']['test__isset'])) { 
+            foreach ($this->expectSuccess['TestRecord']['test__isset'] as $pair) { 
+                $this->assertTrue($this->objects['TestRecord']->__isset($pair[0]));
+            }
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }   
 
-		if (isset($this->expectFailure['TestRecord']['test__isset'])) {	
-			foreach ($this->expectFailure['TestRecord']['test__isset'] as $pair) { 
-				$this->assertFalse($this->objects['TestRecord']->__isset($pair[0]));
-			}
-		} else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}	
-		
-	}
-	
-	public function test__get() {
-		if (isset($this->expectSuccess['TestRecord']['__get'])) {
-			foreach ($this->expectSuccess['TestRecord']['__get'] as $pair) { 
-				$this->objects['TestRecord']->__set($pair[0], $pair[1]);
-				$this->assertEquals($this->objects['TestRecord']->__get($pair[0]), $pair[1]) ;
-		 	}
-		} else {
-    		$this->markTestIncomplete('This test has not been implemented yet.');
-    	}
-	}
-	
-	public function testOffsetUnset() {
-		if (isset($this->expectFailure['TestRecord']['testSetTimezoneException'])) {	
-			foreach ($this->expectFailure['TestRecord']['testSetTimezoneException'] as $pair) {
-				$this->setExpectedException($pair[0]);
-			    try {
-		            $this->objects['TestRecord']->offsetUnset($pair[1]);
-		        }
-		 
-		        catch (Tinebase_Exception_UnexpectedValue $expected) {
-		            return;
-		        }
-		 
-		        $this->fail('An expected exception has not been raised.');
-		    }
-		} else {
-			$this->markTestIncomplete('This test has not been implemented yet.');	
-		}    
-	}
+        if (isset($this->expectFailure['TestRecord']['test__isset'])) { 
+            foreach ($this->expectFailure['TestRecord']['test__isset'] as $pair) { 
+                $this->assertFalse($this->objects['TestRecord']->__isset($pair[0]));
+            }
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }   
+        
+    }
+    
+    public function test__get() {
+        if (isset($this->expectSuccess['TestRecord']['__get'])) {
+            foreach ($this->expectSuccess['TestRecord']['__get'] as $pair) { 
+                $this->objects['TestRecord']->__set($pair[0], $pair[1]);
+                $this->assertEquals($this->objects['TestRecord']->__get($pair[0]), $pair[1]) ;
+            }
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');
+        }
+    }
+    
+    public function testOffsetUnset() {
+        if (isset($this->expectFailure['TestRecord']['testSetTimezoneException'])) {    
+            foreach ($this->expectFailure['TestRecord']['testSetTimezoneException'] as $pair) {
+                $this->setExpectedException($pair[0]);
+                try {
+                    $this->objects['TestRecord']->offsetUnset($pair[1]);
+                }
+         
+                catch (Tinebase_Exception_UnexpectedValue $expected) {
+                    return;
+                }
+         
+                $this->fail('An expected exception has not been raised.');
+            }
+        } else {
+            $this->markTestIncomplete('This test has not been implemented yet.');   
+        }    
+    }
 
-}		
-	
+}       
+    

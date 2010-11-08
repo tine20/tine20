@@ -149,7 +149,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
     {    
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
         
-        $_call->start = Zend_Date::now();
+        $_call->start = Tinebase_DateTime::now();
         
         $filter = new Voipmanager_Model_Asterisk_SipPeerFilter(array(
             array('field' => 'name', 'operator' => 'equals', 'value' => $_call->line_id)
@@ -176,7 +176,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
     {
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
         
-        $_call->connected = Zend_Date::now();
+        $_call->connected = Tinebase_DateTime::now();
         
         $call = $backend->update($_call);
         
@@ -193,28 +193,29 @@ class Phone_Controller extends Tinebase_Controller_Abstract
     {
         $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::CALLHISTORY);
         
-        $_call->disconnected = Zend_Date::now();
+        $_call->disconnected = Tinebase_DateTime::now();
         
         $call = $backend->update($_call);
-
         // calculate duration and ringing time
-        if($call->connected instanceof Zend_Date) {
+        if($call->connected instanceof DateTime) {
+            
             // how long did we talk
             $connected = clone $call->connected;
             $disconnected = clone $call->disconnected;
-            $call->duration = $disconnected->sub($connected);
+            $call->duration = $disconnected->getTimestamp()-$connected->getTimestamp();
             
             // how long was the telephone ringing
             $start = clone $call->start;
             $connected = clone $call->connected;
-            $call->ringing = $connected->sub($start);
+            $call->ringing = $connected->getTimestamp()-$start->getTimestamp();
         } else {
             $start = clone $call->start;
             $disconnected = clone $call->disconnected;
-            $call->ringing = $disconnected->sub($start);
+            $call->ringing = $disconnected->getTimestamp()-$start->getTimestamp();
         }
 
         $call = $backend->update($call);
+        
         
         return $call;
     }

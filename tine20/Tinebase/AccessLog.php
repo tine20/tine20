@@ -71,7 +71,7 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
             return;
         }
         
-        $loginRecord->lo = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $loginRecord->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         if ($_ipAddress !== NULL) {
             $loginRecord->ip = $_ipAddress;
         }

@@ -69,12 +69,12 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
             'container_id'     => $this->testContainer->id,
-            'start'         => new Zend_Date( "2007-12-12" ),
+            'start'         => new Tinebase_DateTime( "2007-12-12" ),
             'description'   => 'Lead Description',
-            'end'           => Zend_Date::now(),
+            'end'           => Tinebase_DateTime::now(),
             'turnover'      => '200000',
             'probability'   => 70,
-            'end_scheduled' => Zend_Date::now(),
+            'end_scheduled' => Tinebase_DateTime::now(),
         )); 
 
         $this->objects['leadWithLink'] = new Crm_Model_Lead(array(
@@ -83,12 +83,12 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'leadtype_id'   => 1,
             'leadsource_id' => 1,
             'container_id'     => $this->testContainer->id,
-            'start'         => new Zend_Date( "2007-12-24" ),
+            'start'         => new Tinebase_DateTime( "2007-12-24" ),
             'description'   => 'Lead Description',
-            'end'           => Zend_Date::now(),
+            'end'           => Tinebase_DateTime::now(),
             'turnover'      => '200000',
             'probability'   => 50,
-            'end_scheduled' => Zend_Date::now(),
+            'end_scheduled' => Tinebase_DateTime::now(),
         )); 
         
        $this->objects['linkedContact'] = new Addressbook_Model_Contact(array(
@@ -105,7 +105,7 @@ class Crm_Export_PdfTest extends PHPUnit_Framework_TestCase
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
             'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'bday'                  => '1975-01-02 03:04:05', // new Tinebase_DateTime???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'note'                  => 'Bla Bla Bla',

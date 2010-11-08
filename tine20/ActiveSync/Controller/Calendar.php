@@ -226,13 +226,13 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     case 'dtend':
                         if ($data->is_all_day_event == true) {
                             $startDateClone = clone $data->dtstart;
-                            $nodeContent = $startDateClone->addHour(24)->toString('yyyyMMddTHHmmss') . 'Z';
+                            $nodeContent = $startDateClone->addHour(24)->format('Ymd\THis') . 'Z';
                         } else {
-                            $nodeContent = $data->dtend->toString('yyyyMMddTHHmmss') . 'Z';
+                            $nodeContent = $data->dtend->format('Ymd\THis') . 'Z';
                         }
                         break;
                     case 'dtstart':
-                        $nodeContent = $data->dtstart->toString('yyyyMMddTHHmmss') . 'Z';
+                        $nodeContent = $data->$value->format('Ymd\THis') . 'Z';
                         break;
                     default:
                         $nodeContent = $data->$value;
@@ -352,8 +352,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             // required field
             $recurrence->appendChild(new DOMElement('Interval', $rrule->interval, 'uri:Calendar'));
             
-            if($rrule->until instanceof Zend_Date) {
-                $recurrence->appendChild(new DOMElement('Until', $rrule->until->toString('yyyyMMddTHHmmss') . 'Z', 'uri:Calendar'));
+            if($rrule->until instanceof DateTime) {
+                $recurrence->appendChild(new DOMElement('Until', $rrule->until->format('Ymd\THis') . 'Z', 'uri:Calendar'));
             }
                         
             //Occurences
@@ -391,7 +391,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $_xmlNode->appendChild(new DOMElement('MeetingStatus', 1, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('BusyStatus', 2, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('Sensitivity', 0, 'uri:Calendar'));
-        $_xmlNode->appendChild(new DOMElement('DtStamp', $data->creation_time->toString('yyyyMMddTHHmmss') . 'Z', 'uri:Calendar'));
+        $_xmlNode->appendChild(new DOMElement('DtStamp', $data->creation_time->format('Ymd\THis') . 'Z', 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('UID', $data->getId(), 'uri:Calendar'));
         if(!empty($data->organizer)) {
             try {
@@ -777,7 +777,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     /**
      * converts an iso formated date into a timestamp
      *
-     * @param  string Zend_Date::ISO8601 representation of a datetime filed
+     * @param  string Tinebase_DateTime::ISO8601 representation of a datetime filed
      * @return int    UNIX Timestamp
      */
     protected function _convertISOToTs($_ISO)
@@ -796,10 +796,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * converts an iso formated date into Zend_Date
+     * converts an iso formated date into DateTime
      *
-     * @param  string  $_iso  Zend_Date::ISO8601 representation of a datetime filed
-     * @return Zend_Date
+     * @param  string  $_iso  ISO8601 representation of a datetime filed
+     * @return DateTime
      */
     protected function _convertISOToZendDate($_iso)
     {
@@ -811,7 +811,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             throw new Tinebase_Exception_UnexpectedValue("invalid date format $_iso");
         }
         
-        return new Zend_Date($_iso, Zend_Date::ISO_8601);
+        return new Tinebase_DateTime($_iso);
     }
     
     /**
@@ -827,20 +827,20 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case self::FILTER_2_WEEKS_BACK:
-                    $from = Zend_Date::now()->subWeek(2);
+                    $from = Tinebase_DateTime::now()->subWeek(2);
                     break;
                 case self::FILTER_1_MONTH_BACK:
-                    $from = Zend_Date::now()->subMonth(2);
+                    $from = Tinebase_DateTime::now()->subMonth(2);
                     break;
                 case self::FILTER_3_MONTHS_BACK:
-                    $from = Zend_Date::now()->subMonth(3);
+                    $from = Tinebase_DateTime::now()->subMonth(3);
                     break;
                 case self::FILTER_6_MONTHS_BACK:
-                    $from = Zend_Date::now()->subMonth(6);
+                    $from = Tinebase_DateTime::now()->subMonth(6);
                     break;
             }
             // next 10 years
-            $to = Zend_Date::now()->addYear(10);
+            $to = Tinebase_DateTime::now()->addYear(10);
             
             // remove all 'old' period filters
             $_filter->removeFilter('period');

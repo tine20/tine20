@@ -178,7 +178,7 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 'adr_two_street'        => $contact->adr_two_street,
                 'adr_two_street2'       => $contact->adr_two_street2,
 
-                'last_modified_time'    => new Zend_Date ( $contact->contact_modified,Zend_Date::TIMESTAMP ),
+                'last_modified_time'    => new Tinebase_DateTime ( $contact->contact_modified),
                 'assistent'             => $contact->contact_assistent,
                 'bday'                  => $contact->contact_bday,
                 'email'                 => $contact->contact_email,
@@ -218,7 +218,7 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 'tz'                    => $contact->contact_tz,
                 'tel_prefer'            => $contact->tel_prefer,
                 'created_by'            => $contact->contact_creator,
-                'creation_time'         => new Zend_Date ( $contact->contact_created,Zend_Date::TIMESTAMP ),
+                'creation_time'         => new Tinebase_DateTime ( $contact->contact_created),
                 'last_modified_by'      => $contact->contact_modifier,            
                 //'calendar_uri'          => $contact->calendar_uri,
                 //'freebusy_uri'          => $contact->freebusy_uri,            

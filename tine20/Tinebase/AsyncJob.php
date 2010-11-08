@@ -89,7 +89,7 @@ class Tinebase_AsyncJob
         // check if job is running for a long time -> set status to Tinebase_Model_AsyncJob::STATUS_FAILURE
         if ($result) {
             $job = $jobs->getFirstRecord();
-            if (Zend_Date::now()->isLater($job->end_time)) {
+            if (Tinebase_DateTime::now()->isLater($job->end_time)) {
                 // it seems that the old job ended (start time is older than SECONDS_TILL_FAILURE mins) -> start a new one
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Old ' . $_name . ' job is running too long. Finishing it now.');
                 
@@ -114,12 +114,12 @@ class Tinebase_AsyncJob
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $date = Zend_Date::now();
-            $date->add($_timeout, Zend_Date::SECOND);
+            $date = new Tinebase_DateTime();
+            $date->addSecond($_timeout);            
             
             $job = new Tinebase_Model_AsyncJob(array(
                 'name'              => $_name,
-                'start_time'        => Zend_Date::now(),
+                'start_time'        => new Tinebase_DateTime(),
                 'end_time'          => $date,
                 'status'            => Tinebase_Model_AsyncJob::STATUS_RUNNING
             ));
@@ -150,7 +150,7 @@ class Tinebase_AsyncJob
             $db = $this->_backend->getAdapter();
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
             
-            $_asyncJob->end_time = Zend_Date::now();
+            $_asyncJob->end_time = Tinebase_DateTime::now();
             $_asyncJob->status = $_status;
             if ($_message !== NULL) {
                 $_asyncJob->message = $_message;

@@ -355,9 +355,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
                 break;
             case 'create_deadline':
                 // date is before deadline
-                $date = new Zend_Date();
-                $date->sub(8, Zend_Date::DAY);
-                $ts->start_date = $date->toString('yyyy-MM-dd');
+                $date = new Tinebase_DateTime();
+                $date->sub(8, Tinebase_DateTime::MODIFIER_DAY);
+                $ts->start_date = $date->toString('Y-m-d');
                 $this->setExpectedException('Timetracker_Exception_Deadline');
                 $this->_timesheetController->create($ts);
                 break;
@@ -432,7 +432,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
             'account_id'        => Tinebase_Core::getUser()->getId(),
             'timeaccount_id'    => $timeaccount->getId(),
             'description'       => 'blabla',
-            'start_date'        => Zend_Date::now()->toString('YYYY-MM-dd')
+            'start_date'        => Tinebase_DateTime::now()->toString('Y-m-d')
         ), TRUE);
     }
 

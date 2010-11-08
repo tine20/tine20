@@ -24,11 +24,11 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCase
 {
-	/**
-	 * @var Tinebase_Timemachine_ModificationLog
-	 */
-	protected $_modLogClass;
-	
+    /**
+     * @var Tinebase_Timemachine_ModificationLog
+     */
+    protected $_modLogClass;
+    
     /**
      * @var Tinebase_Record_RecordSet
      */
@@ -53,9 +53,9 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Timemachine_ModificationLogTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Timemachine_ModificationLogTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Lets update a record tree times
@@ -64,14 +64,14 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     protected function setUp()
     {
-    	$now = Zend_Date::now();
-    	$this->_modLogClass = Tinebase_Timemachine_ModificationLog::getInstance();
-    	$this->_persistantLogEntries = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
-    	$this->_recordIds = array('5dea69be9c72ea3d263613277c3b02d529fbd8bc');
-    	
-    	$tinebaseApp = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-    	
-    	$this->_logEntries = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array(
+        $now = new Tinebase_DateTime();
+        $this->_modLogClass = Tinebase_Timemachine_ModificationLog::getInstance();
+        $this->_persistantLogEntries = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog');
+        $this->_recordIds = array('5dea69be9c72ea3d263613277c3b02d529fbd8bc');
+        
+        $tinebaseApp = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+        
+        $this->_logEntries = new Tinebase_Record_RecordSet('Tinebase_Model_ModificationLog', array(
         array(
             'application_id'       => $tinebaseApp,
             'record_id'            => $this->_recordIds[0],
@@ -141,8 +141,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         
         
         foreach ($this->_logEntries as $logEntry) {
-        	$id = $this->_modLogClass->setModification($logEntry);
-        	$this->_persistantLogEntries->addRecord($this->_modLogClass->getModification($id));
+            $id = $this->_modLogClass->setModification($logEntry);
+            $this->_persistantLogEntries->addRecord($this->_modLogClass->getModification($id));
         }
     }
 
@@ -162,19 +162,19 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
      */
     public function testGetModification()
     {
-    	foreach ($this->_logEntries as $num => $logEntry) {
-    		$RawLogEntry = $logEntry->toArray();
-    		$RawPersistantLogEntry = $this->_persistantLogEntries[$num]->toArray();
-    		
-    		foreach ($RawLogEntry as $field => $value) {
-    			$persistantValue = $RawPersistantLogEntry[$field];
-    			if ($value != $persistantValue) {
-    				$this->fail("Failed asserting that contents of saved LogEntry #$num in field $field equals initial datas. \n" . 
-    				            "Expected '$value', got '$persistantValue'");
-    			}
-    		}
-    	}
-    	$this->assertTrue(true);
+        foreach ($this->_logEntries as $num => $logEntry) {
+            $RawLogEntry = $logEntry->toArray();
+            $RawPersistantLogEntry = $this->_persistantLogEntries[$num]->toArray();
+            
+            foreach ($RawLogEntry as $field => $value) {
+                $persistantValue = $RawPersistantLogEntry[$field];
+                if ($value != $persistantValue) {
+                    $this->fail("Failed asserting that contents of saved LogEntry #$num in field $field equals initial datas. \n" . 
+                                "Expected '$value', got '$persistantValue'");
+                }
+            }
+        }
+        $this->assertTrue(true);
     }
     /**
      * tests computation of a records differences described by a set of modification logs
@@ -186,12 +186,12 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
         $this->assertEquals(2, count($diffs)); // we changed two attributes
         foreach ($diffs as $diff) {
             switch ($diff['modified_attribute']) {
-        	   case 'FirstTestAttribute':
+               case 'FirstTestAttribute':
                    $this->assertEquals('Hamburg', $diff['old_value']);
                    $this->assertEquals('Stuttgart', $diff['new_value']);
                    break;
-        	   case 'SecondTestAttribute':
-        	       $this->assertEquals('Deutschland', $diff['old_value']);
+               case 'SecondTestAttribute':
+                   $this->assertEquals('Deutschland', $diff['old_value']);
                    $this->assertEquals('Italien', $diff['new_value']);
             }
         }
@@ -199,7 +199,7 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
     
     public function testGetModifications()
     {
-    	$testBase = array(
+        $testBase = array(
             'record_id' => '5dea69be9c72ea3d263613277c3b02d529fbd8bc',
             'type'      => 'TestType',
             'backend'   => 'TestBackend'
@@ -225,8 +225,8 @@ class Tinebase_Timemachine_ModificationLogTest extends PHPUnit_Framework_TestCas
             $until = clone $lastModificationTime;
             
             if (isset($params['from_add'])) {
-	       	   list($fn,$p) = explode(',', $params['from_add']);
-	           $from->$fn($p);
+               list($fn,$p) = explode(',', $params['from_add']);
+               $from->$fn($p);
             }
             if (isset($params['until_add'])) {
                 list($fn,$p) = explode(',', $params['until_add']);

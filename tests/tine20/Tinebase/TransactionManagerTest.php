@@ -109,7 +109,7 @@ class Tinebase_TransactionManagerTest extends PHPUnit_Framework_TestCase
      */
     public function testNonTransactionable()
     {
-        $date = Zend_Date::now();
+        $date = Tinebase_DateTime::now();
         $this->setExpectedException('Exception');
         $this->_instance->startTransaction($date);
     }

@@ -288,7 +288,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             $idsToMarkAsChanged = array_diff($_messagesToFlag->getArrayOfIds(), $idsToDelete);
             $this->_backend->updateMultiple($idsToMarkAsChanged, array(
-                'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+                'timestamp' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             ));
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
@@ -377,7 +377,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $this->_backend->updateMultiple(
             $messagesToUnflag->getArrayOfIds(), 
             array(
-                'timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+                'timestamp' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             )
         );
         

@@ -28,7 +28,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     
     public function setUp()
     {
-
+        
     }
     
     public function testSetFromString()
@@ -37,7 +37,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $rrule->setFromString("FREQ=WEEKLY;INTERVAL=3;UNTIL=2009-06-05 00:00:00;WKST=SU;BYDAY=TU,TH");
         
         $this->assertEquals(Calendar_Model_Rrule::FREQ_WEEKLY, $rrule->freq);
-        $this->assertTrue($rrule->until->equals(new Zend_Date('2009-06-05 00:00:00', Calendar_Model_Rrule::ISO8601LONG)));
+        $this->assertTrue($rrule->until->equals(new Tinebase_DateTime('2009-06-05 00:00:00')));
     }
     
     public function testToString()
@@ -76,9 +76,10 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         ));
         
         // note: 2009-03-29 Europe/Berlin switched to DST
-        $from = new Zend_Date('2009-03-23 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-04-03 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-03-23 00:00:00');
+        $until = new Tinebase_DateTime('2009-04-03 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
         $this->assertEquals('2009-03-23 08:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-03-27 08:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-03-29 07:00:00', $recurSet[2]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
@@ -86,21 +87,21 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(3, count($recurSet));
         
         // lets also cover the case when recurevent start during calcualtion period:
-        $from = new Zend_Date('1979-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('1979-06-14 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('1979-06-01 00:00:00');
+        $until = new Tinebase_DateTime('1979-06-14 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(4, count($recurSet), 'recur start in period failed');
 
         // lets cover the case when search period boudaries are in the middle of the recur events
         // lets also cover the case when recurevent start during calcualtion period:
-        $from = new Zend_Date('2009-03-27 08:03:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-03-29 07:03:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-03-27 08:03:00');
+        $until = new Tinebase_DateTime('2009-03-29 07:03:00');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'boundary inclusions failed');
         
         // and finaly lets cover the case when period boundaries are the boundaries of the recur events
-        $from = new Zend_Date('2009-03-01 08:05:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-03-03 08:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-03-01 08:05:00');
+        $until = new Tinebase_DateTime('2009-03-03 08:00:00');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(1, count($recurSet), 'boundary exclusion failed');
         $this->assertEquals('2009-03-03 08:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
@@ -121,31 +122,31 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2009-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-06-30 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-06-01 00:00:00');
+        $until = new Tinebase_DateTime('2009-06-30 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(4, count($recurSet), '2013-06 has 4 sundays');
         
-        $from = new Zend_Date('2013-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2013-06-30 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2013-06-01 00:00:00');
+        $until = new Tinebase_DateTime('2013-06-30 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(5, count($recurSet), '2013-06 has 5 sundays');
         
-        $from = new Zend_Date('1979-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('1979-06-20 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('1979-06-01 00:00:00');
+        $until = new Tinebase_DateTime('1979-06-20 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'test the first sunday (1979-06-10)');
         
         // period boudaries in the middle of the recur events
-        $from = new Zend_Date('2009-04-05 17:30:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-04-12 17:30:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-04-05 17:30:00');
+        $until = new Tinebase_DateTime('2009-04-12 17:30:00');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'boundaries inclusion failed');
         
         // odd interval
         $event->rrule = 'FREQ=WEEKLY;INTERVAL=2;BYDAY=SU';
-        $from = new Zend_Date('2009-04-12 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-05-03 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-04-12 00:00:00');
+        $until = new Tinebase_DateTime('2009-05-03 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'odd interval failed');
     }
@@ -157,7 +158,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
      */
     public function testCalcWeeklyAllDay()
     {
-    	// NOTE allday in Europe/Berlin leads to UTC daybreak
+        // NOTE allday in Europe/Berlin leads to UTC daybreak
         $event = new Calendar_Model_Event(array(
             'uid'              => Tinebase_Record_Abstract::generateUID(),
             'summary'          => 'testCalcWeeklyAllDay',
@@ -171,9 +172,10 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2009-05-31 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-07-05 21:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-05-31 22:00:00');
+        $until = new Tinebase_DateTime('2009-07-05 21:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
         
         $this->assertEquals(4, count($recurSet), 'odd interval failed');
         $this->assertEquals('2009-06-07 22:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
@@ -205,38 +207,40 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         ));
         
         // note: 2009-03-29 Europe/Berlin switched to DST
-        $from = new Zend_Date('2009-01-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-06-30 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-01-01 00:00:00');
+        $until = new Tinebase_DateTime('2009-06-30 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
+        
         $this->assertEquals('2009-01-05 15:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-03-05 15:00:00', $recurSet[1]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-04-05 14:00:00', $recurSet[2]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals(3, count($recurSet));
         
         // lets also cover the case when recurevent start during calcualtion period:
-        $from = new Zend_Date('1979-06-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('1979-10-31 23:49:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('1979-06-01 00:00:00');
+        $until = new Tinebase_DateTime('1979-10-31 23:49:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(4, count($recurSet), 'recur start in period failed');
         
         // lets cover the case when search period boudaries are in the middle of the recur events
         // lets also cover the case when recurevent start during calcualtion period:
-        $from = new Zend_Date('2009-03-05 15:30:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-04-05 14:30:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-03-05 15:30:00');
+        $until = new Tinebase_DateTime('2009-04-05 14:30:00');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'boundary inclusions failed');
         
         // and finaly lets cover the case when period boundaries are the boundaries of the recur events
-        $from = new Zend_Date('2009-03-05 16:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-04-05 14:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-03-05 16:00:00');
+        $until = new Tinebase_DateTime('2009-04-05 14:00:00');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(1, count($recurSet), 'boundary exclusion failed');
         $this->assertEquals('2009-04-05 14:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         
         // try odd interval
         $event->rrule = 'FREQ=MONTHLY;INTERVAL=5;BYMONTHDAY=5';
-        $from = new Zend_Date('2009-01-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-11-05 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-01-05 00:00:00');
+        $until = new Tinebase_DateTime('2009-11-05 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'odd interval failed');
         $this->assertEquals('2009-01-05 15:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
@@ -261,8 +265,8 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2009-07-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-08-31 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-07-01 00:00:00');
+        $until = new Tinebase_DateTime('2009-08-31 23:59:59');
         
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
@@ -272,12 +276,12 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     
     public function testCalcMonthlyByMonthDayStartAllDay()
     {
-    	$event = new Calendar_Model_Event(array(
+        $event = new Calendar_Model_Event(array(
             'uid'             => Tinebase_Record_Abstract::generateUID(),
             'summary'         => 'testCalcMonthlyByMonthDayStartAllDay',
             'dtstart'         => '2009-07-14 22:00:00',
             'dtend'           => '2009-07-15 21:59:00',
-    	    'is_all_day_event' => true,
+            'is_all_day_event' => true,
             'rrule'           => 'FREQ=MONTHLY;INTERVAL=1;BYMONTHDAY=15',
             'originator_tz'   => 'Europe/Berlin',
             Tinebase_Model_Grants::GRANT_EDIT       => true,
@@ -285,8 +289,8 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2009-06-28 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-09-06 21:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-06-28 22:00:00');
+        $until = new Tinebase_DateTime('2009-09-06 21:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $this->assertEquals(1, count($recurSet));
@@ -294,8 +298,8 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $this->assertEquals('2009-08-15 21:59:00', $recurSet[0]->dtend->get(Tinebase_Record_Abstract::ISO8601LONG));
 
         // test switch from DST to NO DST
-        $from = new Zend_Date('2009-11-30 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-12-31 21:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-11-30 22:00:00');
+        $until = new Tinebase_DateTime('2009-12-31 21:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $this->assertEquals(1, count($recurSet));
@@ -317,8 +321,8 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2009-02-22 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-07-26 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-02-22 00:00:00');
+        $until = new Tinebase_DateTime('2009-07-26 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(2, count($recurSet), 'forward skip failed');
         $this->assertEquals('2009-02-22 15:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
@@ -348,8 +352,8 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
             )
         ));
         
-        $from = new Zend_Date('2009-02-01 15:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-12-31 14:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-02-01 15:00:00');
+        $until = new Tinebase_DateTime('2009-12-31 14:00:00');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $this->assertEquals(3, count($recurSet), 'backward skip failed');
@@ -375,8 +379,8 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2009-07-01 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-08-31 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-07-01 00:00:00');
+        $until = new Tinebase_DateTime('2009-08-31 23:59:59');
         
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
@@ -387,6 +391,7 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     
     public function testCalcMonthlyByDayStartAllDay()
     {
+        
         $event = new Calendar_Model_Event(array(
             'uid'             => Tinebase_Record_Abstract::generateUID(),
             'summary'         => 'testCalcMonthlyByDayStartAllDay',
@@ -400,8 +405,8 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2009-06-28 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-09-06 21:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-06-28 22:00:00');
+        $until = new Tinebase_DateTime('2009-09-06 21:59:59');
         
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
@@ -424,14 +429,14 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2010-06-08 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2010-07-31 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2010-06-08 22:00:00');
+        $until = new Tinebase_DateTime('2010-07-31 22:00:00');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(1, count($recurSet));
         $this->assertEquals('2010-07-10 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
         
-        $from = new Zend_Date('2010-06-10 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2010-07-31 22:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2010-06-10 22:00:00');
+        $until = new Tinebase_DateTime('2010-07-31 22:00:00');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(1, count($recurSet));
         $this->assertEquals('2010-07-10 10:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
@@ -452,9 +457,13 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
         // note: 2009-03-29 Europe/Berlin switched to DST
-        $from = new Zend_Date('2008-02-25 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2013-03-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2008-02-25 00:00:00');
+        $until = new Tinebase_DateTime('2013-03-01 23:59:59');
+        $until->setTimezone('Europe/Berlin');
+        $from->setTimezone('Europe/Berlin');
+        
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
         $this->assertEquals(1, count($recurSet), 'leapyear only failed');
         $this->assertEquals('2012-02-29 08:00:00', $recurSet[0]->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG));
     }
@@ -473,8 +482,8 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2008-02-25 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2013-03-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2008-02-25 00:00:00');
+        $until = new Tinebase_DateTime('2013-03-01 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(5, count($recurSet), 'yearlybyday failed');
     }
@@ -507,25 +516,25 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2003-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2003-04-11 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2003-04-04 00:00:00');
+        $until = new Tinebase_DateTime('2003-04-11 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $recurSet->setTimezone('US/Pacific');
-        $this->assertEquals(10, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
-        $this->assertEquals(10, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
+        $this->assertEquals(10, $recurSet[0]->dtstart->get('G'), 'for orginator dtstart should be stable...');
+        $this->assertEquals(10, $recurSet[1]->dtstart->get('G'), 'for orginator dtstart should be stable...');
         
         $recurSet->setTimezone('US/Arizona');
-        $this->assertEquals(11, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 11');
-        $this->assertEquals(10, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 10');
+        $this->assertEquals(11, $recurSet[0]->dtstart->get('G'), 'for US/Arizona dtstart before DST should be 11');
+        $this->assertEquals(10, $recurSet[1]->dtstart->get('G'), 'for US/Arizona dtstart after DST shoud be 10');
         
         $recurSet->setTimezone('America/New_York');
-        $this->assertEquals(13, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for America/New_York dtstart before DST should be 13');
-        $this->assertEquals(13, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for America/New_York dtstart after DST shoud be 13');
+        $this->assertEquals(13, $recurSet[0]->dtstart->get('G'), 'for America/New_York dtstart before DST should be 13');
+        $this->assertEquals(13, $recurSet[1]->dtstart->get('G'), 'for America/New_York dtstart after DST shoud be 13');
         
         $recurSet->setTimezone('UTC');
-        $this->assertEquals(18, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for UTC dtstart before DST should be 18');
-        $this->assertEquals(17, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for UTC dtstart after DST shoud be 17');
+        $this->assertEquals(18, $recurSet[0]->dtstart->get('G'), 'for UTC dtstart before DST should be 18');
+        $this->assertEquals(17, $recurSet[1]->dtstart->get('G'), 'for UTC dtstart after DST shoud be 17');
     }
     
     public function testMultipleTimezonesOriginatingInArizona()
@@ -546,25 +555,25 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2003-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2003-04-11 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2003-04-04 00:00:00');
+        $until = new Tinebase_DateTime('2003-04-11 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         
         $recurSet->setTimezone('US/Pacific');
-        $this->assertEquals(10, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Pacific dtstart before DST should be 10');
-        $this->assertEquals(11, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Pacific dtstart before DST should be 11');
+        $this->assertEquals(10, $recurSet[0]->dtstart->get('G'), 'for US/Pacific dtstart before DST should be 10');
+        $this->assertEquals(11, $recurSet[1]->dtstart->get('G'), 'for US/Pacific dtstart before DST should be 11');
         
         $recurSet->setTimezone('US/Arizona');
-        $this->assertEquals(11, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
-        $this->assertEquals(11, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for orginator dtstart should be stable...');
+        $this->assertEquals(11, $recurSet[0]->dtstart->get('G'), 'for orginator dtstart should be stable...');
+        $this->assertEquals(11, $recurSet[1]->dtstart->get('G'), 'for orginator dtstart should be stable...');
         
         $recurSet->setTimezone('America/New_York');
-        $this->assertEquals(13, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart before DST should be 13');
-        $this->assertEquals(14, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for US/Arizona dtstart after DST shoud be 14');
+        $this->assertEquals(13, $recurSet[0]->dtstart->get('G'), 'for US/Arizona dtstart before DST should be 13');
+        $this->assertEquals(14, $recurSet[1]->dtstart->get('G'), 'for US/Arizona dtstart after DST shoud be 14');
         
         $recurSet->setTimezone('UTC');
-        $this->assertEquals(18, $recurSet[0]->dtstart->get(Zend_Date::HOUR), 'for UTC dtstart before DST should be 18');
-        $this->assertEquals(18, $recurSet[1]->dtstart->get(Zend_Date::HOUR), 'for UTC dtstart after DST shoud be 18');
+        $this->assertEquals(18, $recurSet[0]->dtstart->get('G'), 'for UTC dtstart before DST should be 18');
+        $this->assertEquals(18, $recurSet[1]->dtstart->get('G'), 'for UTC dtstart after DST shoud be 18');
     }
     
     public function testBrokenRrule()
@@ -581,12 +590,13 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2009-08-28 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-09-28 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-08-28 00:00:00');
+        $until = new Tinebase_DateTime('2009-09-28 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
         $this->assertEquals(4, count($recurSet));
         
     }
+    
     
     public function testComputeNextOccurrence()
     {
@@ -601,11 +611,13 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $from = new Zend_Date('2008-01-21 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2008-01-21 00:00:00');
         $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $from);
         $this->assertTrue($event === $nextOccurrence, 'given event is next occurrence');
+
         
         $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtstart);
+        
         $this->assertEquals('2009-09-11 08:00:00', $nextOccurrence->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
         $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($event, $exceptions, $nextOccurrence->dtstart);
@@ -618,69 +630,79 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     public function testSkipWday()
     {
         // $_n == +1
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-12 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-15 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
-        $date = new Zend_Date('2009-04-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-05 00:00:00');
         $this->assertEquals('2009-04-12 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-05 00:00:00');
         $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-05 00:00:00');
         $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
-        $date = new Zend_Date('2009-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-04 00:00:00');
         $this->assertEquals('2009-04-05 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-04 00:00:00');
         $this->assertEquals('2009-04-09 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_THURSDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-04 00:00:00');
         $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
         // $_n == +2
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-19 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY, 2)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-21 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_TUESDAY, 2)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
         // $_n == -1
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-06 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_MONDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-02 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_THURSDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-01 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
-        $date = new Zend_Date('2009-04-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-05 00:00:00');
         $this->assertEquals('2009-04-04 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SATURDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
-        $date = new Zend_Date('2009-04-04 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-04 00:00:00');
         $this->assertEquals('2009-03-29 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY, -1)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
         // $_n == -2
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-03-29 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_SUNDAY, -2)->toString(Tinebase_Record_Abstract::ISO8601LONG));
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-03-31 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_TUESDAY, -2)->toString(Tinebase_Record_Abstract::ISO8601LONG));
     
         // $_considerDateItself == TRUE
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, 1, TRUE)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2009-04-08 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, -1, TRUE)->toString(Tinebase_Record_Abstract::ISO8601LONG));
     
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-15 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, 2, TRUE)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
-        $date = new Zend_Date('2009-04-08 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('2009-04-08 00:00:00');
         $this->assertEquals('2009-04-01 00:00:00', Calendar_Model_Rrule::skipWday($date, Calendar_Model_Rrule::WDAY_WEDNESDAY, -2, TRUE)->toString(Tinebase_Record_Abstract::ISO8601LONG));
         
     }
     
     public function testDatenArrayConverstions()
     {
-        $date = new Zend_Date('1979-06-05 11:22:33', Tinebase_Record_Abstract::ISO8601LONG);
+        $date = new Tinebase_DateTime('1979-06-05 11:22:33');
         $dateArray = array(
             'day'       => 5 ,
             'month'     => 6, 
@@ -696,18 +718,18 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
     
     public function testGetMonthDiff()
     {
-        $from  = new Zend_Date('1979-06-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $from  = new Tinebase_DateTime('1979-06-05 00:00:00');
 
-        $until = new Zend_Date('1980-06-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Tinebase_DateTime('1980-06-05 00:00:00');
         $this->assertEquals(12, Calendar_Model_Rrule::getMonthDiff($from, $until));
         
-        $until = new Zend_Date('1982-07-05 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $until = new Tinebase_DateTime('1982-07-05 00:00:00');
         $this->assertEquals(37, Calendar_Model_Rrule::getMonthDiff($from, $until));
     }
     
     public function testAddMonthIngnoringDay()
     {
-        $date  = new Zend_Date('2009-01-31 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
+        $date  = new Tinebase_DateTime('2009-01-31 00:00:00');
         for ($i=0; $i<12; $i++) {
             $dateArr = Calendar_Model_Rrule::addMonthIngnoringDay($date, $i);
             $this->assertEquals(31, $dateArr['day']);

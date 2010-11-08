@@ -249,7 +249,7 @@ class Voipmanager_JsonTest extends PHPUnit_Framework_TestCase
         $returned = $this->_json->saveAsteriskSipPeer($test->toArray());
         
         // update regseconds
-        $now = Zend_Date::now();
+        $now = Tinebase_DateTime::now();
         $data = array('regseconds' => $now);
         $updated = $this->_json->updatePropertiesAsteriskSipPeer($returned['id'], $data);
         

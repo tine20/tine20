@@ -210,11 +210,11 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
     {
         $account = $this->_backendLDAP->getUserByLoginName('tine20phpunit-updated', 'Tinebase_Model_FullUser');
         
-        $this->_backendLDAP->setExpiryDate($account, Zend_Date::now());
+        $this->_backendLDAP->setExpiryDate($account, Tinebase_DateTime::now());
         
         $account = $this->_backendLDAP->getUserById($account, 'Tinebase_Model_FullUser');
         
-        $this->assertType('Zend_Date', $account->accountExpires);
+        $this->assertType('DateTime', $account->accountExpires);
     }
     
     /**

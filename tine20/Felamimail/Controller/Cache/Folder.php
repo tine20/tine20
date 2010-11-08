@@ -200,7 +200,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $folder->imap_uidvalidity  = $counter['uidvalidity'];
         $folder->imap_totalcount   = $counter['exists'];
         $folder->imap_status       = Felamimail_Model_Folder::IMAP_STATUS_OK;
-        $folder->imap_timestamp    = Zend_Date::now();
+        $folder->imap_timestamp    = Tinebase_DateTime::now();
         
         if (! array_key_exists('uidnext', $counter)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Non-standard IMAP server. Trying to guess uidnext by getting all Uids. Maybe it does not work.');
@@ -305,7 +305,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'is_selectable'     => ($folderData['isSelectable'] == '1'),
                         'has_children'      => ($folderData['hasChildren'] == '1'),
                         'account_id'        => $_account->getId(),
-                        'imap_timestamp'    => Zend_Date::now(),
+                        'imap_timestamp'    => Tinebase_DateTime::now(),
                         'user_id'           => $this->_currentAccount->getId(),
                         'parent'            => $_parentFolder,
                         'system_folder'     => in_array(strtolower($folderData['localName']), $systemFolders),
@@ -361,7 +361,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     {
         // if cache status is CACHE_STATUS_UPDATING and timestamp is less than 5 minutes ago, don't update
         if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING &&
-            ($_folder->cache_timestamp instanceof Zend_Date && $_folder->cache_timestamp->compare(Zend_Date::now()->subMinute(5)) == 1)
+            ($_folder->cache_timestamp instanceof Tinebase_DateTime && $_folder->cache_timestamp->compare(Tinebase_DateTime::now()->subMinute(5)) == 1)
         ) {
             return false;
         }

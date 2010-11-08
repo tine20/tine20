@@ -42,55 +42,55 @@ interface Tinebase_Timemachine_Interface
     /**
      * Returns ids(strings) of records which where created in a given timespan.
      * 
-     * @param Zend_Date _from beginning point of timespan, excluding point itself
-     * @param Zend_Date _until end point of timespan, included point itself
+     * @param Tinebase_DateTime _from beginning point of timespan, excluding point itself
+     * @param Tinebase_DateTime _until end point of timespan, included point itself
      * @param Tinebase_Record_Filter _filter
      * @return array array of identifiers
      * @access public
      */
-    public function getCreated( Zend_Date $_from, Zend_Date $_until, Tinebase_Record_Filter $_filter );
+    public function getCreated( Tinebase_DateTime $_from, Tinebase_DateTime $_until, Tinebase_Record_Filter $_filter );
     
     /**
      * Returns uids(strings) of records which where modified in a given timespan.
      * 
-     * @param Zend_Date _from beginning point of timespan, excluding point itself
-     * @param Zend_Date _until end point of timespan, included point itself
+     * @param Tinebase_DateTime _from beginning point of timespan, excluding point itself
+     * @param Tinebase_DateTime _until end point of timespan, included point itself
      * @param Tinebase_Record_Filter _filter
      * @return array array of identifiers
      * @access public
      */
-    public function getModified( Zend_Date $_from, Zend_Date $_until, Tinebase_Record_Filter $_filter );
+    public function getModified( Tinebase_DateTime $_from, Tinebase_DateTime $_until, Tinebase_Record_Filter $_filter );
     
     /**
      * Returns ids(strings) of records which where deleted in a given timespan.
      * 
-     * @param Zend_Date _from beginning point of timespan, including point itself
-     * @param Zend_Date _until end point of timespan, included point itself
+     * @param Tinebase_DateTime _from beginning point of timespan, including point itself
+     * @param Tinebase_DateTime _until end point of timespan, included point itself
      * @param Tinebase_Record_Filter _filter
      * @return array array of identifiers
      * @access public
      */
-    public function getDeleted( Zend_Date $_from, Zend_Date $_until, Tinebase_Record_Filter $_filter );
+    public function getDeleted( Tinebase_DateTime $_from, Tinebase_DateTime $_until, Tinebase_Record_Filter $_filter );
     
     /**
      * Returns a record as it was at a given point in history
      * 
      * @param string _id 
-     * @param Zend_Date _at 
+     * @param Tinebase_DateTime _at 
      * @return Tinebase_Record
      * @access public
      */
-    public function getRecord( $_id,  Zend_Date $_at );
+    public function getRecord( $_id,  Tinebase_DateTime $_at );
     
     /**
      * Returns a set of records as they where at a given point in history
      * 
      * @param array _ids array of strings 
-     * @param Zend_Date _at 
+     * @param Tinebase_DateTime _at 
      * @return Tinebase_Record_RecordSet
      * @access public
      */
-    public function getRecords( array $_ids,  Zend_Date $_at );
+    public function getRecords( array $_ids,  Tinebase_DateTime $_at );
 
 } // end of Tinebase_Timemachine_Interface
 ?>

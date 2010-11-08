@@ -39,21 +39,21 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     /**
      * returns from datetime
      *
-     * @return Zend_Date
+     * @return Tinebase_DateTime
      */
     public function getFrom()
     {
-        return new Zend_Date($this->_from, Tinebase_Record_Abstract::ISO8601LONG);
+        return new Tinebase_DateTime($this->_from);
     }
     
     /**
      * returns until datetime
      *
-     * @return Zend_Date
+     * @return Tinebase_DateTime
      */
     public function getUntil()
     {
-        return new Zend_Date($this->_until, Tinebase_Record_Abstract::ISO8601LONG);
+        return new Tinebase_DateTime($this->_until);
     }
     
     /**
@@ -64,8 +64,8 @@ class Calendar_Model_PeriodFilter extends Tinebase_Model_Filter_Abstract
     public function setValue($_value)
     {
         if (is_array($_value) && (isset($_value['from']) && isset($_value['until']))) {
-            $from = $_value['from'] instanceof Zend_Date ? $_value['from']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['from'];
-            $until = $_value['until'] instanceof Zend_Date ? $_value['until']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['until'];
+            $from = $_value['from'] instanceof DateTime ? $_value['from']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['from'];
+            $until = $_value['until'] instanceof DateTime ? $_value['until']->get(Tinebase_Record_Abstract::ISO8601LONG) : $_value['until'];
             
             $this->_from = $this->_convertStringToUTC($from);
             $this->_until = $this->_convertStringToUTC($until);

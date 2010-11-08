@@ -20,13 +20,13 @@
  */
 class Tinebase_Translation
 {
-	/**
-	 * Layzy loading for {@see getCountryList()}
-	 * 
-	 * @var array
-	 */
-	protected static $_countryLists = array();
-	
+    /**
+     * Layzy loading for {@see getCountryList()}
+     * 
+     * @var array
+     */
+    protected static $_countryLists = array();
+    
     /**
      * array with translations for applications 
      * - is used in getTranslations to save already initialized translations
@@ -109,24 +109,24 @@ class Tinebase_Translation
      */
     public static function getCountryList()
     {
-    	$locale = Tinebase_Core::get('locale');
-    	$language = $locale->getLanguage();
-    	
-    	//try lazy loading of translated country list
-    	if (empty(self::$_countryLists[$language])) {
-	        $countries = Zend_Locale::getTranslationList('territory', $locale, 2);
-	        asort($countries);
-	        foreach($countries as $shortName => $translatedName) {
-	            $results[] = array(
-	                'shortName'         => $shortName, 
-	                'translatedName'    => $translatedName
-	            );
-	        }
-	
-	        self::$_countryLists[$language] = $results;
-    	}
+        $locale = Tinebase_Core::get('locale');
+        $language = $locale->getLanguage();
+        
+        //try lazy loading of translated country list
+        if (empty(self::$_countryLists[$language])) {
+            $countries = Zend_Locale::getTranslationList('territory', $locale, 2);
+            asort($countries);
+            foreach($countries as $shortName => $translatedName) {
+                $results[] = array(
+                    'shortName'         => $shortName, 
+                    'translatedName'    => $translatedName
+                );
+            }
+    
+            self::$_countryLists[$language] = $results;
+        }
 
-    	return array('results' => self::$_countryLists[$language]);
+        return array('results' => self::$_countryLists[$language]);
     }
     
     /**
@@ -137,14 +137,14 @@ class Tinebase_Translation
      */
     public static function getCountryNameByRegionCode($_regionCode)
     {
-    	$countries = self::getCountryList();
-    	foreach($countries['results'] as $country) {
-    		if ($country['shortName'] === $_regionCode) {
-    			return $country['translatedName'];
-    		}
-    	} 
+        $countries = self::getCountryList();
+        foreach($countries['results'] as $country) {
+            if ($country['shortName'] === $_regionCode) {
+                return $country['translatedName'];
+            }
+        } 
 
-    	return null;
+        return null;
     }
     
     /**
@@ -174,8 +174,8 @@ class Tinebase_Translation
      */
     public static function getLocale($_localeString = 'auto')
     {
-    	Zend_Locale::$compatibilityMode = false;
-    	
+        Zend_Locale::$compatibilityMode = false;
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
         try {
             $locale = new Zend_Locale($_localeString);
@@ -417,20 +417,20 @@ class Tinebase_Translation
     /**
      * convert zend date to string
      * 
-     * @param Zend_Date $_date [optional]
+     * @param Tinebase_DateTime $_date [optional]
      * @param string $_timezone [optional]
      * @param Zend_Locale $_locale [optional]
      * @return string
      */
-    public static function dateToStringInTzAndLocaleFormat(Zend_Date $_date = NULL, $_timezone = NULL, Zend_Locale $_locale = NULL)
+    public static function dateToStringInTzAndLocaleFormat(DateTime $_date = NULL, $_timezone = NULL, Zend_Locale $_locale = NULL)
     {
-        $date = ($_date !== NULL) ? clone($_date) : Zend_Date::now();
+        $date = ($_date !== NULL) ? clone($_date) : Tinebase_DateTime::now();
         $timezone = ($_timezone !== NULL) ? $_timezone : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get(Tinebase_Core::LOCALE);
         
         $date->setTimezone($timezone);
-        $result = $date->toString(Zend_Locale_Format::getDateFormat($locale), $locale) . ' ' .
-            $date->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
+        $result = $date->toString(Tinebase_DateTime::convertIsoToPhpFormat(Zend_Locale_Format::getDateFormat($locale)), $locale) . ' ' .
+            $date->toString(Tinebase_DateTime::convertIsoToPhpFormat(Zend_Locale_Format::getTimeFormat($locale)), $locale);
             
         return $result;
     }

@@ -170,7 +170,7 @@ class Tinebase_Export_Spreadsheet_Xls extends Tinebase_Export_Spreadsheet_Abstra
         switch($_field->type) {
             case 'datetime':
             case 'date':
-                if ($_record->{$_field->identifier} instanceof Zend_Date) {
+                if ($_record->{$_field->identifier} instanceof DateTime) {
                     $result = PHPExcel_Shared_Date::PHPToExcel($_record->{$_field->identifier}->getTimestamp());
                 } else {
                     $result = $_record->{$_field->identifier};

@@ -41,9 +41,9 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Record_RecordTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Record_RecordTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -53,52 +53,52 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      */
     protected function setUp()
     {
-		// initial object
-	    $this->objects['TestRecord'] = new Tinebase_Record_DummyRecord(array(), true) ; 
-	 	$this->objects['TestRecord']->setFromArray(array('id'=>'2', 'test_2'=>NULL, ), NULL);
-		
-		// date management
-		$date = Zend_Date::now();
-		$this->objects['TestRecord']->date_single = clone($date);
-		$this->objects['TestRecord']->date_multiple = array( $date ) ;
-		
-		// bypass filters
-		$this->objects['TestRecordBypassFilters'] = new Tinebase_Record_DummyRecord(array('id'=>'7', 'test_2'=>'STRING'), true) ;
-	
-		$this->expectFailure['TestRecord']['testSetId'][] = array('2','3');
-		$this->expectFailure['TestRecord']['testSetId'][] = array('30000000','3000000000000000000000000000');
-		$this->expectSuccess['TestRecord']['testSetId'][] = array('2','2');
-		
-		$this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','3');
-		$this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('30000000','3000000000000000000000000000');
-		$this->expectSuccess['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','2');
-		
-		$this->expectSuccess['TestRecord']['testSetFromArray'][] = array(array('test_1'=>'2', 'test_2'=>NULL), 'test_1');
-		$this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Exception_Record_Validation', array('test_2' => 'string'), );
-		$this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
-		
-    	$dummy = array(
-					'id'=>2, 
-					'test_2'=>'',
-					'date_single' => $date->get(Tinebase_Record_Abstract::ISO8601LONG), 
-					'date_multiple'=> array($date->get(Tinebase_Record_Abstract::ISO8601LONG)));
-  	  	$this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
-  	  	
-  	  	
-  	  	$this->expectSuccess['TestRecord']['__set'][] = array('test_3', 4 );
-  	  	
-  	  	$this->expectSuccess['TestRecord']['__get'][] = array('test_3', 4 );
-  	  	
-  	  	$this->expectSuccess['TestRecord']['test__isset'][] = array('id');
-  	  	
-  	  	$this->expectFailure['TestRecord']['test__isset'][] = array('string');
-  	  	
-  	  	
-  	  	$this->expectFailure['TestRecord']['test__setException'][] = array( 'Tinebase_Exception_UnexpectedValue', 'test_100',);
-		$this->expectFailure['TestRecord']['test__getException'][] = array( 'Tinebase_Exception_UnexpectedValue', 'test_100',);
-		
-  	  	
-  	  	$this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Exception_Record_NotAllowed', 'test_2',);
+        // initial object
+        $this->objects['TestRecord'] = new Tinebase_Record_DummyRecord(array(), true) ; 
+        $this->objects['TestRecord']->setFromArray(array('id'=>'2', 'test_2'=>NULL, ), NULL);
+        
+        // date management
+        $date = new Tinebase_DateTime();
+        $this->objects['TestRecord']->date_single = clone($date);
+        $this->objects['TestRecord']->date_multiple = array($date);
+        // bypass filters
+        $this->objects['TestRecordBypassFilters'] = new Tinebase_Record_DummyRecord(array('id'=>'7', 'test_2'=>'STRING'), true) ;
+    
+        $this->expectFailure['TestRecord']['testSetId'][] = array('2','3');
+        $this->expectFailure['TestRecord']['testSetId'][] = array('30000000','3000000000000000000000000000');
+        $this->expectSuccess['TestRecord']['testSetId'][] = array('2','2');
+        
+        $this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','3');
+        $this->expectFailure['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('30000000','3000000000000000000000000000');
+        $this->expectSuccess['TestRecordBypassFilters']['testSetIdBypassFilters'][] = array('2','2');
+        
+        $this->expectSuccess['TestRecord']['testSetFromArray'][] = array(array('test_1'=>'2', 'test_2'=>NULL), 'test_1');
+        $this->expectFailure['TestRecord']['testSetFromArrayException'][] = array('Tinebase_Exception_Record_Validation', array('test_2' => 'string'), );
+        $this->expectFailure['TestRecord']['testSetTimezoneException'][] = array('Exception', 'UTC', );
+        
+        $dummy = array(
+                    'id'=>2, 
+                    'test_2'=>'',
+                    'date_single' => $date->get(Tinebase_Record_Abstract::ISO8601LONG), 
+                    'date_multiple'=> array($date->get(Tinebase_Record_Abstract::ISO8601LONG)));
+        
+        $this->expectSuccess['TestRecord']['testToArray'][] = array($dummy);
+        
+        
+        $this->expectSuccess['TestRecord']['__set'][] = array('test_3', 4 );
+        
+        $this->expectSuccess['TestRecord']['__get'][] = array('test_3', 4 );
+        
+        $this->expectSuccess['TestRecord']['test__isset'][] = array('id');
+        
+        $this->expectFailure['TestRecord']['test__isset'][] = array('string');
+        
+        
+        $this->expectFailure['TestRecord']['test__setException'][] = array( 'Tinebase_Exception_UnexpectedValue', 'test_100',);
+        $this->expectFailure['TestRecord']['test__getException'][] = array( 'Tinebase_Exception_UnexpectedValue', 'test_100',);
+        
+        
+        $this->expectFailure['TestRecord']['testOffsetUnset'][] = array( 'Tinebase_Exception_Record_NotAllowed', 'test_2',);
     }
 
     /**
@@ -109,7 +109,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
      */
     protected function tearDown()
     {
-	
+    
     }
     
     /**
@@ -121,7 +121,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
             'string' => 'test',
             'test_1' => 25,
             'test_2' => 99,
-            'date_single' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+            'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
         ), true);
         
         $record2 = clone $record1;
@@ -144,7 +144,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     {
         $record = new Tinebase_Record_DummyRecord(array(
             'string' => 'test',
-            'date_single' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+            'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
         ), true);
         
         $clone = clone $record;
@@ -163,7 +163,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
             'string' => 'test',
             'test_1' => 25,
             'test_2' => 99,
-            'date_single' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+            'date_single' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
         ), true);
         $record2 = clone $record1;
         $this->assertTrue($record1->isEqual($record2), 'records are equal');
@@ -247,7 +247,7 @@ class Tinebase_Record_RecordTest extends Tinebase_Record_AbstractTest
     public function testDateStringConversion()
     {
         $record = new Tinebase_Record_DummyRecord(array('date_stringtrim' => '2008-12-12 00:00:00'));
-        $this->assertType('string', $record->date_stringtrim, 'implicit conversion of Zend_Date to string failed');
+        $this->assertType('string', $record->date_stringtrim, 'implicit conversion of Tinebase_DateTime to string failed');
     }
     
     /**

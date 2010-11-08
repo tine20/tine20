@@ -110,7 +110,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
      * get Timesheet (create timeaccount as well)
      *
      * @param string $_taId
-     * @param Zend_Date $_startDate
+     * @param Tinebase_DateTime $_startDate
      * @return Timetracker_Model_Timesheet
      */
     protected function _getTimesheet($_taId = NULL, $_startDate = NULL)
@@ -122,7 +122,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
             $taId = $_taId;
         }
         
-        $startDate = ($_startDate !== NULL) ? $_startDate : Zend_Date::now()->toString('yyyy-MM-dd');
+        $startDate = ($_startDate !== NULL) ? $_startDate : Tinebase_DateTime::now()->toString('Y-m-d');
         
         return new Timetracker_Model_Timesheet(array(
             'account_id'        => Tinebase_Core::getUser()->getId(),
@@ -300,8 +300,8 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
         );
         
         if ($_type == 'inweek') {
-            $date = new Zend_Date();
-            $weekNumber = $date->get(Zend_Date::WEEK);
+            $date = Tinebase_DateTime::now();
+            $weekNumber = $date->get('W');
             $result[] = array(
                 'field' => 'start_date', 
                 'operator' => 'inweek', 

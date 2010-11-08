@@ -227,7 +227,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     /**
      * Sets timezone of $this->_datetimeFields
      * 
-     * @see Zend_Date::setTimezone()
+     * @see Tinebase_DateTime::setTimezone()
      * @param  string $_timezone
      * @param  bool   $_recursive
      * @return  void

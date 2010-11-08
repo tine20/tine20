@@ -116,7 +116,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         $keys = array ( $valueFields );
                     }
                     foreach ( $keys as $key ) {
-                        if ( $_lead->$key instanceof Zend_Date ) {
+                        if ( $_lead->$key instanceof DateTime ) {
                             $content[] = $_lead->$key->toString(
                                 Zend_Locale_Format::getDateFormat(Tinebase_Core::get(Tinebase_Core::LOCALE)), 
                                 Tinebase_Core::get(Tinebase_Core::LOCALE)
@@ -246,7 +246,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         
                         // get due date
                         if (! empty($task->due)) {
-                            $dueDate = new Zend_Date($task->due, Tinebase_Record_Abstract::ISO8601LONG);                 
+                            $dueDate = new Tinebase_DateTime($task->due);                 
                             $linkedObjects[] = array($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale')) );
                         }    
                         

@@ -282,9 +282,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     /**
      * Search for records matching given filter
      *
-     * @param  Tinebase_Model_Filter_FilterGroup 	$_filter
-     * @param  Tinebase_Model_Pagination 			$_pagination
-     * @param  boolean 								$_onlyIds
+     * @param  Tinebase_Model_Filter_FilterGroup    $_filter
+     * @param  Tinebase_Model_Pagination            $_pagination
+     * @param  boolean                              $_onlyIds
      * @return Tinebase_Record_RecordSet|array
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
@@ -361,18 +361,18 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     public function create(Tinebase_Record_Interface $_record) 
     {
-    	$identifier = $_record->getIdProperty();
-    	
-    	if (!$_record instanceof $this->_modelName) {
-    		throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type. Should be instance of ' . $this->_modelName);
-    	}
-    	
+        $identifier = $_record->getIdProperty();
+        
+        if (!$_record instanceof $this->_modelName) {
+            throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type. Should be instance of ' . $this->_modelName);
+        }
+        
         // set uid if record has hash id and id is empty
-    	if ($this->_hasHashId() && empty($_record->$identifier)) {
+        if ($this->_hasHashId() && empty($_record->$identifier)) {
             $newId = $_record->generateUID();
             $_record->setId($newId);
         }
-    	
+        
         $recordArray = $this->_recordToRawData($_record);
         
         // unset id if autoincrement & still empty
@@ -383,7 +383,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $recordArray = array_intersect_key($recordArray, $this->_schema);
 
         $this->_prepareData($recordArray);
-        
         $this->_db->insert($this->_tablePrefix . $this->_tableName, $recordArray);
         
         if (!$this->_hasHashId()) {
@@ -397,7 +396,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         // if the record had no id set, set the id now
         if ($_record->$identifier == NULL || $_record->$identifier == 'NULL') {
-        	$_record->$identifier = $newId;
+            $_record->$identifier = $newId;
         }
         
         // add custom fields
@@ -430,7 +429,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
         }
         
-    	$_record->isValid(TRUE);
+        $_record->isValid(TRUE);
         
         $id = $_record->getId();
 
@@ -775,7 +774,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         if($_id instanceof $this->_modelName) {
             $identifier = $this->_getRecordIdentifier();
-        	if(empty($_id->$identifier)) {
+            if(empty($_id->$identifier)) {
                 throw new Tinebase_Exception_InvalidArgument('No id set!');
             }
             $id = $_id->$identifier;
@@ -815,10 +814,10 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         if (preg_match("/\./", $this->_identifier)) {
             list($table, $identifier) = explode('.', $this->_identifier);
-    	} else {
-    		$identifier = $this->_identifier;
-    	}
-    	
+        } else {
+            $identifier = $this->_identifier;
+        }
+        
         return $identifier;    
     }
 

@@ -145,7 +145,7 @@ class Tinebase_Relation_Backend_Sql
     	$this->_dbTable->update(array(
     	    'is_deleted'   => true,
     	    'deleted_by'   => Tinebase_Core::getUser()->getId(),
-    	    'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+    	    'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
     	), $where);
     } // end of member function breakRelation
     
@@ -170,7 +170,7 @@ class Tinebase_Relation_Backend_Sql
             $this->_dbTable->update(array(
                 'is_deleted'   => true,
                 'deleted_by'   => Tinebase_Core::getUser()->getId(),
-                'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+                'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             ), $where);
         }
     } // end of member function breakAllRelations

@@ -194,11 +194,12 @@ abstract class Tinebase_Model_Filter_Abstract
     protected function _convertStringToUTC($_string)
     {
         if (empty($_string)) {
-            $date = new Zend_Date();
+            $date = new Tinebase_DateTime();
             $result = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
         } elseif (isset($this->_options['timezone']) && $this->_options['timezone'] !== 'UTC') {
             date_default_timezone_set($this->_options['timezone']);
-            $date = new Zend_Date($_string, Tinebase_Record_Abstract::ISO8601LONG);
+            $date = new Tinebase_DateTime($_string);
+            
             $date->setTimezone('UTC');
             $result = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
             date_default_timezone_set('UTC');

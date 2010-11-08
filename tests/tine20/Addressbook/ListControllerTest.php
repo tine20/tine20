@@ -120,7 +120,7 @@ class Addressbook_ListControllerTest extends PHPUnit_Framework_TestCase
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
             'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'bday'                  => '1975-01-02 03:04:05',
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'note'                  => 'Bla Bla Bla',

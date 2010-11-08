@@ -81,7 +81,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
             'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'bday'                  => '1975-01-02 03:04:05', // new Tinebase_DateTime???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../Tinebase/ImageHelper/phpunit-logo.gif'),
@@ -124,7 +124,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
             'assistent'             => 'Cornelius Weiß',
-            'bday'                  => '1975-01-02 03:04:05', // new Zend_Date???
+            'bday'                  => '1975-01-02 03:04:05', // new Tinebase_DateTime???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
             'jpegphoto'             => '',
@@ -281,9 +281,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
         $this->assertTrue($count > 0);
         
-        $date = Zend_Date::now();
+        $date = Tinebase_DateTime::now();
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'last_modified_time', 'operator' => 'equals', 'value' => $date->toString('yyyy-MM-dd'))
+            array('field' => 'last_modified_time', 'operator' => 'equals', 'value' => $date->toString('Y-m-d'))
         ));
         $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
         $this->assertTrue($count > 0);
@@ -378,9 +378,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         ));
         $count1 = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
         
-        $date = Zend_Date::now();
+        $date = Tinebase_DateTime::now();
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'creation_time', 'operator' => 'equals',   'value' => $date->toString('yyyy-MM-dd')),
+            array('field' => 'creation_time', 'operator' => 'equals',   'value' => $date->toString('Y-m-d')),
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));

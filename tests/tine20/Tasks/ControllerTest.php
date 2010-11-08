@@ -73,14 +73,14 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
             // tine record fields
             'container_id'         => NULL,
             'created_by'           => 6,
-            'creation_time'        => Zend_Date::now(),
+            'creation_time'        => Tinebase_DateTime::now(),
             'is_deleted'           => 0,
             'deleted_time'         => NULL,
             'deleted_by'           => NULL,
             // task only fields
             'percent'              => 70,
             'completed'            => NULL,
-            'due'                  => Zend_Date::now()->addMonth(1),
+            'due'                  => Tinebase_DateTime::now()->addMonth(1),
             // ical common fields
             //'class_id'             => 2,
             'description'          => str_pad('',1000,'.'),
@@ -118,7 +118,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
     {
         $task = new Tasks_Model_Task($this->_minimalDatas['Task']);
         $task->status_id = $this->_getStatus()->getId();
-        $task->completed = Zend_Date::now();
+        $task->completed = Tinebase_DateTime::now();
         
         $pTask = $this->_controller->create($task);
         $this->assertNull($pTask->completed);
@@ -130,10 +130,10 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
     {
         $task = new Tasks_Model_Task($this->_minimalDatas['Task']);
         $task->status_id = $this->_getStatus(false)->getId();
-        //$task->completed = Zend_Date::now();
+        //$task->completed = Tinebase_DateTime::now();
         
         $pTask = $this->_controller->create($task);
-        $this->assertTrue($pTask->completed instanceof Zend_Date);
+        $this->assertTrue($pTask->completed instanceof DateTime);
         
         $this->_controller->delete($pTask->getId());
     }
@@ -158,7 +158,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
      */
     public function testUpdateTask()
     {
-        $nowTs = Zend_Date::now()->getTimestamp();
+        $nowTs = Tinebase_DateTime::now()->getTimestamp();
         $task = clone $this->_persistantTestTask1;
         
         $task->summary = 'Update of test task 1';
@@ -197,7 +197,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         
         sleep(1);
         $resolvableConcurrencyTask = clone $utask;
-        $resolvableConcurrencyTask->last_modified_time = Zend_Date::now()->addHour(-1);
+        $resolvableConcurrencyTask->last_modified_time = Tinebase_DateTime::now()->addHour(-1);
         $resolvableConcurrencyTask->percent = 50;
         $resolvableConcurrencyTask->summary = 'Update of test task 1';
         
@@ -209,14 +209,14 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         
         sleep(1);
         $resolvableConcurrencyTask = clone $utask;
-        $resolvableConcurrencyTask->last_modified_time = Zend_Date::now()->addHour(-1);
+        $resolvableConcurrencyTask->last_modified_time = Tinebase_DateTime::now()->addHour(-1);
         $resolvableConcurrencyTask->percent = 50;
         $resolvableConcurrencyTask->summary = 'Update of test task 1';
         $this->_controller->update($resolvableConcurrencyTask);
         
         sleep(1);
         $resolvableConcurrencyTask = clone $utask;
-        $resolvableConcurrencyTask->last_modified_time = Zend_Date::now()->addHour(-1);
+        $resolvableConcurrencyTask->last_modified_time = Tinebase_DateTime::now()->addHour(-1);
         $resolvableConcurrencyTask->description = 'other field';
         $resolvableConcurrencyTask->percent = 50;
         $resolvableConcurrencyTask->summary = 'Update of test task 1';
@@ -234,7 +234,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         
         sleep(1);
         $conflictTask = clone $utask;
-        $conflictTask->last_modified_time = Zend_Date::now()->addHour(-1);
+        $conflictTask->last_modified_time = Tinebase_DateTime::now()->addHour(-1);
         $conflictTask->summary = 'Non resolvable conflict';
         $this->setExpectedException('Tinebase_Timemachine_Exception_ConcurrencyConflict');
         $this->_controller->update($conflictTask);

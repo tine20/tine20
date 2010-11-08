@@ -28,10 +28,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected $_applicationName = 'Admin';
     
     /**
-	 * @var bool
-	 */
-	protected $_manageSAM = false;
-	
+     * @var bool
+     */
+    protected $_manageSAM = false;
+    
     /**
      * @var bool
      */
@@ -48,10 +48,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function __construct()
     {
         // manage samba sam?
-		if(isset(Tinebase_Core::getConfig()->samba)) {
-			$this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
-		}
-		
+        if(isset(Tinebase_Core::getConfig()->samba)) {
+            $this->_manageSAM = Tinebase_Core::getConfig()->samba->get('manageSAM', false); 
+        }
+        
         // manage email user settings
         if (Tinebase_EmailUser::manages(Tinebase_Model_Config::IMAP)) {
             $this->_manageImapEmailUser = TRUE; 

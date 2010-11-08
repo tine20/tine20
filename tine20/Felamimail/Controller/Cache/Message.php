@@ -210,7 +210,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         $_folder->cache_status    = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
-        $_folder->cache_timestamp = Zend_Date::now();
+        $_folder->cache_timestamp = Tinebase_DateTime::now();
         $_folder->cache_uidnext   = $_folder->imap_uidnext;
         
         $this->_timeStart = microtime(true);
@@ -626,8 +626,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             'account_id'    => $_folder->account_id,
             'messageuid'    => $_message['uid'],
             'folder_id'     => $_folder->getId(),
-            'timestamp'     => Zend_Date::now(),
-            'received'      => Felamimail_Message::convertDate($_message['received'], Felamimail_Model_Message::DATE_FORMAT_RECEIVED),
+            'timestamp'     => Tinebase_DateTime::now(),
+            'received'      => Felamimail_Message::convertDate($_message['received']),
             'size'          => $_message['size'],
             'flags'         => $_message['flags'],
         ));
@@ -663,7 +663,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         /*
         // store in local cache if received during the last day
         // disabled again for performance reason
-        if($createdMessage->received->compare(Zend_Date::now()->subDay(1)) == 1) {
+        if($createdMessage->received->compare(Tinebase_DateTime::now()->subDay(1)) == 1) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
                 ' prefetch imap message to local cache ' . $createdMessage->getId()
             );            
@@ -790,7 +790,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $this->deleteByFolder($folder);
         
-        $folder->cache_timestamp        = Zend_Date::now();
+        $folder->cache_timestamp        = Tinebase_DateTime::now();
         $folder->cache_uidnext          = 1;
         $folder->cache_status           = Felamimail_Model_Folder::CACHE_STATUS_EMPTY;
         $folder->cache_job_actions_estimate = 0;

@@ -338,7 +338,7 @@ class Tinebase_Relations
     protected function _addRelation($_relation)
     {
         $_relation->created_by = Tinebase_Core::getUser()->getId();
-        $_relation->creation_time = Zend_Date::now();
+        $_relation->creation_time = Tinebase_DateTime::now();
         if (!$_relation->isValid()) {
             throw new Tinebase_Exception_Record_Validation('Relation is not valid' . print_r($_relation->getValidationErrors(),true));
         }
@@ -362,7 +362,7 @@ class Tinebase_Relations
     protected function _updateRelation($_relation)
     {
         $_relation->last_modified_by = Tinebase_Core::getUser()->getId();
-        $_relation->last_modified_time = Zend_Date::now();
+        $_relation->last_modified_time = Tinebase_DateTime::now();
         
         return $this->_backend->updateRelation($_relation);
     }

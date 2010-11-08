@@ -31,9 +31,9 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
     public function toArray($_valueToJson = false)
     {
         $result = parent::toArray($_valueToJson);
-        
+       
         if ($this->_operator != 'within' && $_valueToJson == true) {
-            $date = new Zend_Date($result['value'], Tinebase_Record_Abstract::ISO8601LONG);
+            $date = new Tinebase_DateTime($result['value']);
             $date->setTimezone(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE));
             $result['value'] = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
         }
@@ -81,7 +81,7 @@ class Tinebase_Model_Filter_DateTime extends Tinebase_Model_Filter_Date
             $value[1] = $this->_convertStringToUTC($value[1]);
             
         } else  {            
-            $value = $_value;
+            $value = ($_value instanceof DateTime) ? $_value->toString(Tinebase_Record_Abstract::ISO8601LONG) : $_value;
         }
         
         return $value;

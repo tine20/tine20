@@ -447,7 +447,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         // lock all folders for updates
         $data = array(
-            'cache_timestamp' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'cache_timestamp' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'cache_status'    => Felamimail_Model_Folder::CACHE_STATUS_UPDATING,
         );
         $update = $this->_db->update(SQL_TABLE_PREFIX . 'felamimail_folder', $data);
@@ -466,7 +466,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         // unlock all folders for updates and reset folder counters
         $data = array(
-            'cache_timestamp'   => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'cache_timestamp'   => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'cache_status'      => Felamimail_Model_Folder::CACHE_STATUS_EMPTY,
             'cache_uidnext'     => 1,
             'cache_job_actions_estimate' => 0,

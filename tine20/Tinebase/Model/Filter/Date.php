@@ -53,7 +53,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      *
      * @var string
      */
-    protected $_dateFormat = 'yyyy-MM-dd';
+    protected $_dateFormat = 'Y-m-d';
     
     /**
      * appends sql to given select statement
@@ -65,13 +65,14 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     {
         // prepare value
         $value = (array)$this->_getDateValues($this->_operator, $this->_value);
-         
+        
         // quote field identifier
         $field = $this->_getQuotedFieldName($_backend);
          
         // append query to select object
         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
             if (get_parent_class($this) === 'Tinebase_Model_Filter_Date' || in_array($this->_operator, array('isnull', 'notnull'))) {
+                
                 $_select->where($field . $operator, $value[$num]);
             } else {
                 $_select->where("DATE({$field})" . $operator, $value[$num]);
@@ -95,31 +96,31 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting "within" filter: ' . $_value);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Timezone: ' . date_default_timezone_get());
             
-            $date = new Zend_Date();
+            $date = new Tinebase_DateTime();
             
             // special values like this week, ...
             switch($_value) {
                 /******* week *********/
                 case 'weekNext':
-                    $date->add(21, Zend_Date::DAY);
+                    $date->add(21, Tinebase_DateTime::MODIFIER_DAY);
                 case 'weekBeforeLast':    
-                    $date->sub(7, Zend_Date::DAY);
+                    $date->sub(7, Tinebase_DateTime::MODIFIER_DAY);
                 case 'weekLast':    
-                    $date->sub(7, Zend_Date::DAY);
+                    $date->sub(7, Tinebase_DateTime::MODIFIER_DAY);
                 case 'weekThis':
                     $value = $this->_getFirstAndLastDayOfWeek($date);
                     break;
                 /******* month *********/
                 case 'monthNext':
-                    $date->add(2, Zend_Date::MONTH);
+                    $date->add(2, Tinebase_DateTime::MODIFIER_MONTH);
                 case 'monthLast':
-                    $date->sub(1, Zend_Date::MONTH);
+                    $date->sub(1, Tinebase_DateTime::MODIFIER_MONTH);
                 case 'monthThis':
-                    $dayOfMonth = $date->get(Zend_Date::DAY_SHORT);
-                    $monthDays = $date->get(Zend_Date::MONTH_DAYS);
+                    $dayOfMonth = $date->get('j');
+                    $monthDays = $date->get('t');
                     
-                    $first = $date->toString('yyyy-MM') . '-01';
-                    $date->add($monthDays-$dayOfMonth, Zend_Date::DAY);
+                    $first = $date->toString('Y-m') . '-01';
+                    $date->add($monthDays-$dayOfMonth, Tinebase_DateTime::MODIFIER_DAY);
                     $last = $date->toString($this->_dateFormat);
     
                     $value = array(
@@ -129,34 +130,34 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     break;
                 /******* year *********/
                 case 'yearNext':
-                    $date->add(2, Zend_Date::YEAR);
+                    $date->add(2, Tinebase_DateTime::MODIFIER_YEAR);
                 case 'yearLast':
-                    $date->sub(1, Zend_Date::YEAR);
+                    $date->sub(1, Tinebase_DateTime::MODIFIER_YEAR);
                 case 'yearThis':
                     $value = array(
-                        $date->toString('yyyy') . '-01-01', 
-                        $date->toString('yyyy') . '-12-31',
+                        $date->toString('Y') . '-01-01', 
+                        $date->toString('Y') . '-12-31',
                     );                
                     break;
                 /******* quarter *********/
                 case 'quarterNext':
-                    $date->add(6, Zend_Date::MONTH);
+                    $date->add(6, Tinebase_DateTime::MODIFIER_MONTH);
                 case 'quarterLast':
-                    $date->sub(3, Zend_Date::MONTH);
+                    $date->sub(3, Tinebase_DateTime::MODIFIER_MONTH);
                 case 'quarterThis':
-                    $month = $date->get(Zend_Date::MONTH);
+                    $month = $date->get('m');
                     if ($month < 4) {
-                        $first = $date->toString('yyyy' . '-01-01');
-                        $last = $date->toString('yyyy' . '-03-31');
+                        $first = $date->toString('Y' . '-01-01');
+                        $last = $date->toString('Y' . '-03-31');
                     } elseif ($month < 7) {
-                        $first = $date->toString('yyyy' . '-04-01');
-                        $last = $date->toString('yyyy' . '-06-30');
+                        $first = $date->toString('Y' . '-04-01');
+                        $last = $date->toString('Y' . '-06-30');
                     } elseif ($month < 10) {
-                        $first = $date->toString('yyyy' . '-07-01');
-                        $last = $date->toString('yyyy' . '-09-30');
+                        $first = $date->toString('Y' . '-07-01');
+                        $last = $date->toString('Y' . '-09-30');
                     } else {
-                        $first = $date->toString('yyyy' . '-10-01');
-                        $last = $date->toString('yyyy' . '-12-31');
+                        $first = $date->toString('Y' . '-10-01');
+                        $last = $date->toString('Y' . '-12-31');
                     }
                     $value = array(
                         $first, 
@@ -165,14 +166,15 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     break;
                 /******* day *********/
                 case 'dayNext':
-                    $date->add(2, Zend_Date::DAY);
+                    $date->add(2, Tinebase_DateTime::MODIFIER_DAY);
                 case 'dayLast':
-                    $date->sub(1, Zend_Date::DAY);
+                    $date->sub(1, Tinebase_DateTime::MODIFIER_DAY);
                 case 'dayThis':
                     $value = array(
                         $date->toString($this->_dateFormat), 
                         $date->toString($this->_dateFormat), 
                     );
+                    
                     break;
                 /******* error *********/
                 default:
@@ -180,12 +182,12 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                     $value = '';
             }        
         } elseif ($_operator === 'inweek') {
-            $date = new Zend_Date();
+            $date = new Tinebase_DateTime();
             
             if ($_value > 52) {
                 $_value = 52;
             } elseif ($_value < 1) {
-                $_value = $date->get(Zend_Date::WEEK);
+                $_value = $date->get('W');
             }
             $value = $this->_getFirstAndLastDayOfWeek($date, $_value);
             
@@ -198,11 +200,11 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
     /**
      * get string representation of first and last days of the week defined by date/week number
      * 
-     * @param Zend_Date $_date
+     * @param Tinebase_DateTime $_date
      * @param integer $_weekNumber optional
      * @return array
      */
-    protected function _getFirstAndLastDayOfWeek(Zend_Date $_date, $_weekNumber = NULL)
+    protected function _getFirstAndLastDayOfWeek(Tinebase_DateTime $_date, $_weekNumber = NULL)
     {
         $firstDayOfWeek = $this->_getFirstDayOfWeek();
         
@@ -210,13 +212,13 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
             $_date->setWeek($_weekNumber);
         } 
         
-        $dayOfWeek = $_date->get(Zend_Date::WEEKDAY_DIGIT);
+        $dayOfWeek = $_date->get('w');
         // in some locales sunday is last day of the week -> we need to init dayOfWeek with 7
         $dayOfWeek = ($firstDayOfWeek == 1 && $dayOfWeek == 0) ? 7 : $dayOfWeek;
-        $_date->sub($dayOfWeek - $firstDayOfWeek, Zend_Date::DAY);
+        $_date->sub($dayOfWeek - $firstDayOfWeek, Tinebase_DateTime::MODIFIER_DAY);
         
         $firstDay = $_date->toString($this->_dateFormat);
-        $_date->add(6, Zend_Date::DAY);
+        $_date->add(6, Tinebase_DateTime::MODIFIER_DAY);
         $lastDay = $_date->toString($this->_dateFormat);
             
         $result = array(

@@ -144,11 +144,11 @@ class Voipmanager_Frontend_Snom extends Voipmanager_Frontend_Snom_Abstract
         
         switch($_type) {
             case 'settings':
-                $_phone->settings_loaded_at = Zend_Date::now();
+                $_phone->settings_loaded_at = Tinebase_DateTime::now();
                 break;
                 
             case 'firmware':
-                $_phone->firmware_checked_at = Zend_Date::now();
+                $_phone->firmware_checked_at = Tinebase_DateTime::now();
                 break;
         }
         

@@ -101,10 +101,10 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
      *
      * @param string $_class the class name
      * @param ActiveSync_Model_Device $_device
-     * @param Zend_Date $_syncTimeStamp
+     * @param Tinebase_DateTime $_syncTimeStamp
      * @return ActiveSync_Controller_Abstract
      */
-    public static function dataFactory($_class, ActiveSync_Model_Device $_device, Zend_Date $_syncTimeStamp) 
+    public static function dataFactory($_class, ActiveSync_Model_Device $_device, Tinebase_DateTime $_syncTimeStamp) 
     {
         switch($_class) {
             case self::CLASS_CONTACTS:
@@ -283,13 +283,13 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
      * update sync key
      * 
      * @param ActiveSync_Model_Device $_device
-     * @param Zend_Date $_counter
+     * @param Tinebase_DateTime $_counter
      * @param $_timeStamp
      * @param $_class
      * @param $_collectionId
      * @return void
      */
-    public function updateSyncKey(ActiveSync_Model_Device $_device, $_counter, Zend_Date $_timeStamp, $_class, $_collectionId = NULL)
+    public function updateSyncKey(ActiveSync_Model_Device $_device, $_counter, Tinebase_DateTime $_timeStamp, $_class, $_collectionId = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' update synckey to ' . $_counter);
         

@@ -201,6 +201,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persistentEvent = $this->_controller->create($event);
         
         $fbinfo = $this->_controller->getFreeBusyInfo(array(array('from' => $persistentEvent->dtstart, 'until' => $persistentEvent->dtend)), $persistentEvent->attendee);
+       
         $this->assertGreaterThanOrEqual(2, count($fbinfo));
         
         return $persistentEvent;
@@ -449,8 +450,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $attendee = $persitentEvent->attendee[0];
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $from = new Zend_Date('2009-03-26 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-04-01 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-03-26 00:00:00');
+        $until = new Tinebase_DateTime('2009-04-01 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persitentEvent, $exceptions, $from, $until);
         
         $exception = $recurSet->getFirstRecord();
@@ -499,8 +500,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $this->_getEvent();
         
         // only events in future will be changed!
-        $event->dtstart = Zend_Date::now()->addHour(1);
-        $event->dtend = Zend_Date::now()->addHour(2);
+        $event->dtstart = Tinebase_DateTime::now()->addHour(1);
+        $event->dtend = Tinebase_DateTime::now()->addHour(2);
         
         $event->attendee = $this->_getAttendee();
         $event->attendee[1] = new Calendar_Model_Attender(array(
@@ -538,23 +539,35 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
-        $event->exdate = array(new Zend_Date('2009-04-07 13:00:00', Tinebase_Record_Abstract::ISO8601LONG));
+        $event->exdate = array(new Tinebase_DateTime('2009-04-07 13:00:00'));
         $persitentEvent = $this->_controller->create($event);
+        
         
         $exception = clone $persitentEvent;
         $exception->dtstart->addDay(2);
         $exception->dtend->addDay(2);
+        
+        
+        
         $exception->setId(NULL);
         unset($exception->rrule);
         unset($exception->exdate);
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
         $persitentException = $this->_controller->create($exception);
         
+        
+        
         $persitentEvent->dtstart->addHour(5);
         $persitentEvent->dtend->addHour(5);
         
+        
         $updatedEvent = $this->_controller->update($persitentEvent);
+        
+        
         $updatedException = $this->_controller->get($persitentException->getId());
+        
+        //print_r($updatedEvent);
+        
         $this->assertEquals('2009-04-07 18:00:00', $updatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate');
         $this->assertEquals('2009-04-08 18:00:00', substr($updatedException->recurid, -19), 'failed to update persistent exception');
         $this->assertEquals('2009-04-30 18:30:00', Calendar_Model_Rrule::getRruleFromString($updatedEvent->rrule)->until->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update until in rrule');
@@ -587,8 +600,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persitentEvent = $this->_controller->create($event);
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $from = new Zend_Date('2009-03-26 00:00:00', Tinebase_Record_Abstract::ISO8601LONG);
-        $until = new Zend_Date('2009-04-03 23:59:59', Tinebase_Record_Abstract::ISO8601LONG);
+        $from = new Tinebase_DateTime('2009-03-26 00:00:00');
+        $until = new Tinebase_DateTime('2009-04-03 23:59:59');
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persitentEvent, $exceptions, $from, $until); // 9 days
         
         // skip 27(exception), 31(exception), 03(until)
@@ -628,7 +641,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
-        $event->exdate = array(new Zend_Date('2009-04-07 13:00:00', Tinebase_Record_Abstract::ISO8601LONG));
+        $event->exdate = array(new Tinebase_DateTime('2009-04-07 13:00:00'));
         $persitentEvent = $this->_controller->create($event);
         
         $exception = clone $persitentEvent;
@@ -665,7 +678,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
-        $event->exdate = array(new Zend_Date('2009-04-07 13:00:00', Tinebase_Record_Abstract::ISO8601LONG));
+        $event->exdate = array(new Tinebase_DateTime('2009-04-07 13:00:00'));
         $persitentEvent = $this->_controller->create($event);
         
         $exception = clone $persitentEvent;
@@ -719,7 +732,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persitentEventWithExdate = $this->_controller->createRecurException($exception, true);
         
         $persitentEvent = $this->_controller->get($persitentEvent->getId());
-        $this->assertType('Zend_Date', $persitentEventWithExdate->exdate[0]);
+        $this->assertType('DateTime', $persitentEventWithExdate->exdate[0]);
         $this->assertEquals($persitentEventWithExdate->exdate, $persitentEvent->exdate);
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
@@ -744,7 +757,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $persitentEvent = $this->_controller->get($persitentEvent->getId());
         
-        $this->assertType('Zend_Date', $persitentEvent->exdate[0]);
+        $this->assertType('DateTime', $persitentEvent->exdate[0]);
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
         )));
@@ -786,7 +799,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         // assert alarm time is just before next occurence
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persitentEvent, $exceptions, Zend_Date::now());
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persitentEvent, $exceptions, new Tinebase_DateTime());
         
         $alarmTime = clone $nextOccurance->dtstart;
         $alarmTime->subMinute(30);
@@ -799,7 +812,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $updatedEvent = $this->_controller->update($persitentEvent);
 
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, Zend_Date::now());
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, new Tinebase_DateTime());
         
         $alarmTime = clone $nextOccurance->dtstart;
         $alarmTime->subMinute(30);
@@ -818,7 +831,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $persitentEvent = $this->_controller->create($event);
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $exception = Calendar_Model_Rrule::computeNextOccurrence($persitentEvent, $exceptions, Zend_Date::now());
+        $exception = Calendar_Model_Rrule::computeNextOccurrence($persitentEvent, $exceptions, new Tinebase_DateTime());
         $exception->dtstart->subHour(6);
         $exception->dtend->subHour(6);
         $persistentException = $this->_controller->createRecurException($exception);
@@ -828,7 +841,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         
         $exceptions = $this->_controller->getRecurExceptions($persistentException);
-        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, Zend_Date::now());
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, Tinebase_DateTime::now());
         
         $alarmTime = clone $nextOccurance->dtstart;
         $alarmTime->subMinute(30);

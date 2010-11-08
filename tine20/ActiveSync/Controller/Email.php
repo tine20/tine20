@@ -118,8 +118,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         $this->_getContentFilter($filter, 0);
         $this->_getContainerFilter($filter, $_folderId);
 
-        $startTimeStamp = ($_startTimeStamp instanceof Zend_Date) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
-        $endTimeStamp = ($_endTimeStamp instanceof Zend_Date) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
+        $startTimeStamp = ($_startTimeStamp instanceof DateTime) ? $_startTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_startTimeStamp;
+        $endTimeStamp = ($_endTimeStamp instanceof DateTime) ? $_endTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG) : $_endTimeStamp;
         
         $filter->addFilter(new Tinebase_Model_Filter_DateTime(
             'timestamp',
@@ -180,7 +180,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 
                 switch($value) {
                     case 'received':
-                        $nodeContent = $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z';
+                        $nodeContent = $data->$value->toString('Y-m-d H:i:s') . '.000Z';
                         break;
                         
                     case 'from_email':
@@ -622,7 +622,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         #$_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
         
         if(in_array($_filterType, $this->_filterArray)) {
-            $today = Zend_Date::now()
+            $today = Tinebase_DateTime::now()
                 ->setHour(0)
                 ->setMinute(0)
                 ->setSecond(0);

@@ -110,21 +110,21 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Check if deadline is exceeded for timeaccount ' . $timeaccount->title);
             
             // it is only on monday allowed to add timesheets for last week
-            $date = new Zend_Date();
+            $date = new Tinebase_DateTime();
             
-            $date->set('00:00:00', Zend_Date::TIME_FULL);
-            $dayOfWeek = $date->get(Zend_Date::WEEKDAY_DIGIT);
+            $date->setTime(0,0,0);
+            $dayOfWeek = $date->get('w');
             
             if ($dayOfWeek >= 2) {
                 // only allow to add ts for this week
-                $date->sub($dayOfWeek, Zend_Date::DAY);
+                $date->sub($dayOfWeek, Tinebase_DateTime::MODIFIER_DAY);
             } else {
                 // only allow to add ts for last week
-                $date->sub($dayOfWeek+7, Zend_Date::DAY);
+                $date->sub($dayOfWeek+7, Tinebase_DateTime::MODIFIER_DAY);
             }
             
-            // convert start date to Zend_Date
-            $startDate = new Zend_Date($_record->start_date, 'yyyy-MM-dd');
+            // convert start date to Tinebase_DateTime
+            $startDate = new Tinebase_DateTime($_record->start_date);
             if ($date->compare($startDate) >= 0) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deadline exceeded: ' . $startDate . ' < ' . $date);
                 

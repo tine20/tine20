@@ -86,7 +86,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * sets/unsets expiry date (calls backend class with the same name)
      *
      * @param   int         $_accountId
-     * @param   Zend_Date   $_expiryDate
+     * @param   Tinebase_DateTime   $_expiryDate
     */
     public function setExpiryDate($_accountId, $_expiryDate)
     {
@@ -97,7 +97,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
      * blocks/unblocks the user (calls backend class with the same name)
      *
      * @param   int $_accountId
-     * @param   Zend_Date   $_blockedUntilDate
+     * @param   Tinebase_DateTime   $_blockedUntilDate
     */
     public function setBlockedDate($_accountId, $_blockedUntilDate)
     {
@@ -236,7 +236,7 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
             if (empty($userData[$dateTimeField])) {
                 unset($userData[$dateTimeField]);
             } else {
-                $userData[$dateTimeField] = new Zend_Date($userData[$dateTimeField], Zend_Date::TIMESTAMP);
+                $userData[$dateTimeField] = new Tinebase_DateTime($userData[$dateTimeField]);
             }
         }
         

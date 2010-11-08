@@ -87,11 +87,11 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
     abstract public function import();
     
     /**
-     * converts egw date to Zend_Date
+     * converts egw date to Tinebase_DateTime
      * 
      * @param  int $_egwTS
      * @param  string $_tz timezone
-     * @return Zend_Date
+     * @return Tinebase_DateTime
      */
     public function convertDate($_egwTS, $_tz)
     {
@@ -100,7 +100,7 @@ abstract class Tinebase_Setup_Import_Egw14_Abstract
         }
         
         date_default_timezone_set($_tz);
-        $date = new Zend_Date($_egwTS, Zend_Date::TIMESTAMP);
+        $date = new Tinebase_DateTime($_egwTS);
         date_default_timezone_set('UTC');
         
         return $date;

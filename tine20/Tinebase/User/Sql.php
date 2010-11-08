@@ -245,7 +245,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['password'] = ( $_encrypt ) ? md5($_password) : $_password;
-        $accountData['last_password_change'] = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $where = array(
             $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('id') . ' = ?', $user->getId())
@@ -280,7 +280,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                 break;
                 
             case 'expired':
-                $accountData['expires_at'] = Zend_Date::getTimestamp();
+                $accountData['expires_at'] = Tinebase_DateTime::getTimestamp();
                 break;
             
             default:
@@ -303,7 +303,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * sets/unsets expiry date 
      *
      * @param     mixed      $_accountId
-     * @param     Zend_Date  $_expiryDate set to NULL to disable expirydate
+     * @param     Tinebase_DateTime  $_expiryDate set to NULL to disable expirydate
     */
     public function setExpiryDate($_accountId, $_expiryDate)
     {
@@ -313,7 +313,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
-        if($_expiryDate instanceof Zend_Date) {
+        if($_expiryDate instanceof DateTime) {
             $accountData['expires_at'] = $_expiryDate->get(Tinebase_Record_Abstract::ISO8601LONG);
         } else {
             $accountData['expires_at'] = NULL;
@@ -334,7 +334,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * sets blocked until date 
      *
      * @param  mixed      $_accountId
-     * @param  Zend_Date  $_blockedUntilDate set to NULL to disable blockedDate
+     * @param  Tinebase_DateTime  $_blockedUntilDate set to NULL to disable blockedDate
     */
     public function setBlockedDate($_accountId, $_blockedUntilDate)
     {
@@ -344,7 +344,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
         
-        if($_blockedUntilDate instanceof Zend_Date) {
+        if($_blockedUntilDate instanceof DateTime) {
             $accountData['blocked_until'] = $_blockedUntilDate->get(Tinebase_Record_Abstract::ISO8601LONG);
         } else {
             $accountData['blocked_until'] = NULL;
@@ -374,7 +374,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         $accountData['last_login_from'] = $_ipAddress;
-        $accountData['last_login']      = Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $accountData['last_login']      = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
@@ -475,7 +475,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData = array(
             'login_name'        => $_user->accountLoginName,
             'status'            => $_user->accountStatus,
-            'expires_at'        => ($_user->accountExpires instanceof Zend_Date ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
+            'expires_at'        => ($_user->accountExpires instanceof DateTime ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
             'primary_group_id'  => $_user->accountPrimaryGroup,
             'home_dir'          => $_user->accountHomeDirectory,
             'login_shell'       => $_user->accountLoginShell,
@@ -552,7 +552,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             'id'                => $_user->accountId,
             'login_name'        => $_user->accountLoginName,
             'status'            => $_user->accountStatus,
-            'expires_at'        => ($_user->accountExpires instanceof Zend_Date ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
+            'expires_at'        => ($_user->accountExpires instanceof DateTime ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
             'primary_group_id'  => $_user->accountPrimaryGroup,
             'home_dir'          => $_user->accountHomeDirectory,
             'login_shell'       => $_user->accountLoginShell,

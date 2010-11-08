@@ -138,7 +138,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
                     $attendeeBE->create($attender);
                     // set modification time
                     $this->_db->update($tablePrefix . 'cal_events', array(
-                        'last_modified_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+                        'last_modified_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
                         'last_modified_by' => $eventData['created_by'],
                         'seq' => new Zend_Db_Expr("seq+1"),
                     ), "`id` = '{$eventData['id']}'");

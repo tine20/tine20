@@ -135,7 +135,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             'adr_two_region'        => 'Hamburg',
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
-            'bday'                  => '1975-01-02 03:00:00', // new Zend_Date???
+            'bday'                  => '1975-01-02 03:00:00', // new Tinebase_DateTime???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
 //            'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif'),
@@ -162,7 +162,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
             'adr_two_region'        => 'Hamburg',
             'adr_two_street'        => 'Pickhuben 4',
             'adr_two_street2'       => 'no second street2',
-            'bday'                  => '1975-01-02 03:00:00', // new Zend_Date???
+            'bday'                  => '1975-01-02 03:00:00', // new Tinebase_DateTime???
             'email'                 => 'unittests@tine20.org',
             'email_home'            => 'unittests@tine20.org',
 //            'jpegphoto'             => file_get_contents(dirname(__FILE__) . '/../../Tinebase/ImageHelper/phpunit-logo.gif'),
@@ -248,7 +248,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testGetFoldersPalm()
     {
-    	$controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
+    	$controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Tinebase_DateTime(null, null, 'de_DE'));
     	
     	$folders = $controller->getSupportedFolders();
     	
@@ -260,7 +260,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testGetFoldersIPhone()
     {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
         
         $folders = $controller->getSupportedFolders();
         
@@ -286,7 +286,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
         $testNode = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
         
-        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));   	
+        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Tinebase_DateTime());   	
         
     	$controller->appendXML($testNode, null, $this->objects['contact']->getId(), array());
     	
@@ -317,7 +317,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $appData        = $add->appendChild($testDom->createElementNS('uri:AirSync', 'ApplicationData'));
         
         
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));     
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));     
         
         $controller->appendXML($appData, null, $this->objects['contact']->getId(), array());
         
@@ -342,7 +342,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testGetServerEntries()
     {
-    	$controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+    	$controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
     	
     	$entries = $controller->getServerEntries('addressbook-root', null);
     	
@@ -357,7 +357,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testSyncableFolder()
     {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
         
         $entries = $controller->getServerEntries($this->objects['containerWithSyncGrant']->getId(), null);
         
@@ -372,7 +372,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testUnSyncableFolder()
     {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
         
         $entries = $controller->getServerEntries($this->objects['containerWithoutSyncGrant']->getId(), null);
         
@@ -385,12 +385,12 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testGetChanged()
     {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Zend_Date(null, null, 'de_DE'));
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
         
         Addressbook_Controller_Contact::getInstance()->update($this->objects['contact']);
         Addressbook_Controller_Contact::getInstance()->update($this->objects['unSyncableContact']);
         
-        $entries = $controller->getChanged('addressbook-root', Zend_Date::now()->subMinute(1));
+        $entries = $controller->getChanged('addressbook-root', Tinebase_DateTime::now()->subMinute(1));
         #var_dump($entries);
         $this->assertContains($this->objects['contact']->getId(), $entries);
         $this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
@@ -402,7 +402,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
      */
     public function testSearch()
     {
-        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Zend_Date(null, null, 'de_DE'));
+        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Tinebase_DateTime(null, null, 'de_DE'));
 
         // search for non existing contact
         $xml = new SimpleXMLElement($this->_exampleXMLNotExisting);

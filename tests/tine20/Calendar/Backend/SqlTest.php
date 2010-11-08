@@ -247,8 +247,8 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=WEEKLY;INTERVAL=1;UNTIL=2009-05-20 23:59:59';
         $event->exdate = array(
-            new Zend_Date('2009-04-29 06:00:00'),
-            new Zend_Date('2009-05-06 06:00:00'),
+            new Tinebase_DateTime('2009-04-29 06:00:00'),
+            new Tinebase_DateTime('2009-05-06 06:00:00'),
         );
         
         $persistentEvent = $this->_backend->create($event);
@@ -263,7 +263,7 @@ class Calendar_Backend_SqlTest extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         
-        $event->rrule_until = Zend_Date::now();
+        $event->rrule_until = Tinebase_DateTime::now();
         $persitentEvent = $this->_backend->create($event);
         $this->assertNull($persitentEvent->rrule_until, 'rrul_until is not unset');
         

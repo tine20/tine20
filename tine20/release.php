@@ -77,7 +77,7 @@ if (count($opts->toArray()) === 0 || $opts->h) {
     exit;
 }
 
-$build = trim(`whoami`) . ' '. Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+$build = trim(`whoami`) . ' '. Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
 
 if ($opts->yui) {
     $yuiCompressorPath = $opts->yui;
@@ -201,7 +201,7 @@ function concatJs(array $_files, $_filename)
             $jsContent = file_get_contents("$tine20path/$filename");
             $jsContent = preg_replace('/Tine\.clientVersion\.codeName.*;/i',      "Tine.clientVersion.codeName = '$revisionInfo';", $jsContent);
             $jsContent = preg_replace('/Tine\.clientVersion\.buildType.*;/i',     "Tine.clientVersion.buildType = 'DEBUG';", $jsContent);
-            $jsContent = preg_replace('/Tine\.clientVersion\.buildDate.*;/i',     "Tine.clientVersion.buildDate = '" . Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG) . "';", $jsContent);
+            $jsContent = preg_replace('/Tine\.clientVersion\.buildDate.*;/i',     "Tine.clientVersion.buildDate = '" . Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG) . "';", $jsContent);
             $jsContent = preg_replace('/Tine\.clientVersion\.packageString.*;/i', "Tine.clientVersion.packageString = 'none';", $jsContent);
             $jsContent = preg_replace('/Tine\.title = \'Tine 2\.0\';/i', "Tine.title = '" . TINE20_TITLE . "';", $jsContent);
             //$jsContent = preg_replace('/\$.*Build:.*\$/i', $build, $jsContent);

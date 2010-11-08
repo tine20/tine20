@@ -44,9 +44,9 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_SqlTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_User_SqlTest');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -89,7 +89,7 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+    
     }
     
     /**
@@ -187,11 +187,11 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testSetExpiryDate()
     {
-        $this->_backend->setExpiryDate($this->objects['initialAccount'], Zend_Date::now());
+        $this->_backend->setExpiryDate($this->objects['initialAccount'], new Tinebase_DateTime());
         
         $account = $this->_backend->getUserById($this->objects['initialAccount'], 'Tinebase_Model_FullUser');
         
-        $this->assertType('Zend_Date', $account->accountExpires);
+        $this->assertType('DateTime', $account->accountExpires);
     }
     
     /**
@@ -242,8 +242,8 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         
         $account->accountPrimaryGroup = $originalGroupId;
     }
-}		
-	
+}       
+    
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_User_SqlTest::main') {
     Tinebase_User_SqlTest::main();

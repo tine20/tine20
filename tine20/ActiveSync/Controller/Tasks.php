@@ -121,11 +121,11 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         break;
                         
                     case 'due':
-                        if($data->$value instanceof Zend_Date) {
-                            $_xmlNode->appendChild(new DOMElement($key, $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z', 'uri:Tasks'));
+                        if($data->$value instanceof DateTime) {
+                            $_xmlNode->appendChild(new DOMElement($key, $data->$value->toString('Y-m-d H:i:s') . '.000Z', 'uri:Tasks'));
                             #$_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', $key, '2008-12-30T23:00:00.000Z', 'uri:Tasks'));
                             $data->$value->setTimezone(Tinebase_Core::get('userTimeZone'));
-                            $_xmlNode->appendChild(new DOMElement('DueDate', $data->$value->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z', 'uri:Tasks'));
+                            $_xmlNode->appendChild(new DOMElement('DueDate', $data->$value->toString('Y-m-d H:i:s') . '.000Z', 'uri:Tasks'));
                         }
                         break;
                         
@@ -157,9 +157,9 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         }
         
         // Completed is required
-        if ($data->completed instanceof Zend_Date) {
+        if ($data->completed instanceof DateTime) {
             $_xmlNode->appendChild(new DOMElement('Complete', 1, 'uri:Tasks'));
-            $_xmlNode->appendChild(new DOMElement('DateCompleted', $data->completed->toString('yyyy-MM-ddTHH:mm:ss') . '.000Z', 'uri:Tasks'));
+            $_xmlNode->appendChild(new DOMElement('DateCompleted', $data->completed->toString('Y-m-d H:i:s') . '.000Z', 'uri:Tasks'));
         } else {
             $_xmlNode->appendChild(new DOMElement('Complete', 0, 'uri:Tasks'));
         }
@@ -218,7 +218,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                 case 'due':
                     if(isset($xmlData->$fieldName)) {
                         $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
-                        $task->$value = new Zend_Date($timeStamp, NULL);
+                        $task->$value = new Tinebase_DateTime($timeStamp);
                     } else {
                         $task->$value = null;
                     }
@@ -277,7 +277,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     /**
      * converts an iso formated date into a timestamp
      *
-     * @param  string Zend_Date::ISO8601 representation of a datetime filed
+     * @param  string Tinebase_DateTime::ISO8601 representation of a datetime filed
      * @return int    UNIX Timestamp
      */
     protected function _convertISOToTs($_ISO)

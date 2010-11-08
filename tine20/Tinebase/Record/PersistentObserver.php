@@ -111,7 +111,7 @@ class Tinebase_Record_PersistentObserver
     	}
     	
     	$_persistentObserver->created_by = Tinebase_Core::getUser()->getId();
-    	$_persistentObserver->creation_time = Zend_Date::now();
+    	$_persistentObserver->creation_time = Tinebase_DateTime::now();
     	
     	if ($_persistentObserver->isValid()) {
     		$data = $_persistentObserver->toArray();
@@ -147,7 +147,7 @@ class Tinebase_Record_PersistentObserver
         	$this->_db->update(array(
         	    'is_deleted'   => true,
         	    'deleted_by'   => Tinebase_Core::getUser()->getId(),
-        	    'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+        	    'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
         	), $where);
         }
     } // end of member function removeObserver
@@ -168,7 +168,7 @@ class Tinebase_Record_PersistentObserver
             $this->_db->update(array(
                 'is_deleted'   => true,
                 'deleted_by'   => Tinebase_Core::getUser()->getId(),
-                'deleted_time' => Zend_Date::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+                'deleted_time' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             ), $where);
     	} else {
     		throw new Tinebase_Exception_Record_DefinitionFailure();

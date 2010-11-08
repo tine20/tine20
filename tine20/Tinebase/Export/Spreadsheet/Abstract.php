@@ -76,7 +76,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 }
                 break;
             case 'date':
-                $result = ($_record->{$_field->identifier} instanceof Zend_Date) ? $_record->{$_field->identifier}->toString('yyyy-MM-dd') : $_record->{$_field->identifier};
+                $result = ($_record->{$_field->identifier} instanceof DateTime) ? $_record->{$_field->identifier}->toString('Y-m-d') : $_record->{$_field->identifier};
                 // empty date cells, get displayed as 30.12.1899
                 if(empty($result)) {
                     $result = NULL;

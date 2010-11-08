@@ -104,49 +104,15 @@ class Felamimail_Message extends Zend_Mail_Message
     /**
      * convert date from sent/received
      *
-     * @param string $_dateString
-     * @param string $_format default: 'Thu, 21 Dec 2000 16:01:07 +0200' (Zend_Date::RFC_2822)
+     * @param  string $_dateString
      * @return Zend_Date
      */
-    public static function convertDate($_dateString, $_format = Zend_Date::RFC_2822)
+    public static function convertDate($_dateString)
     {
         try {
-            if ($_format == Zend_Date::RFC_2822) {
-    
-                // strip of timezone information for example: (CEST)
-                $dateString = preg_replace('/( [+-]{1}\d{4}) \(.*\)$/', '${1}', $_dateString);
-                
-                // append dummy weekday if missing
-                if(preg_match('/^(\d{1,2})\s(\w{3})\s(\d{4})\s(\d{2}):(\d{2}):{0,1}(\d{0,2})\s([+-]{1}\d{4})$/', $dateString)) {
-                    $dateString = 'xxx, ' . $dateString;
-                }
-                
-                try {
-                    // Fri,  6 Mar 2009 20:00:36 +0100
-                    $date = new Zend_Date($dateString, Zend_Date::RFC_2822, 'en_US');
-                } catch (Zend_Date_Exception $e) {
-                    // Fri,  6 Mar 2009 20:00:36 CET
-                    $date = new Zend_Date($dateString, Felamimail_Model_Message::DATE_FORMAT, 'en_US');
-                }
-    
-            } else {
-                
-                $date = new Zend_Date($_dateString, $_format, 'en_US');
-                
-                if ($_format == Felamimail_Model_Message::DATE_FORMAT_RECEIVED) {
-                    
-                    if (preg_match('/ ([+-]{1})(\d{2})\d{2}$/', $_dateString, $matches)) {
-                        // add / sub from zend date ?
-                        if ($matches[1] == '+') {
-                            $date->subHour($matches[2]);
-                        } else {
-                            $date->addHour($matches[2]);
-                        }
-                        
-                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($matches, true));
-                    }
-                }
-            }
+            $date = new Tinebase_DateTime($_dateString);
+            $date->setTimezone('UTC');
+
         } catch (Zend_Date_Exception $zde) {
             $date = new Zend_Date(0, Zend_Date::TIMESTAMP);
         }

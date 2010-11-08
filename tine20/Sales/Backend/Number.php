@@ -57,7 +57,7 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
                 'type'          => $_type,
                 'number'        => 1,
                 'account_id'    => $_userId,
-                'update_time'   => Zend_Date::now()
+                'update_time'   => Tinebase_DateTime::now()
             ), TRUE);
             
             $number = $this->create($number);
@@ -67,7 +67,7 @@ class Sales_Backend_Number extends Tinebase_Backend_Sql_Abstract
             
             $number->number++;
             $number->account_id = $_userId;
-            $number->update_time = Zend_Date::now();
+            $number->update_time = Tinebase_DateTime::now();
             
             $number = $this->update($number);
         }
