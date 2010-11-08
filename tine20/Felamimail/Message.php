@@ -118,7 +118,7 @@ class Felamimail_Message extends Zend_Mail_Message
             }
 
         } catch (Zend_Date_Exception $zde) {
-            $date = new Zend_Date(0, Zend_Date::TIMESTAMP);
+            $date = new Tinebase_DateTime('@0');
         }
         
         return $date;
