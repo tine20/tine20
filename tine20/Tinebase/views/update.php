@@ -21,19 +21,31 @@
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all.js"></script>
 
+	<script type="text/javascript" src="Tinebase/js/Locale.js"></script>
+	<script type="text/javascript" src="Tinebase/js/Locale/Gettext.js"></script>
+
+	<?php echo '<script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>'; ?>
+
     <script type="text/javascript">
         Ext.onReady(function() {
-                
-                
-                new Ext.Viewport({
-                        layout: 'fit',
-                        items: {
-                                xtype: 'panel',
-                                layout: 'fit'
-                        }
-                    });
-                    Ext.MessageBox.wait('Tine 2.0 needs to be updated or is not installed yet.', 'Please wait or contact your administrator');
-                    window.setTimeout('location.href = location.href', 20000);
+        	Ext.namespace('Tine', 'Tine.Tinebase');
+        	
+        	Tine.Tinebase.translation = new Locale.Gettext();
+        	Tine.Tinebase.translation.textdomain('Tinebase');
+	        window._ = function (msgid) {
+	            return Tine.Tinebase.translation.dgettext('Tinebase', msgid);
+	        };
+        	
+            var viewPort = new Ext.Viewport({
+				layout: 'fit',
+                items: {
+                	xtype: 'container',
+					layout: 'fit'
+            	}
+			});
+            
+            Ext.MessageBox.wait(_('Tine 2.0 needs to be updated or is not installed yet.'), _('Please wait or contact your administrator'));
+            window.setTimeout('location.href = location.href', 20000);
         }); 
     </script>
 
