@@ -777,7 +777,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $result = $this->_imap->search(array(
             'HEADER X-Tine20TestMessage ' . $_testHeaderValue
         ));
-        $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' found.');
+        $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' in folder ' . $_folderName . ' found.');
         $message = $this->_imap->getSummary($result[0]);
         
         $cachedMessage = $this->_cache->addMessage($message, $folder);
