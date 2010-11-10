@@ -19,6 +19,7 @@
  * @package     Tinebase
  * @property    string                  accountStatus
  * @property    Tinebase_Model_SAMUser  sambaSAM            object holding samba settings
+ * @property    string                  accountEmailAddress  email address of user
  * @property    DateTime                accountExpires      date when account expires  
  * @property    string                  accountFullName     fullname of the account
  * @property    string                  accountDisplayName  displayname of the account
@@ -94,6 +95,8 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'contact_id'            => array('allowEmpty' => true),
             'container_id'          => array('allowEmpty' => true),
             'emailUser'             => array('allowEmpty' => true),
+            'imapUser'              => array('allowEmpty' => true),
+            'smtpUser'              => array('allowEmpty' => true),
             'visibility'            => array(new Zend_Validate_InArray(array('hidden', 'displayed')), Zend_Filter_Input::DEFAULT_VALUE => 'displayed'),
             
         );
