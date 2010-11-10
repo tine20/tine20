@@ -21,13 +21,6 @@
 class Tinebase_User_Sql extends Tinebase_User_Abstract
 {
     /**
-     * copy of Tinebase_Core::get('dbAdapter')
-     *
-     * @var Zend_Db_Adapter_Abstract
-     */
-    private $_db;
-    
-    /**
      * row name mapping 
      * 
      * @var array
@@ -53,10 +46,30 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     );
     
     /**
-     * the constructor
+     * copy of Tinebase_Core::get('dbAdapter')
+     *
+     * @var Zend_Db_Adapter_Abstract
      */
-    public function __construct() {
+    protected $_db;
+    
+    protected $_sqlPlugins = array();
+
+    /**
+     * the constructor
+     *
+     * @param  array $options Options used in connecting, binding, etc.
+     */
+    public function __construct(array $_options = array())
+    {
+        parent::__construct($_options);
+
         $this->_db = Tinebase_Core::getDb();
+        
+        foreach ($this->_plugins as $plugin) {
+            if ($plugin instanceof Tinebase_User_Plugin_SqlInterface) {
+                $this->_sqlPlugins[] = $plugin;
+            }
+        }
     }
     
     /**
@@ -121,7 +134,33 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function getUserByProperty($_property, $_value, $_accountClass = 'Tinebase_Model_User')
     {
-        return $this->getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass);
+        $user = $this->getUserByPropertyFromSqlBackend($_property, $_value, $_accountClass);
+        
+        // append data from plugins
+        foreach ($this->_sqlPlugins as $plugin) {
+            $plugin->inspectGetUserByProperty($user);
+        }
+            
+        if($this instanceof Tinebase_User_Interface_SyncAble) {
+            $syncUser = $this->getUserByPropertyFromSyncBackend('accountId', $user, $_accountClass);
+            
+            if (!empty($syncUser->emailUser)) {
+                $user->emailUser  = $syncUser->emailUser;
+            }
+            if (!empty($syncUser->imapUser)) {
+                $user->imapUser  = $syncUser->imapUser;
+            }
+            if (!empty($syncUser->smtpUser)) {
+                $user->smtpUser  = $syncUser->smtpUser;
+            }
+            if (!empty($syncUser->sambaSAM)) {
+                $user->sambaSAM  = $syncUser->sambaSAM;
+            }
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), true));
+        
+        return $user;
     }
 
     /**
@@ -240,7 +279,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function setPassword($_userId, $_password, $_encrypt = TRUE, $_mustChange = null)
     {
-        $user = $_userId instanceof Tinebase_Model_FullUser ? $_userId : $this->getFullUserById($_userId);
+        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
@@ -248,13 +287,18 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $where = array(
-            $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('id') . ' = ?', $user->getId())
+            $accountsTable->getAdapter()->quoteInto($accountsTable->getAdapter()->quoteIdentifier('id') . ' = ?', $userId)
         );
         
         $result = $accountsTable->update($accountData, $where);
         
         if ($result != 1) {
             throw new Tinebase_Exception_NotFound('Unable to update password! account not found in authentication backend.');
+        }
+        
+        // add data from plugins
+        foreach ($this->_sqlPlugins as $plugin) {
+            $plugin->inspectSetPassword($userId, $_password);
         }
     }
     
@@ -446,7 +490,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->updateUserInSyncBackend($_user);
         }
         
-        return $this->updateUserInSqlBackend($_user);
+        $updatedUser = $this->updateUserInSqlBackend($_user);
+        
+        // update data from plugins
+        foreach ($this->_sqlPlugins as $plugin) {
+            $plugin->inspectUpdateUser($updatedUser, $_user);
+        }
+        
+        return $updatedUser;
     }
     
     /**
@@ -519,7 +570,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $_user->setId($userFromSyncBackend->getId());
         }
         
-        return $this->addUserInSqlBackend($_user);
+        $addedUser = $this->addUserInSqlBackend($_user);
+        
+        // add data from plugins
+        foreach ($this->_sqlPlugins as $plugin) {
+            $plugin->inspectAddUser($addedUser, $_user);
+        }
+        
+        return $addedUser;
     }
     
     /**
@@ -591,6 +649,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         if($this instanceof Tinebase_User_Interface_SyncAble) {
             $this->deleteUserInSyncBackend($_userId);
         }
+        
+        // update data from plugins
+        foreach ($this->_sqlPlugins as $plugin) {
+            $plugin->inspectDeleteUser($_userId);
+        }
+        
     }
     
     /**
