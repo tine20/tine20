@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  User
+ * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -16,24 +16,20 @@
  * 
  * Email User Settings Managing for dbmail (+ ...) attributes in ldap backend
  * 
- * @package Tinebase
- * @subpackage Ldap
+ * @package    Tinebase
+ * @subpackage EmailLdap
  */
-class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
+class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
 {
-
-    /**
-     * @var Tinebase_Ldap
-     */
-    protected $_ldap = NULL;
-
     /**
      * user properties mapping 
      * -> we need to use lowercase for ldap fields because ldap_fetch returns lowercase keys
      *
      * @var array
      */
-    protected $_userPropertyNameMapping = array();
+    protected $_propertyMapping = array(
+        'emailAddress'  => 'mail',
+    );
     
     /**
      * objectclasses required for users
@@ -41,187 +37,43 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
      * @var array
      */
     protected $_requiredObjectClass = array(
-        'dbmailUser',
-    );
-    
-    /**
-     * ldap / email user options array
-     *
-     * @var array
-     */
-    protected $_options = array();
+        'inetOrgPerson'
+    );    
     
     /**
      * the constructor
      *
      */
-    public function __construct()
+    public function __construct(array $_options = array())
     {
-        if (Tinebase_User::getConfiguredBackend() != Tinebase_User::LDAP) {
-            throw new Tinebase_Exception('No LDAP config found.');
-        }
+        parent::__construct($_options);
 
         $ldapOptions = Tinebase_User::getBackendConfiguration();
-        $imapConfig  = Tinebase_EmailUser::getConfig(Tinebase_Model_Config::IMAP);
-        $this->_options = array_merge($ldapOptions, $imapConfig);
+        $config  = Tinebase_EmailUser::getConfig($this->_backendType);
+        $this->_options = array_merge($this->_options, $config);
         
-        // set emailGID
-        $this->_options['emailGID'] = 1208394888;
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Binding to ldap server ' . $ldapOptions['host']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ldapOptions, TRUE));
-        
-        $this->_ldap = new Tinebase_Ldap($ldapOptions);
-        $this->_ldap->bind();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_options, true));
     }
     
+    /******************* protected functions *********************/
+    
     /**
-     * get user by id
+     * Check if we should append domain name or not
      *
-     * @param   int         $_userId
-     * @return  Tinebase_Model_EmailUser user
+     * @param  string $_userName
+     * @return string
      */
-    public function getUserById($_userId) 
+    protected function _appendDomain($_userName)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Trying to get ldap user with id ' . $_userId);
-        
-        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        $filter = Zend_Ldap_Filter::equals(
-            $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($userId)
-        );
-        
-        $accounts = $this->_ldap->search(
-            $filter, 
-            $this->_options['userDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
-            array()
-        );
-        
-        if(count($accounts) == 0) {
-            throw new Exception('User not found: ' . $e->getMessage());
+        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
+            $_userName .= '@' . $this->_config['domain'];
         }
         
-        $user = $this->_ldap2User($accounts->getFirst());
-
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), TRUE));
-        
-        return $user;
-    }
-
-    /**
-     * adds email properties for a new user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
-     */
-	public function addUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
-	{
-	    return $this->updateUser($_user, $_emailUser);
-	}
-	
-	/**
-     * updates email properties for an existing user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
-     */
-	public function updateUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
-	{
-	    if (!empty($_user->accountEmailAddress)) {
-	        return $this->_addEmailAttributes($_user, $_emailUser);
-	    } else {
-	        return $this->_removeEmailAttributes($_user, $_emailUser);
-	    }
-	}
-	
-	protected function _addEmailAttributes(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
-	{
-        $_emailUser->emailGID = $this->_options['emailGID'];
-        $_emailUser->emailUID = $_user->accountLoginName;
-        
-        $metaData = $this->_getUserMetaData($_user);
-        $ldapData = $this->_user2ldap($_emailUser);
-        
-        $ldapData['objectclass'] = array_unique(array_merge($metaData['objectclass'], $this->_requiredObjectClass));
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-        
-        $this->_ldap->update($metaData['dn'], $ldapData);
-        
-        return $this->getUserById($_user->getId());
-	}
-
-    protected function _removeEmailAttributes(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
-    {
-        $metaData = $this->_getUserMetaData($_user);
-        
-        $ldapData = array();
-        
-        foreach ($this->_userPropertyNameMapping as $ldapKeyName) {
-            $ldapData[$ldapKeyName] = array();
-        }
-        
-        $ldapData['objectclass'] = array_unique(array_diff($metaData['objectclass'], $this->_requiredObjectClass));
-                
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $metaData['dn']);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
-        
-        $this->_ldap->update($metaData['dn'], $ldapData);
-        
-        return $_emailUser;
-    }
-    
-	/**
-     * delete user by id
-     *
-     * @param   string         $_userId
-     */
-    public function deleteUser($_userId)
-    {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' This does nothing at the moment.');
+        return $_userName;
     }
     
     /**
-     * update/set email user password
-     * 
-     * @param string $_userId
-     * @param string $_password
-     * @return void
-     */
-    public function setPassword($_userId, $_password)
-    {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' This does nothing at the moment.');
-    }
-	
-    /**
-     * get metatada of existing account
-     *
-     * @param  int         $_userId
-     * @return string 
-     */
-    protected function _getUserMetaData($_userId)
-    {
-        $userId = Tinebase_Model_User::convertUserIdToInt($_userId);
-        
-        $filter = Zend_Ldap_Filter::equals(
-            $this->_options['userUUIDAttribute'], Zend_Ldap::filterEscape($userId)
-        );
-        
-        $result = $this->_ldap->search(
-            $filter, 
-            $this->_options['userDn'], 
-            Zend_Ldap::SEARCH_SCOPE_SUB, 
-            array('objectclass')
-        )->getFirst();
-        
-        return $result;
-    }
-    
-    /**
-     * Returns a user obj with raw data from ldap
+     * Returns a user object with raw data from ldap
      *
      * @param array $_userData
      * @param string $_accountClass
@@ -229,24 +81,26 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
      * 
      * @todo add generic function for this in Tinebase_User_Ldap or Tinebase_Ldap?
      */
-    protected function _ldap2User($_userData, $_accountClass = 'Tinebase_Model_EmailUser')
+    protected function _ldap2User(Tinebase_Model_User $_user, array &$_ldapEntry)
     {
-        $accountArray = array(
-            'emailForwards' => array(),
-            'emailAliases'  => array()
-        );
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_ldapEntry, true));
         
-        foreach ($_userData as $key => $value) {
+        $accountArray = array();
+        
+        foreach ($_ldapEntry as $key => $value) {
             if (is_int($key)) {
                 continue;
             }
-            $keyMapping = array_search($key, $this->_userPropertyNameMapping);
+            
+            $keyMapping = array_search($key, $this->_propertyMapping);
+            
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
                     case 'emailMailQuota':
                         // convert to megabytes
                         $accountArray[$keyMapping] = round($value[0] / 1024 / 1024);
                         break;
+                        
                     default: 
                         $accountArray[$keyMapping] = $value[0];
                         break;
@@ -254,9 +108,15 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
             }
         }
         
-        $accountObject = new $_accountClass($accountArray);
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($accountArray, true));
         
-        return $accountObject;
+        if ($this->_backendType == Tinebase_Model_Config::SMTP) {
+            $_user->smtpUser  = new Tinebase_Model_EmailUser($accountArray);
+            $_user->emailUser = Tinebase_EmailUser::merge(isset($_user->emailUser) ? $_user->emailUser : null, $_user->smtpUser);
+        } else {
+            $_user->imapUser  = new Tinebase_Model_EmailUser($accountArray);
+            $_user->emailUser = Tinebase_EmailUser::merge($_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
+        }
     }
     
     /**
@@ -267,24 +127,51 @@ class Tinebase_EmailUser_Ldap extends Tinebase_EmailUser_Abstract
      * 
      * @todo add generic function for this?
      */
-    protected function _user2ldap(Tinebase_Model_EmailUser $_user)
+    protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry)
     {
-        $ldapData = array();
-        foreach ($_user as $key => $value) {
-            $ldapProperty = array_key_exists($key, $this->_userPropertyNameMapping) ? $this->_userPropertyNameMapping[$key] : false;
-            if ($ldapProperty) {
-                switch ($key) {
-                    case 'emailMailQuota':
-                        // convert to bytes
-                        $ldapData[$ldapProperty] = convertToBytes($value . 'M');
-                        break;
-                    default:
-                        $ldapData[$ldapProperty] = $value;
-                        break;
-                }
+        if ($this->_backendType == Tinebase_Model_Config::SMTP) {
+            if (empty($_user->smtpUser)) {
+                return;
+            }
+            $mailSettings = $_user->smtpUser;
+        } else {
+            if (empty($_user->imapUser)) {
+                return;
+            }
+            $mailSettings = $_user->imapUser;
+        }
+        
+        foreach ($this->_propertyMapping as $objectProperty => $ldapAttribute) {
+            $value = empty($mailSettings->{$objectProperty}) ? array() : $mailSettings->{$objectProperty};
+            
+            switch($objectProperty) {
+                case 'emailMailQuota':
+                    // convert to bytes
+                    $_ldapData[$ldapAttribute] = !empty($mailSettings->{$objectProperty}) ? convertToBytes($mailSettings->{$objectProperty} . 'M') : array();
+                    break;
+                    
+                case 'emailUID':
+                    $_ldapData[$ldapAttribute] = $this->_appendDomain($_user->accountLoginName);
+                    break;
+                    
+                case 'emailGID':
+                    $_ldapData[$ldapAttribute] = $this->_config['emailGID'];
+                    break;
+                    
+                default:
+                    $_ldapData[$ldapAttribute] = $mailSettings->{$objectProperty};
+                    break;
             }
         }
         
-        return $ldapData;
+        // check if user has all required object classes. This is needed
+        // when updating users which where created using different requirements
+        foreach ($this->_requiredObjectClass as $className) {
+            if (! in_array($className, $_ldapEntry['objectclass'])) {
+                // merge all required classes at once
+                $_ldapData['objectclass'] = array_unique(array_merge($_ldapEntry['objectclass'], $this->_requiredObjectClass));
+                break;
+            }
+        }
     }
 }  
