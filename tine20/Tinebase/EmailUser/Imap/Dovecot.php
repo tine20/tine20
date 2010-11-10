@@ -3,7 +3,7 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  User
+ * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Michael Fronk
@@ -24,7 +24,7 @@
 
 CREATE TABLE IF NOT EXISTS `dovecot_users` (
 `userid` VARCHAR( 40 ) NOT NULL ,
-`domain` VARCHAR( 80 ) DEFAULT NULL ,
+`domain` VARCHAR( 80 ) DEFAULT '',
 `username` VARCHAR( 80 ) NOT NULL ,
 `password` VARCHAR( 100 ) NOT NULL ,
 `scheme` VARCHAR( 20 ) NOT NULL DEFAULT 'PLAIN-MD5',
@@ -175,14 +175,12 @@ query = SELECT destination FROM smtp_aliases WHERE source='%s'
 */
 
 /**
- * class inebase_EmailUser_Imap_Dovecot
+ * plugin to handle dovecot imap accounts
  * 
- * Email User Settings Managing for Dovecot IMAP attributes
- * 
- * @package Tinebase
- * @subpackage Ldap
+ * @package    Tinebase
+ * @subpackage EmailUser
  */
-class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
+class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
 {
     /**
      * @var Zend_Db_Adapter
@@ -194,7 +192,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
      *
      * @var string
      */
-    protected $_tableName = NULL;
+    protected $_userTable = NULL;
     
     /**
      * quotas table name with prefix
@@ -224,7 +222,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
      *
      * @var array
      */
-    protected $_userPropertyNameMapping = array(
+    protected $_propertyMapping = array(
         'emailUserId'       => 'userid',
         'emailUsername'     => 'username',
         'emailPassword'     => 'password',
@@ -248,9 +246,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
      * @var array
      */
     protected $_readOnlyFields = array(
-        'emailMailQuota', // hack to fix updates
         'emailMailSize',
-        'emailSieveQuota', // hack to fix updates
         'emailSieveSize',
         'emailLastLogin',
     );
@@ -258,7 +254,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
     /**
      * the constructor
      */
-    public function __construct()
+    public function __construct(array $_options = array())
     {
         // get dovecot imap config options (host, dbname, username, password, port)
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
@@ -266,17 +262,17 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
         // merge _config and dovecot imap
         $this->_config = array_merge($imapConfig['dovecot'], $this->_config);
         
+        // set domain from imap config
+        $this->_config['domain'] = !empty($imapConfig['domain']) ? $imapConfig['domain'] : null;
+        
+        // _tablename = "dovecot_users"
+        $this->_userTable = $this->_config['prefix'] . $this->_config['userTable'];
+        
         // _quotaTable = dovecot_aliases
         $this->_quotasTable = $this->_config['prefix'] . $this->_config['quotaTable'];
         
-        // set domain from imap config
-        $this->_config['domain'] = (isset($imapConfig['domain'])) ? $imapConfig['domain'] : '';
-        
-        // _tablename = "dovecot_users"
-        $this->_tableName = $this->_config['prefix'] . $this->_config['userTable'];
-        
         // connect to DB
-        $this->_db = Zend_Db::factory('Pdo_Mysql', $this->_config);
+        $this->_getDB($this->_config);
 
         // copy over default scheme, home, UID, GID from preconfigured defaults
         $this->_config['emailScheme'] = $this->_config['scheme'];
@@ -284,56 +280,46 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
         $this->_config['emailUID']    = $this->_config['uid'];
         $this->_config['emailGID']    = $this->_config['gid'];
     }
-  
-	/**
-     * get user by id
+    
+    /**
+     * delete user by id
      *
-     * @param   string         $_userId
-     * @return  Tinebase_Model_EmailUser user
+     * @param  string  $_userId
      */
-    public function getUserById($_userId) 
+    public function inspectDeleteUser($_userId)
     {
-        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, true));
-        
-        /*
-         * SELECT dovecot_users.*, dovecot_quotas.mail_quota, dovecot_quotas.mail_size, dovecot_quotas.sieve_quota, dovecot_quotas.sieve_size
-         * FROM dovecot_users 
-         * LEFT JOIN dovecot_quotas
-         * ON (dovecot_users.username=dovecot_quotas.username)
-         * WHERE dovecot_users.userid = $_userId
-         * LIMIT 1
-         */
-        $select = $this->_db->select();
-        $select->from(array($this->_tableName))
-            ->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_userPropertyNameMapping['emailUserId']) . ' = ?',   $userId)
-            //->group($this->_tableName . '.' . $this->_userPropertyNameMapping['emailUserId'])
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Dovecot settings for user ' . $_userId);
 
-            // Left Join Quotas Table
-            ->joinLeft(
-                array($this->_quotasTable), // table
-                '(' . $this->_db->quoteIdentifier($this->_tableName . '.' . $this->_userPropertyNameMapping['emailUsername']) .  ' = ' . // ON (left)
-                    $this->_db->quoteIdentifier($this->_quotasTable . '.' . $this->_userPropertyNameMapping['emailUsername']) . ')', // ON (right)
-                array( // Select
-                    $this->_userPropertyNameMapping['emailMailQuota'] => $this->_quotasTable . '.' . $this->_userPropertyNameMapping['emailMailQuota'], // emailMailQuota
-                    $this->_userPropertyNameMapping['emailMailSize'] => $this->_quotasTable . '.' . $this->_userPropertyNameMapping['emailMailSize'], // emailMailSize
-                    $this->_userPropertyNameMapping['emailSieveQuota'] => $this->_quotasTable . '.' . $this->_userPropertyNameMapping['emailSieveQuota'], // emailSieveQuota
-                    $this->_userPropertyNameMapping['emailSieveSize'] => $this->_quotasTable . '.' . $this->_userPropertyNameMapping['emailSieveSize'] // emailSieveSize
-                ) 
-            )
-        
-            // Only want 1 user (shouldn't be more than 1 anyway)
-            ->limit(1);
-        
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $_userId)
+        );
         // append domain if set or domain IS NULL
         if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . 'domain') . ' = ?',   $this->_config['domain']);
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
         } else {
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . 'domain') . ' IS NULL');
+            $where[] = $this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' IS NULL';
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        $this->_db->delete($this->_userTable, $where);
+    }
+    
+    /**
+     * inspect get user by property
+     * 
+     * @param Tinebase_Model_User  $_user  the user object
+     */
+    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
+    {
+        if (! $_user instanceof Tinebase_Model_FullUser) {
+            return;
+        }
+        
+        $userId = $_user->getId();
+        
+        $select = $this->_getSelect()
+            ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?',   $userId);
+        
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         // Perferom query - retrieve user from database
         $stmt = $this->_db->query($select);
@@ -341,186 +327,227 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
         $stmt->closeCursor();
                 
         if (!$queryResult) {
-            throw new Tinebase_Exception_NotFound('Dovecot config for user ' . $_userId . ' not found!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Dovecot config for user ' . $_userId . ' not found!');
+            return;
         }
         
-        // Print results of query if log level DEBUG
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($queryResult, TRUE));
         
         // convert data to Tinebase_Model_EmailUser       
         $emailUser = $this->_rawDataToRecord($queryResult);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser, TRUE));
-        // modify/correct user name
-        // get Tine user
-        $user = Tinebase_User::getInstance()->getFullUserById($_userId);
-        // set emailUsername to Tine accout login name and append domain for login purposes if set
-        $emailUser->emailUsername = $this->_appendDomain($user->accountLoginName);
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
         
-        return $emailUser;
+        // modify/correct user name
+        // set emailUsername to Tine accout login name and append domain for login purposes if set
+        $emailUser->emailUsername = $this->_appendDomain($_user->accountLoginName);
+
+        $_user->imapUser  = $emailUser;
+        $_user->emailUser = Tinebase_EmailUser::merge($_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
+    }
+    
+    /**
+     * update/set email user password
+     * 
+     * @param  string  $_userId
+     * @param  string  $_password
+     */
+    public function inspectSetPassword($_userId, $_password)
+    {
+        $values = array(
+            $this->_propertyMapping['emailScheme']   => $this->_config['emailScheme'],
+            $this->_propertyMapping['emailPassword'] => $this->_generatePassword($_password, $this->_config['emailScheme'])
+        );
+        
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $_userId)
+        );
+        // append domain if set or domain IS NULL
+        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.domain') . ' = ?',   $this->_config['domain']);
+        } else {
+            $where[] = $this->_db->quoteIdentifier($this->_userTable . '.domain') . ' IS NULL';
+        }
+        
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($values, TRUE));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
+        
+        $this->_db->update($this->_userTable, $values, $where);
+    }
+    
+    /**
+     * get new email user
+     * 
+     * @param  Tinebase_Model_FullUser   $_user
+     * @return Tinebase_Model_EmailUser
+     */
+    public function getNewUser(Tinebase_Model_FullUser $_user)
+    {
+        
+        $result = new Tinebase_Model_EmailUser(array(
+            'emailUserId' 		=> $_user->getId(),
+        ));
+        
+        return $result;
+    }
+    
+    /*********  protected functions  *********/
+    
+    /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param  array|string|Zend_Db_Expr  $_cols        columns to get, * per default
+     * @param  boolean                    $_getDeleted  get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     * 
+     * SELECT dovecot_users.*, dovecot_quotas.mail_quota, dovecot_quotas.mail_size, dovecot_quotas.sieve_quota, dovecot_quotas.sieve_size
+     * FROM dovecot_users 
+     * LEFT JOIN dovecot_quotas
+     * ON (dovecot_users.username=dovecot_quotas.username)
+     * WHERE dovecot_users.userid = $_userId
+     * LIMIT 1
+     */
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
+    {        
+        $select = $this->_db->select()
+        
+            ->from(array($this->_userTable))
+
+            // Left Join Quotas Table
+            ->joinLeft(
+                array($this->_quotasTable), // table
+                '(' . $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']) .  ' = ' . // ON (left)
+                    $this->_db->quoteIdentifier($this->_quotasTable . '.' . $this->_propertyMapping['emailUsername']) . ')', // ON (right)
+                array( // Select
+                    $this->_propertyMapping['emailMailQuota'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailMailQuota'], // emailMailQuota
+                    $this->_propertyMapping['emailMailSize'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailMailSize'], // emailMailSize
+                    $this->_propertyMapping['emailSieveQuota'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailSieveQuota'], // emailSieveQuota
+                    $this->_propertyMapping['emailSieveSize'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailSieveSize'] // emailSieveSize
+                ) 
+            )            
+            
+            // Only want 1 user (shouldn't be more than 1 anyway)
+            ->limit(1);
+        
+        // append domain if set or domain IS NULL
+        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
+        } else {
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' IS NULL');
+        }
+        
+        return $select;
     }
     
     /**
      * adds email properties for a new user
      * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser $_emailUser
-     * @return Tinebase_Model_EmailUser
-     * 
+     * @param  Tinebase_Model_FullUser  $_addedUser
+     * @param  Tinebase_Model_FullUser  $_newUserProperties
      */
-    protected function _addUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
+    protected function _addUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
-        // 
-        try {
-            $this->_tineUserToEmailUser($_user, $_emailUser);
-        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
-            return $_emailUser;
-        }
+        $imapSettings = $this->_recordToRawData($_addedUser, $_newUserProperties);
         
-        $recordArray = $this->_recordToRawData($_emailUser);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new dovecot user ' . $imapSettings[$this->_propertyMapping['emailUsername']]);
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new dovecot user ' . $_emailUser->emailUsername);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapSettings, TRUE));
 
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
-            $this->_db->insert($this->_tableName, $recordArray);
+            $values = $imapSettings;
+            unset($values[$this->_propertyMapping['emailMailQuota']]);
+            unset($values[$this->_propertyMapping['emailSieveQuota']]);
+            
+            $this->_db->insert($this->_userTable, $values);
             
             // Add Quotas
             $this->_db->insert($this->_quotasTable, 
                 array(
-                    $this->_userPropertyNameMapping['emailUsername']   => $_emailUser->emailUsername,
-                    $this->_userPropertyNameMapping['emailMailQuota']  => convertToBytes($_emailUser->emailMailQuota . 'M'), 
-                    $this->_userPropertyNameMapping['emailSieveQuota'] => $_emailUser->emailSieveQuota, 
+                    $this->_propertyMapping['emailUsername']   => $imapSettings[$this->_propertyMapping['emailUsername']],
+                    $this->_propertyMapping['emailMailQuota']  => convertToBytes($imapSettings[$this->_propertyMapping['emailMailQuota']] . 'M'), 
+                    $this->_propertyMapping['emailSieveQuota'] => $imapSettings[$this->_propertyMapping['emailSieveQuota']]
                 )
             );
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
-            $result = $this->getUserById($_user->getId());
+            $this->inspectGetUserByProperty($_addedUser);
             
         } catch (Zend_Db_Statement_Exception $zdse) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while creating email user: ' . $zdse->getMessage());
-            $result = NULL;
         }
-        
-        return $result;
 	}
 	
     /**
-     * adds email properties for a new user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
-     */
-    public function addUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
-    {
-        return $this->updateUser($_user, $_emailUser);
-    }
-    
-    /**
      * updates email properties for an existing user
      * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
+     * @param  Tinebase_Model_FullUser  $_updatedUser
+     * @param  Tinebase_Model_FullUser  $_newUserProperties
      */
-    public function updateUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
+    protected function _updateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
-        if ($this->_userExists($_user) === true) {
-            return $this->_updateUser($_user, $_emailUser);
-        } else {
-            return $this->_addUser($_user, $_emailUser);
-        }
-    }
-    
-    /**
-     * updates email properties for an existing user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
-     */
-    protected function _updateUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
-    {
-        try {
-            $this->_tineUserToEmailUser($_user, $_emailUser);
-        } catch (Tinebase_Exception_UnexpectedValue $teuv) {
-            return $_emailUser;
-        }
-        
-        $recordArray = $this->_recordToRawData($_emailUser);
-        
+        $imapSettings = $this->_recordToRawData($_updatedUser, $_newUserProperties);
 
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Dovecot user ' . $_emailUser->emailUsername);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordArray, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO))  Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating Dovecot user ' . $imapSettings[$this->_propertyMapping['emailUsername']]);
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapSettings, TRUE));
         
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userPropertyNameMapping['emailUserId']) . ' = ?', $_user->getId())
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $imapSettings[$this->_propertyMapping['emailUserId']])
         );
         // append domain if set or domain IS NULL
         if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
-            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tableName . '.' . 'domain') . ' = ?',   $this->_config['domain']);
+            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.domain') . ' = ?',   $this->_config['domain']);
         } else {
-            $where[] = $this->_db->quoteIdentifier($this->_tableName . '.' . 'domain') . ' IS NULL';
+            $where[] = $this->_db->quoteIdentifier($this->_userTable . '.domain') . ' IS NULL';
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-
-            $this->_db->update($this->_tableName, $recordArray, $where);
+            
+            $values = $imapSettings;
+            unset($values[$this->_propertyMapping['emailMailQuota']]);
+            unset($values[$this->_propertyMapping['emailSieveQuota']]);
+            
+            $this->_db->update($this->_userTable, $values, $where);
 
             // Update Quotas
             $this->_db->update($this->_quotasTable, 
                 array( 
-                    $this->_userPropertyNameMapping['emailMailQuota']  => convertToBytes($_emailUser->emailMailQuota . 'M'), 
-                    $this->_userPropertyNameMapping['emailSieveQuota'] => $_emailUser->emailSieveQuota, 
+                    $this->_propertyMapping['emailMailQuota']  => convertToBytes($imapSettings[$this->_propertyMapping['emailMailQuota']] . 'M'), 
+                    $this->_propertyMapping['emailSieveQuota'] => $imapSettings[$this->_propertyMapping['emailSieveQuota']]
                 ),
                 array(
-                    $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userPropertyNameMapping['emailUsername']) . ' = ?', $_emailUser->emailUsername)
+                    $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUsername']) . ' = ?', $imapSettings[$this->_propertyMapping['emailUsername']])
                 )
             );
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
 
-            $result = $this->getUserById($_user->getId());
+            $this->inspectGetUserByProperty($_updatedUser);
             
         } catch (Zend_Db_Statement_Exception $zdse) {
             Tinebase_TransactionManager::getInstance()->rollBack();
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error while updating email user: ' . $zdse->getMessage());
-            $result = NULL;
         }            
-        
-        return $result;
     }
     
     /**
      * check if user exists already in dovecot user table
      * 
-     * @param Tinebase_Model_FullUser $_user
+     * @param  Tinebase_Model_FullUser  $_user
      */
     protected function _userExists(Tinebase_Model_FullUser $_user)
     {
-        $select = $this->_db->select();
+        $select = $this->_getSelect();
         
-        $select->from(array($this->_tableName))
-          ->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_userPropertyNameMapping['emailUserId']) . ' = ?',   $_user->getId())
-        // Only want 1 user (shouldn't be more than 1 anyway)
-          ->limit(1);
+        $select
+          ->where($this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUserId']) . ' = ?',   $_user->getId());
           
-        // append domain if set or domain IS NULL
-        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . 'domain') . ' = ?',   $this->_config['domain']);
-        } else {
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.' . 'domain') . ' IS NULL');
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         // Perferom query - retrieve user from database
         $stmt = $this->_db->query($select);
@@ -535,75 +562,17 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
     }
     
     /**
-     * update/set email user password
-     * 
-     * @param string $_userId
-     * @param string $_password
-     * @return void
-     */
-    public function setPassword($_userId, $_password)
-    {
-        $user = Tinebase_User::getInstance()->getFullUserById($_userId);
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Set Dovecot password for user ' . $user->accountLoginName);
-        
-        $emailUser = $this->getUserById($_userId);
-        $emailUser->emailPassword = $_password;
-        
-        return $this->updateUser($user, $emailUser);
-    }
-    
-    /**
-     * delete user by id
-     *
-     * @param   string         $_userId
-     */
-    public function deleteUser($_userId)
-    {
-        $userId = ($_userId instanceof Tinebase_Model_FullUser) ? $_userId->getId() : $_userId;
-        
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Dovecot settings for user ' . $userId);
-
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userPropertyNameMapping['emailUserId']) . ' = ?', $userId)
-        );
-        // append domain if set or domain IS NULL
-        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
-            $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_tableName . '.' . 'domain') . ' = ?',   $this->_config['domain']);
-        } else {
-            $where[] = $this->_db->quoteIdentifier($this->_tableName . '.' . 'domain') . ' IS NULL';
-        }
-        
-        $this->_db->delete($this->_tableName, $where);
-    }
-    
-    /**
-     * get new email user
-     * 
-     * @param Tinebase_Model_FullUser $_user
-     * @return Tinebase_Model_EmailUser
-     */
-    public function getNewUser(Tinebase_Model_FullUser $_user)
-    {
-        
-        $result = new Tinebase_Model_EmailUser(array(
-            'emailUserId' 		=> $_user->getId(),
-        ));
-        
-        return $result;
-    }
-    
-    /**
      * converts raw data from adapter into a single record / do mapping
      *
-     * @param  array $_data
-     * @return Tinebase_Record_Abstract
+     * @param  array                    $_data
+     * @return Tinebase_Model_EmailUser
      */
     protected function _rawDataToRecord(array $_rawdata)
     {
         $data = array();
+        
         foreach ($_rawdata as $key => $value) {
-            $keyMapping = array_search($key, $this->_userPropertyNameMapping);
+            $keyMapping = array_search($key, $this->_propertyMapping);
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
                     case 'emailMailQuota':
@@ -664,161 +633,63 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_EmailUser_Abstract
     /**
      * returns array of raw Dovecot data
      *
-     * @param  Tinebase_Model_EmailUser $_user
+     * @param  Tinebase_Model_FullUser  $_user
+     * @param  Tinebase_Model_FullUser  $_newUserProperties
      * @return array
      */
-    protected function _recordToRawData(Tinebase_Model_EmailUser $_user)
+    protected function _recordToRawData(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $_newUserProperties)
     {
-        $data = array();
-        foreach ($_user as $key => $value) {
-            $property = array_key_exists($key, $this->_userPropertyNameMapping) ? $this->_userPropertyNameMapping[$key] : false;
+        $rawData = array();
+        
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->imapUser->toArray(), true));
+        
+        foreach ($_newUserProperties->imapUser as $key => $value) {
+            $property = array_key_exists($key, $this->_propertyMapping) ? $this->_propertyMapping[$key] : false;
             if ($property && ! in_array($key, $this->_readOnlyFields)) {
                 switch ($key) {
                     case 'emailPassword':
-                    $data[$property] = $this->_generatePassword($value, $this->_config['emailScheme']);
+                        $rawData[$property] = $this->_generatePassword($value, $this->_config['emailScheme']);
                         break;
+                        
+                    case 'emailUserId':
+                        $rawData[$property] = $_user->getId();
+                        break;
+                        
+                    case 'emailUID':
+                        $rawData[$property] = !empty($this->_config['uid']) ? $this->_config['uid'] : $value;
+                        break;
+                        
+                    case 'emailGID':
+                        $rawData[$property] = !empty($this->_config['gid']) ? $this->_config['gid'] : $value;
+                        break;
+                        
+                    case 'emailUsername':
+                        $rawData[$property] = $this->_appendDomain($_user->accountLoginName);
+                        break;
+                        
                     default:
-                        $data[$property] = $value;
+                        $rawData[$property] = $value;
                         break;
                 }
             }
         }
+
+        list($user, $domain) = explode('@', $rawData[$this->_propertyMapping['emailUsername']], 2);
+        //$rawData['user']   = $user;
+        $rawData['domain'] = $domain;
         
-        list($user, $domain) = explode('@', $_user->emailUsername, 2);
-        //$data['user']   = $user;
-        $data['domain'] = $domain;
-        
-        $property = $this->_userPropertyNameMapping['emailScheme'];
-        $data[$property] = $this->_config['emailScheme'];
+        $rawData[$this->_propertyMapping['emailScheme']] = $this->_config['emailScheme'];
         
         // replace home wildcards when storing to db
         // %d = domain
         // %n = user
         // %u == user@domain
-        $property = $this->_userPropertyNameMapping['emailHome'];
+        $property = $this->_propertyMapping['emailHome'];
         $search = array('%n', '%d', '%u');
-        $replace = explode('@', $data[$this->_userPropertyNameMapping['emailUsername']]);
-        $replace[] = $this->_userPropertyNameMapping['emailUsername'];
-        $data[$property] = str_replace($search, $replace, $this->_config['emailHome']);
+        $replace = explode('@', $rawData[$this->_propertyMapping['emailUsername']]);
+        $replace[] = $this->_propertyMapping['emailUsername'];
+        $rawData[$property] = str_replace($search, $replace, $this->_config['emailHome']);
         
-        return $data;
-    }
-    
-    /**
-     * convert tine user to email user
-     * 
-     * @param Tinebase_Model_FullUser $_user
-     * @param Tinebase_Model_EmailUser $_emailUser
-     * @return Tinebase_Model_EmailUser $_emailUser
-     * @throws Tinebase_Exception_UnexpectedValue
-     * 
-     */
-    protected function _tineUserToEmailUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
-    {
-        // tine20 user ID
-        $_emailUser->emailUserId = $_user->getId();
-        // set emailUsername to Tine accout login name and append domain for login purposes if set
-        $_emailUser->emailUsername = $this->_appendDomain($_user->accountLoginName);
-        
-        
-        // set GID/UID to configured UID/GID if not already set in EmailUser
-        if (empty($_emailUser->emailUID)) {
-            $_emailUser->emailUID = $this->_config['uid'];
-        }
-        
-        if (empty($_emailUser->emailGID)) {
-            $_emailUser->emailGID = $this->_config['gid'];
-        }
-    }
-    
-    /**
-     * Check if we should append domain name or not
-     *
-     * @param  string $_userName
-     * @return string
-     */
-    protected function _appendDomain($_userName)
-    {
-        if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
-            $_userName .= '@' . $this->_config['domain'];
-        }
-        
-        return $_userName;
-    }
-    
-    /**
-     * generate password based on password scheme
-     * 
-     * @param string $_password
-     * @param string $_scheme
-     * @return string
-     */
-    protected function _generatePassword($_password, $_scheme)
-    {
-        $password = null;
-        switch ($_scheme) {
-            case 'MD5-CRYPT':
-            case 'SSHA256':
-            case 'SSHA512':
-            	$password = crypt($_password, $this->_salt($_scheme));
-            	break;
-            
-            case 'SHA256':
-            case 'SHA512':
-            	$password = hash($_scheme, $_password);
-            	break;
-            
-            case 'SHA':
-            	$password = sha1($_password);
-            	break;
-            
-            case 'PLAIN':
-            	$password = $_password;
-            	break;
-            
-            case 'PLAIN-MD5':
-            default:
-            	$password = md5($_password);
-            	break;
-        }
-
-        return $password;
-    }
-    
-    /**
-     * generate salt for password scheme
-     * 
-     * @param $_scheme
-     * @return string
-     */
-    protected function _salt($_scheme)
-    {
-        $salt = null;
-        
-        // create a salt that ensures crypt creates an sha2 hash
-        $base64_alphabet='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-            .'abcdefghijklmnopqrstuvwxyz0123456789+/';
-        
-        for($i=0; $i<16; $i++){
-            $salt.=$base64_alphabet[rand(0,63)];
-        }
-        
-        switch ($_scheme)
-        {
-            case 'SSHA256':
-            	$salt = '$5$' . $salt . '$';
-            	break;
-            	
-            case 'SSHA512':
-            	$salt = '$6$' . $salt . '$';
-            	break;
-            	
-            case 'MD5-CRYPT':
-            default:
-            	$salt = crypt($_scheme);
-            	break;
-        }
-
-        return $salt;
+        return $rawData;
     }
 }
