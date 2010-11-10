@@ -113,7 +113,7 @@ class Felamimail_Message extends Zend_Mail_Message
             $date = new Tinebase_DateTime($_dateString ? $_dateString : '@0');
             $date->setTimezone('UTC');
 
-        } catch (Zend_Date_Exception $zde) {
+        } catch (Exception $e) {
             $date = new Tinebase_DateTime('@0');
         }
         
