@@ -157,7 +157,7 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         }
         
         // imap combo
-        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail  MySQL'], ['ldap_imap', 'DBmail Ldap'], ['cyrus', 'Cyrus']];
+        backendComboConfig.store = [['standard', this.app.i18n._('Standard IMAP')], ['dbmail', 'DBmail  MySQL'], ['ldap_imap', 'DBmail Ldap'], ['cyrus', 'Cyrus'], ['dovecot_imap', 'Dovecot MySQL']];
         backendComboConfig.name = 'imap_backend';
         backendComboConfig.listeners = {
             scope: this,
@@ -282,6 +282,16 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                         fieldLabel: this.app.i18n._('Cyrus Admin Password'),
                         inputType: 'password'
                     }]
+                }, {
+                    // dovecot config options
+                    id: this.imapBackendIdPrefix + 'dovecot_imap',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
+                    items: this.getDbConfigFields('imap', 'dovecot').concat(this.getDovecotExtraConfig('imap'))
                 }]
             }]
         }, {
@@ -449,5 +459,46 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
             fieldLabel: typeString + this.app.i18n._('MySql Port'),
             value: 3306
         }];
+    },
+    
+    /**
+     * get db config fields
+     * 
+     * @param {String} type1 (imap, smtp)
+     * @return {Array}
+     */
+    getDovecotExtraConfig: function(type1) {
+        var typeString = (this.showType) ? 'Dovecot ' : '';
+        return [{
+            name: type1 + '_dovecot_uid',
+            fieldLabel: typeString + this.app.i18n._('User or UID')
+        }, {
+            name: type1 + '_dovecot_gid',
+            fieldLabel: typeString + this.app.i18n._('Group or GID')
+        }, {
+            name: type1 + '_dovecot_home',
+            fieldLabel: typeString + this.app.i18n._('Home Template')
+        }, {
+                fieldLabel: typeString + this.app.i18n._('Password Scheme'),
+                name: type1 + '_dovecot_scheme',
+                typeAhead     : false,
+                triggerAction : 'all',
+                lazyRender    : true,
+                editable      : false,
+                mode          : 'local',
+                xtype: 'combo',
+                listWidth: 300,
+                value: 'PLAIN-MD5',
+                store: [
+                    ['PLAIN-MD5',   this.app.i18n._('PLAIN-MD5')],
+                    ['MD5-CRYPT',   this.app.i18n._('MD5-CRYPT')],
+                    ['SHA',   this.app.i18n._('SHA1')],
+                    ['SHA256',   this.app.i18n._('SHA256')],
+                    ['SSHA256',   this.app.i18n._('SSHA256')],
+                    ['SHA512',   this.app.i18n._('SHA512')],
+                    ['SSHA512',   this.app.i18n._('SSHA512')],
+                    ['PLAIN',    this.app.i18n._('PLAIN')]
+                ]
+            }];
     }
 });
