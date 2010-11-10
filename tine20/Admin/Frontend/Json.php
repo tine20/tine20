@@ -179,7 +179,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * returns a fullUser
      *
-     * @param int $id
+     * @param string $id
      */
     public function getUser($id)
     {
@@ -328,6 +328,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             
             if (isset($recordData['emailUser'])) {
                 $account->emailUser = new Tinebase_Model_EmailUser($recordData['emailUser']);
+                $account->imapUser  = new Tinebase_Model_EmailUser($recordData['emailUser']);
+                $account->smtpUser  = new Tinebase_Model_EmailUser($recordData['emailUser']);
             }
             
         } catch (Tinebase_Exception_Record_Validation $e) {
