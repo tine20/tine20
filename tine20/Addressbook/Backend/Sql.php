@@ -78,6 +78,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function create(Tinebase_Record_Interface $_record) 
     {
         $contact = parent::create($_record);
+        
         if (! empty($_record->jpegphoto)) {
             $contact->jpegphoto = $this->_saveImage($contact->getId(), $_record->jpegphoto);
         }
@@ -95,6 +96,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     public function update(Tinebase_Record_Interface $_record) 
     {
         $contact = parent::update($_record);
+        
         if (isset($_record->jpegphoto)) {
             $contact->jpegphoto = $this->_saveImage($contact->getId(), $_record->jpegphoto);
         }
@@ -144,8 +146,6 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
      * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
-     * 
-     * @todo    move visibility='displayed' check to contact filter
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {        
@@ -154,7 +154,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         $select->joinLeft(
             /* table  */ array('accounts' => $this->_tablePrefix . 'accounts'), 
             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('accounts.contact_id'),
-            /* select */ array_key_exists('count', (array)$_cols) ? array() : array('account_id' => 'accounts.id')
+            /* select */ ($_cols == '*' || array_key_exists('account_id', (array)$_cols)) ? array('account_id' => 'accounts.id') : array()
         );
         
         if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
