@@ -494,15 +494,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
                     
                     foreach ($messages as $uid => $message) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Add message $uid to cache " . $_folder->cache_totalcount);
-                        $addedMessage = $this->addMessage($message, $_folder, false);
-                        
-                        $_folder->cache_totalcount++;
-                        $_folder->cache_job_actions_done++;
-                        $incrementMessagesCounter++;
-                        if (! $addedMessage->hasSeenFlag()) {
-                            $incrementUnreadCounter++;
-                        }
+                        $this->_addMessageToCacheAndIncreaseCounters($message, $_folder, $incrementMessagesCounter, $incrementUnreadCounter);
                     }
                     
                     Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -527,7 +519,31 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} cache sequence: $this->_cacheMessageSequence imap sequence: $this->_imapMessageSequence");
-    }    
+    }
+
+    /**
+     * add imap message to cache and increase counters
+     * 
+     * @param array $_message
+     * @param Felamimail_Model_Folder $_folder
+     * @param integer $_incrementMessagesCounter
+     * @param integer $_incrementUnreadCounter
+     */
+    protected function _addMessageToCacheAndIncreaseCounters($_message, $_folder, &$_incrementMessagesCounter, &$_incrementUnreadCounter)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Add message $uid to cache");
+        $addedMessage = $this->addMessage($_message, $_folder, false);
+        
+        if ($addedMessage) {
+            $_folder->cache_totalcount++;
+            $_folder->cache_job_actions_done++;
+            $_incrementMessagesCounter++;
+            if (! $addedMessage->hasSeenFlag()) {
+                $_incrementUnreadCounter++;
+            }
+        }
+    }
+    
     /**
      * maybe there are some messages missing before $this->_imapMessageSequence
      * 
@@ -569,17 +585,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
                         
                         foreach ($messages as $uid => $message) {
-                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Add message $uid to cache");
-                            $addedMessage = $this->addMessage($message, $_folder, false);
-                            
-                            if ($addedMessage) {
-                                $_folder->cache_totalcount++;
-                                $_folder->cache_job_actions_done++;
-                                $incrementMessagesCounter++;
-                                if (! $addedMessage->hasSeenFlag()) {
-                                    $incrementUnreadCounter++;
-                                }
-                            }
+                            $this->_addMessageToCacheAndIncreaseCounters($message, $_folder, $incrementMessagesCounter, $incrementUnreadCounter);
                         }
                         
                         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
