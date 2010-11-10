@@ -61,17 +61,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->_applicationName = 'Admin';
 		
         $this->_userBackend = Tinebase_User::getInstance();
-
-        // manage email user settings
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::IMAP)) {
-            $this->_manageImapEmailUser = TRUE; 
-            $this->_imapUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::IMAP);
-        }
-
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::SMTP)) {
-            $this->_manageSmtpEmailUser = TRUE; 
-            $this->_smtpUserBackend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
-        }
     }
 
     /**
@@ -141,17 +130,17 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     /**
      * get account
      *
-     * @param   int $_accountId account id to get
+     * @param   string  $_accountId  account id to get
      * @return  Tinebase_Model_FullUser
      */
-    public function get($_accountId)
+    public function get($_userId)
     {        
         $this->checkRight('VIEW_ACCOUNTS');
         
-        $user = $this->_userBackend->getUserById($_accountId, 'Tinebase_Model_FullUser');
+        $user = $this->_userBackend->getUserById($_userId, 'Tinebase_Model_FullUser');
         
-        // add email user data here
-        $user->emailUser = $this->_getEmailUser($user);
+        #// add email user data here
+        #$user->emailUser = $this->_getEmailUser($user);
         
         return $user;
     }
@@ -199,8 +188,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             ' Set new password for user ' . $_account->accountLoginName . '. Must change:' . $_mustChange
         );
         
-        $this->_setEmailUserPassword($_account->getId(), $_password);
-        
         // fire change password event
         /*
         $event = new Admin_Event_ChangePassword();
@@ -242,17 +229,12 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         // always add user to primary group
         Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
         
-        
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-        
         
         // fire needed events
         $event = new Admin_Event_UpdateAccount;
         $event->account = $user;
         Tinebase_Event::fireEvent($event);
-        
-        // update email user settings
-        $this->_updateEmailUser($user, $_user->emailUser);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($_user, $_password, $_passwordRepeat);
@@ -293,9 +275,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $event->account = $user;
         Tinebase_Event::fireEvent($event);
         
-        // create email user data here
-        $this->_createEmailUser($user, $_user->emailUser);
-        
         if (!empty($_password) && !empty($_passwordRepeat)) {
             $this->setAccountPassword($user, $_password, $_passwordRepeat);
         }
@@ -314,6 +293,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->checkRight('MANAGE_ACCOUNTS');
         
         $groupsBackend = Tinebase_Group::getInstance();
+        
         foreach ((array)$_accountIds as $accountId) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
             
@@ -332,8 +312,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             if ($this->_manageSmtpEmailUser) {
                 $this->_smtpUserBackend->deleteUser($accountId);
             }
-
-            if (!empty($oldUser->contact_id)) {
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && !empty($oldUser->contact_id)) {
                 $this->_deleteContact($oldUser->contact_id);
             }
             
@@ -353,66 +332,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->checkRight('MANAGE_ACCOUNTS');
         
         return Tinebase_Container::getInstance()->getSharedContainer($this->_currentAccount, 'Addressbook', Tinebase_Model_Grants::GRANT_READ, TRUE);
-    }
-    
-    /**
-     * get email user settings
-     * 
-     * @param Tinebase_Model_FullUser $_user
-     * @return Tinebase_Model_EmailUser
-     */
-    protected function _getEmailUser($_user)
-    {
-        if (! $this->_manageImapEmailUser && ! $this->_manageSmtpEmailUser) {
-            return new Tinebase_Model_EmailUser();
-        }
-        
-        try {
-            $imapUser = ($this->_manageImapEmailUser) ? $this->_imapUserBackend->getUserById($_user) : NULL;
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No imap email user settings yet');
-            $imapUser = NULL;
-        }            
-        
-        try {
-            $smtpUser = ($this->_manageSmtpEmailUser) ? $this->_smtpUserBackend->getUserById($_user) : NULL;
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No smtp email user settings yet');
-            $smtpUser = NULL;
-        }
-            
-        // merge
-        $result = Tinebase_EmailUser::merge($imapUser, $smtpUser);
-        if ($result === NULL) {
-            // no email settings yet
-            $result = ($this->_manageImapEmailUser) ? $this->_imapUserBackend->getNewUser($_user) : $this->_smtpUserBackend->getNewUser($_user);
-        }
-        
-        return $result;
-    }
-
-    /**
-     * create email user settings
-     * 
-     * @param Tinebase_Model_FullUser $_user
-     * @param Tinebase_Model_EmailUser $_emailUser
-     * @return void
-     */
-    protected function _createEmailUser($_user, $_emailUser)
-    {
-        if (! $_emailUser) {
-            $_emailUser = new Tinebase_Model_EmailUser();
-        }
-        
-        // update email user data here
-        if ($this->_manageImapEmailUser) {
-            $this->_imapUserBackend->addUser($_user, $_emailUser);
-        }
-        if ($this->_manageSmtpEmailUser) {
-            $this->_smtpUserBackend->addUser($_user, $_emailUser);
-        }
-        
-        $_user->emailUser = $this->_getEmailUser($_user);
     }
     
     /**
@@ -477,51 +396,5 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
         $contactsBackend->delete($_contactId);        
-    }
-    
-    /**
-     * update email user settings
-     * 
-     * @param Tinebase_Model_FullUser $_user
-     * @param Tinebase_Model_EmailUser $_emailUser
-     * @return void
-     */
-    protected function _updateEmailUser($_user, $_emailUser)
-    {
-        if (! $_emailUser) {
-            $_emailUser = new Tinebase_Model_EmailUser();
-        }
-        
-        // update email user data here
-        if ($this->_manageImapEmailUser) {
-            $this->_imapUserBackend->updateUser($_user, $_emailUser);
-        }
-        if ($this->_manageSmtpEmailUser) {
-            $this->_smtpUserBackend->updateUser($_user, $_emailUser);
-        }
-        
-        $_user->emailUser = $this->_getEmailUser($_user);
-    }
-    
-    /**
-     * set email user password
-     * 
-     * @param string $_accountId
-     * @param string $_password
-     * @return void
-     */
-    protected function _setEmailUserPassword($_accountId, $_password)
-    {
-        try {
-            if ($this->_manageImapEmailUser) {
-                $this->_imapUserBackend->setPassword($_accountId, $_password);
-            }
-    
-            if ($this->_manageSmtpEmailUser) {
-                $this->_smtpUserBackend->setPassword($_accountId, $_password);
-            }
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Tried to set password of non-existant email user. user id: ' . $_accountId);
-        }
     }
 }
