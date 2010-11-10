@@ -29,6 +29,13 @@ class Tinebase_EmailUser
      */
     const DBMAIL    = 'Dbmail';
 
+	/**
+     * Dovecot imap backend const
+     * 
+     * @staticvar string
+     */
+    const DOVECOT_IMAP    = 'Dovecot_imap';
+    
     /**
      * postfix backend const
      * 
@@ -104,7 +111,7 @@ class Tinebase_EmailUser
     public static function getInstance($_configType = Tinebase_Model_Config::IMAP) 
     {
         $backendType = self::getConfiguredBackend($_configType);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
+        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Email user backend: ' . $backendType);
         
         return self::factory($backendType);
     }
@@ -121,7 +128,7 @@ class Tinebase_EmailUser
         switch($_type) {
             case self::LDAP_IMAP:
                 if (!isset(self::$_backends[$_type])) {
-                    self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Ldap();
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Imap_LdapDbmailSchema();
                 }
                 break;
                 
@@ -145,13 +152,19 @@ class Tinebase_EmailUser
                 
             case self::LDAP_SMTP:
                 if (!isset(self::$_backends[$_type])) {
-                    self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_Ldap();
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_LdapDbmailSchema();
                 }
                 break;
                 
             case self::LDAP_SMTP_QMAIL:
                 if (!isset(self::$_backends[$_type])) {
-                    self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_LdapQmail();
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Smtp_LdapQmailSchema();
+                }
+                break;
+			
+            case self::DOVECOT_IMAP:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Tinebase_EmailUser_Imap_Dovecot();
                 }
                 break;
                 
@@ -188,7 +201,9 @@ class Tinebase_EmailUser
                         $result = self::LDAP_IMAP;
                     } else if ($backend == self::CYRUS) {
                         $result = self::CYRUS;
-                    }
+                    } else if ($backend == self::DOVECOT_IMAP) {
+                        $result = self::DOVECOT_IMAP;
+                    } 
                     break;
                 case Tinebase_Model_Config::SMTP:
                     if ($backend == self::POSTFIX) {
