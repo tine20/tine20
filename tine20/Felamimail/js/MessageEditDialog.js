@@ -374,7 +374,7 @@ Ext.namespace('Tine.Felamimail');
             
             if (! this.record.get(field)) {
                 this[field] = Ext.isArray(this[field]) ? this[field] : Ext.isString(this[field]) ? [this[field]] : [];
-                this.record.set(field, this[field]);
+                this.record.set(field, Ext.unique(this[field]));
             }
             delete this[field];
         }, this);

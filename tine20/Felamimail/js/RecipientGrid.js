@@ -313,7 +313,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.record.data.bcc = [];
         this.store.each(function(recipient){
             if (recipient.data.address != '') {
-                this.record.data[recipient.data.type].push(recipient.data.address);
+                this.record.data[recipient.data.type].push(Ext.unique(recipient.data.address));
             }
         }, this);
     },
