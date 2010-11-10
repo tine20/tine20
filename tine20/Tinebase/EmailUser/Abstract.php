@@ -3,9 +3,9 @@
  * Tine 2.0
  * 
  * @package     Tinebase
- * @subpackage  User
+ * @subpackage  EmailUser
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
@@ -16,8 +16,8 @@
  * 
  * Email User Settings Managing for dbmail attributes
  * 
- * @package Tinebase
- * @subpackage Ldap
+ * @package    Tinebase
+ * @subpackage EmailUser
  */
 abstract class Tinebase_EmailUser_Abstract
 {
@@ -27,49 +27,6 @@ abstract class Tinebase_EmailUser_Abstract
      * @var array 
      */
     protected $_config = array();
-    
-    /**
-     * get email user by id
-     *
-     * @param   int         $_userId
-     * @return  Tinebase_Model_EmailUser user
-     */
-    abstract public function getUserById($_userId);
-
-    /**
-     * adds email properties for a new user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser $_emailUser
-     * @return Tinebase_Model_EmailUser
-     * 
-     */
-	abstract public function addUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser);
-	
-	/**
-     * updates email properties for an existing user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
-     */
-	abstract public function updateUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser);
-
-    /**
-     * delete user by id
-     *
-     * @param   string         $_userId
-     */
-    abstract public function deleteUser($_userId);
-	
-    /**
-     * update/set email user password
-     * 
-     * @param string $_userId
-     * @param string $_password
-     * @return void
-     */
-    abstract public function setPassword($_userId, $_password);
     
     /**
      * get new email user
