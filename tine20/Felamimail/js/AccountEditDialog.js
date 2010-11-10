@@ -346,7 +346,7 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     store: [
                         ['html', this.app.i18n._('HTML')],
                         ['plain',  this.app.i18n._('Plain Text')],
-                        ['content_type',  this.app.i18n._('Depending on content type')]
+                        ['content_type',  this.app.i18n._('Depending on content type (experimental)')]
                     ]
                 }]]
             }]
