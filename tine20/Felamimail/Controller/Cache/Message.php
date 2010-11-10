@@ -522,10 +522,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         foreach ($_messages as $uid => $message) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Add message $uid to cache");
-            $addedMessage = $this->addMessage($_message, $_folder, false);
+            $addedMessage = $this->addMessage($message, $_folder, false);
             
             if ($addedMessage) {
-                //$_folder->cache_totalcount++;
                 $_folder->cache_job_actions_done++;
                 $incrementMessagesCounter++;
                 if (! $addedMessage->hasSeenFlag()) {
