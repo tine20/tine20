@@ -20,7 +20,7 @@
  * @subpackage  User
  */
  
-abstract class Tinebase_User_Abstract
+abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
 {
 
     /**
@@ -82,6 +82,24 @@ abstract class Tinebase_User_Abstract
      * user property for openid
      */
     const PROPERTY_OPENID = 'openid';
+    
+    /**
+     * list of plugins 
+     * 
+     * @var array
+     */
+    protected $_plugins = array();
+    
+    /**
+     * the constructor
+     */
+    public function __construct(array $_options = array()) {
+        if(array_key_exists('plugins', $_options)) {
+            foreach ($_options['plugins'] as $plugin) {
+                $this->registerPlugin($plugin);
+            }
+        }
+    }
     
     /**
      * returns all supported password encryptions types
@@ -344,6 +362,11 @@ abstract class Tinebase_User_Abstract
         return $userName;
     }
     
+    public function registerPlugin(Tinebase_User_Plugin_Interface $_plugin)
+    {
+        $this->_plugins[] = $_plugin;
+    }
+    
     /**
      * replaces and/or strips spechialchars from given string
      *
@@ -439,18 +462,6 @@ abstract class Tinebase_User_Abstract
     /******************* abstract functions *********************/
     
     /**
-     * get list of users with NO internal informations
-     *
-     * @param string $_filter
-     * @param string $_sort
-     * @param string $_dir
-     * @param int $_start
-     * @param int $_limit
-     * @return Tinebase_Record_RecordSet with record class Tinebase_Model_User
-     */
-    abstract public function getUsers($_filter = NULL, $_sort = NULL, $_dir = 'ASC', $_start = NULL, $_limit = NULL);
-    
-    /**
      * get user by login name
      *
      * @param   string  $_loginName
@@ -473,16 +484,6 @@ abstract class Tinebase_User_Abstract
     {
         return $this->getUserByProperty('accountId', $_accountId, $_accountClass);
     }
-    
-    /**
-     * get user by property
-     *
-     * @param   string  $_property
-     * @param   string  $_accountId
-     * @param   string  $_accountClass  type of model to return
-     * @return  Tinebase_Model_User user
-     */
-    abstract public function getUserByProperty($_property, $_accountId, $_accountClass = 'Tinebase_Model_User');
     
     /**
      * setPassword() - sets / updates the password in the account backend
