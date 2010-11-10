@@ -138,16 +138,24 @@ class Tinebase_User
      */
     public static function factory($_backendType) 
     {
+        $options = self::getBackendConfiguration();
+        
+        $options['plugins'] = array();
+        
+        // manage email user settings
+        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::IMAP)) {
+            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::IMAP);
+        }
+        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::SMTP)) {
+            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
+        }
+        
         switch ($_backendType) {
             case self::LDAP:
-                $options = self::getBackendConfiguration();
-                
-                $options['plugins'] = array();
                 
 		        // manage samba sam?
 		        if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
-	                $options['plugins'][] = Tinebase_User_Ldap::PLUGIN_SAMBA;
-	                $options[Tinebase_User_Ldap::PLUGIN_SAMBA] = Tinebase_Core::getConfig()->samba->toArray(); 
+		            $options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
 		        }
                 
                 $result  = new Tinebase_User_Ldap($options);
@@ -155,12 +163,12 @@ class Tinebase_User
                 break;
                 
             case self::SQL:
-                $result = new Tinebase_User_Sql();
+                $result = new Tinebase_User_Sql($options);
                 
                 break;
             
             case self::TYPO3:
-                $result = new Tinebase_User_Typo3();
+                $result = new Tinebase_User_Typo3($options);
                 
                 break;
                 
@@ -360,6 +368,7 @@ class Tinebase_User
         
         // update or create user in local sql backend
         try {
+            throw new Tinebase_Exception_NotFound('');
             $currentUser = $userBackend->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
             
             $currentUser->accountLoginName          = $user->accountLoginName;
@@ -383,16 +392,39 @@ class Tinebase_User
             } catch (Tinebase_Exception_NotFound $ten) {
                 // do nothing
             }
+            
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+                $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+                
+                $contact = new Addressbook_Model_Contact(array(
+                    'n_family'      => $user->accountLastName,
+                    'n_given'       => $user->accountFirstName,
+                    'n_fn'          => $user->accountFullName,
+                    'n_fileas'      => $user->accountDisplayName,
+                    'email'         => $user->accountEmailAddress,
+                    'type'          => Addressbook_Model_Contact::CONTACTTYPE_USER,
+                    'container_id'  => $internalAddressbook->getId()
+                ));
+                
+                // add modlog info
+                Tinebase_Timemachine_ModificationLog::setRecordMetaData($contact, 'create');
+        
+                $contact = $addressbook->create($contact);        
+
+                $user->contact_id = $contact->getId();
+            }
             $user = $userBackend->addUserInSqlBackend($user);
         }
         
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  synced user object: " . print_r($user->toArray(), true));
-
+        
         // import contactdata(phone, address, fax, birthday. photo)
-        if($_syncContactData === true) {
+        if($_syncContactData === true && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
             
             $contact = $addressbook->getByUserId($user->getId());
+            
             $userBackend->updateContactFromSyncBackend($user, $contact);
             $addressbook->update($contact);
         }
