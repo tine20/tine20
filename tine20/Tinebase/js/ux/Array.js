@@ -24,6 +24,14 @@ Ext.applyIf(Array.prototype, {
         
         
         return diffs;
+    },
+    
+    /**
+     * Creates a copy of this Array, filtered to contain only unique values.
+     * @return {Array} The new Array containing unique values.
+     */
+    unique: function() {
+        return Ext.unique(this);
     }
 });
 
