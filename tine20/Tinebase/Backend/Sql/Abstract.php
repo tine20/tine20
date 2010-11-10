@@ -679,10 +679,16 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (! empty($this->_foreignTables)) {
             $select->group($this->_tableName . '.id');
             foreach ($this->_foreignTables as $modelName => $join) {
+                if ($_cols == '*' || array_key_exists($modelName, (array)$_cols)) {
+                    $selectArray = array($modelName => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')');
+                } else {
+                    $selectArray = array();
+                }
+                
                 $select->joinLeft(
                     /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
                     /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
-                    /* select */ array($modelName => 'GROUP_CONCAT(' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')')
+                    /* select */ $selectArray
                 );
             }
         }
