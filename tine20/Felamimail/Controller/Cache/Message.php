@@ -488,21 +488,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     
                     $messages = $_imap->getSummary($messageSequenceStart, $messageSequenceEnd, false);
 
-                    $incrementMessagesCounter = 0;
-                    $incrementUnreadCounter   = 0;
-                    
-                    $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                    
-                    foreach ($messages as $uid => $message) {
-                        $this->_addMessageToCacheAndIncreaseCounters($message, $_folder, $incrementMessagesCounter, $incrementUnreadCounter);
-                    }
-                    
-                    Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                    
-                    Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
-                        'cache_totalcount'  => "+$incrementMessagesCounter",
-                        'cache_unreadcount' => "+$incrementUnreadCounter",
-                    ));
+                    $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
                     
                     $messageSequenceStart = $messageSequenceEnd + 1;
                     
@@ -522,26 +508,38 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     }
 
     /**
-     * add imap message to cache and increase counters
+     * add imap messages to cache and increase counters
      * 
-     * @param array $_message
+     * @param array $_messages
      * @param Felamimail_Model_Folder $_folder
-     * @param integer $_incrementMessagesCounter
-     * @param integer $_incrementUnreadCounter
      */
-    protected function _addMessageToCacheAndIncreaseCounters($_message, $_folder, &$_incrementMessagesCounter, &$_incrementUnreadCounter)
+    protected function _addMessagesToCacheAndIncreaseCounters($_messages, $_folder)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Add message $uid to cache");
-        $addedMessage = $this->addMessage($_message, $_folder, false);
+        $incrementMessagesCounter = 0;
+        $incrementUnreadCounter   = 0;
         
-        if ($addedMessage) {
-            $_folder->cache_totalcount++;
-            $_folder->cache_job_actions_done++;
-            $_incrementMessagesCounter++;
-            if (! $addedMessage->hasSeenFlag()) {
-                $_incrementUnreadCounter++;
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        foreach ($_messages as $uid => $message) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Add message $uid to cache");
+            $addedMessage = $this->addMessage($_message, $_folder, false);
+            
+            if ($addedMessage) {
+                //$_folder->cache_totalcount++;
+                $_folder->cache_job_actions_done++;
+                $incrementMessagesCounter++;
+                if (! $addedMessage->hasSeenFlag()) {
+                    $incrementUnreadCounter++;
+                }
             }
         }
+        
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        
+        Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
+            'cache_totalcount'  => "+$incrementMessagesCounter",
+            'cache_unreadcount' => "+$incrementUnreadCounter",
+        ));
     }
     
     /**
@@ -577,23 +575,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     $missingUids = $this->_getMissingMessageUids($_folder, $messageUidsOnImapServer);
                     
                     if (count($missingUids) != 0) {
-                        $incrementMessagesCounter = 0;
-                        $incrementUnreadCounter   = 0;
-                        
                         $messages = $_imap->getSummary($missingUids);
-                        
-                        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                        
-                        foreach ($messages as $uid => $message) {
-                            $this->_addMessageToCacheAndIncreaseCounters($message, $_folder, $incrementMessagesCounter, $incrementUnreadCounter);
-                        }
-                        
-                        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                        
-                        Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
-                            'cache_totalcount'  => "+$incrementMessagesCounter",
-                            'cache_unreadcount' => "+$incrementUnreadCounter",
-                        ));
+                        $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
                     }
                     
                     if ($_folder->cache_totalcount == $_folder->imap_totalcount) {
