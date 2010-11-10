@@ -19,6 +19,16 @@
 class Felamimail_Message extends Zend_Mail_Message
 {
     /**
+     * date formats for convertDate()
+     * 
+     * @var array
+     */
+    public static $dateFormats = array(
+        'D, j M Y H:i:s O',
+        'd-M-Y H:i:s O',
+    );
+    
+    /**
      * Public constructor
      *
      * In addition to the parameters of Zend_Mail_Message::__construct() this constructor supports:
@@ -114,7 +124,16 @@ class Felamimail_Message extends Zend_Mail_Message
             $date->setTimezone('UTC');
 
         } catch (Exception $e) {
-            $date = new Tinebase_DateTime('@0');
+            // try some explicit formats
+            foreach (self::$dateFormats as $format) {
+                $date = DateTime::createFromFormat($format, $_dateString);
+                if ($date) break;
+            }
+            
+            if (! $date) {
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Date $_dateString could  not be converted to DateTime -> using 1970-01-01 00:00:00.");
+                $date = new Tinebase_DateTime('@0');
+            }
         }
         
         return $date;
