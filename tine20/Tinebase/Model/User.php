@@ -22,6 +22,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @property    string  accountId
+ * @property	string  accountEmailAddress  email address of user
  */
 class Tinebase_Model_User extends Tinebase_Record_Abstract
 {
