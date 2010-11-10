@@ -105,6 +105,12 @@ class Tinebase_Controller
             $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($accountName, $_password);
             Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
             
+            // need to set locale again if user preference is available because locale might not be set correctly during loginFromPost
+            $userPrefLocaleString = Tinebase_Core::getPreference()->{Tinebase_Preference::LOCALE};
+            if ($userPrefLocaleString !== 'auto') {
+                Tinebase_Core::setupUserLocale($userPrefLocaleString);
+            }
+            
             $account->setLoginTime($_ipAddress);
             
             $accessLog->sessionid = session_id();
