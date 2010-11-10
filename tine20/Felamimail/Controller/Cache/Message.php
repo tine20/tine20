@@ -572,11 +572,13 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Add message $uid to cache");
                             $addedMessage = $this->addMessage($message, $_folder, false);
                             
-                            $_folder->cache_totalcount++;
-                            $_folder->cache_job_actions_done++;
-                            $incrementMessagesCounter++;
-                            if (! $addedMessage->hasSeenFlag()) {
-                                $incrementUnreadCounter++;
+                            if ($addedMessage) {
+                                $_folder->cache_totalcount++;
+                                $_folder->cache_job_actions_done++;
+                                $incrementMessagesCounter++;
+                                if (! $addedMessage->hasSeenFlag()) {
+                                    $incrementUnreadCounter++;
+                                }
                             }
                         }
                         
@@ -618,10 +620,15 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @param  array                    $_message
      * @param  Felamimail_Model_Folder  $_folder
      * @param  bool                     $_updateFolderCounter
-     * @return Felamimail_Model_Message
+     * @return Felamimail_Model_Message|bool
      */
     public function addMessage(array $_message, Felamimail_Model_Folder $_folder, $_updateFolderCounter = true)
     {
+        if (! array_key_exists('header', $_message) || ! is_array($_message['header'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Email uid ' . $_message['uid'] . ' has no headers. Skipping ...');
+            return FALSE;
+        }
+        
         $messageToCache = new Felamimail_Model_Message(array(
             'account_id'    => $_folder->account_id,
             'messageuid'    => $_message['uid'],
