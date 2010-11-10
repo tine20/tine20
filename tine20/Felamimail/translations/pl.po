@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-06 18:31+0100\n"
+"PO-Revision-Date: 2010-11-10 19:14+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -557,8 +557,8 @@ msgid "Plain Text"
 msgstr "Czysty tekst"
 
 #: js/AccountEditDialog.js:349
-msgid "Depending on content type"
-msgstr "W zależności od treści"
+msgid "Depending on content type (experimental)"
+msgstr "Odpowiednio do typu treści (eksperymentalnie)"
 
 #: js/Felamimail.js:69
 msgid "Email"
@@ -851,6 +851,9 @@ msgstr "Potwierdź usunięcie"
 #: Preference.php:114
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Zanim usuniesz pocztę, wyświetl okno dialogowe z potwierdzeniem"
+
+#~ msgid "Depending on content type"
+#~ msgstr "W zależności od treści"
 
 #~ msgid "Add Attachment(s)"
 #~ msgstr "Dodaj załącznik(i)"
