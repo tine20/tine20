@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-03 19:58+0100\n"
+"PO-Revision-Date: 2010-11-10 19:20+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -381,7 +381,7 @@ msgstr "należy do"
 
 #: js/widgets/container/FilterModel.js:130
 #: js/widgets/container/FilterModel.js:134
-#: js/widgets/grid/FilterModel.js:155
+#: js/widgets/grid/FilterModel.js:156
 msgid "is equal to"
 msgstr "równa się"
 
@@ -524,7 +524,7 @@ msgid "Creating {0}..."
 msgstr "Tworzenie {0}..."
 
 #: js/widgets/tree/ContextMenu.js:85
-#: js/widgets/grid/GridPanel.js:1017
+#: js/widgets/grid/GridPanel.js:1035
 #: js/widgets/dialog/EditDialog.js:449
 #: js/widgets/persistentfilter/PickerPanel.js:200
 #: js/MainMenu.js:228
@@ -556,7 +556,7 @@ msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Edytuj uprawnienia dla {0} \"{1}\""
 
 #: js/widgets/tree/ContextMenu.js:243
-#: js/widgets/grid/GridPanel.js:336
+#: js/widgets/grid/GridPanel.js:349
 msgid "Add {0}"
 msgstr "Dodaj {0}"
 
@@ -576,36 +576,36 @@ msgstr "Edytu uprawnienia"
 msgid "Reload {0}"
 msgstr "Przeładuj {0}"
 
-#: js/widgets/grid/FilterToolbar.js:71
-#: js/widgets/grid/FilterToolbar.js:433
+#: js/widgets/grid/FilterToolbar.js:74
+#: js/widgets/grid/FilterToolbar.js:436
 msgid "Show"
 msgstr "Wyświetl"
 
-#: js/widgets/grid/FilterToolbar.js:137
+#: js/widgets/grid/FilterToolbar.js:140
 msgid "add new filter"
 msgstr "dodaj nowy filtr"
 
-#: js/widgets/grid/FilterToolbar.js:143
+#: js/widgets/grid/FilterToolbar.js:146
 msgid "reset all filters"
 msgstr "Resetuj filtry"
 
-#: js/widgets/grid/FilterToolbar.js:149
+#: js/widgets/grid/FilterToolbar.js:152
 msgid "start search"
 msgstr "Znajdź"
 
-#: js/widgets/grid/FilterToolbar.js:157
+#: js/widgets/grid/FilterToolbar.js:160
 msgid "save as favorite"
 msgstr "zapisz jako ulubione"
 
-#: js/widgets/grid/FilterToolbar.js:246
+#: js/widgets/grid/FilterToolbar.js:249
 msgid "select a field"
 msgstr "zaznacz pole"
 
-#: js/widgets/grid/FilterToolbar.js:271
+#: js/widgets/grid/FilterToolbar.js:274
 msgid "Delete this filter"
 msgstr "Usuń ten filtr"
 
-#: js/widgets/grid/FilterToolbar.js:302
+#: js/widgets/grid/FilterToolbar.js:305
 msgid "and"
 msgstr "i"
 
@@ -617,81 +617,81 @@ msgstr "Usuń wiersz"
 msgid "Search for records ..."
 msgstr "Znajdź wiersze ..."
 
-#: js/widgets/grid/GridPanel.js:222
+#: js/widgets/grid/GridPanel.js:235
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "{0} nie zostały znalezione. Proszę spróbować zmienić kryteria wyszukiwania, opcje wyświetlania albo {1}, w których szukasz."
 
-#: js/widgets/grid/GridPanel.js:314
+#: js/widgets/grid/GridPanel.js:327
 msgid "Edit {0}"
 msgstr "Edytuj {0}"
 
-#: js/widgets/grid/GridPanel.js:325
+#: js/widgets/grid/GridPanel.js:338
 msgid "Copy {0}"
 msgstr "Kopiuj {0}"
 
-#: js/widgets/grid/GridPanel.js:371
-#: js/widgets/grid/GridPanel.js:372
-#: js/widgets/grid/GridPanel.js:374
+#: js/widgets/grid/GridPanel.js:384
+#: js/widgets/grid/GridPanel.js:385
+#: js/widgets/grid/GridPanel.js:387
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Usuń {0}"
 msgstr[1] "Usuń {0}"
 msgstr[2] "Usuń {0}"
 
-#: js/widgets/grid/GridPanel.js:447
+#: js/widgets/grid/GridPanel.js:462
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Wyświetlane wiersze {0} - {1} z {2}"
 
-#: js/widgets/grid/GridPanel.js:448
+#: js/widgets/grid/GridPanel.js:463
 msgid "No {0} to display"
 msgstr "{0} niezdefiniowane"
 
-#: js/widgets/grid/GridPanel.js:656
+#: js/widgets/grid/GridPanel.js:671
 msgid "Tagging"
 msgstr "Przypisywanie znaczników"
 
-#: js/widgets/grid/GridPanel.js:691
+#: js/widgets/grid/GridPanel.js:706
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/widgets/grid/GridPanel.js:692
+#: js/widgets/grid/GridPanel.js:707
 #: js/widgets/ActivitiesPanel.js:465
 msgid "Created By"
 msgstr "Utworzona przez"
 
-#: js/widgets/grid/GridPanel.js:693
+#: js/widgets/grid/GridPanel.js:708
 msgid "Last Modified Time"
 msgstr "Data ostatniej zmiany"
 
-#: js/widgets/grid/GridPanel.js:694
+#: js/widgets/grid/GridPanel.js:709
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
-#: js/widgets/grid/GridPanel.js:997
+#: js/widgets/grid/GridPanel.js:1015
 msgid "Not Allowed"
 msgstr "Brak uprawnień"
 
-#: js/widgets/grid/GridPanel.js:998
+#: js/widgets/grid/GridPanel.js:1016
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nie masz uprawnień, aby usunąć wszystkie strony na raz"
 
-#: js/widgets/grid/GridPanel.js:1016
+#: js/widgets/grid/GridPanel.js:1034
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
 msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 
-#: js/widgets/grid/GridPanel.js:1037
+#: js/widgets/grid/GridPanel.js:1055
 #: js/widgets/dialog/EditDialog.js:451
 msgid "Deleting {0}"
 msgstr "Usuwanie {0}"
 
-#: js/widgets/grid/GridPanel.js:1039
+#: js/widgets/grid/GridPanel.js:1057
 msgid " ... This may take a long time!"
 msgstr "... To może długo potrwać!"
 
-#: js/widgets/grid/GridPanel.js:1056
+#: js/widgets/grid/GridPanel.js:1074
 #: js/widgets/dialog/EditDialog.js:461
 #: js/widgets/tags/TagsPanel.js:292
 #: js/widgets/tags/TagsPanel.js:402
@@ -699,7 +699,7 @@ msgstr "... To może długo potrwać!"
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/widgets/grid/GridPanel.js:1056
+#: js/widgets/grid/GridPanel.js:1074
 #: js/widgets/dialog/EditDialog.js:461
 msgid "Could not delete {0}."
 msgstr "Usunięcie {0} było niemożliwe."
@@ -719,123 +719,123 @@ msgstr[0] "Widok ograniczony filtrem:"
 msgstr[1] "Widoki ograniczone {0} filtrami:"
 msgstr[2] "Widoki ograniczone {0} filtrami:"
 
-#: js/widgets/grid/FilterModel.js:154
+#: js/widgets/grid/FilterModel.js:155
 msgid "contains"
 msgstr "zawiera"
 
-#: js/widgets/grid/FilterModel.js:156
+#: js/widgets/grid/FilterModel.js:157
 msgid "is greater than"
 msgstr "większy od"
 
-#: js/widgets/grid/FilterModel.js:157
+#: js/widgets/grid/FilterModel.js:158
 msgid "is less than"
 msgstr "mniejszy od"
 
-#: js/widgets/grid/FilterModel.js:158
+#: js/widgets/grid/FilterModel.js:159
 msgid "is not"
 msgstr "nie jest"
 
-#: js/widgets/grid/FilterModel.js:159
+#: js/widgets/grid/FilterModel.js:160
 msgid "one of"
 msgstr "jeden z"
 
-#: js/widgets/grid/FilterModel.js:160
+#: js/widgets/grid/FilterModel.js:161
 msgid "none of"
 msgstr "żaden z"
 
-#: js/widgets/grid/FilterModel.js:161
+#: js/widgets/grid/FilterModel.js:162
 msgid "is before"
 msgstr "przed"
 
-#: js/widgets/grid/FilterModel.js:162
+#: js/widgets/grid/FilterModel.js:163
 msgid "is after"
 msgstr "następuje po"
 
-#: js/widgets/grid/FilterModel.js:163
+#: js/widgets/grid/FilterModel.js:164
 msgid "is within"
 msgstr "przypada na"
 
-#: js/widgets/grid/FilterModel.js:164
+#: js/widgets/grid/FilterModel.js:165
 msgid "is in week no."
 msgstr "jest w tygodniu"
 
-#: js/widgets/grid/FilterModel.js:165
+#: js/widgets/grid/FilterModel.js:166
 msgid "starts with"
 msgstr "zaczyna się od"
 
-#: js/widgets/grid/FilterModel.js:166
+#: js/widgets/grid/FilterModel.js:167
 msgid "ends with"
 msgstr "kończy się na"
 
-#: js/widgets/grid/FilterModel.js:207
+#: js/widgets/grid/FilterModel.js:208
 msgid "select a operator"
 msgstr "wybierz operator"
 
-#: js/widgets/grid/FilterModel.js:318
+#: js/widgets/grid/FilterModel.js:319
 msgid "Search Account ..."
 msgstr "Znajdź konto ..."
 
-#: js/widgets/grid/FilterModel.js:440
+#: js/widgets/grid/FilterModel.js:441
 msgid "today"
 msgstr "dzisiaj"
 
-#: js/widgets/grid/FilterModel.js:441
+#: js/widgets/grid/FilterModel.js:442
 msgid "yesterday"
 msgstr "wczoraj"
 
-#: js/widgets/grid/FilterModel.js:442
+#: js/widgets/grid/FilterModel.js:443
 msgid "this week"
 msgstr "bieżący tydzień"
 
-#: js/widgets/grid/FilterModel.js:443
+#: js/widgets/grid/FilterModel.js:444
 msgid "last week"
 msgstr "ubiegły tydzień"
 
-#: js/widgets/grid/FilterModel.js:444
+#: js/widgets/grid/FilterModel.js:445
 msgid "the week before last"
 msgstr "przedostatni tydzień"
 
-#: js/widgets/grid/FilterModel.js:445
+#: js/widgets/grid/FilterModel.js:446
 msgid "this month"
 msgstr "bieżący miesiąc"
 
-#: js/widgets/grid/FilterModel.js:446
+#: js/widgets/grid/FilterModel.js:447
 msgid "last month"
 msgstr "ubiegły miesiąc"
 
-#: js/widgets/grid/FilterModel.js:447
+#: js/widgets/grid/FilterModel.js:448
 msgid "this quarter"
 msgstr "bieżący kwartał"
 
-#: js/widgets/grid/FilterModel.js:448
+#: js/widgets/grid/FilterModel.js:449
 msgid "last quarter"
 msgstr "ubiegły kwartał"
 
-#: js/widgets/grid/FilterModel.js:449
+#: js/widgets/grid/FilterModel.js:450
 msgid "this year"
 msgstr "bieżący rok"
 
-#: js/widgets/grid/FilterModel.js:450
+#: js/widgets/grid/FilterModel.js:451
 msgid "last year"
 msgstr "ubiegły rok"
 
-#: js/widgets/grid/FilterModel.js:454
+#: js/widgets/grid/FilterModel.js:455
 msgid "tomorrow"
 msgstr "jutro"
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:456
 msgid "next week"
 msgstr "przyszły tydzień"
 
-#: js/widgets/grid/FilterModel.js:456
+#: js/widgets/grid/FilterModel.js:457
 msgid "next month"
 msgstr "przyszły miesiąc"
 
-#: js/widgets/grid/FilterModel.js:457
+#: js/widgets/grid/FilterModel.js:458
 msgid "next quarter"
 msgstr "przyszły kwartał"
 
-#: js/widgets/grid/FilterModel.js:458
+#: js/widgets/grid/FilterModel.js:459
 msgid "next year"
 msgstr "przyszły rok"
 
@@ -1519,11 +1519,11 @@ msgid "offline"
 msgstr "offline"
 
 #: js/ux/ConnectionStatus.js:59
-#: User/Abstract.php:266
-#: User/Abstract.php:267
-#: User/Abstract.php:268
-#: User/Abstract.php:269
-#: User/Abstract.php:270
+#: User/Abstract.php:284
+#: User/Abstract.php:285
+#: User/Abstract.php:286
+#: User/Abstract.php:287
+#: User/Abstract.php:288
 msgid "unknown"
 msgstr "nieznany"
 
@@ -1816,6 +1816,14 @@ msgid_plural "to do lists"
 msgstr[0] "Lista zadań"
 msgstr[1] "listy zadań"
 msgstr[2] "listy zadań"
+
+#: views/update.php:47
+msgid "Tine 2.0 needs to be updated or is not installed yet."
+msgstr "Tine 2.0 wymaga aktualizacji albo jeszcze nie jest zainstalowana."
+
+#: views/update.php:47
+msgid "Please wait or contact your administrator"
+msgstr "Proszę poczekać albo skontaktować się ze swoim administratorem"
 
 #: Setup/setup.xml:2780
 msgid "note"
