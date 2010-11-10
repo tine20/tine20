@@ -105,32 +105,29 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
      */
     onKeydown: function(e) {
         if (e.getKey() == e.ENTER) {
-            e.stopEvent();
-            this.cmp.win.focus();
-
             var s = this.cmp.win.getSelection(),
                 r = s.getRangeAt(0),
                 doc = this.cmp.getDoc(),
                 level = this.getBlockquoteLevel(s);
-              
-            if (level == 1) {
-                this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote"><br />');
-                this.cmp.execCmd('outdent');
-                this.cmp.execCmd('outdent');
-            } else if (level > 1) {
-                for (var i=0; i < level; i++) {
-                    this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote">');
-                    this.cmp.execCmd('outdent');
-                    this.cmp.execCmd('outdent');
-                }
-                var br = doc.createElement('br');
-                r.insertNode(br);
-            } else {
-                var br = doc.createElement('br');
-                r.insertNode(br);
-            }
             
-            this.cmp.deferFocus();
+            if (level > 0) {
+                e.stopEvent();
+                this.cmp.win.focus();
+                if (level == 1) {
+                    this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote"><br />');
+                    this.cmp.execCmd('outdent');
+                    this.cmp.execCmd('outdent');
+                } else if (level > 1) {
+                    for (var i=0; i < level; i++) {
+                        this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote">');
+                        this.cmp.execCmd('outdent');
+                        this.cmp.execCmd('outdent');
+                    }
+                    var br = doc.createElement('br');
+                    r.insertNode(br);
+                }
+                this.cmp.deferFocus();
+            }
         }
     },
     
