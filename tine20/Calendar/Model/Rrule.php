@@ -146,7 +146,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function getRruleFromString($_rruleString)
     {
-        $rrule = new Calendar_Model_Rrule();
+        $rrule = new Calendar_Model_Rrule(NULL, TRUE);
         $rrule->setFromString($_rruleString);
         
         return $rrule;
@@ -267,7 +267,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             self::FREQ_YEARLY  => Tinebase_DateTime::MODIFIER_YEAR
         );
         
-        $rrule = new Calendar_Model_Rrule();
+        $rrule = new Calendar_Model_Rrule(NULL, TRUE);
         $rrule->setFromString($_event->rrule);
         
         $from  = clone $_from;
@@ -327,7 +327,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      */
     public static function computeRecuranceSet($_event, $_exceptions, $_from, $_until)
     {
-        $rrule = new Calendar_Model_Rrule();
+        $rrule = new Calendar_Model_Rrule(NULL, TRUE);
         $rrule->setFromString($_event->rrule);
         
         $_exceptionRecurIds = self::getExceptionsRecurIds($_event, $_exceptions);

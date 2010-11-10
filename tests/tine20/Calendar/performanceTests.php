@@ -103,7 +103,7 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
 //            $filter = new Calendar_Model_EventFilter($filterData);
 //            $events = Calendar_Controller_Event::getInstance()->search($filter, NULL, FALSE);
             
-            $this->_json->searchEvents($filterData, array());
+            $this->_json->searchEvents($filterData, NULL);
             $numSearches += 1;
             
         }
@@ -118,6 +118,7 @@ class Calendar_performanceTests extends PHPUnit_Framework_TestCase
         $run_id = $xhprof_runs->save_run($xhprof_data, "xhprof_tine20");
 
         echo "http://localhost/xhprof_html/index.php?run={$run_id}&source=xhprof_tine20 \n";
+        print_r(Tinebase_Record_Abstract::$cns);
     }
     
     public function _testTasks()

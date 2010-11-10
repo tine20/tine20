@@ -63,7 +63,7 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         }
         
         if ($this->_value !== 'all' && ! $this->_value instanceof Tinebase_Record_RecordSet) {
-            $this->_value = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $this->_value);
+            $this->_value = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $this->_value, TRUE);
         }
     }
     

@@ -96,6 +96,10 @@ class Tinebase_Model_Grants extends Tinebase_Record_Abstract
                 'presence' => 'required',
                 'allowEmpty' => true
             );
+            
+            // initialize in case validators are switched off
+            $this->_properties[$grant] = FALSE;
+            
         }
         
         return parent::__construct($_data, $_bypassFilters, $_convertDates);

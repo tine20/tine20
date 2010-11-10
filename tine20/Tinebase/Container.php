@@ -164,10 +164,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                         'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
                         Tinebase_Model_Grants::GRANT_READ       => true
                     )            
-                ));
+                ), TRUE);
             } else {
                 // add all grants to creator only
-                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
+                $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants), TRUE);
             }
         } else {
             $grants = $_grants;
@@ -281,7 +281,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                     $result[] = $row['id'];
                 }
             } else {
-                $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows);
+                $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $rows, TRUE);
             }
             
             // any account should have at least one personal folder
@@ -290,7 +290,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 if ($personalContainer instanceof Tinebase_Model_Container) {
                     $result = ($_onlyIds) ? 
                         array($personalContainer->getId()) : 
-                        new Tinebase_Record_RecordSet('Tinebase_Model_Container', $personalContainers);
+                        new Tinebase_Record_RecordSet('Tinebase_Model_Container', $personalContainers, TRUE);
                 }
             }
             
@@ -450,7 +450,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
 
-        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containersData);
+        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containersData, TRUE);
         
         return $containers;
     }
@@ -556,7 +556,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         $stmt = $this->_db->query($select);
 
-        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC));
+        $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $stmt->fetchAll(Zend_Db::FETCH_ASSOC), TRUE);
         
         return $containers;
     }
@@ -599,7 +599,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerData = $this->_getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL);
         
         Tinebase_Core::getLogger()->err(print_r($containerData, TRUE));
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containerData);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containerData, TRUE);
         
         return $result;
     }
@@ -871,7 +871,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 $grantData[$grant] = TRUE;
             }
         	
-            $containerGrant = new Tinebase_Model_Grants($grantData);
+            $containerGrant = new Tinebase_Model_Grants($grantData, TRUE);
 
             $grants->addRecord($containerGrant);
         }
@@ -1122,7 +1122,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         );
         $grantsFields = array_merge($grantsFields, $grants);
         
-        $grants = new Tinebase_Model_Grants($grantsFields);
+        $grants = new Tinebase_Model_Grants($grantsFields, TRUE);
 
         return $grants;
     }

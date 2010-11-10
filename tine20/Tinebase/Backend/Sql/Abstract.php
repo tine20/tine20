@@ -290,7 +290,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
     {
         if ($_pagination === NULL) {
-            $_pagination = new Tinebase_Model_Pagination();
+            $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
         }
         
         // build query

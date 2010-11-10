@@ -339,11 +339,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
         
         if (isset($_data['attendee']) && is_array($_data['attendee'])) {
-            $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee']);
+            $_data['attendee'] = new Tinebase_Record_RecordSet('Calendar_Model_Attender', $_data['attendee'], $this->bypassFilters);
         }
         
         if (isset($_data['rrule']) && is_array($_data['rrule'])) {
-            $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule']);
+            $_data['rrule'] = new Calendar_Model_Rrule($_data['rrule'], $this->bypassFilters);
         }
         
         if (isset($_data['alarms']) && is_array($_data['alarms'])) {

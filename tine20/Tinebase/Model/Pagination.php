@@ -53,21 +53,19 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      */
     public function appendPaginationSql($_select)
     {
-        if ($this->isValid()) {
-            if (!empty($this->limit)) {
-                $_select->limit($this->limit, $this->start);
-            }
-            if (!empty($this->sort) && !empty($this->dir)){
-                if (is_array($this->sort)) {
-                    $order = array();
-                    foreach ($this->sort as $sort) {
-                        $order[] = $sort . ' ' . $this->dir;
-                    }
-                } else {
-                    $order = $this->sort . ' ' . $this->dir;
+        if (!empty($this->limit)) {
+            $_select->limit($this->limit, $this->start);
+        }
+        if (!empty($this->sort) && !empty($this->dir)){
+            if (is_array($this->sort)) {
+                $order = array();
+                foreach ($this->sort as $sort) {
+                    $order[] = $sort . ' ' . $this->dir;
                 }
-                $_select->order($order);
+            } else {
+                $order = $this->sort . ' ' . $this->dir;
             }
+            $_select->order($order);
         }
     }
 }

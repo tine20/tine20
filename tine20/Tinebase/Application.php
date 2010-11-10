@@ -126,7 +126,7 @@ class Tinebase_Application
             throw new Tinebase_Exception_NotFound('Application not found.');
         }
         
-        $result = new Tinebase_Model_Application($rows[0]);
+        $result = new Tinebase_Model_Application($rows[0], TRUE);
         
         $this->_applicationCache[$applicationId] = $result;
         
@@ -169,7 +169,7 @@ class Tinebase_Application
             if (!$queryResult) {
                 throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
             }
-            $result = new Tinebase_Model_Application($queryResult);
+            $result = new Tinebase_Model_Application($queryResult, TRUE);
             
             if (isset($cache)) {
                 $cache->save($result, $cacheId, array('applications'));
@@ -200,7 +200,7 @@ class Tinebase_Application
         
         $rowSet = $this->_applicationTable->fetchAll($where, $_sort, $_dir, $_limit, $_start);
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $rowSet->toArray());
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $rowSet->toArray(), TRUE);
 
         return $result;
     }    
@@ -220,7 +220,7 @@ class Tinebase_Application
         
         $rowSet = $this->_applicationTable->fetchAll($where);
 
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $rowSet->toArray());
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Application', $rowSet->toArray(), TRUE);
 
         return $result;
     }    

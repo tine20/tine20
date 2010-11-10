@@ -103,7 +103,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-        $result = new Tinebase_Record_RecordSet($_accountClass, $rows);
+        $result = new Tinebase_Record_RecordSet($_accountClass, $rows, TRUE);
         
         return $result;
     }
@@ -161,7 +161,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
         
         try {
-            $account = new $_accountClass();
+            $account = new $_accountClass(NULL, TRUE);
             $account->setFromArray($row);
         } catch (Tinebase_Exception_Record_Validation $e) {
             $validation_errors = $account->getValidationErrors();
@@ -688,7 +688,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
         
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_User', $queryResult);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_User', $queryResult, TRUE);
         
         return $result;
     }

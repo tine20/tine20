@@ -710,7 +710,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not instantiate account object for ldap user ' . print_r($_userData, 1));
             $accountObject = null;
         } else {
-            $accountObject = new $_accountClass($accountArray);
+            $accountObject = new $_accountClass($accountArray, TRUE);
         }
 
         return $accountObject;

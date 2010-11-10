@@ -74,7 +74,7 @@ class Tinebase_Controller
             'li'            => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
             'result'        => $authResult->getCode(),
             'clienttype'    => $_clientIdString,   
-        ));
+        ), TRUE);
         
         if ($authResult->isValid()) {
             $accountName = $authResult->getIdentity();

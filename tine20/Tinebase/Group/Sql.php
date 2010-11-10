@@ -490,7 +490,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
         $queryResult = $stmt->fetchAll();
         $stmt->closeCursor();
         
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group', $queryResult);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Group', $queryResult, TRUE);
         
         return $result;
     }
@@ -516,7 +516,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
 
-        $result = new Tinebase_Model_Group($queryResult);
+        $result = new Tinebase_Model_Group($queryResult, TRUE);
         
         return $result;
     }
@@ -544,7 +544,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             throw new Tinebase_Exception_Record_NotDefined('Group not found.');
         }
 
-        $result = new Tinebase_Model_Group($queryResult);
+        $result = new Tinebase_Model_Group($queryResult, TRUE);
         
         return $result;
     }
@@ -565,7 +565,7 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
 	        
 	        $rows = $this->groupsTable->fetchAll($select);
 	        foreach ($rows as $row) {
-	        	$result->addRecord(new Tinebase_Model_Group($row->toArray()));
+	        	$result->addRecord(new Tinebase_Model_Group($row->toArray(), TRUE));
 	        }
     	}
     	

@@ -167,7 +167,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             'id'            => $group[$this->_groupUUIDAttribute][0],
             'name'          => $group['cn'][0],
             'description'   => isset($group['description'][0]) ? $group['description'][0] : '' 
-        ));
+        ), TRUE);
         
         return $result;
     }
@@ -203,7 +203,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 'id'            => $group[$this->_groupUUIDAttribute][0],
                 'name'          => $group['cn'][0],
                 'description'   => isset($group['description'][0]) ? $group['description'][0] : null
-            )); 
+            ), TRUE); 
 
             $result->addRecord($groupObject);
         }
@@ -805,7 +805,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 'id'            => $group[$this->_groupUUIDAttribute][0],
                 'name'          => $group['cn'][0],
                 'description'   => isset($group['description'][0]) ? $group['description'][0] : null
-            )); 
+            ), TRUE); 
             
             $memberships->addRecord($groupObject);
         }
