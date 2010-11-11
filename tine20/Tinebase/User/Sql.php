@@ -512,7 +512,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     public function updateUserInSqlBackend(Tinebase_Model_FullUser $_user)
     {
         if(! $_user->isValid()) {
-            throw new Tinebase_Exception_Record_Validation('Invalid user object. ' . print_r($_relation->getValidationErrors(), TRUE));
+            throw new Tinebase_Exception_Record_Validation('Invalid user object. ' . print_r($_user->getValidationErrors(), TRUE));
         }
 
         $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
