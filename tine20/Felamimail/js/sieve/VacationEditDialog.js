@@ -97,6 +97,7 @@ Ext.namespace('Tine.Felamimail.sieve');
             fieldLabel: this.app.i18n._('Incoming mails will be answered with this text:'),
             name: 'reason',
             allowBlank: true,
+            disabled: (this.record.get('enabled') == false),
             height: 220,
             getDocMarkup: function() {
                 var markup = '<html><body></body></html>';
@@ -124,6 +125,36 @@ Ext.namespace('Tine.Felamimail.sieve');
                     columnWidth: 1
                 },
                 items: [[
+                // TODO make the radiogroup work
+//                    {
+//                    xtype: 'radiogroup',
+//                    hideLabel: true,
+//                    columns: 1,
+//                    name: 'enabledGroup',
+//                    items: [
+//                        {
+//                            boxLabel: this.app.i18n._('I am available (vacation message disabled)'),
+//                            inputValue: 1,
+//                            //value: 1
+//                            name: 'enabled'
+//                            //checked: this.record.get('enabled') /*, name: 'enabled', inputValue: true */ /* , checked: this.record.get('enabled')*/
+//                        },
+//                        {
+//                            boxLabel: this.app.i18n._('I am not available (vacation message enabled)'),
+//                            inputValue: 0,
+//                            //value: 0
+//                            name: 'enabled'
+//                            //checked: !! this.record.get('enabled') /*, name: 'enabled', inputValue: false*/
+//                        }
+//                    ],
+//                    listeners: {
+//                        scope: this,
+//                        change: function(group, radio) {
+//                            //this.record.set('enabled', radio.inputValue);
+//                            this.reasonEditor.setDisabled(! radio.inputValue);
+//                        }
+//                    }
+//                },
                     {
                         fieldLabel: this.app.i18n._('Status'),
                         name: 'enabled',
@@ -138,9 +169,13 @@ Ext.namespace('Tine.Felamimail.sieve');
                         store: [
                             [0, this.app.i18n._('I am available (vacation message disabled)')], 
                             [1, this.app.i18n._('I am not available (vacation message enabled)')]
-                            //[0, Locale.getTranslationData('Question', 'no').replace(/:.*/, '')], 
-                            //[1, Locale.getTranslationData('Question', 'yes').replace(/:.*/, '')]
-                        ]
+                        ],
+                        listeners: {
+                            scope: this,
+                            select: function (combo, record) {
+                                this.reasonEditor.setDisabled(! record.data.field1);
+                            }
+                        }
                     },
                     this.reasonEditor
                 ]]
