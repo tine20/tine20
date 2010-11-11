@@ -346,13 +346,13 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 // use selected type to create new row with empty address and start editing
                 this.store.add(new Ext.data.Record({type: o.record.data.type, 'address': ''}));
                 this.store.commitChanges();
-                this.startEditing(o.row +1, o.column);
+                this.startEditing.defer(50, this, [o.row +1, o.column]);
             } else if (o.value == '') {
                 this.store.remove(o.record);
             }
             this.setFixedHeight(false);
             this.ownerCt.doLayout();
-            this.searchCombo.focus.defer(50, this.searchCombo);
+            this.searchCombo.focus.defer(80, this.searchCombo);
         }
     },    
     
