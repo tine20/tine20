@@ -23,12 +23,32 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * serialized rule
+     * 
+     * @var string
+     */
     protected $_serializedSieveRule;
     
+    /**
+     * smart rule file into
+     * 
+     * @var string
+     */
     protected $_smartSieveRuleFileInto = '#rule&&13&&ENABLED&&&&&&&&folder&&Listen/Icecast&&0&&List-Id&&icecast.xiph.org&&0';
     
+    /**
+     * smart rule discard
+     * 
+     * @var string
+     */
     protected $_smartSieveRuleDiscard  = '#rule&&15&&ENABLED&&&&&&Bacula: Backup OK of&&discard&&&&0&&&&&&0';
     
+    /**
+     * sieve vacation
+     * 
+     * @var string
+     */
     protected $_smartSieveVacation = '#vacation&&7&&"info@example.com"&&Thank you very much for your email.\n\n&&off';
     
     /**
@@ -119,17 +139,7 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
     public function testEnabledVacation()
     {
         $script = new Felamimail_Sieve_Script();
-        
-        $vacation = new Felamimail_Sieve_Vacation();
-        
-        $vacation->setEnabled(true)
-            ->addAddress('info@example.com')
-            ->setDays(8)
-            ->setSubject('Lößlich')
-            ->setFrom('sieve@example.com')
-            ->setReason('Tine 2.0 Unit Test');
-        
-        $script->setVacation($vacation);
+        $script->setVacation($this->_getVacation());
         
         $sieveScript = $script->getSieve();
         
@@ -139,6 +149,45 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         $this->assertContains('?Q?L=C3=B6=C3=9Flich?=', $sieveScript, $sieveScript);
         $this->assertContains('Felamimail_Sieve_Vacation', $sieveScript);
         $this->assertContains('Tine 2.0 Unit Test', $sieveScript);
+    }
+    
+    /**
+     * get vacation
+     * 
+     * @return Felamimail_Sieve_Vacation
+     */
+    protected function _getVacation() {
+        $vacation = new Felamimail_Sieve_Vacation();
+        
+        $vacation->setEnabled(true)
+            ->addAddress('info@example.com')
+            ->setDays(8)
+            ->setSubject('Lößlich')
+            ->setFrom('sieve@example.com')
+            ->setReason('Tine 2.0 Unit Test');
+            
+        return $vacation;
+    }
+
+    /**
+     * test enabled vacation
+     */
+    public function testMimeVacation()
+    {
+        $vacation = $this->_getVacation();
+        $vacation->setMime('multipart/alternative')->setReason('<html><body><strong>AWAY!</strong></body></html>');
+        
+        $script = new Felamimail_Sieve_Script();
+        $script->setVacation($vacation);
+        
+        $sieveScript = $script->getSieve();
+        
+        //echo $sieveScript;
+        
+        $this->assertContains('Content-Type: multipart/alternative; boundary=foo', $sieveScript);
+        $this->assertContains('vacation :mime :days 8 :from "sieve@example.com" :addresses ["info@example.com"] :subject "=?UTF-8?Q?L=C3=B6=C3=9Flich?=" text:', $sieveScript);
+        $this->assertContains('<html><body><strong>AWAY!</strong></body></html>', $sieveScript);
+        $this->assertContains('--foo--', $sieveScript);
     }
     
     /**
