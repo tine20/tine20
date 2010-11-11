@@ -168,6 +168,15 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* on     */ $this->_db->quoteIdentifier('attendee.cal_event_id') . ' = ' . $this->_db->quoteIdentifier('cal_events.id'),
             /* select */ array());
         
+        if (! $_getDeleted) {
+            $subselect->joinLeft(
+                /* table  */ array('dispcontainer' => $this->_tablePrefix . 'container'), 
+                /* on     */ $this->_db->quoteIdentifier('dispcontainer.id') . ' = ' . $this->_db->quoteIdentifier('attendee.displaycontainer_id'),
+                /* select */ array());
+            
+            $subselect->where($this->_db->quoteIdentifier('dispcontainer.is_deleted') . ' = 0 OR ' . $this->_db->quoteIdentifier('dispcontainer.is_deleted') . 'IS NULL');
+        }
+        
         // remove grantsfilter here as we need it in the main select
         $grantsFilter = $_filter->getFilter('grants');
         if ($grantsFilter) {
@@ -324,8 +333,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* on     */ $this->_db->quoteIdentifier('attendeegroupmemberships.account_id') . ' = ' . $this->_db->quoteIdentifier('attendeeaccounts.contact_id'),
             /* select */ array());
         
-        
-        
+
         
         $_select->joinLeft(
             /* table  */ array('dispgrants' => $this->_tablePrefix . 'container_acl'), 
