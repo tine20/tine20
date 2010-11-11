@@ -5,9 +5,10 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @todo        move visibility='displayed' check from getSelect to contact filter
  */
 
 /**
@@ -47,31 +48,16 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     protected $_foreignTables = array(
         'members'    => array(
         	'table'  => 'addressbook_list_members',
-            'joinOn' => 'list_id',
-            'field'  => 'contact_id'
+            'field'  => 'contact_id',
+    		'joinOn' => 'list_id'
+        ),
+        'group_id'    => array(
+        	'table'  => 'groups',
+            'field'  => 'id',
+        	'joinOn' => 'list_id'
         )
     );
-    
-    /**
-     * get the basic select object to fetch records from the database
-     *  
-     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
-     * @param boolean $_getDeleted get deleted records (if modlog is active)
-     * @return Zend_Db_Select
-     */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {        
-        $select = parent::_getSelect($_cols, $_getDeleted);
-        
-        $select->joinLeft(
-            /* table  */ array('groups' => $this->_tablePrefix . 'groups'), 
-            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('groups.list_id'),
-            /* select */ array('group_id' => 'groups.id')
-        );
-        
-        return $select;
-    }
-    
+
     /**
      * converts record into raw data for adapter
      *
