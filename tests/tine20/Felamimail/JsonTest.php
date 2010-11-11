@@ -592,9 +592,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         $vacationData = array(
             'id'                    => $this->_account->getId(),
-            'addresses'             => array(),
             'subject'               => 'unittest vacation subject',
-            'from'                  => $this->_account->email,
+            'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
             'days'                  => 7,
             'enabled'               => TRUE,
             'reason'                => 'unittest vacation message',
@@ -611,6 +610,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $result = $this->_json->getVacation($this->_account->getId());
 
+        $this->assertEquals($this->_account->email, $result['addresses'][0]);
+        unset($result['addresses']);
         $this->assertEquals($vacationData, $result);
     }
     
@@ -621,9 +622,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     {
         $vacationData = array(
             'id'                    => $this->_account->getId(),
-            'addresses'             => array(),
             'subject'               => 'unittest vacation subject',
-            'from'                  => $this->_account->email,
+            'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
             'days'                  => 7,
             'enabled'               => TRUE,
             'reason'                => '<html><body><h1>unittest vacation message</h1></body></html>',
@@ -815,6 +815,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // check which save fn to use
         if (array_key_exists('reason', $_sieveData)) {
             $resultSet = $this->_json->saveVacation($_sieveData);
+            $this->assertEquals($this->_account->email, $resultSet['addresses'][0]);
+            unset($resultSet['addresses']);
         } else if (array_key_exists('action_type', $_sieveData[0])) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
         }
