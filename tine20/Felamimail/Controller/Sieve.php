@@ -168,6 +168,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     {
         $account = Felamimail_Controller_Account::getInstance()->get($_vacation->getId());
         $this->_setSieveBackendAndAuthenticate($account);
+        $this->_addVacationUserData($_vacation, $account);
         
         $fsv = $_vacation->getFSV();
         
@@ -183,6 +184,33 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         Felamimail_Controller_Account::getInstance()->setVacationActive($account, $_vacation->enabled);
         
         return $this->getVacation($account);
+    }
+    
+    /**
+     * add addresses and from to vacation
+     * 
+     * @param Felamimail_Model_Sieve_Vacation $_vacation
+     * @param Felamimail_Model_Account $_account
+     */
+    protected function _addVacationUserData(Felamimail_Model_Sieve_Vacation $_vacation, Felamimail_Model_Account $_account)
+    {
+        $addresses = array();
+        if ($_account->type == Felamimail_Model_Account::TYPE_SYSTEM) {
+            $addresses[] = (! empty($this->_currentAccount->accountEmailAddress)) ? $this->_currentAccount->accountEmailAddress : $_account->email;
+            if ($this->_currentAccount->smtpUser && ! empty($this->_currentAccount->smtpUser->emailAliases)) {
+                $addresses = array_merge($addresses, $this->_currentAccount->smtpUser->emailAliases);
+            }
+        } else {
+            $addresses[] = $_account->email;
+        }
+        
+        $from = $_account->from;
+        if (strpos($from, '@') === FALSE) {
+            $from .= ' <' . $_account->email . '>';
+        }
+        
+        $_vacation->addresses = $addresses;
+        $_vacation->from = $from;
     }
     
     /**
