@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>3.19</version>
+	<version>3.20</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -2189,7 +2189,7 @@
 		</table>
 		<table>
 			<name>filter</name>
-			<version>1</version>
+			<version>2</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -2273,19 +2273,6 @@
 					<primary>true</primary>
 					<field>
 						<name>id</name>
-					</field>
-				</index>
-				<index>
-					<name>application_id-account_id-name</name>
-					<unique>true</unique>
-					<field>
-						<name>application_id</name>
-					</field>
-					<field>
-						<name>account_id</name>
-					</field>
-					<field>
-						<name>name</name>
 					</field>
 				</index>
 				<index>

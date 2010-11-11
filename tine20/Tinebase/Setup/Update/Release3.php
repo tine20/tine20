@@ -752,4 +752,42 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('groups', 2);
         $this->setApplicationVersion('Tinebase', '3.19');
     }
+    
+    /**
+     * update to 3.20
+     * - drop 'application_id-account_id-name' key
+     */
+    public function update_19()
+    {
+        // we need to drop the foreign key and the index first
+        try {
+            $this->_backend->dropForeignKey('filter', 'filter::application_id--applications::id');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            try {
+                // try it again with table prefix
+                $this->_backend->dropForeignKey('filter', SQL_TABLE_PREFIX . 'filter::application_id--applications::id');
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // already dropped
+            }
+        }
+        $this->_backend->dropIndex('filter', 'application_id-account_id-name');
+        
+        // add foreign key again
+        $this->_backend->addForeignKey('filter', new Setup_Backend_Schema_Index_Xml('<index>
+                <name>filter::application_id--applications::id</name>
+                <field>
+                    <name>application_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>applications</table>
+                    <field>id</field>
+                </reference>
+            </index>')
+        );
+        
+        // increase versions
+        $this->setTableVersion('filter', 2);
+        $this->setApplicationVersion('Tinebase', '3.20');
+    }
 }
