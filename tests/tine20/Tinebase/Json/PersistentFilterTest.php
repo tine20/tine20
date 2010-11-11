@@ -145,27 +145,15 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, count(array_intersect($ids, array($savedFilterData['id']))));
     }
-// obsolete tests
-//    public function testRenameFilter()
-//    {
-//        $savedFilter = $this->testSaveFilter();
-//        $this->_uit->rename($savedFilter['id'], 'renamedFilter');
-//        
-//        $loadedFilter = $this->_uit->get($savedFilter['id']);
-//        $this->assertEquals('renamedFilter', $loadedFilter['name'], 'filter renameing failed');
-//    }
-// 
-//    public function testOverwriteByName()
-//    {
-//        $givenQuery = $this->_getFilter('query', $this->_testFilterData);
-//        $givenQuery['value'] = 'changed';
-//        
-//        $savedFilter = $this->testSaveFilter();
-//        $overwrittenFilter = $this->_uit->savePersistentFilter($this->_testFilterData, 'testFilter', 'Tasks_Model_Task');
-//        
-//        $loadedFilter = $this->_uit->get($savedFilter['id']);
-//        $this->_assertSavedFilter($loadedFilter);
-//    }
+    
+    public function testCreateFilterWithDeletedName()
+    {
+        $savedFilter = $this->testSaveFilter();
+        $this->_uit->deletePersistentFilters($savedFilter['id']);
+        
+        // this failed with old db constrians, cause name was used with is_deleted
+        $this->testSaveFilter();
+    }
 
     /**
      * assert saved filer matches expections for $this->_testFilterData
