@@ -71,13 +71,10 @@ Ext.namespace('Tine.Felamimail.sieve');
             return;
         }
         
-        // mime type is always text/html
-        //this.record.set('mime', 'text/html');
+        // mime type is always multipart/alternative
+        this.record.set('mime', 'multipart/alternative');
 
         this.getForm().loadRecord(this.record);
-        
-        //Tine.log.debug(this.record);
-        //Tine.log.debug(this.account);
         
         var title = String.format(this.app.i18n._('Vacation Message for {0}'), this.account.get('name'));
         this.window.setTitle(title);
@@ -101,13 +98,10 @@ Ext.namespace('Tine.Felamimail.sieve');
             name: 'reason',
             allowBlank: true,
             height: 220,
-            // do we need the markup here?
-            /*
-            getDocMarkup: function(){
+            getDocMarkup: function() {
                 var markup = '<html><body></body></html>';
                 return markup;
             },
-            */
             plugins: [
                 new Ext.ux.form.HtmlEditor.RemoveFormat()
             ]

@@ -566,8 +566,8 @@ Tine.Felamimail.Model.Vacation = Tine.Tinebase.data.Record.create(Tine.Tinebase.
  */
 Tine.Felamimail.Model.Vacation.getDefaultData = function() { 
     return {
-        days: 7
-        //mime: 'text/html'
+        days: 7,
+        mime: 'multipart/alternative'
     };
 };
 
