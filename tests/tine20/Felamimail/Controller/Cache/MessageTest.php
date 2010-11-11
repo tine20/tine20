@@ -126,13 +126,11 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         
         // check folder status after update
         if ($updatedFolder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
-            $this->assertEquals($updatedFolder->imap_uidnext, $updatedFolder->cache_uidnext, 'uidnext values should be equal');
             $this->assertEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should be equal');
             $this->assertGreaterThan(-1, Tinebase_DateTime::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
             $this->assertEquals(0, $updatedFolder->cache_job_actions_done, 'done/estimate wrong');
             $this->assertEquals(0, $updatedFolder->cache_job_actions_estimate, 'done/estimate wrong');
         } else {
-            $this->assertEquals($updatedFolder->imap_uidnext, $updatedFolder->cache_uidnext, 'uidnext values should be equal');
             $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal');
             $this->assertGreaterThan(-1, Tinebase_DateTime::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
             $this->assertNotEquals(0, $updatedFolder->cache_job_actions_done, 'done wrong');
@@ -163,7 +161,6 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         
         // check folder status after update
         $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE, $updatedFolder->cache_status);
-        $this->assertEquals($updatedFolder->imap_uidnext, $updatedFolder->cache_uidnext, 'uidnext values should be equal');
         $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal');
         $this->assertGreaterThan(-1, Tinebase_DateTime::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
         $this->assertEquals(0, $updatedFolder->cache_job_actions_done, 'done wrong');

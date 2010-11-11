@@ -211,7 +211,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $_folder->cache_status    = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
         $_folder->cache_timestamp = Tinebase_DateTime::now();
-        $_folder->cache_uidnext   = $_folder->imap_uidnext;
+        //$_folder->cache_uidnext   = $_folder->imap_uidnext;
         
         $this->_timeStart = microtime(true);
     }
@@ -678,7 +678,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     {
         if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING) {
             $_folder->cache_status               = Felamimail_Model_Folder::CACHE_STATUS_COMPLETE;
-            $_folder->cache_uidnext              = $_folder->imap_uidnext;
+            //$_folder->cache_uidnext              = $_folder->imap_uidnext;
             $_folder->cache_job_actions_estimate = 0;
             $_folder->cache_job_actions_done     = 0;
             $_folder->cache_job_lowestuid        = 0;
@@ -786,7 +786,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->deleteByFolder($folder);
         
         $folder->cache_timestamp        = Tinebase_DateTime::now();
-        $folder->cache_uidnext          = 1;
+        //$folder->cache_uidnext          = 1;
         $folder->cache_status           = Felamimail_Model_Folder::CACHE_STATUS_EMPTY;
         $folder->cache_job_actions_estimate = 0;
         $folder->cache_job_actions_done = 0;
@@ -798,7 +798,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         ));
         
         $folder = Felamimail_Controller_Folder::getInstance()->update($folder);
-                
+        
         return $folder;
     }
     

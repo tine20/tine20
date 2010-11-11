@@ -202,12 +202,12 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $folder->imap_status       = Felamimail_Model_Folder::IMAP_STATUS_OK;
         $folder->imap_timestamp    = Tinebase_DateTime::now();
         
-        if (! array_key_exists('uidnext', $counter)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Non-standard IMAP server. Trying to guess uidnext by getting all Uids. Maybe it does not work.');
-            $folder->imap_uidnext = 0;
-        } else {
-            $folder->imap_uidnext = $counter['uidnext'];
-        }
+//        if (! array_key_exists('uidnext', $counter)) {
+//            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Non-standard IMAP server. Trying to guess uidnext by getting all Uids. Maybe it does not work.');
+//            $folder->imap_uidnext = 0;
+//        } else {
+//            $folder->imap_uidnext = $counter['uidnext'];
+//        }
                     
         return $folder;
     }
