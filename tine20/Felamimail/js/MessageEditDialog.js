@@ -312,6 +312,12 @@ Ext.namespace('Tine.Felamimail');
                 return false;
             }
         }, this);
+        
+        this.htmlEditor.on('keydown', function(e) {
+            if (e.getKey() == e.ENTER && e.ctrlKey) {
+                this.onSaveAndClose();
+            }
+        }, this);
     },
     
     /**

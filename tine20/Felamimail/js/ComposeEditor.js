@@ -127,6 +127,9 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
                     r.insertNode(br);
                 }
                 this.cmp.deferFocus();
+            } else if (e.ctrlKey) {
+                // TODO try to move this to cmp or another plugin as we need this only to submit parent dialog with ctrl-enter
+                this.cmp.fireEvent('keydown', e);
             }
         }
     },
