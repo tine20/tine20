@@ -32,6 +32,11 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     protected $_testCalendar;
     
     /**
+     * @var Tinebase_Record_RecordSet test calendars to be deleted on tearDown
+     */
+    protected $_testCalendars;
+    
+    /**
      * @var Tinebase_Model_FullUser
      */
     protected $_testUser;
@@ -84,6 +89,9 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             'backend'        => $this->_backend->getType(),
             'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
         ), true));
+        
+        $this->_testCalendars = new Tinebase_Record_RecordSet('Tinebase_Model_Container');
+        $this->_testCalendars->addRecord($this->_testCalendar);
     }
     
     /**
@@ -93,7 +101,7 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
     public function tearDown()
     {
         $events = $this->_backend->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'container_id', 'operator' => 'in', 'value' => $this->_testCalendars->getId()),
         )), new Tinebase_Model_Pagination(array()));
         
         // delete alarms
@@ -103,7 +111,9 @@ abstract class Calendar_TestCase extends PHPUnit_Framework_TestCase
             $this->_backend->delete($event->getId());
         }
         
-        Tinebase_Container::getInstance()->deleteContainer($this->_testCalendar, true);
+        foreach ($this->_testCalendars as $cal) {
+            Tinebase_Container::getInstance()->deleteContainer($cal, true);
+        }
     }
     
     /**
