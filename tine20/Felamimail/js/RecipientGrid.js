@@ -156,7 +156,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 resizable: true,
                 id: 'type',
                 dataIndex: 'type',
-                width: 103,
+                width: 104,
                 menuDisabled: true,
                 header: 'type',
                 renderer: function(value) {

@@ -442,8 +442,8 @@ Ext.namespace('Tine.Felamimail');
         }
         
         var scrollWidth = this.recipientGrid.getView().getScrollOffset();
-        this.subjectField.setWidth(this.subjectField.getWidth()-scrollWidth);
-        this.accountCombo.setWidth(this.accountCombo.getWidth()-scrollWidth);
+        this.subjectField.setWidth(this.subjectField.getWidth() - scrollWidth + 1);
+        this.accountCombo.setWidth(this.accountCombo.getWidth() - scrollWidth + 1);
     },
     
     /**

@@ -416,6 +416,7 @@
 
 .felamimail-recipient-grid .x-grid3-td-address {
     background-color: white;
+    border: 1px solid #B5B8C8;
 }
 
 /***** sieve rules ******/
