@@ -204,6 +204,8 @@ class Felamimail_Sieve_Vacation
             $mime = ':mime ';
             $contentType = 'Content-Type: ' . $this->_mime;
             if ($this->_mime == self::MIME_TYPE_MULTIPART_ALTERNATIVE) {
+                // @todo use Zend_Mime
+                
                 $plaintextReason = preg_replace('/\<br *\/*\>/', "\r\n", $reason);
                 $plaintextReason = strip_tags($plaintextReason);
                 
@@ -222,11 +224,11 @@ class Felamimail_Sieve_Vacation
         }
         
         $vacation = sprintf("vacation %s%s%s%s%stext:\r\n%s%s\r\n.\r\n;",
-            $mime,
             $days,
+            $subject,
             $from,
             $addresses,
-            $subject,
+            $mime,
             $contentType,
             $reason
         );
