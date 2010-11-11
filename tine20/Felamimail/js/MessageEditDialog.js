@@ -321,7 +321,7 @@ Ext.namespace('Tine.Felamimail');
      * @param {} o
      */
     onKeyPress: function(e, t, o) {
-        if (e.getKey() == e.TAB && ! e.shiftKey) {
+        if ((e.getKey() == e.TAB || e.getKey() == e.ENTER) && ! e.shiftKey) {
             if (e.getTarget('input[name=subject]')) {
                 this.htmlEditor.focus.defer(50, this.htmlEditor);
             } else if (e.getTarget('input[type=text]')) {
