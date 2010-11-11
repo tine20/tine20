@@ -146,6 +146,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     initColumnModel: function() {
         
+        var app = Tine.Tinebase.appMgr.get('Felamimail');
+        
         this.searchCombo = new Tine.Felamimail.ContactSearchCombo({
         });
         
@@ -159,7 +161,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 header: 'type',
                 renderer: function(value) {
                     var result = '',
-                        app = Tine.Tinebase.appMgr.get('Felamimail'),
                         qtip = app.i18n._('Click here to set To/CC/BCC.');
 
                     switch(value) {
@@ -185,9 +186,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     value         : null,
                     forceSelection: true,
                     store         : [
-                        ['to',  _('To:')],
-                        ['cc',  _('Cc:')],
-                        ['bcc', _('Bcc:')]
+                        ['to',  app.i18n._('To:')],
+                        ['cc',  app.i18n._('Cc:')],
+                        ['bcc', app.i18n._('Bcc:')]
                     ]
                 })
             },{
