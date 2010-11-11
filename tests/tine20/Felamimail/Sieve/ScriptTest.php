@@ -182,10 +182,8 @@ class Felamimail_Sieve_ScriptTest extends PHPUnit_Framework_TestCase
         
         $sieveScript = $script->getSieve();
         
-        //echo $sieveScript;
-        
         $this->assertContains('Content-Type: multipart/alternative; boundary=foo', $sieveScript);
-        $this->assertContains('vacation :mime :days 8 :from "sieve@example.com" :addresses ["info@example.com"] :subject "=?UTF-8?Q?L=C3=B6=C3=9Flich?=" text:', $sieveScript);
+        $this->assertContains('vacation :days 8 :subject "=?UTF-8?Q?L=C3=B6=C3=9Flich?=" :from "sieve@example.com" :addresses ["info@example.com"] :mime text:', $sieveScript);
         $this->assertContains('<html><body><strong>AWAY!</strong></body></html>', $sieveScript);
         $this->assertContains('--foo--', $sieveScript);
     }
