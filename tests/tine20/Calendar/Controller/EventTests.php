@@ -207,10 +207,43 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         return $persistentEvent;
     }
     
-    public function testsearchFreeTime() {
+    public function testSearchFreeTime() {
         $persistentEvent = $this->testGetFreeBusyInfo();
         
         $this->_controller->searchFreeTime($persistentEvent->dtstart->setHour(6), $persistentEvent->dtend->setHour(22), $persistentEvent->attendee); 
+    }
+    
+/**
+     * events from deleted calendars should not be shown
+     */
+    public function testSearchEventFromDeletedCalendar() {
+        $testCal = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'           => 'PHPUnit test calendar',
+            'type'           => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'        => $this->_backend->getType(),
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId()
+        ), true));
+        
+        $this->_testCalendars->addRecord($testCal);
+        
+        // create event in testcal
+        $event = $this->_getEvent();
+        $event->container_id = $testCal->getId();
+        $event->attendee = $this->_getAttendee();
+        $persistentEvent = $this->_controller->create($event);
+
+        // delete testcal
+        Tinebase_Container::getInstance()->deleteContainer($testCal, TRUE);
+        
+        // search by attendee
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'attender', 'operator' => 'equals', 'value' => array(
+                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'   => $this->_testUserContact->getId()
+            ))
+        )), NULL, FALSE, FALSE);
+        
+        $this->assertFalse(in_array($persistentEvent->getId(), $events->getId()), 'event in deleted (display) container shuld not be found');
     }
     
     public function testCreateEventWithConfict()
