@@ -314,7 +314,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.record.data.bcc = [];
         this.store.each(function(recipient){
             if (recipient.data.address != '') {
-                this.record.data[recipient.data.type].push(Ext.unique(recipient.data.address));
+                this.record.data[recipient.data.type].push(recipient.data.address);
             }
         }, this);
     },
@@ -327,7 +327,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         record = record || this.record;
         
         Ext.each(fields, function(field) {
-            this._addRecipients(record.get(field), field);
+            this._addRecipients(Ext.unique(record.get(field)), field);
         }, this);
         
         if (setHeight && setHeight === true) {
