@@ -62,6 +62,12 @@ class Felamimail_Sieve_Vacation
     protected $_mime = NULL;
     
     /**
+     * content type multipart alternative
+     *
+     */
+    const MIME_TYPE_MULTIPART_ALTERNATIVE = 'multipart/alternative';
+    
+    /**
      * the subject for the vacation message
      * 
      * @var string
@@ -192,9 +198,24 @@ class Felamimail_Sieve_Vacation
             $subject = null;
         }
         
+        $reason = $this->_reason;
+        
         if (!empty($this->_mime)) {
             $mime = ':mime ';
-            $contentType = 'Content-Type: ' . $this->_mime . "; charset=UTF-8\r\n\r\n";
+            $contentType = 'Content-Type: ' . $this->_mime;
+            if ($this->_mime == self::MIME_TYPE_MULTIPART_ALTERNATIVE) {
+                $plaintextReason = preg_replace('/\<br *\/*\>/', "\r\n", $reason);
+                $plaintextReason = strip_tags($plaintextReason);
+                
+                $contentType .= "; boundary=foo\r\n\r\n";
+                $reason = sprintf(
+                      "--foo\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n%s\r\n\r\n"
+                    . "--foo\r\nContent-Type: text/html; charset=UTF-8\r\n\r\n%s\r\n\r\n"
+                    . "--foo--", $plaintextReason, $reason
+                );
+            } else {
+                $contentType .= "; charset=UTF-8\r\n\r\n";
+            }
         } else {
             $mime = null;
             $contentType = null;
@@ -207,9 +228,9 @@ class Felamimail_Sieve_Vacation
             $addresses,
             $subject,
             $contentType,
-            $this->_reason
+            $reason
         );
-        
+
         return $vacation;
     }
        
