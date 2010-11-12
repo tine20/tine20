@@ -59,6 +59,17 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     }
     
     /**
+     * a new personal container schould give free/busy to anyone
+     */
+    public function testAddPersonalCalendarGrants()
+    {
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_testCalendar->getId(), TRUE);
+        $anyoneIdx = array_search(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, $grants->account_type);
+        $this->assertTrue($anyoneIdx !== false, 'anyone has no grant entry');
+        $this->assertTrue($grants[$anyoneIdx]->{Tinebase_Model_Grants::GRANT_FREEBUSY}, 'anyone has not freebusy grant');
+    }
+    
+    /**
      * reads an event of the personal calendar of jsmith
      *  -> anyone has readGrant, editGrant and deleteGrant
      */
