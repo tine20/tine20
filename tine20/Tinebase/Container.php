@@ -603,8 +603,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     public function getOtherUsersContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
     {
         $containerData = $this->_getOtherUsersContainerData($_accountId, $_application, $_grant, $_ignoreACL);
-        
-        Tinebase_Core::getLogger()->err(print_r($containerData, TRUE));
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Container', $containerData, TRUE);
         
         return $result;
