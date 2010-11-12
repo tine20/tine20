@@ -94,15 +94,30 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getColumnModel: function() {
-        
-        var columns = [
+        return new Ext.grid.ColumnModel({ 
+            defaults: {
+                sortable: true,
+                hidden: true,
+                resizable: true
+            },
+            columns: this.getColumns()
+        });
+    },
+    
+    /**
+     * returns array with columns
+     * 
+     * @return {Array}
+     */
+    getColumns: function() {
+        return [
             { id: 'tid', header: this.app.i18n._('Type'), dataIndex: 'tid', width: 30, renderer: this.contactTidRenderer.createDelegate(this), hidden: false },
             { id: 'tags', header: this.app.i18n._('Tags'), dataIndex: 'tags', width: 50, renderer: Tine.Tinebase.common.tagsRenderer, sortable: false, hidden: false  },
             { id: 'n_family', header: this.app.i18n._('Last Name'), dataIndex: 'n_family' },
             { id: 'n_given', header: this.app.i18n._('First Name'), dataIndex: 'n_given', width: 80 },
             { id: 'n_fn', header: this.app.i18n._('Full Name'), dataIndex: 'n_fn' },
             { id: 'n_fileas', header: this.app.i18n._('Display Name'), dataIndex: 'n_fileas', hidden: false},
-            { id: 'org_name', header: this.app.i18n._('Company'), dataIndex: 'org_name', width: 200, hidden: false },
+            { id: 'org_name', header: this.app.i18n._('Company'), dataIndex: 'org_name', width: 120, hidden: false },
             { id: 'org_unit', header: this.app.i18n._('Unit'), dataIndex: 'org_unit'  },
             { id: 'title', header: this.app.i18n._('Job Title'), dataIndex: 'title' },
             { id: 'role', header: this.app.i18n._('Job Role'), dataIndex: 'role' },
@@ -134,15 +149,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             { id: 'geo', header: this.app.i18n._('Geo'), dataIndex: 'geo' },
             { id: 'bday', header: this.app.i18n._('Birthday'), dataIndex: 'bday', renderer: Tine.Tinebase.common.dateRenderer }
         ].concat(this.getModlogColumns().concat(this.getCustomfieldColumns()));
-        
-        return new Ext.grid.ColumnModel({ 
-            defaults: {
-                sortable: true,
-                hidden: true,
-                resizable: true
-            },
-            columns: columns
-        });
     },
     
     /**
