@@ -97,6 +97,12 @@ class Tinebase_Record_RecordSetTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($toFind === $found);
     }
     
+    public function testRemoveAll()
+    {
+        $this->object->removeAll();
+        $this->assertEquals(0, $this->object->count(), 'recordSet is not empty');
+    }
+    
     public function testRemoveRecord()
     {
         $idLess1 = $this->object->find('string', 'idLess1');
