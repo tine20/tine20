@@ -91,9 +91,13 @@ Ext.namespace('Tine.Felamimail');
         }
         
         if (! record.bodyIsFetched()) {
-            this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
-            this.defaultTpl.overwrite(body, {msg: ''});
-            this.getLoadMask().show();
+            if (this.grid.getSelectionModel().getCount() == 1) {
+                this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
+                this.defaultTpl.overwrite(body, {msg: ''});
+                this.getLoadMask().show();
+            } else {
+                this.getLoadMask().hide();
+            }
             return;
         }
         
