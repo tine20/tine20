@@ -81,6 +81,10 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') removed groupmember ' . (string) $_eventObject->userId . ' from group ' . (string) $_eventObject->groupId);
                 Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->groupId);
                 break;
+                
+            case 'Tinebase_Event_Container_BeforeCreate':
+                $this->_handleContainerBeforeCreateEvent($_eventObject);
+                break;
         }
     }
     
@@ -102,26 +106,6 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
             'backend'           => 'Sql',
             'color'             => '#FF6600',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId() 
-        ));
-        
-        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
-            array(
-                'account_id'     => $accountId,
-                'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Tinebase_Model_Grants::GRANT_READ      => true,
-                Tinebase_Model_Grants::GRANT_ADD       => true,
-                Tinebase_Model_Grants::GRANT_EDIT      => true,
-                Tinebase_Model_Grants::GRANT_DELETE    => true,
-                Tinebase_Model_Grants::GRANT_EXPORT    => true,
-                Tinebase_Model_Grants::GRANT_SYNC      => true,
-                Tinebase_Model_Grants::GRANT_ADMIN     => true,
-                Tinebase_Model_Grants::GRANT_FREEBUSY  => true,
-            ),
-            array(
-                'account_id'      => '0',
-                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
-                Tinebase_Model_Grants::GRANT_FREEBUSY  => true
-            )
         ));
         
         $personalContainer = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, FALSE, $accountId);
@@ -159,6 +143,47 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
         Calendar_Controller_EventNotifications::getInstance()->sendNotifications($event, $updater, $_action, $oldEvent);
     }
     */
+    
+    /**
+     * handler for Tinebase_Event_Container_BeforeCreate
+     * - give owner of personal container all grants
+     * - give freebusy grants to anyone for personal container
+     * 
+     * @param Tinebase_Event_Container_BeforeCreate $_eventObject
+     */
+    protected function _handleContainerBeforeCreateEvent(Tinebase_Event_Container_BeforeCreate $_eventObject)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . ' (' . __LINE__ . ') about to handle Tinebase_Event_Container_BeforeCreate' );
+        
+        if ($_eventObject->container && 
+            $_eventObject->container->type === Tinebase_Model_Container::TYPE_PERSONAL &&
+            $_eventObject->container->application_id === Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId() &&
+            $_eventObject->grants instanceof Tinebase_Record_RecordSet
+            ) {
+            // get owner from initial initial grants
+            $grants = $_eventObject->grants;
+            $grants->removeAll();
+            
+            $grants->addRecord(new Tinebase_Model_Grants(array(
+                'account_id'     => $_eventObject->accountId,
+                'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                Tinebase_Model_Grants::GRANT_READ      => true,
+                Tinebase_Model_Grants::GRANT_ADD       => true,
+                Tinebase_Model_Grants::GRANT_EDIT      => true,
+                Tinebase_Model_Grants::GRANT_DELETE    => true,
+                Tinebase_Model_Grants::GRANT_EXPORT    => true,
+                Tinebase_Model_Grants::GRANT_SYNC      => true,
+                Tinebase_Model_Grants::GRANT_ADMIN     => true,
+                Tinebase_Model_Grants::GRANT_FREEBUSY  => true,
+            ), TRUE));
+            
+            $grants->addRecord(new Tinebase_Model_Grants(array(
+                'account_id'      => '0',
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Tinebase_Model_Grants::GRANT_FREEBUSY  => true
+            ), TRUE));
+        }
+    }
     
     /**
      * send notifications 
