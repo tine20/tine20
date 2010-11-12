@@ -137,8 +137,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
-        $container = $this->create($_container);
         
         if($_grants === NULL) {
             $creatorGrants = array(
@@ -153,7 +151,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 Tinebase_Model_Grants::GRANT_ADMIN     => true,
             );
             
-            if($container->type === Tinebase_Model_Container::TYPE_SHARED) {
+            if($_container->type === Tinebase_Model_Container::TYPE_SHARED) {
     
                 // add all grants to creator
                 // add read grants to any other user
@@ -173,6 +171,14 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             $grants = $_grants;
         }
         
+        $event = new Tinebase_Event_Container_BeforeCreate();
+        $event->accountId = $accountId;
+        $event->container = $_container;
+        $event->grants = $grants;
+        Tinebase_Event::fireEvent($event);
+        
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
+        $container = $this->create($_container);
         $this->setGrants($container->getId(), $grants, TRUE);
         
         return $container;
