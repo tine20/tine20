@@ -514,6 +514,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('robbat2@gentoo.org', $message->from_email);
         $this->assertEquals($this->_account->getId(), $message->account_id);
         $this->assertEquals('Robin H. Johnson', $message->from_name);
+        $this->assertEquals('"Robin H. Johnson" <robbat2@stork.gentoo.org>', $message->sender);
         $this->assertEquals('1', $message->text_partid);
         $this->assertEquals('1', $message->has_attachment);
         $this->assertEquals(null, $message->html_partid);
