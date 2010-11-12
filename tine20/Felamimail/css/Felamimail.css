@@ -419,6 +419,10 @@
     border: 1px solid #B5B8C8;
 }
 
+.felamimail-no-email {
+    color: #999999;
+}
+
 /***** sieve rules ******/
 
 .felamimail-sieverule-disabled {
