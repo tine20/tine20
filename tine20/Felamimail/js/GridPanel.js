@@ -71,7 +71,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     gridConfig: {
         //loadMask: true,
         autoExpandColumn: 'subject',
-        // drag n drop
+        // drag n dropfrom
         enableDragDrop: true,
         ddGroup: 'mailToTreeDDGroup'
     },
@@ -415,6 +415,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 100,
             sortable: true,
             dataIndex: 'from_name'
+        },{
+            id: 'sender',
+            header: this.app.i18n._("Sender"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'sender',
+            hidden: true
         },{
             id: 'to',
             header: this.app.i18n._("To"),

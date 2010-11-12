@@ -17,8 +17,9 @@
  * 
  * @package     Felamimail
  * @property    string  $subject        the subject of the email
- * @property    string  $from_email     the address of the sender
- * @property    string  $from_name      the name of the sender
+ * @property    string  $from_email     the address of the sender (from)
+ * @property    string  $from_name      the name of the sender (from)
+ * @property    string  $sender         the sender of the email
  * @property    string  $content_type   the content type of the message
  * @property    string  $body_content_type   the content type of the message body
  * @property    array   $to             the to receipients
@@ -97,6 +98,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'from_email'            => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'from_name'             => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
+        'sender'                => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'to'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'cc'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
         'bcc'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -146,7 +148,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     }    
     
     /**
-     * parse headers and set 'date', 'from', 'to', 'cc', 'bcc', 'subject' fields
+     * parse headers and set 'date', 'from', 'to', 'cc', 'bcc', 'subject', 'sender' fields
      * 
      * @param array $_headers
      * @return void
@@ -154,7 +156,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     public function parseHeaders(array $_headers)
     {
         // remove duplicate headers (which can't be set twice in real life)
-        foreach (array('date', 'from', 'to', 'cc', 'bcc', 'subject') as $field) {
+        foreach (array('date', 'from', 'to', 'cc', 'bcc', 'subject', 'sender') as $field) {
             if (isset($_headers[$field]) && is_array($_headers[$field])) {
                 $_headers[$field] = $_headers[$field][0];
             }
@@ -168,15 +170,23 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->sent = Felamimail_Message::convertDate($_headers['resent-date']);
         }
         
-        // if sender set the headers twice we only use the first
-        foreach (array('to', 'cc', 'bcc', 'from') as $field) {
+        foreach (array('to', 'cc', 'bcc', 'from', 'sender') as $field) {
             if (isset($_headers[$field])) {
                 $value = Felamimail_Message::convertAddresses($_headers[$field]);
-                if ($field == 'from') {
-                    $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
-                    $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
-                } else {
-                    $this->$field = $value;
+                
+                switch($field) {
+                    case 'from':
+                        $this->from_email = (isset($value[0]) && array_key_exists('email', $value[0])) ? $value[0]['email'] : '';
+                        $this->from_name = (isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name'])) ? $value[0]['name'] : $this->from_email;
+                        break;
+                    case 'sender':
+                        $this->sender = (isset($value[0]) && array_key_exists('email', $value[0])) ? '<' . $value[0]['email'] . '>' : '';
+                        if ((isset($value[0]) && array_key_exists('name', $value[0]) && ! empty($value[0]['name']))) {
+                            $this->sender = '"' . $value[0]['name'] . '" ' . $this->sender;
+                        }
+                        break;
+                    default:
+                        $this->$field = $value;
                 }
             }
         }

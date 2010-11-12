@@ -24,6 +24,7 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
       { name: 'subject' },
       { name: 'from_email' },
       { name: 'from_name' },
+      { name: 'sender' },
       { name: 'to' },
       { name: 'cc' },
       { name: 'bcc' },

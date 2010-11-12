@@ -358,7 +358,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setTableVersion('felamimail_cache_message', '3');
         $this->setApplicationVersion('Felamimail', '3.11');
-    }    
+    }
 
     /**
      * update function (-> 3.12)
@@ -430,6 +430,28 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_cache_message', '4');
         $this->setApplicationVersion('Felamimail', '3.14');
         $this->_clearMessageCache();
+    }
+
+    /**
+     * update function (-> 3.15)
+     * - add sender property to messages
+     */    
+    public function update_14()
+    {
+        $newFields = array(
+                '<field>
+                    <name>sender</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>',
+        );
+        
+        foreach ($newFields as $col) {
+            $this->_backend->addCol('felamimail_cache_message', new Setup_Backend_Schema_Field_Xml($col));
+        }
+        
+        $this->setTableVersion('felamimail_cache_message', '5');
+        $this->setApplicationVersion('Felamimail', '3.15');
     }
     
     /**
