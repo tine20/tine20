@@ -100,32 +100,6 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
     copyOmitFields: ['account_id']
 });
 
-
-/**
- * get default data for a new contact
- * 
- * @namespace Tine.Addressbook.Model
- * @static
- * @return {Object} default data
- *
- *not usefull as long we don't use full records in the gird
-Tine.Addressbook.Model.Contact.getDefaultData = function() { 
-    var data = {};
-    
-    
-    var app = Tine.Tinebase.appMgr.get('Addressbook');
-    
-    //var treeNode = app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectionModel().getSelectedNode();
-    var treeNode = Ext.getCmp('Addressbook_Tree') ? Ext.getCmp('Addressbook_Tree').getSelectionModel().getSelectedNode() : null;
-    if (treeNode && treeNode.attributes && treeNode.attributes.containerType == 'singleContainer') {
-        data.container_id = treeNode.attributes.container;
-    } else {
-        data.container_id = Tine.Addressbook.registry.get('defaultAddressbook');
-    }
-    
-    return data;
-};*/
-
 /**
  * get filtermodel of contact model
  * 
