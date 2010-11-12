@@ -169,6 +169,8 @@ Tine.Calendar.CalendarSelectTreePanel = Ext.extend(Tine.widgets.container.TreePa
      * returns a calendar to take for an add event action
      * 
      * @return {Tine.Model.Container}
+     * 
+     * TODO generalize this
      */
     getAddCalendar: function() {
         var sm = this.getSelectionModel();
