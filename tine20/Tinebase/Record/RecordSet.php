@@ -129,6 +129,16 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * removes all records from this set
+     */
+    public function removeAll()
+    {
+        foreach($this->_listOfRecords as $record) {
+            $this->removeRecord($record);
+        }
+    }
+    
+    /**
      * remove record from set
      * 
      * @param Tinebase_Record_Interface $_record
