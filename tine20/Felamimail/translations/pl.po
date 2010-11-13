@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-13 09:14+0100\n"
+"PO-Revision-Date: 2010-11-13 09:15+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -247,7 +247,7 @@ msgstr "Włącz przycisk zapisujący treść e-maila w notatce przypisanej do ad
 
 #: js/MessageEditDialog.js:178
 msgid "Click to search for and add recipients from the Addressbook."
-msgstr "Kliknij, aby naleźć i dodać odbiorców z książki adresowej."
+msgstr "Kliknij, aby znaleźć i dodać adresatów z książki adresowej."
 
 #: js/MessageEditDialog.js:254
 msgid "wrote"
