@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-13 09:11+0100\n"
+"PO-Revision-Date: 2010-11-13 09:13+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -227,7 +227,7 @@ msgstr "Wyślij"
 
 #: js/MessageEditDialog.js:127
 msgid "Search Recipients"
-msgstr "Znajdź odbiorców"
+msgstr "Znajdź adresatów"
 
 #: js/MessageEditDialog.js:135
 msgid "Save As Draft"
@@ -243,7 +243,7 @@ msgstr "Zapisz e-mail w notatce"
 
 #: js/MessageEditDialog.js:160
 msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
-msgstr "Włącz przycisk zapisujący treść e-maila w notatce przypisanej do odbiorcy z listy kontaktów."
+msgstr "Włącz przycisk zapisujący treść e-maila w notatce przypisanej do adresata/adresatów z listy kontaktów."
 
 #: js/MessageEditDialog.js:178
 msgid "Click to search for and add recipients from the Addressbook."
