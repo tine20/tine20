@@ -23,17 +23,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
 {    
-//    /**
-//     * Runs the test methods of this class.
-//     *
-//     * @access public
-//     * @static
-//     */
-//    public static function main()
-//    {
-//        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_DateTimeTest');
-//        PHPUnit_TextUI_TestRunner::run($suite);
-//    }
     
     /**
      * Sets up the fixture.
@@ -58,19 +47,19 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
         
         // after 32 Bit timestamp overflow (2038-01-19 03:14:07)
         $dt = new Tinebase_DateTime('2040-06-25 18:04:00');
-        $this->assertsEquals('2224260240', $dt->getTimestamp());
+        $this->assertEquals('2224260240', $dt->getTimestamp());
     }
     
-    
     /**
-     *         echo $dt->getTimestamp() . "\n";
-        
-        $zd = new Zend_Date('2040-06-25 18:04:00', 'yyyy-MM-dd HH:mm:ss');
-        echo $dt->getTimestamp() . "\n";
-        
-        $this->assertsEquals('2224260240', $dt->getTimestamp());
-
+     * check if exception is thrown when trying to compare against an not DateTime
      */
+    public function testCompareExceptionByNoDateTime()
+    {
+        $dt = Tinebase_DateTime::now();
+        
+        $this->setExpectedException('Tinebase_Exception_Date');
+        $dt->compare('2010-11-13 09:36:00');
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_DateTimeTest::main') {
