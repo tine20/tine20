@@ -419,6 +419,11 @@
     border: 1px solid #B5B8C8;
 }
 
+.felamimail-recipient-grid .x-grid3-td-address-editing {
+    background-color: transparent;
+    border: 0;
+}
+
 .felamimail-no-email {
     color: #999999;
 }
