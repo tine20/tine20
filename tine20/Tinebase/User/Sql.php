@@ -42,7 +42,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'accountHomeDirectory'      => 'home_dir',
         'accountLoginShell'         => 'login_shell',
         'openid'                    => 'openid',
-        'visibility'                => 'visibility'
+        'visibility'                => 'visibility',
+        'contactId'					=> 'contact_id'
     );
     
     /**
