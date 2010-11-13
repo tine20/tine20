@@ -91,6 +91,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     deferredRender: false,
     
+    forceValidation: true,
+    
     enableDrop: true,
     ddGroup: 'recipientDDGroup',
 
@@ -119,7 +121,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             this.contextMenu.showAt(e.getXY());
         }, this);
             
+        this.on('beforeedit', this.onBeforeEdit, this);
         this.on('afteredit', this.onAfterEdit, this);
+        this.on('validateedit', this.onValidateEdit, this);
     },
     
     /**
@@ -357,6 +361,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },    
     
+    onBeforeEdit: function(o) {
+        Ext.fly(this.getView().getCell(o.row, o.column)).addClass('x-grid3-td-address-editing');
+    },
+    
     /**
      * delete handler
      */
@@ -372,6 +380,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.ownerCt.doLayout();
     },
     
+     onValidateEdit: function(o) {
+        Ext.fly(this.getView().getCell(o.row, o.column)).removeClass('x-grid3-td-address-editing');
+     },
+     
     /**
      * add recipients to grid store
      * 
