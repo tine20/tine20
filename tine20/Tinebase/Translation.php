@@ -300,7 +300,7 @@ class Tinebase_Translation
             if (file_exists("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js")) {
                 $jsTranslations  .= file_get_contents("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js");
             } else {
-                $jsTranslations  .= "console.error('Translation Error: extjs chaged their lang file name again ;-(');";
+                $jsTranslations  .= "console.error('Translation Error: extjs changed their lang file name again ;-(');";
             }
             
             $poFiles = self::getPoTranslationFiles($_locale);
