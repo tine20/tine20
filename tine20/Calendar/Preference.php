@@ -18,6 +18,11 @@
 class Calendar_Preference extends Tinebase_Preference_Abstract
 {
     /**************************** application preferences/settings *****************/
+
+    /**
+     * where daysview should be scrolled to
+     */
+    const DAYSVIEW_STARTTIME = 'daysviewstarttime';
     
     /**
      * default calendar all newly created/invited events are placed in
@@ -45,7 +50,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      */
     const SEND_NOTIFICATION_OF_OWN_ACTIONS = 'sendnotificationsofownactions';
     
-    
     /**
      * @var string application
      */
@@ -61,6 +65,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
+            self::DAYSVIEW_STARTTIME,
             self::DEFAULTCALENDAR,
             self::DEFAULTPERSISTENTFILTER,
             self::NOTIFICATION_LEVEL,
@@ -80,6 +85,10 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
         $translate = Tinebase_Translation::getTranslation($this->_application);
 
         $prefDescriptions = array(
+            self::DAYSVIEW_STARTTIME => array(
+                'label'         => $translate->_('Start Time'),
+                'description'   => $translate->_('Position on the left time axis, day and week view should start with'),
+            ),
             self::DEFAULTCALENDAR  => array(
                 'label'         => $translate->_('Default Calendar'),
                 'description'   => $translate->_('The default calendar for invitations and new events'),
@@ -112,6 +121,30 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
         switch($_preferenceName) {
+            case self::DAYSVIEW_STARTTIME:
+                $doc = new DomDocument('1.0');
+                $options = $doc->createElement('options');
+                $doc->appendChild($options);
+                
+                $time = new Tinebase_DateTime('@0');
+                for ($i=0; $i<48; $i++) {
+                    $time->addMinute($i ? 30 : 0);
+                    $timeString = $time->format('H:i');
+                    
+                    $value  = $doc->createElement('value');
+                    $value->appendChild($doc->createTextNode($timeString));
+                    $label  = $doc->createElement('label');
+                    $label->appendChild($doc->createTextNode($timeString)); // @todo l10n
+                    
+                    $option = $doc->createElement('option');
+                    $option->appendChild($value);
+                    $option->appendChild($label);
+                    $options->appendChild($option);
+                }
+                
+                $preference->value      = '08:00';
+                $preference->options = $doc->saveXML();
+                break;
             case self::DEFAULTCALENDAR:
                 $accountId = $_accountId ? $_accountId : Tinebase_Core::getUser()->getId();
                 $calendars          = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Calendar', $accountId, 0, true);
