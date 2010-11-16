@@ -42,6 +42,20 @@ class Zend_Mail_Protocol_Sieve
      * @var null|resource
      */
     protected $_socket;
+    
+    /**
+     * the welcome array when connecting
+     * 
+     * @var array
+     */
+    protected $_welcome = array();
+    
+    /**
+     * sieve implementation
+     * 
+     * @var string
+     */
+    protected $_implementation = '';
 
     /**
      * Public constructor
@@ -58,7 +72,6 @@ class Zend_Mail_Protocol_Sieve
         }
     }
 
-
     /**
      * Public destructor
      */
@@ -66,7 +79,6 @@ class Zend_Mail_Protocol_Sieve
     {
         $this->logout();
     }
-
 
     /**
      * Open connection to Sieve server
@@ -94,7 +106,8 @@ class Zend_Mail_Protocol_Sieve
             throw new Zend_Mail_Protocol_Exception('cannot connect to host : ' . $errno . ' : ' . $errstr);
         }
 
-        $welcome = $this->readResponse();
+        $this->_welcome = $this->readResponse();
+        $this->_parseWelcomeArray();
 
         if ($ssl === 'TLS') {
             $result = $this->requestAndResponse('STARTTLS');
@@ -108,7 +121,29 @@ class Zend_Mail_Protocol_Sieve
             }
         }
         
-        return $welcome;
+        return $this->_welcome;
+    }
+    
+    /**
+     * parses the welcome array and sets implementation
+     */
+    protected function _parseWelcomeArray()
+    {
+        foreach ($this->_welcome as $value) {
+            if ($value[0] == 'IMPLEMENTATION') {
+                $this->_implementation = $value[1]; 
+            }
+        }
+    }
+    
+    /**
+     * returns implementation string
+     * 
+     * @return string
+     */
+    public function getImplementation()
+    {
+        return $this->_implementation;
     }
 
     /**
