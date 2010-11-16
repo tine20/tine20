@@ -416,12 +416,72 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             this.onLoad.apply(this);
         }
         
+        // scrollTo initial position
+        try {
+            var startTimeString = this.app.getRegistry().get('preferences').get('daysviewstarttime');
+            var startTime = Date.parseDate(startTimeString, 'H:i');
+            if (! Ext.isDate(startTime)) {
+                throw new Ext.Error('no valid startime given');
+            }
+            
+            this.scrollTo(startTime)
+        } catch (e) {
+            this.scrollTo();
+        }
+        
         this.layout();
         this.rendered = true;
     },
     
-    scrollToNow: function() {
-        this.scroller.dom.scrollTop = this.getTimeOffset(new Date());
+    scrollTo: function(time) {
+        time = Ext.isDate(time) ? time : new Date();
+        this.scroller.dom.scrollTop = this.getTimeOffset(time);
+    },
+    
+    /**
+     * add hint if events are outside visible area
+     * 
+     * @param {} e
+     * @param {} t
+     * @param {} o
+     */
+    onScroll: function(e, t, o) {
+        var visibleHeight = this.scroller.dom.clientHeight,
+            visibleStart  = this.scroller.dom.scrollTop,
+            visibleEnd    = visibleStart + visibleHeight,
+            aboveCols     = [],
+            belowCols     = [];
+            
+        this.ds.each(function(event) {
+            if (event.ui) {
+                Ext.each(event.ui.domIds, function(domId) {
+                    var el = Ext.get(domId),
+                        box = el.getBox(false, true);
+                        
+                    if (box.bottom <= visibleStart) {
+//                        console.log(domId + ' is above visible area');
+                        aboveCols.push(el.up('div[class^=cal-daysviewpanel-body-daycolumn]'));
+                    } else if (box.bottom - box.height >= visibleEnd) {
+//                        console.log(domId + ' is below visible area');
+                        belowCols.push(el.up('div[class^=cal-daysviewpanel-body-daycolumn]'));
+                    }
+                }, this);
+            }
+        });
+        
+        // walk all cols an update hints
+        Ext.each(this.dayCols, function(dayCol, idx) {
+            var dayColEl  = Ext.get(dayCol),
+                aboveHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-abovehint]'),
+                belowHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-belowhint]');
+                
+            aboveHint.setTop(visibleStart + 5);
+            aboveHint.setDisplayed(aboveCols.indexOf(dayColEl) >= 0);
+            
+            belowHint.setTop(visibleEnd - 21);
+            belowHint.setDisplayed(belowCols.indexOf(dayColEl) >= 0);
+        }, this);
+        
     },
     
     /**
@@ -627,17 +687,17 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     onAppActivate: function(app) {
         if (app === this.app) {
             // get Preference
-            try {
-                var startTimeString = this.app.getRegistry().get('preferences').get('daysviewstarttime');
-                var startTime = Date.parseDate(startTimeString, 'H:i');
-                if (! Ext.isDate(startTime)) {
-                    throw new Ext.Error('no valid startime given');
-                }
-                
-                this.scroller.dom.scrollTop = this.getTimeOffset(startTime);
-            } catch (e) {
-                this.scrollToNow();
-            }
+//            try {
+//                var startTimeString = this.app.getRegistry().get('preferences').get('daysviewstarttime');
+//                var startTime = Date.parseDate(startTimeString, 'H:i');
+//                if (! Ext.isDate(startTime)) {
+//                    throw new Ext.Error('no valid startime given');
+//                }
+//                
+//                this.scroller.dom.scrollTop = this.getTimeOffset(startTime);
+//            } catch (e) {
+//                this.scrollToNow();
+//            }
         }
     },
     
@@ -1049,6 +1109,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
         this.scroller.setStyle('overflow-x', 'hidden');
+        this.scroller.on('scroll', this.onScroll, this, {buffer: 200});
         
         this.mainBody = new E(this.scroller.dom.firstChild);
         
@@ -1282,9 +1343,11 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         );
         
         ts.dayColumn = new Ext.XTemplate(
-            '<div class="cal-daysviewpanel-body-daycolumn" style="left: {left}; width: {width};">' +
-                '<div class="cal-daysviewpanel-body-daycolumn-inner">&#160;</div>'+
-                '{overRows}' +
+            '<div class="cal-daysviewpanel-body-daycolumn" style="left: {left}; width: {width};">',
+                '<div class="cal-daysviewpanel-body-daycolumn-inner">&#160;</div>',
+                '{overRows}',
+                '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-daysviewpanel-body-daycolumn-abovehint" />',
+                '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-daysviewpanel-body-daycolumn-belowhint" />',
             '</div>'
         );
         
