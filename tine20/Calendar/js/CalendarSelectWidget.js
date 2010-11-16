@@ -77,8 +77,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.Panel, {
     /**
      *  builds attendee -> calendar map
      */
-    buildCalMapStore: function() {
-        var needEditGrant = true;
+    buildCalMapStore: function(needEditGrant) {
         
         this.calMapStore.removeAll();
         var physCal = this.record.get('container_id');
@@ -151,7 +150,6 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.Panel, {
             containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
             containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
             appName: this.app.appName,
-            requiredGrant: 'addGrant',
             hideTrigger2: false,
             trigger2Class: 'cal-invitation-trigger',
             onTrigger2Click: this.fakeCombo.onTriggerClick.createDelegate(this.fakeCombo),
@@ -209,10 +207,9 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.Panel, {
     
     onBeforeCalComboQuery: function() {
         if(! this.currentCalMap || this.currentCalMap.get('isOriginal')) {
-            this.calCombo.startNode = 'all';
+            this.calCombo.startPath = '/';
         } else {
-            this.calCombo.startNode = 'personalOf';
-            this.calCombo.owner = this.currentCalMap.get('userAccountId');
+            this.calCombo.startPath = '/personal/' + this.currentCalMap.get('userAccountId');
         }
     },
     
@@ -249,11 +246,23 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.Panel, {
      */
     onRecordLoad: function(record) {
         this.record = record;
-        this.buildCalMapStore();
+        this.buildCalMapStore(true);
         
         if (this.calMapStore.getCount() == 0) {
-            // call setValue to add 'choose other'...
-            this.calCombo.setValue('');
+            // no cal with edit grant ...
+            if (this.record.phantom) {
+                // call setValue to add 'choose other'...
+                this.calCombo.setValue('');
+            } else {
+                this.buildCalMapStore(false);
+                
+                if (this.calMapStore.getCount() > 0) {
+                    this.onCalMapSelect(this.calMapStore.getAt(0));
+                }
+                this.calCombo.setDisabled(true);
+            }
+            
+            // if this is a persistent event make combo non selectable
         } else if (this.calMapStore.getCount() == 1) {
             this.onCalMapSelect(this.calMapStore.getAt(0));
             this.calCombo.setTrigger2Disabled(true);
