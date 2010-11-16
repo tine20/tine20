@@ -48,11 +48,11 @@ interface Tinebase_Group_Interface_SyncAble
     /**
      * get groupmemberships of user from sync backend
      * 
-     * @param   Tinebase_Model_User|string  $_userId
+     * @param   Tinebase_Model_User  $_user
      * 
      * @return  array  list of group ids
      */
-    public function getGroupMembershipsFromSyncBackend($_userId);
+    public function getGroupMembershipsFromSyncBackend(Tinebase_Model_User $_user);
         
     /**
      * get list of groups from syncbackend
