@@ -34,10 +34,17 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     id: 'tinebase-file-grid',
     
     /**
-     * config filesProperty
+     * @cfg filesProperty
      * @type String
      */
     filesProperty: 'files',
+    
+    /**
+     * @cfg showTopToolbar
+     * @type Boolean
+     * TODO     think about that -> when we deactivate the top toolbar, we lose the dropzone for files!
+     */
+    showTopToolbar: true,
     
     /**
      * actions
@@ -68,7 +75,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.record = this.record || null;
         this.id = this.id + Ext.id();
         
-        this.initToolbar();
+        this.initToolbarAndContextMenu();
         this.initStore();
         this.initColumnModel();
         this.initSelectionModel();
@@ -77,6 +84,15 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.enableHdMenu = false;
         
         Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
+        
+        this.on('rowcontextmenu', function(grid, row, e) {
+            e.stopEvent();
+            var selModel = grid.getSelectionModel();
+            if(!selModel.isSelected(row)) {
+                selModel.selectRow(row);
+            }
+            this.contextMenu.showAt(e.getXY());
+        }, this);
     },
     
     /**
@@ -101,14 +117,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; ++i) {
             this.store.remove(selectedRows[i]);
-        }                       
+        }
     },
 
     /**
-     * init toolbar
+     * init toolbar and context menu
      * @private
      */
-    initToolbar: function() {
+    initToolbarAndContextMenu: function() {
         this.actions.add = new Ext.Action(this.getAddAction());
 
         this.actions.remove = new Ext.Action({
@@ -119,10 +135,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             handler: this.onRemove
         });
         
-        this.tbar = [                
+        this.tbar = (this.showTopToolbar === true) ? [
             this.actions.add,
             this.actions.remove
-        ]; 
+        ] : [];
+        
+        this.contextMenu = new Ext.menu.Menu({
+            items:  this.actions.remove
+        });
     },
     
     /**
