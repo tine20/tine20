@@ -175,6 +175,7 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
                 Tinebase_Model_Grants::GRANT_SYNC      => true,
                 Tinebase_Model_Grants::GRANT_ADMIN     => true,
                 Tinebase_Model_Grants::GRANT_FREEBUSY  => true,
+                Tinebase_Model_Grants::GRANT_PRIVATE   => true,
             ), TRUE));
             
             $grants->addRecord(new Tinebase_Model_Grants(array(
