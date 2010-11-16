@@ -1165,6 +1165,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.scroller.setSize(vw, vh);
         // we add 2 more pixel to have spare space for our left padding
         this.innerHd.style.width = (vw + 2)+'px';
+        
+        // force positioning on scroll hints
+        this.onScroll();
     },
     
     layoutWholeDayHeader: function() {
