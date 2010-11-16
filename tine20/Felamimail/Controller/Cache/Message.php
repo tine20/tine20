@@ -686,7 +686,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         }
         
         if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && ($_folder->cache_totalcount != $_folder->imap_totalcount)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
                 " something went wrong while in/decrementing counters => recalculate cache counters by counting rows in database. Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount}"
             );
                         
