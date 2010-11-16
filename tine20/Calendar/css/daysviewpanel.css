@@ -81,7 +81,7 @@
 	overflow: hidden;
 }
 
-.cal-daysviewpanel-body-daycolumn-abovehint {
+.cal-daysviewpanel-body-daycolumn-hint-above {
     width: 16px;
     height: 16px;
     background-image: url(../../images/oxygen/16x16/actions/go-up.png);
@@ -90,7 +90,7 @@
     z-index: 1000;
 }
 
-.cal-daysviewpanel-body-daycolumn-belowhint {
+.cal-daysviewpanel-body-daycolumn-hint-below {
     width: 16px;
     height: 16px;
     background-image: url(../../images/oxygen/16x16/actions/go-down.png);

@@ -472,8 +472,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         // walk all cols an update hints
         Ext.each(this.dayCols, function(dayCol, idx) {
             var dayColEl  = Ext.get(dayCol),
-                aboveHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-abovehint]'),
-                belowHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-belowhint]');
+                aboveHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-hint-above]'),
+                belowHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-hint-below]');
                 
             aboveHint.setTop(visibleStart + 5);
             aboveHint.setDisplayed(aboveCols.indexOf(dayColEl) >= 0);
@@ -713,6 +713,13 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     },
     
     onClick: function(e) {
+        // check for hint clicks first
+        var hint = e.getTarget('img[class^=cal-daysviewpanel-body-daycolumn-hint-]', 10, true);
+        if (hint) {
+            this.scroller.scroll(hint.hasClass('cal-daysviewpanel-body-daycolumn-hint-above') ? 't' : 'b', 10000, true);
+            return;
+        }
+        
         var event = this.getTargetEvent(e);
         if (event) {
             this.fireEvent('click', event, e);
@@ -1349,8 +1356,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
             '<div class="cal-daysviewpanel-body-daycolumn" style="left: {left}; width: {width};">',
                 '<div class="cal-daysviewpanel-body-daycolumn-inner">&#160;</div>',
                 '{overRows}',
-                '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-daysviewpanel-body-daycolumn-abovehint" />',
-                '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-daysviewpanel-body-daycolumn-belowhint" />',
+                '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-daysviewpanel-body-daycolumn-hint-above" />',
+                '<img src="', Ext.BLANK_IMAGE_URL, '" class="cal-daysviewpanel-body-daycolumn-hint-below" />',
             '</div>'
         );
         
