@@ -88,6 +88,7 @@
     position: absolute;
     right: 5px;
     z-index: 1000;
+    cursor: pointer;
 }
 
 .cal-daysviewpanel-body-daycolumn-hint-below {
@@ -97,6 +98,7 @@
     position: absolute;
     right: 5px;
     z-index: 1000;
+    cursor: pointer;
 }
 
 .cal-daysviewpanel-body-daycolumn-today {
