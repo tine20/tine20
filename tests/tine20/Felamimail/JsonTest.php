@@ -627,8 +627,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'days'                  => 7,
             'enabled'               => TRUE,
             'reason'                => '<html><body><h1>unittest vacation message</h1></body></html>',
-            'mime'                  => 'text/html',
+            'mime'                  => NULL,
         );
+        
+        $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
+        if (! preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
+            $vacationData['mime'] = 'text/html';
+        }
         
         $this->_sieveTestHelper($vacationData);
     }
@@ -817,6 +822,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             $resultSet = $this->_json->saveVacation($_sieveData);
             $this->assertEquals($this->_account->email, $resultSet['addresses'][0]);
             unset($resultSet['addresses']);
+            
+            $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
+            if (preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
+                $_sieveData['reason'] = strip_tags($_sieveData['reason']);
+            }
         } else if (array_key_exists('action_type', $_sieveData[0])) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
         }
