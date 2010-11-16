@@ -528,9 +528,14 @@ class Tinebase_Core
     {
         Zend_Session::setOptions(array_merge($_options, array(
             'cookie_httponly'   => true,
-            'hash_function'     => 1,
-            'cookie_path'       => basename($_SERVER['REQUEST_URI'])
+            'hash_function'     => 1
         )));
+        
+        if(isset($_SERVER['REQUEST_URI'])) {
+            Zend_Session::setOptions(array(
+                'cookie_path'     => basename($_SERVER['REQUEST_URI']),
+            ));
+        }
         
         if(isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
             Zend_Session::setOptions(array(
