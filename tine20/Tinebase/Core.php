@@ -533,13 +533,13 @@ class Tinebase_Core
         
         if(isset($_SERVER['REQUEST_URI'])) {
             Zend_Session::setOptions(array(
-                'cookie_path'     => basename($_SERVER['REQUEST_URI']),
+                'cookie_path'     => basename($_SERVER['REQUEST_URI'])
             ));
         }
         
         if(isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
             Zend_Session::setOptions(array(
-                'cookie_secure'     => true,
+                'cookie_secure'     => true
             ));
         }
         
