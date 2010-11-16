@@ -10,20 +10,20 @@
  */
 
 /**
- * Tinebase_DateTime - Extensions around php natives DateTime object
+ * Tinebase_DateTime - Extensions around native php DateTime object
  * 
  * @TODO: recheck date creation from custom formats in record/set
  * @TODO: recheck timezone handling on date creation in record
- * @TODO: recheck localistation support -> Tinebase_Translation -> back to Zend_Date
+ * @TODO: recheck localisation support -> Tinebase_Translation -> back to Zend_Date
  * @TODO: recheck addDay/Week ... rework dst fixes
  * @TODO: clean up this class and add more docu
- * @TODO: recheck 32 bit isshues create / compare
+ * @TODO: recheck 32 bit issues create / compare
  * 
  * NOTE: Tinebase_DateTime was introduced as replacement for Zend_Date in normal
  *       datetime operations for perfomance reasons. Most of the functions in this
  *       class are modeled after the Zend_Date class
  * 
- * NOTE: This class has noting to do with localisation! If you need localistaion
+ * NOTE: This class has nothing to do with localisation! If you need localisation
  *       use Zend_Date!
  */
 class Tinebase_DateTime extends DateTime
