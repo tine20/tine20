@@ -63,9 +63,13 @@ class Felamimail_Sieve_Vacation
     
     /**
      * content type multipart alternative
-     *
      */
     const MIME_TYPE_MULTIPART_ALTERNATIVE = 'multipart/alternative';
+    
+    /**
+     * content type text plain
+     */
+    const MIME_TYPE_TEXT_PLAIN = 'text/plain';
     
     /**
      * the subject for the vacation message
@@ -199,16 +203,14 @@ class Felamimail_Sieve_Vacation
         }
         
         $reason = $this->_reason;
+        $plaintextReason = $this->_getPlaintext($reason);
         
-        if (!empty($this->_mime)) {
+        if (! empty($this->_mime)) {
+            var_dump($this->_mime);
             $mime = ':mime ';
             $contentType = 'Content-Type: ' . $this->_mime;
             if ($this->_mime == self::MIME_TYPE_MULTIPART_ALTERNATIVE) {
-                // @todo use Zend_Mime
-                
-                $plaintextReason = preg_replace('/\<br *\/*\>/', "\r\n", $reason);
-                $plaintextReason = strip_tags($plaintextReason);
-                
+                // @todo use Zend_Mime ?
                 $contentType .= "; boundary=foo\r\n\r\n";
                 $reason = sprintf(
                       "--foo\r\nContent-Type: text/plain; charset=UTF-8\r\n\r\n%s\r\n\r\n"
@@ -218,9 +220,14 @@ class Felamimail_Sieve_Vacation
             } else {
                 $contentType .= "; charset=UTF-8\r\n\r\n";
             }
+            
+            if ($this->_mime == self::MIME_TYPE_TEXT_PLAIN) {
+                $reason = $plaintextReason;
+            }
         } else {
             $mime = null;
             $contentType = null;
+            $reason = $plaintextReason;
         }
         
         $vacation = sprintf("vacation %s%s%s%s%stext:\r\n%s%s\r\n.\r\n;",
@@ -235,20 +242,33 @@ class Felamimail_Sieve_Vacation
 
         return $vacation;
     }
-       
+    
     /**
      * quote string for usage in Sieve script 
      * 
      * @param   string  $string     the srting to quote
      */
-    protected function _quoteString($string)
+    protected function _quoteString($_string)
     {
-        if(is_array($string)) {
-            $string = array_map(array($this, '_quoteString'), $string);
+        if(is_array($_string)) {
+            $string = array_map(array($this, '_quoteString'), $_string);
             return '[' . implode(',', $string) . ']'; 
         } else {
-            return '"' . str_replace('"', '\""', $string) . '"';
+            return '"' . str_replace('"', '\""', $_string) . '"';
         }
+    }
+    
+    /**
+     * convert to plaintext
+     * 
+     * @param string $_string
+     */
+    protected function _getPlaintext($_string)
+    {
+        $result = preg_replace('/\<br *\/*\>/', "\r\n", $_string);
+        $result = strip_tags($result);
+
+        return $result;
     }
     
     /**
@@ -264,7 +284,7 @@ class Felamimail_Sieve_Vacation
             'from'                  => $this->_from,
             'days'                  => $this->_days,
             'enabled'               => $this->_enabled,
-            'reason'                => $this->_reason,
+            'reason'                => (empty($this->_mime) || $this->_mime == self::MIME_TYPE_TEXT_PLAIN) ? $this->_getPlaintext($this->_reason) : $this->_reason,
             'mime'                  => $this->_mime,
         );
     }
