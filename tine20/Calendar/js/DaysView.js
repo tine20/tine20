@@ -626,7 +626,18 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
     
     onAppActivate: function(app) {
         if (app === this.app) {
-            this.scrollToNow();
+            // get Preference
+            try {
+                var startTimeString = this.app.getRegistry().get('preferences').get('daysviewstarttime');
+                var startTime = Date.parseDate(startTimeString, 'H:i');
+                if (! Ext.isDate(startTime)) {
+                    throw new Ext.Error('no valid startime given');
+                }
+                
+                this.scroller.dom.scrollTop = this.getTimeOffset(startTime);
+            } catch (e) {
+                this.scrollToNow();
+            }
         }
     },
     
@@ -930,7 +941,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         // put the events in
         this.ds.each(this.insertEvent, this);
-        this.scrollToNow();
         
         this.layout();
     },
