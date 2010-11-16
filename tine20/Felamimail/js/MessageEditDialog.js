@@ -624,6 +624,8 @@ Ext.namespace('Tine.Felamimail');
                 fieldLabel: this.app.i18n._('Attachments'),
                 hideLabel: true,
                 filesProperty: 'attachments',
+                // TODO     think about that -> when we deactivate the top toolbar, we lose the dropzone for files!
+                //showTopToolbar: false,
                 anchor: '100% 95%'
             });
             
