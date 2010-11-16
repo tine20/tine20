@@ -361,7 +361,11 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     {
         // if cache status is CACHE_STATUS_UPDATING and timestamp is less than 5 minutes ago, don't update
         if ($_folder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_UPDATING &&
-            ($_folder->cache_timestamp instanceof Tinebase_DateTime && $_folder->cache_timestamp->compare(Tinebase_DateTime::now()->subMinute(5)) == 1)
+            (
+                is_object($_folder->cache_timestamp) 
+                && $_folder->cache_timestamp instanceof Tinebase_DateTime 
+                && $_folder->cache_timestamp->compare(Tinebase_DateTime::now()->subMinute(5)) == 1
+            )
         ) {
             return false;
         }
