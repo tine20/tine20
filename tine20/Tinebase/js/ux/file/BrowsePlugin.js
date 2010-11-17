@@ -192,7 +192,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
         
         this.wrap.on('mousemove', function(e) {
             var xy = e.getXY();
-            this.input_file.setXY([xy[0] - this.input_file.getWidth()/4, xy[1] - 10]);
+            this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
         }, this);
         this.input_file.setOpacity(0.0);
 
