@@ -68,18 +68,21 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testClearTable()
     {
-//        $opts = new Zend_Console_Getopt('abp:');
-//        $params = array('containerId=' . $this->_container->getId(), 'accountId=' . Tinebase_Core::getUser()->getId(), 'grants=privateGrant');
-//        $opts->setArguments($params);
-//        
-//        ob_start();
-//        $this->_cli->setContainerGrants($opts);
-//        $out = ob_get_clean();
-//        
-//        $this->assertContains("Added grants to container.", $out);        
-//        
-//        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
-//        $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
+        $accessLogsBefore = Admin_Controller_AccessLog::getInstance()->search();
+        
+        $opts = new Zend_Console_Getopt('abp:');
+        $tomorrow = Tinebase_DateTime::now()->addDay(1)->toString('Y-m-d');
+        $params = array('access_log', 'date=' . $tomorrow);
+        $opts->setArguments($params);
+        
+        ob_start();
+        $this->_cli->clearTable($opts);
+        $out = ob_get_clean();
+        
+        $this->assertContains('Removing all access log entries before', $out);        
+        $accessLogsAfter = Admin_Controller_AccessLog::getInstance()->search();
+        $this->assertGreaterThan(count($accessLogsAfter), count($accessLogsBefore));
+        $this->assertEquals(0, count($accessLogsAfter));
     }
 }       
     
