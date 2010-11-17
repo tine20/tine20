@@ -525,6 +525,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * 
      * @param string|Felamimail_Model_Account $_account account record or id
      * @return void
+     * 
+     * @todo we should make this configurable
      */
     public function checkSentTrash($_account)
     {
@@ -532,6 +534,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $imapBackend = $this->_getIMAPBackend($account);
         if (! $imapBackend) {
             return;
+        }
+        
+        $changed = $this->_addFolderDefaults($account);
+        if ($changed) {
+            parent::update($account);
         }
         
         $foldersToCheck = array($account->sent_folder, $account->trash_folder);
@@ -594,16 +601,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $systemAccount->user_id = $userId;
             $this->_addUserValues($systemAccount, $fullUser, $email);
             
-            // set some default settings if not set
-            $folderDefaults = array(
-                'sent_folder'       => 'Sent',
-                'trash_folder'      => 'Trash',
-                'drafts_folder'     => 'Drafts',
-                'templates_folder'  => 'Templates',
-            );
-            foreach ($folderDefaults as $key => $value) {
-                $systemAccount->{$key} = $value;
-            }
+            $this->_addFolderDefaults($systemAccount, TRUE);
             
             // create new account and update capabilities
             Tinebase_Timemachine_ModificationLog::setRecordMetaData($systemAccount, 'create');
@@ -622,6 +620,34 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         } else {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not create system account for user ' . $fullUser->accountLoginName . '. No email address given.');
         }
+    }
+    
+    /**
+     * add folder defaults
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param boolean $_force
+     * @return boolean
+     */
+    protected function _addFolderDefaults($_account, $_force = FALSE)
+    {
+        // set some default settings if not set
+        $folderDefaults = array(
+            'sent_folder'       => 'Sent',
+            'trash_folder'      => 'Trash',
+            'drafts_folder'     => 'Drafts',
+            'templates_folder'  => 'Templates',
+        );
+        
+        $changed = FALSE;
+        foreach ($folderDefaults as $key => $value) {
+            if ($_force || ! isset($_account->{$key}) || empty($_account->{$key})) {
+                $_account->{$key} = $value;
+                $changed = TRUE;
+            }
+        }
+        
+        return $changed;
     }
     
     /**
