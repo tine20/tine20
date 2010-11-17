@@ -17,7 +17,7 @@
  * helper class
  *
  */
-class TestServer extends Tinebase_Server_Abstract
+class TestServer
 {
     /**
      * holdes the instance of the singleton
@@ -54,8 +54,7 @@ class TestServer extends Tinebase_Server_Abstract
      */
     public function initFramework()
     {
-        $this->_initFramework();
-        #$this->_initTestUsers();
+        Tinebase_Core::initFramework();
         
         // set default internal encoding
         //ini_set('iconv.internal_encoding', 'utf-8');
@@ -121,15 +120,5 @@ class TestServer extends Tinebase_Server_Abstract
             $personas[$login] = $user;
         }
         Zend_Registry::set('personas', $personas);
-        
-    }
-    
-    /**
-     * don't use that
-     *
-     */
-    public function handle()
-    {
-        
     }
 }
