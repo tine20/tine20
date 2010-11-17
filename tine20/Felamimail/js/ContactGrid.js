@@ -104,47 +104,44 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     
     /**
      * @private
-     * 
-     * TODO make action updater work
      */
     initActions: function() {
         this.actions_addAsTo = new Ext.Action({
             requiredGrant: 'readGrant',
-            //actionUpdater: this.updatePhoneActions,
             text: this.app.i18n._('Add as "To"'),
-            //disabled: true,
+            disabled: true,
             iconCls: 'action_add',
             handler: this.onAddContact.createDelegate(this, ['to']),
+            allowMultiple: true,
             scope: this
         });
 
         this.actions_addAsCc = new Ext.Action({
             requiredGrant: 'readGrant',
-            //actionUpdater: this.updatePhoneActions,
             text: this.app.i18n._('Add as "Cc"'),
-            //disabled: true,
+            disabled: true,
             iconCls: 'action_add',
             handler: this.onAddContact.createDelegate(this, ['cc']),
+            allowMultiple: true,
             scope: this
         });
 
         this.actions_addAsBcc = new Ext.Action({
             requiredGrant: 'readGrant',
-            //actionUpdater: this.updatePhoneActions,
             text: this.app.i18n._('Add as "Bcc"'),
-            //disabled: true,
+            disabled: true,
             iconCls: 'action_add',
             handler: this.onAddContact.createDelegate(this, ['bcc']),
+            allowMultiple: true,
             scope: this
         });
         
-//        //register actions in updater
-//        this.actionUpdater.addActions([
-//            this.actions_exportContact,
-//            this.actions_callContact,
-//            this.actions_composeEmail,
-//            this.actions_import
-//        ]);
+        //register actions in updater
+        this.actionUpdater.addActions([
+            this.actions_addAsTo,
+            this.actions_addAsCc,
+            this.actions_addAsBcc
+        ]);
     },
     
     /**
