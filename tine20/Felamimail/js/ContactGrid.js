@@ -20,7 +20,6 @@ Ext.ns('Tine.Felamimail');
  * 
  * <p>Contact Grid Panel</p>
  * 
- * TODO         make ctx menu actions work
  * TODO         add recipient on doubleclick
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -51,6 +50,14 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      * @private
      */
     initComponent: function() {
+        this.addEvents(
+            /**
+             * @event addcontacts
+             * Fired when contacts are added
+             */
+            'addcontacts'
+        );
+        
         this.app = Tine.Tinebase.appMgr.get('Addressbook');
         this.filterToolbar = this.getFilterToolbar({
             filterFieldWidth: 100,
@@ -97,15 +104,37 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     
     /**
      * @private
+     * 
+     * TODO make action updater work
      */
     initActions: function() {
         this.actions_addAsTo = new Ext.Action({
             requiredGrant: 'readGrant',
             //actionUpdater: this.updatePhoneActions,
             text: this.app.i18n._('Add as "To"'),
-            disabled: true,
+            //disabled: true,
             iconCls: 'action_add',
-            handler: this.onAdd,
+            handler: this.onAddContact.createDelegate(this, ['to']),
+            scope: this
+        });
+
+        this.actions_addAsCc = new Ext.Action({
+            requiredGrant: 'readGrant',
+            //actionUpdater: this.updatePhoneActions,
+            text: this.app.i18n._('Add as "Cc"'),
+            //disabled: true,
+            iconCls: 'action_add',
+            handler: this.onAddContact.createDelegate(this, ['cc']),
+            scope: this
+        });
+
+        this.actions_addAsBcc = new Ext.Action({
+            requiredGrant: 'readGrant',
+            //actionUpdater: this.updatePhoneActions,
+            text: this.app.i18n._('Add as "Bcc"'),
+            //disabled: true,
+            iconCls: 'action_add',
+            handler: this.onAddContact.createDelegate(this, ['bcc']),
             scope: this
         });
         
@@ -116,12 +145,18 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
 //            this.actions_composeEmail,
 //            this.actions_import
 //        ]);
-//        
-//        Tine.Addressbook.ContactGridPanel.superclass.initActions.call(this);
     },
     
-    onAdd: function() {
-        console.log();
+    /**
+     * on add contact -> fires addcontacts event and passes rows + type
+     * 
+     * @param {String} type
+     */
+    onAddContact: function(type) {
+        var selectedRows = this.grid.getSelectionModel().getSelections();
+        if (selectedRows.length > 0) {
+            this.fireEvent('addcontacts', selectedRows, type);
+        }
     },
 
     /**
@@ -132,8 +167,9 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     getContextMenu: function() {
         if (! this.contextMenu) {
             var items = [
-                // TODO add more actions
-                this.actions_addAsTo
+                this.actions_addAsTo,
+                this.actions_addAsCc,
+                this.actions_addAsBcc
             ];
             this.contextMenu = new Ext.menu.Menu({items: items});
         }

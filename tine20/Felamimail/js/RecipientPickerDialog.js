@@ -93,7 +93,13 @@ Ext.namespace('Tine.Felamimail');
                 frame: true,
                 app: Tine.Tinebase.appMgr.get('Addressbook'),
                 flex: 3,
-                ref: '../contactgrid'
+                ref: '../contactgrid',
+                listeners: {
+                    scope: this,
+                    addcontacts: function(contacts, type) {
+                        this.recipientgrid.addRecordsToStore(contacts, type);
+                    }
+                }
             }, {
                 xtype: 'felamimailrecipientgrid',
                 record: this.record,
