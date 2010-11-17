@@ -197,37 +197,62 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         $args = $this->_parseArgs($_opts, array(), 'tables'); 
 
         if (! array_key_exists('tables', $args) || empty($args['tables'])) {
-            //echo "No tables given.\nPurging records from all tables.\n";
-            // @todo get all app tables
-            echo "No tables given.\n";
+            echo "No tables given.\nPurging records from all tables!\n";
+            $args['tables'] = $this->_getAllApplicationTables();
         }
         
         $db = Tinebase_Core::getDb();
-        // @todo disable foreign key check?
+        
+        if (array_key_exists('date', $args)) {
+            echo "\nRemoving all deleted entries before {$args['date']} ...";
+            $where = array(
+                $db->quoteInto($db->quoteIdentifier('deleted_time') . ' < ?', $args['date'])
+            );
+        } else {
+            echo "\nRemoving all deleted entries ...";
+            $where = array();
+        }
+        $where[] = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
+    
         foreach ($args['tables'] as $table) {
-            
             $schema = $db->describeTable(SQL_TABLE_PREFIX . $table);
             if (! array_key_exists('is_deleted', $schema)) {
                 continue;
             }
             
-            if (array_key_exists('date', $args)) {
-                echo "\nRemoving all deleted entries before {$args['date']} ...";
-                $where = array(
-                    $db->quoteInto($db->quoteIdentifier('deleted_time') . ' < ?', $args['date'])
-                );
-            } else {
-                echo "\nRemoving all deleted entries ...";
-                $where = array();
+            try {
+                $deleteCount = $db->delete(SQL_TABLE_PREFIX . $table, $where);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // try again with foreign key checks off
+                echo "\nTurning off foreign key checks for table $table.";
+                $db->query("SET FOREIGN_KEY_CHECKS=0");
+                $deleteCount = $db->delete(SQL_TABLE_PREFIX . $table, $where);
+                $db->query("SET FOREIGN_KEY_CHECKS=1");
             }
-            $where[] = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
-            
-            $deleteCount = $db->delete(SQL_TABLE_PREFIX . $table, $where);
-            echo "\nCleared table $table (deleted $deleteCount records).";
+            if ($deleteCount > 0) {
+                echo "\nCleared table $table (deleted $deleteCount records).";
+            }
         }
         echo "\n\n";
         
         return TRUE;
+    }
+    
+    /**
+     * get all app tables
+     * 
+     * @return array
+     */
+    protected function _getAllApplicationTables()
+    {
+        $result = array();
+        
+        $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+        foreach ($installedApplications as $application) {
+            $result = array_merge($result, Tinebase_Application::getInstance()->getApplicationTables($application));
+        }
+        
+        return $result;
     }
     
     /**
