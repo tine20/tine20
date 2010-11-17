@@ -28,6 +28,39 @@ class Setup_Core extends Tinebase_Core
     const CHECKDB = 'checkDB';    
 
     /**
+     * init setup framework
+     */
+    public static function initFramework()
+    {
+        Setup_Core::setupConfig();
+        
+        Setup_Core::setupTempDir();
+                
+        // Server Timezone must be setup before logger, as logger has timehandling!
+        Setup_Core::setupServerTimezone();
+
+        Setup_Core::setupLogger();
+
+        //Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX"
+        Setup_Core::setupDatabaseConnection();
+
+        //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
+        //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings 
+        Setup_Core::setupCache();
+
+        Setup_Core::setupSession();
+        
+        // setup a temporary user locale/timezone. This will be overwritten later but we 
+        // need to handle exceptions during initialisation process such as seesion timeout
+        Setup_Core::set('locale', new Zend_Locale('en_US'));
+        Setup_Core::set('userTimeZone', 'UTC');
+        
+        Setup_Core::setupUserLocale();
+        
+        header('X-API: http://www.tine20.org/apidocs/tine20/');
+    }
+    
+    /**
      * dispatch request
      *
      */

@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Setup_Server_Cli extends Setup_Server_Abstract
+class Setup_Server_Cli implements Setup_Server_Interface
 {
     /**
      * handler for command line scripts
@@ -64,7 +64,7 @@ class Setup_Server_Cli extends Setup_Server_Abstract
             exit;
         }
 
-        $this->_initFramework();
+        Setup_Core::initFramework();
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->mode) ? $opts->mode : 'EMPTY'));
         
