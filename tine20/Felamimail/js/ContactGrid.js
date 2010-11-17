@@ -20,8 +20,6 @@ Ext.ns('Tine.Felamimail');
  * 
  * <p>Contact Grid Panel</p>
  * 
- * TODO         add recipient on doubleclick
- * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -65,6 +63,8 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         });
         
         Tine.Felamimail.ContactGridPanel.superclass.initComponent.call(this);
+        
+        this.grid.on('rowdblclick', this.onRowDblClick, this);
     },
     
     /**
@@ -155,7 +155,18 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             this.fireEvent('addcontacts', selectedRows, type);
         }
     },
-
+    
+    /**
+     * row doubleclick handler
+     * 
+     * @param {} grid
+     * @param {} row
+     * @param {} e
+     */
+    onRowDblClick: function(grid, row, e) {
+        this.onAddContact('to');
+    }, 
+    
     /**
      * returns rows context menu
      * 
