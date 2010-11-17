@@ -125,41 +125,27 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - access_log
      * - async_job
      * 
-     * if param data is given (for example: -- date=2010-09-17), all records before this date are deleted (if the table has a date field)
+     * if param date is given (date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * 
      * @param $_opts
      * @return boolean success
      */
     public function clearTable(Zend_Console_Getopt $_opts)
     {
-        $args = $_opts->getRemainingArgs();
-
         if (! $this->_checkAdminRight()) {
             return FALSE;
         }
-
-        // check for date in args
-        foreach ($args as $idx => $arg) {
-            $split = explode('=', $arg);
-            if (is_array($split) && $split[0] == 'date') {
-                unset($args[$idx]);
-                $date = $split[1];
-            }
-        }
-
-        if (empty($args)) {
-            echo "No table given.\n";
-            return FALSE;
-        }
         
+        $args = $this->_parseArgs($_opts, array('tables'), 'tables'); 
+
         $db = Tinebase_Core::getDb();
-        foreach ($args as $table) {
+        foreach ($args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
-                    if (isset($date)) {
-                        echo "\nRemoving all access log entries before $date ...";
+                    if (array_key_exists('date', $args)) {
+                        echo "\nRemoving all access log entries before {$args['date']} ...";
                         $where = array(
-                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $date)
+                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $args['date'])
                         );
                         $db->delete(SQL_TABLE_PREFIX . $table, $where);
                     } else {
@@ -187,6 +173,57 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     echo 'Table ' . $table . " not supported or argument missing.\n";
             }
             echo "\nCleared table $table.";
+        }
+        echo "\n\n";
+        
+        return TRUE;
+    }
+    
+    /**
+     * purge deleted records
+     * 
+     * if param date is given (for example: date=2010-09-17), all records before this date are deleted (if the table has a date field)
+     * if table names are given, purge only records from this tables
+     * 
+     * @param $_opts
+     * @return boolean success
+     */
+    public function purgeDeletedRecords(Zend_Console_Getopt $_opts)
+    {
+        if (! $this->_checkAdminRight()) {
+            return FALSE;
+        }
+
+        $args = $this->_parseArgs($_opts, array(), 'tables'); 
+
+        if (! array_key_exists('tables', $args) || empty($args['tables'])) {
+            //echo "No tables given.\nPurging records from all tables.\n";
+            // @todo get all app tables
+            echo "No tables given.\n";
+        }
+        
+        $db = Tinebase_Core::getDb();
+        // @todo disable foreign key check?
+        foreach ($args['tables'] as $table) {
+            
+            $schema = $db->describeTable(SQL_TABLE_PREFIX . $table);
+            if (! array_key_exists('is_deleted', $schema)) {
+                continue;
+            }
+            
+            if (array_key_exists('date', $args)) {
+                echo "\nRemoving all deleted entries before {$args['date']} ...";
+                $where = array(
+                    $db->quoteInto($db->quoteIdentifier('deleted_time') . ' < ?', $args['date'])
+                );
+            } else {
+                echo "\nRemoving all deleted entries ...";
+                $where = array();
+            }
+            $where[] = $db->quoteInto($db->quoteIdentifier('is_deleted') . ' = ?', 1);
+            
+            $deleteCount = $db->delete(SQL_TABLE_PREFIX . $table, $where);
+            echo "\nCleared table $table (deleted $deleteCount records).";
         }
         echo "\n\n";
         
