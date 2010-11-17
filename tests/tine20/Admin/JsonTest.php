@@ -328,11 +328,31 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccessLogs()
     {
+        $this->_addAccessLog($this->objects['user'], 'Unittest');
         $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter(), array());
       
         // check total count
         $this->assertGreaterThan(0, sizeof($accessLogs['results']));
         $this->assertGreaterThan(0, $accessLogs['totalcount']);
+    }
+    
+    /**
+     * add access log entry
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     * @param String $_clienttype
+     */
+    protected function _addAccessLog($_user, $_clienttype)
+    {
+        Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
+            'sessionid'     => 'test_session_id',
+            'login_name'    => $_user->accountLoginName,
+            'ip'            => '127.0.0.1',
+            'li'            => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'result'        => Zend_Auth_Result::SUCCESS,
+            'account_id'    => $_user->getId(),
+            'clienttype'    => $_clienttype,
+        )));
     }
     
     /**
@@ -377,19 +397,10 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccessLogsWithDeletedUser()
     {
-        $user = $this->objects['user'];
-
     	$clienttype = 'Unittest';
-        Tinebase_AccessLog::getInstance()->create(new Tinebase_Model_AccessLog(array(
-            'sessionid'     => 'test_session_id',
-            'login_name'    => $user->accountLoginName,
-            'ip'            => '127.0.0.1',
-            'li'            => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'result'        => Zend_Auth_Result::SUCCESS,
-            'account_id'    => $user->getId(),
-            'clienttype'    => $clienttype,
-        )));
-                
+    	$user = $this->objects['user'];
+        $this->_addAccessLog($user, $clienttype);
+        
     	Admin_Controller_User::getInstance()->delete($user->getId());
         $accessLogs = $this->_backend->searchAccessLogs($this->_getAccessLogFilter($user->accountLoginName, $clienttype), array());
 
