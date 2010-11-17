@@ -238,13 +238,15 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
     },
     
     /**
-     * generic apply changes handler
-     * 
-     * @todo display alert message if there are changed panels with data from the other mode
-     * @todo submit 'lock' info as well in admin mode
+     * apply changes handler
      */
     onApplyChanges: function(button, event, closeWindow) {
     	
+        if (! this.isValid()) {
+            Ext.MessageBox.alert(_('Errors'), _('You need to correct the red marked fields before config could be saved'));    
+            return;
+        }
+        
     	this.loadMask.show();
     	
     	// get values from card panels
@@ -270,9 +272,28 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
                 }
             },
             failure: function (response) {
-                Ext.MessageBox.alert(_('Errors'), _('Saving of preferences failed.'));    
+                Ext.MessageBox.alert(_('Errors'), _('Saving of preferences failed.'));
             }
         });
+    },
+    
+    /**
+     * check all panels if they are valid
+     * 
+     * @return {Boolean}
+     */
+    isValid: function() {
+        var panel = {};
+        var panelsToSave = (this.adminMode) ? this.adminPrefPanels : this.prefPanels;
+
+        for (panelName in panelsToSave) {
+            panel = panelsToSave[panelName];
+            if (! panel.isValid()) {
+                return false;
+            }
+        }
+        
+        return true;
     },
     
     /**
@@ -390,7 +411,6 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
             remoteSort: false
         });
         
-        Tine.log.debug(appName);
         store.load();
     },
 

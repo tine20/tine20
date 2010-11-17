@@ -9,7 +9,6 @@
  * @version     $Id$
  *
  * TODO         add pref description to input fields
- * TODO         add icons from apps
  */
 
 Ext.ns('Tine.widgets', 'Tine.widgets.dialog');
@@ -74,6 +73,10 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
     },
     bodyStyle: 'padding:5px',
     
+    /**
+     * init component
+     * @private
+     */
     initComponent: function() {
     	
         this.addEvents(
@@ -120,6 +123,7 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 	fieldDef.store = pref.get('options');
                 	fieldDef.mode = 'local';
                     fieldDef.forceSelection = true;
+                    fieldDef.allowBlank = false;
                     fieldDef.triggerAction = 'all';
                 }
                 
@@ -178,5 +182,24 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                 });        	
             }
         }
+    },
+    
+    /**
+     * check validity for all panel items
+     * 
+     * @return {Boolean}
+     */
+    isValid: function() {
+        if (this.items && this.items.items) {
+            var field;
+            for (var i=0; i < this.items.items.length; i++) {
+                field = this.items.items[i];
+                if (! field.isValid()) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 });
