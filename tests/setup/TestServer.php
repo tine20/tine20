@@ -15,7 +15,7 @@
  * helper class
  *
  */
-class TestServer extends Setup_Server_Abstract
+class TestServer
 {
     /**
      * holdes the instance of the singleton
@@ -52,15 +52,6 @@ class TestServer extends Setup_Server_Abstract
      */
     public function initFramework()
     {
-        $this->_initFramework();
-    }
-    
-    /**
-     * don't use that
-     *
-     */
-    public function handle()
-    {
-        
+        Setup_Core::initFramework();
     }
 }
