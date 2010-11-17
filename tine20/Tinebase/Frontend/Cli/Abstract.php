@@ -114,20 +114,25 @@ class Tinebase_Frontend_Cli_Abstract
      * 
      * @param Zend_Console_Getopt $_opts
      * @param array $_requiredKeys
+     * @param string $_otherKey use this key for arguments without '='
      * @throws Tinebase_Exception_InvalidArgument
      * @return array
      */
-    protected function _parseArgs(Zend_Console_Getopt $_opts, $_requiredKeys = array())
+    protected function _parseArgs(Zend_Console_Getopt $_opts, $_requiredKeys = array(), $_otherKey = 'other')
     {
         $args = $_opts->getRemainingArgs();
         
         $result = array();
         foreach ($args as $idx => $arg) {
-            list($key, $value) = explode('=', $arg);
-            if (strpos($value, ',') !== false) {
-                $value = explode(',', $value);
+            if (strpos($arg, '=') !== false) {
+                list($key, $value) = explode('=', $arg);
+                if (strpos($value, ',') !== false) {
+                    $value = explode(',', $value);
+                }
+                $result[$key] = $value;
+            } else {
+                $result[$_otherKey][] = $arg;
             }
-            $result[$key] = $value;
         }
         
         if (! empty($_requiredKeys)) {
