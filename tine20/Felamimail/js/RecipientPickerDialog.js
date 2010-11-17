@@ -59,10 +59,16 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     onRecordLoad: function() {
-        Tine.Felamimail.RecipientPickerDialog.superclass.onRecordLoad.call(this);
+        // interrupt process flow till dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
         
         var subject = (this.record.get('subject') != '') ? this.record.get('subject') : this.app.i18n._('(new message)');
         this.window.setTitle(String.format(this.app.i18n._('Select recipients for "{0}"'), subject));
+        
+        this.loadMask.hide();
     },
 
     /**
