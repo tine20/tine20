@@ -69,11 +69,7 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
     public function testClearTableAccessLogWithDate()
     {
         $accessLogsBefore = Admin_Controller_AccessLog::getInstance()->search();
-        
-        $opts = new Zend_Console_Getopt('abp:');
-        $tomorrow = Tinebase_DateTime::now()->addDay(1)->toString('Y-m-d');
-        $params = array('access_log', 'date=' . $tomorrow);
-        $opts->setArguments($params);
+        $opts = $this->_getOpts('access_log');
         
         ob_start();
         $this->_cli->clearTable($opts);
@@ -83,6 +79,61 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         $accessLogsAfter = Admin_Controller_AccessLog::getInstance()->search();
         $this->assertGreaterThan(count($accessLogsAfter), count($accessLogsBefore));
         $this->assertEquals(0, count($accessLogsAfter));
+    }
+    
+    /**
+     * get options
+     * 
+     * @param string $_table
+     * @return Zend_Console_Getopt
+     */
+    protected function _getOpts($_table)
+    {
+        $opts = new Zend_Console_Getopt('abp:');
+        $tomorrow = Tinebase_DateTime::now()->addDay(1)->toString('Y-m-d');
+        $params = array($_table, 'date=' . $tomorrow);
+        $opts->setArguments($params);
+        
+        return $opts;
+    }
+
+    /**
+     * test purge deleted records
+     */
+    public function testPurgeDeletedRecords()
+    {
+        $opts = $this->_getOpts('addressbook');
+        $deletedRecord = $this->_addAndDeleteContact();
+        
+        ob_start();
+        $this->_cli->purgeDeletedRecords($opts);
+        $out = ob_get_clean();
+        
+        $this->assertContains('Removing all deleted entries before', $out);
+        $this->assertContains('Cleared table addressbook (deleted ', $out);
+
+        $contactBackend = new Addressbook_Backend_Sql();
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $deletedRecord = $contactBackend->get($deletedRecord->getId(), TRUE);
+        
+    }
+    
+    /**
+     * creates and deletes a contact + returns the deleted record
+     * 
+     * @return Addressbook_Model_Contact
+     */
+    protected function _addAndDeleteContact()
+    {
+        $newContact = new Addressbook_Model_Contact(array(
+            'n_family'          => 'PHPUNIT',
+            'container_id'      => Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook()->getId(),
+            'tel_cell_private'  => '+49TELCELLPRIVATE',
+        ));
+        $newContact = Addressbook_Controller_Contact::getInstance()->create($newContact);
+        Addressbook_Controller_Contact::getInstance()->delete($newContact->getId());
+        
+        return $newContact;
     }
 }       
     
