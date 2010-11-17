@@ -227,7 +227,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this,
             allowMultiple: true
         });
-
+        
         this.actions_import = new Ext.Action({
             //requiredGrant: 'addGrant',
             text: this.app.i18n._('Import contacts'),

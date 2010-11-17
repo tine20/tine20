@@ -352,6 +352,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             scope: this
         });
         
+        this.actions_print = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: _('Print Page'),
+            disabled: false,
+            handler: function() {
+                Ext.ux.Printer.print(this.getGrid());
+            },
+            iconCls:'action_print',
+            scope: this,
+            allowMultiple: true
+        });
+        
         this.initDeleteAction();
         
         //if (this.recordClass.getField('tags')) {
@@ -621,6 +633,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                             iconAlign: 'top'
                         }),
                         Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                            scale: 'medium',
+                            rowspan: 2,
+                            iconAlign: 'top'
+                        }),
+                        Ext.apply(new Ext.Button(this.actions_print), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign: 'top'
