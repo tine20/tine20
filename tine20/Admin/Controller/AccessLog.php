@@ -71,6 +71,9 @@ class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
     {
         $this->checkRight('VIEW_ACCESS_LOG');
         
+        if ($_filter === NULL) {
+            $_filter = new Tinebase_Model_Filter_FilterGroup();
+        }
         $result = Tinebase_AccessLog::getInstance()->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
         return $result;
