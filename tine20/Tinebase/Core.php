@@ -248,6 +248,46 @@ class Tinebase_Core
     /******************************* SETUP ************************************/
 
     /**
+     * init tine framework
+     */
+    public static function initFramework()
+    {
+        Tinebase_Core::setupConfig();
+        
+        Tinebase_Core::setupTempDir();
+        
+        // Server Timezone must be setup before logger, as logger has timehandling!
+        Tinebase_Core::setupServerTimezone();
+        
+        Tinebase_Core::setupLogger();
+        
+        // Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX" 
+        Tinebase_Core::setupDatabaseConnection();
+        
+        //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
+        //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
+        Tinebase_Core::setupCache();
+
+        Tinebase_Core::setupSession();
+        
+        // setup a temporary user locale/timezone. This will be overwritten later but we 
+        // need to handle exceptions during initialisation process such as session timeout
+        // @todo add fallback locale to config file
+        Tinebase_Core::set('locale', new Zend_Locale('en_US'));
+        Tinebase_Core::set('userTimeZone', 'UTC');
+        
+        Tinebase_Core::setupMailer();
+        
+        Tinebase_Core::setupUserCredentialCache();
+        
+        Tinebase_Core::setupUserTimezone();
+        
+        Tinebase_Core::setupUserLocale();
+        
+        header('X-API: http://www.tine20.org/apidocs/tine20/');
+    }
+    
+    /**
      * tines error expeption handler for catchable fatal errors
      *
      * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default,

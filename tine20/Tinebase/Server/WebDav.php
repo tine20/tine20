@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_WebDav extends Tinebase_Server_Abstract
+class Tinebase_Server_WebDav implements Tinebase_Server_Interface
 {
     /**
      * 
@@ -60,7 +60,7 @@ class Tinebase_Server_WebDav extends Tinebase_Server_Abstract
     public function handle()
     {
         try {
-            $this->_initFramework();
+            Tinebase_Core::initFramework();
         } catch (Zend_Session_Exception $exception) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
             Zend_Session::expireSessionCookie();

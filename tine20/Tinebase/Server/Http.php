@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_Http extends Tinebase_Server_Abstract
+class Tinebase_Server_Http implements Tinebase_Server_Interface
 {
     /**
      * handler for HTTP api requests
@@ -28,7 +28,7 @@ class Tinebase_Server_Http extends Tinebase_Server_Abstract
     public function handle()
     {
         try {
-            $this->_initFramework();
+            Tinebase_Core::initFramework();
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Is HTTP request. method: ' . (isset($_REQUEST['method']) ? $_REQUEST['method'] : 'EMPTY'));
             //Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Rawdata: ' . print_r($_REQUEST, true));
             

@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_Cli extends Tinebase_Server_Abstract
+class Tinebase_Server_Cli implements Tinebase_Server_Interface
 {
     /**
      * init tine framework
@@ -64,7 +64,7 @@ class Tinebase_Server_Cli extends Tinebase_Server_Abstract
      * @return boolean
      */
     public function handle()
-    {        
+    {
         $this->_initFramework();
         
         $opts = Tinebase_Core::get('opts');

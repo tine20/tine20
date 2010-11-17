@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Server_Json extends Tinebase_Server_Abstract
+class Tinebase_Server_Json implements Tinebase_Server_Interface
 {
     /**
      * handle request
@@ -27,7 +27,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
 	public function handle()
 	{
 	    try {
-    	    $this->_initFramework();
+    	    Tinebase_Core::initFramework();
     	    $exception = FALSE;
 	    } catch (Exception $exception) {
 	        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' initFramework exception: ' . $exception);
@@ -146,7 +146,7 @@ class Tinebase_Server_Json extends Tinebase_Server_Abstract
     protected function _handleException($server, $request, $exception)
     {
         $exceptionData = method_exists($exception, 'toArray')? $exception->toArray() : array();
-        $exceptionData['message'] = $exception->getMessage();
+        $exceptionData['message'] = htmlentities($exception->getMessage(), ENT_COMPAT, 'UTF-8');
         $exceptionData['code']    = $exception->getCode();
         if (Tinebase_Core::getConfig()->suppressExceptionTraces !== TRUE) {
             $exceptionData['trace']   = $exception->getTrace();
