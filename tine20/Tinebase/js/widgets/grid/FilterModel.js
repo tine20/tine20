@@ -220,6 +220,13 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                     this.onOperatorChange(combo.filter, combo.value);
                 }
             }, this);
+        } else if (this.operators[0] == 'freeform') {
+            var operator = new Ext.form.TextField({
+                filter: filter,
+                width: 100,
+                emptyText: this.emptyText || '',
+                renderTo: el
+            });
         } else {
             var operator = new Ext.form.Label({
                 filter: filter,
@@ -227,8 +234,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 style: {margin: '0px 10px'},
                 getValue: function() { return operatorStore.getAt(0).get('operator'); },
                 text : operatorStore.getAt(0).get('label'),
-                //hideLabel: true,
-                //readOnly: true,
                 renderTo: el
             });
         }
