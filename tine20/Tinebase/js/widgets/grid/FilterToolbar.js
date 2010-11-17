@@ -414,11 +414,13 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
         if (oldValue && typeof f.selectText == 'function' && typeof f.doQuery != 'function') {
             var o = filter.formFields.operator;
             
-            if (typeof o.setValue == 'function' && o.findRecord(o.valueField, oldOperator)) {
-                o.setValue(oldOperator);
+            if (typeof o.findRecord == 'function') {
+                if (typeof o.setValue == 'function' && o.findRecord(o.valueField, oldOperator)) {
+                    o.setValue(oldOperator);
+                }
+                filter.formFields.value.setValue(oldValue);
+                filter.formFields.value.selectText.defer(50, filter.formFields.value);
             }
-            filter.formFields.value.setValue(oldValue);
-            filter.formFields.value.selectText.defer(50, filter.formFields.value);
         }
     },
     
