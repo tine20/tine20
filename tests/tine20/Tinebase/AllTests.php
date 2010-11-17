@@ -4,10 +4,9 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * 
- * @todo        what about the account/group tests? only test the backends or the factory as well?
  * @version     $Id$
  */
 
@@ -45,7 +44,6 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_ApplicationTest');
         $suite->addTestSuite('Tinebase_Relation_AllTests');
         $suite->addTestSuite('Tinebase_NotesTest');
-        $suite->addTestSuite('Tinebase_JsonTest');
         $suite->addTestSuite('Tinebase_TransactionManagerTest');
         $suite->addTestSuite('Tinebase_TranslationTest');
         $suite->addTestSuite('Tinebase_AsyncJobTest');
@@ -54,7 +52,7 @@ class Tinebase_AllTests
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
         $suite->addTest(Tinebase_Timemachine_AllTests::suite());
-        $suite->addTest(Tinebase_Json_AllTests::suite());
+        $suite->addTest(Tinebase_Frontend_AllTests::suite());
         $suite->addTest(Tinebase_Acl_AllTests::suite());
         
         return $suite;

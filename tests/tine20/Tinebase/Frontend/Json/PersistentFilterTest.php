@@ -3,7 +3,7 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -11,10 +11,10 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Json_PersistentFilterTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_Frontend_Json_PersistentFilterTest::main');
 }
 
 /**
@@ -22,7 +22,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * 
  * @todo test search -> filter resolving not yet implemented -> do we need this? -> filters need to cope with resolved values!
  */
-class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Tinebase_Frontend_Json_PersistentFilter
@@ -246,6 +246,6 @@ class Tinebase_Json_PersistentFilterTest extends PHPUnit_Framework_TestCase
 }
     
 
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Json_PersistentFilterTest::main') {
-    Tinebase_Json_PersistentFilterTest::main();
+if (PHPUnit_MAIN_METHOD == 'Tinebase_Frontend_Json_PersistentFilterTest::main') {
+    Tinebase_Frontend_Json_PersistentFilterTest::main();
 }

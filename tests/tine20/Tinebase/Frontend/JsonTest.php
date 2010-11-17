@@ -6,7 +6,7 @@
  * @subpackage  Json
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -14,16 +14,16 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_JsonTest::main();
+    Tinebase_Frontend_JsonTest::main();
 }
 
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 {
     /**
      * unit under test (UIT)
@@ -48,7 +48,7 @@ class Tinebase_JsonTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_JsonTest');
+        $suite  = new PHPUnit_Framework_TestSuite('Tinebase_Frontend_JsonTest');
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     

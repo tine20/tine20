@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -13,16 +13,16 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Json_ContainerTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_Frontend_Json_ContainerTest::main');
 }
 
 /**
  * Test class for Tinebase_Group
  */
-class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
+class Tinebase_Frontend_Json_ContainerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var Tinebase_Frontend_Json_Container
@@ -42,7 +42,7 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Json_ContainerTest');
+		$suite  = new PHPUnit_Framework_TestSuite('Tinebase_Frontend_Json_ContainerTest');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -193,6 +193,6 @@ class Tinebase_Json_ContainerTest extends PHPUnit_Framework_TestCase
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Json_ContainerTest::main') {
-    Tinebase_Json_ContainerTest::main();
+if (PHPUnit_MAIN_METHOD == 'Tinebase_Frontend_Json_ContainerTest::main') {
+    Tinebase_Frontend_Json_ContainerTest::main();
 }
