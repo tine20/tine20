@@ -64,9 +64,9 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test to set container grants
+     * test to clear accesslog table
      */
-    public function testClearTable()
+    public function testClearTableAccessLogWithDate()
     {
         $accessLogsBefore = Admin_Controller_AccessLog::getInstance()->search();
         
