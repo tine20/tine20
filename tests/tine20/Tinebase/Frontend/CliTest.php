@@ -87,11 +87,14 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
      * @param string $_table
      * @return Zend_Console_Getopt
      */
-    protected function _getOpts($_table)
+    protected function _getOpts($_table = NULL)
     {
         $opts = new Zend_Console_Getopt('abp:');
         $tomorrow = Tinebase_DateTime::now()->addDay(1)->toString('Y-m-d');
-        $params = array($_table, 'date=' . $tomorrow);
+        $params = array('date=' . $tomorrow);
+        if ($_table !== NULL) {
+            $params[] = $_table;
+        }
         $opts->setArguments($params);
         
         return $opts;
@@ -100,7 +103,7 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
     /**
      * test purge deleted records
      */
-    public function testPurgeDeletedRecords()
+    public function testPurgeDeletedRecordsAddressbook()
     {
         $opts = $this->_getOpts('addressbook');
         $deletedRecord = $this->_addAndDeleteContact();
@@ -115,7 +118,32 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         $contactBackend = new Addressbook_Backend_Sql();
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $deletedRecord = $contactBackend->get($deletedRecord->getId(), TRUE);
+    }
+
+    /**
+     * test purge deleted records
+     */
+    public function testPurgeDeletedRecordsAllTables()
+    {
+        $opts = $this->_getOpts();
+        $deletedContact = $this->_addAndDeleteContact();
+        $deletedLead = $this->_addAndDeleteLead();
         
+        ob_start();
+        $this->_cli->purgeDeletedRecords($opts);
+        $out = ob_get_clean();
+        
+        $this->assertContains('Removing all deleted entries before', $out);
+        $this->assertContains('Cleared table addressbook (deleted ', $out);
+        $this->assertContains('Cleared table metacrm_lead (deleted ', $out);
+
+        $contactBackend = new Addressbook_Backend_Sql();
+        $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
+        $this->assertEquals(0, count($contacts));
+
+        $leadsBackend = new Crm_Backend_Lead();
+        $leads = $leadsBackend->getMultipleByProperty($deletedLead->getId(), 'id', TRUE);
+        $this->assertEquals(0, count($leads));
     }
     
     /**
@@ -134,6 +162,27 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         Addressbook_Controller_Contact::getInstance()->delete($newContact->getId());
         
         return $newContact;
+    }
+
+    /**
+     * creates and deletes a lead + returns the deleted record
+     * 
+     * @return Crm_Model_Lead
+     */
+    protected function _addAndDeleteLead()
+    {
+        $newLead = new Crm_Model_Lead(array(
+            'lead_name'     => 'PHPUNIT Lead',
+            'container_id'  => Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Crm')->getId(),
+            'leadstate_id'  => 1,
+            'leadtype_id'   => 1,
+            'leadsource_id' => 1,
+            'start'         => Tinebase_DateTime::now(),
+        ));
+        $newLead = Crm_Controller_Lead::getInstance()->create($newLead);
+        Crm_Controller_Lead::getInstance()->delete($newLead->getId());
+        
+        return $newLead;
     }
 }       
     
