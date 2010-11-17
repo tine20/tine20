@@ -263,7 +263,7 @@ class Tinebase_EmailUser
     {
         $config = self::getConfig($_configType);
         
-        $result = (isset($config['backend']) && ! empty($config['backend']) && $config['backend'] != 'standard');
+        $result = (isset($config['backend']) && ! empty($config['backend']) && $config['backend'] != 'standard' && isset($config['active']) && $config['active'] == true);
         
         return $result;
     }
