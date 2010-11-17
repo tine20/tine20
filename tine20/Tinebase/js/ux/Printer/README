@@ -1,0 +1,45 @@
+Overview
+========
+
+Ext.ux.Printer is a small library that provides a generic way of printing Ext Components (Grids, Trees, etc).
+It consists of the main Printer class, and a number of Renderers, which each provide support for a given type of component.
+
+Installation
+============
+
+Printer.js and renderers/Base.js are required:
+
+<script type="text/javascript" src="Printer.js"></script>
+<script type="text/javascript" src="renderers/Base.js"></script>
+
+The library currently comes with renderers for Ext.grid.GridPanel, and Ext.tree.ColumnTree. These can be included as required:
+<script type="text/javascript" src="renderers/GridPanel.js"></script>
+<script type="text/javascript" src="renderers/ColumnTree.js"></script>
+
+Usage
+=====
+
+Ext.ux.Printer.print just take a single argument - a normal component instance. Use it like this:
+
+var myGrid = new Ext.grid.GridPanel({
+  //your usual grid config here
+});
+
+var myTree = new Ext.tree.ColumnTree({
+  //your usual tree config here
+})
+
+Ext.ux.Printer.print(myGrid);
+Ext.ux.Printer.print(myTree);
+
+Each of the above examines the component you pass to the print function, and if a suitable renderer has been created
+for it, the component is printed by opening a new window, writing some print-friendly HTML to it, and calling the 
+window's print function.
+
+Currently supported components are:
+
+Ext.grid.GridPanel
+Ext.tree.ColumnTreePanel
+
+To add support for another Component type, simply subclass Ext.ux.Printer.BaseRenderer (see the existing renderers for examples),
+and register it with Ext.ux.Printer.registerRenderer('somextype', Ext.ux.Printer.SomeComponentRenderer).
