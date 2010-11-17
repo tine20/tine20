@@ -14,6 +14,11 @@
 
 /*global Ext, Tine, google, OpenLayers, Locale, */
 
+/** ------------------------- Ext.ux Initialisation ------------------------ **/
+
+Ext.ux.Printer.BaseRenderer.prototype.stylesheetPath = 'Tinebase/js/ux/Printer/print.css';
+
+
 /** ------------------------ Tine 2.0 Initialisation ----------------------- **/
 
 /**
