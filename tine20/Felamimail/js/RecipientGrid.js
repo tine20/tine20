@@ -249,25 +249,36 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var dropTargetEl = this.getView().scroller.dom;
         var dropTarget = new Ext.dd.DropTarget(dropTargetEl, {
             ddGroup    : 'recipientDDGroup',
-            notifyDrop : function(ddSource, e, data){
-                    var records = ddSource.dragData.selections,
-                        hasEmail = false,
-                        added = false,
-                        emptyRecord = this.grid.store.getAt(this.grid.store.findExact('address', '')),
-                        type = (emptyRecord) ? emptyRecord.get('type') : 'to';
-                        
-                    Ext.each(records, function(record) {
-                        hasEmail = ((record.get('email') !== null && record.get('email') !== '') || (record.get('email_home') !== null && record.get('email_home') !== ''));
-                        if (hasEmail) {
-                            this.store.add(new Ext.data.Record({type: type, 'address': Tine.Felamimail.getEmailStringFromContact(record)}));
-                            added = true;
-                        }
-                    }, this.grid);
-                    
-                    return true;
+            notifyDrop : function(ddSource, e, data) {
+                this.grid.addRecordsToStore(ddSource.dragData.selections);
+                return true;
             },
             grid: this
         });        
+    },
+    
+    /**
+     * add records to recipient store
+     * 
+     * @param {Array} records
+     * @param {String} type
+     */
+    addRecordsToStore: function(records, type) {
+        if (! type) {
+            var emptyRecord = this.store.getAt(this.store.findExact('address', '')),
+                type = (emptyRecord) ? emptyRecord.get('type') : 'to';
+        }
+                        
+        var hasEmail = false,
+            added = false;
+
+        Ext.each(records, function(record) {
+            hasEmail = ((record.get('email') !== null && record.get('email') !== '') || (record.get('email_home') !== null && record.get('email_home') !== ''));
+            if (hasEmail) {
+                this.store.add(new Ext.data.Record({type: type, 'address': Tine.Felamimail.getEmailStringFromContact(record)}));
+                added = true;
+            }
+        }, this);        
     },
     
     /**
