@@ -40,6 +40,7 @@ Tine.Felamimail.sieve.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterT
     defaultFilter: 'from',
     allowSaving: false,
     showSearchButton: false,
+    filterFieldWidth: 160,
     
     // unused fn
     onFiltertrigger: Ext.emptyFn,
@@ -74,6 +75,7 @@ Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel = function(app) {
         {label: app.i18n._('From'),     field: 'from',     operators: ['contains']},
         {label: app.i18n._('To'),       field: 'to',       operators: ['contains']},
         {label: app.i18n._('Subject'),  field: 'subject',  operators: ['contains']},
-        {label: app.i18n._('Size'),     field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'}
+        {label: app.i18n._('Size'),     field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'},
+        {label: app.i18n._('Header contains'),   field: 'header',   operators: ['freeform'], defaultOperator: 'freeform', emptyText: app.i18n._('Header name')}
     ];
 };

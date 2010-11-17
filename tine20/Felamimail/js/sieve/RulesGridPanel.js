@@ -296,7 +296,10 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             // get header/comperator translation
             var filterModel = Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel(this.app),
-                header, comperator, i;
+                header, 
+                comperator, 
+                i, 
+                found = false;
             for (i=0; i < filterModel.length; i++) {
                 if (condition.header == filterModel[i].field) {
                     header = filterModel[i].label;
@@ -305,11 +308,15 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     } else {
                         comperator = _(condition.comperator);
                     }
+                    found = true;
                 }
             }
-
-            result = //'[' + condition.test + '] ' + 
-                header + ' ' + comperator + ' "' + condition.key + '"';
+            
+            if (found === true) {
+                result = header + ' ' + comperator + ' "' + condition.key + '"';
+            } else {
+                result = String.format(this.app.i18n._('Header "{0}" contains "{1}"'), condition.header, condition.key);
+            }
         }
         
         return result;

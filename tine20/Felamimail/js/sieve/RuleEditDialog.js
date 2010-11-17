@@ -127,9 +127,15 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             i = 0, 
             condition,
             test,
-            comperator;
+            comperator,
+            header;
             
         for (i = 0; i < conditions.length; i++) {
+            // set defaults
+            comperator = conditions[i].operator;
+            header = conditions[i].field;
+            test = 'header';
+
             switch (conditions[i].field) {
                 case 'from':
                 case 'to':
@@ -137,27 +143,22 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     break;
                 case 'size':
                     test = 'size';
-                    break;
-                default:
-                    test = 'header';
-            }
-            switch (conditions[i].field) {
-                case 'size':
                     comperator = (conditions[i].operator == 'greater') ? 'over' : 'under';
                     break;
-                default:
-                    comperator = conditions[i].operator;
+                case 'header':
+                    header = conditions[i].operator;
+                    comperator = 'contains';
+                    break;
             }
             condition = {
                 test: test,
-                header: conditions[i].field,
+                header: header,
                 comperator: comperator,
                 key: conditions[i].value
             };
             result.push(condition);            
         }
-        
-        return result;     
+        return result;
     },
     
     /**
@@ -170,18 +171,26 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var result = [],
             i = 0, 
             filter,
-            operator;
+            operator,
+            field;
             
         for (i = 0; i < conditions.length; i++) {
-            switch (conditions[i].header) {
+            field = conditions[i].header;
+            switch (field) {
                 case 'size':
                     operator = (conditions[i].comperator == 'over') ? 'greater' : 'less';
                     break;
-                default:
+                case 'from':
+                case 'to':
+                case 'subject':
                     operator = conditions[i].comperator;
+                    break;
+                default:
+                    operator = field;
+                    field = 'header';
             }
             filter = {
-                field: conditions[i].header,
+                field: field,
                 operator: operator,
                 value: conditions[i].key
             };
