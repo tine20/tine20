@@ -316,7 +316,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      */
     protected function _setTurnover($_record)
     {
-        if (empty($_record->turnover)) {
+        if (empty($_record->turnover) && isset($_record->relations)) {
             $sum = 0;
             foreach ($_record->relations as $relation) {
                 if (! is_array($relation)) {
