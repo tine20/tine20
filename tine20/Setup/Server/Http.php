@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Setup_Server_Http implements Setup_Server_Interface
+class Setup_Server_Http implements Tinebase_Server_Interface
 {
     /**
      * handler for HTTP api requests

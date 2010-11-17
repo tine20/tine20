@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Setup_Server_Cli implements Setup_Server_Interface
+class Setup_Server_Cli implements Tinebase_Server_Interface
 {
     /**
      * handler for command line scripts

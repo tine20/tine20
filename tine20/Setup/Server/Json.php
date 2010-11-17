@@ -16,7 +16,7 @@
  * @package     Setup
  * @subpackage  Server
  */
-class Setup_Server_Json extends Tinebase_Server_Json implements Setup_Server_Interface
+class Setup_Server_Json extends Tinebase_Server_Json
 {
     /**
      * handler for JSON api requests
