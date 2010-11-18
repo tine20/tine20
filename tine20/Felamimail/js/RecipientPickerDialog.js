@@ -104,7 +104,7 @@ Ext.namespace('Tine.Felamimail');
                 xtype: 'felamimailrecipientgrid',
                 record: this.record,
                 i18n: this.app.i18n,
-                title: this.app.i18n._('Recipients'),
+                title: this.app.i18n._('Recipients (drag and drop contacts here to add)'),
                 flex: 2,
                 header: true,
                 ref: '../recipientgrid'
