@@ -239,6 +239,8 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
      * unknown browser -> may not work
      * 
      * @return {Ext.Container}
+     * 
+     * TODO find icons with the correct license
      */
     getBrowserIncompatiblePanel: function() {
         if (! this.browserIncompatiblePanel) {
@@ -250,7 +252,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 items: []
             });
             
-            var browserSupport = 'compatible';
+            var browserSupport = 'unknown';
             if (Ext.isIE6 || Ext.isGecko2) {
                 browserSupport = 'incompatible';
             } else if (
@@ -279,12 +281,11 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
             if (browserSupport != 'compatible') {
                 this.browserIncompatiblePanel.add(items.concat([{
                     html: '<p>' + _('You might try one of these browsers:') + '<br/>'
-                        + '<a href="http://www.google.com/chrome" target="_blank"><img src="images/browsers/chrome.png" alt="Google Chrome" title="Google Chrome"></a>'
-                        + '<a href="http://www.mozilla.com/firefox/" target="_blank"><img src="images/browsers/firefox.png" alt="Mozilla FireFox" title="Mozilla FireFox"></a>'
-                        + '<a href="http://www.opera.com/" target="_blank"><img src="images/browsers/opera.png" alt="Opera" title="Opera"></a>'
-                        + '<a href="http://www.apple.com/safari/download/" target="_blank"><img src="images/browsers/safari.png" alt="Safari" title="Safari"></a>'    
-                        + '<a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" target="_blank"><img src="images/browsers/ie.png" alt="Internet Explorer" title="Internet Explorer"></a>'
-                        + '<br/><br/></p>'
+                        + '<a href="http://www.google.com/chrome" target="_blank">Google Chrome</a><br/>'
+                        + '<a href="http://www.mozilla.com/firefox/" target="_blank">Mozilla Firefox</a><br/>'
+                        + '<a href="http://www.apple.com/safari/download/" target="_blank">Apple Safari</a><br/>'    
+                        + '<a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" target="_blank">Microsoft Internet Explorer</a>'
+                        + '<br/></p>'
                 }]));
                 this.browserIncompatiblePanel.doLayout();
             }
