@@ -5,7 +5,7 @@
  * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -38,6 +38,14 @@ Ext.BLANK_IMAGE_URL = "library/ExtJS/resources/images/default/s.gif";
  * don't fill yahoo stats
  */
 Ext.chart.Chart.CHART_URL = 'library/ExtJS/resources/charts.swf';
+
+/**
+ * use native json implementation because we had problems with utf8 linebreaks (\u2028 for example)
+ * @see http://www.tine20.org/bugtracker/view.php?id=3356
+ * 
+ * @type Boolean
+ */
+Ext.USE_NATIVE_JSON = true;
 
 /**
  * init ext quick tips
