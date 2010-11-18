@@ -100,7 +100,7 @@ Ext.extend(Tine.Tinebase.data.MemoryBackend, Tine.Tinebase.data.AbstractBackend,
      * @return {Ext.data.Record}
      */
     recordReader: function(response) {
-        var recordData = Ext.util.JSON.decode('{results: [' + response.responseText + ']}');
+        var recordData = Ext.util.JSON.decode('{"results": [' + response.responseText + ']}');
         var data = this.jsonReader.readRecords(recordData);
         
         var record = data.records[0];

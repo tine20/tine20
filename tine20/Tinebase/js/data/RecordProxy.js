@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -339,7 +339,7 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
      * @return {Ext.data.Record}
      */
     recordReader: function(response) {
-        var recordData = Ext.util.JSON.decode('{results: [' + response.responseText + ']}');
+        var recordData = Ext.util.JSON.decode('{"results": [' + response.responseText + ']}');
         var data = this.jsonReader.readRecords(recordData);
         
         var record = data.records[0];
