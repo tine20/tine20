@@ -438,6 +438,22 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.scroller.dom.scrollTop = this.getTimeOffset(time);
     },
     
+    onBeforeScroll: function() {
+        if (! this.isScrolling) {
+            this.isScrolling = true;
+            
+            // walk all cols an hide hints
+            Ext.each(this.dayCols, function(dayCol, idx) {
+                var dayColEl  = Ext.get(dayCol),
+                    aboveHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-hint-above]'),
+                    belowHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-hint-below]');
+                    
+                aboveHint.setDisplayed(false);
+                belowHint.setDisplayed(false);
+            }, this);
+        }
+    },
+    
     /**
      * add hint if events are outside visible area
      * 
@@ -475,13 +491,22 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                 aboveHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-hint-above]'),
                 belowHint = dayColEl.down('img[class=cal-daysviewpanel-body-daycolumn-hint-below]');
                 
-            aboveHint.setTop(visibleStart + 5);
-            aboveHint.setDisplayed(aboveCols.indexOf(dayColEl) >= 0);
+            if (aboveCols.indexOf(dayColEl) >= 0) {
+                aboveHint.setTop(visibleStart + 5);
+                if (!aboveHint.isVisible()) {
+                    aboveHint.fadeIn({duration: 1.6});
+                }
+            }
             
-            belowHint.setTop(visibleEnd - 21);
-            belowHint.setDisplayed(belowCols.indexOf(dayColEl) >= 0);
+            if (belowCols.indexOf(dayColEl) >= 0) {
+                belowHint.setTop(visibleEnd - 14);
+                if (!belowHint.isVisible()) {
+                    belowHint.fadeIn({duration: 1.6});
+                }
+            }
         }, this);
         
+        this.isScrolling = false;
     },
     
     /**
@@ -1012,7 +1037,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.layout();
     },
     
-    
     hex2dec: function(hex) {
         var dec = 0;
         hex = hex.toString();
@@ -1116,6 +1140,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         this.scroller = new E(this.mainWrap.dom.childNodes[1]);
         this.scroller.setStyle('overflow-x', 'hidden');
+        this.scroller.on('scroll', this.onBeforeScroll, this);
         this.scroller.on('scroll', this.onScroll, this, {buffer: 200});
         
         this.mainBody = new E(this.scroller.dom.firstChild);
