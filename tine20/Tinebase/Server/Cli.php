@@ -83,9 +83,9 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
     }
     
     /**
-     * promts user for input
+     * prompts user for input
      * 
-     * @param  string $_promtText   promt text to dipslay
+     * @param  string $_promptText   prompt text to dipslay
      * @param  bool   $_isPassword  is prompt a password?
      * @return string
      */
