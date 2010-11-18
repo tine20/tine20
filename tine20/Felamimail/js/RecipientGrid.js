@@ -356,6 +356,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         Ext.each(fields, function(field) {
             this._addRecipients(record.get(field), field);
         }, this);
+        this.store.sort('address');
         
         if (setHeight && setHeight === true) {
             this.setFixedHeight(true);
