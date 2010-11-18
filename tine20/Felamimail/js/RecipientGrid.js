@@ -153,6 +153,17 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         var app = Tine.Tinebase.appMgr.get('Felamimail');
         
         this.searchCombo = new Tine.Felamimail.ContactSearchCombo({
+            listeners: {
+                scope: this,
+                specialkey: function(combo, e) {
+                    // jump to subject if we are in the last row and it is empty
+                    var sm = this.getSelectionModel(),
+                        record = sm.getSelected();
+                    if ((! record || record.get('address') == '') && ! sm.hasNext()) {
+                        this.fireEvent('specialkey', combo, e);
+                    }
+                }
+            }
         });
         
         this.cm = new Ext.grid.ColumnModel([
@@ -236,7 +247,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         
         this.setFixedHeight(true);
         
-        this.relayEvents(this.searchCombo, ['specialkey', 'blur' ]);
+        this.relayEvents(this.searchCombo, ['blur' ]);
         
         this.initDropTarget();
     },
