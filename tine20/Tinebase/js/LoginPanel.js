@@ -232,6 +232,14 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         return this.surveyTemplate;
     },
     
+    /**
+     * checks browser compatibility and show messages if unknown/incompatible
+     * 
+     * ie6, gecko2 -> bad
+     * unknown browser -> may not work
+     * 
+     * @return {Ext.Container}
+     */
     getBrowserIncompatiblePanel: function() {
         if (! this.browserIncompatiblePanel) {
             this.browserIncompatiblePanel = new Ext.Container({
@@ -242,18 +250,47 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 items: []
             });
             
-            if (false) {
-                this.browserIncompatiblePanel.add([{
+            var browserSupport = 'compatible';
+            if (Ext.isIE6 || Ext.isGecko2) {
+                browserSupport = 'incompatible';
+            } else if (
+                ! (Ext.isWebKit || Ext.isGecko || Ext.isOpera || Ext.isIE)
+            ) {
+                browserSupport = 'unknown';
+            }
+            
+            var items = [];
+            if (browserSupport == 'incompatible') {
+                items = [{
+                    cls: 'tb-login-big-label',
+                    html: _('Browser incompatible')
+                }, {
+                    html: '<p>' + _('Your browser is not supported by Tine 2.0.') + '<br/><br/></p>'
+                }];
+            } else if (browserSupport == 'unknown') {
+                items = [{
                     cls: 'tb-login-big-label',
                     html: _('Browser incompatible?')
                 }, {
-                    html: '<p>' + _('lalala') + '</p>'
-                }]);
-                this.browserIncompatiblePanel.doLayout();                
+                    html: '<p>' + _('You are using an unrecognized browser. This could result in unexpected behaviour.') + '<br/><br/></p>'
+                }];
+            }
+            
+            if (browserSupport != 'compatible') {
+                this.browserIncompatiblePanel.add(items.concat([{
+                    html: '<p>' + _('You might try one of these browsers:') + '<br/>'
+                        + '<a href="http://www.google.com/chrome" target="_blank"><img src="images/browsers/chrome.png" alt="Google Chrome" title="Google Chrome"></a>'
+                        + '<a href="http://www.mozilla.com/firefox/" target="_blank"><img src="images/browsers/firefox.png" alt="Mozilla FireFox" title="Mozilla FireFox"></a>'
+                        + '<a href="http://www.opera.com/" target="_blank"><img src="images/browsers/opera.png" alt="Opera" title="Opera"></a>'
+                        + '<a href="http://www.apple.com/safari/download/" target="_blank"><img src="images/browsers/safari.png" alt="Safari" title="Safari"></a>'    
+                        + '<a href="http://www.microsoft.com/windows/internet-explorer/default.aspx" target="_blank"><img src="images/browsers/ie.png" alt="Internet Explorer" title="Internet Explorer"></a>'
+                        + '<br/><br/></p>'
+                }]));
+                this.browserIncompatiblePanel.doLayout();
             }
         }
         
-        return this.browserIncompatiblePanel
+        return this.browserIncompatiblePanel;
     },
     
     initComponent: function () {
