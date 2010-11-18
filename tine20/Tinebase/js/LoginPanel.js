@@ -252,7 +252,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                 items: []
             });
             
-            var browserSupport = 'unknown';
+            var browserSupport = 'compatible';
             if (Ext.isIE6 || Ext.isGecko2) {
                 browserSupport = 'incompatible';
             } else if (
