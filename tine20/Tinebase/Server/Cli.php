@@ -109,4 +109,15 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         return rtrim($input);
     }
     
+    /**
+     * read password from file
+     * 
+     * @param string $_filename
+     * @return string
+     */
+    public static function getPasswordFromFile($_filename)
+    {
+        $result = @file_get_contents($_filename);
+        return rtrim($result);
+    }
 }

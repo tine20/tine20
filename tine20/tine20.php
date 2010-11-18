@@ -48,7 +48,8 @@ try {
     
         'method=s'              => 'Method to call [required]',              
         'username=s'            => 'Username [required]',              
-        'password=s'            => 'Password',              
+        'password=s'            => 'Password',
+        'passwordfile=s'        => 'Name of file that contains password',
     ));
     $opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
@@ -73,7 +74,11 @@ if (! in_array($opts->method, $anonymousMethods)) {
     }
     
     if (empty($opts->password)) {
-        $opts->password = Tinebase_Server_Cli::promptInput('password', TRUE);
+        if (empty($opts->passwordfile)) {
+            $opts->password = Tinebase_Server_Cli::promptInput('password', TRUE);
+        } else {
+            $opts->password = Tinebase_Server_Cli::getPasswordFromFile($opts->passwordfile);
+        }
     }
 }
 
