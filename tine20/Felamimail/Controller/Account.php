@@ -538,7 +538,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $changed = $this->_addFolderDefaults($account);
         if ($changed) {
-            parent::update($account);
+            // need to use backend update because we prohibit the change of some fields in _inspectBeforeUpdate()
+            $account = $this->_backend->update($account);
         }
         
         $foldersToCheck = array($account->sent_folder, $account->trash_folder);

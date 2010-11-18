@@ -132,4 +132,28 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(2, $folderFoundCount, 'sent/trash folders not found');
     }
+
+    /**
+     * check for sent/trash folder defaults
+     */
+    public function testCheckSentTrashFolderDefaults()
+    {
+        // make sure, folder cache is filled
+        Felamimail_Controller_Folder::getInstance()->search(new Felamimail_Model_FolderFilter(array(
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
+        )));
+        
+        $account = clone($this->_account);
+        $account->sent_folder = '';
+        $account->trash_folder = '';
+        
+        $accountBackend = new Felamimail_Backend_Account();
+        $account = $accountBackend->update($account);
+        $this->_controller->checkSentTrash($account);
+        
+        $updatedAccount = $this->_controller->get($account->getId());
+        
+        $this->assertEquals('Trash', $updatedAccount->trash_folder);
+        $this->assertEquals('Sent', $updatedAccount->sent_folder);
+    }
 }
