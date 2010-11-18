@@ -232,6 +232,30 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
         return this.surveyTemplate;
     },
     
+    getBrowserIncompatiblePanel: function() {
+        if (! this.browserIncompatiblePanel) {
+            this.browserIncompatiblePanel = new Ext.Container({
+                layout: 'fit',
+                cls: 'tb-login-surveypanel',
+                border: false,
+                defaults: {xtype: 'label'},
+                items: []
+            });
+            
+            if (false) {
+                this.browserIncompatiblePanel.add([{
+                    cls: 'tb-login-big-label',
+                    html: _('Browser incompatible?')
+                }, {
+                    html: '<p>' + _('lalala') + '</p>'
+                }]);
+                this.browserIncompatiblePanel.doLayout();                
+            }
+        }
+        
+        return this.browserIncompatiblePanel
+    },
+    
     initComponent: function () {
         this.initLayout();
         
@@ -240,6 +264,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     
     initLayout: function () {
         var infoPanelItems = (this.showInfoBox) ? [
+            this.getBrowserIncompatiblePanel(),
             this.getTinePanel(),
             this.getSurveyPanel()
         ] : [];
@@ -344,8 +369,6 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
     },
     
     renderSurveyPanel: function (survey) {
-        console.log(survey);
-        
         var items = [{
             cls: 'tb-login-big-label',
             html: _('Tine 2.0 needs your help')
