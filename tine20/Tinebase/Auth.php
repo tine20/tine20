@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -22,16 +22,22 @@
 class Tinebase_Auth
 {
     /**
-     * constant for Sql contacts backend class
+     * constant for Sql auth
      *
      */
     const SQL = 'Sql';
     
     /**
-     * constant for LDAP contacts backend class
+     * constant for LDAP auth
      *
      */
     const LDAP = 'Ldap';
+
+    /**
+     * constant for IMAP auth
+     *
+     */
+    const IMAP = 'Imap';
 
     /**
      * General Failure
@@ -124,7 +130,7 @@ class Tinebase_Auth
     /**
      * the instance of the authenticationbackend
      *
-     * @var Tinebase_Auth_Sql
+     * @var Tinebase_Auth_Interface
      */
     protected $_backend;
     
@@ -151,7 +157,6 @@ class Tinebase_Auth
      * @var Tinebase_Auth
      */
     private static $_instance = NULL;
-    
     
     /**
      * the singleton pattern
