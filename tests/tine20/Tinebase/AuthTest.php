@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @version     $Id: $
+ * @version     $Id$
  */
 
 /**
@@ -24,13 +24,19 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
 {
-
     /**
      * @var array test objects
      */
     protected $_objects = array();
     
+    /**
+     * @var mixed
+     */
     protected $_originalBackendConfiguration = null;
+    
+    /**
+     * @var mixed
+     */
     protected $_originalBackendType = null;
 
     /**
@@ -71,6 +77,9 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         Tinebase_Auth::saveBackendConfiguration();
     }
 
+    /**
+     * testSaveBackendConfiguration
+     */
     public function testSaveBackendConfiguration()
     {
         Tinebase_Auth::setBackendType(Tinebase_Auth::LDAP);
@@ -84,6 +93,10 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals($rawConfigBefore, $rawConfigAfter);
     }
     
+    /**
+     * 
+     * testSetBackendConfiguration
+     */
     public function testSetBackendConfiguration()
     {
         Tinebase_Auth::setBackendType(Tinebase_Auth::LDAP);   
@@ -103,6 +116,9 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * testDeleteBackendConfiguration
+     */
     public function testDeleteBackendConfiguration()
     {
         Tinebase_Auth::setBackendType(Tinebase_Auth::LDAP);   
@@ -123,8 +139,9 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(count(Tinebase_Auth::getBackendConfiguration()) == 0);
     }
     
-    
-    
+    /**
+     * testGetBackendConfigurationDefaults
+     */
     public function testGetBackendConfigurationDefaults()
     {
         $defaults = Tinebase_Auth::getBackendConfigurationDefaults();
@@ -137,6 +154,4 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('host', $defaults));
         $this->assertFalse(array_key_exists(Tinebase_Auth::LDAP, $defaults));
     }
-
-
 }       
