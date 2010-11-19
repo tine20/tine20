@@ -158,6 +158,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         //this.ds.each(this.removeEvent, this);
         
         this.updateDayHeaders();
+        this.onBeforeScroll();
         
         this.fireEvent('changePeriod', period);
     },
