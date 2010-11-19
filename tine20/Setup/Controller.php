@@ -712,6 +712,8 @@ class Setup_Controller
      */
     protected function _updateAuthentication($_authenticationData)
     {
+        //Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_authenticationData, TRUE));
+        
         if (isset($_authenticationData['authentication'])) {
             $this->_updateAuthenticationProvider($_authenticationData['authentication']);
         }
@@ -741,9 +743,9 @@ class Setup_Controller
         
         $excludeKeys = array('adminLoginName', 'adminPassword', 'adminPasswordConfirmation');
         foreach ($excludeKeys as $key) {
-          if (array_key_exists($key, $_data[$_data['backend']])) {
-              unset($_data[$_data['backend']][$key]);
-          }
+            if (array_key_exists($key, $_data[$_data['backend']])) {
+                unset($_data[$_data['backend']][$key]);
+            }
         }
         
         Tinebase_Auth::setBackendConfiguration($_data[$_data['backend']]);
