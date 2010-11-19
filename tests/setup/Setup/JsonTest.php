@@ -183,9 +183,9 @@ class Setup_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('authentication', $result));
         $this->assertTrue(array_key_exists('accounts', $result));
         $authentication = $result['authentication'];
-        $this->assertContains($authentication['backend'], array(Tinebase_Auth_Factory::SQL, Tinebase_Auth_Factory::LDAP));
-        $this->assertTrue(is_array($authentication[Tinebase_Auth_Factory::SQL]));
-        $this->assertTrue(is_array($authentication[Tinebase_Auth_Factory::LDAP]));
+        $this->assertContains($authentication['backend'], array(Tinebase_Auth::SQL, Tinebase_Auth::LDAP));
+        $this->assertTrue(is_array($authentication[Tinebase_Auth::SQL]));
+        $this->assertTrue(is_array($authentication[Tinebase_Auth::LDAP]));
     }
     
     public function testSaveAuthenticationSql()

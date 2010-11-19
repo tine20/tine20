@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id: Auth.php 390 2007-12-03 15:29:54Z nelius_weiss $
  */
@@ -19,18 +19,6 @@
 class Tinebase_Auth_Factory
 {
     /**
-     * constant for Sql contacts backend class
-     *
-     */
-    const SQL = 'Sql';
-    
-    /**
-     * constant for LDAP contacts backend class
-     *
-     */
-    const LDAP = 'Ldap';
-    
-    /**
      * factory function to return a selected authentication backend class
      *
      * @param   string $type
@@ -40,12 +28,12 @@ class Tinebase_Auth_Factory
     static public function factory($_type)
     {
         switch($_type) {
-            case self::LDAP:
+            case Tinebase_Auth::LDAP:
                 $options = array('ldap' => Tinebase_Auth::getBackendConfiguration()); //only pass ldap options without e.g. sql options
                 $instance = new Tinebase_Auth_Ldap($options);
                 break;
                 
-            case self::SQL:
+            case Tinebase_Auth::SQL:
                 $instance = new Tinebase_Auth_Sql(
                     Tinebase_Core::getDb(),
                     SQL_TABLE_PREFIX . 'accounts',

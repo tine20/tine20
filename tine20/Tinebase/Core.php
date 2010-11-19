@@ -890,9 +890,9 @@ class Tinebase_Core
     public static function getAuthType()
     {
         if (isset(Tinebase_Core::getConfig()->authentication)) {
-            $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth_Factory::SQL);
+            $authType = Tinebase_Core::getConfig()->authentication->get('backend', Tinebase_Auth::SQL);
         } else {
-            $authType = Tinebase_Auth_Factory::SQL;
+            $authType = Tinebase_Auth::SQL;
         }
 
         return ucfirst($authType);
