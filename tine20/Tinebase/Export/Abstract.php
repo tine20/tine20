@@ -217,10 +217,10 @@ abstract class Tinebase_Export_Abstract
      */
     protected function _resolveRecords(Tinebase_Record_RecordSet $_records)
     {
-        // get field types from config
+        // get field types/identifiers from config
+        $identifiers = array();
         if ($this->_config->columns) {
             $types = array();
-            $identifiers = array();
             foreach ($this->_config->columns->column as $column) {
                 $types[] = $column->type;
                 $identifiers[] = $column->identifier;
