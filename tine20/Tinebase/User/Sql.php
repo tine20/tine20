@@ -159,7 +159,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), true));
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($user->toArray(), true));
         
         return $user;
     }
