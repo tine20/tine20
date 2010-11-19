@@ -75,11 +75,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * get preference defaults if no default is found in the database
      *
      * @param string $_preferenceName
-     * @param integer $_accountId
+     * @param string|Tinebase_Model_User $_accountId
      * @param string $_accountType
      * @return Tinebase_Model_Preference
      */
-    abstract public function getApplicationPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
+    abstract public function getApplicationPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
 
     /**************************** public interceptior functions *********************************/
 
@@ -736,5 +736,22 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
 
         return $result;
+    }
+    
+    /**
+     * adds defaults to default container pref
+     * 
+     * @param Tinebase_Model_Preference $_preference
+     * @param string|Tinebase_Model_User $_accountId
+     * @param string $_applicationName
+     */
+    protected function _getDefaultContainerPreferenceDefaults(Tinebase_Model_Preference $_preference, $_accountId, $_applicationName = NULL)
+    {
+        $appName = ($_applicationName !== NULL) ? $_applicationName : $this->_application;
+        $accountId = ($_accountId) ? $_accountId : Tinebase_Core::getUser()->getId();
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $appName, $accountId, 0, true);
+        
+        $_preference->value  = $containers->getFirstRecord()->getId();
+        $_preference->personal_only = TRUE;        
     }
 }
