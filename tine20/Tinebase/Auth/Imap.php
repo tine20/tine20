@@ -26,7 +26,7 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
      */
     public function __construct(array $options = array(), $username = null, $password = null)
     {
-        $this->setOptions($options);
+        $this->setOptions($options[0]);
         if ($username !== null) {
             $this->setIdentity($username);
         }
@@ -64,6 +64,10 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
      */
     public function setIdentity($_identity)
     {
+        if (isset($this->_options['domain']) && ! empty($this->_options['domain'])) {
+            $_identity .= '@' . $this->_options['domain'];
+        }
+        
         parent::setUsername($_identity);
         return $this;
     }
