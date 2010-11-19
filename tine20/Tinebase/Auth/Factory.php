@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id: Auth.php 390 2007-12-03 15:29:54Z nelius_weiss $
+ * @version     $Id$
  */
 
 /**
@@ -22,7 +22,7 @@ class Tinebase_Auth_Factory
      * factory function to return a selected authentication backend class
      *
      * @param   string $type
-     * @return  Zend_Auth_Adapter_Interface
+     * @return  Tinebase_Auth_Interface
      * @throws  Tinebase_Exception_InvalidArgument
      */
     static public function factory($_type)
@@ -41,6 +41,11 @@ class Tinebase_Auth_Factory
                     'password',
                     'MD5(?)'
                 );
+                break;
+                
+            case Tinebase_Auth::IMAP:
+                $options = array(Tinebase_Auth::getBackendConfiguration());
+                $instance = new Tinebase_Auth_Imap($options);
                 break;
                 
             default:
