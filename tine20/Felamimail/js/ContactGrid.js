@@ -95,7 +95,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     getViewRowClass: function(record, index) {
         var className = '';
         
-        if ((! record.get('email') || record.get('email') == '') && (! record.get('email_home') || record.get('email_home') == '')) {
+        if (! record.hasEmail()) {
             className = 'felamimail-no-email';
         }
         
@@ -111,6 +111,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             text: this.app.i18n._('Add as "To"'),
             disabled: true,
             iconCls: 'action_add',
+            actionUpdater: this.updateRecipientActions,
             handler: this.onAddContact.createDelegate(this, ['to']),
             allowMultiple: true,
             scope: this
@@ -121,6 +122,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             text: this.app.i18n._('Add as "Cc"'),
             disabled: true,
             iconCls: 'action_add',
+            actionUpdater: this.updateRecipientActions,
             handler: this.onAddContact.createDelegate(this, ['cc']),
             allowMultiple: true,
             scope: this
@@ -131,6 +133,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             text: this.app.i18n._('Add as "Bcc"'),
             disabled: true,
             iconCls: 'action_add',
+            actionUpdater: this.updateRecipientActions,
             handler: this.onAddContact.createDelegate(this, ['bcc']),
             allowMultiple: true,
             scope: this
@@ -142,6 +145,29 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             this.actions_addAsCc,
             this.actions_addAsBcc
         ]);
+    },
+    
+    /**
+     * updates context menu
+     * 
+     * @param {Ext.Action} action
+     * @param {Object} grants grants sum of grants
+     * @param {Object} records
+     */
+    updateRecipientActions: function(action, grants, records) {
+        if (records.length > 0) {
+            var emptyEmails = true;
+            for (var i=0; i < records.length; i++) {
+                if (records[i].hasEmail()) {
+                    emptyEmails = false;
+                    break;
+                }
+            }
+            
+            action.setDisabled(emptyEmails);
+        } else {
+            action.setDisabled(true);
+        }
     },
     
     /**
