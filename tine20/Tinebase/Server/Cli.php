@@ -43,7 +43,6 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
     /**
      * initializes the config
      * - overwrite session_save_path
-     *
      */
     public function _setupCliConfig()
     {
@@ -51,8 +50,7 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         if($configData === false) {
             die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
         }
-        //$configData['session.save_path'] = Tinebase_Core::getTempDir() . PATH_SEPARATOR . 'tine20_cli_session';
-        $configData['session.save_path'] = '/tmp';
+        $configData['sessiondir'] = Tinebase_Core::getTempDir();
         
         $config = new Zend_Config($configData);
         Tinebase_Core::set(Tinebase_Core::CONFIG, $config);  
