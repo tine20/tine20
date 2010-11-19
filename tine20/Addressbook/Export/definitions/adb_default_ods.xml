@@ -156,6 +156,18 @@
             <identifier>lat</identifier>
         </column>
         <column>
+            <identifier>created_by</identifier>
+        </column>
+        <column>
+            <identifier>creation_time</identifier>
+        </column>
+        <column>
+            <identifier>last_modified_by</identifier>
+        </column>
+        <column>
+            <identifier>last_modified_time</identifier>
+        </column>
+        <column>
             <identifier>tags</identifier>
             <type>tags</type>
         </column>
