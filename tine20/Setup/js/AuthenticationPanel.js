@@ -23,6 +23,7 @@ Ext.ns('Tine', 'Tine.Setup');
  * TODO         move to next step after install?
  * TODO         make default is valid mechanism with 'allowEmpty' work
  * TODO         add port for ldap hosts
+ * TODO         disable imap auth backend if setup is required
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -181,7 +182,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 allowEmpty: false,
                 triggerAction: 'all',
                 selectOnFocus:true,
-                store: [['Sql', 'Sql'], ['Ldap','Ldap']],
+                store: [['Sql', 'Sql'], ['Ldap','Ldap'], ['Imap', 'IMAP']],
                 name: 'authentication_backend',
                 fieldLabel: this.app.i18n._('Backend'),
                 value: 'Sql',
@@ -355,6 +356,78 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         name: 'authentication_Ldap_accountDomainNameShort',
                         fieldLabel: this.app.i18n._('Account domain short name')
                     }]
+                }, {
+                    id: this.authProviderIdPrefix + 'Imap',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
+                    items: [{
+                        name: 'authentication_Imap_host',
+                        fieldLabel: this.app.i18n._('Hostname')
+                    }, {
+                        name: 'authentication_Imap_port',
+                        fieldLabel: this.app.i18n._('Port'),
+                        xtype: 'numberfield'
+                    }, {
+                        fieldLabel: this.app.i18n._('Secure Connection'),
+                        name: 'authentication_Imap_ssl',
+                        typeAhead     : false,
+                        triggerAction : 'all',
+                        lazyRender    : true,
+                        editable      : false,
+                        mode          : 'local',
+                        value: 'none',
+                        xtype: 'combo',
+                        listWidth: 300,
+                        store: [
+                            ['none', this.app.i18n._('None')],
+                            ['tls',  this.app.i18n._('TLS')],
+                            ['ssl',  this.app.i18n._('SSL')]
+                        ]
+                    }
+//                    {
+//                        inputType: 'text',
+//                        xtype: 'combo',
+//                        width: 300,
+//                        listWidth: 300,
+//                        mode: 'local',
+//                        forceSelection: true,
+//                        allowEmpty: false,
+//                        triggerAction: 'all',
+//                        selectOnFocus:true,
+//                        store: [['1', 'Yes'], ['0','No']],
+//                        name: 'authentication_Sql_tryUsernameSplit',
+//                        fieldLabel: this.app.i18n._('Try to split username'),
+//                        value: '1'
+//                    }, {
+//                        inputType: 'text',
+//                        xtype: 'combo',
+//                        width: 300,
+//                        listWidth: 300,
+//                        mode: 'local',
+//                        forceSelection: true,
+//                        allowEmpty: false,
+//                        triggerAction: 'all',
+//                        selectOnFocus:true,
+//                        store: [['2', 'ACCTNAME_FORM_USERNAME'], ['3','ACCTNAME_FORM_BACKSLASH'], ['4','ACCTNAME_FORM_PRINCIPAL']],
+//                        name: 'authentication_Sql_accountCanonicalForm',
+//                        fieldLabel: this.app.i18n._('Account canonical form'),
+//                        value: '2'
+//                    }, {
+//                        name: 'authentication_Sql_accountDomainName',
+//                        fieldLabel: this.app.i18n._('Account domain name '),
+//                        inputType: 'text',
+//                        tabIndex: 7
+//                    }, {
+//                        name: 'authentication_Sql_accountDomainNameShort',
+//                        fieldLabel: this.app.i18n._('Account domain short name'),
+//                        inputType: 'text',
+//                        tabIndex: 8
+//                    } 
+                    ]
                 }]
             } ]
           }, {
