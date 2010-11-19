@@ -739,12 +739,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 break;
 
             case self::DEFAULTCONTAINER_OPTIONS:
-                // get all containers of current user and shared containers for app
-                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_application, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
-                $containers->merge(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_application, Tinebase_Model_Grants::GRANT_ADD));
-                foreach ($containers as $container) {
-                    $result[] = array($container->getId(), $container->name);
-                }
+                $result = $this->_getDefaultContainerOptions();
                 break;
                 
             default:
@@ -755,15 +750,36 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     }
     
     /**
+     * get all containers of current user and shared containers for app
+     * 
+     * @param string $_appName
+     * @return array
+     */
+    protected function _getDefaultContainerOptions($_appName = NULL)
+    {
+        $result = array();
+        $appName = ($_appName !== NULL) ? $_appName : $this->_application;
+        
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $appName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
+        $containers->merge(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $appName, Tinebase_Model_Grants::GRANT_ADD));
+        foreach ($containers as $container) {
+            $result[] = array($container->getId(), $container->name);
+        }
+        
+        return $result;
+    }
+    
+    /**
      * adds defaults to default container pref
      * 
      * @param Tinebase_Model_Preference $_preference
      * @param string|Tinebase_Model_User $_accountId
-     * @param string $_applicationName
+     * @param string $_appName
      */
-    protected function _getDefaultContainerPreferenceDefaults(Tinebase_Model_Preference $_preference, $_accountId, $_applicationName = NULL)
+    protected function _getDefaultContainerPreferenceDefaults(Tinebase_Model_Preference $_preference, $_accountId, $_appName = NULL, $_optionName = self::DEFAULTCONTAINER_OPTIONS)
     {
-        $appName = ($_applicationName !== NULL) ? $_applicationName : $this->_application;
+        $appName = ($_appName !== NULL) ? $_appName : $this->_application;
+        
         $accountId = ($_accountId) ? $_accountId : Tinebase_Core::getUser()->getId();
         $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $appName, $accountId, 0, true);
         
@@ -771,7 +787,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $_preference->personal_only = TRUE;
         $_preference->options = '<?xml version="1.0" encoding="UTF-8"?>
             <options>
-                <special>' . self::DEFAULTCONTAINER_OPTIONS . '</special>
+                <special>' . $_optionName . '</special>
             </options>';
     }
 }
