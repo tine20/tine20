@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -16,9 +16,8 @@
  * @package     Tinebase
  * @subpackage  Auth
  */
-interface Tinebase_Auth_Interface
+interface Tinebase_Auth_Interface extends Zend_Auth_Adapter_Interface
 {
-    
     /**
      * setIdentity() - set the value to be used as the identity
      *
