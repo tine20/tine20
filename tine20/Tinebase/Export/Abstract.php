@@ -220,8 +220,10 @@ abstract class Tinebase_Export_Abstract
         // get field types from config
         if ($this->_config->columns) {
             $types = array();
+            $identifiers = array();
             foreach ($this->_config->columns->column as $column) {
                 $types[] = $column->type;
+                $identifiers[] = $column->identifier;
             }
             $types = array_unique($types);
         } else {
@@ -230,7 +232,7 @@ abstract class Tinebase_Export_Abstract
         
         // resolve users
         foreach ($this->_userFields as $field) {
-            if (in_array($field, $types)) {
+            if (in_array($field, $types) || in_array($field, $identifiers)) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resolving users for ' . $field);
                 Tinebase_User::getInstance()->resolveMultipleUsers($_records, $field, TRUE);
             }

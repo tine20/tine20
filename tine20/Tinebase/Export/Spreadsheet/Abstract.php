@@ -113,13 +113,12 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                     if (isset($_record->customfields[$_field->identifier])) {
                         $result = $_record->customfields[$_field->identifier];
                     }
-                    
                 } elseif (isset($_field->divisor)) {
                     // divisor
                     $result = $_record->{$_field->identifier} / $_field->divisor;
-                } elseif (in_array($_field->type, $this->_userFields)) {
+                } elseif (in_array($_field->type, $this->_userFields) || in_array($_field->identifier, $this->_userFields)) {
                     // resolved user
-                    $result = (! empty($_record->{$_field->type})) ? $_record->{$_field->type}->{$_field->field} : '';
+                    $result = $this->_getUserValue($_record, $_field);
                 } else {
                     // all remaining
                     $result = $_record->{$_field->identifier};
@@ -140,6 +139,32 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 
                 // do replacements
                 $result = $this->_replaceAndMatchvalue($result, $_field);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get value from resolved user record
+     * 
+     * @param Tinebase_Record_Interface $_record
+     * @param Zend_Config $_fieldConfig
+     */
+    protected function _getUserValue($_record, $_fieldConfig)
+    {
+        $result = '';
+        if (in_array($_fieldConfig->type, $this->_userFields)) {
+            $user = $_record->{$_fieldConfig->type};
+        } else {
+            $user = $_record->{$_fieldConfig->identifier};
+        }
+        
+        if (! empty($user) && is_object($user)) {
+            if ($_fieldConfig->field) {
+                $result = $user->{$_fieldConfig->field};
+            } else {
+                $result = $user->accountDisplayName;
+            }
         }
         
         return $result;
