@@ -75,11 +75,11 @@ Ext.ux.Printer.GridPanelRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
    * The XTemplate used to create the headings row. By default this just uses <th> elements, override to provide your own
    */
   headerTpl:  new Ext.XTemplate(
-    '<tr>',
+    '<tr><thead>',
       '<tpl for=".">',
         '<th>{header}</th>',
       '</tpl>',
-    '</tr>'
+    '</thead></tr>'
   ),
  
    /**
