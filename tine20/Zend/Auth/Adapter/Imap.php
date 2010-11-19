@@ -196,6 +196,12 @@ class Zend_Auth_Adapter_Imap implements Zend_Auth_Adapter_Interface
             return new Zend_Auth_Result($code, '', $messages);
         }
         
+        if (isset($this->_options['domain']) && ! empty($this->_options['domain'])) {
+            $imapUsername = $username . '@' . $this->_options['domain'];
+        } else {
+            $imapUsername = $username;
+        }
+        
         if (!$password) {
             /* A password is required because some servers will
              * treat an empty password as an anonymous bind.
@@ -215,9 +221,9 @@ class Zend_Auth_Adapter_Imap implements Zend_Auth_Adapter_Interface
         $ssl  = isset($this->_options['ssl'])  ? $this->_options['ssl']  : false;
 
         $imap->connect($host, $port, $ssl);
-        if (! $imap->login($username, $password)) {
+        if (! $imap->login($imapUsername, $password)) {
             $code = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
-            $messages[0] = 'Invalid credentials.';
+            $messages[0] = 'Invalid credentials for user ' . $imapUsername;
         } else {
             $code = Zend_Auth_Result::SUCCESS;
             $messages[0] = 'Authentication successful.';
