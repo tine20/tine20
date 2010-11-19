@@ -5,14 +5,34 @@ Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
         var daysHtml = this.splitDays(view.ds, view.startDate, view.dateMesh.length),
             body = [];
         
+        // title
         body.push('<table><tr><th class="cal-print-title">', this.getTitle(view), '</th></tr></table>');
         
-        body.push(String.format('<table class="cal-print-monthview">{0}</table>', this.generateCalRows(daysHtml, 7, true)));
+        // day headers
+        var dayNames = [];
+        for(var i = 0; i < 7; i++){
+            var d = view.startDay+i;
+            if(d > 6){
+                d = d-7;
+            }
+            dayNames.push("<td class='cal-print-monthview-daycell'><span>", view.dayNames[d], "</span></td>");
+        }
+        
+        // body
+        body.push(String.format('<br/><table class="cal-print-monthview"><thead>{0}</thead>{1}</table>', dayNames.join("\n"), this.generateCalRows(daysHtml, 7, true)));
    
         return body.join("\n");
     },
     
     getTitle: function(view) {
         return view.dateMesh[10].format('F Y');
-    }
+    },
+    
+    dayHeadersTpl: new Ext.XTemplate(
+        '<tr>',
+            '<tpl for=".">',
+                '<th>\{{dataIndex}\}</th>',
+            '</tpl>',
+        '</tr>'
+    )
 });
