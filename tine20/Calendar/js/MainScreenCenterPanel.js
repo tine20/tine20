@@ -108,6 +108,14 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             scope: this
         });
         
+        this.actions_print = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Print Page'),
+            handler: this.onPrint,
+            iconCls:'action_print',
+            scope: this
+        });
+        
         this.showDayView = new Ext.Toolbar.Button({
             pressed: this.activeView === 'day',
             text: this.app.i18n._('Day'),
@@ -518,6 +526,17 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         	if (! this.action_deleteRecord.isDisabled()) {
                 this.onDeleteRecords.call(this);
             }
+        }
+    },
+    
+    onPrint: function() {
+        var panel = this.getCalendarPanel(this.activeView),
+            view = panel ? panel.getView() : null;
+            
+        if (view && Ext.isFunction(view.print)) {
+            view.print();
+        } else {
+            Ext.Msg.alert(this.app.i18n._('Could not Print'), this.app.i18n._('Sorry, your current view does not support printing.'));
         }
     },
     

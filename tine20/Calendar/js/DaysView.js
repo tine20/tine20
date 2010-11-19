@@ -1042,7 +1042,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
      * print wrapper
      */
     print: function() {
-        var renderer = new Tine.Calendar.DaysViewPrinter();
+        var renderer = new Tine.Calendar.Printer.DaysViewRenderer();
         renderer.print(this);
     },
     

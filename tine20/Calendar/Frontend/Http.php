@@ -49,6 +49,9 @@ class Calendar_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Calendar/js/RrulePanel.js',
             'Calendar/js/ResourcesGridPanel.js',
             'Calendar/js/ResourceEditDialog.js',
+            'Calendar/js/Printer/Base.js',
+            'Calendar/js/Printer/DaysView.js',
+            'Calendar/js/Printer/MonthView.js',
         );
     }
     
