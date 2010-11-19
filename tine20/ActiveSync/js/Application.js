@@ -33,7 +33,7 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
     },
     
     /**
-     * returns additional items for persitentn filter context menu
+     * returns additional items for persistent filter context menu
      * 
      * @todo rework this to be event/hook 
      * 
@@ -78,7 +78,7 @@ Tine.ActiveSync.Application = Ext.extend(Tine.Tinebase.Application, {
     },
     
     /**
-     * persitently set filter for device
+     * persistently set filter for device
      * 
      * @param {Ext.Action} btn
      * @param {Ext.EventObject} e
