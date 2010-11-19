@@ -73,36 +73,6 @@ class Tinebase_Auth_Ldap extends Zend_Auth_Adapter_Ldap implements Tinebase_Auth
         return $result;
     }
     
-    protected function _getAuthResult($_code)
-    {
-        switch($_code) {
-            case Zend_Auth_Result::SUCCESS:
-                return new Zend_Auth_Result(
-                    $_code, 
-                    $this->_identity, 
-                    array('Ldap.php Authentication successful.'));
-                break;
-            case Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID:
-                return new Zend_Auth_Result(
-                    $_code, 
-                    $this->_identity, 
-                    array('The supplied password is invalid.'));
-                break;
-            case Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS:
-                return new Zend_Auth_Result(
-                    $_code, 
-                    $this->_identity, 
-                    array('More than one account found.'));
-                break;
-            case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
-                return new Zend_Auth_Result(
-                    $_code, 
-                    $this->_identity, 
-                    array('No account' . $this->_identity . ' found.'));
-                break;
-        }
-    }
-    
     /**
      * set loginname
      *
