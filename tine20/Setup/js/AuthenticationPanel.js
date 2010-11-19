@@ -387,6 +387,9 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                             ['tls',  this.app.i18n._('TLS')],
                             ['ssl',  this.app.i18n._('SSL')]
                         ]
+                    }, {
+                        name: 'authentication_Imap_domain',
+                        fieldLabel: this.app.i18n._('Append domain to login name')
                     }
 //                    {
 //                        inputType: 'text',
