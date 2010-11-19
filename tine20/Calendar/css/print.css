@@ -77,3 +77,37 @@ table td {
 .cal-print-day-singleday th {
     display: none;
 }
+
+
+/* ------------ monthview ------------ */
+
+.cal-print-monthview .cal-print-daycell {
+    width: 13%;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.cal-print-monthview {
+	font-size: 10px;
+}
+
+.cal-print-monthview .cal-print-daysview-day-weekDay {
+    display: none;
+}
+
+.cal-print-monthview .cal-print-daysview-day-dayOfMonth {
+    font-size: 15px;
+}
+
+.cal-print-monthview .cal-print-daysview-day-color {
+    width: 5px;
+}
+
+.cal-print-monthview .cal-print-daysview-day-starttime {
+    width: 15px;
+}
+
+.cal-print-monthview .cal-print-daysview-day-untilseperator,
+.cal-print-monthview .cal-print-daysview-day-endtime {
+	display: none;
+}

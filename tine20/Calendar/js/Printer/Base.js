@@ -40,11 +40,11 @@ Tine.Calendar.Printer.BaseRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
             //offset = row*numCols;
             
             for (col=0; col<numCols; col++) {
-                idx = col*numRows + row;
+                idx = alignHorizontal ? row*numCols + col: col*numRows + row;
                 cellsHtml += String.format('<td class="cal-print-daycell" style="vertical-align: top;">{0}</td>', days[idx] || '');
             }
             
-            rowsHtml += String.format('<tr class="cal-print-dayrow" style="height: {1}mm">{0}</tr>', cellsHtml, 200/numRows);
+            rowsHtml += String.format('<tr class="cal-print-dayrow" style="height: {1}mm">{0}</tr>', cellsHtml, this.paperHeight/numRows);
         }
         
         return rowsHtml;

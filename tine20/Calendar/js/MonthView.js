@@ -473,7 +473,7 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         
         // save some layout info
         event.ui.is_all_day_event = event.get('is_all_day_event') || startCellNumber != endCellNumber;
-        event.ui.colorSet = Tine.Calendar.colorMgr.getColor(event);
+        event.ui.colorSet = event.colorSet = Tine.Calendar.colorMgr.getColor(event);
         event.ui.color = event.ui.colorSet.color;
         event.ui.bgColor = event.ui.colorSet.light;
         
@@ -794,6 +794,14 @@ Ext.extend(Tine.Calendar.MonthView, Ext.util.Observable, {
         event.commit(true);
         this.setActiveEvent(this.getActiveEvent());
         this.layoutDayCells();
+    },
+    
+    /**
+     * print wrapper
+     */
+    print: function() {
+        var renderer = new Tine.Calendar.Printer.MonthViewRenderer();
+        renderer.print(this);
     },
     
     /**

@@ -1,4 +1,5 @@
 Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRenderer, {
+    paperHeight: 200, 
     generateBody: function(view) {
         var daysHtml = this.splitDays(view.ds, view.startDate, view.numOfDays),
             body = [];
@@ -42,7 +43,7 @@ Tine.Calendar.Printer.DaysViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseRe
     },
   
     generateIsoWeek: function(daysHtml) {
-        var height = 200/4;
+        var height = this.paperHeight/4;
         return ['<table>',
             '<tr style="height: ' + height + 'mm;">',
                 '<td class="cal-print-daycell" width="50%">', daysHtml[0], '</td>',
