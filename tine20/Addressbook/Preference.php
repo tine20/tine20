@@ -84,19 +84,17 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
      * get preference defaults if no default is found in the database
      *
      * @param string $_preferenceName
+     * @param string|Tinebase_Model_User $_accountId
+     * @param string $_accountType
      * @return Tinebase_Model_Preference
      */
-    public function getApplicationPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    public function getApplicationPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
         switch($_preferenceName) {
             case self::DEFAULTADDRESSBOOK:
-                $accountId          = $_accountId ? $_accountId : Tinebase_Core::getUser()->getId();
-                $addressbooks       = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Addressbook', $accountId, 0, true);
-                $preference->value  = $addressbooks->getFirstRecord()->getId();
-                $preference->personal_only = TRUE;
-                
+                $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
                 break;
             case self::DEFAULTPERSISTENTFILTER:
                 $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Addressbook', $_accountId, self::DEFAULTPERSISTENTFILTER_NAME);

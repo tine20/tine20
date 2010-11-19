@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -17,8 +17,6 @@
  */
 class Calendar_Preference extends Tinebase_Preference_Abstract
 {
-    /**************************** application preferences/settings *****************/
-
     /**
      * where daysview should be scrolled to
      */
@@ -55,8 +53,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      */
     protected $_application = 'Calendar';    
         
-    /**************************** public functions *********************************/
-    
     /**
      * get all possible application prefs
      *
@@ -114,9 +110,11 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
      * get preference defaults if no default is found in the database
      *
      * @param string $_preferenceName
+     * @param string|Tinebase_Model_User $_accountId
+     * @param string $_accountType
      * @return Tinebase_Model_Preference
      */
-    public function getApplicationPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    public function getApplicationPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
@@ -146,10 +144,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 $preference->options = $doc->saveXML();
                 break;
             case self::DEFAULTCALENDAR:
-                $accountId = $_accountId ? $_accountId : Tinebase_Core::getUser()->getId();
-                $calendars          = Tinebase_Container::getInstance()->getPersonalContainer($accountId, 'Calendar', $accountId, 0, true);
-                $preference->value  = $calendars->getFirstRecord()->getId();
-                $preference->personal_only = TRUE;
+                $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
                 break;
             case self::DEFAULTPERSISTENTFILTER:
                 $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Calendar', $_accountId, "All my events");
