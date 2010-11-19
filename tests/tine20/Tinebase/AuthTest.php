@@ -75,6 +75,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         Tinebase_Auth::deleteBackendConfiguration();
         Tinebase_Auth::setBackendConfiguration($this->_originalBackendConfiguration);
         Tinebase_Auth::saveBackendConfiguration();
+        Tinebase_Auth::getInstance()->setBackend();
     }
 
     /**
@@ -163,12 +164,17 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         // use imap config for the auth config
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         $authConfig = array(
-            'host' => $imapConfig['host'],
-            'port' => $imapConfig['port'],
-            'ssl'  => $imapConfig['ssl'],
+            'host'      => $imapConfig['host'],
+            'port'      => $imapConfig['port'],
+            'ssl'       => $imapConfig['ssl'],
+            'domain'    => $imapConfig['domain'],
         );
         Tinebase_Auth::setBackendType(Tinebase_Auth::IMAP);   
         Tinebase_Auth::setBackendConfiguration($authConfig);
+        Tinebase_Auth::saveBackendConfiguration();
+        Tinebase_Auth::getInstance()->setBackend();
+        
+        $this->assertEquals(Tinebase_Auth::IMAP, Tinebase_Auth::getConfiguredBackend());
 
         $testConfig = Zend_Registry::get('testConfig');
         
@@ -180,6 +186,6 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         $authResult = Tinebase_Auth::getInstance()->authenticate($testConfig->username, 'some pw');
         $this->assertFalse($authResult->isValid());
         $this->assertEquals(Tinebase_Auth::FAILURE_CREDENTIAL_INVALID, $authResult->getCode());
-        $this->assertEquals(array('Supplied credential is invalid.'), $authResult->getMessages());
+        $this->assertEquals(array('Invalid credentials.', ''), $authResult->getMessages());
     }
 }
