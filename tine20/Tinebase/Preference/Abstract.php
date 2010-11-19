@@ -31,6 +31,13 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     const YES_NO_OPTIONS = 'yesnoopt';
 
+    /**
+     * default container options
+     *
+     * @staticvar string
+     */
+    const DEFAULTCONTAINER_OPTIONS = 'defaulcontaineropt';
+    
     /**************************** backend settings *********************************/
 
     /**
@@ -720,7 +727,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
 
         switch ($_value) {
 
-            case Tinebase_Preference_Abstract::YES_NO_OPTIONS:
+            case self::YES_NO_OPTIONS:
                 $locale = Tinebase_Core::get(Tinebase_Core::LOCALE);
                 $question = Zend_Locale::getTranslationList('Question', $locale);
 
@@ -731,6 +738,15 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 $result[] = array(1, $yes);
                 break;
 
+            case self::DEFAULTCONTAINER_OPTIONS:
+                // get all containers of current user and shared containers for app
+                $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_application, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
+                $containers->merge(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_application, Tinebase_Model_Grants::GRANT_ADD));
+                foreach ($containers as $container) {
+                    $result[] = array($container->getId(), $container->name);
+                }
+                break;
+                
             default:
                 throw new Tinebase_Exception_NotFound('Special option not found.');
         }
@@ -752,6 +768,10 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $appName, $accountId, 0, true);
         
         $_preference->value  = $containers->getFirstRecord()->getId();
-        $_preference->personal_only = TRUE;        
+        $_preference->personal_only = TRUE;
+        $_preference->options = '<?xml version="1.0" encoding="UTF-8"?>
+            <options>
+                <special>' . self::DEFAULTCONTAINER_OPTIONS . '</special>
+            </options>';
     }
 }

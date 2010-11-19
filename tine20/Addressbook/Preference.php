@@ -117,15 +117,6 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
     {
         $result = array();
         switch($_value) {
-            case self::DEFAULTADDRESSBOOK:
-                // get all user accounts
-                $addressbooks = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
-                $addressbooks->merge(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_ADD));
-                
-                foreach ($addressbooks as $addressbook) {
-                    $result[] = array($addressbook->getId(), $addressbook->name);
-                }
-                break;
             case self::DEFAULTPERSISTENTFILTER:
                 $result = Tinebase_PersistentFilter::getPreferenceValues('Addressbook');
                 break;

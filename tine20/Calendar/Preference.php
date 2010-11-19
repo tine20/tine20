@@ -202,14 +202,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     {
         $result = array();
         switch($_value) {
-            case self::DEFAULTCALENDAR:
-                // get all containers of current user
-                $calendars = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), 'Calendar', Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_ADD);
-                
-                foreach ($calendars as $calendar) {
-                    $result[] = array($calendar->getId(), $calendar->name);
-                }
-                break;
             case self::DEFAULTPERSISTENTFILTER:
                 $result = Tinebase_PersistentFilter::getPreferenceValues('Calendar');
                 break;
