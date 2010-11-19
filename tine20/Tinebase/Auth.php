@@ -126,9 +126,10 @@ class Tinebase_Auth
             'accountDomainNameShort' => '',
          ),
          self::IMAP => array(
-            'host' => '',
-            'port' => 143,
-            'ssl'  => 'tls'
+            'host'      => '',
+            'port'      => 143,
+            'ssl'       => 'tls',
+            'domain'    => '',
          ),
      );
     
@@ -145,9 +146,7 @@ class Tinebase_Auth
      * don't use the constructor. use the singleton 
      */
     private function __construct() {
-        $backendType = self::getConfiguredBackend();
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $backendType);
-        $this->_backend = Tinebase_Auth_Factory::factory($backendType);
+        $this->setBackend();
     }
     
     /**
@@ -231,6 +230,16 @@ class Tinebase_Auth
         }
         
         return self::$_backendType;
+    }
+    
+    /**
+     * set the auth backend
+     */
+    public function setBackend()
+    {
+        $backendType = self::getConfiguredBackend();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' authentication backend: ' . $backendType);
+        $this->_backend = Tinebase_Auth_Factory::factory($backendType);        
     }
     
     /**
