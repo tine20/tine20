@@ -110,7 +110,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
            'username' => 'cn=testcn,ou=teestou,o=testo',
            'password' => 'secret'
         );
-        Tinebase_Auth::setBackendConfiguration($testValues, null);
+        Tinebase_Auth::setBackendConfiguration($testValues);
         foreach ($testValues as $key => $testValue) {
             $this->assertEquals($testValue, Tinebase_Auth::getBackendConfiguration($key));
         }
@@ -154,4 +154,32 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(array_key_exists('host', $defaults));
         $this->assertFalse(array_key_exists(Tinebase_Auth::LDAP, $defaults));
     }
-}       
+    
+    /**
+     * test imap authentication
+     */
+    public function testImapAuth()
+    {
+        // use imap config for the auth config
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $authConfig = array(
+            'host' => $imapConfig['host'],
+            'port' => $imapConfig['port'],
+            'ssl'  => $imapConfig['ssl'],
+        );
+        Tinebase_Auth::setBackendType(Tinebase_Auth::IMAP);   
+        Tinebase_Auth::setBackendConfiguration($authConfig);
+
+        $testConfig = Zend_Registry::get('testConfig');
+        
+        // valid authentication
+        $authResult = Tinebase_Auth::getInstance()->authenticate($testConfig->username, $testConfig->password);
+        $this->assertTrue($authResult->isValid());        
+        
+        // invalid authentication
+        $authResult = Tinebase_Auth::getInstance()->authenticate($testConfig->username, 'some pw');
+        $this->assertFalse($authResult->isValid());
+        $this->assertEquals(Tinebase_Auth::FAILURE_CREDENTIAL_INVALID, $authResult->getCode());
+        $this->assertEquals(array('Supplied credential is invalid.'), $authResult->getMessages());
+    }
+}
