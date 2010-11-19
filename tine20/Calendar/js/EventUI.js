@@ -189,6 +189,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         this.event.view = view;
         
         this.colorSet = Tine.Calendar.colorMgr.getColor(this.event);
+        this.event.colorSet = this.colorSet;
         
         this.dtStart = this.event.get('dtstart');
         this.startColNum = view.getColumnNumber(this.dtStart);
