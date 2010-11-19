@@ -124,8 +124,13 @@ class Tinebase_Auth
             'accountCanonicalForm' => '2',
             'accountDomainName' => '',
             'accountDomainNameShort' => '',
-         )
-    );
+         ),
+         self::IMAP => array(
+            'host' => '',
+            'port' => 143,
+            'ssl'  => 'tls'
+         ),
+     );
     
     /**
      * the instance of the authenticationbackend
