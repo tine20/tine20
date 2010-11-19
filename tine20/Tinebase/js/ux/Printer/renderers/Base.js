@@ -38,7 +38,7 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
       '<html>',
         '<head>',
           '<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />',
-          '<link href="' + this.stylesheetPath + '" rel="stylesheet" type="text/css" media="screen,print" />',
+          '<link href="' + this.stylesheetPath + '?' + new Date().getTime() + '" rel="stylesheet" type="text/css" media="screen,print" />',
           '<title>' + this.getTitle(component) + '</title>',
         '</head>',
         '<body>',
