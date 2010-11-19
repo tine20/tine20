@@ -417,6 +417,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }
         
         // scrollTo initial position
+        this.isScrolling = true;
         try {
             var startTimeString = this.app.getRegistry().get('preferences').get('daysviewstarttime');
             var startTime = Date.parseDate(startTimeString, 'H:i');
@@ -1037,6 +1038,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.layout();
     },
     
+    /**
+     * print wrapper
+     */
+    print: function() {
+        var renderer = new Tine.Calendar.DaysViewPrinter();
+        renderer.print(this);
+    },
+    
     hex2dec: function(hex) {
         var dec = 0;
         hex = hex.toString();
@@ -1199,7 +1208,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.innerHd.style.width = (vw + 2)+'px';
         
         // force positioning on scroll hints
-        this.onScroll();
+        this.onScroll.defer(100, this);
     },
     
     layoutWholeDayHeader: function() {
