@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-13 09:15+0100\n"
+"PO-Revision-Date: 2010-11-20 15:52+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -17,13 +17,13 @@ msgstr ""
 #: js/GridDetailsPanel.js:137
 #: js/GridPanel.js:289
 #: js/GridPanel.js:402
-#: js/MessageEditDialog.js:716
-#: js/sieve/RuleConditionsPanel.js:76
+#: js/MessageEditDialog.js:718
+#: js/sieve/RuleConditionsPanel.js:77
 msgid "Subject"
 msgstr "Temat"
 
 #: Controller/Message.php:638
-#: js/MessageEditDialog.js:676
+#: js/MessageEditDialog.js:678
 msgid "Body"
 msgstr "wiadomość"
 
@@ -44,8 +44,8 @@ msgid "Create new email accounts"
 msgstr "tworzenie nowych kont pocztowych"
 
 #: js/GridDetailsPanel.js:138
-#: js/MessageEditDialog.js:702
-#: js/sieve/RuleConditionsPanel.js:74
+#: js/MessageEditDialog.js:704
+#: js/sieve/RuleConditionsPanel.js:75
 msgid "From"
 msgstr "Od"
 
@@ -142,7 +142,7 @@ msgstr "Od (nazwa)"
 
 #: js/GridPanel.js:292
 #: js/GridPanel.js:427
-#: js/sieve/RuleConditionsPanel.js:75
+#: js/sieve/RuleConditionsPanel.js:76
 msgid "To"
 msgstr "Do"
 
@@ -177,7 +177,7 @@ msgid "Sent"
 msgstr "Wysłane"
 
 #: js/GridPanel.js:449
-#: js/sieve/RuleConditionsPanel.js:77
+#: js/sieve/RuleConditionsPanel.js:78
 msgid "Size"
 msgstr "Rozmiar"
 
@@ -205,21 +205,21 @@ msgstr "Anuluj"
 msgid "Folder Selection"
 msgstr "Wybór katalogu"
 
-#: js/RecipientPickerDialog.js:64
+#: js/RecipientPickerDialog.js:68
 msgid "(new message)"
 msgstr "(nowa wiadomość)"
 
-#: js/RecipientPickerDialog.js:65
+#: js/RecipientPickerDialog.js:69
 msgid "Select recipients for \"{0}\""
 msgstr "Zaznacz adresatów dla \"{0}\""
 
-#: js/RecipientPickerDialog.js:86
+#: js/RecipientPickerDialog.js:92
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: js/RecipientPickerDialog.js:95
-msgid "Recipients"
-msgstr "Adresaci"
+#: js/RecipientPickerDialog.js:107
+msgid "Recipients (drag and drop contacts here to add)"
+msgstr "Adresaci (aby ich dodać, przeciągnij i upuść kontakty)"
 
 #: js/MessageEditDialog.js:119
 msgid "Send"
@@ -289,7 +289,7 @@ msgid "Please fix the errors noted."
 msgstr "Proszę poprawić zgłoszone błędy."
 
 #: js/MessageEditDialog.js:528
-#: js/MessageEditDialog.js:726
+#: js/MessageEditDialog.js:728
 msgid "Compose email:"
 msgstr "Nowa wiadomość:"
 
@@ -389,26 +389,26 @@ msgstr "Oznacz katalog jako przeczytany"
 msgid "Update Folder List"
 msgstr "Aktualizuj listę katalogów"
 
-#: js/RecipientGrid.js:164
+#: js/RecipientGrid.js:179
 msgid "Click here to set To/CC/BCC."
 msgstr "Kliknij tutaj, aby ustawić Do/DW/UDW."
 
-#: js/RecipientGrid.js:168
-#: js/RecipientGrid.js:189
+#: js/RecipientGrid.js:183
+#: js/RecipientGrid.js:204
 msgid "To:"
 msgstr "Do:"
 
-#: js/RecipientGrid.js:171
-#: js/RecipientGrid.js:190
+#: js/RecipientGrid.js:186
+#: js/RecipientGrid.js:205
 msgid "Cc:"
 msgstr "DW:"
 
-#: js/RecipientGrid.js:174
-#: js/RecipientGrid.js:191
+#: js/RecipientGrid.js:189
+#: js/RecipientGrid.js:206
 msgid "Bcc:"
 msgstr "UDW:"
 
-#: js/RecipientGrid.js:211
+#: js/RecipientGrid.js:226
 msgid "Remove"
 msgstr "Usuń"
 
@@ -572,9 +572,17 @@ msgstr "Czysty tekst"
 msgid "Depending on content type (experimental)"
 msgstr "Odpowiednio do typu treści (eksperymentalnie)"
 
-#: js/ContactGrid.js:105
+#: js/ContactGrid.js:111
 msgid "Add as \"To\""
 msgstr "Dodaj jako \"Do\""
+
+#: js/ContactGrid.js:122
+msgid "Add as \"Cc\""
+msgstr "Dodaj jako \"DW\""
+
+#: js/ContactGrid.js:133
+msgid "Add as \"Bcc\""
+msgstr "Dodaj jako \"UDW\""
 
 #: js/Felamimail.js:69
 msgid "Email"
@@ -752,13 +760,17 @@ msgstr "Warunki"
 msgid "Action"
 msgstr "Działanie"
 
-#: js/sieve/RulesGridPanel.js:304
+#: js/sieve/RulesGridPanel.js:307
 msgid "is greater than"
 msgstr "większy od"
 
-#: js/sieve/RulesGridPanel.js:304
+#: js/sieve/RulesGridPanel.js:307
 msgid "is less than"
 msgstr "mniejszy od"
+
+#: js/sieve/RulesGridPanel.js:318
+msgid "Header \"{0}\" contains \"{1}\""
+msgstr "Nagłówek \"{0}\" zawiera \"{1}\""
 
 #: js/sieve/RulesDialog.js:80
 msgid "Sieve Filter Rules for {0}"
@@ -798,35 +810,43 @@ msgstr "Zaawansowane"
 msgid "Only send all X days to the same sender"
 msgstr "Wysyłaj zawsze co X dni do tego samego nadawcy"
 
+#: js/sieve/RuleConditionsPanel.js:79
+msgid "Header contains"
+msgstr "Nagłówek zawiera"
+
+#: js/sieve/RuleConditionsPanel.js:79
+msgid "Header name"
+msgstr "Nazwa nagłówka"
+
 #: js/sieve/RuleEditDialog.js:98
 msgid "Edit Filter Rule"
 msgstr "Edytuj reguły filtrowania"
 
-#: js/sieve/RuleEditDialog.js:235
+#: js/sieve/RuleEditDialog.js:244
 msgid "If all of the following conditions are met:"
 msgstr "Jeśli wszystkie z następujących warunków są spełnione:"
 
-#: js/sieve/RuleEditDialog.js:252
+#: js/sieve/RuleEditDialog.js:261
 msgid "Do this action:"
 msgstr "Wykonaj działanie:"
 
-#: js/sieve/RuleEditDialog.js:341
+#: js/sieve/RuleEditDialog.js:350
 msgid "Move mail to folder"
 msgstr "Przenieś wiadomość do katalogu"
 
-#: js/sieve/RuleEditDialog.js:342
+#: js/sieve/RuleEditDialog.js:351
 msgid "Redirect mail to address"
 msgstr "Przekieruj wiadomość na adres"
 
-#: js/sieve/RuleEditDialog.js:343
+#: js/sieve/RuleEditDialog.js:352
 msgid "Reject mail with this text"
 msgstr "Zablokuj wiadomość zawierającą tę treść"
 
-#: js/sieve/RuleEditDialog.js:344
+#: js/sieve/RuleEditDialog.js:353
 msgid "Discard mail"
 msgstr "Usuń wiadomość"
 
-#: js/sieve/RuleEditDialog.js:345
+#: js/sieve/RuleEditDialog.js:354
 msgid "Keep mail"
 msgstr "Zachowaj wiadomość"
 
@@ -869,6 +889,9 @@ msgstr "Potwierdź usunięcie"
 #: Preference.php:114
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Zanim usuniesz pocztę, wyświetl okno dialogowe z potwierdzeniem"
+
+#~ msgid "Recipients"
+#~ msgstr "Adresaci"
 
 #~ msgid "Depending on content type"
 #~ msgstr "W zależności od treści"
