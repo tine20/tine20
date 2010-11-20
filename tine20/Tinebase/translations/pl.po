@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-10 19:20+0100\n"
+"PO-Revision-Date: 2010-11-20 15:59+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -77,7 +77,7 @@ msgstr "Utworzono poprzez"
 msgid "Activities"
 msgstr "Aktywności"
 
-#: Preference/Abstract.php:453
+#: Preference/Abstract.php:460
 msgid "default"
 msgstr "domyślny"
 
@@ -213,12 +213,12 @@ msgid "about {0} minutes"
 msgstr "około {0} minut"
 
 #: js/LoginPanel.js:197
-#: js/LoginPanel.js:351
+#: js/LoginPanel.js:412
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 liczy na Twoją pomoc"
 
 #: js/LoginPanel.js:199
-#: js/LoginPanel.js:353
+#: js/LoginPanel.js:414
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "Aby następne wydania Tine 2.0 coraz lepiej spełniały Twoje oczekiwania, nieprzerwanie potrzebujemy odzewu na nasz produkt. Współpracując, pomóż nam i sobie."
 
@@ -234,11 +234,31 @@ msgstr "Języki"
 msgid "Duration"
 msgstr "Czas wypełniania ankiety"
 
-#: js/LoginPanel.js:278
+#: js/LoginPanel.js:268
+msgid "Browser incompatible"
+msgstr "Nieobsługiwana przeglądarka WWW"
+
+#: js/LoginPanel.js:270
+msgid "Your browser is not supported by Tine 2.0."
+msgstr "Tine 2.0 nie obsługuje przeglądarki WWW, której używasz."
+
+#: js/LoginPanel.js:275
+msgid "Browser incompatible?"
+msgstr "Nieobsługiwana przeglądarka WWW?"
+
+#: js/LoginPanel.js:277
+msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
+msgstr "Używasz nieobsługiwanej przeglądarki WWW. Może się ona zachować w niespodziewany sposób."
+
+#: js/LoginPanel.js:283
+msgid "You might try one of these browsers:"
+msgstr "Spróbuj skorzystać z następujących przeglądarek WWW:"
+
+#: js/LoginPanel.js:341
 msgid "Logging you in..."
 msgstr "Trwa logowanie …"
 
-#: js/LoginPanel.js:278
+#: js/LoginPanel.js:341
 #: js/widgets/container/GrantsDialog.js:169
 #: js/widgets/tree/ContextMenu.js:43
 #: js/widgets/tree/ContextMenu.js:87
@@ -248,33 +268,34 @@ msgstr "Trwa logowanie …"
 msgid "Please wait"
 msgstr "Proszę czekać"
 
-#: js/LoginPanel.js:290
+#: js/LoginPanel.js:353
 msgid "Login successful. Loading {0}..."
 msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
 
-#: js/LoginPanel.js:290
+#: js/LoginPanel.js:353
 #: js/MainMenu.js:242
 msgid "Please wait!"
 msgstr "Proszę czekać!"
 
-#: js/LoginPanel.js:295
+#: js/LoginPanel.js:358
 msgid "Login failure"
 msgstr "Błąd logowania"
 
-#: js/LoginPanel.js:296
+#: js/LoginPanel.js:359
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Twój login oraz / lub hasło są nieprawidłowe!!!"
 
-#: js/LoginPanel.js:307
+#: js/LoginPanel.js:370
 #: js/widgets/dialog/ExportDialog.js:131
 #: js/widgets/dialog/CredentialsDialog.js:109
-#: js/widgets/dialog/PreferencesDialog.js:273
+#: js/widgets/dialog/PreferencesDialog.js:246
+#: js/widgets/dialog/PreferencesDialog.js:275
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/EditDialog.js:441
 msgid "Errors"
 msgstr "Błędy"
 
-#: js/LoginPanel.js:307
+#: js/LoginPanel.js:370
 #: js/widgets/dialog/ExportDialog.js:131
 #: js/widgets/dialog/CredentialsDialog.js:109
 #: js/widgets/dialog/ImportDialog.js:194
@@ -282,7 +303,7 @@ msgstr "Błędy"
 msgid "Please fix the errors noted."
 msgstr "Proszę poprawić wskazane błędy."
 
-#: js/LoginPanel.js:322
+#: js/LoginPanel.js:385
 msgid "Please enter your login data"
 msgstr "Proszę wprowadzić dane logowania"
 
@@ -524,7 +545,7 @@ msgid "Creating {0}..."
 msgstr "Tworzenie {0}..."
 
 #: js/widgets/tree/ContextMenu.js:85
-#: js/widgets/grid/GridPanel.js:1035
+#: js/widgets/grid/GridPanel.js:1052
 #: js/widgets/dialog/EditDialog.js:449
 #: js/widgets/persistentfilter/PickerPanel.js:200
 #: js/MainMenu.js:228
@@ -577,7 +598,7 @@ msgid "Reload {0}"
 msgstr "Przeładuj {0}"
 
 #: js/widgets/grid/FilterToolbar.js:74
-#: js/widgets/grid/FilterToolbar.js:436
+#: js/widgets/grid/FilterToolbar.js:438
 msgid "Show"
 msgstr "Wyświetl"
 
@@ -629,69 +650,73 @@ msgstr "Edytuj {0}"
 msgid "Copy {0}"
 msgstr "Kopiuj {0}"
 
-#: js/widgets/grid/GridPanel.js:384
-#: js/widgets/grid/GridPanel.js:385
-#: js/widgets/grid/GridPanel.js:387
+#: js/widgets/grid/GridPanel.js:357
+msgid "Print Page"
+msgstr "Drukuj stronę"
+
+#: js/widgets/grid/GridPanel.js:396
+#: js/widgets/grid/GridPanel.js:397
+#: js/widgets/grid/GridPanel.js:399
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Usuń {0}"
 msgstr[1] "Usuń {0}"
 msgstr[2] "Usuń {0}"
 
-#: js/widgets/grid/GridPanel.js:462
+#: js/widgets/grid/GridPanel.js:474
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Wyświetlane wiersze {0} - {1} z {2}"
 
-#: js/widgets/grid/GridPanel.js:463
+#: js/widgets/grid/GridPanel.js:475
 msgid "No {0} to display"
 msgstr "{0} niezdefiniowane"
 
-#: js/widgets/grid/GridPanel.js:671
+#: js/widgets/grid/GridPanel.js:688
 msgid "Tagging"
 msgstr "Przypisywanie znaczników"
 
-#: js/widgets/grid/GridPanel.js:706
+#: js/widgets/grid/GridPanel.js:723
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/widgets/grid/GridPanel.js:707
+#: js/widgets/grid/GridPanel.js:724
 #: js/widgets/ActivitiesPanel.js:465
 msgid "Created By"
 msgstr "Utworzona przez"
 
-#: js/widgets/grid/GridPanel.js:708
+#: js/widgets/grid/GridPanel.js:725
 msgid "Last Modified Time"
 msgstr "Data ostatniej zmiany"
 
-#: js/widgets/grid/GridPanel.js:709
+#: js/widgets/grid/GridPanel.js:726
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
-#: js/widgets/grid/GridPanel.js:1015
+#: js/widgets/grid/GridPanel.js:1032
 msgid "Not Allowed"
 msgstr "Brak uprawnień"
 
-#: js/widgets/grid/GridPanel.js:1016
+#: js/widgets/grid/GridPanel.js:1033
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nie masz uprawnień, aby usunąć wszystkie strony na raz"
 
-#: js/widgets/grid/GridPanel.js:1034
+#: js/widgets/grid/GridPanel.js:1051
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
 msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 
-#: js/widgets/grid/GridPanel.js:1055
+#: js/widgets/grid/GridPanel.js:1072
 #: js/widgets/dialog/EditDialog.js:451
 msgid "Deleting {0}"
 msgstr "Usuwanie {0}"
 
-#: js/widgets/grid/GridPanel.js:1057
+#: js/widgets/grid/GridPanel.js:1074
 msgid " ... This may take a long time!"
 msgstr "... To może długo potrwać!"
 
-#: js/widgets/grid/GridPanel.js:1074
+#: js/widgets/grid/GridPanel.js:1091
 #: js/widgets/dialog/EditDialog.js:461
 #: js/widgets/tags/TagsPanel.js:292
 #: js/widgets/tags/TagsPanel.js:402
@@ -699,7 +724,7 @@ msgstr "... To może długo potrwać!"
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/widgets/grid/GridPanel.js:1074
+#: js/widgets/grid/GridPanel.js:1091
 #: js/widgets/dialog/EditDialog.js:461
 msgid "Could not delete {0}."
 msgstr "Usunięcie {0} było niemożliwe."
@@ -771,100 +796,100 @@ msgstr "kończy się na"
 msgid "select a operator"
 msgstr "wybierz operator"
 
-#: js/widgets/grid/FilterModel.js:319
+#: js/widgets/grid/FilterModel.js:324
 msgid "Search Account ..."
 msgstr "Znajdź konto ..."
 
-#: js/widgets/grid/FilterModel.js:441
+#: js/widgets/grid/FilterModel.js:446
 msgid "today"
 msgstr "dzisiaj"
 
-#: js/widgets/grid/FilterModel.js:442
+#: js/widgets/grid/FilterModel.js:447
 msgid "yesterday"
 msgstr "wczoraj"
 
-#: js/widgets/grid/FilterModel.js:443
+#: js/widgets/grid/FilterModel.js:448
 msgid "this week"
 msgstr "bieżący tydzień"
 
-#: js/widgets/grid/FilterModel.js:444
+#: js/widgets/grid/FilterModel.js:449
 msgid "last week"
 msgstr "ubiegły tydzień"
 
-#: js/widgets/grid/FilterModel.js:445
+#: js/widgets/grid/FilterModel.js:450
 msgid "the week before last"
 msgstr "przedostatni tydzień"
 
-#: js/widgets/grid/FilterModel.js:446
+#: js/widgets/grid/FilterModel.js:451
 msgid "this month"
 msgstr "bieżący miesiąc"
 
-#: js/widgets/grid/FilterModel.js:447
+#: js/widgets/grid/FilterModel.js:452
 msgid "last month"
 msgstr "ubiegły miesiąc"
 
-#: js/widgets/grid/FilterModel.js:448
+#: js/widgets/grid/FilterModel.js:453
 msgid "this quarter"
 msgstr "bieżący kwartał"
 
-#: js/widgets/grid/FilterModel.js:449
+#: js/widgets/grid/FilterModel.js:454
 msgid "last quarter"
 msgstr "ubiegły kwartał"
 
-#: js/widgets/grid/FilterModel.js:450
+#: js/widgets/grid/FilterModel.js:455
 msgid "this year"
 msgstr "bieżący rok"
 
-#: js/widgets/grid/FilterModel.js:451
+#: js/widgets/grid/FilterModel.js:456
 msgid "last year"
 msgstr "ubiegły rok"
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:460
 msgid "tomorrow"
 msgstr "jutro"
 
-#: js/widgets/grid/FilterModel.js:456
+#: js/widgets/grid/FilterModel.js:461
 msgid "next week"
 msgstr "przyszły tydzień"
 
-#: js/widgets/grid/FilterModel.js:457
+#: js/widgets/grid/FilterModel.js:462
 msgid "next month"
 msgstr "przyszły miesiąc"
 
-#: js/widgets/grid/FilterModel.js:458
+#: js/widgets/grid/FilterModel.js:463
 msgid "next quarter"
 msgstr "przyszły kwartał"
 
-#: js/widgets/grid/FilterModel.js:459
+#: js/widgets/grid/FilterModel.js:464
 msgid "next year"
 msgstr "przyszły rok"
 
-#: js/widgets/grid/FileUploadGrid.js:88
+#: js/widgets/grid/FileUploadGrid.js:104
 #: js/ux/form/ImageField.js:159
 msgid "Upload Failed"
 msgstr "Wysyłanie zakończone niepowodzeniem"
 
-#: js/widgets/grid/FileUploadGrid.js:89
+#: js/widgets/grid/FileUploadGrid.js:105
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Przesłanie pliku było niemożliwe. Możliwe, że rozmiar pliku jest za duży. Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku:"
 
-#: js/widgets/grid/FileUploadGrid.js:115
+#: js/widgets/grid/FileUploadGrid.js:131
 msgid "Remove file"
 msgstr "Usuń plik"
 
-#: js/widgets/grid/FileUploadGrid.js:147
+#: js/widgets/grid/FileUploadGrid.js:167
 msgid "Add file"
 msgstr "Dodaj plik"
 
-#: js/widgets/grid/FileUploadGrid.js:186
+#: js/widgets/grid/FileUploadGrid.js:206
 msgid "name"
 msgstr "nazwa"
 
-#: js/widgets/grid/FileUploadGrid.js:201
+#: js/widgets/grid/FileUploadGrid.js:221
 msgid "size"
 msgstr "rozmiar"
 
-#: js/widgets/grid/FileUploadGrid.js:208
+#: js/widgets/grid/FileUploadGrid.js:228
 msgid "type"
 msgstr "typ"
 
@@ -1035,16 +1060,21 @@ msgstr "Edytuj ustawienia"
 msgid "Loading ..."
 msgstr "Ładowanie ..."
 
-#: js/widgets/dialog/PreferencesDialog.js:273
+#: js/widgets/dialog/PreferencesDialog.js:246
+#: js/widgets/form/ConfigPanel.js:108
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr "Przed zapisaniem konfiguracji należy poprawić wskazane pola"
+
+#: js/widgets/dialog/PreferencesDialog.js:275
 msgid "Saving of preferences failed."
 msgstr "Zapisywanie ustawień zakończone niepowodzeniem."
 
-#: js/widgets/dialog/PreferencesPanel.js:38
+#: js/widgets/dialog/PreferencesPanel.js:37
 #: js/MainMenu.js:133
 msgid "Preferences"
 msgstr "Ustawienia"
 
-#: js/widgets/dialog/PreferencesPanel.js:151
+#: js/widgets/dialog/PreferencesPanel.js:155
 msgid "There are no preferences for this application."
 msgstr "Brak ustawień dla tej aplikacji."
 
@@ -1400,10 +1430,6 @@ msgstr "Proszę rozważyć aktualizację!"
 msgid "Invalid configuration"
 msgstr "Nieprawidłowa konfiguracja"
 
-#: js/widgets/form/ConfigPanel.js:108
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr "Przed zapisaniem konfiguracji należy poprawić wskazane pola"
-
 #: js/widgets/form/ConfigPanel.js:133
 msgid "Transferring Configuration..."
 msgstr "Konfiguracja przesyłania..."
@@ -1585,7 +1611,7 @@ msgid "There are no applications enabled for you. Please contact your administra
 msgstr "Nie masz włączonych aplikacji. Proszę się skontaktować ze swoim administratorem."
 
 #: js/ExceptionDialog.js:51
-#: Frontend/Http.php:585
+#: Frontend/Http.php:589
 msgid "Abnormal End"
 msgstr "Zakończenie awaryjne"
 
@@ -1594,7 +1620,7 @@ msgid "Send Report"
 msgstr "Wyślij raport"
 
 #: js/ExceptionDialog.js:76
-#: Frontend/Http.php:586
+#: Frontend/Http.php:590
 msgid "An error occurred, the program ended abnormal."
 msgstr "Wystąpił błąd. Praca programu została zakończona awaryjnie."
 
@@ -1691,12 +1717,12 @@ msgstr "To pole jest częścią profilu do edycji"
 msgid "Field Name"
 msgstr "Nazwa pola"
 
-#: js/tineInit.js:570
+#: js/tineInit.js:575
 msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 msgstr "Błąd krytyczny. Aktualizacja danych klienta nie powiodła się. Proszę się skontaktować ze swoim administratorem i / lub zrestartować / przeładować przeglądarkę."
 
 #: js/ExceptionHandler.js:127
-#: Frontend/Http.php:558
+#: Frontend/Http.php:562
 msgid "Authorisation Required"
 msgstr "Konieczne uwierzytelnienie"
 
@@ -1825,43 +1851,43 @@ msgstr "Tine 2.0 wymaga aktualizacji albo jeszcze nie jest zainstalowana."
 msgid "Please wait or contact your administrator"
 msgstr "Proszę poczekać albo skontaktować się ze swoim administratorem"
 
-#: Setup/setup.xml:2780
+#: Setup/setup.xml:2767
 msgid "note"
 msgstr "zwykłą"
 
-#: Setup/setup.xml:2785
+#: Setup/setup.xml:2772
 msgid "default note type"
 msgstr "domyślny typ: notatka"
 
-#: Setup/setup.xml:2811
+#: Setup/setup.xml:2798
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:2816
+#: Setup/setup.xml:2803
 msgid "telephone call"
 msgstr "telefon"
 
-#: Setup/setup.xml:2842
+#: Setup/setup.xml:2829
 msgid "email"
 msgstr "e-mail"
 
-#: Setup/setup.xml:2847
+#: Setup/setup.xml:2834
 msgid "email contact"
 msgstr "kontakt e-mail"
 
-#: Setup/setup.xml:2873
+#: Setup/setup.xml:2860
 msgid "created"
 msgstr "utworzony"
 
-#: Setup/setup.xml:2878
+#: Setup/setup.xml:2865
 msgid "record created"
 msgstr "wiersz utworzony"
 
-#: Setup/setup.xml:2904
+#: Setup/setup.xml:2891
 msgid "changed"
 msgstr "zmieniony"
 
-#: Setup/setup.xml:2909
+#: Setup/setup.xml:2896
 msgid "record changed"
 msgstr "wiersz zmieniony"
 
@@ -1897,7 +1923,7 @@ msgstr "Potwierdź wylogowanie"
 msgid "Show confirmation dialog on logout."
 msgstr "Wyświetl okno dialogowe potwierdzające chęć wylogowania."
 
-#: Frontend/Http.php:559
+#: Frontend/Http.php:563
 msgid "Your session is not valid. You need to login again."
 msgstr "Twoja sesja wygasła. Musisz się ponownie zalogować."
 
