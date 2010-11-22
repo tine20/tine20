@@ -91,7 +91,7 @@ Ext.namespace('Tine.Felamimail');
         }
         
         if (! record.bodyIsFetched()) {
-            if (this.grid.getSelectionModel().getCount() == 1) {
+            if (! this.grid || this.grid.getSelectionModel().getCount() == 1) {
                 this.refetchBody(record, this.updateDetails.createDelegate(this, [record, body]), 'updateDetails');
                 this.defaultTpl.overwrite(body, {msg: ''});
                 this.getLoadMask().show();
@@ -192,6 +192,12 @@ Ext.namespace('Tine.Felamimail');
                         var width = this.panel.body.getWidth()-25,
                             height = this.panel.body.getHeight()-90,
                             id = Ext.id();
+                            
+                        if (height < 0) {
+                        	// sometimes the height is negative, fix this here
+                            height = 500;
+                        }
+                            
                         body = '<textarea ' +
                             'style="width: ' + width + 'px; height: ' + height + 'px; " ' +
                             'autocomplete="off" id="' + id + '" name="body" class="x-form-textarea x-form-field x-ux-display-background-border" readonly="" >' +
