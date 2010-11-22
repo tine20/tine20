@@ -571,12 +571,11 @@ class Tinebase_Core
             'hash_function'     => 1
         )));
         
-        //if(isset($_SERVER['REQUEST_URI'])) self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' uri:' . $_SERVER['REQUEST_URI'] . ' basename: ' . basename($_SERVER['REQUEST_URI']));
-//        if (isset($_SERVER['REQUEST_URI'])) {
-//            Zend_Session::setOptions(array(
-//                'cookie_path'     => basename($_SERVER['REQUEST_URI'])
-//            ));
-//        }
+        if (isset($_SERVER['REQUEST_URI'])) {
+            Zend_Session::setOptions(array(
+                'cookie_path'     => dirname($_SERVER['REQUEST_URI'])
+            ));
+        }
         
         if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
             Zend_Session::setOptions(array(
