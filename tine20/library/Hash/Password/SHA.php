@@ -20,7 +20,7 @@
  * 
  * @package    Hash
  */
-class Hash_SHA
+class Hash_Password_SHA
 {
     /**
      * generate SHA hash

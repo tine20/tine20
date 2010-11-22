@@ -20,7 +20,7 @@
  * 
  * @package    Hash
  */
-class Hash_Crypt
+class Hash_Password_Crypt
 {
     const CRYPT          = '{CRYPT}';
     const CRYPT_MD5      = '{CRYPT-MD5}';

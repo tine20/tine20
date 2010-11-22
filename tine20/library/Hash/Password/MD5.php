@@ -20,7 +20,7 @@
  * 
  * @package    Hash
  */
-class Hash_MD5
+class Hash_Password_MD5
 {
     /**
      * generate SSHA hash
