@@ -23,7 +23,6 @@ Ext.ns('Tine', 'Tine.Setup');
  * TODO         move to next step after install?
  * TODO         make default is valid mechanism with 'allowEmpty' work
  * TODO         add port for ldap hosts
- * TODO         disable imap auth backend if setup is required
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -214,7 +213,40 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 }
             });
         
-        return [ {
+        return [{
+            xtype:'fieldset',
+            collapsible: true,
+            collapsed: !setupRequired,
+            autoHeight: true,
+            title: this.app.i18n._('Initial Admin User'),
+            items: [{
+                layout: 'form',
+                autoHeight: 'auto',
+                border: false,
+                defaults: {
+                    width: 300,
+                    xtype: 'textfield',
+                    inputType: 'password'
+                },
+                items: [{
+                    inputType: 'text',
+                    name: 'authentication_Sql_adminLoginName',
+                    fieldLabel: this.app.i18n._('Initial admin login name'),
+                    disabled: !setupRequired,
+                    tabIndex: 2
+                }, {
+                    name: 'authentication_Sql_adminPassword',
+                    fieldLabel: this.app.i18n._('Initial admin Password'),
+                    disabled: !setupRequired,
+                    tabIndex: 3
+                }, {
+                    name: 'authentication_Sql_adminPasswordConfirmation',
+                    fieldLabel: this.app.i18n._('Password confirmation'),
+                    disabled: !setupRequired,
+                    tabIndex: 4
+                }]
+            }]
+        }, {
             xtype:'fieldset',
             collapsible: false,
             autoHeight:true,
@@ -229,35 +261,16 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                 defaults: {
                     border: false
                 },
-                items: [ {
+                items: [{
                     id: this.authProviderIdPrefix + 'Sql',
                     layout: 'form',
                     autoHeight: 'auto',
                     defaults: {
                         width: 300,
-                        xtype: 'textfield',
-                        inputType: 'password'
+                        xtype: 'textfield'
                     },
-                    items: [ {
-                        inputType: 'text',
-                        name: 'authentication_Sql_adminLoginName',
-                        fieldLabel: this.app.i18n._('Initial admin login name'),
-                        disabled: !setupRequired,
-                        tabIndex: 2
-                    }, {
-                        name: 'authentication_Sql_adminPassword',
-                        fieldLabel: this.app.i18n._('Initial admin Password'),
-                        disabled: !setupRequired,
-                        tabIndex: 3
-                    }, {
-                        name: 'authentication_Sql_adminPasswordConfirmation',
-                        fieldLabel: this.app.i18n._('Password confirmation'),
-                        disabled: !setupRequired,
-                        tabIndex: 4
-                    }, {
-                        inputType: 'text',
+                    items: [{
                         xtype: 'combo',
-                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
@@ -269,9 +282,7 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                         fieldLabel: this.app.i18n._('Try to split username'),
                         value: '1'
                     }, {
-                        inputType: 'text',
                         xtype: 'combo',
-                        width: 300,
                         listWidth: 300,
                         mode: 'local',
                         forceSelection: true,
@@ -285,12 +296,10 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
                     }, {
                         name: 'authentication_Sql_accountDomainName',
                         fieldLabel: this.app.i18n._('Account domain name '),
-                        inputType: 'text',
                         tabIndex: 7
                     }, {
                         name: 'authentication_Sql_accountDomainNameShort',
                         fieldLabel: this.app.i18n._('Account domain short name'),
-                        inputType: 'text',
                         tabIndex: 8
                     } ]
                 }, {
@@ -696,7 +705,10 @@ Tine.Setup.AuthenticationPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPan
         }
         
         // check if initial username/passwords are set
-        if(Tine.Setup.registry.get('setupRequired') && this.authenticationBackendCombo.getValue() == 'Sql' && form.findField('authentication_Sql_adminLoginName')) {
+        if (
+            Tine.Setup.registry.get('setupRequired') 
+            && form.findField('authentication_Sql_adminLoginName')
+        ) {
             if (form.findField('authentication_Sql_adminLoginName').getValue() == '') {
                 form.markInvalid([{
                     id: 'authentication_Sql_adminLoginName',
