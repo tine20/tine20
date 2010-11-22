@@ -508,7 +508,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $eventInOrganizerTZ->setTimezone($_event->originator_tz);
         
         // some clients skip the monthday e.g. for yearly rrules
-        Tinebase_Core::getLogger()->ERR($_rrule->bymonthday);
         if (! $_rrule->bymonthday) {
             $_rrule->bymonthday = $eventInOrganizerTZ->dtstart->format('j');
         }
