@@ -30,7 +30,9 @@ Ext.apply(console, {
         WARN:     4,  // Warning: warning conditions
         NOTICE:   5,  // Notice: normal but significant condition
         INFO:     6,  // Informational: informational messages
-        DEBUG:    7   // Debug: debug messages
+        DEBUG:    7,   // Debug: debug messages
+        TRACE:    8   // Debug: debug messages
+        
     },
     
     // only console writer atm.
@@ -42,7 +44,8 @@ Ext.apply(console, {
         WARN:     console.warn,
         NOTICE:   console.info,
         INFO:     console.info,
-        DEBUG:    console.log
+        DEBUG:    console.log,
+        TRACE:    console.log
     },
     
     /**

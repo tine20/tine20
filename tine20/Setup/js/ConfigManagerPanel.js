@@ -137,7 +137,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 allowEmpty: false,
                 triggerAction: 'all',
                 selectOnFocus:true,
-                store: [[0, 'Emergency'], [1,'Alert'], [2, 'Critical'], [3, 'Error'], [4, 'Warning'], [5, 'Notice'], [6, 'Informational'], [7, 'Debug']],
+                store: [[0, 'Emergency'], [1,'Alert'], [2, 'Critical'], [3, 'Error'], [4, 'Warning'], [5, 'Notice'], [6, 'Informational'], [7, 'Debug'], [8, 'Trace']],
                 name: 'logger_priority',
                 fieldLabel: this.app.i18n._('Priority'),
                 tabIndex: 10
