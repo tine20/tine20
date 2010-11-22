@@ -944,8 +944,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * print handler
+     * 
+     * @param {Tine.Felamimail.GridDetailsPanel} details panel [optional]
      */
-    onPrint: function() {
+    onPrint: function(detailsPanel) {
         if (!Ext.get('felamimailPrintHelperIframe')) {
             Ext.getBody().createChild({
                 id: 'felamimailPrintHelper',
@@ -957,7 +959,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }]
             });
         }
-        var content = this.getDetailsPanelContentForPrinting();
+        var content = this.getDetailsPanelContentForPrinting(detailsPanel || this.detailsPanel);
         Ext.get('felamimailPrintHelperIframe').dom.contentWindow.document.documentElement.innerHTML = content;
         Ext.get('felamimailPrintHelperIframe').dom.contentWindow.print();
     },
@@ -965,12 +967,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * get detail panel content
      * 
+     * @param {Tine.Felamimail.GridDetailsPanel} details panel
      * @return {String}
      */
-    getDetailsPanelContentForPrinting: function() {
+    getDetailsPanelContentForPrinting: function(detailsPanel) {
         // TODO somehow we have two <div class="preview-panel-felamimail"> -> we need to fix that and get the first element found
-        var detailsPanels = this.detailsPanel.getEl().query('.preview-panel-felamimail');
-        var detailsPanelContent = detailsPanels[1].innerHTML;
+        var detailsPanels = detailsPanel.getEl().query('.preview-panel-felamimail');
+        var detailsPanelContent = (detailsPanels.length > 1) ? detailsPanels[1].innerHTML : detailsPanels[0].innerHTML;
         
         var buffer = '<html><head>';
         buffer += '<title>' + this.app.i18n._('Print Preview') + '</title>';
@@ -983,9 +986,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * print preview handler
+     * 
+     * @param {Tine.Felamimail.GridDetailsPanel} details panel [optional]
      */
-    onPrintPreview: function() {
-        var content = this.getDetailsPanelContentForPrinting();
+    onPrintPreview: function(detailsPanel) {
+        var content = this.getDetailsPanelContentForPrinting(detailsPanel || this.detailsPanel);
         
         var win = window.open('about:blank',this.app.i18n._('Print Preview'),'width=500,height=500,scrollbars=yes,toolbar=yes,status=yes,menubar=yes');
         win.document.open()

@@ -72,13 +72,13 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         
         this.action_print = new Ext.Action({
             text: this.app.i18n._('Print Message'),
-            handler: this.onMessagePrint.createDelegate(this),
+            handler: this.onMessagePrint.createDelegate(this.app.getMainScreen().getCenterPanel(), [this]),
             iconCls:'action_print',
             menu:{
                 items:[
                     new Ext.Action({
                         text: this.app.i18n._('Print Preview'),
-                        handler: this.onMessagePrintPreview.createDelegate(this),
+                        handler: this.onMessagePrintPreview.createDelegate(this.app.getMainScreen().getCenterPanel(), [this]),
                         iconCls:'action_printPreview'
                     })
                 ]
