@@ -511,6 +511,11 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $eventInOrganizerTZ = clone $_event;
         $eventInOrganizerTZ->setTimezone($_event->originator_tz);
         
+        // some clients skip the monthday
+        if ($_rrule->bymonthday) {
+            $_rrule->bymonthday = $eventInOrganizerTZ->dtstart->format('j');
+        }
+        
         // NOTE: non existing dates will be discarded (e.g. 31. Feb.)
         //       for correct computations we deal with virtual dates, represented as arrays
         $computationStartDateArray = self::date2array($eventInOrganizerTZ->dtstart);
