@@ -171,7 +171,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      * @return void
      * 
      * @todo add must change pwd info to normal tine user accounts
-     * @todo add Admin_Event_ChangePassword?
      */
     public function setAccountPassword(Tinebase_Model_FullUser $_account, $_password, $_passwordRepeat, $_mustChange = null)
     {
@@ -187,14 +186,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             __METHOD__ . '::' . __LINE__ . 
             ' Set new password for user ' . $_account->accountLoginName . '. Must change:' . $_mustChange
         );
-        
-        // fire change password event
-        /*
-        $event = new Admin_Event_ChangePassword();
-        $event->userId = $_account->getId();
-        $event->password = $_password;
-        Tinebase_Event::fireEvent($event);
-        */
     }
     
     /**
