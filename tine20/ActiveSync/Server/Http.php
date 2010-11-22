@@ -7,7 +7,7 @@
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -18,7 +18,7 @@
  * @package     ActiveSync
  * @subpackage  Server
  */
-class ActiveSync_Server_Http extends Tinebase_Server_Abstract 
+class ActiveSync_Server_Http implements Tinebase_Server_Interface
 {
     /**
      * handler for ActiveSync requests
@@ -28,7 +28,7 @@ class ActiveSync_Server_Http extends Tinebase_Server_Abstract
     public function handle()
     {
         try {
-            $this->_initFramework();
+            Tinebase_Core::initFramework();
         } catch (Zend_Session_Exception $exception) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' invalid session. Delete session cookie.');
             Zend_Session::expireSessionCookie();
