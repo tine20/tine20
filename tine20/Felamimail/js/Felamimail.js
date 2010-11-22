@@ -339,7 +339,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     showCredentialsDialog: function(account, username) {
         Tine.Felamimail.credentialsDialog = Tine.widgets.dialog.CredentialsDialog.openWindow({
-            title: String.format(this.i18n._('IMAP Credentials for {0}'), account.get('name')),
+            windowTitle: String.format(this.i18n._('IMAP Credentials for {0}'), account.get('name')),
             appName: 'Felamimail',
             credentialsId: account.id,
             i18nRecordName: this.i18n._('Credentials'),

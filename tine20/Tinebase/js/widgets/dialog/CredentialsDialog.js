@@ -70,6 +70,26 @@ Tine.widgets.dialog.CredentialsDialog = Ext.extend(Tine.widgets.dialog.EditDialo
     },
     
     /**
+     * executed after record got updated from proxy
+     * 
+     * @private
+     */
+    onRecordLoad: function() {
+        // interrupt process flow till dialog is rendered
+        if (! this.rendered) {
+            this.onRecordLoad.defer(250, this);
+            return;
+        }
+        
+        var title = this.windowTitle || this.app.i18n._('Please enter your credentials');
+        this.window.setTitle(title);
+        
+        this.getForm().loadRecord(this.record);
+        
+        this.loadMask.hide();
+    },
+    
+    /**
      * generic apply changes handler
      */
     onApplyChanges: function(button, event, closeWindow) {
