@@ -113,6 +113,11 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         }
     }
     
+    /**
+     * return request params
+     * 
+     * @return array
+     */
     protected function _getRequestParameters()
     {
         $result['protocolVersion']  = $_SERVER['HTTP_MS_ASPROTOCOLVERSION'];
@@ -123,6 +128,12 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         return $result;
     }
 
+    /**
+     * decode request params
+     * 
+     * @param array $_requestParameters
+     * @return array
+     */
     public function decodeRequestParameters($_requestParameters)
     {
         $request = base64_decode($_requestParameters);
@@ -145,6 +156,11 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         return $result;
     }
     
+    /**
+     * decode command
+     * 
+     * @param string $_code
+     */
     protected function _decodeCommandCode($_code)
     {
         $codes = array(
@@ -175,6 +191,12 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         return $codes[$_code];
     }
     
+    /**
+     * read integer from stream
+     * 
+     * @param handle $stream
+     * @return integer
+     */
     protected function _readInteger($stream)
     {
         $byte = fread($stream, 1);
@@ -184,6 +206,12 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         return $unpacked['integer'];
     }
     
+    /**
+     * read short from stream
+     * 
+     * @param handle $stream
+     * @return short
+     */
     protected function _readShort($stream)
     {
         $bytes = fread($stream, 2);
@@ -193,6 +221,12 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         return $unpacked['short'];
     }
     
+    /**
+     * read string from stream
+     * 
+     * @param handle $stream
+     * @return string
+     */
     protected function _readString($stream)
     {
         $length = $this->_readInteger($stream);
