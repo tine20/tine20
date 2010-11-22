@@ -381,9 +381,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 break;
                 
             case self::FREQ_YEARLY:
-                //$computitionEvent = clone $_event;
-                //$computitionEvent->dtstart->setMonth($rrule->bymonth);
-                
                 $yearlyrrule = clone $rrule;
                 $yearlyrrule->freq = self::FREQ_MONTHLY;
                 $yearlyrrule->interval = 12;
@@ -391,7 +388,6 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 if ($rrule->byday) {
                     self::_computeRecurMonthlyByDay($_event, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                 } else {
-                    $yearlyrrule->bymonthday = $yearlyrrule->bymonthday ? $yearlyrrule->bymonthday : $_event->dtstart->get('j');
                     self::_computeRecurMonthlyByMonthDay($_event, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
                 }
 
@@ -511,8 +507,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $eventInOrganizerTZ = clone $_event;
         $eventInOrganizerTZ->setTimezone($_event->originator_tz);
         
-        // some clients skip the monthday
-        if ($_rrule->bymonthday) {
+        // some clients skip the monthday e.g. for yearly rrules
+        Tinebase_Core::getLogger()->ERR($_rrule->bymonthday);
+        if (! $_rrule->bymonthday) {
             $_rrule->bymonthday = $eventInOrganizerTZ->dtstart->format('j');
         }
         
