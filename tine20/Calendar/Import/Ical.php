@@ -75,27 +75,23 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
      */
     public function import($_resource = NULL)
     {
-        //@TODO check reqired configs
         if (! $this->_config['importContainerId']) {
             throw new Tinebase_Exception_InvalidArgument('you need to define a importContainerId');
         }
+        
+        $result = array(
+            'results'           => null,
+            'totalcount'        => 0,
+            'failcount'         => 0,
+            'duplicatecount'    => 0,
+        );
         
         $icalData = stream_get_contents($_resource);
         
         $parser = new qCal_Parser();
         $ical = $parser->parse($icalData);
         
-        $this->_import($ical);
-    }
-    
-    /**
-     * imports given qCal_Component_Vcalendar into configured calendar
-     * 
-     * @param qCal_Component_Vcalendar $_ical
-     */
-    protected function _import(qCal_Component_Vcalendar $_ical)
-    {
-        $events = $this->_getEvents($_ical);
+        $events = $result['results'] = $this->_getEvents($ical);
 //        print_r($events->toArray());
         
         // set container
@@ -111,20 +107,28 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         )), NULL);
         
         // insert one by one in a single transaction
-        $tid = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         $existingEvents->addIndices(array('uid'));
         foreach($events as $event) {
             $existingEvent = $existingEvents->find('uid', $event->uid);
-            if (! $existingEvent) {
-                $cc->create($event, FALSE);
-            } else if ($this->_config['forceUpdateExisting'] || ($this->_config['updateExisting'] && $event->seq > $existingEvent->seq)) {
-                $event->id = $existingEvent->getId();
-                $event->last_modified_time = clone $existingEvent->last_modified_time;
-                $cc->update($event, FALSE);
+            try {
+                if (! $existingEvent) {
+                    $cc->create($event, FALSE);
+                    $result['totalcount'] += 1;
+                } else if ($this->_config['forceUpdateExisting'] || ($this->_config['updateExisting'] && $event->seq > $existingEvent->seq)) {
+                    $event->id = $existingEvent->getId();
+                    $event->last_modified_time = clone $existingEvent->last_modified_time;
+                    $cc->update($event, FALSE);
+                    $result['totalcount'] += 1;
+                } else {
+                    $result['duplicatecount'] += 1;
+                }
+            } catch (Exception $e) {
+                $result['failcount'] += 1;
             }
         }
-        Tinebase_TransactionManager::getInstance()->commitTransaction($tid);
         $cc->sendNotifications($existingEvents);
+        
+        return $result;
     }
     
     /**
