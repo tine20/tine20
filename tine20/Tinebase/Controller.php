@@ -75,22 +75,45 @@ class Tinebase_Controller
             'result'        => $authResult->getCode(),
             'clienttype'    => $_clientIdString,   
         ), TRUE);
-        
-        if ($authResult->isValid()) {
+
+        // does the user exist in the user database?
+        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
             $accountName = $authResult->getIdentity();
             
             $accountsController = Tinebase_User::getInstance();
             $groupsController   = Tinebase_Group::getInstance();
+            
             try {
                 if ($accountsController instanceof Tinebase_User_Interface_SyncAble) {
                     Tinebase_User::syncUser($accountName);
                 }
-                $account = $accountsController->getFullUserByLoginName($accountName);
+                $user = $accountsController->getFullUserByLoginName($accountName);
             } catch (Tinebase_Exception_NotFound $e) {
                 Zend_Session::destroy();
-                throw new Tinebase_Exception_NotFound('Account ' . $accountName . ' not found in account storage.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 'Account ' . $accountName . ' not found in account storage.');
+                $accessLog->result = Tinebase_Auth::FAILURE_IDENTITY_NOT_FOUND;
             }
-            
+        }
+        
+        // is the user enabled?
+        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
+            if($user->accountStatus !== 'enabled') {
+                // account is expired
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $accountName . ' is not enabled');
+                $accessLog->result = Tinebase_Auth::FAILURE_DISABLED;
+            }
+        }
+                
+        // is the password expired?
+        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
+            if(($user->accountExpires instanceof Tinebase_DateTime) && Tinebase_DateTime::now()->isLater($user->accountExpires)) {
+                // account is expired
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $accountName . ' password is expired');
+                $accessLog->result = Tinebase_Auth::FAILURE_PASSWORD_EXPIRED;
+            }
+        }
+        
+        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
             if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
                 Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
@@ -99,8 +122,8 @@ class Tinebase_Controller
             }
             Zend_Session::regenerateId();
             
-            Tinebase_Core::set(Tinebase_Core::USER, $account);
-            Tinebase_Core::getSession()->currentAccount = $account;
+            Tinebase_Core::set(Tinebase_Core::USER, $user);
+            Tinebase_Core::getSession()->currentAccount = $user;
             
             $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($accountName, $_password);
             Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
@@ -111,25 +134,31 @@ class Tinebase_Controller
                 Tinebase_Core::setupUserLocale($userPrefLocaleString);
             }
             
-            $account->setLoginTime($_ipAddress);
+            $user->setLoginTime($_ipAddress);
             
             $accessLog->sessionid = session_id();
             $accessLog->login_name = $accountName;
-            $accessLog->account_id = $account->getId();
+            $accessLog->account_id = $user->getId();
             
             $result = true;
             
         } else {
+            if ($accessLog->result == Tinebase_Auth::FAILURE_CREDENTIAL_INVALID) {
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Invalid password provided for: ' . $_loginname);
+            }
+            
             $accessLog->login_name = $_loginname;
             $accessLog->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
             
             Zend_Session::destroy();
             
-            sleep(2);
+            sleep(mt_rand(2,5));
+            
             $result = false;
         }
         
         Tinebase_AccessLog::getInstance()->create($accessLog);
+        
         return $result;
     }
     
