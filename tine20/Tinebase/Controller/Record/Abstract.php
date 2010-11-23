@@ -345,7 +345,7 @@ abstract class Tinebase_Controller_Record_Abstract
             }
             
             if ($this->sendNotifications()) {
-                $this->sendNotifications($record, $this->_currentAccount, 'created');  
+                $this->doSendNotifications($record, $this->_currentAccount, 'created');  
             }
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -448,7 +448,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
             // send notifications
             if ($this->_sendNotifications && $record->has('created_by') && count($currentMods) > 0) {
-                $this->sendNotifications($record, $this->_currentAccount, 'changed', $currentRecord);
+                $this->doSendNotifications($record, $this->_currentAccount, 'changed', $currentRecord);
             }        
             
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
@@ -540,7 +540,7 @@ abstract class Tinebase_Controller_Record_Abstract
             // send notifications
             if ($this->sendNotifications()) {
                 foreach ($records as $record) {
-                    $this->sendNotifications($record, $this->_currentAccount, 'deleted');
+                    $this->doSendNotifications($record, $this->_currentAccount, 'deleted');
                 }
             }
             
