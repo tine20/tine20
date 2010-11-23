@@ -372,7 +372,6 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
 Tine.Calendar.MonthViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     onSelectedChange: function(state){
         Tine.Calendar.MonthViewEventUI.superclass.onSelectedChange.call(this, state);
-        console.log(this);
         if(state){
             this.addClass('cal-monthview-active');
             this.setStyle({
