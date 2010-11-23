@@ -3,39 +3,60 @@
  * Tine 2.0
  * 
  * @package     Addressbook
+ * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- *
+ */
 
 /**
  * csv import class for the addressbook
  * 
  * @package     Addressbook
  * @subpackage  Import
- * 
  */
 class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
 {    
     /**
-     * the constructor
-     *
-     * @param Tinebase_Model_ImportExportDefinition $_definition
-     * @param mixed $_controller
-     * @param array $_options additional options
+     * creates a new importer from an importexport definition
+     * 
+     * @param  Tinebase_Model_ImportExportDefinition $_definition
+     * @param  array                                 $_config
+     * @return Calendar_Import_Ical
+     * 
+     * @todo move this to abstract when we no longer need to be php 5.2 compatible
      */
-    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL, $_options = array())
+    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array())
     {
-        parent::__construct($_definition, $_controller, $_options);
+        $config = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, $_config);
+        $configArray = $config->toArray();
+        if (! $configArray['model']) {
+            $configArray['model'] = $_definition->model;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating importer with following config: ' . print_r($configArray, TRUE));
+        return new Addressbook_Import_Csv($configArray);
+    }
+
+    /**
+     * init stuff
+     * - do not set geodata
+     * - set default container id
+     * 
+     * (non-PHPdoc)
+     * @see tine20/Tinebase/Import/Csv/Tinebase_Import_Csv_Abstract::_init()
+     */
+    protected function _init()
+    {
+        parent::_init();
         
         // don't set geodata for imported contacts as this is too much traffic for the nominatim server
-        Addressbook_Controller_Contact::getInstance()->setGeoDataForContacts(FALSE);
+        $this->_controller->setGeoDataForContacts(FALSE);
         
         // get container id from default container if not set
-        if (! isset($this->_options['container_id'])) {
-            $defaultContainer = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+        if (empty($this->_options['container_id'])) {
+            $defaultContainer = $this->_controller->getDefaultAddressbook();
             $this->_options['container_id'] = $defaultContainer->getId();
         }
     }
@@ -95,5 +116,5 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
         }
         
         return $result;
-    }    
+    }
 }

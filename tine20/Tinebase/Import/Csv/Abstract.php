@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
@@ -35,56 +35,32 @@
  * <fixed>fixed</fixed>:                the field has a fixed value ('fixed' in this example)
  * 
  */
-abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
+abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
 {
     /**
      * @var array
      */
-    protected $_options;
-    
-    /**
-     * @var int max line length
-     */
-    protected $_maxLineLength = 8000;
-    
-    /**
-     * @var char delimiter
-     */
-    protected $_delimiter = ',';
-    
-    /**
-     * special delimiter
-     *
-     * @var array
-     */
-    protected $_specialDelimiter = array(
-        'TAB'   => "\t"
+    protected $_config = array(
+        'maxLineLength'     => 8000,
+        'delimiter'         => ',',
+        'specialDelimiter'  => array(
+            'TAB'   => "\t"
+        ),
+        'enclosure'         => '"',
+        'escape'            => '\\',
+        'encoding'          => 'UTF-8',
+        'encodingTo'        => 'UTF-8',
+        'dryrun'            => FALSE,
+        'dryrunCount'       => 20,
+        'duplicateCount'    => 0,
+        'createMethod'      => 'create',
+        'model'             => '',
+        'mapping'           => '',
+        'container_id'      => '',
+        'duplicates'        => 0,
+        'headline'          => 0,
+        'use_headline'      => 0,
     );
-    
-    /**
-     * @var char enclosure
-     */
-    protected $_enclosure = '"';
-    
-    /**
-     * @var char escape
-     */
-    protected $_escape = '\\';
-
-    /**
-     * @var default input encoding
-     */
-    protected $_encoding = 'UTF-8';
-    
-    /**
-     * @var int dryrun record count
-     */
-    protected $_dryrunCount = 20;
-    
-    /**
-     * @var int duplicate record count
-     */
-    protected $_duplicateCount = 0;
     
     /**
      * the record controller
@@ -94,68 +70,31 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     protected $_controller = NULL;
     
     /**
-     * the record model
-     *
-     * @var string
+     * template fn for init, cause constructor cannot be overwritten -> static late binding ... :-(
      */
-    protected $_modelName = '';
-    
-    /**
-     * name of create method for imported records
-     *
-     * @var string
-     */
-    protected $_createMethod = 'create';
-    
-    /************************* public functions **************************/
-    
-    /**
-     * the constructor
-     *
-     * @param Tinebase_Model_ImportExportDefinition $_definition
-     * @param mixed $_controller
-     * @param array $_options additional options
-     * 
-     * @todo use Tinebase_Core::getApplicationInstance() to get controller
-     */
-    public function __construct(Tinebase_Model_ImportExportDefinition $_definition, $_controller = NULL, $_options = array())
+    protected function _init()
     {
-        if ($_controller === NULL) {
-            list($appName, $ns, $modelName) = explode('_', $_definition->model);
-            $controllerName = "{$appName}_Controller_{$modelName}";
-            $this->_controller = call_user_func($controllerName . '::getInstance');
-        } else {
-            $this->_controller = $_controller;
+        if (empty($this->_config['model'])) {
+            throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs model in config.');
         }
         
-        $this->_modelName = $_definition->model;
-        $this->_options = $this->_getConfig($_definition->plugin_options, $_options);
+        list($appName, $ns, $modelName) = explode('_', $this->_config['model']);
+        $this->_controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
     }
     
     /**
      * import the data
      *
-     * @param  string $_filename
      * @param  resource $_resource (if $_filename is a stream)
      * @return array with Tinebase_Record_RecordSet the imported records (if dryrun) and totalcount 
      */
-    public function import($_filename, $_resource = NULL)
+    public function import($_resource = NULL)
     {
-        // read file / stream
-        if ($_resource === NULL) {
-            if (! file_exists($_filename)) {
-                throw new Tinebase_Exception_NotFound("File $_filename not found.");
-            }
-            $_resource = fopen($_filename, 'r');
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Importing from file ' . $_filename);
-        
         // get headline
-        if (isset($this->_options['headline']) && $this->_options['headline']) {
+        if (isset($this->_config['headline']) && $this->_config['headline']) {
             $headline = $this->_getRawData($_resource);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got headline: ' . implode(', ', $headline));
-            if (isset($this->_options['use_headline']) && $this->_options['use_headline'] == 0) {
+            if (isset($this->_config['use_headline']) && $this->_config['use_headline'] == 0) {
                 // just read headline but do not use it
                 $headline = array();
             }
@@ -164,7 +103,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         }
 
         $result = array(
-            'results'           => new Tinebase_Record_RecordSet($this->_modelName),
+            'results'           => new Tinebase_Record_RecordSet($this->_config['model']),
             'totalcount'        => 0,
             'failcount'         => 0,
             'duplicatecount'    => 0,
@@ -172,8 +111,8 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
 
         while (
             ($recordData = $this->_getRawData($_resource)) !== FALSE && 
-            (! $this->_options['dryrun'] 
-                || ! (isset($this->_options['dryrunLimit']) && $this->_options['dryrunLimit'] && $result['totalcount'] >= $this->_dryrunCount)
+            (! $this->_config['dryrun'] 
+                || ! (isset($this->_config['dryrunLimit']) && $this->_config['dryrunLimit'] && $result['totalcount'] >= $this->_config['dryrunCount'])
             )
         ) {
             if (is_array($recordData)) {
@@ -186,7 +125,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                         // merge additional values (like group id, container id ...)
                         $recordData = array_merge($recordData, $this->_addData($recordData));
                         
-                        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
                         
                         // import record into tine!
                         $importedRecord = $this->_importRecord($recordData, $result);
@@ -195,7 +134,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                 } catch (Exception $e) {
                     // don't add incorrect record (name missing for example)
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                     $result['failcount']++;
                 }
             }
@@ -208,8 +147,6 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
         return $result;
     }
     
-    /*************************** protected functions ********************************/
-    
     /**
      * get raw data of a single record
      * 
@@ -220,11 +157,11 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     {
         $lineData = fgetcsv(
             $_resource, 
-            $this->_options['maxLineLength'], 
-            $this->_options['delimiter'], 
-            $this->_options['enclosure'] 
+            $this->_config['maxLineLength'], 
+            $this->_config['delimiter'], 
+            $this->_config['enclosure'] 
             // escape param is only available in PHP >= 5.3.0
-            // $this->_options['escape']
+            // $this->_config['escape']
         );
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($lineData, TRUE));
@@ -251,7 +188,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             $_data_indexed = array_combine($_headline, $_data);
         }
 
-        foreach ($this->_options['mapping']['field'] as $index => $field) {
+        foreach ($this->_config['mapping']['field'] as $index => $field) {
             if (empty($_data_indexed)) {
                 // use import definition order
                 
@@ -315,11 +252,11 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
             if (is_array($value)) {
                 $result = array();
                 foreach ($value as $singleValue) {
-                    $result[] = @iconv($this->_options['encoding'], $this->_encoding, $singleValue);
+                    $result[] = @iconv($this->_config['encoding'], $this->_config['encodingTo'], $singleValue);
                 }
                 $data[$key] = $result;
             } else {
-                $data[$key] = @iconv($this->_options['encoding'], $this->_encoding, $value);
+                $data[$key] = @iconv($this->_config['encoding'], $this->_config['encodingTo'], $value);
             }
         }
         
@@ -338,13 +275,13 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     {
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recordData, true));
         
-        $record = new $this->_modelName($_recordData, TRUE);
+        $record = new $this->_config['model']($_recordData, TRUE);
         
         if ($record->isValid()) {
-            if (! $this->_options['dryrun']) {
+            if (! $this->_config['dryrun']) {
                 
                 // check for duplicate
-                if (isset($this->_options['duplicates']) && $this->_options['duplicates']) {
+                if (isset($this->_config['duplicates']) && $this->_config['duplicates']) {
                     // search for record in container and print log message
                     $existingRecords = $this->_controller->search($this->_getDuplicateSearchFilter($record), NULL, FALSE, TRUE);
                     if (count($existingRecords) > 0) {
@@ -356,11 +293,11 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                 }
                 
                 // create/add shared tags
-                if (isset($_recordData['tags'])) {
+                if (isset($_recordData['tags']) && is_array($_recordData['tags'])) {
                     $record->tags = $this->_addSharedTags($_recordData['tags']);
                 }
 
-                $record = call_user_func(array($this->_controller, $this->_createMethod), $record);
+                $record = call_user_func(array($this->_controller, $this->_config['createMethod']), $record);
             } else {
                 $_result['results']->addRecord($record);
             }
@@ -393,46 +330,6 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
     {
         return array();
     }
-    
-    /**
-     * write to temp file and read with Zend_Config_Xml
-     *
-     * @param string $_configString
-     * @param array $_options additional options
-     * @return array 
-     * 
-     * @todo use Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml()
-     */
-    protected function _getConfig($_configString, $_options = array())
-    {
-        $tmpfname = tempnam(Tinebase_Core::getTempDir(), "tine_tempfile_");
-        
-        $handle = fopen($tmpfname, "w");
-        fwrite($handle, $_configString);
-        fclose($handle);
-        
-        // read file with Zend_Config_Xml
-        $config = new Zend_Config_Xml($tmpfname, null, TRUE);
-        $config->merge(new Zend_Config($_options));
-        
-        unlink($tmpfname);
-        
-        $config->maxLineLength = $config->maxLineLength ? $config->maxLineLength : $this->_maxLineLength;
-        $config->enclosure = $config->enclosure ? $config->enclosure : $this->_enclosure;
-        $config->escape = $config->escape ? $config->escape : $this->_escape;
-        $config->dryrun = $config->dryrun ? $config->dryrun : 0;
-        $config->encoding = $config->encoding ? $config->encoding : $this->_encoding;
-
-        if ($config->delimiter) {
-            $config->delimiter = (isset($this->_specialDelimiter[$config->delimiter])) 
-                ? $this->_specialDelimiter[$config->delimiter] 
-                : $config->delimiter;
-        } else {
-            $config->delimiter = $this->_delimiter;      
-        }
-        
-        return $config->toArray();
-    }
 
     /**
      *  add/create shared tags if they don't exist
@@ -455,7 +352,7 @@ abstract class Tinebase_Import_Csv_Abstract implements Tinebase_Import_Interface
                 $existing = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
                 $id = $existing->getId();
             } catch (Tinebase_Exception_NotFound $tenf) {
-                if (isset($this->_options['shared_tags']) && $this->_options['shared_tags'] == 'create') {
+                if (isset($this->_config['shared_tags']) && $this->_config['shared_tags'] == 'create') {
                     // create shared tag
                     $newTag = new Tinebase_Model_Tag(array(
                         'name'          => $name,
