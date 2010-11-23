@@ -36,27 +36,6 @@ class Tinebase_Auth_Imap extends Zend_Auth_Adapter_Imap implements Tinebase_Auth
     }
     
     /**
-     * authenticate() - defined by Zend_Auth_Adapter_Interface.
-     *
-     * @return Zend_Auth_Result
-     */
-    public function authenticate()
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to authenticate '. $this->getUsername());
-        
-        $result = parent::authenticate();
-        
-        if ($result->isValid()) {
-            // username and password are correct, let's do some additional tests            
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->getUsername() . ' succeeded');
-        } else {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->getUsername() . ' failed');
-        }
-        
-        return $result;
-    }
-    
-    /**
      * set loginname
      *
      * @param string $_identity
