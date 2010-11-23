@@ -35,11 +35,25 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     protected $_account = NULL;
     
     /**
+     * user pw has changed
+     * 
+     * @var boolean
+     */
+    protected $_passwordChanged = FALSE;
+    
+    /**
      * folders to delete in tearDown
      * 
      * @var array
      */
     protected $_foldersToDelete = array();
+    
+    /**
+     * accounts to delete in tearDown
+     * 
+     * @var array
+     */
+    protected $_accountsToDelete = array();
     
     /**
      * Runs the test methods of this class.
@@ -84,6 +98,35 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
                 // do nothing
             }
         }
+        
+        if ($this->_passwordChanged) {
+            // reset password
+            $testConfig = Zend_Registry::get('testConfig');
+            $this->_setCredentials($testConfig->username, $testConfig->password);
+        }
+        
+        foreach ($this->_accountsToDelete as $account) {
+            Felamimail_Controller_Account::getInstance()->delete($account);
+        }
+    }
+    
+    /**
+     * set new password & credentials
+     * 
+     * @param string $_username
+     * @param string $_password
+     */
+    protected function _setCredentials($_username, $_password)
+    {
+        Tinebase_User::getInstance()->setPassword(Tinebase_Core::getUser(), $_password, true, false);
+        
+        $oldCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        
+        // update credential cache
+        $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($_username, $_password);
+        Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
+        $event = new Tinebase_Event_User_ChangeCredentialCache($oldCredentialCache);
+        Tinebase_Event::fireEvent($event);
     }
 
     /**
@@ -155,5 +198,47 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals('Trash', $updatedAccount->trash_folder);
         $this->assertEquals('Sent', $updatedAccount->sent_folder);
+    }
+    
+    /**
+     * test change pw + credential cache
+     */
+    public function testChangePasswordAndUpdateCredentialCache()
+    {
+        $testConfig = Zend_Registry::get('testConfig');
+        
+        $account = clone($this->_account);
+        unset($account->id);
+        $account->type = Felamimail_Model_Account::TYPE_USER;
+        $account->user = $testConfig->username;
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
+            $account->user .= '@' . $imapConfig['domain'];
+        }
+        $account->password = $testConfig->password;
+        $account = $this->_controller->create($account);
+        $this->_accountsToDelete[] = $account;
+        
+        $testPw = 'testpwd';
+        
+        // change pw & update credential cache
+        $this->_passwordChanged = TRUE;
+        $this->_setCredentials($testConfig->username, $testPw);
+        $account = $this->_controller->get($account->getId());
+
+        // try to connect to imap
+        $loginSuccessful = TRUE;
+        try {
+            $imap = Felamimail_Backend_ImapFactory::factory($account);
+            $imapAccountConfig = $account->getImapConfig();
+            if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
+                $imapAccountConfig['user'] .= '@' . $imapConfig['domain'];
+            }        
+            $imap->connectAndLogin((object)$imapAccountConfig);
+        } catch (Felamimail_Exception_IMAPInvalidCredentials $e) {
+            $loginSuccessful = FALSE;
+        }
+        
+        $this->assertTrue($loginSuccessful, 'wrong credentials');
     }
 }
