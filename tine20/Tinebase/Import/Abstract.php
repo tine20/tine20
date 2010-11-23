@@ -27,12 +27,21 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     protected $_config = array();
     
     /**
+     * additional config options (to be added by child classes)
+     * 
+     * @var array
+     */
+    protected $_additionalConfig = array();
+    
+    /**
      * constructs a new importer from given config
      * 
      * @param array $_config
      */
     final public function __construct(array $_config = array())
     {
+        $this->_config = array_merge($this->_config, $this->_additionalConfig);
+        
         foreach($_config as $key => $cfg) {
             if (array_key_exists($key, $this->_config)) {
                 $this->_config[$key] = $cfg;
@@ -77,6 +86,25 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         fclose($resource);
         
         return $retVal;
+    }
+    
+    /**
+     * returns config from definition
+     * 
+     * @param Tinebase_Model_ImportExportDefinition $_definition
+     * @param array                                 $_config
+     * @return array
+     */
+    public static function getConfigArrayFromDefinition($_definition, $_config)
+    {
+        $config = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, $_config);
+        $configArray = $config->toArray();
+        if (! isset($configArray['model'])) {
+            $configArray['model'] = $_definition->model;
+        }
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating importer with following config: ' . print_r($configArray, TRUE));
+        return $configArray;
     }
     
     /**
