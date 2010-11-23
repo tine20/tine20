@@ -10,6 +10,7 @@ Date:       $LastChangedDate$
 Contents
 --
 1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
+2. Switched from Zend_Date to DateTime
 
 
 --------------------------------------------------------------
@@ -17,3 +18,7 @@ Contents
 
 - We have renamed the _inspectUpdate() /_inspectCreate() functions to _inspectBeforeUpdate() / _inspectBeforeCreate().
 - Added new functions _inspectAfterUpdate() / _inspectAfterCreate().
+
+2. Switched from Zend_Date to DateTime
+
+- We switched from Zend_Date to php DateTime to improve the performance of datetime handling. 
