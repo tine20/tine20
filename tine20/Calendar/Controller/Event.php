@@ -66,7 +66,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     
     /**
      * send notifications?
-     * - the controller has to define a sendNotifications() function
+     * - the controller has to define a doSendNotifications() function
      *
      * @var boolean
      */
@@ -198,7 +198,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // send notifications
         if ($this->_sendNotifications) {
-            $this->sendNotifications($createdEvent, $this->_currentAccount, 'created');
+            $this->doSendNotifications($createdEvent, $this->_currentAccount, 'created');
         }
         
         return $createdEvent;
@@ -462,7 +462,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // send notifications
         if ($this->_sendNotifications) {
-            $this->sendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
+            $this->doSendNotifications($updatedEvent, $this->_currentAccount, 'changed', $event);
         }
         return $updatedEvent;
     }
@@ -630,7 +630,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $_event->attendee->bypassFilters = TRUE;
                 $_event->created_by = $baseEvent->created_by;
                 
-                $this->sendNotifications($notificationEvent, $this->_currentAccount, $notificationAction);
+                $this->doSendNotifications($notificationEvent, $this->_currentAccount, $notificationAction);
             } catch (Exception $e) {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not send notification {$e->getMessage()}");
             }
@@ -1253,7 +1253,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $event = $this->get($_alarm->record_id);
         $this->_doContainerACLChecks = $doContainerACLChecks;
         
-        $this->sendNotifications($event, $this->_currentAccount, 'alarm');
+        $this->doSendNotifications($event, $this->_currentAccount, 'alarm');
         
         //if ($event->rrule)
     }
@@ -1267,7 +1267,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Calendar_Model_Event       $_oldEvent
      * @return void
      */
-    public function sendNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
+    public function doSendNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
     {
         Tinebase_ActionQueue::getInstance()->queueAction('Calendar.sendEventNotifications', 
             $_event, 

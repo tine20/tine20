@@ -140,7 +140,7 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
         $updater = new Tinebase_Model_FullUser($_updaterData);
         $oldEvent = new Calendar_Model_Event($_oldEventData);
         
-        Calendar_Controller_EventNotifications::getInstance()->sendNotifications($event, $updater, $_action, $oldEvent);
+        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($event, $updater, $_action, $oldEvent);
     }
     */
     
@@ -197,6 +197,6 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
      */
     public function sendEventNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
     {
-        Calendar_Controller_EventNotifications::getInstance()->sendNotifications($_event, $_updater, $_action, $_oldEvent);
+        Calendar_Controller_EventNotifications::getInstance()->doSendNotifications($_event, $_updater, $_action, $_oldEvent);
     }
 }

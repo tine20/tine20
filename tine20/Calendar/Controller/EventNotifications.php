@@ -126,8 +126,12 @@
      * @param Calendar_Model_Event       $_oldEvent
      * @return void
      */
-    public function sendNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
+    public function doSendNotifications($_event, $_updater, $_action, $_oldEvent=NULL)
     {
+        if (! $_event->attendee instanceof Tinebase_Record_RecordSet) {
+            return;
+        }
+        
         // lets resolve attendee once as batch to fill cache
         $attendee = clone $_event->attendee;
         Calendar_Model_Attender::resolveAttendee($attendee);
