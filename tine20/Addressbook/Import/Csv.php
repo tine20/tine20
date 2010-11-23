@@ -29,14 +29,7 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array())
     {
-        $config = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, $_config);
-        $configArray = $config->toArray();
-        if (! $configArray['model']) {
-            $configArray['model'] = $_definition->model;
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating importer with following config: ' . print_r($configArray, TRUE));
-        return new Addressbook_Import_Csv($configArray);
+        return new Addressbook_Import_Csv(self::getConfigArrayFromDefinition($_definition, $_config));
     }
 
     /**
