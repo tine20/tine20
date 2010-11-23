@@ -125,7 +125,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                         // merge additional values (like group id, container id ...)
                         $recordData = array_merge($recordData, $this->_addData($recordData));
                         
-                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
+                        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
                         
                         // import record into tine!
                         $importedRecord = $this->_importRecord($recordData, $result);
