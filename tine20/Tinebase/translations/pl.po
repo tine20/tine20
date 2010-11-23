@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-20 15:59+0100\n"
+"PO-Revision-Date: 2010-11-23 19:38+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -287,7 +287,7 @@ msgstr "Twój login oraz / lub hasło są nieprawidłowe!!!"
 
 #: js/LoginPanel.js:370
 #: js/widgets/dialog/ExportDialog.js:131
-#: js/widgets/dialog/CredentialsDialog.js:109
+#: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/PreferencesDialog.js:246
 #: js/widgets/dialog/PreferencesDialog.js:275
 #: js/widgets/dialog/ImportDialog.js:194
@@ -297,7 +297,7 @@ msgstr "Błędy"
 
 #: js/LoginPanel.js:370
 #: js/widgets/dialog/ExportDialog.js:131
-#: js/widgets/dialog/CredentialsDialog.js:109
+#: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/EditDialog.js:441
 msgid "Please fix the errors noted."
@@ -1043,6 +1043,10 @@ msgstr "Definicja eksportu"
 #: js/widgets/dialog/ExportDialog.js:102
 msgid "Select Export Definition ..."
 msgstr "Wybierz definicję eksportu ..."
+
+#: js/widgets/dialog/CredentialsDialog.js:84
+msgid "Please enter your credentials"
+msgstr "Proszę wpisać swoje dane dostępowe"
 
 #: js/widgets/dialog/PreferencesDialog.js:126
 msgid "Admin Mode"
