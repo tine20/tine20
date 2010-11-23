@@ -379,19 +379,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 				'jsonKey'       => Tinebase_Core::get('jsonKey'),
                 'welcomeMessage' => "Welcome to Tine 2.0!"
             );
-            
-            if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-                $cacheId = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE)->getCacheId();
-                setcookie('usercredentialcache', base64_encode(Zend_Json::encode($cacheId)));
-            } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
-                $success = FALSE;
-            }
-        
+            $success = $this->_setCredentialCacheCookie();
         }
 
         if (! $success) {
-            
             // reset credentials cache
             setcookie('usercredentialcache', '', time() - 3600);
             
@@ -404,6 +395,26 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $response;
     }
 
+    /**
+     * set credential cache cookie
+     * 
+     * @return boolean
+     */
+    protected function _setCredentialCacheCookie()
+    {
+        $result = TRUE;
+        
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
+            $cacheId = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE)->getCacheId();
+            setcookie('usercredentialcache', base64_encode(Zend_Json::encode($cacheId)));
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
+            $success = FALSE;
+        }
+        
+        return $result;
+    }
+    
     /**
      * destroy session
      *
