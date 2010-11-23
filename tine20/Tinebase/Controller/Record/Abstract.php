@@ -76,7 +76,6 @@ abstract class Tinebase_Controller_Record_Abstract
     
     /**
      * send notifications?
-     * - the controller has to define a sendNotifications() function
      *
      * @var boolean
      */
@@ -168,7 +167,23 @@ abstract class Tinebase_Controller_Record_Abstract
         
         return $count;
     }
-
+    
+    /**
+     * set/get the sendNotifications state
+     * 
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function sendNotifications()
+    {
+        $currValue = $this->_sendNotifications;
+        if (func_num_args() === 1) {
+            $this->_sendNotifications = (bool) func_get_arg(0);
+        }
+        
+        return $currValue;
+    }
+    
     /**
      * get by id
      *
@@ -329,7 +344,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 $this->_saveAlarms($record);
             }
             
-            if ($this->_sendNotifications) {
+            if ($this->sendNotifications()) {
                 $this->sendNotifications($record, $this->_currentAccount, 'created');  
             }
             
@@ -523,7 +538,7 @@ abstract class Tinebase_Controller_Record_Abstract
             Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
             // send notifications
-            if ($this->_sendNotifications) {
+            if ($this->sendNotifications()) {
                 foreach ($records as $record) {
                     $this->sendNotifications($record, $this->_currentAccount, 'deleted');
                 }
