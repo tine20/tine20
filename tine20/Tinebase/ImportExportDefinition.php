@@ -130,7 +130,7 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
      * @param array $_additionalOptions additional options
      * @return Zend_Config_Xml
      */
-    public function getOptionsAsZendConfigXml(Tinebase_Model_ImportExportDefinition $_definition, $_additionalOptions = array())
+    public static function getOptionsAsZendConfigXml(Tinebase_Model_ImportExportDefinition $_definition, $_additionalOptions = array())
     {
         $tmpfname = tempnam(Tinebase_Core::getTempDir(), "tine_tempfile_");
         
