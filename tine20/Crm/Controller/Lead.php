@@ -141,7 +141,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      * @param Crm_Model_Lead            $_oldLead
      * @return void
      */
-    protected function sendNotifications(Crm_Model_Lead $_lead, Tinebase_Model_FullUser $_updater, $_action, $_oldLead = NULL)
+    protected function doSendNotifications(Crm_Model_Lead $_lead, Tinebase_Model_FullUser $_updater, $_action, $_oldLead = NULL)
     {
         $sendOnOwnActions = Tinebase_Core::getPreference('Crm')->getValue(Crm_Preference::SEND_NOTIFICATION_OF_OWN_ACTIONS);
         if (! $sendOnOwnActions) {
