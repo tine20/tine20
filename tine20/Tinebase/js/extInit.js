@@ -120,6 +120,18 @@ Ext.util.JSON.encodeDate = function(o){
         pad(o.getSeconds()) + '"';
 };
 
+Date.prototype.toJSON = function(key) {
+    var pad = function(n) {
+        return n < 10 ? "0" + n : n;
+    };
+    return this.getFullYear() + "-" +
+        pad(this.getMonth() + 1) + "-" +
+        pad(this.getDate()) + " " +
+        pad(this.getHours()) + ":" +
+        pad(this.getMinutes()) + ":" +
+        pad(this.getSeconds());
+}
+
 /**
  * addidional formats
  */
