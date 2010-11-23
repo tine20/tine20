@@ -25,3 +25,7 @@ table td {
 @media print {
    thead {display: table-header-group;}
 }
+
+#csscheck {
+	display: none;
+}

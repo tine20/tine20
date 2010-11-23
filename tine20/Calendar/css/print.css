@@ -26,6 +26,10 @@ table td {
    thead {display: table-header-group;}
 }
 
+#csscheck {
+    display: none;
+}
+
 .cal-print-title {
 	text-align: center;
 	font-size: 20px;
