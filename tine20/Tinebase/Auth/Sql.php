@@ -22,47 +22,6 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
     const ACCTNAME_FORM_BACKSLASH = 3;
     const ACCTNAME_FORM_PRINCIPAL = 4;
     
-    
-    /**
-     * authenticate() - defined by Zend_Auth_Adapter_Interface.
-     *
-     * @throws Zend_Auth_Adapter_Exception if answering the authentication query is impossible
-     * @return Zend_Auth_Result
-     */
-    public function authenticate()
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to authenticate '. $this->_identity);
-        
-        $result = parent::authenticate();
-        
-        if($result->isValid()) {
-            // username and password are correct, let's do some additional tests
-            
-            if($this->_resultRow['status'] != 'enabled') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Account: '. $this->_identity . ' is disabled');
-                // account is disabled
-                $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
-                $authResult['messages'][] = 'Account disabled.';
-                return new Zend_Auth_Result($authResult['code'], $result->getIdentity(), $authResult['messages']);
-            }
-            
-            //if(($this->_resultRow['expires_at'] !== NULL) && $this->_resultRow['expires_at'] < Tinebase_DateTime::now()->getTimestamp()) {
-            if(($this->_resultRow['expires_at'] !== NULL) && Tinebase_DateTime::now()->isLater($this->_resultRow['expires_at'])) {
-                // account is expired
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Account: '. $this->_identity . ' is expired');
-                $authResult['code'] = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
-                $authResult['messages'][] = 'Account expired.';
-                return new Zend_Auth_Result($authResult['code'], $result->getIdentity(), $authResult['messages']);
-            }
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->_identity . ' succeeded');
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $this->_identity . ' failed');
-        }
-        
-        return $result;
-    }
-    
     /**
      * setIdentity() - set the value to be used as the identity
      *
@@ -195,6 +154,33 @@ class Tinebase_Auth_Sql extends Zend_Auth_Adapter_DbTable implements Tinebase_Au
         return false;
     }
     
+    /**
+     * _authenticateValidateResult() - This method attempts to validate that the record in the
+     * result set is indeed a record that matched the identity provided to this adapter.
+     *
+     * @param array $resultIdentity
+     * @return Zend_Auth_Result
+     */
+    protected function _authenticateValidateResult($resultIdentity)
+    {
+        $passwordHash = substr($resultIdentity[$this->_credentialColumn], 0, 1) === '{' 
+            ? $resultIdentity[$this->_credentialColumn] 
+            : '{PLAIN-MD5}' . $resultIdentity[$this->_credentialColumn];
+        
+        if (Hash_Password::validate($passwordHash, $this->_credential) !== true) {
+            $this->_authenticateResultInfo['code'] = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
+            $this->_authenticateResultInfo['messages'][] = 'Supplied credential is invalid.';
+            return $this->_authenticateCreateAuthResult();
+        }
+
+        unset($resultIdentity['zend_auth_credential_match']);
+        $this->_resultRow = $resultIdentity;
+
+        $this->_authenticateResultInfo['code'] = Zend_Auth_Result::SUCCESS;
+        $this->_authenticateResultInfo['messages'][] = 'Authentication successful.';
+        return $this->_authenticateCreateAuthResult();
+    }
+
     /**
      * @return string Either ACCTNAME_FORM_BACKSLASH, ACCTNAME_FORM_PRINCIPAL or
      * ACCTNAME_FORM_USERNAME indicating the form usernames should be canonicalized to.
