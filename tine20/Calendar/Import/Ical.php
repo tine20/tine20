@@ -78,6 +78,19 @@ class Calendar_Import_Ical
     }
     
     /**
+     * imports given data into configured calendar
+     * 
+     * @param string $_icalData
+     */
+    public function importData($_icalData)
+    {
+        $parser = new qCal_Parser();
+        $ical = $parser->parse($_icalData);
+        
+        $this->_import($ical);
+    }
+    
+    /**
      * imports given file into configured calendar
      * 
      * @param string    $_file
@@ -90,8 +103,17 @@ class Calendar_Import_Ical
         ));
         
         $ical = $parser->parseFile(basename($_file));
-        
-        $events = $this->_getEvents($ical);
+        $this->_import($ical);
+    }
+    
+    /**
+     * imports given qCal_Component_Vcalendar into configured calendar
+     * 
+     * @param qCal_Component_Vcalendar $_ical
+     */
+    protected function _import(qCal_Component_Vcalendar $_ical)
+    {
+        $events = $this->_getEvents($_ical);
 //        print_r($events->toArray());
         
         // set container
