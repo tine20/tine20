@@ -6,7 +6,7 @@
  * @subpackage  Import
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -21,6 +21,48 @@
 class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
 {
     /**
+     * additional config options
+     * 
+     * @var array
+     */
+    protected $_additionalConfig = array(
+        'group_id'                      => '',
+        'password'                      => '',
+        'accountLoginNamePrefix'        => '',
+        'accountHomeDirectoryPrefix'    => '',
+        'accountEmailDomain'            => '',
+        'samba'                         => '',
+    );
+    
+    /**
+     * creates a new importer from an importexport definition
+     * 
+     * @param  Tinebase_Model_ImportExportDefinition $_definition
+     * @param  array                                 $_config
+     * @return Calendar_Import_Ical
+     * 
+     * @todo move this to abstract when we no longer need to be php 5.2 compatible
+     */
+    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array())
+    {
+        return new Admin_Import_Csv(self::getConfigArrayFromDefinition($_definition, $_config));
+    }
+    
+    /**
+     * template fn for init, cause constructor cannot be overwritten -> static late binding ... :-(
+     */
+    protected function _init()
+    {
+        switch($this->_config['model']) {
+            case 'Tinebase_Model_FullUser':
+                $this->_controller = Admin_Controller_User::getInstance();
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs correct model in config.');
+        }
+    }
+    
+    /**
      * import single record (create password if in data)
      *
      * @param array $_recordData
@@ -30,9 +72,9 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _importRecord($_recordData, &$_result)
     {
-        if ($this->_modelName == 'Tinebase_Model_FullUser' && $this->_controller instanceof Admin_Controller_User) {
+        if ($this->_config['model'] == 'Tinebase_Model_FullUser' && $this->_controller instanceof Admin_Controller_User) {
         
-            $record = new $this->_modelName($_recordData, TRUE);
+            $record = new $this->_config['model']($_recordData, TRUE);
             
             // create valid login name
             if (! isset($record->accountLoginName)) {
@@ -40,32 +82,32 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
             }
             
             // add prefix to login name if given 
-            if (isset($this->_options['accountLoginNamePrefix'])) {
-                $record->accountLoginName = $this->_options['accountLoginNamePrefix'] . $record->accountLoginName;
+            if (! empty($this->_config['accountLoginNamePrefix'])) {
+                $record->accountLoginName = $this->_config['accountLoginNamePrefix'] . $record->accountLoginName;
             }
             
             // add home dir if empty and prefix is given (append login name)
-            if (empty($record->accountHomeDirectory) && isset($this->_options['accountHomeDirectoryPrefix'])) {
-                $record->accountHomeDirectory = $this->_options['accountHomeDirectoryPrefix'] . $record->accountLoginName;
+            if (empty($record->accountHomeDirectory) && ! empty($this->_config['accountHomeDirectoryPrefix'])) {
+                $record->accountHomeDirectory = $this->_config['accountHomeDirectoryPrefix'] . $record->accountLoginName;
             }
             
             // create email address if accountEmailDomain if given
-            if (empty($record->accountEmailAddress) && isset($this->_options['accountEmailDomain']) && ! empty($this->_options['accountEmailDomain'])) {
-                $record->accountEmailAddress = $record->accountLoginName . '@' . $this->_options['accountEmailDomain'];
+            if (empty($record->accountEmailAddress) && ! empty($this->_config['accountEmailDomain'])) {
+                $record->accountEmailAddress = $record->accountLoginName . '@' . $this->_config['accountEmailDomain'];
             }
             
-            if (isset($this->_options['samba']) && ! empty($this->_options['samba'])) {
+            if (! empty($this->_config['samba'])) {
                 $this->_addSambaSettings($record);
             }
             
-            Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_options));
+            Tinebase_Event::fireEvent(new Admin_Event_BeforeImportUser($record, $this->_config));
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
             
             // generate passwd (use accountLoginName or password from options or password from csv in this order)
             $password = $record->accountLoginName;
-            if (isset($this->_options['password'])) {
-                $password = $this->_options['password'];
+            if (! empty($this->_config['password'])) {
+                $password = $this->_config['password'];
             }
             if (isset($_recordData['password']) && !empty($_recordData['password'])) {
                 $password = $_recordData['password'];
@@ -75,7 +117,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
                 
             // try to create record with password
             if ($record->isValid()) {   
-                if (!$this->_options['dryrun']) {
+                if (!$this->_config['dryrun']) {
                     $record = $this->_controller->create($record, $password, $password);
                 } else {
                     $_result['results']->addRecord($record);
@@ -99,7 +141,7 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _addSambaSettings(Tinebase_Model_FullUser $_record)
     {
-        $sambaConfig = $this->_options['samba'];
+        $sambaConfig = $this->_config['samba'];
         
         $samUser = new Tinebase_Model_SAMUser(array(
             'homePath'      => $sambaConfig['homePath'] . $_record->accountLoginName,
@@ -120,9 +162,9 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
      */
     protected function _addData()
     {
-        if ($this->_modelName == 'Tinebase_Model_FullUser') {
-            if (isset($this->_options['group_id'])) {
-                $groupId = $this->_options['group_id'];
+        if ($this->_config['model'] == 'Tinebase_Model_FullUser') {
+            if (! empty($this->_config['group_id'])) {
+                $groupId = $this->_config['group_id'];
             } else {
                 // add default user group
                 $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();

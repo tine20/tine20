@@ -158,7 +158,7 @@ class Admin_CliTest extends PHPUnit_Framework_TestCase
         }
         
         $opts = new Zend_Console_Getopt('abp:');
-        $opts->setArguments(array($_filename, $_definition));
+        $opts->setArguments(array($_filename, 'definition=' . $_definition));
         
         ob_start();
         $this->_cli->importUser($opts);
