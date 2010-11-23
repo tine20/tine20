@@ -28,6 +28,15 @@ interface Tinebase_Import_Interface
     public function __construct(array $_config = array());
     
     /**
+     * creates a new importer from an importexport definition
+     * 
+     * @param  Tinebase_Model_ImportExportDefinition $_definition
+     * @param  array                                 $_config
+     * @return Tinebase_Import_Abstract
+     */
+    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array());
+    
+    /**
      * import the data
      *
      * @param  stream $_resource 
@@ -55,12 +64,4 @@ interface Tinebase_Import_Interface
      */
     public function importData($_data);
     
-    /**
-     * creates a new importer from an importexport definition
-     * 
-     * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array                                 $_config
-     * @return Tinebase_Import_Abstract
-     */
-    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array());
 }

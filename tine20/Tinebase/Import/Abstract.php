@@ -43,19 +43,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
     }
     
     /**
-     * creates a new importer from an importexport definition
-     * 
-     * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array                                 $_config
-     * @return Tinebase_Import_Abstract
-     */
-    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array())
-    {
-        $config = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, $_config);
-        return new Tinebase_Import_Abstract($config->toArray());
-    }
-    
-    /**
      * import given filename
      * 
      * @param string $_filename
