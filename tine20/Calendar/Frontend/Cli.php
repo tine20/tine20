@@ -41,6 +41,16 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         ),
     );
     
+    /**
+     * import contacts
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
+    public function import($_opts)
+    {
+        parent::_import($_opts, array());        
+    }
+    
     public function importegw14($_opts) {
         //$args = $_opts->getRemainingArgs();
         list($host, $username, $password, $dbname, $charset) = $_opts->getRemainingArgs();
