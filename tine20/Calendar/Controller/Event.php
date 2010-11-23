@@ -66,7 +66,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     
     /**
      * send notifications?
-     * - the controller has to define a doSendNotifications() function
      *
      * @var boolean
      */
