@@ -9,12 +9,45 @@
  * @version     $Id$
  */
 
+/**
+ * @see for german holydays http://www.sunbird-kalender.de/extension/kalender/
+ * 
+ * @todo add support for rrule exceptions
+ * @todo add support for alarms
+ * @todo add support for attendee / organizer
+ * @todo add support for categories
+ *
+ */
 class Calendar_Import_Ical
 {
-    protected $_importContainerId = 363; // Ferien SH
+    protected $_config = array(
+        /**
+         * force update of existing events 
+         * @var boolean
+         */
+        'updateExisting'        => TRUE,
+        /**
+         * updates exiting events if sequence number is higher
+         * @var boolean
+         */
+        'forceUpdateExisting'   => FALSE,
+        /**
+         * container the events should be imported in
+         * @var string
+         */
+        'importContainerId'     => NULL,
+    );
     
+    /**
+     * default timezone from VCALENDAR. If not present, users default tz will be taken
+     * @var string
+     */
     protected $_defaultTimezoneId;
     
+    /**
+     * maps tine20 propertynames to ical propertynames
+     * @var array
+     */
     protected $_eventPropertyMap = array(
         'summary'               => 'SUMMARY',
         'description'           => 'DESCRIPTION',
@@ -30,9 +63,18 @@ class Calendar_Import_Ical
         'last_modified_time'    => 'LAST-MODIFIED',
     );
     
+    /**
+     * constructs an ical importer
+     * 
+     * @param array $_config
+     */
     public function __construct($_config = array())
     {
-        
+        foreach($_config as $key => $val) {
+            if (array_key_exists($key, $this->_config)) {
+                $this->_config[$key] = $val;
+            }
+        }
     }
     
     /**
@@ -53,26 +95,32 @@ class Calendar_Import_Ical
 //        print_r($events->toArray());
         
         // set container
-        $events->container_id = $this->_importContainerId;
+        $events->container_id = $this->_config['importContainerId'];
         
         $cc = Calendar_Controller_Event::getInstance();
+        $sendNotifications = $cc->sendNotifications(FALSE);
         
         // search uid's and remove already existing -> only in import cal?
         $existingEvents = $cc->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_importContainerId),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_config['importContainerId']),
             array('field' => 'uid', 'operator' => 'in', 'value' => array_unique($events->uid)),
         )), NULL);
         
-        foreach($existingEvents as $existingEvent) {
-            $events->removeRecord($events->find('uid', $existingEvent->uid));
-        }
-        
         // insert one by one in a single transaction
         $tid = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $existingEvents->addIndices(array('uid'));
         foreach($events as $event) {
-            $cc->create($event, FALSE);
+            $existingEvent = $existingEvents->find('uid', $event->uid);
+            if (! $existingEvent) {
+                $cc->create($event, FALSE);
+            } else if ($this->_config['forceUpdateExisting'] || ($this->_config['updateExisting'] && $event->seq > $existingEvent->seq)) {
+                $event->id = $existingEvent->getId();
+                $event->last_modified_time = clone $existingEvent->last_modified_time;
+                $cc->update($event, FALSE);
+            }
         }
         Tinebase_TransactionManager::getInstance()->commitTransaction($tid);
+        $cc->sendNotifications($existingEvents);
     }
     
     /**
@@ -144,7 +192,7 @@ class Calendar_Import_Ical
             $tz = array_value(0, $component->getComponent('VTIMEZONE'));
             $this->_defaultTimezoneId = array_value(0, $tz->getProperty('TZID'))->getValue();
         } else {
-            // @TODO take the users default timezone
+            $this->_defaultTimezoneId = (string) Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         }
         
         foreach ($component->getChildren() as $children) {
