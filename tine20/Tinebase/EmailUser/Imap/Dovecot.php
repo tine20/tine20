@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS `dovecot_users` (
 `domain` VARCHAR( 80 ) DEFAULT '',
 `username` VARCHAR( 80 ) NOT NULL ,
 `password` VARCHAR( 100 ) NOT NULL ,
-`scheme` VARCHAR( 20 ) NOT NULL DEFAULT 'PLAIN-MD5',
 `uid` VARCHAR( 20 ) NOT NULL ,
 `gid` VARCHAR( 20 ) NOT NULL ,
 `home` VARCHAR( 256 ) NOT NULL ,
@@ -213,7 +212,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         'emailHome'			=> '/var/vmail/%d/%n',
         'emailUID'          => 'vmail', 
         'emailGID'          => 'vmail',
-        'emailScheme'    	=> 'PLAIN-MD5',
+        'emailScheme'    	=> 'SSHA256',
         'domain'			=> null,
     );
     
@@ -236,8 +235,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         'emailSieveSize'    => 'sieve_size',
 
         // makes mapping data to _config easier
-        'emailHome'			=> 'home',
-        'emailScheme'		=> 'scheme',
+        'emailHome'			=> 'home'
     );
     
     /**
@@ -354,8 +352,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
     public function inspectSetPassword($_userId, $_password)
     {
         $values = array(
-            $this->_propertyMapping['emailScheme']   => $this->_config['emailScheme'],
-            $this->_propertyMapping['emailPassword'] => $this->_generatePassword($_password, $this->_config['emailScheme'])
+            $this->_propertyMapping['emailPassword'] => Hash_Password::generate($this->_config['emailScheme'], $_password)
         );
         
         $where = array(
@@ -575,6 +572,9 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
             $keyMapping = array_search($key, $this->_propertyMapping);
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
+                    case 'emailPassword':
+                        // do nothing
+                        break;
                     case 'emailMailQuota':
                     case 'emailMailSize':
                         // convert to megabytes
@@ -648,7 +648,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
             if ($property && ! in_array($key, $this->_readOnlyFields)) {
                 switch ($key) {
                     case 'emailPassword':
-                        $rawData[$property] = $this->_generatePassword($value, $this->_config['emailScheme']);
+                        $rawData[$property] = Hash_Password::generate($this->_config['emailScheme'], $value);
                         break;
                         
                     case 'emailUserId':
@@ -677,8 +677,6 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         list($user, $domain) = explode('@', $rawData[$this->_propertyMapping['emailUsername']], 2);
         //$rawData['user']   = $user;
         $rawData['domain'] = $domain;
-        
-        $rawData[$this->_propertyMapping['emailScheme']] = $this->_config['emailScheme'];
         
         // replace home wildcards when storing to db
         // %d = domain
