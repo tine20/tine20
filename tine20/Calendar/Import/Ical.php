@@ -18,7 +18,7 @@
  * @todo add support for categories
  *
  */
-class Calendar_Import_Ical
+class Calendar_Import_Ical extends Tinebase_Import_Abstract
 {
     protected $_config = array(
         /**
@@ -64,45 +64,27 @@ class Calendar_Import_Ical
     );
     
     /**
-     * constructs an ical importer
-     * 
-     * @param array $_config
+     * import the data
+     *
+     * @param  stream $_resource 
+     * @return array : 
+     *  'results'           => Tinebase_Record_RecordSet, // for dryrun only
+     *  'totalcount'        => int,
+     *  'failcount'         => int,
+     *  'duplicatecount'    => int,
      */
-    public function __construct($_config = array())
+    public function import($_resource = NULL)
     {
-        foreach($_config as $key => $val) {
-            if (array_key_exists($key, $this->_config)) {
-                $this->_config[$key] = $val;
-            }
+        //@TODO check reqired configs
+        if (! $this->_config['importContainerId']) {
+            throw new Tinebase_Exception_InvalidArgument('you need to define a importContainerId');
         }
-    }
-    
-    /**
-     * imports given data into configured calendar
-     * 
-     * @param string $_icalData
-     */
-    public function importData($_icalData)
-    {
+        
+        $icalData = stream_get_contents($_resource);
+        
         $parser = new qCal_Parser();
-        $ical = $parser->parse($_icalData);
+        $ical = $parser->parse($icalData);
         
-        $this->_import($ical);
-    }
-    
-    /**
-     * imports given file into configured calendar
-     * 
-     * @param string    $_file
-     */
-    public function importFile($_file)
-    {
-        $filepath = realpath(dirname($_file));
-        $parser = new qCal_Parser(array(
-            'searchpath' => $filepath,
-        ));
-        
-        $ical = $parser->parseFile(basename($_file));
         $this->_import($ical);
     }
     
