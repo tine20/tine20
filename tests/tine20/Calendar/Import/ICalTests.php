@@ -22,7 +22,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 /**
  * Test class for Calendar_ICalTests
  */
-class Calendar_ICalTests extends Calendar_TestCase
+class Calendar_Import_ICalTests extends Calendar_TestCase
 {
     public function testImportSimpleFromString()
     {
