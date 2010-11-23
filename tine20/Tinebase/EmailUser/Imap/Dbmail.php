@@ -326,6 +326,10 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
             $keyMapping = array_search($key, $this->_propertyMapping);
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
+                    case 'emailPassword':
+                        // do nothing
+                        break;
+                        
                     case 'emailMailQuota':
                     case 'emailMailSize':
                     case 'emailSieveQuota':
@@ -333,6 +337,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
                         // convert to megabytes
                         $data[$keyMapping] = round($value / 1024 / 1024);
                         break;
+                        
                     default: 
                         $data[$keyMapping] = $value;
                         break;
