@@ -165,40 +165,42 @@ class Tinebase_Frontend_Cli_Abstract
     /**
      * import records
      *
-     * @param Zend_Console_Getopt $_opts
-     * @param Tinebase_Controller_Record_Interface $_controller
+     * @param Zend_Console_Getopt   $_opts
      */
-    protected function _import($_opts, $_controller)
+    protected function _import($_opts)
     {
-        $args = $_opts->getRemainingArgs();
-            
-        // get csv importer
-        $definitionName = array_pop($args);
+        $args = $this->_parseArgs($_opts, array(), 'filename');
         
-        if (empty($definitionName)) {
-            echo "No definition name/file given.\n";
+        if ($_opts->d) {
+            $args['dryrun'] = 1;
+        }
+        
+        if (array_key_exists('definition', $args))  {       
+            if (preg_match("/\.xml/", $args['definition'])) {
+                $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
+                    $args['definition'],
+                    Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
+                ); 
+            } else {
+                $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($args['definition']);
+            }
+        
+            $importer = call_user_func($definition->plugin . '::createFromDefinition', $args);
+        } else if (array_key_exists('plugin', $args)) {
+            $importer =  new $args['plugin']($args);
+        } else {
+            echo "You need to define a plugin OR a definition at least! \n";
             exit;
         }
         
-        if (preg_match("/\.xml/", $definitionName)) {
-            $definition = Tinebase_ImportExportDefinition::getInstance()->getFromFile(
-                $definitionName,
-                Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
-            ); 
-        } else {
-            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definitionName);
-        }
-        
-        $importer = new $definition->plugin($definition, $_controller, ($_opts->d) ? array('dryrun' => 1) : array());
-        
         // loop files in argv
-        foreach ($args as $filename) {
+        foreach ((array) $args['filename'] as $filename) {
             // read file
             if ($_opts->v) {
                 echo "reading file $filename ...";
             }
             try {
-                $result = $importer->import($filename);
+                $result = $importer->importFile($filename);
                 if ($_opts->v) {
                     echo "done.\n";
                 }
