@@ -42,27 +42,27 @@ class Tinebase_Auth
     /**
      * General Failure
      */
-    const FAILURE                       =  0;
+    const FAILURE                       =  Zend_Auth_Result::FAILURE;
 
     /**
      * Failure due to identity not being found.
      */
-    const FAILURE_IDENTITY_NOT_FOUND    = -1;
+    const FAILURE_IDENTITY_NOT_FOUND    = Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND;
 
     /**
      * Failure due to identity being ambiguous.
      */
-    const FAILURE_IDENTITY_AMBIGUOUS    = -2;
+    const FAILURE_IDENTITY_AMBIGUOUS    = Zend_Auth_Result::FAILURE_IDENTITY_AMBIGUOUS;
 
     /**
      * Failure due to invalid credential being supplied.
      */
-    const FAILURE_CREDENTIAL_INVALID    = -3;
+    const FAILURE_CREDENTIAL_INVALID    = Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID;
 
     /**
      * Failure due to uncategorized reasons.
      */
-    const FAILURE_UNCATEGORIZED         = -4;
+    const FAILURE_UNCATEGORIZED         = Zend_Auth_Result::FAILURE_UNCATEGORIZED;
     
     /**
      * Failure due the account is disabled
@@ -72,7 +72,7 @@ class Tinebase_Auth
     /**
      * Failure due the account is expired
      */
-    const FAILURE_EXPIRED               = -101;
+    const FAILURE_PASSWORD_EXPIRED      = -101;
     
     /**
      * Failure due the account is temporarly blocked
@@ -82,7 +82,7 @@ class Tinebase_Auth
     /**
      * Authentication success.
      */
-    const SUCCESS                        =  1;
+    const SUCCESS                        =  Zend_Auth_Result::SUCCESS;
 
     /**
      * the name of the authenticationbackend
@@ -185,11 +185,19 @@ class Tinebase_Auth
      */
     public function authenticate($_username, $_password)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to authenticate '. $_username);
+        
         $this->_backend->setIdentity($_username);
         $this->_backend->setCredential($_password);
         
         $result = Zend_Auth::getInstance()->authenticate($this->_backend);
-                
+        
+        if($result->isValid()) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $_username . ' succeeded');
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Authentication of '. $_username . ' failed');
+        }
+        
         return $result;
     }
     
