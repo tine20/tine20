@@ -41,6 +41,7 @@ class Tinebase_Event
                         . (string) $application . ' threw an exception: '
                         . $e->getMessage()
                     );
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') ' . $e->getTraceAsString());
                 }
             }
         }
