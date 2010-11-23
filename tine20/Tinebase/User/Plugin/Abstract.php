@@ -71,45 +71,6 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
         return $_userName;
     }
     
-    /**
-     * generate password based on password scheme
-     * 
-     * @param string $_password
-     * @param string $_scheme
-     * @return string
-     */
-    protected function _generatePassword($_password, $_scheme)
-    {
-        switch (strtoupper($_scheme)) {
-            case 'MD5-CRYPT':
-            case 'SSHA256':
-            case 'SSHA512':
-            	$password = crypt($_password, $this->_salt($_scheme));
-            	break;
-            
-            case 'SHA256':
-            case 'SHA512':
-            	$password = hash($_scheme, $_password);
-            	break;
-            
-            case 'SHA':
-            	$password = sha1($_password);
-            	break;
-            
-            case 'PLAIN':
-            	$password = $_password;
-            	break;
-            
-            case 'PLAIN-MD5':
-            case 'MD5':    
-            default:
-            	$password = md5($_password);
-            	break;
-        }
-
-        return $password;
-    }
-    
     protected function _getDb($_config)
     {
         $tine20DbConfig = Tinebase_Core::getDb()->getConfig();
