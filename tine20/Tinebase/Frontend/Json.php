@@ -416,6 +416,33 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * update user credential cache
+     * 
+     * - fires Tinebase_Event_User_ChangeCredentialCache
+     * 
+     * @param string $username
+     * @param string $password
+     * @return array
+     */
+    public function updateCredentialCache($username, $password)
+    {
+        $oldCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($username, $password);
+        Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
+        
+        $success = $this->_setCredentialCacheCookie();
+        
+        if ($success) {
+            $event = new Tinebase_Event_User_ChangeCredentialCache($oldCredentialCache);
+            Tinebase_Event::fireEvent($event);
+        }
+        
+        return array(
+            'success'      => $success
+        );
+    }
+    
+    /**
      * destroy session
      *
      * @return array
