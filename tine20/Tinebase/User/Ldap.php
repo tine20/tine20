@@ -280,7 +280,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $metaData = $this->_getMetaData($user);
 
         $encryptionType = isset($this->_options['pwEncType']) ? $this->_options['pwEncType'] : Tinebase_User_Abstract::ENCRYPT_SSHA;
-        $userpassword = $_encrypt ? Tinebase_User_Abstract::encryptPassword($_password, $encryptionType) : $_password;
+        $userpassword = $_encrypt ? Hash_Password::generate($encryptionType, $_password) : $_password;
+        
         $ldapData = array(
             'userpassword'     => $userpassword,
             'shadowlastchange' => floor(Tinebase_DateTime::now()->getTimestamp() / 86400)

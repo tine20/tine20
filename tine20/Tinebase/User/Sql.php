@@ -284,7 +284,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
-        $accountData['password'] = ( $_encrypt ) ? md5($_password) : $_password;
+        $accountData['password'] = ( $_encrypt ) ? Hash_Password::generate('SSHA256', $_password) : $_password;
         $accountData['last_password_change'] = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         $where = array(
