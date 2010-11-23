@@ -232,21 +232,16 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * 
      * @param array $_files to import
      * @param string $_importDefinitionId
-     * @param Tinebase_Controller_Record_Interface $_controller
-     * @param boolean $_dryRun
      * @param array $_options additional import options
      * @return array
-     * 
-     * @todo    close session? this caused a problem with the unittests ....
      */
-    protected function _import($_files, $_importDefinitionId, $_controller, $_options = array())
+    protected function _import($_files, $_importDefinitionId, $_options = array())
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->get($_importDefinitionId);
-        $importer = new $definition->plugin($definition, $_controller, $_options);
+        $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $_options);
         
-        // extend execution time and close session
+        // extend execution time
         Tinebase_Core::setExecutionLifeTime(1800); // 30 minutes
-        //Zend_Session::writeClose(true);
         
         // import files
         $result = array(
@@ -257,7 +252,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             'status'            => 'success',
         );
         foreach ($_files as $file) {
-            $importResult = $importer->import($file['path']);
+            $importResult = $importer->importFile($file['path']);
             $result['results']           = array_merge($result['results'], $importResult['results']->toArray());
             $result['totalcount']       += $importResult['totalcount'];
             $result['failcount']        += $importResult['failcount'];

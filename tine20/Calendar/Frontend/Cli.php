@@ -48,7 +48,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function import($_opts)
     {
-        parent::_import($_opts, array());        
+        parent::_import($_opts);        
     }
     
     public function importegw14($_opts) {

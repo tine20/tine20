@@ -336,6 +336,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         // export first and create files array
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
         $filename = $exporter->generate();
+        //echo file_get_contents($filename);
         $files = array(
             array('name' => $filename, 'path' => $filename)
         );
@@ -346,12 +347,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         // then import
         $result = $this->_instance->importContacts($files, $options, $definition->getId());
-        #print_r($result['results'][0]);
+        //print_r($result['results'][0]);
         
         // check
         $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
-        $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_id'], 'Did not get user record.');
+        $this->assertEquals('Admin Account, Tine 2.0', $result['results'][0]['n_fileas'], 'file as not found');
         #
         #@todo check tags again
         #

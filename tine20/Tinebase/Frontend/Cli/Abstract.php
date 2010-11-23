@@ -185,7 +185,7 @@ class Tinebase_Frontend_Cli_Abstract
                 $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($args['definition']);
             }
         
-            $importer = call_user_func($definition->plugin . '::createFromDefinition', $args);
+            $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $args);
         } else if (array_key_exists('plugin', $args)) {
             $importer =  new $args['plugin']($args);
         } else {

@@ -47,6 +47,6 @@ class Admin_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      */
     public function importUser($_opts)
     {
-        parent::_import($_opts, Admin_Controller_User::getInstance());
+        parent::_import($_opts);
     }
 }

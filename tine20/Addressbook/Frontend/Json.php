@@ -129,7 +129,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function importContacts($files, $importOptions, $definitionId)
     {
-        return $this->_import($files, $definitionId, Addressbook_Controller_Contact::getInstance(), $importOptions);
+        return $this->_import($files, $definitionId, $importOptions);
     }
     
     /****************************************** get default adb ****************************/
