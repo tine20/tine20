@@ -403,6 +403,22 @@ class Tinebase_DateTime extends DateTime
         return $this->format($_format);
     }
     
+    public function setHour($modify)
+    {
+        list ($i, $s) = explode(' ', $this->format('i s'));
+        
+        $this->setTime($modify, $i, $s);
+        return $this;
+    }
+    
+    public function setMinute($modify)
+    {
+        list ($h, $s) = explode(' ', $this->format('H s'));
+        
+        $this->setTime($h, $modify, $s);
+        return $this;
+    }
+    
     public function setTimezone($_timezone)
     {
         parent::setTimezone(new DateTimeZone($_timezone));
@@ -421,14 +437,6 @@ class Tinebase_DateTime extends DateTime
         $currentWeekDay = (int)$this->format("N");
         $operator = ($currentWeekDay > $weekDay) ? "-" : "+";
         return $this->modify($operator . abs($currentWeekDay - $weekDay) . "day");
-    }
-    
-    public function setHour($modify)
-    {
-        list ($i, $s) = explode(' ', $this->format('i s'));
-        
-        $this->setTime($modify, $i, $s);
-        return $this;
     }
     
     
