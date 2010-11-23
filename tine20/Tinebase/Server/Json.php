@@ -55,8 +55,10 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
             $_requests = $requests;
-            if (isset($requests[0]["params"]["password"])) {
-                $_requests[0]["params"]["password"] = "*******";
+            foreach (array('password', 'oldPassword', 'newPassword') as $field) {
+                if (isset($requests[0]["params"][$field])) {
+                    $_requests[0]["params"][$field] = "*******";
+                }
             }
             Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($_requests, true));
         } 
