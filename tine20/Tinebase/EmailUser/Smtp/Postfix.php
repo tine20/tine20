@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS `smtp_users` (
   `client_idnr` varchar(40) NOT NULL,
   `username` varchar(80) NOT NULL,
   `passwd` varchar(34) DEFAULT NULL,
-  `encryption_type` varchar(20) NOT NULL DEFAULT 'md5',
   `email` varchar(80) NOT NULL,
   `forward_only` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`userid`, `client_idnr`),
@@ -125,7 +124,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
         'prefix'            => 'smtp_',
         'userTable'         => 'users',
         'destinationTable'  => 'destinations',
-        'emailScheme'       => 'md5',
+        'emailScheme'       => 'ssha256',
         'domain'            => null,
         'alloweddomains'    => array()
     );
@@ -142,10 +141,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
         'emailForwardOnly'  => 'forward_only',
         'emailUsername'     => 'username',
         'emailAliases'      => 'source',
-        'emailForwards'     => 'destination',
-    
-        // makes mapping data to _config easier
-        'emailScheme'		=> 'encryption_type'
+        'emailForwards'     => 'destination'
     );
     
     /**
@@ -255,8 +251,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
     public function inspectSetPassword($_userId, $_password)
     {
         $values = array(
-            $this->_propertyMapping['emailScheme']   => $this->_config['emailScheme'],
-            $this->_propertyMapping['emailPassword'] => $this->_generatePassword($_password, $this->_config['emailScheme'])
+            $this->_propertyMapping['emailPassword'] => Hash_Password::generate($this->_config['emailScheme'], $_password)
         );
         
         $where = array(
@@ -526,6 +521,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
             $keyMapping = array_search($key, $this->_propertyMapping);
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
+                    case 'emailPassword':
+                        // do nothing
+                        break;
+                    
                     case 'emailAliases':
                     case 'emailForwards':
                         $data[$keyMapping] = explode(',', $value);
@@ -571,7 +570,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
             if ($property) {
                 switch ($key) {
                     case 'emailPassword':
-                        $rawData[$property] = $this->_generatePassword($value, $this->_config['emailScheme']);
+                        $rawData[$property] = Hash_Password::generate($this->_config['emailScheme'], $value);
                         break;
                         
                     case 'emailUserId':
