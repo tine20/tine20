@@ -64,6 +64,19 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
     );
     
     /**
+     * creates a new importer from an importexport definition
+     * 
+     * @param  Tinebase_Model_ImportExportDefinition $_definition
+     * @param  array                                 $_config
+     * @return Calendar_Import_Ical
+     */
+    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array())
+    {
+        $config = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, $_config);
+        return new Calendar_Import_Ical($config->toArray());
+    }
+    
+    /**
      * import the data
      *
      * @param  stream $_resource 
