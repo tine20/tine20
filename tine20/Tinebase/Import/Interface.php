@@ -21,11 +21,46 @@
 interface Tinebase_Import_Interface
 {
     /**
+     * constructs a new importer from given config
+     * 
+     * @param array $_config
+     */
+    public function __construct(array $_config = array());
+    
+    /**
      * import the data
      *
-     * @param  string $_filename
-     * @param  resource $_resource (if $_filename is a stream)
-     * @return array with Tinebase_Record_RecordSet the imported records (if dryrun) and totalcount 
+     * @param  stream $_resource 
+     * @return array : 
+     *  'results'           => Tinebase_Record_RecordSet, // for dryrun only
+     *  'totalcount'        => int,
+     *  'failcount'         => int,
+     *  'duplicatecount'    => int,
      */
-    public function import($_filename, $_resource = NULL);
+    public function import($_resource = NULL);
+    
+    /**
+     * import given filename
+     * 
+     * @param string $_filename
+     * @return @see{Tinebase_Import_Interface::import}
+     */
+    public function importFile($_filename);
+    
+    /**
+     * import from given data
+     * 
+     * @param string $_data
+     * @return @see{Tinebase_Import_Interface::import}
+     */
+    public function importData($_data);
+    
+    /**
+     * creates a new importer from an importexport definition
+     * 
+     * @param  Tinebase_Model_ImportExportDefinition $_definition
+     * @param  array                                 $_config
+     * @return Tinebase_Import_Abstract
+     */
+    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array());
 }
