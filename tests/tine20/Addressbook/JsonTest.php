@@ -303,7 +303,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test import data
      */
-    public function testImport()
+    public function testExportImport()
     {
         $filter = new Addressbook_Model_ContactFilter();
         $tag = new Tinebase_Model_Tag(array(
@@ -319,6 +319,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         // export first and create files array
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
         $filename = $exporter->generate();
+        $this->assertContains(',"tag::testImport"', file_get_contents($filename), 'tag was not found in export');
+        
+        // then import
         $files = array(
             array('name' => $filename, 'path' => $filename)
         );
@@ -326,8 +329,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             'container_id'  => $this->container->getId(),
             'dryrun'        => 1,
         );
-        
-        // then import
         $result = $this->_instance->importContacts($files, $options, $definition->getId());
         
         // check
