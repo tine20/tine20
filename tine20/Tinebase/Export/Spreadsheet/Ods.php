@@ -172,26 +172,10 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
      */
     protected function _addHead($table)
     {
-        /*
-        // @todo add this again?
-        $columnId = 0;
-        foreach($this->_config->columns->column as $field) {
-            $column = $table->appendColumn();
-            $column->setStyle('co' . $columnId);
-            if($field->type == 'date') {
-                $column->setDefaultCellStyle('ceShortDate');
-            }
-            $this->_addColumnStyle('co' . $columnId, $field->width);
-            
-            $columnId++;
-        }
-        */
-
         $row = $table->appendRow();
         
         // add header (replace placeholders)
         if (isset($this->_config->headers)) {
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_filter->toArray(), true));
             
             $patterns = array(
                 '/\{date\}/', 
@@ -201,7 +185,6 @@ class Tinebase_Export_Spreadsheet_Ods extends Tinebase_Export_Spreadsheet_Abstra
             $replacements = array(
                 Zend_Date::now()->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale),
                 Tinebase_Core::getUser()->accountDisplayName,
-                //$this->_translate->_('Filter') . ': ' . implode(', ', $filters)
             );
             
             foreach($this->_config->headers->header as $headerCell) {
