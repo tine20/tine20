@@ -33,11 +33,10 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
     const DEFAULTCALENDAR = 'defaultCalendar';
     
     /**
-     * default folder to create new synced emails in
+     * default container to create new synced tasks in
      * 
-     * @todo do we need that?
      */
-    //const DEFAULTEMAILFOLDER = 'defaultEmailFolder';
+    const DEFAULTTASKLIST = 'defaultTaskList';
     
     /**
      * application
@@ -56,6 +55,7 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
         $allPrefs = array(
             self::DEFAULTADDRESSBOOK,
             self::DEFAULTCALENDAR,
+            self::DEFAULTTASKLIST,
         );
             
         return $allPrefs;
@@ -79,6 +79,10 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
                 'label'         => $translate->_('Default Calendar'),
                 'description'   => $translate->_('The default calendar to create new events in.'),
             ),
+            self::DEFAULTTASKLIST  => array(
+                'label'         => $translate->_('Default Task List'),
+                'description'   => $translate->_('The default task list to create new tasks in.'),
+            ),
         );
         
         return $prefDescriptions;
@@ -100,6 +104,9 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULTCALENDAR:
                 $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId, 'Calendar', self::DEFAULTCALENDAR);
+                break;
+            case self::DEFAULTTASKLIST:
+                $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId, 'Tasks', self::DEFAULTTASKLIST);
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
@@ -123,6 +130,9 @@ class ActiveSync_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULTCALENDAR:
                 $result = $this->_getDefaultContainerOptions('Calendar');
+                break;
+            case self::DEFAULTTASKLIST:
+                $result = $this->_getDefaultContainerOptions('Tasks');
                 break;
             default:
                 $result = parent::_getSpecialOptions($_value);
