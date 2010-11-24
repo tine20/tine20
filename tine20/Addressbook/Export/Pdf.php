@@ -160,7 +160,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
                     }
                     foreach ( $keys as $key ) {
                         if ( $_contact->$key instanceof Tinebase_DateTime ) { 
-                            Tinebase_Translation::dateToStringInTzAndLocaleFormat($_contact->$key, NULL, NULL, 'date');
+                            $content[] = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_contact->$key, NULL, NULL, 'date');
                         } elseif (!empty($_contact->$key) ) {
                             if (preg_match("/countryname/", $key)) {
                                 $content[] = Zend_Locale::getTranslation($_contact->$key, 'country', $locale);
