@@ -26,6 +26,6 @@ Contents
 
 3. Added new log level: TRACE
 
-- A new log level has been added: TRACE. You can activate it in your config.inc.php:
+- A new log level has been added: TRACE (8). It logs even more verbose than DEBUG (7). You can activate it in your config.inc.php:
 
     'priority' => '8',
