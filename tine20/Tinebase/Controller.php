@@ -89,7 +89,6 @@ class Tinebase_Controller
                 }
                 $user = $accountsController->getFullUserByLoginName($accountName);
             } catch (Tinebase_Exception_NotFound $e) {
-                Zend_Session::destroy();
                 if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 'Account ' . $accountName . ' not found in account storage.');
                 $accessLog->result = Tinebase_Auth::FAILURE_IDENTITY_NOT_FOUND;
             }
