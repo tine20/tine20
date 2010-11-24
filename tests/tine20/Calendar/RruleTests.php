@@ -745,6 +745,21 @@ class Calendar_RruleTests extends PHPUnit_Framework_TestCase
         }
     }
     
+    public function testIsRecurException()
+    {
+        $event = new Calendar_Model_Event(array(
+            'uid'           => '839404a34a8005d2ebd0da68b6aa922460ae945a',
+            'summary'       => 'conference exception (late)',
+            'dtstart'       => '2003-03-28 10:00:00',
+            'dtend'         => '2003-03-28 12:00:00',
+            'originator_tz' => 'US/Pacific',
+            'recurid'       => '839404a34a8005d2ebd0da68b6aa922460ae945a-2003-03-28 08:00:00'
+        ));
+        
+        $this->assertTrue($event->isRecurException(), 'recur exception was not detected');
+        $this->assertEquals('2003-03-28 08:00:00', $event->getOriginalDtStart()->format(Tinebase_Record_Abstract::ISO8601LONG));
+    }
+    
 }
     
 
