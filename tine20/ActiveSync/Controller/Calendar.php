@@ -355,8 +355,18 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             if($rrule->until instanceof DateTime) {
                 $recurrence->appendChild(new DOMElement('Until', $rrule->until->format('Ymd\THis') . 'Z', 'uri:Calendar'));
             }
-                        
-            //Occurences
+        }
+
+        // handle exceptions of repeating events
+        if(!empty($data->exdate) && is_array($data->exdate)) {
+            $exceptions = $_xmlNode->appendChild(new DOMElement('Exceptions', null, 'uri:Calendar'));
+            
+            foreach ($data->exdate as $exdate) {
+                $exception = $exceptions->appendChild(new DOMElement('Exception', null, 'uri:Calendar'));
+                
+                $exception->appendChild(new DOMElement('Deleted', 1, 'uri:Calendar'));
+                $exception->appendChild(new DOMElement('ExceptionStartTime', $exdate->format('Ymd\THis') . 'Z', 'uri:Calendar'));
+            }
         }
         
         if(count($data->attendee) > 0) {
