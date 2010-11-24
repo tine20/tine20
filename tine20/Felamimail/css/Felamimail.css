@@ -64,28 +64,6 @@
 }
 	
 
-.action_print {
-    background-image:url(../../images/oxygen/16x16/actions/document-print.png) !important;
-}
-.x-btn-medium .action_print {
-    background-image:url(../../images/oxygen/22x22/actions/document-print.png) !important;
-}
-.x-btn-large .action_print {
-    background-image:url(../../images/oxygen/32x32/actions/document-print.png) !important;
-}
-
-
-.action_printPreview {
-    background-image:url(../../images/oxygen/16x16/actions/document-print-preview.png) !important;
-}
-.x-btn-medium .action_printPreview {
-    background-image:url(../../images/oxygen/22x22/actions/document-print-preview.png) !important;
-}
-.x-btn-large .action_printPreview {
-    background-image:url(../../images/oxygen/32x32/actions/document-print-preview.png) !important;
-}
-
-
 .FelamimailIconCls {
     background-image:url(../../images/oxygen/16x16/apps/kmail.png) !important;
 }
