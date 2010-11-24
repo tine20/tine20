@@ -311,12 +311,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $this->_coursesToDelete[] = $courseData['id'];
         
         // import data
-        $importer = new $_definition->plugin(
-            $_definition, 
-            Admin_Controller_User::getInstance(),
-            array(
+        $importer = call_user_func($_definition->plugin . '::createFromDefinition', $_definition, array(
                 'group_id'                  => $courseData['group_id'],
-                #'accountLoginNamePrefix'    => $courseData['name'] . '-',
                 'accountHomeDirectoryPrefix' => '//base/school/' . $courseData['name'] . '/',
                 'accountEmailDomain'        => 'school.org',
                 'password'                  => $courseData['name'],
@@ -328,7 +324,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $importer->import($_filename);
+        $importer->importFile($_filename);
         $courseData = $this->_json->getCourse($courseData['id']);
 
         return $courseData;
