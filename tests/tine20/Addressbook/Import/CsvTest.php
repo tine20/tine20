@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -81,8 +81,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test import data
-     *
+     * test import duplicate data
      */
     public function testImportDuplicates()
     {
@@ -120,7 +119,6 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         return $result;
     }
 }		
-	
 
 if (PHPUnit_MAIN_METHOD == 'Addressbook_Import_CsvTest::main') {
     Addressbook_Import_CsvTest::main();
