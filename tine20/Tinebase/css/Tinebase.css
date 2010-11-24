@@ -278,6 +278,15 @@ html, body {
     background-image:url(../../images/oxygen/32x32/apps/kmail.png) !important;
 }
 
+.action_print {
+    background-image:url(../../images/oxygen/16x16/actions/document-print.png) !important;
+}
+.x-btn-medium .action_print {
+    background-image:url(../../images/oxygen/22x22/actions/document-print.png) !important;
+}
+.x-btn-large .action_print {
+    background-image:url(../../images/oxygen/32x32/actions/document-print.png) !important;
+}
 
 .tinebase-action-export-xls {
     background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.ms-excel.png) !important;
