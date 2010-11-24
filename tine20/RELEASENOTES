@@ -11,6 +11,7 @@ Contents
 --
 1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
 2. Switched from Zend_Date to DateTime
+3. Added new log level: TRACE
 
 
 --------------------------------------------------------------
@@ -22,3 +23,9 @@ Contents
 2. Switched from Zend_Date to DateTime
 
 - We switched from Zend_Date to php DateTime to improve the performance of datetime handling. 
+
+3. Added new log level: TRACE
+
+- A new log level has been added: TRACE. You can activate it in your config.inc.php:
+
+    'priority' => '8',
