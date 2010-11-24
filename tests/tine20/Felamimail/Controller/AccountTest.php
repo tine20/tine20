@@ -231,9 +231,6 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         try {
             $imap = Felamimail_Backend_ImapFactory::factory($account);
             $imapAccountConfig = $account->getImapConfig();
-            if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
-                $imapAccountConfig['user'] .= '@' . $imapConfig['domain'];
-            }        
             $imap->connectAndLogin((object)$imapAccountConfig);
         } catch (Felamimail_Exception_IMAPInvalidCredentials $e) {
             $loginSuccessful = FALSE;

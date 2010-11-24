@@ -425,9 +425,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     /**
      * updates all credentials of user accounts with new password
      * 
-     * @param Tinebase_Model_CredentialCache $_oldCredentialCache
+     * @param Tinebase_Model_CredentialCache $_oldUserCredentialCache old user credential cache
      */
-    public function updateCredentialsOfAllUserAccounts(Tinebase_Model_CredentialCache $_oldCredentialCache)
+    public function updateCredentialsOfAllUserAccounts(Tinebase_Model_CredentialCache $_oldUserCredentialCache)
     {
         $accounts = $this->search();
         
@@ -435,16 +435,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             if ($account->type === Felamimail_Model_Account::TYPE_USER) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating credentials for account ' . $account->name);
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($account->toArray(), TRUE));
                 $credentialIdKeys = array('credentials_id', 'smtp_credentials_id');
                 foreach ($credentialIdKeys as $idKey) {
                     if (! empty($account->{$idKey})) {
-                        //$oldCredentialCache = Tinebase_Auth_CredentialCache::getInstance()->get($account->{$idKey});
-                        //Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($oldCredentialCache);
-                        $account->{$idKey} = $this->_createCredentials($_oldCredentialCache->username, $_oldCredentialCache->password);
+                        $oldCredentialCache = Tinebase_Auth_CredentialCache::getInstance()->get($account->{$idKey});
+                        $oldCredentialCache->key = $_oldUserCredentialCache->password;
+                        Tinebase_Auth_CredentialCache::getInstance()->getCachedCredentials($oldCredentialCache);
+                        $account->{$idKey} = $this->_createCredentials($oldCredentialCache->username, $oldCredentialCache->password);
                     }
                 }
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($account->toArray(), TRUE));
                 $this->_backend->update($account);
             }
         }
@@ -713,9 +712,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param string $_password
      * @return string
      */
-    protected function _createCredentials($_username = NULL, $_password = NULL)
+    protected function _createCredentials($_username = NULL, $_password = NULL, $_userCredentialCache = NULL)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Create new account credentials for username ' . $_username);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+            $message = 'Create new account credentials';
+            if ($_username !== NULL) {
+                $message .= ' for username ' . $_username;
+            } 
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $message);    
+        }
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
             $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
@@ -729,7 +734,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 'password' => $_password,
             ));
         }
-
+        
         $accountCredentials = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(
             ($_username !== NULL) ? $_username : $userCredentialCache->username,
             ($_password !== NULL) ? $_password : $userCredentialCache->password,
