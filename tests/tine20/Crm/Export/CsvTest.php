@@ -66,7 +66,7 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         $csvFilename = $this->_instance->generate();
         
         $export = file_get_contents($csvFilename);
-        //echo $export;
+        echo $export;
         
         $translate = Tinebase_Translation::getTranslation('Crm');
         
@@ -76,6 +76,10 @@ class Crm_Export_CsvTest extends Crm_Export_AbstractTest
         $this->assertContains('"PHPUnit","1","' . $translate->_('open') . '","1","' . $translate->_('Customer') . '","1","' . $translate->_('Market') . '","' 
             . $defaultContainerId . '","Description","200000","70","', $export, 'data wrong');
         $this->assertContains('"Kneschke, Lars","","phpunit: crm test task"', $export, 'relations wrong');
+        
+        $date = Zend_Date::now();
+        $locale = Tinebase_Core::getLocale();
+        $this->assertContains($date->toString(Zend_Locale_Format::getDateFormat($locale), $locale), $export, 'note date wrong');
 
         unlink($csvFilename);
     }
