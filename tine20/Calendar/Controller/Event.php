@@ -674,14 +674,20 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         if ($_fakeDeletedInstances) {
             $baseEvent = $_event->isRecurException() ? $this->getRecurBaseEvent($_event) : $_event;
-            
+            $eventLength = $baseEvent->dtstart->diff($baseEvent->dtend);
+
             // compute remaining exdates
-            //$persistentExceptionsExdates = $exceptions->getOriginalDtStart();
-            
             $deletedInstanceDtStarts = array_diff($baseEvent->exdate, $exceptions->getOriginalDtStart());
             foreach((array) $deletedInstanceDtStarts as $deletedInstanceDtStart) {
                 $fakeEvent = clone $baseEvent;
                 $fakeEvent->setId(NULL);
+                unset($fakeEvent->exdate);
+                unset($fakeEvent->rrule);
+                unset($fakeEvent->rrule_until);
+                
+                $fakeEvent->dtstart = clone $deletedInstanceDtStart;
+                $fakeEvent->dtend = clone $deletedInstanceDtStart;
+                $fakeEvent->dtend->add($eventLength);
                 $fakeEvent->is_deleted = TRUE;
                 $fakeEvent->recurid = $fakeEvent->uid . '-' . $deletedInstanceDtStart->format(Tinebase_Record_Abstract::ISO8601LONG);
                 
