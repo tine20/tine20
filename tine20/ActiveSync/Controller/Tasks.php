@@ -88,6 +88,13 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     protected $_defaultFolderType   = ActiveSync_Command_FolderSync::FOLDERTYPE_TASK;
     
     /**
+     * default container for new entries
+     * 
+     * @var string
+     */
+    protected $_defaultFolder       = ActiveSync_Preference::DEFAULTTASKLIST;
+    
+    /**
      * type of user created folders
      *
      * @var int
