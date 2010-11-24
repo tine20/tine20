@@ -415,23 +415,30 @@ class Tinebase_Translation
     }
     
     /**
-     * convert zend date to string
+     * convert date to string
      * 
      * @param Tinebase_DateTime $_date [optional]
-     * @param string $_timezone [optional]
-     * @param Zend_Locale $_locale [optional]
+     * @param string            $_timezone [optional]
+     * @param Zend_Locale       $_locale [optional]
+     * @param string            $_part one of date, time or datetime
      * @return string
      */
-    public static function dateToStringInTzAndLocaleFormat(DateTime $_date = NULL, $_timezone = NULL, Zend_Locale $_locale = NULL)
+    public static function dateToStringInTzAndLocaleFormat(DateTime $_date = NULL, $_timezone = NULL, Zend_Locale $_locale = NULL, $_part = 'datetime')
     {
         $date = ($_date !== NULL) ? clone($_date) : Tinebase_DateTime::now();
         $timezone = ($_timezone !== NULL) ? $_timezone : Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get(Tinebase_Core::LOCALE);
         
+        $date = new Zend_Date($date->getTimestamp());
         $date->setTimezone($timezone);
-        $result = $date->toString(Tinebase_DateTime::convertIsoToPhpFormat(Zend_Locale_Format::getDateFormat($locale)), $locale) . ' ' .
-            $date->toString(Tinebase_DateTime::convertIsoToPhpFormat(Zend_Locale_Format::getTimeFormat($locale)), $locale);
-            
-        return $result;
+        
+        $dateString = $date->toString(Zend_Locale_Format::getDateFormat($locale), $locale);
+        $timeString = $date->toString(Zend_Locale_Format::getTimeFormat($locale), $locale);
+        
+        switch($_part) {
+            case 'date': return $dateString;
+            case 'time': return $timeString;
+            default: return $dateString . ' ' . $timeString;
+        }
     }
 }

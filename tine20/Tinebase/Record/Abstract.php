@@ -582,7 +582,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
      */
     protected function _convertDateTimeToString(&$_toConvert, $_format)
     {
-        $_format = "Y-m-d H:i:s";
+        //$_format = "Y-m-d H:i:s";
         foreach ($_toConvert as $field => &$value) {
             if ($value instanceof DateTime) {
                 $_toConvert[$field] = $value->format($_format);
