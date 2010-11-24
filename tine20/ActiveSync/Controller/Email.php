@@ -622,10 +622,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         #$_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
         
         if(in_array($_filterType, $this->_filterArray)) {
-            $today = Tinebase_DateTime::now()
-                ->setHour(0)
-                ->setMinute(0)
-                ->setSecond(0);
+            $today = Tinebase_DateTime::now()->setTime(0,0,0);
                 
             switch($_filterType) {
                 case self::FILTER_1_DAY_BACK:
