@@ -117,10 +117,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                     }
                     foreach ( $keys as $key ) {
                         if ( $_lead->$key instanceof DateTime ) {
-                            $content[] = $_lead->$key->toString(
-                                Zend_Locale_Format::getDateFormat(Tinebase_Core::get(Tinebase_Core::LOCALE)), 
-                                Tinebase_Core::get(Tinebase_Core::LOCALE)
-                            );
+                            $content[] = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_lead->$key, NULL, NULL, 'date');
                         } elseif (!empty($_lead->$key) ) {
                             if ( $key === 'turnover' ) {
                                 $content[] = Zend_Locale_Format::toNumber($_lead->$key, array('locale' => $_locale)) . " €";
@@ -247,7 +244,10 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         // get due date
                         if (! empty($task->due)) {
                             $dueDate = new Tinebase_DateTime($task->due);                 
-                            $linkedObjects[] = array($_translate->_('Due Date'), $dueDate->toString(Zend_Locale_Format::getDateFormat(Tinebase_Core::get('locale')), Tinebase_Core::get('locale')) );
+                            $linkedObjects[] = array(
+                                $_translate->_('Due Date'), 
+                                Tinebase_Translation::dateToStringInTzAndLocaleFormat($dueDate, NULL, NULL, 'date')
+                            );
                         }    
                         
                         // get task priority

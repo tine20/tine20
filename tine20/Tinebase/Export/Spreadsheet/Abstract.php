@@ -69,7 +69,7 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
         
         switch($_field->type) {
             case 'datetime':
-                $result = $_record->{$_field->identifier}->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale);
+                $result = Tinebase_Translation::dateToStringInTzAndLocaleFormat($_record->{$_field->identifier});
                 // empty date cells, get displayed as 30.12.1899
                 if(empty($result)) {
                     $result = NULL;
