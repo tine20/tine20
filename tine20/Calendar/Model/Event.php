@@ -183,6 +183,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     }
     
     /**
+     * returns the original dtstart of a recur series exception event 
+     *  -> when the event should have started with no exception
+     * 
+     * @return Tinebase_DateTime
+     */
+    public function getOriginalDtStart()
+    {
+        return $this->isRecurException() ? new Tinebase_DateTime(substr($this->recurid, -19)) : clone $this->dtstart;
+    }
+    
+    /**
      * gets translated field name
      * 
      * NOTE: this has to be done explicitly as our field names are technically 
@@ -255,6 +266,16 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         }
         
         return $hasGrant;
+    }
+    
+    /**
+     * event is an exception of a recur event series
+     * 
+     * @return boolean
+     */
+    public function isRecurException()
+    {
+        return !!$this->recurid;
     }
     
     /**
