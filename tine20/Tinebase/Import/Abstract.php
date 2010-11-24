@@ -38,7 +38,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @param array $_config
      */
-    final public function __construct(array $_config = array())
+    public function __construct(array $_config = array())
     {
         $this->_config = array_merge($this->_config, $this->_additionalConfig);
         
@@ -47,8 +47,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 $this->_config[$key] = $cfg;
             }
         }
-        
-        $this->_init();
     }
     
     /**
@@ -105,13 +103,5 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating importer with following config: ' . print_r($configArray, TRUE));
         return $configArray;
-    }
-    
-    /**
-     * template fn for init, cause constructor cannot be overwritten -> static late binding ... :-(
-     */
-    protected function _init()
-    {
-        
     }
 }

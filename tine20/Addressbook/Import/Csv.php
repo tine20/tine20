@@ -33,16 +33,13 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
     }
 
     /**
-     * init stuff
-     * - do not set geodata
-     * - set default container id
+     * constructs a new importer from given config
      * 
-     * (non-PHPdoc)
-     * @see tine20/Tinebase/Import/Csv/Tinebase_Import_Csv_Abstract::_init()
+     * @param array $_config
      */
-    protected function _init()
+    public function __construct(array $_config = array())
     {
-        parent::_init();
+        parent::__construct($_config);
         
         // don't set geodata for imported contacts as this is too much traffic for the nominatim server
         $this->_controller->setGeoDataForContacts(FALSE);

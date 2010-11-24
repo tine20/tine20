@@ -70,10 +70,14 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     protected $_controller = NULL;
     
     /**
-     * template fn for init, cause constructor cannot be overwritten -> static late binding ... :-(
+     * constructs a new importer from given config
+     * 
+     * @param array $_config
      */
-    protected function _init()
+    public function __construct(array $_config = array())
     {
+        parent::__construct($_config);
+        
         if (empty($this->_config['model'])) {
             throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs model in config.');
         }

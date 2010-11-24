@@ -35,6 +35,24 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     );
     
     /**
+     * constructs a new importer from given config
+     * 
+     * @param array $_config
+     */
+    public function __construct(array $_config = array())
+    {
+        parent::__construct($_config);
+        
+        switch($this->_config['model']) {
+            case 'Tinebase_Model_FullUser':
+                $this->_controller = Admin_Controller_User::getInstance();
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs correct model in config.');
+        }
+    }
+    
+    /**
      * creates a new importer from an importexport definition
      * 
      * @param  Tinebase_Model_ImportExportDefinition $_definition
@@ -46,20 +64,6 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array())
     {
         return new Admin_Import_Csv(self::getConfigArrayFromDefinition($_definition, $_config));
-    }
-    
-    /**
-     * template fn for init, cause constructor cannot be overwritten -> static late binding ... :-(
-     */
-    protected function _init()
-    {
-        switch($this->_config['model']) {
-            case 'Tinebase_Model_FullUser':
-                $this->_controller = Admin_Controller_User::getInstance();
-                break;
-            default:
-                throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs correct model in config.');
-        }
     }
     
     /**
