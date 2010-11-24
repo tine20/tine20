@@ -420,19 +420,20 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * - fires Tinebase_Event_User_ChangeCredentialCache
      * 
-     * @param string $username
      * @param string $password
      * @return array
      */
-    public function updateCredentialCache($username, $password)
+    public function updateCredentialCache($password)
     {
         $oldCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-        $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($username, $password);
+        $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials(Tinebase_Core::getUser()->accountLoginName, $password);
         Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
         
         $success = $this->_setCredentialCacheCookie();
         
         if ($success) {
+            // close session to allow other requests
+            Zend_Session::writeClose(true);
             $event = new Tinebase_Event_User_ChangeCredentialCache($oldCredentialCache);
             Tinebase_Event::fireEvent($event);
         }
