@@ -125,7 +125,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         ));
         
         $event = Calendar_Controller_Event::getInstance()->create($event);
-        #var_dump($event->toArray());
+        
         $this->objects['event'] = $event;
         
         $eventDaily = new Calendar_Model_Event(array(
@@ -135,10 +135,6 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
             'dtend'         => Tinebase_DateTime::now()->addMonth(1)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-05-25 18:30:00',
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=' . Tinebase_DateTime::now()->addMonth(1)->addHour(1)->addDay(6)->toString(Tinebase_Record_Abstract::ISO8601LONG), //2009-05-31 17:30:00',
-            'exdate'        => implode(',', array(
-                Tinebase_DateTime::now()->addMonth(1)->addHour(1)->addDay(2)->toString(Tinebase_Record_Abstract::ISO8601LONG),
-                Tinebase_DateTime::now()->addMonth(1)->addHour(1)->addDay(3)->toString(Tinebase_Record_Abstract::ISO8601LONG)
-            )),// '2009-05-27 18:00:00,2009-05-29 17:00:00',
             'container_id'  => $this->objects['containerWithSyncGrant']->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
@@ -159,10 +155,11 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
         $persitentException = Calendar_Controller_Event::getInstance()->createRecurException($exception);
         
-        //$eventDaily = Calendar_Controller_Event::getInstance()->get($eventDaily);
-        
+        //$eventDaily = Calendar_Controller_Event::getInstance()->get($eventDaily);        
         //var_dump($eventDaily->toArray());
         $this->objects['eventDaily'] = $eventDaily;
+        
+        Tinebase_Core::getPreference('ActiveSync')->setValue(ActiveSync_Preference::DEFAULTCALENDAR, $containerWithSyncGrant->getId());
         
         ########### define test filter
         $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
@@ -305,8 +302,8 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendXmlDailyEvent()
     {
-        $eventDaily = Calendar_Controller_Event::getInstance()->get($this->objects['eventDaily']->getId());
-        var_dump($eventDaily->toArray());
+        #$eventDaily = Calendar_Controller_Event::getInstance()->get($this->objects['eventDaily']->getId());
+        #var_dump($eventDaily->toArray());
         
         $imp                   = new DOMImplementation();
         
@@ -349,6 +346,11 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         
         $this->assertContains($this->objects['event']->getId(), $entries);
         #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
+    }
+    
+    public function testAddEntryToBackend()
+    {
+        // @todo check that entry gets added to ActiveSync_Preference::DEFAULTCALENDAR
     }
     
 }
