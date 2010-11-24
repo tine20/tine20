@@ -662,14 +662,34 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * NOTE: returns all exceptions regardless of current filters and access restrictions
      * 
      * @param  Calendar_Model_Event $_event
+     * @param  boolean              $_fakeDeletedInstances
      * @return Tinebase_Record_RecordSet of Calendar_Model_Event
      */
-    public function getRecurExceptions($_event)
+    public function getRecurExceptions($_event, $_fakeDeletedInstances = FALSE)
     {
-        return $this->_backend->search(new Calendar_Model_EventFilter(array(
+        $exceptions = $this->_backend->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals',  'value' => $_event->uid),
             array('field' => 'recurid', 'operator' => 'notnull', 'value' => NULL)
         )));
+        
+        if ($_fakeDeletedInstances) {
+            $baseEvent = $_event->isRecurException() ? $this->getRecurBaseEvent($_event) : $_event;
+            
+            // compute remaining exdates
+            //$persistentExceptionsExdates = $exceptions->getOriginalDtStart();
+            
+            $deletedInstanceDtStarts = array_diff($baseEvent->exdate, $exceptions->getOriginalDtStart());
+            foreach((array) $deletedInstanceDtStarts as $deletedInstanceDtStart) {
+                $fakeEvent = clone $baseEvent;
+                $fakeEvent->setId(NULL);
+                $fakeEvent->is_deleted = TRUE;
+                $fakeEvent->recurid = $fakeEvent->uid . '-' . $deletedInstanceDtStart->format(Tinebase_Record_Abstract::ISO8601LONG);
+                
+                $exceptions->addRecord($fakeEvent);
+            }
+        }
+        
+        return $exceptions;
     }
     
     /****************************** overwritten functions ************************/
