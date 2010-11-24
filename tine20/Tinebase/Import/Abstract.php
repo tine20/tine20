@@ -47,6 +47,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 $this->_options[$key] = $cfg;
             }
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating importer with following config: ' . print_r($this->_options, TRUE));
     }
     
     /**
@@ -101,7 +103,6 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             $optionsArray['model'] = $_definition->model;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating importer with following config: ' . print_r($optionsArray, TRUE));
         return $optionsArray;
     }
 }
