@@ -66,7 +66,7 @@ class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tine
      */
     public function handleEvents(Tinebase_Event_Abstract $_eventObject)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
         switch(get_class($_eventObject)) {
             case 'Tinebase_Event_User_ChangeCredentialCache':
