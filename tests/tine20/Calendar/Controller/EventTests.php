@@ -748,6 +748,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
         )));
         $this->assertEquals(2, count($events));
+        
+        return $persitentException;
     }
     
     public function testDeleteNonPersistentRecurException()
@@ -883,6 +885,23 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $alarmTime = clone $persistentException->dtstart;
         $alarmTime->subMinute(30);
         $this->assertTrue($alarmTime->equals($persistentException->alarms->getFirstRecord()->alarm_time), 'alarmtime of persistent exception is not correnct/set');
+    }
+    
+    public function testGetRecurExceptions()
+    {
+        $persitentException = $this->testCreateRecurException();
+        
+        $baseEvent = $this->_controller->getRecurBaseEvent($persitentException);
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($baseEvent, $exceptions, $baseEvent->dtstart);
+        $this->_controller->createRecurException($nextOccurance, TRUE);
+        
+        $exceptions = $this->_controller->getRecurExceptions($persitentException, TRUE);
+        $dtstarts = $exceptions->dtstart;
+
+        $this->assertTrue(in_array($nextOccurance->dtstart, $dtstarts), 'deleted instance missing');
+        $this->assertTrue(in_array($persitentException->dtstart, $dtstarts), 'exception instance missing');
     }
     
     /**
