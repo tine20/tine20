@@ -17,29 +17,38 @@
  * @subpackage  Import
  */
 class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
-{    
+{
+    /**
+     * additional config options
+     * 
+     * @var array
+     */
+    protected $_additionalOptions = array(
+        'container_id'      => '',
+    );
+    
     /**
      * creates a new importer from an importexport definition
      * 
      * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array                                 $_config
+     * @param  array                                 $_options
      * @return Calendar_Import_Ical
      * 
      * @todo move this to abstract when we no longer need to be php 5.2 compatible
      */
-    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array())
+    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_options = array())
     {
-        return new Addressbook_Import_Csv(self::getConfigArrayFromDefinition($_definition, $_config));
+        return new Addressbook_Import_Csv(self::getOptionsArrayFromDefinition($_definition, $_options));
     }
 
     /**
      * constructs a new importer from given config
      * 
-     * @param array $_config
+     * @param array $_options
      */
-    public function __construct(array $_config = array())
+    public function __construct(array $_options = array())
     {
-        parent::__construct($_config);
+        parent::__construct($_options);
         
         // don't set geodata for imported contacts as this is too much traffic for the nominatim server
         $this->_controller->setGeoDataForContacts(FALSE);
@@ -48,6 +57,7 @@ class Addressbook_Import_Csv extends Tinebase_Import_Csv_Abstract
         if (empty($this->_options['container_id'])) {
             $defaultContainer = $this->_controller->getDefaultAddressbook();
             $this->_options['container_id'] = $defaultContainer->getId();
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting default container id: ' . $this->_options['container_id']);
         }
     }
     

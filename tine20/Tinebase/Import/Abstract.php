@@ -24,27 +24,27 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * 
      * @var array
      */
-    protected $_config = array();
+    protected $_options = array();
     
     /**
      * additional config options (to be added by child classes)
      * 
      * @var array
      */
-    protected $_additionalConfig = array();
+    protected $_additionalOptions = array();
     
     /**
      * constructs a new importer from given config
      * 
-     * @param array $_config
+     * @param array $_options
      */
-    public function __construct(array $_config = array())
+    public function __construct(array $_options = array())
     {
-        $this->_config = array_merge($this->_config, $this->_additionalConfig);
+        $this->_options = array_merge($this->_options, $this->_additionalOptions);
         
-        foreach($_config as $key => $cfg) {
-            if (array_key_exists($key, $this->_config)) {
-                $this->_config[$key] = $cfg;
+        foreach($_options as $key => $cfg) {
+            if (array_key_exists($key, $this->_options)) {
+                $this->_options[$key] = $cfg;
             }
         }
     }
@@ -90,18 +90,18 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      * returns config from definition
      * 
      * @param Tinebase_Model_ImportExportDefinition $_definition
-     * @param array                                 $_config
+     * @param array                                 $_options
      * @return array
      */
-    public static function getConfigArrayFromDefinition($_definition, $_config)
+    public static function getOptionsArrayFromDefinition($_definition, $_options)
     {
-        $config = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, $_config);
-        $configArray = $config->toArray();
-        if (! isset($configArray['model'])) {
-            $configArray['model'] = $_definition->model;
+        $options = Tinebase_ImportExportDefinition::getOptionsAsZendConfigXml($_definition, $_options);
+        $optionsArray = $options->toArray();
+        if (! isset($optionsArray['model'])) {
+            $optionsArray['model'] = $_definition->model;
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating importer with following config: ' . print_r($configArray, TRUE));
-        return $configArray;
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Creating importer with following config: ' . print_r($optionsArray, TRUE));
+        return $optionsArray;
     }
 }

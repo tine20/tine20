@@ -10,7 +10,7 @@
  */
 
 /**
- * @see for german holydays http://www.sunbird-kalender.de/extension/kalender/
+ * @see for german holidays http://www.sunbird-kalender.de/extension/kalender/
  * 
  * @todo add support for rrule exceptions
  * @todo add support for alarms
@@ -20,7 +20,12 @@
  */
 class Calendar_Import_Ical extends Tinebase_Import_Abstract
 {
-    protected $_config = array(
+    /**
+     * config options
+     * 
+     * @var array
+     */
+    protected $_options = array(
         /**
          * force update of existing events 
          * @var boolean
@@ -67,12 +72,12 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
      * creates a new importer from an importexport definition
      * 
      * @param  Tinebase_Model_ImportExportDefinition $_definition
-     * @param  array                                 $_config
+     * @param  array                                 $_options
      * @return Calendar_Import_Ical
      */
-    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_config = array())
+    public static function createFromDefinition(Tinebase_Model_ImportExportDefinition $_definition, array $_options = array())
     {
-        return new Calendar_Import_Ical(self::getConfigArrayFromDefinition($_definition, $_config));
+        return new Calendar_Import_Ical(self::getOptionsArrayFromDefinition($_definition, $_options));
     }
     
     /**
@@ -87,7 +92,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
      */
     public function import($_resource = NULL)
     {
-        if (! $this->_config['importContainerId']) {
+        if (! $this->_options['importContainerId']) {
             throw new Tinebase_Exception_InvalidArgument('you need to define a importContainerId');
         }
         
@@ -107,14 +112,14 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
 //        print_r($events->toArray());
         
         // set container
-        $events->container_id = $this->_config['importContainerId'];
+        $events->container_id = $this->_options['importContainerId'];
         
         $cc = Calendar_Controller_Event::getInstance();
         $sendNotifications = $cc->sendNotifications(FALSE);
         
         // search uid's and remove already existing -> only in import cal?
         $existingEvents = $cc->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_config['importContainerId']),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_options['importContainerId']),
             array('field' => 'uid', 'operator' => 'in', 'value' => array_unique($events->uid)),
         )), NULL);
         
@@ -126,7 +131,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                 if (! $existingEvent) {
                     $cc->create($event, FALSE);
                     $result['totalcount'] += 1;
-                } else if ($this->_config['forceUpdateExisting'] || ($this->_config['updateExisting'] && $event->seq > $existingEvent->seq)) {
+                } else if ($this->_options['forceUpdateExisting'] || ($this->_options['updateExisting'] && $event->seq > $existingEvent->seq)) {
                     $event->id = $existingEvent->getId();
                     $event->last_modified_time = clone $existingEvent->last_modified_time;
                     $cc->update($event, FALSE);
