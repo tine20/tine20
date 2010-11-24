@@ -10,10 +10,6 @@
     <description>tine adb import</description>
     <mapping>
         <field>
-            <source>account_id</source>
-            <destination>account_id</destination>
-        </field>
-        <field>
             <source>adr_one_countryname</source>
             <destination>adr_one_countryname</destination>
         </field>
