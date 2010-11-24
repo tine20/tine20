@@ -418,7 +418,7 @@ abstract class Tinebase_Export_Abstract
         
         $resultArray = array();
         foreach ($_record->notes as $note) {
-            $date = $note->creation_time->toString(Zend_Locale_Format::getDateFormat($this->_locale), $this->_locale);
+            $date = Tinebase_Translation::dateToStringInTzAndLocaleFormat($note->creation_time);
             $resultArray[] = $date . ' - ' . $note->note;
         }
         
