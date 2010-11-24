@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ActiveSync\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-20 15:47+0100\n"
+"PO-Revision-Date: 2010-11-24 18:44+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -80,4 +80,12 @@ msgstr "Domyślny kalendarz"
 #: Preference.php:80
 msgid "The default calendar to create new events in."
 msgstr "Domyślny kalendarz z nowymi wydarzeniami."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Domyślna lista zadań"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Domyślna lista dla nowo tworzonych zadań."
 
