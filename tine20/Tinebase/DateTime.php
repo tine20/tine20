@@ -419,6 +419,14 @@ class Tinebase_DateTime extends DateTime
         return $this;
     }
     
+    public function setSecond($modify)
+    {
+        list ($h, $i) = explode(' ', $this->format('H i'));
+        
+        $this->setTime($h, $i, $modify);
+        return $this;
+    }
+    
     public function setTimezone($_timezone)
     {
         parent::setTimezone(new DateTimeZone($_timezone));
