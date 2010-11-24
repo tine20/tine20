@@ -142,9 +142,26 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
             'container_id'  => $this->objects['containerWithSyncGrant']->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
-        
+                
         $eventDaily = Calendar_Controller_Event::getInstance()->create($eventDaily);
-        #var_dump($eventDaily->toArray());
+        
+        $exception = clone $eventDaily;
+        $exception->dtstart->addDay(2);
+        $exception->dtend->addDay(2);
+        $exception->summary = 'Test Exception 1';
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentException = Calendar_Controller_Event::getInstance()->createRecurException($exception);
+        
+        $exception = clone $eventDaily;
+        $exception->dtstart->addDay(3);
+        $exception->dtend->addDay(3);
+        $exception->summary = 'Test Exception 2';
+        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $persitentException = Calendar_Controller_Event::getInstance()->createRecurException($exception);
+        
+        //$eventDaily = Calendar_Controller_Event::getInstance()->get($eventDaily);
+        
+        //var_dump($eventDaily->toArray());
         $this->objects['eventDaily'] = $eventDaily;
         
         ########### define test filter
@@ -288,6 +305,9 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendXmlDailyEvent()
     {
+        $eventDaily = Calendar_Controller_Event::getInstance()->get($this->objects['eventDaily']->getId());
+        var_dump($eventDaily->toArray());
+        
         $imp                   = new DOMImplementation();
         
         $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
