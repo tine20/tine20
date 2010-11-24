@@ -52,6 +52,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         'encodingTo'        => 'UTF-8',
         'dryrun'            => FALSE,
         'dryrunCount'       => 20,
+        'dryrunLimit'       => 0,       
         'duplicateCount'    => 0,
         'createMethod'      => 'create',
         'model'             => '',
@@ -105,7 +106,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         if (isset($this->_options['headline']) && $this->_options['headline']) {
             $headline = $this->_getRawData($_resource);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got headline: ' . implode(', ', $headline));
-            if ($this->_options['use_headline']) {
+            if (! $this->_options['use_headline']) {
                 // just read headline but do not use it
                 $headline = array();
             }
@@ -123,23 +124,26 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         while (
             ($recordData = $this->_getRawData($_resource)) !== FALSE && 
             (! $this->_options['dryrun'] 
-                || ! (isset($this->_options['dryrunLimit']) && $this->_options['dryrunLimit'] && $result['totalcount'] >= $this->_options['dryrunCount'])
+                || ! ($this->_options['dryrunLimit'] && $result['totalcount'] >= $this->_options['dryrunCount'])
             )
         ) {
             if (is_array($recordData)) {
                 try {
-                    $recordData = $this->_doMapping($recordData, $headline);
+                    $mappedData = $this->_doMapping($recordData, $headline);
                     
-                    if (!empty($recordData)) {
-                        $recordData = $this->_doConversions($recordData);
+                    if (! empty($mappedData)) {
+                        $convertedData = $this->_doConversions($mappedData);
 
                         // merge additional values (like group id, container id ...)
-                        $recordData = array_merge($recordData, $this->_addData($recordData));
+                        $mergedData = array_merge($convertedData, $this->_addData($convertedData));
                         
-                        //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, true));
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Merged data: ' . print_r($mergedData, true));
                         
                         // import record into tine!
-                        $importedRecord = $this->_importRecord($recordData, $result);
+                        $importedRecord = $this->_importRecord($mergedData, $result);
+                    } else {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got empty record from mapping! Was: ' . print_r($recordData, TRUE));
+                        $result['failcount']++;
                     }
                     
                 } catch (Exception $e) {
@@ -148,6 +152,8 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
                     $result['failcount']++;
                 }
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No array: ' . $recordData);
             }
         }
         
@@ -198,7 +204,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         if (! empty($_headline) && sizeof($_headline) == sizeof($_data)) {
             $_data_indexed = array_combine($_headline, $_data);
         }
-
+        
         foreach ($this->_options['mapping']['field'] as $index => $field) {
             if (empty($_data_indexed)) {
                 // use import definition order
