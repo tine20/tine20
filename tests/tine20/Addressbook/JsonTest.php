@@ -155,22 +155,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
         
     /**
-     * try to get accounts
-     *
-     */
-    #public function testGetAccounts()
-    #{
-    #    $paging = $this->objects['paging'];
-    #    
-    #    $filter = array(
-    #        array('field' => 'containerType', 'operator' => 'equals',   'value' => 'shared'),
-    #    );
-    #    $contacts = $this->_instance->searchContacts($filter, $paging);
-    #
-    #    $this->assertGreaterThan(0, $contacts['totalcount']);
-    #}
-    
-    /**
      * try to get contacts by owner
      *
      */
@@ -318,7 +302,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test import data
-     *
      */
     public function testImport()
     {
@@ -336,7 +319,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         // export first and create files array
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
         $filename = $exporter->generate();
-        //echo file_get_contents($filename);
         $files = array(
             array('name' => $filename, 'path' => $filename)
         );
@@ -347,16 +329,12 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         
         // then import
         $result = $this->_instance->importContacts($files, $options, $definition->getId());
-        //print_r($result['results'][0]);
         
         // check
         $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
         $this->assertEquals('Admin Account, Tine 2.0', $result['results'][0]['n_fileas'], 'file as not found');
-        #
-        #@todo check tags again
-        #
-        #$this->assertEquals('tag::testImport', $result['results'][0]['tags'], 'Did not get tag');
+        $this->assertEquals('tag::testImport', $result['results'][0]['tags'], 'Did not get tag');
         
         // cleanup
         unset($filename);
