@@ -77,6 +77,13 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     protected $_defaultFolderType;
     
     /**
+     * default container for new entries
+     * 
+     * @var string
+     */
+    protected $_defaultFolder;
+    
+    /**
      * type of user created folders
      *
      * @var int
@@ -218,9 +225,16 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         $entry = $this->_toTineModel($_data);
         $entry->creation_time = $this->_syncTimeStamp;
         $entry->created_by = Tinebase_Core::getUser()->getId();
+        
         // container_id gets set to personal folder in application specific controller if missing
         if($_folderId != $this->_specialFolderName) {
             $entry->container_id = $_folderId;
+        } else {
+            $containerId = Tinebase_Core::getPreference('ActiveSync')->{$this->_defaultFolder};
+            
+            if (Tinebase_Core::getUser()->hasGrant($containerId, Tinebase_Model_Grants::GRANT_ADD) === true) {
+                $entry->container_id = $containerId;
+            }
         }
             
         $entry = $this->_contentController->create($entry);
