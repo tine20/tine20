@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -42,7 +42,7 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     );
     
     /**
-     * import contacts
+     * import events
      *
      * @param Zend_Console_Getopt $_opts
      */
@@ -51,6 +51,11 @@ class Calendar_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         parent::_import($_opts);        
     }
     
+    /**
+     * import from egroupware
+     *
+     * @param Zend_Console_Getopt $_opts
+     */
     public function importegw14($_opts) {
         //$args = $_opts->getRemainingArgs();
         list($host, $username, $password, $dbname, $charset) = $_opts->getRemainingArgs();
