@@ -81,6 +81,14 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             throw new Tinebase_Exception_InvalidArgument(get_class($this) . ' needs model in config.');
         }
         
+        $this->_setController();
+    }
+    
+    /**
+     * set controller
+     */
+    protected function _setController()
+    {
         list($appName, $ns, $modelName) = explode('_', $this->_options['model']);
         $this->_controller = Tinebase_Core::getApplicationInstance($appName, $modelName);
     }

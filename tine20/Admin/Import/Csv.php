@@ -35,14 +35,10 @@ class Admin_Import_Csv extends Tinebase_Import_Csv_Abstract
     );
     
     /**
-     * constructs a new importer from given config
-     * 
-     * @param array $_options
+     * set controller
      */
-    public function __construct(array $_options = array())
+    protected function _setController()
     {
-        parent::__construct($_options);
-        
         switch($this->_options['model']) {
             case 'Tinebase_Model_FullUser':
                 $this->_controller = Admin_Controller_User::getInstance();
