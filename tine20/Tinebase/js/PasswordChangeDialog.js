@@ -90,6 +90,12 @@ Tine.Tinebase.PasswordChangeDialog = Ext.extend(Ext.Window, {
                                             buttons: Ext.MessageBox.OK,
                                             icon: Ext.MessageBox.INFO
                                         });
+                                        Ext.Ajax.request({
+                                            params: {
+                                                method: 'Tinebase.updateCredentialCache',
+                                                password: values.newPassword
+                                            }
+                                        });
                                     } else {
                                         Ext.MessageBox.show({
                                             title: _('Failure'),
