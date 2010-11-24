@@ -45,10 +45,10 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
             return true;
         };
         
-        this.DAILYcard = new Tine.Calendar.RrulePanel.DAILYcard({});
-        this.WEEKLYcard = new Tine.Calendar.RrulePanel.WEEKLYcard({});
-        this.MONTHLYcard = new Tine.Calendar.RrulePanel.MONTHLYcard({});
-        this.YEARLYcard = new Tine.Calendar.RrulePanel.YEARLYcard({});
+        this.DAILYcard = new Tine.Calendar.RrulePanel.DAILYcard({rrulePanel: this});
+        this.WEEKLYcard = new Tine.Calendar.RrulePanel.WEEKLYcard({rrulePanel: this});
+        this.MONTHLYcard = new Tine.Calendar.RrulePanel.MONTHLYcard({rrulePanel: this});
+        this.YEARLYcard = new Tine.Calendar.RrulePanel.YEARLYcard({rrulePanel: this});
         
         this.ruleCards = new Ext.Panel({
             layout: 'card',
@@ -211,6 +211,13 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         return rrule;
     },
     
+    onAfterUnitTriggerClick: function() {
+        if (! this.until.getValue()) {
+            var dtstart = this.rrulePanel.record.get('dtstart');
+            this.until.menu.picker.setValue(dtstart);
+        }
+    },
+    
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         
@@ -219,7 +226,8 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         this.until = new Ext.form.DateField({
             requiredGrant : 'editGrant',
             width         : 100,
-            emptyText     : this.app.i18n._('forever')
+            emptyText     : this.app.i18n._('forever'),
+            onTriggerClick: Ext.form.DateField.prototype.onTriggerClick.createSequence(this.onAfterUnitTriggerClick, this)
         });
         
         /*
