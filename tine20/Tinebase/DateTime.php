@@ -58,6 +58,11 @@ class Tinebase_DateTime extends DateTime
         }
     }
     
+    public function __call($name, $arguments)
+    {
+        return call_user_func_array(array($this, "php52compat_$name"), $arguments);
+    }
+    
     /**
      * Adds a date or datepart to the existing date. For PHP < 5.3 supported parts are:
      *  sec, min, hour, day, week, month, year. For later versions check DateTime::add docu.
@@ -74,6 +79,8 @@ class Tinebase_DateTime extends DateTime
     {
         if ($_interval instanceof DateInterval) {
             return parent::add($_interval);
+//        } else if ($_interval instanceof DateIntervalLight) {
+//            
         } else if ($_interval instanceof DateTime) {
             $_interval = $_interval->get('U');
             $_part = self::MODIFIER_SECOND;
@@ -395,6 +402,21 @@ class Tinebase_DateTime extends DateTime
         return $this;
     }
     
+    /**
+     * Returns the difference between two DateTime objects
+     * 
+     * @param  DateTime $datetime2
+     * @param  bool     $absolute
+     * @return DateInterval
+     */
+    public function php52compat_diff(DateTime $datetime2, $absolute = false)
+    {
+        // use Zend_Date for 32 bit compat
+        $thisZD = new Zend_Date($this->format('U'));
+        $datetime2ZD = new Zend_Date($datetime2->format('U'));
+        
+        return $datetime2ZD->sub($thisZD, Zend_Date::TIMESTAMP);
+    }
     
     
     
@@ -462,8 +484,12 @@ class Tinebase_DateTime extends DateTime
     
     public static function isDate($_date)
     {
-        $result = date_parse($_date);
-        return empty($result['warning_count']) && empty($result['error_count']);
+        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+            $result = date_parse($_date);
+            return empty($result['warning_count']) && empty($result['error_count']);
+        } else {
+            return Zend_Date::isDate($_date, 'yyyy-MM-dd HH:mm:ss');
+        }
     }
     
     public function toArray()
@@ -490,3 +516,4 @@ class Tinebase_DateTime extends DateTime
     }
     
 }
+
