@@ -141,22 +141,38 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
                 
         $eventDaily = Calendar_Controller_Event::getInstance()->create($eventDaily);
         
-        $exception = clone $eventDaily;
-        $exception->dtstart->addDay(2);
-        $exception->dtend->addDay(2);
-        $exception->summary = 'Test Exception 1';
-        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $persitentException = Calendar_Controller_Event::getInstance()->createRecurException($exception);
+        // existing exceptions
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
-        $exception = clone $eventDaily;
-        $exception->dtstart->addDay(3);
-        $exception->dtend->addDay(3);
-        $exception->summary = 'Test Exception 2';
-        $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $persitentException = Calendar_Controller_Event::getInstance()->createRecurException($exception);
+        // first deleted instance
+        $deletedInstance1 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $eventDaily->dtstart);
+        Calendar_Controller_Event::getInstance()->createRecurException($deletedInstance1, true);
         
-        //$eventDaily = Calendar_Controller_Event::getInstance()->get($eventDaily);        
-        //var_dump($eventDaily->toArray());
+        // second deleted instance
+        $deletedInstance2 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $deletedInstance1->dtstart);
+        Calendar_Controller_Event::getInstance()->createRecurException($deletedInstance2, true);
+        
+        // first exception instance
+        $exceptionInstance1 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $deletedInstance2->dtstart);
+        $exceptionInstance1->dtstart->addHour(2);
+        $exceptionInstance1->dtend->addHour(2);
+        $exceptionInstance1->summary = 'Test Exception 1';
+        $exceptionInstance1 = Calendar_Controller_Event::getInstance()->createRecurException($exceptionInstance1);
+        
+        // first exception instance
+        $exceptionInstance2 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $exceptionInstance1->dtstart);
+        $exceptionInstance2->dtstart->addHour(3);
+        $exceptionInstance2->dtend->addHour(3);
+        $exceptionInstance2->summary = 'Test Exception 2';
+        $exceptionInstance2 = Calendar_Controller_Event::getInstance()->createRecurException($exceptionInstance2);
+        
+        // reread event from database again
+        #$eventDaily = Calendar_Controller_Event::getInstance()->get($eventDaily);        
+        #var_dump($eventDaily->toArray());
+        
+        $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($eventDaily, TRUE);
+        var_dump($exceptions->toArray());
+        
         $this->objects['eventDaily'] = $eventDaily;
         
         Tinebase_Core::getPreference('ActiveSync')->setValue(ActiveSync_Preference::DEFAULTCALENDAR, $containerWithSyncGrant->getId());
