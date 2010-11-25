@@ -546,6 +546,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     onStoreBeforeload: function (store, options) {
         options.params = options.params || {};
         
+        // define a transaction
+        this.lastStoreTransactionId = options.transactionId = Ext.id();
+        
         // allways start with an empty filter set!
         // this is important for paging and sort header!
         options.params.filter = [];
@@ -555,6 +558,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         //calendarSelectionPlugin.onBeforeLoad.call(calendarSelectionPlugin, store, options);
         
         this.filterToolbar.onBeforeLoad.call(this.filterToolbar, store, options);
+    },
+    
+    /**
+     * fence against loading of wrong data set
+     */
+    onStoreBeforeLoadRecords: function(o, options, success) {
+        return this.lastStoreTransactionId === options.transactionId;
     },
     
     /**
@@ -617,6 +627,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 fields: Tine.Calendar.Model.Event,
                 proxy: Tine.Calendar.backend,
                 reader: new Ext.data.JsonReader({}), //Tine.Calendar.backend.getReader(),
+                loadRecords: Ext.data.Store.prototype.loadRecords.createInterceptor(this.onStoreBeforeLoadRecords, this),
                 listeners: {
                     scope: this,
                     'beforeload': this.onStoreBeforeload,
