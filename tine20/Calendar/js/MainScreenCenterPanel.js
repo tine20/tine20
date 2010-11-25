@@ -638,11 +638,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                                 tbar.addButton(this.changeViewActions[i]);
                             }
                         }
-                    },
-                    change: this.updateView.createDelegate(this, [which]),
-                    refresh: this.refresh.createDelegate(this, [true])
+                    }
                 }
             });
+            
+            tbar.on('change', this.updateView.createDelegate(this, [which]), this, {buffer: 200});
+            tbar.on('refresh', this.refresh.createDelegate(this, [true]), this, {buffer: 200});
             
             var view;
             switch (which) 
