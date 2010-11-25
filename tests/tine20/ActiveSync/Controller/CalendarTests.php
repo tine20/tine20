@@ -145,22 +145,22 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         
         // first deleted instance
-        $deletedInstance1 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $eventDaily->dtstart);
+        $deletedInstance1 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $eventDaily->dtend);
         Calendar_Controller_Event::getInstance()->createRecurException($deletedInstance1, true);
         
         // second deleted instance
-        $deletedInstance2 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $deletedInstance1->dtstart);
+        $deletedInstance2 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $deletedInstance1->dtend);
         Calendar_Controller_Event::getInstance()->createRecurException($deletedInstance2, true);
         
         // first exception instance
-        $exceptionInstance1 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $deletedInstance2->dtstart);
+        $exceptionInstance1 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $deletedInstance2->dtend);
         $exceptionInstance1->dtstart->addHour(2);
         $exceptionInstance1->dtend->addHour(2);
         $exceptionInstance1->summary = 'Test Exception 1';
         $exceptionInstance1 = Calendar_Controller_Event::getInstance()->createRecurException($exceptionInstance1);
         
         // first exception instance
-        $exceptionInstance2 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $exceptionInstance1->dtstart);
+        $exceptionInstance2 = Calendar_Model_Rrule::computeNextOccurrence($eventDaily, $exceptions, $exceptionInstance1->dtend);
         $exceptionInstance2->dtstart->addHour(3);
         $exceptionInstance2->dtend->addHour(3);
         $exceptionInstance2->summary = 'Test Exception 2';
@@ -171,7 +171,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         #var_dump($eventDaily->toArray());
         
         $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($eventDaily, TRUE);
-        var_dump($exceptions->toArray());
+        #var_dump($exceptions->toArray());
         
         $this->objects['eventDaily'] = $eventDaily;
         
