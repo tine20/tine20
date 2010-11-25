@@ -60,6 +60,14 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_Date');
         $dt->compare('2010-11-13 09:36:00');
     }
+    
+    public function testModifyReturnValue()
+    {
+        $dt = new Tinebase_DateTime('2010-11-25 12:11:00');
+        $instance = $dt->addDay(-1);
+        
+        $this->assertType('Tinebase_DateTime', $instance);
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_DateTimeTest::main') {
