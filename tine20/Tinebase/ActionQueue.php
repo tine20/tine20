@@ -97,25 +97,33 @@
     {
         $params = func_get_args();
         $action = array_shift($params);
+        $decodedAction = array(
+            'action' => $action,
+            'params' => $params
+        );
+        
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " queuing action: '{$action}'");
         
-        try {
-            $message = serialize(array(
-                'action' => $action,
-                'params' => $params
-            ));
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message);
-        } catch (Exception $e) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not create message for action: '{$action}'");
-            return;
-        }
-        
-        if ($this->_queue) {
-            $this->_queue->send($message);
+        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+            try {
+                $message = serialize($decodedAction);
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not create message for action: '{$action}'");
+                return;
+            }
+            
+            if ($this->_queue) {
+                $this->_queue->send($message);
+            } else {
+                // execute action immediately if no queue service is available
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue configured -> directly execute action: '{$action}'");
+                $this->_executeAction($message);
+            }
         } else {
-            // execute action immediately if no queue service is available
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue configured -> directly execute action: '{$action}'");
-            $this->_executeAction($message);
+            // NOTE: DateTime is not serialisable before 5.3
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue support for php < 5.3.0 -> directly execute action: '{$action}'");
+            $this->_executeDecodedAction($decodedAction);
         }
     }
     
@@ -136,8 +144,19 @@
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " executing action: '{$decodedMessage['action']}'");
         
+        return $this->_executeDecodedAction($decodedMessage);
+    }
+    
+    /**
+     * execute the decoded action
+     * 
+     * @param array $_decodedMessage
+     * @throws Exception
+     */
+    protected function _executeDecodedAction($_decodedMessage)
+    {
         try {
-            list($appName, $actionName) = explode('.', $decodedMessage['action']);
+            list($appName, $actionName) = explode('.', $_decodedMessage['action']);
             $controller = Tinebase_Core::getApplicationInstance($appName);
         
             if (! method_exists($controller, $actionName)) {
@@ -148,6 +167,6 @@
             return;
         }
         
-        call_user_func_array(array($controller, $actionName), $decodedMessage['params']);
+        call_user_func_array(array($controller, $actionName), $_decodedMessage['params']);
     }
 }
