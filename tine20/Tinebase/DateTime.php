@@ -382,6 +382,18 @@ class Tinebase_DateTime extends DateTime
         return $this->addYear(-1 * $number);
     }
     
+    /**
+     * Alters the timestamp
+     * NOTE: PHP 5.3.0 Changelog: Changed the return value on success from NULL to DateTime
+     *
+     * @param  string $modify A date/time string. Valid formats are explained in Date and Time Formats.
+     * @return Tinebase_DateTime $this
+     */
+    public function modify($modify)
+    {
+        parent::modify($modify);
+        return $this;
+    }
     
     
     
