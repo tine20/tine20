@@ -220,7 +220,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false)
     {
-        $data = $this->_contentController->get($_serverId);
+        $data = $_serverId instanceof Calendar_Model_Event ? $_serverId : $this->_contentController->get($_serverId);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " calendar data " . print_r($data->toArray(), true));
         
@@ -366,13 +366,19 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
 
         // handle exceptions of repeating events
         if(!empty($data->exdate) && is_array($data->exdate)) {
-            $exceptions = $_xmlNode->appendChild(new DOMElement('Exceptions', null, 'uri:Calendar'));
+            $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($data, TRUE);
             
-            foreach ($data->exdate as $exdate) {
-                $exception = $exceptions->appendChild(new DOMElement('Exception', null, 'uri:Calendar'));
+            $exceptionsTag = $_xmlNode->appendChild(new DOMElement('Exceptions', null, 'uri:Calendar'));
+            
+            foreach ($exceptions as $exception) {
+                $exceptionTag = $exceptionsTag->appendChild(new DOMElement('Exception', null, 'uri:Calendar'));
                 
-                $exception->appendChild(new DOMElement('Deleted', 1, 'uri:Calendar'));
-                $exception->appendChild(new DOMElement('ExceptionStartTime', $exdate->format('Ymd\THis') . 'Z', 'uri:Calendar'));
+                $exceptionTag->appendChild(new DOMElement('Deleted', (int)$exception->is_deleted, 'uri:Calendar'));
+                $exceptionTag->appendChild(new DOMElement('ExceptionStartTime', $exception->getOriginalDtStart()->format('Ymd\THis') . 'Z', 'uri:Calendar'));
+                
+                if ((int)$exception->is_deleted === 0) {
+                    $this->appendXML($exceptionTag, $_folderId, $exception, $_options, $_neverTruncate);
+                }
             }
         }
         
