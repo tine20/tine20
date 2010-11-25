@@ -417,11 +417,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderUserName: function(name) {
-        if (typeof name.get == 'function' && name.get('n_fn')) {
-            return Ext.util.Format.htmlEncode(name.get('n_fn'));
+        if (typeof name.get == 'function' && name.get('n_fileas')) {
+            return Ext.util.Format.htmlEncode(name.get('n_fileas'));
         }
-        if (name.n_fn) {
-            return Ext.util.Format.htmlEncode(name.n_fn);
+        if (name.n_fileas) {
+            return Ext.util.Format.htmlEncode(name.n_fileas);
         }
         if (name.accountDisplayName) {
             return Ext.util.Format.htmlEncode(name.accountDisplayName);
