@@ -400,7 +400,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         #$this->assertEquals('Europe/Berlin', $event->originator_tz);
     }
     
-    public function testAddEntryToBackend()
+    public function _testAddEntryToBackend()
     {
         $xml = simplexml_import_dom($this->testDOM);
         
