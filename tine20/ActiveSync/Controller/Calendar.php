@@ -15,10 +15,6 @@
 /**
  * controller events class
  * 
- * current problems:
- *   n tine events become one AS event as AS events house all exceptions
- *   one AS event becomes n tine events
- *
  * @package     ActiveSync
  */
 class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
