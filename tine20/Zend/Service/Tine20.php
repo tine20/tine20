@@ -79,7 +79,7 @@ class Zend_Service_Tine20 extends Zend_Json_Client
      * @param string $loginname
      * @param string $password
      * @return array decoded JSON responce
-     * @thorws Zend_Service_Exception
+     * @throws Zend_Service_Exception
      */
     public function login($loginname, $password)
     {
