@@ -349,10 +349,17 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         
         $controller->appendXML($appData, null, $this->objects['eventDaily']->getId(), array());
         
+        #echo $testDom->saveXML();
+        
         // namespace === uri:Calendar
         $this->assertEquals(ActiveSync_Controller_Calendar::RECUR_TYPE_DAILY, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Type')->item(0)->nodeValue, $testDom->saveXML());
+        $this->assertEquals(4, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Exception')->length, $testDom->saveXML());
+        $this->assertEquals(4, @$testDom->getElementsByTagNameNS('uri:Calendar', 'ExceptionStartTime')->length, $testDom->saveXML());
+        $this->assertEquals(3, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Subject')->length, $testDom->saveXML());
+        
         $endTime = $this->objects['eventDaily']->dtend->format("Ymd\THis") . 'Z';
         $this->assertEquals($endTime, @$testDom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $testDom->saveXML());
+        
         $untilTime = Calendar_Model_Rrule::getRruleFromString($this->objects['eventDaily']->rrule)->until->format("Ymd\THis") . 'Z';
         $this->assertEquals($untilTime, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Until')->item(0)->nodeValue, $testDom->saveXML());
         
