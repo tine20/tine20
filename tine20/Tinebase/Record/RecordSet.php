@@ -433,6 +433,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * adds indices to this record set
      *
      * @param array $_properties
+     * @return $this
      */
     public function addIndices(array $_properties)
     {
@@ -445,6 +446,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             
             $this->_buildIndices();
         }
+        
+        return $this;
     }
     
     /**
@@ -563,7 +566,7 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
      * @param string $_direction
      * @param string $_sortFunction
      * @param int $_flags sort flags for asort/arsort
-     * @return void
+     * @return $this
      */
     public function sort($_field, $_direction = 'ASC', $_sortFunction = 'asort', $_flags = SORT_REGULAR)
     {
@@ -599,6 +602,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
         foreach (array_keys($offsetToSortFieldMap) as $oldOffset) {
             $this->addRecord($oldListOfRecords[$oldOffset]);
         }
+        
+        return $this;
     }
         
     /**
