@@ -10,6 +10,12 @@
  * @version     $Id$
  */
 
+/**
+ * Tinebase updates for version 0.x
+ *
+ * @package     Tinebase
+ * @subpackage  Setup
+ */
 class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
 {
     /**
