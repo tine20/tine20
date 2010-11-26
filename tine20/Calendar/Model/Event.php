@@ -190,7 +190,22 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function getOriginalDtStart()
     {
-        return $this->isRecurException() ? new Tinebase_DateTime(substr($this->recurid, -19)) : clone $this->dtstart;
+        $origianlDtStart = $this->dtstart;
+        
+        if ($this->isRecurException()) {
+            if ($this->recurid instanceof DateTime) {
+                $origianlDtStart = clone $this->recurid;
+            } else if (is_string($_exception->recurid)) {
+                $origianlDtStartString = substr($_exception->recurid, -19);
+                if (! Tinebase_DateTime::isDate($origianlDtStartString)) {
+                    throw new Tinebase_Exception_InvalidArgument('recurid does not contain a valid original start date');
+                }
+                
+                $origianlDtStart = new Tinebase_DateTime(substr($_exception->recurid, -19));
+            }
+        }
+        
+        return $origianlDtStart;
     }
     
     /**
