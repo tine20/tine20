@@ -64,6 +64,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $persistentEvent = $this->_uit->create($event);
         
         $this->_assertTestEvent($persistentEvent);
+        return $persistentEvent;
     }
     
     public function testGet()
@@ -86,6 +87,57 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         
         $this->assertEquals(1, $events->count());
         $this->_assertTestEvent($events->getFirstRecord());
+    }
+    
+    public function testUpdateRemoveExceptions()
+    {
+        $event = $this->testCreate();
+        
+        $event->exdate = NULL;
+        $updatedEvent = $this->_uit->update($event);
+        
+        $this->assertEquals(0, $updatedEvent->exdate->count());
+    }
+    
+    public function testUpdateCreateExceptions()
+    {
+        $event = $this->testCreate();
+        
+        $newPersistentException = clone $event->exdate->filter('is_deleted', 0)->getFirstRecord();
+        $newPersistentException->recurid = clone $event->dtstart;
+        $newPersistentException->recurid->addDay(3);
+        $newPersistentException->dtstart->addDay(2)->addHour(2);
+        $newPersistentException->dtend->addDay(2)->addHour(2);
+        $newPersistentException->summary = 'new exception';
+        $event->exdate->addRecord($newPersistentException);
+        
+        $newDeletedInstance = clone $event->exdate->filter('is_deleted', 1)->getFirstRecord();
+        $newDeletedInstance->dtstart->addDay(2);
+        $newDeletedInstance->dtend->addDay(2);
+        $newDeletedInstance->recurid = clone $newDeletedInstance->dtstart;
+        $newDeletedInstance->is_deleted = TRUE;
+        $event->exdate->addRecord($newDeletedInstance);
+        
+        $updatedEvent = $this->_uit->update($event);
+        
+        $this->assertEquals(4, $updatedEvent->exdate->count());
+    }
+    
+    public function testUpdateUpdateExceptions()
+    {
+        $event = $this->testCreate();
+        
+        $persistentException = $event->exdate->filter('is_deleted', 0)->getFirstRecord();
+        $persistentException->dtstart->addHour(2);
+        $persistentException->dtend->addHour(2);
+        $persistentException->summary = 'updated exception';
+        
+        $updatedEvent = $this->_uit->update($event);
+        
+        $this->assertEquals(2, $updatedEvent->exdate->count());
+        $updatedPersistentException = $updatedEvent->exdate->filter('is_deleted', 0)->getFirstRecord();
+        $this->assertEquals('updated exception', $updatedPersistentException->summary);
+        $this->assertEquals('2009-03-26 10:00:00', $updatedPersistentException->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
     protected function _assertTestEvent($persistentEvent)
