@@ -65,7 +65,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $this->testDOM->formatOutput = false;
         $this->testDOM->encoding     = 'utf-8';
         $this->testDOM->loadXML('<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:Calendar="uri:Calendar"><Collections><Collection><Class>Calendar</Class><SyncKey>9</SyncKey><CollectionId>41</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>5</FilterType></Options><Commands><Change><ServerId>6de7cb687964dc6eea109cd81750177979362217</ServerId><ApplicationData><Calendar:Timezone>xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Calendar:Timezone><Calendar:AllDayEvent>0</Calendar:AllDayEvent><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:DtStamp>20101125T150537Z</Calendar:DtStamp><Calendar:EndTime>20101123T160000Z</Calendar:EndTime><Calendar:Sensitivity>0</Calendar:Sensitivity><Calendar:Subject>Repeat</Calendar:Subject><Calendar:StartTime>20101123T130000Z</Calendar:StartTime><Calendar:UID>6de7cb687964dc6eea109cd81750177979362217</Calendar:UID><Calendar:MeetingStatus>1</Calendar:MeetingStatus><Calendar:Attendees><Calendar:Attendee><Calendar:Name>Lars Kneschke</Calendar:Name><Calendar:Email>lars@kneschke.de</Calendar:Email></Calendar:Attendee></Calendar:Attendees><Calendar:Recurrence><Calendar:Type>0</Calendar:Type><Calendar:Interval>1</Calendar:Interval><Calendar:Until>20101128T225959Z</Calendar:Until></Calendar:Recurrence><Calendar:Exceptions><Calendar:Exception><Calendar:Deleted>0</Calendar:Deleted><Calendar:ExceptionStartTime>20101125T130000Z</Calendar:ExceptionStartTime><Calendar:StartTime>20101125T140000Z</Calendar:StartTime><Calendar:EndTime>20101125T170000Z</Calendar:EndTime><Calendar:Subject>Repeat mal anders</Calendar:Subject><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:AllDayEvent>0</Calendar:AllDayEvent></Calendar:Exception><Calendar:Exception><Calendar:Deleted>1</Calendar:Deleted><Calendar:ExceptionStartTime>20101124T130000Z</Calendar:ExceptionStartTime></Calendar:Exception></Calendar:Exceptions></ApplicationData></Change></Commands></Collection></Collections></Sync>');
-        //echo $this->testDOM->saveXML();
+        #$this->testDOM->formatOutput = true; echo $this->testDOM->saveXML(); $this->testDOM->formatOutput = false;
     	
         
     	############# TEST USER ##########
@@ -371,9 +371,10 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         
         $event = $controller->toTineModel($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
-        //var_dump($event->toArray());
+        #var_dump($event->toArray());
         
-        $this->assertEquals('Repeat',        $event->summary);
+        $this->assertEquals('Repeat', $event->summary);
+        $this->assertEquals(2,        count($event->exdate));
         #$this->assertEquals('Europe/Berlin', $event->originator_tz);
     }
     
