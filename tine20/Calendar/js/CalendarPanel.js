@@ -222,6 +222,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             this.conflictConfirmWin = Tine.WindowFactory.getWindow({
                 modal: true,
                 width: 350,
+                height: 150 + 15*error.freebusyinfo.length,
                 cls: 'x-window-dlg',
                 closable: false,
                 title: this.app.i18n._('Scheduling Conflict'),
@@ -229,6 +230,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 items: [{
                 	border: false,
                 	unstyled: true,
+                    autoScroll: true,
                     buttons: [{
                         text: this.app.i18n._('Ignore Conflict'),
                         scope: this,
