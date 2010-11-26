@@ -137,7 +137,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $events = $this->_eventController->search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
         if (! $_onlyIds) {
-            foreach($events as $events) {
+            foreach($events as $event) {
                 $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
             }
         }
