@@ -26,7 +26,7 @@
  * of recur event instances stored in the property:
  * -> Calendar_Model_Event::recurid
  */
-class Calendar_Conroller_MSEventFacade implements Tinebase_Controller_Record_Interface
+class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_Interface
 {
     /**
      * @var Calendar_Controller_Event
@@ -34,7 +34,7 @@ class Calendar_Conroller_MSEventFacade implements Tinebase_Controller_Record_Int
     protected $_eventController = NULL;
     
     /**
-     * @var Calendar_Conroller_MSEventFacade
+     * @var Calendar_Controller_MSEventFacade
      */
     private static $_instance = NULL;
     
@@ -58,12 +58,12 @@ class Calendar_Conroller_MSEventFacade implements Tinebase_Controller_Record_Int
     /**
      * singleton
      *
-     * @return Calendar_Conroller_MSEventFacade
+     * @return Calendar_Controller_MSEventFacade
      */
     public static function getInstance() 
     {
         if (self::$_instance === NULL) {
-            self::$_instance = new Calendar_Conroller_MSEventFacade();
+            self::$_instance = new Calendar_Controller_MSEventFacade();
         }
         return self::$_instance;
     }
@@ -172,7 +172,7 @@ class Calendar_Conroller_MSEventFacade implements Tinebase_Controller_Record_Int
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function create(Calendar_Model_Event $_event)
+    public function create(Tinebase_Record_Interface $_event)
     {
         if ($_event->recurid) {
             throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
@@ -203,7 +203,7 @@ class Calendar_Conroller_MSEventFacade implements Tinebase_Controller_Record_Int
      * @throws  Tinebase_Exception_AccessDenied
      * @throws  Tinebase_Exception_Record_Validation
      */
-    public function update(Calendar_Model_Event $_event, $_checkBusyConficts = FALSE)
+    public function update(Tinebase_Record_Interface $_event, $_checkBusyConficts = FALSE)
     {
         if ($_event->recurid) {
             throw new Tinebase_Exception_UnexpectedValue('recur event instances must be saved as part of the base event');
