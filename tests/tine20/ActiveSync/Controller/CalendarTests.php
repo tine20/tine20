@@ -409,6 +409,10 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         $event = $controller->add($this->objects['containerWithSyncGrant']->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
         Calendar_Controller_Event::getInstance()->delete($event->getId());
+        
+        $this->assertEquals('Repeat', $event->summary);
+        $this->assertEquals(2,        count($event->exdate));
+        
     }
     
 }
