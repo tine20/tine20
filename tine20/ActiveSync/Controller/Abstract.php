@@ -114,6 +114,14 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     protected $_sortField;
     
     /**
+     * name of the contentcontoller class
+     * Defaults to $this->_applicationName . '_Controller_' . $this->_modelName
+     * 
+     * @var string
+     */
+    protected $_contentControllerName;
+    
+    /**
      * the constructor
      *
      * @param Tinebase_DateTime $_syncTimeStamp
@@ -142,8 +150,12 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         
         $this->_device              = $_device;
         $this->_syncTimeStamp       = $_syncTimeStamp;
+        
         $this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
-        $this->_contentController   = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+        if (empty($this->_contentControllerName)) {
+            $this->_contentControllerName = $this->_applicationName . '_Controller_' . $this->_modelName;
+        }
+        $this->_contentController   = call_user_func(array($this->_contentControllerName, 'getInstance')); 
     }
     
     /**
