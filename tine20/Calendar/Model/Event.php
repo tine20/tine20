@@ -156,7 +156,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     public function __set($_name, $_value)
     {
         // ensure exdate as array
-        if ($_name == 'exdate' && ! empty($_value) && ! is_array($_value)) {
+        if ($_name == 'exdate' && ! empty($_value) && ! is_array($_value) && ! $_value instanceof Tinebase_Record_RecordSet ) {
             $_value = array($_value);
         }
         
@@ -195,13 +195,13 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         if ($this->isRecurException()) {
             if ($this->recurid instanceof DateTime) {
                 $origianlDtStart = clone $this->recurid;
-            } else if (is_string($_exception->recurid)) {
-                $origianlDtStartString = substr($_exception->recurid, -19);
+            } else if (is_string($this->recurid)) {
+                $origianlDtStartString = substr($this->recurid, -19);
                 if (! Tinebase_DateTime::isDate($origianlDtStartString)) {
                     throw new Tinebase_Exception_InvalidArgument('recurid does not contain a valid original start date');
                 }
                 
-                $origianlDtStart = new Tinebase_DateTime(substr($_exception->recurid, -19));
+                $origianlDtStart = new Tinebase_DateTime($origianlDtStartString);
             }
         }
         
