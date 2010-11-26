@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -13,7 +13,7 @@
 /**
  * Felamimail updates for version 0.x
  *
- * @package     ActiveSync
+ * @package     Felamimail
  * @subpackage  Setup
  */
 class Felamimail_Setup_Update_Release0 extends Setup_Update_Abstract

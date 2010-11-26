@@ -13,7 +13,7 @@
 /**
  * Felamimail updates for version 3.x
  *
- * @package     ActiveSync
+ * @package     Felamimail
  * @subpackage  Setup
  */
 class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
