@@ -10,6 +10,12 @@
  * @version     $Id$
  */
 
+/**
+ * Felamimail updates for version 3.x
+ *
+ * @package     ActiveSync
+ * @subpackage  Setup
+ */
 class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
 {
     /**

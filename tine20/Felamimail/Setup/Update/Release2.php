@@ -10,6 +10,12 @@
  * @version     $Id: Release0.php 10122 2009-08-21 10:23:50Z p.schuele@metaways.de $
  */
 
+/**
+ * Felamimail updates for version 2.x
+ *
+ * @package     ActiveSync
+ * @subpackage  Setup
+ */
 class Felamimail_Setup_Update_Release2 extends Setup_Update_Abstract
 {
     /**
