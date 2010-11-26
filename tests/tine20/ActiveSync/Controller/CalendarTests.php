@@ -370,6 +370,21 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
      * 
      * birthday must have 12 hours added
      */
+    public function testGetServerEntries()
+    {
+        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $entries = $controller->getServerEntries('calendar-root', ActiveSync_Controller_Calendar::FILTER_2_WEEKS_BACK);
+        
+        $this->assertContains($this->objects['event']->getId(), $entries);
+        #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
+    }
+    
+    /**
+     * test xml generation for IPhone
+     * 
+     * birthday must have 12 hours added
+     */
     public function testConvertToTine20Model()
     {
         $xml = simplexml_import_dom($this->testDOM);
@@ -385,24 +400,15 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         #$this->assertEquals('Europe/Berlin', $event->originator_tz);
     }
     
-    /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
-     */
-    public function testGetServerEntries()
-    {
-        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
-        
-        $entries = $controller->getServerEntries('calendar-root', ActiveSync_Controller_Calendar::FILTER_2_WEEKS_BACK);
-        
-        $this->assertContains($this->objects['event']->getId(), $entries);
-        #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
-    }
-    
     public function testAddEntryToBackend()
     {
-        // @todo check that entry gets added to ActiveSync_Preference::DEFAULTCALENDAR
+        $xml = simplexml_import_dom($this->testDOM);
+        
+        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime());
+        
+        $event = $controller->add($this->objects['containerWithSyncGrant']->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        Calendar_Controller_Event::getInstance()->delete($event->getId());
     }
     
 }
