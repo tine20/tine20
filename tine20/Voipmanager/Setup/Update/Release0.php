@@ -2,13 +2,20 @@
 /**
  * Tine 2.0
  *
- * @package     Voipmanager Management
+ * @package     Voipmanager
+ * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
+/**
+ * Voipmanager updates for version 0.x
+ *
+ * @package     Voipmanager
+ * @subpackage  Setup
+ */
 class Voipmanager_Setup_Update_Release0 extends Setup_Update_Abstract
 {
     /**
