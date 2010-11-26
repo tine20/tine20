@@ -369,25 +369,25 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             if($rrule->until instanceof DateTime) {
                 $recurrence->appendChild(new DOMElement('Until', $rrule->until->format('Ymd\THis') . 'Z', 'uri:Calendar'));
             }
-        }
-
-        // handle exceptions of repeating events
-        if(!empty($data->exdate) && is_array($data->exdate)) {
-            $exceptions = Calendar_Controller_Event::getInstance()->getRecurExceptions($data, TRUE);
             
-            $exceptionsTag = $_xmlNode->appendChild(new DOMElement('Exceptions', null, 'uri:Calendar'));
-            
-            foreach ($exceptions as $exception) {
-                $exceptionTag = $exceptionsTag->appendChild(new DOMElement('Exception', null, 'uri:Calendar'));
+            // handle exceptions of repeating events
+            if(isset($data->exdate) && $data->exdate instanceof Tinebase_Record_RecordSet) {
+                $exceptionsTag = $_xmlNode->appendChild(new DOMElement('Exceptions', null, 'uri:Calendar'));
                 
-                $exceptionTag->appendChild(new DOMElement('Deleted', (int)$exception->is_deleted, 'uri:Calendar'));
-                $exceptionTag->appendChild(new DOMElement('ExceptionStartTime', $exception->getOriginalDtStart()->format('Ymd\THis') . 'Z', 'uri:Calendar'));
-                
-                if ((int)$exception->is_deleted === 0) {
-                    $this->appendXML($exceptionTag, $_folderId, $exception, $_options, $_neverTruncate);
+                foreach ($data->exdate as $exception) {
+                    $exceptionTag = $exceptionsTag->appendChild(new DOMElement('Exception', null, 'uri:Calendar'));
+                    
+                    $exceptionTag->appendChild(new DOMElement('Deleted', (int)$exception->is_deleted, 'uri:Calendar'));
+                    $exceptionTag->appendChild(new DOMElement('ExceptionStartTime', $exception->getOriginalDtStart()->format('Ymd\THis') . 'Z', 'uri:Calendar'));
+                    
+                    if ((int)$exception->is_deleted === 0) {
+                        $this->appendXML($exceptionTag, $_folderId, $exception, $_options, $_neverTruncate);
+                    }
                 }
             }
+            
         }
+
         
         if(count($data->attendee) > 0) {
             // fill attendee cache
