@@ -205,8 +205,15 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * 
      * @var string
      */
-    protected $_filterProperty = 'calendarfilter_id';
-        
+    protected $_filterProperty      = 'calendarfilter_id';
+    
+    /**
+     * name of the contentcontoller class
+     * 
+     * @var string
+     */
+    protected $_contentControllerName = 'Calendar_Controller_MSEventFacade';
+    
     /**
      * append event data to xml element
      *
@@ -756,7 +763,30 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }            
             
             $event->rrule = $rrule;
+            
+            // handle exceptions from recurrence
+            if(isset($xmlData->Exceptions)) {
+                $exdates = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+                
+                foreach ($xmlData->Exceptions->Exception as $exception) {
+                    $eventException = new Calendar_Model_Event(array(
+                        'recurid' => $this->_convertISOToZendDate((string)$exception->ExceptionStartTime)
+                    ));
+                    
+                    if ((int)$exception->Deleted === 0) {
+                        $eventException->is_deleted = false;
+                        $this->toTineModel($exception, $eventException);
+                    } else {
+                        $eventException->is_deleted = true;
+                    }
+                    
+                    $exdates->addRecord($eventException);
+                }
+                
+                $event->exdate = $exdates;
+            }
         }
+        
         
         if(empty($event->organizer)) {
             $event->organizer = Tinebase_Core::getUser()->contact_id;
@@ -845,8 +875,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     protected function _getContentFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_filterType)
     {
-        $_filter->addFilter(new Tinebase_Model_Filter_Text('recurid', 'isnull', null));
-        
         if(in_array($_filterType, $this->_filterArray)) {
             switch($_filterType) {
                 case self::FILTER_2_WEEKS_BACK:
