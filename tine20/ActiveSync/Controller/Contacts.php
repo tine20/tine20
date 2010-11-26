@@ -294,7 +294,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_Contact
      */
-    protected function _toTineModel(SimpleXMLElement $_data, $_entry = null)
+    public function toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
         if($_entry instanceof Addressbook_Model_Contact) {
             $contact = $_entry;

@@ -187,7 +187,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_Contact
      */
-    protected function _toTineModel(SimpleXMLElement $_data, $_entry = null)
+    public function toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
         if($_entry instanceof Tasks_Model_Task) {
             $task = $_entry;

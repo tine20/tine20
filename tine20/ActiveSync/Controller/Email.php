@@ -451,7 +451,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
      * @param  SimpleXMLElement  $_data
      * @param  mixed             $_entry
      */
-    protected function _toTineModel(SimpleXMLElement $_data, $_entry = null)
+    public function toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
         // does nothing => you can't add emails via ActiveSync
     }

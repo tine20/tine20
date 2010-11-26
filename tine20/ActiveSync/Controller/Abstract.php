@@ -222,7 +222,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " add entry");
         
-        $entry = $this->_toTineModel($_data);
+        $entry = $this->toTineModel($_data);
         $entry->creation_time = $this->_syncTimeStamp;
         $entry->created_by = Tinebase_Core::getUser()->getId();
         
@@ -258,7 +258,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         
         $oldEntry = $this->_contentController->get($_id); 
         
-        $entry = $this->_toTineModel($_data, $oldEntry);
+        $entry = $this->toTineModel($_data, $oldEntry);
         $entry->last_modified_time = $this->_syncTimeStamp;
         
         $entry = $this->_contentController->update($entry);
@@ -416,7 +416,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         return array();
     }
             
-    abstract protected function _toTineModel(SimpleXMLElement $_data, $_entry = null);
+    abstract public function toTineModel(SimpleXMLElement $_data, $_entry = null);
     
     abstract protected function _toTineFilterArray(SimpleXMLElement $_data);
     

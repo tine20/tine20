@@ -494,7 +494,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      * @param SimpleXMLElement $_data
      * @return Calendar_Model_Event
      */
-    protected function _toTineModel(SimpleXMLElement $_data, $_entry = null)
+    public function toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
         if($_entry instanceof Calendar_Model_Event) {
             $event = $_entry;
