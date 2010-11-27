@@ -564,6 +564,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
+        $oldMaxExcecutionTime = ini_get('max_execution_time');
+        
         // increase execution time (sending message with attachments can take a long time)
         Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
@@ -606,6 +608,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         } else {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
         }
+        
+        // reset max execution time to old value
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $_message;
     }
@@ -702,6 +707,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             ' Sending message with subject ' . $_mail->getSubject() 
         );
 
+        $oldMaxExcecutionTime = ini_get('max_execution_time');
+        
         // increase execution time (sending message with attachments can take a long time)
         Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
@@ -740,6 +747,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         } else {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
         }
+        
+        // reset max execution time to old value
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $_mail;
     }
