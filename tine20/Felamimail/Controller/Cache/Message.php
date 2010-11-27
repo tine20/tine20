@@ -118,6 +118,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     public function updateCache($_folder, $_time = 10)
     {
+        $oldMaxExcecutionTime = ini_get('max_execution_time');
+        
         Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         // always read folder from database
@@ -138,6 +140,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_addMessagesToCache($folder, $imap);
         $this->_checkForMissingMessages($folder, $imap);
         $this->_updateFolderStatus($folder);
+        
+        // reset max execution time to old value
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $folder;
     }
