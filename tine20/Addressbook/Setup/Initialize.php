@@ -25,7 +25,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      * 
      * @see tine20/Setup/Setup_Initialize#_initialize($_application)
      */
-    public function _initialize(Tinebase_Model_Application $_application, $_options = null)
+    protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
         #$initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
         #Tinebase_User::getInstance()->importUsers($initialAdminUserOptions); //import users(ldap)/create initial users(sql)
