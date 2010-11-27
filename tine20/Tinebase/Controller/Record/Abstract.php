@@ -564,12 +564,17 @@ abstract class Tinebase_Controller_Record_Abstract
      */
     public function deleteByFilter(Tinebase_Model_Filter_FilterGroup $_filter)
     {
+        $oldMaxExcecutionTime = ini_get('max_execution_time');
+        
         Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         $ids = $this->search($_filter, NULL, FALSE, TRUE);
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($ids) . ' records ...');
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($ids, true));
+        
+        // reset max execution time to old value
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $this->delete($ids);
     }
