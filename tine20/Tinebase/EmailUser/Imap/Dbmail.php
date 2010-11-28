@@ -176,7 +176,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         $stmt->closeCursor();
                 
         if (!$queryResult) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Dovecot config for user ' . $_userId . ' not found!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Dbmail config for user ' . $_userId . ' not found!');
             return;
         }
         
@@ -204,7 +204,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
     {
         $values = array(
             $this->_propertyMapping['emailScheme']   => $this->_config['emailScheme'],
-            $this->_propertyMapping['emailPassword'] => $this->_generatePassword($_password, $this->_config['emailScheme'])
+            $this->_propertyMapping['emailPassword'] => Hash_Password::generate($this->_config['emailScheme'], $_password, false) 
         );
         
         if($this->_hasTine20Userid === true) {
@@ -282,7 +282,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
 	}
 	
     /**
-     * check if user exists already in dovecot user table
+     * check if user exists already in dbmail user table
      * 
      * @param  Tinebase_Model_FullUser  $_user
      */
@@ -349,7 +349,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
     }
     
     /**
-     * returns array of raw Dovecot data
+     * returns array of raw Dbmail data
      *
      * @param  Tinebase_Model_EmailUser  $_user
      * @param  Tinebase_Model_EmailUser  $_newUserProperties
@@ -364,11 +364,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
             if ($property && ! in_array($key, $this->_readOnlyFields)) {
                 switch ($key) {
                     case 'emailPassword':
-                        if ($this->_config['emailScheme'] == 'md5') {
-                            $rawData[$property] = $this->_generatePassword($value, $this->_config['emailScheme']);
-                        } else {
-                            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  emailScheme not supported!');
-                        }
+                        $rawData[$property] =  Hash_Password::generate($this->_config['emailScheme'], $value, false);
                         break;
                         
                     case 'emailUserId':
