@@ -55,7 +55,7 @@ class Tasks_Model_TaskFilterTest extends PHPUnit_Framework_TestCase
             'organizer'            => Tinebase_Core::getUser()->getId(),
             'priority'             => 2,
             //'status_id'            => 2,
-            'summary'              => 'our fist test task',
+            'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
         ));
         

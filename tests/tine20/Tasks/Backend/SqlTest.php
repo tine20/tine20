@@ -73,7 +73,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	        'organizer'            => Tinebase_Core::getUser()->getId(),
 	        'priority'             => 2,
 	        //'status_id'            => 2,
-	        'summary'              => 'our fist test task',
+	        'summary'              => 'our first test task',
 	        'url'                  => 'http://www.testtask.com',
         ));
         
@@ -139,7 +139,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->_backend->delete($testId);
         
         $filter = new Tasks_Model_TaskFilter(array(
-            array('field' => 'summary',      'operator' => 'contains', 'value' => 'our fist test task'),
+            array('field' => 'summary',      'operator' => 'contains', 'value' => 'our first test task'),
             array('field' => 'container_id', 'operator' => 'equals',   'value' => $this->_persistantTestTask1->container_id)
         ));
         
