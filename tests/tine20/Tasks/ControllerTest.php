@@ -89,7 +89,7 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
             'organizer'            => 4,
             'priority'             => 2,
             //'status_id'            => 2,
-            'summary'              => 'our fist test task',
+            'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
         ),true, false);
         $this->_testTask1->convertDates = true;
