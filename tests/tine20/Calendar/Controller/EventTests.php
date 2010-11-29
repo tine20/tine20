@@ -768,7 +768,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $persitentEvent = $this->_controller->get($persitentEvent->getId());
         $this->assertType('DateTime', $persitentEventWithExdate->exdate[0]);
-        $this->assertEquals($persitentEventWithExdate->exdate, $persitentEvent->exdate);
+        $this->assertEquals($persitentEventWithExdate->exdate[0]->format('c'), $persitentEvent->exdate[0]->format('c'));
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
         )));
