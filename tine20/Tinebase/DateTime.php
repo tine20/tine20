@@ -12,11 +12,7 @@
 /**
  * Tinebase_DateTime - Extensions around native php DateTime object
  * 
- * @TODO: recheck date creation from custom formats in record/set
- * @TODO: recheck timezone handling on date creation in record
- * @TODO: recheck localisation support -> Tinebase_Translation -> back to Zend_Date
  * @TODO: recheck addDay/Week ... rework dst fixes
- * @TODO: clean up this class and add more docu
  * @TODO: recheck 32 bit issues create / compare
  * 
  * NOTE: Tinebase_DateTime was introduced as replacement for Zend_Date in normal
@@ -418,25 +414,38 @@ class Tinebase_DateTime extends DateTime
         return $datetime2ZD->sub($thisZD, Zend_Date::TIMESTAMP);
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    /**
+     * Returns a string representation of the object
+     * For Supported format tokens see: php.net/date
+     * 
+     * @return String
+     */
     public function __toString()
     {
         return $this->format("Y-m-d H:i:s");
     }
     
+    /**
+     * Returns a string representation of the object
+     * For Supported format tokens see: php.net/date
+     * 
+     * @param  String $_format  OPTIONAL Rule for formatting output. If null the default date format is used
+     * @return String
+     */
     public function toString($_format = "Y-m-d H:i:s")
     {
         return $this->format($_format);
     }
     
+    /**
+     * Sets a new hour
+     * The hour is always a number.
+     * Returned is the new date object
+     * Example: 04.May.1993 13:07:25 -> setHour(7); -> 04.May.1993 07:07:25
+     *
+     * @param  string|integer $modify    Hour to set
+     * @return Tinebase_DateTime  $this
+     */
     public function setHour($modify)
     {
         list ($i, $s) = explode(' ', $this->format('i s'));
@@ -445,6 +454,15 @@ class Tinebase_DateTime extends DateTime
         return $this;
     }
     
+    /**
+     * Sets a new minute
+     * The minute is always a number.
+     * Returned is the new date object
+     * Example: 04.May.1993 13:23:25 -> setMinute(7); -> 04.May.1993 13:07:25
+     *
+     * @param  string|integer $modify    Minute to set
+     * @return Tinebase_DateTime  $this
+     */
     public function setMinute($modify)
     {
         list ($h, $s) = explode(' ', $this->format('H s'));
@@ -453,6 +471,15 @@ class Tinebase_DateTime extends DateTime
         return $this;
     }
     
+    /**
+     * Sets a new second
+     * The second is always a number.
+     * Returned is the new date object
+     * Example: 04.May.1993 13:07:25 -> setSecond(7); -> 04.May.1993 13:07:07
+     *
+     * @param  string|integer $modify    Second to set
+     * @return Tinebase_DateTime  $this
+     */
     public function setSecond($modify)
     {
         list ($h, $i) = explode(' ', $this->format('H i'));
@@ -461,12 +488,27 @@ class Tinebase_DateTime extends DateTime
         return $this;
     }
     
+    /**
+     * Sets a new timezone.
+     * For a list of supported timezones look here: http://php.net/timezones
+     *
+     * @param  string  $_timezone      OPTIONAL timezone for date calculation; defaults to date_default_timezone_get()
+     * @return Tinebase_DateTime  $this
+     */
     public function setTimezone($_timezone)
     {
         parent::setTimezone(new DateTimeZone($_timezone));
         return $this;
     }
     
+    /**
+     * Sets a new week. The week is always a number. The day of week is not changed.
+     * Returned is the new date object
+     * Example: 09.Jan.2007 13:07:25 -> setWeek(1); -> 02.Jan.2007 13:07:25
+     *
+     * @param  string|integer     $week    Week to set
+     * @return Tinebase_DateTime  $this
+     */
     public function setWeek($week)
     {
         $currentWeek = (int)$this->format("W");
@@ -474,6 +516,15 @@ class Tinebase_DateTime extends DateTime
         return $this->modify($operator . abs($currentWeek - $week) . "week");
     }
     
+    /**
+     * Sets a new weekday
+     * The weekday can be a number or a string.
+     * Returned is the new date object.
+     * Example: setWeekday(3); will set the wednesday of this week as day.
+     *
+     * @param  string|integer                  $weekDay   Weekday to set
+     * @return Tinebase_DateTime  $this
+     */
     public function setWeekDay($weekDay)
     {
         $currentWeekDay = (int)$this->format("N");
@@ -481,7 +532,13 @@ class Tinebase_DateTime extends DateTime
         return $this->modify($operator . abs($currentWeekDay - $weekDay) . "day");
     }
     
-    
+    /**
+     * Checks if the given date is a real date or datepart.
+     * Returns false if a expected datepart is missing or a datepart exceeds its possible border.
+     *
+     * @param  string             $_date   Date to parse for correctness
+     * @return boolean            True when all date parts are correct
+     */
     public static function isDate($_date)
     {
         if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
@@ -492,6 +549,11 @@ class Tinebase_DateTime extends DateTime
         }
     }
     
+    /**
+     * Returns an array representation of the object
+     *
+     * @return array
+     */
     public function toArray()
     {
         return array(
@@ -502,7 +564,7 @@ class Tinebase_DateTime extends DateTime
             'minute'    => $this->format('i'),
             'second'    => $this->format('s'),
             'timezone'  => $this->format('e'),
-            'timestamp' => $this->format('U'), // $this->getTimestamp() for php >= 5.3.0
+            'timestamp' => $this->format('U'),
             'weekday'   => $this->format('N'),
             'dayofyear' => $this->format('z'),
             'week'      => $this->format('W'),
@@ -510,6 +572,11 @@ class Tinebase_DateTime extends DateTime
         );
     }
     
+    /**
+     * Returns the actual date as new date object
+     *
+     * @return Tinebase_DateTime
+     */
     public static function now()
     {
         return new Tinebase_DateTime();
