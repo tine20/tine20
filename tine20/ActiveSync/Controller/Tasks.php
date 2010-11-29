@@ -118,7 +118,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false)
     {
-        $data = $this->_contentController->get($_serverId);
+        $data = $_serverId instanceof Tasks_Model_Task ? $_serverId : $this->_contentController->get($_serverId);
         
         foreach ($this->_mapping as $key => $value) {
             if (!empty($data->$value)) {
@@ -160,7 +160,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
             $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
             
             $dataTag = $body->appendChild(new DOMElement('Data', null, 'uri:AirSyncBase'));
-            $dataTag->appendChild(new DOMText($data->description));
+            $dataTag->appendChild(new DOMText(preg_replace("/(\r\n?|\n)/", "\r\n", $data->description)));
         }
         
         // Completed is required
@@ -244,7 +244,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
             $airSyncBase = $_data->children('uri:AirSyncBase');
             
             if (isset($airSyncBase->Body) && isset($airSyncBase->Body->Data)) {
-                $task->description = $airSyncBase->Body->Data;
+                $task->description = preg_replace("/(\r\n?|\n)/", "\r\n", (string)$airSyncBase->Body->Data);
             }
         }
         
