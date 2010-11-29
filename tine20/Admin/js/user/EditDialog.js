@@ -146,6 +146,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         this.record.set('accountGroups', newGroups);
         this.record.set('accountRoles', newRoles);
+        
+        // unset localized datetime fields before saving
+        var dateTimeDisplayFields = ['accountLastLogin', 'accountLastPasswordChange', 'logonTime', 'logoffTime', 'pwdLastSet', 'kickoffTime'];
+        Ext.each(dateTimeDisplayFields, function (dateTimeDisplayField) {
+        	this.record.set(dateTimeDisplayField, '');
+        }, this);
     },
 
     /**
