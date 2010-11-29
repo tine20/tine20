@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  * 
- * @package     Task
+ * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -11,9 +11,9 @@
 
 
 /**
- * backend for Calendar preferences
+ * Tasks preferences
  *
- * @package     Calendar
+ * @package     Tasks
  */
 class Tasks_Preference extends Tinebase_Preference_Abstract
 {
