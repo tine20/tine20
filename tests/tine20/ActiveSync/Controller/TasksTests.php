@@ -120,7 +120,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         
         $task = $controller->toTineModel($xml->Collections->Collection->Commands->Add[0]->ApplicationData);
         
-        var_dump($task->toArray());
+        #var_dump($task->toArray());
         
         $this->assertEquals('Testaufgabe auf mfe', $task->summary);
         $this->assertEquals(0,                     $task->percent);
