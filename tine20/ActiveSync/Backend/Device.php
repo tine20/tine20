@@ -22,6 +22,9 @@
  */
 class ActiveSync_Backend_Device extends Tinebase_Backend_Sql_Abstract 
 {
+    const TYPE_PALM   = 'palm';
+    const TYPE_IPHONE = 'iphone';
+    
     /**
      * Table name without prefix
      *
