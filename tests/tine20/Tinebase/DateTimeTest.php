@@ -68,6 +68,21 @@ class Tinebase_DateTimeTest extends PHPUnit_Framework_TestCase
         
         $this->assertType('Tinebase_DateTime', $instance);
     }
+    
+    public function testSleepWakeup()
+    {
+        $dt = new Tinebase_DateTime('2010-11-29 14:14:00', new DateTimeZone('Indian/Mauritius'));
+        $sdt = serialize($dt);
+        
+        $wdt = unserialize($sdt);
+        
+        // toy with it -> see if bug http://bugs.php.net/bug.php?id=46891 comes:
+        //  "The DateTime object has not been correctly initialized by its constructor"
+        $wdt->addHour(1);
+        
+        $this->assertEquals('2010-11-29 15:14:00', $wdt->format(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('Indian/Mauritius', $wdt->getTimezone()->getName());
+    }
 }
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_DateTimeTest::main') {
