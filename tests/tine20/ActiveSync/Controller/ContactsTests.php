@@ -414,7 +414,7 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $xml = new SimpleXMLElement($this->_exampleXMLExisting);
         $existing = $controller->search('addressbook-root', $xml->Collections->Collection->Commands->Add->ApplicationData);
         
-        $this->assertEquals(count($existing), 1);
+        $this->assertGreaterThanOrEqual(1, count($existing));
     }
 }
     
