@@ -35,6 +35,38 @@ class Tinebase_DateTime extends DateTime
     const MODIFIER_YEAR     = 'year';
     
     /**
+     * holds datetime string when being serialised (needed for php < 5.3)
+     * @see http://bugs.php.net/bug.php?id=46891
+     * 
+     * @var string
+     */
+    private $__sDT;
+    
+    /**
+     * holds datetimezone string when being serialised (needed for php < 5.3)
+     * @see http://bugs.php.net/bug.php?id=46891
+     * 
+     * @var string
+     */
+    private $__sDTZ;
+    
+    /**
+     * @see http://bugs.php.net/bug.php?id=46891
+     */
+    public function __sleep(){
+        $this->__sDT = $this->format('c');
+        $this->__sDTZ = $this->getTimezone()->getName();
+        return array('__sDT', '__sDTZ');
+    }
+
+    /**
+     * @see http://bugs.php.net/bug.php?id=46891
+     */
+    public function __wakeup() {
+        $this->__construct($this->__sDT, new DateTimeZone($this->__sDTZ));
+    }
+    
+    /**
      * Returns new DateTime object
      * 
      * @param string|int    $_time
