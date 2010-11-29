@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -21,10 +21,18 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
 /**
  * Test class for Calendar_Controller_Event
  * 
- * @package     Calendar
+ * @package     ActiveSync
  */
-class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
+class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
 {
+    /**
+     * name of the application
+     * 
+     * @var string
+     */
+    protected $_applicationName = 'Calendar';
+    
+    protected $_controllerName = 'ActiveSync_Controller_Calendar';
     
     /**
      * @var ActiveSync_Controller_Calendar controller
@@ -36,12 +44,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
      */
     protected $objects = array();
     
-    /**
-     * test domdocument with an calendar event
-     * 
-     * @var DOMDocument
-     */
-    protected $testDOM;
+    protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:Calendar="uri:Calendar"><Collections><Collection><Class>Calendar</Class><SyncKey>9</SyncKey><CollectionId>41</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>5</FilterType></Options><Commands><Change><ServerId>6de7cb687964dc6eea109cd81750177979362217</ServerId><ApplicationData><Calendar:Timezone>xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Calendar:Timezone><Calendar:AllDayEvent>0</Calendar:AllDayEvent><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:DtStamp>20101125T150537Z</Calendar:DtStamp><Calendar:EndTime>20101123T160000Z</Calendar:EndTime><Calendar:Sensitivity>0</Calendar:Sensitivity><Calendar:Subject>Repeat</Calendar:Subject><Calendar:StartTime>20101123T130000Z</Calendar:StartTime><Calendar:UID>6de7cb687964dc6eea109cd81750177979362217</Calendar:UID><Calendar:MeetingStatus>1</Calendar:MeetingStatus><Calendar:Attendees><Calendar:Attendee><Calendar:Name>Lars Kneschke</Calendar:Name><Calendar:Email>lars@kneschke.de</Calendar:Email></Calendar:Attendee></Calendar:Attendees><Calendar:Recurrence><Calendar:Type>0</Calendar:Type><Calendar:Interval>1</Calendar:Interval><Calendar:Until>20101128T225959Z</Calendar:Until></Calendar:Recurrence><Calendar:Exceptions><Calendar:Exception><Calendar:Deleted>0</Calendar:Deleted><Calendar:ExceptionStartTime>20101125T130000Z</Calendar:ExceptionStartTime><Calendar:StartTime>20101125T140000Z</Calendar:StartTime><Calendar:EndTime>20101125T170000Z</Calendar:EndTime><Calendar:Subject>Repeat mal anders</Calendar:Subject><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:AllDayEvent>0</Calendar:AllDayEvent></Calendar:Exception><Calendar:Exception><Calendar:Deleted>1</Calendar:Deleted><Calendar:ExceptionStartTime>20101124T130000Z</Calendar:ExceptionStartTime></Calendar:Exception></Calendar:Exceptions></ApplicationData></Change></Commands></Collection></Collections></Sync>';
     
     /**
      * Runs the test methods of this class.
@@ -58,84 +61,15 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {   	
-    	$appName = 'Calendar';
-    	
-    	############# TEST DOMDOCUMENT #############
-    	$this->testDOM = new DOMDocument();
-        $this->testDOM->formatOutput = false;
-        $this->testDOM->encoding     = 'utf-8';
-        $this->testDOM->loadXML('<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:Calendar="uri:Calendar"><Collections><Collection><Class>Calendar</Class><SyncKey>9</SyncKey><CollectionId>41</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>5</FilterType></Options><Commands><Change><ServerId>6de7cb687964dc6eea109cd81750177979362217</ServerId><ApplicationData><Calendar:Timezone>xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Calendar:Timezone><Calendar:AllDayEvent>0</Calendar:AllDayEvent><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:DtStamp>20101125T150537Z</Calendar:DtStamp><Calendar:EndTime>20101123T160000Z</Calendar:EndTime><Calendar:Sensitivity>0</Calendar:Sensitivity><Calendar:Subject>Repeat</Calendar:Subject><Calendar:StartTime>20101123T130000Z</Calendar:StartTime><Calendar:UID>6de7cb687964dc6eea109cd81750177979362217</Calendar:UID><Calendar:MeetingStatus>1</Calendar:MeetingStatus><Calendar:Attendees><Calendar:Attendee><Calendar:Name>Lars Kneschke</Calendar:Name><Calendar:Email>lars@kneschke.de</Calendar:Email></Calendar:Attendee></Calendar:Attendees><Calendar:Recurrence><Calendar:Type>0</Calendar:Type><Calendar:Interval>1</Calendar:Interval><Calendar:Until>20101128T225959Z</Calendar:Until></Calendar:Recurrence><Calendar:Exceptions><Calendar:Exception><Calendar:Deleted>0</Calendar:Deleted><Calendar:ExceptionStartTime>20101125T130000Z</Calendar:ExceptionStartTime><Calendar:StartTime>20101125T140000Z</Calendar:StartTime><Calendar:EndTime>20101125T170000Z</Calendar:EndTime><Calendar:Subject>Repeat mal anders</Calendar:Subject><Calendar:BusyStatus>2</Calendar:BusyStatus><Calendar:AllDayEvent>0</Calendar:AllDayEvent></Calendar:Exception><Calendar:Exception><Calendar:Deleted>1</Calendar:Deleted><Calendar:ExceptionStartTime>20101124T130000Z</Calendar:ExceptionStartTime></Calendar:Exception></Calendar:Exceptions></ApplicationData></Change></Commands></Collection></Collections></Sync>');
-        #$this->testDOM->formatOutput = true; echo $this->testDOM->saveXML(); $this->testDOM->formatOutput = false;
-    	
-        
-    	############# TEST USER ##########
-    	$user = new Tinebase_Model_FullUser(array(
-            'accountId'             => 10,
-            'accountLoginName'      => 'tine20phpunit',
-            'accountDisplayName'    => 'tine20phpunit',
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getGroupByName('Users')->getId(),
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
-        ));
-        
-        try {
-            $user = Tinebase_User::getInstance()->getUserById($user->accountId) ;
-        } catch (Tinebase_Exception_NotFound $e) {
-            Tinebase_User::getInstance()->addUser($user);
-        }
-        $this->objects['user'] = $user;
-        
-        
-        ############# TEST CONTACT ##########
-        try {
-            $containerWithSyncGrant = Tinebase_Container::getInstance()->getContainerByName($appName, 'ContainerWithSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
-        } catch (Tinebase_Exception_NotFound $e) {
-	        $containerWithSyncGrant = new Tinebase_Model_Container(array(
-	            'name'              => 'ContainerWithSyncGrant',
-	            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-	            'backend'           => 'Sql',
-	            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()
-	        ));
-	        $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithSyncGrant);
-        }
-        $this->objects['containerWithSyncGrant'] = $containerWithSyncGrant;
-        
-        try {
-            $containerWithoutSyncGrant = Tinebase_Container::getInstance()->getContainerByName($appName, 'ContainerWithoutSyncGrant', Tinebase_Model_Container::TYPE_PERSONAL);
-        } catch (Tinebase_Exception_NotFound $e) {
-            $creatorGrants = array(
-                'account_id'     => Tinebase_Core::getUser()->getId(),
-                'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-                Tinebase_Model_Grants::GRANT_READ      => true,
-                Tinebase_Model_Grants::GRANT_ADD       => true,
-                Tinebase_Model_Grants::GRANT_EDIT      => true,
-                Tinebase_Model_Grants::GRANT_DELETE    => true,
-                //Tinebase_Model_Grants::GRANT_EXPORT    => true,
-                //Tinebase_Model_Grants::GRANT_SYNC      => true,
-                Tinebase_Model_Grants::GRANT_ADMIN     => true,
-            );        	
-        	$grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
-        	
-            $containerWithoutSyncGrant = new Tinebase_Model_Container(array(
-                'name'              => 'ContainerWithoutSyncGrant',
-                'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
-                'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($appName)->getId()
-            ));
-            $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithoutSyncGrant, $grants);
-        }
-        $this->objects['containerWithoutSyncGrant'] = $containerWithoutSyncGrant;
-
+        parent::setUp();	
+            	
         $event = new Calendar_Model_Event(array(
             'uid'           => Tinebase_Record_Abstract::generateUID(),
             'summary'       => 'SyncTest',
             'dtstart'       => Tinebase_DateTime::now()->addMonth(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:00:00',
             'dtend'         => Tinebase_DateTime::now()->addMonth(1)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:30:00',
             'originator_tz' => 'Europe/Berlin',
-            'container_id'  => $this->objects['containerWithSyncGrant']->getId(),
+            'container_id'  => $this->_getContainerWithSyncGrant()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         
@@ -150,7 +84,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
             'dtend'         => Tinebase_DateTime::now()->addMonth(1)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-05-25 18:30:00',
             'originator_tz' => 'Europe/Berlin',
             'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=' . Tinebase_DateTime::now()->addMonth(1)->addHour(1)->addDay(6)->toString(Tinebase_Record_Abstract::ISO8601LONG), //2009-05-31 17:30:00',
-            'container_id'  => $this->objects['containerWithSyncGrant']->getId(),
+            'container_id'  => $this->_getContainerWithSyncGrant()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
                 
@@ -187,7 +121,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         
         $this->objects['eventDaily'] = $eventDaily;
         
-        Tinebase_Core::getPreference('ActiveSync')->setValue(ActiveSync_Preference::DEFAULTCALENDAR, $containerWithSyncGrant->getId());
+        Tinebase_Core::getPreference('ActiveSync')->setValue(ActiveSync_Preference::DEFAULTCALENDAR, $this->_getContainerWithSyncGrant()->getId());
         
         ########### define test filter
         $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
@@ -202,7 +136,7 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
                 'filters'           => array(array(
                     'field'     => 'container_id', 
                     'operator'  => 'equals', 
-                    'value'     => $this->objects['containerWithSyncGrant']->getId()
+                    'value'     => $this->_getContainerWithSyncGrant()->getId()
                 )),
                 'name'              => 'Calendar Sync Test',
                 'description'       => 'Created by unit test'
@@ -216,13 +150,13 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
         ########### define test devices
         $palm = ActiveSync_Backend_DeviceTests::getTestDevice();
         $palm->devicetype   = 'palm';
-        $palm->owner_id     = $user->getId();
+        $palm->owner_id     = $this->_testUser->getId();
         $palm->calendarfilter_id = $this->objects['filter']->getId();
         $this->objects['devicePalm']   = ActiveSync_Controller_Device::getInstance()->create($palm);
         
         $iphone = ActiveSync_Backend_DeviceTests::getTestDevice();
         $iphone->devicetype = 'iphone';
-        $iphone->owner_id   = $user->getId();
+        $iphone->owner_id   = $this->_testUser->getId();
         $iphone->calendarfilter_id = $this->objects['filter']->getId();
         $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
         
@@ -236,51 +170,17 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        // remove accounts for group member tests
-        try {
-            Tinebase_User::getInstance()->deleteUser($this->objects['user']->accountId);
-        } catch (Exception $e) {
-            // do nothing
-        }
-
+        parent::tearDown();
+        
         Calendar_Controller_Event::getInstance()->delete(array($this->objects['event']->getId()));
         Calendar_Controller_Event::getInstance()->delete(array($this->objects['eventDaily']->getId()));
         #Calendar_Controller_Event::getInstance()->delete(array($this->objects['eventWeekly']->getId()));
-        
-        Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithSyncGrant']);
-        Tinebase_Container::getInstance()->deleteContainer($this->objects['containerWithoutSyncGrant']);
         
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['devicePalm']);
         ActiveSync_Controller_Device::getInstance()->delete($this->objects['deviceIPhone']);
         
         $filterBackend = new Tinebase_PersistentFilter_Backend_Sql();
         $filterBackend->delete($this->objects['filter']->getId());
-    }
-    
-    /**
-     * validate getFolders for all devices except IPhone
-     */
-    public function testGetFoldersPalm()
-    {
-    	$controller = new ActiveSync_Controller_Calendar($this->objects['devicePalm'], new Tinebase_DateTime(null, null, 'de_DE'));
-    	
-    	$folders = $controller->getSupportedFolders();
-    	
-    	$this->assertArrayHasKey("calendar-root", $folders, print_r($folders, true));
-    }
-    
-    /**
-     * validate getFolders for IPhones
-     */
-    public function testGetFoldersIPhone()
-    {
-        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
-        
-        $folders = $controller->getSupportedFolders();
-        foreach($folders as $folder) {
-        	$this->assertTrue(Tinebase_Core::getUser()->hasGrant($folder['folderId'], Tinebase_Model_Grants::GRANT_SYNC), print_r($folder, true));
-        }
-        $this->assertArrayNotHasKey("calendar-root", $folders, print_r($folders, true));
     }
     
     /**
@@ -387,9 +287,9 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
      */
     public function testConvertToTine20Model()
     {
-        $xml = simplexml_import_dom($this->testDOM);
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
         
-        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime());     
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
         
         $event = $controller->toTineModel($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
@@ -402,11 +302,11 @@ class ActiveSync_Controller_CalendarTests extends PHPUnit_Framework_TestCase
     
     public function testAddEntryToBackend()
     {
-        $xml = simplexml_import_dom($this->testDOM);
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
         
         $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime());
         
-        $event = $controller->add($this->objects['containerWithSyncGrant']->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $event = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
         Calendar_Controller_Event::getInstance()->delete($event->getId());
         
