@@ -36,6 +36,10 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
      * @cfg {Function} handler
      */
     handler: Ext.emptyFn,
+    /**
+     * @cfg {Boolean} allowCancel
+     */
+    allowCancel: false,
     
     windowNamePrefix: 'MultiOptionsDialog',
     bodyStyle:'padding:5px',
@@ -69,10 +73,12 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
                 border: false,
                 layout: 'fit',
                 flex: 1,
+                autoScroll: true,
                 items: [{
                     xtype: 'label',
+                    border: false,
                     cls: 'ext-mb-text',
-                    text: this.questionText || _('What would you like to do?')
+                    html: this.questionText || _('What would you like to do?')
                 }, {
                     xtype: 'radiogroup',
                     hideLabel: true,
@@ -103,6 +109,7 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
             text: _('Cancel'),
             minWidth: 70,
             scope: this,
+            hidden: !this.allowCancel,
             handler: this.onCancel,
             iconCls: 'action_cancel'
         }];
@@ -149,8 +156,8 @@ Ext.extend(Tine.widgets.dialog.MultiOptionsDialog, Ext.FormPanel, {
  */
 Tine.widgets.dialog.MultiOptionsDialog.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
-        width: 400,
-        height: 150,
+        width: config.width || 400,
+        height: config.height || 150,
         closable: false,
         name: Tine.widgets.dialog.MultiOptionsDialog.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.widgets.dialog.MultiOptionsDialog',
