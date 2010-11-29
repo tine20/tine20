@@ -31,6 +31,11 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
     const DEFAULTPERSISTENTFILTER_NAME = "All my tasks";
     
     /**
+     * default task list where all new tasks are placed in
+     */
+    const DEFAULTTASKLIST = 'defaultTaskList';
+    
+    /**
      * @var string application
      */
     protected $_application = 'Tasks';    
@@ -45,7 +50,8 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
     public function getAllApplicationPreferences()
     {
         $allPrefs = array(
-            self::DEFAULTPERSISTENTFILTER
+            self::DEFAULTPERSISTENTFILTER,
+            self::DEFAULTTASKLIST,
         );
             
         return $allPrefs;
@@ -64,7 +70,11 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
             self::DEFAULTPERSISTENTFILTER  => array(
                 'label'         => $translate->_('Default Favorite'),
                 'description'   => $translate->_('The default favorite which is loaded on Tasks startup'),
-            )
+            ),
+            self::DEFAULTTASKLIST  => array(
+                'label'         => $translate->_('Default Task List'),
+                'description'   => $translate->_('The default task list to create new tasks in.'),
+            ),
         );
         
         return $prefDescriptions;
@@ -74,9 +84,11 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
      * get preference defaults if no default is found in the database
      *
      * @param string $_preferenceName
+     * @param string|Tinebase_Model_User $_accountId
+     * @param string $_accountType
      * @return Tinebase_Model_Preference
      */
-    public function getApplicationPreferenceDefaults($_preferenceName, $_accountId=NULL, $_accountType=Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
+    public function getApplicationPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
         $preference = $this->_getDefaultBasePreference($_preferenceName);
         
@@ -84,6 +96,9 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
             case self::DEFAULTPERSISTENTFILTER:
                 $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Tasks', $_accountId, self::DEFAULTPERSISTENTFILTER_NAME);
                 $preference->personal_only  = TRUE;
+                break;
+            case self::DEFAULTTASKLIST:
+                $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');
