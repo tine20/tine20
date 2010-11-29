@@ -219,42 +219,34 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 
             });
             
-            this.conflictConfirmWin = Tine.WindowFactory.getWindow({
+            this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 modal: true,
-                width: 350,
+                allowCancel: false,
                 height: 150 + 15*error.freebusyinfo.length,
-                cls: 'x-window-dlg',
-                closable: false,
                 title: this.app.i18n._('Scheduling Conflict'),
-                
-                items: [{
-                	border: false,
-                	unstyled: true,
-                    autoScroll: true,
-                    buttons: [{
-                        text: this.app.i18n._('Ignore Conflict'),
-                        scope: this,
-                        handler: function() {
+                questionText: '<div class = "cal-conflict-heading">' +
+                                   this.app.i18n._('The following attendee are busy at the requested time:') + 
+                               '</div>' +
+                               busyAttendeeHTML,
+                options: [
+                    {text: this.app.i18n._('Ignore Conflict'), name: 'ignore'},
+                    {text: this.app.i18n._('Edit Event'), name: 'edit'}
+                ],
+                handler: function(option) {
+                    switch (option) {
+                        case 'ignore':
                             this.onAddEvent(event, false);
                             this.conflictConfirmWin.close();
-                        }
-                    }, {
-                        text: this.app.i18n._('Edit Event'),
-                        scope: this,
-                        handler: function() {
+                            break;
+                        
+                        case 'edit':
+                        default:
                             this.view.getSelectionModel().select(event);
                             this.view.fireEvent('dblclick', this.view, event);
                             this.conflictConfirmWin.close();
-                        }
-                    }],
-                    html: '<div class="ext-mb-icon ext-mb-question"></div>' +
-                          '<div class="ext-mb-content"><span class="ext-mb-text"></span>' +
-                                '<div class = "cal-conflict-heading">' +
-                                    this.app.i18n._('The following attendee are busy at the requested time:') + 
-                                '</div>' +
-                                busyAttendeeHTML +
-                          '<br /><div class="ext-mb-fix-cursor"></div></div>'
-                }]
+                            break;
+                    }
+                }
             });
             
         } else {
