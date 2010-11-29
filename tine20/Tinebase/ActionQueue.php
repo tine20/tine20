@@ -104,26 +104,20 @@
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " queuing action: '{$action}'");
         
-        if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
-            try {
-                $message = serialize($decodedAction);
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message);
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not create message for action: '{$action}'");
-                return;
-            }
-            
-            if ($this->_queue) {
-                $this->_queue->send($message);
-            } else {
-                // execute action immediately if no queue service is available
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue configured -> directly execute action: '{$action}'");
-                $this->_executeAction($message);
-            }
+        try {
+            $message = serialize($decodedAction);
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $message);
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not create message for action: '{$action}'");
+            return;
+        }
+        
+        if ($this->_queue) {
+            $this->_queue->send($message);
         } else {
-            // NOTE: DateTime is not serialisable before 5.3
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue support for php < 5.3.0 -> directly execute action: '{$action}'");
-            $this->_executeDecodedAction($decodedAction);
+            // execute action immediately if no queue service is available
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue configured -> directly execute action: '{$action}'");
+            $this->_executeAction($message);
         }
     }
     
