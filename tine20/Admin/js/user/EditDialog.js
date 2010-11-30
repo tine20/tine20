@@ -276,6 +276,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             selectType: 'group',
             selectAnyone: false,
             selectTypeDefault: 'group',
+            groupRecordClass: Tine.Admin.Model.Group,
             getColumnModel: function () {
 				return new Ext.grid.ColumnModel({
 		            defaults: { sortable: true },
