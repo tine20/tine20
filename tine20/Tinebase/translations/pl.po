@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-23 19:38+0100\n"
+"PO-Revision-Date: 2010-11-30 19:24+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -56,11 +56,7 @@ msgstr "Zarządzaj własnym profilem"
 msgid "The right to manage the own profile (selected contact data)."
 msgstr "Uprawnienia do zarządzania własnym profilem (zaznaczone dane kontaktowe)."
 
-#: Export/Spreadsheet/Ods.php:204
-msgid "Filter"
-msgstr "Filtr"
-
-#: Export/Spreadsheet/Ods.php:295
+#: Export/Spreadsheet/Ods.php:278
 msgid "Data"
 msgstr "Data"
 
@@ -109,6 +105,13 @@ msgid_plural "{0} workdays"
 msgstr[0] "{0} dzień roboczy"
 msgstr[1] "{0} dni robocze"
 msgstr[2] "{0} dni roboczych"
+
+#: js/common.js:175
+msgid "{0} second"
+msgid_plural "{0} seconds"
+msgstr[0] "{0} sekund"
+msgstr[1] "{0} sekundy"
+msgstr[2] "{0} sekund"
 
 #: js/UserRegistration.js:38
 msgid "Registration Wizard"
@@ -307,31 +310,31 @@ msgstr "Proszę poprawić wskazane błędy."
 msgid "Please enter your login data"
 msgstr "Proszę wprowadzić dane logowania"
 
-#: js/widgets/account/PickerGridPanel.js:147
+#: js/widgets/account/PickerGridPanel.js:151
 msgid "Search User"
 msgstr "Znajdź użytkownika"
 
-#: js/widgets/account/PickerGridPanel.js:153
+#: js/widgets/account/PickerGridPanel.js:157
 msgid "Search Group"
 msgstr "Znajdź grupę"
 
-#: js/widgets/account/PickerGridPanel.js:159
+#: js/widgets/account/PickerGridPanel.js:163
 msgid "Add Anyone"
 msgstr "Dodaj kogokolwiek"
 
-#: js/widgets/account/PickerGridPanel.js:167
+#: js/widgets/account/PickerGridPanel.js:171
 msgid "Anyone"
 msgstr "Ktokolwiek"
 
-#: js/widgets/account/PickerGridPanel.js:214
+#: js/widgets/account/PickerGridPanel.js:219
 msgid "Search for users ..."
 msgstr "Znajdź użytkowników..."
 
-#: js/widgets/account/PickerGridPanel.js:233
+#: js/widgets/account/PickerGridPanel.js:238
 msgid "Search for groups ..."
 msgstr "Znajdź grupy..."
 
-#: js/widgets/account/PickerGridPanel.js:249
+#: js/widgets/account/PickerGridPanel.js:254
 #: js/Models.js:400
 msgid "Name"
 msgstr "Nazwa"
@@ -373,7 +376,7 @@ msgstr "Proszę wybrać {0}"
 
 #: js/widgets/container/ContainerSelect.js:452
 #: js/widgets/ActivitiesPanel.js:304
-#: js/widgets/dialog/MultiOptionsDialog.js:103
+#: js/widgets/dialog/MultiOptionsDialog.js:109
 #: js/widgets/dialog/PreferencesDialog.js:118
 #: js/widgets/dialog/EditDialog.js:189
 #: js/widgets/tags/TagsMassAttachAction.js:90
@@ -386,7 +389,7 @@ msgstr "Anuluj"
 
 #: js/widgets/container/ContainerSelect.js:461
 #: js/widgets/ActivitiesPanel.js:312
-#: js/widgets/dialog/MultiOptionsDialog.js:96
+#: js/widgets/dialog/MultiOptionsDialog.js:102
 #: js/widgets/dialog/PreferencesDialog.js:110
 #: js/widgets/dialog/EditDialog.js:172
 #: js/widgets/tags/TagsMassAttachAction.js:96
@@ -1023,12 +1026,12 @@ msgid "Links"
 msgstr "Linki"
 
 #: js/widgets/dialog/MultiOptionsDialog.js:28
-#: js/widgets/dialog/MultiOptionsDialog.js:75
+#: js/widgets/dialog/MultiOptionsDialog.js:81
 msgid "What would you like to do?"
 msgstr "Proszę o podjęcie decyzji:"
 
 #: js/widgets/dialog/MultiOptionsDialog.js:32
-#: js/widgets/dialog/MultiOptionsDialog.js:134
+#: js/widgets/dialog/MultiOptionsDialog.js:141
 msgid "You need to select an option!"
 msgstr "Należy zaznaczyć opcję."
 
@@ -1696,12 +1699,12 @@ msgstr "Zakończone sukcesem"
 msgid "Your password has been changed."
 msgstr "Twoje hasło zostało zmienione."
 
-#: js/PasswordChangeDialog.js:95
-#: js/PasswordChangeDialog.js:105
+#: js/PasswordChangeDialog.js:101
+#: js/PasswordChangeDialog.js:111
 msgid "Failure"
 msgstr "Próba nieudana"
 
-#: js/PasswordChangeDialog.js:106
+#: js/PasswordChangeDialog.js:112
 msgid "The new passwords mismatch, please correct them."
 msgstr "Nowe hasła nie są takie same, proszę je poprawić."
 
@@ -1855,43 +1858,43 @@ msgstr "Tine 2.0 wymaga aktualizacji albo jeszcze nie jest zainstalowana."
 msgid "Please wait or contact your administrator"
 msgstr "Proszę poczekać albo skontaktować się ze swoim administratorem"
 
-#: Setup/setup.xml:2767
+#: Setup/setup.xml:2768
 msgid "note"
 msgstr "zwykłą"
 
-#: Setup/setup.xml:2772
+#: Setup/setup.xml:2773
 msgid "default note type"
 msgstr "domyślny typ: notatka"
 
-#: Setup/setup.xml:2798
+#: Setup/setup.xml:2799
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:2803
+#: Setup/setup.xml:2804
 msgid "telephone call"
 msgstr "telefon"
 
-#: Setup/setup.xml:2829
+#: Setup/setup.xml:2830
 msgid "email"
 msgstr "e-mail"
 
-#: Setup/setup.xml:2834
+#: Setup/setup.xml:2835
 msgid "email contact"
 msgstr "kontakt e-mail"
 
-#: Setup/setup.xml:2860
+#: Setup/setup.xml:2861
 msgid "created"
 msgstr "utworzony"
 
-#: Setup/setup.xml:2865
+#: Setup/setup.xml:2866
 msgid "record created"
 msgstr "wiersz utworzony"
 
-#: Setup/setup.xml:2891
+#: Setup/setup.xml:2892
 msgid "changed"
 msgstr "zmieniony"
 
-#: Setup/setup.xml:2896
+#: Setup/setup.xml:2897
 msgid "record changed"
 msgstr "wiersz zmieniony"
 
@@ -1930,6 +1933,9 @@ msgstr "Wyświetl okno dialogowe potwierdzające chęć wylogowania."
 #: Frontend/Http.php:563
 msgid "Your session is not valid. You need to login again."
 msgstr "Twoja sesja wygasła. Musisz się ponownie zalogować."
+
+#~ msgid "Filter"
+#~ msgstr "Filtr"
 
 #~ msgid "Transfering Configuration..."
 #~ msgstr "Przesyłanie konfiguracji..."
