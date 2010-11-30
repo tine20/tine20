@@ -47,11 +47,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
     const BODY_TYPE_RTF                                 = 3;
     const BODY_TYPE_MIME                                = 4;
 
-    /**
-     * An error occurred while setting the notification GUID. = 10
-     * Device has not been provisioned for notifications yet. = 11
-     */
-    
+
     protected $_defaultNameSpace    = 'uri:AirSync';
     protected $_documentElement     = 'Sync';
     
