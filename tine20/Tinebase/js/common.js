@@ -160,6 +160,33 @@ Tine.Tinebase.common = {
         
         return s;
     },
+
+    /**
+     * Returns prettyfied seconds
+     * @param  {Number} seconds
+     * @return {String}
+     */
+    secondsRenderer: function(seconds){
+        
+        var s = seconds%60;
+        var m = Math.floor(seconds/60);
+        var result = '';
+        
+        var secondResult = String.format(Tine.Tinebase.translation.ngettext('{0} second', '{0} seconds', s), s);
+        
+        if (m) {
+            result = Tine.Tinebase.common.minutesRenderer(m);
+        }
+        
+        if (s) {
+            if (result !== '') {
+                result += ', ';
+            }
+            result += secondResult;
+        }
+        
+        return result;
+    },
     
     /**
      * Returns the formated username
