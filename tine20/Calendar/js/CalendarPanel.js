@@ -232,6 +232,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                     {text: this.app.i18n._('Ignore Conflict'), name: 'ignore'},
                     {text: this.app.i18n._('Edit Event'), name: 'edit'}
                 ],
+                scope: this,
                 handler: function(option) {
                     switch (option) {
                         case 'ignore':
