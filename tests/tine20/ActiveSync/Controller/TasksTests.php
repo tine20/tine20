@@ -36,7 +36,7 @@ class ActiveSync_Controller_TasksTests extends ActiveSync_TestCase
     
     protected $_testXML = '';
     
-    protected $_exampleXMLNotExisting = '<?xml version="1.0" encoding="utf-8"?>
+/*    protected $_exampleXMLNotExisting = '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
 <Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>ads2f, asdfadsf</Contacts:FileAs><Contacts:FirstName>asdf </Contacts:FirstName><Contacts:LastName>asdfasdfaasd </Contacts:LastName><Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber><Contacts:Body>&#13;
 </Contacts:Body></ApplicationData></Add></Commands></Collection></Collections></Sync>';
@@ -44,12 +44,12 @@ class ActiveSync_Controller_TasksTests extends ActiveSync_TestCase
     protected $_exampleXMLExisting = '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
 <Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>Kneschke, Lars</Contacts:FileAs><Contacts:FirstName>Lars</Contacts:FirstName><Contacts:LastName>Kneschke</Contacts:LastName></ApplicationData></Add></Commands></Collection></Collections></Sync>';
-    
-    protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Tasks="uri:Tasks"><Collections><Collection><Class>Tasks</Class><SyncKey>17</SyncKey><CollectionId>tasks-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>8</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>2048</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:Data>test beschreibung zeile 1&#13;
+  */  
+    protected $_testXMLInput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Tasks="uri:Tasks"><Collections><Collection><Class>Tasks</Class><SyncKey>17</SyncKey><CollectionId>tasks-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>8</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>2048</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>0</Conflict></Options><Commands><Change><ClientId>1</ClientId><ApplicationData><AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:Data>test beschreibung zeile 1&#13;
 Zeile 2&#13;
-Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe</Tasks:Subject><Tasks:Importance>1</Tasks:Importance><Tasks:UtcDueDate>2010-11-28T22:59:00.000Z</Tasks:UtcDueDate><Tasks:DueDate>2010-11-28T23:59:00.000Z</Tasks:DueDate><Tasks:Complete>0</Tasks:Complete><Tasks:Sensitivity>0</Tasks:Sensitivity></ApplicationData></Add></Commands></Collection></Collections></Sync>';
+Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe</Tasks:Subject><Tasks:Importance>1</Tasks:Importance><Tasks:UtcDueDate>2010-11-28T22:59:00.000Z</Tasks:UtcDueDate><Tasks:DueDate>2010-11-28T23:59:00.000Z</Tasks:DueDate><Tasks:Complete>0</Tasks:Complete><Tasks:Sensitivity>0</Tasks:Sensitivity></ApplicationData></Change></Commands></Collection></Collections></Sync>';
     
-    protected $_testXMLOutput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Tasks="uri:Tasks"><Collections><Collection><Class>Tasks</Class><SyncKey>17</SyncKey><CollectionId>tasks-root</CollectionId><Commands><Add><ClientId>1</ClientId><ApplicationData/></Add></Commands></Collection></Collections></Sync>';
+    protected $_testXMLOutput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Tasks="uri:Tasks"><Collections><Collection><Class>Tasks</Class><SyncKey>17</SyncKey><CollectionId>tasks-root</CollectionId><Commands><Change><ClientId>1</ClientId><ApplicationData/></Change></Commands></Collection></Collections></Sync>';
     
     /**
      * Runs the test methods of this class.
@@ -72,9 +72,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
     }
     
     /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
+     * test xml generation for sync to client
      */
     public function testAppendXml()
     {
@@ -108,9 +106,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
     }
     
     /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
+     * test convert from XML to Tine 2.0 model
      */
     public function testConvertToTine20Model()
     {
@@ -118,7 +114,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         
         $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));   
         
-        $task = $controller->toTineModel($xml->Collections->Collection->Commands->Add[0]->ApplicationData);
+        $task = $controller->toTineModel($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
         #var_dump($task->toArray());
         
@@ -127,69 +123,30 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $task->description);
     }
     
-    /**
-     * validate xml generation for all devices except IPhone
-     */
-    public function _testAppendXmlPalm()
+    protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record)
     {
-        $imp                   = new DOMImplementation();
+        $this->objects['tasks'][] = $_record;
         
-        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
-        $testDom               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
-        $testDom->formatOutput = true;
-        $testDom->encoding     = 'utf-8';
+        #var_dump($_record->toArray());
         
-        $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
-        $testNode = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'TestAppendXml'));
-        
-        $controller = new ActiveSync_Controller_Contacts($this->objects['devicePalm'], new Tinebase_DateTime());   	
-        
-    	$controller->appendXML($testNode, null, $this->objects['contact']->getId(), array());
-    	
-    	// offset birthday 0 hours and namespace === uri:Contacts
-    	$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), @$testDom->getElementsByTagNameNS('uri:Contacts', 'BusinessCountry')->item(0)->nodeValue, $testDom->saveXML());
-    	$this->assertEquals('1975-01-02T03:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
+        $this->assertEquals('Testaufgabe auf mfe', $_record->summary);
+        $this->assertEquals(0,                     $_record->percent);
+        $this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $_record->description);
     }
     
-    /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
-     */
-    public function _testAppendXmlIPhone()
+    protected function _validateGetServerEntries(Tinebase_Record_Abstract $_record)
     {
-		$imp                   = new DOMImplementation();
-		
-        $dtd                   = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
-        $testDom               = $imp->createDocument('uri:AirSync', 'Sync', $dtd);
-        $testDom->formatOutput = true;
-        $testDom->encoding     = 'utf-8';
-        $testDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/' ,'xmlns:Contacts', 'uri:Contacts');
+        $this->objects['tasks'][] = $_record;
         
-        $collections    = $testDom->documentElement->appendChild($testDom->createElementNS('uri:AirSync', 'Collections'));
-        $collection     = $collections->appendChild($testDom->createElementNS('uri:AirSync', 'Collection'));
-        $commands       = $collection->appendChild($testDom->createElementNS('uri:AirSync', 'Commands'));
-        $add            = $commands->appendChild($testDom->createElementNS('uri:AirSync', 'Add'));
-        $appData        = $add->appendChild($testDom->createElementNS('uri:AirSync', 'ApplicationData'));
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+        $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Controller_Tasks::FILTER_NOTHING);
         
-        
-        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));     
-        
-        $controller->appendXML($appData, null, $this->objects['contact']->getId(), array());
-        
-        // offset birthday 12 hours and namespace === uri:Contacts
-        $this->assertEquals('1975-01-02T15:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
-        
-        #echo $testDom->saveXML();
-
-        // try to encode XML until we have wbxml tests
-        $outputStream = fopen("php://temp", 'r+');
-        $encoder = new Wbxml_Encoder($outputStream, 'UTF-8', 3);
-        $encoder->encode($testDom);
-        
-        #rewind($outputStream);
-        #fpassthru($outputStream);
+        $this->assertContains($_record->getId(), $records);
+        #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
     }
+    
+    
+    
     
     /**
      * test xml generation for IPhone

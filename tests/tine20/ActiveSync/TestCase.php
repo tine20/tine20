@@ -143,10 +143,42 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test convert xml to Tine 2.0 model
+     * test convert from XML to Tine 2.0 model
      * 
      */
     abstract public function testConvertToTine20Model();
+    
+    /**
+     * test xml generation for sync to client
+     */
+    abstract public function testAppendXml();
+        
+    public function testAddEntryToBackend()
+    {
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+        
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        $record = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+
+        $this->_validateAddEntryToBackend($record);
+    }
+    
+    abstract protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record);
+    
+    /**
+     * test get list all record ids
+     */
+    public function testGetServerEntries()
+    {
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+        
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        $record = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        $this->_validateGetServerEntries($record);        
+    }
+    
+    abstract protected function _validateGetServerEntries(Tinebase_Record_Abstract $_record);
     
     /**
      * create container with sync grant
@@ -271,9 +303,11 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      */
     protected function _getController(ActiveSync_Model_Device $_device)
     {
-        $controller = new $this->_controllerName($_device, new Tinebase_DateTime(null, null, 'de_DE'));
+        if ($this->_controller === null) {
+            $this->_controller = new $this->_controllerName($_device, new Tinebase_DateTime(null, null, 'de_DE'));
+        } 
         
-        return $controller;
+        return $this->_controller;
     }
     
     /**

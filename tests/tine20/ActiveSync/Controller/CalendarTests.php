@@ -265,18 +265,14 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
         
     }
     
-    /**
-     * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
-     */
-    public function testGetServerEntries()
+    protected function _validateGetServerEntries(Tinebase_Record_Abstract $_record)
     {
-        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
+        $this->objects['events'][] = $_record;
         
-        $entries = $controller->getServerEntries('calendar-root', ActiveSync_Controller_Calendar::FILTER_2_WEEKS_BACK);
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+        $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Controller_Calendar::FILTER_2_WEEKS_BACK);
         
-        $this->assertContains($this->objects['event']->getId(), $entries);
+        $this->assertContains($_record->getId(), $records);
         #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
     }
     
@@ -300,19 +296,14 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
         #$this->assertEquals('Europe/Berlin', $event->originator_tz);
     }
     
-    public function testAddEntryToBackend()
+    protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record)
     {
-        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        $this->objects['events'][] = $_record;
         
-        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime());
+        #var_dump($_record->toArray());
         
-        $event = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-        
-        Calendar_Controller_Event::getInstance()->delete($event->getId());
-        
-        $this->assertEquals('Repeat', $event->summary);
-        $this->assertEquals(2,        count($event->exdate));
-        
+        $this->assertEquals('Repeat', $_record->summary);
+        $this->assertEquals(2,        count($_record->exdate));
     }
     
 }
