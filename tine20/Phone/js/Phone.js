@@ -695,7 +695,7 @@ Tine.Phone.Main = {
                 { id: 'start', header: this.translation._('Start'), dataIndex: 'start', renderer: Tine.Tinebase.common.dateTimeRenderer },
                 { id: 'connected', header: this.translation._('Connected'), dataIndex: 'connected', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: true },
                 { id: 'disconnected', header: this.translation._('Disconnected'), dataIndex: 'disconnected', renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: true  },
-                { id: 'duration', header: this.translation._('Duration'), dataIndex: 'duration', width: 40 },
+                { id: 'duration', header: this.translation._('Duration'), dataIndex: 'duration', width: 60, renderer: Tine.Tinebase.common.secondsRenderer },
                 { id: 'ringing', header: this.translation._('Ringing'), dataIndex: 'ringing', width: 40, hidden: true },
                 { id: 'id', header: this.translation._('Call ID'), dataIndex: 'id', hidden: true}
             ]
