@@ -197,12 +197,9 @@ abstract class Tinebase_Model_Filter_Abstract
             $date = new Tinebase_DateTime();
             $result = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
         } elseif (isset($this->_options['timezone']) && $this->_options['timezone'] !== 'UTC') {
-            date_default_timezone_set($this->_options['timezone']);
-            $date = new Tinebase_DateTime($_string);
-            
+            $date = new Tinebase_DateTime($_string, $this->_options['timezone']);
             $date->setTimezone('UTC');
             $result = $date->toString(Tinebase_Record_Abstract::ISO8601LONG);
-            date_default_timezone_set('UTC');
         } else {
             $result = $_string;
         }
