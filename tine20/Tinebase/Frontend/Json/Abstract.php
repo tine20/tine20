@@ -278,8 +278,17 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _deleteByFilter($_filter, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
-        $filter = new $_filterModel(Zend_Json::decode($_filter));
-        
+    	$decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
+    	
+        if (is_array($decodedFilter) && ! empty($decodedFilter)) {
+            $filter = new $_filterModel(array());
+            $filter->setFromArrayInUsersTimezone($decodedFilter);
+        } else if (! empty($decodedFilter) && strlen($decodedFilter) == 40) {
+            $filter = Tinebase_PersistentFilter::getFilterById($decodedFilter);
+        } else {
+       		throw new Tinebase_Exception_UnexpectedValue('Filter is empty');
+        }
+    	
         $_controller->deleteByFilter($filter);
         return array(
             'status'    => 'success'
