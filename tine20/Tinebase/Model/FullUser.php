@@ -24,6 +24,8 @@
  * @property    string                  accountFullName     fullname of the account
  * @property    string                  accountDisplayName  displayname of the account
  * @property    string                  accountLoginName    account login name
+ * @property    DateTime                lastLoginFailure    time of last login failure
+ * @property    int						loginFailures       number of login failures
  * @subpackage  User
  */
 class Tinebase_Model_FullUser extends Tinebase_Model_User
@@ -66,7 +68,8 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
     protected $_datetimeFields = array(
         'accountLastLogin',
         'accountLastPasswordChange',
-        'accountExpires'
+        'accountExpires',
+        'lastLoginFailure'
     );
     
     /**
@@ -90,6 +93,8 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountEmailAddress'   => array('allowEmpty' => true),
             'accountHomeDirectory'  => array('allowEmpty' => true),
             'accountLoginShell'     => array('allowEmpty' => true),
+            'lastLoginFailure'		=> array('allowEmpty' => true),
+            'loginFailures'			=> array('allowEmpty' => true),
             'sambaSAM'              => array('allowEmpty' => true),
             'openid'                => array('allowEmpty' => true),
             'contact_id'            => array('allowEmpty' => true),
