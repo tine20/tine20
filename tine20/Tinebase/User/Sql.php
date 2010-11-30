@@ -41,6 +41,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         'accountEmailAddress'       => 'email',
         'accountHomeDirectory'      => 'home_dir',
         'accountLoginShell'         => 'login_shell',
+        'lastLoginFailure'			=> 'last_login_failure_at',
+        'loginFailures'				=> 'login_failures',
         'openid'                    => 'openid',
         'visibility'                => 'visibility',
         'contactId'					=> 'contact_id'
@@ -245,13 +247,14 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
                     'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
                     'accountLoginShell'     => $this->rowNameMapping['accountLoginShell'],
-                
                     'accountDisplayName'    => $this->rowNameMapping['accountDisplayName'],
                     'accountFullName'       => $this->rowNameMapping['accountFullName'],
                     'accountFirstName'      => $this->rowNameMapping['accountFirstName'],
                     'accountLastName'       => $this->rowNameMapping['accountLastName'],
                     'accountEmailAddress'   => $this->rowNameMapping['accountEmailAddress'],
-                    'contact_id',
+                    'lastLoginFailure'      => $this->rowNameMapping['lastLoginFailure'],
+                    'loginFailures'         => $this->rowNameMapping['loginFailures'],
+                	'contact_id',
                 	'openid',
                     'visibility'
                 )
@@ -374,7 +377,30 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         return $result;
     }
-
+    
+    public function setLastLoginFailure($_loginName)
+    {
+        Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Invalid password provided for: ' . $_loginName);
+        
+        try {
+            $user = $this->getUserByLoginName($_loginName);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // nothing todo => is no existing user
+            return;
+        }
+        
+        $values = array(
+            'last_login_failure_at' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
+            'login_failures'        => new Zend_Db_Expr($this->_db->quoteIdentifier('login_failures') . ' + 1')
+        );
+        
+        $where = array(
+            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId())
+        );
+        
+        $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $values, $where);
+    }
+    
     /**
      * sets blocked until date 
      *
@@ -420,6 +446,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $accountData['last_login_from'] = $_ipAddress;
         $accountData['last_login']      = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $accountData['login_failures']  = 0;
         
         $where = array(
             $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)

@@ -572,4 +572,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @return Tinebase_Record_RecordSet
      */
     abstract public function getMultiple($_id);
+    
+    abstract public function setLastLoginFailure($_loginName);
 }
