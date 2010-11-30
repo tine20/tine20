@@ -796,4 +796,25 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('filter', 2);
         $this->setApplicationVersion('Tinebase', '3.20');
     }
+    
+    /**
+     * update to 3.21
+     * - set default value for login_failures to 0
+     */
+    public function update_20()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml(
+            '<field>
+            	<name>login_failures</name>
+            	<type>integer</type>
+                <default>0</default>
+            </field>');
+        $this->_backend->alterCol('accounts', $declaration);
+        
+        $this->_db->update(SQL_TABLE_PREFIX . 'accounts', array('login_failures' => 0));
+                
+        // increase versions
+        $this->setTableVersion('accounts', 6);
+        $this->setApplicationVersion('Tinebase', '3.21');
+    }
 }

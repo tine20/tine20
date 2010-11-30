@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>3.20</version>
+	<version>3.21</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -194,7 +194,7 @@
 
 		<table>
 			<name>accounts</name>
-			<version>5</version>
+			<version>6</version>
 			<declaration>
                 <field>
                 	<name>id</name>
@@ -258,6 +258,7 @@
                 <field>
                 	<name>login_failures</name>
                 	<type>integer</type>
+                    <default>0</default>
                 </field>
                 <field>
                 	<name>last_login_failure_at</name>
