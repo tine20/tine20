@@ -279,6 +279,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $organizerId = $organizer->getId();
         
         $task = $this->_getTask();
+        
         $task->organizer = $organizer;
         $returned = $this->_backend->saveTask($task->toArray());
         $taskId = $returned['id'];
@@ -374,7 +375,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         return new Tasks_Model_Task(array(
             'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
-            'due'           => new Tinebase_DateTime()
+            'due'           => new Tinebase_DateTime("now", Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))
         ));
     }
 
