@@ -64,6 +64,7 @@ class Tinebase_DateTime extends DateTime
      */
     public function __wakeup() {
         $this->__construct($this->__sDT, new DateTimeZone($this->__sDTZ));
+        $this->__sDT = $this->__sDTZ = NULL;
     }
     
     /**
