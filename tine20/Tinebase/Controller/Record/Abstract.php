@@ -485,6 +485,28 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * set purging of record when deleting
+     * 
+     * @param boolean $_purge
+     * @return void
+     */
+    public function setPurgeRecords($_purge = TRUE)
+    {
+    	$this->_purgeRecords = $_purge;
+    }
+    
+    /**
+     * set sending notifications
+     * 
+     * @param boolean $_notifications
+     * @return void
+     */
+    public function setSendNotifications($_notifications = FALSE)
+    {
+    	$this->_sendNotifications = $_notifications;
+    }
+    
+    /**
      * update multiple records
      * 
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
