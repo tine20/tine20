@@ -68,6 +68,9 @@ class Tinebase_Controller
     {
         $authResult = Tinebase_Auth::getInstance()->authenticate($_loginname, $_password);
         
+        $accountsController = Tinebase_User::getInstance();
+        $groupsController   = Tinebase_Group::getInstance();
+        
         $accessLog = new Tinebase_Model_AccessLog(array(
             'sessionid'     => session_id(),
             'ip'            => $_ipAddress,
@@ -79,9 +82,6 @@ class Tinebase_Controller
         // does the user exist in the user database?
         if ($accessLog->result === Tinebase_Auth::SUCCESS) {
             $accountName = $authResult->getIdentity();
-            
-            $accountsController = Tinebase_User::getInstance();
-            $groupsController   = Tinebase_Group::getInstance();
             
             try {
                 if ($accountsController instanceof Tinebase_User_Interface_SyncAble) {
@@ -110,6 +110,15 @@ class Tinebase_Controller
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $accountName . ' password is expired');
                 $accessLog->result = Tinebase_Auth::FAILURE_PASSWORD_EXPIRED;
             }
+        }
+        
+        // to many login failures
+        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
+            if ($user->loginFailures > 5 && Tinebase_DateTime::now()->subMinute(15)->isEarlier($user->lastLoginFailure)) {
+                // account is blocked
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $accountName . ' is blocked');
+                $accessLog->result = Tinebase_Auth::FAILURE_BLOCKED;
+            } 
         }
         
         if ($accessLog->result === Tinebase_Auth::SUCCESS) {
@@ -142,9 +151,7 @@ class Tinebase_Controller
             $result = true;
             
         } else {
-            if ($accessLog->result == Tinebase_Auth::FAILURE_CREDENTIAL_INVALID) {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Invalid password provided for: ' . $_loginname);
-            }
+            $accountsController->setLastLoginFailure($_loginname);
             
             $accessLog->login_name = $_loginname;
             $accessLog->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
