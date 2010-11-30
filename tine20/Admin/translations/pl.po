@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-10-28 20:01+0100\n"
+"PO-Revision-Date: 2010-11-30 19:21+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -134,8 +134,8 @@ msgstr "ID"
 
 #: js/SambaMachineGrid.js:93
 #: js/Groups.js:238
-#: js/user/EditDialog.js:277
-#: js/user/EditDialog.js:306
+#: js/user/EditDialog.js:284
+#: js/user/EditDialog.js:313
 #: js/Applications.js:286
 #: js/Roles.js:239
 #: js/Tags.js:226
@@ -249,7 +249,7 @@ msgstr "Podczas próby usunięcia funkcji wystąpił błąd."
 msgid "Rights"
 msgstr "Uprawnienia"
 
-#: js/RoleEditDialog.js:262
+#: js/RoleEditDialog.js:261
 msgid "Members"
 msgstr "Uczestnicy"
 
@@ -298,7 +298,7 @@ msgstr[1] "użytkowników"
 msgstr[2] "użytkowników"
 
 #: js/user/GridPanel.js:160
-#: js/user/EditDialog.js:776
+#: js/user/EditDialog.js:783
 #: js/Applications.js:287
 msgid "Status"
 msgstr "Status"
@@ -324,17 +324,17 @@ msgid "Email"
 msgstr "E-mail"
 
 #: js/user/GridPanel.js:166
-#: js/user/EditDialog.js:754
+#: js/user/EditDialog.js:761
 msgid "OpenID"
 msgstr "ID uwierzytelnienia (OpenID)"
 
 #: js/user/GridPanel.js:167
-#: js/user/EditDialog.js:831
+#: js/user/EditDialog.js:838
 msgid "Last login at"
 msgstr "Czas ostatniego logowania"
 
 #: js/user/GridPanel.js:168
-#: js/user/EditDialog.js:835
+#: js/user/EditDialog.js:842
 msgid "Last login from"
 msgstr "Ostatnie zalogowanie z adresu"
 
@@ -343,7 +343,7 @@ msgid "Password changed"
 msgstr "Hasło zostało zmienione"
 
 #: js/user/GridPanel.js:170
-#: js/user/EditDialog.js:785
+#: js/user/EditDialog.js:792
 msgid "Expires"
 msgstr "Konto wygasa"
 
@@ -369,11 +369,11 @@ msgstr[0] "E-mail użytkownika"
 msgstr[1] "E-maile użytkowników"
 msgstr[2] "E-maile użytkowników"
 
-#: js/user/EditDialog.js:165
+#: js/user/EditDialog.js:171
 msgid "Passwords do not match!"
 msgstr "Nieprawidłowe hasło"
 
-#: js/user/EditDialog.js:221
+#: js/user/EditDialog.js:227
 #: js/Admin.js:37
 #: js/Models.js:88
 msgid "Groups"
@@ -381,256 +381,256 @@ msgstr "Grupy"
 
 # The word "Roles" could not be clearly understood. The word "Funkcje" is the better choice.
 # Das Wort "Roles" koennte missverstanden werden. Das Wort "Funkcje" passt besser.
-#: js/user/EditDialog.js:226
+#: js/user/EditDialog.js:232
 #: js/Admin.js:50
 msgid "Roles"
 msgstr "Role"
 
-#: js/user/EditDialog.js:278
-#: js/user/EditDialog.js:759
+#: js/user/EditDialog.js:285
+#: js/user/EditDialog.js:766
 msgid "Primary group"
 msgstr "Grupa nadrzędna"
 
-#: js/user/EditDialog.js:345
+#: js/user/EditDialog.js:352
 msgid "Unix"
 msgstr "Unix"
 
-#: js/user/EditDialog.js:359
+#: js/user/EditDialog.js:366
 msgid "Home Directory"
 msgstr "Katalog domowy"
 
-#: js/user/EditDialog.js:363
+#: js/user/EditDialog.js:370
 msgid "Login Shell"
 msgstr "Powłoka logowania"
 
-#: js/user/EditDialog.js:369
+#: js/user/EditDialog.js:376
 msgid "Windows"
 msgstr "Windows"
 
-#: js/user/EditDialog.js:383
+#: js/user/EditDialog.js:390
 msgid "Home Drive"
 msgstr "Dysk lokalny"
 
-#: js/user/EditDialog.js:388
+#: js/user/EditDialog.js:395
 msgid "Logon Time"
 msgstr "Czas zalogowania"
 
-#: js/user/EditDialog.js:390
-#: js/user/EditDialog.js:833
-#: js/user/EditDialog.js:837
+#: js/user/EditDialog.js:397
+#: js/user/EditDialog.js:840
+#: js/user/EditDialog.js:844
 msgid "never logged in"
 msgstr "nigdy nie był zalogowany"
 
-#: js/user/EditDialog.js:393
+#: js/user/EditDialog.js:400
 msgid "Home Path"
 msgstr "Ścieżka do katalogu domowego"
 
-#: js/user/EditDialog.js:398
+#: js/user/EditDialog.js:405
 msgid "Logoff Time"
 msgstr "Czas wylogowania"
 
-#: js/user/EditDialog.js:400
+#: js/user/EditDialog.js:407
 msgid "never logged off"
 msgstr "nigdy się nie wylogowywał(a)"
 
-#: js/user/EditDialog.js:403
+#: js/user/EditDialog.js:410
 msgid "Profile Path"
 msgstr "Ścieżka do katalogu z profilami"
 
-#: js/user/EditDialog.js:408
+#: js/user/EditDialog.js:415
 msgid "Password Last Set"
 msgstr "Ostatnia zmiana hasła"
 
-#: js/user/EditDialog.js:410
-#: js/user/EditDialog.js:787
-#: js/user/EditDialog.js:841
+#: js/user/EditDialog.js:417
+#: js/user/EditDialog.js:794
+#: js/user/EditDialog.js:848
 msgid "never"
 msgstr "nigdy"
 
-#: js/user/EditDialog.js:413
+#: js/user/EditDialog.js:420
 msgid "Logon Script"
 msgstr "Skrypt logowania"
 
-#: js/user/EditDialog.js:418
+#: js/user/EditDialog.js:425
 msgid "Password Can Change"
 msgstr "Możliwa zmiana hasła"
 
-#: js/user/EditDialog.js:420
-#: js/user/EditDialog.js:425
-#: js/user/EditDialog.js:430
+#: js/user/EditDialog.js:427
+#: js/user/EditDialog.js:432
+#: js/user/EditDialog.js:437
 msgid "not set"
 msgstr "nie ustawione"
 
-#: js/user/EditDialog.js:423
+#: js/user/EditDialog.js:430
 msgid "Password Must Change"
 msgstr "Konieczna zmiana hasła"
 
-#: js/user/EditDialog.js:428
+#: js/user/EditDialog.js:435
 msgid "Kick Off Time"
 msgstr "Czas wylogowania"
 
-#: js/user/EditDialog.js:448
+#: js/user/EditDialog.js:455
 msgid "Quota (MB)"
 msgstr "Kwota (MB)"
 
-#: js/user/EditDialog.js:461
+#: js/user/EditDialog.js:468
 msgid "Quota"
 msgstr "Kwota"
 
-#: js/user/EditDialog.js:469
+#: js/user/EditDialog.js:476
 msgid "Current Mail Size"
 msgstr "Rozmiar wiadomości"
 
-#: js/user/EditDialog.js:477
+#: js/user/EditDialog.js:484
 msgid "Sieve Quota (MB)"
 msgstr "Kwota ograniczenia (MB)"
 
-#: js/user/EditDialog.js:490
+#: js/user/EditDialog.js:497
 msgid "Sieve Quota"
 msgstr "Kwota ograniczenia"
 
-#: js/user/EditDialog.js:498
+#: js/user/EditDialog.js:505
 msgid "Sieve Size"
 msgstr "Rozmiar ograniczenia"
 
-#: js/user/EditDialog.js:507
-#: js/user/EditDialog.js:816
+#: js/user/EditDialog.js:514
+#: js/user/EditDialog.js:823
 msgid "Information"
 msgstr "Informacja"
 
-#: js/user/EditDialog.js:521
+#: js/user/EditDialog.js:528
 msgid "Last Login"
 msgstr "Ostatnie logowanie o"
 
-#: js/user/EditDialog.js:557
+#: js/user/EditDialog.js:564
 msgid "Aliases"
 msgstr "Aliasy"
 
-#: js/user/EditDialog.js:560
+#: js/user/EditDialog.js:567
 msgid "Email Alias"
 msgstr "Alias adresu e-mail"
 
-#: js/user/EditDialog.js:566
+#: js/user/EditDialog.js:573
 msgid "Add an alias address..."
 msgstr "Dodaj alias dla adresu e-mail..."
 
-#: js/user/EditDialog.js:577
+#: js/user/EditDialog.js:584
 msgid "Forwards"
 msgstr "Przesłane dalej"
 
-#: js/user/EditDialog.js:580
+#: js/user/EditDialog.js:587
 msgid "Email Forward"
 msgstr "Przekaż e-mail"
 
-#: js/user/EditDialog.js:586
+#: js/user/EditDialog.js:593
 msgid "Add a forward address..."
 msgstr "Dodaj adres dla przekazywanych wiadomości..."
 
-#: js/user/EditDialog.js:598
+#: js/user/EditDialog.js:605
 msgid "Forward Only"
 msgstr "Tylko prześlij dalej"
 
-#: js/user/EditDialog.js:621
+#: js/user/EditDialog.js:628
 msgid "Password confirmation"
 msgstr "Powtórz hasło"
 
-#: js/user/EditDialog.js:638
+#: js/user/EditDialog.js:645
 msgid "Repeat password"
 msgstr "Zresetuj hasło"
 
-#: js/user/EditDialog.js:650
+#: js/user/EditDialog.js:657
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: js/user/EditDialog.js:657
+#: js/user/EditDialog.js:664
 msgid "Ok"
 msgstr "OK"
 
-#: js/user/EditDialog.js:682
+#: js/user/EditDialog.js:689
 msgid "Account"
 msgstr "Konto"
 
-#: js/user/EditDialog.js:697
+#: js/user/EditDialog.js:704
 msgid "First Name"
 msgstr "Imię"
 
-#: js/user/EditDialog.js:707
+#: js/user/EditDialog.js:714
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/user/EditDialog.js:712
+#: js/user/EditDialog.js:719
 #: js/AccessLog.js:132
 msgid "Login Name"
 msgstr "Login"
 
-#: js/user/EditDialog.js:717
+#: js/user/EditDialog.js:724
 msgid "Password"
 msgstr "Hasło"
 
-#: js/user/EditDialog.js:721
+#: js/user/EditDialog.js:728
 msgid "no password set"
 msgstr "brak hasła"
 
-#: js/user/EditDialog.js:748
+#: js/user/EditDialog.js:755
 msgid "Emailaddress"
 msgstr "Adres e-mail"
 
-#: js/user/EditDialog.js:782
+#: js/user/EditDialog.js:789
 #: js/Applications.js:237
 msgid "enabled"
 msgstr "włączone"
 
-#: js/user/EditDialog.js:782
+#: js/user/EditDialog.js:789
 #: js/Applications.js:234
 msgid "disabled"
 msgstr "wyłączone"
 
-#: js/user/EditDialog.js:782
+#: js/user/EditDialog.js:789
 msgid "expired"
 msgstr "wygasło"
 
-#: js/user/EditDialog.js:790
+#: js/user/EditDialog.js:797
 #: js/GroupEditDialog.js:144
 msgid "Visibility"
 msgstr "Widoczność konta"
 
-#: js/user/EditDialog.js:796
+#: js/user/EditDialog.js:803
 #: js/GroupEditDialog.js:150
 msgid "Display in addressbook"
 msgstr "Wyświetlaj w książce adresowej"
 
-#: js/user/EditDialog.js:796
+#: js/user/EditDialog.js:803
 #: js/GroupEditDialog.js:150
 msgid "Hide from addressbook"
 msgstr "Ukryj w książce adresowej"
 
-#: js/user/EditDialog.js:806
+#: js/user/EditDialog.js:813
 #: js/GroupEditDialog.js:161
 msgid "Saved in Addressbook"
 msgstr "Zapisano w książce adresowej"
 
-#: js/user/EditDialog.js:833
-#: js/user/EditDialog.js:837
+#: js/user/EditDialog.js:840
+#: js/user/EditDialog.js:844
 msgid "don't know"
 msgstr "nie znam"
 
-#: js/user/EditDialog.js:839
+#: js/user/EditDialog.js:846
 msgid "Password set"
 msgstr "Hasło ustawiono"
 
-#: js/user/EditDialog.js:846
+#: js/user/EditDialog.js:853
 msgid "User memberships"
 msgstr "Przynależność użytkownika"
 
-#: js/user/EditDialog.js:852
+#: js/user/EditDialog.js:859
 msgid "Fileserver"
 msgstr "Serwer plików"
 
-#: js/user/EditDialog.js:858
+#: js/user/EditDialog.js:865
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:867
+#: js/user/EditDialog.js:874
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -862,22 +862,34 @@ msgid "Result"
 msgstr "Wynik"
 
 #: js/AccessLog.js:158
+msgid "user blocked"
+msgstr "użytkownik zablokowany"
+
+#: js/AccessLog.js:162
+msgid "password expired"
+msgstr "hasło wygasło"
+
+#: js/AccessLog.js:166
+msgid "user disabled"
+msgstr "użytkownik wyłączony"
+
+#: js/AccessLog.js:170
 msgid "invalid password"
 msgstr "nieprawidłowe hasło"
 
-#: js/AccessLog.js:162
+#: js/AccessLog.js:174
 msgid "ambiguous username"
 msgstr "wieloznaczna nazwa użytkownika"
 
-#: js/AccessLog.js:166
+#: js/AccessLog.js:178
 msgid "user not found"
 msgstr "użytkownik nie istnieje"
 
-#: js/AccessLog.js:170
+#: js/AccessLog.js:182
 msgid "failure"
 msgstr "błąd"
 
-#: js/AccessLog.js:174
+#: js/AccessLog.js:186
 msgid "success"
 msgstr "zakończone sukcesem"
 
