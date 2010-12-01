@@ -53,9 +53,9 @@ interface Tinebase_User_Interface
     public function registerPlugin(Tinebase_User_Plugin_Interface $_plugin);
     
     /**
-     * increase bad password counter and set last bad password timestamp
+     * increase bad password counter and store last login failure timestamp if user exists
      * 
-     * @param  string  $_loginname
+     * @param string $_loginName
      */
-    #public function increaseBadPasswordCounter($_loginname);
+    public function setLastLoginFailure($_loginName);
 }
