@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-30 19:24+0100\n"
+"PO-Revision-Date: 2010-12-01 19:30+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -85,28 +85,28 @@ msgstr "przez"
 msgid "Changed fields:"
 msgstr "Zmienione pola:"
 
-#: js/common.js:150
+#: js/common.js:152
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minuta"
 msgstr[1] "{0} minuty"
 msgstr[2] "{0} minut"
 
-#: js/common.js:151
+#: js/common.js:153
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} godzina"
 msgstr[1] "{0} godziny"
 msgstr[2] "{0} godzin"
 
-#: js/common.js:152
+#: js/common.js:154
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} dzień roboczy"
 msgstr[1] "{0} dni robocze"
 msgstr[2] "{0} dni roboczych"
 
-#: js/common.js:175
+#: js/common.js:180
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] "{0} sekund"
@@ -1412,8 +1412,8 @@ msgid "Saving favorite"
 msgstr "Zapisywanie ulubionych"
 
 #: js/widgets/persistentfilter/PickerPanel.js:270
-msgid "Overwriteing system favorites is not yet supported"
-msgstr "Nadpisywanie systemowych ulubionych nie jest jeszcze obsługiwane"
+msgid "Overwriting system favorites is not yet supported"
+msgstr "Nadpisywanie systemowych ulubionych jeszcze nie jest obsługiwane"
 
 #: js/widgets/VersionCheck.js:45
 #: js/widgets/VersionCheck.js:54
@@ -1618,7 +1618,7 @@ msgid "There are no applications enabled for you. Please contact your administra
 msgstr "Nie masz włączonych aplikacji. Proszę się skontaktować ze swoim administratorem."
 
 #: js/ExceptionDialog.js:51
-#: Frontend/Http.php:589
+#: Frontend/Http.php:590
 msgid "Abnormal End"
 msgstr "Zakończenie awaryjne"
 
@@ -1627,7 +1627,7 @@ msgid "Send Report"
 msgstr "Wyślij raport"
 
 #: js/ExceptionDialog.js:76
-#: Frontend/Http.php:590
+#: Frontend/Http.php:591
 msgid "An error occurred, the program ended abnormal."
 msgstr "Wystąpił błąd. Praca programu została zakończona awaryjnie."
 
@@ -1724,12 +1724,12 @@ msgstr "To pole jest częścią profilu do edycji"
 msgid "Field Name"
 msgstr "Nazwa pola"
 
-#: js/tineInit.js:575
+#: js/tineInit.js:572
 msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 msgstr "Błąd krytyczny. Aktualizacja danych klienta nie powiodła się. Proszę się skontaktować ze swoim administratorem i / lub zrestartować / przeładować przeglądarkę."
 
 #: js/ExceptionHandler.js:127
-#: Frontend/Http.php:562
+#: Frontend/Http.php:563
 msgid "Authorisation Required"
 msgstr "Konieczne uwierzytelnienie"
 
@@ -1930,9 +1930,12 @@ msgstr "Potwierdź wylogowanie"
 msgid "Show confirmation dialog on logout."
 msgstr "Wyświetl okno dialogowe potwierdzające chęć wylogowania."
 
-#: Frontend/Http.php:563
+#: Frontend/Http.php:564
 msgid "Your session is not valid. You need to login again."
 msgstr "Twoja sesja wygasła. Musisz się ponownie zalogować."
+
+#~ msgid "Overwriteing system favorites is not yet supported"
+#~ msgstr "Nadpisywanie systemowych ulubionych nie jest jeszcze obsługiwane"
 
 #~ msgid "Filter"
 #~ msgstr "Filtr"
