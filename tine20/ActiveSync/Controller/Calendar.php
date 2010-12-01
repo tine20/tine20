@@ -528,14 +528,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
         }
         
-        if ($event->is_all_day_event == true) {
-            $event->dtend = clone $event->dtstart;
-            $event->dtend
-                ->addHour(24);
-                #->addMinute(59)
-                #->addSecond(59);
-        }
-        
         // get body
         if (isset($xmlData->body)) {
             // ActiveSync 2.5
