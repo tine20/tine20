@@ -144,13 +144,13 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     currentRequestFolder.set('cache_status', 'incomplete');
                     currentRequestFolder.commit();
                 } else {
-                    Tine.log.debug('a request updateing message cache for folder "' + folder.get('localname') + '" is in progress -> wait for request to return');
+                    Tine.log.debug('a request updating message cache for folder "' + folder.get('localname') + '" is in progress -> wait for request to return');
                     return;
                 }
             }
             
             var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval, 120);
-            Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" with ' + executionTime + ' seconds max execution time');
+            Tine.log.debug('updating message cache for folder "' + folder.get('localname') + '" with ' + executionTime + ' seconds max execution time');
             
             folder.set('cache_status', 'pending');
             folder.commit();
@@ -164,13 +164,15 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     this.getFolderStore().updateFolder(folder);
                     
                     if (folder.get('cache_status') === 'updating') {
-                        Tine.log.debug('updateing message cache for folder "' + folder.get('localname') + '" is in progress on the server (folder is locked)');
+                        Tine.log.debug('updating message cache for folder "' + folder.get('localname') + '" is in progress on the server (folder is locked)');
                         return this.checkMailsDelayedTask.delay(this.updateInterval);
                     }
                     this.checkMailsDelayedTask.delay(0);
                 }
             });
         } else {
+            // TODO get next account to update
+            
             Tine.log.info('nothing more to do -> will check mails again in "' + this.updateInterval/1000 + '" seconds');
             if (this.updateInterval > 0) {
                 this.checkMailsDelayedTask.delay(this.updateInterval);
