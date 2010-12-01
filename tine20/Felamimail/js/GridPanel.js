@@ -437,6 +437,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             dataIndex: 'received',
             renderer: Tine.Tinebase.common.dateTimeRenderer
         },{
+            id: 'folder_id',
+            header: this.app.i18n._("Folder"),
+            width: 100,
+            sortable: true,
+            dataIndex: 'folder_id',
+            hidden: true,
+            renderer: this.accountAndFolderRenderer.createDelegate(this)
+        },{
             id: 'size',
             header: this.app.i18n._("Size"),
             width: 80,
@@ -491,6 +499,30 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result += '<img class="FelamimailFlagIcon" src="' + icon.src + '" ext:qtip="' + icon.qtip + '">';
         }, this);
         
+        return result;
+    },
+    
+    /**
+     * returns account and folder globalname
+     * 
+     * @param {String} folderId
+     * @return {String}
+     */
+    accountAndFolderRenderer: function(folderId, metadata, record) {
+        console.log(record);
+        
+        var folderStore = this.app.getFolderStore(),
+            account = Tine.Felamimail.loadAccountStore().getById(record.get('account_id')),
+            result = (account) ? account.get('name') : record.get('account_id'),
+            folder = folderStore.getById(folderId);
+        
+        result += '/';
+        if (folder) {
+            result += folder.get('globalname');
+        } else {
+            result += folderId;
+        }
+            
         return result;
     },
     
