@@ -59,14 +59,6 @@ interface Tinebase_User_Interface_SyncAble
     public function setExpiryDateInSyncBackend($_accountId, $_expiryDate);
     
     /**
-     * sets blocked until date 
-     *
-     * @param  mixed      $_accountId
-     * @param  Tinebase_DateTime  $_blockedUntilDate set to NULL to disable blockedDate
-    */
-    public function setBlockedDateInSyncBackend($_accountId, $_blockedUntilDate);
-        
-    /**
      * add an user
      * 
      * @param   Tinebase_Model_FullUser  $_user
