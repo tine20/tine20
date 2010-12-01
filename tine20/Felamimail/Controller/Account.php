@@ -289,7 +289,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $allowedFields = array(
                 'name',
                 'signature',
-                'intelligent_folders',
                 'has_children_support',
                 'delimiter',
                 'ns_personal',

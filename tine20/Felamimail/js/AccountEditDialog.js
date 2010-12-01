@@ -65,8 +65,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 // only enable some fields
                 switch(item.name) {
                     case 'signature':
-                    case 'intelligent_folders':
-                    case 'has_children_support':
                         break;
                     default:
                         item.setDisabled(true);
@@ -317,21 +315,6 @@ Tine.Felamimail.AccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'felamimailfolderselect',
                     account: this.record,
                     maxLength: 64
-                }, {
-                    fieldLabel: this.app.i18n._('Show Intelligent Folders'),
-                    name: 'intelligent_folders',
-                    typeAhead     : false,
-                    triggerAction : 'all',
-                    lazyRender    : true,
-                    editable      : false,
-                    mode          : 'local',
-                    forceSelection: true,
-                    value: '0',
-                    xtype: 'combo',
-                    store: [
-                        ['0', this.app.i18n._('No')],
-                        ['1',  this.app.i18n._('Yes')]
-                    ]
                 }, {
                     fieldLabel: this.app.i18n._('Display Format'),
                     name: 'display_format',

@@ -70,7 +70,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {        
-        $select = $this->_getSelect(array('count' => 'COUNT(*)'));
+        $select = $this->_getSelect(array('count' => 'COUNT(*)', 'flags' => 'felamimail_cache_message_flag.flag'));
         $this->_addFilter($select, $_filter);
         
         $stmt = $this->_db->query($select);

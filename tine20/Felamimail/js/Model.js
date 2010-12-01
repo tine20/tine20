@@ -120,6 +120,30 @@ Tine.Felamimail.Model.Message.getDefaultData = function() {
 };
 
 /**
+ * get filtermodel for messages
+ * 
+ * @namespace Tine.Felamimail.Model
+ * @static
+ * @return {Object} filterModel definition
+ */ 
+Tine.Felamimail.Model.Message.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Felamimail');
+    
+    return [
+        {filtertype: 'tine.felamimail.folder.filtermodel', app: app, recordClass: Tine.Felamimail.Model.Message, field: 'folder_id'},
+        {label: app.i18n._('Subject/From'),field: 'query',         operators: ['contains']},
+        {label: app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
+        {label: app.i18n._('From (Email)'),field: 'from_email',    operators: ['contains']},
+        {label: app.i18n._('From (Name)'), field: 'from_name',     operators: ['contains']},
+        {label: app.i18n._('To'),          field: 'to',            operators: ['contains']},
+        {label: app.i18n._('Cc'),          field: 'cc',            operators: ['contains']},
+        {label: app.i18n._('Bcc'),         field: 'bcc',           operators: ['contains']},
+        {label: app.i18n._('Flags'),       field: 'flags',         filtertype: 'tinebase.multiselect', app: app, valueStore: Tine.Felamimail.loadFlagsStore()},
+        {label: app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true}
+    ];
+};
+
+/**
  * @namespace Tine.Felamimail
  * @class Tine.Felamimail.messageBackend
  * @extends Tine.Tinebase.data.RecordProxy
@@ -225,6 +249,9 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         p.filterData = ids;
         p.flags = flags;
         
+        // increase timeout as this can take a longer (5 minutes)
+        options.timeout = 300000;
+        
         return this.doXHTTPRequest(options);
     },
     
@@ -244,6 +271,9 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
         p.method = this.appName + '.clearFlags';
         p.filterData = ids;
         p.flags = flags;
+        
+        // increase timeout as this can take a longer (5 minutes)
+        options.timeout = 300000;
         
         return this.doXHTTPRequest(options);
     },
@@ -284,7 +314,6 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     { name: 'trash_folder' },
     { name: 'drafts_folder' },
     { name: 'templates_folder' },
-    { name: 'intelligent_folders' },
     { name: 'has_children_support', type: 'bool' },
     { name: 'delimiter' },
     { name: 'display_format' },
@@ -311,9 +340,9 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     recordName: 'Account',
     recordsName: 'Accounts',
     containerProperty: 'container_id',
-    // ngettext('record list', 'record lists', n);
-    containerName: 'Account list',
-    containersName: 'Account lists',
+    // ngettext('Email Accounts', 'Email Accounts', n);
+    containerName: 'Email Accounts',
+    containersName: 'Email Accounts',
     
     /**
      * @type Object
@@ -726,4 +755,27 @@ Tine.Felamimail.rulesBackend = new Tine.Tinebase.data.RecordProxy({
     handleRequestException: function(exception) {
         Tine.Felamimail.handleRequestException(exception);
     }
+});
+
+/**
+ * @namespace Tine.Felamimail.Model
+ * @class Tine.Felamimail.Model.Flag
+ * @extends Tine.Tinebase.data.Record
+ * 
+ * Flag Record Definition
+ */ 
+Tine.Felamimail.Model.Flag = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+    { name: 'id' },
+    { name: 'name' }
+]), {
+    appName: 'Felamimail',
+    modelName: 'Flag',
+    idProperty: 'id',
+    titleProperty: 'id',
+    // ngettext('Flag', 'Flags', n);
+    recordName: 'Flag',
+    recordsName: 'Flags',
+    // ngettext('Flag list', 'Flag lists', n);
+    containerName: 'Flag list',
+    containersName: 'Flag lists'    
 });

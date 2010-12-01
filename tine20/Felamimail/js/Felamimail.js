@@ -428,6 +428,33 @@ Tine.Felamimail.loadAccountStore = function(reload) {
 };
 
 /**
+ * get flags store
+ *
+ * @param {Boolean} reload
+ * @return {Ext.data.JsonStore}
+ */
+Tine.Felamimail.loadFlagsStore = function(reload) {
+    
+    var store = Ext.StoreMgr.get('FelamimailFlagsStore');
+    
+    if (!store) {
+        // create store (get from initial registry data)
+        store = new Ext.data.JsonStore({
+            fields: Tine.Felamimail.Model.Flag,
+            data: Tine.Felamimail.registry.get('supportedFlags'),
+            autoLoad: true,
+            id: 'id',
+            root: 'results',
+            totalProperty: 'totalcount'
+        });
+        
+        Ext.StoreMgr.add('FelamimailFlagsStore', store);
+    } 
+
+    return store;
+};
+
+/**
  * add signature (get it from default account settings)
  * 
  * @param {String} id

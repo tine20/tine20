@@ -249,6 +249,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * returns supported flags
+     * 
+     * @return array
+     * 
+     * @todo add gettext for flags
+     */
+    public function getSupportedFlags()
+    {
+        $result = array();
+        $translate = Tinebase_Translation::getTranslation('Felamimail');
+        
+        foreach (self::$_allowedFlags as $flag) {
+            $result[] = array('id'        => $flag,      'name'      => $translate->_(substr($flag, 1)));
+        }
+        
+        return $result;
+    }
+    
+    /**
      * set flags in local database
      * 
      * @param Tinebase_Record_RecordSet $_messagesToFlag

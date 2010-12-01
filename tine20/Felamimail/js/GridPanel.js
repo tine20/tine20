@@ -284,20 +284,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: this.app.i18n._('Subject/From'),field: 'query',         operators: ['contains']},
-                {label: this.app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
-                {label: this.app.i18n._('From (Email)'),field: 'from_email',    operators: ['contains']},
-                {label: this.app.i18n._('From (Name)'), field: 'from_name',     operators: ['contains']},
-                {label: this.app.i18n._('To'),          field: 'to',            operators: ['contains']},
-                {label: this.app.i18n._('Cc'),          field: 'cc',            operators: ['contains']},
-                {label: this.app.i18n._('Bcc'),         field: 'bcc',           operators: ['contains']},
-                {label: this.app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true}
-             ],
+            filterModels: Tine.Felamimail.Model.Message.getFilterModel(),
              defaultFilter: 'query',
              filters: [],
              plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
+                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
+                    criteriaIgnores: [
+                        {field: 'folder_id', operator: 'equals',       value: {path: '/'}},
+                        {field: 'query',     operator: 'contains',     value: ''}
+                    ]
+                })
              ]
         });
     },    

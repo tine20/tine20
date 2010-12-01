@@ -15,6 +15,8 @@ Ext.ns('Tine.Crm');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * TODO         extend Tine.widgets.grid.FilterModelMultiSelect
  */
 Tine.Crm.LeadStateFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**

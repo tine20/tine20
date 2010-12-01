@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>3.15</version>
+    <version>3.16</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -10,7 +10,7 @@
     <tables>
         <table>
             <name>felamimail_account</name>
-            <version>13</version>
+            <version>14</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -89,10 +89,6 @@
                     <name>templates_folder</name>
                     <type>text</type>
                     <length>64</length>
-                </field>
-                <field>
-                    <name>intelligent_folders</name>
-                    <type>boolean</type>
                 </field>
                 <field>
                     <name>has_children_support</name>

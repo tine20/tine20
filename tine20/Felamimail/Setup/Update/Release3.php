@@ -461,6 +461,18 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }
     
     /**
+     * update function (-> 3.16)
+     * - drop intelligent_folders column
+     */    
+    public function update_15()
+    {
+        $this->_backend->dropCol('felamimail_account', 'intelligent_folders');
+        
+        $this->setTableVersion('felamimail_account', '14');
+        $this->setApplicationVersion('Felamimail', '3.16');
+    }
+    
+    /**
      * clear message cache tables and reset folder status
      */
     protected function _clearMessageCache()

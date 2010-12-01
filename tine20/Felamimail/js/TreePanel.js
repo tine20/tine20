@@ -13,6 +13,25 @@ Ext.namespace('Tine.Felamimail');
 
 /**
  * @namespace   Tine.Felamimail
+ * @class       Tine.Felamimail.FilterPanel
+ * @extends     Tine.widgets.persistentfilter.PickerPanel
+ * 
+ * <p>Felamimail Favorites Panel</p>
+ * 
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @version     $Id$
+ * 
+ * @param       {Object} config
+ * @constructor
+ * Create a new Tine.Felamimail.FilterPanel
+ */
+Tine.Felamimail.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
+    filterModel: 'Felamimail_Model_MessageFilter'
+});
+
+/**
+ * @namespace   Tine.Felamimail
  * @class       Tine.Felamimail.TreePanel
  * @extends     Ext.tree.TreePanel
  * 
@@ -22,7 +41,6 @@ Ext.namespace('Tine.Felamimail');
  * low priority:
  * TODO         make inbox/drafts/templates configurable in account
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
- * TODO         add unread count to intelligent folders
  * TODO         disable delete action in account ctx menu if user has no manage_accounts right
  * </pre>
  * 
@@ -91,12 +109,18 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @private
      */
 	rootVisible: false,
-    id: 'felamimail-tree',
     // drag n drop
     enableDrop: true,
     ddGroup: 'mailToTreeDDGroup',
     border: false,
+    recordClass: Tine.Felamimail.Model.Account,
+    filterMode: 'filterToolbar',
 	
+    /**
+     * is needed by Tine.widgets.mainscreen.WestPanel to fake container tree panel
+     */
+    selectContainerPath: Ext.emptyFn,
+    
     /**
      * init
      * @private
@@ -145,6 +169,9 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             }
         }
         
+        //this.selModel = new Ext.tree.MultiSelectionModel({});
+        this.selModel = new Ext.tree.DefaultSelectionModel({});
+        
         // init context menu TODO use Ext.apply
         var initCtxMenu = Tine.Felamimail.setTreeContextMenus.createDelegate(this);
         initCtxMenu();
@@ -158,6 +185,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.on('containeradd', this.onFolderAdd, this);
         this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
+        this.selModel.on('selectionchange', this.onSelectionChange, this);
         this.folderStore.on('update', this.onUpdateFolderStore, this);
         
         // call parent::initComponent
@@ -200,53 +228,73 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         });
     },
     
+    /**
+     * called when tree selection changes
+     * 
+     * @param {} sm
+     * @param {} node
+     */
+    onSelectionChange: function(sm, nodes) {
+        if (this.filterMode == 'gridFilter' && this.filterPlugin) {
+            this.filterPlugin.onFilterChange();
+        }
+        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+            
+            // get filterToolbar
+            var ftb = this.filterPlugin.getGridPanel().filterToolbar;
+            if (! ftb.rendered) {
+                this.onSelectionChange.defer(150, this, [sm, nodes]);
+                return;
+            }
+            
+            // remove all ftb container and /toberemoved/ filters
+            ftb.supressEvents = true;
+            ftb.filterStore.each(function(filter) {
+                var field = filter.get('field');
+                // @todo find criteria what to remove
+                if (field === 'folder_id') {
+                    ftb.deleteFilter(filter);
+                }
+            }, this);
+            ftb.supressEvents = false;
+            
+            // set ftb filters according to tree selection
+            var containerFilter = this.getFilterPlugin().getContainerFilter();
+            ftb.addFilter(new ftb.record(containerFilter));
+        
+            ftb.onFiltertrigger();
+            
+            // finally select the selected node, as filtertrigger clears all selections
+            sm.suspendEvents();
+            Ext.each(nodes, function(node) {
+                sm.select(node, Ext.EventObject, true);
+            }, this);
+            sm.resumeEvents();
+        }
+    },
+    
+    /**
+     * called on filtertrigger of filter toolbar
+     * clears selection silently
+     */
+    onFilterChange: function() {
+        var sm = this.getSelectionModel();
+        
+        sm.suspendEvents();
+        sm.clearSelections();
+        sm.resumeEvents();
+    },    
+    
    /**
      * returns a filter plugin to be used in a grid
      * @private
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
-            var scope = this;
-            this.filterPlugin = new Tine.widgets.grid.FilterPlugin({
-                getValue: function() {
-                	var node = scope.getSelectionModel().getSelectedNode();
-                    
-                    if (node && node.attributes.globalname == 'marked') {
-                        return [
-                            {field: 'flags',        operator: 'equals', value: '\\Flagged' },
-                            {field: 'account_id',   operator: 'equals', value: node.attributes.account_id }
-                        ];
-                    } else if (node && node.attributes.globalname == 'unread') {
-                        return [
-                            {field: 'flags',        operator: 'not', value: '\\Seen' },
-                            {field: 'account_id',   operator: 'equals', value: node.attributes.account_id }
-                        ];
-                    } else {
-                        return [
-                            {field: 'folder_id',    operator: 'equals', value: (node && node.attributes.folder_id) ? node.attributes.folder_id : '' }
-                        ];
-                    }
-                },
-                // TODO use createSequence?
-                onBeforeLoad: function(store, options) {
-                    
-                    options = options || {};
-                    options.params = options.params || {};
-                    options.params.filter = options.params.filter ? options.params.filter : [];
-
-                    var value = this.getValue();
-                    if (value && Ext.isArray(options.params.filter)) {
-                        value = Ext.isArray(value) ? value : [value];
-                        for (var i=0; i<value.length; i++) {
-                            options.params.filter.push(value[i]);
-                        }
-                    }                
-                    
-                    // stop request if folder_id is empty in filter
-                    if (options.params.filter[0] && options.params.filter[0].field == 'folder_id' && options.params.filter[0].value == '') {
-                        return false;
-                    }
-                }
+            this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
+                treePanel: this,
+                field: 'folder_id',
+                nodeAttributeField: 'folder_id'
             });
         }
         
@@ -273,6 +321,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 }
             }, this);
         });
+        
+        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+            this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
+        }
     },
     
     /**
@@ -654,7 +706,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             qtip: record.get('host'),
             leaf: false,
             cls: 'felamimail-node-account',
-            intelligent_folders: (record.get('intelligent_folders')) ? record.get('intelligent_folders') : 0,
             delimiter: record.get('delimiter'),
             ns_personal: record.get('ns_personal'),
             account_id: record.data.id,
@@ -663,41 +714,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 load: function(node) {
                     var account = Tine.Felamimail.loadAccountStore().getById(node.id);
                     this.updateAccountStatus(account);
-                    
-                    // add 'intelligent' folders
-                    if (node.attributes.intelligent_folders == 1) {
-                        var markedNode = new Ext.tree.TreeNode({
-                            id: record.data.id + '/marked',
-                            localname: 'marked', //this.app.i18n._('Marked'),
-                            globalname: 'marked',
-                            draggable: false,
-                            allowDrop: false,
-                            expanded: false,
-                            text: this.app.i18n._('Marked'),
-                            qtip: this.app.i18n._('Contains marked messages'),
-                            leaf: true,
-                            cls: 'felamimail-node-intelligent-marked',
-                            account_id: record.data.id
-                        });
-                
-                        node.appendChild(markedNode);
-                    
-                        var unreadNode = new Ext.tree.TreeNode({
-                            id: record.data.id + '/unread',
-                            localname: 'unread', //this.app.i18n._('Marked'),
-                            globalname: 'unread',
-                            draggable: false,
-                            allowDrop: false,
-                            expanded: false,
-                            text: this.app.i18n._('Unread'),
-                            qtip: this.app.i18n._('Contains unread messages'),
-                            leaf: true,
-                            cls: 'felamimail-node-intelligent-unread',
-                            account_id: record.data.id
-                        });
-                
-                        node.appendChild(unreadNode);
-                    }
                 }
             }
         });

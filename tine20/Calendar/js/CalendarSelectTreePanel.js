@@ -14,7 +14,7 @@ Ext.ns('Tine.Calendar');
  * @class       Tine.Calendar.FilterPanel
  * @extends     Tine.widgets.persistentfilter.PickerPanel
  * 
- * <p>Calendar Favorietes Panel</p>
+ * <p>Calendar Favorites Panel</p>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3

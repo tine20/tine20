@@ -82,19 +82,33 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                 
                 // add conditions
                 $tablename  = $_backend->getTablePrefix() . $foreignTables[$customData['field']]['table'];
-                if ($customData['field'] == 'flags') {
-                    $fieldName = 'flag';
-                } else {
+                if ($customData['field'] !== 'flags') {
                     $fieldName  = $tablename . '.name';
                     $fieldEmail = $tablename . '.email';
                 }
                 
                 // add filter value
-                $value      = '%' . $customData['value'] . '%';
+                if (! is_array($customData['value'])) {
+                    $value      = '%' . $customData['value'] . '%';
+                } else {
+                    $value = array();
+                    foreach ((array)$customData['value'] as $customValue) {
+                        $value[]      = '%' . $customValue . '%';
+                    }
+                }
                                 
                 if ($customData['field'] == 'flags') {
                     if ($customData['operator'] == 'equals' || $customData['operator'] == 'contains') {
                         $_select->having($db->quoteInto('flags LIKE ?', $value));
+                    } else if ($customData['operator'] == 'in' || $customData['operator'] == 'notin') {
+                        $value = (array) $value;
+                        $where = array();
+                        $op = ($customData['operator'] == 'in') ? 'LIKE' : 'NOT LIKE';
+                        $opImplode = ($customData['operator'] == 'in') ? ' OR ' : ' AND ';
+                        foreach ($value as $flag) {
+                            $where[] = $db->quoteInto('flags ' . $op . ' ?', $flag);
+                        }
+                        $_select->having(implode($opImplode, $where));
                     } else {
                         $_select->having($db->quoteInto('flags NOT LIKE ? OR flags IS NULL', $value));
                     }

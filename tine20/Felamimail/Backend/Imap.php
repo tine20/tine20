@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -786,25 +786,17 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      * identify the message.
      *
      * @param   int $id number of message
-     * @return  null
-     * @throws  Zend_Mail_Storage_Exception
+     * @return  void
+     * @throws  Felamimail_Exception_IMAP
      */
     public function removeMessage($id)
     {
         if (!$this->_protocol->store(array(Zend_Mail_Storage::FLAG_DELETED), $id, null, '+', true, $this->_useUid)) {
-            /**
-             * @see Zend_Mail_Storage_Exception
-             */
-            require_once 'Zend/Mail/Storage/Exception.php';
-            throw new Zend_Mail_Storage_Exception('cannot set deleted flag');
+            throw new Felamimail_Exception_IMAP('cannot set deleted flag');
         }
         // TODO: expunge here or at close? we can handle an error here better and are more fail safe
         if (!$this->_protocol->expunge()) {
-            /**
-             * @see Zend_Mail_Storage_Exception
-             */
-            require_once 'Zend/Mail/Storage/Exception.php';
-            throw new Zend_Mail_Storage_Exception('message marked as deleted, but could not expunge');
+            throw new Felamimail_Exception_IMAP('message marked as deleted, but could not expunge');
         }
     }
     
@@ -813,13 +805,13 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      *
      * @param  int|array                       $id     number of message(s)
      * @param  string|Zend_Mail_Storage_Folder $folder name or instance of targer folder
-     * @return null
-     * @throws Felamimail_Exception_IMAPFolderNotFound
+     * @return void
+     * @throws Felamimail_Exception_IMAP
      */
     public function copyMessage($id, $folder)
     {
         if (!$this->_protocol->copy($folder, $id, null, $this->_useUid)) {
-            throw new Felamimail_Exception_IMAPFolderNotFound('Cannot copy message, does the target folder "' . $folder . '" exist?');
+            throw new Felamimail_Exception_IMAP('Cannot copy message, does the target folder "' . $folder . '" exist? Or maybe you exceeded your Quota.');
         }
     }
     

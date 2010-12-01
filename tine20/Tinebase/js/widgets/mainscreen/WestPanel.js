@@ -81,9 +81,9 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
         this.getPortalColumn().items.each(function(item, idx) {
             // kill x-scrollers
             if (item.getEl && item.getEl()) {
-                this.xsrollKiller(item);
+                this.xScrollKiller(item);
             } else {
-                item.on('afterrender', this.xsrollKiller, this);
+                item.on('afterrender', this.xScrollKiller, this);
             }
             
             //bubble state events
@@ -281,7 +281,7 @@ Ext.extend(Tine.widgets.mainscreen.WestPanel, Ext.ux.Portal, {
      * 
      * @param {Ext.Component} cmp
      */
-    xsrollKiller:  function(cmp) {
+    xScrollKiller:  function(cmp) {
         var panelEls = cmp.getEl().child('div[class^=' + this.defaults.baseCls + '-body]');
         if (panelEls) {
             panelEls.applyStyles('overflow-x: hidden');

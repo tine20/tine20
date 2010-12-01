@@ -267,14 +267,17 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 var existingRecord = existingRecordIdx ? this.store.getAt(existingRecordIdx) : null;
                 if (existingRecord) {
                     if (existingRecord.isShared()) {
-                        Ext.Msg.alert(_('Favorite not Saved'), _('Overwriteing system favorites is not yet supported'));
+                        Ext.Msg.alert(_('Favorite not Saved'), _('Overwriting system favorites is not yet supported'));
                         return;
                     }
                     this.store.remove(existingRecord);
                 }
                 
-                var recordClass = this.recordClass || this.treePanel ? this.treePanel.recordClass : ftb.store.reader.recordType;
-                var model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName') + 'Filter';
+                var model = this.filterModel;
+                if (! model) {
+                    var recordClass = this.recordClass || this.treePanel ? this.treePanel.recordClass : ftb.store.reader.recordType;
+                    model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName') + 'Filter';
+                }
                 
                 var record = new Tine.widgets.persistentfilter.model.PersistentFilter({
                     id:             existingRecord ? existingRecord.id : 0,
@@ -288,7 +291,6 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 
                 Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
                     scope: this,
-                    //failure: this.onProxyFail,
                     success: function(savedRecord){
                         var persistentFilterNode = this.getPersistentFilterNode();
                         
@@ -398,8 +400,7 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
                 qtip: Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) : ''),
                 selected: attr.id === this.selectedFilterId,
                 id: attr.id,
-                leaf: attr.leaf === false ? attr.leaf : true/*,
-                filter: Ext.copyTo({}, attr, 'id, name, filters')*/
+                leaf: attr.leaf === false ? attr.leaf : true
             });
         }
     }

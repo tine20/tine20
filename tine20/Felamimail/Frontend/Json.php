@@ -486,8 +486,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             );
         }
         
+        $supportedFlags = Felamimail_Controller_Message::getInstance()->getSupportedFlags();
+        
         $result = array(
-            'accounts'              => $accounts
+            'accounts'              => $accounts,
+            'supportedFlags'        => array(
+                'results'       => $supportedFlags,
+                'totalcount'    => count($supportedFlags),
+            ),
         );
         
         $defaults = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);

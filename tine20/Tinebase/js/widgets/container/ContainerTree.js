@@ -557,15 +557,32 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
      */
     treePanel: null,
     
+    /**
+     * @cfg field
+     * @type String
+     */
+    field: 'container_id',
+
+    /**
+     * @cfg nodeAttributeField
+     * @type String
+     */
+    nodeAttributeField: 'container',
+    
+    /**
+     * get container filter object
+     * 
+     * @return {Object}
+     */
     getContainerFilter: function() {
-        var filter = {field: 'container_id'};
+        var filter = {field: this.field};
         var sm = this.treePanel.getSelectionModel();
         filter.operator = typeof sm.getSelectedNodes == 'function' ? 'in' : 'equals';
         var selection =  filter.operator === 'in' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
         var values = [];
         Ext.each(selection, function(node) {
-            values.push(node.attributes.container);
+            values.push(node.attributes[this.nodeAttributeField]);
         }, this);
         
         filter.value = Ext.isEmpty(values) ? '' : filter.operator === 'in' ? values : values[0];
@@ -601,7 +618,7 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
         sm.clearSelections(true);
         
         Ext.each(filters, function(filter) {
-            if (filter.field !== 'container_id') {
+            if (filter.field !== this.field) {
                 return;
             }
             
@@ -610,6 +627,11 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
         }, this);
     },
     
+    /**
+     * select tree node(s)
+     * 
+     * @param {String} value
+     */
     selectValue: function(value) {
         var values = Ext.isArray(value) ? value : [value];
         Ext.each(values, function(value) {

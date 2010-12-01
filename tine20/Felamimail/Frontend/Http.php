@@ -53,6 +53,7 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Addressbook/js/ContactGrid.js',
             'Felamimail/js/ContactGrid.js',
             'Felamimail/js/RecipientPickerDialog.js',
+            'Felamimail/js/FolderFilterModel.js',
         );
     }
 

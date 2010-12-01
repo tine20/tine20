@@ -29,7 +29,7 @@ Tine.Calendar.AttendeeFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
-        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
+        Tine.Calendar.AttendeeFilterModel.superclass.initComponent.call(this);
         
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         

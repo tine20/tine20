@@ -40,7 +40,7 @@ Ext.ns('Tine.widgets.grid');
 Tine.widgets.grid.FilterToolbarQuickFilterPlugin = function(config) {
     config = config || {};
     
-    this.criteriaIgnores = [
+    this.criteriaIgnores = config.criteriaIgnores || [
         {field: 'container_id', operator: 'equals', value: {path: '/'}},
         {field: 'query',        operator: 'contains',    value: ''}
     ];

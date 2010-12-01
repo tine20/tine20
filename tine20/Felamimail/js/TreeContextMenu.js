@@ -135,7 +135,6 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         
                         // update tree node + store
                         this.ctxNode.setText(account.get('name'));
-                        this.ctxNode.attributes.intelligent_folders = account.get('intelligent_folders');
                         this.accountStore.reload();
                         
                         // reload tree node + remove all folders of this account from store ?
