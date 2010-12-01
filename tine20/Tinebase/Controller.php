@@ -80,7 +80,7 @@ class Tinebase_Controller
         ), TRUE);
 
         // does the user exist in the user database?
-        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
+        if ($accessLog->result == Tinebase_Auth::SUCCESS) {
             $accountName = $authResult->getIdentity();
             
             try {
@@ -95,33 +95,27 @@ class Tinebase_Controller
         }
         
         // is the user enabled?
-        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
-            if($user->accountStatus !== 'enabled') {
-                // account is expired
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $accountName . ' is not enabled');
+        if ($accessLog->result == Tinebase_Auth::SUCCESS && $user->accountStatus !== Tinebase_User::STATUS_ENABLED) {
+            // is the account enabled?
+            if($user->accountStatus == Tinebase_User::STATUS_DISABLED) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $accountName . ' is disabled');
                 $accessLog->result = Tinebase_Auth::FAILURE_DISABLED;
             }
-        }
                 
-        // is the password expired?
-        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
-            if(($user->accountExpires instanceof Tinebase_DateTime) && Tinebase_DateTime::now()->isLater($user->accountExpires)) {
-                // account is expired
+            // is the account expired?
+            elseif($user->accountStatus == Tinebase_User::STATUS_EXPIRED) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $accountName . ' password is expired');
                 $accessLog->result = Tinebase_Auth::FAILURE_PASSWORD_EXPIRED;
             }
-        }
         
-        // to many login failures
-        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
-            if ($user->loginFailures > 5 && Tinebase_DateTime::now()->subMinute(15)->isEarlier($user->lastLoginFailure)) {
-                // account is blocked
+            // to many login failures?
+            elseif($user->accountStatus == Tinebase_User::STATUS_BLOCKED) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Account: '. $accountName . ' is blocked');
                 $accessLog->result = Tinebase_Auth::FAILURE_BLOCKED;
             } 
         }
         
-        if ($accessLog->result === Tinebase_Auth::SUCCESS) {
+        if ($accessLog->result === Tinebase_Auth::SUCCESS && $user->accountStatus === Tinebase_User::STATUS_ENABLED) {
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
             if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
                 Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
