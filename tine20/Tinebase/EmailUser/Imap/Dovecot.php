@@ -27,10 +27,10 @@ CREATE TABLE IF NOT EXISTS `dovecot_users` (
 `domain` VARCHAR( 80 ) DEFAULT '',
 `username` VARCHAR( 80 ) NOT NULL ,
 `password` VARCHAR( 100 ) NOT NULL ,
-`uid` VARCHAR( 20 ) NOT NULL ,
-`gid` VARCHAR( 20 ) NOT NULL ,
-`home` VARCHAR( 256 ) NOT NULL ,
-`last_login` DATETIME NOT NULL ,
+`uid` VARCHAR( 20 ) DEFAULT NULL ,
+`gid` VARCHAR( 20 ) DEFAULT NULL ,
+`home` VARCHAR( 256 ) DEFAULT NULL ,
+`last_login` DATETIME DEFAULT NULL ,
 PRIMARY KEY ( `userid`, `domain` ) ,
 UNIQUE ( `username` )
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
@@ -453,6 +453,11 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             $values = $imapSettings;
+            
+            // generate random password if not set
+            if (empty($values[$this->_propertyMapping['emailPassword']])) {
+                $values[$this->_propertyMapping['emailPassword']] = Hash_Password::generate($this->_config['emailScheme'], Tinebase_Record_Abstract::generateUID());
+            }
             unset($values[$this->_propertyMapping['emailMailQuota']]);
             unset($values[$this->_propertyMapping['emailSieveQuota']]);
             
@@ -463,7 +468,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
                 array(
                     $this->_propertyMapping['emailUsername']   => $imapSettings[$this->_propertyMapping['emailUsername']],
                     $this->_propertyMapping['emailMailQuota']  => convertToBytes($imapSettings[$this->_propertyMapping['emailMailQuota']] . 'M'), 
-                    $this->_propertyMapping['emailSieveQuota'] => $imapSettings[$this->_propertyMapping['emailSieveQuota']]
+                    $this->_propertyMapping['emailSieveQuota'] => convertToBytes($imapSettings[$this->_propertyMapping['emailSieveQuota']] . 'M')
                 )
             );
             
