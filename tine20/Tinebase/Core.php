@@ -840,10 +840,10 @@ class Tinebase_Core
     {
         $oldMaxExcecutionTime = ini_get('max_execution_time');
         
-        if (ini_get('max_execution_time') > 0) {
+        if ($oldMaxExcecutionTime > 0) {
             if ((bool)ini_get('safe_mode') === true) {
                 if (Tinebase_Core::isRegistered(self::LOGGER)) {
-                    Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' max_execution_time(' . ini_get('max_execution_time') . ') is too low. Can\'t set limit to ' . $_seconds . ' because of safe mode restrictions.');    
+                    Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' max_execution_time(' . $oldMaxExcecutionTime . ') is too low. Can\'t set limit to ' . $_seconds . ' because of safe mode restrictions.');    
                 }
             } else {
             	if (Tinebase_Core::isRegistered(self::LOGGER)) {
