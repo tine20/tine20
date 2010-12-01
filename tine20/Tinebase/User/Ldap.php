@@ -357,24 +357,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     }
 
     /**
-     * sets blocked until date 
-     *
-     * @param  mixed      $_accountId
-     * @param  Tinebase_DateTime  $_blockedUntilDate set to NULL to disable blockedDate
-    */
-    public function setBlockedDateInSyncBackend($_accountId, $_blockedUntilDate)
-    {
-        // not supported by standart ldap schemas
-        $user = $this->getFullUserById($_accountId);
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "  With ldap user backend, user '{$user->accountLoginName}' could not be blocked until {$_blockedUntilDate}");
-
-        foreach ($this->_plugins as $plugin) {
-            $plugin->inspectSetBlocked($_accountId, $_blockedUntilDate);
-        }
-
-    }
-
-    /**
      * updates an existing user
      *
      * @todo check required objectclasses?
