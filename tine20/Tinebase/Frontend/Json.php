@@ -738,9 +738,9 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getUserProfileConfig()
     {
         return array(
-            'possibleFields'   => Tinebase_UserProfile::getInstance()->getPossibleFields(),
-            'readableFields'   => Tinebase_UserProfile::getInstance()->getReadableFields(),
-            'updateableFields' => Tinebase_UserProfile::getInstance()->getUpdateableFields(),
+            'possibleFields'   => array_values(Tinebase_UserProfile::getInstance()->getPossibleFields()),
+            'readableFields'   => array_values(Tinebase_UserProfile::getInstance()->getReadableFields()),
+            'updateableFields' => array_values(Tinebase_UserProfile::getInstance()->getUpdateableFields()),
         );
     }
     
