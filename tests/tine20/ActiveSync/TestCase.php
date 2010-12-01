@@ -314,12 +314,12 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      * 
      * @return DOMDocument
      */
-    protected function _getInputDOMDocument()
+    protected function _getInputDOMDocument($xml = NULL)
     {
     	$dom = new DOMDocument();
         $dom->formatOutput = false;
         $dom->encoding     = 'utf-8';
-        $dom->loadXML($this->_testXMLInput);
+        $dom->loadXML($xml ? $xml : $this->_testXMLInput);
         #$dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
         
         return $dom;
