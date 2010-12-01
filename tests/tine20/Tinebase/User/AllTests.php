@@ -43,10 +43,7 @@ class Tinebase_User_AllTests
             }
         }
 
-        $stmpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-        if (isset($stmpConfig['backend']) && ucfirst($stmpConfig['backend']) == Tinebase_EmailUser::POSTFIX) {
-            $suite->addTestSuite('Tinebase_User_EmailUser_PostfixTest');
-        }
+        $suite->addTestSuite('Tinebase_User_EmailUser_PostfixTest');
         return $suite;
     }
 }
