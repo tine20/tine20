@@ -23,8 +23,8 @@ CREATE TABLE IF NOT EXISTS `smtp_users` (
   `userid` varchar(40) NOT NULL,
   `client_idnr` varchar(40) NOT NULL,
   `username` varchar(80) NOT NULL,
-  `passwd` varchar(34) DEFAULT NULL,
-  `email` varchar(80) NOT NULL,
+  `passwd` varchar(80) NOT NULL,
+  `email` varchar(80) DEFAULT NULL,
   `forward_only` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`userid`, `client_idnr`),
   UNIQUE KEY `username` (`username`),
@@ -357,6 +357,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             $values = $smtpSettings;
+            // generate random password if not set
+            if (empty($values[$this->_propertyMapping['emailPassword']])) {
+                $values[$this->_propertyMapping['emailPassword']] = Hash_Password::generate($this->_config['emailScheme'], Tinebase_Record_Abstract::generateUID());
+            }
             unset($values[$this->_propertyMapping['emailForwards']]);
             unset($values[$this->_propertyMapping['emailAliases']]);
             
@@ -562,30 +566,15 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
     {
         $rawData = array();
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->toArray(), true));
         
-        foreach ($_newUserProperties->imapUser as $key => $value) {
+        foreach ($_newUserProperties->smtpUser as $key => $value) {
             
             $property = array_key_exists($key, $this->_propertyMapping) ? $this->_propertyMapping[$key] : false;
             if ($property) {
                 switch ($key) {
                     case 'emailPassword':
                         $rawData[$property] = Hash_Password::generate($this->_config['emailScheme'], $value);
-                        break;
-                        
-                    case 'emailUserId':
-                        $rawData[$property] = $_user->getId();
-                        break;
-                        
-                    case 'emailUsername':
-                        $rawData[$property] = $this->_appendDomain($_user->accountLoginName);
-                        break;
-                        
-                    case 'emailAddress':
-                        if (!empty($_user->accountEmailAddress)) {
-                            $this->_checkDomain($_user->accountEmailAddress, TRUE);
-                        }        
-                        $rawData[$property] = $_user->accountEmailAddress;
                         break;
                         
                     case 'emailAliases':
@@ -610,7 +599,14 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
             }
             
         }
-
+        
+        if (!empty($_user->accountEmailAddress)) {
+            $this->_checkDomain($_user->accountEmailAddress, TRUE);
+        }        
+        $rawData[$this->_propertyMapping['emailAddress']]  = $_user->accountEmailAddress;
+        $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
+        $rawData[$this->_propertyMapping['emailUsername']] = $this->_appendDomain($_user->accountLoginName);
+        
         if (empty($rawData[$this->_propertyMapping['emailAddress']])) {
             $rawData[$this->_propertyMapping['emailAliases']]  = null;
             $rawData[$this->_propertyMapping['emailForwards']] = null;
@@ -620,9 +616,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
             $rawData[$this->_propertyMapping['emailForwardOnly']] = 0;
         }
         
+                        
         $rawData['client_idnr'] = $this->_clientId;
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, true));
         
         return $rawData;
     }
