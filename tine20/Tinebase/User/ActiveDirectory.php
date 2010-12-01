@@ -152,19 +152,6 @@ class Tinebase_User_ActiveDirectory extends Tinebase_User_Ldap
     }
 
     /**
-     * blocks/unblocks the user (calls backend class with the same name)
-     *
-     * @param   int $_accountId
-     * @param   Tinebase_DateTime   $_blockedUntilDate
-    */
-    public function setBlockedDate($_accountId, $_blockedUntilDate) 
-    {
-        // not supported by standart ldap schemas
-        $user = $this->getFullUserById($_accountId);
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . "  With ldap user backend, user '{$user->accountLoginName}' could not be blocked until {$_blockedUntilDate}");
-    }
-        
-    /**
      * updates an existing user
      * 
      * @todo check required objectclasses?
