@@ -108,7 +108,11 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                         foreach ($value as $flag) {
                             $where[] = $db->quoteInto('flags ' . $op . ' ?', $flag);
                         }
-                        $_select->having(implode($opImplode, $where));
+                        $whereString = implode($opImplode, $where);
+                        if ($customData['operator'] == 'notin') {
+                            $whereString = '(' . $whereString . ') OR flags IS NULL';
+                        }
+                        $_select->having($whereString);
                     } else {
                         $_select->having($db->quoteInto('flags NOT LIKE ? OR flags IS NULL', $value));
                     }
