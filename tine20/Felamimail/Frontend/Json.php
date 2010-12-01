@@ -30,6 +30,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchFolders($filter)
     {
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
+        
         $result = $this->_search($filter, '', Felamimail_Controller_Folder::getInstance(), 'Felamimail_Model_FolderFilter');
         
         return $result;
