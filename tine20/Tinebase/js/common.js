@@ -139,26 +139,31 @@ Tine.Tinebase.common = {
     /**
      * Returns prettyfied minutes
      * @param  {Number} minutes
+     * @param  {String} format -> {0} will be replaced by Hours, {1} with minutes
      * @return {String}
      */
-    minutesRenderer: function(minutes){
-        
+    minutesRenderer: function(minutes, format){
+        var s;
         var i = minutes%60;
         var H = Math.floor(minutes/60);//%(24);
         //var d = Math.floor(minutes/(60*24));
         
-        var s = String.format(Tine.Tinebase.translation.ngettext('{0} minute', '{0} minutes', i), i);
-        var Hs = String.format(Tine.Tinebase.translation.ngettext('{0} hour', '{0} hours', H), H);
-        //var ds = String.format(Tine.Tinebase.translation.ngettext('{0} workday', '{0} workdays', d), d);
-        
-        if (i == 0) {
-        	s = Hs;
-        } else {
-            s = H ? Hs + ', ' + s : s;
+        if (! format) {
+            var s = String.format(Tine.Tinebase.translation.ngettext('{0} minute', '{0} minutes', i), i);
+            var Hs = String.format(Tine.Tinebase.translation.ngettext('{0} hour', '{0} hours', H), H);
+            //var ds = String.format(Tine.Tinebase.translation.ngettext('{0} workday', '{0} workdays', d), d);
+            
+            if (i == 0) {
+            	s = Hs;
+            } else {
+                s = H ? Hs + ', ' + s : s;
+            }
+            //s = d ? ds + ', ' + s : s;
+            
+            return s;
         }
-        //s = d ? ds + ', ' + s : s;
         
-        return s;
+        return String.format(format, H, i);
     },
 
     /**
