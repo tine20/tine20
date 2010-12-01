@@ -241,10 +241,8 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $definition = Tinebase_ImportExportDefinition::getInstance()->get($_importDefinitionId);
         $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $_options);
         
-        $oldMaxExcecutionTime = ini_get('max_execution_time');
-        
         // extend execution time to 30 minutes
-        Tinebase_Core::setExecutionLifeTime(1800);
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);
         
         $result = array(
             'results'           => array(),
