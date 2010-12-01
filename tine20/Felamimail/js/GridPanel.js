@@ -559,8 +559,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 currFolder = this.app.getFolderStore().getById(msg.get('folder_id')),
                 diff = isSeen ? 0 : 1;
                 
-            currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
-            if (folder !== null) {
+            if (currFolder) {
+                currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
+            }
+            if (folder) {
                 // update unread count of target folder (only when moving)
                 folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
             }
