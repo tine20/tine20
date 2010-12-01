@@ -288,7 +288,7 @@ Tine.widgets.dialog.Preferences = Ext.extend(Ext.FormPanel, {
 
         for (panelName in panelsToSave) {
             panel = panelsToSave[panelName];
-            if (typeof panel.isValid === 'function' && ! panel.isValid()) {
+            if (panel && typeof panel.isValid === 'function' && ! panel.isValid()) {
                 return false;
             }
         }
