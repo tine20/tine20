@@ -56,18 +56,17 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        // clear table
         $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-        $db = Zend_Db::factory('Pdo_Mysql', $smtpConfig['postfix']);
-        $db->query('TRUNCATE TABLE `smtp_users`');
+        if (!isset($smtpConfig['backend']) || !ucfirst($smtpConfig['backend']) == Tinebase_EmailUser::POSTFIX) {
+            $this->markTestSkipped('Postfix MySQL backend not configured');
+        }
         
         $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
         
         $personas = Zend_Registry::get('personas');
-        $user = $personas['jsmith'];
-        $this->_objects['jsmith'] = $user;
+        $this->_objects['user'] = $personas['jsmith'];
 
-        $this->_objects['addedUser'] = $this->_addUser();
+        $this->_objects['addedUsers'] = array();
     }
 
     /**
@@ -79,7 +78,9 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         // delete email account
-        $this->_backend->deleteUser($this->_objects['jsmith']->getId());
+        foreach ($this->_objects['addedUsers'] as $user) {
+            $this->_backend->inspectDeleteUser($user->getId());
+        }
     }
     
     /**
@@ -87,17 +88,27 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
      */
     public function testAddEmailAccount()
     {
-        //print_r($this->_objects['addedUser']->toArray());
+        $emailUser = clone $this->_objects['user'];
+        $emailUser->smtpUser = new Tinebase_Model_EmailUser(array(
+            'emailForwards' => array('unittest@tine20.org', 'test@tine20.org'),
+            'emailAliases'  => array('bla@tine20.org', 'blubb@tine20.org')
+        ));
+        
+        $this->_backend->inspectAddUser($this->_objects['user'], $emailUser);
+        $this->_objects['addedUsers']['emailUser'] = $this->_objects['user'];
+        
+        #var_dump($this->_objects['user']->smtpUser->toArray());
         
         $this->assertEquals(array(
-            'emailAddress'      => $this->_objects['jsmith']->accountEmailAddress,
-            'emailUsername'     => $this->_objects['jsmith']->accountLoginName . '@tine20.org',
-            'emailPassword'     => '',
-            'emailUserId'       => $this->_objects['jsmith']->getId(),
+            'emailUserId'       => $this->_objects['user']->getId(),
+        	'emailAddress'      => $this->_objects['user']->accountEmailAddress,
+            'emailUsername'     => $this->_objects['user']->smtpUser->emailUsername,
             'emailForwardOnly'  => 0,
             'emailAliases'      => array('bla@tine20.org', 'blubb@tine20.org'),
-            'emailForwards'     => array('test@tine20.org', 'unittest@tine20.org'),
-        ), $this->_objects['addedUser']->toArray());
+            'emailForwards'     => array('unittest@tine20.org', 'test@tine20.org')
+        ), $this->_objects['user']->smtpUser->toArray());
+        
+        return $this->_objects['addedUsers']['emailUser'];
     }
     
     /**
@@ -105,25 +116,27 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateAccount()
     {
-        // update user
-        $this->_objects['addedUser']->emailForwardOnly = 1;
-        $this->_objects['addedUser']->emailAliases = array();
-        $this->_objects['addedUser']->emailForwards = array('test@tine20.org');
-        $this->_objects['jsmith']->accountEmailAddress = 'j.smith@tine20.org';
+        // add smtp user
+        $user = $this->testAddEmailAccount();
         
-        $updatedUser = $this->_backend->updateUser($this->_objects['jsmith'], $this->_objects['addedUser']);
+        // update user
+        $user->smtpUser->emailForwardOnly = 1;
+        $user->smtpUser->emailAliases = array();
+        $user->smtpUser->emailForwards = array('test@tine20.org');
+        $this->_objects['user']->accountEmailAddress = 'j.smith@tine20.org';
+        
+        $updatedUser = $this->_backend->inspectUpdateUser($this->_objects['user'], $user);
         
         //print_r($updatedUser->toArray());
         
         $this->assertEquals(array(
-            'emailAddress'      => $this->_objects['jsmith']->accountEmailAddress,
-            'emailUsername'     => $this->_objects['jsmith']->accountLoginName . '@tine20.org',
-            'emailPassword'     => '',
-            'emailUserId'       => $this->_objects['jsmith']->getId(),
+            'emailUserId'       => $this->_objects['user']->getId(),
+        	'emailAddress'      => $this->_objects['user']->accountEmailAddress,
+            'emailUsername'     => $this->_objects['user']->smtpUser->emailUsername,
             'emailForwardOnly'  => 1,
             'emailAliases'      => array(),
-            'emailForwards'     => array('test@tine20.org'),
-        ), $this->_objects['addedUser']->toArray());
+            'emailForwards'     => array('test@tine20.org')
+        ), $this->_objects['user']->smtpUser->toArray());
     }
     
     /**
@@ -131,27 +144,11 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
      */
     public function testSetPassword()
     {
-        // set pw
-        $this->_objects['addedUser']->emailPassword = 'password';
+        // add smtp user
+        $user = $this->testAddEmailAccount();
         
-        $updatedUser = $this->_backend->updateUser($this->_objects['jsmith'], $this->_objects['addedUser']);
+        $this->_backend->inspectSetPassword($this->_objects['user']->getId(), Tinebase_Record_Abstract::generateUID());
         
-        $this->assertEquals(md5('password'), $updatedUser->emailPassword);
-    }
-    
-    /**
-     * add new email user / use jsmith persona as user
-     * 
-     * @return Tinebase_Model_EmailUser
-     */
-    protected function _addUser()
-    {
-        $emailUser = new Tinebase_Model_EmailUser(array(
-            'emailForwards'     => array('unittest@tine20.org', 'test@tine20.org'),
-            'emailAliases'      => array('bla@tine20.org', 'blubb@tine20.org'),
-        ));
-        $addedUser = $this->_backend->addUser($this->_objects['jsmith'], $emailUser);
-        
-        return $addedUser;
+        //$this->assertEquals(md5('password'), $updatedUser->emailPassword);
     }
 }	
