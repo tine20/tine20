@@ -540,7 +540,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     refresh.enable();
                 });
             } else {
-                this.doLoad();
+                this.filterToolbar.onFilterChange();
             }
     },
     
