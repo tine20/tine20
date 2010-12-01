@@ -309,7 +309,7 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     { name: 'organization' },
     { name: 'port' },
     { name: 'ssl' },
-    { name: 'imap_status' }, // client only {success|failure}
+    { name: 'imap_status', defaultValue: 'success'}, // client only {success|failure}
     { name: 'sent_folder' },
     { name: 'trash_folder' },
     { name: 'drafts_folder' },
@@ -330,7 +330,8 @@ Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.M
     { name: 'sieve_hostname' },
     { name: 'sieve_port' },
     { name: 'sieve_ssl' },
-    { name: 'sieve_vacation_active', type: 'bool' }
+    { name: 'sieve_vacation_active', type: 'bool' },
+    { name: 'all_folders_fetched', type: 'bool', defaultValue: false } // client only
 ]), {
     appName: 'Felamimail',
     modelName: 'Account',
