@@ -235,8 +235,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 switch($value) {
                     case 'dtend':
                         if ($data->is_all_day_event == true) {
-                            $startDateClone = clone $data->dtstart;
-                            $nodeContent = $startDateClone->addHour(24)->format('Ymd\THis') . 'Z';
+                            // whole day events ends at 23:59:59 in Tine 2.0 but 00:00 the next day in AS
+                            $dtend = clone $data->dtend;
+                            if ($dtend->format('s') == '59') {
+                                $dtend->addSecond(1);
+                            }
+                            $nodeContent = $dtend->format('Ymd\THis') . 'Z';
                         } else {
                             $nodeContent = $data->dtend->format('Ymd\THis') . 'Z';
                         }
