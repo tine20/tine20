@@ -119,9 +119,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
-        this.filterToolbar.getQuickFilterPlugin().criteriaIgnores.push(
-            {field: 'folder_id'}
-        );
         
         this.pagingConfig = {
             doRefresh: this.doRefresh.createDelegate(this)
@@ -290,7 +287,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
              plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
                     criteriaIgnores: [
-                        {field: 'folder_id', operator: 'equals',       value: {path: '/'}},
                         {field: 'query',     operator: 'contains',     value: ''}
                     ]
                 })
