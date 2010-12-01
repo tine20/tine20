@@ -255,9 +255,12 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     data.scope.getSelectionModel().select(event);
                 
                     var targetDateTime = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
+                    console.log(targetDateTime);
                     if (targetDateTime) {
                         var dtString = targetDateTime.format(targetDateTime.is_all_day_event ? Ext.form.DateField.prototype.format : 'H:i');
-                        Ext.fly(dd.proxy.el.query('div[class=cal-daysviewpanel-event-header-inner]')[0]).update(dtString);
+                        if (! event.data.is_all_day_event) {
+                            Ext.fly(dd.proxy.el.query('div[class=cal-daysviewpanel-event-header-inner]')[0]).update(dtString);
+                        }
                         
                         if (event.get('editGrant')) {
                             return Math.abs(targetDateTime.getTime() - event.get('dtstart').getTime()) < Date.msMINUTE ? 'cal-daysviewpanel-event-drop-nodrop' : 'cal-daysviewpanel-event-drop-ok';
