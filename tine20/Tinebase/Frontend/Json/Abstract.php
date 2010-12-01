@@ -100,20 +100,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _search($_filter, $_paging, Tinebase_Controller_SearchInterface $_controller, $_filterModel, $_getRelations = FALSE, $_totalCountMethod = self::TOTALCOUNT_CONTROLLER)
     {
-        $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
         $decodedPagination = is_array($_paging) ? $_paging : Zend_Json::decode($_paging);
-        
-        if (is_array($decodedFilter)) {
-            $filter = new $_filterModel(array());
-            $filter->setFromArrayInUsersTimezone($decodedFilter);
-        } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
-            $filter = Tinebase_PersistentFilter::getFilterById($decodedFilter);
-        } else {
-            // filter is empty
-            $filter = new $_filterModel(array());
-        }
-
         $pagination = new Tinebase_Model_Pagination($decodedPagination);
+        $filter = $this->_decodeFilter($_filter, $_filterModel);
         
         $records = $_controller->search($filter, $pagination, $_getRelations);
         
@@ -126,6 +115,32 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
                 count($result),
             'filter'        => $filter->toArray(TRUE),
         );
+    }
+    
+    /**
+     * decodes the filter string
+     * 
+     * @param string|array $_filter
+     * @param string $_filterModel the class name of the filter model to use
+     * @param boolean $_throwExceptionIfEmpty
+     * @return Tinebase_Model_Filter_FilterGroup
+     */
+    protected function _decodeFilter($_filter, $_filterModel, $_throwExceptionIfEmpty = FALSE)
+    {
+        $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
+        
+        if (is_array($decodedFilter)) {
+            $filter = new $_filterModel(array());
+            $filter->setFromArrayInUsersTimezone($decodedFilter);
+        } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
+            $filter = Tinebase_PersistentFilter::getFilterById($decodedFilter);
+        } else if ($_throwExceptionIfEmpty) {
+            throw new Tinebase_Exception_InvalidArgument('Filter must not be empty!');
+        } else {
+            $filter = new $_filterModel(array());
+        }        
+        
+        return $filter;
     }
     
     /**
@@ -144,7 +159,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         $record = new $modelClass(array(), TRUE);
         $record->setFromJsonInUsersTimezone($_recordData);
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "recordData: ". print_r($record->toArray(), true));
         $method = (empty($record->$_identifier)) ? 'create' : 'update';
         $args = array_merge(array($record), $_additionalArguments);
         $savedRecord = call_user_func_array(array($_controller, $method), $args);
@@ -158,25 +172,13 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param string $_filter json encoded filter
      * @param string $_data json encoded key/value pairs 
      * @param Tinebase_Controller_Record_Interface $_controller
-     * @param string FilterGroup name
+     * @param string $_filterModel FilterGroup name
      * @return array with number of updated records
      */
     protected function _updateMultiple($_filter, $_data, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
-        $decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
         $decodedData   = is_array($_data) ? $_data : Zend_Json::decode($_data);
-        
-        if (is_array($decodedFilter)) {
-            $filter = new $_filterModel(array());
-            $filter->setFromArrayInUsersTimezone($decodedFilter);
-        } else if (!empty($decodedFilter) && strlen($decodedFilter) == 40) {
-            $persistentFilterJson = new Tinebase_Frontend_Json_PersistentFilter(); 
-            $filter = $persistentFilterJson->get($decodedFilter);
-        } else {
-            // filter is empty
-            throw new Tinebase_Exception_InvalidArgument('filter must not be empty');
-        }
-        
+        $filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
         
         $result = $_controller->updateMultiple($filter, $decodedData);
         
@@ -195,7 +197,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      */
     protected function _updateProperties($_id, $_data, Tinebase_Controller_Record_Interface $_controller)
     {
-        // get record
         $record = $_controller->get($_id);
         
         // merge with new properties
@@ -242,10 +243,9 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
         
         $oldMaxExcecutionTime = ini_get('max_execution_time');
         
-        // extend execution time
-        Tinebase_Core::setExecutionLifeTime(1800); // 30 minutes
+        // extend execution time to 30 minutes
+        Tinebase_Core::setExecutionLifeTime(1800);
         
-        // import files
         $result = array(
             'results'           => array(),
             'totalcount'        => 0,
@@ -261,8 +261,6 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
             $result['duplicatecount']   += $importResult['duplicatecount'];
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, true));
-        
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
@@ -274,20 +272,12 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @param string $_filter json encoded filter
      * @param Tinebase_Controller_Record_Interface $_controller the record controller
+     * @param string $_filterModel the class name of the filter model to use
      * @return array
      */
     protected function _deleteByFilter($_filter, Tinebase_Controller_Record_Interface $_controller, $_filterModel)
     {
-    	$decodedFilter = is_array($_filter) || strlen($_filter) == 40 ? $_filter : Zend_Json::decode($_filter);
-    	
-        if (is_array($decodedFilter) && ! empty($decodedFilter)) {
-            $filter = new $_filterModel(array());
-            $filter->setFromArrayInUsersTimezone($decodedFilter);
-        } else if (! empty($decodedFilter) && strlen($decodedFilter) == 40) {
-            $filter = Tinebase_PersistentFilter::getFilterById($decodedFilter);
-        } else {
-       		throw new Tinebase_Exception_UnexpectedValue('Filter is empty');
-        }
+    	$filter = $this->_decodeFilter($_filter, $_filterModel, TRUE);
     	
         $_controller->deleteByFilter($filter);
         return array(
@@ -326,7 +316,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * @param Tinebase_Model_Filter_FilterGroup
      * @return array data
      */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
     {       
         if (count($_records) == 0) {
             return array();
