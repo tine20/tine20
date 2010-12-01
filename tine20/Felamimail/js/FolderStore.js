@@ -112,6 +112,22 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
     },
     
     /**
+     * check if query has already loaded or is loading
+     * 
+     * @param {String} field
+     * @param {String} value
+     * @return {boolean}
+     */
+    isLoadedOrLoading: function(field, value) {
+        var key = this.getKey(field, value),
+            result = false;
+        
+        result = (this.queriesDone.indexOf(key) >= 0 || this.queriesPending.indexOf(key) >= 0);
+        
+        return result;
+    },
+    
+    /**
      * get key to store query 
      * 
      * @param  {string} field
