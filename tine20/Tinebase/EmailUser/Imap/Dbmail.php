@@ -237,6 +237,11 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding Dbmail user ' . $imapSettings[$this->_propertyMapping['emailUsername']]);
         
+        // generate random password if not set
+        if (empty($imapSettings[$this->_propertyMapping['emailPassword']])) {
+            $imapSettings[$this->_propertyMapping['emailPassword']] = Hash_Password::generate($this->_config['emailScheme'], Tinebase_Record_Abstract::generateUID(), false);
+        }
+        
         unset($imapSettings[$this->_propertyMapping['emailMailSize']]);
         unset($imapSettings[$this->_propertyMapping['emailSieveSize']]);
         unset($imapSettings[$this->_propertyMapping['emailLastLogin']]);
