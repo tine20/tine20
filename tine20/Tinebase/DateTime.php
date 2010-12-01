@@ -395,6 +395,18 @@ class Tinebase_DateTime extends DateTime
     }
     
     /**
+     * Substracts seconds. The parameter is always a number.
+     * Returns the modified DateTime object or FALSE on failure.
+     *
+     * @param  integer              $number seconds to substract
+     * @return Tinebase_DateTime
+     */
+    public function subSecond($number)
+    {
+        return $this->addSecond(-1 * $number);
+    }
+    
+    /**
      * Substracts minutes. The parameter is always a number.
      * Returns the modified DateTime object or FALSE on failure.
      *
