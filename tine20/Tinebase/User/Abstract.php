@@ -90,6 +90,11 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      */
     protected $_plugins = array();
     
+    protected $_maxLoginFailures = 5;
+    
+    protected $_blockTime        = 15;
+        
+    
     /**
      * the constructor
      */
@@ -513,14 +518,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     abstract public function setExpiryDate($_accountId, $_expiryDate);
 
     /**
-     * blocks/unblocks the user (calls backend class with the same name)
-     *
-     * @param   int $_accountId
-     * @param   Tinebase_DateTime   $_blockedUntilDate
-    */
-    abstract public function setBlockedDate($_accountId, $_blockedUntilDate);
-    
-    /**
      * set login time for user (with ip address)
      *
      * @param int $_accountId
@@ -571,7 +568,5 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
      * @param string|array $_id Ids
      * @return Tinebase_Record_RecordSet
      */
-    abstract public function getMultiple($_id);
-    
-    abstract public function setLastLoginFailure($_loginName);
+    abstract public function getMultiple($_id);    
 }
