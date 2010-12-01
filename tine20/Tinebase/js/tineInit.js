@@ -497,7 +497,6 @@ Tine.Tinebase.tineInit = {
                 }
             });
         } else {
-            //var mainWindow = Ext.ux.PopupWindowGroup.getMainWindow();
             var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
             
             for (var p in mainWindow.Tine) {
@@ -517,23 +516,21 @@ Tine.Tinebase.tineInit = {
      * @param {value} newValue
      */
     onPreferenceChange: function (key, oldValue, newValue) {
-        switch (key) 
-        {
-        case 'windowtype':
-            //console.log('hier');
-            //break;
-        case 'confirmLogout':
-        case 'timezone':
-        case 'locale':
-            if (window.google && google.gears && google.gears.localServer) {
-                var pkgStore = google.gears.localServer.openStore('tine20-package-store');
-                if (pkgStore) {
-                    google.gears.localServer.removeStore('tine20-package-store');
+        switch (key) {
+            case 'windowtype':
+            case 'confirmLogout':
+            case 'timezone':
+            case 'locale':
+                // TODO do we still need the gears stuff here?
+                if (window.google && google.gears && google.gears.localServer) {
+                    var pkgStore = google.gears.localServer.openStore('tine20-package-store');
+                    if (pkgStore) {
+                        google.gears.localServer.removeStore('tine20-package-store');
+                    }
                 }
-            }
-            // reload mainscreen (only if timezone or locale have changed)
-            window.location = window.location.href.replace(/#+.*/, '');
-            break;
+                // reload mainscreen
+                window.location = window.location.href.replace(/#+.*/, '');
+                break;
         }
     },
     
