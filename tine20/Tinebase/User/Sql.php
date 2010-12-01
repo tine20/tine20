@@ -234,6 +234,16 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     protected function _getUserSelectObject()
     {
+        /*
+         * IF (`status` = 'enabled', (CASE WHEN NOW() > `expires_at` THEN 'expired' 
+         * WHEN (`login_failures` > 5 AND DATE_ADD(`last_login_failure_at`, INTERVAL 15 MINUTE) > NOW()) 
+         * THEN 'blocked' ELSE 'enabled' END), 'disabled')
+         */
+        $statusSQL = 'IF (' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('enabled') . ', (CASE WHEN NOW() > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires']) . ' THEN ' . $this->_db->quote('expired') . 
+            ' WHEN (' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . " > {$this->_maxLoginFailures} AND DATE_ADD(" . 
+                $this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure']) . ", INTERVAL {$this->_blockTime} MINUTE) > NOW()) THEN 'blocked'" . 
+            ' ELSE ' . $this->_db->quote('enabled') . ' END), ' . $this->_db->quote('disabled') . ')';
+        
         $select = $this->_db->select()
             ->from(SQL_TABLE_PREFIX . 'accounts', 
                 array(
@@ -242,7 +252,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
                     'accountLastLogin'      => $this->rowNameMapping['accountLastLogin'],
                     'accountLastLoginfrom'  => $this->rowNameMapping['accountLastLoginfrom'],
                     'accountLastPasswordChange' => $this->rowNameMapping['accountLastPasswordChange'],
-                    'accountStatus'         => 'if(NOW() > ' . $this->rowNameMapping['accountExpires']. ', \'expired\', status)',
+                    'accountStatus'         => $statusSQL,
                     'accountExpires'        => $this->rowNameMapping['accountExpires'],
                     'accountPrimaryGroup'   => $this->rowNameMapping['accountPrimaryGroup'],
                     'accountHomeDirectory'  => $this->rowNameMapping['accountHomeDirectory'],
@@ -323,6 +333,11 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         switch($_status) {
             case 'enabled':
+                $accountData[$this->rowNameMapping['loginFailures']]  = 0;
+                $accountData[$this->rowNameMapping['accountExpires']] = null;
+                $accountData['status'] = $_status;
+                break;
+                
             case 'disabled':
                 $accountData['status'] = $_status;
                 break;
@@ -401,36 +416,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $values, $where);
     }
     
-    /**
-     * sets blocked until date 
-     *
-     * @param  mixed      $_accountId
-     * @param  Tinebase_DateTime  $_blockedUntilDate set to NULL to disable blockedDate
-    */
-    public function setBlockedDate($_accountId, $_blockedUntilDate)
-    {
-        if($this instanceof Tinebase_User_Interface_SyncAble) {
-            $this->setBlockedDateInSyncBackend($_accountId, $_blockedUntilDate);
-        }
-        
-        $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        
-        if($_blockedUntilDate instanceof DateTime) {
-            $accountData['blocked_until'] = $_blockedUntilDate->get(Tinebase_Record_Abstract::ISO8601LONG);
-        } else {
-            $accountData['blocked_until'] = NULL;
-        }
-        
-        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-
-        $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId)
-        );
-        
-        $result = $accountsTable->update($accountData, $where);
-        
-        return $result;
-    }    
     /**
      * update the lastlogin time of user
      *
@@ -545,6 +530,8 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
 
         $accountId = Tinebase_Model_User::convertUserIdToInt($_user);
 
+        $oldUser = $this->getFullUserById($accountId);
+        
         $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
         
         if (empty($_user->contact_id)) {
@@ -554,7 +541,6 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         
         $accountData = array(
             'login_name'        => $_user->accountLoginName,
-            'status'            => $_user->accountStatus,
             'expires_at'        => ($_user->accountExpires instanceof DateTime ? $_user->accountExpires->get(Tinebase_Record_Abstract::ISO8601LONG) : NULL),
             'primary_group_id'  => $_user->accountPrimaryGroup,
             'home_dir'          => $_user->accountHomeDirectory,
@@ -569,6 +555,21 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             $this->rowNameMapping['accountEmailAddress'] => $_user->accountEmailAddress,
         );
         
+        // ignore all other states (expired and blocked)
+        if ($_user->accountStatus == Tinebase_User::STATUS_ENABLED) {
+            $accountData[$this->rowNameMapping['accountStatus']] = $_user->accountStatus;
+            
+            if ($oldUser->accountStatus === Tinebase_User::STATUS_BLOCKED) {
+                $accountData[$this->rowNameMapping['loginFailures']] = 0;
+            } elseif ($oldUser->accountStatus === Tinebase_User::STATUS_EXPIRED) {
+                $accountData[$this->rowNameMapping['accountExpires']] = null;
+            }
+        } elseif ($_user->accountStatus == Tinebase_User::STATUS_DISABLED) {
+            $accountData[$this->rowNameMapping['accountStatus']] = $_user->accountStatus;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($accountData, true));
+
         try {
             $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
             
