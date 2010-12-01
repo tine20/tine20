@@ -255,7 +255,6 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
                     data.scope.getSelectionModel().select(event);
                 
                     var targetDateTime = Tine.Calendar.DaysView.prototype.getTargetDateTime.call(data.scope, e);
-                    console.log(targetDateTime);
                     if (targetDateTime) {
                         var dtString = targetDateTime.format(targetDateTime.is_all_day_event ? Ext.form.DateField.prototype.format : 'H:i');
                         if (! event.data.is_all_day_event) {
