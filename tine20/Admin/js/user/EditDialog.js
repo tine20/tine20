@@ -786,7 +786,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         triggerAction: 'all',
                         allowBlank: false,
                         editable: false,
-                        store: [['enabled', this.app.i18n.gettext('enabled')], ['disabled', this.app.i18n.gettext('disabled')], ['expired', this.app.i18n.gettext('expired')]]
+                        store: [['enabled', this.app.i18n.gettext('enabled')], ['disabled', this.app.i18n.gettext('disabled')], ['expired', this.app.i18n.gettext('expired')], ['blocked', this.app.i18n.gettext('blocked')]]
                     }, {
                         xtype: 'extuxclearabledatefield',
                         fieldLabel: this.app.i18n.gettext('Expires'),
