@@ -237,7 +237,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $filter filter array
      * @param  array $paging pagination info
      * @return array
-
      */
     public function searchTags($filter, $paging)
     {
