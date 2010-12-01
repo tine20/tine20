@@ -834,9 +834,12 @@ class Tinebase_Core
      * set php execution life (max) time
      *
      * @param int $_seconds
+     * @return int old max exexcution time in seconds
      */
     public static function setExecutionLifeTime($_seconds)
     {
+        $oldMaxExcecutionTime = ini_get('max_execution_time');
+        
         if (ini_get('max_execution_time') > 0) {
             if ((bool)ini_get('safe_mode') === true) {
                 if (Tinebase_Core::isRegistered(self::LOGGER)) {
@@ -849,6 +852,8 @@ class Tinebase_Core
                 set_time_limit($_seconds);
             }
         }
+        
+        return $oldMaxExcecutionTime;
     }
 
     /******************************* REGISTRY ************************************/
