@@ -122,8 +122,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         this.checkMailsDelayedTask.cancel();
         
         if (! this.getFolderStore().getCount() && this.defaultAccount) {
-            Tine.log.debug('no folders in store yet, fetching first level...');
-            this.getFolderStore().asyncQuery('parent_path', '/' + this.defaultAccount, this.checkMails.createDelegate(this, []), [], this, this.getFolderStore());
+            this.fetchSubfolders('/' + this.defaultAccount);
             return;
         }
         
@@ -167,17 +166,84 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                         Tine.log.debug('updating message cache for folder "' + folder.get('localname') + '" is in progress on the server (folder is locked)');
                         return this.checkMailsDelayedTask.delay(this.updateInterval);
                     }
-                    this.checkMailsDelayedTask.delay(0);
+                    this.checkMailsDelayedTask.delay(500);
                 }
             });
         } else {
-            // TODO get next account to update
+            var allFoldersFetched = this.fetchSubfolders();
             
-            Tine.log.info('nothing more to do -> will check mails again in "' + this.updateInterval/1000 + '" seconds');
-            if (this.updateInterval > 0) {
-                this.checkMailsDelayedTask.delay(this.updateInterval);
+            if (allFoldersFetched) {
+                Tine.log.info('nothing more to do -> will check mails again in "' + this.updateInterval/1000 + '" seconds');
+                if (this.updateInterval > 0) {
+                    this.checkMailsDelayedTask.delay(this.updateInterval);
+                }
+            } else {
+                this.checkMailsDelayedTask.delay(5000);
             }
         }
+    },
+    
+    /**
+     * fetch subfolders by parent path 
+     * - if parentPath param is empty, it loops all accounts and account folders to find the next folders to fetch
+     * 
+     * @param {String} parentPath
+     * @return {Boolean} true if all folders of all accounts have been fetched
+     */
+    fetchSubfolders: function(parentPath) {
+        var folderStore = this.getFolderStore(),
+            accountStore = Tine.Felamimail.loadAccountStore(),
+            doQuery = true,
+            allFoldersFetched = false;
+        
+        if (! parentPath) {
+            // find first account that has unfetched folders
+            var index = accountStore.findExact('all_folders_fetched', false);
+                account = accountStore.getAt(index);
+            
+            if (account) {
+                // determine the next level of folders that is not fetched
+                parentPath = '/' + account.id;
+                
+                var recordsOfAccount = folderStore.query('account_id', account.id);
+                if (recordsOfAccount.getCount() > 0) {
+                    // loop account folders and find the next folder path that hasn't been queried
+                    var path, found = false;
+                    recordsOfAccount.each(function(record) {
+                        path = parentPath + '/' + record.id;
+                        if (! folderStore.isLoadedOrLoading('parent_path', path)) {
+                            parentPath = path;
+                            found = true;
+                            Tine.log.debug('fetching next level of subfolders for ' + record.get('globalname'));
+                            return false;
+                        }
+                        return true;
+                    }, this);
+                    
+                    if (! found) {
+                        Tine.log.debug('all folders of account ' + account.get('name') + ' have been fetched ...');
+                        account.set('all_folders_fetched', true);
+                        return false;
+                    }
+                } else {
+                    Tine.log.debug('fetching first level of folders for account ' + account.get('name'));
+                }
+                
+            } else {
+                Tine.log.debug('all folders of all accounts have been fetched ...');
+                return true;
+            }
+        } else {
+            Tine.log.debug('no folders in store yet, fetching first level ...');
+        }
+        
+        if (! folderStore.queriesPending || folderStore.queriesPending.length == 0) {
+            folderStore.asyncQuery('parent_path', parentPath, this.checkMails.createDelegate(this, []), [], this, folderStore);
+        } else {
+            this.checkMailsDelayedTask.delay(500);
+        }
+        
+        return false;
     },
     
     /**
@@ -356,9 +422,13 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     var folderStore = this.getFolderStore();
                     if (folderStore.queriesPending.length > 0) {
                         // reload all folders of account and try to select inbox
-                        var accountId = folderStore.queriesPending[0].substring(16, 56);
+                        var accountId = folderStore.queriesPending[0].substring(16, 56),
+                            account = Tine.Felamimail.loadAccountStore().getById(accountId),
+                            accountNode = this.getMainScreen().getTreePanel().getNodeById(accountId);
+                            
                         folderStore.resetQueryAndRemoveRecords('parent_path', '/' + accountId);
-                        var accountNode = this.getMainScreen().getTreePanel().getNodeById(accountId);
+                        account.set('all_folders_fetched', true);
+                        
                         accountNode.loading = false;
                         accountNode.reload(function(callback) {
                             Ext.each(accountNode.childNodes, function(node) {
@@ -406,9 +476,6 @@ Tine.Felamimail.loadAccountStore = function(reload) {
     var store = Ext.StoreMgr.get('FelamimailAccountStore');
     
     if (!store) {
-        
-        //console.log(Tine.Felamimail.registry.get('accounts'));
-        
         // create store (get from initial data)
         store = new Ext.data.JsonStore({
             fields: Tine.Felamimail.Model.Account,
@@ -532,6 +599,7 @@ Tine.Felamimail.handleRequestException = function(exception) {
                 imapStatus  = account ? account.get('imap_status') : null;
                 
             if (account) {
+                account.set('all_folders_fetched', true);
                 app.showCredentialsDialog(account, exception.username);
             } else {
                 exception.code = 910;
