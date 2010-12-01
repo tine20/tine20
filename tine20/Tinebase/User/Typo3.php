@@ -94,17 +94,6 @@ class Tinebase_User_Typo3 extends Tinebase_User_Sql
     }
 
     /**
-     * blocks/unblocks the user (calls backend class with the same name)
-     *
-     * @param   int $_accountId
-     * @param   Tinebase_DateTime   $_blockedUntilDate
-    */
-    public function setBlockedDate($_accountId, $_blockedUntilDate)
-    {
-        throw new Tinebase_Exception_AccessDenied();
-    }
-    
-    /**
      * updates an existing user
      *
      * @param Tinebase_Model_FullUser $_account
