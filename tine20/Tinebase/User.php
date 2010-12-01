@@ -24,6 +24,11 @@ class Tinebase_User
     
     const TYPO3 = 'Typo3';
     
+    const STATUS_BLOCKED  = 'blocked';
+    const STATUS_DISABLED = 'disabled';
+    const STATUS_ENABLED  = 'enabled';
+    const STATUS_EXPIRED  = 'expired';
+    
     /**
      * Key under which the default user group name setting will be stored/retrieved
      *
