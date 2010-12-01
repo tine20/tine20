@@ -563,7 +563,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null;
             
-        Tine.log.info('Account ' + account.id + ' updated with imap_status: ' + imapStatus);
+        Tine.log.info('Account ' + account.get('name') + ' updated with imap_status: ' + imapStatus);
         if (node && node.ui.rendered) {
             var statusEl = Ext.get(Ext.DomQuery.selectNode('span[class=felamimail-node-accountfailure]', nodeEl));
             if (! statusEl) {
