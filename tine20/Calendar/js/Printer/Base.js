@@ -64,7 +64,7 @@ Tine.Calendar.Printer.BaseRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
                 endTime: event.data.is_all_day_event ? '' : end.format('H:i'),
                 summary: Ext.util.Format.htmlEncode(event.data.summary),
                 duration: event.data.is_all_day_event ? Tine.Tinebase.appMgr.get('Calendar').i18n._('whole day') : 
-                    Tine.Tinebase.common.minutesRenderer(Math.round((end.getTime() - start.getTime())/(1000*60)))
+                    Tine.Tinebase.common.minutesRenderer(Math.round((end.getTime() - start.getTime())/(1000*60)), '{0}:{1}')
             });
         }, this);
         
