@@ -236,7 +236,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param  array $filter filter array
      * @param  array $paging pagination info
-     * @return array
+     * @return array        console.log(data);
+
      */
     public function searchTags($filter, $paging)
     {
@@ -675,7 +676,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                         foreach ($data as $name => $value) {
                             $backend->doSpecialJsonFrontendActions($this, $name, $value['value'], $applicationName);
                             $backend->$name = $value['value'];
-                            $result[$applicationName][] = array('name' => $name, 'value' => $value['value']);
+                            $result[$applicationName][] = array('name' => $name, 'value' => $backend->$name);
                         }
                     }
                 }
