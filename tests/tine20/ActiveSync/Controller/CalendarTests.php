@@ -48,6 +48,8 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
     
     protected $_testXMLInput_palmPreV12 = '<?xml version="1.0" encoding="utf-8"?><!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar"><Collections><Collection><Class>Calendar</Class><SyncKey>345</SyncKey><CollectionId>calendar-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>4</FilterType><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type></AirSyncBase:BodyPreference></Options><Commands><Change><ServerId>3452c1dd3f21d1c12589e517f0c6a928137113a4</ServerId><ApplicationData><Calendar:Timezone>xP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAoAAAAFAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMAAAAFAAIAAAAAAAAAxP///w==</Calendar:Timezone><Calendar:UID>3452c1dd3f21d1c12589e517f0c6a928137113a4</Calendar:UID><Calendar:DtStamp>20101104T070652Z</Calendar:DtStamp><Calendar:Subject>GM straussberg2</Calendar:Subject><Calendar:MeetingStatus>1</Calendar:MeetingStatus><Calendar:OrganizerName>Nadine </Calendar:OrganizerName><Calendar:OrganizerEmail>meine@mail.com</Calendar:OrganizerEmail><Calendar:Attendees><Calendar:Attendee><Calendar:Name>Nadine </Calendar:Name><Calendar:Email>meine@mail.com</Calendar:Email></Calendar:Attendee></Calendar:Attendees><Calendar:BusyStatus>0</Calendar:BusyStatus><Calendar:AllDayEvent>1</Calendar:AllDayEvent><Calendar:StartTime>20101103T230000Z</Calendar:StartTime><Calendar:EndTime>20101106T230000Z</Calendar:EndTime><Calendar:Sensitivity>0</Calendar:Sensitivity></ApplicationData></Change></Commands></Collection></Collections></Sync>';
     
+    protected $_testXMLOutput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Calendar="uri:Calendar"><Collections><Collection><Class>Calendar</Class><SyncKey>17</SyncKey><CollectionId>calendar-root</CollectionId><Commands><Change><ClientId>1</ClientId><ApplicationData/></Change></Commands></Collection></Collections></Sync>';
+    
     /**
      * Runs the test methods of this class.
      *
@@ -223,6 +225,32 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
         
         #rewind($outputStream);
         #fpassthru($outputStream);
+    }
+    
+    public function testAppendXml_allDayEvent()
+    {
+        $allDayEvent = new Calendar_Model_Event(array(
+            'summary'       => 'Allday SyncTest',
+            'dtstart'       => Tinebase_DateTime::now()->setTime(0,0,0)->addMonth(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:00:00',
+            'dtend'         => Tinebase_DateTime::now()->setTime(23,59,59)->addMonth(1)->addDay(3)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:30:00',
+            'is_all_day_event' => true,
+            'originator_tz' => 'Europe/Berlin',
+            'container_id'  => $this->_getContainerWithSyncGrant()->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        $allDayEvent = Calendar_Controller_Event::getInstance()->create($allDayEvent);
+        $this->objects['events']['allDayEvent'] = $allDayEvent;
+        
+        $dom     = $this->_getOutputDOMDocument();
+        $appData = $dom->getElementsByTagNameNS('uri:AirSync', 'ApplicationData')->item(0);
+
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM)); 
+        
+        $controller->appendXML($appData, null, $allDayEvent, array());
+        
+//        $dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
+        
+        $this->assertEquals('20110105T000000Z', @$dom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $dom->saveXML());
     }
     
     /**
