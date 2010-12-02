@@ -78,7 +78,7 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
         var displayContainer = this.get('container_id');
         var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
         
-        var attendeeStore = Tine.Calendar.Model.Attender.getAttendeeStore(this.get('attendee'));
+        var attendeeStore = this.getAttendeeStore();
         
         attendeeStore.each(function(attender) {
             var userAccountId = attender.getUserAccountId();
@@ -119,6 +119,35 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
      */
     isRecurInstance: function() {
         return this.id && this.id.match(/^fakeid/);
+    },
+    
+    /**
+     * returns store of attender objects
+     * 
+     * @param  {Array} attendeeData
+     * @return {Ext.data.Store}
+     */
+    getAttendeeStore: function() {
+        return Tine.Calendar.Model.Attender.getAttendeeStore(this.get('attendee'));
+    },
+    
+    /**
+     * returns attender record of current account if exists, else false
+     */
+    getMyAttenderRecord: function() {
+        var currentAccountId = Tine.Tinebase.registry.get('currentAccount').accountId;
+        var attendeeStore = this.getAttendeeStore();
+        var myRecord = false;
+        
+        attendeeStore.each(function(attender) {
+            var userAccountId = attender.getUserAccountId();
+            if (userAccountId == currentAccountId) {
+                myRecord = attender;
+                return false;
+            }
+        }, this);
+        
+        return myRecord;
     }
 });
 
