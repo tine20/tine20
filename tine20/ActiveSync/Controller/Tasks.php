@@ -153,7 +153,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         }   
 
         // body aka description
-        if (version_compare($this->_device->acsversion, '12.0', '>=')) {
+        if (!empty($data->description) && version_compare($this->_device->acsversion, '12.0', '>=')) {
             $body = $_xmlNode->appendChild(new DOMElement('Body', null, 'uri:AirSyncBase'));
             
             $body->appendChild(new DOMElement('Type', 1, 'uri:AirSyncBase'));
