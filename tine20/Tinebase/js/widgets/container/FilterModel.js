@@ -302,7 +302,8 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
     onContainerSelect: function(field, containerData) {
         var existingRecord = this.store.getById(containerData.id);
         if (! existingRecord) {
-            this.store.add(new Tine.Tinebase.Model.Container(containerData));
+            var data = (containerData.data) ? containerData.data : containerData;
+            this.store.add(new Tine.Tinebase.Model.Container(data));
             
         } else {
             var idx = this.store.indexOf(existingRecord);
