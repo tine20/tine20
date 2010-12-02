@@ -84,6 +84,7 @@ class ActiveSync_Backend_DeviceTests extends PHPUnit_Framework_TestCase
     
     public function testGetChanged()
     {
+        $this->markTestIncomplete();
     }
 }
     

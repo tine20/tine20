@@ -30,10 +30,8 @@ class ActiveSync_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 ActiveSync All Tests');
         
         $suite->addTestSuite('ActiveSync_TimezoneConverterTest');
-        $suite->addTestSuite('ActiveSync_Controller_ContactsTests');
-        $suite->addTestSuite('ActiveSync_Controller_CalendarTests');
-        $suite->addTestSuite('ActiveSync_Controller_TasksTests');
-        $suite->addTestSuite('ActiveSync_Controller_DeviceTests');
+        $suite->addTestSuite('ActiveSync_Controller_AllTests');
+        $suite->addTestSuite('ActiveSync_Backend_AllTests');
         
         return $suite;
     }

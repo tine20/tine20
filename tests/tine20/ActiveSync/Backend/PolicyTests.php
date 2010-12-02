@@ -70,7 +70,12 @@ class ActiveSync_Backend_PolicyTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    }    
+    }
+        
+    public function testGetChanged()
+    {
+        $this->markTestIncomplete();
+    }
 }
     
 if (PHPUnit_MAIN_METHOD == 'ActiveSync_Backend_Policy::main') {
