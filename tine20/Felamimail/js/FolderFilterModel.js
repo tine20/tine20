@@ -35,6 +35,11 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMult
         this.label = this.app.i18n._('Folder');
         this.valueStore = this.app.getFolderStore();
         this.recordClass = Tine.Felamimail.Model.Folder;
+        this.selectionCombo = new Tine.Felamimail.FolderSelectTriggerField({
+            emptyValue: this.app.i18n._('Select Folder'),
+            name: 'folder',
+            allAccounts: true
+        });
 
         Tine.Felamimail.FolderFilterModel.superclass.initComponent.call(this);
     }
