@@ -173,7 +173,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId/* . ' options ' . print_r($_options, true)*/);
         
         $data = $this->_contentController->get($_serverId);
-                        
+        
         foreach($this->_mapping as $key => $value) {
             if(!empty($data->$value) || $data->$value == 0) {
                 $nodeContent = null;
@@ -184,9 +184,14 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                         break;
                         
                     case 'from_email':
-                        $nodeContent = !empty($data->from_name) ? "\"{$data->from_name}\" <{$data->from_email}>" : $data->from_email; 
+                        $nodeContent = $this->_createEmailAddress($data->from_name, $data->from_email); 
                         break;
                         
+                    case 'to':
+                    case 'cc':
+                        $nodeContent = implode(', ', $data->$value);
+                        
+                        break;
                     default:
                         $nodeContent = $data->$value;
                         break;
@@ -456,6 +461,18 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     public function toTineModel(SimpleXMLElement $_data, $_entry = null)
     {
         // does nothing => you can't add emails via ActiveSync
+    }
+    
+    /**
+     * create rfc email address 
+     * 
+     * @param  string  $_realName
+     * @param  string  $_address
+     * @return string
+     */
+    protected function _createEmailAddress($_realName, $_address)
+    {
+        return !empty($_realName) ? sprintf('"%s" <%s>', str_replace('"', '\\"', $_realName), $_address) : $_address; 
     }
     
     /**
