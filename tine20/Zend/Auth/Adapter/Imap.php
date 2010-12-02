@@ -218,7 +218,7 @@ class Zend_Auth_Adapter_Imap implements Zend_Auth_Adapter_Interface
 
         $host = isset($this->_options['host']) ? $this->_options['host'] : 'localhost';
         $port = isset($this->_options['port']) ? $this->_options['port'] : null;
-        $ssl  = isset($this->_options['ssl'])  ? $this->_options['ssl']  : false;
+        $ssl  = isset($this->_options['ssl'])  ? strtoupper($this->_options['ssl']) : false;
 
         $imap->connect($host, $port, $ssl);
         if (! $imap->login($imapUsername, $password)) {
