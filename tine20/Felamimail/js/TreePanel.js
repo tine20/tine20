@@ -38,6 +38,7 @@ Tine.Felamimail.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPan
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
+ * TODO         make multi selection work
  * low priority:
  * TODO         make inbox/drafts/templates configurable in account
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
