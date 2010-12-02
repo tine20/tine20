@@ -119,7 +119,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             scope: this,
             handler: this.onRemove,
             iconCls: 'action_deleteContact'
-        })
+        });
         
         var contextItems = [this.actionRemove];
         this.contextMenu = new Ext.menu.Menu({
@@ -241,3 +241,4 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     }
 });
 
+Ext.reg('wdgt.pickergrid', Tine.widgets.grid.PickerGridPanel);
