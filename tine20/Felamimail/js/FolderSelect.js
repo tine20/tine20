@@ -22,6 +22,7 @@ Tine.Felamimail.FolderSelectTriggerField = Ext.extend(Ext.form.TriggerField, {
     
     triggerClass: 'x-form-search-trigger',
     account: null,
+    allAccounts: false,
     
     /**
      * onTriggerClick
@@ -30,9 +31,10 @@ Tine.Felamimail.FolderSelectTriggerField = Ext.extend(Ext.form.TriggerField, {
      * @param e
      */
     onTriggerClick: function(e) {
-        if (this.account && this.account.id !== 0) {
+        if ((this.account && this.account.id !== 0) || this.allAccounts) {
             this.selectPanel = Tine.Felamimail.FolderSelectPanel.openWindow({
                 account: this.account,
+                allAccounts: this.allAccounts,
                 listeners: {
                     // NOTE: scope has to be first item in listeners! @see Ext.ux.WindowFactory
                     scope: this,

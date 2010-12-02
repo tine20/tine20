@@ -56,8 +56,12 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
         );
 
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
-        this.account = this.account || this.app.getActiveAccount();
-        this.title = String.format(this.app.i18n._('Folders of account {0}'), this.account.get('name'));
+        if (! this.allAccounts) {
+            this.account = this.account || this.app.getActiveAccount();
+            this.title = String.format(this.app.i18n._('Folders of account {0}'), this.account.get('name'));
+        } else {
+            this.title = this.app.i18n._('Folders of all accounts');
+        }
         
         this.initActions();
         this.initFolderTree();
@@ -87,16 +91,42 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
      * init folder tree
      */
     initFolderTree: function() {
-        this.folderTree = new Ext.tree.TreePanel({
-            id: 'felamimail-foldertree',
-            rootVisible: true,
-            store: this.store || this.app.getFolderStore(),
-            // TODO use another loader/store for subscriptions
-            loader: this.loader || new Tine.Felamimail.TreeLoader({
-                folderStore: this.store,
-                app: this.app
-            }),
-            root: new Ext.tree.AsyncTreeNode({
+        
+        if (this.allAccounts) {
+
+            this.root = new Ext.tree.TreeNode({
+                text: 'default',
+                draggable: false,
+                allowDrop: false,
+                expanded: true,
+                leaf: false,
+                id: 'root'
+            });
+        
+            Tine.Felamimail.loadAccountStore().each(function(record) {
+                // TODO generalize this
+                var node = new Ext.tree.AsyncTreeNode({
+                    id: record.data.id,
+                    path: '/' + record.data.id,
+                    record: record,
+                    globalname: '',
+                    draggable: false,
+                    allowDrop: false,
+                    expanded: false,
+                    text: record.get('name'),
+                    qtip: record.get('host'),
+                    leaf: false,
+                    cls: 'felamimail-node-account',
+                    delimiter: record.get('delimiter'),
+                    ns_personal: record.get('ns_personal'),
+                    account_id: record.data.id
+                });
+            
+                this.root.appendChild(node);
+            }, this);
+            
+        } else {
+            this.root = new Ext.tree.AsyncTreeNode({
                 text: this.account.get('name'),
                 draggable: false,
                 allowDrop: false,
@@ -105,7 +135,20 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
                 cls: 'felamimail-node-account',
                 id: this.account.id,
                 path: '/' + this.account.id
-            })
+            });
+        }
+        
+        
+        this.folderTree = new Ext.tree.TreePanel({
+            id: 'felamimail-foldertree',
+            rootVisible: ! this.allAccounts,
+            store: this.store || this.app.getFolderStore(),
+            // TODO use another loader/store for subscriptions
+            loader: this.loader || new Tine.Felamimail.TreeLoader({
+                folderStore: this.store,
+                app: this.app
+            }),
+            root: this.root
         });
         this.folderTree.on('click', this.onFolderSelect, this);
         
@@ -128,6 +171,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
      */
     onFolderSelect: function(node) {
         this.fireEvent('folderselect', node);
+        return false;
     },
     
     /**
