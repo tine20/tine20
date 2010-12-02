@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-11-30 19:21+0100\n"
+"PO-Revision-Date: 2010-12-02 22:55+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -588,6 +588,10 @@ msgstr "wyłączone"
 #: js/user/EditDialog.js:789
 msgid "expired"
 msgstr "wygasło"
+
+#: js/user/EditDialog.js:789
+msgid "blocked"
+msgstr "zablokowany"
 
 #: js/user/EditDialog.js:797
 #: js/GroupEditDialog.js:144
