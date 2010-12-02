@@ -448,7 +448,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
         
         this.title = this.title ? this.title : String.format(_('please select a {0}'), this.containerName);
         
-        this.cancleAction = new Ext.Action({
+        this.cancelAction = new Ext.Action({
             text: _('Cancel'),
             iconCls: 'action_cancel',
             minWidth: 70,
@@ -496,7 +496,7 @@ Tine.widgets.container.selectionDialog = Ext.extend(Ext.Component, {
             buttonAlign: 'right',
             
             buttons: [
-                this.cancleAction,
+                this.cancelAction,
                 this.okAction
             ],
             

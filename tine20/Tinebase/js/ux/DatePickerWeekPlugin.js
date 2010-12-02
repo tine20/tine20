@@ -146,7 +146,7 @@ Ext.ux.DatePickerWeekPlugin.prototype = {
     
     /**
      * inspects month picker onClick event method
-     * return false to cancle original onClick handler
+     * return false to cancel original onClick handler
      */
     inspectMonthPickerClick: Ext.emptyFn,
     

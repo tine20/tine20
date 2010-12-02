@@ -300,7 +300,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
                 this.onClose();
             };
             
-            this.cancleAction = new Ext.Action({
+            this.cancelAction = new Ext.Action({
                 text: _('Cancel'),
                 iconCls: 'action_cancel',
                 minWidth: 70,
@@ -328,7 +328,7 @@ Tine.widgets.activities.ActivitiesAddButton = Ext.extend(Ext.SplitButton, {
                 bodyStyle: 'padding:5px;',
                                 
                 buttons: [
-                    this.cancleAction,
+                    this.cancelAction,
                     this.okAction                                    
                 ],
                 

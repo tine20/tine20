@@ -96,12 +96,12 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     init: Ext.emptyFn,
     
     /**
-     * template function for subclasses is called before app activation. Return false to cancle activation
+     * template function for subclasses is called before app activation. Return false to cancel activation
      */
     onBeforeActivate: Ext.emptyFn,
     
     /**
-     * template function for subclasses is called before app deactivation. Return false to cancle deactivation
+     * template function for subclasses is called before app deactivation. Return false to cancel deactivation
      */
     onBeforeDeActivate: Ext.emptyFn
     
