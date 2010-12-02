@@ -178,7 +178,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     this.checkMailsDelayedTask.delay(this.updateInterval);
                 }
             } else {
-                this.checkMailsDelayedTask.delay(5000);
+                this.checkMailsDelayedTask.delay(20000);
             }
         }
     },
@@ -301,6 +301,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             return ! Ext.isDate(timestamp) || timestamp.getElapsed() > this.updateInterval;
         }, this);
         if (outdated.getCount() > 0) {
+            Tine.log.debug('still got ' + outdated.getCount() + ' outdated folders to update ...');
             return outdated.first();
         }
         
@@ -347,7 +348,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     onBeforeActivate: function() {
         Tine.log.info('activating felamimail now');
-        // abort preloading/old actions and force frech fetch
+        // abort preloading/old actions and force fresh fetch
         this.checkMailsDelayedTask.delay(0);
     },
     
