@@ -757,7 +757,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMessageWithCommaInTo()
     {
-        $cachedMessage = $this->_messageTestHelper('mail_to_comma.eml', 'text/comma');
+        $cachedMessage = $this->messageTestHelper('mail_to_comma.eml', 'text/comma');
         $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertEquals('inscription@arrakeen.net', $completeMessage->to[0]);
