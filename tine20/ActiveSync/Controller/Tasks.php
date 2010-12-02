@@ -224,8 +224,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     break;
                 case 'due':
                     if(isset($xmlData->$fieldName)) {
-                        $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
-                        $task->$value = new Tinebase_DateTime($timeStamp);
+                        $task->$value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
                     } else {
                         $task->$value = null;
                     }
@@ -264,14 +263,24 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     protected function _toTineFilterArray(SimpleXMLElement $_data)
     {
-        $xmlData = $_data->children('Tasks');
-                
-        foreach($this->_mapping as $fieldName => $value) {
+        $xmlData = $_data->children('uri:Tasks');
+        
+        foreach($this->_mapping as $fieldName => $field) {
             if(isset($xmlData->$fieldName)) {
+                switch ($field) {
+                    case 'due':
+                        $value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
+                        break;
+                        
+                    default:
+                        $value = (string)$xmlData->$fieldName;
+                        break;
+                        
+                }
                 $filterArray[] = array(
-                    'field'     => $value,
+                    'field'     => $field,
                     'operator'  => 'equals',
-                    'value'     => (string)$xmlData->$fieldName
+                    'value'     => $value
                 );
             }
         }
@@ -282,26 +291,25 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * converts an iso formated date into a timestamp
+     * converts an iso formated date into DateTime
      *
-     * @param  string Tinebase_DateTime::ISO8601 representation of a datetime filed
-     * @return int    UNIX Timestamp
+     * @param  string  $_iso  ISO8601 representation of a datetime filed
+     * @return DateTime
      */
-    protected function _convertISOToTs($_ISO)
+    protected function _convertISOToZendDate($_iso)
     {
         $matches = array();
         
-        preg_match("/^(\d{4})-(\d{2})-(\d{2})[T ]{1}(\d{2}):(\d{2}):(\d{2})/", $_ISO, $matches);
-
+        preg_match("/^(\d{4})-(\d{2})-(\d{2})[T ]{1}(\d{2}):(\d{2}):(\d{2})/", $_iso, $matches);
+        
         if (count($matches) !== 7) {
-            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_ISO");
+            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_iso");
         }
         
-        list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
-        return  mktime($hour, $minute, $second, $month, $day, $year);
+        return new Tinebase_DateTime($_iso);
     }
     
-    /**
+	/**
      * return list of supported folders for this backend
      *
      * @return array
