@@ -37,19 +37,19 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     protected $_emailTestClass;
     
+    protected $_controllerName = 'ActiveSync_Controller_Email';
+    
+    /**
+     * @var ActiveSync_Controller_Abstract controller
+     */
+    protected $_controller;
+    
     /**
      * @var array test objects
      */
     protected $objects = array();
     
-    protected $_exampleXMLNotExisting = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-<Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>ads2f, asdfadsf</Contacts:FileAs><Contacts:FirstName>asdf </Contacts:FirstName><Contacts:LastName>asdfasdfaasd </Contacts:LastName><Contacts:MobilePhoneNumber>+4312341234124</Contacts:MobilePhoneNumber><Contacts:Body>&#13;
-</Contacts:Body></ApplicationData></Add></Commands></Collection></Collections></Sync>';
-    
-    protected $_exampleXMLExisting = '<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
-<Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>Kneschke, Lars</Contacts:FileAs><Contacts:FirstName>Lars</Contacts:FirstName><Contacts:LastName>Kneschke</Contacts:LastName></ApplicationData></Add></Commands></Collection></Collections></Sync>';
+    protected $_testXMLOutput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Email="uri:Email"><Collections><Collection><Class>Email</Class><SyncKey>17</SyncKey><CollectionId>Inbox</CollectionId><Commands><Change><ClientId>1</ClientId><ApplicationData/></Change></Commands></Collection></Collections></Sync>';
     
     /**
      * Runs the test methods of this class.
@@ -66,33 +66,17 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     
     protected function setUp()
     {   	
-        $imp = new DOMImplementation;
-        
-        $doctype = $imp->createDocumentType("phpunit", "-//W3C//DTD HTML 4.01//EN", "http://www.w3.org/TR/html4/strict.dtd"); 
-        $this->_domDocument = $imp->createDocument(null, 'phpunit', $doctype);
-        
-        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts'    , 'uri:Contacts');
-        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Tasks'       , 'uri:Tasks');
-        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Email'       , 'uri:Email');
-        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Calendar'    , 'uri:Calendar');
-        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSyncBase' , 'uri:AirSyncBase');
-        $this->_domDocument->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:AirSync'     , 'uri:AirSync');
-        $this->_domDocument->formatOutput = false;
-        $this->_domDocument->encoding     = 'utf-8';
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        if (empty($imapConfig) || !array_key_exists('useSystemAccount', $imapConfig) || $imapConfig['useSystemAccount'] != true) {
+            $this->markTestSkipped('IMAP backend not configured');
+        }
+        $this->_testUser    = Tinebase_Core::getUser();        
+        $this->_domDocument = $this->_getOutputDOMDocument();        
         
         $this->_emailTestClass = new Felamimail_Controller_MessageTest();
         $this->_emailTestClass->setup();
         
-        ########### define test devices
-        $palm = ActiveSync_Backend_DeviceTests::getTestDevice();
-        $palm->devicetype = 'palm';
-        $palm->acsversion = '12.0';
-        $this->objects['devicePalm']   = ActiveSync_Controller_Device::getInstance()->create($palm);
-        
-        $iphone = ActiveSync_Backend_DeviceTests::getTestDevice();
-        $iphone->devicetype = 'iphone';
-        $iphone->acsversion = '2.5';
-        $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
+        $this->objects['devices'] = array();
     }
 
     /**
@@ -103,10 +87,13 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_emailTestClass->tearDown();
+        if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
+            $this->_emailTestClass->tearDown();
+        }
         
-        ActiveSync_Controller_Device::getInstance()->delete($this->objects['devicePalm']);
-        ActiveSync_Controller_Device::getInstance()->delete($this->objects['deviceIPhone']);
+        foreach($this->objects['devices'] as $device) {
+            ActiveSync_Controller_Device::getInstance()->delete($device);
+        }
     }
     
     /**
@@ -114,9 +101,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendFileReference()
     {
-    	$controller = new ActiveSync_Controller_Email($this->objects['devicePalm'], Tinebase_DateTime::now());
+    	$controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM)); 
     	
-    	$message = $this->_emailTestClass->createCachedTestMessage('multipart_mixed.eml', 'multipart/mixed');
+    	$message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
     	
     	$fileReference = $message->getId() . '-2';
     	
@@ -128,7 +115,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     	#echo $this->_domDocument->saveXML();
 
         $this->assertEquals('text/plain', @$this->_domDocument->getElementsByTagNameNS('uri:AirSyncBase', 'ContentType')->item(0)->nodeValue, $this->_domDocument->saveXML());
-        $this->assertEquals(2787, strlen($this->_domDocument->getElementsByTagNameNS('uri:ItemOperations', 'Data')->item(0)->nodeValue), $this->_domDocument->saveXML());
+        $this->assertEquals(3716, strlen($this->_domDocument->getElementsByTagNameNS('uri:ItemOperations', 'Data')->item(0)->nodeValue), $this->_domDocument->saveXML());
     }
     
     /**
@@ -136,9 +123,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     public function testAppendXML()
     {
-        $controller = new ActiveSync_Controller_Email($this->objects['devicePalm'], Tinebase_DateTime::now());
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM)); 
         
-        $message = $this->_emailTestClass->createCachedTestMessage('multipart_mixed.eml', 'multipart/mixed');
+        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
         $options = array();
         $properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
@@ -165,6 +152,74 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     {
         $message = fopen(dirname(dirname(__FILE__)) . '/files/' . $_filename, 'r');
         $this->_controller->appendMessage($_folder, $message);
+    }
+    
+    /**
+     * return active device
+     * 
+     * @param string $_deviceType
+     * @return ActiveSync_Model_Device
+     */
+    protected function _getDevice($_deviceType)
+    {
+        if (isset($this->objects['devices'][$_deviceType])) {
+            return $this->objects['devices'][$_deviceType];
+        }
+        
+        switch ($_deviceType) {
+            case ActiveSync_Backend_Device::TYPE_IPHONE:
+                $device = ActiveSync_Backend_DeviceTests::getTestDevice();
+                $device->devicetype   = $_deviceType;
+                $device->owner_id     = $this->_testUser->getId();
+                #$palm->contactsfilter_id = $this->objects['filter']->getId();
+                
+                break;
+                
+            case ActiveSync_Backend_Device::TYPE_PALM:
+                $device = ActiveSync_Backend_DeviceTests::getTestDevice();
+                $device->devicetype   = $_deviceType;
+                $device->owner_id     = $this->_testUser->getId();
+                $device->acsversion   = '12.0';
+                #$palm->contactsfilter_id = $this->objects['filter']->getId();
+                
+                break;
+                
+            default:
+                throw new Exception('unsupported device: ' , $_deviceType);
+        }
+        
+        $this->objects['devices'][$_deviceType] = ActiveSync_Controller_Device::getInstance()->create($device);
+
+        return $this->objects['devices'][$_deviceType];
+    }
+    
+    /**
+     * get application activesync controller
+     * 
+     * @param ActiveSync_Model_Device $_device
+     */
+    protected function _getController(ActiveSync_Model_Device $_device)
+    {
+        if ($this->_controller === null) {
+            $this->_controller = new $this->_controllerName($_device, new Tinebase_DateTime(null, null, 'de_DE'));
+        } 
+        
+        return $this->_controller;
+    }
+    
+    /**
+     * 
+     * @return DOMDocument
+     */
+    protected function _getOutputDOMDocument()
+    {
+    	$dom = new DOMDocument();
+        $dom->formatOutput = false;
+        $dom->encoding     = 'utf-8';
+        $dom->loadXML($this->_testXMLOutput);
+        #$dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
+        
+        return $dom;
     }
     
 }
