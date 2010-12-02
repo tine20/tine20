@@ -776,8 +776,12 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 // already dropped
             }
         }
-        $this->_backend->dropIndex('filter', 'application_id-account_id-name');
-        
+        try {
+            $this->_backend->dropIndex('filter', 'application_id-account_id-name');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // already dropped
+        }
+            
         // add foreign key again
         $this->_backend->addForeignKey('filter', new Setup_Backend_Schema_Index_Xml('<index>
                 <name>filter::application_id--applications::id</name>
