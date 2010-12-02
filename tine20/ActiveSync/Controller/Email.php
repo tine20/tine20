@@ -203,6 +203,8 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 
                 // strip off any non printable control characters
                 if (!ctype_print($nodeContent)) {
+                    # another way to remove non printing characters
+                    #$nodeContent = preg_replace("/[^[:print:]]+/", null, $nodeContent);
                     $nodeContent = preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null, $nodeContent);
                 }
                 
