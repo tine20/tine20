@@ -110,8 +110,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMultipleMessages()
     {
-        $message1 = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
-        $message2 = $this->_messageTestHelper('text_plain.eml', 'text/plain');
+        $message1 = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
+        $message2 = $this->messageTestHelper('text_plain.eml', 'text/plain');
         
         $messages = $this->_controller->getMultiple(array(
             $message1->getId(),
@@ -191,7 +191,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             
         );
 
-        $message = $this->_messageTestHelper('text_plain.eml', 'text/plain');
+        $message = $this->messageTestHelper('text_plain.eml', 'text/plain');
         
         $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
     }
@@ -251,7 +251,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             
         );
         
-        $message = $this->_messageTestHelper('multipart_alternative.eml', 'multipart/alternative'); 
+        $message = $this->messageTestHelper('multipart_alternative.eml', 'multipart/alternative'); 
         
         $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
     }
@@ -321,7 +321,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             
         );
         
-        $message = $this->_messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $message = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
         $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_PLAIN, $message['body_content_type']);
@@ -421,7 +421,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             
         );
         
-        $message = $this->_messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
+        $message = $this->messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
         
         $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
     }
@@ -431,7 +431,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBodyMultipartRelated()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
+        $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
 
         $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, $this->_account);
         
@@ -443,7 +443,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBodyMultipartRelatedReadOnly()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
+        $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
 
         $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, $this->_account, true);
         
@@ -457,7 +457,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBodyPlainText()
     {
-        $cachedMessage = $this->_messageTestHelper('text_plain.eml', 'text/plain');
+        $cachedMessage = $this->messageTestHelper('text_plain.eml', 'text/plain');
         
         $body = $this->_controller->getMessageBody($cachedMessage, null, Zend_Mime::TYPE_TEXT, $this->_account);
         
@@ -469,7 +469,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBodyPart()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
+        $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
         
         $part = $this->_controller->getMessagePart($cachedMessage, '2');
         
@@ -492,7 +492,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCompleteMessageAsPart()
     {
-        $cachedMessage = $this->_messageTestHelper('complete.eml', 'text/service');
+        $cachedMessage = $this->messageTestHelper('complete.eml', 'text/service');
         
         $messagePart = $this->_controller->getMessagePart($cachedMessage);
         
@@ -508,7 +508,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCompleteMessage()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertEquals('robbat2@gentoo.org', $message->from_email);
@@ -530,7 +530,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCompleteMessage2()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
+        $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         #var_dump($message->toArray());
@@ -549,7 +549,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCompleteMessage3()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
+        $cachedMessage = $this->messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertEquals('multipart/mixed', $message->content_type);
@@ -564,7 +564,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCompleteMessageAmazon()
     {
-        $cachedMessage = $this->_messageTestHelper('Amazon.eml', 'multipart/amazon');
+        $cachedMessage = $this->messageTestHelper('Amazon.eml', 'multipart/amazon');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertEquals('multipart/alternative', $message->content_type);
@@ -577,7 +577,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCompleteMessageOrder()
     {
-        $cachedMessage = $this->_messageTestHelper('Angebotsformular.eml', 'text/angebot');
+        $cachedMessage = $this->messageTestHelper('Angebotsformular.eml', 'text/angebot');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertEquals('text/plain', $message->content_type);
@@ -590,7 +590,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCompleteMessageDifferentEncoding()
     {
-        $cachedMessage = $this->_messageTestHelper('UmlauteUTF8TextISO-8859-15Signatur.eml', 'text/different');
+        $cachedMessage = $this->messageTestHelper('UmlauteUTF8TextISO-8859-15Signatur.eml', 'text/different');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         //print_r($message->toArray());
@@ -604,7 +604,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMessageRFC822()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
+        $cachedMessage = $this->messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
         $this->assertEquals('4121', $message->size);
@@ -617,7 +617,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMessageRFC822_2()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_rfc2822-2.eml', 'multipart/rfc2822-2');
+        $cachedMessage = $this->messageTestHelper('multipart_rfc2822-2.eml', 'multipart/rfc2822-2');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
         #var_dump($message->toArray());
@@ -635,7 +635,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testAddMessageToCacheDuplicateTo()
     {
-        $cachedMessage = $this->_messageTestHelper('text_plain2.eml', 'text_plain2.eml');
+        $cachedMessage = $this->messageTestHelper('text_plain2.eml', 'text_plain2.eml');
         
         $this->assertGreaterThan(0, count($cachedMessage->to));
         $this->assertContains('c.weiss@metaways.de', $cachedMessage->to[0], 'wrong "to" header:' . print_r($cachedMessage->to, TRUE));
@@ -647,7 +647,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testAddMessageToCacheInvalidDate()
     {
-        $cachedMessage = $this->_messageTestHelper('invaliddate.eml', 'text/invaliddate');
+        $cachedMessage = $this->messageTestHelper('invaliddate.eml', 'text/invaliddate');
         
         $this->assertEquals('2010-03-01 21:39:42', $cachedMessage->sent->toString());
     }
@@ -657,7 +657,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testAddMessageToCacheEmptyDate()
     {
-        $cachedMessage = $this->_messageTestHelper('empty_date_header.eml', 'empty_date_header.eml');
+        $cachedMessage = $this->messageTestHelper('empty_date_header.eml', 'empty_date_header.eml');
         
         $this->assertEquals(0, $cachedMessage->sent->getTimestamp(), 'no timestamp should be set');
     }
@@ -669,7 +669,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testForwardMessageWithAttachment()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
+        $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
         
         // forward message
         $forwardMessage = new Felamimail_Model_Message(array(
@@ -700,7 +700,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBodyPartIdMultipartAlternative()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_alternative.eml', 'multipart/alternative');
+        $cachedMessage = $this->messageTestHelper('multipart_alternative.eml', 'multipart/alternative');
         $cachedMessage->parseBodyParts();
 
         $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
@@ -712,7 +712,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBodyPartIdMultipartMixed()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         $cachedMessage->parseBodyParts();
 
         $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
@@ -723,7 +723,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBodyPartIdMultipartSigned()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_signed.eml', 'multipart/signed');
+        $cachedMessage = $this->messageTestHelper('multipart_signed.eml', 'multipart/signed');
         $cachedMessage->parseBodyParts();
 
         $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
@@ -734,7 +734,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetBodyPartIdMultipartRelated()
     {
-        $cachedMessage = $this->_messageTestHelper('multipart_related.eml', 'multipart/related');
+        $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
         $cachedMessage->parseBodyParts();
 
         $this->assertEquals(1, $cachedMessage->text_partid, 'did not find all partIds');
@@ -746,7 +746,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMessageWithoutFromHeader()
     {
-        $cachedMessage = $this->_messageTestHelper('withoutfrom.eml', 'text/withoutfrom');
+        $cachedMessage = $this->messageTestHelper('withoutfrom.eml', 'text/withoutfrom');
         $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertContains('Hier ist Ihr Hot Web Email-Deal Angebot von M&amp;M Computer.', $completeMessage->body);
@@ -776,7 +776,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param string $_testHeaderValue
      * @return Felamimail_Model_Message
      */
-    protected function _messageTestHelper($_filename, $_testHeaderValue)
+    public function messageTestHelper($_filename, $_testHeaderValue)
     {
         $this->_appendMessage($_filename, $this->_folder);
         return $this->_searchAndCacheMessage($_testHeaderValue);
