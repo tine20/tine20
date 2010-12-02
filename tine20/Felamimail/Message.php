@@ -76,6 +76,7 @@ class Felamimail_Message extends Zend_Mail_Message
                 $address = trim($matches[2]);
                 $addresses[$key] = array('name' => substr($name, 0, 250), 'address' => $address);
             } else {
+                $address = preg_replace('/[,;]*/i', '', $address);
                 $addresses[$key] = array('name' => null, 'address' => $address);
             }
         }
