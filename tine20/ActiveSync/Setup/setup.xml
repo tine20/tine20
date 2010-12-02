@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>ActiveSync</name>
-    <version>3.4</version>
+    <version>3.5</version>
     <order>90</order>
     <depends>
         <application>Addressbook</application>
@@ -54,7 +54,7 @@
         </table>        
         <table>
             <name>acsync_device</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -206,6 +206,8 @@
                     <reference>
                         <table>filter</table>
                         <field>id</field>
+                        <ondelete>set null</ondelete>
+                        <onupdate>cascade</onupdate>
                     </reference>
                 </index>   
                 <index>
@@ -217,6 +219,8 @@
                     <reference>
                         <table>filter</table>
                         <field>id</field>
+                        <ondelete>set null</ondelete>
+                        <onupdate>cascade</onupdate>
                     </reference>
                 </index>   
                 <index>
@@ -228,6 +232,8 @@
                     <reference>
                         <table>filter</table>
                         <field>id</field>
+                        <ondelete>set null</ondelete>
+                        <onupdate>cascade</onupdate>
                     </reference>
                 </index>   
                 <index>
@@ -239,6 +245,8 @@
                     <reference>
                         <table>filter</table>
                         <field>id</field>
+                        <ondelete>set null</ondelete>
+                        <onupdate>cascade</onupdate>
                     </reference>
                 </index>   
             </declaration>

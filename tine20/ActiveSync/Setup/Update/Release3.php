@@ -250,4 +250,88 @@ class ActiveSync_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('ActiveSync', '3.4');
     }
+    
+    /**
+     * update foreign keys
+     * 
+     * @return void
+     */
+    public function update_4()
+    {
+        $this->_backend->dropForeignKey('acsync_device', 'acsync_device::calendarfilter_id--filter::id');
+        $this->_backend->dropForeignKey('acsync_device', 'acsync_device::contactsfilter_id--filter::id');
+        $this->_backend->dropForeignKey('acsync_device', 'acsync_device::emailfilter_id--filter::id');
+        $this->_backend->dropForeignKey('acsync_device', 'acsync_device::tasksfilter_id--filter::id');
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>acsync_device::calendarfilter_id--filter::id</name>
+                <field>
+                    <name>calendarfilter_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>filter</table>
+                    <field>id</field>
+                    <ondelete>set null</ondelete>
+                    <onupdate>cascade</onupdate>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('acsync_device', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>acsync_device::contactsfilter_id--filter::id</name>
+                <field>
+                    <name>contactsfilter_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>filter</table>
+                    <field>id</field>
+                    <ondelete>set null</ondelete>
+                    <onupdate>cascade</onupdate>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('acsync_device', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>acsync_device::emailfilter_id--filter::id</name>
+                <field>
+                    <name>emailfilter_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>filter</table>
+                    <field>id</field>
+                    <ondelete>set null</ondelete>
+                    <onupdate>cascade</onupdate>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('acsync_device', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>acsync_device::tasksfilter_id--filter::id</name>
+                <field>
+                    <name>tasksfilter_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>filter</table>
+                    <field>id</field>
+                    <ondelete>set null</ondelete>
+                    <onupdate>cascade</onupdate>
+                </reference>
+            </index>   
+        ');
+        $this->_backend->addForeignKey('acsync_device', $declaration);
+        
+        $this->setTableVersion('acsync_device', 2);
+        $this->setApplicationVersion('ActiveSync', '3.5');
+    }
 }
