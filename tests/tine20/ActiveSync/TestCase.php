@@ -181,6 +181,11 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     abstract protected function _validateGetServerEntries(Tinebase_Record_Abstract $_record);
     
     /**
+     * test search records
+     */
+    abstract public function testSearch();
+    
+    /**
      * create container with sync grant
      * 
      * @return Tinebase_Model_Container
