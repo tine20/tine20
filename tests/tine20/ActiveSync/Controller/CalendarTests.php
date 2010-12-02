@@ -229,10 +229,13 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
     
     public function testAppendXml_allDayEvent()
     {
+        $startDate = Tinebase_DateTime::now()->setTime(0,0,0)->addMonth(1);
+        $endDate   = Tinebase_DateTime::now()->setTime(23,59,59)->addMonth(1)->addDay(3);
+        
         $allDayEvent = new Calendar_Model_Event(array(
             'summary'       => 'Allday SyncTest',
-            'dtstart'       => Tinebase_DateTime::now()->setTime(0,0,0)->addMonth(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:00:00',
-            'dtend'         => Tinebase_DateTime::now()->setTime(23,59,59)->addMonth(1)->addDay(3)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:30:00',
+            'dtstart'       => $startDate->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-04-25 18:00:00'
+            'dtend'         => $endDate->toString(Tinebase_Record_Abstract::ISO8601LONG),   //'2009-04-25 23:59:59'
             'is_all_day_event' => true,
             'originator_tz' => 'Europe/Berlin',
             'container_id'  => $this->_getContainerWithSyncGrant()->getId(),
@@ -250,7 +253,8 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
         
 //        $dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
         
-        $this->assertEquals('20110105T000000Z', @$dom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $dom->saveXML());
+        # ;'20110106T000000Z'
+        $this->assertEquals($endDate->addSecond(1)->format('Ymd\THis\Z'), @$dom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $dom->saveXML());
     }
     
     /**
@@ -348,6 +352,26 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
         
         $this->assertEquals('Repeat', $_record->summary);
         $this->assertEquals(2,        count($_record->exdate));
+    }
+    
+    /**
+     * test search events
+     */
+    public function testSearch()
+    {
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        
+        $record = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $this->objects['events'][] = $record;
+        
+        $event = $controller->search($this->_specialFolderName, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        #var_dump($event->toArray());
+        
+        $this->assertEquals(1       , count($event));
+        $this->assertEquals('Repeat', $event[0]->summary);
     }
     
 }
