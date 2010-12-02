@@ -133,6 +133,10 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             folder = this.getNextFolderToUpdate();
         }
         
+        // for testing purposes
+        //console.log('update disabled');
+        //return;
+        
         if (folder) {
             if (this.updateMessageCacheTransactionId && Tine.Felamimail.folderBackend.isLoading(this.updateMessageCacheTransactionId)) {
                 var currentRequestFolder = this.folderStore.query('cache_status', 'pending').first();
