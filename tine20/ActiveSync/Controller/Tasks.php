@@ -130,7 +130,6 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     case 'due':
                         if($data->$value instanceof DateTime) {
                             $_xmlNode->appendChild(new DOMElement($key, $data->$value->toString('Y-m-d H:i:s') . '.000Z', 'uri:Tasks'));
-                            #$_xmlNode->appendChild($_xmlDocument->createElementNS('POOMTASKS', $key, '2008-12-30T23:00:00.000Z', 'uri:Tasks'));
                             $data->$value->setTimezone(Tinebase_Core::get('userTimeZone'));
                             $_xmlNode->appendChild(new DOMElement('DueDate', $data->$value->toString('Y-m-d H:i:s') . '.000Z', 'uri:Tasks'));
                         }
