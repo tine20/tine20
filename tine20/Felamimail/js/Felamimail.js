@@ -207,11 +207,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 
                 var recordsOfAccount = folderStore.query('account_id', account.id);
                 if (recordsOfAccount.getCount() > 0) {
-                    // loop account folders and find the next folder path that hasn't been queried
+                    // loop account folders and find the next folder path that hasn't been queried and has children
                     var path, found = false;
                     recordsOfAccount.each(function(record) {
                         path = parentPath + '/' + record.id;
-                        if (! folderStore.isLoadedOrLoading('parent_path', path)) {
+                        if (! folderStore.isLoadedOrLoading('parent_path', path) && (! account.get('has_children_support') || record.get('has_children'))) {
                             parentPath = path;
                             found = true;
                             Tine.log.debug('fetching next level of subfolders for ' + record.get('globalname'));
