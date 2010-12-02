@@ -292,11 +292,15 @@ Tine.widgets.container.FilterModelMultipleValueField = Ext.extend(Ext.ux.form.La
     },
     
     /**
-     * cancel collapse if ctx menu is shown
+     * cancel collapse if ctx menu or container selection is shown
+     * 
+     * @return Boolean
      */
     onBeforeCollapse: function() {
-        return (!this.containerGridPanel.contextMenu || this.containerGridPanel.contextMenu.hidden) &&
-                !this.containerSelectionCombo.isExpanded() && !this.containerSelectionCombo.dlg;
+        var contextMenuVisible = this.containerGridPanel.contextMenu && ! this.containerGridPanel.contextMenu.hidden,
+            containerSelectionVisible = this.containerSelectionCombo.dlg && ! this.containerSelectionCombo.dlg.win.isDestroyed;
+            
+        return ! (contextMenuVisible || this.containerSelectionCombo.isExpanded() || containerSelectionVisible);
     },
     
     onContainerSelect: function(field, containerData) {
