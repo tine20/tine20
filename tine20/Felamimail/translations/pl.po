@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-01 19:28+0100\n"
+"PO-Revision-Date: 2010-12-02 22:57+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -156,7 +156,7 @@ msgid "To"
 msgstr "Do"
 
 #: js/GridPanel.js:426
-#: js/Model.js:474
+#: js/Model.js:475
 msgid "Sent"
 msgstr "Wysłane"
 
@@ -166,13 +166,13 @@ msgid "Received"
 msgstr "Odebrane"
 
 #: js/GridPanel.js:441
-#: js/FolderFilterModel.js:60
+#: js/FolderFilterModel.js:35
 #: js/TreeContextMenu.js:88
 #: js/TreeContextMenu.js:91
 #: js/TreeContextMenu.js:94
 #: js/TreeContextMenu.js:185
 #: js/Model.js:53
-#: js/Model.js:480
+#: js/Model.js:481
 msgid "Folder"
 msgid_plural "Folders"
 msgstr[0] "Katalog"
@@ -196,15 +196,19 @@ msgstr "Przesłane dalej"
 msgid "Recent"
 msgstr "Nowe"
 
-#: js/FolderSelectPanel.js:60
+#: js/FolderSelectPanel.js:61
 msgid "Folders of account {0}"
 msgstr "Katalogi konta: {0}"
 
-#: js/FolderSelectPanel.js:73
+#: js/FolderSelectPanel.js:63
+msgid "Folders of all accounts"
+msgstr "Katalogi ze wszystkich kont"
+
+#: js/FolderSelectPanel.js:77
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: js/FolderSelectPanel.js:120
+#: js/FolderSelectPanel.js:163
 msgid "Folder Selection"
 msgstr "Wybór katalogu"
 
@@ -312,9 +316,9 @@ msgstr "Wysłanie {0} było niemożliwe."
 msgid "Error:"
 msgstr "Błąd:"
 
-#: js/FolderFilterModel.js:129
-msgid "Select Folders"
-msgstr "Wybierz katalogi"
+#: js/FolderFilterModel.js:39
+msgid "Select Folder"
+msgstr "Zaznacz katalog"
 
 #: js/TreeContextMenu.js:29
 msgid "Update {0} Cache"
@@ -412,7 +416,7 @@ msgid "Signature"
 msgstr "Podpis"
 
 #: js/AccountEditDialog.js:105
-#: js/Model.js:339
+#: js/Model.js:340
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "konto"
@@ -579,48 +583,48 @@ msgstr "Aktywna wiadomość o nieobecności"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Konto pocztowe \"{0}\" ma włączone powiadamianie o nieobecności."
 
-#: js/Felamimail.js:309
+#: js/Felamimail.js:380
 msgid "New mails"
 msgstr "Nowe wiadomości"
 
-#: js/Felamimail.js:310
+#: js/Felamimail.js:381
 msgid "You got {0} new mail(s) in Folder {1}."
 msgstr "Masz {0} nowych wiadomości w katalogu {1}."
 
-#: js/Felamimail.js:344
+#: js/Felamimail.js:415
 msgid "IMAP Credentials for {0}"
 msgstr "Dane dostępowe IMAP dla {0}"
 
-#: js/Felamimail.js:347
+#: js/Felamimail.js:418
 msgid "Credentials"
 msgstr "Dane dostępowe"
 
-#: js/Felamimail.js:522
-#: js/Felamimail.js:544
+#: js/Felamimail.js:594
+#: js/Felamimail.js:617
 msgid "IMAP Error"
 msgstr "Błąd IMAP"
 
-#: js/Felamimail.js:523
+#: js/Felamimail.js:595
 msgid "No connection to IMAP server."
 msgstr "Brak połączenia z serwerem IMAP."
 
-#: js/Felamimail.js:545
+#: js/Felamimail.js:618
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr "Jeden katalog został usunięty przez innego klienta, proszę odśwież widok w przeglądarce"
 
-#: js/Felamimail.js:560
+#: js/Felamimail.js:633
 msgid "SMTP Error"
 msgstr "Błąd SMTP"
 
-#: js/Felamimail.js:561
+#: js/Felamimail.js:634
 msgid "No connection to SMTP server."
 msgstr "Brak połączenia z serwerem SMTP"
 
-#: js/Felamimail.js:569
+#: js/Felamimail.js:642
 msgid "Sieve Error"
 msgstr "Błąd filtrowania"
 
-#: js/Felamimail.js:570
+#: js/Felamimail.js:643
 msgid "No connection to Sieve server."
 msgstr "Brak połączenia z serwerem filtrów."
 
@@ -636,91 +640,91 @@ msgstr "DW"
 msgid "Bcc"
 msgstr "UDW"
 
-#: js/Model.js:343
+#: js/Model.js:344
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
 msgstr[0] "Konto e-mail"
 msgstr[1] "konta e-mail"
 msgstr[2] "konta-email"
 
-#: js/Model.js:474
+#: js/Model.js:475
 msgid "INBOX"
 msgstr "Pobrane"
 
-#: js/Model.js:474
+#: js/Model.js:475
 msgid "Drafts"
 msgstr "Szkice"
 
-#: js/Model.js:474
+#: js/Model.js:475
 msgid "Templates"
 msgstr "Szablony"
 
-#: js/Model.js:474
+#: js/Model.js:475
 msgid "Junk"
 msgstr "Spam"
 
-#: js/Model.js:474
+#: js/Model.js:475
 msgid "Trash"
 msgstr "Kosz"
 
-#: js/Model.js:483
-#: js/Model.js:587
-#: js/Model.js:649
+#: js/Model.js:484
+#: js/Model.js:588
+#: js/Model.js:650
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Lista wiadomości"
 msgstr[1] "listy wiadomości"
 msgstr[2] "listy wiadomości"
 
-#: js/Model.js:583
+#: js/Model.js:584
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Urlop"
 msgstr[1] "urlopy"
 msgstr[2] "urlopy"
 
-#: js/Model.js:645
+#: js/Model.js:646
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Reguła"
 msgstr[1] "reguły"
 msgstr[2] "reguły"
 
-#: js/Model.js:775
+#: js/Model.js:776
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flaga"
 msgstr[1] "flagi"
 msgstr[2] "flagi"
 
-#: js/Model.js:778
+#: js/Model.js:779
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Lista flag"
 msgstr[1] "listy flag"
 msgstr[2] "listy flag"
 
-#: js/TreePanel.js:464
+#: js/TreePanel.js:465
 msgid "Invalid drop target"
 msgstr "Nieprawidłowy katalog docelowy"
 
-#: js/TreePanel.js:464
+#: js/TreePanel.js:465
 msgid "Could not move message(s)."
 msgstr "Przeniesienie wiadomości było niemożliwe."
 
-#: js/TreePanel.js:626
+#: js/TreePanel.js:627
 msgid "Total Messages:"
 msgstr "Suma wiadomości:"
 
-#: js/TreePanel.js:630
+#: js/TreePanel.js:631
 msgid "Unread Messages:"
 msgstr "Nieprzeczytane wiadomości:"
 
-#: js/TreePanel.js:634
+#: js/TreePanel.js:635
 msgid "Name on Server:"
 msgstr "Nazwa serwera:"
 
-#: js/TreePanel.js:654
+#: js/TreePanel.js:655
 #, python-format
 msgid "Fetching messages... ({0}% done)"
 msgstr "Pobieranie wiadomości... ({0}% pobrano)"
@@ -886,6 +890,9 @@ msgstr "Potwierdź usunięcie"
 #: Preference.php:114
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Zanim usuniesz pocztę, wyświetl okno dialogowe z potwierdzeniem"
+
+#~ msgid "Select Folders"
+#~ msgstr "Wybierz katalogi"
 
 #~ msgid "Show Intelligent Folders"
 #~ msgstr "Pokaż inteligentne katalogi"
