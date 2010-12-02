@@ -752,6 +752,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Hier ist Ihr Hot Web Email-Deal Angebot von M&amp;M Computer.', $completeMessage->body);
     }
     
+    /**
+     * testGetMessageWithCommaInTo
+     */
+    public function testGetMessageWithCommaInTo()
+    {
+        $cachedMessage = $this->_messageTestHelper('mail_to_comma.eml', 'text/comma');
+        $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertEquals('inscription@arrakeen.net', $completeMessage->to[0]);
+        $this->assertEquals('November 2010 Crystal Newsletter - Cut the Rope Update Released!', $completeMessage->subject);
+    }
+
+    
     /********************************* protected helper funcs *************************************/
     
     /**
