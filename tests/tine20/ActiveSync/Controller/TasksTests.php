@@ -123,6 +123,26 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         $this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $task->description);
     }
     
+    /**
+     * test search tasks
+     */
+    public function testSearch()
+    {
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        
+        $record = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $this->objects['tasks'][] = $record;
+        
+        $task = $controller->search($this->_specialFolderName, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        #var_dump($task->toArray());
+        
+        $this->assertEquals(1                    , count($task));
+        $this->assertEquals('Testaufgabe auf mfe', $task[0]->summary);
+    }
+    
     protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record)
     {
         $this->objects['tasks'][] = $_record;
