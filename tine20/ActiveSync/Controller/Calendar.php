@@ -804,12 +804,23 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         
         $filterArray = array();
         
-        foreach($this->_mapping as $fieldName => $value) {
+        foreach($this->_mapping as $fieldName => $field) {
             if(isset($xmlData->$fieldName)) {
+                switch ($field) {
+                    case 'dtend':
+                    case 'dtstart':
+                        $value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
+                        break;
+                        
+                    default:
+                        $value = (string)$xmlData->$fieldName;
+                        break;
+                        
+                }
                 $filterArray[] = array(
-                    'field'     => $value,
+                    'field'     => $field,
                     'operator'  => 'equals',
-                    'value'     => (string)$xmlData->$fieldName
+                    'value'     => $value
                 );
             }
         }
