@@ -296,7 +296,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             width: width  +'px',
             height: '15px',
             left: left + 'px',
-            top: pos * 18 + 'px'//'1px'
+            top: pos * 18 + 'px',//'1px'
+            statusIcons: this.statusIcons
         }, true);
         
         if (this.event.dirty) {
