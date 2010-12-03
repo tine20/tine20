@@ -97,8 +97,15 @@ table td {
 
 .cal-print-monthview .cal-print-daycell {
     width: 13%;
+    padding-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
+    border: 1px solid #d0d0d0;
+}
+
+.cal-print-monthview .cal-print-daysview-day th {
+    border: 0;
+    border-bottom: 1px solid #d0d0d0;
 }
 
 .cal-print-monthview {
