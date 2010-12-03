@@ -18,7 +18,14 @@ Ext.ux.Printer.BaseRenderer = Ext.extend(Object, {
     
     win.document.write(this.generateHTML(component));
     win.document.close();
-
+    
+    // gecko looses its document after document.close(). but fortunally waits with printing till css is loaded itself
+    if (Ext.isGecko) {
+        win.print();
+        win.close();
+        return;
+    }
+    
     this.doPrintOnStylesheetLoad.defer(10, this, [win]);
   },
   
