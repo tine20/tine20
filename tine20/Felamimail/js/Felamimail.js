@@ -278,7 +278,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         var currNode = this.getMainScreen().getTreePanel().getSelectionModel().getSelectedNode(),
             currFolder = currNode ? this.getFolderStore().getById(currNode.id) : null;
         
-        // current selection has highes prio!
+        // current selection has highest prio!
         if (currFolder && currFolder.needsUpdate(this.updateInterval)) {
             return currFolder;
         }
@@ -302,7 +302,16 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         // check for outdated
         var outdated = this.folderStore.queryBy(function(folder) {
             var timestamp = folder.get('client_access_time');
-            return ! Ext.isDate(timestamp) || timestamp.getElapsed() > this.updateInterval;
+            if (! Ext.isDate(timestamp)) {
+                return true;
+            }
+            // update inboxes more often than other folders
+            if (Ext.util.Format.lowercase(folder.get('localname')) === 'inbox' && timestamp.getElapsed() > this.updateInterval) {
+                return true;
+            } else if (timestamp.getElapsed() > (this.updateInterval * 5)) {
+                return true;
+            }
+            return false;
         }, this);
         if (outdated.getCount() > 0) {
             Tine.log.debug('still got ' + outdated.getCount() + ' outdated folders to update ...');
