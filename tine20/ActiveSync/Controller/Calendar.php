@@ -831,27 +831,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * converts an iso formated date into a timestamp
-     *
-     * @param  string Tinebase_DateTime::ISO8601 representation of a datetime filed
-     * @return int    UNIX Timestamp
-     */
-    protected function _convertISOToTs($_ISO)
-    {
-        $matches = array();
-        
-        preg_match("/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/", $_ISO, $matches);
-
-        if (count($matches) !== 7) {
-            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_ISO");
-        }
-        
-        list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
-        
-        return mktime($hour, $minute, $second, $month, $day, $year);
-    }
-    
-    /**
      * converts an iso formated date into DateTime
      *
      * @param  string  $_iso  ISO8601 representation of a datetime filed
