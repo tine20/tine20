@@ -301,7 +301,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var event = view.getTargetEvent(e);
         var datetime = view.getTargetDateTime(e);
         
-        var addAction;
+        var addAction, responseAction;
         if (datetime || event) {
             var dtStart = datetime || event.get('dtstart').clone();
             if (dtStart.format('H:i') === '00:00') {
@@ -312,6 +312,28 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 handler: this.onEditInNewWindow.createDelegate(this, ["add", dtStart]),
                 iconCls: 'action_add'
             };
+            
+            // assemble response action
+            if (event) {
+                var myAttenderRecord = event.getMyAttenderRecord();
+                if (myAttenderRecord) {
+                    responseAction = {
+                        text: this.app.i18n._('Set my response'),
+                        iconCls: 'cal-response-action-' + myAttenderRecord.get('status'),
+                        menu: []
+                    };
+                    
+                    Tine.Calendar.Model.Attender.getAttendeeStatusStore().each(function(status) {
+                        responseAction.menu.push({
+                            text: status.get('status_name'),
+                            handler: this.setResponseStatus.createDelegate(this, [event, status.id]),
+                            iconCls: 'cal-response-action-' + status.id,
+                            disabled: myAttenderRecord.get('status') === status.id
+                        });
+                    }, this);
+                }
+            }
+
         } else {
             addAction = this.action_addInNewWindow;
         }
@@ -323,7 +345,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
            
         var ctxMenu = new Ext.menu.Menu({
-            items: this.recordActions.concat(addAction)
+            items: this.recordActions.concat(addAction, responseAction)
         });
         ctxMenu.showAt(e.getXY());
     },
@@ -609,6 +631,16 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         // clear favorites
         Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getWestPanel().getFavoritesPanel().getSelectionModel().clearSelections();
+    },
+    
+    setResponseStatus: function(event, status) {
+        var myAttenderRecord = event.getMyAttenderRecord();
+        if (myAttenderRecord) {
+            myAttenderRecord.set('status', status);
+            event.dirty = true;
+            var panel = this.getCalendarPanel(this.activeView);
+            panel.onUpdateEvent(event);
+        }
     },
     
     updateEventActions: function () {
