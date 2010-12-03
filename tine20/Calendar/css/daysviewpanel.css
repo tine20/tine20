@@ -342,6 +342,12 @@
     top: 2px;
 }
 
+.cal-daysviewpanel-wholedayheader .cal-daysviewpanel-event-header-icons {
+    background: #EDEDED url(../../images/white-gradiend.png) repeat-y right;
+    padding-left: 2px;
+    top: 3px;
+}
+
 .cal-daysviewpanel-event-drop-ok .cal-daysviewpanel-event-header-inner,
 .cal-daysviewpanel-event-drop-nodrop .cal-daysviewpanel-event-header-inner {
     left: 17px;
