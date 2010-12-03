@@ -30,6 +30,7 @@
 Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     
     /**
+     * request data
      * 
      * @param {Ext.tree.TreeNode} node
      * @param {Function} callback Function to call after the node has been loaded. The
