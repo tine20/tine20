@@ -582,7 +582,9 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
         
         var values = [];
         Ext.each(selection, function(node) {
-            values.push(node.attributes[this.nodeAttributeField]);
+            if (node) {
+                values.push(node.attributes[this.nodeAttributeField]);
+            }
         }, this);
         
         filter.value = Ext.isEmpty(values) ? '' : filter.operator === 'in' ? values : values[0];
