@@ -14,6 +14,7 @@ Ext.ns('Tine.Calendar');
 Tine.Calendar.EventUI = function(event) {
     this.event = event;
     this.domIds = [];
+    this.app = Tine.Tinebase.appMgr.get('Calendar');
     this.init();
 };
 
@@ -212,6 +213,37 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             return;
         }
         
+        // compute status icons
+        this.statusIcons = [];
+        if (this.event.get('class') === 'PRIVATE') {
+            this.statusIcons.push({
+                status: 'private',
+                text: this.app.i18n._('private classification')
+            });
+        }
+        
+        if (this.event.get('rrule')) {
+            this.statusIcons.push({
+                status: 'recur',
+                text: this.app.i18n._('recurring event')
+            });
+        }
+        
+        if (! Ext.isEmpty(this.event.get('alarms'))) {
+            this.statusIcons.push({
+                status: 'alarm',
+                text: this.app.i18n._('has alarm')
+            });
+        }
+        
+        var myAttenderRecord = this.event.getMyAttenderRecord();
+        if (myAttenderRecord) {
+            this.statusIcons.push({
+                status: myAttenderRecord.get('status'),
+                text: Tine.Calendar.Model.Attender.getAttendeeStatusStore().getById(myAttenderRecord.get('status')).get('status_name')
+            });
+        }
+        
         var registry = this.event.get('is_all_day_event') ? view.parallelWholeDayEventsRegistry : view.parallelScrollerEventsRegistry;
         
         var position = registry.getPosition(this.event);
@@ -343,7 +375,8 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
                 // max shift to 20+gap
                 //left: 80 - 80/Math.sqrt(pos+1) + 10*Math.sqrt(pos) + '%',
                 //width: 80/Math.sqrt(pos+1) + '%',
-                top: top + 'px'
+                top: top + 'px',
+                statusIcons: this.statusIcons
             }, true);
             
             if (this.event.dirty) {
