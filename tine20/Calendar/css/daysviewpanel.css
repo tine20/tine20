@@ -339,6 +339,7 @@
 .cal-daysviewpanel-event-header-icons {
     position: absolute;
     right: 4px;
+    top: 2px;
 }
 
 .cal-daysviewpanel-event-drop-ok .cal-daysviewpanel-event-header-inner,
