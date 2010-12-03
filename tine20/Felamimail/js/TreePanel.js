@@ -295,7 +295,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
                 treePanel: this,
                 field: 'folder_id',
-                nodeAttributeField: 'folder_id'
+                nodeAttributeField: 'folder_id',
+                singleNodeOperator: 'in'
             });
         }
         

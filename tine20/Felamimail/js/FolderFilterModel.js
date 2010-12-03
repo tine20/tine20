@@ -21,9 +21,8 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMult
 
     /**
      * @cfg 
-     * TODO make notin work
      */
-    operators: ['in'/*, 'notin' */],
+    operators: ['in', 'notin'],
     field: 'folder_id',
     
     /**
