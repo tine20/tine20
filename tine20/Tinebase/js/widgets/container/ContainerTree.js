@@ -570,16 +570,24 @@ Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlu
     nodeAttributeField: 'container',
     
     /**
+     * @cfg singleNodeOperator
+     * @type String
+     */
+    singleNodeOperator: 'equals',
+    
+    /**
      * get container filter object
      * 
      * @return {Object}
      */
     getContainerFilter: function() {
-        var filter = {field: this.field};
-        var sm = this.treePanel.getSelectionModel();
-        filter.operator = typeof sm.getSelectedNodes == 'function' ? 'in' : 'equals';
-        var selection =  filter.operator === 'in' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
+        var filter = {field: this.field},
+            sm = this.treePanel.getSelectionModel(),
+            multiSelection = typeof sm.getSelectedNodes == 'function',
+            selection = multiSelection ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
+        filter.operator = multiSelection ? 'in' : this.singleNodeOperator;
+            
         var values = [];
         Ext.each(selection, function(node) {
             if (node) {
