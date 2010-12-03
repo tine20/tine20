@@ -172,3 +172,27 @@ span.tw-containerselect-trigger2 img.tw-containerselect-trigger2-bg {
 .cal-conflict-eventinfos {
     margin-left: 15px;
 }
+
+/**** status icons ****/
+.cal-status-icon {
+	background-image:url(../../images/calendar-status-icons.gif) !important;
+    background-repeat:no-repeat;
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+}
+
+.private-white      { background-position:   0px   0px; }
+.private-black      { background-position:   0px -10px; }
+.recur-white        { background-position: -10px   0px; }
+.recur-black        { background-position: -10px -10px; }
+.alarm-white        { background-position: -20px   0px; }
+.alarm-black        { background-position: -20px -10px; }
+.NEEDS-ACTION-white { background-position: -30px   0px; }
+.NEEDS-ACTION-black { background-position: -30px -10px; }
+.ACCEPTED-white     { background-position: -40px   0px; }
+.ACCEPTED-black     { background-position: -40px -10px; }
+.DECLINED-white     { background-position: -50px   0px; }
+.DECLINED-black     { background-position: -50px -10px; }
+.TENTATIVE-white    { background-position: -60px   0px; }
+.TENTATIVE-black    { background-position: -60px -10px; }
