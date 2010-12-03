@@ -60,7 +60,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             disabled: true,
             handler: this.enableDisableButtonHandler.createDelegate(this, ['enabled']),
             iconCls: 'action_enable',
-            actionUpdater: this.enableDisableActionUpdater.createDelegate(this, 'disabled', true)
+            actionUpdater: this.enableDisableActionUpdater.createDelegate(this, [['disabled', 'blocked', 'expired']], true)
         });
     
         this.actionDisable = new Ext.Action({
@@ -70,7 +70,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             disabled: true,
             handler: this.enableDisableButtonHandler.createDelegate(this, ['disabled']),
             iconCls: 'action_disable',
-            actionUpdater: this.enableDisableActionUpdater.createDelegate(this, 'enabled', true)
+            actionUpdater: this.enableDisableActionUpdater.createDelegate(this, [['enabled']], true)
         });
     
         this.actionResetPassword = new Ext.Action({
@@ -204,11 +204,12 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Ext.Action} action
      * @param {Object} grants grants sum of grants
      * @param {Object} records
+     * @param {Array} requiredAccountStatus
      */
     enableDisableActionUpdater: function(action, grants, records, requiredAccountStatus) {
-        var enabled = true && records.length > 0;
+        var enabled = records.length > 0;
         Ext.each(records, function(record){
-            enabled &= record.get('accountStatus') === requiredAccountStatus;
+            enabled &= requiredAccountStatus.indexOf(record.get('accountStatus')) >=0;// === requiredAccountStatus;
             return enabled;
         }, this);
         
