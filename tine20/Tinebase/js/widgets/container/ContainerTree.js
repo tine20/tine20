@@ -215,7 +215,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
-            this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
+            this.filterPlugin = new Tine.widgets.tree.FilterPlugin({
                 treePanel: this
             });
         }
@@ -517,7 +517,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             ftb.supressEvents = false;
             
             // set ftb filters according to tree selection
-            var containerFilter = this.getFilterPlugin().getContainerFilter();
+            var containerFilter = this.getFilterPlugin().getFilter();
             ftb.addFilter(new ftb.record(containerFilter));
         
             ftb.onFiltertrigger();
@@ -540,162 +540,5 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     selectContainerPath: function(containerPath, attr, callback) {
         return this.selectPath(this.getTreePath(containerPath), attr, callback);
-    }
-});
-
-
-/**
- * filter plugin for container tree
- * 
- * @namespace Tine.widgets.container
- * @class     Tine.widgets.container.TreeFilterPlugin
- * @extends   Tine.widgets.grid.FilterPlugin
- */
-Tine.widgets.container.TreeFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
-    /**
-     * @cfg {ContainerTree} treePanel (required)
-     */
-    treePanel: null,
-    
-    /**
-     * @cfg field
-     * @type String
-     */
-    field: 'container_id',
-
-    /**
-     * @cfg nodeAttributeField
-     * @type String
-     */
-    nodeAttributeField: 'container',
-    
-    /**
-     * @cfg singleNodeOperator
-     * @type String
-     */
-    singleNodeOperator: 'equals',
-    
-    /**
-     * get container filter object
-     * 
-     * @return {Object}
-     */
-    getContainerFilter: function() {
-        var filter = {field: this.field},
-            sm = this.treePanel.getSelectionModel(),
-            multiSelection = typeof sm.getSelectedNodes == 'function',
-            selection = multiSelection ? sm.getSelectedNodes() : [sm.getSelectedNode()];
-        
-        filter.operator = multiSelection ? 'in' : this.singleNodeOperator;
-            
-        var values = [];
-        Ext.each(selection, function(node) {
-            if (node) {
-                values.push(node.attributes[this.nodeAttributeField]);
-            }
-        }, this);
-        
-        filter.value = Ext.isEmpty(values) ? '' : filter.operator === 'in' ? values : values[0];
-        return filter;
-    },
-    
-    /**
-     * gets value of this container filter
-     */
-    getValue: function() {
-        // only return values if gridFilter mode
-        if (this.treePanel.filterMode !== 'gridFilter') {
-            return null;
-        }
-        
-        return this.getContainerFilter();
-    },
-    
-    /**
-     * sets the selected container (node) of this tree
-     * 
-     * @param {Array} all filters
-     */
-    setValue: function(filters) {
-        // only set filters if gridFilter mode
-        if (this.treePanel.filterMode !== 'gridFilter') {
-            return null;
-        }
-        
-        var sm = this.treePanel.getSelectionModel();
-        
-        // clear all selections
-        sm.clearSelections(true);
-        
-        Ext.each(filters, function(filter) {
-            if (filter.field !== this.field) {
-                return;
-            }
-            
-            this.treePanel.getSelectionModel().suspendEvents();
-            this.selectValue(filter.value);
-        }, this);
-    },
-    
-    /**
-     * select tree node(s)
-     * 
-     * @param {String} value
-     */
-    selectValue: function(value) {
-        var values = Ext.isArray(value) ? value : [value];
-        Ext.each(values, function(value) {
-            var treePath = this.treePanel.getTreePath(value.path);
-            this.selectPath.call(this.treePanel, treePath, null, function() {
-                // mark this expansion as done and check if all are done
-                value.isExpanded = true;
-                var allValuesExpanded = true;
-                Ext.each(values, function(v) {
-                    allValuesExpanded &= v.isExpanded;
-                }, this);
-                
-                if (allValuesExpanded) {
-                    this.treePanel.getSelectionModel().resumeEvents();
-                }
-            }.createDelegate(this), true)
-        }, this);
-    },
-    
-    /**
-     * Selects the node in this tree at the specified path. A path can be retrieved from a node with {@link Ext.data.Node#getPath}
-     * @param {String} path
-     * @param {String} attr (optional) The attribute used in the path (see {@link Ext.data.Node#getPath} for more info)
-     * @param {Function} callback (optional) The callback to call when the selection is complete. The callback will be called with
-     * (bSuccess, oSelNode) where bSuccess is if the selection was successful and oSelNode is the selected node.
-     */
-    selectPath : function(path, attr, callback, keep){
-        attr = attr || 'id';
-        var keys = path.split(this.pathSeparator),
-            v = keys.pop();
-        if(keys.length > 1){
-            var f = function(success, node){
-                if(success && node){
-                    var n = node.findChild(attr, v);
-                    if(n){
-                        n.getOwnerTree().getSelectionModel().select(n, false, keep);
-                        if(callback){
-                            callback(true, n);
-                        }
-                    }else if(callback){
-                        callback(false, n);
-                    }
-                }else{
-                    if(callback){
-                        callback(false, n);
-                    }
-                }
-            };
-            this.expandPath(keys.join(this.pathSeparator), attr, f);
-        }else{
-            this.root.select();
-            if(callback){
-                callback(true, this.root);
-            }
-        }
     }
 });

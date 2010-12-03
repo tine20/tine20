@@ -260,8 +260,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             ftb.supressEvents = false;
             
             // set ftb filters according to tree selection
-            var containerFilter = this.getFilterPlugin().getContainerFilter();
-            ftb.addFilter(new ftb.record(containerFilter));
+            var filter = this.getFilterPlugin().getFilter();
+            ftb.addFilter(new ftb.record(filter));
         
             ftb.onFiltertrigger();
             
@@ -292,7 +292,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
-            this.filterPlugin = new Tine.widgets.container.TreeFilterPlugin({
+            this.filterPlugin = new Tine.widgets.tree.FilterPlugin({
                 treePanel: this,
                 field: 'folder_id',
                 nodeAttributeField: 'folder_id',
