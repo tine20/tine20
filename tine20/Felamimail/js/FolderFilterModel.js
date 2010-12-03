@@ -37,8 +37,6 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMult
             labelField: 'globalname',
             layerHeight: 200,
             selectionWidget: new Tine.Felamimail.FolderSelectTriggerField({
-                emptyValue: this.app.i18n._('Select Folder'),
-                name: 'folder',
                 allAccounts: true
             }),
             recordClass: Tine.Felamimail.Model.Folder,
