@@ -5,6 +5,13 @@ Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
         var daysHtml = this.splitDays(view.ds, view.startDate, view.dateMesh.length),
             body = [];
         
+        // try to force landscape -> opera only atm...
+        body.push('<style type="text/css">', 
+            '@page {',
+                'size:landscape',
+            '}',
+        '</style>');
+        
         // title
         body.push('<table><tr><th class="cal-print-title">', this.getTitle(view), '</th></tr></table>');
         
