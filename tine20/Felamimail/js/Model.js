@@ -138,7 +138,9 @@ Tine.Felamimail.Model.Message.getFilterModel = function() {
         {label: app.i18n._('To'),          field: 'to',            operators: ['contains']},
         {label: app.i18n._('Cc'),          field: 'cc',            operators: ['contains']},
         {label: app.i18n._('Bcc'),         field: 'bcc',           operators: ['contains']},
-        {label: app.i18n._('Flags'),       field: 'flags',         filtertype: 'tinebase.multiselect', app: app, valueStore: Tine.Felamimail.loadFlagsStore()},
+        {label: app.i18n._('Flags'),       field: 'flags',         filtertype: 'tinebase.multiselect', app: app, multiselectFieldConfig: {
+            valueStore: Tine.Felamimail.loadFlagsStore()
+        }},
         {label: app.i18n._('Received'),    field: 'received',      valueType: 'date', pastOnly: true}
     ];
 };
