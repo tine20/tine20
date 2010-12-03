@@ -414,8 +414,12 @@ class Tinebase_Acl_Roles
         foreach ($roles as $role) {
           $roleIds[] = $role->id;
         }
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($roles) .' users');
-        $this->deleteRoles($roleIds);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($roles) .' roles');
+        
+        if (count($roles) > 0) {
+            $this->deleteRoles($roleIds);
+        }
     }
     
     /**
