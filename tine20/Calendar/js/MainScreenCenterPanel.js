@@ -638,7 +638,13 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         if (myAttenderRecord) {
             myAttenderRecord.set('status', status);
             event.dirty = true;
+            
             var panel = this.getCalendarPanel(this.activeView);
+            var store = panel.getStore();
+                    
+            store.remove(event);
+            store.add(event);
+            
             panel.onUpdateEvent(event);
         }
     },
