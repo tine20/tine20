@@ -324,5 +324,10 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
      * sets values to innerForm
      */
     setFormValue: function(value) {
+        if (this.xtype == 'checkbox') {
+            this.getInnerForm().getForm().items.each(function(item) {
+                item.setValue(value.indexOf(item.name) >= 0 ? 'on' : 'off');
+            }, this);
+        }
     }
 });
