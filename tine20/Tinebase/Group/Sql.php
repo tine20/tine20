@@ -429,8 +429,8 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             }
         } else {
             $groupIds[] = Tinebase_Model_Group::convertGroupIdToInt($_groupId);
-        }        
-        
+        }
+                        
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
             
@@ -458,8 +458,12 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
     public function deleteAllGroups()
     {
         $groups = $this->getGroups();
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($groups) .' users');
-        $this->deleteGroups($groups);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($groups) .' groups');
+        
+        if(count($groups) > 0) {
+            $this->deleteGroups($groups);        
+        }
     }
     
     /**
