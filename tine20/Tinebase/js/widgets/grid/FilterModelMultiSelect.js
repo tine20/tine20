@@ -280,7 +280,6 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
             var record, id;
             for (var i=0; i < value.length; i++) {
                 id = (Ext.isString(value[i])) ? value[i] : value[i].id;
-                console.log(id);
                 record = this.valueStore.getById(id);
                 if (record) {
                     this.currentValue.push(record.id);
