@@ -116,7 +116,7 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
             // only get first alarm at the moment
             //var alarm = new Tine.Tinebase.Model.Alarm(record.get('alarms')[0]);
             var alarm = record.get('alarms')[0];
-            var options = Ext.util.JSON.decode(alarm.options);
+            var options = alarm.options ? Ext.util.JSON.decode(alarm.options) : null;
             
             if (options && options.custom /*&& options.custom == true*/) {
                 var date = Date.parseDate(alarm.alarm_time, Date.patterns.ISO8601Long);
