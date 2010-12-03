@@ -144,11 +144,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     public function getGroupByIdFromSyncBackend($_groupId)
     {   
         $groupId = Tinebase_Model_Group::convertGroupIdToInt($_groupId);     
-
+        
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
             Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($groupId))
         );
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " ldap filter: " . $filter);
         
         $groups = $this->_ldap->search(
             $filter, 
@@ -261,7 +263,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      */
     public function setGroupMembershipsInSyncBackend($_userId, $_groupIds)
     {
-        throw new Tinebase_Exception_NotImplemented('Not yet implemented');
+        if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " method not yet implemented");
         
         return $this->getGroupMembershipsFromSyncBackend($_userId);
     }
@@ -729,8 +731,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             return $_gidNumber;
         }
         
-        $filter = Zend_Ldap_Filter::equals(
-            'gidnumber', Zend_Ldap::filterEscape($_gidNumber)
+        $filter = Zend_Ldap_Filter::andFilter(
+            Zend_Ldap_Filter::string($this->_groupBaseFilter),
+            Zend_Ldap_Filter::equals('gidnumber', Zend_Ldap::filterEscape($_gidNumber))
         );
         
         $groupId = $this->_ldap->search(
@@ -743,6 +746,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         if ($groupId == null) {
             throw new Tinebase_Exception_NotFound('LDAP group with (gidnumber=' . $_gidNumber . ') not found');
         }
+        
         return $groupId[$this->_groupUUIDAttribute][0];
     }
     
@@ -758,8 +762,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             return $_uuid;
         }
         
-        $filter = Zend_Ldap_Filter::equals(
-            $this->_groupUUIDAttribute, Zend_Ldap::filterEscape($_uuid)
+        $filter = Zend_Ldap_Filter::andFilter(
+            Zend_Ldap_Filter::string($this->_groupBaseFilter),
+            Zend_Ldap_Filter::equals($this->_groupUUIDAttribute, Zend_Ldap::filterEscape($_uuid))
         );
         
         $groupId = $this->_ldap->search(
@@ -775,12 +780,12 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
     /**
      * get groupmemberships of user from sync backend
      * 
-     * @param   Tinebase_Model_User  $_user
+     * @param   Tinebase_Model_User|string  $_userId
      * @return  array  list of group ids
      */
-    public function getGroupMembershipsFromSyncBackend(Tinebase_Model_User $_user)
+    public function getGroupMembershipsFromSyncBackend($_userId)
     {
-        $metaData = $this->_getUserMetaData($_user);
+        $metaData = $this->_getUserMetaData($_userId);
         
         $filter = Zend_Ldap_Filter::andFilter(
             Zend_Ldap_Filter::string($this->_groupBaseFilter),
