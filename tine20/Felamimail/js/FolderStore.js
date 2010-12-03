@@ -71,7 +71,9 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
         
         if (store.queriesDone.indexOf(key) >= 0) {
             Tine.log.debug('result already loaded -> directly query store');
-            result = store.query(field, value);
+            // we need regexp here because query returns all records with path that begins with the value string otherwise
+            var valueReg = new RegExp(value + '$');
+            result = store.query(field, valueReg);
             args.push(result);
             callback.apply(scope, args);
         } else if (store.queriesPending.indexOf(key) >= 0) {
@@ -167,6 +169,7 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
      * @param {String|null} parentPath
      */
     computePaths: function(records, givenParentPath) {
+        var parentPath, path;
         Ext.each(records, function(record) {
             if (givenParentPath === null) {
                 var parent = this.getParentByAccountIdAndGlobalname(record.get('account_id'), record.get('parent'));
@@ -174,10 +177,14 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
             } else {
                 parentPath = givenParentPath;
             }
-            record.beginEdit();
-            record.set('parent_path', parentPath);
-            record.set('path', parentPath + '/' + record.id);
-            record.endEdit();
+            path = parentPath + '/' + record.id;
+            
+            if (record.get('parent_path') != parentPath || record.get('path') != path) {
+                record.beginEdit();
+                record.set('parent_path', parentPath);
+                record.set('path', path);
+                record.endEdit();
+            }
         }, this);        
     },
     
