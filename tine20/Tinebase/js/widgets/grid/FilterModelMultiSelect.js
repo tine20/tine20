@@ -53,44 +53,16 @@ Tine.widgets.grid.FilterModelMultiSelect = Ext.extend(Tine.widgets.grid.FilterMo
     filterValueWidth: 200,
 
     /**
-     * @cfg valueStore
-     * @type Ext.data.Store
+     * @cfg multiselectField
      */
-    valueStore: null,
-    
-    /**
-     * @cfg recordClass
-     * @type Tine.Tinebase.data.Record
-     */
-    recordClass: null,
-    
-    selectionCombo: null,
-    
-    /**
-     * xtype for the value select field
-     * 
-     * @cfg valueXtype
-     * @type String
-     */
-    valueXtype: 'checkbox',
-    
-    /**
-     * @cfg labelField
-     * @type String
-     */
-    labelField: 'name',
-    
-    /**
-     * @cfg layerHeight
-     * @type Integer
-     */
-    layerHeight: null,
+    multiselectFieldConfig: null,
     
     /**
      * @private
      */
     initComponent: function() {
         this.operators = this.operators || ['in', 'notin'];
+        this.multiselectFieldConfig = this.multiselectFieldConfig || {};
         
         Tine.widgets.grid.FilterModelMultiSelect.superclass.initComponent.call(this);
     },
@@ -102,20 +74,14 @@ Tine.widgets.grid.FilterModelMultiSelect = Ext.extend(Tine.widgets.grid.FilterMo
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        var value = new Tine.widgets.grid.FilterModelMultiSelectValueField({
+        var value = new Tine.widgets.grid.FilterModelMultiSelectValueField(Ext.apply({
             app: this.app,
             filter: filter,
             width: this.filterValueWidth,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el,
-            valueStore: this.valueStore,
-            xtype: this.valueXtype,
-            recordClass: this.recordClass,
-            labelField: this.labelField,
-            layerHeight: this.layerHeight,
-            selectionCombo: this.selectionCombo
-        });
+            renderTo: el
+        }, this.multiselectFieldConfig));
         value.on('specialkey', function(field, e){
              if(e.getKey() == e.ENTER){
                  this.onFiltertrigger();
@@ -136,8 +102,6 @@ Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.multiselect'] = Tine.widgets.g
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
- * 
- * TODO extend this in felamimail and move specific stuff there
  */
 Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,
@@ -150,7 +114,7 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
     recordClass: null,
     valueStore: null,
 
-    selectionCombo: null,
+    selectionWidget: null,
     
     /**
      * init
@@ -199,12 +163,10 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
         var items = [];
 
         if (this.xtype == 'wdgt.pickergrid') {
-            //this.selectionCombo.on('select', this.onRecordSelect, this);
-
-            this.selectionCombo.onSelectFolder = this.addRecord.createDelegate(this);
+            this.initSelectionWidget();
             
             // defeat scoping :)
-            selectionCombo = this.selectionCombo;
+            selectionWidget = this.selectionWidget;
             
             this.pickerGridPanel = new Tine.widgets.grid.PickerGridPanel({
                 height: this.layerHeight || 'auto',
@@ -216,7 +178,7 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
                     Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
                     this.tbar = new Ext.Toolbar({
                         layout: 'fit',
-                        items: [ selectionCombo ]
+                        items: [ selectionWidget ]
                     });
                 }
             });
@@ -235,6 +197,13 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
         }
         
         return items;
+    },
+    
+    /**
+     * init selection widget
+     */
+    initSelectionWidget: function() {
+        this.selectionWidget.on('select', this.onRecordSelect, this);
     },
     
     /**
@@ -257,14 +226,10 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
      * @param {String} field
      * @param {Object} recordData
      */
-//    onRecordSelect: function(field, recordData) {
-//        console.log(arguments);
-//        return;
-//        
-//        
-//        
-//        this.containerSelectionCombo.clearValue();
-//    },
+    onRecordSelect: function(field, recordData) {
+        this.addRecord(recordData);        
+        this.selectionWidget.clearValue();
+    },
     
     /**
      * adds record from selection widget to store
@@ -285,7 +250,7 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
             Ext.fly(row).highlight();
         }
         
-        this.selectionCombo.selectPanel.close();
+        this.selectionWidget.selectPanel.close();
     },
     
     /**
@@ -338,12 +303,22 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
     onBeforeCollapse: function() {
         if (this.pickerGridPanel) {
             var contextMenuVisible = this.pickerGridPanel.contextMenu && ! this.pickerGridPanel.contextMenu.hidden,
-                selectionVisible = this.selectionCombo.selectPanel && ! this.selectionCombo.selectPanel.isDestroyed;
+                selectionVisible = this.isSelectionVisible();
             
             return ! (contextMenuVisible || selectionVisible);
         } else {
             return true;
         }
+    },
+    
+    /**
+     * is selection visible ?
+     * - overwrite this when extending to make sure that the selection widget is no longer visible on collapse
+     * 
+     * @return {Boolean}
+     */
+    isSelectionVisible: function() {
+        return false;
     },
     
     /**
