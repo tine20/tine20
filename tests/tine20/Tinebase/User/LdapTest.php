@@ -177,6 +177,10 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
         $user = $this->testAddUser();
         
         $this->_backend->setLoginTime($user, '127.0.0.1');
+        
+        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertNotEquals($user->accountLastLogin, $testUser->accountLastLogin);
     }
     
     /**
@@ -186,8 +190,12 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
     public function testSetPassword()
     {
         $user = $this->testAddUser();
-        
+
         $this->_backend->setPassword($user, Tinebase_Record_Abstract::generateUID());
+        
+        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertNotEquals($user->accountLastPasswordChange, $testUser->accountLastPasswordChange);
     }
     
     /**
