@@ -62,11 +62,6 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
         }
     }
     
-    public function inspectSetBlocked($_accountId, $_blockedUntilDate)
-    {
-    	// does nothing
-    }
-    
     /**
      * inspect set expiry date
      * 
@@ -109,7 +104,7 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
     public function inspectSetPassword($_userId, $_password, $_encrypt, $_mustChange, array &$_ldapData)
     {
         if ($_encrypt !== true) {
-            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make sure to reset password for user ' . $_loginName);
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' can not transform crypted password into nt/lm samba password. Make sure to reset password for user ' . $_userId);
         } else {
             $_ldapData['sambantpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_NTPASSWORD);
             $_ldapData['sambalmpassword'] = Tinebase_User_Abstract::encryptPassword($_password, Tinebase_User_Abstract::ENCRYPT_LMPASSWORD);
@@ -161,7 +156,7 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
                     case 'kickoffTime':
                     case 'pwdCanChange':
                     case 'pwdMustChange':
-                        $accountArray[$keyMapping] = new Tinebase_DateTime($value[0], Tinebase_DateTime::TIMESTAMP);
+                        $accountArray[$keyMapping] = new Tinebase_DateTime($value[0]);
                         break;
                     default: 
                         $accountArray[$keyMapping] = $value[0];
