@@ -360,7 +360,6 @@ class Tinebase_User
         $groupBackend = Tinebase_Group::getInstance();
         
         $user = $userBackend->getUserByPropertyFromSyncBackend('accountLoginName', $username, 'Tinebase_Model_FullUser');
-        
         $user->accountPrimaryGroup = $groupBackend->resolveGIdNumberToUUId($user->accountPrimaryGroup);
         
         // make sure primary group exists
