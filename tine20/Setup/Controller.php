@@ -771,7 +771,10 @@ class Setup_Controller
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleteing all user accounts, groups, roles and rights');
                 //delete all users, groups and roles because they will be imported from new accounts storage backend
                 Tinebase_User::factory(Tinebase_User::SQL)->deleteAllUsers();
+                
                 Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
+                $lists = new Addressbook_Backend_List();
+                $lists->deleteAllLists();
                 
                 $roles = Tinebase_Acl_Roles::getInstance();
                 $roles->deleteAllRoles();
