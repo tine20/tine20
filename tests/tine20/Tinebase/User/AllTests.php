@@ -27,6 +27,7 @@ class Tinebase_User_AllTests
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All User Tests');
         $suite->addTestSuite('Tinebase_User_SqlTest');
         $suite->addTestSuite('Tinebase_User_LdapTest');
+        $suite->addTestSuite('Tinebase_User_Plugin_SambaTest');
         // disabled user registration tests -> this is not used atm and not functional
         //$suite->addTestSuite('Tinebase_User_RegistrationTest');
         $suite->addTestSuite('Tinebase_User_ModelTest');
