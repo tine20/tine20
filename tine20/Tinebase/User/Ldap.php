@@ -163,8 +163,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
                 $this->_ldapPlugins[] = $plugin;
             }
         }
-        
-        
     }
 
     /**
@@ -396,7 +394,6 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function addUserToSyncBackend(Tinebase_Model_FullUser $_user)
     {
-        $dn = $this->_generateDn($_user);
         $ldapData = $this->_user2ldap($_user);
 
         $ldapData['uidnumber'] = $this->_generateUidNumber();
@@ -409,6 +406,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $dn);
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
 
+        $dn = $this->_generateDn($ldapData['uidnumber']);
         $this->_ldap->add($dn, $ldapData);
 
         $userId = $this->_ldap->getEntry($dn, array($this->_userUUIDAttribute));
@@ -476,8 +474,9 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $attributes = array_merge($attributes, $plugin->getSupportedAttributes());
         }
         $attributes[] = 'objectclass';
+        $attributes[] = 'uidnumber';
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' requested attributes ' . print_r($attributes, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' requested attributes ' . print_r($attributes, true));
         
         $accounts = $this->_ldap->search(
             $filter,
@@ -489,6 +488,8 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if (count($accounts) !== 1) {
             throw new Tinebase_Exception_NotFound('User with ' . $_property . ' =  ' . $value . ' not found.');
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' current ldap values ' . print_r($accounts->getFirst(), true));
         
         return $accounts->getFirst();
     }
@@ -526,12 +527,11 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * @param  Tinebase_Model_FullUser $_account
      * @return string
      */
-    protected function _generateDn(Tinebase_Model_FullUser $_account)
+    protected function _generateDn($_uidNumber)
     {
         $baseDn = $this->_baseDn;
 
-        $uidProperty = array_search('uid', $this->_rowNameMapping);
-        $newDn = "uid={$_account->$uidProperty},{$baseDn}";
+        $newDn = "uidNumber={$_uidNumber},{$baseDn}";
 
         return $newDn;
     }
@@ -739,14 +739,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * @param  Tinebase_Model_FullUser $_user
      * @return array
      */
-    protected function _user2ldap(Tinebase_Model_FullUser $_user, $_ldapEntry)
+    protected function _user2ldap(Tinebase_Model_FullUser $_user, array $_ldapEntry = array())
     {
         $ldapData = array();
 
         foreach ($_user as $key => $value) {
-            #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $key => $value");
             $ldapProperty = array_key_exists($key, $this->_rowNameMapping) ? $this->_rowNameMapping[$key] : false;
-            #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $ldapProperty");
+
             if ($ldapProperty) {
                 switch ($key) {
                     case 'accountLastPasswordChange':
@@ -778,16 +777,20 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         if (empty($ldapData['homedirectory'])) {
             $ldapData['homedirectory'] = '/dev/null';
         }
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_ldapEntry, true));
+        
+        $ldapData['objectclass'] = isset($_ldapEntry['objectclass']) ? $_ldapEntry['objectclass'] : array();
+        
         // check if user has all required object classes. This is needed
         // when updating users which where created using different requirements
-        foreach ($this->_requiredObjectClass as $className) {
-            if (! in_array($className, $_ldapEntry['objectclass'])) {
+        foreach ($this->_requiredObjectClass as $className) {            
+            if (! in_array($className, $ldapData['objectclass'])) {
                 // merge all required classes at once
-                $ldapData['objectclass'] = array_unique(array_merge($_ldapEntry['objectclass'], $this->_requiredObjectClass));
+                $ldapData['objectclass'] = array_unique(array_merge($ldapData['objectclass'], $this->_requiredObjectClass));
                 break;
             }
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($ldapData, true));
         
         return $ldapData;
     }
