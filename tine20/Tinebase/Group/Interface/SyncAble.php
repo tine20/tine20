@@ -52,7 +52,7 @@ interface Tinebase_Group_Interface_SyncAble
      * 
      * @return  array  list of group ids
      */
-    public function getGroupMembershipsFromSyncBackend(Tinebase_Model_User $_user);
+    public function getGroupMembershipsFromSyncBackend($_userId);
         
     /**
      * get list of groups from syncbackend
