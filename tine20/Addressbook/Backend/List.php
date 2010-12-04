@@ -111,6 +111,21 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * Delete all lists returned by {@see getAll()} using {@see delete()}
+     * @return void
+     */
+    public function deleteAllLists()
+    {
+        $lists = $this->getAll();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleting ' . count($lists) .' lists');
+        
+        if(count($lists) > 0) {
+            $this->delete($lists->getArrayOfIds());        
+        }
+    }
+    
+    /**
      * remove members from list
      * 
      * @param  mixed  $_listId
