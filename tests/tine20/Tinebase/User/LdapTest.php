@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -16,11 +16,11 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Group_SqlTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_LdapTest::main');
 }
 
 /**
- * Test class for Tinebase_Group
+ * Test class for Tinebase_User_Ldap
  */
 class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
 {
@@ -265,6 +265,6 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Group_SqlTest::main') {
+if (PHPUnit_MAIN_METHOD == 'Tinebase_User_LdapTest::main') {
     Tinebase_Group_SqlTest::main();
 }
