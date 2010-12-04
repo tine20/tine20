@@ -56,8 +56,8 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
     public function __construct(array $_options = array()) 
     {
         parent::__construct($_options);
-         
-        if (empty($_options['sid'])) {
+        
+        if (empty($this->_options['sid'])) {
             throw new Exception('you need to configure the sid of the samba installation');
         }
     }
@@ -208,60 +208,61 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
     /**
      * convert objects with user data to ldap data array
      * 
-     * @param Tinebase_Model_FullUser  $_user
-     * @param array                    $_ldapData  the data to be written to ldap
+     * @param  Tinebase_Model_FullUser  $_user
+     * @param  array                    $_ldapData   the data to be written to ldap
+     * @param  array                    $_ldapEntry  the data currently stored in ldap 
      */
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
-    {
+    {   
         $this->inspectExpiryDate(isset($_user->accountExpires) ? $_user->accountExpires : null, $_ldapData);
         
-        foreach ($_user->sambaSAM as $key => $value) {
-            if (array_key_exists($key, $this->_propertyMapping)) {
-                switch ($key) {
-                    case 'pwdLastSet':
-                    case 'logonTime':
-                    case 'logoffTime':
-                    case 'kickoffTime':
-                        // do nothing
-                        break;
-                        
-                    case 'sid':
-                        if (empty($_ldapEntry['sambasid']) && isset($_ldapData['uidnumber'])) {
-                            $_ldapData['sambasid'] = $this->_options[Tinebase_User_Ldap::PLUGIN_SAMBA]['sid'] . '-' . (2 * $_ldapData['uidnumber'] + 1000);
-                        }
-                        break;
-                        
-                    case 'pwdCanChange':
-                    case 'pwdMustChange':
-                        if ($value instanceof Tinebase_DateTime) {
-                            $_ldapData[$this->_propertyMapping[$key]]     = $value->getTimestamp();
-                        } else {
-                            $_ldapData[$this->_propertyMapping[$key]]     = array();
-                        }
-                        break;
-                        
-                    case 'acctFlags':
-                        $_ldapData[$this->_propertyMapping[$key]]     = !empty($_ldapEntry['sambaacctflags']) ? $_ldapEntry['sambaacctflags'][0] : '[U          ]';
-                        $_ldapData[$this->_propertyMapping[$key]][2]  = ($_user->accountStatus != 'enabled') ? 'D' : ' ';
-                        break;
+        if ($_user->sambaSAM instanceof Tinebase_Model_SAMUser) {
+            foreach ($_user->sambaSAM as $key => $value) {
+                if (array_key_exists($key, $this->_propertyMapping)) {
+                    switch ($key) {
+                        case 'pwdLastSet':
+                        case 'logonTime':
+                        case 'logoffTime':
+                        case 'kickoffTime':
+                        case 'sid':
+                        case 'acctFlags':
+                        case 'primaryGroupSID':
+                            // do nothing
+                            break;
                             
-                    case 'primaryGroupSID':
-#                        $_ldapData[$this->_propertyMapping[$key]]     = $this->_getGroupSID($_user->accountPrimaryGroup);
-                        break;
-                        
-                    default:
-                        $_ldapData[$this->_propertyMapping[$key]]     = $value;
-                        break;
+                        case 'pwdCanChange':
+                        case 'pwdMustChange':
+                            if ($value instanceof Tinebase_DateTime) {
+                                $_ldapData[$this->_propertyMapping[$key]]     = $value->getTimestamp();
+                            } else {
+                                $_ldapData[$this->_propertyMapping[$key]]     = array();
+                            }
+                            break;
+                            
+                        default:
+                            $_ldapData[$this->_propertyMapping[$key]]     = $value;
+                            break;
+                    }
                 }
             }
         }
         
+        if (empty($_ldapEntry['sambasid'])) {
+            $uidNumer = isset($_ldapData['uidnumber']) ? $_ldapData['uidnumber'] : $_ldapEntry['uidnumber'][0];
+            $_ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $uidNumer + 1000);
+        }
+
+        $_ldapData['sambaacctflags']     = !empty($_ldapEntry['sambaacctflags']) ? $_ldapEntry['sambaacctflags'][0] : '[U          ]';
+        $_ldapData['sambaacctflags'][2]  = ($_user->accountStatus != 'enabled') ? 'D' : ' ';
+        
+        #$_ldapData['sambaprimarygroupsid'] = $this->_getGroupSID($_user->accountPrimaryGroup);
+        
         // check if user has all required object classes. This is needed
         // when updating users which where created using different requirements
         foreach ($this->_requiredObjectClass as $className) {
-            if (! in_array($className, $_ldapEntry['objectclass'])) {
+            if (! in_array($className, $_ldapData['objectclass'])) {
                 // merge all required classes at once
-                $_ldapData['objectclass'] = array_unique(array_merge($_ldapEntry['objectclass'], $this->_requiredObjectClass));
+                $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
                 break;
             }
         }
