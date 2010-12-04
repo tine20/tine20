@@ -23,6 +23,13 @@
 interface Tinebase_User_Interface
 {
     /**
+     * get plugins
+     * 
+     * return array
+     */
+    public function getPlugins();
+    
+    /**
      * get list of users
      *
      * @param string $_filter
