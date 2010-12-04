@@ -57,8 +57,9 @@ class Tinebase_User_EmailUser_PostfixTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-        if (!isset($smtpConfig['backend']) || !ucfirst($smtpConfig['backend']) == Tinebase_EmailUser::POSTFIX) {
-            $this->markTestSkipped('Postfix MySQL backend not configured');
+        var_dump($smtpConfig);
+        if (!isset($smtpConfig['backend']) || !(ucfirst($smtpConfig['backend']) == Tinebase_EmailUser::POSTFIX) || $smtpConfig['active'] != true) {
+            $this->markTestSkipped('Postfix MySQL backend not configured or not enabled');
         }
         
         $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
