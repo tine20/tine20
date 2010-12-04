@@ -64,7 +64,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
         
         $personas = Zend_Registry::get('personas');
-        $this->_objects['user'] = $personas['jsmith'];
+        $this->_objects['user'] = clone $personas['jsmith'];
 
         $this->_objects['addedUsers'] = array();
     }
@@ -125,7 +125,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         $user->smtpUser->emailForwards = array('test@tine20.org');
         $this->_objects['user']->accountEmailAddress = 'j.smith@tine20.org';
         
-        $updatedUser = $this->_backend->inspectUpdateUser($this->_objects['user'], $user);
+        $this->_backend->inspectUpdateUser($this->_objects['user'], $user);
         
         //print_r($updatedUser->toArray());
         
