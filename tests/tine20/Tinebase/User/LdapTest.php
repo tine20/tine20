@@ -63,32 +63,13 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
+            $this->markTestSkipped('LDAP backend not enabled');
+        }
         $this->_backendLDAP = Tinebase_User::factory(Tinebase_User::LDAP);
         $this->_backendSQL  = Tinebase_User::factory(Tinebase_User::SQL);
         
-        $groupBackend = Tinebase_Group::factory(Tinebase_Group::LDAP);
-        
-        $groups = $groupBackend->getGroups();
-        
-        $this->objects['initialAccount'] = new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => 'tine20phpunit',
-            'accountStatus'         => 'enabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => $groups[0]->id,
-            'accountLastName'       => 'Tine 2.0',
-            'accountFirstName'      => 'PHPUnit',
-            'accountEmailAddress'   => 'phpunit@metaways.de'
-        )); 
-        
-        $this->objects['updatedAccount'] = new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => 'tine20phpunit-updated',
-            'accountStatus'         => 'disabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => $groups[0]->id,
-            'accountLastName'       => 'Tine 2.0 Updated',
-            'accountFirstName'      => 'PHPUnit Updated',
-            'accountEmailAddress'   => 'phpunit@tine20.org'
-        ));         
+        $this->objects['users'] = array();
     }
 
     /**
@@ -99,97 +80,101 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-    
+        foreach ($this->objects['users'] as $user) {
+            $this->_backendLDAP->deleteUser($user);
+        }
     }
     
     /**
-     * try to add an account
-     *
+     * try to add an user
+     * 
+     * @return Tinebase_Model_FullUser
      */
-    public function testAddAccount()
+    public function testAddUser()
     {
-        $account = $this->_backendLDAP->addUser($this->objects['initialAccount']);
-        $this->assertEquals($this->objects['initialAccount']['accountLoginName'], $account->accountLoginName);
+        $user = $this->getTestRecord();
         
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($account->accountId);
-        $this->assertTrue(!empty($contact->creation_time));
+        $testUser = $this->_backendLDAP->addUser($user);
+        $this->objects['users']['testUser'] = $testUser;
+        
+        $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
+        
+        return $user;
     }
     
     /**
-     * try to get all accounts containing phpunit in there name
-     *
+     * try to get all users containing phpunit in there name
      */
-    public function testGetAccounts()
+    public function testGetUsers()
     {
-        $accounts = $this->_backendLDAP->getUsers('phpunit', 'accountStatus');
+        $user = $this->testAddUser();
         
-        $this->assertEquals(1, count($accounts));
+        $users = $this->_backendLDAP->getUsers('phpunit', 'accountStatus');
+        
+        $this->assertGreaterThanOrEqual(1, count($users));
     }
     
     /**
-     * try to get the account with the loginName tine20phpunit
+     * try to get an user by loginname
      *
      */
-    public function testGetAccountByLoginName()
+    public function testGetUserByLoginName()
     {
-        $account = $this->_backendLDAP->getUserByLoginName('tine20phpunit', 'Tinebase_Model_FullUser');
+        $user = $this->testAddUser();
         
-        $this->assertEquals($this->objects['initialAccount']['accountLoginName'], $account->accountLoginName);
+        $testUser = $this->_backendLDAP->getUserByLoginName($user->accountLoginName, 'Tinebase_Model_FullUser');
+        
+        $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
     }
     
     /**
-     * try to get the account with the loginName tine20phpunit
+     * try to get an user by userId
      *
      */
-    public function testGetAccountById()
+    public function testGetUserById()
     {
-        $account = $this->_backendLDAP->getUserByLoginName('tine20phpunit', 'Tinebase_Model_FullUser');
+        $user = $this->testAddUser();
         
-        $account = $this->_backendLDAP->getUserById($account->getId(), 'Tinebase_Model_FullUser');
+        $testUser = $this->_backendLDAP->getUserById($user->getId(), 'Tinebase_Model_FullUser');
         
-        $this->assertEquals($this->objects['initialAccount']['accountLoginName'], $account->accountLoginName);
+        $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
     }
     
     /**
-     * try to update an account
+     * try to update an user
      *
      */
-    public function testUpdateAccount()
+    public function testUpdateUser()
     {
-        $account = $this->_backendLDAP->getUserByLoginName('tine20phpunit', 'Tinebase_Model_FullUser');
+        $user = $this->testAddUser();
+        $user->accountLoginName = 'tine20phpunituser-updated';
         
-        $this->objects['updatedAccount']->accountId = $account->getId();
-        $account = $this->_backendLDAP->updateUser($this->objects['updatedAccount']);
+        $testUser = $this->_backendLDAP->updateUser($user);
         
-        $this->assertEquals($this->objects['updatedAccount']['accountLoginName'], $account->accountLoginName);
-        #$this->assertEquals('disabled', $account->accountStatus);
+        $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
     }
     
     /**
      * try to enable an account
      *
      */
-/*    public function testSetStatusEnabled()
+    public function testSetStatus()
     {
-        $this->_backendLDAP->setStatus($this->objects['initialAccount'], 'enabled');
-        
-        $account = $this->_backendLDAP->getUserById($this->objects['initialAccount'], 'Tinebase_Model_FullUser');
-        
-        $this->assertEquals('enabled', $account->accountStatus);
-    } */
-    
-    /**
-     * try to disable an account
-     *
-     */
-/*    public function testSetStatusDisabled()
-    {
-        $this->_backendLDAP->setStatus($this->objects['initialAccount'], 'disabled');
+        $user = $this->testAddUser();
 
-        $account = $this->_backendLDAP->getUserById($this->objects['initialAccount'], 'Tinebase_Model_FullUser');
+        $this->_backendLDAP->setStatus($user, Tinebase_User::STATUS_DISABLED);
         
-        $this->assertEquals('disabled', $account->accountStatus);
-    } */
+        $testUser = $this->_backendLDAP->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertEquals(Tinebase_User::STATUS_DISABLED, $testUser->accountStatus);
+        
+        
+        $this->_backendLDAP->setStatus($user, Tinebase_User::STATUS_ENABLED);
+        
+        $testUser = $this->_backendLDAP->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertEquals(Tinebase_User::STATUS_ENABLED, $testUser->accountStatus);
+    }
     
     /**
      * try to update the logintimestamp
@@ -197,9 +182,20 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
      */
     public function testSetLoginTime()
     {
-        $account = $this->_backendLDAP->getUserByLoginName('tine20phpunit-updated', 'Tinebase_Model_FullUser');
+        $user = $this->testAddUser();
         
-        $this->_backendLDAP->setLoginTime($account, '127.0.0.1');
+        $this->_backendLDAP->setLoginTime($user, '127.0.0.1');
+    }
+    
+    /**
+     * try to set password
+     *
+     */
+    public function testSetPassword()
+    {
+        $user = $this->testAddUser();
+        
+        $this->_backendLDAP->setPassword($user, Tinebase_Record_Abstract::generateUID());
     }
     
     /**
@@ -208,13 +204,14 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
      */
     public function testSetExpiryDate()
     {
-        $account = $this->_backendLDAP->getUserByLoginName('tine20phpunit-updated', 'Tinebase_Model_FullUser');
+        $user = $this->testAddUser();
         
-        $this->_backendLDAP->setExpiryDate($account, Tinebase_DateTime::now());
+        $this->_backendLDAP->setExpiryDate($user, Tinebase_DateTime::now()->subDay(1));
         
-        $account = $this->_backendLDAP->getUserById($account, 'Tinebase_Model_FullUser');
+        $testUser = $this->_backendLDAP->getUserById($user, 'Tinebase_Model_FullUser');
         
-        $this->assertType('DateTime', $account->accountExpires);
+        $this->assertType('DateTime',                      $testUser->accountExpires);
+        $this->assertEquals(Tinebase_User::STATUS_EXPIRED, $testUser->accountStatus);
     }
     
     /**
@@ -223,30 +220,49 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
      */
     public function testUnsetExpiryDate()
     {
-        $account = $this->_backendLDAP->getUserByLoginName('tine20phpunit-updated', 'Tinebase_Model_FullUser');
+        $user = $this->testAddUser();
         
-        $this->_backendLDAP->setExpiryDate($account, NULL);
+        $this->_backendLDAP->setExpiryDate($user, NULL);
         
-        $account = $this->_backendLDAP->getUserById($account, 'Tinebase_Model_FullUser');
+        $testUser = $this->_backendLDAP->getUserById($user, 'Tinebase_Model_FullUser');
         
-        $this->assertEquals(NULL, $account->accountExpires);
+        $this->assertEquals(NULL, $testUser->accountExpires);
     }
     
     /**
-     * try to delete an accout
+     * try to delete an user
      *
      */
-    public function testDeleteAccount()
+    public function testDeleteUser()
     {
-        $account = $this->_backendLDAP->getUserByLoginName('tine20phpunit-updated', 'Tinebase_Model_FullUser');
+        $user = $this->testAddUser();
         
-        $this->_backendLDAP->deleteUser($account);
+        $this->_backendLDAP->deleteUser($user);
+        unset($this->objects['users']['testUser']);
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
         
-        $account = $this->_backendLDAP->getUserById($account, 'Tinebase_Model_FullUser');        
+        $testUser = $this->_backendLDAP->getUserById($user, 'Tinebase_Model_FullUser');        
     }
-    }		
+    
+    /**
+     * @return Tinebase_Model_FullUser
+     */
+    public static function getTestRecord()
+    {
+        $user  = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'tine20phpunituser',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnit User',
+            'accountEmailAddress'   => 'phpunit@tine20.org'
+        )); 
+        
+        return $user;
+    }
+}		
 	
 
 if (PHPUnit_MAIN_METHOD == 'Tinebase_Group_SqlTest::main') {
