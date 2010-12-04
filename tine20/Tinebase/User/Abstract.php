@@ -219,6 +219,15 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     }    
     
     /**
+     * (non-PHPdoc)
+     * @see Tinebase_User_Interface::getPlugins()
+     */
+    public function getPlugins()
+    {
+       return $this->_plugins; 
+    }
+    
+    /**
      * generates a randomstrings of given length
      *
      * @param int $_length
@@ -367,9 +376,13 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
         return $userName;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Tinebase_User_Interface::registerPlugin()
+     */
     public function registerPlugin(Tinebase_User_Plugin_Interface $_plugin)
     {
-        $this->_plugins[] = $_plugin;
+        $this->_plugins[get_class($_plugin)] = $_plugin;
     }
     
     /**
