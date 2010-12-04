@@ -90,6 +90,7 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
         $this->objects['users']['testUser'] = $testUser;
         
         $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
+        $this->assertType('Tinebase_Model_FullUser', $testUser);
         
         return $user;
     }
@@ -112,11 +113,13 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
      */
     public function testGetUserByLoginName()
     {
+        // add a test user
         $user = $this->testAddUser();
         
-        $testUser = $this->_backend->getUserByLoginName($user->accountLoginName, 'Tinebase_Model_FullUser');
+        $testUser = $this->_backend->getFullUserByLoginName($user->accountLoginName);
         
         $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
+        $this->assertType('Tinebase_Model_FullUser', $testUser);
     }
     
     /**
@@ -127,11 +130,12 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
     {
         $user = $this->testAddUser();
         
-        $testUser = $this->_backend->getUserById($user->getId(), 'Tinebase_Model_FullUser');
+        $testUser = $this->_backend->getFullUserById($user->getId());
         
         $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
+        $this->assertType('Tinebase_Model_FullUser', $testUser);
     }
-    
+        
     /**
      * try to update an user
      *

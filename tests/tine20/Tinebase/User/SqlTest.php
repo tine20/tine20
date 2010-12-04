@@ -97,8 +97,9 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
         
         $this->objects['users']['addedUser'] = $this->_backend->addUser($testUser);
         
-        $this->assertEquals($testUser->getId(), $this->objects['users']['addedUser']->getId());
-        $this->assertEquals('hidden',           $this->objects['users']['addedUser']->visibility);
+        $this->assertEquals($testUser->getId(),      $this->objects['users']['addedUser']->getId());
+        $this->assertEquals('hidden',                $this->objects['users']['addedUser']->visibility);
+        $this->assertType('Tinebase_Model_FullUser', $testUser);
         
         return $this->objects['users']['addedUser'];
     }
@@ -118,20 +119,34 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to get the account with the loginName tine20phpunit
+     * try to get an user by loginname
      *
      */
-    public function testGetAccountByLoginName()
+    public function testGetUserByLoginName()
     {
         // add a test user
-        $testUser = $this->testAddUser();
+        $user = $this->testAddUser();
         
-        $user = $this->_backend->getUserByLoginName('tine20phpunituser', 'Tinebase_Model_FullUser');
+        $testUser = $this->_backend->getFullUserByLoginName($user->accountLoginName);
         
-        $this->assertEquals($testUser->accountLoginName, $user->accountLoginName);
+        $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
+        $this->assertType('Tinebase_Model_FullUser', $testUser);
     }
-
     
+    /**
+     * try to get an user by userId
+     *
+     */
+    public function testGetUserById()
+    {
+        $user = $this->testAddUser();
+        
+        $testUser = $this->_backend->getFullUserById($user->getId());
+        
+        $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
+        $this->assertType('Tinebase_Model_FullUser', $testUser);
+    }
+        
     /**
      * try to update an account
      *
