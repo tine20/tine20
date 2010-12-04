@@ -56,7 +56,11 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Tinebase_User_Sql();
+        if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::SQL) {
+            $this->markTestSkipped('SQL backend not enabled');
+        }
+        
+        $this->_backend = Tinebase_User::factory(Tinebase_User::SQL);
 
         // remove user left over by broken tests
         try {
