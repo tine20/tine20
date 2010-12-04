@@ -59,7 +59,12 @@ class Tinebase_User_Plugin_SambaTest extends PHPUnit_Framework_TestCase
         if (Tinebase_User::getConfiguredBackend() !== Tinebase_User::LDAP) {
             $this->markTestSkipped('LDAP backend not enabled');
         }
+        
         $this->_backend = Tinebase_User::factory(Tinebase_User::LDAP);
+        
+        if (!array_key_exists('Tinebase_User_Plugin_Samba', $this->_backend->getPlugins())) {
+            $this->markTestSkipped('Samba LDAP plugin not enabled');
+        }
         
         $this->objects['users'] = array();
     }
