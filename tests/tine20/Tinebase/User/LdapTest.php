@@ -206,27 +206,21 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
     {
         $user = $this->testAddUser();
         
+        
         $this->_backend->setExpiryDate($user, Tinebase_DateTime::now()->subDay(1));
         
         $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
         
         $this->assertType('DateTime',                      $testUser->accountExpires);
         $this->assertEquals(Tinebase_User::STATUS_EXPIRED, $testUser->accountStatus);
-    }
-    
-    /**
-     * try to unset the expirydate
-     *
-     */
-    public function testUnsetExpiryDate()
-    {
-        $user = $this->testAddUser();
         
+
         $this->_backend->setExpiryDate($user, NULL);
         
         $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
         
         $this->assertEquals(NULL, $testUser->accountExpires);
+        $this->assertEquals(Tinebase_User::STATUS_ENABLED, $testUser->accountStatus);
     }
     
     /**

@@ -282,32 +282,25 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testSetExpiryDate()
     {
-        // add a test user (enabled by default)
-        $testUser = $this->testAddUser();
+        $user = $this->testAddUser();
         
-        $this->_backend->setExpiryDate($testUser, new Tinebase_DateTime());
         
-        $user = $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');
+        $this->_backend->setExpiryDate($user, Tinebase_DateTime::now()->subDay(1));
         
-        $this->assertType('DateTime', $user->accountExpires);
+        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertType('DateTime',                      $testUser->accountExpires);
+        $this->assertEquals(Tinebase_User::STATUS_EXPIRED, $testUser->accountStatus);
+        
+
+        $this->_backend->setExpiryDate($user, NULL);
+        
+        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertEquals(NULL, $testUser->accountExpires);
+        $this->assertEquals(Tinebase_User::STATUS_ENABLED, $testUser->accountStatus);
     }
-    
-    /**
-     * try to unset the expirydate
-     *
-     */
-    public function testUnsetExpiryDate()
-    {
-        // add a test user (enabled by default)
-        $testUser = $this->testAddUser();
         
-        $this->_backend->setExpiryDate($testUser, NULL);
-        
-        $user = $this->_backend->getUserById($testUser, 'Tinebase_Model_FullUser');
-        
-        $this->assertEquals(NULL, $user->accountExpires);
-    }
-    
     /**
      * try to delete an accout
      *
