@@ -252,12 +252,30 @@ class Tinebase_User_SqlTest extends PHPUnit_Framework_TestCase
      */
     public function testSetLoginTime()
     {
-        // add a test user (enabled by default)
-        $testUser = $this->testAddUser();
+        $user = $this->testAddUser();
         
-        $this->_backend->setLoginTime($testUser, '127.0.0.1');
+        $this->_backend->setLoginTime($user, '127.0.0.1');
+        
+        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertNotEquals($user->accountLastLogin, $testUser->accountLastLogin);
     }
     
+    /**
+     * try to set password
+     *
+     */
+    public function testSetPassword()
+    {
+        $user = $this->testAddUser();
+
+        $this->_backend->setPassword($user, Tinebase_Record_Abstract::generateUID());
+        
+        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertNotEquals($user->accountLastPasswordChange, $testUser->accountLastPasswordChange);
+    }
+        
     /**
      * try to set the expirydate
      *
