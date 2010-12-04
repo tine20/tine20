@@ -795,6 +795,8 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             )
         );
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' ldap search filter: ' . $filter);
+        
         $groups = $this->_ldap->search(
             $filter, 
             $this->_options['groupsDn'], 
@@ -802,27 +804,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             array('cn', 'description', $this->_groupUUIDAttribute)
         );
         
-        /*
-        $memberships = new Tinebase_Record_RecordSet('Tinebase_Model_Group');
-        
-        foreach ($groups as $group) {
-            $groupObject = new Tinebase_Model_Group(array(
-                'id'            => $group[$this->_groupUUIDAttribute][0],
-                'name'          => $group['cn'][0],
-                'description'   => isset($group['description'][0]) ? $group['description'][0] : null
-            ), TRUE); 
-            
-            $memberships->addRecord($groupObject);
-        }
-        */
-        
         $memberships = array();
         
         foreach ($groups as $group) {
             $memberships[] = $group[$this->_groupUUIDAttribute][0];
         }
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($memberships, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .' group memberships: ' . print_r($memberships, TRUE));
         
         return $memberships;
     }
