@@ -244,6 +244,16 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * execute Tinebase_User::syncUser
+     */
+    public function testSyncUser()
+    {
+        $user = $this->testAddUser();
+        
+        Tinebase_User::syncUser($user, Tinebase_Application::getInstance()->isInstalled('Addressbook'));
+    }
+        
+    /**
      * @return Tinebase_Model_FullUser
      */
     public static function getTestRecord()
