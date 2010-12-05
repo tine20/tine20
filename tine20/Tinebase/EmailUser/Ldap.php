@@ -85,7 +85,15 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
     {
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_ldapEntry, true));
         
-        $accountArray = array();
+        if ($this->_backendType == Tinebase_Model_Config::SMTP) {
+            $accountArray = array(
+                'emailForwardOnly' => false,
+                'emailAliases'     => array(),
+                'emailForwards'    => array()
+            );
+        } else {
+            $accountArray = array();
+        }
         
         foreach ($_ldapEntry as $key => $value) {
             if (is_int($key)) {
@@ -99,6 +107,15 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
                     case 'emailMailQuota':
                         // convert to megabytes
                         $accountArray[$keyMapping] = round($value[0] / 1024 / 1024);
+                        break;
+                        
+                    case 'emailAliases':
+                    case 'emailForwards':
+                        $accountArray[$keyMapping] = $value;
+                        break;
+                
+                    case 'emailForwardOnly':
+                        $accountArray[$keyMapping] = ($value[0] == 'forwardonly') ? true : false;
                         break;
                         
                     default: 
@@ -157,10 +174,22 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
                     $_ldapData[$ldapAttribute] = $this->_config['emailGID'];
                     break;
                     
+                case 'emailForwardOnly':
+                    $_ldapData[$ldapAttribute] = ($mailSettings->{$objectProperty} == true) ? 'forwardonly' : array();
+                    break;
+                    
+                case 'emailAddress';
+                    $_ldapData[$ldapAttribute] = $_user->accountEmailAddress;
+                    break;
+                    
                 default:
                     $_ldapData[$ldapAttribute] = $mailSettings->{$objectProperty};
                     break;
             }
+        }
+        
+        if (array_key_exists('emailForwards', $this->_propertyMapping) && empty($_ldapData[$this->_propertyMapping['emailForwards']])) {
+            $_ldapData[$this->_propertyMapping['emailForwardOnly']] = array();
         }
         
         // check if user has all required object classes. This is needed
