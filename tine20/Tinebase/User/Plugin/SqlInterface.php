@@ -42,14 +42,6 @@ interface Tinebase_User_Plugin_SqlInterface extends Tinebase_User_Plugin_Interfa
     public function inspectUpdateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties);
     
     /**
-     * inspect set blocked
-     * 
-     * @param string  $_accountId
-     * @param string  $_blockedUntilDate
-     */
-#    public function inspectSetBlocked($_accountId, $_blockedUntilDate);
-    
-    /**
      * inspect set expiry date
      * 
      * @param Tinebase_DateTime  $_expiryDate  the expirydate
