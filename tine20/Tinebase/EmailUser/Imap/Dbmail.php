@@ -191,7 +191,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         $emailUser->emailUsername = $this->_appendDomain($_user->accountLoginName);
 
         $_user->imapUser  = $emailUser;
-        $_user->emailUser = Tinebase_EmailUser::merge($_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
+        $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
     }
     
     /**
