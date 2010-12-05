@@ -145,19 +145,23 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         }
             
         if($this instanceof Tinebase_User_Interface_SyncAble) {
-            $syncUser = $this->getUserByPropertyFromSyncBackend('accountId', $user, $_accountClass);
-            
-            if (!empty($syncUser->emailUser)) {
-                $user->emailUser  = $syncUser->emailUser;
-            }
-            if (!empty($syncUser->imapUser)) {
-                $user->imapUser  = $syncUser->imapUser;
-            }
-            if (!empty($syncUser->smtpUser)) {
-                $user->smtpUser  = $syncUser->smtpUser;
-            }
-            if (!empty($syncUser->sambaSAM)) {
-                $user->sambaSAM  = $syncUser->sambaSAM;
+            try {
+                $syncUser = $this->getUserByPropertyFromSyncBackend('accountId', $user, $_accountClass);
+                
+                if (!empty($syncUser->emailUser)) {
+                    $user->emailUser  = $syncUser->emailUser;
+                }
+                if (!empty($syncUser->imapUser)) {
+                    $user->imapUser  = $syncUser->imapUser;
+                }
+                if (!empty($syncUser->smtpUser)) {
+                    $user->smtpUser  = $syncUser->smtpUser;
+                }
+                if (!empty($syncUser->sambaSAM)) {
+                    $user->sambaSAM  = $syncUser->sambaSAM;
+                }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $user->getId());
             }
         }
         
