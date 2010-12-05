@@ -56,7 +56,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
      */
     protected function setUp()
     {
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        /*$smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
         if (!isset($smtpConfig['backend']) || !(ucfirst($smtpConfig['backend']) == Tinebase_EmailUser::POSTFIX) || $smtpConfig['active'] != true) {
             $this->markTestSkipped('Postfix MySQL backend not configured or not enabled');
         }
@@ -67,6 +67,14 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         $this->_objects['user'] = clone $personas['jsmith'];
 
         $this->_objects['addedUsers'] = array();
+        */
+        $this->_backend = Tinebase_User::factory(Tinebase_User::getConfiguredBackend());
+        
+        if (!array_key_exists('Tinebase_EmailUser_Smtp_Postfix', $this->_backend->getPlugins())) {
+            $this->markTestSkipped('Postfix SQL plugin not enabled');
+        }
+        
+        $this->objects['users'] = array();
     }
 
     /**
@@ -77,66 +85,80 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
      */
     protected function tearDown()
     {
-        // delete email account
-        foreach ($this->_objects['addedUsers'] as $user) {
-            $this->_backend->inspectDeleteUser($user->getId());
+        foreach ($this->objects['users'] as $user) {
+            $this->_backend->deleteUser($user);
         }
     }
     
     /**
-     * try to add an email account
+     * try to add an user
+     * 
+     * @return Tinebase_Model_FullUser
      */
-    public function testAddEmailAccount()
+    public function testAddUser()
     {
-        $emailUser = clone $this->_objects['user'];
-        $emailUser->smtpUser = new Tinebase_Model_EmailUser(array(
-            'emailForwards' => array('unittest@tine20.org', 'test@tine20.org'),
-            'emailAliases'  => array('bla@tine20.org', 'blubb@tine20.org')
-        ));
+        $user = Tinebase_User_LdapTest::getTestRecord();
+		$user->smtpUser = new Tinebase_Model_EmailUser(array(
+		    'emailAddress'     => $user->accountEmailAddress,
+		    'emailForwardOnly' => true,
+            'emailForwards'    => array('unittest@tine20.org', 'test@tine20.org'),
+            'emailAliases'     => array('bla@tine20.org', 'blubb@tine20.org')
+		));
+		
+        $testUser = $this->_backend->addUser($user);
+        $this->objects['users']['testUser'] = $testUser;
+
+        $this->assertEquals(array('unittest@tine20.org', 'test@tine20.org'), $testUser->smtpUser->emailForwards);
+        $this->assertEquals(array('bla@tine20.org', 'blubb@tine20.org'),     $testUser->smtpUser->emailAliases);
+        $this->assertEquals(true,                                            $testUser->smtpUser->emailForwardOnly);
+        $this->assertEquals($user->accountEmailAddress,                      $testUser->smtpUser->emailAddress);
         
-        $this->_backend->inspectAddUser($this->_objects['user'], $emailUser);
-        $this->_objects['addedUsers']['emailUser'] = $this->_objects['user'];
-        
-        #var_dump($this->_objects['user']->smtpUser->toArray());
-        
-        $this->assertEquals(array(
-            'emailUserId'       => $this->_objects['user']->getId(),
-        	'emailAddress'      => $this->_objects['user']->accountEmailAddress,
-            'emailUsername'     => $this->_objects['user']->smtpUser->emailUsername,
-            'emailForwardOnly'  => 0,
-            'emailAliases'      => array('bla@tine20.org', 'blubb@tine20.org'),
-            'emailForwards'     => array('unittest@tine20.org', 'test@tine20.org')
-        ), $this->_objects['user']->smtpUser->toArray());
-        
-        return $this->_objects['addedUsers']['emailUser'];
+        return $testUser;
     }
     
     /**
      * try to update an email account
      */
-    public function testUpdateAccount()
+    public function testUpdateUser()
     {
         // add smtp user
-        $user = $this->testAddEmailAccount();
+        $user = $this->testAddUser();
         
         // update user
         $user->smtpUser->emailForwardOnly = 1;
-        $user->smtpUser->emailAliases = array();
-        $user->smtpUser->emailForwards = array('test@tine20.org');
-        $this->_objects['user']->accountEmailAddress = 'j.smith@tine20.org';
+        $user->smtpUser->emailAliases = array('bla@tine20.org');
+        $user->smtpUser->emailForwards = array();
+        $user->accountEmailAddress = 'j.smith@tine20.org';
         
-        $this->_backend->inspectUpdateUser($this->_objects['user'], $user);
+        $testUser = $this->_backend->updateUser($user);
         
-        //print_r($updatedUser->toArray());
+        $this->assertEquals(array(),                 $testUser->smtpUser->emailForwards, 'forwards mismatch');
+        $this->assertEquals(array('bla@tine20.org'), $testUser->smtpUser->emailAliases,  'aliases mismatch');
+        $this->assertEquals(false,                   $testUser->smtpUser->emailForwardOnly);
+        $this->assertEquals('j.smith@tine20.org',    $testUser->smtpUser->emailAddress);
+    }
+    
+    /**
+     * try to enable an account
+     *
+     */
+    public function testSetStatus()
+    {
+        $user = $this->testAddUser();
+
         
-        $this->assertEquals(array(
-            'emailUserId'       => $this->_objects['user']->getId(),
-        	'emailAddress'      => $this->_objects['user']->accountEmailAddress,
-            'emailUsername'     => $this->_objects['user']->smtpUser->emailUsername,
-            'emailForwardOnly'  => 1,
-            'emailAliases'      => array(),
-            'emailForwards'     => array('test@tine20.org')
-        ), $this->_objects['user']->smtpUser->toArray());
+        $this->_backend->setStatus($user, Tinebase_User::STATUS_DISABLED);
+        
+        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertEquals(Tinebase_User::STATUS_DISABLED, $testUser->accountStatus);
+
+        
+        $this->_backend->setStatus($user, Tinebase_User::STATUS_ENABLED);
+        
+        $testUser = $this->_backend->getUserById($user, 'Tinebase_Model_FullUser');
+        
+        $this->assertEquals(Tinebase_User::STATUS_ENABLED, $testUser->accountStatus);
     }
     
     /**
@@ -145,9 +167,9 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
     public function testSetPassword()
     {
         // add smtp user
-        $user = $this->testAddEmailAccount();
+        $user = $this->testAddUser();
         
-        $this->_backend->inspectSetPassword($this->_objects['user']->getId(), Tinebase_Record_Abstract::generateUID());
+        $this->_backend->setPassword($user, Tinebase_Record_Abstract::generateUID());
         
         //$this->assertEquals(md5('password'), $updatedUser->emailPassword);
     }
