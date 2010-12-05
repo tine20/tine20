@@ -34,9 +34,10 @@ class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
      * @var array
      */
     protected $_propertyMapping = array(
-        'emailAddress'  => 'mail',
-        'emailAliases'  => 'mailalternateaddress', 
-        'emailForwards' => 'mailforwardingaddress'
+        'emailAddress'     => 'mail',
+        'emailAliases'     => 'mailalternateaddress', 
+        'emailForwards'    => 'mailforwardingaddress',
+        'emailForwardOnly' => 'deliverymode'
     );
     
     /**
@@ -79,6 +80,6 @@ class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
             parent::_user2Ldap($_user, $_ldapData, $_ldapEntry);
         }
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($_ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($_ldapData, true));
     }
 }  
