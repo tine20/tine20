@@ -201,11 +201,8 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
     }
         
     /**
-     * convert objects with user data to ldap data array
-     * 
-     * @param  Tinebase_Model_FullUser  $_user
-     * @param  array                    $_ldapData   the data to be written to ldap
-     * @param  array                    $_ldapEntry  the data currently stored in ldap 
+     * (non-PHPdoc)
+     * @see Tinebase_User_Plugin_LdapAbstract::_user2ldap()
      */
     protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
     {   
