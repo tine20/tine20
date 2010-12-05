@@ -394,7 +394,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $dn = Zend_Ldap_Dn::factory($ldapEntry['dn'], null);
         $rdn = $dn->getRdn();
         
-        if (isset($rdn['uid']) && $rdn['uid'] != $ldapData['uid']) {
+        if (isset($ldapData[key($rdn)]) && $rdn[key($rdn)] != $ldapData[key($rdn)]) {
             $newDN = $this->_generateDn($_account);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  rename ldap entry to: ' . $newDN);
             $this->_ldap->rename($dn, $newDN);
