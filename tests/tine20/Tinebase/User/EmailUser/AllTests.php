@@ -34,13 +34,11 @@ class Tinebase_User_EmailUser_AllTests
 #                case Tinebase_EmailUser::DBMAIL:
 #                   $suite->addTestSuite('Tinebase_User_EmailUser_DbmailTest');
 #                    break;
-#                case Tinebase_EmailUser::LDAP_IMAP:
-#                   $suite->addTestSuite('Tinebase_User_EmailUser_LdapImapTest');
-#                   break;
 #           }
 #       }
 
         $suite->addTestSuite('Tinebase_User_EmailUser_Imap_DovecotTest');
+        $suite->addTestSuite('Tinebase_User_EmailUser_Imap_LdapDbmailSchemaTest');
         
         $suite->addTestSuite('Tinebase_User_EmailUser_Smtp_PostfixTest');
         
