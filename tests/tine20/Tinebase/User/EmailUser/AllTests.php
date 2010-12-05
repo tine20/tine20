@@ -41,6 +41,7 @@ class Tinebase_User_EmailUser_AllTests
         $suite->addTestSuite('Tinebase_User_EmailUser_Imap_LdapDbmailSchemaTest');
         
         $suite->addTestSuite('Tinebase_User_EmailUser_Smtp_PostfixTest');
+        $suite->addTestSuite('Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest');
         
         return $suite;
     }
