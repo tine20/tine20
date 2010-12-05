@@ -106,6 +106,28 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on password change.');    
     }
     
+    /**
+     * inspect setStatus
+     * 
+     * @param string  $_status    the status
+     * @param array   $_ldapData  the data to be written to ldap
+     */
+    public function inspectStatus($_status, array &$_ldapData)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on status change.');    	
+    }
+    
+    /**
+     * inspect set expiry date
+     * 
+     * @param Tinebase_DateTime  $_expiryDate  the expirydate
+     * @param array      $_ldapData    the data to be written to ldap
+     */
+    public function inspectExpiryDate($_expiryDate, array &$_ldapData)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Nothing to be done on expiry change.');
+    }
+    
 	/**
 	 * (non-PHPdoc)
 	 * @see Tinebase_User_Plugin_LdapAbstract::inspectUpdateUser()
@@ -123,4 +145,13 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
     {
         $this->_ldap = $_ldap;
     }
+    
+    /**
+     * convert object with user data to ldap data array
+     * 
+     * @param  Tinebase_Model_FullUser  $_user
+     * @param  array                    $_ldapData   the data to be written to ldap
+     * @param  array                    $_ldapEntry  the data currently stored in ldap 
+     */
+    abstract protected function _user2ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array());
 }  
