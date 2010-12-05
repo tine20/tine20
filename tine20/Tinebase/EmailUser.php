@@ -189,7 +189,7 @@ class Tinebase_EmailUser
         $result = '';        
         
         $config = self::getConfig($_configType);
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($config, TRUE));
         
         if (isset($config['backend'])) {
             $backend = ucfirst(strtolower($config['backend']));
