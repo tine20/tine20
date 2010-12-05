@@ -438,11 +438,15 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      */
     public function deleteUserInSyncBackend($_userId)
     {
-        $metaData = $this->_getMetaData($_userId);
-
-        // user does not exist in ldap anymore
-        if (!empty($metaData['dn'])) {
-            $this->_ldap->delete($metaData['dn']);
+        try {
+            $metaData = $this->_getMetaData($_userId);
+    
+            // user does not exist in ldap anymore
+            if (!empty($metaData['dn'])) {
+                $this->_ldap->delete($metaData['dn']);
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $_userId);
         }
     }
 
@@ -526,7 +530,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         );
 
         if (count($result) !== 1) {
-            throw new Exception("user with userid $_userId not found");
+            throw new Tinebase_Exception_NotFound("user with userid $_userId not found");
         }
 
         return $result->getFirst();
