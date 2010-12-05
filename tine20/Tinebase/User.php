@@ -372,12 +372,10 @@ class Tinebase_User
         
         // update or create user in local sql backend
         try {
-            throw new Tinebase_Exception_NotFound('');
             $currentUser = $userBackend->getUserByProperty('accountId', $user, 'Tinebase_Model_FullUser');
             
             $currentUser->accountLoginName          = $user->accountLoginName;
             $currentUser->accountLastPasswordChange = $user->accountLastPasswordChange;
-            $currentUser->accountStatus             = $user->accountStatus;
             $currentUser->accountPrimaryGroup       = $user->accountPrimaryGroup;
             $currentUser->accountDisplayName        = $user->accountDisplayName;
             $currentUser->accountLastName           = $user->accountLastName;
@@ -427,10 +425,14 @@ class Tinebase_User
         if($_syncContactData === true && Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $addressbook = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
             
-            $contact = $addressbook->getByUserId($user->getId());
-            
-            $userBackend->updateContactFromSyncBackend($user, $contact);
-            $addressbook->update($contact);
+            try {
+                $contact = $addressbook->getByUserId($user->getId());
+                
+                $userBackend->updateContactFromSyncBackend($user, $contact);
+                $addressbook->update($contact);
+            } catch (Addressbook_Exception_NotFound $aenf) {
+                // do nothing => user has no contact in addressbook
+            }
         }
         
         // sync group memberships
