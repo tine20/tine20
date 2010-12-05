@@ -142,10 +142,6 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
             'emailMailSize'    => 0,
             'emailSieveQuota'  => 0,
             'emailSieveSize'   => 0,
-            'emailAliases'     => null,
-            'emailForwards'    => null,
-            'emailForwardOnly' => null,
-            'emailAddress'     => null
         ), $this->_objects['user']->imapUser->toArray());
     }
     
