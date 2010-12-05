@@ -61,13 +61,10 @@ class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
     }
     
     /**
-     * returns array of ldap data
-     *
-     * @param  Tinebase_Model_FullUser  $_user
-     * @param  array                    $_ldapData
-     * @param  array                    $_ldapEntry
+     * (non-PHPdoc)
+     * @see Tinebase_EmailUser_Ldap::_user2Ldap()
      */
-    protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry)
+    protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
     {
         if (empty($_user->accountEmailAddress)) {
             foreach ($this->_propertyMapping as $ldapKeyName) {
@@ -76,7 +73,7 @@ class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
             $_ldapData['accountStatus'] = array();
             $_ldapData['mailHost']      = array();
             
-            $_ldapData['objectclass'] = array_unique(array_diff($_ldapEntry['objectclass'], $this->_requiredObjectClass));
+            $_ldapData['objectclass'] = array_unique(array_diff($_ldapData['objectclass'], $this->_requiredObjectClass));
             
         } else {
             parent::_user2Ldap($_user, $_ldapData, $_ldapEntry);
