@@ -43,14 +43,6 @@ interface Tinebase_User_LdapPlugin_Interface
     public function inspectUpdateUser(Tinebase_Model_FullUser $_user, array &$_ldapData);
     
     /**
-     * inspect set blocked
-     * 
-     * @param string  $_accountId
-     * @param string  $_blockedUntilDate
-     */
-    public function inspectSetBlocked($_accountId, $_blockedUntilDate);
-    
-    /**
      * inspect set expiry date
      * 
      * @param Tinebase_DateTime  $_expiryDate  the expirydate
