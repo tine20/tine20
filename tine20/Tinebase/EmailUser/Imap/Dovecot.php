@@ -340,7 +340,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         $emailUser->emailUsername = $this->_appendDomain($_user->accountLoginName);
 
         $_user->imapUser  = $emailUser;
-        $_user->emailUser = Tinebase_EmailUser::merge($_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
+        $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
     }
     
     /**
@@ -445,9 +445,9 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
     {
         $imapSettings = $this->_recordToRawData($_addedUser, $_newUserProperties);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new dovecot user ' . $imapSettings[$this->_propertyMapping['emailUsername']]);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding new dovecot user ' . $imapSettings[$this->_propertyMapping['emailUsername']]);
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapSettings, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapSettings, TRUE));
 
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
@@ -578,6 +578,10 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
             if ($keyMapping !== FALSE) {
                 switch($keyMapping) {
                     case 'emailPassword':
+                    case 'emailAliases':
+                    case 'emailForwards':
+                    case 'emailForwardOnly':
+                    case 'emailAddress':
                         // do nothing
                         break;
                     case 'emailMailQuota':
@@ -644,20 +648,23 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
      */
     protected function _recordToRawData(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $_newUserProperties)
     {
-        $rawData = array();
+        $rawData = array(
+            $this->_propertyMapping['emailSieveQuota'] => null
+        );
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->imapUser->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->imapUser->toArray(), true));
         
         foreach ($_newUserProperties->imapUser as $key => $value) {
             $property = array_key_exists($key, $this->_propertyMapping) ? $this->_propertyMapping[$key] : false;
             if ($property && ! in_array($key, $this->_readOnlyFields)) {
                 switch ($key) {
-                    case 'emailPassword':
-                        $rawData[$property] = Hash_Password::generate($this->_config['emailScheme'], $value);
+                    case 'emailUserId':
+                    case 'emailUsername':
+                        // do nothing
                         break;
                         
-                    case 'emailUserId':
-                        $rawData[$property] = $_user->getId();
+                    case 'emailPassword':
+                        $rawData[$property] = Hash_Password::generate($this->_config['emailScheme'], $value);
                         break;
                         
                     case 'emailUID':
@@ -668,17 +675,16 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
                         $rawData[$property] = !empty($this->_config['gid']) ? $this->_config['gid'] : $value;
                         break;
                         
-                    case 'emailUsername':
-                        $rawData[$property] = $this->_appendDomain($_user->accountLoginName);
-                        break;
-                        
                     default:
                         $rawData[$property] = $value;
                         break;
                 }
             }
         }
-
+        
+        $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
+        $rawData[$this->_propertyMapping['emailUsername']] = $this->_appendDomain($_user->accountLoginName);
+        
         list($user, $domain) = explode('@', $rawData[$this->_propertyMapping['emailUsername']], 2);
         //$rawData['user']   = $user;
         $rawData['domain'] = $domain;
