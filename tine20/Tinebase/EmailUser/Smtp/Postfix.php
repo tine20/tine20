@@ -185,10 +185,12 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
      */
     public function inspectDeleteUser($_userId)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Postfix settings for user ' . $_userId);
+        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Postfix settings for user ' . $userId);
 
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $_userId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $userId)
         );
         // append domain if set or domain IS NULL
         if (! empty($this->_clientId)) {
@@ -542,6 +544,10 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
                         if (count($data[$keyMapping]) == 1 && empty($data[$keyMapping][0])) {
                             $data[$keyMapping] = array();
                         }
+                        break;
+                        
+                    case 'emailForwardOnly':
+                        $data[$keyMapping] = (bool)$value;
                         break;
                         
                     default: 
