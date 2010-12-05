@@ -52,7 +52,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
         $config  = Tinebase_EmailUser::getConfig($this->_backendType);
         $this->_options = array_merge($this->_options, $config);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_options, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_options, true));
     }
     
     /******************* protected functions *********************/
@@ -108,26 +108,25 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
             }
         }
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($accountArray, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($accountArray, true));
         
         if ($this->_backendType == Tinebase_Model_Config::SMTP) {
             $_user->smtpUser  = new Tinebase_Model_EmailUser($accountArray);
             $_user->emailUser = Tinebase_EmailUser::merge(isset($_user->emailUser) ? $_user->emailUser : null, $_user->smtpUser);
         } else {
             $_user->imapUser  = new Tinebase_Model_EmailUser($accountArray);
-            $_user->emailUser = Tinebase_EmailUser::merge($_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
+            $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
         }
     }
     
     /**
-     * returns array of ldap data
-     *
-     * @param  Tinebase_Model_EmailUser $_user
-     * @return array
+     * convert object with user data to ldap data array
      * 
-     * @todo add generic function for this?
+     * @param  Tinebase_Model_FullUser  $_user
+     * @param  array                    $_ldapData   the data to be written to ldap
+     * @param  array                    $_ldapEntry  the data currently stored in ldap 
      */
-    protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry)
+    protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
     {
         if ($this->_backendType == Tinebase_Model_Config::SMTP) {
             if (empty($_user->smtpUser)) {
@@ -167,9 +166,9 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
         // check if user has all required object classes. This is needed
         // when updating users which where created using different requirements
         foreach ($this->_requiredObjectClass as $className) {
-            if (! in_array($className, $_ldapEntry['objectclass'])) {
+            if (! in_array($className, $_ldapData['objectclass'])) {
                 // merge all required classes at once
-                $_ldapData['objectclass'] = array_unique(array_merge($_ldapEntry['objectclass'], $this->_requiredObjectClass));
+                $_ldapData['objectclass'] = array_unique(array_merge($_ldapData['objectclass'], $this->_requiredObjectClass));
                 break;
             }
         }
