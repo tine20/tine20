@@ -89,7 +89,7 @@ abstract class Tinebase_User_Plugin_LdapAbstract implements Tinebase_User_Plugin
 
         $this->_ldap2User($_user, $_ldapEntry);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_user->toArray(), true));
     }
     
     /**
