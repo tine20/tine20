@@ -312,19 +312,20 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 			recordClass: Tine.Tinebase.Model.Role,
 			columns: [{id: 'name', header: Tine.Tinebase.translation.gettext('Name'), sortable: true, dataIndex: 'name'}],
 			initActionsAndToolbars: function () {
-		    	Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
-		    	
-		    	this.comboPanel = new Ext.Container({
-		            layout: 'hfit',
-		            border: false,
-		            items: this.getSearchCombo(),
-		            columnWidth: 1
-		        });
-		    	
-		    	this.tbar = new Ext.Toolbar({
-		            items: this.comboPanel,
-		            layout: 'column'
-		        });
+				// for now removed abillity to edit role membership				
+//		    	Tine.widgets.grid.PickerGridPanel.prototype.initActionsAndToolbars.call(this);
+//		    	
+//		    	this.comboPanel = new Ext.Container({
+//		            layout: 'hfit',
+//		            border: false,
+//		            items: this.getSearchCombo(),
+//		            columnWidth: 1
+//		        });
+//		    	
+//		    	this.tbar = new Ext.Toolbar({
+//		            items: this.comboPanel,
+//		            layout: 'column'
+//		        });
 		    },
 		    onAddRecordFromCombo: function (recordToAdd) {	        
 		        // check if already in
@@ -335,7 +336,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		        this.clearValue();
 		        this.reset();
 		    }
-		}); 
+		});
+		// remove listeners for this grid selection model
+		this.pickerGridRoles.selModel.purgeListeners();
         
     	return this.pickerGridRoles; 
     },
