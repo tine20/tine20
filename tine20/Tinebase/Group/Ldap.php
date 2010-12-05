@@ -374,7 +374,13 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         $groupDn = $this->_getDn($_groupId);
         
-        $accountMetaData = $this->_getAccountMetaData($_accountId);
+        try {
+            $accountMetaData = $this->_getAccountMetaData($_accountId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $_accountId);
+            return;
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " account meta data: " . print_r($accountMetaData, true));
         
         $memberUidNumbers = $this->getGroupMembers($_groupId);
@@ -616,7 +622,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
                 $retrievedAccountIds[] = $account[$this->_userUUIDAttribute][0];
             }
             
-            throw new Exception("Some dn's are missing. "  . print_r(array_diff($wantedAccountIds, $retrievedAccountIds), true));
+            throw new Tinebase_Exception_NotFound("Some dn's are missing. "  . print_r(array_diff($wantedAccountIds, $retrievedAccountIds), true));
         }
         
         $result = array();
