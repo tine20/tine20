@@ -24,11 +24,9 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
      * @var array 
      */
     protected $_config = array(
-        'prefix'            => 'dbmail_',
-        'userTable'         => 'users',
         'encryptionType'    => 'md5',
-        'mailboxTable'      => 'mailboxes',
-        'emailGID'			=> null
+        'emailGID'			=> null,
+        'domain'			=> null
     );
     
     /**
@@ -62,6 +60,7 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
         parent::__construct($_options);
         
         $this->_config['emailGID'] = sprintf("%u", crc32(Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId()));
+        $this->_config['domain']   = !empty($this->_options['domain']) ? $this->_options['domain'] : null;
     }
     
     /**
@@ -72,7 +71,7 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
      * @param  array                    $_ldapEntry
      * @return array
      */
-    protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry)
+    protected function _user2Ldap(Tinebase_Model_FullUser $_user, array &$_ldapData, array &$_ldapEntry = array())
     {
         if (empty($_user->accountEmailAddress)) {
             foreach ($this->_propertyMapping as $ldapKeyName) {
@@ -80,13 +79,12 @@ class Tinebase_EmailUser_Imap_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
             }
             $_ldapData['accountStatus'] = array();
             $_ldapData['mailHost']      = array();
-            
-            $_ldapData['objectclass'] = array_unique(array_diff($_ldapEntry['objectclass'], $this->_requiredObjectClass));
+            $_ldapData['objectclass']   = array_unique(array_diff($_ldapData['objectclass'], $this->_requiredObjectClass));
             
         } else {
             parent::_user2Ldap($_user, $_ldapData, $_ldapEntry);
         }
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($_ldapData, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($_ldapData, true));
     }
 }
