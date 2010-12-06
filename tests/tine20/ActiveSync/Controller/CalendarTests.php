@@ -218,7 +218,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         // namespace === uri:Calendar
         $endTime = $this->objects['event']->dtend->format("Ymd\THis") . 'Z';
         $this->assertEquals($endTime, @$testDom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $testDom->saveXML());
-        $this->assertEquals($this->objects['event']->getId(), @$testDom->getElementsByTagNameNS('uri:Calendar', 'UID')->item(0)->nodeValue, $testDom->saveXML());
+        $this->assertEquals($this->objects['event']->uid, @$testDom->getElementsByTagNameNS('uri:Calendar', 'UID')->item(0)->nodeValue, $testDom->saveXML());
         
         // try to encode XML until we have wbxml tests
         $outputStream = fopen("php://temp", 'r+');
