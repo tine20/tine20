@@ -54,7 +54,7 @@ class Tinebase_DateTime extends DateTime
      * @see http://bugs.php.net/bug.php?id=46891
      */
     public function __sleep(){
-        $this->__sDT = $this->format(Tinebase_Record_Abstract::ISO8601LONG);
+        $this->__sDT = $this->format('Y-m-d H:i:s');
         $this->__sDTZ = $this->getTimezone()->getName();
         return array('__sDT', '__sDTZ');
     }
