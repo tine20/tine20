@@ -422,7 +422,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $_xmlNode->appendChild(new DOMElement('BusyStatus', 2, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('Sensitivity', 0, 'uri:Calendar'));
         $_xmlNode->appendChild(new DOMElement('DtStamp', $data->creation_time->format('Ymd\THis') . 'Z', 'uri:Calendar'));
-        $_xmlNode->appendChild(new DOMElement('UID', $data->getId(), 'uri:Calendar'));
+        $_xmlNode->appendChild(new DOMElement('UID', $data->uid, 'uri:Calendar'));
+        
         if(!empty($data->organizer)) {
             try {
                 $contact = Addressbook_Controller_Contact::getInstance()->get($data->organizer);
