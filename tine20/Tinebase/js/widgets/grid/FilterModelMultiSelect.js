@@ -115,6 +115,7 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
     valueStore: null,
 
     selectionWidget: null,
+    labelRenderer: Ext.emptyFn,
     
     /**
      * init
@@ -210,13 +211,16 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
      * @return Ext.grid.ColumnModel
      */
     getColumnModel: function() {
+        var labelColumn = {id: this.labelField, header: String.format(_('Selected  {0}'), this.recordClass.getMeta('recordsName')), dataIndex: this.labelField};
+        if (this.labelRenderer != Ext.emptyFn) {
+            labelColumn.renderer = this.labelRenderer;
+        }
+        
         return new Ext.grid.ColumnModel({
             defaults: {
                 sortable: false
             },
-            columns:  [
-                {id: this.labelField, header: String.format(_('Selected  {0}'), this.recordClass.getMeta('recordsName')), dataIndex: this.labelField}
-            ]
+            columns:  [ labelColumn ]
         });
     },
     
@@ -277,14 +281,11 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
             }, this);
         } else {
             this.store.removeAll();
-            var record, id;
+            var record, id, text;
             for (var i=0; i < value.length; i++) {
-                id = (Ext.isString(value[i])) ? value[i] : value[i].id;
-                record = this.valueStore.getById(id);
-                if (record) {
-                    this.currentValue.push(record.id);
-                    this.store.add(record);
-                    recordText.push(record.get(this.labelField));
+                text = this.getRecordText(value[i]);
+                if (text && text !== '') {
+                    recordText.push(text);
                 }
             }
         }
@@ -292,6 +293,27 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
         this.setRawValue(recordText.join(', '));
         
         return this;
+    },
+    
+    /**
+     * get text from record defined by value (id or something else)
+     * 
+     * @param {String|Object} value
+     * @return {String}
+     */
+    getRecordText: function(value) {
+        var text = '';
+        
+        id = (Ext.isString(value)) ? value : value.id;
+        record = this.valueStore.getById(id);
+        if (record) {
+            this.currentValue.push(record.id);
+            this.store.add(record);
+            text = record.get(this.labelField);
+            text = (this.labelRenderer != Ext.emptyFn) ? this.labelRenderer(text) : text;
+        }
+        
+        return text;
     },
     
     /**
