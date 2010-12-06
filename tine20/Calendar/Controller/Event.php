@@ -356,7 +356,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $fixedCalendars = Tinebase_Config::getInstance()->getConfigAsArray('fixedCalendars', 'Calendar');
 //        Tinebase_Core::getLogger()->ERR(print_r($fixedCalendars, TRUE));
         
-        if (is_array($fixedCalendars)) {
+        if (is_array($fixedCalendars) && ! empty($fixedCalendars)) {
             $fixed = new Calendar_Model_EventFilter(array(), 'AND');
             $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendars));
             $periodFilter = $_filter->getFilter('period');
