@@ -95,7 +95,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     }
 
     /**
-     * add to/cc/bcc and flags custom filters
+     * add path custom filter
      * 
      * @param  Zend_Db_Select                       $_select
      * @param  Felamimail_Backend_Cache_Sql_Message $_backend
