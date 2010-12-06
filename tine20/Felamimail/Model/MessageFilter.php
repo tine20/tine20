@@ -73,7 +73,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             }
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
     }
     
     /**
@@ -101,12 +101,25 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
      * @param  Felamimail_Backend_Cache_Sql_Message $_backend
      * @param  array                                $_filterData
      * @return void
-     * 
-     * @todo implement
      */
     protected function _addPathSql($_select, $_backend, $_filterData)
     {
         $db = $_backend->getAdapter();
+        
+        $folderIds = array();
+        foreach((array)$_filterData['value'] as $filterValue) {
+            $pathParts = explode('/', $filterValue);
+            array_shift($pathParts);
+            if (count($pathParts) == 1) {
+                // we only have an account id
+                $folderIds = array_merge($folderIds, $this->_getFolderIdsForAccount($pathParts[0]));
+            } else if (count($pathParts) > 1) {
+                $folderIds[] = array_pop($pathParts);
+            }
+        }
+        
+        $folderFilter = new Tinebase_Model_Filter_Id('folder_id', $_filterData['operator'], array_unique($folderIds));
+        $folderFilter->appendFilterSql($_select, $_backend);
     }
     
     /**

@@ -408,6 +408,28 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Felamimail_Exception_IMAPMessageNotFound');
         $message = $this->_json->getMessage($message['id']);
     }
+
+    /**
+     * try search for a message with path filter
+     */
+    public function testSearchMessageWithPathFilter()
+    {
+        $sentMessage = $this->_sendMessage();
+        $filter = array(array(
+            'field' => 'path', 'operator' => 'in', 'value' => '/' . $this->_account->getId()
+        ));
+        $result = $this->_json->searchMessages($filter, '');
+        $message = $this->_getMessageFromSearchResult($result, $sentMessage['subject']);
+        $this->assertTrue(! empty($message), 'Sent message not found with account path filter');
+
+        $inbox = $this->_getFolder('INBOX');
+        $filter = array(array(
+            'field' => 'path', 'operator' => 'in', 'value' => '/' . $this->_account->getId() . '/' . $inbox->getId()
+        ));
+        $result = $this->_json->searchMessages($filter, '');
+        $message = $this->_getMessageFromSearchResult($result, $sentMessage['subject']);
+        $this->assertTrue(! empty($message), 'Sent message not found with path filter');
+    }
     
     /**
      * test flags (add + clear + deleted)
@@ -747,13 +769,28 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         //sleep(10);
         $result = $this->_getMessages();
+        $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
+        
+        $this->assertTrue(! empty($message), 'Sent message not found.');
+        
+        return $message;
+    }
+    
+    /**
+     * returns message array from result
+     * 
+     * @param array $_result
+     * @param string $_subject
+     * @return array
+     */
+    protected function _getMessageFromSearchResult($_result, $_subject)
+    {
         $message = array(); 
-        foreach ($result['results'] as $mail) {
-            if ($mail['subject'] == $messageToSend['subject']) {
+        foreach ($_result['results'] as $mail) {
+            if ($mail['subject'] == $_subject) {
                 $message = $mail;
             }
         }
-        $this->assertTrue(! empty($message), 'Sent message not found.');
         
         return $message;
     }
