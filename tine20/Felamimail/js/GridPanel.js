@@ -903,7 +903,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     diff = (action === 'clear' && isSeen) ? 1 :
                            (action === 'add' && ! isSeen) ? -1 : 0;
                            
-                   folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
+                if (folder) {
+                    folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
+                }
             }
             
             msg[action + 'Flag'](flag);
