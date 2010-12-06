@@ -37,12 +37,12 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             'options'       => array('fields' => array('subject', 'from_email', 'from_name'))
         ),
         'folder_id'     => array('filter' => 'Tinebase_Model_Filter_Id'),
-        //'path'          => array('filter' => 'Tinebase_Model_Filter_Id'),
         'subject'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'from_email'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'from_name'     => array('filter' => 'Tinebase_Model_Filter_Text'),
         'received'      => array('filter' => 'Tinebase_Model_Filter_DateTime'),
     // custom filters
+        'path'          => array('custom' => true),
         'to'            => array('custom' => true),
         'cc'            => array('custom' => true),
         'bcc'           => array('custom' => true),
@@ -65,8 +65,11 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                 $folderIds = $this->_getFolderIdsForAccount($customData['value']);
                 $_select->where($db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.folder_id') . ' IN (?)', $folderIds));
                 
+            } else if ($customData['field'] == 'path') {
+                $this->_addPathSql($_select, $_backend, $customData);
+                
             } else {
-                $this->_addRecipientAndFlagsSql($_select, $_backend);
+                $this->_addRecipientAndFlagsSql($_select, $_backend, $customData);
             }
         }
         
@@ -90,49 +93,65 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         
         return $folderIds;
     }
+
+    /**
+     * add to/cc/bcc and flags custom filters
+     * 
+     * @param  Zend_Db_Select                       $_select
+     * @param  Felamimail_Backend_Cache_Sql_Message $_backend
+     * @param  array                                $_filterData
+     * @return void
+     * 
+     * @todo implement
+     */
+    protected function _addPathSql($_select, $_backend, $_filterData)
+    {
+        $db = $_backend->getAdapter();
+    }
     
     /**
      * add to/cc/bcc and flags custom filters
      * 
      * @param  Zend_Db_Select                       $_select
      * @param  Felamimail_Backend_Cache_Sql_Message $_backend
+     * @param  array                                $_filterData
      * @return void
      */
-    protected function _addRecipientAndFlagsSql($_select, $_backend)
+    protected function _addRecipientAndFlagsSql($_select, $_backend, $_filterData)
     {
         $db = $_backend->getAdapter();
         $foreignTables = $_backend->getForeignTables();
         
         // add conditions
-        $tablename  = $_backend->getTablePrefix() . $foreignTables[$customData['field']]['table'];
-        if ($customData['field'] !== 'flags') {
+        $tablename  = $_backend->getTablePrefix() . $foreignTables[$_filterData['field']]['table'];
+        if ($_filterData['field'] !== 'flags') {
             $fieldName  = $tablename . '.name';
             $fieldEmail = $tablename . '.email';
         }
         
         // add filter value
-        if (! is_array($customData['value'])) {
-            $value      = '%' . $customData['value'] . '%';
+        if (! is_array($_filterData['value'])) {
+            $value      = '%' . $_filterData['value'] . '%';
         } else {
             $value = array();
-            foreach ((array)$customData['value'] as $customValue) {
+            foreach ((array)$_filterData['value'] as $customValue) {
                 $value[]      = '%' . $customValue . '%';
             }
         }
                         
-        if ($customData['field'] == 'flags') {
-            if ($customData['operator'] == 'equals' || $customData['operator'] == 'contains') {
+        if ($_filterData['field'] == 'flags') {
+            if ($_filterData['operator'] == 'equals' || $_filterData['operator'] == 'contains') {
                 $_select->having($db->quoteInto('flags LIKE ?', $value));
-            } else if ($customData['operator'] == 'in' || $customData['operator'] == 'notin') {
+            } else if ($_filterData['operator'] == 'in' || $_filterData['operator'] == 'notin') {
                 $value = (array) $value;
                 $where = array();
-                $op = ($customData['operator'] == 'in') ? 'LIKE' : 'NOT LIKE';
-                $opImplode = ($customData['operator'] == 'in') ? ' OR ' : ' AND ';
+                $op = ($_filterData['operator'] == 'in') ? 'LIKE' : 'NOT LIKE';
+                $opImplode = ($_filterData['operator'] == 'in') ? ' OR ' : ' AND ';
                 foreach ($value as $flag) {
                     $where[] = $db->quoteInto('flags ' . $op . ' ?', $flag);
                 }
                 $whereString = implode($opImplode, $where);
-                if ($customData['operator'] == 'notin') {
+                if ($_filterData['operator'] == 'notin') {
                     $whereString = '(' . $whereString . ') OR flags IS NULL';
                 }
                 $_select->having($whereString);
