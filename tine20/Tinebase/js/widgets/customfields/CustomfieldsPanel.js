@@ -133,7 +133,7 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
      * @author Mihail Panayotov
      */
     getFieldSet: function(name) {
-        reg = /\s+/;
+        var reg = /\s+/;
         var system_name = name.replace(reg,'_');
         if (! this.fieldset[system_name]) {
             this.fieldset[system_name] = new Ext.form.FieldSet({
@@ -226,7 +226,7 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
     setValue: function(values){
         if (values) {
             this.cfStore.each(function(def) {
-                value = values[def.get('name')];
+                var value = values[def.get('name')];
                 if (value) {
                     var datetimeFields = ['datefield', 'datetimefield', 'extuxclearabledatefield'];
                     if (datetimeFields.indexOf(def.get('type')) != -1) {
