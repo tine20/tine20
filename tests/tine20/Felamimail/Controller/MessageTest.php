@@ -63,6 +63,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected $_testFolderName = 'Junk';
     
     /**
+     * accounts to delete in tearDown
+     * 
+     * @var array
+     */
+    protected $_accountsToDelete = array();
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -99,8 +106,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        //echo "deleting messages: " . print_r($this->_createdMessages->getArrayOfIds(), TRUE);
         $this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+        
+        foreach ($this->_accountsToDelete as $account) {
+            Felamimail_Controller_Account::getInstance()->delete($account);
+        }
     }
 
     /********************************* test funcs *************************************/
@@ -763,9 +773,60 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('inscription@arrakeen.net', $completeMessage->to[0]);
         $this->assertEquals('November 2010 Crystal Newsletter - Cut the Rope Update Released!', $completeMessage->subject);
     }
-
+    
+    /**
+     * test move to another account
+     */
+    public function testMoveMessageToAnotherAccount()
+    {
+        $clonedAccount = $this->_cloneAccount();
+        $folder = $this->_getFolder($this->_testFolderName, $clonedAccount);
+        
+        $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        
+        $this->_controller->moveMessages($cachedMessage, $folder);
+        $this->_searchMessage('multipart/mixed', $folder);
+    }
+    
+     /**
+     * test delete in different accounts
+     * 
+     * @todo finish implementation
+     */
+    public function testDeleteMessagesInDifferentAccounts()
+    {
+//        $clonedAccount = $this->_cloneAccount();
+//        $folder = $this->_getFolder($this->_testFolderName, $clonedAccount);
+//        
+//        $cachedMessage1 = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+//        $cachedMessage2 = $this->messageTestHelper('complete.eml', 'text/service', $folder);
+//        
+//        $this->_controller->delete(array($cachedMessage1, $cachedMessage2));
+//        
+//        $result1 = $this->_searchOnImap('multipart/mixed', $this->_folder);
+//        $this->assertEquals(0, count($result1));
+//        $result2 = $this->_searchOnImap('multipart/mixed', $folder);
+//        $this->assertEquals(0, count($result2));
+//        $result3 = $this->_searchOnImap('multipart/mixed', $this->_getFolder('Trash'));
+//        $this->assertEquals(1, count($result3));
+//        $result4 = $this->_searchOnImap('text/service', $this->_getFolder('Trash'));
+//        $this->assertEquals(1, count($result4));
+    }
     
     /********************************* protected helper funcs *************************************/
+    
+    /**
+     * clones the account
+     */
+    protected function _cloneAccount()
+    {
+        $account = clone($this->_account);
+        unset($account->id);
+        $this->_accountsToDelete[] = $account;
+        $account = Felamimail_Controller_Account::getInstance()->create($account);
+        
+        return $account;
+    }
     
     /**
      * helper function
@@ -774,11 +835,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * 
      * @param string $_filename
      * @param string $_testHeaderValue
+     * @param Felamimail_Model_Folder $_folder
      * @return Felamimail_Model_Message
      */
-    public function messageTestHelper($_filename, $_testHeaderValue)
+    public function messageTestHelper($_filename, $_testHeaderValue, $_folder = NULL)
     {
-        $this->_appendMessage($_filename, $this->_folder);
+        $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
+        $this->_appendMessage($_filename, $folder);
         return $this->_searchAndCacheMessage($_testHeaderValue);
     }
     
@@ -791,23 +854,70 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function _searchAndCacheMessage($_testHeaderValue, $_folderName = NULL) 
     {
-        if ($_folderName !== NULL) {
-            $this->_imap->selectFolder($_folderName);
-            $folder = $this->_getFolder($_folderName);
-        } else {
-            $this->_imap->selectFolder($this->_testFolderName);
-            $folder = $this->_folder;
-        }
-        $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage ' . $_testHeaderValue
-        ));
-        $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' in folder ' . $_folderName . ' found.');
-        $message = $this->_imap->getSummary($result[0]);
+        $folder = ($_folderName !== NULL) ? $this->_getFolder($_folderName) : $this->_folder;
+        $message = $this->_searchMessage($_testHeaderValue, $folder);
         
         $cachedMessage = $this->_cache->addMessage($message, $folder);
         $this->_createdMessages->addRecord($cachedMessage);
         
         return $cachedMessage;
+    }
+    
+    /**
+     * search message in folder
+     * 
+     * @param string $_testHeaderValue
+     * @param Felamimail_Model_Folder $_folder
+     * @return array
+     */
+    protected function _searchMessage($_testHeaderValue, $_folder)
+    {
+        $imap = $this->_getImapFromFolder($_folder);
+        
+        $result = $this->_searchOnImap($_testHeaderValue, $_folder, $imap);
+        $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' in folder ' . $_folder->globalname . ' found.');
+        $message = $imap->getSummary($result[0]);
+        
+        return $message;
+    }
+    
+    /**
+     * get imap backend
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @return Felamimail_Backend_ImapProxy
+     */
+    protected function _getImapFromFolder($_folder) {
+        if ($_folder->account_id == $this->_account->getId()) {
+            $imap = $this->_imap;
+        } else {
+            $imap = Felamimail_Backend_ImapFactory::factory($_folder->account_id);
+        }
+        
+        return $imap;
+    }
+    
+    /**
+     * search for messages on imap server
+     * 
+     * @param string $_testHeaderValue
+     * @param Felamimail_Model_Folder $_folder
+     * @return array
+     */
+    protected function _searchOnImap($_testHeaderValue, $_folder, $_imap = NULL)
+    {
+        if ($_imap === NULL) {
+            $imap = $this->_getImapFromFolder($_folder);
+        } else {
+            $imap = $_imap;
+        }
+        
+        $imap->selectFolder($_folder->globalname);
+        $result = $imap->search(array(
+            'HEADER X-Tine20TestMessage ' . $_testHeaderValue
+        ));
+        
+        return $result;
     }
     
     /**
@@ -840,18 +950,18 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      *
      * @return Felamimail_Model_Folder
      */
-    protected function _getFolder($_folderName = null)
+    protected function _getFolder($_folderName = null, $_account = NULL)
     {
         $folderName = ($_folderName !== null) ? $_folderName : $this->_testFolderName;
+        $account = ($_account !== NULL) ? $_account : $this->_account;
         
         $filter = new Felamimail_Model_FolderFilter(array(
             array('field' => 'globalname', 'operator' => 'equals', 'value' => '',),
-            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())
         ));
         $result = Felamimail_Controller_Folder::getInstance()->search($filter);
         $folder = $result->filter('localname', $folderName)->getFirstRecord();
         if (empty($folder)) {
-            //print_r($result->toArray()); 
             throw new Exception('folder not found');
         }
 
