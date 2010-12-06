@@ -22,9 +22,11 @@ table td {
   border-color: #ededed;
 }
 
+/* irritating in cal views
 @media print {
    thead {display: table-header-group;}
 }
+*/
 
 #csscheck {
     display: none;
