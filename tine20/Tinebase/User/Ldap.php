@@ -114,7 +114,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
     /**
      * the constructor
      *
-     * @param  array $options Options used in connecting, binding, etc.
+     * @param  array  $_options  Options used in connecting, binding, etc.
      */
     public function __construct(array $_options = array())
     {
