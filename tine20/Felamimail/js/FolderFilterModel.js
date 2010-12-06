@@ -23,7 +23,7 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMult
      * @cfg 
      */
     operators: ['in', 'notin'],
-    field: 'folder_id',
+    field: 'path',
     
     /**
      * @private
@@ -33,7 +33,7 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMult
         
         this.multiselectFieldConfig = {
             xtype: 'wdgt.pickergrid',
-            labelField: 'globalname',
+            labelField: 'path',
             layerHeight: 200,
             selectionWidget: new Tine.Felamimail.FolderSelectTriggerField({
                 allAccounts: true
@@ -44,11 +44,31 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMult
             /**
              * functions
              */
+            labelRenderer: Tine.Felamimail.GridPanel.prototype.accountAndFolderRenderer.createDelegate(this),
             initSelectionWidget: function() {
                 this.selectionWidget.onSelectFolder = this.addRecord.createDelegate(this);
             },
             isSelectionVisible: function() {
                 return this.selectionWidget.selectPanel && ! this.selectionWidget.selectPanel.isDestroyed        
+            },
+            getRecordText: function(value) {
+                var path = (Ext.isString(value)) ? value : (value.path) ? value.path : '/' + value.id,
+                    index = this.valueStore.findExact('path', path),
+                    record = this.valueStore.getAt(index),
+                    text = null;
+                
+                if (! record) {
+                    // try account
+                    var accountId = path.substr(1, 40);
+                    record = Tine.Felamimail.loadAccountStore().getById(accountId);
+                }
+                if (record) {
+                    this.currentValue.push(path);
+                    this.store.add(record);
+                    text = this.labelRenderer(record.id, {}, record);
+                }
+                
+                return text;
             }
         };
 

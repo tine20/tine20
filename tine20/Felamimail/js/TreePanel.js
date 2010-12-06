@@ -253,7 +253,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             ftb.filterStore.each(function(filter) {
                 var field = filter.get('field');
                 // @todo find criteria what to remove
-                if (field === 'folder_id') {
+                if (field === 'path') {
                     ftb.deleteFilter(filter);
                 }
             }, this);
@@ -294,8 +294,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         if (!this.filterPlugin) {
             this.filterPlugin = new Tine.widgets.tree.FilterPlugin({
                 treePanel: this,
-                field: 'folder_id',
-                nodeAttributeField: 'folder_id',
+                field: 'path',
+                nodeAttributeField: 'path',
                 singleNodeOperator: 'in'
             });
         }

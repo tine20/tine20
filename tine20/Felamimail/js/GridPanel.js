@@ -506,6 +506,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * returns account and folder globalname
      * 
      * @param {String} folderId
+     * @param {Object} metadata
+     * @param {Folder|Account} record
      * @return {String}
      */
     accountAndFolderRenderer: function(folderId, metadata, record) {
@@ -514,6 +516,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result = (account) ? account.get('name') : record.get('account_id'),
             folder = folderStore.getById(folderId);
         
+        if (! folder) {
+            folder = folderStore.getById(record.id);
+            if (! folder) {
+                // only account
+                return (result) ? result : record.get('name');
+            }
+        }
+            
         result += '/';
         if (folder) {
             result += folder.get('globalname');
