@@ -130,7 +130,7 @@ Tine.Felamimail.Model.Message.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Felamimail');
     
     return [
-        {filtertype: 'tine.felamimail.folder.filtermodel', app: app, recordClass: Tine.Felamimail.Model.Message, field: 'folder_id'},
+        {filtertype: 'tine.felamimail.folder.filtermodel', app: app},
         {label: app.i18n._('Subject/From'),field: 'query',         operators: ['contains']},
         {label: app.i18n._('Subject'),     field: 'subject',       operators: ['contains']},
         {label: app.i18n._('From (Email)'),field: 'from_email',    operators: ['contains']},
