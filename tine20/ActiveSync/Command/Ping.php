@@ -121,23 +121,26 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                     #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . print_r($folder, true));
                     try {
                         $syncState = $controller->getSyncState($this->_device, $folder['folderType'], $folder['serverEntryId']);
-                        //$count = $dataController->getItemEstimate($syncState->lastsync);
+                        
                         $count = $this->_getItemEstimate(
                             $dataController,
                             $folder,
                             $syncState->lastsync
                         );
-                                                
-                        if($count > 0) {
-                            $folderWithChanges[] = array(
-                                'serverEntryId' => $folder['serverEntryId'],
-                                'folderType'    => $folder['folderType']
-                            );
-                            $status = self::STATUS_CHANGES_FOUND;
-                        }
                     } catch (ActiveSync_Exception_SyncStateNotFound $e) {
                         // folder got never synchronized to client
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " " . $e->getMessage());
+                        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' syncstate not found. enforce sync for folder: ' . $folder['serverEntryId']);
+                        
+                        $count = 1;
+                    }
+                        
+                    if($count > 0) {
+                        $folderWithChanges[] = array(
+                            'serverEntryId' => $folder['serverEntryId'],
+                            'folderType'    => $folder['folderType']
+                        );
+                        $status = self::STATUS_CHANGES_FOUND;
                     }
                 }
                 
