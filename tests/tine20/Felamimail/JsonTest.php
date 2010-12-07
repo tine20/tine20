@@ -486,6 +486,21 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * move message to trash with trash folder constant (Felamimail_Model_Folder::FOLDER_TRASH)
+     */
+    public function testMoveMessagesToTrash()
+    {
+        $message = $this->_sendMessage();
+        $this->_foldersToClear = array('INBOX', $this->_account->sent_folder, $this->_account->trash_folder);
+        
+        $result = $this->_json->moveMessages(array(array(
+            'field' => 'id', 'operator' => 'in', 'value' => array($message['id'])
+        )), Felamimail_Model_Folder::FOLDER_TRASH);
+
+        $messageInTrash = $this->_searchForMessageBySubject($message['subject'], $this->_account->trash_folder);
+    }
+    
+    /**
      * test reply mail
      * 
      */

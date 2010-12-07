@@ -64,6 +64,11 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
     const CACHE_STATUS_INVALID = 'invalid';
     
     /**
+     * meta folder trash constant
+     */
+    const FOLDER_TRASH = '_trash_';
+    
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 

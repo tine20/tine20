@@ -415,7 +415,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * move messages to folder
      *
      * @param  mixed  $_messages
-     * @param  mixed  $_targetFolder
+     * @param  mixed  $_targetFolder can be one of: folder_id, Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
      * @return Felamimail_Model_Folder
      * 
      * @todo return list of affected folders
@@ -425,15 +425,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // we always need to read the messages from cache to get the current flags
         $messages = $this->_convertToRecordSet($_messages, TRUE);
                 
-        $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
+        if ($_targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
+            $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' move ' . count($messages) . ' messages to ' . $targetFolder->globalname
+            ' move ' . count($messages) . ' messages to ' . ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) ? $_targetFolder : $targetFolder->globalname
         );
         
         $messages->sort('folder_id');
         
-        $lastAccountId = null;
         $lastFolderId  = null;
         $imapBackend   = null;
         $folderIds    = array();
@@ -447,6 +448,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             if ($lastFolderId != $message->folder_id) {
                 $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id, $selectedFolder);
+                if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH && (! isset($targetFolder) || $targetFolder->account_id != $message->account_id)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting trash folder for account.');
+                    $targetFolder = Felamimail_Controller_Account::getInstance()->getTrashFolder($message->account_id);
+                }
                 $lastFolderId             = $message->folder_id;
                 $folderIds[$lastFolderId] = array(
                     'decrementMessagesCounter' => 0, 
