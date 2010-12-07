@@ -415,4 +415,79 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('addressbook', '10');
         $this->setApplicationVersion('Addressbook', '3.9');
     }
+    
+    /**
+     * update to 3.10
+     * - change id column of addressbook table to varchar(40)
+     */
+    public function update_9()
+    {
+        $this->_backend->dropForeignKey('addressbook_image', 'addressbook_image::contact_id-addressbook::id');
+        $this->_backend->dropForeignKey('addressbook_list_members', 'addressbook_list_members::contact_id--addressbook::id');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('addressbook', $declaration);
+        $this->setTableVersion('addressbook', '11');
+        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>contact_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('addressbook_image', $declaration);
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+			<index>
+                <name>addressbook_image::contact_id-addressbook::id</name>
+                <field>
+                    <name>contact_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>addressbook</table>
+                    <field>id</field>
+                    <ondelete>CASCADE</ondelete>
+                    <onupdate>CASCADE</onupdate>
+                </reference>
+                <ondelete>cascade</ondelete>
+            </index>');
+        $this->_backend->addForeignKey('addressbook_image', $declaration);
+        $this->setTableVersion('addressbook_image', '2');
+        
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>contact_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>');
+        $this->_backend->alterCol('addressbook_list_members', $declaration);
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>addressbook_list_members::contact_id--addressbook::id</name>
+                <field>
+                    <name>contact_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>addressbook</table>
+                    <field>id</field>
+                    <ondelete>CASCADE</ondelete>
+                    <onupdate>CASCADE</onupdate>
+                </reference>
+            </index>');
+        $this->_backend->addForeignKey('addressbook_list_members', $declaration);        
+        $this->setTableVersion('addressbook_list_members', '2');
+        
+        $this->setApplicationVersion('Addressbook', '3.10');
+    }
 }

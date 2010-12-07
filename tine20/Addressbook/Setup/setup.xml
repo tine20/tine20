@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>3.9</version>
+    <version>3.10</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,12 +11,13 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>10</version>
+            <version>11</version>
             <declaration>
                 <field>
                     <name>id</name>
-                    <type>integer</type>
-                    <autoincrement>true</autoincrement>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>adr_one_countryname</name>
@@ -496,11 +497,12 @@
         </table>
         <table>
             <name>addressbook_image</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>contact_id</name>
-                    <type>integer</type>
+                    <type>text</type>
+                    <length>40</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -524,6 +526,7 @@
                         <table>addressbook</table>
                         <field>id</field>
                         <ondelete>CASCADE</ondelete>
+                        <onupdate>CASCADE</onupdate>
                     </reference>
                     <ondelete>cascade</ondelete>
                 </index>
@@ -620,7 +623,7 @@
         </table>
         <table>
             <name>addressbook_list_members</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>list_id</name>
@@ -630,9 +633,8 @@
                 </field>
                 <field>
                     <name>contact_id</name>
-                    <type>integer</type>
-                    <!-- <type>text</type> 
-                    <length>40</length> --> 
+                    <type>text</type> 
+                    <length>40</length> 
                     <notnull>true</notnull>
                 </field>
 
