@@ -116,6 +116,8 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
 
         if(array_key_exists('tine20_userid', $columns) && array_key_exists('tine20_clientid', $columns)) {
             $this->_hasTine20Userid = true;
+            $this->_propertyMapping['emailUserId'] = 'tine20_userid';
+            $this->_propertyMapping['emailGID']    = 'tine20_clientid';
         }
         
         $this->_clientId = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
@@ -130,19 +132,23 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
      */
     public function inspectDeleteUser($_userId)
     {
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Dbmail settings for user ' . $_userId);
+        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Dbmail settings for user ' . $userId);
 
         if($this->_hasTine20Userid === true) {
             $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_userid')   . ' = ?', $_userId),
-                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_clientid') . ' = ?', $this->_config['emailGID'])
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $userId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailGID'])    . ' = ?', $this->_config['emailGID'])
             );
         } else {
             $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $this->_convertToInt($_userId)),
-                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailGID']) . ' = ?', $this->_convertToInt($this->_config['emailGID']))
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $this->_convertToInt($userId)),
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailGID'])    . ' = ?', $this->_convertToInt($this->_config['emailGID']))
             );
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " delete from {$this->_userTable} " . print_r($where, true));
         
         $this->_db->delete($this->_userTable, $where);
     }
@@ -163,12 +169,12 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         $select = $this->_getSelect();
         
         if($this->_hasTine20Userid === true) {
-            $select->where($this->_db->quoteIdentifier('tine20_userid') . ' = ?',   $userId);
+            $select->where($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?',   $userId);
         } else {
             $select->where($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?',   $this->_convertToInt($userId));
         }
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         // Perferom query - retrieve user from database
         $stmt = $this->_db->query($select);
@@ -176,7 +182,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         $stmt->closeCursor();
                 
         if (!$queryResult) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Dbmail config for user ' . $_userId . ' not found!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Dbmail config for user ' . $userId . ' not found!');
             return;
         }
         
@@ -209,8 +215,8 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         
         if($this->_hasTine20Userid === true) {
             $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_userid')   . ' = ?', $_userId),
-                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_clientid') . ' = ?', $this->_config['emailGID'])
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $_userId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailGID'])    . ' = ?', $this->_config['emailGID'])
             );
         } else {
             $where = array(
@@ -245,7 +251,6 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         unset($imapSettings[$this->_propertyMapping['emailMailSize']]);
         unset($imapSettings[$this->_propertyMapping['emailSieveSize']]);
         unset($imapSettings[$this->_propertyMapping['emailLastLogin']]);
-        unset($imapSettings[$this->_propertyMapping['emailUserId']]);
                     
         $this->_db->insert($this->_userTable, $imapSettings);
         
@@ -266,8 +271,8 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         
         if($this->_hasTine20Userid === true) {
             $where = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_userid')   . ' = ?', $_updatedUser->getId()),
-                $this->_db->quoteInto($this->_db->quoteIdentifier('tine20_clientid') . ' = ?', $this->_config['emailGID'])
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $_updatedUser->getId()),
+                $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailGID'])    . ' = ?', $this->_config['emailGID'])
             );
         } else {
             $where = array(
@@ -297,13 +302,9 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
         
         $select = $this->_getSelect();
         
-        if($this->_hasTine20Userid === true) {
-            $select->where($this->_db->quoteIdentifier('tine20_userid') . ' = ?',   $userId);
-        } else {
-            $select->where($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?',   $this->_convertToInt($userId));
-        }
+        $select->where($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?',   ($this->_hasTine20Userid === true) ? $userId : $this->_convertToInt($userId));
                   
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         // Perferom query - retrieve user from database
         $stmt = $this->_db->query($select);
@@ -373,24 +374,9 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
                         break;
                         
                     case 'emailUserId':
-                        if($this->_hasTine20Userid === true) {
-                            // dbmail user_id gets populated from auto increment field
-                            $rawData['tine20_userid'] = $_user->getId();
-                        } else {
-                            $rawData[$property] = $this->_convertToInt($_user->getId());
-                        }
-                        break;
-                        
                     case 'emailGID':
-                        if($this->_hasTine20Userid === true) {
-                            $rawData['tine20_clientid'] = $this->_config['emailGID'];
-                        }
-                        
-                        $rawData[$property]     = $this->_convertToInt($this->_config['emailGID']);
-                        break;
-                        
                     case 'emailUsername':
-                        $rawData[$property] = $this->_appendDomain($_user->accountLoginName);
+                        // do nothing
                         break;
                         
                     case 'emailMailQuota':
@@ -407,9 +393,17 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
             }
         }
         
-        $rawData[$this->_propertyMapping['emailScheme']] = $this->_config['emailScheme'];
+        $rawData[$this->_propertyMapping['emailUserId']]   = $this->_hasTine20Userid === true ? $_user->getId() : $this->_convertToInt($_user->getId());
+        if($this->_hasTine20Userid === true) {
+            $rawData[$this->_propertyMapping['emailGID']]  = $this->_config['emailGID'];
+            $rawData['client_idnr']                        = $this->_convertToInt($this->_config['emailGID']);
+        } else {
+            $rawData[$this->_propertyMapping['emailGID']]  = $this->_convertToInt($this->_config['emailGID']);
+        }
+        $rawData[$this->_propertyMapping['emailUsername']] = $this->_appendDomain($_user->accountLoginName);
+        $rawData[$this->_propertyMapping['emailScheme']]   = $this->_config['emailScheme'];
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($rawData, TRUE));
         
         return $rawData;
     }
@@ -461,7 +455,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
             ->from($this->_userTable);
 
         if($this->_hasTine20Userid === true) {
-            $select->where($this->_db->quoteIdentifier('tine20_clientid') . ' = ?', $this->_config['emailGID'])
+            $select->where($this->_db->quoteIdentifier($this->_propertyMapping['emailGID']) . ' = ?', $this->_config['emailGID'])
                    ->limit(1);
         } else {
             $select->where($this->_db->quoteIdentifier($this->_propertyMapping['emailGID']) . ' = ?', $this->_convertToInt($this->_config['emailGID']))
