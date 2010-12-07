@@ -62,7 +62,7 @@ class Tinebase_User_EmailUser_Smtp_LdapDbmailSchemaTest extends PHPUnit_Framewor
             $this->markTestSkipped('LDAP backend not enabled');
         }
         
-        $this->_backend = Tinebase_User::factory(Tinebase_User::LDAP);
+        $this->_backend = Tinebase_User::getInstance();
         
         if (!array_key_exists('Tinebase_EmailUser_Smtp_LdapDbmailSchema', $this->_backend->getPlugins())) {
             $this->markTestSkipped('Dbmail LDAP plugin not enabled');

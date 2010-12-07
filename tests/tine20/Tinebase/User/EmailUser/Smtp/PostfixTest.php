@@ -68,7 +68,7 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
 
         $this->_objects['addedUsers'] = array();
         */
-        $this->_backend = Tinebase_User::factory(Tinebase_User::getConfiguredBackend());
+        $this->_backend = Tinebase_User::getInstance();
         
         if (!array_key_exists('Tinebase_EmailUser_Smtp_Postfix', $this->_backend->getPlugins())) {
             $this->markTestSkipped('Postfix SQL plugin not enabled');
