@@ -134,7 +134,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
      */
     public function updateFolderCounter($_folderId, array $_counters)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " " . print_r($_counters, true));        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' folder: ' . $_folderId . ' - ' . print_r($_counters, true));        
         if (empty($_counters)) {
             return; // nothing todo
         }
