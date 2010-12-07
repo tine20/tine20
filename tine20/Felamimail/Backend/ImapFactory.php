@@ -32,6 +32,7 @@ class Felamimail_Backend_ImapFactory
     static public function factory($_accountId)
     {
         $accountId = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId->getId() : $_accountId;
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting IMAP backend for account id ' . $accountId);
         
         if (!isset(self::$_backends[$accountId])) {
             // get imap config from account
