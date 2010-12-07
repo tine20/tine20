@@ -280,6 +280,22 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
     }
     
     /**
+     * get new email user
+     * 
+     * @param  Tinebase_Model_FullUser   $_user
+     * @return Tinebase_Model_EmailUser
+     */
+    public function getNewUser(Tinebase_Model_FullUser $_user)
+    {
+        $result = new Tinebase_Model_EmailUser(array(
+            'emailUserId' 	=> $_user->getId(),
+            'emailUsername' => $this->_appendDomain($_user->accountLoginName)
+        ));
+        
+        return $result;
+    }
+    
+    /**
      * delete user by id
      *
      * @param  string  $_userId
@@ -371,22 +387,6 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
         $this->_db->update($this->_userTable, $values, $where);
-    }
-    
-    /**
-     * get new email user
-     * 
-     * @param  Tinebase_Model_FullUser   $_user
-     * @return Tinebase_Model_EmailUser
-     */
-    public function getNewUser(Tinebase_Model_FullUser $_user)
-    {
-        
-        $result = new Tinebase_Model_EmailUser(array(
-            'emailUserId' 		=> $_user->getId(),
-        ));
-        
-        return $result;
     }
     
     /*********  protected functions  *********/
