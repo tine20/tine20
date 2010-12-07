@@ -18,7 +18,7 @@
  * @package Tinebase
  * @subpackage User
  */
-class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_EmailUser_Abstract
+class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
 {
     /**
      * 
@@ -27,128 +27,157 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_EmailUser_Abstract
     protected $_imap;
     
     /**
+     * email user config
+     * 
+     * @var array 
+     */
+    protected $_config = array(
+        'domain'   => null,
+        'host'     => null,
+        'port'     => 143,
+        'ssl'      => FALSE,
+        'admin'    => null,
+        'password' => null
+    );
+    
+    /**
      * the constructor
      *
      */
-    public function __construct()
+    public function __construct(array $_options = array())
     {
-        $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        // get cyrus imap config options (host, username, password, port)
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         
-        #$this->_config = array_merge($imapConfig['cyrus'], $this->_config);
-        #$this->_config['domain'] = (isset($imapConfig['domain'])) ? $imapConfig['domain'] : '';
+        // merge _config and dovecot imap
+        $this->_config = array_merge($this->_config, $imapConfig['cyrus']);
         
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  imap config: ' . print_r($this->_config, true));
+        // set domain from imap config
+        $this->_config['domain'] = !empty($imapConfig['domain']) ? $imapConfig['domain'] : null;
+        $this->_config['host']   = $imapConfig['host'];
+        $this->_config['port']   = !empty($imapConfig['port']) ? $imapConfig['port'] : 143;
+        $this->_config['ssl']    = $imapConfig['ssl'] != 'none' ? $imapConfig['ssl'] : false;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' cyrus imap config: ' . print_r($this->_config, true));
     }
     
     /**
-     * get email user by id
-     *
-     * @todo    retrieve quota from imap server
+     * get new email user
      * 
-     * @param   string  $_userId
-     * @return  Tinebase_Model_EmailUser user
-     */
-    public function getUserById($_userId)
-    {
-        $user = ($_userId instanceof Tinebase_Model_FullUser) ? $_userId : Tinebase_User::getInstance()->getFullUserById($_userId);
-        
-        #$imap = $this->_getImapConnection();
-        #$imap->getQuota();
-        
-        $data = array(
-            'emailUserId'   => $user->accountLoginName,
-            'emailMailQuota' => 0,
-            'emailMailSize'  => 0
-        );
-        
-        return new Tinebase_Model_EmailUser($data, true);
-    }
-
-    /**
-     * adds email properties for a new user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser $_emailUser
+     * @param  Tinebase_Model_FullUser   $_user
      * @return Tinebase_Model_EmailUser
-     * 
      */
-    public function addUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
+    public function getNewUser(Tinebase_Model_FullUser $_user)
     {
-        return $this->updateUser($_user, $_emailUser);
+        $result = new Tinebase_Model_EmailUser(array(
+            'emailUserId' 	=> $this->_appendDomain($_user->accountLoginName),
+            'emailUsername' => $this->_appendDomain($_user->accountLoginName)
+        ));
+        
+        return $result;
     }
     
-    /**
-     * updates email properties for an existing user
-     * 
-     * @param  Tinebase_Model_FullUser $_user
-     * @param  Tinebase_Model_EmailUser  $_emailUser
-     * @return Tinebase_Model_EmailUser
-     */
-    public function updateUser(Tinebase_Model_FullUser $_user, Tinebase_Model_EmailUser $_emailUser)
-    {
-        // do nothing when no email address is set
-        if (empty($_user->accountEmailAddress)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
-                " user {$_user->accountLoginName} has no email address. Don't create/update imap mailbox."
-            );
-            
-            return $_emailUser;
-        }
-        
-        $imap = $this->_getImapConnection();
-        
-        $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
-        
-        $mailbox = $imap->listMailbox('', $mailboxString);
-        
-        if (!array_key_exists($mailboxString, $mailbox)) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' must create mailbox ');
-            if ($imap->create($mailboxString) == true) {
-                if ($imap->setACL($mailboxString, $_user->accountLoginName, 'lrswipcda') !== true) {
-                    // failed to set acl
-                }
-            }
-        }
-        
-        return $this->getUserById($_user);
-    }
-
     /**
      * delete user by id
      *
-     * @param   string         $_userId
+     * @param  string  $_userId
      */
-    public function deleteUser($_userId)
+    public function inspectDeleteUser($_userId)
     {
-        $user = ($_userId instanceof Tinebase_Model_FullUser) ? $_userId : Tinebase_User::getInstance()->getFullUserById($_userId);
+        $user = $_userId instanceof Tinebase_Model_User ? $_userId : Tinebase_User::getInstance()->getFullUserById($_userId);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Cyrus imap account of user ' . $user->accountLoginName);
+
         $imap = $this->_getImapConnection();
         
         $mailboxString = $this->_getUserMailbox($user->accountLoginName);
         
-        $mailbox = $imap->listMailbox('', $mailboxString);
+        $mailboxes = $imap->listMailbox('', $mailboxString);
         
-        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . '  imap config: ' . print_r($mailbox, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " search for {$mailboxString} in " . print_r($mailboxes, true));
         
         // does mailbox exist at all?
-        if (array_key_exists($mailboxString, $mailbox)) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' must delete mailbox ');
-            if ($imap->setACL($mailboxString, $this->_config['cyrus']['admin'], 'lrswipcda') === true) {
+        if (array_key_exists($mailboxString, $mailboxes)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' must delete mailbox ');
+            if ($imap->setACL($mailboxString, $this->_config['admin'], 'lrswipcda') === true) {
                 $imap->delete($mailboxString);
             }
         }
     }
     
     /**
+     * inspect get user by property
+     * 
+     * @param Tinebase_Model_User  $_user  the user object
+     */
+    public function inspectGetUserByProperty(Tinebase_Model_User $_user)
+    {
+        if (! $_user instanceof Tinebase_Model_FullUser) {
+            return;
+        }
+        
+        #$imap = $this->_getImapConnection();
+        #$imap->getQuota();
+        
+        $emailUser = new Tinebase_Model_EmailUser(array(
+            'emailUsername'  => $this->_appendDomain($_user->accountLoginName),
+            'emailUserId'    => $this->_appendDomain($_user->accountLoginName),
+            'emailMailQuota' => 0,
+            'emailMailSize'  => 0
+        ));
+                
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
+        
+        $_user->imapUser  = $emailUser;
+        $_user->emailUser = Tinebase_EmailUser::merge(clone $_user->imapUser, isset($_user->emailUser) ? $_user->emailUser : null);
+    }
+        
+    /**
      * update/set email user password
      * 
-     * @param string $_userId
-     * @param string $_password
-     * @return void
+     * @param  string  $_userId
+     * @param  string  $_password
      */
-    public function setPassword($_userId, $_password)
+    public function inspectSetPassword($_userId, $_password)
     {
         // nothing to be done for cyrus imap server
+    }
+        
+    /**
+     * adds email properties for a new user
+     * 
+     * @param  Tinebase_Model_FullUser  $_addedUser
+     * @param  Tinebase_Model_FullUser  $_newUserProperties
+     */
+    protected function _addUser(Tinebase_Model_FullUser $_addedUser, Tinebase_Model_FullUser $_newUserProperties)
+    {
+        // do nothing when no email address is set
+        if (empty($_addedUser->accountEmailAddress)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
+                " user {$_addedUser->accountLoginName} has no email address. Don't create cyrus imap mailbox."
+            );
+            
+            return;
+        }
+        
+        $imap = $this->_getImapConnection();
+        
+        $mailboxString = $this->_getUserMailbox($_addedUser->accountLoginName);
+        
+        $mailboxes = $imap->listMailbox('', $mailboxString);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " search for {$mailboxString} in " . print_r($mailboxes, true));
+        
+        if (!array_key_exists($mailboxString, $mailboxes)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' must create mailbox: '. $mailboxString);
+            if ($imap->create($mailboxString) == true) {
+                if ($imap->setACL($mailboxString, $this->_appendDomain($_addedUser->accountLoginName), 'lrswipcda') !== true) {
+                    // failed to set acl
+                }
+            }
+        }
+        
+        $this->inspectGetUserByProperty($_addedUser);
     }
     
     /**
@@ -158,8 +187,8 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_EmailUser_Abstract
     protected function _getImapConnection()
     {
         if (! $this->_imap instanceof Zend_Mail_Protocol_Imap) {
-            $this->_imap = new Zend_Mail_Protocol_Imap($this->_config['host'], $this->_config['port']);
-            $this->_imap->login($this->_config['cyrus']['admin'], $this->_config['cyrus']['password']);
+            $this->_imap = new Zend_Mail_Protocol_Imap($this->_config['host'], $this->_config['port'], $this->_config['ssl']);
+            $this->_imap->login($this->_config['admin'], $this->_config['password']);
         }
 
         return $this->_imap;
@@ -182,8 +211,42 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_EmailUser_Abstract
             throw new Tinebase_Exception_InvalidArgument('other namespace not found');
         }
         
-        $mailboxString = $namespaces['other']['name'] . $_username;
+        $mailboxString = $namespaces['other']['name'] . $this->_appendDomain($_username);
         
         return $mailboxString;
+    }
+    
+    /**
+     * updates email properties for an existing user
+     * 
+     * @param  Tinebase_Model_FullUser  $_updatedUser
+     * @param  Tinebase_Model_FullUser  $_newUserProperties
+     */
+    protected function _updateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
+    {
+        // does nothing at the moment
+    }
+    
+    /**
+     * check if user exists already in dovecot user table
+     * 
+     * @param  Tinebase_Model_FullUser  $_user
+     */
+    protected function _userExists(Tinebase_Model_FullUser $_user)
+    {
+        $imap = $this->_getImapConnection();
+        
+        $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
+        
+        $mailboxes = $imap->listMailbox('', $mailboxString);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " search for {$mailboxString} in " . print_r($mailboxes, true));
+        
+        // does mailbox exist at all?
+        if (!array_key_exists($mailboxString, $mailboxes)) {
+            return false;
+        }
+        
+        return true;
     }
 }
