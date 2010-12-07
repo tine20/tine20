@@ -130,7 +130,7 @@ Date.prototype.toJSON = function(key) {
         pad(this.getHours()) + ":" +
         pad(this.getMinutes()) + ":" +
         pad(this.getSeconds());
-}
+};
 
 /**
  * addidional formats
