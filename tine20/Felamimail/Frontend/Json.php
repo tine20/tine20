@@ -199,9 +199,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $filter = new Felamimail_Model_MessageFilter(array());
         $filter->setFromArrayInUsersTimezone($filterData);
-        $sourceFolder = Felamimail_Controller_Message::getInstance()->moveMessages($filter, $targetFolderId);
+        $updatedFolders = Felamimail_Controller_Message::getInstance()->moveMessages($filter, $targetFolderId);
         
-        $result = $this->_recordToJson($sourceFolder);
+        $result = $this->_multipleRecordsToJson($updatedFolders);
         
         return $result;
     }
