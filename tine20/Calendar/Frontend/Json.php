@@ -131,7 +131,39 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchEvents($filter, $paging)
     {
-        return $this->_search($filter, $paging, Calendar_Controller_Event::getInstance(), 'Calendar_Model_EventFilter', FALSE , Tinebase_Frontend_Json_Abstract::TOTALCOUNT_COUNTRESULT);
+        $controller = Calendar_Controller_Event::getInstance();
+        
+        $decodedPagination = is_array($paging) ? $paging : Zend_Json::decode($paging);
+        $pagination = new Tinebase_Model_Pagination($decodedPagination);
+        $clientFilter = $filter = $this->_decodeFilter($filter, 'Calendar_Model_EventFilter');
+        
+        // add fixed calendar on demand
+        $fixedCalendars = Tinebase_Config::getInstance()->getConfigAsArray('fixedCalendars', 'Calendar');
+        if (is_array($fixedCalendars) && ! empty($fixedCalendars)) {
+            $fixed = new Calendar_Model_EventFilter(array(), 'AND');
+            $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendars));
+            $periodFilter = $filter->getFilter('period');
+            if ($periodFilter) {
+                $fixed->addFilter($periodFilter);
+            }
+            
+            $og = new Calendar_Model_EventFilter(array(), 'OR');
+            $og->addFilterGroup($fixed);
+            $og->addFilterGroup($clientFilter);
+            
+            $filter = new Calendar_Model_EventFilter(array(), 'AND');
+            $filter->addFilterGroup($og);
+        }
+        
+        $records = $controller->search($filter, $pagination, FALSE);
+        
+        $result = $this->_multipleRecordsToJson($records, $clientFilter);
+        
+        return array(
+            'results'       => $result,
+            'totalcount'    => count($result),
+            'filter'        => $clientFilter->toArray(TRUE),
+        );
     }
     
     /**

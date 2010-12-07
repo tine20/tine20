@@ -352,26 +352,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        // add fixed calendar on demand
-        $fixedCalendars = Tinebase_Config::getInstance()->getConfigAsArray('fixedCalendars', 'Calendar');
-//        Tinebase_Core::getLogger()->ERR(print_r($fixedCalendars, TRUE));
-        
-        if (is_array($fixedCalendars) && ! empty($fixedCalendars)) {
-            $fixed = new Calendar_Model_EventFilter(array(), 'AND');
-            $fixed->addFilter( new Tinebase_Model_Filter_Text('container_id', 'in', $fixedCalendars));
-            $periodFilter = $_filter->getFilter('period');
-            if ($periodFilter) {
-                $fixed->addFilter($periodFilter);
-            }
-            
-            $og = new Calendar_Model_EventFilter(array(), 'OR');
-            $og->addFilterGroup($fixed)->addFilterGroup($_filter);
-            $og->addFilterGroup($_filter);
-            
-            $_filter = new Calendar_Model_EventFilter(array(), 'AND');
-            $_filter->addFilterGroup($og);
-        }
-        
         $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
         if (! $_onlyIds) {
