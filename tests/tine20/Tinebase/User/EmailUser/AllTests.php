@@ -28,15 +28,8 @@ class Tinebase_User_EmailUser_AllTests
     public static function suite ()
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Tinebase All EmailUser Tests');
-#        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-#        if (isset($imapConfig['backend'])) {
-#            switch (ucfirst($imapConfig['backend'])) {
-#                case Tinebase_EmailUser::DBMAIL:
-#                   $suite->addTestSuite('Tinebase_User_EmailUser_DbmailTest');
-#                    break;
-#           }
-#       }
 
+        $suite->addTestSuite('Tinebase_User_EmailUser_Imap_DbmailTest');
         $suite->addTestSuite('Tinebase_User_EmailUser_Imap_DovecotTest');
         $suite->addTestSuite('Tinebase_User_EmailUser_Imap_LdapDbmailSchemaTest');
         $suite->addTestSuite('Tinebase_User_EmailUser_Imap_CyrusTest');
