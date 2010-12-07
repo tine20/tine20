@@ -422,9 +422,25 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_9()
     {
-        $this->_backend->dropForeignKey('addressbook_image', 'addressbook_image::contact_id-addressbook::id');
-        $this->_backend->dropForeignKey('addressbook_list_members', 'addressbook_list_members::contact_id--addressbook::id');
-        
+        try {
+            $this->_backend->dropForeignKey('addressbook_image', 'addressbook_image::contact_id-addressbook::id');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            try {
+                // try it again with table prefix
+                $this->_backend->dropForeignKey('addressbook_image', SQL_TABLE_PREFIX . 'addressbook_image::contact_id-addressbook::id');
+            } catch (Zend_Db_Statement_Exception $zdse) {
+            }
+        }
+        try {
+            $this->_backend->dropForeignKey('addressbook_list_members', 'addressbook_list_members::contact_id--addressbook::id');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            try {
+                // try it again with table prefix
+                $this->_backend->dropForeignKey('addressbook_list_members', SQL_TABLE_PREFIX . 'addressbook_list_members::contact_id--addressbook::id');
+            } catch (Zend_Db_Statement_Exception $zdse) {
+            }
+        }
+            
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
                 <name>id</name>
@@ -485,7 +501,8 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
                     <onupdate>CASCADE</onupdate>
                 </reference>
             </index>');
-        $this->_backend->addForeignKey('addressbook_list_members', $declaration);        
+        $this->_backend->addForeignKey('addressbook_list_members', $declaration);
+        
         $this->setTableVersion('addressbook_list_members', '2');
         
         $this->setApplicationVersion('Addressbook', '3.10');
