@@ -106,7 +106,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+        //$this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
         
         foreach ($this->_accountsToDelete as $account) {
             Felamimail_Controller_Account::getInstance()->delete($account);
@@ -790,27 +790,25 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
      /**
      * test delete in different accounts
-     * 
-     * @todo finish implementation
      */
     public function testDeleteMessagesInDifferentAccounts()
     {
-//        $clonedAccount = $this->_cloneAccount();
-//        $folder = $this->_getFolder($this->_testFolderName, $clonedAccount);
-//        
-//        $cachedMessage1 = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
-//        $cachedMessage2 = $this->messageTestHelper('complete.eml', 'text/service', $folder);
-//        
-//        $this->_controller->delete(array($cachedMessage1, $cachedMessage2));
-//        
-//        $result1 = $this->_searchOnImap('multipart/mixed', $this->_folder);
-//        $this->assertEquals(0, count($result1));
-//        $result2 = $this->_searchOnImap('multipart/mixed', $folder);
-//        $this->assertEquals(0, count($result2));
-//        $result3 = $this->_searchOnImap('multipart/mixed', $this->_getFolder('Trash'));
-//        $this->assertEquals(1, count($result3));
-//        $result4 = $this->_searchOnImap('text/service', $this->_getFolder('Trash'));
-//        $this->assertEquals(1, count($result4));
+        $clonedAccount = $this->_cloneAccount();
+        $trashFolderMainAccount = $this->_getFolder('Trash');
+        $trashFolderClonedAccount = $this->_getFolder('Trash', $clonedAccount);
+        
+        // empty trash
+        Felamimail_Controller_Folder::getInstance()->emptyFolder($trashFolderMainAccount);
+        
+        $cachedMessage1 = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed', $trashFolderMainAccount);
+        $cachedMessage2 = $this->messageTestHelper('complete.eml', 'text/service', $trashFolderClonedAccount);
+        
+        $this->_controller->addFlags(array($cachedMessage1->getId(), $cachedMessage2->getId()), array(Zend_Mail_Storage::FLAG_DELETED));
+        
+        $result1 = $this->_searchOnImap('multipart/mixed', $trashFolderMainAccount);
+        $this->assertEquals(0, count($result1), $trashFolderMainAccount->globalname . ' still contains multipart/mixed messages:' . print_r($result1, TRUE));
+        $result2 = $this->_searchOnImap('text/service', $trashFolderClonedAccount);
+        $this->assertEquals(0, count($result2), $trashFolderClonedAccount->globalname . ' still contains text/service messages:' . print_r($result2, TRUE));
     }
     
     /********************************* protected helper funcs *************************************/
@@ -842,19 +840,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
         $this->_appendMessage($_filename, $folder);
-        return $this->_searchAndCacheMessage($_testHeaderValue);
+        return $this->_searchAndCacheMessage($_testHeaderValue, $folder);
     }
     
     /**
      * search message by header (X-Tine20TestMessage) and add it to cache
      * 
      * @param string $_testHeaderValue
-     * @param string $_folderName
+     * @param Felamimail_Model_Folder $_folder
      * @return Felamimail_Model_Message
      */
-    protected function _searchAndCacheMessage($_testHeaderValue, $_folderName = NULL) 
+    protected function _searchAndCacheMessage($_testHeaderValue, $_folder = NULL) 
     {
-        $folder = ($_folderName !== NULL) ? $this->_getFolder($_folderName) : $this->_folder;
+        $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
         $message = $this->_searchMessage($_testHeaderValue, $folder);
         
         $cachedMessage = $this->_cache->addMessage($message, $folder);
@@ -870,12 +868,14 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param Felamimail_Model_Folder $_folder
      * @return array
      */
-    protected function _searchMessage($_testHeaderValue, $_folder)
+    protected function _searchMessage($_testHeaderValue, $_folder, $_assert = TRUE)
     {
         $imap = $this->_getImapFromFolder($_folder);
         
         $result = $this->_searchOnImap($_testHeaderValue, $_folder, $imap);
-        $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' in folder ' . $_folder->globalname . ' found.');
+        if ($_assert) {
+            $this->assertGreaterThan(0, count($result), 'No messages with HEADER X-Tine20TestMessage: ' . $_testHeaderValue . ' in folder ' . $_folder->globalname . ' found.');
+        }
         $message = $imap->getSummary($result[0]);
         
         return $message;
@@ -912,7 +912,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             $imap = $_imap;
         }
         
-        $imap->selectFolder($_folder->globalname);
+        $imap->expunge($_folder->globalname);
         $result = $imap->search(array(
             'HEADER X-Tine20TestMessage ' . $_testHeaderValue
         ));
