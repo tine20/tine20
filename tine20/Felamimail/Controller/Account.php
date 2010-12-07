@@ -592,6 +592,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * get trash folder for account
+     * 
+     * @param $_account
+     * @return Felamimail_Model_Folder
+     */
+    public function getTrashFolder($_account)
+    {
+        $account = ($_account instanceof Felamimail_Model_Account) ? $_account : $this->get($_account);
+        $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $account->trash_folder);
+        return $trashFolder;
+    }
+    
+    /**
      * set vacation active field for account
      * 
      * @param string|Felamimail_Model_Account $_account
