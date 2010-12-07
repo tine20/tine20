@@ -34,7 +34,9 @@ class Hash_Password_MD5
         
         // generate hash
         switch ($algo) {
+            case 'MD5':
             case 'PLAIN-MD5':
+                $algo = 'MD5';
                 $hash = hash('md5', $password);
                 break;
                 
