@@ -199,15 +199,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // set flags on imap server
         foreach ($messagesToFlag as $message) {
+            //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), TRUE));
             
             // write flags on imap (if folder changes or count messages > 50)
             if ($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Folder changed, writing flags.');
                 $this->_addFlagsOnImap($imapMessageUids, $flags, $imapBackend);
                 $imapMessageUids = array();
             }
             
             // init new folder
             if ($lastFolderId != $message->folder_id) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting new IMAP backend for folder ' . $message->folder_id);
                 $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
                 $lastFolderId             = $message->folder_id;
                 $folderIds[$lastFolderId] = array(
