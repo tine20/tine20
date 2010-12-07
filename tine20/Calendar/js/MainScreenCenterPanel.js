@@ -345,7 +345,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
            
         var ctxMenu = new Ext.menu.Menu({
-            items: this.recordActions.concat(addAction, responseAction)
+            items: this.recordActions.concat(addAction, responseAction || [])
         });
         ctxMenu.showAt(e.getXY());
     },
