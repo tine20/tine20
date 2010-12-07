@@ -419,6 +419,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @return Felamimail_Model_Folder
      * 
      * @todo return list of affected folders
+     * @todo break this fn in smaller parts
      */
     public function moveMessages($_messages, $_targetFolder)
     {
@@ -441,16 +442,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // move + delete messages on imap server
         foreach ($messages as $message) {
+            //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' message ' . $message->getId());
             if ($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
                 $this->_moveBatchOfMessages($imapMessageUids, $targetFolder->globalname, $imapBackend);
                 $imapMessageUids = array();
             }
             
             if ($lastFolderId != $message->folder_id) {
-                $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id, $selectedFolder);
+                $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
                 if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH && (! isset($targetFolder) || $targetFolder->account_id != $message->account_id)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting trash folder for account.');
-                    $targetFolder = Felamimail_Controller_Account::getInstance()->getTrashFolder($message->account_id);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting trash folder for account id ' . $message->account_id);
+                    try {
+                        $targetFolder = Felamimail_Controller_Account::getInstance()->getTrashFolder($message->account_id);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No trash folder found - skipping message');
+                        $messages->removeRecord($message);
+                        $imapBackend = NULL;
+                        $lastFolderId = NULL;
+                        continue;
+                    }
                 }
                 $lastFolderId             = $message->folder_id;
                 $folderIds[$lastFolderId] = array(
