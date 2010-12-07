@@ -195,7 +195,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
         $lastFolderId = null;
         $imapBackend  = null;
-        $folderIds    = array();
+        $folderCounterById    = array();
         
         // set flags on imap server
         foreach ($messagesToFlag as $message) {
@@ -213,7 +213,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting new IMAP backend for folder ' . $message->folder_id);
                 $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
                 $lastFolderId             = $message->folder_id;
-                $folderIds[$lastFolderId] = array(
+                $folderCounterById[$lastFolderId] = array(
                     'decrementMessagesCounter' => 0, 
                     'decrementUnreadCounter'   => 0
                 );
@@ -227,7 +227,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $this->_addFlagsOnImap($imapMessageUids, $flags, $imapBackend);
         }    
 
-        $folderCounts = $this->_addFlagsOnCache($messagesToFlag, $flags, $folderIds);
+        $folderCounts = $this->_addFlagsOnCache($messagesToFlag, $flags, $folderCounterById);
         $affectedFolders = $this->_updateFolderCounts($folderCounts);
         
         return $affectedFolders;
@@ -352,7 +352,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
         $lastFolderId = null;
         $imapBackend  = null;
-        $folderIds    = array();
+        $folderCounterById    = array();
         
         // set flags on imap server
         foreach ($messagesToUnflag as $message) {
@@ -365,7 +365,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if ($lastFolderId != $message->folder_id) {
                 $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
                 $lastFolderId             = $message->folder_id;
-                $folderIds[$lastFolderId] = array(
+                $folderCounterById[$lastFolderId] = array(
                     'incrementUnreadCounter' => 0
                 );
             }
@@ -389,7 +389,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         foreach($messagesToUnflag as $message) {
             if (in_array(Zend_Mail_Storage::FLAG_SEEN, $flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
                 // count messages with seen flag for the first time
-                $folderIds[$message->folder_id]['incrementUnreadCounter']++;
+                $folderCounterById[$message->folder_id]['incrementUnreadCounter']++;
             }
             
             $this->_backend->clearFlag($message, $flags);
@@ -407,7 +407,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cleared flags on cache');
         
-        $affectedFolders = $this->_updateFolderCounts($folderIds);
+        $affectedFolders = $this->_updateFolderCounts($folderCounterById);
         return $affectedFolders;
     }
     
@@ -416,95 +416,117 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param  mixed  $_messages
      * @param  mixed  $_targetFolder can be one of: folder_id, Felamimail_Model_Folder or Felamimail_Model_Folder::FOLDER_TRASH (constant)
-     * @return Felamimail_Model_Folder
-     * 
-     * @todo return list of affected folders
-     * @todo break this fn in smaller parts
+     * @return Tinebase_Record_RecordSet
      */
     public function moveMessages($_messages, $_targetFolder)
     {
         // we always need to read the messages from cache to get the current flags
         $messages = $this->_convertToRecordSet($_messages, TRUE);
+        $messages->sort('folder_id');
                 
         if ($_targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
             $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' move ' . count($messages) . ' messages to ' . ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) ? $_targetFolder : $targetFolder->globalname
-        );
-        
-        $messages->sort('folder_id');
-        
-        $lastFolderId  = null;
-        $imapBackend   = null;
-        $folderIds    = array();
-        
-        // move + delete messages on imap server
-        foreach ($messages as $message) {
-            //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' message ' . $message->getId());
-            if ($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
-                $this->_moveBatchOfMessages($imapMessageUids, $targetFolder->globalname, $imapBackend);
-                $imapMessageUids = array();
-            }
+        foreach ($messages->folder_id as $folderId) {
+            $messagesInFolder = $messages->filter('folder_id', $folderId);
             
-            if ($lastFolderId != $message->folder_id) {
-                $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
-                if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH && (! isset($targetFolder) || $targetFolder->account_id != $message->account_id)) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting trash folder for account id ' . $message->account_id);
-                    try {
-                        $targetFolder = Felamimail_Controller_Account::getInstance()->getTrashFolder($message->account_id);
-                    } catch (Tinebase_Exception_NotFound $tenf) {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No trash folder found - skipping message');
-                        $messages->removeRecord($message);
-                        $imapBackend = NULL;
-                        $lastFolderId = NULL;
-                        continue;
-                    }
+            if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
+                // messages should be moved to trash -> need to determine the trash folder for the account of the folder that contains the messages
+                try {
+                    $targetFolder = Felamimail_Controller_Account::getInstance()->getTrashFolder($messagesInFolder->getFirstRecord()->account_id);
+                    $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No trash folder found - skipping messages in this folder.');
+                    $messages->removeRecords($messagesInFolder);
                 }
-                $lastFolderId             = $message->folder_id;
-                $folderIds[$lastFolderId] = array(
-                    'decrementMessagesCounter' => 0, 
-                    'decrementUnreadCounter' => 0
-                );
+            } else if ($messagesInFolder->getFirstRecord()->account_id == $targetFolder->account_id) {
+                // messages are moved within the same imap account
+                $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
+            } else {
+                // messages are moved to a different imap account
+                throw new Felamimail_Exception('not yet implemented');
             }
-            
-            $imapMessageUids[] = $message->messageuid;
         }
-        
-        // move remaining
-        if ($imapBackend !== null && count($imapMessageUids) > 0) {
-            $this->_moveBatchOfMessages($imapMessageUids, $targetFolder->globalname, $imapBackend);
-        }    
 
         // delete messages in local cache
         $number = $this->_backend->delete($messages->getArrayOfIds());
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Deleted ' . $number .' messages from cache');
         
-        // update counts
-        foreach($messages as $message) {
+        return $this->_updateCountsAfterMove($messages);
+    }
+    
+    /**
+     * move messages from one folder to another folder within the same email account
+     * 
+     * @param Tinebase_Record_RecordSet $_messages
+     * @param Felamimail_Model_Folder $_targetFolder
+     */
+    protected function _moveMessagesInFolderOnSameAccount(Tinebase_Record_RecordSet $_messages, Felamimail_Model_Folder $_targetFolder)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Move ' . count($_messages) . ' message(s) to ' . $_targetFolder->globalname
+        );
+        
+        $imapBackend = Felamimail_Backend_ImapFactory::factory($_messages->getFirstRecord()->account_id);
+        
+        $imapMessageUids = array();
+        foreach ($_messages as $message) {
+            $imapMessageUids = $message->messageuid;
+            
+            if (count($imapMessageUids) >= 50) {
+                $this->_moveBatchOfMessages($imapMessageUids, $_targetFolder->globalname, $imapBackend);
+                $imapMessageUids = array();
+            }
+        }
+        
+        // the rest
+        if (count($imapMessageUids) > 0) {
+            $this->_moveBatchOfMessages($imapMessageUids, $_targetFolder->globalname, $imapBackend);
+        }
+    }
+    
+    /**
+     * update folder count after moving messages
+     * 
+     * @param Tinebase_Record_RecordSet $_messages
+     * @param array $_folderCounterById
+     * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
+     */
+    protected function _updateCountsAfterMove(Tinebase_Record_RecordSet $_messages)
+    {
+        $folderCounterById = array();
+        foreach($_messages as $message) {
+            if (! array_key_exists($message->folder_id, $folderCounterById)) {
+                $folderCounterById[$message->folder_id] = array(
+                    'decrementUnreadCounter'    => 0,
+                    'decrementMessagesCounter'  => 0,
+                );
+            }
+            
             if (!is_array($message->flags) || !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
                 // count messages with seen flag for the first time
-                $folderIds[$message->folder_id]['decrementUnreadCounter']++;
+                $folderCounterById[$message->folder_id]['decrementUnreadCounter']++;
             }
-            $folderIds[$message->folder_id]['decrementMessagesCounter']++;
+            $folderCounterById[$message->folder_id]['decrementMessagesCounter']++;
         }
-        $affectedFolders = $this->_updateFolderCounts($folderIds);
-        
-        return Felamimail_Controller_Folder::getInstance()->get($targetFolder);
+        $affectedFolders = $this->_updateFolderCounts($folderCounterById);
+
+        return $affectedFolders;
     }
     
     /**
      * move messages on imap server
      * 
      * @param array $_uids
-     * @param string $_targetFolder
+     * @param string $_targetFolderName
      * @param Felamimail_Backend_ImapProxy $_imap
      */
-    protected function _moveBatchOfMessages($_uids, $_targetFolder, Felamimail_Backend_ImapProxy $_imap)
+    protected function _moveBatchOfMessages($_uids, $_targetFolderName, Felamimail_Backend_ImapProxy $_imap)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Move ' . count($_uids) . ' messages on imap server');
-        $_imap->copyMessage($_uids, $_targetFolder);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Move ' . count($_uids) . ' messages to folder ' . $_targetFolderName . ' on imap server');
+        $_imap->copyMessage($_uids, $_targetFolderName);
         $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
     }
     
@@ -578,7 +600,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * append a new message to given folder
      *
      * @param  string|Felamimail_Model_Folder  $_folder   id of target folder
-     * @param  string  $_message  full message content
+     * @param  string|resource  $_message  full message content
      * @param  array   $_flags    flags for new message
      */
     public function appendMessage($_folder, $_message, $_flags = null)
@@ -1166,8 +1188,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Backend_ImapProxy   $_imapBackend
      * @throws Felamimail_Exception_IMAPServiceUnavailable
      * @return Felamimail_Backend_ImapProxy
-     * 
-     * @todo refactor exception handling
      */
     protected function _getBackendAndSelectFolder($_folderId = NULL, &$_folder = NULL, $_select = TRUE, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
