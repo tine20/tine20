@@ -62,6 +62,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     {
         foreach ($this->_customData as $customData) {
             if ($customData['field'] == 'account_id') {
+                $db = $_backend->getAdapter();
                 $folderIds = $this->_getFolderIdsForAccount($customData['value']);
                 $_select->where($db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.folder_id') . ' IN (?)', $folderIds));
                 
