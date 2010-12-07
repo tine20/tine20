@@ -305,7 +305,13 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testExportImport()
     {
-        $filter = new Addressbook_Model_ContactFilter();
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array(
+                'field'    => 'n_fileas',
+                'operator' => 'equals',
+                'value'    =>  Tinebase_Core::getUser()->accountDisplayName
+            )
+        ));
         $tag = new Tinebase_Model_Tag(array(
             'type'  => Tinebase_Model_Tag::TYPE_SHARED,
             'name'  => 'tag::testImport',
@@ -319,7 +325,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         // export first and create files array
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
         $filename = $exporter->generate();
-        $this->assertContains(',"tag::testImport"', file_get_contents($filename), 'tag was not found in export');
+        $this->assertContains(',"tag::testImport', file_get_contents($filename), 'tag was not found in export');
         
         // then import
         $files = array(
@@ -334,8 +340,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         // check
         $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
-        $this->assertEquals('Admin Account, Tine 2.0', $result['results'][0]['n_fileas'], 'file as not found');
-        $this->assertEquals('tag::testImport', $result['results'][0]['tags'], 'Did not get tag');
+        $this->assertEquals(Tinebase_Core::getUser()->accountDisplayName, $result['results'][0]['n_fileas'], 'file as not found');
+        $this->assertContains('tag::testImport', $result['results'][0]['tags'], 'Did not get tag');
         
         // cleanup
         unset($filename);

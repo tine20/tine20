@@ -74,10 +74,16 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public function testImport()
     {
-        $result = $this->_doImport(array('dryrun' => 1), new Addressbook_Model_ContactFilter(array()));
+        $result = $this->_doImport(array('dryrun' => 1), new Addressbook_Model_ContactFilter(array(
+            array(
+                'field'    => 'n_fileas',
+                'operator' => 'equals',
+                'value'    =>  Tinebase_Core::getUser()->accountDisplayName
+            )
+        )));
         
         $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
-        $this->assertEquals('Admin Account, Tine 2.0', $result['results']->getFirstRecord()->n_fileas, 'file as not found');
+        $this->assertEquals(Tinebase_Core::getUser()->accountDisplayName, $result['results']->getFirstRecord()->n_fileas, 'file as not found');
     }
 
     /**

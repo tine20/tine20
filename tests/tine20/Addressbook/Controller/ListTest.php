@@ -233,7 +233,8 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
         
         $list = Addressbook_Controller_List::getInstance()->addListMember($list, $this->objects['contact1']);
         
-        $this->assertEquals($list->members, array($this->objects['contact1']->getId(), $this->objects['contact2']->getId()));
+        $this->assertTrue(in_array($this->objects['contact1']->getId(), $list->members));
+        $this->assertTrue(in_array($this->objects['contact2']->getId(), $list->members));
     }
 
     /**
