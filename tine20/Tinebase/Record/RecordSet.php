@@ -150,6 +150,18 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
             $this->offsetUnset($idx);
         }
     }
+
+    /**
+     * remove records from set
+     * 
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    public function removeRecords(Tinebase_Record_RecordSet $_records)
+    {
+        foreach ($_records as $record) {
+            $this->removeRecord($record);
+        }
+    }
     
     /**
      * checks if each member record of this set is valid
