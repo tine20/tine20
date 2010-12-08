@@ -27,18 +27,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 0 -> max size = memory limit
      * 2097152 = 2MB
      */
-    //const MAX_ATTACHMENT_SIZE = 2097152;
     const MAX_ATTACHMENT_SIZE = 0;
     
     /**
      * imap flags to constants translation
      * @var array
      */
-    protected static $_allowedFlags = array('\Answered' => Zend_Mail_Storage::FLAG_ANSWERED,
-                                            '\Seen'     => Zend_Mail_Storage::FLAG_SEEN,
-                                            '\Deleted'  => Zend_Mail_Storage::FLAG_DELETED,
-                                            '\Draft'    => Zend_Mail_Storage::FLAG_DRAFT,
-                                            '\Flagged'  => Zend_Mail_Storage::FLAG_FLAGGED);
+    protected static $_allowedFlags = array('\Answered' => Zend_Mail_Storage::FLAG_ANSWERED,    // _("Answered")
+                                            '\Seen'     => Zend_Mail_Storage::FLAG_SEEN,        // _("Seen")
+                                            '\Deleted'  => Zend_Mail_Storage::FLAG_DELETED,     // _("Deleted")
+                                            '\Draft'    => Zend_Mail_Storage::FLAG_DRAFT,       // _("Draft")
+                                            '\Flagged'  => Zend_Mail_Storage::FLAG_FLAGGED);    // _("Flagged")
     
     /**
      * application name (is needed in checkRight())
