@@ -672,6 +672,56 @@ class Zend_Mail_Protocol_Imap
         return $result;
     }
     
+    /**
+     * set quota for specified mailbox
+     * 
+     * @see http://tools.ietf.org/html/rfc2087
+     * @param  string  $mailbox   the mailbox (user.example)
+     * @param  string  $resource  the resource (STORAGE or MESSAGE)
+     * @param  int     $limit     the limit (set to null to remove limit)
+     */
+    public function setQuota($mailbox, $resource, $limit=null)
+    {
+        $tokens = array(
+            $this->escapeString($mailbox),
+            $this->escapeList($limit !== null ? array(strtoupper($resource), $limit) : array())
+        );
+        
+        return $this->requestAndResponse('SETQUOTA', $tokens, true);
+    }
+    
+    public function getQuotaRoot($mailbox)
+    {
+        $this->sendRequest('GETQUOTAROOT', array($this->escapeString($mailbox)), $tag);
+
+        $result = array();
+        while (!$this->readLine($tokens, $tag)) {
+
+            #var_dump($tokens);
+#            $nsNames = array('personal', 'other', 'shared');
+#            $index = 0;
+            
+#            foreach ($tokens as $token) {
+#                if (is_array($token)) {
+#                    $result[$nsNames[$index]] = array(
+#                        'name' => preg_replace('/"/', '', $token[0][0]), 
+#                        'delimiter' => preg_replace('/"/', '', $token[0][1]),
+#                    );
+#                } else if ($token == 'NIL') {
+#                    $result[$nsNames[$index]] = array('name' => 'NIL');
+#                } else {
+#                    continue;
+#                }
+#                $index++;
+#            }
+        }
+
+        if ($tokens[0] != 'OK') {
+            return false;
+        }
+        
+        return $result;
+    }
     
     /**
      * get mailbox list
