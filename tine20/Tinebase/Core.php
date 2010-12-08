@@ -146,15 +146,15 @@ class Tinebase_Core
 
         /**************************** JSON API *****************************/
         if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  ||
-        (isset($_SERVER['CONTENT_TYPE']) && substr($_SERVER['CONTENT_TYPE'],0,16) == 'application/json')  ||
-        (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
+            (isset($_SERVER['CONTENT_TYPE']) && substr($_SERVER['CONTENT_TYPE'],0,16) == 'application/json')  ||
+            (isset($_POST['requestType']) && $_POST['requestType'] == 'JSON')
         ) {
             $server = new Tinebase_Server_Json();
 
             /**************************** SNOM API *****************************/
         } elseif(
-        isset($_SERVER['HTTP_USER_AGENT']) &&
-        preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])
+            isset($_SERVER['HTTP_USER_AGENT']) &&
+            preg_match('/^Mozilla\/4\.0 \(compatible; (snom...)\-SIP (\d+\.\d+\.\d+)/i', $_SERVER['HTTP_USER_AGENT'])
         ) {
             $server = new Voipmanager_Server_Snom();
 
@@ -171,8 +171,14 @@ class Tinebase_Core
             $server = new ActiveSync_Server_Http();
 
 
-            /**************************** *DAV API ****************************
-             * RewriteRule ^/dav(.*) /index.php$1 [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+            /**************************** DAV API **********************************
+             * RewriteCond %{REQUEST_METHOD} ^(PROPFIND|PUT|DELETE|OPTIONS)$
+             * RewriteRule ^/(.*) /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             *
+             * RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+             * RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+             * RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-l
+             * RewriteRule ^/(.*) /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              */
         } elseif(isset($_SERVER['REDIRECT_DAV']) && $_SERVER['REDIRECT_DAV'] == 'true') {
             $server = new Tinebase_Server_WebDav();
