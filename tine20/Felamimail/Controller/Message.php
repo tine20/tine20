@@ -606,7 +606,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         $sourceAccount = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
-        $targetAccount = ($_message->account_id == $folder->account_id) ? $account : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+        $targetAccount = ($_message->account_id == $folder->account_id) ? $sourceAccount : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
         $mailToAppend = $this->_createMailForSending($_message, $sourceAccount);
         
