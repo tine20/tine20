@@ -432,6 +432,20 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try search for a message with all inboxes filter
+     */
+    public function testSearchMessageWithAllInboxesFilter()
+    {
+        $sentMessage = $this->_sendMessage();
+        $filter = array(array(
+            'field' => 'path', 'operator' => 'in', 'value' => Felamimail_Model_MessageFilter::PATH_ALLINBOXES
+        ));
+        $result = $this->_json->searchMessages($filter, '');
+        $message = $this->_getMessageFromSearchResult($result, $sentMessage['subject']);
+        $this->assertTrue(! empty($message), 'Sent message not found with all inboxes filter');
+    }
+    
+    /**
      * test flags (add + clear + deleted)
      * 
      */
