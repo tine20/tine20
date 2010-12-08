@@ -422,7 +422,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     {
         // we always need to read the messages from cache to get the current flags
         $messages = $this->_convertToRecordSet($_messages, TRUE);
-        $messages->sort('folder_id');
+        $messages->addIndices(array('folder_id'));
         
         if ($_targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
             $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
