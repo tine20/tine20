@@ -471,6 +471,27 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_account', '14');
         $this->setApplicationVersion('Felamimail', '3.16');
     }
+
+    /**
+     * update function (-> 3.17)
+     * - add default favorite for all inboxes
+     */    
+    public function update_16()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        $myInboxPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'name'              => Felamimail_Preference::DEFAULTPERSISTENTFILTER_NAME,
+            'description'       => "All INBOXES", // _("All INBOXES")
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId(),
+            'model'             => 'Felamimail_Model_MessageFilter',
+            'filters'           => array(
+                array('field' => 'path'    , 'operator' => 'in', 'value' => Felamimail_Model_MessageFilter::PATH_ALLINBOXES),
+            )
+        )));
+        
+        $this->setApplicationVersion('Felamimail', '3.17');
+    }
     
     /**
      * clear message cache tables and reset folder status

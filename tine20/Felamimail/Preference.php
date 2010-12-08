@@ -41,7 +41,6 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      *
      */
     const USEINADB = 'useInAdb';
-
    
     /**
      * use for default note
@@ -55,6 +54,11 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      * @todo add this to more apps?
      */
     const CONFIRM_DELETE = 'confirmDelete';
+    
+    /**
+     * default filter name
+     */
+    const DEFAULTPERSISTENTFILTER_NAME = 'allinboxes';
     
     /**
      * application
