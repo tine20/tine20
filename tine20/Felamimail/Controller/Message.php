@@ -428,8 +428,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
         }
         
-        foreach ($messages->folder_id as $folderId) {
+        foreach (array_unique($messages->folder_id) as $folderId) {
             $messagesInFolder = $messages->filter('folder_id', $folderId);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' moving messages: ' . print_r($messagesInFolder->getArrayOfIds(), TRUE));
             
             if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
                 // messages should be moved to trash -> need to determine the trash folder for the account of the folder that contains the messages
@@ -470,7 +471,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $imapMessageUids = array();
         foreach ($_messages as $message) {
-            $imapMessageUids = $message->messageuid;
+            $imapMessageUids[] = $message->messageuid;
             
             if (count($imapMessageUids) >= 50) {
                 $this->_moveBatchOfMessages($imapMessageUids, $_targetFolder->globalname, $imapBackend);
@@ -492,6 +493,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _moveMessagesToAnotherAccount(Tinebase_Record_RecordSet $_messages, Felamimail_Model_Folder $_targetFolder)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Move ' . count($_messages) . ' message(s) to ' . $_targetFolder->globalname . ' in account ' . $_targetFolder->account_id
+        );
+        
         foreach ($_messages as $message) {
             $this->saveMessageInFolder($_targetFolder, $message);
         }
@@ -532,13 +537,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_uids
      * @param string $_targetFolderName
      * @param Felamimail_Backend_ImapProxy $_imap
+     * 
+     * @todo perhaps we should check the existance of the messages on the imap instead of catching the exception here
      */
     protected function _moveBatchOfMessages($_uids, $_targetFolderName, Felamimail_Backend_ImapProxy $_imap)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Move ' . count($_uids) . ' messages to folder ' . $_targetFolderName . ' on imap server');
-        $_imap->copyMessage($_uids, $_targetFolderName);
-        $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
+        try {
+            $_imap->copyMessage($_uids, $_targetFolderName);
+            $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
+        } catch (Felamimail_Exception_IMAP $fei) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $fei->getMessage()); 
+        }
     }
     
     /**
