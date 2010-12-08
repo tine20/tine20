@@ -19,11 +19,11 @@
  */
 class Tinebase_WebDav_Root extends Sabre_DAV_Directory 
 {
-    protected $_name;
+    protected $_path;
     
-    public function __construct($name) 
+    public function __construct($_path) 
     {
-        $this->_name = $name;
+        $this->_path = $_path;
     }
     
     public function getChildren() 
@@ -31,12 +31,15 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
         $children = array();
         
         // Loop through the directory, and create objects for each node
-        foreach(array('Addressbook', 'Calendar') as $application) {
-            if(Tinebase_Core::getUser()->hasRight($application, Tinebase_Acl_Rights::RUN)) {
+        foreach(Tinebase_Core::getUser()->getApplications() as $application) {
+            $className = $application . '_WebDav';
+            
+            if (@class_exists($className)) {
+                Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' adding WebDav application: ' . $application);
                 $children[] = $this->getChild($application);
             }
         }
-             
+        
         return $children;            
     }
     
@@ -49,6 +52,6 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
     
     public function getName() 
     {
-        return $this->_name;
+        return $this->_path;
     }    
 }
