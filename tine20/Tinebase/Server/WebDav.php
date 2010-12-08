@@ -19,44 +19,6 @@
  */
 class Tinebase_Server_WebDav implements Tinebase_Server_Interface
 {
-    /**
-     * 
-     * @var Sabre_DAV_Server
-     */
-    protected $_server;
-    
-    /**
-     * the constructor
-     * 
-     */
-    public function __construct()
-    {
-        $rootDirectory = new Sabre_DAV_SimpleDirectory('root');
-        $rootDirectory->addChild(
-            new Tinebase_WebDav_Root('dav')
-        );
-        
-        $tree = new Sabre_DAV_ObjectTree($rootDirectory);
-        
-        $server = new Sabre_DAV_Server($tree);
-        
-        $server->setBaseUri('/');
-        
-        #$lockBackend = new Sabre_DAV_Locks_Backend_FS('/var/www/phpfcgi/cache');
-        #$lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
-        #$server->addPlugin($lockPlugin);
-        
-        $server->addPlugin(
-            new Sabre_DAV_Browser_Plugin()
-        );
-        
-        $server->addPlugin(
-            new Sabre_CalDAV_Plugin()
-        );
-        
-        $this->_server = $server;
-    }
-    
     public function handle()
     {
         try {
@@ -93,6 +55,24 @@ class Tinebase_Server_WebDav implements Tinebase_Server_Interface
             return;                            
         }
         
-        $this->_server->exec();
+        $tree = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root('/'));
+        
+        $server = new Sabre_DAV_Server($tree);
+        
+        #$server->setBaseUri('/');
+        
+        #$lockBackend = new Sabre_DAV_Locks_Backend_FS('/var/www/phpfcgi/cache');
+        #$lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
+        #$server->addPlugin($lockPlugin);
+        
+        $server->addPlugin(
+            new Sabre_DAV_Browser_Plugin()
+        );
+        
+        $server->addPlugin(
+            new Sabre_CalDAV_Plugin()
+        );
+        
+        $server->exec();
     }
 }
