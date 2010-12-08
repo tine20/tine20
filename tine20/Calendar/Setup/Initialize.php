@@ -30,6 +30,9 @@ class Calendar_Setup_Initialize extends Setup_Initialize
         $this->_initializeFavorites();
     }
     
+    /**
+     * init favorites
+     */
     protected function _initializeFavorites()
     {
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
