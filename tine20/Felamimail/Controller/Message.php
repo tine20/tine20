@@ -585,14 +585,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * save message in folder
+     * save message in folder (target folder can be within a different account)
      * 
      * @param string|Felamimail_Model_Folder $_folder globalname or folder record
      * @param Felamimail_Model_Message $_message
-     * @param Felamimail_Model_Account $_account
      * @return Felamimail_Model_Message
      */
-    public function saveMessageInFolder($_folder, $_message, $_account = NULL)
+    public function saveMessageInFolder($_folder, $_message)
     {
         $sourceAccount = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
