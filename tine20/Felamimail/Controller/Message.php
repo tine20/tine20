@@ -423,7 +423,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // we always need to read the messages from cache to get the current flags
         $messages = $this->_convertToRecordSet($_messages, TRUE);
         $messages->sort('folder_id');
-                
+        
         if ($_targetFolder !== Felamimail_Model_Folder::FOLDER_TRASH) {
             $targetFolder = ($_targetFolder instanceof Felamimail_Model_Folder) ? $_targetFolder : Felamimail_Controller_Folder::getInstance()->get($_targetFolder);
         }
@@ -441,11 +441,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $messages->removeRecords($messagesInFolder);
                 }
             } else if ($messagesInFolder->getFirstRecord()->account_id == $targetFolder->account_id) {
-                // messages are moved within the same imap account
                 $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
             } else {
-                // messages are moved to a different imap account
-                throw new Felamimail_Exception('not yet implemented');
+                $this->_moveMessagesToAnotherAccount($messagesInFolder, $targetFolder);
             }
         }
 
@@ -483,6 +481,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // the rest
         if (count($imapMessageUids) > 0) {
             $this->_moveBatchOfMessages($imapMessageUids, $_targetFolder->globalname, $imapBackend);
+        }
+    }
+
+    /**
+     * move messages to another email account
+     * 
+     * @param Tinebase_Record_RecordSet $_messages
+     * @param Felamimail_Model_Folder $_targetFolder
+     */
+    protected function _moveMessagesToAnotherAccount(Tinebase_Record_RecordSet $_messages, Felamimail_Model_Folder $_targetFolder)
+    {
+        foreach ($_messages as $message) {
+            $this->saveMessageInFolder($_targetFolder, $message);
         }
     }
     
@@ -576,22 +587,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * save message in folder
      * 
-     * @param string $_folderName
+     * @param string|Felamimail_Model_Folder $_folder globalname or folder record
      * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Account $_account
      * @return Felamimail_Model_Message
      */
-    public function saveMessageInFolder($_folderName, $_message)
+    public function saveMessageInFolder($_folder, $_message, $_account = NULL)
     {
-        $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
+        $sourceAccount = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
+        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
+        $targetAccount = ($_message->account_id == $folder->account_id) ? $account : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
-        $mailToAppend = $this->_createMailForSending($_message, $account);
+        $mailToAppend = $this->_createMailForSending($_message, $sourceAccount);
         
         $transport = new Felamimail_Transport();
         $mailAsString = $transport->getRawMessage($mailToAppend);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Appending message ' . $_message->subject . ' to folder ' . $_folderName);
-        Felamimail_Backend_ImapFactory::factory($account)->appendMessage($mailAsString, $_folderName);
+            ' Appending message ' . $_message->subject . ' to folder ' . $folder->globalname . ' in account ' . $targetAccount->name);
+        Felamimail_Backend_ImapFactory::factory($targetAccount)->appendMessage($mailAsString, $folder->globalname);
         
         return $_message;
     }
