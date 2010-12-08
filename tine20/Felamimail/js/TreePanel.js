@@ -471,15 +471,18 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     onUpdateFolderStore: function(store, record, operation) {
         if (operation === Ext.data.Record.EDIT) {
-            var selectedNode = this.getSelectionModel().getSelectedNode();
+            var selectedNodes = this.getSelectionModel().getSelectedNodes();
             
             // TODO move this to grid panel
-            if (selectedNode && selectedNode.id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
-                var contentPanel = this.app.getMainScreen().getCenterPanel();
-                if (contentPanel) {
-                    // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
-                    // TODO do not reload details panel
-                    contentPanel.loadData(true, true, true);
+            for (var i = 0; i < selectedNodes.length; i++) {
+                if (selectedNodes[i].id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
+                    var contentPanel = this.app.getMainScreen().getCenterPanel();
+                    if (contentPanel) {
+                        // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
+                        // TODO do not reload details panel
+                        contentPanel.loadData(true, true, true);
+                        break;
+                    }
                 }
             }
                 
@@ -560,7 +563,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * updates folder staus icons/info in this tree
+     * updates folder status icons/info in this tree
      * 
      * @param {Tine.Felamimail.Model.Folder} folder
      */
