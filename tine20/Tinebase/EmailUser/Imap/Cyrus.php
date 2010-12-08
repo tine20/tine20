@@ -181,8 +181,9 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
             }
         }
         
-        $imap->setQuota($mailboxString, 'STORAGE', convertToBytes($_newUserProperties->imapUser->emailMailQuota . 'M') / 1024);
-        $quota = $imap->getQuotaRoot($mailboxString);
+        $limit = convertToBytes($_newUserProperties->imapUser->emailMailQuota . 'M') / 1024;
+        
+        $imap->setQuota($mailboxString, 'STORAGE', !empty($limit) ? $limit : null);
         
         $this->inspectGetUserByProperty($_addedUser);
     }
@@ -235,9 +236,9 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
         
         $mailboxString = $this->_getUserMailbox($_updatedUser->accountLoginName);
         
-        $imap->setQuota($mailboxString, 'STORAGE', convertToBytes($_newUserProperties->imapUser->emailMailQuota . 'M') / 1024);
+        $limit = convertToBytes($_newUserProperties->imapUser->emailMailQuota . 'M') / 1024;
         
-        $quota = $imap->getQuotaRoot($mailboxString);
+        $imap->setQuota($mailboxString, 'STORAGE', !empty($limit) ? $limit : null);
         
         $this->inspectGetUserByProperty($_updatedUser);
     }
