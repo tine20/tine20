@@ -18,6 +18,46 @@ msgstr ""
 msgid "%s's personal tasks"
 msgstr "%s személyes feladatok"
 
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "TEVÉKENYSÉG-SZÜKSÉGES"
+
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "ELKÉSZÜLT"
+
+#: Setup/setup.xml:339 js/Status.js:187
+msgid "IN-PROCESS"
+msgstr "FELDOLGOZÁS ALATT"
+
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "TÖRÖLVE"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+msgid "All tasks of my taskslists"
+msgstr "Minden feladat a feladatlistámon"
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr "Minden feladatom"
+
+#: Preference.php:71
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
+
+#: Preference.php:72
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Alapértelmezett kedvenc, ami a Feladatok indításakor betöltődik"
+
+#: Preference.php:75
+msgid "Default Task List"
+msgstr ""
+
+#: Preference.php:76
+msgid "The default task list to create new tasks in."
+msgstr ""
+
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
 msgstr "megosztott feladatalisták kezelése"
@@ -34,95 +74,10 @@ msgstr "kedvenc megosztott feladatok kezelése"
 msgid "Create or update shared tasks favorites"
 msgstr "Kedvenc megosztott feladatok készítése vagy frissítése"
 
-#: Model/Task.php:183
-#, fuzzy
-msgid "Due"
-msgstr "Esedékes"
-
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Szervező"
-
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Leírás"
-
-#: Model/Task.php:186 js/TaskEditDialog.js:189 js/GridPanel.js:163
-msgid "Priority"
-msgstr "Prioritás"
-
-#: Model/Task.php:187 js/TaskEditDialog.js:209 js/GridPanel.js:190
-#: js/Status.js:33
+#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
+#: Model/Task.php:187
 msgid "Status"
 msgstr "Állapot"
-
-#: Model/Task.php:188 js/GridPanel.js:177
-msgid "Percent"
-msgstr "Százalék"
-
-#: Model/Task.php:195 js/GridPanel.js:141
-msgid "Lead"
-msgstr "Ügylet"
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr "Telefon"
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr "Email"
-
-#: js/Tasks.js:99
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Feladat"
-msgstr[1] "Feladatok"
-
-#: js/Tasks.js:99
-msgid "Tasks"
-msgstr "Feladatok"
-
-#: js/Tasks.js:103
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "teendő lista"
-msgstr[1] "teendő listák"
-
-#: js/Tasks.js:103
-msgid "to do lists"
-msgstr "teendő listák"
-
-#: js/TaskEditDialog.js:142
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Meg kell adnod egy lejárati időt, mert riasztás van beállítva!"
-
-#: js/TaskEditDialog.js:181 js/GridPanel.js:93 js/GridPanel.js:144
-msgid "Summary"
-msgstr "Összegzés"
-
-#: js/TaskEditDialog.js:186
-msgid "Due date"
-msgstr "Lejárati idő"
-
-#: js/TaskEditDialog.js:192
-msgid "Add Responsible ..."
-msgstr "Felelős hozzáadása..."
-
-#: js/TaskEditDialog.js:199
-msgid "Notes"
-msgstr "Megjegyzések"
-
-#: js/TaskEditDialog.js:200
-msgid "Enter description..."
-msgstr "Leírás megadása..."
-
-#: js/TaskEditDialog.js:205
-msgid "Percentage"
-msgstr "Százalék"
-
-#: js/TaskEditDialog.js:213 js/GridPanel.js:211
-msgid "Completed"
-msgstr "Teljesítve"
 
 #: js/GridPanel.js:56
 msgid "Do you really want to delete the selected task?"
@@ -133,6 +88,10 @@ msgstr[1] "Biztosan törlöd a kiválasztott feladatokat?"
 #: js/GridPanel.js:91
 msgid "Quick search"
 msgstr "Gyors keresés"
+
+#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
+msgid "Summary"
+msgstr "Összegzés"
 
 #: js/GridPanel.js:94 js/GridPanel.js:155
 msgid "Due Date"
@@ -154,50 +113,99 @@ msgstr "Feladat nem menthető."
 msgid "Tags"
 msgstr "Címkék"
 
+#: js/GridPanel.js:141 Model/Task.php:195
+msgid "Lead"
+msgstr "Ügylet"
+
 #: js/GridPanel.js:151
 msgid "Add a task..."
 msgstr "Feladat hozzáadása..."
+
+#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+msgid "Priority"
+msgstr "Prioritás"
+
+#: js/GridPanel.js:177 Model/Task.php:188
+msgid "Percent"
+msgstr "Százalék"
 
 #: js/GridPanel.js:204
 msgid "Creation Time"
 msgstr "Készítés ideje"
 
+#: js/GridPanel.js:211 js/TaskEditDialog.js:213
+msgid "Completed"
+msgstr "Teljesítve"
+
 #: js/GridPanel.js:267
 msgid "Show closed"
 msgstr "Lezártak mutatása"
 
-#: js/Status.js:187 Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "FELDOLGOZÁS ALATT"
+#: js/TaskEditDialog.js:142
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Meg kell adnod egy lejárati időt, mert riasztás van beállítva!"
 
-#: Preference.php:29
-msgid "All my tasks"
-msgstr "Minden feladatom"
+#: js/TaskEditDialog.js:186
+msgid "Due date"
+msgstr "Lejárati idő"
 
-#: Preference.php:65
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
+#: js/TaskEditDialog.js:192
+msgid "Add Responsible ..."
+msgstr "Felelős hozzáadása..."
 
-#: Preference.php:66
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Alapértelmezett kedvenc, ami a Feladatok indításakor betöltődik"
+#: js/TaskEditDialog.js:199
+msgid "Notes"
+msgstr "Megjegyzések"
+
+#: js/TaskEditDialog.js:200
+msgid "Enter description..."
+msgstr "Leírás megadása..."
+
+#: js/TaskEditDialog.js:205
+msgid "Percentage"
+msgstr "Százalék"
+
+#: js/Tasks.js:99
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Feladat"
+msgstr[1] "Feladatok"
+
+#: js/Tasks.js:99
+msgid "Tasks"
+msgstr "Feladatok"
+
+#: js/Tasks.js:103
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "teendő lista"
+msgstr[1] "teendő listák"
+
+#: js/Tasks.js:103
+msgid "to do lists"
+msgstr "teendő listák"
+
+#: Model/Task.php:183
+#, fuzzy
+msgid "Due"
+msgstr "Esedékes"
+
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr "Szervező"
+
+#: Model/Task.php:185
+msgid "Description"
+msgstr "Leírás"
+
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Model/Task.php:202
+msgid "Email"
+msgstr "Email"
 
 #: Controller/Task.php:166
 msgid "Notification for Task "
 msgstr "Értesítés a Feladathoz"
-
-#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
-msgid "All tasks of my taskslists"
-msgstr "Minden feladat a feladatlistámon"
-
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "TEVÉKENYSÉG-SZÜKSÉGES"
-
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "ELKÉSZÜLT"
-
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "TÖRÖLVE"
