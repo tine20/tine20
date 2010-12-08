@@ -350,7 +350,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function getContainerByName($_application, $_containerName, $_type)
     {
-        if($_type !== Tinebase_Model_Container::TYPE_INTERNAL and $_type !== Tinebase_Model_Container::TYPE_PERSONAL and $_type !== Tinebase_Model_Container::TYPE_SHARED) {
+        if($_type !== Tinebase_Model_Container::TYPE_PERSONAL && $_type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
         }
         
@@ -369,38 +369,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         return $container;
     }
-    
-    /**
-     * returns the internal conatainer for a given application
-     *
-     * @param   string|Tinebase_Model_User          $_accountId
-     * @param   string|Tinebase_Model_Application   $_application
-     * @param   array|string                        $_grant
-     * @param   bool                                $_ignoreACL
-     * @return  Tinebase_Model_Container the internal container
-     * @throws  Tinebase_Exception_NotFound
-     * @throws  Tinebase_Exception_AccessDenied
-     */
-    /*public function getInternalContainer($_accountId, $_application, $_grant, $_ignoreACL = FALSE)
-    {
-        $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
-        
-        $filter = new Tinebase_Model_ContainerFilter(array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $applicationId),
-            array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_INTERNAL),
-        ));
-        
-        $container =  $this->search($filter)->getFirstRecord();
-        if (! $container) {
-            throw new Tinebase_Exception_NotFound('No internal container found.');
-        }
-        
-        if($_ignoreACL !== TRUE && !$this->hasGrant($_accountId, $container, $_grant)) {
-            throw new Tinebase_Exception_AccessDenied('Permission to container denied.');
-        }
-        
-        return $container;        
-    }*/
     
     /**
      * returns the personal container of a given account accessible by a another given account

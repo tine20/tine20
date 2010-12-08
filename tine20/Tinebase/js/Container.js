@@ -19,14 +19,6 @@ Ext.ns('Tine.Tinebase.container');
  */
 Tine.Tinebase.container = {
     /**
-     * type for internal contaier for example the internal addressbook
-     * 
-     * @constant TYPE_INTERNAL
-     * @type String
-     */
-    TYPE_INTERNAL: 'internal',
-    
-    /**
      * type for personal containers
      * 
      * @constant TYPE_PERSONAL
@@ -48,7 +40,7 @@ Tine.Tinebase.container = {
      * @property isLeafRegExp
      * @type RegExp
      */
-    isLeafRegExp: /^\/personal\/[0-9a-z_\-]+\/|^\/shared\/[a-f0-9]+|^\/internal/i,
+    isLeafRegExp: /^\/personal\/[0-9a-z_\-]+\/|^\/shared\/[a-f0-9]+/i,
     
     /**
      * @private
@@ -57,14 +49,6 @@ Tine.Tinebase.container = {
      * @type RegExp
      */
     isPersonalNodeRegExp: /^\/personal\/([0-9a-z_\-]+)$/i,
-    
-    /**
-     * @private
-     * 
-     * @property isInternalRegExp
-     * @type RegExp
-     */
-    isInternalRegExp: /^\/internal/,
     
     /**
      * returns the path of the 'my ...' node
@@ -103,17 +87,6 @@ Tine.Tinebase.container = {
     },
     
     /**
-     * returns true if given path represents an (single) internal container
-     * 
-     * @static
-     * @param {String} path
-     * @return {Boolean}
-     */
-    pathIsInternalContainer: function(path) {
-        return !Ext.isString(path) || path.match(Tine.Tinebase.container.isInternalRegExp);
-    },
-    
-    /**
      * returns owner id if given path represents an personal _node_
      * 
      * @static
@@ -143,7 +116,6 @@ Tine.Tinebase.container = {
             case '/':           return String.format(_('All {0}'), containersName);
             case '/shared':     return String.format(_('Shared {0}'), containersName);
             case '/personal':   return String.format(_('Other Users {0}'), containersName);
-            case '/internal':   return String.format(_('Internal {0}'), containersName);
         }
         
         if (path === Tine.Tinebase.container.getMyNodePath()) {

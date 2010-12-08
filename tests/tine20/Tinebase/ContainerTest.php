@@ -264,18 +264,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to add an account
-     *
-     */
-    /*public function testGetInternalContainer()
-    {
-        $container = $this->_instance->getInternalContainer(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Model_Grants::GRANT_READ);
-        
-        $this->assertType('Tinebase_Model_Container', $container);
-        $this->assertEquals(Tinebase_Model_Container::TYPE_INTERNAL, $container->type);
-    }*/
-    
-    /**
      * try to other users who gave grants to current account
      *
      */

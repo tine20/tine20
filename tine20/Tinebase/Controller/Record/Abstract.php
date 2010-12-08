@@ -750,10 +750,7 @@ abstract class Tinebase_Controller_Record_Abstract
                 break;
             case 'delete':
                 $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
-                $hasGrant = (
-                    $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_DELETE)
-                    && $container->type != Tinebase_Model_Container::TYPE_INTERNAL
-                );
+                $hasGrant = $this->_currentAccount->hasGrant($_record->container_id, Tinebase_Model_Grants::GRANT_DELETE);
                 break;
         }
         
