@@ -100,7 +100,7 @@ class Tinebase_User_EmailUser_Imap_CyrusTest extends PHPUnit_Framework_TestCase
         #var_dump($testUser->imapUser->toArray());
         #var_dump($this->_config);
         
-        #$this->assertEquals($user->imapUser->emailMailQuota, $testUser->imapUser->emailMailQuota, 'emailMailQuota');
+        $this->assertEquals($user->imapUser->emailMailQuota, $testUser->imapUser->emailMailQuota, 'emailMailQuota');
         $this->assertEquals(empty($this->_config['domain']) ? $user->accountLoginName : $user->accountLoginName . '@' . $this->_config['domain'], 
             $testUser->imapUser->emailUserId, 'emailUserId');
         $this->assertEquals(empty($this->_config['domain']) ? $user->accountLoginName : $user->accountLoginName . '@' . $this->_config['domain'], 
@@ -110,43 +110,41 @@ class Tinebase_User_EmailUser_Imap_CyrusTest extends PHPUnit_Framework_TestCase
     }
         
     /**
-     * try to update an email account
+     * try to update an user
+     *
      */
-    public function testUpdateAccount()
+    public function testUpdateUser()
     {
-        // add smtp user
-        $user = $this->testAddEmailAccount();
+        $user = $this->testAddUser();
+		$user->imapUser = new Tinebase_Model_EmailUser(array(
+		    'emailMailQuota' => 2000
+        ));
+                
+        $testUser = $this->_backend->updateUser($user);
         
-        // update user
-        $user->imapUser->emailMailQuota = 600;
+        #var_dump($testUser->toArray());
         
-        $this->_backend->inspectUpdateUser($this->_objects['user'], $user);
-        
-        //print_r($user->toArray());
-        
-        $this->assertEquals(array(
-            'emailUserId'      => $this->_objects['user']->getId(),
-            'emailUsername'    => $this->_objects['user']->imapUser->emailUsername,
-            'emailUID'         => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
-            'emailGID'         => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
-            'emailLastLogin'   => null,
-            'emailMailQuota'   => 600,
-            'emailMailSize'    => 0,
-            'emailSieveQuota'  => 0,
-            'emailSieveSize'   => 0,
-        ), $this->_objects['user']->imapUser->toArray());
+        $this->assertEquals($user->imapUser->emailMailQuota, $testUser->imapUser->emailMailQuota, 'emailMailQuota');
+        $this->assertEquals(empty($this->_config['domain']) ? $user->accountLoginName : $user->accountLoginName . '@' . $this->_config['domain'], 
+            $testUser->imapUser->emailUserId, 'emailUserId');
+        $this->assertEquals(empty($this->_config['domain']) ? $user->accountLoginName : $user->accountLoginName . '@' . $this->_config['domain'], 
+            $testUser->imapUser->emailUsername, 'emailUsername');
     }
-    
+            
     /**
-     * try to update an email account
+     * try to reset quota
      */
-    public function testSetPassword()
+    public function testResetQuota()
     {
-        // add smtp user
-        $user = $this->testAddEmailAccount();
+        $user = $this->testAddUser();
+		$user->imapUser = new Tinebase_Model_EmailUser(array(
+		    'emailMailQuota' => null
+        ));
+                
+        $testUser = $this->_backend->updateUser($user);
         
-        $this->_backend->inspectSetPassword($this->_objects['user']->getId(), Tinebase_Record_Abstract::generateUID());
+        #var_dump($testUser->imapUser->toArray());
         
-        //$this->assertEquals(md5('password'), $updatedUser->emailPassword);
-    }
+        $this->assertEquals(0, $testUser->imapUser->emailMailQuota, 'emailMailQuota');
+    }        
 }	
