@@ -67,6 +67,9 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMult
                     // always copy/clone record because it can't exist in 2 different stores
                     this.store.add(record.copy());
                     text = this.labelRenderer(record.id, {}, record);
+                } else {
+                    text = value;
+                    this.currentValue.push(value);
                 }
                 
                 return text;
