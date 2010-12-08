@@ -481,7 +481,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
         $myInboxPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
             'name'              => Felamimail_Preference::DEFAULTPERSISTENTFILTER_NAME,
-            'description'       => "All INBOXES", // _("All INBOXES")
+            'description'       => "All INBOXES of my email accounts", // _("All INBOXES of my email accounts")
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId(),
             'model'             => 'Felamimail_Model_MessageFilter',
