@@ -178,7 +178,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         initCtxMenu();
         
     	// add listeners
-        this.on('beforeclick', this.onBeforeClick, this);
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
@@ -366,17 +365,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 app.getMainScreen().getTreePanel().updateFolderStatus(folder);
             }
         }, appendedNode.ui);
-    },
-    
-    /**
-     * on before click hanlder -> accounts not yet clickable
-     * 
-     * @param {Ext.tree.AsyncTreeNode} node
-     */
-    onBeforeClick: function(node) {
-        if (Tine.Felamimail.loadAccountStore().getById(node.id)) {
-            return false;
-        }
     },
     
     /**
