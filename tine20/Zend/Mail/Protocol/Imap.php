@@ -690,35 +690,33 @@ class Zend_Mail_Protocol_Imap
         return $this->requestAndResponse('SETQUOTA', $tokens, true);
     }
     
+    /**
+     * get quotas for specified mailbox
+     * 
+     * @param  string  $mailbox  the mailbox (user.example)
+     * @return array
+     */
     public function getQuotaRoot($mailbox)
     {
         $this->sendRequest('GETQUOTAROOT', array($this->escapeString($mailbox)), $tag);
-
+        
         $result = array();
+        
         while (!$this->readLine($tokens, $tag)) {
-
-            #var_dump($tokens);
-#            $nsNames = array('personal', 'other', 'shared');
-#            $index = 0;
-            
-#            foreach ($tokens as $token) {
-#                if (is_array($token)) {
-#                    $result[$nsNames[$index]] = array(
-#                        'name' => preg_replace('/"/', '', $token[0][0]), 
-#                        'delimiter' => preg_replace('/"/', '', $token[0][1]),
-#                    );
-#                } else if ($token == 'NIL') {
-#                    $result[$nsNames[$index]] = array('name' => 'NIL');
-#                } else {
-#                    continue;
-#                }
-#                $index++;
-#            }
+             if ($tokens[0] == 'QUOTA'/* && $tokens[1] == $mailbox*/) {
+                 if (is_array($tokens[2]) && !empty($tokens[2])) {
+                     $result[strtoupper($tokens[2][0])] = array(
+                         'resource' => strtoupper($tokens[2][0]),
+                         'usage'    => $tokens[2][1],
+                         'limit'    => $tokens[2][2]
+                     );
+                 }
+             }
         }
 
-        if ($tokens[0] != 'OK') {
-            return false;
-        }
+        #if ($tokens[0] != 'OK') {
+        #    return false;
+        #}
         
         return $result;
     }
