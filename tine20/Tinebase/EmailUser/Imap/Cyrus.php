@@ -17,6 +17,7 @@
  * 
  * @package Tinebase
  * @subpackage User
+ * @todo add quota support
  */
 class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
 {
@@ -116,14 +117,17 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
             return;
         }
         
-        #$imap = $this->_getImapConnection();
-        #$imap->getQuota();
+        $imap = $this->_getImapConnection();
+        
+        $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
+
+        $quota = $imap->getQuotaRoot($mailboxString);
         
         $emailUser = new Tinebase_Model_EmailUser(array(
             'emailUsername'  => $this->_appendDomain($_user->accountLoginName),
             'emailUserId'    => $this->_appendDomain($_user->accountLoginName),
-            'emailMailQuota' => 0,
-            'emailMailSize'  => 0
+            'emailMailQuota' => isset($quota['STORAGE']) ? $quota['STORAGE']['limit'] / 1024 : null,
+            'emailMailSize'  => isset($quota['STORAGE']) ? $quota['STORAGE']['usage'] / 1024 : null
         ));
                 
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($emailUser->toArray(), TRUE));
@@ -177,6 +181,9 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
             }
         }
         
+        $imap->setQuota($mailboxString, 'STORAGE', convertToBytes($_newUserProperties->imapUser->emailMailQuota . 'M') / 1024);
+        $quota = $imap->getQuotaRoot($mailboxString);
+        
         $this->inspectGetUserByProperty($_addedUser);
     }
     
@@ -224,7 +231,15 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
      */
     protected function _updateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
-        // does nothing at the moment
+        $imap = $this->_getImapConnection();
+        
+        $mailboxString = $this->_getUserMailbox($_updatedUser->accountLoginName);
+        
+        $imap->setQuota($mailboxString, 'STORAGE', convertToBytes($_newUserProperties->imapUser->emailMailQuota . 'M') / 1024);
+        
+        $quota = $imap->getQuotaRoot($mailboxString);
+        
+        $this->inspectGetUserByProperty($_updatedUser);
     }
     
     /**
