@@ -160,6 +160,7 @@ class Wbxml_Encoder extends Wbxml_Abstract
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         
         if (!xml_parse($parser, $_dom->saveXML())) {
+            #file_put_contents(tempnam(sys_get_temp_dir(), "xmlerrors"), $_dom->saveXML());
             throw new Exception(sprintf('XML error: %s at line %d',
                 xml_error_string(xml_get_error_code($parser)),
                 xml_get_current_line_number($parser)
