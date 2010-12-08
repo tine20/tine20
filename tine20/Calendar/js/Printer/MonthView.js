@@ -2,7 +2,7 @@ Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
     paperHeight: 170,
     
     generateBody: function(view) {
-        var daysHtml = this.splitDays(view.ds, view.startDate, view.dateMesh.length),
+        var daysHtml = this.splitDays(view.ds, view.dateMesh[0], view.dateMesh.length),
             body = [];
         
         // try to force landscape -> opera only atm...
