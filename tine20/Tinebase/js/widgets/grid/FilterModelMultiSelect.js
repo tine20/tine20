@@ -308,7 +308,8 @@ Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.Laye
         record = this.valueStore.getById(id);
         if (record) {
             this.currentValue.push(record.id);
-            this.store.add(record);
+            // always copy/clone record because it can't exist in 2 different stores
+            this.store.add(record.copy());
             text = record.get(this.labelField);
             text = (this.labelRenderer != Ext.emptyFn) ? this.labelRenderer(text) : text;
         }
