@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-08 14:19+0100\n"
+"PO-Revision-Date: 2010-12-08 15:51+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr "Alle Posteingänge meiner Emailkonten"
 
 #: Preference.php:61
 msgid "All INBOXES"
-msgstr "Alles Posteingänge"
+msgstr "Alle Posteingänge"
 
 #: Preference.php:101
 msgid "Default Email Account"
