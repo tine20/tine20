@@ -248,12 +248,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 return;
             }
             
-            // remove all ftb container and /toberemoved/ filters
+            // remove all filters except query filter
             ftb.supressEvents = true;
             ftb.filterStore.each(function(filter) {
                 var field = filter.get('field');
-                // @todo find criteria what to remove
-                if (field === 'path') {
+                if (field !== 'query') {
                     ftb.deleteFilter(filter);
                 }
             }, this);
