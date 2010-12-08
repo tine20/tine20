@@ -613,6 +613,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                         '<td>', this.app.i18n._('Name on Server:'), '</td>',
                         '<td>', folder.get('globalname'), '</td>',
                     '</tr>',
+                    '<tr>',
+                        '<td>', this.app.i18n._('Last update:'), '</td>',
+                        '<td>', Tine.Tinebase.common.dateTimeRenderer(folder.get('client_access_time')), '</td>',
+                    '</tr>',
                 '</table>'
             ];
             tip.body.dom.innerHTML = info.join('');
