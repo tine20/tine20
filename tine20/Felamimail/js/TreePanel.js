@@ -38,7 +38,6 @@ Tine.Felamimail.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPan
  * <p>Account/Folder Tree Panel</p>
  * <p>Tree of Accounts with folders</p>
  * <pre>
- * TODO         make multi selection work
  * low priority:
  * TODO         make inbox/drafts/templates configurable in account
  * TODO         save tree state? @see http://examples.extjs.eu/?ex=treestate
@@ -110,9 +109,16 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @private
      */
 	rootVisible: false,
-    // drag n drop
+    
+    /**
+     * drag n drop
+     */ 
     enableDrop: true,
     ddGroup: 'mailToTreeDDGroup',
+    
+    /**
+     * @cfg
+     */
     border: false,
     recordClass: Tine.Felamimail.Model.Account,
     filterMode: 'filterToolbar',
@@ -148,6 +154,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         // add account nodes
         this.initAccounts();
+        
         // init drop zone
         this.dropConfig = {
             ddGroup: this.ddGroup || 'TreeDD',
@@ -170,8 +177,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             }
         }
         
-        //this.selModel = new Ext.tree.MultiSelectionModel({});
-        this.selModel = new Ext.tree.DefaultSelectionModel({});
+        // init selection model (multiselect)
+        this.selModel = new Ext.tree.MultiSelectionModel({});
         
         // init context menu TODO use Ext.apply
         var initCtxMenu = Tine.Felamimail.setTreeContextMenus.createDelegate(this);
@@ -301,8 +308,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         return this.filterPlugin;
     },
     
-    /********************* event handler ******************/
-    
     /**
      * @private
      * 
@@ -370,18 +375,17 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     /**
      * on click handler
      * 
-     * - expand + select node
+     * - expand node
      * - update filter toolbar of grid
+     * - start check mails delayed task
      * 
      * @param {Ext.tree.AsyncTreeNode} node
      * @private
      */
     onClick: function(node) {
-        
         if (node.expandable) {
             node.expand();
         }
-        node.select();
         
         if (node.id && node.id != '/' && node.attributes.globalname != '') {
             this.filterPlugin.onFilterChange();
@@ -519,8 +523,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.folderStore.remove(this.folderStore.getById(folderData.id));
     },
     
-    /********************* helpers *****************************/
-    
     /**
      * returns tree node id the given el is child of
      * 
@@ -592,8 +594,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Ext.Tooltip} tip
      */
     updateFolderTip: function(tip) {
-        //console.log(Ext.EventObject);
-        //if (Ext.EventObject.mousedown)
         var folderId = this.getElsParentsNodeId(tip.triggerElement),
             folder = this.app.getFolderStore().getById(folderId),
             account = Tine.Felamimail.loadAccountStore().getById(folderId);
