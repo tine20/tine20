@@ -219,7 +219,7 @@ Tine.widgets.account.PickerGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPa
             emptyText: _('Search for users ...'),
             newRecordClass: this.recordClass,
             recordPrefix: this.recordPrefix,
-            internalContactsOnly: true,
+            userOnly: true,
             onSelect: this.onAddRecordFromCombo
         });
     },

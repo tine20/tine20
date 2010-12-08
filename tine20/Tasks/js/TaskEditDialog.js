@@ -190,7 +190,7 @@ Ext.namespace('Tine.Tasks');
                         name: 'priority'
                     }), new Tine.Addressbook.SearchCombo({
                             emptyText: _('Add Responsible ...'),
-                            internalContactsOnly: true,
+                            userOnly: true,
                             name: 'organizer',
                             nameField: 'n_fileas',
                             useAccountRecord: true

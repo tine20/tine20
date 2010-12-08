@@ -322,7 +322,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
                     value: filter.data.value ? filter.data.value : this.defaultValue,
                     emptyText: _('Search Account ...'),
-                    internalContactsOnly: true,
+                    userOnly: true,
                     name: 'organizer',
                     nameField: 'n_fileas',
                     useAccountRecord: true,

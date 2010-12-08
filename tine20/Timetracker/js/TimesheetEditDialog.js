@@ -182,7 +182,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                         columnWidth: 1,
                         disabled: true,
                         useAccountRecord: true,
-                        internalContactsOnly: true,
+                        userOnly: true,
                         nameField: 'n_fileas',
                         fieldLabel: this.app.i18n._('Account'),
                         name: 'account_id'

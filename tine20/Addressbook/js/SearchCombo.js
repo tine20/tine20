@@ -22,7 +22,6 @@ Ext.ns('Tine.Addressbook');
  * <p>Contact Search Combobox</p>
  * <p><pre>
  * TODO         make this a twin trigger field with 'clear' button?
- * TODO         replace internalContactsOnly with usersOnly (and update needed filter)
  * TODO         add switch to filter for expired/enabled/disabled user accounts
  * TODO         extend Tine.Tinebase.widgets.form.RecordPickerComboBox
  * </pre></p>
@@ -55,9 +54,9 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
     blurOnSelect: false,
     
     /**
-     * @cfg {Boolean} internalContactsOnly
+     * @cfg {Boolean} userOnly
      */
-    internalContactsOnly: false,
+    userOnly: false,
     
     /**
      * @property additionalFilters
@@ -109,7 +108,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
             {field: 'query', operator: 'contains', value: qevent.query }
         ];
         
-        if (this.internalContactsOnly) {
+        if (this.userOnly) {
             filter.push({field: 'type', operator: 'equals', value: 'user'});
         }
         

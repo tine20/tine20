@@ -221,7 +221,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             renderer: Tine.Tinebase.common.accountRenderer,
             quickaddField: new Tine.Addressbook.SearchCombo({
                 // at the moment we support accounts only
-                internalContactsOnly: true,
+                userOnly: true,
                 nameField: 'n_fileas',
                 blurOnSelect: true,
                 selectOnFocus: true,
