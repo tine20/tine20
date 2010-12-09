@@ -808,9 +808,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     /**
      * update/synchronize flags
      * 
-     * @param Felamimail_Model_Folder $_folder
+     * @param string|Felamimail_Model_Folder $_folder
      * @param integer $_time
-     * @return void
+     * @return Felamimail_Model_Folder
      * 
      * @todo add status/progress to start at later messages when this is called next time?
      */
@@ -847,6 +847,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 break;
             }
         }
+        
+        return $folder;
     }
     
     /**
