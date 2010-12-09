@@ -381,15 +381,17 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 this.checkMailsDelayedTask.delay(1000);
             }
             
-            var changes = record.getChanges();
-            
-            if (record.isModified('cache_recentcount') && changes.cache_recentcount > 0) {
-                //console.log('show notification');
-                Ext.ux.Notification.show(
-                    this.i18n._('New mails'), 
-                    String.format(this.i18n._('You got {0} new mail(s) in Folder {1}.'), 
-                        changes.cache_recentcount, record.get('localname'))
-                );
+            // only show notifications for inbox if unreadcount changed
+            if (record.isModified('cache_unreadcount')) {
+                var recents = (changes.cache_unreadcount - record.modified.cache_unreadcount);
+                if (recents > 0 && Ext.util.Format.lowercase(record.get('localname')) == 'inbox') {
+                    Tine.log.info('show notification: ' + recents + ' new mails.');
+                    Ext.ux.Notification.show(
+                        this.i18n._('New mails'), 
+                        String.format(this.i18n._('You got {0} new mail(s) in Folder {1}.'), 
+                            recents, record.get('localname'))
+                    );
+                }
             }
         }
     },
