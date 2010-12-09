@@ -473,7 +473,7 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'cache_job_actions_done',         type: 'int' },
       { name: 'client_access_time', type: 'date', dateFormat: Date.patterns.ISO8601Long  } // client only {@see Tine.Felamimail.folderBackend#updateMessageCache}
 ], {
-    // translations for system folder:
+    // translations for system folders:
     // _('INBOX') _('Drafts') _('Sent') _('Templates') _('Junk') _('Trash')
 
     appName: 'Felamimail',
