@@ -134,12 +134,12 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
      */
     public function updateFolderCounter($_folderId, array $_counters)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' folder: ' . $_folderId . ' - ' . print_r($_counters, true));        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' folder: ' . $_folderId . ' - ' . print_r($_counters, true));
         if (empty($_counters)) {
             return; // nothing todo
         }
         
-        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        $folder = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId : $this->get($_folderId);
         
         $data = array();
         $where = array();
@@ -156,8 +156,13 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
             }
         }
         
-        $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $folderId);
+        $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $folder->getId());
         
-        $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+        try {
+            $this->_db->update($this->_tablePrefix . $this->_tableName, $data, $where);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' data: ' . print_r($data, TRUE) . ' where: ' . print_r($where, TRUE));
+            throw $zdse;
+        }
     }
 }
