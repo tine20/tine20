@@ -106,7 +106,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        //$this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+        $this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
         
         foreach ($this->_accountsToDelete as $account) {
             Felamimail_Controller_Account::getInstance()->delete($account);
