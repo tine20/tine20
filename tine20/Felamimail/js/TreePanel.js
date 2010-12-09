@@ -389,7 +389,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         if (node.id && node.id != '/' && node.attributes.globalname != '') {
             this.filterPlugin.onFilterChange();
-            
+            var folder = this.app.getFolderStore().getById(node.id);
+            if (folder) {
+                folder.set('cache_status', 'pending');
+            }
             this.app.checkMailsDelayedTask.delay(0);
         }
     },
