@@ -7,8 +7,6 @@
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
- * 
- * @todo        add test for a really big folder (subscribe mailing list?) and start 2-3 import jobs
  */
 
 /**
@@ -46,10 +44,15 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     protected $_folder = NULL;
     
     /**
+     * 
+     * @var Felamimail_Controller_MessageTest
+     */
+    protected $_emailTestClass;
+    
+    /**
      * name of the folder to use for tests
      * @var string
      */
-    #protected $_testFolderName = 'INBOX';
     protected $_testFolderName = 'Junk';
     
     /**
@@ -84,6 +87,9 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
         
         $this->_folder = $this->_getFolder($this->_testFolderName);
+        
+        $this->_emailTestClass = new Felamimail_Controller_MessageTest();
+        $this->_emailTestClass->setup();
     }
 
     /**
@@ -94,8 +100,9 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        // clear message cache
-        #$this->_controller->clear($this->_folder);
+        if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
+            $this->_emailTestClass->tearDown();
+        }
     }
     
     /**
@@ -201,5 +208,29 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $mailAsString = file_get_contents(dirname(dirname(dirname(__FILE__))) . '/files/' . $_filename);
         Felamimail_Backend_ImapFactory::factory($this->_account->getId())
             ->appendMessage($mailAsString, $_folder);
+    }
+    
+    /**
+     * test flag update
+     */
+    public function testUpdateFlags() 
+    {
+        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        // appended messages already have the SEEN flag
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags), 'SEEN flag not found: ' . print_r($message->flags, TRUE));
+        
+        while (! isset($updatedFolder) || $updatedFolder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
+            $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        }
+        
+        // clear/add flag on imap
+        $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
+        $this->_imap->addFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_FLAGGED));
+        
+        $this->_controller->updateFlags($updatedFolder);
+        
+        $cachedMessage = Felamimail_Controller_Message::getInstance()->get($message->getId());
+        $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags), 'SEEN flag found: ' . print_r($cachedMessage->flags, TRUE));
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $cachedMessage->flags), 'FLAGGED flag not found: ' . print_r($cachedMessage->flags, TRUE));
     }
 }

@@ -8,8 +8,6 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
- * @todo        reactivate updateFlags
  */
 
 /**
@@ -810,39 +808,70 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     /**
      * update/synchronize flags
      * 
-     * @todo make this work again
+     * @param Felamimail_Model_Folder $_folder
+     * @param integer $_time
+     * @return void
+     * 
+     * @todo add status/progress to start at later messages when this is called next time?
      */
-    public function updateFlags()
+    public function updateFlags($_folder, $_time = 60)
     {
-//        // lets update message flags if some time is left
-//        if ($this->_timeLeft()) {
-//            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-//                ' start updating flags'
-//            );
-//            for ($i=$folder->cache_totalcount; $i > $folder->cache_totalcount - 100; $i -= $this->_importCountPerStep) {
-//                $firstMessageSequence = ($i-$this->_importCountPerStep) >= 0 ? $i-$this->_importCountPerStep : 0;
-//                $cachedMessages = $this->_getCachedMessagesChunked($folder, $firstMessageSequence);
-//
-//                $flags = $imap->getFlags($cachedMessages->messageuid);
-//
-//                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-//                
-//                foreach ($cachedMessages as $cachedMessage) {
-//                    if (array_key_exists($cachedMessage->messageuid, $flags)) {
-//                        $newFlags = array_key_exists('flags', $flags[$cachedMessage->messageuid]) ? $flags[$cachedMessage->messageuid]['flags'] : arary();
-//                        $this->_backend->setFlags($cachedMessage, $newFlags);
-//                    }
-//                }
-//                
-//                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-//                
-//                if(! $this->_timeLeft()) {
-//                    break;
-//                }
-//            }
-//            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-//                ' updating flags finished'
-//            );
-//        }
+        // always read folder from database
+        $folder = Felamimail_Controller_Folder::getInstance()->get($_folder);
+        
+        if ($folder->cache_status !== Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                ' Do not update flags of incomplete folder ' . $folder->globalname
+            );
+            return;
+        }
+        
+        $this->_availableUpdateTime = $_time;
+        $this->_timeStart = microtime(true);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Updating flags of folder ' . $folder->globalname . ' / start time: ' . $this->_timeStart . ' / available seconds: ' . $_time
+        );
+
+        // get all flags for folder
+        $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
+        $imap->selectFolder($folder->globalname);
+        $flags = $imap->getFlags(1, INF);
+        
+        for ($i = $folder->cache_totalcount; $i > $folder->cache_totalcount - 100; $i -= $this->_importCountPerStep) {
+            $firstMessageSequence = ($i - $this->_importCountPerStep) >= 0 ? $i - $this->_importCountPerStep : 0;
+            $cachedMessages = $this->_getCachedMessagesChunked($folder, $firstMessageSequence);
+            $this->_setFlagsOnCache($cachedMessages, $flags);
+            
+            if(! $this->_timeLeft()) {
+                break;
+            }
+        }
+    }
+    
+    /**
+     * set flags on cache if different
+     * 
+     * @param Tinebase_Record_RecordSet $_messages
+     * @param array $_flags
+     */
+    protected function _setFlagsOnCache($_messages, $_flags)
+    {
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        
+        $updateCount = 0;
+        foreach ($_messages as $cachedMessage) {
+            if (array_key_exists($cachedMessage->messageuid, $_flags)) {
+                $newFlags = array_key_exists('flags', $_flags[$cachedMessage->messageuid]) ? $_flags[$cachedMessage->messageuid]['flags'] : arary();
+                if (count(array_diff($cachedMessage->flags, $newFlags)) > 0) {
+                    $this->_backend->setFlags($cachedMessage, $newFlags);
+                    $updateCount++;
+                }
+            }
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' flags.');
+        
+        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);        
     }
 }
