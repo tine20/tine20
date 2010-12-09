@@ -28,21 +28,6 @@ Ext.ux.Notification = function(){
     }
     */
     
-    /*
-    function webkitNotification(iconUrl, title, text) {
-        console.log('show notification');
-        var nc = window.webkitNotifications;
-        document.tempNotif = nc.createNotification(iconUrl, title, text);
-        document.tempNotif.ondisplay = function() {
-            setTimeout(function(){
-                document.tempNotif.cancel();
-                document.tempNotif = false;
-            },5000); 
-        };
-        document.tempNotif.show();
-    } 
-    */   
-        
     return {
         show: function(title, text){
             
@@ -66,30 +51,34 @@ Ext.ux.Notification = function(){
                 });
                 
             // webkit notifications
-                /*
             } else if (window.webkitNotifications !== undefined) {
-                console.log('webkitNotifications available');
+//                console.log('webkitNotifications available');
+//                if (window.webkitNotifications.checkPermission() == 0) {
+//                    // you can pass any url as a parameter
+//                    window.webkitNotifications.createNotification(iconUrl, title, text).show(); 
+//                } else {
+//                    window.webkitNotifications.requestPermission();
+//                }
                 
-                var nc = window.webkitNotifications;
-                document.tempNotif = nc.createNotification(iconUrl, title, text);
-                document.tempNotif.ondisplay = function() {
-                    setTimeout(function(){
-                        document.tempNotif.cancel();
-                        document.tempNotif = false;
-                    },5000); 
-                };
-                document.tempNotif.show();
-                
-                var nc = window.webkitNotifications;
-                if (nc.checkPermission()) { 
-                    //console.log('request permission for ');
-                    //console.log(webkitNotification);
-                    //nc.requestPermission(webkitNotification);
-                    nc.requestPermission(Ext.ux.Notification.webkit); 
-                } else { 
-                    webkitNotification(iconUrl, title, text);
-                }
-                */
+//                var nc = window.webkitNotifications;
+//                document.tempNotif = nc.createNotification(iconUrl, title, text);
+//                document.tempNotif.ondisplay = function() {
+//                    setTimeout(function(){
+//                        document.tempNotif.cancel();
+//                        document.tempNotif = false;
+//                    },5000); 
+//                };
+//                document.tempNotif.show();
+//                
+//                var nc = window.webkitNotifications;
+//                if (nc.checkPermission()) { 
+//                    //console.log('request permission for ');
+//                    //console.log(webkitNotification);
+//                    //nc.requestPermission(webkitNotification);
+//                    nc.requestPermission(Ext.ux.Notification.webkit); 
+//                } else { 
+//                    webkitNotification(iconUrl, title, text);
+//                }
                 
             // default behaviour
             } else {
