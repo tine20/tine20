@@ -163,6 +163,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                         this.fireEvent('specialkey', combo, e);
                     }
                 }
+//                blur: function(combo) {
+//                    // check if email is in store -> if not, add it
+//                    var value = combo.getValue();
+//                    console.log(value);
+//                    console.log(this.store);
+//                }
             }
         });
         
