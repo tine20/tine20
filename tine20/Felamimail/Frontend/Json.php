@@ -336,7 +336,23 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return parent::_recordToJson($_record);
     }
     
-
+    /**
+     * update flags
+     * - use session/writeClose to allow following requests
+     *
+     * @param  string  $folderId id of active folder
+     * @param  integer $time     update time in seconds
+     * @return array
+     */
+    public function updateFlags($folderId, $time)
+    {
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
+        
+        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateFlags($folderId, $time);
+        
+        return $this->_recordToJson($folder);
+    }
     /***************************** accounts funcs *******************************/
     
     /**
