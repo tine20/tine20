@@ -383,7 +383,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             
             // only show notifications for inbox if unreadcount changed
             if (record.isModified('cache_unreadcount')) {
-                var recents = (changes.cache_unreadcount - record.modified.cache_unreadcount);
+                var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount);
                 if (recents > 0 && Ext.util.Format.lowercase(record.get('localname')) == 'inbox') {
                     Tine.log.info('show notification: ' + recents + ' new mails.');
                     Ext.ux.Notification.show(
