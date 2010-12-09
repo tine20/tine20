@@ -138,6 +138,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_addMessagesToCache($folder, $imap);
         $this->_checkForMissingMessages($folder, $imap);
         $this->_updateFolderStatus($folder);
+        $this->updateFlags($folder);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -644,7 +645,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             $result = $this->_backend->create($messageToCache);
             // store headers in cache / we need them later anyway
             $cacheId = 'getMessageHeaders' . $result->getId();
-            Tinebase_Core::get('cache')->save($_message['header'], $cacheId, array('getMessageHeaders'));
+            Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));
         } catch (Zend_Db_Statement_Exception $zdse) {
             // perhaps we already have this message in our cache (duplicate)
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
@@ -813,6 +814,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @return Felamimail_Model_Folder
      * 
      * @todo only get flags of records
+     * @todo only get flags of current batch of messages from imap?
      * @todo add status/progress to start at later messages when this is called next time?
      */
     public function updateFlags($_folder, $_time = 60)
@@ -827,11 +829,15 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             return;
         }
         
-        $this->_availableUpdateTime = $_time;
-        $this->_timeStart = microtime(true);
+        if ($this->_availableUpdateTime == 0) {
+            $this->_availableUpdateTime = $_time;
+            $this->_timeStart = microtime(true);
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Updating flags of folder ' . $folder->globalname . ' / start time: ' . $this->_timeStart . ' / available seconds: ' . $_time
+            ' Updating flags of folder ' . $folder->globalname 
+            . ' / start time: ' . Tinebase_DateTime::now()->toString() 
+            . ' / available seconds: ' . ($this->_availableUpdateTime - $this->_timeElapsed)
         );
 
         // get all flags for folder
@@ -839,15 +845,20 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $imap->selectFolder($folder->globalname);
         $flags = $imap->getFlags(1, INF);
         
-        for ($i = $folder->cache_totalcount; $i > $folder->cache_totalcount - 100; $i -= $this->_importCountPerStep) {
+        $unreadcount = $folder->cache_unreadcount;
+        for ($i = $folder->cache_totalcount; $i > 0; $i -= $this->_importCountPerStep) {
             $firstMessageSequence = ($i - $this->_importCountPerStep) >= 0 ? $i - $this->_importCountPerStep : 0;
             $cachedMessages = $this->_getCachedMessagesChunked($folder, $firstMessageSequence);
-            $this->_setFlagsOnCache($cachedMessages, $flags);
+            $this->_setFlagsOnCache($cachedMessages, $flags, $unreadcount);
             
             if(! $this->_timeLeft()) {
                 break;
             }
         }
+        
+        Felamimail_Controller_Folder::getInstance()->updateFolderCounter($folder, array(
+            'cache_unreadcount' => $unreadcount,
+        ));
         
         return $folder;
     }
@@ -857,8 +868,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param Tinebase_Record_RecordSet $_messages
      * @param array $_flags
+     * @param integer $_unreadcount
      */
-    protected function _setFlagsOnCache($_messages, $_flags)
+    protected function _setFlagsOnCache($_messages, $_flags, &$_unreadcount)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
@@ -866,14 +878,22 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         foreach ($_messages as $cachedMessage) {
             if (array_key_exists($cachedMessage->messageuid, $_flags)) {
                 $newFlags = array_key_exists('flags', $_flags[$cachedMessage->messageuid]) ? $_flags[$cachedMessage->messageuid]['flags'] : arary();
-                if (count(array_diff($cachedMessage->flags, $newFlags)) > 0) {
+                $diff1 = array_diff($cachedMessage->flags, $newFlags);
+                $diff2 = array_diff($newFlags, $cachedMessage->flags);
+                if (count($diff1) > 0 || count($diff2) > 0) {
+                    if (in_array(Zend_Mail_Storage::FLAG_SEEN, $diff1)) {
+                        $_unreadcount++;
+                    } else if (in_array(Zend_Mail_Storage::FLAG_SEEN, $diff2)) {
+                        $_unreadcount--;
+                    }
+                    
                     $this->_backend->setFlags($cachedMessage, $newFlags);
                     $updateCount++;
                 }
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' flags.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' flags. / new unreadcount: ' . $_unreadcount);
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);        
     }
