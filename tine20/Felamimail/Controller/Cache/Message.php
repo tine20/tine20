@@ -812,6 +812,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @param integer $_time
      * @return Felamimail_Model_Folder
      * 
+     * @todo only get flags of records
      * @todo add status/progress to start at later messages when this is called next time?
      */
     public function updateFlags($_folder, $_time = 60)
