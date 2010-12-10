@@ -1012,8 +1012,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getDetailsPanelContentForPrinting: function(detailsPanel) {
         // TODO somehow we have two <div class="preview-panel-felamimail"> -> we need to fix that and get the first element found
         var detailsPanels = detailsPanel.getEl().query('.preview-panel-felamimail');
-        console.log(detailsPanel.getEl().dom.innerHTML);
-        console.log(detailsPanels);
         var detailsPanelContent = (detailsPanels.length > 1) ? detailsPanels[1].innerHTML : detailsPanels[0].innerHTML;
         
         var buffer = '<html><head>';
