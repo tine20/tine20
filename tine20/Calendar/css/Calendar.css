@@ -89,7 +89,7 @@
 }
 
 .cal-response-action-TENTATIVE {
-    background-image:url(../../images/oxygen/16x16/actions/arrow-right-double.png) !important;
+    background-image:url(../../images/calendar-response-tentative.png) !important;
 }
 
 /**** colendar select widget ****/
