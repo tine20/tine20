@@ -254,11 +254,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 return;
             }
             
-            // remove all filters except query filter
+            // remove path filter
             ftb.supressEvents = true;
             ftb.filterStore.each(function(filter) {
                 var field = filter.get('field');
-                if (field !== 'query') {
+                if (field === 'path') {
                     ftb.deleteFilter(filter);
                 }
             }, this);
