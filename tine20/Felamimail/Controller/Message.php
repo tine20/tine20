@@ -497,7 +497,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         );
         
         foreach ($_messages as $message) {
-            $this->saveMessageInFolder($_targetFolder, $message);
+            $part = Felamimail_Controller_Message::getInstance()->getMessagePart($message);
+            $this->appendMessage($_targetFolder, $part->getRawStream(), $message->flags);
         }
     }
     
@@ -981,7 +982,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * get message part
      *
-     * @param string $_id
+     * @param string|Felamimail_Model_Message $_id
      * @param string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
      * @return Zend_Mime_Part
      */

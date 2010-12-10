@@ -780,12 +780,29 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testMoveMessageToAnotherAccount()
     {
         $clonedAccount = $this->_cloneAccount();
-        $folder = $this->_getFolder($this->_testFolderName, $clonedAccount);
+        $folder = $this->_getFolder('Drafts', $clonedAccount);
         
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
         $this->_controller->moveMessages($cachedMessage, $folder);
-        $this->_searchMessage('multipart/mixed', $folder);
+        $message = $this->_searchMessage('multipart/mixed', $folder);
+        
+        $folder = $this->_cache->updateCache($folder, 30);
+        while ($folder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
+            $folder = $this->_cache->updateCache($folder, 30);
+        }        
+        $result = $this->_controller->search($this->_getFilter($folder->getId()));
+        foreach ($result as $messageInCache) {
+            if ($messageInCache->messageuid == $message['uid']) {
+                $foundMessage = $messageInCache;
+                break;
+            }
+        }
+        
+        $this->assertTrue(isset($foundMessage));
+        $this->_createdMessages[] = $foundMessage;
+        $completeMessage = $this->_controller->getCompleteMessage($foundMessage);
+        $this->assertContains('The attached list notes all of the packages that were added or removed', $completeMessage->body);
     }
     
      /**
