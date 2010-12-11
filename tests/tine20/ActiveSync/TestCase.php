@@ -123,6 +123,37 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test search tasks
+     */
+    public function testGetFolder()
+    {
+        // create at least one folder with sync grants
+        $syncAbleFolder    = $this->_getContainerWithSyncGrant();
+        
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_IPHONE));
+        
+        $folder = $controller->getFolder($syncAbleFolder);
+        
+        //var_dump($folder);
+        
+        $this->assertArrayHasKey($syncAbleFolder->getId(), $folder);
+    }
+    
+    /**
+     * test search tasks
+     */
+    public function testGetSpecialFolder()
+    {
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_IPHONE));
+        
+        $folder = $controller->getFolder($this->_specialFolderName);
+        
+        //var_dump($folder);
+        
+        $this->assertArrayHasKey($this->_specialFolderName, $folder);
+    }
+    
+    /**
      * validate getFolders for IPhones
      */
     public function testGetFoldersIPhone()
