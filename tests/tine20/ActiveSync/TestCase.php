@@ -340,7 +340,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     protected function _getController(ActiveSync_Model_Device $_device)
     {
         if ($this->_controller === null) {
-            $this->_controller = new $this->_controllerName($_device, new Tinebase_DateTime(null, null, 'de_DE'));
+            $this->_controller = ActiveSync_Controller::dataFactory($this->_class, $_device, new Tinebase_DateTime(null, null, 'de_DE'));
         } 
         
         return $this->_controller;
