@@ -34,6 +34,8 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
     
     protected $_controllerName = 'ActiveSync_Controller_Calendar';
     
+    protected $_specialFolderName = 'calendar-root';
+    
     /**
      * @var ActiveSync_Controller_Calendar controller
      */
