@@ -34,6 +34,8 @@ class ActiveSync_Controller_TasksTests extends ActiveSync_TestCase
     
     protected $_controllerName = 'ActiveSync_Controller_Tasks';
     
+    protected $_specialFolderName = 'tasks-root';
+    
     protected $_testXML = '';
     
 /*    protected $_exampleXMLNotExisting = '<?xml version="1.0" encoding="utf-8"?>
