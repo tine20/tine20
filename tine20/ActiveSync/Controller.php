@@ -229,8 +229,6 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
      */
     public function updateDevice(ActiveSync_Model_Device $_device)
     {
-        $_device->acsversion = $this->getAcsVersionFromUserAgent($_device->useragent, $_device->acsversion);
-        
         $device = $this->_deviceBackend->update($_device);
         
         return $device;
@@ -244,8 +242,6 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
      */
     public function createDevice(ActiveSync_Model_Device $_device)
     {
-        $_device->acsversion = $this->getAcsVersionFromUserAgent($_device->useragent, $_device->acsversion);;
-        
         $device = $this->_deviceBackend->create($_device);
         
         return $device;
@@ -313,31 +309,5 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
             // add new syncState
             $this->_syncStateBackend->create($syncState);
         }
-    }
-    
-    /**
-     * 
-     * @param string $_userAgent the useragent string of the device
-     * @return unknown_type
-     */
-    public function getAcsVersionFromUserAgent($_userAgent, $_defaultVersion = '2.5')
-    {
-        $acsVersion = $_defaultVersion;
-        
-        // skip that for now
-        
-        #if(preg_match('/^MSFT-PPC\/(\d\.\d)\./', $_userAgent, $matches) === 1) {
-        #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' matches ' . print_r($matches, true));
-        #    switch($matches[1]) {
-        #        case '5.1':
-        #            $acsVersion = '2.5';
-        #            break;
-        #        case '5.2':
-        #            $acsVersion = '12.0';
-        #            break;
-        #    }
-        #}
-        
-        return $acsVersion;
     }
 }
