@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        move visibility='displayed' check from getSelect to contact filter
@@ -72,8 +72,6 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @return  Tinebase_Record_Interface
      * @throws  Tinebase_Exception_InvalidArgument
      * @throws  Tinebase_Exception_UnexpectedValue
-     * 
-     * @todo    remove autoincremental ids later
      */
     public function create(Tinebase_Record_Interface $_record) 
     {
@@ -114,7 +112,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         $select = $this->_db->select()
             ->from($this->_tablePrefix . 'addressbook_image', array('image'))
-            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('contact_id'). ' = ?', $_contactId, Zend_Db::INT_TYPE));
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('contact_id'). ' = ?', $_contactId));
         $imageData = $this->_db->fetchOne($select, 'image');
         
         return $imageData ? base64_decode($imageData) : '';
@@ -129,7 +127,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function _saveImage($_contactId, $imageData)
     {
-        $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $_contactId, Zend_Db::INT_TYPE));
+        $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $_contactId));
         if (! empty($imageData)) {
             $this->_db->insert($this->_tablePrefix . 'addressbook_image', array(
                 'contact_id'    => $_contactId,
@@ -171,11 +169,6 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             ")";
         }
         
-        #if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
-        #    $where = "ISNULL(account_id) OR (NOT ISNULL(account_id) AND (visibility='displayed' OR account_id = '".Tinebase_Core::getUser()->getId()."'))";
-        #} else {
-        #    $where = "ISNULL(account_id) OR (NOT ISNULL(account_id) AND visibility='displayed')";
-        #}
         $select->where($where);        
         
         if ($_cols == '*' || array_key_exists('jpegphoto', (array)$_cols)) {
@@ -201,5 +194,4 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 
         return $result;
     }
-    
 }
