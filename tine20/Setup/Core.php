@@ -230,8 +230,6 @@ class Setup_Core extends Tinebase_Core
     
     /**
      * initializes the session
-     *
-     * @todo use TINE20SETUP_CODENAME/TINE20SETUP_PACKAGESTRING/TINE20SETUP_RELEASETIME ?
      */
     public static function setupSession()
     {
@@ -245,9 +243,9 @@ class Setup_Core extends Tinebase_Core
 
         $config = self::getConfig();
         define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
-        define('TINE20_CODENAME',      getDevelopmentRevision());
-        define('TINE20_PACKAGESTRING', 'none');
-        define('TINE20_RELEASETIME',   'none');
+        define('TINE20SETUP_CODENAME',      getDevelopmentRevision());
+        define('TINE20SETUP_PACKAGESTRING', 'none');
+        define('TINE20SETUP_RELEASETIME',   'none');
     }
     
     /**
