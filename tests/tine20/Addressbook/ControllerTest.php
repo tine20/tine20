@@ -4,12 +4,10 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
- * @todo        update tests to use new search/count functions
- * @todo        remove old function calls
  */
 
 /**
@@ -32,9 +30,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
 
     /**
-     * @var bool allow the use of GLOBALS to exchange data between tests
+     * @var Addressbook_Controller_Contact
      */
-    protected $backupGlobals = false;
+    protected $_instance = NULL;
     
     /**
      * Runs the test methods of this class.
@@ -56,8 +54,6 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $GLOBALS['Addressbook_ControllerTest'] = array_key_exists('Addressbook_ControllerTest', $GLOBALS) ? $GLOBALS['Addressbook_ControllerTest'] : array();
-        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -158,6 +154,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'note'              => 'phpunit test note',    
         ));
         
+        $this->_instance = Addressbook_Controller_Contact::getInstance();
+        
         return;
         
     }
@@ -170,30 +168,34 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-	
+	    if (array_key_exists('contact', $this->objects)) {
+	        $this->_instance->delete($this->objects['contact']);
+	    }
     }
     
     /**
-     * try to add a contact
+     * adds a contact
      *
+     * @return Addressbook_Model_Contact
      */
-    public function testAddContact()
+    protected function _addContact()
     {
         $contact = $this->objects['initialContact'];
         $contact->notes = new Tinebase_Record_RecordSet('Tinebase_Model_Note', array($this->objects['note']));
-        $contact = Addressbook_Controller_Contact::getInstance()->create($contact);
-        $GLOBALS['Addressbook_ControllerTest']['contactId'] = $contact->getId();
+        $contact = $this->_instance->create($contact);
+        $this->objects['contact'] = $contact;
         
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
+        
+        return $contact;
     }
     
     /**
      * try to get a contact
-     *
      */
     public function testGetContact()
     {
-        $contact = Addressbook_Controller_Contact::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['contactId']);
+        $contact = $this->_addContact();
         
         $this->assertEquals($this->objects['initialContact']->adr_one_locality, $contact->adr_one_locality);
     }
@@ -204,7 +206,9 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetImage()
     {
-        $image = Addressbook_Controller::getInstance()->getImage($GLOBALS['Addressbook_ControllerTest']['contactId']);
+        $contact = $this->_addContact();
+        
+        $image = Addressbook_Controller::getInstance()->getImage($contact->getId());
         $this->assertType('Tinebase_Model_Image', $image);
         $this->assertEquals($image->width, 94);
     }
@@ -215,12 +219,14 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountByOwner()
     {
+        $contact = $this->_addContact();
+        
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'query',         'operator' => 'contains', 'value' => $this->objects['initialContact']->n_family),
+            array('field' => 'query',         'operator' => 'contains', 'value' => $contact->n_family),
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $count = $this->_instance->searchCount($filter);
         
         $this->assertEquals(1, $count);
     }
@@ -231,6 +237,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountByAddressbookId()
     {
+        $contact = $this->_addContact();
+        
         $personalContainer = Tinebase_Container::getInstance()->getPersonalContainer(
             Zend_Registry::get('currentAccount'), 
             'Addressbook', 
@@ -243,7 +251,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         ));
         $filter->container = array($container->getId());
-        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $count = $this->_instance->searchCount($filter);
         
         $this->assertGreaterThan(0, $count);
     }
@@ -254,11 +262,13 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testGetCountOfAllContacts()
     {
+        $contact = $this->_addContact();
+        
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'query',         'operator' => 'contains', 'value' => $this->objects['initialContact']->n_family),
+            array('field' => 'query',         'operator' => 'contains', 'value' => $contact->n_family),
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'all'),
         ));
-        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $count = $this->_instance->searchCount($filter);
         
         $this->assertEquals(1, $count);
     }
@@ -269,8 +279,10 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateContact()
     {
-        $this->objects['updatedContact']->setId($GLOBALS['Addressbook_ControllerTest']['contactId']);
-        $contact = Addressbook_Controller_Contact::getInstance()->update($this->objects['updatedContact']);
+        $contact = $this->_addContact();
+        
+        $this->objects['updatedContact']->setId($contact->getId());
+        $contact = $this->_instance->update($this->objects['updatedContact']);
 
         $this->assertEquals($this->objects['updatedContact']->adr_one_locality, $contact->adr_one_locality);
         $this->assertEquals($this->objects['updatedContact']->n_given." ".$this->objects['updatedContact']->n_family, $contact->n_fn);
@@ -278,37 +290,29 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'last_modified_by', 'operator' => 'equals', 'value' => Zend_Registry::get('currentAccount')->getId())
         ));
-        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $count = $this->_instance->searchCount($filter);
         $this->assertTrue($count > 0);
         
         $date = Tinebase_DateTime::now();
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'last_modified_time', 'operator' => 'equals', 'value' => $date->toString('Y-m-d'))
         ));
-        $count = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $count = $this->_instance->searchCount($filter);
         $this->assertTrue($count > 0);
     }
 
     /**
      * test remove image
-     *
      */
     public function testRemoveContactImage()
     {
-        $contact = Addressbook_Controller_Contact::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['contactId']);
+        $contact = $this->_addContact();
+        
         $contact->jpegphoto = '';
+        $contact = $this->_instance->update($contact);
+        
         $this->setExpectedException('Exception');
         $image = Addressbook_Controller::getInstance()->getImage($contact->id);
-    }
-    
-    /**
-     * tests that exception gets thrown when contact has no image
-     *
-     */
-    public function testGetImageException()
-    {
-        $this->setExpectedException('Exception');
-        Addressbook_Controller::getInstance()->getImage($GLOBALS['Addressbook_ControllerTest']['contactId']);
     }
     
     /**
@@ -317,10 +321,13 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteContact()
     {
-        Addressbook_Controller_Contact::getInstance()->delete($GLOBALS['Addressbook_ControllerTest']['contactId']);
+        $contact = $this->_addContact();
+        
+        $this->_instance->delete($contact->getId());
+        unset($this->objects['contact']);
 
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $contact = Addressbook_Controller_Contact::getInstance()->get($GLOBALS['Addressbook_ControllerTest']['contactId']);
+        $contact = $this->_instance->get($contact->getId());
     }
 
     /**
@@ -330,8 +337,8 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
     public function testDeleteUserAccountContact()
     {
         $this->setExpectedException('Addressbook_Exception_AccessDenied');
-        $userContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId());
-        Addressbook_Controller_Contact::getInstance()->delete($userContact->getId());
+        $userContact = $this->_instance->getContactByUserId(Tinebase_Core::getUser()->getId());
+        $this->_instance->delete($userContact->getId());
     }
     
     /**
@@ -352,18 +359,20 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testCreationTimeWeekOperator()
     {
+        $contact = $this->_addContact();
+        
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        $count1 = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $count1 = $this->_instance->searchCount($filter);
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'creation_time', 'operator' => 'inweek',   'value' => 0),
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        $count2 = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $count2 = $this->_instance->searchCount($filter);
         $this->assertEquals($count1, $count2);
     }
     
@@ -372,11 +381,13 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testCreationTimeEqualsOperator()
     {
+        $contact = $this->_addContact();
+        
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        $count1 = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $count1 = $this->_instance->searchCount($filter);
         
         $date = Tinebase_DateTime::now();
         $filter = new Addressbook_Model_ContactFilter(array(
@@ -384,7 +395,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
-        $count2 = Addressbook_Controller_Contact::getInstance()->searchCount($filter);
+        $count2 = $this->_instance->searchCount($filter);
         $this->assertEquals($count1, $count2);
     }
 }
