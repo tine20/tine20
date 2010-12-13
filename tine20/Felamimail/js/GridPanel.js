@@ -644,7 +644,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         } else {
             var msgs = sm.getSelectionsCollection(),
                 lastIdx = this.getStore().indexOf(msgs.last()),
-                nextRecord = this.getStore().getAt(++lastIdx);
+                nextRecord = (sm.getCount() == 1) ? this.getStore().getAt(++lastIdx) : null;
         }
         
         msgs.each(function(msg) {
