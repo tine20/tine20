@@ -285,7 +285,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         // check if inboxes need updates
         var inboxes = this.folderStore.queryBy(function(folder) {
-            return Ext.util.Format.lowercase(folder.get('localname')) === 'inbox' && folder.needsUpdate(this.updateInterval);
+            return folder.isInbox() && folder.needsUpdate(this.updateInterval);
         }, this);
         if (inboxes.getCount() > 0) {
             return inboxes.first();

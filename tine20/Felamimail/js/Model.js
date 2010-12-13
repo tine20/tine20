@@ -505,6 +505,15 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
     },
     
     /**
+     * is this folder an inbox?
+     * 
+     * @return {Boolean}
+     */
+    isInbox: function() {
+        return Ext.util.Format.lowercase(this.get('localname')) === 'inbox';
+    },
+    
+    /**
      * returns true if current folder needs an update
      */
     needsUpdate: function(updateInterval) {
