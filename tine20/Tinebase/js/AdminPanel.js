@@ -7,6 +7,9 @@
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  */
+ 
+/*global Ext, Tine, Locale*/
+ 
 Ext.ns('Tine.Tinebase');
 
 /**
@@ -38,12 +41,11 @@ Tine.Tinebase.AdminPanel = Ext.extend(Ext.TabPanel, {
     /**
      * @private
      */
-    initComponent: function() {
+    initComponent: function () {
         this.items = new Tine.Tinebase.Admin.UserProfileConfigPanel({});
         
         Tine.Tinebase.AdminPanel.superclass.initComponent.call(this);
     }
-    
 });
 
 /**
@@ -62,15 +64,6 @@ Tine.Tinebase.AdminPanel.openWindow = function (config) {
     }); 
 };
 
-
-
-
-
-
-
-
-
-
 Ext.ns('Tine.Tinebase.Admin');
 Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: extend some kind of AppAdminPanel
 
@@ -80,7 +73,7 @@ Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: ex
     /**
      * @private
      */
-    initComponent: function() {
+    initComponent: function () {
         this.title = _('Profile Information');
         this.items = [];
         
@@ -97,22 +90,24 @@ Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: ex
         this.supr().initComponent.call(this);
     },
     
-    afterRender: function() {
+    afterRender: function () {
         this.supr().afterRender.apply(this, arguments);
         
         this.loadMask = new Ext.LoadMask(this.getEl(), {msg: _('Please Wait')});
         if (! this.store) {
-            this.loadMask.show();
+            (function () {
+            	this.loadMask.show();
+            }).defer(50, this);
         }
     },
     
-    applyConfig: function() {
+    applyConfig: function () {
         var userProfileConfig = {
             readableFields: [],
             updateableFields: []
         };
         
-        this.store.each(function(field) {
+        this.store.each(function (field) {
             var fieldName = field.get('fieldName');
             
             if (field.get('readGrant')) {
@@ -124,21 +119,21 @@ Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: ex
         }, this);
         
         this.loadMask.show();
-        Tine.Tinebase.setUserProfileConfig(userProfileConfig, function() {
-            this.applyAction.setDisabled(true);
+        Tine.Tinebase.setUserProfileConfig(userProfileConfig, function () {
             this.store.commitChanges();
+            this.applyAction.setDisabled(true);
             this.loadMask.hide();
         }, this);
         
     },
     
-    initProfileTable: function(userProfileConfig) {
+    initProfileTable: function (userProfileConfig) {
         var adbI18n = new Locale.Gettext();
         adbI18n.textdomain('Addressbook');
         
         var fieldData = [];
         
-        Ext.each(userProfileConfig.possibleFields, function(fieldName) {
+        Ext.each(userProfileConfig.possibleFields, function (fieldName) {
             var fieldDefinition = Tine.Addressbook.Model.Contact.getField(fieldName);
             fieldData.push([
                 fieldName,
@@ -192,9 +187,7 @@ Tine.Tinebase.Admin.UserProfileConfigPanel = Ext.extend(Ext.Panel, { // TODO: ex
         }
     },
     
-    onStoreUpdate: function() {
+    onStoreUpdate: function () {
         this.applyAction.setDisabled(false);
     }
-    
-    
 });
