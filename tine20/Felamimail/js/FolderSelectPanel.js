@@ -41,6 +41,7 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
     border: true,
     autoScroll: true,
     bodyStyle: 'background-color:white',
+    selectedNode: null,
 	
     /**
      * init
@@ -79,9 +80,19 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
             iconCls: 'action_cancel'
         });
         
+        this.action_ok = new Ext.Action({
+            disabled: true,
+            text: _('Ok'),
+            iconCls: 'action_saveAndClose',
+            minWidth: 70,
+            handler: this.onOk,
+            scope: this
+        });        
+        
         this.fbar = [
             '->',
-            this.action_cancel
+            this.action_cancel,
+            this.action_ok
         ];        
     },
         
@@ -148,7 +159,8 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
             }),
             root: this.root
         });
-        this.folderTree.on('click', this.onFolderSelect, this);
+        this.folderTree.on('dblclick', this.onTreeNodeDblClick, this);
+        this.folderTree.on('click', this.onTreeNodeClick, this);
         
         this.items = [this.folderTree];
     },
@@ -172,9 +184,18 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
      * @param {Ext.tree.AsyncTreeNode} node
      * @private
      */
-    onFolderSelect: function(node) {
-        this.fireEvent('folderselect', node);
+    onTreeNodeDblClick: function(node) {
+        this.selectedNode = node;
+        this.onOk();
         return false;
+    },
+    
+    /**
+     * @private
+     */
+    onTreeNodeClick: function(node) {
+        this.selectedNode = node;
+        this.action_ok.setDisabled(false);
     },
     
     /**
@@ -183,7 +204,16 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
     onCancel: function(){
         this.purgeListeners();
         this.window.close();
-    }    
+    },
+    
+    /**
+     * @private
+     */
+    onOk: function() {
+        if (this.selectedNode) {
+            this.fireEvent('folderselect', this.selectedNode);
+        }
+    }
 });
 
 /**
