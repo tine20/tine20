@@ -5,8 +5,8 @@
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Controller.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
  */
 
@@ -18,15 +18,23 @@
 class Phone_Controller extends Tinebase_Controller_Abstract
 {
     /**
+     * call backend type
+     * 
+     * @var string
+     */
+    protected $_callBackendType = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
      */
     private function __construct() 
     {
-        // we don't have a user when we have a snom connection
-        //$this->_currentAccount = Tinebase_Core::getUser();  
-              
+        $this->_callBackendType = Tinebase_Config::getInstance()->getConfigAsArray('snom', 'Tinebase', array(
+            'backend' => Phone_Backend_Factory::ASTERISK
+        ));
+        
         $this->_applicationName = 'Phone';
     }
 
@@ -73,7 +81,7 @@ class Phone_Controller extends Tinebase_Controller_Abstract
     {
         $accountId = Tinebase_Core::getUser()->getId();
         $vmController = Voipmanager_Controller_Snom_Phone::getInstance();
-        $backend = Phone_Backend_Factory::factory(Phone_Backend_Factory::ASTERISK);
+        $backend = Phone_Backend_Factory::factory($this->_callBackendType);
         
         if ($_phoneId === NULL && $_lineId === NULL) {
             
@@ -85,11 +93,13 @@ class Phone_Controller extends Tinebase_Controller_Abstract
 
             if(count($phones) > 0) {
                 $phone = $vmController->get($phones[0]->id);
-                if(count($phone->lines) > 0) {
-                    $asteriskLineId = $phone->lines[0]->asteriskline_id;
-                } else {
-                    throw new Phone_Exception_NotFound('No line found for this phone.');
-                }
+                if ($this->_callBackendType === Phone_Backend_Factory::ASTERISK) {
+                    if (count($phone->lines) > 0) {
+                        $asteriskLineId = $phone->lines[0]->asteriskline_id;
+                    } else {
+                        throw new Phone_Exception_NotFound('No line found for this phone.');
+                    }
+                 }
             } else {
                 throw new Phone_Exception_NotFound('No phones found.');
             }
@@ -97,14 +107,29 @@ class Phone_Controller extends Tinebase_Controller_Abstract
         } else {
             // use given phone and line ids
             $phone = Phone_Controller_MyPhone::getInstance()->get($_phoneId);
-            $line = $phone->lines[$phone->lines->getIndexById($_lineId)];
-            $asteriskLineId = $line->asteriskline_id; 
+            if ($this->_callBackendType === Phone_Backend_Factory::ASTERISK) {
+               $line = $phone->lines[$phone->lines->getIndexById($_lineId)];
+               $asteriskLineId = $line->asteriskline_id;
+            }
         }
 
-        $asteriskLine = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($asteriskLineId);
-        $asteriskContext = Voipmanager_Controller_Asterisk_Context::getInstance()->get($asteriskLine->context_id);
-        
-        $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskContext->name, $_number, 1, "WD <$_number>");
+        if ($this->_callBackendType === Phone_Backend_Factory::SNOM_WEBSERVER) {
+            $filter = new Voipmanager_Model_Snom_PhoneFilter(array(
+                array('field' => 'account_id', 'operator' => 'equals', 'value' => $accountId)
+            ));
+            foreach ($vmController->search($filter) as $p) {
+                if ($p->id == $phone->id) {
+                    // @todo http_user / http_pass
+                    $backend->dialNumber($p->ipaddress, $_number, null, null);
+                    break;
+                }
+            }
+        } else {
+            $asteriskLine = Voipmanager_Controller_Asterisk_SipPeer::getInstance()->get($asteriskLineId);
+            $asteriskContext = Voipmanager_Controller_Asterisk_Context::getInstance()->get($asteriskLine->context_id);
+            
+            $backend->dialNumber('SIP/' . $asteriskLine->name, $asteriskContext->name, $_number, 1, "WD <$_number>");
+        }
     }    
     
     /**

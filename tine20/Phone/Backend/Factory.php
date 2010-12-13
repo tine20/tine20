@@ -5,7 +5,7 @@
  * @package     Phone
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Factory.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  */
 
@@ -38,8 +38,14 @@ class Phone_Backend_Factory
      * constant for the snom phone callhistory backend class
      *
      */
-    const CALLHISTORY = 'Callhistory';
-    
+     const CALLHISTORY = 'Callhistory';
+     
+     /**
+      * constant for the snom phone webserver backend class
+      *
+      */
+     const SNOM_WEBSERVER = 'SnomWebserver';
+     
     /**
      * factory function to return a selected phone backend class
      *
@@ -70,7 +76,13 @@ class Phone_Backend_Factory
                     self::$_backends[$_type] = new Phone_Backend_Snom_Callhistory();
                 }
                 $instance = self::$_backends[$_type];
-                break;                            
+                break;
+            case self::SNOM_WEBSERVER:
+                if (!isset(self::$_backends[$_type])) {
+                    self::$_backends[$_type] = new Phone_Backend_Snom_Webserver();
+                }
+                $instance = self::$_backends[$_type];
+                break;
             default:
                 throw new Phone_Exception_InvalidArgument('Unsupported phone backend (' . $_type . ').');
         }
