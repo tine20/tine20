@@ -119,15 +119,14 @@ class Addressbook_Controller extends Tinebase_Controller_Abstract implements Tin
      * returns contact image
      * 
      * @param   string $_identifier record identifier
-     * @param   string $_location not used, requierd by interface
+     * @param   string $_location not used, required by interface
      * @return  Tinebase_Model_Image
      * @throws  Addressbook_Exception_NotFound if no image found
      */
-    public function getImage($_identifier, $_location='')
+    public function getImage($_identifier, $_location = '')
     {
         // get contact to ensure user has read rights
         $image = Addressbook_Controller_Contact::getInstance()->getImage($_identifier);
-        
         
         if (empty($image)) {
             throw new Addressbook_Exception_NotFound('Contact has no image.');
@@ -140,5 +139,4 @@ class Addressbook_Controller extends Tinebase_Controller_Abstract implements Tin
             'data'         => $image
         ));
     }
-    
 }
