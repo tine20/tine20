@@ -56,11 +56,9 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
         );
 
         this.app = Tine.Tinebase.appMgr.get('Felamimail');
+        
         if (! this.allAccounts) {
             this.account = this.account || this.app.getActiveAccount();
-            this.title = String.format(this.app.i18n._('Folders of account {0}'), this.account.get('name'));
-        } else {
-            this.title = this.app.i18n._('Folders of all accounts');
         }
         
         this.initActions();
@@ -160,7 +158,12 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
      */
     afterRender: function() {
         Tine.Felamimail.FolderSelectPanel.superclass.afterRender.call(this);
-        this.window.setTitle(this.app.i18n._('Folder Selection'));
+        
+        var title = (! this.allAccounts) 
+            ? String.format(this.app.i18n._('Folders of account {0}'), this.account.get('name'))
+            : this.app.i18n._('Folders of all accounts');
+            
+        this.window.setTitle(title);
     },
 
     /**
@@ -193,6 +196,7 @@ Tine.Felamimail.FolderSelectPanel.openWindow = function (config) {
     var window = Tine.WindowFactory.getWindow({
         width: 200,
         height: 300,
+        modal: true,
         name: Tine.Felamimail.FolderSelectPanel.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Felamimail.FolderSelectPanel',
         contentPanelConstructorConfig: config
