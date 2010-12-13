@@ -306,7 +306,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 return true;
             }
             // update inboxes more often than other folders
-            if (Ext.util.Format.lowercase(folder.get('localname')) === 'inbox' && timestamp.getElapsed() > this.updateInterval) {
+            if (folder.isInbox() && timestamp.getElapsed() > this.updateInterval) {
                 return true;
             } else if (timestamp.getElapsed() > (this.updateInterval * 5)) {
                 return true;
@@ -384,7 +384,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             // only show notifications for inbox if unreadcount changed
             if (record.isModified('cache_unreadcount')) {
                 var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount);
-                if (recents > 0 && Ext.util.Format.lowercase(record.get('localname')) == 'inbox') {
+                if (recents > 0 && folder.isInbox()) {
                     Tine.log.info('show notification: ' + recents + ' new mails.');
                     Ext.ux.Notification.show(
                         this.i18n._('New mails'), 
@@ -448,7 +448,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                         accountNode.loading = false;
                         accountNode.reload(function(callback) {
                             Ext.each(accountNode.childNodes, function(node) {
-                                if (Ext.util.Format.lowercase(node.attributes.localname) == 'inbox') {
+                                if (folder.isInbox()) {
                                     node.select();
                                     return false;
                                 }
