@@ -139,7 +139,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * folder store gets updated -> update grid/tree and show notifications
+     * folder store gets updated -> refresh grid if new messages arrived or messages have been removed
      * 
      * @param {Tine.Felamimail.FolderStore} store
      * @param {Tine.Felamimail.Model.Folder} record
@@ -152,15 +152,30 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
             // only refresh if 1 or no messages are selected
             if (this.getGrid().getSelectionModel().getCount() <= 1) {
+                var refresh = false;
                 for (var i = 0; i < selectedNodes.length; i++) {
                     if (selectedNodes[i].id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
-                        var contentPanel = this.app.getMainScreen().getCenterPanel();
-                        if (contentPanel) {
-                            // TODO do not reload details panel
-                            contentPanel.loadData(true, true, true);
-                            break;
+                        refresh = true;
+                        break;
+                    }
+                }
+                
+                // check if folder is in filter or allinboxes are selected and updated folder is an inbox
+                if (! refresh) {
+                    var filters = this.filterToolbar.getValue();
+                    for (var i = 0; i < filters.length; i++) {
+                        if (filters[i].field == 'path' && filters[i].operator == 'in') {
+                            if (filters[i].value.indexOf(record.get('path')) !== -1 || (filters[i].value.indexOf('/allinboxes') !== -1 && record.isInbox())) {
+                                refresh = true;
+                                break;
+                            }
                         }
                     }
+                }
+                
+                if (refresh) {
+                    // TODO do not reload details panel
+                    this.loadData(true, true, true);
                 }
             }
         }
