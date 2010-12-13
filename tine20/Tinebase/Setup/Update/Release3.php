@@ -240,12 +240,16 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             </declaration>
         </table>');
         
-        $this->_backend->createTable($declaration);
-        Tinebase_Application::getInstance()->addApplicationTable(
-            Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
-            'scheduler', 
-            1
-        );
+        try {
+            $this->_backend->createTable($declaration);
+            Tinebase_Application::getInstance()->addApplicationTable(
+                Tinebase_Application::getInstance()->getApplicationByName('Tinebase'), 
+                'scheduler', 
+                1
+            );
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // do nothing
+        }
         
         $request = new Zend_Controller_Request_Simple(); 
         $request->setControllerName('Tinebase_Alarm');
