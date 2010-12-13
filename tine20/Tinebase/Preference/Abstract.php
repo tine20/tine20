@@ -463,13 +463,15 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         foreach ($options as $option) {
             if ($default->value == $option[0]) {
                 $valueLabel = $option[1];
+                break;
             }
         }
+        // add default setting to the top of options
         $defaultLabel .= ' (' . $valueLabel . ')';
-        $options[] = array(
+        array_unshift($options, array(
             Tinebase_Model_Preference::DEFAULT_VALUE,
             $defaultLabel,
-            );
+        ));
         
         $_preference->options = $options;
     }
