@@ -15,7 +15,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
- * @property    application_id
+ * @property    string application_id
+ * @property    string type
  * 
  * NOTE: container class is in the transition from int based grants to string based
  *       grants! In the next refactoring step of container class, int based grants 
