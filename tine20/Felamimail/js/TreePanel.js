@@ -227,7 +227,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             listeners: {beforeshow: this.updateProgressTip.createDelegate(this)}
         });
         
-        this.folderProgressTip = new Ext.ToolTip({
+        this.folderUnreadTip = new Ext.ToolTip({
             target: this.getEl(),
             delegate: '.felamimail-node-statusbox-unread',
             renderTo: document.body,
@@ -466,7 +466,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * folder store gets updated -> update grid/tree and show notifications
+     * folder store gets updated -> update tree nodes
      * 
      * @param {Tine.Felamimail.FolderStore} store
      * @param {Tine.Felamimail.Model.Folder} record
@@ -474,21 +474,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     onUpdateFolderStore: function(store, record, operation) {
         if (operation === Ext.data.Record.EDIT) {
-            var selectedNodes = this.getSelectionModel().getSelectedNodes();
-            
-            // TODO move this to grid panel
-            for (var i = 0; i < selectedNodes.length; i++) {
-                if (selectedNodes[i].id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
-                    var contentPanel = this.app.getMainScreen().getCenterPanel();
-                    if (contentPanel) {
-                        // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
-                        // TODO do not reload details panel
-                        contentPanel.loadData(true, true, true);
-                        break;
-                    }
-                }
-            }
-                
             this.updateFolderStatus(record);
         }
     },

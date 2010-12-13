@@ -128,6 +128,40 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
+        this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
+    },
+    
+    /**
+     * cleanup on destruction
+     */
+    onDestroy: function() {
+        this.app.getFolderStore().un('update', this.onUpdateFolderStore, this);
+    },
+    
+    /**
+     * folder store gets updated -> update grid/tree and show notifications
+     * 
+     * @param {Tine.Felamimail.FolderStore} store
+     * @param {Tine.Felamimail.Model.Folder} record
+     * @param {String} operation
+     */
+    onUpdateFolderStore: function(store, record, operation) {
+        if (operation === Ext.data.Record.EDIT) {
+            var tree = this.app.getMainScreen().getTreePanel(),
+                selectedNodes = (tree) ? tree.getSelectionModel().getSelectedNodes() : [];
+            
+            for (var i = 0; i < selectedNodes.length; i++) {
+                if (selectedNodes[i].id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
+                    var contentPanel = this.app.getMainScreen().getCenterPanel();
+                    if (contentPanel) {
+                        // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
+                        // TODO do not reload details panel
+                        contentPanel.loadData(true, true, true);
+                        break;
+                    }
+                }
+            }
+        }
     },
     
     /**
