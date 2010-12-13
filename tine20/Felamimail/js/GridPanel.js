@@ -150,14 +150,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var tree = this.app.getMainScreen().getTreePanel(),
                 selectedNodes = (tree) ? tree.getSelectionModel().getSelectedNodes() : [];
             
-            for (var i = 0; i < selectedNodes.length; i++) {
-                if (selectedNodes[i].id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
-                    var contentPanel = this.app.getMainScreen().getCenterPanel();
-                    if (contentPanel) {
-                        // TODO do not update if multiple messages are selected (this does not work if messages are moved!)
-                        // TODO do not reload details panel
-                        contentPanel.loadData(true, true, true);
-                        break;
+            // only refresh if 1 or no messages are selected
+            if (this.getGrid().getSelectionModel().getCount() <= 1) {
+                for (var i = 0; i < selectedNodes.length; i++) {
+                    if (selectedNodes[i].id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
+                        var contentPanel = this.app.getMainScreen().getCenterPanel();
+                        if (contentPanel) {
+                            // TODO do not reload details panel
+                            contentPanel.loadData(true, true, true);
+                            break;
+                        }
                     }
                 }
             }
