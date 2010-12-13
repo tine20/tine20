@@ -15,6 +15,8 @@
  * 
  * @package     Tinebase
  * @subpackage  Record
+ * 
+ * @property    string  name
  */
 class Tinebase_Model_Application extends Tinebase_Record_Abstract
 {
