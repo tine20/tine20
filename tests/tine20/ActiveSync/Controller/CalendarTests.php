@@ -310,9 +310,9 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $this->objects['events'][] = $_record;
         
         $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
-        $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Controller_Calendar::FILTER_2_WEEKS_BACK);
+        $records = $controller->getServerEntries($this->_specialFolderName, ActiveSync_Controller_Calendar::FILTER_NOTHING);
         
-        $this->assertContains($_record->getId(), $records);
+        $this->assertContains($_record->getId(), $records, 'event not found');
         #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
     }
     
