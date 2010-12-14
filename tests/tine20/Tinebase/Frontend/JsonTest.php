@@ -85,6 +85,9 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         ));        
     }
     
+    /**
+     * tear down prefs
+     */
     public function tearDown()
     {
         if ($this->_clearPrefs) {
@@ -123,32 +126,6 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             $this->_objects['record']['id']
         );        
     }
-    
-    /**
-     * try to add group and then search
-     *
-    public function testSearchGroups()
-    {
-    	$group = Tinebase_Group::getInstance()->addGroup($this->_objects['group']);
-    	
-    	$filter = array(array(
-            'field' 	=> 'query',
-            'operator' 	=> 'contains',
-            'value' 	=> 'phpunit test group'
-        ));
-        $paging = array(
-        	'start'	=> 0,
-        	'limit'	=> 1
-        );
-        
-        $groups = $this->_instance->searchGroups($filter, $paging);
-        
-        $this->assertGreaterThan(0, $groups['totalcount']);        
-        $this->assertEquals($this->_objects['group']->name, $groups['results'][0]['name']);
-        
-        // delete grop
-        Tinebase_Group::getInstance()->deleteGroups($group->id);        
-    }*/
     
     /**
      * try to delete role and then search
@@ -328,7 +305,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
                 $this->assertEquals(Tinebase_Model_Preference::DEFAULT_VALUE, $result['value']);
                 $this->assertTrue(is_array($result['options']));
                 $this->assertEquals(3, count($result['options']));
-                $this->assertContains('option1', $result['options'][2][1]);
+                $this->assertContains('option1', $result['options'][1][1]);
             } else if ($result['name'] == Tinebase_Preference::TIMEZONE) {
                 $this->assertTrue(is_array($result['options'][0]), 'options should be arrays');
             }
