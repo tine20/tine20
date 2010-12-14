@@ -129,7 +129,7 @@ class Setup_Controller
     /**
      * Check if logger is propperly configured (or not configured at all)
      * 
-     * @return bool
+     * @return boolean
      */
     public function checkConfigLogger()
     {
@@ -150,7 +150,7 @@ class Setup_Controller
     /**
      * Check if caching is propperly configured (or not configured at all)
      * 
-     * @return bool
+     * @return boolean
      */
     public function checkConfigCaching()
     {
@@ -166,6 +166,7 @@ class Setup_Controller
      * checks if path in config is writable
      * 
      * @param string $_name
+     * @return boolean
      */
     public function checkDir($_name)
     {
