@@ -66,6 +66,24 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     }
     
     /**
+     * add queue task to scheduler
+     * 
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addQueueTask(Zend_Scheduler $_scheduler)
+    {
+        $request = new Zend_Controller_Request_Simple(); 
+        $request->setControllerName('Tinebase_ActionQueue');
+        $request->setActionName('processQueue');
+        
+        $task = self::getTask();
+        $task->setRequest($request);
+        
+        $_scheduler->addTask('Tinebase_ActionQueue', $task);
+        $_scheduler->saveTask();
+    }
+    
+    /**
      * run requests
      * 
      * @see tine20/Zend/Scheduler/Zend_Scheduler_Task::run()

@@ -60,16 +60,27 @@
     /**
      * constructor
      * 
+     * @see http://framework.zend.com/manual/en/zend.queue.adapters.html for config options
+     * @todo finish implementation
      */
     private function __construct()
     {
-        if(isset(Tinebase_Core::getConfig()->actionqueue)) {
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
             $options = Tinebase_Core::getConfig()->actionqueue->toArray();
             
-            $adapter = $options['adapter'];
+            $adapter = array_key_exists('adapter', $options) ? $options['adapter'] : 'Db';
             unset($options['adapter']);
             
-            $options['name'] = $options['name'] ? $options['name'] : SQL_TABLE_PREFIX . 'actionqueue';
+            $options['name'] = array_key_exists('name', $options) ? $options['name'] : SQL_TABLE_PREFIX . 'actionqueue';
+            if ($adapter == 'Db') {
+                // use default db settings if empty
+                $options['driverOptions'] = (array_key_exists('driverOptions', $options)) ? $options['driverOptions'] : Tinebase_Core::getConfig()->database->toArray();
+                if (! array_key_exists('type', $options['driverOptions'])) {
+                    $options['driverOptions']['type'] = (array_key_exists('adapter', $options['driverOptions'])) ? $options['driverOptions']['adapter'] : 'pdo_mysql';
+                }
+            }
+            
+            //print_r($options);
             
             $this->_queue = new Zend_Queue($adapter, $options);
         }
