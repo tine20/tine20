@@ -178,11 +178,21 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 tabIndex: 14
             }]
         }, {
+            // TODO this should be not saved in the config.inc.php
+            title: this.app.i18n._('Filestore directory'),
+            id: 'setup-filesDir-group',
+            items: [{
+                name: 'filesdir',
+                value: Tine.Setup.registry.get(this.registryKey)['filesdir'],
+                fieldLabel: this.app.i18n._('Filestore Path'),
+                tabIndex: 15
+            }]
+        }, {
             title: this.app.i18n._('Addressbook Map panel'),
             items: [{
                 name: 'mapPanel',
                 fieldLabel: this.app.i18n._('Map panel'),
-                tabIndex: 15,
+                tabIndex: 16,
                 xtype: 'combo',
                 width: 283, // late rendering bug
                 listWidth: 300,
@@ -212,6 +222,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
         Ext.getCmp('setup-caching-group').setIconClass(Tine.Setup.registry.get('checkCaching') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-tmpDir-group').setIconClass(Tine.Setup.registry.get('checkTmpDir') ? 'setup_checks_success' : 'setup_checks_fail');
         Ext.getCmp('setup-sessionDir-group').setIconClass(Tine.Setup.registry.get('checkSessionDir') ? 'setup_checks_success' : 'setup_checks_fail');
+        Ext.getCmp('setup-filesDir-group').setIconClass(Tine.Setup.registry.get('checkFilesDir') ? 'setup_checks_success' : 'setup_checks_fail');
     },
     
     /**
