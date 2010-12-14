@@ -178,13 +178,13 @@ class Tinebase_Core
 
 
             /**************************** DAV API **********************************
-             * RewriteCond %{REQUEST_METHOD} ^(PROPFIND|PUT|DELETE|OPTIONS)$
+             * RewriteCond %{REQUEST_METHOD} ^(PROPFIND|PUT|DELETE|OPTIONS|MKCOL)$
              * RewriteRule ^/(.*) /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              *
              * RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
              * RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
              * RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-l
-             * RewriteRule ^/(.*) /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             * RewriteRule ^/(addressbook|filemanager|calendar)/ /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              */
         } elseif(isset($_SERVER['REDIRECT_DAV']) && $_SERVER['REDIRECT_DAV'] == 'true') {
             $server = new Tinebase_Server_WebDav();
