@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Jan Schneider <edv@janschneider.net>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Webserver.php 10598 2009-09-27 08:16:50Z l.kneschke@metaways.de $
+ * @version     $Id$
  *
  */
 
