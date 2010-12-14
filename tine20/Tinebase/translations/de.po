@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2010-12-08 14:27+0100\n"
+"PO-Revision-Date: 2010-12-14 10:55+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -745,7 +745,7 @@ msgstr "Alarm"
 
 #: js/widgets/dialog/AlarmPanel.js:42
 msgid "Custom Datetime"
-msgstr "Belibiger Zeitpunkt"
+msgstr "Beliebiger Zeitpunkt"
 
 #: js/widgets/dialog/AlarmPanel.js:52
 msgid "Send Alarm"
@@ -781,7 +781,7 @@ msgstr "1 Tag davor"
 
 #: js/widgets/dialog/AlarmPanel.js:69
 msgid "Custom datetime"
-msgstr "Belibiger Zeitpunkt"
+msgstr "Beliebiger Zeitpunkt"
 
 #: js/widgets/VersionCheck.js:45
 #: js/widgets/VersionCheck.js:54
