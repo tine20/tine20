@@ -52,7 +52,7 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('filesystem base path not found');
         }
         
-        $this->_basePath   = 'tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId() . '/folders/' . Tinebase_Model_Container::TYPE_SHARED;
+        $this->_basePath   = 'tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '/internal/phpunit';
         
         $this->objects['directories'] = array();
     }
@@ -65,12 +65,15 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->objects['directories'] as $directory) {
-            // don't delete files in physical filesystem
-            if (substr($directory, 0, 9) == 'tine20://') {
-                $this->_rmdir($directory);
-            }
-        } 
+        #foreach ($this->objects['directories'] as $directory) {
+        #    // don't delete files in physical filesystem
+        #    if (substr($directory, 0, 9) == 'tine20://') {
+        #        $this->_rmdir($directory);
+        #    }
+        #}
+        if (substr($this->_basePath, 0, 9) == 'tine20://') {
+            $this->_rmdir($this->_basePath);
+        }
     }
     
     protected function _rmdir($_path)
