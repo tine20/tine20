@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -146,6 +146,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
      * @var string
      */
     const SESSIONUSERAGENTVALIDATION = 'sessionUserAgentValidation';
+    
+    /**
+     * filestore directory
+     * 
+     * @var string
+     */
+    const FILESDIR = 'filesdir';
     
     /**
      * identifier
