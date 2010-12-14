@@ -269,11 +269,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         
         // do some mapping and save folder in db (if it doesn't exist
         foreach ($_folders as $folderData) {
-            // @todo think about if we need unselectable folders in the folder cache / disabled them for the moment
             if (! $folderData['isSelectable'] == '1') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Do not add folder ' . $folderData['globalName'] 
-                    . '. It is not selectable.');
-                continue;
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Folder ' . $folderData['globalName'] . ' is not selectable.');
             }
             
             try {
