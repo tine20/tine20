@@ -5,8 +5,10 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
+ * 
+ * @todo        move config options to config table
  */
 
 /**
@@ -118,6 +120,23 @@
             // execute action immediately if no queue service is available
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " no queue configured -> directly execute action: '{$action}'");
             $this->_executeAction($message);
+        }
+    }
+    
+    /**
+     * process number of messages in queue
+     * 
+     * @param integer $_numberOfMessagesToProcess
+     */
+    public function processQueue($_numberOfMessagesToProcess = 5)
+    {
+        if ($this->_queue && count($queue) > 0) {
+            $messages = $queue->receive($_numberOfMessagesToProcess);
+ 
+            foreach ($messages as $i => $message) {
+                $this->_executeAction($message);
+                $this->_queue->deleteMessage($message);
+            }
         }
     }
     
