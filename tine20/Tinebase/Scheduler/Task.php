@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe g.ciyiltepe@metaways.de>
- * @version     $Id: Task.php 13654 2010-03-23 16:06:19Z g.ciyiltepe@metaways.de $
+ * @version     $Id$
  */
 
 /**
