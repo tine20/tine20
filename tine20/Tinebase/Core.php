@@ -99,7 +99,13 @@ class Tinebase_Core
      *
      */
     const TMPDIR = 'tmpdir';
-
+    
+    /**
+     * constant temp dir registry
+     *
+     */
+    const FILESDIR = 'filesdir';
+    
     /**************** other consts *************************/
 
     /**
@@ -269,6 +275,8 @@ class Tinebase_Core
         
         // Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX" 
         Tinebase_Core::setupDatabaseConnection();
+        
+        Tinebase_Core::setupStreamWrapper();
         
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
@@ -562,6 +570,19 @@ class Tinebase_Core
         if (isset(self::get(self::SESSION)->currentAccount)) {
             self::set(self::USER, self::get(self::SESSION)->currentAccount);
         }
+    }
+    
+    /**
+     * setup stream wrapper for tine20:// prefix
+     * 
+     */
+    public static function setupStreamWrapper()
+    {
+        if (empty(Tinebase_Core::getConfig()->filesdir)) {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " filesdir config value not set. tine20:// streamwrapper not registered.");
+        }
+        
+        stream_wrapper_register('tine20', 'Tinebase_FileSystem_StreamWrapper');
     }
     
     /**
