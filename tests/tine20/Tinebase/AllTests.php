@@ -48,6 +48,8 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_TranslationTest');
         $suite->addTestSuite('Tinebase_AsyncJobTest');
         $suite->addTestSuite('Tinebase_HelperTests');
+        $suite->addTestSuite('Tinebase_Tree_AllTests');
+        #$suite->addTestSuite('Tinebase_FileSystem_StreamWrapperTest');
         
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
