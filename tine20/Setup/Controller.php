@@ -163,33 +163,18 @@ class Setup_Controller
     }
     
     /**
-     * Check if tmpdir is propperly configured (or not configured at all)
+     * checks if path in config is writable
      * 
-     * @return bool
+     * @param string $_name
      */
-    public function checkConfigTmpDir()
+    public function checkDir($_name)
     {
         $config = Setup_Core::getConfig();
-        if (!isset($config->tmpdir) || empty($config->tmpdir)) {
+        $path = $config->get($_name, null);
+        if (empty($path)) {
             return true;
         } else {
-            return @is_writable($config->tmpdir);
-        }
-    }
-    
-    /**
-     * Check if session save path is propperly configured (or not configured at all)
-     * 
-     * @return bool
-     */
-    public function checkConfigSessionDir()
-    {
-        $config = Setup_Core::getConfig();
-        $sessionSavePath = $config->get('sessiondir', null);
-        if (empty($sessionSavePath)) {
-            return true;
-        } else {
-            return @is_writable($sessionSavePath);
+            return @is_writable($path);
         }
     }
     

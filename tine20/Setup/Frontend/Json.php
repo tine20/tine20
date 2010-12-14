@@ -208,8 +208,8 @@ class Setup_Frontend_Json extends Tinebase_Frontend_Abstract
             'checkDB'         => $checkDB,
             'checkLogger'     => $this->_controller->checkConfigLogger(),
             'checkCaching'    => $this->_controller->checkConfigCaching(),
-            'checkTmpDir'     => $this->_controller->checkConfigTmpDir(),
-            'checkSessionDir' => $this->_controller->checkConfigSessionDir(),
+            'checkTmpDir'     => $this->_controller->checkDir('tmpdir'),
+            'checkSessionDir' => $this->_controller->checkDir('sessiondir'),
             'setupRequired'	  => empty($checkDB) ? TRUE : $this->_controller->setupRequired(),
         );
 
