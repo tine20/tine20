@@ -66,7 +66,7 @@ Tine.widgets.dialog.AlarmPanel = Ext.extend(Ext.Panel, {
                 ['60',      _('1 hour before')],
                 ['120',     _('2 hours before')],
                 ['1440',    _('1 day before')],
-                ['custom',  _('Custom datetime')]
+                ['custom',  _('Custom Datetime')]
             ],
             listeners       : {
                 scope: this,
