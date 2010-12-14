@@ -19,16 +19,38 @@
 class Tinebase_Scheduler_Task extends Zend_Scheduler_Task 
 {
     /**
+     * minutely task (default)
+     * 
+     * @var string
+     */
+    const TASK_TYPE_MINUTELY = 'minutely';
+    
+    /**
      * static task getter
      * 
-     * @param  array $options
+     * @param  string $_type
+     * @param  array $_options
      * @return Tinebase_Scheduler_Task
      */
-    public static function getTask(array $options = array())
+    public static function getTask($_type = self::TASK_TYPE_MINUTELY, array $_options = array())
     {
-        return new Tinebase_Scheduler_Task($options);
+        $task = new Tinebase_Scheduler_Task($_options);
+        if ($_type == self::TASK_TYPE_MINUTELY) {
+            $task->setMonths("Jan-Dec");
+            $task->setWeekdays("Sun-Sat");
+            $task->setDays("1-31");
+            $task->setHours("0-23");
+            $task->setMinutes("0/1");
+        }
+        
+        return $task;
     }
     
+    /**
+     * run requests
+     * 
+     * @see tine20/Zend/Scheduler/Zend_Scheduler_Task::run()
+     */
     public function run()
     {
         foreach ($this->getRequests() as $request) {
