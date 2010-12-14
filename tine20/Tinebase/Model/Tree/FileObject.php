@@ -14,7 +14,7 @@
  * 
  * @property  string   name
  */
-class Tinebase_Model_Tree_Object extends Tinebase_Record_Abstract
+class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
 {
     /**
      * key in $_validators/$_properties array for the filed which 
