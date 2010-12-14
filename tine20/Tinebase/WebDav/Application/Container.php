@@ -19,60 +19,63 @@
  */
 class Tinebase_WebDav_Application_Container extends Sabre_DAV_Directory
 {
-    const CONTAINER_SHARED = 'shared';
-    const CONTAINER_USERS  = 'users';
-    
     protected $_path;
     
-    protected $_containerType;
-    
-    protected $_containerName;
+    /**
+     * the current container
+     * 
+     * @var Tinebase_Model_Container
+     */
+    protected $_container;
     
     protected $_username;
     
     protected $_applicationName;
     
-    protected $_modelName = 'Contact';
-    
     protected $_contentController;
+    
+    protected $_containerPath;
+    
+    protected $_fileSystemPath;
     
     public function __construct($path) 
     {
         $this->_path = $path;
-        error_log(__METHOD__ . ' ' . __LINE__ . ' PATH: ' . $this->_path);
 
         $this->_parsePath();
         
-        error_log(__METHOD__ . ' ' . __LINE__ . ' APPLICATION: ' . $this->_applicationName);
-        
-        $this->_contentController   = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
-        $this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filesystem path: ' . $this->_fileSystemPath);
     }
-    
+
+    /**
+     * parse the path
+     * path can be: 
+     * 	 /applicationname/shared/containername(/*)
+     *   /applicationname/personal/username/containername(/*)
+     */
     protected function _parsePath()
     {
-        $pathParts = explode('/', ltrim($this->_path, '/'));
+        // split path into parts
+        $pathParts = explode('/', trim($this->_path, '/'), 4);
         
-        $this->_applicationName = $pathParts[0];
-        $this->_containerType   = $pathParts[1];
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH PARTS: ' . print_r($pathParts, true));
+        
+        $this->_applicationName = ucfirst(strtolower($pathParts[0]));
+        $containerType          = strtolower($pathParts[1]);
 
-        switch($this->_containerType) {
-            case self::CONTAINER_SHARED:
-                if(isset($pathParts[2])) {
-                    $this->_containerName = $pathParts[2];
-                }
+        switch($containerType) {
+            case Tinebase_Model_Container::TYPE_SHARED:
+                $containerName         = $pathParts[2];
+                $this->_container      = Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $containerName, $containerType);
+                $this->_containerPath  = 'tine20:///' . Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() . '/folders/' . $this->_container->type . '/' . $this->_container->getId();
+                $this->_fileSystemPath = isset($pathParts[3]) ? $this->_containerPath . '/' . $pathParts[3] : $this->_containerPath;
                 
                 break;
                 
-            case self::CONTAINER_USERS:
-                if(isset($pathParts[2])) {
-                    $this->_username = $pathParts[2];
-                }
-                
-                if(isset($pathParts[3])) {
-                    $this->_containerName = $pathParts[3];
-                }
-                
+            case Tinebase_Model_Container::TYPE_PERSONAL:
+                $this->_username      = $pathParts[2];
+                // needs more splitting
+                $this->_containerName = $pathParts[3];
                 break;
                 
             default:
@@ -81,72 +84,56 @@ class Tinebase_WebDav_Application_Container extends Sabre_DAV_Directory
         }
     }
     
-    
+    /**
+     * @todo rework
+     */
     public function getChildren() 
     {
-        error_log(__METHOD__ . ' ' . __LINE__ . ' PATH: ' . $this->_path);
-        error_log(__METHOD__ . ' ' . __LINE__ . ' APPLICATION: ' . $this->_applicationName);
-        error_log(__METHOD__ . ' ' . __LINE__ . ' CONTAINERTYPE: ' . $this->_containerType);
-        
         $children = array();
         
-        if($this->_containerType == self::CONTAINER_SHARED) {
-            // get list of containers
-            if(!isset($this->_containerName)) {
-                $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_EXPORT);
-                foreach ($containers as $container) {
-                    $children[] = $this->getChild($container->name);
-                }
-            } else {
-                $container = Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $this->_containerName, Tinebase_Model_Container::TYPE_SHARED);
+        if($this->_containerType == Tinebase_Model_Container::TYPE_SHARED) {
+			$container = Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $this->_containerName, Tinebase_Model_Container::TYPE_SHARED);
 
-                $filter = new $this->_contentFilterClass();
-                $filter->addFilter(new Tinebase_Model_Filter_Container(
-                    'container_id', 
-                    'equals', 
-                    $container->getId(), 
-                    array('applicationName' => $this->_applicationName)
-                ));
-                
-                $entries = $this->_contentController->search($filter, null, false, true, 'export');
-                
-                foreach($entries as $entry) {
-                    $children[] = $this->getChild($entry . '.vcf');
-                }
+            $this->_contentFilterClass  = $this->_applicationName . '_Model_' . $this->_modelName . 'Filter';
+            $filter = new $this->_contentFilterClass();
+            $filter->addFilter(new Tinebase_Model_Filter_Container(
+                'container_id', 
+                'equals', 
+                $container->getId(), 
+                array('applicationName' => $this->_applicationName)
+            ));
+            
+            $this->_contentController   = Tinebase_Core::getApplicationInstance($this->_applicationName, $this->_modelName);
+            $entries = $this->_contentController->search($filter, null, false, true, 'export');
+            
+            foreach($entries as $entry) {
+                $children[] = $this->getChild($entry . '.vcf');
             }
-        } elseif($containerType == self::CONTAINER_USERS) {
+        } elseif($containerType == Tinebase_Model_Container::TYPE_PERSONAL) {
             
         }
                      
         return $children;            
     }
     
-    public function getContainerType()
-    {
-        return $this->_containerType;
-    }
-    
     public function getChild($name) 
     {
-        error_log(__METHOD__ . ' ' . __LINE__ . ' ');
         $path = rtrim($this->_path, '/') . '/' . $name;
         
-        error_log(__METHOD__ . ' ' . __LINE__ . ' NAME: ' . $name . ' PATH: ' . $path );
+        Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' NAME: ' . $name . ' PATH: ' . $path );
         
         
         #// We have to throw a FileNotFound exception if the file didn't exist
         #if (!file_exists($this->myPath)) throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $name . ' could not be found');
         #// Some added security
         
-        if($this->_containerType == self::CONTAINER_SHARED && isset($this->_containerName)) {
-            return new Tinebase_WebDav_File($path);
-        } else {
-            return new Tinebase_WebDav_Application_Container($path);
-        }
+        return new Tinebase_WebDav_File($path);
     }
     
     public function getName() 
     {
+        Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' ' . basename($this->_path));
+        
         return basename($this->_path);
-    }    
+    }
 }

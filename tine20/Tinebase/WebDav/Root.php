@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  WebDav
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
@@ -32,8 +32,8 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
         
         // Loop through the directory, and create objects for each node
         foreach(Tinebase_Core::getUser()->getApplications() as $application) {
-            $className = $application . '_WebDav';
-            
+            $className = $application . '_Frontend_WebDav';
+            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' WebDav classname: ' . $className);
             if (@class_exists($className)) {
                 Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' adding WebDav application: ' . $application);
                 $children[] = $this->getChild($application);
@@ -45,13 +45,11 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
     
     public function getChild($name) 
     {
-        $className = ucfirst($name) . '_WebDav';
-        
-        return new $className($name);
+        return new Tinebase_WebDav_Application($name);
     }
     
     public function getName() 
     {
-        return $this->_path;
+        return basename($this->_path);
     }    
 }
