@@ -6,7 +6,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
- * @version     $Id: SchedulerTest.php 4754 2008-09-30 13:34:35Z g.ciyiltepe@metaways.de $
+ * @version     $Id$
  */
 
 /**
@@ -336,6 +336,25 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * testActionQueueTriggeredBySchedule
+     * 
+     * @todo finish & activate
+     */
+    public function _testActionQueueTriggeredByScheduler()
+    {
+        if (! isset(Tinebase_Core::getConfig()->actionqueue)) {
+            return;
+        }
+        
+        Tinebase_ActionQueue::getInstance()->queueAction('Addressbook.createPersonalFolder', Tinebase_Core::getUser());
+        
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->run();
+        
+        // @todo check if user has 2 personal folders now
+    }
+    
+    /**
      * Tests any given backend.
      *
      * @param Zend_Scheduler $scheduler
@@ -353,8 +372,5 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         
         $taskCount = (count($tasks) > 0);
         $this->assertTrue($taskCount);
-
     }
-    
-    
 }
