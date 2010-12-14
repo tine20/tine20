@@ -131,25 +131,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
     protected function _initTinebaseScheduler()
     {
         $scheduler = Tinebase_Core::getScheduler();
-        $this->_addAlarmTask($scheduler);
-    }
-    
-    /**
-     * add alarm task to scheduler
-     * 
-     * @param Zend_Scheduler $_scheduler
-     */
-    protected function _addAlarmTask($_scheduler)
-    {
-        $request = new Zend_Controller_Request_Simple(); 
-        $request->setControllerName('Tinebase_Alarm');
-        $request->setActionName('sendPendingAlarms');
-        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
-        
-        $task = Tinebase_Scheduler_Task::getTask();
-        $task->setRequest($request);
-        
-        $_scheduler->addTask('Tinebase_Alarm', $task);
-        $_scheduler->saveTask();
+        Tinebase_Scheduler_Task::addAlarmTask($scheduler);
     }
 }

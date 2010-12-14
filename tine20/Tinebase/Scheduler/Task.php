@@ -47,6 +47,25 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     }
     
     /**
+     * add alarm task to scheduler
+     * 
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addAlarmTask(Zend_Scheduler $_scheduler)
+    {
+        $request = new Zend_Controller_Request_Simple(); 
+        $request->setControllerName('Tinebase_Alarm');
+        $request->setActionName('sendPendingAlarms');
+        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
+        
+        $task = self::getTask();
+        $task->setRequest($request);
+        
+        $_scheduler->addTask('Tinebase_Alarm', $task);
+        $_scheduler->saveTask();
+    }
+    
+    /**
      * run requests
      * 
      * @see tine20/Zend/Scheduler/Zend_Scheduler_Task::run()
