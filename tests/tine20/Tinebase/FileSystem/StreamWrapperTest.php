@@ -59,6 +59,10 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        if (empty(Tinebase_Core::getConfig()->filesdir)) {
+            $this->markTestSkipped('filesystem base path not found');
+        }
+        
         $this->_controller = Filemanager_Controller_Filesystem::getInstance();
         $this->_basePath   = 'tine20:///' . Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId() . '/folders/' . Tinebase_Model_Container::TYPE_SHARED;
         
