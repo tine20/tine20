@@ -1,0 +1,7 @@
+#: Acl/Rights.php:98
+msgid "manage shared folders"
+msgstr ""
+
+#: Acl/Rights.php:99
+msgid "Create new shared folders"
+msgstr ""
