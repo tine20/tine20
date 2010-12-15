@@ -828,7 +828,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
     
     /**
      * update to 3.22
-     * - schedulers
+     * - file store
      */
     public function update_21()
     {
@@ -1082,5 +1082,16 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('tree_nodes', 1, true);
         
         $this->setApplicationVersion('Tinebase', '3.22');
+    }    
+
+    /**
+     * update to 3.23
+     * - add queue task to scheduler
+     */
+    public function update_22()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addQueueTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '3.23');
     }    
 }
