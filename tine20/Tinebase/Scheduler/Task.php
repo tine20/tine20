@@ -63,6 +63,8 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         
         $_scheduler->addTask('Tinebase_Alarm', $task);
         $_scheduler->saveTask();
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_Alarm::sendPendingAlarms in scheduler.');
     }
     
     /**
@@ -81,6 +83,8 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         
         $_scheduler->addTask('Tinebase_ActionQueue', $task);
         $_scheduler->saveTask();
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_ActionQueue::processQueue in scheduler.');
     }
     
     /**
