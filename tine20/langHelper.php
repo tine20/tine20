@@ -231,7 +231,11 @@ function potmerge($_verbose)
                     echo "Adding non exising translation $langCode for $appName\n";
                 }
                 
-                list ($language, $region) = explode('_', $langCode);
+                if (strpos($langCode, '_') !== FALSE) {
+                    list ($language, $region) = explode('_', $langCode);
+                } else {
+                    $language = $langCode;
+                }
     
                 $locale = new Zend_Locale('en');
                 $languageName = $locale->getTranslation($language, 'language');
