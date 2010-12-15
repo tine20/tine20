@@ -12,7 +12,7 @@ Contents
 1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
 2. Switched from Zend_Date to DateTime
 3. Added new log level: TRACE
-
+4. Added action-queue
 
 --------------------------------------------------------------
 1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
@@ -20,12 +20,37 @@ Contents
 - We have renamed the _inspectUpdate() /_inspectCreate() functions to _inspectBeforeUpdate() / _inspectBeforeCreate().
 - Added new functions _inspectAfterUpdate() / _inspectAfterCreate().
 
+--------------------------------------------------------------
 2. Switched from Zend_Date to DateTime
 
 - We switched from Zend_Date to php DateTime to improve the performance of datetime handling. 
 
+--------------------------------------------------------------
 3. Added new log level: TRACE
 
 - A new log level has been added: TRACE (8). It logs even more verbose than DEBUG (7). You can activate it in your config.inc.php:
 
     'priority' => '8',
+
+--------------------------------------------------------------
+4. Added action-queue
+    
+- Some jobs (for example the calendar notifications) can be processed by an action-queue.
+
+- To activate the (db) queue, you need to add the following to your config.inc.php file:
+
+  'actionqueue' => array(
+    'adapter' => 'Db',
+    'driverOptions' => array (
+        'host' => 'localhost',
+        'dbname' => 'queue',
+        'username' => 'user',
+        'password' => 'pw',
+        'type' => 'pdo_mysql',
+    ),
+  ),
+
+- If you use the db-adapter, it is necessary to create the queue and message tables first. use the queue.sql script found in the [tine20dir]/library/Zend/Queue/Adapter/Db directory.
+
+- The queue is triggered by the scheduler and the scheduler can be run by the triggerAsyncEvents CLI function.
+    
