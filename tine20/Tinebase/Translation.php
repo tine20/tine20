@@ -238,7 +238,12 @@ class Tinebase_Translation
             
             // create new translation
             $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
-            $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+            try {
+                $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ .' Translations not found: ' . $path);
+                throw $e;
+            }
 
             try {
                 $translate->setLocale($locale);
@@ -258,10 +263,10 @@ class Tinebase_Translation
     /**
      * Returns collection of all javascript translations data for requested language
      * 
-     * This is a javascript spechial function!
+     * This is a javascript special function!
      * The data will be preseted to be included as javascript on client side!
      *
-     * NOTE: This functino is called from release.php cli script. In this case no 
+     * NOTE: This function is called from release.php cli script. In this case no 
      *       tine 2.0 core initialisation took place beforehand
      *       
      * @param  Zend_Locale $_locale
