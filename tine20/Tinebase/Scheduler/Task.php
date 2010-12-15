@@ -26,6 +26,13 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     const TASK_TYPE_MINUTELY = 'minutely';
     
     /**
+     * minutely task (default)
+     * 
+     * @var string
+     */
+    const TASK_TYPE_HOURLY = 'hourly';
+    
+    /**
      * static task getter
      * 
      * @param  string $_type
@@ -35,12 +42,18 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     public static function getPreparedTask($_type = self::TASK_TYPE_MINUTELY, array $_options = array())
     {
         $task = new Tinebase_Scheduler_Task($_options);
-        if ($_type == self::TASK_TYPE_MINUTELY) {
-            $task->setMonths("Jan-Dec");
-            $task->setWeekdays("Sun-Sat");
-            $task->setDays("1-31");
-            $task->setHours("0-23");
-            $task->setMinutes("0/1");
+        $task->setMonths("Jan-Dec");
+        $task->setWeekdays("Sun-Sat");
+        $task->setDays("1-31");
+        $task->setHours("0-23");
+        
+        switch ($_type) {
+            case self::TASK_TYPE_MINUTELY:
+                $task->setMinutes("0/1");
+                break;
+            case self::TASK_TYPE_HOURLY:
+                $task->setMinutes("0");
+                break;
         }
         
         return $task;
@@ -88,6 +101,26 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     }
     
     /**
+     * add cache cleanup task to scheduler
+     * 
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addCacheCleanupTask(Zend_Scheduler $_scheduler)
+    {
+        $request = new Zend_Controller_Request_Simple(); 
+        $request->setControllerName('Tinebase_Controller');
+        $request->setActionName('cleanupCache');
+        
+        $task = self::getPreparedTask(self::TASK_TYPE_HOURLY);
+        $task->setRequest($request);
+        
+        $_scheduler->addTask('Tinebase_CacheCleanup', $task);
+        $_scheduler->saveTask();
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_ActionQueue::processQueue in scheduler.');
+    }
+    
+    /**
      * run requests
      * 
      * @see tine20/Zend/Scheduler/Zend_Scheduler_Task::run()
@@ -95,7 +128,12 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     public function run()
     {
         foreach ($this->getRequests() as $request) {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Running request: ' . $request->getControllerName() . '::' . $request->getActionName());
+            
             $controller = Tinebase_Controller_Abstract::getController($request->getControllerName());
+            
+            // strange: only the first request is process because of this return 
+            // @todo remove the loop? can there be multiple requests?)
             return call_user_func_array(array($controller, $request->getActionName()), $request->getUserParams());
         }
     }
