@@ -19,7 +19,7 @@
  *
  * @package     Tinebase
  */
- class Tinebase_ActionQueue
+ class Tinebase_ActionQueue implements Tinebase_Controller_Interface
  {
      /**
       * holds queue instance
@@ -58,10 +58,25 @@
     }
     
     /**
+     * suspend processing of event
+     */
+    public function suspendEvents()
+    {
+        $this->_disabledEvents = true;
+    }
+
+    /**
+     * resume processing of events
+     */
+    public function resumeEvents()
+    {
+        $this->_disabledEvents = false;
+    }
+    
+    /**
      * constructor
      * 
      * @see http://framework.zend.com/manual/en/zend.queue.adapters.html for config options
-     * @todo finish implementation
      */
     private function __construct()
     {
@@ -71,7 +86,7 @@
             $adapter = array_key_exists('adapter', $options) ? $options['adapter'] : 'Db';
             unset($options['adapter']);
             
-            $options['name'] = array_key_exists('name', $options) ? $options['name'] : SQL_TABLE_PREFIX . 'actionqueue';
+            $options['name'] = array_key_exists('name', $options) ? $options['name'] : 'tine20actionqueue';
             if ($adapter == 'Db') {
                 // use default db settings if empty
                 $options['driverOptions'] = (array_key_exists('driverOptions', $options)) ? $options['driverOptions'] : Tinebase_Core::getConfig()->database->toArray();
@@ -79,8 +94,6 @@
                     $options['driverOptions']['type'] = (array_key_exists('adapter', $options['driverOptions'])) ? $options['driverOptions']['adapter'] : 'pdo_mysql';
                 }
             }
-            
-            //print_r($options);
             
             $this->_queue = new Zend_Queue($adapter, $options);
         }
@@ -141,11 +154,11 @@
      */
     public function processQueue($_numberOfMessagesToProcess = 5)
     {
-        if ($this->_queue && count($queue) > 0) {
-            $messages = $queue->receive($_numberOfMessagesToProcess);
+        if ($this->_queue && count($this->_queue) > 0) {
+            $messages = $this->_queue->receive($_numberOfMessagesToProcess);
  
             foreach ($messages as $i => $message) {
-                $this->_executeAction($message);
+                $this->_executeAction($message->body);
                 $this->_queue->deleteMessage($message);
             }
         }
@@ -162,7 +175,7 @@
         try {
             $decodedMessage = unserialize($_message);
         } catch (Exception $e) {
-            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not decode message -> aborting execution");
+            Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not decode message -> aborting execution (" . $e->getMessage() . ')');
             return;
         }
         
