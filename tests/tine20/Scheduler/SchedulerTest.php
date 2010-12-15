@@ -39,6 +39,10 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         $scheduler = Tinebase_Core::getScheduler();
         $db = $scheduler->getBackend()->getDbAdapter();
         $db->delete(SQL_TABLE_PREFIX.'scheduler');
+        
+        // add initial tasks again
+        $init = new Tinebase_Setup_Initialize();
+        $init->initTinebaseScheduler();
     }
     
     /**
@@ -337,21 +341,28 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
 
     /**
      * testActionQueueTriggeredBySchedule
-     * 
-     * @todo finish & activate
      */
-    public function _testActionQueueTriggeredByScheduler()
+    public function testActionQueueTriggeredByScheduler()
     {
         if (! isset(Tinebase_Core::getConfig()->actionqueue)) {
             return;
         }
         
-        Tinebase_ActionQueue::getInstance()->queueAction('Addressbook.createPersonalFolder', Tinebase_Core::getUser());
+        $user = Tinebase_Core::getUser();
+        $result1 = Tinebase_Container::getInstance()->getPersonalContainer($user, 'Addressbook', $user, '', TRUE);
         
         $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addQueueTask($scheduler);
+        
+        Tinebase_ActionQueue::getInstance()->queueAction('Addressbook.createPersonalFolder', $user);
         $scheduler->run();
         
-        // @todo check if user has 2 personal folders now
+        // check if user has 1 more personal folders now
+        $result2 = Tinebase_Container::getInstance()->getPersonalContainer($user, 'Addressbook', $user, '', TRUE);
+        $this->assertGreaterThan(count($result1), count($result2));
+        $migration = $result2->getMigration($result1->getArrayOfIds());
+        print_r($migration);
+        Tinebase_Container::getInstance()->delete($migration['toDeleteIds']);
     }
     
     /**
