@@ -32,7 +32,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
      * @param  array $_options
      * @return Tinebase_Scheduler_Task
      */
-    public static function getTask($_type = self::TASK_TYPE_MINUTELY, array $_options = array())
+    public static function getPreparedTask($_type = self::TASK_TYPE_MINUTELY, array $_options = array())
     {
         $task = new Tinebase_Scheduler_Task($_options);
         if ($_type == self::TASK_TYPE_MINUTELY) {
@@ -58,7 +58,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         $request->setActionName('sendPendingAlarms');
         $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
         
-        $task = self::getTask();
+        $task = self::getPreparedTask();
         $task->setRequest($request);
         
         $_scheduler->addTask('Tinebase_Alarm', $task);
@@ -76,7 +76,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         $request->setControllerName('Tinebase_ActionQueue');
         $request->setActionName('processQueue');
         
-        $task = self::getTask();
+        $task = self::getPreparedTask();
         $task->setRequest($request);
         
         $_scheduler->addTask('Tinebase_ActionQueue', $task);
