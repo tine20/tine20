@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  Server
  */
-class Tinebase_Controller
+class Tinebase_Controller extends Tinebase_Controller_Abstract
 {
     /**
      * holds the instance of the singleton
@@ -26,6 +26,13 @@ class Tinebase_Controller
      */
     private static $_instance = NULL;
     
+    /**
+     * application name
+     *
+     * @var string
+     */
+    protected $_applicationName = 'Tinebase';
+        
     /**
      * the constructor
      *
@@ -217,7 +224,7 @@ class Tinebase_Controller
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
      */
-    public function getImage($_application, $_identifier, $_location='')
+    public function getImage($_application, $_identifier, $_location = '')
     {
         $appController = Tinebase_Core::getApplicationInstance($_application);
         if (!method_exists($appController, 'getImage')) {
@@ -229,5 +236,15 @@ class Tinebase_Controller
             throw new Tinebase_Exception_UnexpectedValue("$_application returned invalid image.");
         }
         return $image;
+    }
+    
+    /**
+     * remove obsolete/outdated stuff from cache
+     */
+    public function cleanupCache()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Cleaning up the cache.');
+        
+        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_OLD);
     }
 }
