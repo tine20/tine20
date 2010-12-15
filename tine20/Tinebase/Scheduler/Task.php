@@ -77,7 +77,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         $_scheduler->addTask('Tinebase_Alarm', $task);
         $_scheduler->saveTask();
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_Alarm::sendPendingAlarms in scheduler.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_Alarm::sendPendingAlarms in scheduler.');
     }
     
     /**
@@ -97,7 +97,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         $_scheduler->addTask('Tinebase_ActionQueue', $task);
         $_scheduler->saveTask();
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_ActionQueue::processQueue in scheduler.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_ActionQueue::processQueue in scheduler.');
     }
     
     /**
@@ -117,7 +117,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         $_scheduler->addTask('Tinebase_CacheCleanup', $task);
         $_scheduler->saveTask();
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_ActionQueue::processQueue in scheduler.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_ActionQueue::processQueue in scheduler.');
     }
     
     /**
@@ -128,7 +128,8 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     public function run()
     {
         foreach ($this->getRequests() as $request) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Running request: ' . $request->getControllerName() . '::' . $request->getActionName());
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Running request: ' . $request->getControllerName() . '::' . $request->getActionName());
             
             $controller = Tinebase_Controller_Abstract::getController($request->getControllerName());
             
