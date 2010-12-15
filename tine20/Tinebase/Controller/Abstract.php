@@ -153,7 +153,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         }
         
         if (!in_array('Tinebase_Controller_Interface', class_implements($_controllerName))) {
-            throw new Exception("Controller" . $_controllerName . "not implements Tinebase_Controller_Interface.");
+            throw new Exception("Controller" . $_controllerName . " does not implement Tinebase_Controller_Interface.");
         }
         
         return call_user_func(array($_controllerName, 'getInstance')); 
