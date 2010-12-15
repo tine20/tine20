@@ -361,7 +361,6 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         $result2 = Tinebase_Container::getInstance()->getPersonalContainer($user, 'Addressbook', $user, '', TRUE);
         $this->assertGreaterThan(count($result1), count($result2));
         $migration = $result2->getMigration($result1->getArrayOfIds());
-        print_r($migration);
         Tinebase_Container::getInstance()->delete($migration['toDeleteIds']);
     }
     
