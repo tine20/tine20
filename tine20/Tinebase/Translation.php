@@ -238,12 +238,7 @@ class Tinebase_Translation
             
             // create new translation
             $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
-            try {
-                $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
-            } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ .' Translations not found: ' . $path);
-                throw $e;
-            }
+            $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
 
             try {
                 $translate->setLocale($locale);
