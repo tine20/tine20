@@ -340,7 +340,7 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testActionQueueTriggeredBySchedule
+     * testActionQueueTriggeredByScheduler
      */
     public function testActionQueueTriggeredByScheduler()
     {
@@ -362,6 +362,19 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(count($result1), count($result2));
         $migration = $result2->getMigration($result1->getArrayOfIds());
         Tinebase_Container::getInstance()->delete($migration['toDeleteIds']);
+    }
+
+    /**
+     * testCleanupCacheTriggeredByScheduler
+     * 
+     * @todo make it work
+     * @todo find a way to check if cache cleanup has been successful -> this is only for code coverage at the moment
+     */
+    public function _testCleanupCacheTriggeredByScheduler()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
+        $scheduler->run();
     }
     
     /**
