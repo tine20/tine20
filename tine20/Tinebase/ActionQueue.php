@@ -62,7 +62,6 @@
      */
     public function suspendEvents()
     {
-        $this->_disabledEvents = true;
     }
 
     /**
@@ -70,7 +69,6 @@
      */
     public function resumeEvents()
     {
-        $this->_disabledEvents = false;
     }
     
     /**
