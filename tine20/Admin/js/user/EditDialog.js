@@ -20,7 +20,6 @@ Ext.ns('Tine.Admin.user');
  * 
  * <p>User Edit Dialog</p>
  * <p>
- * TODO         use quota fieldset checkbox information (checked/unchecked) 
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -459,6 +458,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 autoHeight: true,
                 checkboxToggle: true,
                 layout: 'hfit',
+                listeners: {
+                    scope: this,
+                    collapse: function() {
+                        this.getForm().findField('emailMailQuota').setValue(null);
+                    }
+                },
                 items: [{
                     xtype: 'columnform',
                     labelAlign: 'top',
@@ -488,6 +493,12 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 autoHeight: true,
                 checkboxToggle: true,
                 layout: 'hfit',
+                listeners: {
+                    scope: this,
+                    collapse: function() {
+                        this.getForm().findField('emailSieveQuota').setValue(null);
+                    }
+                },
                 items: [{
                     xtype: 'columnform',
                     labelAlign: 'top',
@@ -551,7 +562,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 			var commonConfig = {
 	            autoExpandColumn: 'email',
 	            quickaddMandatory: 'email',
-	            //border: true,
 	            frame: false,
 	            useBBar: true,
 	            dataField: 'email',
@@ -564,7 +574,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     		
     		this.aliasesGrid = new Tine.widgets.grid.QuickaddGridPanel(
 	            Ext.apply(commonConfig, {
-	                //title:this.app.i18n.gettext('Aliases'),
 	                cm: new Ext.grid.ColumnModel([{ 
 	                    id: 'email', 
 	                    header: this.app.i18n.gettext('Email Alias'), 
@@ -584,7 +593,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	
 	        this.forwardsGrid = new Tine.widgets.grid.QuickaddGridPanel(
 	            Ext.apply(commonConfig, {
-	                //title:this.app.i18n.gettext('Forwards'),
 	                cm: new Ext.grid.ColumnModel([{ 
 	                    id: 'email', 
 	                    header: this.app.i18n.gettext('Email Forward'), 
