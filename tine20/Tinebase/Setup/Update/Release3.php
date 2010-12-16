@@ -1086,12 +1086,13 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
 
     /**
      * update to 3.23
-     * - add queue task to scheduler
+     * - add queue + cache cleanup tasks to scheduler
      */
     public function update_22()
     {
         $scheduler = Tinebase_Core::getScheduler();
         Tinebase_Scheduler_Task::addQueueTask($scheduler);
+        Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
         $this->setApplicationVersion('Tinebase', '3.23');
     }    
 }
