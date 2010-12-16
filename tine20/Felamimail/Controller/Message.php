@@ -1195,7 +1195,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $section = ($_partId === null) ?  'HEADER' : $_partId . '.HEADER';
         
-        $rawHeaders = $imapBackend->getRawContent($message->messageuid, $section, $_readOnly);
+        try {
+            $rawHeaders = $imapBackend->getRawContent($message->messageuid, $section, $_readOnly);
+        } catch (Felamimail_Exception_IMAPMessageNotFound $feimnf) {
+            $this->_backend->delete($message->getId());
+            throw $feimnf;
+        }
         Zend_Mime_Decode::splitMessage($rawHeaders, $headers, $null);
         
         $cache->save($headers, $cacheId, array('getMessageHeaders'));
