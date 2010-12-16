@@ -79,11 +79,14 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
     }
     
+    /**
+     * flush mailer (send all remaining mails first)
+     */
     protected function _flushMailer()
     {
         // make sure all messages are sent if queue is activated
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue();
+            Tinebase_ActionQueue::getInstance()->processQueue(100);
         }
         
         $this->_mailer->flush();
