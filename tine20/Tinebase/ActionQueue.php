@@ -153,7 +153,10 @@
     public function processQueue($_numberOfMessagesToProcess = 5)
     {
         if ($this->_queue && count($this->_queue) > 0) {
-            $messages = $this->_queue->receive($_numberOfMessagesToProcess);
+            $numberToProcess = min(array($_numberOfMessagesToProcess, count($this->_queue)));
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' processing messages: ' . $numberToProcess . ' of ' . count($this->_queue));
+            
+            $messages = $this->_queue->receive($numberToProcess);
  
             foreach ($messages as $i => $message) {
                 $this->_executeAction($message->body);
