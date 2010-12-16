@@ -367,10 +367,9 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     /**
      * testCleanupCacheTriggeredByScheduler
      * 
-     * @todo make it work
      * @todo find a way to check if cache cleanup has been successful -> this is only for code coverage at the moment
      */
-    public function _testCleanupCacheTriggeredByScheduler()
+    public function testCleanupCacheTriggeredByScheduler()
     {
         $scheduler = Tinebase_Core::getScheduler();
         Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
