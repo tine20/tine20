@@ -156,6 +156,8 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         }
         
         $this->_backend = Felamimail_Backend_SieveFactory::factory($_accountId);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' sieve server capabilities: ' . print_r($this->_backend->capability(), TRUE));
     }
     
     /**
