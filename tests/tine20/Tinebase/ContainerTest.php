@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -79,19 +79,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         ));
         
         $this->objects['contactsToDelete'] = array();
-        
-/*        
-        $this->objects['updatedContainer'] = new Tinebase_Container_Model_FullContainer(array(
-            'accountId'             => 10,
-            'accountLoginName'      => 'tine20phpunit-updated',
-            'accountStatus'         => 'disabled',
-            'accountExpires'        => NULL,
-            'accountPrimaryGroup'   => Tinebase_Group_Sql::getInstance()->getGroupByName('Users')->id,
-            'accountLastName'       => 'Tine 2.0 Updated',
-            'accountFirstName'      => 'PHPUnit Updated',
-            'accountEmailAddress'   => 'phpunit@tine20.org'
-        )); 
-  */  	
     }
 
     /**
@@ -232,25 +219,37 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * try to add an account
-     *
+     * try to set grants
      */
     public function testSetGrants()
     {
         $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
         $newGrants->addRecord(
-            new Tinebase_Model_Grants(
-                array(
+            new Tinebase_Model_Grants(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
-                    //'account_name'   => 'not used',
                     Tinebase_Model_Grants::GRANT_READ      => true,
                     Tinebase_Model_Grants::GRANT_ADD       => false,
                     Tinebase_Model_Grants::GRANT_EDIT      => true,
                     Tinebase_Model_Grants::GRANT_DELETE    => true,
                     Tinebase_Model_Grants::GRANT_ADMIN     => true
              ))
-         );
+        );
+        
+        // get group and add grants for it
+        $lists = Addressbook_Controller_List::getInstance()->search(new Addressbook_Model_ListFilter());
+        $groupToAdd = $lists->getFirstRecord();
+        $newGrants->addRecord(
+            new Tinebase_Model_Grants(array(
+                    'account_id'     => $groupToAdd->group_id,
+                    'account_type'   => 'group',
+                    Tinebase_Model_Grants::GRANT_READ      => true,
+                    Tinebase_Model_Grants::GRANT_ADD       => false,
+                    Tinebase_Model_Grants::GRANT_EDIT      => false,
+                    Tinebase_Model_Grants::GRANT_DELETE    => false,
+                    Tinebase_Model_Grants::GRANT_ADMIN     => false
+             ))
+        );
         
         $grants = $this->_instance->setGrants($this->objects['initialContainer'], $newGrants);
         $this->assertType('Tinebase_Record_RecordSet', $grants);
@@ -261,6 +260,7 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($grants[0]["editGrant"]);
         $this->assertTrue($grants[0]["deleteGrant"]);
         $this->assertTrue($grants[0]["adminGrant"]);
+        $this->assertTrue($grants[1]["readGrant"]);
     }
     
     /**
