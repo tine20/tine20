@@ -154,31 +154,34 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
 
     /**
-     * 'ok' handler for passwordConfirmWindow
+     * Validate confirmed password
      */
     onPasswordConfirm: function () {
-        var confirmForm = this.passwordConfirmWindow.items.first().getForm();
-        var confirmValues = confirmForm.getValues();
-        var passwordField = this.getForm().findField('accountPassword');
-        
+        var confirmForm = this.passwordConfirmWindow.items.first().getForm(),
+        	confirmValues = confirmForm.getValues(),
+        	passwordStatus = confirmForm.findField('passwordStatus'),
+        	passwordField = this.getForm().findField('accountPassword');
+        	         
         if (! passwordField) {
             // oops: something went wrong, this should not happen
-            return;
+            return false;
         }
         
         if (confirmValues.passwordRepeat !== passwordField.getValue()) {
-            passwordField.markInvalid(this.app.i18n.gettext('Passwords do not match!'));
-            passwordField.passwordsMatch = false;
-        } else {
-            passwordField.passwordsMatch = true;
-            passwordField.clearInvalid();
+            passwordStatus.el.setStyle('color', 'red');
+            passwordStatus.setValue(this.app.i18n.gettext('Passwords do not match!'));
             
-            // focus email field
-            this.getForm().findField('accountEmailAddress').focus(true, 100);
+            passwordField.passwordsMatch = false;
+//            passwordField.markInvalid(this.app.i18n.gettext('Passwords do not match!'));
+        } else {
+        	passwordStatus.el.setStyle('color', 'green');
+        	passwordStatus.setValue(this.app.i18n.gettext('Passwords match!'));
+        	        	
+            passwordField.passwordsMatch = true;
+//            passwordField.clearInvalid();
         }
         
-        this.passwordConfirmWindow.hide();
-        confirmForm.reset();
+        return passwordField.passwordsMatch ? passwordField.passwordsMatch : passwordStatus.getValue();
     },
     
     /**
@@ -191,81 +194,18 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * Init user memberships tab
+     * Init User groups picker grid
      * 
-     * @return {Array} - tab items
+     * @return {Tine.widgets.account.PickerGridPanel}
      */
-    initUserMemberships: function () {
+    initUserGroups: function () {
     	this.storeGroups = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
             fields: Tine.Admin.Model.Group
         });
-        
-        this.storeRoles = new Ext.data.JsonStore({
-            root: 'results',
-            totalProperty: 'totalcount',
-            id: 'id',
-            fields: Tine.Tinebase.Model.Role
-        });
     	
-    	return [{
-    		xtype: 'treepanel',
-    		region: 'west',
-    		layout: 'fit',
-    		width: 120,
-    		frame: false,
-    		border: true,
-    		autoScroll: true,
-    		rootVisible: false,
-			loader: new Ext.tree.TreeLoader(),
-			root: new Ext.tree.AsyncTreeNode({
-	            expanded: true,
-	            children: [{
-	            	text: this.app.i18n.gettext('Groups'),
-		            iconCls: 'admin-node-groups',
-		            id: 'Groups',
-		            leaf: true
-	            }, {
-	            	text: this.app.i18n.gettext('Roles'),
-		            iconCls: 'action_permissions',
-		            id: 'Roles',
-		            leaf: true
-	            }] 
-	        }),
-	        listeners: {
-	        	scope: this,
-	        	'click': function (node) {
-	        		var centerRegion = node.ownerTree.ownerCt.items.get(1);
-	        		
-	        		if (! node.pickerGrid) {
-	        			node.pickerGrid = this['initUser' + node.id](); 
-	        			centerRegion.add(node.pickerGrid);
-        				centerRegion.layout.setActiveItem(node.pickerGrid.id);
-        				centerRegion.doLayout();
-	        		}
-	        		else {
-	        			centerRegion.layout.setActiveItem(node.pickerGrid.id);
-	        		}
-	        	}
-	        }
-    	}, {
-    		xtype: 'container',
-    		region: 'center',
-    		layout: 'card',
-    		frame: false,
-    		border: true,
-    		items: []
-    	}];
-    },
-    
-    /**
-     * Init User groups picker grid
-     * 
-     * @return {Tine.widgets.account.PickerGridPanel}
-     */
-    initUserGroups: function () {
     	var self = this;
     	
         this.pickerGridGroups = new Tine.widgets.account.PickerGridPanel({
@@ -303,6 +243,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @return {Tine.widgets.account.PickerGridPanel}
      */
     initUserRoles: function () {
+    	this.storeRoles = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'id',
+            fields: Tine.Tinebase.Model.Role
+        });
+    	
         this.pickerGridRoles = new Tine.widgets.grid.PickerGridPanel({
         	border: false,
         	frame: false,
@@ -640,51 +587,70 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             closeAction: 'hide',
             modal: true,
             width: 300,
-            height: 130,
-            //layout: 'fit',
-            //plain: true,
-            items: new Ext.FormPanel({
-                bodyStyle: 'padding:5px;',
+            height: 150,
+            items: [{
+                xtype: 'form',
+                bodyStyle: 'padding: 5px;',
                 buttonAlign: 'right',
                 labelAlign: 'top',
                 anchor: '100%',
+                monitorValid: true,
+                defaults: { anchor: '100%' },
                 items: [{
                     xtype: 'textfield',
                     inputType: 'password',
-                    anchor: '100%',
                     id: 'passwordRepeat',
                     fieldLabel: this.app.i18n.gettext('Repeat password'), 
                     name: 'passwordRepeat',
+                    validator: this.onPasswordConfirm.createDelegate(this),
                     listeners: {
                         scope: this,
                         specialkey: function (field, event) {
                             if (event.getKey() === event.ENTER) {
-                                this.onPasswordConfirm();
+                            	// call OK button handler
+                                this.passwordConfirmWindow.items.first().buttons[1].handler.call(this);
                             }
                         }
                     }
+                }, {
+                	xtype: 'displayfield',
+                	hideLabel: true,
+                	id: 'passwordStatus',
+                	value: this.app.i18n.gettext('Passwords do not match!')
                 }],
                 buttons: [{
                     text: _('Cancel'),
                     iconCls: 'action_cancel',
+                    scope: this,
                     handler: function () {
                         this.passwordConfirmWindow.hide();
-                    },
-                    scope: this
+                        this.passwordConfirmWindow.items.first().getForm().reset();
+                    }
                 }, {
                     text: _('Ok'),
+                    formBind: true,
                     iconCls: 'action_saveAndClose',
-                    handler: this.onPasswordConfirm,
-                    scope: this
+                    scope: this,
+                    handler: function () {
+                    	var confirmForm = this.passwordConfirmWindow.items.first().getForm();
+                    	
+                    	// check if confim for is valid (we need this if special key called button handler)
+                    	if (confirmForm.isValid()) {
+                    		this.passwordConfirmWindow.hide();
+    						confirmForm.reset();
+    						
+    						// focus email field
+        					this.getForm().findField('accountEmailAddress').focus(true, 100);
+                    	}            			
+                    }
                 }]
-            }),
+            }],
             listeners: {
                 scope: this,
                 show: function (win) {
                     var confirmForm = this.passwordConfirmWindow.items.first().getForm();
-                    var confirmField = confirmForm.findField('passwordRepeat');
                     
-                    confirmField.focus(true, 500);
+                    confirmForm.findField('passwordRepeat').focus(true, 500);
                 }
             }
         });
@@ -695,7 +661,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             deferredRender: false,
             border: false,
             plain: true,
-            activeTab: 0,
+            activeTab: this.record && this.record.id ? 1 : 0,
             items: [{               
                 title: this.app.i18n.gettext('Account'),
                 autoScroll: true,
@@ -861,11 +827,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	                }]
                 }]
             }, {
-                title: this.app.i18n.gettext('User memberships'),
+                title: this.app.i18n.gettext('User groups'),
                 border: false,
-                frame: false,
-                layout: 'border',
-                items: this.initUserMemberships()
+                frame: true,
+                layout: 'fit',
+                items: this.initUserGroups()
+            }, {
+                title: this.app.i18n.gettext('User roles'),
+                border: false,
+                frame: true,
+                layout: 'fit',
+                items: this.initUserRoles()
             }, {
                 title: this.app.i18n.gettext('Fileserver'),
                 disabled: !this.ldapBackend,
