@@ -45,6 +45,10 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     protected $_testCalendar;
     
+    /**
+     * (non-PHPdoc)
+     * @see tests/tine20/Calendar/Calendar_TestCase::setUp()
+     */
     public function setUp()
     {
         parent::setUp();
@@ -54,25 +58,40 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_mailer = Tinebase_Smtp::getDefaultTransport();
         
         $this->_setupPreferences();
-
     }
     
+    /**
+     * testInvitation
+     */
     public function testInvitation()
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         
-        $this->_mailer->flush();
+        $this->_flushMailer();
         $persitentEvent = $this->_eventController->create($event);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'invit');
         
-        $this->_mailer->flush();
+        $this->_flushMailer();
         $persitentEvent = $this->_eventController->delete($persitentEvent);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
     }
     
+    protected function _flushMailer()
+    {
+        // make sure all messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue();
+        }
+        
+        $this->_mailer->flush();
+    }
+
+    /**
+     * testUpdateEmpty
+     */
     public function testUpdateEmpty()
     {
         $event = $this->_getEvent();
@@ -80,11 +99,14 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persitentEvent = $this->_eventController->create($event);
         
         // no updates
-        $this->_mailer->flush();
+        $this->_flushMailer();
         $updatedEvent = $this->_eventController->update($persitentEvent);
         $this->_assertMail('jsmith, pwulf, sclever, jmcblack, rwright', NULL);
     }
     
+    /**
+     * testUpdateChangeAttendee
+     */
     public function testUpdateChangeAttendee()
     {
         $event = $this->_getEvent();
@@ -100,7 +122,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persitentEvent->attendee->find('user_id', $this->_personasContacts['jmcblack']->getId())->status =
             Calendar_Model_Attender::STATUS_DECLINED;
             
-        $this->_mailer->flush();
+        $this->_flushMailer();
         $updatedEvent = $this->_eventController->update($persitentEvent);
         $this->_assertMail('jsmith, jmcblack', NULL);
         $this->_assertMail('sclever', 'invit');
@@ -108,6 +130,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $this->_assertMail('rwright', 'Attendee');
     }
     
+    /**
+     * testUpdateReschedule
+     */
     public function testUpdateReschedule()
     {
         $event = $this->_getEvent();
@@ -118,12 +143,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persitentEvent->dtstart->addHour(1);
         $persitentEvent->dtend->addHour(1);
         
-        $this->_mailer->flush();
+        $this->_flushMailer();
         $updatedEvent = $this->_eventController->update($persitentEvent);
         $this->_assertMail('jsmith, pwulf', NULL);
         $this->_assertMail('sclever, jmcblack, rwright', 'reschedul');
     }
     
+    /**
+     * testUpdateDetails
+     */
     public function testUpdateDetails()
     {
         $event = $this->_getEvent();
@@ -134,12 +162,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persitentEvent->url = 'http://somedetail.com';
         $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
         
-        $this->_mailer->flush();
+        $this->_flushMailer();
         $updatedEvent = $this->_eventController->update($persitentEvent);
         $this->_assertMail('jsmith, pwulf, sclever', NULL);
         $this->_assertMail('jmcblack, rwright', 'update');
     }
         
+    /**
+     * testUpdateAttendeeStatus
+     */
     public function testUpdateAttendeeStatus()
     {
         $event = $this->_getEvent();
@@ -148,12 +179,15 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
-        $this->_mailer->flush();
+        $this->_flushMailer();
         $updatedEvent = $this->_eventController->update($persitentEvent);
         $this->_assertMail('jsmith, pwulf, sclever, jmcblack', NULL);
         $this->_assertMail('rwright', 'decline');
     }
     
+    /**
+     * testOrganizerNotificationSupress
+     */
     public function testOrganizerNotificationSupress()
     {
         $event = $this->_getEvent();
@@ -163,11 +197,14 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
-        $this->_mailer->flush();
+        $this->_flushMailer();
         $updatedEvent = $this->_eventController->update($persitentEvent);
         $this->_assertMail('jsmith, pwulf', NULL);
     }
     
+    /**
+     * testOrganizerNotificationSend
+     */
     public function testOrganizerNotificationSend()
     {
         $event = $this->_getEvent();
@@ -177,12 +214,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
-        $this->_mailer->flush();
+        $this->_flushMailer();
         $updatedEvent = $this->_eventController->update($persitentEvent);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf', 'decline');
     }
-    
     
     /**
      * checks if mail for persona got send
@@ -193,6 +229,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
      */
     protected function _assertMail($_personas, $_assertString = NULL)
     {
+        // make sure messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue();
+        }
+        
         foreach (explode(',', $_personas) as $personaName) {
             $mailsForPersona = array();
             $personaEmail = $this->_personas[trim($personaName)]->accountEmailAddress;
@@ -213,6 +254,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         }
     }
     
+    /**
+     * get attendee
+     * 
+     * @param string $_personas
+     * @return Tinebase_Record_RecordSet
+     */
     protected function _getPersonaAttendee($_personas)
     {
         $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
