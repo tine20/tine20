@@ -731,7 +731,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         foreach (array_keys($this->_foreignTables) as $field) {
             if (!empty($_record->{$field})) {
-                $_record->{$field} = explode(',', $_record->{$field});
+                $_record->{$field} = (array_key_exists('singleValue', $this->_foreignTables[$field]) && $this->_foreignTables[$field]['singleValue'])
+                    ? $_record->{$field}
+                    : explode(',', $_record->{$field});
             } else {
                 $_record->{$field} = array();
             }

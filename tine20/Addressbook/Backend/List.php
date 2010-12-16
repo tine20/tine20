@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        move visibility='displayed' check from getSelect to contact filter
@@ -52,9 +52,11 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
     		'joinOn' => 'list_id'
         ),
         'group_id'    => array(
-        	'table'  => 'groups',
-            'field'  => 'id',
-        	'joinOn' => 'list_id'
+        	'table'        => 'groups',
+            'field'        => 'id',
+        	'joinOn'       => 'list_id',
+        // use first element of result array
+            'singleValue'  => TRUE,
         )
     );
 
