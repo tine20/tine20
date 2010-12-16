@@ -985,6 +985,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         if($_ignoreAcl !== TRUE) {
+            // if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
+
             if(!$this->hasGrant(Tinebase_Core::getUser(), $containerId, Tinebase_Model_Grants::GRANT_ADMIN)) {
                 throw new Tinebase_Exception_AccessDenied('Permission to set grants of container denied.');
             }            
@@ -1019,7 +1021,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 $data = array(
                     'id'            => $recordGrants->getId(),
                     'container_id'  => $containerId,
-                    'account_id'    => (is_array($recordGrants['account_id'])) ? $recordGrants['account_id'][0] : $recordGrants['account_id'],
+                    'account_id'    => $recordGrants['account_id'],
                     'account_type'  => $recordGrants['account_type'],
                 );
                 if(empty($data['id'])) {
