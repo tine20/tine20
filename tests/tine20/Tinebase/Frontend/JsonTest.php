@@ -519,6 +519,9 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         );
     }
     
+    /**
+     * testGetUserProfile
+     */
     public function testGetUserProfile()
     {
         $profile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
@@ -538,6 +541,9 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->_instance->getUserProfile($sclever->getId());
     }
     
+    /**
+     * testGetUserProfileConfig
+     */
     public function testGetUserProfileConfig()
     {
         $config = $this->_instance->getUserProfileConfig();
@@ -551,6 +557,9 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($config['updateableFields']));
     }
     
+    /**
+     * testSetUserProfileConfig
+     */
     public function testSetUserProfileConfig()
     {
         $config = $this->_instance->getUserProfileConfig();
@@ -568,6 +577,9 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->_instance->setUserProfileConfig($config);
     }
     
+    /**
+     * testUpdateUserPofile
+     */
     public function testUpdateUserPofile()
     {
         $profile = $this->_instance->getUserProfile(Tinebase_Core::getUser()->getId());
