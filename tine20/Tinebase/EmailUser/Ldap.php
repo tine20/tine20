@@ -106,7 +106,7 @@ class Tinebase_EmailUser_Ldap extends Tinebase_User_Plugin_LdapAbstract
                 switch($keyMapping) {
                     case 'emailMailQuota':
                         // convert to megabytes
-                        $accountArray[$keyMapping] = round($value[0] / 1024 / 1024);
+                        $accountArray[$keyMapping] = convertToMegabytes($value[0]);
                         break;
                         
                     case 'emailAliases':

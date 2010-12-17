@@ -181,14 +181,29 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
             }
         }
         
-        $limit = convertToBytes($_newUserProperties->imapUser->emailMailQuota . 'M') / 1024;
-        
-        $imap->setQuota($mailboxString, 'STORAGE', !empty($limit) ? $limit : null);
+        $this->_setImapQuota($_newUserProperties, $imap, $mailbox);
         
         $this->inspectGetUserByProperty($_addedUser);
     }
     
     /**
+     * set quota directly on IMAP server
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     * @param Zend_Mail_Protocol_Imap $_imap
+     * @param string $_mailboxString
+     */
+    protected function _setImapQuota(Tinebase_Model_FullUser $_user, Zend_Mail_Protocol_Imap $_imap = NULL, $_mailboxString = NULL)
+    {
+        $imap = ($_imap !== NULL) ? $_imap : $this->_getImapConnection();
+        $mailboxString = ($_mailboxString !== NULL) ? $_mailboxString : $this->_getUserMailbox($_user->accountLoginName);
+        
+        $limit = ($_user->imapUser->emailMailQuota) ? convertToBytes($_user->imapUser->emailMailQuota . 'M') / 1024 : null;
+        $imap->setQuota($mailboxString, 'STORAGE', $limit);
+    }
+    
+    /**
+     * get imap connection
      * 
      * @return Zend_Mail_Protocol_Imap
      */
@@ -232,14 +247,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
      */
     protected function _updateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
-        $imap = $this->_getImapConnection();
-        
-        $mailboxString = $this->_getUserMailbox($_updatedUser->accountLoginName);
-        
-        $limit = convertToBytes($_newUserProperties->imapUser->emailMailQuota . 'M') / 1024;
-        
-        $imap->setQuota($mailboxString, 'STORAGE', !empty($limit) ? $limit : null);
-        
+        $this->_setImapQuota($_newUserProperties);
         $this->inspectGetUserByProperty($_updatedUser);
     }
     

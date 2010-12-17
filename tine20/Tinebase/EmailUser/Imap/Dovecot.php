@@ -588,8 +588,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
                         break;
                     case 'emailMailQuota':
                     case 'emailMailSize':
-                        // convert to megabytes
-                        $data[$keyMapping] = round($value / 1024 / 1024);
+                        $data[$keyMapping] = convertToMegabytes($value);
                         break;
                     /* 
                      * emailHome, emailScheme, emailUID, emailGID are currently broken

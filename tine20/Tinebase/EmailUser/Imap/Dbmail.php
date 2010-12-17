@@ -340,8 +340,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
                     case 'emailMailSize':
                     case 'emailSieveQuota':
                     case 'emailSieveSize':
-                        // convert to megabytes
-                        $data[$keyMapping] = round($value / 1024 / 1024);
+                        $data[$keyMapping] = convertToMegabytes($value);
                         break;
                         
                     default: 
