@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-15 18:33+0100\n"
+"PO-Revision-Date: 2010-12-17 23:02+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -860,14 +860,37 @@ msgstr "Usuń wiadomość"
 msgid "Keep mail"
 msgstr "Zachowaj wiadomość"
 
-#: Setup/Initialize.php:41
-#: Setup/Update/Release3.php:484
-msgid "All INBOXES of my email accounts"
-msgstr "Wszystkie ODEBRANE moich kont pocztowych"
+#: Setup/Initialize.php:48
+msgid "All inboxes of my email accounts"
+msgstr "Wszystkie odebrane wiadomości z własnych kont pocztowych"
+
+#: Setup/Initialize.php:55
+msgid "All unread mail"
+msgstr "Wszystkie nieprzeczytane wiadomości"
+
+#: Setup/Initialize.php:56
+msgid "All unread mail of my email accounts"
+msgstr "Wszystkie nieprzeczytane wiadomości z własnych kont pocztowych"
+
+#: Setup/Initialize.php:63
+msgid "All highlighted mail"
+msgstr "Wszystkie wyróżnione wiadomości"
+
+#: Setup/Initialize.php:64
+msgid "All highlighted mail of my email accounts"
+msgstr "Wszystkie wyróżnione wiadomości z własnych kont pocztowych"
+
+#: Setup/Initialize.php:71
+msgid "All drafts"
+msgstr "Wszystkie szkice"
+
+#: Setup/Initialize.php:72
+msgid "All mails with the draft flag"
+msgstr "Wszystkie wiadomości z flagą szkic"
 
 #: Preference.php:61
-msgid "All INBOXES"
-msgstr "Wszystkie ODEBRANE"
+msgid "All inboxes"
+msgstr "Wszystkie odebrane"
 
 #: Preference.php:101
 msgid "Default Email Account"
@@ -908,6 +931,12 @@ msgstr "Potwierdź usunięcie"
 #: Preference.php:118
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Zanim usuniesz pocztę, wyświetl okno dialogowe z potwierdzeniem"
+
+#~ msgid "All INBOXES of my email accounts"
+#~ msgstr "Wszystkie ODEBRANE moich kont pocztowych"
+
+#~ msgid "All INBOXES"
+#~ msgstr "Wszystkie ODEBRANE"
 
 #~ msgid "Folder Selection"
 #~ msgstr "Wybór katalogu"
