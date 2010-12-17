@@ -598,6 +598,24 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('email@userprofile.set', $updatedProfileData['email_home']);
     }
     
+    /**
+     * testGetSaveApplicationConfig
+     */
+    public function testGetSaveApplicationConfig()
+    {
+        $config = $this->_instance->getConfig('Admin');
+        $this->assertGreaterThan(0, count($config));
+        
+        $data = array(
+            'id'        => 'Admin',
+            'settings'  => $config['settings'],
+        );
+        
+        $newConfig = $this->_instance->saveConfig($data);
+        
+        $this->assertEquals($config, $newConfig);
+    }
+    
     /******************** protected helper funcs ************************/
     
     /**

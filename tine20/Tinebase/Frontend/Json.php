@@ -780,7 +780,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getConfig($id)
     {
-        $appController = Tinebase_Controller_Abstract::getController($id);
+        $controllerName = $id . '_Controller';
+        $appController = Tinebase_Controller_Abstract::getController($controllerName);
         
         return array(
             'id'        => $id,
@@ -796,7 +797,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveConfig($data)
     {
-        $appController = Tinebase_Controller_Abstract::getController($data['id']);
+        $controllerName = $data['id'] . '_Controller';
+        $appController = Tinebase_Controller_Abstract::getController($controllerName);
         $appController->saveConfigSettings($data['settings']);
         
         return $this->getConfig($data['id']);
