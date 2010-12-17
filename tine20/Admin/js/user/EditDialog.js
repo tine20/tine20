@@ -661,7 +661,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             deferredRender: false,
             border: false,
             plain: true,
-            activeTab: this.record && this.record.id ? 1 : 0,
+            activeTab: 0,
             items: [{               
                 title: this.app.i18n.gettext('Account'),
                 autoScroll: true,
