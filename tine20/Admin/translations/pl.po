@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-16 18:37+0100\n"
+"PO-Revision-Date: 2010-12-17 22:58+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -355,14 +355,14 @@ msgstr "Zdefiniuj nowe hasło"
 msgid "Please enter the new password:"
 msgstr "Proszę wprowadzić nowe hasło:"
 
-#: js/user/Users.js:117
+#: js/user/Users.js:119
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] "Użytkownik Samby"
 msgstr[1] "użytkowników Samby"
 msgstr[2] "użytkowników Samby"
 
-#: js/user/Users.js:143
+#: js/user/Users.js:145
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "E-mail użytkownika"
@@ -698,6 +698,18 @@ msgstr "lp"
 #: js/Applications.js:288
 msgid "Version"
 msgstr "Wersja"
+
+#: js/AdminPanel.js:63
+msgid "Change settings for application {0}"
+msgstr "Zmień ustawienia aplikacji {0}"
+
+#: js/AdminPanel.js:123
+msgid "Defaults"
+msgstr "Ustawienia domyślne"
+
+#: js/AdminPanel.js:135
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Domyślna książka adresowa dla nowych kontaktów i grup"
 
 #: js/GroupEditDialog.js:73
 msgid "Could not save group."
