@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -32,7 +32,7 @@ function array_value($_key, array $_array)
  */
 function convertToBytes($_value)
 {
-    if (is_int($_value)) {
+    if (is_int($_value) || ! $_value) {
         $bytes = $_value;
     } else {
         if (preg_match("/M/", $_value)) {
@@ -51,6 +51,18 @@ function convertToBytes($_value)
     }
     
     return $bytes;
+}
+
+/**
+ * converts value to megabytes
+ * 
+ * @param integer $_value
+ * @return integer
+ */
+function convertToMegabytes($_value)
+{
+    $result = ($_value) ? round($_value / 1024 / 1024) : $_value;
+    return $result;
 }
 
 /**
