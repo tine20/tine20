@@ -58,7 +58,7 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
     /**
      * default filter name
      */
-    const DEFAULTPERSISTENTFILTER_NAME = 'All INBOXES'; //  _("All INBOXES")
+    const DEFAULTPERSISTENTFILTER_NAME = 'All inboxes'; //  _("All inboxes")
     
     /**
      * application
