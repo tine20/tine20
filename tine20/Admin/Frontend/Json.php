@@ -69,15 +69,15 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {   
-        $defaultInternalAddressbookIdConfig = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::DEFAULTINTERNALADDRESSBOOK, NULL, 0);
+        $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
         
         $registryData = array(
             'manageSAM'                     => $this->_manageSAM,
             'manageImapEmailUser'           => $this->_manageImapEmailUser,
             'manageSmtpEmailUser'           => $this->_manageSmtpEmailUser,
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
-            'defaultInternalAddressbook'    => ($defaultInternalAddressbookIdConfig->value !== 0) 
-                ? Tinebase_Container::getInstance()->get($defaultInternalAddressbookIdConfig->value)->toArray() 
+            'defaultInternalAddressbook'    => ($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL) 
+                ? Tinebase_Container::getInstance()->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray() 
                 : NULL,
         );        
         return $registryData;    
