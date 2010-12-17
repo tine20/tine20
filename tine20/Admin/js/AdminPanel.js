@@ -20,6 +20,7 @@ Ext.namespace('Tine.Admin');
  * 
  * <p>Admin Admin Panel</p>
  * <p><pre>
+ * TODO         make saving work, somehow we lose the params (recordData) before the request is sent
  * TODO         generalize this
  * </pre></p>
  * 
@@ -38,29 +39,16 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     appName: 'Admin',
     recordClass: Tine.Tinebase.Model.Config,
+    recordProxy: Tine.Tinebase.configBackend,
     evalGrants: false,
     
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     * @private
-     */
-//    updateToolbars: function() {
-//    },
-
-    /**
-     * init record to edit
-     */
-    initRecord: function() {
+    //private
+    initComponent: function(){
         this.record = new this.recordClass({
             id: this.appName
-        });
-        this.loadRequest = this.recordProxy.loadRecord(this.record, {
-            scope: this,
-            success: function(record) {
-                this.record = record;
-                this.onRecordLoad();
-            }
-        });
+        });    
+        
+        Tine.Admin.AdminPanel.superclass.initComponent.call(this);
     },
     
     /**
@@ -92,14 +80,35 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * executed when record gets updated from form
      */
     onRecordUpdate: function() {
-        var form = this.getForm();
+        // merge changes from form into settings
+        var settings = this.record.get('settings'),
+            form = this.getForm(),
+            newSettings = {};
+
+        for (var setting in settings) {
+            newSettings[setting] = form.findField(setting).getValue();
+        }
         
-        // TODO merge changes from form into settings
-        //form.updateRecord(this.record.get('settings'));
+//        form.updateRecord(this.record);
+//        this.record.set('settings', {});
+        //this.record.set('settings', Ext.util.JSON.encode(settings));
+        this.record.set('settings', newSettings);
+
+        //console.log(this.record);
         
-        // TODO update registry / reload?
+        // TODO update registry
     },
     
+    /**
+     * on update
+     * 
+     * TODO make this work
+     */
+//    onUpdate: function() {
+//        // reload mainscreen to make sure registry gets updated
+//        window.location = window.location.href.replace(/#+.*/, '');
+//    },
+
     /**
      * returns dialog
      * 
@@ -145,11 +154,10 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @return  {Ext.ux.Window}
  */
 Tine.Admin.AdminPanel.openWindow = function (config) {
-    var id = (config.record && config.record.id) ? config.record.id : 0;
     var window = Tine.WindowFactory.getWindow({
         width: 600,
         height: 400,
-        name: Tine.Admin.AdminPanel.prototype.windowNamePrefix + id,
+        name: Tine.Admin.AdminPanel.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Admin.AdminPanel',
         contentPanelConstructorConfig: config
     });
