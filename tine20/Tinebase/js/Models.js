@@ -415,7 +415,7 @@ Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
     appName: 'Tinebase',
     modelName: 'Config',
     idProperty: 'id',
-    titleProperty: 'name',
+    titleProperty: 'id',
     // ngettext('Config', 'Configs', n); gettext('Configs');
     recordName: 'Config',
     recordsName: 'Configs',
