@@ -262,7 +262,7 @@ class Tinebase_Config
     public static function getOptionString($_record, $_label)
     {
         $controller = Tinebase_Core::getApplicationInstance($_record->getApplication());
-        $settings = $controller->getSettings();
+        $settings = $controller->getConfigSettings();
         $idField = $_label . '_id';
         
         $option = $settings->getOptionById($_record->{$idField}, $_label . 's');
