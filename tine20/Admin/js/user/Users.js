@@ -83,12 +83,14 @@ Tine.Admin.Model.User = Tine.Tinebase.data.Record.create(Tine.Admin.Model.UserAr
  * @return {Object} default data
  */
 Tine.Admin.Model.User.getDefaultData = function () {
+    var internalAddressbook = Tine.Admin.registry.get('defaultInternalAddressbook');
+    
     return {
         sambaSAM: '',
         emailUser: '',
         accountStatus: 'enabled',
-        visibility: 'hidden',
-        container_id: null,
+        visibility: (internalAddressbook !== null) ? 'displayed' : 'hidden',
+        container_id: internalAddressbook,
         accountPrimaryGroup: Tine.Admin.registry.get('defaultPrimaryGroup')
     };
 };

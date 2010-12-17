@@ -99,8 +99,10 @@ Tine.Admin.Model.Group = Tine.Tinebase.data.Record.create([
  * @return {Object} default data
  */
 Tine.Admin.Model.Group.getDefaultData = function () {
+    var internalAddressbook = Tine.Admin.registry.get('defaultInternalAddressbook');
+    
     return {
-        visibility: 'hidden',
-        container_id: null
+        visibility: (internalAddressbook !== null) ? 'displayed' : 'hidden',
+        container_id: internalAddressbook
     };
 };
