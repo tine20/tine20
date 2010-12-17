@@ -5,7 +5,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: AdminPanel.js 17913 2010-12-17 11:18:34Z p.schuele@metaways.de $
+ * @version     $Id$
  *
  */
 
@@ -27,7 +27,7 @@ Ext.namespace('Tine.Admin');
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: AdminPanel.js 17913 2010-12-17 11:18:34Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor
