@@ -400,3 +400,24 @@ Tine.Tinebase.Model.Department.getFilterModel = function() {
         {label: _('Name'),          field: 'name',       operators: ['contains']}
     ];
 };
+
+/**
+ * @namespace Tine.Tinebase.Model
+ * @class     Tine.Tinebase.Model.Config
+ * @extends   Tine.Tinebase.data.Record
+ * 
+ * Model of a application config settings
+ */
+Tine.Tinebase.Model.Config = Tine.Tinebase.data.Record.create([
+    {name: 'id'}, // application name
+    {name: 'settings'}
+], {
+    appName: 'Tinebase',
+    modelName: 'Config',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Config', 'Configs', n); gettext('Configs');
+    recordName: 'Config',
+    recordsName: 'Configs',
+    containerProperty: null
+});
