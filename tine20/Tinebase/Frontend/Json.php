@@ -785,7 +785,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return array(
             'id'        => $id,
-            'settings'  => $appController->getConfigSettings(),
+            'settings'  => $appController->getConfigSettings(TRUE),
         );
     }
 

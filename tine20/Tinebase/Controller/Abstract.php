@@ -114,15 +114,28 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     /**
      * Returns default settings for app
      *
+     * @param boolean $_resolve if some values should be resolved
      * @return  array settings data
      */
-    public function getConfigSettings()
+    public function getConfigSettings($_resolve = FALSE)
     {
-        return Tinebase_Config::getInstance()->getConfigAsArray(
+        $settings = Tinebase_Config::getInstance()->getConfigAsArray(
             Tinebase_Model_Config::APPDEFAULTS, 
             $this->_applicationName, 
             $this->_defaultsSettings
         );
+        
+        return ($_resolve) ? $this->_resolveConfigSettings($settings) : $settings;
+    }
+    
+    /**
+     * resolve some settings
+     * 
+     * @param array $_settings
+     */
+    protected function _resolveConfigSettings($_settings)
+    {
+        return $_settings;
     }
     
     /**
