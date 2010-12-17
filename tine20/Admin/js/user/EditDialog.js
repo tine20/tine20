@@ -634,7 +634,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     handler: function () {
                     	var confirmForm = this.passwordConfirmWindow.items.first().getForm();
                     	
-                    	// check if confim for is valid (we need this if special key called button handler)
+                    	// check if confirm form is valid (we need this if special key called button handler)
                     	if (confirmForm.isValid()) {
                     		this.passwordConfirmWindow.hide();
     						confirmForm.reset();
