@@ -133,8 +133,8 @@ Tine.Crm.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
         });
         
         return {
-            layout: 'accordion',
-            animate: true,
+            xtype: 'tabpanel',
+            activeTab: 0,
             border: true,
             items: [{
                 title: this.app.i18n._('Defaults'),
