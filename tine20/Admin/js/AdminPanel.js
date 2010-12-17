@@ -39,7 +39,6 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     appName: 'Admin',
     recordClass: Tine.Tinebase.Model.Config,
-    recordProxy: Tine.Tinebase.configBackend,
     evalGrants: false,
     
     //private
@@ -89,9 +88,6 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
             newSettings[setting] = form.findField(setting).getValue();
         }
         
-//        form.updateRecord(this.record);
-//        this.record.set('settings', {});
-        //this.record.set('settings', Ext.util.JSON.encode(settings));
         this.record.set('settings', newSettings);
 
         //console.log(this.record);
