@@ -70,7 +70,7 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
      */
     protected function getRecord(Crm_Model_Lead $_lead, Zend_Locale $_locale, Zend_Translate $_translate)
     {        
-        $settings = Crm_Controller::getInstance()->getSettings();
+        $settings = Crm_Controller::getInstance()->getConfigSettings();
         
         $leadFields = array (
             array(  'label' => /* $_translate->_('Lead Data') */ "", 

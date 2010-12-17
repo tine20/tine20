@@ -133,7 +133,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      * @todo check 'endslead' values
      * @todo generalize this
      */
-    public function getSettings()
+    public function getConfigSettings()
     {
         $cache = Tinebase_Core::get('cache');
         $cacheId = convertCacheId('getCrmSettings');
@@ -144,7 +144,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
             $translate = Tinebase_Translation::getTranslation('Crm');
             
             $result = new Crm_Model_Config(array(
-                'defaults' => parent::getSettings()
+                'defaults' => parent::getConfigSettings()
             ));
             
             $others = array(
@@ -187,7 +187,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      * 
      * @todo generalize this
      */
-    public function saveSettings($_settings)
+    public function saveConfigSettings($_settings)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating Crm Settings: ' . print_r($_settings->toArray(), TRUE));
         
@@ -195,7 +195,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
             if ($field == 'id') {
                 continue;
             } else if ($field == 'defaults') {
-                parent::saveSettings($value);
+                parent::saveConfigSettings($value);
             } else {
                 Tinebase_Config::getInstance()->setConfigForApplication($field, Zend_Json::encode($value), $this->_applicationName);
             }
@@ -204,6 +204,6 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
         // invalidate cache
         Tinebase_Core::get('cache')->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('settings'));
         
-        return $this->getSettings();
+        return $this->getConfigSettings();
     }
 }

@@ -41,7 +41,7 @@ class Crm_Setup_Initialize extends Setup_Initialize
     {
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
         
-        $closedStatus = Crm_Controller::getInstance()->getSettings()->getEndedLeadstates(TRUE);
+        $closedStatus = Crm_Controller::getInstance()->getConfigSettings()->getEndedLeadstates(TRUE);
         
         $pfe->create(new Tinebase_Model_PersistentFilter(array(
             'name'              => Crm_Preference::DEFAULTPERSISTENTFILTER_NAME,

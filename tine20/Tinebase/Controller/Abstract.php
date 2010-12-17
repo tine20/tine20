@@ -116,7 +116,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      *
      * @return  array settings data
      */
-    public function getSettings()
+    public function getConfigSettings()
     {
         return Tinebase_Config::getInstance()->getConfigAsArray(
             Tinebase_Model_Config::APPDEFAULTS, 
@@ -131,7 +131,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      * @param array $_settings
      * @return void
      */
-    public function saveSettings($_settings)
+    public function saveConfigSettings($_settings)
     {
         Tinebase_Config::getInstance()->setConfigForApplication(
             Tinebase_Model_Config::APPDEFAULTS, 

@@ -64,7 +64,7 @@ class Crm_Export_Helper
                 $value = $_record->getLeadStatus();
                 break;
             case 'source':
-                $settings = Crm_Controller::getInstance()->getSettings();
+                $settings = Crm_Controller::getInstance()->getConfigSettings();
                 $source = $settings->getOptionById($_record->leadsource_id, 'leadsources');
                 if (isset($source['leadsource'])) {
                     $value = $source['leadsource'];
@@ -74,7 +74,7 @@ class Crm_Export_Helper
                 }
                 break;
             case 'type':
-                $settings = Crm_Controller::getInstance()->getSettings();
+                $settings = Crm_Controller::getInstance()->getConfigSettings();
                 $type = $settings->getOptionById($_record->leadtype_id, 'leadtypes');
                 if (isset($type['leadtype'])) {
                     $value = $type['leadtype'];

@@ -54,7 +54,7 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
         $defaultFavorite = $pfe->getByProperty(Crm_Preference::DEFAULTPERSISTENTFILTER_NAME, 'name');
         $defaultFavorite->bypassFilters = TRUE;
         
-        $closedStatus = Crm_Controller::getInstance()->getSettings()->getEndedLeadstates(TRUE);
+        $closedStatus = Crm_Controller::getInstance()->getConfigSettings()->getEndedLeadstates(TRUE);
         
         $defaultFavorite->filters =  array(
             array('field' => 'leadstate_id',    'operator' => 'notin',  'value' => $closedStatus),

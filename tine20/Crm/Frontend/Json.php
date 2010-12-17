@@ -111,7 +111,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {   
-        $settings = $this->getSettings();
+        $settings = $this->getConfigSettings();
         $defaults = $settings['defaults'];
         
         // get default container
@@ -151,9 +151,9 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @todo    return json store style with totalcount/result?
      */
-    public function getSettings()
+    public function getConfigSettings()
     {
-        $result = Crm_Controller::getInstance()->getSettings()->toArray();
+        $result = Crm_Controller::getInstance()->getConfigSettings()->toArray();
         
         return $result;
     }
@@ -163,10 +163,10 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @return array created/updated settings
      */
-    public function saveSettings($recordData)
+    public function saveConfigSettings($recordData)
     {
         $settings = new Crm_Model_Config($recordData);
-        $result = Crm_Controller::getInstance()->saveSettings($settings)->toArray();
+        $result = Crm_Controller::getInstance()->saveConfigSettings($settings)->toArray();
         
         return $result;
     }

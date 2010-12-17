@@ -156,7 +156,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         
         $view->updater = $_updater;
         $view->lead = $_lead;
-        $settings = Crm_Controller::getInstance()->getSettings();
+        $settings = Crm_Controller::getInstance()->getConfigSettings();
         $view->leadState = $settings->getOptionById($_lead->leadstate_id, 'leadstates');
         $view->leadType = $settings->getOptionById($_lead->leadtype_id, 'leadtypes');
         $view->leadSource = $settings->getOptionById($_lead->leadsource_id, 'leadsources');
