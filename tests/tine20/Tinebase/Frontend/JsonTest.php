@@ -608,7 +608,7 @@ class Tinebase_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         $data = array(
             'id'        => 'Admin',
-            'settings'  => $config['settings'],
+            'settings'  => Admin_Controller::getInstance()->getConfigSettings(),
         );
         
         $newConfig = $this->_instance->saveConfig($data);
