@@ -133,6 +133,9 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
      */
     public function saveConfigSettings($_settings)
     {
+        // only admins are allowed to do this
+        $this->checkRight(Tinebase_Acl_Rights::ADMIN);
+        
         Tinebase_Config::getInstance()->setConfigForApplication(
             Tinebase_Model_Config::APPDEFAULTS, 
             Zend_Json::encode($_settings), 
