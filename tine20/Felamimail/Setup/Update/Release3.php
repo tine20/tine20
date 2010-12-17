@@ -481,7 +481,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         $pfe = new Tinebase_PersistentFilter_Backend_Sql();
         $myInboxPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array(
             'name'              => Felamimail_Preference::DEFAULTPERSISTENTFILTER_NAME,
-            'description'       => "All INBOXES of my email accounts", // _("All INBOXES of my email accounts")
+            'description'       => "All inboxes of my email accounts",
             'account_id'        => NULL,
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId(),
             'model'             => 'Felamimail_Model_MessageFilter',
@@ -491,6 +491,47 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         )));
         
         $this->setApplicationVersion('Felamimail', '3.17');
+    }
+
+    /**
+     * update function (-> 3.18)
+     * - add more default favorites
+     */    
+    public function update_17()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Felamimail')->getId(),
+            'model'             => 'Felamimail_Model_MessageFilter',
+        );
+        
+        $myUnseenPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => 'All unread mail',
+            'description'       => 'All unread mail of my email accounts',
+            'filters'           => array(
+                array('field' => 'flags'    , 'operator' => 'notin', 'value' => Zend_Mail_Storage::FLAG_SEEN),
+            )
+        ))));
+
+        $myHighlightedPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => 'All highlighted mail',
+            'description'       => 'All highlighted mail of my email accounts',
+            'filters'           => array(
+                array('field' => 'flags'    , 'operator' => 'in', 'value' => Zend_Mail_Storage::FLAG_FLAGGED),
+            )
+        ))));
+
+        $myDraftsPFilter = $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => 'All drafts',
+            'description'       => 'All mails with the draft flag',
+            'filters'           => array(
+                array('field' => 'flags'    , 'operator' => 'in', 'value' => Zend_Mail_Storage::FLAG_DRAFT),
+            )
+        ))));
+        
+        $this->setApplicationVersion('Felamimail', '3.18');
     }
     
     /**
