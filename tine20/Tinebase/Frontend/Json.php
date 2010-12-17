@@ -770,6 +770,38 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
     
+    /************************ config functions ******************************/
+    
+    /**
+     * get config settings for application
+     * 
+     * @param $id application name
+     * @return array
+     */
+    public function getConfig($id)
+    {
+        $appController = Tinebase_Controller_Abstract::getController($id);
+        
+        return array(
+            'id'        => $id,
+            'settings'  => $appController->getConfigSettings(),
+        );
+    }
+
+    /**
+     * save application config
+     * 
+     * @param $data
+     * @return array
+     */
+    public function saveConfig($data)
+    {
+        $appController = Tinebase_Controller_Abstract::getController($data['id']);
+        $appController->saveConfigSettings($data['settings']);
+        
+        return $this->getConfig($data['id']);
+    }
+    
     /************************ protected functions ***************************/
     
     /**
