@@ -775,7 +775,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * get config settings for application
      * 
-     * @param $id application name
+     * @param string $id application name
      * @return array
      */
     public function getConfig($id)
@@ -792,16 +792,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * save application config
      * 
-     * @param $data
+     * @param array $recordData
      * @return array
      */
-    public function saveConfig($data)
+    public function saveConfig($recordData)
     {
-        $controllerName = $data['id'] . '_Controller';
-        $appController = Tinebase_Controller_Abstract::getController($controllerName);
-        $appController->saveConfigSettings($data['settings']);
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($recordData, TRUE));
         
-        return $this->getConfig($data['id']);
+        $controllerName = $recordData['id'] . '_Controller';
+        $appController = Tinebase_Controller_Abstract::getController($controllerName);
+        $appController->saveConfigSettings($recordData['settings']);
+        
+        return $this->getConfig($recordData['id']);
     }
     
     /************************ protected functions ***************************/
