@@ -76,9 +76,13 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.window.setTitle(String.format(_('Change settings for application {0}'), this.appName));
         
         if (this.fireEvent('load', this) !== false) {
-            //this.getForm().loadRecord(this.record.get('settings'));
-            // TODO load settings into form
-            this.getForm().clearInvalid();
+            var settings = this.record.get('settings'),
+                form = this.getForm();
+            for (var setting in settings) {
+                form.findField(setting).setValue(settings[setting]);
+            }
+        
+            form.clearInvalid();
             
             this.loadMask.hide();
         }
@@ -93,7 +97,7 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
         // TODO merge changes from form into settings
         //form.updateRecord(this.record.get('settings'));
         
-        // TODO update registry
+        // TODO update registry / reload?
     },
     
     /**
@@ -131,7 +135,7 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 }]]
             }]
         };                
-    } // end of getFormItems
+    }
 });
 
 /**
