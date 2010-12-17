@@ -155,6 +155,13 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const FILESDIR = 'filesdir';
     
     /**
+     * default internal addressbook for new users/groups
+     * 
+     * @var string
+     */
+    const DEFAULTINTERNALADDRESSBOOK = 'defaultinternaladdressbook';
+    
+    /**
      * identifier
      * 
      * @var string
