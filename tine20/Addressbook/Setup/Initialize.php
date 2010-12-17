@@ -44,6 +44,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         $this->_initializeFavorites();
         $this->_initializeUserContacts();
         $this->_initializeGroupLists();
+        $this->_initializeConfig();
     }
     
     /**
@@ -149,5 +150,14 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             }
         }
         return $result;
+    }
+    
+    /**
+     * init config settings
+     * - add internal addressbook config setting
+     */
+    protected function _initializeConfig()
+    {
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::DEFAULTINTERNALADDRESSBOOK, $this->_getInternalAddressbook()->getId());
     }
 }
