@@ -13,6 +13,7 @@ Contents
 2. Switched from Zend_Date to DateTime
 3. Added new log level: TRACE
 4. Added action-queue
+5. User contact / group list records can now be saved in other Addressbooks
 
 --------------------------------------------------------------
 1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
@@ -53,4 +54,11 @@ Contents
 - If you use the db-adapter, it is necessary to create the queue and message tables first. use the queue.sql script found in the [tine20dir]/library/Zend/Queue/Adapter/Db directory.
 
 - The queue is triggered by the scheduler and the scheduler can be run by the triggerAsyncEvents CLI function.
-    
+
+--------------------------------------------------------------
+5. User contact / group list records can now be saved in other Addressbooks
+
+- In older versions, there has been only one internal Addressbook where all user contact/group list records were saved in. In Neele, you can choose in which Addressbook a contact/list 
+is saved in. 
+
+- A new config for default internal Addressbook has been added. Change it in Admin/Applications/Admin/Settings.
