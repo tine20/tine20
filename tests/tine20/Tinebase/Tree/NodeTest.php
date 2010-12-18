@@ -130,20 +130,21 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
     public function testGetPathNodes()
     {
         $treeNode = $this->testCreateTreeNode();
-        var_dump($treeNode->toArray());
         
-        $path = $this->_treeNodeBackend->getPathNodes('/8bce224fb90239a7047c6165fe7e427309d4b28f/folders/shared');
+        $path = $this->_treeNodeBackend->getPathNodes('/' . $treeNode->name);
         
-        #var_dump($path->toArray());
+        $this->assertEquals(1, $path->count());
     }
     
     public function testLastPathNode()
     {
         $treeNode = $this->testCreateTreeNode();
         
-        $node = $this->_treeNodeBackend->getLastPathNode('/8bce224fb90239a7047c6165fe7e427309d4b28f/folders/shared');
+        $node = $this->_treeNodeBackend->getLastPathNode('/' . $treeNode->name);
         
-        var_dump($node);
+        #var_dump($node->toArray());
+        $this->assertEquals($treeNode->name, $node->name);
+        #$this->assertEquals($treeNode->getId(), $node->getId());
     }
     
     /**
