@@ -226,6 +226,10 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 
     }
     
+    /**
+     * @param  string  $_path
+     * @return bool
+     */
     public function pathExists($_path)
     {
         try {
