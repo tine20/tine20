@@ -152,5 +152,5 @@ class Tinebase_Tree_FileObject extends Tinebase_Backend_Sql_Abstract
         if ($data !== null) {
             $this->_db->insert($this->_tablePrefix . 'tree_filerevisions', $data);
         }
-    }
+    }    
 }
