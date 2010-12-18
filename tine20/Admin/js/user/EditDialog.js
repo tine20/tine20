@@ -172,13 +172,13 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             passwordStatus.setValue(this.app.i18n.gettext('Passwords do not match!'));
             
             passwordField.passwordsMatch = false;
-//            passwordField.markInvalid(this.app.i18n.gettext('Passwords do not match!'));
+            passwordField.markInvalid(this.app.i18n.gettext('Passwords do not match!'));
         } else {
         	passwordStatus.el.setStyle('color', 'green');
         	passwordStatus.setValue(this.app.i18n.gettext('Passwords match!'));
         	        	
             passwordField.passwordsMatch = true;
-//            passwordField.clearInvalid();
+            passwordField.clearInvalid();
         }
         
         return passwordField.passwordsMatch ? passwordField.passwordsMatch : passwordStatus.getValue();
@@ -624,7 +624,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     scope: this,
                     handler: function () {
                         this.passwordConfirmWindow.hide();
-                        this.passwordConfirmWindow.items.first().getForm().reset();
+//                        this.passwordConfirmWindow.items.first().getForm().reset();
                     }
                 }, {
                     text: _('Ok'),
@@ -637,7 +637,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     	// check if confirm form is valid (we need this if special key called button handler)
                     	if (confirmForm.isValid()) {
                     		this.passwordConfirmWindow.hide();
-    						confirmForm.reset();
+//    						confirmForm.reset();
     						
     						// focus email field
         					this.getForm().findField('accountEmailAddress').focus(true, 100);
@@ -650,6 +650,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 show: function (win) {
                     var confirmForm = this.passwordConfirmWindow.items.first().getForm();
                     
+                    confirmForm.reset();
                     confirmForm.findField('passwordRepeat').focus(true, 500);
                 }
             }
@@ -724,7 +725,9 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                                 field.passwordsMatch = false;
                             }
                         },
-                        validateValue : function (value) {
+                        validateValue: function (value) {
+                        	console.log('validateValue - ' + this.passwordsMatch);
+                        	console.log(this);
                             return this.passwordsMatch;
                         }
                     }], [{
