@@ -1082,7 +1082,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('tree_nodes', 1, true);
         
         $this->setApplicationVersion('Tinebase', '3.22');
-    }    
+    }
 
     /**
      * update to 3.23
@@ -1095,4 +1095,31 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
         $this->setApplicationVersion('Tinebase', '3.23');
     }    
+
+    /**
+     * update to 3.24
+     * - add new index
+     */
+    public function update_23()
+    {
+        // add index and foreign key again
+        $this->_backend->addIndex('tree_nodes', new Setup_Backend_Schema_Index_Xml('
+        	<index>
+                <name>parent_id-name</name>
+                <unique>true</unique>
+                <field>
+                    <name>parent_id</name>
+                </field>
+                <field>
+                    <name>name</name>
+                </field>
+            </index>')
+        ); 
+        
+        $this->_backend->dropIndex('tree_nodes', 'parent_id');
+        
+        $this->setTableVersion('tree_nodes', 2);
+        
+        $this->setApplicationVersion('Tinebase', '3.24');
+    }
 }

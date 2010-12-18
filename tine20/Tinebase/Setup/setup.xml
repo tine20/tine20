@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>3.23</version>
+	<version>3.24</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -2959,9 +2959,13 @@
                     </field>
                 </index>
                 <index>
-                    <name>parent_id</name>
+                    <name>parent_id-name</name>
+                    <unique>true</unique>
                     <field>
                         <name>parent_id</name>
+                    </field>
+                    <field>
+                        <name>name</name>
                     </field>
                 </index>
                 <index>
