@@ -101,7 +101,7 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
         $this->objects['nodes'][] =  $testTreeNode;
         #var_dump($testTreeNode->toArray());
         
-        $this->assertEquals($treeNode->name,                     $testTreeNode->name);
+        $this->assertEquals($treeNode->name,                           $testTreeNode->name);
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $testTreeNode->type);
         
         return $testTreeNode;
@@ -121,10 +121,29 @@ class Tinebase_Tree_NodeTest extends PHPUnit_Framework_TestCase
         $testTreeNode = $this->_treeNodeBackend->update($treeNode);
         #var_dump($testTreeNode->toArray());
         
-        $this->assertEquals($treeNode->name,                     $testTreeNode->name);
+        $this->assertEquals($treeNode->name,                           $testTreeNode->name);
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $testTreeNode->type);
         
         return $testTreeNode;
+    }
+    
+    public function testGetPathNodes()
+    {
+        $treeNode = $this->testCreateTreeNode();
+        var_dump($treeNode->toArray());
+        
+        $path = $this->_treeNodeBackend->getPathNodes('/8bce224fb90239a7047c6165fe7e427309d4b28f/folders/shared');
+        
+        #var_dump($path->toArray());
+    }
+    
+    public function testLastPathNode()
+    {
+        $treeNode = $this->testCreateTreeNode();
+        
+        $node = $this->_treeNodeBackend->getLastPathNode('/8bce224fb90239a7047c6165fe7e427309d4b28f/folders/shared');
+        
+        var_dump($node);
     }
     
     /**
