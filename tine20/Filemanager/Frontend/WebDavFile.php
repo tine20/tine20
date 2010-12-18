@@ -65,20 +65,32 @@ class Filemanager_Frontend_WebDavFile extends Sabre_DAV_File
      *
      * If null is returned, we'll assume application/octet-stream
      */ 
-    public function _getContentType() 
+    public function getContentType() 
     {
-        $contentType = $this->_controller->getContentType($this->_filesystemPath);
+        $tinebaseFileSystem = new Tinebase_FileSystem();
+        
+        $contentType = $tinebaseFileSystem->getContentType(substr($this->_filesystemPath, 9));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_filesystemPath . ' => ' . $contentType);
         
         return $contentType;
     }
     
-    public function _getETag() 
+    /**
+     * Returns the ETag for a file
+     *
+     * An ETag is a unique identifier representing the current version of the file. If the file changes, the ETag MUST change.
+     * The ETag is an arbritrary string, but MUST be surrounded by double-quotes.
+     */
+    public function getETag() 
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $this->_filesystemPath);
+        $stat = stat($this->_filesystemPath);
         
-        return $this->_controller->getETag($this->_filesystemPath);
+        $etag = sha1(sprintf('%u', $stat['ino']) . '-' .$stat['mtime']);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' etag for file: ' . $this->_filesystemPath . ' ' . $etag);
+        
+        return '"' . $etag . '"';
     }
     
     /**
