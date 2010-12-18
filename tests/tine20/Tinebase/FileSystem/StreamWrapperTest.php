@@ -65,12 +65,6 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        #foreach ($this->objects['directories'] as $directory) {
-        #    // don't delete files in physical filesystem
-        #    if (substr($directory, 0, 9) == 'tine20://') {
-        #        $this->_rmdir($directory);
-        #    }
-        #}
         if (substr($this->_basePath, 0, 9) == 'tine20://') {
             $this->_rmdir($this->_basePath);
         }
