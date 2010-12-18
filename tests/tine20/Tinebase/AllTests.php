@@ -49,6 +49,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_HelperTests');
         $suite->addTestSuite('Tinebase_Tree_AllTests');
         $suite->addTestSuite('Tinebase_FileSystem_StreamWrapperTest');
+        $suite->addTestSuite('Tinebase_FileSystemTest');
         
         // @todo add the controller test to the suite -> somehow this does not work because of @runInSeparateProcess
         //$suite->addTestSuite('Tinebase_ControllerTest');
