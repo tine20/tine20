@@ -146,6 +146,19 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('phpunit', $content, 'failed to read content from file');
     }
     
+    public function testUpdateFile()
+    {
+        $testPath = $this->testMkdir()  . '/phpunit.txt';
+        
+        file_put_contents($testPath, 'phpunit');
+        
+        file_put_contents($testPath, 'phpunit2');
+        
+        $this->assertTrue(file_exists($testPath) ,  'failed to create file');
+        $this->assertTrue(is_file($testPath)     ,  'path created by mkdir is not a directory');
+        $this->assertEquals(8, filesize($testPath), 'failed to write content to file');
+    }
+    
     public function testScandir()
     {
         $testPath = $this->testMkdir();
