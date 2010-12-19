@@ -213,7 +213,10 @@ class Tinebase_Filesystem_StreamWrapper
         $options = stream_context_get_options($this->_stream);
         
         switch ($options['tine20']['mode']) {
+            case 'w':
+            case 'wb':
             case 'x':
+            case 'xb':
                 rewind($this->_stream);
                 
                 $ctx = hash_init('sha1');
@@ -269,10 +272,10 @@ class Tinebase_Filesystem_StreamWrapper
         return feof($this->_stream);
     }
     
-    public function stream_open($_path, $_mode ,$_options ,&$_opened_path)
+    public function stream_open($_path, $_mode, $_options, &$_opened_path)
     {
         $quiet    = !(bool)($_options & STREAM_REPORT_ERRORS);
-
+        
         try {
             $path = $this->_validatePath($_path);
         } catch (Tinebase_Exception_InvalidArgument $teia) {
@@ -284,6 +287,7 @@ class Tinebase_Filesystem_StreamWrapper
         
         switch ($_mode) {
             case 'x':
+            case 'xb':
                 $dirName  = dirname($path);
                 $fileName = basename($path);
                 
@@ -303,7 +307,7 @@ class Tinebase_Filesystem_StreamWrapper
                     
                 }
                 
-                if ($this->_getTreeNodeBackend()->pathExists($_path)) {
+                if ($this->_getTreeNodeBackend()->pathExists($path)) {
                     if (!$quiet) {
                         trigger_error('file exists already', E_USER_WARNING);
                     }
@@ -311,6 +315,38 @@ class Tinebase_Filesystem_StreamWrapper
                 }
                 
                 $this->_currentNode = $this->_createFileTreeNode($parent, $fileName);
+                
+                $this->_stream = tmpfile();
+                $_opened_path = $_path;
+                
+                break;
+                
+            case 'w':
+            case 'wb':
+                $dirName  = dirname($path);
+                $fileName = basename($path);
+                
+                try {
+                    $parent = $this->_getTreeNodeBackend()->getLastPathNode($dirName);
+                    if ($parent->type != Tinebase_Model_Tree_FileObject::TYPE_FOLDER) {
+                        if (!$quiet) {
+                            trigger_error('parent must be directory', E_USER_WARNING);
+                        }
+                        return false;
+                    }
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    if (!$quiet) {
+                        trigger_error('parent directory not found', E_USER_WARNING);
+                    }
+                    return false;
+                    
+                }
+                
+                try {
+                    $this->_currentNode = $this->_getTreeNodeBackend()->getLastPathNode($path);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    $this->_currentNode = $this->_createFileTreeNode($parent, $fileName);
+                }
                 
                 $this->_stream = tmpfile();
                 $_opened_path = $_path;
@@ -425,7 +461,7 @@ class Tinebase_Filesystem_StreamWrapper
         
         $options = stream_context_get_options($this->_stream);
         
-        if ($options['tine20']['mode'] != 'x') {
+        if (!in_array($options['tine20']['mode'], array('w', 'wb', 'x', 'xb'))) {
             // readonly
             return false;
         }
