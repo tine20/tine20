@@ -17,7 +17,7 @@
  * @package     Tinebase
  * @subpackage  WebDav
  */
-class Tinebase_WebDav_Application extends Sabre_DAV_Directory 
+abstract class Tinebase_WebDav_Application extends Sabre_DAV_Directory 
 {
     protected $_path;
     
@@ -25,6 +25,8 @@ class Tinebase_WebDav_Application extends Sabre_DAV_Directory
      * @var Tinebase_Model_Application
      */
     protected $_application;
+    
+    protected $_applicationName;
     
     /**
      * @var string
@@ -40,11 +42,7 @@ class Tinebase_WebDav_Application extends Sabre_DAV_Directory
     
     public function __construct($path) 
     {
-        $this->_path = $path;
         
-        $this->_parsePath();
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $this->_path);
     }
     
     /**
@@ -59,9 +57,24 @@ class Tinebase_WebDav_Application extends Sabre_DAV_Directory
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH PARTS: ' . print_r($pathParts, true));
         
-        $this->_application   = Tinebase_Application::getInstance()->getApplicationByName(ucfirst(strtolower($pathParts[0])));
-        $this->_containerType = isset($pathParts[1]) ? strtolower($pathParts[1]) : null;
-        $this->_username      = isset($pathParts[2]) ? strtolower($pathParts[2]) : null;
+        $this->_application   = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        if (!empty($pathParts[0])) {
+            $this->_containerType = strtolower($pathParts[0]);
+            
+            switch ($this->_containerType) {
+                case Tinebase_Model_Container::TYPE_SHARED:
+                    break;
+                    
+                case Tinebase_Model_Container::TYPE_PERSONAL:
+                    break;
+                    
+                default:
+                    throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_containerType . ' could not be found');
+                    break;
+            }
+        }
+        $this->_containerType = !empty($pathParts[0]) ? strtolower($pathParts[0]) : null;
+        $this->_username      = isset($pathParts[1])  ? strtolower($pathParts[1]) : null;
     }
     
     public function getChildren() 
