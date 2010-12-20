@@ -168,6 +168,23 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(in_array('phpunit.txt', $children));
     }
+    
+    public function testRename()
+    {
+        $testPath = $this->testMkdir();        
+        $this->testCreateFile();
+        
+        $testPath2 = $testPath . '/RENAMED';
+        mkdir($testPath2, 0777, true);
+        
+        $children = scandir($testPath);
+        
+        rename($testPath . '/phpunit.txt', $testPath2 . '/phpunit2.txt');
+        
+        $children = scandir($testPath2);
+        
+        $this->assertTrue(in_array('phpunit2.txt', $children));
+    }
 }		
 	
 
