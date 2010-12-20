@@ -69,7 +69,7 @@ class Admin_Controller extends Tinebase_Controller_Abstract
     protected function _resolveConfigSettings($_settings)
     {
         foreach ($_settings as $key => $value) {
-            if ($key === Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK) {
+            if ($key === Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK && $value) {
                 $_settings[$key] = Tinebase_Container::getInstance()->get($value)->toArray();
             }
         }
