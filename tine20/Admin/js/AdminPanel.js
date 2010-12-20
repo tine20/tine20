@@ -20,7 +20,6 @@ Ext.namespace('Tine.Admin');
  * 
  * <p>Admin Admin Panel</p>
  * <p><pre>
- * TODO         make saving work, somehow we lose the params (recordData) before the request is sent
  * TODO         generalize this
  * </pre></p>
  * 
@@ -89,22 +88,10 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }
         
         this.record.set('settings', newSettings);
-
-        //console.log(this.record);
         
         // TODO update registry
     },
     
-    /**
-     * on update
-     * 
-     * TODO make this work
-     */
-//    onUpdate: function() {
-//        // reload mainscreen to make sure registry gets updated
-//        window.location = window.location.href.replace(/#+.*/, '');
-//    },
-
     /**
      * returns dialog
      * 
@@ -142,6 +129,16 @@ Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
         };                
     }
 });
+
+/**
+ * admin panel on update function
+ * 
+ * TODO         update registry without reloading the mainscreen
+ */
+Tine.Admin.AdminPanel.onUpdate = function() {
+    // reload mainscreen to make sure registry gets updated
+    window.location = window.location.href.replace(/#+.*/, '');
+}
 
 /**
  * Admin admin settings popup
