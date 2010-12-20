@@ -55,7 +55,7 @@ class Tinebase_Server_WebDav implements Tinebase_Server_Interface
             return;                            
         }
         
-        $tree = new Sabre_DAV_ObjectTree(new Tinebase_WebDav_Root('/'));
+        $tree = new Tinebase_WebDav_Tree('/');
         
         $server = new Sabre_DAV_Server($tree);
         
