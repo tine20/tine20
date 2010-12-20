@@ -114,6 +114,33 @@ class Filemanager_Frontend_WebDavFile extends Sabre_DAV_File
         unlink($this->_filesystemPath);
     }
     
+    public function put($data)
+    {
+        $path = $this->_filesystemPath;
+        
+        if (!$handle = fopen($path, 'w')) {
+            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename ' . $path . ')');
+        }
+        
+        if (is_resource($data)) {
+            stream_copy_to_stream($data, $handle);
+        }
+        
+        fclose($handle);
+    }
+    
+    /**
+     * Renames the node
+     * 
+     * @throws Sabre_DAV_Exception_Forbidden
+     * @param string $name The new name
+     * @return void
+     */
+    public function setName($name) 
+    {
+        rename($this->_filesystemPath, dirname($this->_filesystemPath) . '/' . $name);
+    }
+    
     /**
      * parse the path
      * path can be: 
