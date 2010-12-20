@@ -6,7 +6,7 @@
  * @subpackage  Views
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -16,16 +16,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/ext-all.css"/>
-    <!-- <link rel="stylesheet" type="text/css" href="library/ExtJS/resources/css/xtheme-gray.css" /> --><!-- LIBS -->
-    
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all.js"></script>
 
-	<script type="text/javascript" src="Tinebase/js/Locale.js"></script>
-	<script type="text/javascript" src="Tinebase/js/Locale/Gettext.js"></script>
-
-	<?php echo '<script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>'; ?>
-
+	<?php require 'Tinebase/views/includeJsAndCss.php'; ?>
+	
     <script type="text/javascript">
         Ext.onReady(function() {
         	Ext.namespace('Tine', 'Tine.Tinebase');

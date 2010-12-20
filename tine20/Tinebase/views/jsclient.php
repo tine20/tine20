@@ -8,8 +8,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * @todo        check if build script puts the translation files in build dir $tineBuildPath
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -44,45 +42,7 @@
         <link rel="stylesheet" type="text/css"  media="print" href="Tinebase/css/print.css" />
     -->
           
-    <!-- Tine 2.0 static files --><?php
-        /**
-         * this variable gets replaced by the buildscript
-         */
-        $tineBuildPath = '';
-        
-        $locale = Zend_Registry::get('locale');
-        switch(TINE20_BUILDTYPE) {
-            case 'DEVELOPMENT':
-                $includeFiles = Tinebase_Frontend_Http::getAllIncludeFiles();
-                
-                // css files
-                foreach ($includeFiles['css'] as $name) {
-                    echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'" />';
-                }
-                
-                // js files
-                foreach ($includeFiles['js'] as $name) {
-                    echo "\n    ". '<script type="text/javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
-                }
-                
-                // laguage file
-                echo "\n    ". '<script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
-                break;
-
-            case 'DEBUG':
-                echo "\n    <link rel='stylesheet' type='text/css' href='" . Tinebase_Frontend_Http_Abstract::_appendFileTime('Tinebase/css/' . $tineBuildPath . 'tine-all-debug.css') . "' />";
-                echo "\n    <script type=\"text/javascript\" src=\"" . Tinebase_Frontend_Http_Abstract::_appendFileTime('Tinebase/js/' . $tineBuildPath . 'tine-all-debug.js') . "\"></script>";
-                echo "\n    <script type=\"text/javascript\" src=\"" . Tinebase_Frontend_Http_Abstract::_appendFileTime("Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js") ."\"></script>";
-                break;
-                
-            case 'RELEASE':
-                echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/" . $tineBuildPath . "tine-all.css' />";
-                echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/" . $tineBuildPath . "tine-all.js\"></script>";
-                echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all.js\"></script>";
-                break;
-        }
-        
-        if (Tinebase_Core::getConfig()->customMainscreenHeaders) {echo "\n" . Tinebase_Core::getConfig()->customMainscreenHeaders;}?>
+   <?php require 'Tinebase/views/includeJsAndCss.php'; ?>
         
 </head>
 <body>
