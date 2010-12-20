@@ -16,11 +16,10 @@ Ext.namespace('Tine.Admin');
  * 
  * @namespace   Tine.Admin
  * @class       Tine.Admin.AdminPanel
- * @extends     Tine.widgets.dialog.EditDialog
+ * @extends     Tine.widgets.dialog.AdminPanel
  * 
  * <p>Admin Admin Panel</p>
  * <p><pre>
- * TODO         generalize this
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -32,101 +31,26 @@ Ext.namespace('Tine.Admin');
  * @constructor
  * Create a new Tine.Admin.AdminPanel
  */
-Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.EditDialog, {
+Tine.Admin.AdminPanel = Ext.extend(Tine.widgets.dialog.AdminPanel, {
     /**
      * @private
      */
     appName: 'Admin',
-    recordClass: Tine.Tinebase.Model.Config,
-    evalGrants: false,
-    
-    //private
-    initComponent: function(){
-        this.record = new this.recordClass({
-            id: this.appName
-        });    
-        
-        Tine.Admin.AdminPanel.superclass.initComponent.call(this);
-    },
     
     /**
-     * executed after record got updated from proxy
-     */
-    onRecordLoad: function() {
-        // interrupt process flow until dialog is rendered
-        if (! this.rendered) {
-            this.onRecordLoad.defer(250, this);
-            return;
-        }
-        
-        this.window.setTitle(String.format(_('Change settings for application {0}'), this.appName));
-        
-        if (this.fireEvent('load', this) !== false) {
-            var settings = this.record.get('settings'),
-                form = this.getForm();
-            for (var setting in settings) {
-                form.findField(setting).setValue(settings[setting]);
-            }
-        
-            form.clearInvalid();
-            
-            this.loadMask.hide();
-        }
-    },
-    
-    /**
-     * executed when record gets updated from form
-     */
-    onRecordUpdate: function() {
-        // merge changes from form into settings
-        var settings = this.record.get('settings'),
-            form = this.getForm(),
-            newSettings = {};
-
-        for (var setting in settings) {
-            newSettings[setting] = form.findField(setting).getValue();
-        }
-        
-        this.record.set('settings', newSettings);
-        
-        // TODO update registry
-    },
-    
-    /**
-     * returns dialog
+     * get config items
      * 
-     * NOTE: when this method gets called, all initalisation is done.
-     * 
-     * @return {Object}
-     * @private
+     * @return {Array}
      */
-    getFormItems: function() {
-        
-        return {
-            xtype: 'tabpanel',
-            activeTab: 0,
-            border: true,
-            items: [{
-                title: this.app.i18n._('Defaults'),
-                autoScroll: true,
-                border: false,
-                frame: true,
-                xtype: 'columnform',
-                formDefaults: {
-                    anchor: '90%',
-                    labelSeparator: '',
-                    columnWidth: 1
-                },
-                items: [[{
-                    xtype: 'tinerecordpickercombobox',
-                    fieldLabel: this.app.i18n._('Default Addressbook for new contacts and groups'),
-                    name: 'defaultInternalAddressbook',
-                    blurOnSelect: true,
-                    recordClass: Tine.Tinebase.Model.Container,
-                    recordProxy: Tine.Admin.sharedAddressbookBackend
-                }]]
-            }]
-        };                
+    getConfigItems: function() {
+        return [[{
+            xtype: 'tinerecordpickercombobox',
+            fieldLabel: this.app.i18n._('Default Addressbook for new contacts and groups'),
+            name: 'defaultInternalAddressbook',
+            blurOnSelect: true,
+            recordClass: Tine.Tinebase.Model.Container,
+            recordProxy: Tine.Admin.sharedAddressbookBackend
+        }]];
     }
 });
 
