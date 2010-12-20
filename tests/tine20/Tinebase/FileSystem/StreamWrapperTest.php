@@ -77,15 +77,12 @@ class Tinebase_Filesystem_StreamWrapperTest extends PHPUnit_Framework_TestCase
                 $path = $_path . '/' . $element;
                 
                 if (is_dir($path)) {
-                    #echo "recurse to $path" . PHP_EOL;
                     $this->_rmdir($path);
                 } else {
-                    #echo "unlink $path" . PHP_EOL;
                     unlink($path);
                 }
             }
         }
-        #echo "rmdir $_path" . PHP_EOL;
         rmdir($_path);
         
         closedir($dir);
