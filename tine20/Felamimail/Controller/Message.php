@@ -466,7 +466,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             ' Move ' . count($_messages) . ' message(s) to ' . $_targetFolder->globalname
         );
         
-        $imapBackend = Felamimail_Backend_ImapFactory::factory($_messages->getFirstRecord()->account_id);
+        $firstMessage = $_messages->getFirstRecord();
+        $folder = Felamimail_Controller_Folder::getInstance()->get($firstMessage->folder_id);
+        $imapBackend = Felamimail_Backend_ImapFactory::factory($firstMessage->account_id);
+        $imapBackend->selectFolder($folder->globalname);
         
         $imapMessageUids = array();
         foreach ($_messages as $message) {
