@@ -188,7 +188,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
                 ->where("level{$level}.name = ?", $pathParts[$level]);
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
