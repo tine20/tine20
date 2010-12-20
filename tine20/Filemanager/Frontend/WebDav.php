@@ -45,8 +45,8 @@ class Filemanager_Frontend_WebDav extends Sabre_DAV_Directory
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path); 
         
-        if ($this->_container instanceof Tinebase_Model_Container && !file_exists($this->_containerPath)) {
-            mkdir($this->_containerPath, 0777, true);
+        if (!file_exists($this->_fileSystemBasePath . '/shared')) {
+            mkdir($this->_fileSystemBasePath . '/shared', 0777, true);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filesystem path: ' . $this->_fileSystemPath);
@@ -237,7 +237,20 @@ class Filemanager_Frontend_WebDav extends Sabre_DAV_Directory
      */
     public function createDirectory($name) 
     {
-        $path = $this->_fileSystemPath . '/' . $name;
+        if ($this->_fileSystemPath == $this->_fileSystemBasePath) {
+             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
+        } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/shared') {
+            $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+                'name'           => $name,
+                'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                'backend'        => 'sql',
+                'application_id' => $this->_application->getId()
+            )));
+        
+            $path = $this->_fileSystemPath . '/' . $container->getId();
+        } else {
+            $path = $this->_fileSystemPath . '/' . $name;
+        }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
         
