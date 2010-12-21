@@ -356,24 +356,22 @@ class Setup_Frontend_Cli
      */
     public static function parseConfigValue($_value)
     {
-        $result = $_value;
+        $result = array(
+            'active' => 1
+        );
+        
         $_value = preg_replace('/\s*/', '', $_value);
         $parts = explode(',', $_value);
-        if (count($parts) > 1) {
-            $result = array(
-                'active' => 1
-            );
-            foreach ($parts as $part) {
-                if (preg_match('/_/', $part)) {
-                    list($key, $sub) = explode('_', $part);
-                    list($subKey, $value) = explode(':', $sub);
-                    $result[$key][$subKey] = $value;
-                } else {
-                    list($key, $value) = explode(':', $part);
-                    $result[$key] = $value;
-                }
+        foreach ($parts as $part) {
+            if (preg_match('/_/', $part)) {
+                list($key, $sub) = explode('_', $part);
+                list($subKey, $value) = explode(':', $sub);
+                $result[$key][$subKey] = $value;
+            } else {
+                list($key, $value) = explode(':', $part);
+                $result[$key] = $value;
             }
-        }
+            }
 
         return $result;
     }
