@@ -352,7 +352,7 @@ class Setup_Frontend_Cli
      * parse options
      * 
      * @param string $_value
-     * @return array
+     * @return array|string
      */
     public static function parseConfigValue($_value)
     {
@@ -368,10 +368,13 @@ class Setup_Frontend_Cli
                 list($subKey, $value) = explode(':', $sub);
                 $result[$key][$subKey] = $value;
             } else {
-                list($key, $value) = explode(':', $part);
-                $result[$key] = $value;
+                if (preg_match('/:/', $part)) {
+                    list($key, $value) = explode(':', $part);
+                } else {
+                    $result = $value;
+                }
             }
-            }
+        }
 
         return $result;
     }
