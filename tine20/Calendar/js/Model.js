@@ -201,6 +201,7 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
         {filtertype: 'calendar.attendee'},
         {filtertype: 'calendar.attendeestatus'},
+        {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
         {filtertype: 'tinebase.tag', app: app}
     ];
 };
