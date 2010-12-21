@@ -282,4 +282,62 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Calendar', '3.7');
     }
+    
+    /**
+     * create more persistent filters
+     */
+    public function update_7()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'name'              => "Awaiting response", //_("Awaiting response")
+            'description'       => "Events I have not yet respondet to", // _("Events I have not yet respondet to")
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => 'Calendar_Model_EventFilter',
+            'filters'           => array(
+                array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT,
+                )),
+                array('field' => 'attender_status'    , 'operator' => 'in', 'value' => array(
+                    Calendar_Model_Attender::STATUS_NEEDSACTION,
+                    Calendar_Model_Attender::STATUS_TENTATIVE,
+                    
+                )),
+            )
+        )));
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'name'              => "Declined events", //_("Declined events")
+            'description'       => "Events I have declined", // _("Events I have declined")
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => 'Calendar_Model_EventFilter',
+            'filters'           => array(
+                array('field' => 'attender'    , 'operator' => 'equals', 'value' => array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'user_id'   => Addressbook_Model_Contact::CURRENTCONTACT,
+                )),
+                array('field' => 'attender_status'    , 'operator' => 'in', 'value' => array(
+                    Calendar_Model_Attender::STATUS_DECLINED,
+                )),
+            )
+        )));
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array(
+            'name'              => "I'm organizer", //_("I'm organizer")
+            'description'       => "Events I'm the organizer of", // _("Events I'm the organizer of")
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'model'             => 'Calendar_Model_EventFilter',
+            'filters'           => array(
+                array('field' => 'organizer', 'operator' => 'equals', 'value' => Addressbook_Model_Contact::CURRENTCONTACT)
+            )
+        )));
+        
+        //organizer
+        $this->setApplicationVersion('Calendar', '3.8');
+    }
 }
