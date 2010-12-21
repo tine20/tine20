@@ -370,6 +370,7 @@ class Setup_Frontend_Cli
             } else {
                 if (preg_match('/:/', $part)) {
                     list($key, $value) = explode(':', $part);
+                    $result[$key] = $value;
                 } else {
                     $result = $value;
                 }
