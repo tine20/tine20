@@ -325,6 +325,39 @@ class Tinebase_DateTime extends DateTime
     }
     
     /**
+     * (non-PHPdoc)
+     * @see DateTime::setDate()
+     * @note PHP 5.3.0 changed the return value on success from NULL to DateTime.
+     */
+    public function setDate($year ,$month ,$day)
+    {
+        parent::setDate($year ,$month ,$day);
+        return $this;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see DateTime::setTime()
+     * @note PHP 5.3.0 changed the return value on success from NULL to DateTime.
+     */
+    public function setTime($hour, $minute, $second = 0)
+    {
+        parent::setTime($hour, $minute, $second);
+        return $this;
+    }
+    
+    /**
+     * (non-PHPdoc)
+     * @see DateTime::setISODate()
+     * @note PHP 5.3.0 changed the return value on success from NULL to DateTime.
+     */
+    public function setISODate($year ,$week, $day = 1)
+    {
+        parent::setISODate($year ,$week, $day);
+        return $this;
+    }
+    
+    /**
      * Substracts a date or datepart to the existing date. For PHP < 5.3 supported parts are:
      *  sec, min, hour, day, week, month, year. For later versions check DateTime::sub docu.
      *  Returns the modified DateTime object or FALSE on failure.
