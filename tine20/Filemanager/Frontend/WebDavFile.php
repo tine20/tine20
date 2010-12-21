@@ -15,49 +15,37 @@
  * 
  * @package     Filemanager
  */
-class Filemanager_Frontend_WebDavFile extends Sabre_DAV_File
+class Filemanager_Frontend_WebDavFile extends Filemanager_Frontend_WebDavNode implements Sabre_DAV_IFile
 {
-    protected $_path;
-    
-    protected $_applicationName;
-    
-    /**
-     * the current container
-     * 
-     * @var Tinebase_Model_Container
-     */
-    protected $_container;
-    
-    protected $_filesystemPath;
-    
-    public function __construct($path) 
+    public function __construct($_path) 
     {
-        $this->_path = $path;
-
-        $this->_parsePath();
+        parent::__construct($_path);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' filesystem path: ' . $this->_filesystemPath);
+        if ($this->_container == null) {
+            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
+        }
+        
+        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_READ)) {
+            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
+        }
+        
+        if (!file_exists($this->_fileSystemPath)) {
+            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
+        }
     }
     
-    public function getName() 
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . basename($this->_path));
-        
-        return basename($this->_path);
-    }
-
     public function get() 
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__);
         
-        return fopen($this->_filesystemPath, 'r');
+        return fopen($this->_fileSystemPath, 'r');
     }
 
     public function getSize() 
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $this->_filesystemPath);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $this->_fileSystemPath);
         
-        return filesize($this->_filesystemPath);
+        return filesize($this->_fileSystemPath);
     }
     
     /**
@@ -69,9 +57,9 @@ class Filemanager_Frontend_WebDavFile extends Sabre_DAV_File
     {
         $tinebaseFileSystem = new Tinebase_FileSystem();
         
-        $contentType = $tinebaseFileSystem->getContentType(substr($this->_filesystemPath, 9));
+        $contentType = $tinebaseFileSystem->getContentType(substr($this->_fileSystemPath, 9));
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_filesystemPath . ' => ' . $contentType);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . substr($this->_fileSystemPath, 9) . ' => ' . $contentType);
         
         return $contentType;
     }
@@ -84,11 +72,11 @@ class Filemanager_Frontend_WebDavFile extends Sabre_DAV_File
      */
     public function getETag() 
     {
-        $stat = stat($this->_filesystemPath);
+        $stat = stat($this->_fileSystemPath);
         
         $etag = sha1(sprintf('%u', $stat['ino']) . '-' .$stat['mtime']);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' etag for file: ' . $this->_filesystemPath . ' ' . $etag);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' etag for file: ' . $this->_fileSystemPath . ' ' . $etag);
         
         return '"' . $etag . '"';
     }
@@ -98,10 +86,10 @@ class Filemanager_Frontend_WebDavFile extends Sabre_DAV_File
      *
      * @return int 
      */
-    public function getLastModified()
-    {
-        return filemtime($this->_filesystemPath);
-    }
+    #public function getLastModified()
+    #{
+    #    return filemtime($this->_fileSystemPath);
+    #}
     
     /**
      * Deleted the current node
@@ -111,12 +99,20 @@ class Filemanager_Frontend_WebDavFile extends Sabre_DAV_File
      */
     public function delete() 
     {
-        unlink($this->_filesystemPath);
+        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_DELETE)) {
+            throw new Sabre_DAV_Exception_Forbidden('Forbidden to edit file: ' . $this->_path);
+        }
+        
+        unlink($this->_fileSystemPath);
     }
     
     public function put($data)
     {
-        $path = $this->_filesystemPath;
+        if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_EDIT)) {
+            throw new Sabre_DAV_Exception_Forbidden('Forbidden to edit file: ' . $this->_path);
+        }
+        
+        $path = $this->_fileSystemPath;
         
         if (!$handle = fopen($path, 'w')) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename ' . $path . ')');
@@ -127,54 +123,5 @@ class Filemanager_Frontend_WebDavFile extends Sabre_DAV_File
         }
         
         fclose($handle);
-    }
-    
-    /**
-     * Renames the node
-     * 
-     * @throws Sabre_DAV_Exception_Forbidden
-     * @param string $name The new name
-     * @return void
-     */
-    public function setName($name) 
-    {
-        rename($this->_filesystemPath, dirname($this->_filesystemPath) . '/' . $name);
-    }
-    
-    /**
-     * parse the path
-     * path can be: 
-     * 	 /applicationname/shared/containername(/*)
-     *   /applicationname/personal/username/containername(/*)
-     */
-    protected function _parsePath()
-    {
-        // split path into parts
-        $pathParts = explode('/', trim($this->_path, '/'), 4);
-        
-        #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' PATH PARTS: ' . print_r($pathParts, true));
-        
-        $this->_applicationName = ucfirst(strtolower($pathParts[0]));
-        $containerType          = strtolower($pathParts[1]);
-
-        switch($containerType) {
-            case Tinebase_Model_Container::TYPE_SHARED:
-                $containerName         = $pathParts[2];
-                $this->_container      = Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $containerName, $containerType);
-                $this->_filesystemPath = 'tine20:///' . Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() . '/folders/' . $this->_container->type . '/' . $this->_container->getId();
-                $this->_filesystemPath = isset($pathParts[3]) ? $this->_filesystemPath . '/' . $pathParts[3] : $this->_filesystemPath;
-                
-                break;
-                
-            case Tinebase_Model_Container::TYPE_PERSONAL:
-                $this->_username      = $pathParts[2];
-                // needs more splitting
-                $this->_containerName = $pathParts[3];
-                break;
-                
-            default:
-                throw new Sabre_DAV_Exception_FileNotFound();
-                break;
-        }
     }
 }
