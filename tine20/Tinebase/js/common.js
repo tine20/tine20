@@ -151,14 +151,23 @@ Tine.Tinebase.common = {
      * 
      * @param  {Number} minutes
      * @param  {String} format -> {0} will be replaced by Hours, {1} with minutes
+     * @param  {String} leadingZeros add leading zeros for given item {i|H}
      * @return {String}
      */
-    minutesRenderer: function (minutes, format) {
+    minutesRenderer: function (minutes, format, leadingZeros) {
         var s,
         	i = minutes % 60,
         	H = Math.floor(minutes / 60), // % (24);
         	Hs;
         //var d = Math.floor(minutes / (60 * 24));
+        
+        if (leadingZeros && (leadingZeros === true || leadingZeros.match(/i/)) && String(i).length === 1 ) {
+            i = '0' + String(i);
+        }
+        
+        if (leadingZeros && (leadingZeros === true || leadingZeros.match(/H/)) && String(H).length === 1 ) {
+            H = '0' + String(H);
+        }
         
         if (! format) {
             s = String.format(Tine.Tinebase.translation.ngettext('{0} minute', '{0} minutes', i), i);
