@@ -58,7 +58,7 @@ class Tinebase_Model_Filter_User extends Tinebase_Model_Filter_Text
         }
         
         // transform current user 
-        $_value = $_value == Tinebase_Model_User::CURRENTACCOUNT ? Tinebase_Core::getUser()->getId() : $_value;
+        $_value = ($_value == Tinebase_Model_User::CURRENTACCOUNT && is_object(Tinebase_Core::getUser())) ? Tinebase_Core::getUser()->getId() : $_value;
         
         parent::setValue($_value);
     }
