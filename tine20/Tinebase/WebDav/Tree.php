@@ -44,25 +44,8 @@ class Tinebase_WebDav_Tree extends Sabre_DAV_Tree
      */
     public function getNodeForPath($_path) 
     {
-        $pathParts = explode('/', $_path, 2);
+        $root = new Tinebase_WebDav_Root($_path);
         
-        list($prefix, $applicationPath) = array($pathParts[0], isset($pathParts[1]) ? $pathParts[1] : null);
-        
-        $node = new Tinebase_WebDav_Root($prefix);
-        
-        if ($applicationPath !== null) {
-            $node = $node->getChild($applicationPath);
-        }
-        
-        return $node;
-        
-        $realPath = $this->getRealPath($path);
-        if (!file_exists($realPath)) throw new Sabre_DAV_Exception_FileNotFound('File at location ' . $realPath . ' not found');
-        if (is_dir($realPath)) { 
-            return new Sabre_DAV_FS_Directory($path);
-        } else {
-            return new Sabre_DAV_FS_File($path);
-        }
-
+        return $root->getNodeForPath();
     }
 }
