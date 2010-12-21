@@ -33,8 +33,8 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
         $children = array();
         
         if (empty($this->_path)) {
-            $children[] = $this->getChild('webdav');
-        } else {
+            $children[] = $this->getChild('dav');
+        } elseif ($this->_path == 'dav') {
             // Loop through the directory, and create objects for each node
             foreach(Tinebase_Core::getUser()->getApplications() as $application) {
                 #Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' application: ' . $application);
@@ -52,32 +52,10 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
     
     public function getChild($_name) 
     {
-        if (empty($this->_path) || strtolower($_name) == 'webdav') {
-            return new Tinebase_WebDav_Root('webdav');
-        } else {
-            // appname[/subdir][/subdir]...
-            $pathParts = explode('/', $_name, 2);
-            list($appName, $appPath) = array(ucfirst($pathParts[0]), isset($pathParts[1]) ? $pathParts[1] : null);
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' appname: ' . $appName . ' apppath: ' . $appPath);
-
-            if (!Tinebase_Application::getInstance()->isInstalled($appName)) {
-                throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_name . ' could not be found');
-            }
-            
-            if (!Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::RUN)) {
-                throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_name . ' could not be found');
-            }
-            
-            $className = $appName . '_Frontend_WebDav';
-            if (!@class_exists($className)) {
-                throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_name . ' could not be found');
-            }
-            
-            $application = new $className($appName . '/' . $appPath);
-            
-            $node = $application->getNodeForCurrentPath();
-            
-            return $node;
+        if (empty($this->_path)) {
+            return new Tinebase_WebDav_Root('dav');
+        } elseif (strtolower($this->_path) == 'dav') {
+            return $this->_getApplicationNode($_name);
         }
     }
     
@@ -85,4 +63,40 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
     {
         return strtolower(basename($this->_path));
     }    
+    
+    public function getNodeForPath()
+    {
+        if (empty($this->_path) || strtolower($this->_path) == 'dav') {
+            return new Tinebase_WebDav_Root(strtolower($this->_path));
+        } else {
+            $applicationNode = $this->_getApplicationNode(substr($this->_path, 4));
+            
+            return $applicationNode->getNodeForPath();
+        }
+    }
+    
+    protected function _getApplicationNode($_appPath)
+    {
+        // appname[/subdir][/subdir]...
+        $pathParts = explode('/', $_appPath, 2);
+        list($appName, $appPath) = array(ucfirst($pathParts[0]), isset($pathParts[1]) ? $pathParts[1] : null);
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' appname: ' . $appName . ' apppath: ' . $appPath . ' origPath: ' . $_appPath);
+
+        if (!Tinebase_Application::getInstance()->isInstalled($appName)) {
+            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
+        }
+        
+        if (!Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::RUN)) {
+            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
+        }
+        
+        $className = $appName . '_Frontend_WebDav';
+        if (!@class_exists($className)) {
+            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
+        }
+        
+        $applicationNode = new $className($_appPath);
+        
+        return $applicationNode;
+    }
 }
