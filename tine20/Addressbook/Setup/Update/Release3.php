@@ -507,4 +507,63 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Addressbook', '3.10');
     }
+    
+    /**
+     * update to 3.11
+     * - add more default favorites
+     */
+    public function update_10()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+            'model'             => 'Addressbook_Model_ContactFilter',
+        );
+        
+        try {
+            $internalAddressbook = Tinebase_Container::getInstance()->getContainerByName('Addressbook', 'Internal Contacts', Tinebase_Model_Container::TYPE_SHARED);
+            $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+                'name'              => "My company",
+                'description'       => "All coworkers in my company",
+                'filters'           => array(array(
+                    'field'     => 'container_id',
+                    'operator'  => 'in',
+                    'value'     => array(
+                        'id'    => $internalAddressbook->getId(),
+                        // @todo use placeholder here (as this can change later)?
+                        'path'  => '/shared/' . $internalAddressbook->getId(),
+                    )
+                )),
+            ))));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // do not create filter
+        }
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "My contacts",
+            'description'       => "All contacts in my Addressbooks",
+            'filters'           => array(array(
+                'field'     => 'container_id',
+                'operator'  => 'in',
+                'value'     => array(
+                    'id'    => 'personal',
+                    'path'  => '/personal/' . Tinebase_Model_User::CURRENTACCOUNT,
+                )
+            )),
+        ))));
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "Last modified by me",
+            'description'       => "All contacts that I have last modified",
+            'filters'           => array(array(
+                'field'     => 'last_modified_by',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_User::CURRENTACCOUNT,
+            )),
+        ))));
+        
+        $this->setApplicationVersion('Addressbook', '3.11');
+    }
 }
