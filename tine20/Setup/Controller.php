@@ -680,7 +680,7 @@ class Setup_Controller
     public function saveAuthentication($_authenticationData)
     {
         if ($this->isInstalled('Tinebase')) {
-            // NOTE: Tinebase_Setup_Initialiser calls this functino again so
+            // NOTE: Tinebase_Setup_Initialiser calls this function again so
             //       we come to this point on initial installation _and_ update
             $this->_updateAuthentication($_authenticationData);
         } else {
@@ -691,7 +691,6 @@ class Setup_Controller
 
     /**
      * Save {@param $_authenticationData} to config file
-     * @todo save to config table instead of config file!
      * 
      * @param array $_authenticationData [hash containing settings for authentication and accountsStorage]
      * @return void
@@ -880,6 +879,16 @@ class Setup_Controller
                 Tinebase_Config::getInstance()->setConfigForApplication($configKey, Zend_Json::encode($_data[$configName]));
             }
         }
+    }
+    
+    /**
+     * returns all email config keys
+     * 
+     * @return array
+     */
+    public function getEmailConfigKeys()
+    {
+        return $this->_emailConfigKeys;
     }
     
     /**
