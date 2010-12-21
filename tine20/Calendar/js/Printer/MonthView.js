@@ -26,7 +26,7 @@ Tine.Calendar.Printer.MonthViewRenderer = Ext.extend(Tine.Calendar.Printer.BaseR
         }
         
         // body
-        body.push(String.format('<br/><table class="cal-print-monthview"><thead>{0}</thead>{1}</table>', dayNames.join("\n"), this.generateCalRows(daysHtml, 7, true)));
+        body.push(String.format('<br/><table class="cal-print-monthview"><tr>{0}</thead>{1}</tr>', dayNames.join("\n"), this.generateCalRows(daysHtml, 7, true)));
    
         return body.join("\n");
     },

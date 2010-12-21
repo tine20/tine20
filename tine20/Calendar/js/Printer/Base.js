@@ -72,7 +72,7 @@ Tine.Calendar.Printer.BaseRenderer = Ext.extend(Ext.ux.Printer.BaseRenderer, {
             dayOfMonth: dayStart.format('j'),
             weekDay: dayStart.format('l')
         });
-        return String.format('<table class="cal-print-daysview-day"><thead>{0}</thead>{1}</table>', dayHeader, dayBody);
+        return String.format('<table class="cal-print-daysview-day"><tr>{0}</tr>{1}</table>', dayHeader, dayBody);
     },
     
     splitDays: function(ds, startDate, numOfDays, returnData) {
