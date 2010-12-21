@@ -17,7 +17,6 @@
  */
 class Tinebase_Setup_Initialize extends Setup_Initialize
 {
-    
     /**
      * Override method: Tinebase needs additional initialisation
      * 
@@ -30,10 +29,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         $authenticationData['accounts'][Tinebase_User::getConfiguredBackend()] = array_merge($authenticationData['accounts'][Tinebase_User::getConfiguredBackend()], $defaultGroupNames);
         Setup_Controller::getInstance()->saveAuthentication($authenticationData);
         
-        if (isset($_options['imap']) || isset($_options['smtp'])) {
-            $data = $this->_parseEmailOptions($_options);
-            Setup_Controller::getInstance()->saveEmailConfig($data);
-        }
+        $this->_setConfigOptions($_options);
         
         // import groups(ldap)/create initial groups(sql)
         if(Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
@@ -46,6 +42,27 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         $this->initTinebaseScheduler();
         
     	parent::_initialize($_application, $_options);
+    }
+    
+    /**
+     * set config options (accounts/authentication/email/...)
+     * 
+     * @param array $_options
+     */
+    protected function _setConfigOptions($_options)
+    {
+        $emailConfigKeys = Setup_Controller::getInstance()->getEmailConfigKeys();
+        $configsToSet = array_merge($emailConfigKeys, array('authentication', 'accounts', 'redirectSettings'));
+        
+        $parsedOptions = array();
+        foreach ($configsToSet as $group) {
+            if (isset($_options[$group])) {
+                $parsedOptions[$group] = (is_string($_options[$group])) ? Setup_Frontend_Cli::parseConfigValue($_options[$group]) : $_options[$group];
+            }
+        }
+        
+        Setup_Controller::getInstance()->saveEmailConfig($parsedOptions);
+        Setup_Controller::getInstance()->saveAuthentication($parsedOptions);
     }
     
     /**
@@ -70,39 +87,6 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             $_application->getId(), 
             Tinebase_Acl_Rights::REPORT_BUGS
         );
-    }
-    
-    /**
-     * parse email options
-     * 
-     * @param array $_options
-     * @return array
-     * 
-     * @todo generalize this to allow to add other options during cli setup
-     */
-    protected function _parseEmailOptions($_options)
-    {
-        $result = array('imap' => array(), 'smtp' => array(), 'sieve' => array());
-        
-        foreach (array_keys($result) as $group) {
-            if (isset($_options[$group])) {
-                $_options[$group] = preg_replace('/\s*/', '', $_options[$group]);
-                $parts = explode(',', $_options[$group]);
-                foreach ($parts as $part) {
-                    if (preg_match('/_/', $part)) {
-                        list($key, $sub) = explode('_', $part);
-                        list($subKey, $value) = explode(':', $sub);
-                        $result[$group][$key][$subKey] = $value;
-                    } else {
-                        list($key, $value) = explode(':', $part);
-                        $result[$group][$key] = $value;
-                    }
-                }
-                $result[$group]['active'] = 1;
-            }
-        }
-        
-        return $result;
     }
     
     /**
