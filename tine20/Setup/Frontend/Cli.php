@@ -107,12 +107,13 @@ class Setup_Frontend_Cli
     }
 
     /**
+     * prompt remaining options
      * 
-     * @todo add requird version server side
+     * @param array $_applications
+     * @param array $_options
+     * @return void
      * 
-     * @param $_applications
-     * @param $_options
-     * @return unknown_type
+     * @todo add required version server side
      */
     protected function _promptRemainingOptions($_applications, &$_options) {
         if (in_array('Tinebase', $_applications)) {
@@ -335,9 +336,7 @@ class Setup_Frontend_Cli
             $errors[] = 'Missing argument: configvalue';
         }
         $configKey = (string)$options['configkey'];
-        $configValue = $this->_parseConfigValue($options['configvalue']);
-        //Setup_Controller::getInstance()->setConfig()
-        //$results = Setup_Controller::getInstance()->checkRequirements();
+        $configValue = self::parseConfigValue($options['configvalue']);
         if (empty($errors)) {
            Setup_Controller::setConfigOption($configKey, $configValue);
            echo "OK - Updated configuration option $configKey\n";
@@ -350,20 +349,20 @@ class Setup_Frontend_Cli
     }
     
     /**
-     * parse email options
+     * parse options
      * 
-     * @param array $_options
+     * @param string $_value
      * @return array
-     * 
-     * @todo generalize this to allow to add other options during cli setup
      */
-    protected function _parseConfigValue($_value)
+    public static function parseConfigValue($_value)
     {
         $result = $_value;
         $_value = preg_replace('/\s*/', '', $_value);
         $parts = explode(',', $_value);
         if (count($parts) > 1) {
-            $result = array();
+            $result = array(
+                'active' => 1
+            );
             foreach ($parts as $part) {
                 if (preg_match('/_/', $part)) {
                     list($key, $sub) = explode('_', $part);
