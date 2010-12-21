@@ -56,6 +56,7 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Addressbook/js/Addressbook.js',
             'Addressbook/js/ContactGridDetailsPanel.js',
             'Addressbook/js/ContactGrid.js',
+            'Addressbook/js/ContactFilterModel.js',
             'Addressbook/js/ContactEditDialog.js',
             'Addressbook/js/SearchCombo.js',
         );
