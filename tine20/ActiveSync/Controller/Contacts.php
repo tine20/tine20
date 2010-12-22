@@ -330,7 +330,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         if ($this->_needsBdayTZFix()) {
                             // iOS < 4 & palm send birthdays to the entered date, but the time the birthday got entered on the device
                             $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
-                            $contact->bday = new Tinebase_DateTime($contact->bday->setTime(0,0,0)->format(Tinebase_Record_Abstract::ISO8601LONG, $userTimezone));
+                            $contact->bday = new Tinebase_DateTime($contact->bday->setTime(0,0,0)->format(Tinebase_Record_Abstract::ISO8601LONG), $userTimezone);
                             $contact->bday->setTimezone('UTC');
                         }
                         
