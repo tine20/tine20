@@ -108,14 +108,23 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
         if (!Tinebase_Core::getUser()->hasRight($this->_application, Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS)) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
         }
-
+        
+        try {
+            Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $name, Tinebase_Model_Container::TYPE_SHARED);
+            
+            // container exists already => that's bad!
+            throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // continue
+        }
+        
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => $name,
             'type'           => Tinebase_Model_Container::TYPE_SHARED,
             'backend'        => 'sql',
             'application_id' => $this->_application->getId()
         )));
-    
+        
         $path = $this->_fileSystemPath . '/' . $container->getId();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create directory: ' . $path);
