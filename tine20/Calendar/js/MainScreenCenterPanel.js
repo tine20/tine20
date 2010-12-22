@@ -682,10 +682,10 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 fields: Tine.Calendar.Model.Event,
                 proxy: Tine.Calendar.backend,
                 reader: new Ext.data.JsonReader({}), //Tine.Calendar.backend.getReader(),
-                loadRecords: Ext.data.Store.prototype.loadRecords.createInterceptor(this.onStoreBeforeLoadRecords, this),
                 listeners: {
                     scope: this,
                     'beforeload': this.onStoreBeforeload,
+                    'beforeloadrecords' : this.onStoreBeforeLoadRecords,
                     'load': this.onStoreLoad
                 }
             });
