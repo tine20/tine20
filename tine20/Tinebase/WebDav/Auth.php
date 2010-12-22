@@ -17,37 +17,49 @@
  * @package     Tinebase
  * @subpackage  WebDav
  */
-class Tinebase_WebDav_Auth extends Sabre_DAV_Auth_Backend_AbstractDigest {
+class Tinebase_WebDav_Auth extends Sabre_DAV_Auth_Backend_Abstract {
 
     /**
      * Returns a users' information 
      * 
-     * @param string $realm 
-     * @param string $username 
+     * @param  string  $_realm 
+     * @param  string  $_username 
      * @return string 
      */
-    public function getUserInfo($realm,$username) {
-
+    public function getUserInfo($_realm, $_username) 
+    {
         return array(
-            'userId' => $username,
-            'digestHash' => $username,
+            'uri'                                   => 'principals/' . $_username,
+            '{http://sabredav.org/ns}email-address' => $_username . '@example.org'
         );
-
     }
 
-    public function getUsers() {
-
+    /**
+     * Returns information about the currently logged in user.
+     *
+     * If nobody is currently logged in, this method should return null.
+     * 
+     * @return array|null
+     */
+    public function getCurrentUser()
+    {
+        return array('uri' => 'principals/' . Tinebase_Core::getUser()->accountLoginName);
+    }
+    
+    public function getUsers() 
+    {
+        // lis of all users
         $result = array(
-            array('username' => 'lars')
+            array('username' => Tinebase_Core::getUser()->accountLoginName)
         );
         
         $rv = array();
+        
         foreach($result as $user) {
-
             $rv[] = array(
-                'userId' => $user['username'],
+                'uri'                                   => 'principals/' . $user['username'],
+                '{http://sabredav.org/ns}email-address' => $user['username'] . '@example.org'
             );
-
         }
 
         return $rv;
@@ -63,8 +75,9 @@ class Tinebase_WebDav_Auth extends Sabre_DAV_Auth_Backend_AbstractDigest {
      * @throws Sabre_DAV_Exception_NotAuthenticated
      * @return void
      */
-    public function authenticate(Sabre_DAV_Server $server,$realm) {
-        $userData = $this->getUserInfo($realm, $username);
+    public function authenticate(Sabre_DAV_Server $_server, $_realm) 
+    {
+        $userData = $this->getUserInfo($_realm, $_username);
         
         return $userData;
     }
