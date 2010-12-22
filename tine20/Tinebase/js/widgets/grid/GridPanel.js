@@ -447,17 +447,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onStoreUpdate: function(store, record, operation) {
         switch (operation) {
             case Ext.data.Record.EDIT:
+            
+                this.addToEditBuffer(record);
+                if (this.usePagingToolbar) {
+                    this.pagingToolbar.refresh.disable();
+                }
+                
                 this.recordProxy.saveRecord(record, {
                     scope: this,
                     success: function(updatedRecord) {
                         store.commitChanges();
+                        
                         // update record in store to prevent concurrency problems
                         record.data = updatedRecord.data;
                         
-                        // reloading the store feels like oldschool 1.x
-                        // maybe we should reload if the sort critera changed, 
-                        // but even this might be confusing
-                        //store.load({});
+                        this.loadData(true, true, true, 'keepBuffered');
                     }
                 });
                 break;
@@ -542,7 +546,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
 
         Ext.each(idsToAdd, function(idToAdd) {
-            records.push(this.store.getById(idToAdd));
+            records.push(this.store.getById(idToAdd).copy());
         }, this);
     },
     
