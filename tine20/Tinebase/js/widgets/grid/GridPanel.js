@@ -442,6 +442,39 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     /**
+     * new entry event -> add new record to store
+     * 
+     * @param {Object} recordData
+     * @return {Boolean}
+     */
+    onStoreNewEntry: function(recordData) {
+        var initialData = null;
+        if (Ext.isFunction(this.recordClass.getDefaultData)) {
+            initialData = Ext.apply(this.recordClass.getDefaultData(), recordData);
+        } else {
+            initialData = recordData;
+        }
+        var record = new this.recordClass(initialData);
+        this.store.insert(0 , [record]);
+        
+        if (this.usePagingToolbar) {
+            this.pagingToolbar.refresh.disable();
+        }
+        this.recordProxy.saveRecord(record, {
+            scope: this,
+            success: function(newRecord) {
+                this.store.remove(record);
+                this.store.insert(0 , [newRecord]);
+                this.addToEditBuffer(newRecord);
+                
+                this.loadData(true, true, true, 'keepBuffered');
+            }
+        });
+            
+        return true;
+    },
+    
+    /**
      * called when the store gets updated, e.g. from editgrid
      */
     onStoreUpdate: function(store, record, operation) {
@@ -644,9 +677,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }));
         
         // init various grid / sm listeners
-        this.grid.on('keydown',     this.onKeyDown,     this);
-        this.grid.on('rowclick',    this.onRowClick,    this);
-        this.grid.on('rowdblclick', this.onRowDblClick, this);
+        this.grid.on('keydown',     this.onKeyDown,         this);
+        this.grid.on('rowclick',    this.onRowClick,        this);
+        this.grid.on('rowdblclick', this.onRowDblClick,     this);
+        this.grid.on('newentry',    this.onStoreNewEntry,   this);
         
         this.grid.on('rowcontextmenu', function(grid, row, e) {
             e.stopEvent();
