@@ -147,15 +147,12 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
-                        if(strtolower($this->_device->devicetype) == 'iphone' && preg_match('/(.+)\/(\d+)\.(\d+)/', $this->_device->useragent, $matches)) {
-                            list(, $name, $majorVersion, $minorVersion) = $matches;
-                            if ($majorVersion > 800) {
-                                // IOS 4
-                                
-                            } else {
-                                // IOS 3 and less
-                                $data->bday->addHour(12);
-                            }
+                        if ($this->_needsBdayTZFix()) {
+                            // iOS < 4 & palm send birthdays at the entered date, but the time the birthday got entered on the device
+                            $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+                            $contact->bday->setTimezone($userTimezone);
+                            $contact->bday->$data->bday->addHour(12);
+                            $contact->bday = new Tinebase_DateTime($contact->bday->format(Tinebase_Record_Abstract::ISO8601LONG, 'UTC'));
                         }
                         
                         $nodeContent = $data->bday->format("Y-m-d\TH:i:s") . '.000Z';
@@ -330,27 +327,11 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
                         $contact->bday = new Tinebase_DateTime($timeStamp);
                         
-                        switch(strtolower($this->_device->devicetype)) {
-                            // the iphone sends the birthday based noon
-                            // Tine 2.0 stores the birthday at midnight
-                            case 'iphone':
-                                if (preg_match('/(.+)\/(\d+)\.(\d+)/', $this->_device->useragent, $matches)) {
-                                    list(, $name, $majorVersion, $minorVersion) = $matches;
-                                    if ($majorVersion > 800) {
-                                        // IOS 4
-                                        
-                                    } else {
-                                        // IOS 3 and less
-                                        $contact->bday->subHour(12);
-                                    }
-                                }
-                                break;
-                                
-                            // the palm sets the birthday to the time the birthday got entered on the device
-                            // thats something we can't work with 
-                            case 'palm':
-                                unset($contact->bday);
-                                break;
+                        if ($this->_needsBdayTZFix()) {
+                            // iOS < 4 & palm send birthdays to the entered date, but the time the birthday got entered on the device
+                            $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+                            $contact->bday = new Tinebase_DateTime($contact->bday->setTime(0,0,0)->format(Tinebase_Record_Abstract::ISO8601LONG, $userTimezone));
+                            $contact->bday->setTimezone('UTC');
                         }
                         
                     } else {
@@ -457,5 +438,31 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         
         list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
         return  mktime($hour, $minute, $second, $month, $day, $year);
+    }
+    
+    /**
+     * checks if current device need a timezone fix for the bday field
+     */
+    protected function _needsBdayTZFix()
+    {
+        switch(strtolower($this->_device->devicetype)) {
+                case 'iphone':
+                    if (preg_match('/(.+)\/(\d+)\.(\d+)/', $this->_device->useragent, $matches)) {
+                        list(, $name, $majorVersion, $minorVersion) = $matches;
+                        if ($majorVersion > 800) {
+                            // IOS 4
+                            
+                        } else {
+                            // IOS 3 and less
+                            return TRUE;
+                        }
+                    }
+                    break;
+                    
+                case 'palm':
+                    return TRUE;
+            }
+            
+            return FALSE;
     }
 }
