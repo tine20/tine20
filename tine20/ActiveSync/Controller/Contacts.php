@@ -152,7 +152,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                             $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
                             $data->bday->setTimezone($userTimezone);
                             $data->bday->addHour(12);
-                            $data->bday = new Tinebase_DateTime($data->bday->format(Tinebase_Record_Abstract::ISO8601LONG, 'UTC'));
+                            $data->bday = new Tinebase_DateTime($data->bday->format(Tinebase_Record_Abstract::ISO8601LONG), 'UTC');
                         }
                         
                         $nodeContent = $data->bday->format("Y-m-d\TH:i:s") . '.000Z';
