@@ -738,10 +738,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Tine.Felamimail.Model.Folder} [folder]
      */
     onAfterDelete: function(ids, folder) {
-        if (folder) {
-            folder.set('cache_status', 'incomplete');
-        }
-        
         this.removeFromEditBuffer(ids);
         Ext.each(Ext.unique(ids), function(id) {
             this.deleteQueue.remove(id);
