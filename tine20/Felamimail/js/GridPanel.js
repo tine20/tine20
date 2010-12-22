@@ -174,7 +174,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
                 
                 if (refresh) {
-                    this.loadData(true, true, true, 'keepBuffered');
+                    this.loadGridData(true, true, true, 'keepBuffered');
                 }
             }
         }
@@ -744,7 +744,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, this);
 
         if (! this.deleteTransactionId || ! Tine.Felamimail.messageBackend.isLoading(this.deleteTransactionId)) {
-            this.loadData(true, true, true, 'keepBuffered');
+            this.loadGridData(true, true, true, 'keepBuffered');
         }
     },
     

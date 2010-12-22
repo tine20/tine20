@@ -470,7 +470,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 
                 this.addToEditBuffer(newRecord);
                 
-                this.loadData(true, true, true, 'keepBuffered');
+                this.loadGridData(true, true, true, 'keepBuffered');
             }
         });
             
@@ -497,7 +497,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         // update record in store to prevent concurrency problems
                         record.data = updatedRecord.data;
                         
-                        this.loadData(true, true, true, 'keepBuffered');
+                        this.loadGridData(true, true, true, 'keepBuffered');
                     }
                 });
                 break;
@@ -1127,7 +1127,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onUpdateRecord: function(record) {
         this.addToEditBuffer(record);
-        this.loadData(true, true, true, 'keepBuffered');
+        this.loadGridData(true, true, true, 'keepBuffered');
     },
     
     /**
@@ -1252,7 +1252,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onAfterDelete: function(ids) {
         this.removeFromEditBuffer(ids);
-        this.loadData(true, true, true);
+        this.loadGridData(true, true, true);
     },
     
     /**
