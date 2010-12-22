@@ -27,11 +27,19 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
         if ($this->_fileSystemPath == $this->_fileSystemBasePath) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_fileSystemPath);
             $children[] = $this->getChild(Tinebase_Model_Container::TYPE_SHARED);
-            #$children[] = $this->getChild(Tinebase_Model_Container::TYPE_PERSONAL);
-        } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/shared') {
+            $children[] = $this->getChild(Tinebase_Model_Container::TYPE_PERSONAL);
+        } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_SHARED) {
             $sharedContainers = Tinebase_Core::getUser()->getSharedContainer($this->_application->name, Tinebase_Model_Grants::GRANT_READ);
             
             foreach ($sharedContainers as $container) {
+                $children[] = $this->getChild($container);
+            }
+        } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_PERSONAL) {
+            $children[] = $this->getChild(Tinebase_Core::getUser());
+        } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountId) {
+            $personalContainers = Tinebase_Core::getUser()->getPersonalContainer($this->_application->name, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
+            
+            foreach ($personalContainers as $container) {
                 $children[] = $this->getChild($container);
             }
         }
@@ -47,7 +55,8 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
             }
             if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path . '/' . $name);
             return new Filemanager_Frontend_WebDav($this->_path . '/' . $name);
-        } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/shared') {
+            
+        } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_SHARED) {
             try {
                 $container = $name instanceof Tinebase_Model_Container ? $name : Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $name, Tinebase_Model_Container::TYPE_SHARED);
             } catch (Tinebase_Exception_NotFound $tenf) {
@@ -55,6 +64,25 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
             }
             
             return new Filemanager_Frontend_WebDav($this->_path . '/' . $container->name);
+            
+        } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_PERSONAL) {
+            try {
+                $user = $name instanceof Tinebase_Model_User ? $name : Tinebase_User::getInstance()->getUserByLoginName($name);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $name . ' could not be found');
+            }
+            
+            return new Filemanager_Frontend_WebDav($this->_path . '/' . $user->accountLoginName);
+            
+        } elseif ($this->_fileSystemPath == $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountId) {
+            try {
+                $container = $name instanceof Tinebase_Model_Container ? $name : Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $name, Tinebase_Model_Container::TYPE_PERSONAL);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $name . ' could not be found');
+            }
+            
+            return new Filemanager_Frontend_WebDav($this->_path . '/' . $container->name);
+            
         } else {
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $name . ' could not be found');
         }
@@ -101,16 +129,20 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
      */
     public function createDirectory($name) 
     {
-        if ($this->_fileSystemPath != $this->_fileSystemBasePath . '/shared') {
+        if ($this->_fileSystemPath != $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_SHARED && 
+            $this->_fileSystemPath != $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountId) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
         };
         
-        if (!Tinebase_Core::getUser()->hasRight($this->_application, Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS)) {
+        $containerType = $this->_fileSystemPath == $this->_fileSystemBasePath . '/' . Tinebase_Model_Container::TYPE_SHARED ?  Tinebase_Model_Container::TYPE_SHARED : Tinebase_Model_Container::TYPE_PERSONAL;
+        
+        if ($containerType == Tinebase_Model_Container::TYPE_SHARED &&
+            !Tinebase_Core::getUser()->hasRight($this->_application, Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS)) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
         }
         
         try {
-            Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $name, Tinebase_Model_Container::TYPE_SHARED);
+            Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $name, $containerType);
             
             // container exists already => that's bad!
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create directory');
@@ -120,7 +152,7 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
         
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => $name,
-            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+            'type'           => $containerType,
             'backend'        => 'sql',
             'application_id' => $this->_application->getId()
         )));
@@ -152,6 +184,6 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
      */
     public function setName($name) 
     {
-        rename($this->_fileSystemPath, dirname($this->_fileSystemPath) . '/' . $name);
+        throw new Sabre_DAV_Exception_Forbidden('Permission denied to rename node');
     }
 }

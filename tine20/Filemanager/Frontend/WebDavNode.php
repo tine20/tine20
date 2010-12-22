@@ -126,9 +126,29 @@ abstract class Filemanager_Frontend_WebDavNode implements Sabre_DAV_INode
                     break;
                     
                 case Tinebase_Model_Container::TYPE_PERSONAL:
-                    $this->_username      = $pathParts[2];
-                    // needs more splitting
-                    $this->_containerName = $pathParts[3];
+                    if (!empty($pathParts[2])) {
+                        if ($pathParts[2] != Tinebase_Core::getUser()->accountLoginName) {
+                            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $pathParts[2] . ' could not be found');
+                        }
+                        $this->_fileSystemPath .= '/' . Tinebase_Core::getUser()->accountId;
+                        
+                        if (!empty($pathParts[3])) {
+                            // explode again
+                            $subPathParts = explode('/', $pathParts[3], 2);
+                            
+                            try {
+                                $this->_container = Tinebase_Container::getInstance()->getContainerByName($this->_application->name, $subPathParts[0], $containerType);
+                            } catch (Tinebase_Exception_NotFound $tenf) {
+                                throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $subPathParts[0] . ' could not be foundd');
+                            }
+                            $this->_containerPath   = $this->_fileSystemPath . '/' . $this->_container->getId();
+                            $this->_fileSystemPath .= '/' . $this->_container->getId();
+                            
+                            if (!empty($subPathParts[1])) {
+                                $this->_fileSystemPath .= '/' . $subPathParts[1];
+                            }
+                        }
+                    }
                     break;
                     
                 default:
