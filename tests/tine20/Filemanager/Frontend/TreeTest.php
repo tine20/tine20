@@ -60,6 +60,15 @@ class Filemanager_Frontend_TreeTest extends PHPUnit_Framework_TestCase
         $this->_webdavTree = new Tinebase_WebDav_Tree('/');
         
         $this->objects['nodes'] = array();
+        
+        try {
+            $container = Tinebase_Container::getInstance()->getContainerByName('Filemanager', 'unittestdirectory', Tinebase_Model_Container::TYPE_SHARED);
+            
+            // container exists already => remove him
+            Tinebase_Container::getInstance()->delete($container);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // continue
+        }
     }
 
     /**
@@ -104,6 +113,7 @@ class Filemanager_Frontend_TreeTest extends PHPUnit_Framework_TestCase
     
     public function testgetNodeForPath_dav()
     {
+        
         $node = $this->_webdavTree->getNodeForPath('dav');
         
         $this->assertType('Tinebase_WebDav_Root', $node);
@@ -129,12 +139,89 @@ class Filemanager_Frontend_TreeTest extends PHPUnit_Framework_TestCase
         
         $children = $node->getChildren();
         
-        $this->assertEquals(1, count($children));
+        $this->assertEquals(2, count($children));
         $this->assertType('Sabre_DAV_ICollection', $children[0]);
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
         $node->delete();
+    }
+    
+    public function testgetNodeForPath_dav_filemanager_personal()
+    {
+        $node = $this->_webdavTree->getNodeForPath('dav/filemanager/personal');
+        
+        $this->assertType('Filemanager_Frontend_WebDav', $node);
+        $this->assertEquals('personal', $node->getName());
+        
+        $children = $node->getChildren();
+        
+        $this->assertEquals(1, count($children));
+        $this->assertType('Filemanager_Frontend_WebDav', $children[0]);
+        
+        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        
+        $node->delete();
+    }
+    
+    public function testgetNodeForPath_dav_filemanager_personal_currentuser()
+    {
+        $node = $this->_webdavTree->getNodeForPath('dav/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName);
+        
+        $this->assertType('Filemanager_Frontend_WebDav', $node);
+        $this->assertEquals(Tinebase_Core::getUser()->accountLoginName, $node->getName());
+        
+        $children = $node->getChildren();
+        #var_dump($children);
+        $this->assertGreaterThanOrEqual(1, count($children));
+        $this->assertType('Filemanager_Frontend_WebDav', $children[0]);
+        
+        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        
+        $node->delete();
+    }
+    
+    /**
+     * @return Filemanager_Frontend_WebDavDirectory
+     */
+    public function testgetNodeForPath_dav_filemanager_personal_currentuser_unittestdirectory()
+    {
+        $this->testCreatePersonalDirectory();
+        
+        $node = $this->_webdavTree->getNodeForPath('dav/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName .'/unittestdirectory');
+        
+        $this->assertType('Filemanager_Frontend_WebDavDirectory', $node);
+        $this->assertEquals('unittestdirectory', $node->getName());
+        
+        $children = $node->getChildren();
+        
+        return $node;
+    }
+    
+    /**
+     * 
+     * @return Filemanager_Frontend_WebDavDirectory
+     */
+    public function testCreatePersonalDirectory()
+    {
+        try {
+            // remove file left over from broken test
+            $node = $this->_webdavTree->getNodeForPath('dav/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName . '/unittestdirectory');
+            $node->delete();
+        } catch (Sabre_DAV_Exception_FileNotFound $sdavefnf) {
+            // do nothing
+        }
+        
+        $node = $this->_webdavTree->getNodeForPath('dav/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName);
+        
+        $node->createDirectory('unittestdirectory');
+        
+        $node = $this->_webdavTree->getNodeForPath('dav/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName . '/unittestdirectory');
+        $this->objects['nodes'][] = $node;
+        
+        $this->assertType('Filemanager_Frontend_WebDavDirectory', $node);
+        
+        return $node;
     }
     
     public function testgetNodeForPath_dav_filemanager_shared()
@@ -152,12 +239,11 @@ class Filemanager_Frontend_TreeTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * 
      * @return Filemanager_Frontend_WebDavDirectory
      */
     public function testgetNodeForPath_dav_filemanager_shared_unittestdirectory()
     {
-        $this->testCreateDirectory();
+        $this->testCreateSharedDirectory();
         
         $node = $this->_webdavTree->getNodeForPath('dav/filemanager/shared/unittestdirectory');
         
@@ -183,7 +269,7 @@ class Filemanager_Frontend_TreeTest extends PHPUnit_Framework_TestCase
      * 
      * @return Filemanager_Frontend_WebDavDirectory
      */
-    public function testCreateDirectory()
+    public function testCreateSharedDirectory()
     {
         try {
             // remove file left over from broken test
@@ -219,7 +305,7 @@ class Filemanager_Frontend_TreeTest extends PHPUnit_Framework_TestCase
             // do nothing
         }
         
-        $parent = $this->testCreateDirectory();
+        $parent = $this->testCreateSharedDirectory();
         
         $file = $parent->createFile('tine_logo.png', fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
         
