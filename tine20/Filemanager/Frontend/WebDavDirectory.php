@@ -173,6 +173,11 @@ class Filemanager_Frontend_WebDavDirectory extends Filemanager_Frontend_WebDavNo
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to rename file: ' . $this->_path);
         }
         
-        rename($this->_fileSystemPath, dirname($this->_fileSystemPath) . '/' . $name);
+        if ($this->_fileSystemPath == $this->_containerPath) {
+            $this->_container->name = $name;
+            Tinebase_Container::getInstance()->update($this->_container);
+        } else {
+            rename($this->_fileSystemPath, dirname($this->_fileSystemPath) . '/' . $name);
+        }
     }
 }
