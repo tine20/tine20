@@ -334,7 +334,16 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                             // the iphone sends the birthday based noon
                             // Tine 2.0 stores the birthday at midnight
                             case 'iphone':
-                                $contact->bday->subHour(12);
+                                if (preg_match('/(.+)\/(\d+)\.(\d+)/', $this->_device->useragent, $matches)) {
+                                    list(, $name, $majorVersion, $minorVersion) = $matches;
+                                    if ($majorVersion > 800) {
+                                        // IOS 4
+                                        
+                                    } else {
+                                        // IOS 3 and less
+                                        $contact->bday->subHour(12);
+                                    }
+                                }
                                 break;
                                 
                             // the palm sets the birthday to the time the birthday got entered on the device
