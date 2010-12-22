@@ -89,12 +89,18 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
         if (!Tinebase_Core::getUser()->hasRight($appName, Tinebase_Acl_Rights::RUN)) {
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
         }
+
+        // apps which have an WebDav Frontend but are not yet working
+        if (in_array($appName, array('Calendar'))) {
+            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
+        }
+        
         
         $className = $appName . '_Frontend_WebDav';
         if (!@class_exists($className)) {
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $_appPath . ' could not be found');
         }
-        
+        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' classname: ' . $className);
         $applicationNode = new $className($_appPath);
         
         return $applicationNode;
