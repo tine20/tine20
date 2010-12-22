@@ -479,7 +479,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // this is important for paging and sort header!
         options.params.filter = [];
         
-        if (! options.removeStrategy || options.removeStrategy != 'keepBuffered') {
+        if (! options.removeStrategy || options.removeStrategy !== 'keepBuffered') {
             this.editBuffer = [];
         }
         
@@ -506,13 +506,44 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * onStoreBeforeLoadRecords
      * 
-     * @param {} o
-     * @param {} options
-     * @param {} success
-     * @param {} store
+     * @param {Object} o
+     * @param {Object} options
+     * @param {Boolean} success
+     * @param {Ext.data.Store} store
      */
     onStoreBeforeLoadRecords: function(o, options, success, store) {
-        return this.lastStoreTransactionId === options.transactionId;
+        if (this.lastStoreTransactionId !== options.transactionId) {
+            Tine.log.debug('cancelling old transaction request.');
+            return false;
+        }
+        
+        if (! options.removeStrategy || options.removeStrategy === 'default') {
+            return true;
+        }
+        
+        var records = o.records,
+            newIds = [],
+            idsToAdd = [];
+        Ext.each(records, function(record) {
+            newIds.push(record.id);
+        });
+        
+        switch (options.removeStrategy) {
+            case 'keepBuffered':
+                idsToAdd = this.editBuffer.diff(newIds);
+                break;
+            case 'keepAll':
+                var oldIds = [];
+                this.store.each(function(record) {
+                    oldIds.push(record.id);
+                });
+                idsToAdd = oldIds.diff(newIds);
+                break;
+        }
+
+        Ext.each(idsToAdd, function(idToAdd) {
+            records.push(this.store.getById(idToAdd));
+        }, this);
     },
     
     /**
