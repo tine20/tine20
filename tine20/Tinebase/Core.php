@@ -178,8 +178,8 @@ class Tinebase_Core
 
 
             /**************************** DAV API **********************************
-             * RewriteCond %{REQUEST_METHOD} ^(PROPFIND|PUT|DELETE|OPTIONS|MKCOL)$
-             * RewriteRule ^/(.*) /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             * RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
+             * RewriteRule ^/$   /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              *
              * RewriteRule ^/dav /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              */
