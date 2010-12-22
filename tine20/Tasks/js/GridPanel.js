@@ -44,7 +44,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     defaultSortInfo: {field: 'due', dir: 'ASC'},
     gridConfig: {
         clicksToEdit: 'auto',
-        loadMask: true,
         quickaddMandatory: 'summary',
         autoExpandColumn: 'summary',
         // drag n drop
@@ -75,9 +74,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // this leads to a 'flicker' effect we dont want!
         // mhh! but disabling this, breaks keynav 
         //this.grid.view.focusCell = Ext.emptyFn;
-        
-        // legacy
-        this.initGridEvents();
     },
     
     /**
@@ -105,24 +101,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
         });
-    },
-    
-    // legacy
-    initGridEvents: function() {    
-        this.grid.on('newentry', function(taskData){
-            var task = new Tine.Tasks.Task(Ext.apply(this.recordClass.getDefaultData(), taskData));
-            
-            Tine.Tasks.JsonBackend.saveRecord(task, {
-                scope: this,
-                success: function() {
-                    this.loadData(true, true, true);
-                },
-                failure: function () { 
-                    Ext.MessageBox.alert(this.app.i18n._('Failed'), this.app.i18n._('Could not save task.')); 
-                }
-            });
-            return true;
-        }, this);
     },
     
     /**
