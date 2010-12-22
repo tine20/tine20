@@ -42,6 +42,7 @@ class AllTests
         $suite->addTest(Timetracker_AllTests::suite());
         $suite->addTest(Courses_AllTests::suite());
         $suite->addTest(ActiveSync_AllTests::suite());
+        $suite->addTest(Filemanager_AllTests::suite());
         
         return $suite;
     }
