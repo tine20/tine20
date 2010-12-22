@@ -147,8 +147,15 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
-                        if(strtolower($this->_device->devicetype) == 'iphone') {
-                            $data->bday->addHour(12);
+                        if(strtolower($this->_device->devicetype) == 'iphone' && preg_match('/(.+)\/(\d+)\.(\d+)/', $this->_device->useragent, $matches)) {
+                            list(, $name, $majorVersion, $minorVersion) = $matches;
+                            if ($majorVersion > 800) {
+                                // IOS 4
+                                
+                            } else {
+                                // IOS 3 and less
+                                $data->bday->addHour(12);
+                            }
                         }
                         
                         $nodeContent = $data->bday->format("Y-m-d\TH:i:s") . '.000Z';
