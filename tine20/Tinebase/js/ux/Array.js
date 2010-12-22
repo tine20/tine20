@@ -1,5 +1,19 @@
 Ext.applyIf(Array.prototype, {
     /**
+     * Returns an object with ids of records to delete, to create or to update
+     *
+     * @param {Array} toCompare Array to compare with
+     * @return object An object with sub array properties 'toDelete', 'toCreate' and 'toUpdate'
+     */
+    getMigration: function(toCompare) {
+        return {
+            toDelete: this.diff(toCompare),
+            toCreate: toCompare.diff(this),
+            toUpdate: this.intersect(toCompare)
+        };
+    },
+    
+    /**
      * Returns an array containing all the entries from this array that are not present in any of the other arrays.
      * 
      * @param {Array} array1
@@ -24,6 +38,33 @@ Ext.applyIf(Array.prototype, {
         
         
         return diffs;
+    },
+    
+    /**
+     * returns an array containing all the values of this array that are present in all the arguments.
+     * 
+     * @param {Array} array1
+     * @param {Array} [array2]
+     * @param {Array} [...]
+     */
+    intersect: function() {
+        var allItems = [],
+            intersect = [];
+        
+        // create an array containing all items of all args
+        for (var i=0; i<arguments.length; i++) {
+            allItems = allItems.concat(arguments[i]);
+        }
+        
+        // check which item is not present in all args
+        Ext.each(this, function(item) {
+            if (allItems.indexOf(item) >= 0) {
+                intersect.push(item);
+            }
+        }, this);
+        
+        
+        return intersect;
     },
     
     /**
