@@ -218,3 +218,10 @@ Ext.ButtonToggleMgr = function(){
        }
    };
 }();
+
+/**
+ * add beforeloadrecords event
+ */
+Ext.data.Store.prototype.loadRecords = Ext.data.Store.prototype.loadRecords.createInterceptor(function(o, options, success) {
+    return this.fireEvent('beforeloadrecords', o, options, success, this);
+});
