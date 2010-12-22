@@ -463,8 +463,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.recordProxy.saveRecord(record, {
             scope: this,
             success: function(newRecord) {
+                this.store.suspendEvents();
                 this.store.remove(record);
                 this.store.insert(0 , [newRecord]);
+                this.store.resumeEvents();
+                
                 this.addToEditBuffer(newRecord);
                 
                 this.loadData(true, true, true, 'keepBuffered');
@@ -558,33 +561,39 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             return true;
         }
         
-        var records = o.records,
-            newIds = [],
-            idsToAdd = [];
-        Ext.each(records, function(record) {
-            newIds.push(record.id);
+        var records = [],
+            recordsIds = [],
+            newRecordCollection = new Ext.util.MixedCollection();
+            
+        // fill new collection
+        Ext.each(o.records, function(record) {
+            newRecordCollection.add(record.id, record);
         });
         
-        switch (options.removeStrategy) {
-            case 'keepBuffered':
-                idsToAdd = this.editBuffer.diff(newIds);
-                break;
-            case 'keepAll':
-                var oldIds = [];
-                this.store.each(function(record) {
-                    oldIds.push(record.id);
-                });
-                idsToAdd = oldIds.diff(newIds);
-                break;
-        }
-        
-        var recordToAdd = null;
-        Ext.each(idsToAdd, function(idToAdd) {
-            recordToAdd = this.store.getById(idToAdd);
-            if (recordToAdd) {
-                records.push(recordToAdd.copy());
+        // assemble update & keep
+        this.store.each(function(record) {
+            var newRecord = newRecordCollection.get(record.id);
+            if (newRecord) {
+                records.push(newRecord);
+                recordsIds.push(newRecord.id);
+            } else if (options.removeStrategy === 'keepAll' || (options.removeStrategy === 'keepBuffered' && this.editBuffer.indexOf(record.id) >= 0)) {
+                records.push(record.copy());
+                recordsIds.push(record.id);
             }
         }, this);
+        
+        // assemble adds
+        newRecordCollection.each(function(record, idx) {
+            if (recordsIds.indexOf(record.id) == -1) {
+                var lastRecord = newRecordCollection.itemAt(idx-1);
+                var lastRecordIdx = lastRecord ? recordsIds.indexOf(lastRecord.id) : -1;
+                records.splice(lastRecordIdx+1, 0, record);
+                recordsIds.splice(lastRecordIdx+1, 0, record.id);
+            }
+        }, this);
+        
+        o.records = records;
+
     },
     
     /**
