@@ -284,6 +284,7 @@
     background-color: #808080;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
+    overflow: hidden;
 }
 
 .cal-daysviewpanel-event-editgrant .cal-daysviewpanel-event-header {
