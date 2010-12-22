@@ -15,7 +15,7 @@
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Filemanager_Frontend_TreeTest::main');
+    define('PHPUnit_MAIN_METHOD', 'Filemanager_Frontend_WebDavTest::main');
 }
 
 /**
@@ -23,7 +23,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * 
  * @package     Tinebase
  */
-class Filemanager_Frontend_TreeTest extends PHPUnit_Framework_TestCase
+class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
@@ -360,6 +360,6 @@ class Filemanager_Frontend_TreeTest extends PHPUnit_Framework_TestCase
 }		
 	
 
-if (PHPUnit_MAIN_METHOD == 'Filemanager_Frontend_TreeTest::main') {
-    Filemanager_Frontend_TreeTest::main();
+if (PHPUnit_MAIN_METHOD == 'Filemanager_Frontend_WebDavTest::main') {
+    Filemanager_Frontend_WebDavTest::main();
 }
