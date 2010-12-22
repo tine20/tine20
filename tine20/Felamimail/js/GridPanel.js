@@ -748,7 +748,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }, this);
 
         if (! this.deleteTransactionId || ! Tine.Felamimail.messageBackend.isLoading(this.deleteTransactionId)) {
-            this.loadData(true, true, true);
+            this.loadData(true, true, true, 'keepBuffered');
         }
     },
     
