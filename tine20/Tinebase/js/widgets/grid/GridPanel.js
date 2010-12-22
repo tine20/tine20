@@ -17,7 +17,7 @@ Ext.ns('Tine.widgets.grid');
  * 
  * <p>Application Grid Panel</p>
  * <p>
- * TODO         remove the loadmask on error
+ * TODO         remove the (delete) loadmask on error
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -379,7 +379,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             hidden:         ! this.recordClass.getField('tags'),
             selectionModel: this.grid.getSelectionModel(),
             recordClass:    this.recordClass,
-            updateHandler:  this.loadData.createDelegate(this, [true, true, true]),
+            updateHandler:  this.loadGridData.createDelegate(this),
             app:            this.app
         });
             
@@ -470,7 +470,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 
                 this.addToEditBuffer(newRecord);
                 
-                this.loadGridData(true, true, true, 'keepBuffered');
+                this.loadGridData({
+                    removeStrategy: 'keepBuffered'
+                });
             }
         });
             
@@ -497,7 +499,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         // update record in store to prevent concurrency problems
                         record.data = updatedRecord.data;
                         
-                        this.loadGridData(true, true, true, 'keepBuffered');
+                        this.loadGridData({
+                            removeStrategy: 'keepBuffered'
+                        });
                     }
                 });
                 break;
@@ -718,32 +722,35 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * load data
      * 
-     * @todo rethink -> preserveCursor and preserveSelection might conflict on page breaks!
-     * @todo scroller preserving might me not enough, as selected position might change
-     *       we better make sure, that first seeable record stays or something like this -> liveGrid
-     * @todo don't reload details panel when selection is preserved
+     * TODO rethink -> preserveCursor and preserveSelection might conflict on page breaks!
+     * TODO scroller preserving might me not enough, as selected position might change
+     *      we better make sure, that first seeable record stays or something like this -> liveGrid
+     * TODO don't reload details panel when selection is preserved
      * 
-     * @todo use config object
-     * 
-     * @param {Boolean} preserveCursor
-     * @param {Boolean} preserveSelection
-     * @param {Boolean} preserveScroller
-     * @param {String}  removeStrategy
+     * @param {Object} options
      */
-    loadData: function(preserveCursor, preserveSelection, preserveScroller, removeStrategy) {
+    loadGridData: function(options) {
+        
+        options = Ext.apply({
+            preserveCursor:     true, 
+            preserveSelection:  true, 
+            preserveScroller:   true, 
+            removeStrategy:     'default'
+        }, options);
+        
         var opts = {
             callback: Ext.emptyFn,
             scope: this,
-            removeStrategy: removeStrategy
+            removeStrategy: options.removeStrategy
         };
         
-        if (preserveCursor && this.usePagingToolbar) {
+        if (options.preserveCursor && this.usePagingToolbar) {
             opts.params = {
                 start: this.pagingToolbar.cursor
             };
         }
         
-        if (preserveSelection) {
+        if (options.preserveSelection) {
             var oldSelection = this.grid.getSelectionModel().getSelections(),
                 oldRow = oldSelection.length === 1 ? this.getStore().indexOfId(oldSelection[0].id) : null;
         
@@ -763,7 +770,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this);
         }
         
-        if (preserveScroller) {
+        if (options.preserveScroller) {
             this.grid.getView().scrollTop = this.grid.getView().scroller.dom.scrollTop;
             
             opts.callback = opts.callback.createSequence(function(records, options, success) {
@@ -1127,7 +1134,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onUpdateRecord: function(record) {
         this.addToEditBuffer(record);
-        this.loadGridData(true, true, true, 'keepBuffered');
+        this.loadGridData({
+            removeStrategy: 'keepBuffered'
+        });
     },
     
     /**
@@ -1252,7 +1261,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onAfterDelete: function(ids) {
         this.removeFromEditBuffer(ids);
-        this.loadGridData(true, true, true);
+        this.loadGridData();
     },
     
     /**

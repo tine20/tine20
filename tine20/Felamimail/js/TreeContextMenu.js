@@ -215,7 +215,7 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         var folder = this.app.getFolderStore().getById(folderId);
                         folder.set('cache_unreadcount', 0);
                         if (isSelectedNode) {
-                            this.app.getMainScreen().getCenterPanel().loadGridData(true, true, true);
+                            this.app.getMainScreen().getCenterPanel().loadGridData();
                         }
                     }
                 });
