@@ -133,7 +133,8 @@ class Filemanager_Frontend_WebDavDirectory extends Filemanager_Frontend_WebDavNo
     
     /**
      * Deleted the current node
-     *
+     * 
+     * @todo   use filesystem controller to delete directories recursive
      * @throws Sabre_DAV_Exception_Forbidden
      * @return void 
      */
@@ -144,6 +145,10 @@ class Filemanager_Frontend_WebDavDirectory extends Filemanager_Frontend_WebDavNo
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' delete directory: ' . $this->_fileSystemPath);
+        
+        foreach ($this->getChildren() as $child) {
+            $child->delete();
+        }
         
         if (!rmdir($this->_fileSystemPath)) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to delete node');
