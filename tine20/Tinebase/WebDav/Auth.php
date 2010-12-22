@@ -28,10 +28,20 @@ class Tinebase_WebDav_Auth extends Sabre_DAV_Auth_Backend_Abstract {
      */
     public function getUserInfo($_realm, $_username) 
     {
-        return array(
-            'uri'                                   => 'principals/' . $_username,
-            '{http://sabredav.org/ns}email-address' => $_username . '@example.org'
-        );
+        if ($_username == Tinebase_Core::getUser()->accountLoginName) {
+            $userInfo = array(
+                'uri'                                   => 'principals/' . Tinebase_Core::getUser()->accountLoginName,
+                '{http://sabredav.org/ns}email-address' => Tinebase_Core::getUser()->accountEmailAddress,
+                '{DAV:}displayname'                     => Tinebase_Core::getUser()->accountDisplayName
+            ); 
+        } else {
+            array(
+                'uri'               => 'principals/' . $_username,
+            	'{DAV:}displayname' => 'unknown user'
+            );
+        }
+        
+        return $userInfo;
     }
 
     /**
@@ -43,22 +53,23 @@ class Tinebase_WebDav_Auth extends Sabre_DAV_Auth_Backend_Abstract {
      */
     public function getCurrentUser()
     {
-        return array('uri' => 'principals/' . Tinebase_Core::getUser()->accountLoginName);
+        return $this->getUserInfo(null, Tinebase_Core::getUser()->accountLoginName);
     }
     
     public function getUsers() 
     {
         // lis of all users
         $result = array(
-            array('username' => Tinebase_Core::getUser()->accountLoginName)
+            Tinebase_Core::getUser()
         );
         
         $rv = array();
         
         foreach($result as $user) {
             $rv[] = array(
-                'uri'                                   => 'principals/' . $user['username'],
-                '{http://sabredav.org/ns}email-address' => $user['username'] . '@example.org'
+                'uri'                                   => 'principals/' . $user->accountLoginName,
+                '{http://sabredav.org/ns}email-address' => $user->accountEmailAddress,
+                '{DAV:}displayname'                     => $user->accountDisplayName
             );
         }
 
