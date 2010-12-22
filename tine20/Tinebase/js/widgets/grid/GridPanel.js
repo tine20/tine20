@@ -421,7 +421,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     scope: this,
                     'update': this.onStoreUpdate,
                     'beforeload': this.onStoreBeforeload,
-                    'load': this.onStoreLoad
+                    'load': this.onStoreLoad,
+                    'beforeloadrecords': this.onStoreBeforeLoadRecords
                 }
             });
         } else {
@@ -430,6 +431,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 recordClass: this.recordClass
             });
         }
+    },
+    
+    /**
+     * onStoreBeforeLoadRecords
+     * 
+     * @param {} o
+     * @param {} options
+     * @param {} success
+     * @param {} store
+     */
+    onStoreBeforeLoadRecords: function(o, options, success, store) {
+        return this.lastStoreTransactionId === options.transactionId;
     },
     
     /**
@@ -855,6 +868,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * called before store queries for data
      */
     onStoreBeforeload: function(store, options) {
+        // define a transaction
+        this.lastStoreTransactionId = options.transactionId = Ext.id();
+
         options.params = options.params || {};
         // allways start with an empty filter set!
         // this is important for paging and sort header!
