@@ -212,10 +212,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     hasQuickSearchFilterToolbarPlugin: true,
     
     /**
-     * @property storeLoadTransactionId 
+     * @property lastStoreTransactionId 
      * @type String
      */
-    storeLoadTransactionId: null,
+    lastStoreTransactionId: null,
+    
+    /**
+     * @property editBuffer 
+     * @type Array of ids
+     */
+    editBuffer: null,
     
     layout: 'border',
     border: false,
@@ -233,7 +239,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nContainerName = this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1);
         this.i18nContainersName = this.app.i18n._hidden(this.recordClass.getMeta('containersName'));
         this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName)
+        
         this.editDialogConfig = this.editDialogConfig || {};
+        this.editBuffer = [];
         
         // init store
         this.initStore();
@@ -434,6 +442,68 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     /**
+     * called when the store gets updated, e.g. from editgrid
+     */
+    onStoreUpdate: function(store, record, operation) {
+        switch (operation) {
+            case Ext.data.Record.EDIT:
+                this.recordProxy.saveRecord(record, {
+                    scope: this,
+                    success: function(updatedRecord) {
+                        store.commitChanges();
+                        // update record in store to prevent concurrency problems
+                        record.data = updatedRecord.data;
+                        
+                        // reloading the store feels like oldschool 1.x
+                        // maybe we should reload if the sort critera changed, 
+                        // but even this might be confusing
+                        //store.load({});
+                    }
+                });
+                break;
+            case Ext.data.Record.COMMIT:
+                //nothing to do, as we need to reload the store anyway.
+                break;
+        }
+    },
+    
+    /**
+     * called before store queries for data
+     */
+    onStoreBeforeload: function(store, options) {
+        // define a transaction
+        this.lastStoreTransactionId = options.transactionId = Ext.id();
+
+        options.params = options.params || {};
+        // allways start with an empty filter set!
+        // this is important for paging and sort header!
+        options.params.filter = [];
+        
+        if (! options.removeStrategy || options.removeStrategy != 'keepBuffered') {
+            this.editBuffer = [];
+        }
+        
+        // fix nasty paging tb
+        Ext.applyIf(options.params, this.defaultPaging);
+    },
+    
+    /**
+     * called after a new set of Records has been loaded
+     * 
+     * @param  {Ext.data.Store} this.store
+     * @param  {Array}          loaded records
+     * @param  {Array}          load options
+     * @return {Void}
+     */
+    onStoreLoad: function(store, records, options) {
+        // we always focus the first row so that keynav starts in the grid
+        if (this.store.getCount() > 0) {
+            // this resets scroller ;-(
+            //this.grid.getView().focusRow(0);
+        }
+    },
+    
+    /**
      * onStoreBeforeLoadRecords
      * 
      * @param {} o
@@ -571,14 +641,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      *       we better make sure, that first seeable record stays or something like this -> liveGrid
      * @todo don't reload details panel when selection is preserved
      * 
+     * @todo use config object
+     * 
      * @param {Boolean} preserveCursor
      * @param {Boolean} preserveSelection
      * @param {Boolean} preserveScroller
+     * @param {String}  removeStrategy
      */
-    loadData: function(preserveCursor, preserveSelection, preserveScroller) {
+    loadData: function(preserveCursor, preserveSelection, preserveScroller, removeStrategy) {
         var opts = {
             callback: Ext.emptyFn,
-            scope: this
+            scope: this,
+            removeStrategy: removeStrategy
         };
         
         if (preserveCursor && this.usePagingToolbar) {
@@ -615,13 +689,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             }, this);
         }
         
-//        if (this.storeLoadTransactionId && ! this.recordProxy.isLoading(this.storeLoadTransactionId)) {
-//            this.recordProxy.abort(this.storeLoadTransactionId);
-//        }
-        
         this.store.load(opts);
-        
-//        this.storeLoadTransactionId = this.recordProxy.transId;
     },
     
     getActionToolbar: function() {
@@ -839,64 +907,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     /**
-     * called when the store gets updated, e.g. from editgrid
-     */
-    onStoreUpdate: function(store, record, operation) {
-        switch (operation) {
-            case Ext.data.Record.EDIT:
-                this.recordProxy.saveRecord(record, {
-                    scope: this,
-                    success: function(updatedRecord) {
-                        store.commitChanges();
-                        // update record in store to prevent concurrency problems
-                        record.data = updatedRecord.data;
-                        
-                        // reloading the store feels like oldschool 1.x
-                        // maybe we should reload if the sort critera changed, 
-                        // but even this might be confusing
-                        //store.load({});
-                    }
-                });
-                break;
-            case Ext.data.Record.COMMIT:
-                //nothing to do, as we need to reload the store anyway.
-                break;
-        }
-    },
-    
-    /**
-     * called before store queries for data
-     */
-    onStoreBeforeload: function(store, options) {
-        // define a transaction
-        this.lastStoreTransactionId = options.transactionId = Ext.id();
-
-        options.params = options.params || {};
-        // allways start with an empty filter set!
-        // this is important for paging and sort header!
-        options.params.filter = [];
-        
-        // fix nasty paging tb
-        Ext.applyIf(options.params, this.defaultPaging);
-    },
-    
-    /**
-     * called after a new set of Records has been loaded
-     * 
-     * @param  {Ext.data.Store} this.store
-     * @param  {Array}          loaded records
-     * @param  {Array}          load options
-     * @return {Void}
-     */
-    onStoreLoad: function(store, records, options) {
-        // we always focus the first row so that keynav starts in the grid
-        if (this.store.getCount() > 0) {
-            // this resets scroller ;-(
-            //this.grid.getView().focusRow(0);
-        }
-    },
-    
-    /**
      * key down handler
      * @private
      */
@@ -1031,10 +1041,25 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * on update after edit
      * 
-     * @param {Tine.Tinebase.data.Record} record
+     * @param {String|Tine.Tinebase.data.Record} record
      */
     onUpdateRecord: function(record) {
-        this.loadData(true, true, true);
+        this.addToEditBuffer(record);
+        this.loadData(true, true, true, 'keepBuffered');
+    },
+    
+    /**
+     * add record to edit buffer
+     * 
+     * @param {String|Tine.Tinebase.data.Record} record
+     */
+    addToEditBuffer: function(record) {
+        var recordData = (Ext.isString(record)) ? Ext.decode(record) : record.data,
+            id = recordData[this.recordClass.getMeta('idProperty')];
+        
+        if (this.editBuffer.indexOf(id) === -1) {
+            this.editBuffer.push(id);
+        }
     },
     
     /**
@@ -1100,7 +1125,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 scope: this,
                 success: function() {
                     this.refreshAfterDelete();
-                    this.onAfterDelete();
+                    var ids = [];
+                    if (Ext.isArray(records)) {
+                        Ext.each(records, function(record) {
+                            ids.push(record.id);
+                        }, this);
+                    }
+                    this.onAfterDelete(ids);
                 },
                 failure: function () {
                     this.refreshAfterDelete();
@@ -1134,8 +1165,26 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * do something after deletion of records
      * - reload the store
+     * 
+     * @param {Array} [ids]
      */
-    onAfterDelete: function() {
+    onAfterDelete: function(ids) {
+        this.removeFromEditBuffer(ids);
         this.loadData(true, true, true);
+    },
+    
+    /**
+     * remove ids from edit buffer
+     * 
+     * @param {Array} [ids]
+     */
+    removeFromEditBuffer: function(ids) {
+        if (Ext.isArray(ids)) {
+            Ext.each(this.editBuffer, function(id) {
+                if (ids.indexOf(id) >= 0) {
+                    this.editBuffer.remove(id);
+                }
+            },this);
+        }
     }
 });
