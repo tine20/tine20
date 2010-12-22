@@ -133,7 +133,7 @@ Tine.widgets.grid.QuickaddGridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, 
             initialData = recordData;
         }
         var newRecord = new this.recordClass(initialData);
-        this.store.insert(0 , newRecord);
+        this.store.insert(0 , [newRecord]);
         return true;
     },
     
