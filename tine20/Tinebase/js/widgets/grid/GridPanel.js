@@ -544,9 +544,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 idsToAdd = oldIds.diff(newIds);
                 break;
         }
-
+        
+        var recordToAdd = null;
         Ext.each(idsToAdd, function(idToAdd) {
-            records.push(this.store.getById(idToAdd).copy());
+            recordToAdd = this.store.getById(idToAdd);
+            if (recordToAdd) {
+                records.push(recordToAdd.copy());
+            }
         }, this);
     },
     
