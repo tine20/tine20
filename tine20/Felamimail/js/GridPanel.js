@@ -174,8 +174,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
                 
                 if (refresh) {
-                    // TODO do not reload details panel
-                    this.loadData(true, true, true);
+                    this.loadData(true, true, true, 'keepBuffered');
                 }
             }
         }
@@ -594,15 +593,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folder = node ? this.app.getFolderStore().getById(node.id) : null,
             refresh = this.pagingToolbar.refresh;
             
-            if (folder) {
-                refresh.disable();
-                Tine.log.info('user forced mail check for folder "' + folder.get('localname') + '"');
-                this.app.checkMails(folder, function() {
-                    refresh.enable();
-                });
-            } else {
-                this.filterToolbar.onFilterChange();
-            }
+        // refresh is explicit
+        this.editBuffer = [];
+            
+        if (folder) {
+            refresh.disable();
+            Tine.log.info('user forced mail check for folder "' + folder.get('localname') + '"');
+            this.app.checkMails(folder, function() {
+                refresh.enable();
+            });
+        } else {
+            this.filterToolbar.onFilterChange();
+        }
     },
     
     /**
@@ -740,6 +742,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folder.set('cache_status', 'incomplete');
         }
         
+        this.removeFromEditBuffer(ids);
         Ext.each(Ext.unique(ids), function(id) {
             this.deleteQueue.remove(id);
         }, this);
@@ -947,8 +950,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         var action = flagCount >= Math.round(msgs.getCount()/2) ? 'clear' : 'add';
         
-        
-        // mark messages in UI
+        // mark messages in UI and add to edit buffer
         msgs.each(function(msg) {
             // update unreadcount
             if (flag === '\\Seen') {
@@ -963,6 +965,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
             
             msg[action + 'Flag'](flag);
+            
+            this.addToEditBuffer(msg);
         }, this);
         
         // do request
