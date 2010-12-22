@@ -170,7 +170,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                         Tine.log.debug('updating message cache for folder "' + folder.get('localname') + '" is in progress on the server (folder is locked)');
                         return this.checkMailsDelayedTask.delay(this.updateInterval);
                     }
-                    this.checkMailsDelayedTask.delay(500);
+                    this.checkMailsDelayedTask.delay(0);
                 }
             });
         } else {
@@ -244,7 +244,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         if (! folderStore.queriesPending || folderStore.queriesPending.length == 0) {
             folderStore.asyncQuery('parent_path', parentPath, this.checkMails.createDelegate(this, []), [], this, folderStore);
         } else {
-            this.checkMailsDelayedTask.delay(500);
+            this.checkMailsDelayedTask.delay(0);
         }
         
         return false;
