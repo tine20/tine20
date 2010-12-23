@@ -29,9 +29,10 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
     protected $objects = array();
 
     /**
-     * @var Filemanager_Controller_Filesystem
+     * @var Tinebase_FileSystem
      */
     protected $_controller;
+    
     /**
      * Backend
      *
@@ -93,7 +94,7 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
     {
         $this->testMkdir();
         
-        $children = $this->_controller->scanDir($this->_basePath);
+        $children = $this->_controller->scanDir($this->_basePath)->name;
         
         $this->assertTrue(in_array('PHPUNIT', $children));
     }
@@ -121,7 +122,7 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         
         $this->_controller->fclose($handle);
         
-        $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT');
+        $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT')->name;
         
         $this->assertTrue(in_array('phpunit.txt', $children));
     }
@@ -143,7 +144,7 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         
         $this->_controller->unlink($this->_basePath . '/PHPUNIT/phpunit.txt');
         
-        $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT');
+        $children = $this->_controller->scanDir($this->_basePath . '/PHPUNIT')->name;
         
         $this->assertTrue(!in_array('phpunit.txt', $children));
     }
@@ -175,6 +176,17 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $timestamp = $this->_controller->getMTime($this->_basePath . '/PHPUNIT/phpunit.txt');
         
         $this->assertGreaterThanOrEqual(sprintf('%u', $now), sprintf('%u', $timestamp));
+    }
+    
+    public function testGetEtag()
+    {
+        $this->testCreateFile();
+        
+        $node = $this->_controller->stat($this->_basePath . '/PHPUNIT/phpunit.txt');
+        
+        $etag = $this->_controller->getETag($this->_basePath . '/PHPUNIT/phpunit.txt');
+        
+        $this->assertEquals($node->hash, $etag);
     }
     
     /**
