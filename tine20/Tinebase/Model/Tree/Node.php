@@ -12,9 +12,14 @@
 /**
  * class to hold data representing one node in the tree
  * 
- * @property  string  name
- * @property  string  object_id
- * @property  string  type
+ * @property  string             contenttype
+ * @property  Tinebase_DateTime  creation_time
+ * @property  string             hash
+ * @property  string             name
+ * @property  Tinebase_DateTime  last_modified_time
+ * @property  string             object_id
+ * @property  string             size
+ * @property  string             type
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
