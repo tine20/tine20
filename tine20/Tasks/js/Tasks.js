@@ -126,7 +126,7 @@ Tine.Tasks.Task.getDefaultData = function() {
 /**
  * @namespace Tine.Tasks.Task
  * 
- * get product filter
+ * get task filter
  *  
  * @return {Array} filter objects
  * @static
