@@ -62,7 +62,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     evalGrants: false,
     filterSelectionDelete: true,
-    showDeleteMask: false,
     
     /**
      * @private grid cfg
