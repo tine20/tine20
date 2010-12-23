@@ -108,7 +108,7 @@ Tine.Tasks.Task = Tine.Tinebase.data.Record.create(Tine.Tasks.TaskArray, {
 /**
  * returns default account data
  * 
- * @namespace Tine.Admin.Model.User
+ * @namespace Tine.Tasks.Task
  * @static
  * @return {Object} default data
  */
@@ -121,6 +121,32 @@ Tine.Tasks.Task.getDefaultData = function() {
         organizer: Tine.Tinebase.registry.get('currentAccount'),
         container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getAddContainer()
     };
+};
+
+/**
+ * @namespace Tine.Tasks.Task
+ * 
+ * get product filter
+ *  
+ * @return {Array} filter objects
+ * @static
+ */ 
+Tine.Tasks.Task.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('Tasks');
+    
+    return [
+        {label: _('Quick search'),                  field: 'query',    operators: ['contains']},
+        {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Tasks.Task},
+        {label: app.i18n._('Summary'),         field: 'summary' },
+        {label: app.i18n._('Due Date'),        field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
+        {filtertype: 'tasks.status'},
+        {label: app.i18n._('Responsible'),     field: 'organizer', valueType: 'user'},
+        {filtertype: 'tinebase.tag', app: app},
+        {label: app.i18n._('Last modified'),   field: 'last_modified_time', valueType: 'date'},
+        {label: app.i18n._('Last modifier'),   field: 'last_modified_by',   valueType: 'user'},
+        {label: app.i18n._('Creation Time'),   field: 'creation_time',      valueType: 'date'},
+        {label: app.i18n._('Creator'),         field: 'created_by',         valueType: 'user'}
+    ];
 };
 
 /**
