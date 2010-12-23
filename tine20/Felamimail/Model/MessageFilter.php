@@ -68,7 +68,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         $accountFilterAdded = FALSE;
         foreach ($this->_customData as $customData) {
             if ($customData['field'] == 'account_id') {
-                $this->_addAccountFilter($_select, (array) $customData['value']);
+                $this->_addAccountFilter($_select, $_backend, (array) $customData['value']);
                 $accountFilterAdded = TRUE;
                 
             } else if ($customData['field'] == 'path') {
