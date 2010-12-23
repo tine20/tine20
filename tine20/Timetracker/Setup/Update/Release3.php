@@ -20,15 +20,6 @@ class Timetracker_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        /*
-        $config = Tinebase_Core::getConfig();
-        if (isset($config->timesheetExport)) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saving timesheet ods default export config in database.');
-            $tsExportConfig['timesheets']['default'] = $config->timesheetExport->toArray();
-            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::ODSEXPORTCONFIG, Zend_Json::encode($tsExportConfig), 'Timetracker');
-        }
-        */
-        
         $this->setApplicationVersion('Timetracker', '3.1');
     }
 
