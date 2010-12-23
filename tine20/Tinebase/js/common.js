@@ -157,19 +157,19 @@ Tine.Tinebase.common = {
     minutesRenderer: function (minutes, format, leadingZeros) {
         var s,
         	i = minutes % 60,
-        	H = Math.floor(minutes / 60), // % (24);
+        	H = Math.floor(minutes / 60),
         	Hs;
-        //var d = Math.floor(minutes / (60 * 24));
         
-        if (leadingZeros && (leadingZeros === true || leadingZeros.match(/i/)) && String(i).length === 1 ) {
-            i = '0' + String(i);
+        if (leadingZeros && (Ext.isString(leadingZeros) || leadingZeros === true)) { 
+            if (leadingZeros === true || (leadingZeros.match(/i/) && String(i).length === 1)) {
+                i = '0' + String(i);
+            }
+            if (leadingZeros === true || (leadingZeros.match(/H/) && String(H).length === 1)) {
+                H = '0' + String(H);
+            }
         }
         
-        if (leadingZeros && (leadingZeros === true || leadingZeros.match(/H/)) && String(H).length === 1 ) {
-            H = '0' + String(H);
-        }
-        
-        if (! format) {
+        if (! format || ! Ext.isString(format)) {
             s = String.format(Tine.Tinebase.translation.ngettext('{0} minute', '{0} minutes', i), i);
             Hs = String.format(Tine.Tinebase.translation.ngettext('{0} hour', '{0} hours', H), H);
             //var ds = String.format(Tine.Tinebase.translation.ngettext('{0} workday', '{0} workdays', d), d);
