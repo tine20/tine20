@@ -179,9 +179,9 @@ class Tinebase_Core
 
             /**************************** DAV API **********************************
              * RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
-             * RewriteRule ^/$   /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             * RewriteRule ^/$      /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              *
-             * RewriteRule ^/dav /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             * RewriteRule ^/webdav /index.php [E=REDIRECT_DAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              */
         } elseif(isset($_SERVER['REDIRECT_DAV']) && $_SERVER['REDIRECT_DAV'] == 'true') {
             $server = new Tinebase_Server_WebDav();
