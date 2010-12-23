@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-17 23:04+0100\n"
+"PO-Revision-Date: 2010-12-23 21:49+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -85,28 +85,28 @@ msgstr "przez"
 msgid "Changed fields:"
 msgstr "Zmienione pola:"
 
-#: js/common.js:164
+#: js/common.js:173
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minuta"
 msgstr[1] "{0} minuty"
 msgstr[2] "{0} minut"
 
-#: js/common.js:165
+#: js/common.js:174
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} godzina"
 msgstr[1] "{0} godziny"
 msgstr[2] "{0} godzin"
 
-#: js/common.js:166
+#: js/common.js:175
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} dzień roboczy"
 msgstr[1] "{0} dni robocze"
 msgstr[2] "{0} dni roboczych"
 
-#: js/common.js:193
+#: js/common.js:202
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] "{0} sekund"
@@ -545,7 +545,7 @@ msgid "Creating {0}..."
 msgstr "Tworzenie {0}..."
 
 #: js/widgets/tree/ContextMenu.js:85
-#: js/widgets/grid/GridPanel.js:1052
+#: js/widgets/grid/GridPanel.js:1182
 #: js/widgets/dialog/EditDialog.js:449
 #: js/widgets/persistentfilter/PickerPanel.js:200
 #: js/MainMenu.js:228
@@ -577,7 +577,7 @@ msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Edytuj uprawnienia dla {0} \"{1}\""
 
 #: js/widgets/tree/ContextMenu.js:243
-#: js/widgets/grid/GridPanel.js:349
+#: js/widgets/grid/GridPanel.js:359
 msgid "Add {0}"
 msgstr "Dodaj {0}"
 
@@ -638,85 +638,85 @@ msgstr "Usuń wiersz"
 msgid "Search for records ..."
 msgstr "Znajdź wiersze ..."
 
-#: js/widgets/grid/GridPanel.js:235
+#: js/widgets/grid/GridPanel.js:241
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "{0} nie zostały znalezione. Proszę spróbować zmienić kryteria wyszukiwania, opcje wyświetlania albo {1}, w których szukasz."
 
-#: js/widgets/grid/GridPanel.js:327
+#: js/widgets/grid/GridPanel.js:337
 msgid "Edit {0}"
 msgstr "Edytuj {0}"
 
-#: js/widgets/grid/GridPanel.js:338
+#: js/widgets/grid/GridPanel.js:348
 msgid "Copy {0}"
 msgstr "Kopiuj {0}"
 
-#: js/widgets/grid/GridPanel.js:357
+#: js/widgets/grid/GridPanel.js:367
 msgid "Print Page"
 msgstr "Drukuj stronę"
 
-#: js/widgets/grid/GridPanel.js:396
-#: js/widgets/grid/GridPanel.js:397
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:406
+#: js/widgets/grid/GridPanel.js:407
+#: js/widgets/grid/GridPanel.js:409
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Usuń {0}"
 msgstr[1] "Usuń {0}"
 msgstr[2] "Usuń {0}"
 
-#: js/widgets/grid/GridPanel.js:474
+#: js/widgets/grid/GridPanel.js:674
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Wyświetlane wiersze {0} - {1} z {2}"
 
-#: js/widgets/grid/GridPanel.js:475
+#: js/widgets/grid/GridPanel.js:675
 msgid "No {0} to display"
 msgstr "{0} niezdefiniowane"
 
-#: js/widgets/grid/GridPanel.js:688
+#: js/widgets/grid/GridPanel.js:856
 msgid "Tagging"
 msgstr "Przypisywanie znaczników"
 
-#: js/widgets/grid/GridPanel.js:723
+#: js/widgets/grid/GridPanel.js:891
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/widgets/grid/GridPanel.js:724
+#: js/widgets/grid/GridPanel.js:892
 #: js/widgets/ActivitiesPanel.js:465
 msgid "Created By"
 msgstr "Utworzona przez"
 
-#: js/widgets/grid/GridPanel.js:725
+#: js/widgets/grid/GridPanel.js:893
 msgid "Last Modified Time"
 msgstr "Data ostatniej zmiany"
 
-#: js/widgets/grid/GridPanel.js:726
+#: js/widgets/grid/GridPanel.js:894
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
-#: js/widgets/grid/GridPanel.js:1032
+#: js/widgets/grid/GridPanel.js:1162
 msgid "Not Allowed"
 msgstr "Brak uprawnień"
 
-#: js/widgets/grid/GridPanel.js:1033
+#: js/widgets/grid/GridPanel.js:1163
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nie masz uprawnień, aby usunąć wszystkie strony na raz"
 
-#: js/widgets/grid/GridPanel.js:1051
+#: js/widgets/grid/GridPanel.js:1181
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
 msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 
-#: js/widgets/grid/GridPanel.js:1072
+#: js/widgets/grid/GridPanel.js:1215
 #: js/widgets/dialog/EditDialog.js:451
 msgid "Deleting {0}"
 msgstr "Usuwanie {0}"
 
-#: js/widgets/grid/GridPanel.js:1074
+#: js/widgets/grid/GridPanel.js:1215
 msgid " ... This may take a long time!"
 msgstr "... To może długo potrwać!"
 
-#: js/widgets/grid/GridPanel.js:1091
+#: js/widgets/grid/GridPanel.js:1231
 #: js/widgets/dialog/EditDialog.js:461
 #: js/widgets/tags/TagsPanel.js:292
 #: js/widgets/tags/TagsPanel.js:402
@@ -724,7 +724,7 @@ msgstr "... To może długo potrwać!"
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/widgets/grid/GridPanel.js:1091
+#: js/widgets/grid/GridPanel.js:1231
 #: js/widgets/dialog/EditDialog.js:461
 msgid "Could not delete {0}."
 msgstr "Usunięcie {0} było niemożliwe."
@@ -1118,6 +1118,14 @@ msgstr "Wyniki importu"
 #: js/widgets/dialog/ImportDialog.js:173
 msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
 msgstr "Import skuteczny dla {0} wierszy / import nieskuteczny dla {1} wierszy / znaleziono {2} powtórzenia"
+
+#: js/widgets/dialog/AdminPanel.js:61
+msgid "Change settings for application {0}"
+msgstr "Zmień ustawienia aplikacji {0}"
+
+#: js/widgets/dialog/AdminPanel.js:109
+msgid "Defaults"
+msgstr "Ustawienia domyślne"
 
 #: js/widgets/dialog/EditDialog.js:181
 #: js/widgets/EditRecord.js:169
@@ -1612,7 +1620,7 @@ msgid "There are no applications enabled for you. Please contact your administra
 msgstr "Nie masz włączonych aplikacji. Proszę się skontaktować ze swoim administratorem."
 
 #: js/ExceptionDialog.js:51
-#: Frontend/Http.php:591
+#: Frontend/Http.php:592
 msgid "Abnormal End"
 msgstr "Zakończenie awaryjne"
 
@@ -1621,7 +1629,7 @@ msgid "Send Report"
 msgstr "Wyślij raport"
 
 #: js/ExceptionDialog.js:76
-#: Frontend/Http.php:592
+#: Frontend/Http.php:593
 msgid "An error occurred, the program ended abnormal."
 msgstr "Wystąpił błąd. Praca programu została zakończona awaryjnie."
 
@@ -1723,7 +1731,7 @@ msgid "Fatal Error: Client self-update failed, please contact your administrator
 msgstr "Błąd krytyczny. Aktualizacja danych klienta nie powiodła się. Proszę się skontaktować ze swoim administratorem i / lub zrestartować / przeładować przeglądarkę."
 
 #: js/ExceptionHandler.js:127
-#: Frontend/Http.php:564
+#: Frontend/Http.php:565
 msgid "Authorisation Required"
 msgstr "Konieczne uwierzytelnienie"
 
@@ -1855,51 +1863,51 @@ msgstr[0] "Lista zadań"
 msgstr[1] "listy zadań"
 msgstr[2] "listy zadań"
 
-#: views/update.php:47
+#: views/update.php:42
 msgid "Tine 2.0 needs to be updated or is not installed yet."
 msgstr "Tine 2.0 wymaga aktualizacji albo jeszcze nie jest zainstalowana."
 
-#: views/update.php:47
+#: views/update.php:42
 msgid "Please wait or contact your administrator"
 msgstr "Proszę poczekać albo skontaktować się ze swoim administratorem"
 
-#: Setup/setup.xml:3008
+#: Setup/setup.xml:3012
 msgid "note"
 msgstr "zwykłą"
 
-#: Setup/setup.xml:3013
+#: Setup/setup.xml:3017
 msgid "default note type"
 msgstr "domyślny typ: notatka"
 
-#: Setup/setup.xml:3039
+#: Setup/setup.xml:3043
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3044
+#: Setup/setup.xml:3048
 msgid "telephone call"
 msgstr "telefon"
 
-#: Setup/setup.xml:3070
+#: Setup/setup.xml:3074
 msgid "email"
 msgstr "e-mail"
 
-#: Setup/setup.xml:3075
+#: Setup/setup.xml:3079
 msgid "email contact"
 msgstr "kontakt e-mail"
 
-#: Setup/setup.xml:3101
+#: Setup/setup.xml:3105
 msgid "created"
 msgstr "utworzony"
 
-#: Setup/setup.xml:3106
+#: Setup/setup.xml:3110
 msgid "record created"
 msgstr "wiersz utworzony"
 
-#: Setup/setup.xml:3132
+#: Setup/setup.xml:3136
 msgid "changed"
 msgstr "zmieniony"
 
-#: Setup/setup.xml:3137
+#: Setup/setup.xml:3141
 msgid "record changed"
 msgstr "wiersz zmieniony"
 
@@ -1935,7 +1943,7 @@ msgstr "Potwierdź wylogowanie"
 msgid "Show confirmation dialog on logout."
 msgstr "Wyświetl okno dialogowe potwierdzające chęć wylogowania."
 
-#: Frontend/Http.php:565
+#: Frontend/Http.php:566
 msgid "Your session is not valid. You need to login again."
 msgstr "Twoja sesja wygasła. Musisz się ponownie zalogować."
 
