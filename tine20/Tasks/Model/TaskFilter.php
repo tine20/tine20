@@ -5,7 +5,7 @@
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -51,24 +51,4 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Tasks')),
         //'showClosed'           => array('custom' => true),
     );
-    
-    /**
-     * appends custom filters to a given select object
-     * 
-     * @param  Zend_Db_Select                    $_select
-     * @param  Tinebase_Backend_Sql_Abstract     $_backend
-     * @return void
-     * 
-     * @todo    add status & organizer filters
-     *
-    public function appendFilterSql($_select, $_backend)
-    {
-        $gs = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
-        $adapter = $_backend->getAdapter();
-        
-        foreach ($this->_value as $value) {
-            
-        }
-        $gs->appendWhere(Zend_Db_Select::SQL_OR);
-    }*/
 }
