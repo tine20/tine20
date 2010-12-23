@@ -92,7 +92,7 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
     {
         if ($this->_container == null) {
             return new Filemanager_Frontend_WebDav($this->_path);
-        } elseif (is_dir($this->_fileSystemPath)) {
+        } elseif (Tinebase_FileSystem::getInstance()->isDir(substr($this->_fileSystemPath, 9))) {
             return new Filemanager_Frontend_WebDavDirectory($this->_path);
         } else {
             return new Filemanager_Frontend_WebDavFile($this->_path);
@@ -104,7 +104,7 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
         $path = $this->_fileSystemPath . '/' . $name;
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' exists: ' . $path);
         
-        return file_exists($path);
+        return Tinebase_FileSystem::getInstance()->fileExists(substr($path, 9));
     }
 
     /**

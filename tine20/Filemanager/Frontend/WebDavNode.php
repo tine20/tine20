@@ -43,6 +43,11 @@ abstract class Filemanager_Frontend_WebDavNode implements Sabre_DAV_INode
     
     protected $_fileSystemBasePath;
     
+    /**
+     * @var Tinebase_Model_Tree_Node
+     */
+    protected $_node;
+    
     public function __construct($_path) 
     {
         $this->_path               = $_path;
@@ -71,7 +76,17 @@ abstract class Filemanager_Frontend_WebDavNode implements Sabre_DAV_INode
      */
     public function getLastModified()
     {
-        return filemtime($this->_fileSystemPath);
+        if ($this->_node instanceof Tinebase_Model_Tree_Node) {
+            if ($this->_node->last_modified_time instanceof Tinebase_DateTime) {
+                $timestamp = $this->_node->last_modified_time->getTimestamp();
+            } else {
+                $timestamp = $this->_node->creation_time->getTimestamp();
+            }
+        } else {
+            $timestamp = Tinebase_DateTime::now()->getTimestamp();
+        }
+        
+        return $timestamp;
     }
 
     /**

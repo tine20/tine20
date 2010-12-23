@@ -28,8 +28,10 @@ class Filemanager_Frontend_WebDavFile extends Filemanager_Frontend_WebDavNode im
         if (!Tinebase_Core::getUser()->hasGrant($this->_container, Tinebase_Model_Grants::GRANT_READ)) {
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
         }
-        
-        if (!file_exists($this->_fileSystemPath)) {
+
+        try {
+            $this->_node = Tinebase_FileSystem::getInstance()->stat(substr($this->_fileSystemPath, 9));
+        } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
         }
     }
@@ -45,7 +47,7 @@ class Filemanager_Frontend_WebDavFile extends Filemanager_Frontend_WebDavNode im
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $this->_fileSystemPath);
         
-        return filesize($this->_fileSystemPath);
+        return $this->_node->size;
     }
     
     /**
@@ -55,13 +57,7 @@ class Filemanager_Frontend_WebDavFile extends Filemanager_Frontend_WebDavNode im
      */ 
     public function getContentType() 
     {
-        $tinebaseFileSystem = new Tinebase_FileSystem();
-        
-        $contentType = $tinebaseFileSystem->getContentType(substr($this->_fileSystemPath, 9));
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . substr($this->_fileSystemPath, 9) . ' => ' . $contentType);
-        
-        return $contentType;
+        return $this->_node->contenttype;
     }
     
     /**
@@ -72,24 +68,8 @@ class Filemanager_Frontend_WebDavFile extends Filemanager_Frontend_WebDavNode im
      */
     public function getETag() 
     {
-        $stat = stat($this->_fileSystemPath);
-        
-        $etag = sha1(sprintf('%u', $stat['ino']) . '-' .$stat['mtime']);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' etag for file: ' . $this->_fileSystemPath . ' ' . $etag);
-        
-        return '"' . $etag . '"';
+        return '"' . $this->_node->hash . '"';
     }
-    
-    /**
-     * Returns the last modification time 
-     *
-     * @return int 
-     */
-    #public function getLastModified()
-    #{
-    #    return filemtime($this->_fileSystemPath);
-    #}
     
     /**
      * Deleted the current node
@@ -103,7 +83,7 @@ class Filemanager_Frontend_WebDavFile extends Filemanager_Frontend_WebDavNode im
             throw new Sabre_DAV_Exception_Forbidden('Forbidden to edit file: ' . $this->_path);
         }
         
-        unlink($this->_fileSystemPath);
+        Tinebase_FileSystem::getInstance()->unlink(substr($this->_fileSystemPath, 9));
     }
     
     public function put($data)

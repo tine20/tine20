@@ -29,24 +29,27 @@ class Filemanager_Frontend_WebDavDirectory extends Filemanager_Frontend_WebDavNo
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
         }
         
-        if (!file_exists($this->_fileSystemPath)) {
+        try {
+            $this->_node = Tinebase_FileSystem::getInstance()->stat(substr($this->_fileSystemPath, 9));
+        } catch (Tinebase_Exception_NotFound $tenf) {
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $this->_path . ' could not be found');
         }
     }
     
     public function getChildren() 
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_fileSystemPath);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_fileSystemPath);
         
         $children = array();
             
         // Loop through the directory, and create objects for each node
-        foreach(scandir($this->_fileSystemPath) as $name) {
+        foreach(Tinebase_FileSystem::getInstance()->scanDir(substr($this->_fileSystemPath, 9)) as $node) {
             // Ignoring files staring with .
             #if ($node[0]==='.') continue;
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' name: ' . $name);
-            $children[] = $this->getChild($name);
+            $children[] = $this->getChild($node->name);
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_fileSystemPath);
         
         return $children;
     }
@@ -54,19 +57,14 @@ class Filemanager_Frontend_WebDavDirectory extends Filemanager_Frontend_WebDavNo
     public function getChild($name) 
     {
         $path = $this->_fileSystemPath . '/' . $name;
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $path);
         
-        // We have to throw a FileNotFound exception if the file didn't exist
-        if (!$this->childExists($name)) {
-            throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $name . ' could not be found');
-        }
-        // Some added security
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $path);
         
         if ($name[0]=='.')  {
             throw new Sabre_DAV_Exception_FileNotFound('Access denied');
         }
         
-        if (is_dir($path)) {
+        if (Tinebase_FileSystem::getInstance()->isDir(substr($path, 9))) {
             return new Filemanager_Frontend_WebDav($this->_path . '/' . $name);
         } else {
             return new Filemanager_Frontend_WebDavFile($this->_path . '/' . $name);
@@ -78,7 +76,7 @@ class Filemanager_Frontend_WebDavDirectory extends Filemanager_Frontend_WebDavNo
         $path = $this->_fileSystemPath . '/' . $name;
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' ' . __LINE__ . ' exists: ' . $path);
         
-        return file_exists($path);
+        return Tinebase_FileSystem::getInstance()->fileExists(substr($path, 9));
     }
 
     /**
