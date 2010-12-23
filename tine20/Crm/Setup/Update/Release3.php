@@ -63,4 +63,58 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Crm', '3.3');
     }
+    
+    /**
+     * add more default favorites
+     */
+    public function update_3()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Crm')->getId(),
+            'model'             => 'Crm_Model_LeadFilter',
+        );
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "Last modified by me",
+            'description'       => "All leads that I have last modified",
+            'filters'           => array(array(
+                'field'     => 'last_modified_by',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_User::CURRENTACCOUNT,
+            )),
+        ))));
+
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "My leads",
+            'description'       => "All leads that I am responsible for",
+            'filters'           => array(array(
+                'field'     => 'contact',
+                'operator'  => 'AND',
+                'value'     => array(array(
+                    'field'     => 'id',
+                    'operator'  => 'equals',
+                    'value'     => Addressbook_Model_Contact::CURRENTCONTACT,
+                ))
+            )),
+        ))));
+
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "Leads with overdue tasks",
+            'description'       => "Leads with overdue tasks",
+            'filters'           => array(array(
+                'field'     => 'task',
+                'operator'  => 'AND',
+                'value'     => array(array(
+                    'field'     => 'due',
+                    'operator'  => 'before',
+                    'value'     => 'dayThis',
+                ))
+            )),
+        ))));
+        
+        $this->setApplicationVersion('Crm', '3.4');
+    }
 }
