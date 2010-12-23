@@ -40,7 +40,18 @@ class ActiveSync_Model_Device extends Tinebase_Record_Abstract
      * @var string
      */
     protected $_application = 'ActiveSync';
-
+    
+    /**
+     * list of zend inputfilter
+     * 
+     * this filter get used when validating user generated content with Zend_Input_Filter
+     *
+     * @var array
+     */
+    protected $_filters = array(
+        'devicetype'             => 'StringToLower',
+    );
+    
     /**
      * list of zend validator
      * 
@@ -71,5 +82,25 @@ class ActiveSync_Model_Device extends Tinebase_Record_Abstract
         'emailfilter_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tasksfilter_id'        => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
-
+    
+    /**
+     * Returns major firmware version of this device
+     * 
+     * @return int/string
+     */
+    public function getMajorVersion()
+    {
+        switch ($this->devicetype) {
+            case ActiveSync_Backend_Device::TYPE_IPHONE:
+                if (preg_match('/(.+)\/(\d+)\.(\d+)/', $this->useragent, $matches)) {
+                    list(, $name, $majorVersion, $minorVersion) = $matches;
+                    return $majorVersion;
+                }
+                break;
+            default:
+                break;
+        }
+        
+        return 0;
+    }
 }

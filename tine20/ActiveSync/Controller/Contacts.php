@@ -147,8 +147,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
             if(!empty($data->$value)) {
                 switch($value) {
                     case 'bday':
-                        if ($this->_needsBdayTZFix()) {
-                            // iOS < 4 & palm send birthdays at the entered date, but the time the birthday got entered on the device
+                        
+                        if ($this->_device->devicetype == ActiveSync_Backend_Device::TYPE_PALM) {
                             $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
                             $data->bday->setTimezone($userTimezone);
                             $data->bday->addHour(12);
@@ -327,8 +327,13 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
                         $contact->bday = new Tinebase_DateTime($timeStamp);
                         
-                        if ($this->_needsBdayTZFix()) {
+                        if (
+                            ($this->_device->devicetype == ActiveSync_Backend_Device::TYPE_PALM) ||
+                            ($this->_device->devicetype == ActiveSync_Backend_Device::TYPE_IPHONE && $this->_device->getMajorVersion() < 800)
+                        ) {
                             // iOS < 4 & palm send birthdays to the entered date, but the time the birthday got entered on the device
+                            // acutally iOS < 4 somtimes sends the bday at noon but the timezone is not clear
+                            // -> we don't trust the time part and set the birthdays timezone to the timezone the user has set in tine
                             $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
                             $contact->bday = new Tinebase_DateTime($contact->bday->setTime(0,0,0)->format(Tinebase_Record_Abstract::ISO8601LONG), $userTimezone);
                             $contact->bday->setTimezone('UTC');
@@ -440,31 +445,4 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         return  mktime($hour, $minute, $second, $month, $day, $year);
     }
     
-    /**
-     * checks if current device need a timezone fix for the bday field
-     * 
-     * @return bool
-     */
-    protected function _needsBdayTZFix()
-    {
-        switch(strtolower($this->_device->devicetype)) {
-                case 'iphone':
-                    if (preg_match('/(.+)\/(\d+)\.(\d+)/', $this->_device->useragent, $matches)) {
-                        list(, $name, $majorVersion, $minorVersion) = $matches;
-                        if ($majorVersion > 800) {
-                            // IOS 4
-                            
-                        } else {
-                            // IOS 3 and less
-                            return TRUE;
-                        }
-                    }
-                    break;
-                    
-                case 'palm':
-                    return TRUE;
-            }
-            
-            return FALSE;
-    }
 }

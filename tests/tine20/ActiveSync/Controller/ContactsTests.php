@@ -290,9 +290,9 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
     	$controller->appendXML($testNode, null, $this->objects['contact']->getId(), array());
     	
-    	// offset birthday 0 hours and namespace === uri:Contacts
+    	// offset birthday 12 hours + user TZ and namespace === uri:Contacts
     	$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), @$testDom->getElementsByTagNameNS('uri:Contacts', 'BusinessCountry')->item(0)->nodeValue, $testDom->saveXML());
-    	$this->assertEquals('1975-01-02T03:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
+    	$this->assertEquals('1975-01-02T16:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
     }
     
     /**
@@ -321,8 +321,8 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         $controller->appendXML($appData, null, $this->objects['contact']->getId(), array());
         
-        // offset birthday 12 hours and namespace === uri:Contacts
-        $this->assertEquals('1975-01-02T15:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
+        // no offset and namespace === uri:Contacts
+        $this->assertEquals('1975-01-02T03:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
         
         #echo $testDom->saveXML();
 
