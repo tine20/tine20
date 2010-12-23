@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -101,34 +101,6 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Addressbook')),
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        //'user_status'          => array('custom' => true),
         'customfield'          => array('filter' => 'Tinebase_Model_Filter_CustomField', 'options' => array('idProperty' => 'addressbook.id')),
     );
-    
-    /**
-     * appends custom filters to a given select object
-     *
-     * @param  Zend_Db_Select                       $_select
-     * @param  Felamimail_Backend_Cache_Sql_Message $_backend
-     * @return void
-     *
-     * @todo use group of Tinebase_Model_Filter_Text with OR?
-     * @todo user_status: allow array as value and use 'in' operator
-     */
-/*    public function appendFilterSql($_select, $_backend)
-    {
-        $db = $_backend->getAdapter();
-        
-        foreach ($this->_customData as $customData) {
-            switch($customData['field']) {
-                case 'user_status':
-                    $status = explode(' ', $customData['value']);
-                    $_select->where(
-                        $db->quoteInto("IF(`user_status` = 'enabled' AND NOW() > `expires_at`, 'expired', status) IN (?)", $status)
-                    );
-                    break;
-            }
-        }
-        
-    } */
 }
