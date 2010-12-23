@@ -191,9 +191,9 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 if(_success === true) {
                     var result = Ext.util.JSON.decode(_response.responseText);
                     if(result.success === true) {
-                        this.loadGridData(
+                        this.loadGridData({
                             removeStrategy: 'keepBuffered'
-                        );
+                        });
                     }
                 }
             }
