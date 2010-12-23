@@ -427,7 +427,12 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             listeners: {
                 scope: this,
                 'update': function(record) {
-                    this.loadGridData();
+                    this.loadGridData({
+                        preserveCursor:     false, 
+                        preserveSelection:  false, 
+                        preserveScroller:   false,
+                        removeStrategy:     'default'
+                    });
                 }
             },
             record: new Tine.Tinebase.Model.ImportJob({
