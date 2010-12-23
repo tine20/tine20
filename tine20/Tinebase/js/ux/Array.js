@@ -41,6 +41,20 @@ Ext.applyIf(Array.prototype, {
     },
     
     /**
+     * simple map fn
+     * 
+     * @param {Function} fn
+     */
+    map: function(fn) {
+        var map = [];
+        Ext.each(this, function(v, i) {
+            map.push(fn.call(this, v, i));
+        }, this);
+        
+        return map;
+    },
+    
+    /**
      * returns an array containing all the values of this array that are present in all the arguments.
      * 
      * @param {Array} array1
