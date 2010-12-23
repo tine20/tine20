@@ -212,10 +212,16 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     lastStoreTransactionId: null,
     
     /**
-     * @property editBuffer 
+     * @property editBuffer  - array of ids of records edited since last explicit refresh
      * @type Array of ids
      */
     editBuffer: null,
+    
+    /**
+     * @property deleteQueue - array of ids of records currently being deleted
+     * @type Array of ids
+     */
+    deleteQueue: null,
     
     layout: 'border',
     border: false,
@@ -235,7 +241,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.i18nEmptyText = this.i18nEmptyText || String.format(Tine.Tinebase.translation._("No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."), this.i18nRecordsName, this.i18nContainersName)
         
         this.editDialogConfig = this.editDialogConfig || {};
+        
         this.editBuffer = [];
+        this.deleteQueue = [];
         
         // init store
         this.initStore();
@@ -609,7 +617,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         // assemble adds
         newRecordCollection.each(function(record, idx) {
-            if (recordsIds.indexOf(record.id) == -1) {
+            if (recordsIds.indexOf(record.id) == -1 && this.deleteQueue.indexOf(record.id) == -1) {
                 var lastRecord = newRecordCollection.itemAt(idx-1);
                 var lastRecordIdx = lastRecord ? recordsIds.indexOf(lastRecord.id) : -1;
                 records.splice(lastRecordIdx+1, 0, record);
@@ -618,7 +626,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }, this);
         
         o.records = records;
-
     },
     
     /**
@@ -635,6 +642,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.store.load.defer(10, this.store, [
                 typeof this.autoLoad == 'object' ?
                     this.autoLoad : undefined]);
+        }
+        
+        if (this.usePagingToolbar && this.recordProxy) {
+            this.pagingToolbar.refresh.disable.defer(10, this.pagingToolbar.refresh);
         }
     },
     
@@ -1195,30 +1206,28 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 this.pagingToolbar.refresh.disable();
             }
             
-            var i18nItems    = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
+            var i18nItems = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length),
+                recordIds = [].concat(records).map(function(v){return v.id});
 
             if (sm.isFilterSelect && this.filterSelectionDelete) {
                 if (! this.deleteMask) {
-                    var message = String.format(_('Deleting {0}'), i18nItems) + _(' ... This may take a long time!');
-                    this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: message});
+                    this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {
+                        msg: String.format(_('Deleting {0}'), i18nItems) + _(' ... This may take a long time!')
+                    });
                 }
                 this.deleteMask.show();
             }
             
+            this.deleteQueue = this.deleteQueue.concat(recordIds);
+            
             var options = {
                 scope: this,
                 success: function() {
-                    this.refreshAfterDelete();
-                    var ids = [];
-                    if (Ext.isArray(records)) {
-                        Ext.each(records, function(record) {
-                            ids.push(record.id);
-                        }, this);
-                    }
-                    this.onAfterDelete(ids);
+                    this.refreshAfterDelete(recordIds);
+                    this.onAfterDelete(recordIds);
                 },
                 failure: function () {
-                    this.refreshAfterDelete();
+                    this.refreshAfterDelete(recordIds);
                     Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
                 }
             };
@@ -1234,7 +1243,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     /**
      * refresh after delete (hide delete mask or refresh paging toolbar)
      */
-    refreshAfterDelete: function() {
+    refreshAfterDelete: function(ids) {
+        this.deleteQueue = this.deleteQueue.diff(ids);
+        
         if (this.deleteMask) {
             this.deleteMask.hide();
         }
@@ -1251,24 +1262,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Array} [ids]
      */
     onAfterDelete: function(ids) {
-        this.removeFromEditBuffer(ids);
+        this.editBuffer = this.editBuffer.diff(ids);
+        
         this.loadGridData({
             removeStrategy: 'keepBuffered'
         });
-    },
-    
-    /**
-     * remove ids from edit buffer
-     * 
-     * @param {Array} [ids]
-     */
-    removeFromEditBuffer: function(ids) {
-        if (Ext.isArray(ids)) {
-            Ext.each(this.editBuffer, function(id) {
-                if (ids.indexOf(id) >= 0) {
-                    this.editBuffer.remove(id);
-                }
-            },this);
-        }
     }
 });
