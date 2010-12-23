@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-15 18:35+0100\n"
+"PO-Revision-Date: 2010-12-23 21:40+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -20,4 +20,13 @@ msgstr "zarządzaj wspólnymi katalogami"
 #: Acl/Rights.php:99
 msgid "Create new shared folders"
 msgstr "Utwórz nowe, wspólne katalogi"
+
+#: js/Application.js:31
+msgid "Filemanager"
+msgstr "Zarządca plików"
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal files"
+msgstr "%s's osobistych plików"
 
