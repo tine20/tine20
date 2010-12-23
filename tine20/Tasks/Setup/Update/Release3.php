@@ -94,4 +94,69 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tasks', '3.3');
     }
+    
+    /**
+     * add more default favorites
+     */
+    public function update_3()
+    {
+        $pfe = new Tinebase_PersistentFilter_Backend_Sql();
+        
+        $commonValues = array(
+            'account_id'        => NULL,
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Tasks')->getId(),
+            'model'             => 'Tasks_Model_TaskFilter',
+        );
+        
+        $closedStatus = Tasks_Controller_Status::getInstance()->getAllStatus()->filter('status_is_open', 0);
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "My open tasks",
+            'description'       => "My open tasks",
+            'filters'           => array(
+                array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
+                array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+            )
+        ))));
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "My open tasks this week",
+            'description'       => "My open tasks this week",
+            'filters'           => array(
+                array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
+                array('field' => 'due',          'operator' => 'within', 'value' => 'weekThis'),
+                array('field' => 'status_id',    'operator' => 'notin',  'value' => $closedStatus->getId()),
+            )
+        ))));
+
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "All my tasks",
+            'description'       => "All tasks that I am responsible for",
+            'filters'           => array(
+                array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
+            )
+        ))));
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "Last modified by me",
+            'description'       => "All tasks that I have last modified",
+            'filters'           => array(array(
+                'field'     => 'last_modified_by',
+                'operator'  => 'equals',
+                'value'     => Tinebase_Model_User::CURRENTACCOUNT,
+            )),
+        ))));
+        
+        $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
+            'name'              => "Tasks without responsible",
+            'description'       => "Tasks without responsible",
+            'filters'           => array(array(
+                'field'     => 'organizer',
+                'operator'  => 'equals',
+                'value'     => '',
+            )),
+        ))));
+        
+        $this->setApplicationVersion('Tasks', '3.4');
+    }
 }
