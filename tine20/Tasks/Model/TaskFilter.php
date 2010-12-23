@@ -49,6 +49,5 @@ class Tasks_Model_TaskFilter extends Tinebase_Model_Filter_FilterGroup
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'container_id'         => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Tasks')),
-        //'showClosed'           => array('custom' => true),
     );
 }
