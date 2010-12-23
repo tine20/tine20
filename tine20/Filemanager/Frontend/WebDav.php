@@ -99,10 +99,13 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
         }
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Sabre_DAV_ICollection::childExists()
+     */
     public function childExists($name) 
     {
         $path = $this->_fileSystemPath . '/' . $name;
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' exists: ' . $path);
         
         return Tinebase_FileSystem::getInstance()->fileExists(substr($path, 9));
     }
