@@ -24,7 +24,7 @@ Tine.Admin.user.show = function () {
         });
     }
     else {
-    	Tine.Admin.user.gridPanel.loadData.defer(100, Tine.Admin.user.gridPanel, [true, true, true]);
+    	Tine.Admin.user.gridPanel.loadGridData.defer(100, Tine.Admin.user.gridPanel, []);
     }
     
     Tine.Tinebase.MainScreen.setActiveContentPanel(Tine.Admin.user.gridPanel, true);
