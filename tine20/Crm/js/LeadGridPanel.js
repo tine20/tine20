@@ -127,7 +127,8 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             {label: this.app.i18n._('Last modifier'),   field: 'last_modified_by',   valueType: 'user'},
             {label: this.app.i18n._('Creation Time'),   field: 'creation_time',      valueType: 'date'},
             {label: this.app.i18n._('Creator'),         field: 'created_by',         valueType: 'user'},
-            {filtertype: 'crm.contact'}
+            {filtertype: 'crm.contact'},
+            {filtertype: 'foreignrecord', app: this.app, foreignRecordClass: Tine.Tasks.Task, ownField: 'task'}
         ];
         
         if (Tine.Sales && Tine.Tinebase.common.hasRight('run', 'Sales')) {
