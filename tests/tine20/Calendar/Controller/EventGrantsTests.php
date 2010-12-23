@@ -303,6 +303,29 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $this->assertEquals(1, count($events), 'testuser has implicit readGrant, but serach for action get found no event');
     }
     
+//    /**
+//     * search for an attender we have no cal grants for
+//     * 
+//     */
+//    public function testSearchGrantsByAttender()
+//    {
+//        // make sure we have no grants on sclevers calendar @ all
+//        $this->cleanupTestCalendars();
+//        
+//        $persistentEvent = $this->_createEventInPersonasCalendar('rwright', 'rwright', 'rwright');
+//        
+//        $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
+//            array('field' => 'attender', 'operator' => 'in', 'value' => array(
+//                array(
+//                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+//                    'user_id'   => $this->_personasContacts['rwright']->getId()
+//                )
+//            ))
+//        )), NULL, FALSE, FALSE);
+//        
+//        print_r($events->toArray());
+//    }
+    
     /**
      * tests if search deals with record based grants correctly for 'get' action
      * 
