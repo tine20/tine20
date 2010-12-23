@@ -84,13 +84,17 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             recordClass: this.recordClass,
             filterModels: [
-                {label: _('Quick search'),    field: 'query',    operators: ['contains']},
+                {label: _('Quick search'),                  field: 'query',    operators: ['contains']},
                 {filtertype: 'tine.widget.container.filtermodel', app: this.app, recordClass: this.recordClass},
-                {label: this.app.i18n._('Summary'), field: 'summary' },
-                {label: this.app.i18n._('Due Date'), field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
+                {label: this.app.i18n._('Summary'),         field: 'summary' },
+                {label: this.app.i18n._('Due Date'),        field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
                 {filtertype: 'tasks.status'},
-                {label: this.app.i18n._('Responsible'), field: 'organizer', valueType: 'user'},
-                {filtertype: 'tinebase.tag', app: this.app}
+                {label: this.app.i18n._('Responsible'),     field: 'organizer', valueType: 'user'},
+                {filtertype: 'tinebase.tag', app: this.app},
+                {label: this.app.i18n._('Last modified'),   field: 'last_modified_time', valueType: 'date'},
+                {label: this.app.i18n._('Last modifier'),   field: 'last_modified_by',   valueType: 'user'},
+                {label: this.app.i18n._('Creation Time'),   field: 'creation_time',      valueType: 'date'},
+                {label: this.app.i18n._('Creator'),         field: 'created_by',         valueType: 'user'}
             ],
             defaultFilter: 'query',
             filters: [
@@ -122,9 +126,6 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             header: this.app.i18n._("Summary"),
             width: 400,
             dataIndex: 'summary',
-            //editor: new Ext.form.TextField({
-            //  allowBlank: false
-            //}),
             quickaddField: new Ext.form.TextField({
                 emptyText: this.app.i18n._('Add a task...')
             })
