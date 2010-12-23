@@ -5,7 +5,7 @@
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -61,6 +61,10 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
         'product'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
             'related_model'     => 'Sales_Model_Product',
             'related_filter'    => 'Sales_Model_ProductFilter'
+        )),
+        'task'           => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
+            'related_model'     => 'Tasks_Model_Task',
+            'related_filter'    => 'Tasks_Model_TaskFilter'
         )),
     );
 }
