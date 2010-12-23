@@ -52,12 +52,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     deleteTransactionId: null,
     
     /**
-     * @property deleteQueue - array of ids with messages currently being deleted
-     * @type Array
-     */
-    deleteQueue: null,
-    
-    /**
      * @private model cfg
      */
     evalGrants: false,
@@ -122,8 +116,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.pagingConfig = {
             doRefresh: this.doRefresh.createDelegate(this)
         };
-        
-        this.deleteQueue = [];
         
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
@@ -739,10 +731,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Tine.Felamimail.Model.Folder} [folder]
      */
     onAfterDelete: function(ids, folder) {
-        this.removeFromEditBuffer(ids);
-        Ext.each(Ext.unique(ids), function(id) {
-            this.deleteQueue.remove(id);
-        }, this);
+        this.editBuffer = this.editBuffer.diff(ids);
 
         if (! this.deleteTransactionId || ! Tine.Felamimail.messageBackend.isLoading(this.deleteTransactionId)) {
             this.loadGridData({
@@ -983,27 +972,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
-    /**
-     * called after a new set of Records has been loaded
-     * 
-     * @param  {Ext.data.Store} store
-     * @param  {Array}          loaded records
-     * @param  {Array}          load options
-     * @return {Void}
-     */
-    onStoreLoad: function(store, records, options) {
-        if (! Ext.isEmpty(this.deleteQueue)) {
-            
-            // don't display msgs in delete queue
-            Ext.each(this.deleteQueue, function(id) {
-                var msg = store.getById(id);
-                if (msg) {
-                    store.remove(msg);
-                }
-            }, this);
-        }
-    },
-        
     /**
      * add new account button
      * 
