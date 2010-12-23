@@ -18,19 +18,6 @@
 class Felamimail_Setup_Initialize extends Setup_Initialize
 {
     /**
-     * initialize application
-     *
-     * @param Tinebase_Model_Application $_application
-     * @param array | optional $_options
-     * @return void
-     */
-    protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
-    {
-        parent::_createInitialRights($_application, $_options);
-        $this->_initializeFavorites();
-    }
-    
-    /**
      * init favorites
      */
     protected function _initializeFavorites()

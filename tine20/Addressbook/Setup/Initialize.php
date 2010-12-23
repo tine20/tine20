@@ -41,7 +41,6 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         }
         parent::_initialize($_application, $_options);
 
-        $this->_initializeFavorites();
         $this->_initializeUserContacts();
         $this->_initializeGroupLists();
         $this->_initializeConfig();

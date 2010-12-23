@@ -34,7 +34,6 @@ class Crm_Setup_Initialize extends Setup_Initialize
             $_application->getId(), 
             Crm_Acl_Rights::MANAGE_LEADS
         );
-        $this->_initializeFavorites(); 
     }
     
     /**

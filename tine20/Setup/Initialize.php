@@ -58,6 +58,7 @@ class Setup_Initialize
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
         $this->_createInitialRights($_application);
+        $this->_initializeFavorites();
     }
     
     /**
@@ -100,5 +101,11 @@ class Setup_Initialize
     		);
 		}
     }
-
+    
+    /**
+     * init favorites
+     */
+    protected function _initializeFavorites()
+    {
+    }
 }
