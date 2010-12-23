@@ -123,6 +123,10 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             {label: this.app.i18n._('Probability'), field: 'probability', valueType: 'percentage'},
             {label: this.app.i18n._('Turnover'),    field: 'turnover', valueType: 'number', defaultOperator: 'greater'},
             {filtertype: 'tinebase.tag', app: this.app},
+            {label: this.app.i18n._('Last modified'),   field: 'last_modified_time', valueType: 'date'},
+            {label: this.app.i18n._('Last modifier'),   field: 'last_modified_by',   valueType: 'user'},
+            {label: this.app.i18n._('Creation Time'),   field: 'creation_time',      valueType: 'date'},
+            {label: this.app.i18n._('Creator'),         field: 'created_by',         valueType: 'user'},
             {filtertype: 'crm.contact'}
         ];
         

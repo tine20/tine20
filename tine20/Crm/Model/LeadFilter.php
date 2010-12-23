@@ -37,16 +37,21 @@ class Crm_Model_LeadFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'query'          => array('filter' => 'Crm_Model_LeadQueryFilter'),
-        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'lead_name'      => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'metacrm_lead.id')),
-        'probability'    => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'turnover'       => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'leadstate_id'   => array('filter' => 'Tinebase_Model_Filter_Int'),
-        'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Crm')),
-        'showClosed'     => array('filter' => 'Crm_Model_LeadClosedFilter'),
+        'id'                    => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'query'                 => array('filter' => 'Crm_Model_LeadQueryFilter'),
+        'description'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'lead_name'             => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'tag'                   => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'metacrm_lead.id')),
+        'probability'           => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'turnover'              => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'leadstate_id'          => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'container_id'          => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Crm')),
+        'showClosed'            => array('filter' => 'Crm_Model_LeadClosedFilter'),
+        'last_modified_by'      => array('filter' => 'Tinebase_Model_Filter_User'),
+        'last_modified_time'    => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'deleted_time'          => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'created_by'            => array('filter' => 'Tinebase_Model_Filter_User'),
+        'creation_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         
     // relation filters
         'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
