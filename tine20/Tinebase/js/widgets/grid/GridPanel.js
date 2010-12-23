@@ -539,6 +539,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             // this resets scroller ;-(
             //this.grid.getView().focusRow(0);
         }
+        
+        // restore selection
+        if (Ext.isArray(options.preserveSelection)) {
+            Ext.each(options.preserveSelection, function(record) {
+                var row = this.store.indexOfId(record.id);
+                if (row >= 0) {
+                    this.grid.getSelectionModel().selectRow(row, true);
+                }
+            }, this);
+        }
+        
+        // restore scroller
+        if (Ext.isNumber(options.preserveScroller)) {
+            this.grid.getView().scroller.dom.scrollTop = options.preserveScroller;
+        }
     },
     
     /**
@@ -555,6 +570,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             return false;
         }
         
+        // save selection -> will be applied onLoad
+        if (options.preserveSelection) {
+            options.preserveSelection = this.grid.getSelectionModel().getSelections();
+        }
+        
+        // save scroller -> will be applied onLoad
+        if (options.preserveScroller) {
+            options.preserveScroller = this.grid.getView().scroller.dom.scrollTop;
+        }
+        
+        
+        // apply removeStrategy
         if (! options.removeStrategy || options.removeStrategy === 'default') {
             return true;
         }
@@ -714,65 +741,31 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     /**
-     * load data
+     * trigger store load with grid related options
      * 
      * TODO rethink -> preserveCursor and preserveSelection might conflict on page breaks!
-     * TODO scroller preserving might me not enough, as selected position might change
-     *      we better make sure, that first seeable record stays or something like this -> liveGrid
      * TODO don't reload details panel when selection is preserved
      * 
      * @param {Object} options
      */
     loadGridData: function(options) {
         
-        options = Ext.apply({
+        Ext.applyIf(options, {
+            callback:           Ext.emptyFn,
+            scope:              this,
+            params:             {},
+            
             preserveCursor:     true, 
             preserveSelection:  true, 
             preserveScroller:   true, 
             removeStrategy:     'default'
-        }, options);
-        
-        var opts = {
-            callback: Ext.emptyFn,
-            scope: this,
-            removeStrategy: options.removeStrategy
-        };
+        });
         
         if (options.preserveCursor && this.usePagingToolbar) {
-            opts.params = {
-                start: this.pagingToolbar.cursor
-            };
+            options.params.start = this.pagingToolbar.cursor;
         }
         
-        if (options.preserveSelection) {
-            var oldSelection = this.grid.getSelectionModel().getSelections(),
-                oldRow = oldSelection.length === 1 ? this.getStore().indexOfId(oldSelection[0].id) : null;
-        
-            opts.callback = opts.callback.createSequence(function(records, options, success) {
-                var sm = this.grid.getSelectionModel();
-                var store = this.getStore();
-                
-                Ext.each(oldSelection, function(record) {
-                    var row = store.indexOfId(record.id);
-                    if (row >= 0) {
-                        sm.selectRow(row, true);
-                    } else if (oldRow !== null) {
-                        // if row is not existing, select the next one
-                        sm.selectRow(oldRow);
-                    }
-                }, this);
-            }, this);
-        }
-        
-        if (options.preserveScroller) {
-            this.grid.getView().scrollTop = this.grid.getView().scroller.dom.scrollTop;
-            
-            opts.callback = opts.callback.createSequence(function(records, options, success) {
-                var v = this.grid.getView().scroller.dom.scrollTop = this.grid.getView().scrollTop;
-            }, this);
-        }
-        
-        this.store.load(opts);
+        this.store.load(options);
     },
     
     getActionToolbar: function() {
