@@ -8,6 +8,8 @@
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
+ * 
+ * @todo        implement emptyStringMeansNull
  */
 
 /**
@@ -17,6 +19,10 @@
  * @subpackage  Filter
  * 
  * filters one filterstring in one property
+ * 
+ * supports the following options:
+ * - emptyStringAlsoChecksNull
+ * - (emptyStringMeansNull)
  */
 class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
 {
@@ -54,6 +60,26 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
     );
     
     /**
+     * get a new single filter action
+     *
+     * @param string $_field
+     * @param string $_operator
+     * @param mixed  $_value    
+     * @param array  $_options
+     */
+    public function __construct($_field, $_operator, $_value, array $_options = array())
+    {
+        // set default options
+        if (! array_key_exists('emptyStringAlsoChecksNull', $_options)) {
+            $_options['emptyStringAlsoChecksNull'] = FALSE;
+        }
+        if (! array_key_exists('emptyStringMeansNull', $_options)) {
+            $_options['emptyStringMeansNull'] = FALSE;
+        }
+        parent::__construct($_field, $_operator, $_value, $_options);
+    }
+    
+    /**
      * appends sql to given select statement
      *
      * @param  Zend_Db_Select                $_select
@@ -75,7 +101,7 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         if (in_array($this->_operator, array('in', 'notin')) && ! is_array($value)) {
             $value = explode(' ', $value);
         }
-            
+        
         if (is_array($value) && empty($value)) {
              $_select->where('1=' . (substr($this->_operator, 0, 3) == 'not' ? '1/* empty query */' : '0/* impossible query */'));
              return;
@@ -83,10 +109,10 @@ class Tinebase_Model_Filter_Text extends Tinebase_Model_Filter_Abstract
         
         $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
         
-        if ($this->_operator == 'not' || $this->_operator == 'notin') {
+        if ($this->_operator == 'not' || $this->_operator == 'notin' || ($value === '' && $this->_options['emptyStringAlsoChecksNull'])) {
             $where = "( $where OR $field IS NULL)";
         }
-         
+        
         // finally append query to select object
         $_select->where($where);
     }
