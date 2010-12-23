@@ -172,12 +172,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     copyEditAction: false,
 
     /**
-     * @type Bool
-     * @property showDeleteMask
-     */
-    showDeleteMask: true,
-
-    /**
      * @type Ext.Toolbar
      * @property actionToolbar
      */
@@ -1196,20 +1190,26 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Array} records
      */
     deleteRecords: function(sm, records) {
+        // directly remove records from the store
+        if (Ext.isArray(records)) {
+            Ext.each(records, function(record) {
+                this.store.remove(record);
+            });
+        }
+        
         if (this.recordProxy) {
+            if (this.usePagingToolbar) {
+                this.pagingToolbar.refresh.disable();
+            }
+            
             var i18nItems    = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), records.length);
 
-            if (this.showDeleteMask) {
+            if (sm.isFilterSelect && this.filterSelectionDelete) {
                 if (! this.deleteMask) {
-                    var message = String.format(_('Deleting {0}'), i18nItems);
-                    if (sm.isFilterSelect) {
-                        message = message + _(' ... This may take a long time!');
-                    } 
+                    var message = String.format(_('Deleting {0}'), i18nItems) + _(' ... This may take a long time!');
                     this.deleteMask = new Ext.LoadMask(this.grid.getEl(), {msg: message});
                 }
                 this.deleteMask.show();
-            } else if (this.usePagingToolbar) {
-                this.pagingToolbar.refresh.disable();
             }
             
             var options = {
@@ -1235,10 +1235,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             } else {
                 this.recordProxy.deleteRecords(records, options);
             }
-        } else {
-            Ext.each(records, function(record) {
-                this.store.remove(record);
-            });
         }
     },
     
@@ -1246,9 +1242,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * refresh after delete (hide delete mask or refresh paging toolbar)
      */
     refreshAfterDelete: function() {
-        if (this.showDeleteMask) {
+        if (this.deleteMask) {
             this.deleteMask.hide();
-        } else if (this.usePagingToolbar) {
+        }
+        
+        if (this.usePagingToolbar) {
             this.pagingToolbar.refresh.show();
         }
     },
@@ -1261,7 +1259,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onAfterDelete: function(ids) {
         this.removeFromEditBuffer(ids);
-        this.loadGridData();
+        this.loadGridData({
+            removeStrategy: 'keepBuffered'
+        });
     },
     
     /**
