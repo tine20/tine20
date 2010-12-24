@@ -180,7 +180,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 
                 switch($value) {
                     case 'received':
-                        $nodeContent = $data->$value->toString('Y-m-d H:i:s') . '.000Z';
+                        $nodeContent = $data->$value->toString('Y-m-d\TH:i:s') . '.000Z';
                         break;
                         
                     case 'from_email':
