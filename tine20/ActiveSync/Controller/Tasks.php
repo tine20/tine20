@@ -129,9 +129,9 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                         
                     case 'due':
                         if($data->$value instanceof DateTime) {
-                            $_xmlNode->appendChild(new DOMElement($key, $data->$value->toString('Y-m-d H:i:s') . '.000Z', 'uri:Tasks'));
+                            $_xmlNode->appendChild(new DOMElement($key, $data->$value->toString('Y-m-d\TH:i:s') . '.000Z', 'uri:Tasks'));
                             $data->$value->setTimezone(Tinebase_Core::get('userTimeZone'));
-                            $_xmlNode->appendChild(new DOMElement('DueDate', $data->$value->toString('Y-m-d H:i:s') . '.000Z', 'uri:Tasks'));
+                            $_xmlNode->appendChild(new DOMElement('DueDate', $data->$value->toString('Y-m-d\TH:i:s') . '.000Z', 'uri:Tasks'));
                         }
                         break;
                         
@@ -165,7 +165,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         // Completed is required
         if ($data->completed instanceof DateTime) {
             $_xmlNode->appendChild(new DOMElement('Complete', 1, 'uri:Tasks'));
-            $_xmlNode->appendChild(new DOMElement('DateCompleted', $data->completed->toString('Y-m-d H:i:s') . '.000Z', 'uri:Tasks'));
+            $_xmlNode->appendChild(new DOMElement('DateCompleted', $data->completed->toString('Y-m-d\TH:i:s') . '.000Z', 'uri:Tasks'));
         } else {
             $_xmlNode->appendChild(new DOMElement('Complete', 0, 'uri:Tasks'));
         }
