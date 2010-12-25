@@ -402,10 +402,11 @@ var wbxml = {
 	req.mozBackgroundRequest = true; 
 	req.open("POST", config.url+'?Cmd='+command+'&User='+config.user+'&DeviceId=ThunderTine'+config.deviceId+'&DeviceType='+config.deviceType, true);
 	req.overrideMimeType('application/vnd.ms-sync.wbxml'); 
-    req.setRequestHeader("Content-Type", 'application/vnd.ms-sync.wbxml');
+	req.setRequestHeader("User-Agent", config.deviceType+' ActiveSync');
+	req.setRequestHeader("Content-Type", 'application/vnd.ms-sync.wbxml');
 	req.setRequestHeader("Authorization", 'Basic '+btoa(config.user+':'+config.pwd));
 	req.setRequestHeader("MS-ASProtocolVersion", '2.5');
-	req.setRequestHeader("Content-Length", wbxml.length); 
+	req.setRequestHeader("Content-Length", wbxml.length);
 	req.onload = function () {
 		if (req.readyState == 4) {
 			if (req.status == 200) {
@@ -417,7 +418,15 @@ var wbxml = {
 				sync.failed('http', req);
 		} 
 	}
+	req.upload.onerror = function (e) {
+		helper.prompt("Error " + e.target.status + " occurred while uploading.");
+	}
 	req.sendAsBinary(wbxml);
+  }, 
+
+  httpError: function(evt) {
+	alert('Error!');
+	//alert(evt);
   }
 
 }

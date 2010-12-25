@@ -85,10 +85,13 @@ var helper = {
   }, 
 
   prompt: function(txt) {
-    if (config.fullSilence==false) return false;
-    var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
-                                  .getService(Components.interfaces.nsIPromptService);
-    promptService.alert(window, ttine.strings.getString("messageTitle"), txt);
+    if (config.fullSilence==true) {
+      Components.utils.reportError(txt);
+    } else {
+      var promptService = Components.classes["@mozilla.org/embedcomp/prompt-service;1"]
+                                    .getService(Components.interfaces.nsIPromptService);
+      promptService.alert(window, ttine.strings.getString("messageTitle"), txt);
+    }
   },
 
   ask: function(txt) {

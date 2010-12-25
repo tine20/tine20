@@ -52,6 +52,7 @@ var ab = {
 	<Contacts_Webpage>WebPage1</Contacts_Webpage>\
 	<Contacts_Suffix>Custom2</Contacts_Suffix>\
 	<Contacts_Picture>%Picture</Contacts_Picture>\
+	<Contacts_Categories>%Categories</Contacts_Categories>\
 </card>',
 
   mapDom: function() { 
@@ -134,6 +135,15 @@ var ab = {
 		card.setProperty("BirthYear", tbDate.substr(0,4) );
 		card.setProperty("BirthMonth", tbDate.substr(5,2) );
 		card.setProperty("BirthDay", tbDate.substr(8,2) );
+	}
+	else if (tbField=='Categories') {
+		var Customfield = '';
+		for (var i=0; i<asValue.children.length; i++) {
+			Customfield = Customfield + asValue.children[i].firstChild.nodeValue;
+			if (i<(asValue.children.length-1))
+				Customfield = Customfield + ", ";
+		}
+		card.setProperty("Custom4", Customfield );
 	}
 	else if (tbField=='Picture') { 
 		// delete image
@@ -404,6 +414,8 @@ var ab = {
 					if (asField == 'Contacts_Picture')
 						// stupid Mozilla 4kb bug -> Need extra function to retrieve nodeValue!!
 						var asValue = this._largeDomValue(appDataDom.children[i]); 
+					else if (asField == 'Contacts_Categories')
+						var asValue = appDataDom.children[i];
 					else
 						var asValue = appDataDom.children[i].firstChild.nodeValue; 
 					var tbFieldX = helper.doEvaluateXPath(mapDom, "//"+asField);
