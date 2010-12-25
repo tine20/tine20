@@ -28,6 +28,10 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
         $this->_path = $_path;
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Sabre_DAV_ICollection::getChildren()
+     */
     public function getChildren() 
     {
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_path);
@@ -52,6 +56,10 @@ class Tinebase_WebDav_Root extends Sabre_DAV_Directory
         return $children;            
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see Sabre_DAV_Directory::getChild()
+     */
     public function getChild($_name) 
     {
         if (empty($this->_path)) {
