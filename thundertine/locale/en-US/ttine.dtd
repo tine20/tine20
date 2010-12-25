@@ -21,6 +21,7 @@
 <!ENTITY ttine.prefwindowCheckFolder "check remote folders before syncing">
 <!ENTITY ttine.prefwindowLimitPicSize "limit picture size (ActiveSync standard ~36 KB)">
 <!ENTITY ttine.prefwindowIPhone "pretend to be a iPhone">
+<!ENTITY ttine.prefwindowFullSilence "Disable all output, getting full silence">
 
 <!ENTITY ttine.prefwindowLocalBooks "local address books">
 <!ENTITY ttine.prefwindowAddNew "Add new address book...">

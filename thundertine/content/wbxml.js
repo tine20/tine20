@@ -273,9 +273,9 @@ var wbxml = {
 					// replace forbidden xml characters
 					inString = inString.replace('<', '&lt;');
 					inString = inString.replace('>', '&gt;');
-					/* inString = inString.replace('"', '&quot;');
+					inString = inString.replace('"', '&quot;');
 					inString = inString.replace('&', '&amp;');
-					inString = inString.replace("'", '&apos;'); */
+					/* inString = inString.replace("'", '&apos;'); */
 					xml = xml + inString;
 				}
 				else

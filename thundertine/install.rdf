@@ -9,7 +9,7 @@
   <RDF:Description RDF:about="urn:mozilla:install-manifest"
                    em:id="thundertine@santa.noel"
                    em:name="ThunderTine"
-                   em:version="0.1"
+                   em:version="0.2"
                    em:creator="Santa Noel"
                    em:description="Sync against Tine 2.0 Groupware"
                    em:iconURL="chrome://ttine/skin/ttine.png"

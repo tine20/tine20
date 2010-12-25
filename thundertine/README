@@ -54,3 +54,4 @@ will be inside a (new) ttine.xpi.
 HISTORY
 
 0.1     Initial  Version: Sync contacts between Thunderbird and Tine 2.0
+0.2     Problems with ampersand ("&") solved

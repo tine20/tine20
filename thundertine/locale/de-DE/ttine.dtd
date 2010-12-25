@@ -21,6 +21,7 @@
 <!ENTITY ttine.prefwindowCheckFolder "überprüfe vor dem Synchronisieren die Ordner auf dem Server">
 <!ENTITY ttine.prefwindowLimitPicSize "Größe der Bilder beschränken (ActiveSync-Standard ~36 KB)">
 <!ENTITY ttine.prefwindowIPhone "Am Server als iPhone ausgeben">
+<!ENTITY ttine.prefwindowFullSilence "Alle Ausgaben unterdrücken, Stille erzwingen">
 
 <!ENTITY ttine.prefwindowLocalBooks "lokale Addressbücher">
 <!ENTITY ttine.prefwindowAddNew "Addressbuch hinzufügen...">
