@@ -96,7 +96,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         #$dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
         
         // namespace === uri:Calendar
-        $dueDate = $task->due->format("Y-m-d H:i:s") . '.000Z';
+        $dueDate = $task->due->format("Y-m-d\TH:i:s") . '.000Z';
         $this->assertEquals($dueDate, @$dom->getElementsByTagNameNS('uri:Tasks', 'DueDate')->item(0)->nodeValue, $dom->saveXML());
         $this->assertEquals("Hello\r\nTask\r\nLars", @$dom->getElementsByTagNameNS('uri:AirSyncBase', 'Data')->item(0)->nodeValue, $dom->saveXML());
         
