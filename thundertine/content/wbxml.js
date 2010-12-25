@@ -424,10 +424,5 @@ var wbxml = {
 	req.sendAsBinary(wbxml);
   }, 
 
-  httpError: function(evt) {
-	alert('Error!');
-	//alert(evt);
-  }
-
 }
 
