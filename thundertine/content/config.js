@@ -99,6 +99,7 @@ var config = {
 	config.contactsLocalFolder = prefs.getCharPref("contactsLocalFolder");
 	config.contactsRemoteFolder = prefs.getCharPref("contactsRemoteFolder");
 	config.contactsLimitPictureSize = prefs.getBoolPref("contactsLimitPictureSize");
+        config.fullSilence = prefs.getBoolPref("fullSilence");
 	// get password
 	var passwordManager = Components.classes["@mozilla.org/login-manager;1"]
 		.getService(Components.interfaces.nsILoginManager);
