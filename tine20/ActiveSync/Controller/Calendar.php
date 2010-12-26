@@ -367,12 +367,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $recurrence->appendChild(new DOMElement('Interval', $rrule->interval, 'uri:Calendar'));
             
             if($rrule->until instanceof DateTime) {
-                $until = clone $rrule->until;
-                if ($until->format('s') == '59') {
-                    $until->addSecond(1);
-                }
-                
-                $recurrence->appendChild(new DOMElement('Until', $until->format('Ymd\THis') . 'Z', 'uri:Calendar'));
+                $recurrence->appendChild(new DOMElement('Until', $rrule->until->format('Ymd\THis') . 'Z', 'uri:Calendar'));
             }
             
             // handle exceptions of repeating events
@@ -756,9 +751,9 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             
             if(isset($xmlData->Recurrence->Until)) {
                 $rrule->until = $this->_convertISOToZendDate((string)$xmlData->Recurrence->Until);
-                // until ends at xx:59:59 in Tine 2.0 but xx:00:00 in AS
+                // until ends at 23:59:59 in Tine 2.0 but at 00:00:00 in Windows CE (local user time)
                 if ($rrule->until->format('s') == '00') {
-                    $rrule->until->subSecond(1);
+                    $rrule->until->addHour(23)->addMinute(59)->addSecond(59);
                 }
             } else {
                 $rrule->until = null;
