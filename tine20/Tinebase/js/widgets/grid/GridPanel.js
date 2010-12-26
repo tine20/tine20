@@ -760,7 +760,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Object} options
      */
     loadGridData: function(options) {
-        
+    	var options = options || {};
+    	
         Ext.applyIf(options, {
             callback:           Ext.emptyFn,
             scope:              this,
