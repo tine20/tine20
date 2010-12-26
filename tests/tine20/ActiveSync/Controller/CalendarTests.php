@@ -95,7 +95,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
             'dtstart'       => Tinebase_DateTime::now()->addMonth(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-05-25 18:00:00',
             'dtend'         => Tinebase_DateTime::now()->addMonth(1)->addHour(1)->toString(Tinebase_Record_Abstract::ISO8601LONG), //'2009-05-25 19:00:00',
             'originator_tz' => 'Europe/Berlin',
-            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=' . Tinebase_DateTime::now()->addMonth(1)->addDay(6)->setHour(22)->setMinute(59)->setSecond(59)->toString(Tinebase_Record_Abstract::ISO8601LONG), //2009-05-31 17:30:00',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=' . Tinebase_DateTime::now()->addMonth(1)->addDay(6)->setHour(22)->setMinute(59)->setSecond(59)->toString(Tinebase_Record_Abstract::ISO8601LONG), //2009-05-31 22:59:59',
             'container_id'  => $this->_getContainerWithSyncGrant()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
@@ -302,7 +302,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $endTime = $this->objects['eventDaily']->dtend->format("Ymd\THis") . 'Z';
         $this->assertEquals($endTime, @$testDom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $testDom->saveXML());
         
-        $untilTime = Calendar_Model_Rrule::getRruleFromString($this->objects['eventDaily']->rrule)->until->addSecond(1)->format("Ymd\THis") . 'Z';
+        $untilTime = Calendar_Model_Rrule::getRruleFromString($this->objects['eventDaily']->rrule)->until->format("Ymd\THis") . 'Z';
         $this->assertEquals($untilTime, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Until')->item(0)->nodeValue, $testDom->saveXML());
         
     }
@@ -364,7 +364,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         
         $this->assertEquals('2010-12-20 09:00:00', $event->dtstart->format(Tinebase_Record_Abstract::ISO8601LONG));
         $this->assertEquals('2010-12-20 10:00:00', $event->dtend->format(Tinebase_Record_Abstract::ISO8601LONG));
-        $this->assertEquals('2010-12-22 22:59:59', $event->rrule->until->format(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertEquals('2010-12-23 22:59:59', $event->rrule->until->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
     protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record)
