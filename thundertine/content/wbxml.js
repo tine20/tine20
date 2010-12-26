@@ -275,7 +275,7 @@ var wbxml = {
 					inString = inString.replace('>', '&gt;');
 					inString = inString.replace('"', '&quot;');
 					inString = inString.replace('&', '&amp;');
-					/* inString = inString.replace("'", '&apos;'); */
+					// inString = inString.replace("/'/g", '&apos;');
 					xml = xml + inString;
 				}
 				else
@@ -300,10 +300,14 @@ var wbxml = {
 			xml = xml + '</' + lastTags.pop()+ '>';
 		}
 		else if (c>=0x05) { 
+//if ( tag == 'FolderHierarchy_ParentId' )
+//  alert(c+'    '+this.codePages[page]+'   ');
 			// remove type addition from tags
+			var inside = true;
 			if(c > 0xC0) c = c - 0xC0;
-			else if(c > 0x80) c = c - 0x80;
+			else if(c > 0x80) { c = c - 0x80; inside=false; }
 			else if(c > 0x40) c = c - 0x40;
+			else inside=false;
 			// find tag
 			var acp = this.codePages[page]; 
 			var acp_i = 0;
@@ -316,8 +320,14 @@ var wbxml = {
 					acp_i = this.tokens.indexOf(c, acp_i) + 1; 
 				} 
 			} 
-			lastTags.push(tag); 
-			xml = xml + '<' + tag + '>'; 
+			if (inside==true) {
+				lastTags.push(tag); 
+				xml = xml + '<' + tag + '>'; 
+			} 
+			else {
+                                xml = xml + '<' + tag + '/>'; 
+				continue;
+			}
 		}	
 		
 	} 
@@ -325,7 +335,7 @@ var wbxml = {
 	if (lastTags.length > 0)
 		xml = xml + '</' + lastTags.pop()+ '>'; 
 	// make Dom out of it
-	try {
+	try { 
 		var parser = Components.classes["@mozilla.org/xmlextras/domparser;1"]
 			.createInstance(Components.interfaces.nsIDOMParser);
 		return parser.parseFromString(xml, "text/xml");

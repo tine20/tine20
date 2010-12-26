@@ -59,10 +59,13 @@ var folder = {
 				if (tag == 'FolderHierarchy_Add') { 
 					for (var f=0; f<node.children.length; f++) { 
 						var subtag_name = node.children[f].nodeName;
-						var subtag_value = node.children[f].firstChild.nodeValue;
+						if (node.children[f].firstChild != null)
+							var subtag_value = node.children[f].firstChild.nodeValue;
+						else
+							var subtag_value = '???';
 						if (subtag_name == 'FolderHierarchy_ServerId')
 							config.folderIds.push(subtag_value);
-						else if (subtag_name == 'FolderHierarchy_DisplayName')
+						else if (subtag_name == 'FolderHierarchy_DisplayName') 
 							config.folderNames.push(subtag_value);
 						else if (subtag_name == 'FolderHierarchy_Type')
 							config.folderTypes.push(subtag_value); 
@@ -71,7 +74,10 @@ var folder = {
 				else if (tag == 'FolderHierarchy_Update') {
 					for (var f=0; f<node.children.length; f++) {
 						var subtag_name = node.children[f].nodeName;
-						var subtag_value = node.children[f].firstChild.nodeValue;
+                                                if (node.children[f].firstChild != null)
+                                                        var subtag_value = node.children[f].firstChild.nodeValue;
+                                                else
+                                                        var subtag_value = '???';
 						if (subtag_name == 'FolderHierarchy_ServerId')
 							var folder_id = subtag_value;
 						else if (subtag_name == 'FolderHierarchy_DisplayName')
@@ -83,7 +89,10 @@ var folder = {
 				else if (tag == 'FolderHierarchy_Delete') {
 					for (var f=0; f<node.children.length; f++) {
 						var subtag_name = node.children[f].nodeName;
-						var subtag_value = node.children[f].firstChild.nodeValue;
+                                                if (node.children[f].firstChild != null)
+                                                        var subtag_value = node.children[f].firstChild.nodeValue;
+                                                else
+                                                        var subtag_value = '???';
 						if (subtag_name == 'FolderHierarchy_ServerId') {
 							config.folderNames.splice(config.folderIds.indexOf(subtag_value), 1);
 							config.folderTypes.splice(config.folderIds.indexOf(subtag_value), 1);
