@@ -290,19 +290,6 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $this->assertTrue($events[0]->summary == '');
     }
     
-    /**
-     * tests if search deals with record based grants correctly for 'get' action
-     * 
-     *  -> test user is attendee -> implicit READ GRANT
-     *  
-     */
-    public function testSearchGrantsActionGet()
-    {
-        $events = $this->_testSearchGrantsActionForAction('get');
-        
-        $this->assertEquals(1, count($events), 'testuser has implicit readGrant, but serach for action get found no event');
-    }
-    
 //    /**
 //     * search for an attender we have no cal grants for
 //     * 
@@ -325,6 +312,19 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
 //        
 //        print_r($events->toArray());
 //    }
+
+    /**
+     * tests if search deals with record based grants correctly for 'get' action
+     * 
+     *  -> test user is attendee -> implicit READ GRANT
+     *  
+     */
+    public function testSearchGrantsActionGet()
+    {
+        $events = $this->_testSearchGrantsActionForAction('get');
+        
+        $this->assertEquals(1, count($events), 'testuser has implicit readGrant, but serach for action get found no event');
+    }
     
     /**
      * tests if search deals with record based grants correctly for 'get' action
