@@ -1182,6 +1182,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
+        if ($_attender->user_type === Calendar_Model_Attender::USERTYPE_RESOURCE) {
+            $resource = Calendar_Controller_Resource::getInstance()->get($_attender->user_id);
+            $_attender->displaycontainer_id = $resource->container_id;
+        }
         $this->_backend->createAttendee($_attender);
     }
     
