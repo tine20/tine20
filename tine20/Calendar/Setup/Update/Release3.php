@@ -365,7 +365,7 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
                     <field>id</field>
                 </reference>
             </index>');
-        $this->_backend->addIndex('cal_resources', $declaration);
+        $this->_backend->addForeignKey('cal_resources', $declaration);
         
         $this->setTableVersion('cal_resources', 2);
         $this->setApplicationVersion('Calendar', '3.9');
