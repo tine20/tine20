@@ -369,5 +369,30 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setTableVersion('cal_resources', 2);
         $this->setApplicationVersion('Calendar', '3.9');
+        
+        // give existing resources a container
+        $rb = new Tinebase_Backend_Sql('Calendar_Model_Resource', 'cal_resources');
+        $resources = $rb->getAll();
+        
+        foreach($resources as $resource) {
+            $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+                'name'              => $resource->name,
+                'type'              => Tinebase_Model_Container::TYPE_SHARED,
+                'backend'           => 'Sql',
+                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            )), NULL, TRUE, $resource->getId());
+            
+            // remove default admin
+            $grants = Tinebase_Container::getInstance()->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+                array(
+                    'account_id'      => '0',
+                    'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                    Tinebase_Model_Grants::GRANT_FREEBUSY  => true
+                )
+            )), TRUE, FALSE);
+            
+            $resource->container_id = $container->getId();
+            $rb->update($resource);
+        }
     }
 }
