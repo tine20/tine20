@@ -2,7 +2,7 @@
 <application>
     <name>Calendar</name>
     <!-- gettext('Calendar') -->   
-    <version>3.8</version>
+    <version>3.9</version>
     <order>15</order>
     <status>enabled</status>
     <tables>
@@ -385,13 +385,17 @@
         <!-- resouces -->
         <table>
             <name>cal_resources</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>container_id</name>
+                    <type>integer</type>
                 </field>
                 <field>
                     <name>created_by</name>
@@ -476,6 +480,17 @@
                     <field>
                         <name>is_location</name>
                     </field>
+                </index>
+                <index>
+                    <name>cal_resources::container_id--container::id</name>
+                    <field>
+                        <name>container_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>container</table>
+                        <field>id</field>
+                    </reference>
                 </index>
             </declaration>
         </table>

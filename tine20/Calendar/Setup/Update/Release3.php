@@ -340,4 +340,34 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         //organizer
         $this->setApplicationVersion('Calendar', '3.8');
     }
+    
+    /**
+     * add a calendar for each resource
+     */
+    public function update_8()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>container_id</name>
+                <type>integer</type>
+            </field>');
+        $this->_backend->addCol('cal_resources', $declaration, 1);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>cal_resources::container_id--container::id</name>
+                <field>
+                    <name>container_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>container</table>
+                    <field>id</field>
+                </reference>
+            </index>');
+        $this->_backend->addIndex('cal_resources', $declaration);
+        
+        $this->setTableVersion('cal_resources', 2);
+        $this->setApplicationVersion('Calendar', '3.9');
+    }
 }
