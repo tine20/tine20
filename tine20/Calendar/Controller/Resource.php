@@ -77,6 +77,65 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * add one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function create(Tinebase_Record_Interface $_record)
+    {
+        // create a calendar for this resource
+        $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'              => $_record->name,
+            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'backend'           => $this->_backend->getType(),
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
+        ), NULL, TRUE, NULL));
+        
+        // remove default admin
+        $grants = Tinebase_Container::getInstance()->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
+            array(
+                'account_id'      => '0',
+                'account_type'    => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,
+                Tinebase_Model_Grants::GRANT_FREEBUSY  => true
+            )
+        )), TRUE, FALSE);
+        
+        $_record->container_id = $container->getId();
+        return parent::create($_record);
+    }
+    
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
+        $container->name = $_record->name;
+        Tinebase_Container::getInstance()->update($_record);
+        
+        return parent::update($_record);
+    }
+    
+//    /**
+//     * Deletes a set of records.
+//     * 
+//     * If one of the records could not be deleted, no record is deleted
+//     * 
+//     * @param   array array of record identifiers
+//     * @return  Tinebase_Record_RecordSet
+//     * @throws Tinebase_Exception_NotFound|Tinebase_Exception
+//     */
+//    public function delete($_ids)
+//    {
+//    }
+    
+    /**
      * check if user has the right to manage resources
      * 
      * @param string $_action {get|create|update|delete}
