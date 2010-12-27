@@ -207,7 +207,7 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
      * @param string tableName 
      * @param Setup_Backend_Schema_Index_Abstract declaration
      */     
-    public function addIndex($_tableName ,  Setup_Backend_Schema_Index_Abstract$_declaration)
+    public function addIndex($_tableName ,  Setup_Backend_Schema_Index_Abstract $_declaration)
     {
         $statement = "ALTER TABLE `" . SQL_TABLE_PREFIX . $_tableName . "` ADD "
                     . $this->getIndexDeclarations($_declaration);
