@@ -91,7 +91,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => $this->_backend->getType(),
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
-        ), NULL, TRUE, NULL));
+        )), NULL, TRUE, NULL);
         
         // remove default admin
         $grants = Tinebase_Container::getInstance()->setGrants($container->getId(), new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array(
