@@ -88,7 +88,7 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
         // create a calendar for this resource
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'              => $_record->name,
-            'type'              => Tinebase_Model_Container::TYPE_PERSONAL,
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => $this->_backend->getType(),
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
         ), NULL, TRUE, NULL));
