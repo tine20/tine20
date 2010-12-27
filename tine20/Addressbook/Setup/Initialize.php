@@ -109,8 +109,8 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
         ))));
         
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "My company",
-            'description'       => "All coworkers in my company", // _("All contacts I have read grants for")
+            'name'              => "My company", // _("My company")
+            'description'       => "All coworkers in my company", // _("All coworkers in my company")
             'filters'           => array(array(
                 'field'     => 'container_id',
                 'operator'  => 'in',
