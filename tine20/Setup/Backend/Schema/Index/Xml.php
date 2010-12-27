@@ -19,12 +19,9 @@ class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
      */
     public function __construct($_declaration)
     {
-        if($_declaration instanceof SimpleXMLElement) {
-            $this->_setIndex($_declaration);
-        } elseif ($_declaration !== NULL) {
-            $declaration = new SimpleXMLElement($_declaration);
-            $this->_setIndex($declaration);
-        }
+        $declaration = $_declaration instanceof SimpleXMLElement ? $_declaration : new SimpleXMLElement($_declaration);
+        
+        $this->_setIndex($declaration);
     }
  
     protected function _setIndex($_declaration)
@@ -38,16 +35,16 @@ class Setup_Backend_Schema_Index_Xml extends Setup_Backend_Schema_Index_Abstract
                 if ($val instanceof SimpleXMLElement) {
                     $this->field[] = (string) $val->name;
                 } else {
-                    $this->field = (string) $val;
+                    $this->field   = (string) $val;
                 }
             
             // reduce complexity of storage of foreign keys 
             } else if ($key == 'reference') {
-                $this->referenceTable = $val->table;
-                $this->referenceField = $val->field;
-                $this->referenceOnUpdate = $val->onupdate;
-                $this->referenceOnDelete= $val->ondelete;
-                $this->field = $this->field[0];
+                $this->referenceTable    = (string) $val->table;
+                $this->referenceField    = (string) $val->field;
+                $this->referenceOnUpdate = (string) $val->onupdate;
+                $this->referenceOnDelete = (string) $val->ondelete;
+                $this->field             = $this->field[0];
             }
         }
 
