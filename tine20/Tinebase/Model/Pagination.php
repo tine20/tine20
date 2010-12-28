@@ -24,21 +24,22 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      */    
     protected $_identifier = 'id';
     
+    /**
+     * validators
+     * 
+     * @var array
+     */
     protected $_validators = array(
         'id'                   => array('allowEmpty'    => true,  
                                         'Int'                           ),
-        
         'start'                => array('allowEmpty'    => true,
                                         'Int',
                                         'default'       => 0            ),
-    
         'limit'                => array('allowEmpty'    => true,  
                                         'Int',
                                         'default'       => 0            ),
-    
         'sort'                 => array('allowEmpty'    => true,
                                         'default'       => NULL         ),
-    
         'dir'                  => array('presence'      => 'required',
                                         'allowEmpty'    => false,
                                         'InArray'       => array('ASC', 'DESC'),
