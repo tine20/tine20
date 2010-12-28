@@ -148,7 +148,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 if ($folder->has_children) {
                     $this->update($account, $folder->globalname, $_recursive);
                 } else {
-                    $this->_removeNoLongerExistingFolders($account, $folder->globalname);
+                    $this->_removeFromCache($account, $folder->globalname);
                 }
                 $this->_backend->update($folder);
             }
@@ -247,7 +247,10 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     public function clear($_accountId)
     {
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
-        $this->_removeNoLongerExistingFolders($account);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing folder cache of account ' . $account->name);
+        
+        $this->_removeFromCache($account);
     }
     
     /***************************** protected funcs *******************************/
@@ -321,7 +324,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                     ));
                     
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new folder ' . $folderData['globalName'] . ' to cache.');
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folder->toArray(), true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . print_r($folder->toArray(), true));
                     
                     $folder = $this->_backend->create($folder);
                 }
@@ -330,7 +333,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $result->addRecord($folder);
         }
         
-        $this->_removeNoLongerExistingFolders($_account, $_parentFolder, $result->getArrayOfIds());
+        $this->_removeFromCache($_account, $_parentFolder, $result->getArrayOfIds());
         
         return $result;
     }
@@ -342,7 +345,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param string $_parentFolder
      * @param array $_imapFolderIds if empty, remove all found cached folders
      */
-    protected function _removeNoLongerExistingFolders(Felamimail_Model_Account $_account, $_parentFolder = NULL, $_imapFolderIds = array())
+    protected function _removeFromCache(Felamimail_Model_Account $_account, $_parentFolder = NULL, $_imapFolderIds = array())
     {
         $filterData = array(array('field' => 'account_id',  'operator' => 'equals', 'value' => $_account->getId()));
         if ($_parentFolder !== NULL) {
@@ -352,9 +355,9 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $cachedFolderIds = $this->_backend->search($filter, NULL, TRUE);
         if (count($cachedFolderIds) > count($_imapFolderIds)) {
             // remove folders from cache
-            $noLongerExistingIds = array_diff($cachedFolderIds, $_imapFolderIds);
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing ' . count($noLongerExistingIds) . ' no longer existing folder from cache.');
-            $this->delete($noLongerExistingIds);
+            $idsToRemove = array_diff($cachedFolderIds, $_imapFolderIds);
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing ' . count($idsToRemove) . ' folders from cache.');
+            $this->delete($idsToRemove);
         }
     }
     
