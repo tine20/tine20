@@ -132,10 +132,12 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->_createdFolders as $folderName) {
-            //echo "delete $folderName\n";
-            //Felamimail_Controller_Folder::getInstance()->delete($this->_account->getId(), $folderName);
-            $this->_imap->removeFolder($folderName);
+        if (count($this->_createdFolders) > 0) {
+            foreach ($this->_createdFolders as $folderName) {
+                //echo "delete $folderName\n";
+                $this->_imap->removeFolder($folderName);
+            }
+            Felamimail_Controller_Cache_Folder::getInstance()->clear($this->_account);
         }
         
         if (! empty($this->_foldersToClear)) {
@@ -203,20 +205,27 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, $result['totalcount'], 'Found too many messages in folder ' . $this->_testFolderName);
         $this->assertEquals(0, $folder->cache_totalcount);
     }
-    
-    /**
-     * try to create a folder
-     */
-    public function testCreateFolder()
-    {
-        $result = $this->_json->addFolder('test', $this->_testFolderName, $this->_account->getId());
-        $this->_createdFolders[] = $this->_testFolderName . $this->_account->delimiter . 'test';
-        
-        $this->assertEquals('test', $result['localname']);
-        $this->assertEquals($this->_testFolderName . $this->_account->delimiter . 'test', $result['globalname']);
-        $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_EMPTY, $result['cache_status']);
-    }
 
+    /**
+     * try to create some folders
+     */
+    public function testCreateFolders()
+    {
+        $filter = $this->_getFolderFilter();
+        $result = $this->_json->searchFolders($filter);
+        
+        $foldernames = array('test' => 'test', 'Schlüssel' => 'Schluessel', 'test/1' => 'test1', 'test\2' => 'test2');
+        
+        foreach ($foldernames as $foldername => $expected) {
+            $result = $this->_json->addFolder($foldername, $this->_testFolderName, $this->_account->getId());
+            $globalname = $this->_testFolderName . $this->_account->delimiter . $expected;
+            $this->_createdFolders[] = $globalname;
+            $this->assertEquals($expected, $result['localname']);
+            $this->assertEquals($globalname, $result['globalname']);
+            $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_EMPTY, $result['cache_status']);
+        }
+    }
+    
     /**
      * testUpdateFolderCache
      */
