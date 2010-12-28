@@ -786,6 +786,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             select: function (combo, record) {
                                 // disable container_id combo if hidden
                                 this.getForm().findField('container_id').setDisabled(record.data.field1 === 'hidden');
+                                this.getForm().findField('container_id').setValue(null);
                             }
                         }
                     }, {
@@ -793,6 +794,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n.gettext('Saved in Addressbook'),
                         name: 'container_id',
                         blurOnSelect: true,
+                        allowBlank: false,
+                        forceSelection: true,
                         listWidth: 250,
                         recordClass: Tine.Tinebase.Model.Container,
                         disabled: this.record.get('visibility') === 'hidden',
