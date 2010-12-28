@@ -668,13 +668,12 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     
     protected function _getContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
     {
-        #$_filter->addFilter(
+        // custom filter gets added when created
         $_filter->createFilter(
             'account_id', 
             'equals', 
             Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}
         );
-        #);
         
         $_filter->addFilter($_filter->createFilter(
             'folder_id', 
