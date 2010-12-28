@@ -412,8 +412,11 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
     var defaults = (Tine.Felamimail.registry.get('defaults')) 
         ? Tine.Felamimail.registry.get('defaults')
         : {};
+        
+    var currentUserDisplayName = Tine.Tinebase.registry.get('currentAccount').accountDisplayName;
     
     return {
+        from: currentUserDisplayName,
         host: (defaults.host) ? defaults.host : '',
         port: (defaults.port) ? defaults.port : 143,
         smtp_hostname: (defaults.smtp && defaults.smtp.hostname) ? defaults.smtp.hostname : '',
