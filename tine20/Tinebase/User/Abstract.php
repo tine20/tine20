@@ -324,7 +324,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             
             for ($i=0; $i<strlen($_account->accountFirstName); $i++) {
                 
-                $userName = strtolower(self::replaceSpechialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
+                $userName = strtolower(self::replaceSpecialChars(substr($_account->accountFirstName, 0, $i+1) . $_account->accountLastName));
                 if (! $this->userNameExists($userName)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  generated username: ' . $userName);
                     return $userName;
@@ -351,9 +351,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     public function generateUserName($_account)
     {
         if (! empty($_account->accountFirstName)) {
-            $userName = strtolower(self::replaceSpechialChars(substr($_account->accountLastName, 0, 10) . substr($_account->accountFirstName, 0, 2)));
+            $userName = strtolower(self::replaceSpecialChars(substr($_account->accountLastName, 0, 10) . substr($_account->accountFirstName, 0, 2)));
         } else {
-            $userName = strtolower(self::replaceSpechialChars(substr($_account->accountLastName, 0, 10)));
+            $userName = strtolower(self::replaceSpecialChars(substr($_account->accountLastName, 0, 10)));
         }
         
         if ($this->userNameExists($userName)) {
@@ -386,12 +386,12 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     }
     
     /**
-     * replaces and/or strips spechialchars from given string
+     * replaces and/or strips special chars from given string
      *
      * @param string $_input
      * @return string
      */
-    public static function replaceSpechialChars($_input)
+    public static function replaceSpecialChars($_input)
     {
         $search  = array('ä',  'ü',  'ö',  'ß',  'é', 'è', 'ê', 'ó' ,'ô', 'á', 'ź', 'Ä',  'Ü',  'Ö',  'É', 'È', 'Ê', 'Ó' ,'Ô', 'Á', 'Ź'); 
         $replace = array('ae', 'ue', 'oe', 'ss', 'e', 'e', 'e', 'o', 'o', 'a', 'z', 'Ae', 'Ue', 'Oe', 'E', 'E', 'E', 'O', 'O', 'a', 'z');
