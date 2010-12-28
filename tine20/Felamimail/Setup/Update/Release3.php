@@ -215,7 +215,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
      */    
     public function update_5()
     {
-        $this->_clearMessageCache();
+        $this->_clearCache();
                 
         $this->setApplicationVersion('Felamimail', '3.6');
     }
@@ -226,7 +226,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
      */    
     public function update_6()
     {
-        $this->_clearMessageCache();
+        $this->_clearCache();
         
         $newFields = array(
             '<field>
@@ -270,7 +270,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
      */    
     public function update_7()
     {
-        $this->_clearMessageCache();
+        $this->_clearCache();
         
         $this->setApplicationVersion('Felamimail', '3.8');
     }
@@ -335,7 +335,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
      */    
     public function update_10()
     {
-        $this->_clearMessageCache();
+        $this->_clearCache();
         
         $newFields = array(
                 '<field>
@@ -435,7 +435,7 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setTableVersion('felamimail_cache_message', '4');
         $this->setApplicationVersion('Felamimail', '3.14');
-        $this->_clearMessageCache();
+        $this->_clearCache();
     }
 
     /**
@@ -535,24 +535,18 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }
     
     /**
-     * clear message cache tables and reset folder status
+     * clear cache tables and reset folder status
      */
-    protected function _clearMessageCache()
+    protected function _clearCache()
     {
         $cachingTables = array(
             'felamimail_cache_message_bcc',
             'felamimail_cache_message_cc',
             'felamimail_cache_message_flag',
             'felamimail_cache_message_to',
-            'felamimail_cache_message'
+            'felamimail_cache_message',
+            'felamimail_folder',
         );
-        
-        // lock all folders for updates
-        $data = array(
-            'cache_timestamp' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'cache_status'    => Felamimail_Model_Folder::CACHE_STATUS_UPDATING,
-        );
-        $update = $this->_db->update(SQL_TABLE_PREFIX . 'felamimail_folder', $data);
         
         // truncate tables (disable foreign key checks for this)
         $this->_db->query("SET AUTOCOMMIT=0");
@@ -565,18 +559,5 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->_db->query("SET FOREIGN_KEY_CHECKS=1");
         $this->_db->query("SET AUTOCOMMIT=1");
-        
-        // unlock all folders for updates and reset folder counters
-        $data = array(
-            'cache_timestamp'   => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-            'cache_status'      => Felamimail_Model_Folder::CACHE_STATUS_EMPTY,
-            'cache_uidnext'     => 1,
-            'cache_job_actions_estimate' => 0,
-            'cache_job_actions_done' => 0,
-            'cache_totalcount'  => 0,
-            'cache_recentcount' => 0,
-            'cache_unreadcount' => 0
-        );
-        $update = $this->_db->update(SQL_TABLE_PREFIX . 'felamimail_folder', $data);
     }
 }
