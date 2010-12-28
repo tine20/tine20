@@ -184,9 +184,9 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                 }
             }
             
-            // does the folder exist?
+            // does the folder exist for this device
             try {
-                $folder         = $this->_folderStateBackend->getByProperty($collectionId, 'folderid');
+                $folder         = $this->getFolderState($this->_device, $collectionId);
                 // newer clients don't send the class tag anymore
                 $collectionData['class'] = $folder->class;
             } catch (Tinebase_Exception_NotFound $e) {
@@ -586,26 +586,14 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                     $this->_controller->updateSyncKey($this->_device, $newSyncKey, $this->_syncTimeStamp, $collectionData['class'], $collectionData['collectionId']);
                     
                     // store current filter type
-                    $filter = new ActiveSync_Model_FolderStateFilter(array(
-                        array(
-                            'field'     => 'device_id',
-                            'operator'  => 'equals',
-                            'value'     => $this->_device->getId(),
-                        ),
-                        array(
-                            'field'     => 'class',
-                            'operator'  => 'equals',
-                            'value'     => $collectionData['class'],
-                        ),
-                        array(
-                            'field'     => 'folderid',
-                            'operator'  => 'equals',
-                            'value'     => $collectionData['collectionId']
-                        )
-                    ));
-                    $folderState = $this->_folderStateBackend->search($filter)->getFirstRecord();
-                    $folderState->lastfiltertype = $collectionData['filterType'];
-                    $this->_folderStateBackend->update($folderState);
+                    try {
+                        $folderState = $this->getFolderState($this->_device, $collectionData['collectionId']);
+                        $folderState->lastfiltertype = $collectionData['filterType'];
+                        $this->_folderStateBackend->update($folderState);
+                    } catch (Tinebase_Exception_NotFound $tenf) {
+                        // failed to get folderstate => should not happen but is also no problem in this state
+                        if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' failed to get content state for: ' . $collectionData['collectionId']);
+                    }
                 }
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__);
             }
@@ -682,4 +670,36 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " no contentstate found for " . print_r($contentStateFilter->toArray(), true));
         }
     }    
+    
+    /**
+     * @param unknown_type $_deviceId
+     * @param unknown_type $_class
+     * @param unknown_type $_folderId
+     * @return ActiveSync_Model_FolderState
+     */
+    public function getFolderState($_deviceId, $_folderId)
+    {
+        $deviceId = $_deviceId instanceof ActiveSync_Model_Device ? $_deviceId->getId() : $_deviceId;
+        
+        // store current filter type
+        $filter = new ActiveSync_Model_FolderStateFilter(array(
+            array(
+                'field'     => 'device_id',
+                'operator'  => 'equals',
+                'value'     => $deviceId,
+            ),
+            array(
+                'field'     => 'folderid',
+                'operator'  => 'equals',
+                'value'     => $_folderId
+            )
+        ));
+        $folderStates = $this->_folderStateBackend->search($filter);
+
+        if ($folderStates->count() == 0) {
+            throw new Tinebase_Exception_NotFound('folderstate for device not found');
+        }
+        
+        return $folderStates->getFirstRecord();
+    }
 }
