@@ -78,7 +78,12 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function get($_id)
     {
         $event = $this->_eventController->get($_id);
-        $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+        
+        $exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+        // don't add empty recordset
+        if ($exdate->count() > 0) {
+            $event->exdate = $exdate;
+        }
         
         return $event;
     }
