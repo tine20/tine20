@@ -78,25 +78,20 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function get($_id)
     {
         $event = $this->_eventController->get($_id);
-        
-        $exdate = $this->_eventController->getRecurExceptions($event, TRUE);
-        // don't add empty recordset
-        if ($exdate->count() > 0) {
-            $event->exdate = $exdate;
-        }
+        $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
         
         return $event;
     }
     
     /**
-     * Returns a set of leads identified by their id's
+     * Returns a set of events identified by their id's
      * 
      * @param   array array of record identifiers
      * @return  Tinebase_Record_RecordSet of Calendar_Model_Event
      */
     public function getMultiple($_ids)
     {
-        $events = $this->_eventController->get($_ids);
+        $events = $this->_eventController->getMultiple($_ids);
         foreach ($events as $event) {
             $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
         }
@@ -265,7 +260,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $events = $this->getMultiple($ids);
         
         foreach($events as $event) {
-            foreach ($event->rrule as $exception) {
+            foreach ($event->exdate as $exception) {
                 $exceptionId = $exception->getId();
                 if ($exceptionId) {
                     $ids[] = $exceptionId;
