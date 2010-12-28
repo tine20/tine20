@@ -14,6 +14,7 @@ Contents
 3. Added new log level: TRACE
 4. Added action-queue
 5. User contact / group list records can now be saved in other Addressbooks
+6. Customfields are now sorted by order column
 
 --------------------------------------------------------------
 1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
@@ -62,3 +63,8 @@ Contents
 is saved in. 
 
 - A new config for default internal Addressbook has been added. Change it in Admin/Applications/Admin/Settings.
+
+--------------------------------------------------------------
+6. Customfields are now sorted by order column
+
+- Please check the order of your customfields: they used to be sorted by name and are now sorted by the order column.
