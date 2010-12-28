@@ -354,11 +354,15 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      */
     public function getChanged($_folderId, $_startTimeStamp, $_endTimeStamp = NULL)
     {
+        $filter = new $this->_contentFilterClass();
+        
         if(!empty($this->_device->{$this->_filterProperty})) {
-            $filter = Tinebase_PersistentFilter::getFilterById($this->_device->{$this->_filterProperty});
-        } else {
-            $filter = new $this->_contentFilterClass();
-        }
+            try {
+                $filter = Tinebase_PersistentFilter::getFilterById($this->_device->{$this->_filterProperty});
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // filter got deleted already
+            }
+        } 
         
         $this->_getContentFilter($filter, 0);
         $this->_getContainerFilter($filter, $_folderId);
@@ -394,11 +398,15 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      */
     public function getServerEntries($_folderId, $_filterType)
     {
+        $filter = new $this->_contentFilterClass();
+        
         if(!empty($this->_device->{$this->_filterProperty})) {
-            $filter = Tinebase_PersistentFilter::getFilterById($this->_device->{$this->_filterProperty});
-        } else {
-            $filter = new $this->_contentFilterClass();
-        }
+            try {
+                $filter = Tinebase_PersistentFilter::getFilterById($this->_device->{$this->_filterProperty});
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // filter got deleted already
+            }
+        } 
         
         $this->_getContentFilter($filter, $_filterType);
         $this->_getContainerFilter($filter, $_folderId);
