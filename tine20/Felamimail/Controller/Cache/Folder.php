@@ -239,6 +239,17 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     }
     
     
+    /**
+     * clear all folders of account
+     * 
+     * @param mixed $_accountId
+     */
+    public function clear($_accountId)
+    {
+        $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+        $this->_removeNoLongerExistingFolders($account);
+    }
+    
     /***************************** protected funcs *******************************/
     
     /**
@@ -331,12 +342,13 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param string $_parentFolder
      * @param array $_imapFolderIds if empty, remove all found cached folders
      */
-    protected function _removeNoLongerExistingFolders(Felamimail_Model_Account $_account, $_parentFolder, $_imapFolderIds = array())
+    protected function _removeNoLongerExistingFolders(Felamimail_Model_Account $_account, $_parentFolder = NULL, $_imapFolderIds = array())
     {
-        $filter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'parent',      'operator' => 'equals', 'value' => $_parentFolder),
-            array('field' => 'account_id',  'operator' => 'equals', 'value' => $_account->getId()),
-        ));
+        $filterData = array(array('field' => 'account_id',  'operator' => 'equals', 'value' => $_account->getId()));
+        if ($_parentFolder !== NULL) {
+            $filterData[] = array('field' => 'parent',      'operator' => 'equals', 'value' => $_parentFolder);
+        } 
+        $filter = new Felamimail_Model_FolderFilter($filterData);
         $cachedFolderIds = $this->_backend->search($filter, NULL, TRUE);
         if (count($cachedFolderIds) > count($_imapFolderIds)) {
             // remove folders from cache
