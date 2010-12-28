@@ -265,7 +265,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      */
     protected function _prepareFolderName($_folderName)
     {
-        $result = $_folderName;
+        $result = replaceSpecialChars($_folderName);
         return $result;
     }
     
