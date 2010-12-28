@@ -371,7 +371,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
             
             // handle exceptions of repeating events
-            if(isset($data->exdate) && $data->exdate instanceof Tinebase_Record_RecordSet) {
+            if($data->exdate->count() > 0) {
                 $exceptionsTag = $_xmlNode->appendChild(new DOMElement('Exceptions', null, 'uri:Calendar'));
                 
                 foreach ($data->exdate as $exception) {
