@@ -60,17 +60,21 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
                     $_requests[0]["params"][$field] = "*******";
                 }
             }
-            Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($_requests, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is JSON request. rawdata: ' . print_r($_requests, true));
         } 
         
         $response = array();
         foreach ($requests as $requestOptions) {
-        	$request = new Zend_Json_Server_Request();
-        	$request->setOptions($requestOptions);
-        	
-        	$response[] = $exception ? 
-        	   $this->_handleException($server, $request, $exception) :
-        	   $this->_handle($server, $request);
+            if ($requestOptions !== NULL) {
+            	$request = new Zend_Json_Server_Request();
+            	$request->setOptions($requestOptions);
+            	
+            	$response[] = $exception ? 
+            	   $this->_handleException($server, $request, $exception) :
+            	   $this->_handle($server, $request);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Got empty request options: skip request.');
+            }
         }
         
         echo $isBatchedRequest ? '['. implode(',', $response) .']' : $response[0];
