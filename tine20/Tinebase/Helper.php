@@ -137,3 +137,19 @@ function removeDir($_dir)
     }
     if (is_dir($_dir)) rmdir($_dir);
 }
+
+/**
+ * replaces and/or strips special chars from given string
+ *
+ * @param string $_input
+ * @return string
+ */
+function replaceSpecialChars($_input)
+{
+    $search  = array('ä',  'ü',  'ö',  'ß',  'é', 'è', 'ê', 'ó' ,'ô', 'á', 'ź', 'Ä',  'Ü',  'Ö',  'É', 'È', 'Ê', 'Ó' ,'Ô', 'Á', 'Ź'); 
+    $replace = array('ae', 'ue', 'oe', 'ss', 'e', 'e', 'e', 'o', 'o', 'a', 'z', 'Ae', 'Ue', 'Oe', 'E', 'E', 'E', 'O', 'O', 'a', 'z');
+                
+    $output = str_replace($search, $replace, $_input);
+    
+    return preg_replace('/[^a-zA-Z0-9._\-]/', '', $output);
+}
