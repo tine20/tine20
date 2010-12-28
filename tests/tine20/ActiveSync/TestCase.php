@@ -184,6 +184,9 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
      */
     abstract public function testAppendXml();
         
+    /**
+     * @return Tinebase_Record_Abstract
+     */
     public function testAddEntryToBackend()
     {
         $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
@@ -192,6 +195,8 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
         $record = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
 
         $this->_validateAddEntryToBackend($record);
+        
+        return $record;
     }
     
     abstract protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record);
