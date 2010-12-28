@@ -261,8 +261,8 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
      */
     public function delete($_ids)
     {
-        $ids = array_unique($_ids);
-        $events = $this->getMultiple($_ids);
+        $ids = array_unique((array)$_ids);
+        $events = $this->getMultiple($ids);
         
         foreach($events as $event) {
             foreach ($event->rrule as $exception) {
