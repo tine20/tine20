@@ -246,6 +246,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
             'dtend'         => $endDate->toString(Tinebase_Record_Abstract::ISO8601LONG),   //'2009-04-25 23:59:59'
             'is_all_day_event' => true,
             'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=' . Tinebase_DateTime::now()->addMonth(1)->addDay(6)->setHour(22)->setMinute(59)->setSecond(59)->toString(Tinebase_Record_Abstract::ISO8601LONG),
             'container_id'  => $this->_getContainerWithSyncGrant()->getId(),
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
@@ -257,12 +258,14 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
 
         $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM)); 
         
-        $controller->appendXML($appData, null, $allDayEvent, array());
+        $controller->appendXML($appData, null, $allDayEvent->getId(), array());
         
-//        $dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
+        #$dom->formatOutput = true; echo $dom->saveXML(); $dom->formatOutput = false;
         
         # ;'20110106T000000Z'
         $this->assertEquals($endDate->addSecond(1)->format('Ymd\THis\Z'), @$dom->getElementsByTagNameNS('uri:Calendar', 'EndTime')->item(0)->nodeValue, $dom->saveXML());
+        // check that no Exceptions tag is set
+        $this->assertEquals(0,                                            $dom->getElementsByTagNameNS('uri:Calendar', 'Exceptions')->length);
     }
     
     /**
