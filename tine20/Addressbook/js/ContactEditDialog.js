@@ -108,22 +108,26 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             }, {
                                 columnWidth: 0.65,
                                 fieldLabel: this.app.i18n._('Title'), 
-                                name: 'n_prefix'
+                                name: 'n_prefix',
+                                maxLength: 64
                             }, {
                                 width: 100,
                                 hidden: true
                             }], [{
                                 columnWidth: 0.35,
                                 fieldLabel: this.app.i18n._('First Name'), 
-                                name: 'n_given'
+                                name: 'n_given',
+                                maxLength: 64
                             }, {
                                 columnWidth: 0.30,
                                 fieldLabel: this.app.i18n._('Middle Name'), 
-                                name: 'n_middle'
+                                name: 'n_middle',
+                                maxLength: 64
                             }, {
                                 columnWidth: 0.35,
                                 fieldLabel: this.app.i18n._('Last Name'), 
-                                name: 'n_family'
+                                name: 'n_family',
+                                maxLength: 64
                             }, {
                                 width: 100,
                                 hidden: true
@@ -150,7 +154,8 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             }, {
                                 columnWidth: 0.35,
                                 fieldLabel: this.app.i18n._('Job Title'),
-                                name: 'title'
+                                name: 'title',
+                                maxLength: 64
                             }, {
                                 width: 100,
                                 xtype: 'extuxclearabledatefield',
@@ -180,43 +185,52 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             items: [[{
                                 fieldLabel: this.app.i18n._('Phone'), 
                                 labelIcon: 'images/oxygen/16x16/apps/kcall.png',
-                                name: 'tel_work'
+                                name: 'tel_work',
+                                maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Mobile'),
                                 labelIcon: 'images/oxygen/16x16/devices/phone.png',
-                                name: 'tel_cell'
+                                name: 'tel_cell',
+                                maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Fax'), 
                                 labelIcon: 'images/oxygen/16x16/devices/printer.png',
-                                name: 'tel_fax'
+                                name: 'tel_fax',
+                                maxLength: 40
                             }], [{
                                 fieldLabel: this.app.i18n._('Phone (private)'),
                                 labelIcon: 'images/oxygen/16x16/apps/kcall.png',
-                                name: 'tel_home'
+                                name: 'tel_home',
+                                maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Mobile (private)'),
                                 labelIcon: 'images/oxygen/16x16/devices/phone.png',
-                                name: 'tel_cell_private'
+                                name: 'tel_cell_private',
+                                maxLength: 40
                             }, {
                                 fieldLabel: this.app.i18n._('Fax (private)'), 
                                 labelIcon: 'images/oxygen/16x16/devices/printer.png',
-                                name: 'tel_fax_home'
+                                name: 'tel_fax_home',
+                                maxLength: 40
                             }], [{
                                 fieldLabel: this.app.i18n._('E-Mail'), 
                                 labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
                                 name: 'email',
-                                vtype: 'email'
+                                vtype: 'email',
+                                maxLength: 64
                             }, {
                                 fieldLabel: this.app.i18n._('E-Mail (private)'), 
                                 labelIcon: 'images/oxygen/16x16/actions/kontact-mail.png',
                                 name: 'email_home',
-                                vtype: 'email'
+                                vtype: 'email',
+                                maxLength: 64
                             }, {
                                 xtype: 'mirrortextfield',
                                 fieldLabel: this.app.i18n._('Web'),
                                 labelIcon: 'images/oxygen/16x16/actions/network.png',
                                 name: 'url',
                                 vtype: 'url',
+                                maxLength: 128,
                                 listeners: {
                                     scope: this,
                                     focus: function (field) {
@@ -249,46 +263,58 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                             xtype: 'columnform',
                             items: [[{
                                 fieldLabel: this.app.i18n._('Street'), 
-                                name: 'adr_one_street'
+                                name: 'adr_one_street',
+                                maxLength: 64
                             }, {
                                 fieldLabel: this.app.i18n._('Street 2'), 
-                                name: 'adr_one_street2'
+                                name: 'adr_one_street2',
+                                maxLength: 64
                             }, {
                                 fieldLabel: this.app.i18n._('Region'),
-                                name: 'adr_one_region'
+                                name: 'adr_one_region',
+                                maxLength: 64
                             }], [{
                                 fieldLabel: this.app.i18n._('Postal Code'), 
-                                name: 'adr_one_postalcode'
+                                name: 'adr_one_postalcode',
+                                maxLength: 64
                             }, {
                                 fieldLabel: this.app.i18n._('City'),
-                                name: 'adr_one_locality'
+                                name: 'adr_one_locality',
+                                maxLength: 64
                             }, {
                                 xtype: 'widget-countrycombo',
                                 fieldLabel: this.app.i18n._('Country'),
-                                name: 'adr_one_countryname'
+                                name: 'adr_one_countryname',
+                                maxLength: 64
                             }]]
                         }, {
                             title: this.app.i18n._('Private Address'),
                             xtype: 'columnform',
                             items: [[{
                                 fieldLabel: this.app.i18n._('Street'), 
-                                name: 'adr_two_street'
+                                name: 'adr_two_street',
+                                maxLength: 64
                             }, {
                                 fieldLabel: this.app.i18n._('Street 2'), 
-                                name: 'adr_two_street2'
+                                name: 'adr_two_street2',
+                                maxLength: 64
                             }, {
                                 fieldLabel: this.app.i18n._('Region'),
-                                name: 'adr_two_region'
+                                name: 'adr_two_region',
+                                maxLength: 64
                             }], [{
                                 fieldLabel: this.app.i18n._('Postal Code'), 
-                                name: 'adr_two_postalcode'
+                                name: 'adr_two_postalcode',
+                                maxLength: 64
                             }, {
                                 fieldLabel: this.app.i18n._('City'),
-                                name: 'adr_two_locality'
+                                name: 'adr_two_locality',
+                                maxLength: 64
                             }, {
                                 xtype: 'widget-countrycombo',
                                 fieldLabel: this.app.i18n._('Country'),
-                                name: 'adr_two_countryname'
+                                name: 'adr_two_countryname',
+                                maxLength: 64
                             }]]
                         }]
                     }]
