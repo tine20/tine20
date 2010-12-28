@@ -64,6 +64,7 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $persistentEvent = $this->_uit->create($event);
         
         $this->_assertTestEvent($persistentEvent);
+        
         return $persistentEvent;
     }
     
@@ -75,6 +76,14 @@ class Calendar_Controller_MSEventFacadeTest extends Calendar_TestCase
         $persistentEvent = $this->_uit->get($persistentEvent->getId());
         
         $this->_assertTestEvent($persistentEvent);
+    }
+    
+    public function testDelete()
+    {
+        $event = $this->getTestEvent();
+        
+        $persistentEvent = $this->_uit->create($event);
+        $persistentEvent = $this->_uit->delete($event->getId());
     }
     
     public function testSearch()
