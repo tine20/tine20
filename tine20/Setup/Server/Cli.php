@@ -31,7 +31,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             array(
                 'help|h'                    => 'Display this help Message',
                 'verbose|v'                 => 'Output messages',
-                'config|c'                  => 'Path to config.inc.php file',
+                'config|c=s'                => 'Path to config.inc.php file',
                 'setconfig'                 => 'Update config. To specify the key and value, append \' -- configKey="your_key" configValue="your config value"\'
                          Examples:
                            setup.php --setconfig -- configkey=sample1 configvalue=value11
@@ -64,6 +64,12 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             exit;
         }
 
+        if ($opts->config) {
+            // add path to config.inc.php to include path
+            $path = strstr($opts->config, 'config.inc.php') !== false ? dirname($opts->config) : $opts->config;
+            set_include_path($path . PATH_SEPARATOR . get_include_path());
+        }
+        
         Setup_Core::initFramework();
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->mode) ? $opts->mode : 'EMPTY'));
