@@ -147,7 +147,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
         $oldCheckValue = $this->_doContainerACLChecks;
         $this->_doContainerACLChecks = FALSE;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . " About to send alarm " . print_r($_alarm->toArray(), TRUE)
         );
 
@@ -173,7 +173,7 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to send alarm email to ' . $organizerContact->email);
                 $notificationsBackend->send(NULL, $organizerContact, $messageSubject, $messageBody);
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Organizer has no email address.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Organizer / creator has no email address.');
             }
         } catch (Exception $e) {
             $this->_doContainerACLChecks = $oldCheckValue;
