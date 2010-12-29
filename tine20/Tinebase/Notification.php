@@ -82,14 +82,15 @@ class Tinebase_Notification
                 $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachements);
             } catch (Exception $e) {
                 $exception = $e;
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Failed to send notification message. Error: " . $e->getMessage());
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $e");
+                $message = "Failed to send notification message to " . $recipient->email . ". Error: " . $e->getMessage();
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $message);
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " $e");
             }
         }
         
         if ($exception !== NULL) {
             // throw exception in the end when all recipients have been processed
-            throw new Tinebase_Exception('Send notification failed: ' . $exception->getMessage());
+            throw new Tinebase_Exception($message);
         }
     }
 }
