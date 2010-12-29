@@ -121,13 +121,22 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * @param   boolean $_ignoreACL don't check acl grants
      * @return  Addressbook_Model_Contact
      * @throws  Addressbook_Exception_AccessDenied if user has no read grant
+     * @throws  Addressbook_Exception_NotFound if contact is hidden from addressbook
+     * 
+     * @todo this is almost always called with ignoreACL = TRUE because contacts can be hidden from addressbook. 
+     *       is this the way we want that?
      */
     public function getContactByUserId($_userId, $_ignoreACL = FALSE)
     {
         $contact = $this->_backend->getByUserId($_userId);
         
-        if ($_ignoreACL === FALSE && !$this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
-            throw new Addressbook_Exception_AccessDenied('read access to contact denied');
+        if ($_ignoreACL === FALSE) {
+            if (empty($contact->container_id)) {
+                throw new Addressbook_Exception_NotFound('Contact is hidden from addressbook (container id is empty).');
+            }
+            if (! $this->_currentAccount->hasGrant($contact->container_id, Tinebase_Model_Grants::GRANT_READ)) {
+                throw new Addressbook_Exception_AccessDenied('Read access to contact denied.');
+            }
         }
         
         if ($this->_resolveCustomFields && $contact->has('customfields')) {
