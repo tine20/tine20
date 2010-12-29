@@ -31,7 +31,7 @@ class Setup_Server_Cli implements Tinebase_Server_Interface
             array(
                 'help|h'                    => 'Display this help Message',
                 'verbose|v'                 => 'Output messages',
-                'config|c=w'                => 'Path to config.inc.php file',
+                'config|c'                  => 'Path to config.inc.php file',
                 'setconfig'                 => 'Update config. To specify the key and value, append \' -- configKey="your_key" configValue="your config value"\'
                          Examples:
                            setup.php --setconfig -- configkey=sample1 configvalue=value11
