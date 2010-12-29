@@ -171,15 +171,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      *
      * @param   Tinebase_Record_Interface $_record
      * @return  Tinebase_Record_Interface
-     * 
-     * @todo do we really want to add new account as default account pref?
      */
     public function create(Tinebase_Record_Interface $_record)
     {
         $result = parent::create($_record);
         
-        // set as default account
-        Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $result->getId();
+        // set as default account if it is the only account
+        if ($this->searchCount(new Felamimail_Model_AccountFilter(array())) === 1) {
+            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $result->getId();
+        }
         
         // update account capabilities
         return $this->updateCapabilities($result);
