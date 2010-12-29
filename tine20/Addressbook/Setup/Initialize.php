@@ -33,14 +33,20 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
      */
     protected function _initialize(Tinebase_Model_Application $_application, $_options = null)
     {
+        $initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
+        
         if(Tinebase_User::getInstance() instanceof Tinebase_User_Interface_SyncAble) {
             Tinebase_User::syncUsers(true);
         } else {
-            $initialAdminUserOptions = $this->_parseInitialAdminUserOptions($_options);
             Tinebase_User::createInitialAccounts($initialAdminUserOptions);
         }
-        parent::_initialize($_application, $_options);
 
+        // set current user
+        $initialUser = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $initialAdminUserOptions['adminLoginName']);
+        Tinebase_Core::set(Tinebase_Core::USER, $initialUser);
+        
+        parent::_initialize($_application, $_options);
+        
         $this->_initializeUserContacts();
         $this->_initializeGroupLists();
         $this->_initializeConfig();
@@ -173,13 +179,14 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
     /**
      * Extract default group name settings from {@param $_options}
      * 
+     * @todo the initial admin user options get set for the sql backend only. They should be set independed of the backend selected
      * @param array $_options
      * @return array
      */
     protected function _parseInitialAdminUserOptions($_options)
     {
         $result = array();
-        $accounts = isset($_options['authenticationData']['authentication'][Tinebase_User::getConfiguredBackend()]) ? $_options['authenticationData']['authentication'][Tinebase_User::getConfiguredBackend()] : array();
+        $accounts = isset($_options['authenticationData']['authentication'][Tinebase_User::SQL]) ? $_options['authenticationData']['authentication'][Tinebase_User::SQL] : array();
         $keys = array('adminLoginName', 'adminPassword');
         foreach ($keys as $key) {
             if (isset($_options[$key])) {
