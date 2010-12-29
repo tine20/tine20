@@ -32,7 +32,21 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      * @var Tasks_Frontend_Json
      */
     protected $_backend;
+    
+    /**
+     * smtp config array
+     * 
+     * @var array
+     */
+    protected $_smtpConfig = array();
 
+    /**
+     * smtp transport
+     * 
+     * @var Zend_Mail_Transport_Abstract
+     */
+    protected $_smtpTransport = NULL;
+    
     /**
      * main function
      *
@@ -51,7 +65,9 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_backend = new Tasks_Frontend_Json();  
+        $this->_backend = new Tasks_Frontend_Json();
+        $this->_smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $this->_smtpTransport = Tinebase_Smtp::getDefaultTransport();
     }
 
     /**
@@ -63,6 +79,9 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
+        
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, $this->_smtpConfig);
+        Tinebase_Smtp::setDefaultTransport($this->_smtpTransport);
     }
     
     /**
@@ -110,7 +129,6 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test create task with alarm
-     *
      */
     public function testCreateTaskWithAlarm()
     {
@@ -118,6 +136,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
+        
         $this->_checkAlarm($loadedTaskData);
         $this->_sendAlarm();
         
@@ -129,6 +148,27 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         unset($task->due);
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $this->assertEquals(0, count($persistentTaskData['alarms']));
+    }
+    
+    /**
+     * test alarm sending failure (with wrong stmp user/password)
+     */
+    public function testAlarmSendingFailure()
+    {
+        $task = $this->_getTaskWithAlarm();
+        $persistentTaskData = $this->_backend->saveTask($task->toArray());
+        
+        // set wrong smtp user/password
+        $wrongCredentialsConfig = $this->_smtpConfig;
+        $wrongCredentialsConfig['password'] = 'wrongpw';
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, $wrongCredentialsConfig);
+        Tinebase_Smtp::setDefaultTransport(NULL);
+        
+        $this->_sendAlarm();
+
+        $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_FAILURE, $loadedTaskData['alarms'][0]['sent_status']);
+        $this->assertEquals('535 5.7.8 Error: authentication failed: authentication failure', $loadedTaskData['alarms'][0]['sent_message']);
     }
     
     /**
@@ -386,7 +426,8 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         return new Tasks_Model_Task(array(
             'summary'       => 'minimal task by PHPUnit::Tasks_ControllerTest',
-            'due'           => new Tinebase_DateTime("now", Tinebase_Core::get(Tinebase_Core::USERTIMEZONE))
+            'due'           => new Tinebase_DateTime("now", Tinebase_Core::get(Tinebase_Core::USERTIMEZONE)),
+            'organizer'     => Tinebase_Core::getUser()->getId(),
         ));
     }
 
