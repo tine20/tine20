@@ -1074,9 +1074,9 @@ class Tinebase_Core
     {
         $sessionDirName ='tine20_sessions';
         $config = self::getConfig();
-
+        
         $sessionDir = $config->get('sessiondir', null);
-
+        
         #####################################
         # LEGACY/COMPATIBILITY: had to rename session.save_path key to sessiondir because otherwise the
         # generic save config method would interpret the "_" as array key/value seperator
