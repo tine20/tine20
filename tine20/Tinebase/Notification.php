@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -57,7 +57,7 @@ class Tinebase_Notification
     }
     
     /**
-     * send notifications to a list a receipients
+     * send notifications to a list a recipients
      *
      * @param Tinebase_Model_FullUser   $_updater
      * @param array                     $_recipients array of int|Addressbook_Model_Contact
@@ -65,21 +65,31 @@ class Tinebase_Notification
      * @param string                    $_messagePlain
      * @param string                    $_messageHtml
      * @param string|array              $_attachements
+     * @throws Tinebase_Exception
+     * 
+     * @todo improve exception handling: collect all messages / exceptions / failed email addresses / ...
      */
     public function send(Tinebase_Model_FullUser $_updater, $_recipients, $_subject, $_messagePlain, $_messageHtml = NULL, $_attachements = NULL)
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
+        $exception = NULL;
         foreach($_recipients as $recipient) {
             try {
-                if(!$recipient instanceof Addressbook_Model_Contact) {
+                if (!$recipient instanceof Addressbook_Model_Contact) {
                     $recipient = $contactsBackend->get($recipient);
                 }
                 $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachements);
             } catch (Exception $e) {
+                $exception = $e;
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " Failed to send notification message. Error: " . $e->getMessage());
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " $e");
             }
+        }
+        
+        if ($exception !== NULL) {
+            // throw exception in the end when all recipients have been processed
+            throw new Tinebase_Exception('Send notification failed: ' . $exception->getMessage());
         }
     }
 }
