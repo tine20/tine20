@@ -19,11 +19,12 @@
  * @package     Tinebase
  * @property    string                  accountStatus
  * @property    Tinebase_Model_SAMUser  sambaSAM            object holding samba settings
- * @property    string                  accountEmailAddress  email address of user
+ * @property    string                  accountEmailAddress email address of user
  * @property    DateTime                accountExpires      date when account expires  
  * @property    string                  accountFullName     fullname of the account
  * @property    string                  accountDisplayName  displayname of the account
  * @property    string                  accountLoginName    account login name
+ * @property    string                  container_id        
  * @property    DateTime                lastLoginFailure    time of last login failure
  * @property    int						loginFailures       number of login failures
  * @subpackage  User
@@ -102,7 +103,7 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'emailUser'             => array('allowEmpty' => true),
             'imapUser'              => array('allowEmpty' => true),
             'smtpUser'              => array('allowEmpty' => true),
-            'visibility'            => array(new Zend_Validate_InArray(array('hidden', 'displayed')), Zend_Filter_Input::DEFAULT_VALUE => 'displayed'),
+            'visibility'            => array(new Zend_Validate_InArray(array(Tinebase_Model_User::VISIBILITY_HIDDEN, Tinebase_Model_User::VISIBILITY_DISPLAYED)), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
             
         );
         

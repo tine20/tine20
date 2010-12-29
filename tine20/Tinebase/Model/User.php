@@ -33,6 +33,9 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      */
     const CURRENTACCOUNT = 'currentAccount';
     
+    const VISIBILITY_HIDDEN    = 'hidden';
+    const VISIBILITY_DISPLAYED = 'displayed';
+    
     /**
      * list of zend inputfilter
      * 
