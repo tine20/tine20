@@ -223,7 +223,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
         if (isset($_data['user_id']) && is_array($_data['user_id'])) {
             if (array_key_exists('accountId', $_data['user_id'])) {
             	// NOTE: we need to support accounts, cause the client might not have the contact, e.g. when the attender is generated from a container owner
-                $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'])->getId();
+                $_data['user_id'] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_data['user_id']['accountId'], TRUE)->getId();
             } elseif (array_key_exists('group_id', $_data['user_id'])) {
                 $_data['user_id'] = is_array($_data['user_id']['group_id']) ? $_data['user_id']['group_id'][0] : $_data['user_id']['group_id'];
             } else if (array_key_exists('id', $_data['user_id'])) {

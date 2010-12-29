@@ -155,10 +155,10 @@ class Tasks_Controller_Task extends Tinebase_Controller_Record_Abstract implemen
             $task = $this->get($_alarm->record_id);
             
             if ($task->organizer) {
-                $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($task->organizer);
+                $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($task->organizer, TRUE);
             } else {
                 // use creator as organizer
-                $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($task->created_by);
+                $organizerContact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($task->created_by, TRUE);
             }
             
             // create message

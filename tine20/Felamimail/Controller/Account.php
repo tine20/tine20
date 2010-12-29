@@ -848,7 +848,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $_account->from   = $_user->accountFullName;
         
         // add contact data
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_user->getId());
+        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_user->getId(), TRUE);
         $_account->organization = $contact->org_name;
     }
 }
