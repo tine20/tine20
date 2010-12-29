@@ -96,6 +96,8 @@ class Tinebase_Smtp
      */
     public static function setDefaultTransport($_transport)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting SMTP transport: ' . get_class($_transport));
+        
         self::$_defaultTransport = $_transport;
     }
     
