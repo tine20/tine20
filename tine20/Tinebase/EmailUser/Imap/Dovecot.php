@@ -23,16 +23,18 @@
 --
 
 CREATE TABLE IF NOT EXISTS `dovecot_users` (
-`userid` VARCHAR( 40 ) NOT NULL ,
-`domain` VARCHAR( 80 ) DEFAULT '',
-`username` VARCHAR( 80 ) NOT NULL ,
-`password` VARCHAR( 100 ) NOT NULL ,
-`uid` VARCHAR( 20 ) DEFAULT NULL ,
-`gid` VARCHAR( 20 ) DEFAULT NULL ,
-`home` VARCHAR( 256 ) DEFAULT NULL ,
-`last_login` DATETIME DEFAULT NULL ,
-PRIMARY KEY ( `userid`, `domain` ) ,
-UNIQUE ( `username` )
+`userid`        VARCHAR( 40 ) NOT NULL ,
+`domain`        VARCHAR( 80 ) NOT NULL DEFAULT '',
+`username`      VARCHAR( 80 ) NOT NULL ,
+`password`      VARCHAR( 100 ) NOT NULL ,
+`quota_bytes`   BIGINT NOT NULL DEFAULT '0',
+`quota_message` INT NOT NULL DEFAULT '0',
+`uid`           VARCHAR( 20 ) DEFAULT NULL ,
+`gid`           VARCHAR( 20 ) DEFAULT NULL ,
+`home`          VARCHAR( 256 ) DEFAULT NULL ,
+`last_login`    DATETIME DEFAULT NULL ,
+PRIMARY KEY (`userid`, `domain`),
+UNIQUE (`username`)
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 
@@ -40,14 +42,12 @@ UNIQUE ( `username` )
 -- Table structure for table `dovecot_quotas`
 --
 
-CREATE TABLE IF NOT EXISTS `dovecot_quotas` (
+CREATE TABLE IF NOT EXISTS `dovecot_usage` (
 `username` VARCHAR( 80 ) NOT NULL ,
-`mail_quota` BIGINT NOT NULL DEFAULT '536870912',
-`mail_size` BIGINT NOT NULL DEFAULT '0',
-`sieve_quota` INT NOT NULL DEFAULT '0',
-`sieve_size` INT NOT NULL DEFAULT '0',
-CONSTRAINT `dovecot_quotas::username--dovecot_users::username` FOREIGN KEY (`username`) 
-REFERENCES `dovecot_users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
+`storage`  BIGINT NOT NULL DEFAULT '0',
+`messages` BIGINT NOT NULL DEFAULT '0',
+PRIMARY KEY (`username`),
+CONSTRAINT `dovecot_usage::username--dovecot_users::username` FOREIGN KEY (`username`) REFERENCES `dovecot_users` (`username`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=Innodb DEFAULT CHARSET=utf8;
 -- --------------------------------------------------------
 * 
@@ -72,23 +72,19 @@ password_query = SELECT dovecot_users.username AS user,
 	home AS userdb_home, 
 	uid AS userdb_uid, 
 	gid AS userdb_gid, 
-	CONCAT('*:bytes=', CAST(dovecot_quotas.mail_quota AS CHAR), ':messages=', CAST(dovecot_quotas.sieve_quota AS CHAR)) AS userdb_quota_rule 
+	CONCAT('*:bytes=', CAST(quota_bytes AS CHAR), 'M') AS userdb_quota_rule   
 	FROM dovecot_users 
-	LEFT JOIN dovecot_quotas
-	ON (dovecot_users.username=dovecot_quotas.username)
 	WHERE dovecot_users.username='%u'
 
 # userdb for deliver
 user_query = SELECT home, uid, gid, 
-	CONCAT('*:bytes=', CAST(dovecot_quotas.mail_quota AS CHAR), ':messages=', CAST(dovecot_quotas.sieve_quota AS CHAR)) AS userdb_quota_rule 
+	CONCAT('*:bytes=', CAST(quota_bytes AS CHAR), 'M') AS userdb_quota_rule   
 	FROM dovecot_users 
-	LEFT JOIN dovecot_quotas
-	ON (dovecot_users.username=dovecot_quotas.username)
 	WHERE dovecot_users.username='%u'
 -- --------------------------------------------------------
 
 -- 
--- Quotas Config: dovecot-dict-quota.conf
+-- Quotas Config: dovecot-dict-sql.conf
 --
 -- Note: Currently Tine Sieve Quota is used as Message Quota
 --
@@ -97,17 +93,18 @@ connect = host=127.0.0.1 dbname=DovecotDB user=DovecotUser password=DovecotPass
 
 map {
   pattern = priv/quota/storage
-  table = dovecot_quotas
+  table = dovecot_usage
   username_field = username
-  value_field = mail_size
+  value_field = storage
 }
 
 map {
   pattern = priv/quota/messages
-  table = dovecot_quotas
+  table = dovecot_usage
   username_field = username
-  value_field = sieve_size
+  value_field = messages
 }
+
 -- ----------------------------------------------------
 * 
 * 
@@ -208,7 +205,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
     protected $_config = array(
         'prefix'            => 'dovecot_',
         'userTable'         => 'users',
-        'quotaTable'        => 'quotas',
+        'quotaTable'        => 'usage',
         'emailHome'			=> '/var/vmail/%d/%n',
         'emailUID'          => 'vmail', 
         'emailGID'          => 'vmail',
@@ -228,11 +225,11 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         'emailUID'          => 'uid', 
         'emailGID'          => 'gid', 
         'emailLastLogin'    => 'last_login',
-        
-        'emailMailQuota'    => 'mail_quota',
-        'emailMailSize'     => 'mail_size',
-        'emailSieveQuota'   => 'sieve_quota',
-        'emailSieveSize'    => 'sieve_size',
+        'emailMailQuota'    => 'quota_bytes',
+        #'emailSieveQuota'   => 'quota_message',
+    
+        'emailMailSize'     => 'storage',
+    	'emailSieveSize'    => 'messages',
 
         // makes mapping data to _config easier
         'emailHome'			=> 'home'
@@ -313,7 +310,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
             $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
         } else {
-            $where[] = $this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' IS NULL';
+            $where[] = $this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " =''";
         }
         
         $this->_db->delete($this->_userTable, $where);
@@ -380,7 +377,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
             $where[] = $this->_db->quoteInto($this->_db->quoteIdentifier($this->_userTable . '.domain') . ' = ?',   $this->_config['domain']);
         } else {
-            $where[] = $this->_db->quoteIdentifier($this->_userTable . '.domain') . ' IS NULL';
+            $where[] = $this->_db->quoteIdentifier($this->_userTable . '.domain') . " = ''";
         }
         
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($values, TRUE));
@@ -417,9 +414,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
                 '(' . $this->_db->quoteIdentifier($this->_userTable . '.' . $this->_propertyMapping['emailUsername']) .  ' = ' . // ON (left)
                     $this->_db->quoteIdentifier($this->_quotasTable . '.' . $this->_propertyMapping['emailUsername']) . ')', // ON (right)
                 array( // Select
-                    $this->_propertyMapping['emailMailQuota'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailMailQuota'], // emailMailQuota
-                    $this->_propertyMapping['emailMailSize'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailMailSize'], // emailMailSize
-                    $this->_propertyMapping['emailSieveQuota'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailSieveQuota'], // emailSieveQuota
+                    $this->_propertyMapping['emailMailSize']  => $this->_quotasTable . '.' . $this->_propertyMapping['emailMailSize'], // emailMailSize
                     $this->_propertyMapping['emailSieveSize'] => $this->_quotasTable . '.' . $this->_propertyMapping['emailSieveSize'] // emailSieveSize
                 ) 
             )            
@@ -431,7 +426,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
             $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' = ?',   $this->_config['domain']);
         } else {
-            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . ' IS NULL');
+            $select->where($this->_db->quoteIdentifier($this->_userTable . '.' . 'domain') . " = ''");
         }
         
         return $select;
@@ -452,29 +447,12 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($imapSettings, TRUE));
 
         try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            
-            $values = $imapSettings;
-            
             // generate random password if not set
-            if (empty($values[$this->_propertyMapping['emailPassword']])) {
-                $values[$this->_propertyMapping['emailPassword']] = Hash_Password::generate($this->_config['emailScheme'], Tinebase_Record_Abstract::generateUID());
+            if (empty($imapSettings[$this->_propertyMapping['emailPassword']])) {
+                $imapSettings[$this->_propertyMapping['emailPassword']] = Hash_Password::generate($this->_config['emailScheme'], Tinebase_Record_Abstract::generateUID());
             }
-            unset($values[$this->_propertyMapping['emailMailQuota']]);
-            unset($values[$this->_propertyMapping['emailSieveQuota']]);
             
-            $this->_db->insert($this->_userTable, $values);
-            
-            // Add Quotas
-            $this->_db->insert($this->_quotasTable, 
-                array(
-                    $this->_propertyMapping['emailUsername']   => $imapSettings[$this->_propertyMapping['emailUsername']],
-                    $this->_propertyMapping['emailMailQuota']  => convertToBytes($imapSettings[$this->_propertyMapping['emailMailQuota']] . 'M'), 
-                    $this->_propertyMapping['emailSieveQuota'] => convertToBytes($imapSettings[$this->_propertyMapping['emailSieveQuota']] . 'M')
-                )
-            );
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $this->_db->insert($this->_userTable, $imapSettings);
             
             $this->inspectGetUserByProperty($_addedUser);
             
@@ -510,26 +488,7 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($where, TRUE));
         
         try {
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
-            
-            $values = $imapSettings;
-            unset($values[$this->_propertyMapping['emailMailQuota']]);
-            unset($values[$this->_propertyMapping['emailSieveQuota']]);
-            
-            $this->_db->update($this->_userTable, $values, $where);
-
-            // Update Quotas
-            $this->_db->update($this->_quotasTable, 
-                array( 
-                    $this->_propertyMapping['emailMailQuota']  => convertToBytes($imapSettings[$this->_propertyMapping['emailMailQuota']] . 'M'), 
-                    $this->_propertyMapping['emailSieveQuota'] => $imapSettings[$this->_propertyMapping['emailSieveQuota']]
-                ),
-                array(
-                    $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUsername']) . ' = ?', $imapSettings[$this->_propertyMapping['emailUsername']])
-                )
-            );
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            $this->_db->update($this->_userTable, $imapSettings, $where);
 
             $this->inspectGetUserByProperty($_updatedUser);
             
@@ -586,10 +545,16 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
                     case 'emailAddress':
                         // do nothing
                         break;
+                        
                     case 'emailMailQuota':
-                    case 'emailMailSize':
-                        $data[$keyMapping] = convertToMegabytes($value);
+                    case 'emailSieveQuota':
+                        $data[$keyMapping] = $value > 0 ? $value : null;
                         break;
+                        
+                    case 'emailMailSize':
+                        $data[$keyMapping] = $value > 0 ? round($value/1048576, 2) : 0;
+                        break;
+                        
                     /* 
                      * emailHome, emailScheme, emailUID, emailGID are currently broken
                      * home and scheme are understandable, uid and gid not so much
@@ -650,7 +615,6 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
     protected function _recordToRawData(Tinebase_Model_FullUser $_user, Tinebase_Model_FullUser $_newUserProperties)
     {
         $rawData = array(
-            $this->_propertyMapping['emailSieveQuota'] => null
         );
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_newUserProperties->imapUser->toArray(), true));
@@ -686,19 +650,20 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
         $rawData[$this->_propertyMapping['emailUsername']] = $this->_appendDomain($_user->accountLoginName);
         
-        list($user, $domain) = explode('@', $rawData[$this->_propertyMapping['emailUsername']], 2);
-        //$rawData['user']   = $user;
+        list($localPart, $domain) = explode('@', $rawData[$this->_propertyMapping['emailUsername']], 2);
         $rawData['domain'] = $domain;
         
         // replace home wildcards when storing to db
         // %d = domain
         // %n = user
         // %u == user@domain
-        $property = $this->_propertyMapping['emailHome'];
         $search = array('%n', '%d', '%u');
-        $replace = explode('@', $rawData[$this->_propertyMapping['emailUsername']]);
-        $replace[] = $this->_propertyMapping['emailUsername'];
-        $rawData[$property] = str_replace($search, $replace, $this->_config['emailHome']);
+        $replace = array(
+            $localPart,
+            $domain,
+            $rawData[$this->_propertyMapping['emailUsername']]
+        );
+        $rawData[$this->_propertyMapping['emailHome']] = str_replace($search, $replace, $this->_config['emailHome']);
         
         return $rawData;
     }
