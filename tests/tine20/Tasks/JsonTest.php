@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
@@ -135,6 +135,11 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($persistentTaskData['alarms']));
     }
 
+    /**
+     * create scheduler task
+     * 
+     * @return Tinebase_Scheduler_Task
+     */
     public function createTask()
     {
         $request = new Zend_Controller_Request_Http(); 
