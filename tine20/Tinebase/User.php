@@ -511,15 +511,14 @@ class Tinebase_User
 
         // update or create user in local sql backend
         try {
-            $userBackend->getUserByProperty('accountId', $_options['adminLoginName']);
+            $userBackend->getUserByProperty('accountLoginName', $_options['adminLoginName']);
             $user = $userBackend->updateUserInSqlBackend($user);
         } catch (Tinebase_Exception_NotFound $ten) {
             $user = $userBackend->addUserInSqlBackend($user);
         }
         
-        Tinebase_Core::set(Tinebase_Core::USER, $user);
         // set the password for the account
-        Tinebase_User::getInstance()->setPassword(Tinebase_Core::getUser(), $_options['adminPassword']);
+        Tinebase_User::getInstance()->setPassword($user, $_options['adminPassword']);
 
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
