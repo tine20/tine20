@@ -401,7 +401,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     	if (Tine.Admin.registry.get('manageImapEmailUser')) {
     		return [{
     			xtype: 'fieldset',
-                title: this.app.i18n.gettext('Quota (MB)'),
+                title: this.app.i18n.gettext('IMAP Quota (MB)'),
                 autoHeight: true,
                 checkboxToggle: true,
                 layout: 'hfit',
@@ -421,14 +421,17 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     },
                     items: [[{
                         fieldLabel: this.app.i18n.gettext('Quota'),
+                        emptyText: this.app.i18n.gettext('no quota set'),
                         name: 'emailMailQuota',
                         xtype: 'uxspinner',
                         strategy: new Ext.ux.form.Spinner.NumberStrategy({
                             incrementValue : 10,
+                            alternateIncrementValue: 50,
+                            minValue: 0,
                             allowDecimals : false
                         })
                     }], [{
-                        fieldLabel: this.app.i18n.gettext('Current Mail Size'),
+                        fieldLabel: this.app.i18n.gettext('Current Mailbox size'),
                         name: 'emailMailSize',
                         xtype: 'displayfield',
                         style: this.displayFieldStyle
@@ -455,15 +458,18 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         columnWidth: 0.666
                     },
                     items: [[{
-                        fieldLabel: this.app.i18n.gettext('Sieve Quota'),
+                        fieldLabel: this.app.i18n.gettext('Quota'),
+                        emptyText: this.app.i18n.gettext('no quota set'),
                         name: 'emailSieveQuota',
                         xtype: 'uxspinner',
                         strategy: new Ext.ux.form.Spinner.NumberStrategy({
                             incrementValue : 10,
+                            alternateIncrementValue: 50,
+                            minValue: 0,
                             allowDecimals : false
                         })
                     }], [{
-                        fieldLabel: this.app.i18n.gettext('Sieve Size'),
+                        fieldLabel: this.app.i18n.gettext('Current Sieve size'),
                         name: 'emailSieveSize',
                         xtype: 'displayfield',
                         style: this.displayFieldStyle
