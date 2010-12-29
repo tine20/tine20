@@ -105,13 +105,13 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $this->assertEquals(array(
             'emailUserId'     => $this->_objects['user']->getId(),
             'emailUsername'   => $this->_objects['user']->imapUser->emailUsername,
-            'emailUID'        => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
+            'emailMailQuota'  => 500,
+        	'emailUID'        => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
             'emailGID'        => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
             'emailLastLogin'  => null,
-            'emailMailQuota'  => 500,
             'emailMailSize'   => 0,
-            'emailSieveQuota' => 0,
-            'emailSieveSize'  => 0
+            #'emailSieveQuota' => 0,
+            'emailSieveSize'  => null
         ), $this->_objects['user']->imapUser->toArray());
         
         return $this->_objects['user'];
@@ -135,13 +135,13 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
         $this->assertEquals(array(
             'emailUserId'      => $this->_objects['user']->getId(),
             'emailUsername'    => $this->_objects['user']->imapUser->emailUsername,
-            'emailUID'         => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
+            'emailMailQuota'   => 600,
+        	'emailUID'         => !empty($this->_config['dovecot']['uid']) ? $this->_config['dovecot']['uid'] : '1000',
             'emailGID'         => !empty($this->_config['dovecot']['gid']) ? $this->_config['dovecot']['gid'] : '1000',
             'emailLastLogin'   => null,
-            'emailMailQuota'   => 600,
             'emailMailSize'    => 0,
-            'emailSieveQuota'  => 0,
-            'emailSieveSize'   => 0,
+            #'emailSieveQuota'  => 0,
+            'emailSieveSize'   => null
         ), $this->_objects['user']->imapUser->toArray());
     }
     
