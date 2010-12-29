@@ -58,4 +58,6 @@ if (!$tinebaseController->login($config->username, $config->password, $config->i
     throw new Exception("Couldn't login, user session required for tests! \n");
 }
 
+// do this after login because we need the current user
+TestServer::getInstance()->initTestUsers();
 TestServer::getInstance()->setTestUserEmail();

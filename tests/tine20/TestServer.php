@@ -78,15 +78,13 @@ class TestServer
         iconv_set_encoding("internal_encoding", "UTF-8");
         
         Zend_Registry::set('locale', new Zend_Locale($config->locale));
-        
-        $this->_initTestUsers();
     }
     
     /**
      * inits (adds) some test users
      *
      */
-    protected function _initTestUsers()
+    public function initTestUsers()
     {
         $personas = array(
             'jsmith'   => 'John Smith',
