@@ -119,11 +119,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
         $this->_checkAlarm($loadedTaskData);
-        
-        // try to send alarm
-        $scheduler = Tinebase_Core::getScheduler();
-        $scheduler->addTask('Tinebase_Alarm', $this->createTask());
-        $scheduler->run();
+        $this->_sendAlarm();
         
         // check alarm status
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
@@ -134,13 +130,23 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
         $this->assertEquals(0, count($persistentTaskData['alarms']));
     }
+    
+    /**
+     * send alarm via scheduler
+     */
+    protected function _sendAlarm()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->addTask('Tinebase_Alarm', $this->_createTask());
+        $scheduler->run();
+    }
 
     /**
      * create scheduler task
      * 
      * @return Tinebase_Scheduler_Task
      */
-    public function createTask()
+    protected function _createTask()
     {
         $request = new Zend_Controller_Request_Http(); 
         $request->setControllerName('Tinebase_Alarm');
