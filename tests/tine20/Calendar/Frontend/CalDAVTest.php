@@ -23,7 +23,7 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  * 
  * @package     Tinebase
  */
-class Calendar_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
+class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array test objects
