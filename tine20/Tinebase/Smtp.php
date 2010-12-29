@@ -42,6 +42,14 @@ class Tinebase_Smtp
      */
     private function __construct() 
     {
+        self::createDefaultTransport();
+    }
+    
+    /**
+     * create default transport
+     */
+    public static function createDefaultTransport()
+    {
         $config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP, 'Tinebase', array(
             'hostname' => 'localhost', 
             'port' => 25
@@ -61,10 +69,10 @@ class Tinebase_Smtp
             }
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting default SMTP transport. Hostname: ' . $config['hostname']);
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($config, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($config, TRUE));
             
             self::setDefaultTransport(new Zend_Mail_Transport_Smtp($config['hostname'], $config));
-        }
+        }        
     }
     
     /**
@@ -91,14 +99,18 @@ class Tinebase_Smtp
 
     /**
      * sets default transport
-     * @param  Zend_Mail_Transport_Abstract $_transport
+     * @param  Zend_Mail_Transport_Abstract|NULL $_transport
      * @return void
      */
     public static function setDefaultTransport($_transport)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting SMTP transport: ' . get_class($_transport));
-        
-        self::$_defaultTransport = $_transport;
+        if ($_transport) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Setting SMTP transport: ' . get_class($_transport));
+            self::$_defaultTransport = $_transport;
+        } else {
+            self::$_defaultTransport = NULL;
+            self::createDefaultTransport();
+        }
     }
     
     /**
