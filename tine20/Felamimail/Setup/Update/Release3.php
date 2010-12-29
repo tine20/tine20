@@ -535,6 +535,17 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }
     
     /**
+     * update function (-> 3.19)
+     * - DEFAULTACCOUNT preference is personal only
+     */    
+    public function update_18()
+    {
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . "preferences SET personal_only = 1 WHERE name = 'defaultEmailAccount'");
+        
+        $this->setApplicationVersion('Felamimail', '3.19');
+    }
+    
+    /**
      * clear cache tables and reset folder status
      */
     protected function _clearCache()

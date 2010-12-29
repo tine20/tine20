@@ -141,7 +141,8 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
                     </options>';
                 break;
             case self::DEFAULTACCOUNT:
-                $preference->value      = '';
+                $preference->personal_only  = TRUE;
+                $preference->value          = '';
                 break;
             case self::UPDATEINTERVAL:
                 $preference->value      = 5;
