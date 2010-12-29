@@ -310,6 +310,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                     continue;
                     
                 } else {
+                    $delimiter = (strlen($folderData['delimiter']) === 1) ? $folderData['delimiter'] : '';
+                    
                     $folder = new Felamimail_Model_Folder(array(
                         'localname'         => $folderData['localName'],
                         'globalname'        => $folderData['globalName'],
@@ -320,7 +322,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'user_id'           => $this->_currentAccount->getId(),
                         'parent'            => $_parentFolder,
                         'system_folder'     => in_array(strtolower($folderData['localName']), $systemFolders),
-                        'delimiter'         => $folderData['delimiter']
+                        'delimiter'         => $delimiter,
                     ));
                     
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new folder ' . $folderData['globalName'] . ' to cache.');
