@@ -203,10 +203,12 @@ class Tinebase_Config
      */
     public function setConfigForApplication($_name, $_value, $_applicationName = 'Tinebase')
     {
+        $value = (is_array($_value)) ? Zend_Json::encode($_value) : $_value;
+        
         $configRecord = new Tinebase_Model_Config(array(
             "application_id"    => Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId(),
             "name"              => $_name,
-            "value"             => $_value,              
+            "value"             => $value,              
         ));
         
         return $this->setConfig($configRecord);
