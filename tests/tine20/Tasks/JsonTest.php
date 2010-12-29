@@ -39,6 +39,13 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     protected $_smtpConfig = array();
 
     /**
+     * smtp config changed
+     * 
+     * @var array
+     */
+    protected $_smtpConfigChanged = FALSE;
+
+    /**
      * smtp transport
      * 
      * @var Zend_Mail_Transport_Abstract
@@ -78,8 +85,10 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         parent::tearDown();
         
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, $this->_smtpConfig);
-        Tinebase_Smtp::setDefaultTransport($this->_smtpTransport);
+        if ($this->_smtpConfigChanged) {
+            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, $this->_smtpConfig);
+            Tinebase_Smtp::setDefaultTransport($this->_smtpTransport);
+        }
     }
     
     /**
@@ -160,6 +169,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
         $wrongCredentialsConfig = $this->_smtpConfig;
         $wrongCredentialsConfig['password'] = 'wrongpw';
         Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::SMTP, $wrongCredentialsConfig);
+        $this->_smtpConfigChanged = TRUE;
         Tinebase_Smtp::setDefaultTransport(NULL);
         
         $this->_sendAlarm();
