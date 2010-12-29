@@ -453,25 +453,27 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
              $options = $this->_convertXmlOptionsToArray($_preference->options);
         }
         
-        $translate = Tinebase_Translation::getTranslation($this->_application);
-        
-        // get default pref and add value to string
-        $default = $this->_getDefaultPreference($_preference->name); 
-        $defaultLabel = $translate->_('default');
-        // check if value is in options and use that label
-        $valueLabel = $default->value;
-        foreach ($options as $option) {
-            if ($default->value == $option[0]) {
-                $valueLabel = $option[1];
-                break;
+        if (! $_preference->personal_only) {
+            $translate = Tinebase_Translation::getTranslation($this->_application);
+            
+            // get default pref and add value to string
+            $default = $this->_getDefaultPreference($_preference->name); 
+            $defaultLabel = $translate->_('default');
+            // check if value is in options and use that label
+            $valueLabel = $default->value;
+            foreach ($options as $option) {
+                if ($default->value == $option[0]) {
+                    $valueLabel = $option[1];
+                    break;
+                }
             }
+            // add default setting to the top of options
+            $defaultLabel .= ' (' . $valueLabel . ')';
+            array_unshift($options, array(
+                Tinebase_Model_Preference::DEFAULT_VALUE,
+                $defaultLabel,
+            ));
         }
-        // add default setting to the top of options
-        $defaultLabel .= ' (' . $valueLabel . ')';
-        array_unshift($options, array(
-            Tinebase_Model_Preference::DEFAULT_VALUE,
-            $defaultLabel,
-        ));
         
         $_preference->options = $options;
     }
