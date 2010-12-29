@@ -251,7 +251,12 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             // NOTE: we just send notifications to users, not to groups or anyones!
             foreach ($containerGrants as $grant) {
                 if ($grant['account_type'] == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER && $grant[Tinebase_Model_Grants::GRANT_READ] == 1) {
-                    $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'], TRUE)->getId();
+                    try {
+                        $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($grant['account_id'], TRUE)->getId();
+                    } catch (Addressbook_Exception_NotFound $aenf) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ 
+                            . ' Do not send notification to non-existant user: ' . $aenf->getMessage()); 
+                    }
                 }
             }
         }
