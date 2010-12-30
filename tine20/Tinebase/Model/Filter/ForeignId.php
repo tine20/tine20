@@ -1,7 +1,20 @@
 <?php
+/**
+ * Tine 2.0
+ * 
+ * @package     Tinebase
+ * @subpackage  Filter
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @version     $Id$
+ */
 
 /**
  * foreign id filter
+ * 
+ * @package     Tinebase
+ * @subpackage  Filter
  * 
  * Expects:
  * - a filtergroup in options->filtergroup
@@ -80,6 +93,11 @@ class Tinebase_Model_Filter_ForeignId extends Tinebase_Model_Filter_Abstract
         $_select->where($this->_getQuotedFieldName($_backend) . ' IN (?)', empty($this->_foreignIds) ? array('') : $this->_foreignIds);
     }
     
+    /**
+     * set required grants
+     * 
+     * @param array $_grants
+     */
     public function setRequiredGrants(array $_grants)
     {
         $this->_filterGroup->setRequiredGrants($_grants);
