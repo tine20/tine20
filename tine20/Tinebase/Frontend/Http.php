@@ -629,7 +629,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         flush();
         
         foreach ($orderedApplications as $application) {
-            readfile($application . '/js/all' . $mode == 'debug' ? '-debug' : null . '.js');
+            readfile($application . '/js/all' . ($mode == 'debug' ? '-debug' : null) . '.js');
         }
         
         die();
@@ -646,7 +646,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         flush();
         
         foreach ($orderedApplications as $application) {
-            readfile($application . '/css/all' . $mode == 'debug' ? '-debug' : null . '.css');
+            readfile($application . '/css/all' . ($mode == 'debug' ? '-debug' : null) . '.css');
         }
         
         die();
