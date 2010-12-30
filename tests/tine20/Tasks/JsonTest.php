@@ -189,7 +189,11 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     {
         $scheduler = Tinebase_Core::getScheduler();
         $scheduler->addTask('Tinebase_Alarm', $this->_createTask());
-        $scheduler->run();
+        try {   
+            $scheduler->run();
+        } catch (Tinebase_Exception $te) {
+            // do nothing
+        }
     }
 
     /**
