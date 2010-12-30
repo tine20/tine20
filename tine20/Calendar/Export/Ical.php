@@ -56,6 +56,9 @@ class Calendar_Export_Ical
             }
         }
         
+        if ($_event->rrule) {
+            $vevent->addProperty('rrule', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $_event->rrule));
+        }
         // rrule (until needs different format)
         // recurid (needs different format?)
         // status
@@ -75,15 +78,15 @@ class Calendar_Export_Ical
         $tzinfo = ActiveSync_TimezoneConverter::getInstance()
             ->getOffsetsForTimezone($tzName);
 
-            $standardOffset = ((-1 *  $tzinfo['bias']) > 0 ? '+' : '-') .
-                str_pad((string) floor(-1 * $tzinfo['bias'] / 60), 2, 0, STR_PAD_LEFT) . 
-                str_pad((string) floor(-1 * $tzinfo['bias'] % 60), 2, 0, STR_PAD_LEFT);
+        $standardOffset = ((-1 *  $tzinfo['bias']) > 0 ? '+' : '-') .
+            str_pad((string) floor(-1 * $tzinfo['bias'] / 60), 2, 0, STR_PAD_LEFT) . 
+            str_pad((string) floor(-1 * $tzinfo['bias'] % 60), 2, 0, STR_PAD_LEFT);
+            
+        $daylightOffset = ((-1 *  ($tzinfo['bias'] + $tzinfo['daylightBias'])) > 0 ? '+' : '-') .
+            str_pad((string) floor(-1 * ($tzinfo['bias'] + $tzinfo['daylightBias'])/ 60), 2, 0, STR_PAD_LEFT) . 
+            str_pad((string) floor(-1 * ($tzinfo['bias'] + $tzinfo['daylightBias']) % 60), 2, 0, STR_PAD_LEFT);
                 
-            $daylightOffset = ((-1 *  ($tzinfo['bias'] + $tzinfo['daylightBias'])) > 0 ? '+' : '-') .
-                str_pad((string) floor(-1 * ($tzinfo['bias'] + $tzinfo['daylightBias'])/ 60), 2, 0, STR_PAD_LEFT) . 
-                str_pad((string) floor(-1 * ($tzinfo['bias'] + $tzinfo['daylightBias']) % 60), 2, 0, STR_PAD_LEFT);
-                
-            return new qCal_Component_Vtimezone(array(
+        return new qCal_Component_Vtimezone(array(
             'tzid'  => $tzName
         ), array(
             new qCal_Component_Daylight(array(
