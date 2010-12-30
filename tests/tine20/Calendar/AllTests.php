@@ -43,7 +43,8 @@ class Calendar_AllTests
         $suite->addTestSuite('Calendar_Controller_RecurTest');
         $suite->addTestSuite('Calendar_Controller_MSEventFacadeTest');
         $suite->addTestSuite('Calendar_JsonTests');
-        $suite->addTestSuite('Calendar_Import_ICalTests');
+        $suite->addTestSuite('Calendar_Import_ICalTest');
+        $suite->addTestSuite('Calendar_Export_ICalTest');
         return $suite;
     }
 }

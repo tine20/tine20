@@ -18,7 +18,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 /**
  * Test class for Calendar_Import_ICal
  */
-class Calendar_Import_ICalTests extends Calendar_TestCase
+class Calendar_Import_ICalTest extends Calendar_TestCase
 {
     public function testImportSimpleFromString()
     {
