@@ -134,6 +134,16 @@ $includeFiles = Tinebase_Frontend_Http::getAllIncludeFiles();
 $setupIncludeFiles = Setup_Frontend_Http::getAllIncludeFiles();
 
 if ($opts->a || $opts->s) {
+    foreach(scandir(dirname(__FILE__)) as $filename) {
+        if (file_exists(dirname(__FILE__) . DIRECTORY_SEPARATOR . $filename . DIRECTORY_SEPARATOR . 'Frontend' . DIRECTORY_SEPARATOR . 'Http.php')) {
+            $className = $filename . '_Frontend_Http';
+            $frontend = new $className;
+            
+            concatCss($frontend->getCssFilesToInclude(), $filename . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'all-debug.css');
+            compress($filename . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'all-debug.css', $filename . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'all.css');
+        }
+    }
+    
     // tine 2.0 main css files
     concatCss($includeFiles['css'], 'Tinebase/css/tine-all-debug.css');
     compress('Tinebase/css/tine-all-debug.css', 'Tinebase/css/tine-all.css');
@@ -143,6 +153,16 @@ if ($opts->a || $opts->s) {
 }
 
 if ($opts->a || $opts->j) {
+    foreach(scandir(dirname(__FILE__)) as $filename) {
+        if (file_exists(dirname(__FILE__) . DIRECTORY_SEPARATOR . $filename . DIRECTORY_SEPARATOR . 'Frontend' . DIRECTORY_SEPARATOR . 'Http.php')) {
+            $className = $filename . '_Frontend_Http';
+            $frontend = new $className;
+            
+            concatJs($frontend->getJsFilesToInclude(), $filename . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'all-debug.js');
+            compress($filename . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'all-debug.js', $filename . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'all.js');
+        }
+    }
+    
     // tine 2.0 main css files
     concatJs($includeFiles['js'], 'Tinebase/js/tine-all-debug.js');
     compress('Tinebase/js/tine-all-debug.js', 'Tinebase/js/tine-all.js');
