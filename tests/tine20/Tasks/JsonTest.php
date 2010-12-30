@@ -162,8 +162,9 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAlarmSendingFailure()
     {
-        $this->markTestSkipped('Test currently disabled');
-        
+        // send old alarms first
+        $this->_sendAlarm();
+
         $task = $this->_getTaskWithAlarm();
         $persistentTaskData = $this->_backend->saveTask($task->toArray());
         
