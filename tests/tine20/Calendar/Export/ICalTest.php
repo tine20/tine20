@@ -34,6 +34,7 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
             'class'         => Calendar_Model_Event::CLASS_PUBLIC,
             'location'      => 'couch',
             'priority'      => 1,
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2015-12-30 13:00:00'
         ));
         
         $ics = Calendar_Export_Ical::eventToIcal($event);
@@ -49,7 +50,9 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
         // assert vtimezone
         $this->assertEquals(1, preg_match("/BEGIN:VTIMEZONE\r\n/", $ics), 'VTIMEZONE missing');
         $this->assertEquals(1, preg_match("/BEGIN:DAYLIGHT\r\nTZOFFSETFROM:\+0100\r\nTZOFFSETTO:\+0200\r\nRRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU\r\nEND:DAYLIGHT\r\n/", $ics), 'DAYLIGHT not correct');
-        
+
+        // assert rrule
+        $this->assertEquals(1, preg_match("/RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20151230T130000Z\r\n/", $ics), 'RRULE broken');
     }
 
 }
