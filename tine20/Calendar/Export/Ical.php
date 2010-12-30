@@ -31,8 +31,9 @@ class Calendar_Export_Ical
     
     public static function eventToIcal($_event)
     {
+        $version = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->version;
         $vcalendar = new qCal_Component_Vcalendar(array(
-            'prodid'    => '-//tine20.org//Calendar v3.9//EN',
+            'prodid'    => "-//tine20.org//Calendar v$version//EN",
             'calscale'  => 'GREGORIAN',
             'version'   => '2.0',
         ));
