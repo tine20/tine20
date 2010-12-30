@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Admin\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-17 22:58+0100\n"
+"PO-Revision-Date: 2010-12-30 18:35+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -298,7 +298,7 @@ msgstr[1] "użytkowników"
 msgstr[2] "użytkowników"
 
 #: js/user/GridPanel.js:160
-#: js/user/EditDialog.js:760
+#: js/user/EditDialog.js:769
 #: js/Applications.js:287
 msgid "Status"
 msgstr "Status"
@@ -324,17 +324,17 @@ msgid "Email"
 msgstr "E-mail"
 
 #: js/user/GridPanel.js:166
-#: js/user/EditDialog.js:738
+#: js/user/EditDialog.js:747
 msgid "OpenID"
 msgstr "ID uwierzytelnienia (OpenID)"
 
 #: js/user/GridPanel.js:167
-#: js/user/EditDialog.js:815
+#: js/user/EditDialog.js:830
 msgid "Last login at"
 msgstr "Czas ostatniego logowania"
 
 #: js/user/GridPanel.js:168
-#: js/user/EditDialog.js:819
+#: js/user/EditDialog.js:834
 msgid "Last login from"
 msgstr "Ostatnie zalogowanie z adresu"
 
@@ -343,15 +343,15 @@ msgid "Password changed"
 msgstr "Hasło zostało zmienione"
 
 #: js/user/GridPanel.js:170
-#: js/user/EditDialog.js:769
+#: js/user/EditDialog.js:778
 msgid "Expires"
 msgstr "Konto wygasa"
 
-#: js/user/GridPanel.js:225
+#: js/user/GridPanel.js:227
 msgid "Set new password"
 msgstr "Zdefiniuj nowe hasło"
 
-#: js/user/GridPanel.js:225
+#: js/user/GridPanel.js:227
 msgid "Please enter the new password:"
 msgstr "Proszę wprowadzić nowe hasło:"
 
@@ -371,7 +371,7 @@ msgstr[2] "E-maile użytkowników"
 
 #: js/user/EditDialog.js:172
 #: js/user/EditDialog.js:175
-#: js/user/EditDialog.js:619
+#: js/user/EditDialog.js:625
 msgid "Passwords do not match!"
 msgstr "Nieprawidłowe hasło"
 
@@ -380,7 +380,7 @@ msgid "Passwords match!"
 msgstr "Hasła poprawne!"
 
 #: js/user/EditDialog.js:224
-#: js/user/EditDialog.js:743
+#: js/user/EditDialog.js:752
 msgid "Primary group"
 msgstr "Grupa nadrzędna"
 
@@ -409,8 +409,8 @@ msgid "Logon Time"
 msgstr "Czas zalogowania"
 
 #: js/user/EditDialog.js:346
-#: js/user/EditDialog.js:817
-#: js/user/EditDialog.js:821
+#: js/user/EditDialog.js:832
+#: js/user/EditDialog.js:836
 msgid "never logged in"
 msgstr "nigdy nie był zalogowany"
 
@@ -435,8 +435,8 @@ msgid "Password Last Set"
 msgstr "Ostatnia zmiana hasła"
 
 #: js/user/EditDialog.js:366
-#: js/user/EditDialog.js:771
-#: js/user/EditDialog.js:825
+#: js/user/EditDialog.js:780
+#: js/user/EditDialog.js:840
 msgid "never"
 msgstr "nigdy"
 
@@ -463,167 +463,169 @@ msgid "Kick Off Time"
 msgstr "Czas wylogowania"
 
 #: js/user/EditDialog.js:404
-msgid "Quota (MB)"
-msgstr "Kwota (MB)"
+msgid "IMAP Quota (MB)"
+msgstr "Kwota dla IMAPa (MB)"
 
 #: js/user/EditDialog.js:423
+#: js/user/EditDialog.js:461
 msgid "Quota"
 msgstr "Kwota"
 
-#: js/user/EditDialog.js:431
-msgid "Current Mail Size"
-msgstr "Rozmiar wiadomości"
+#: js/user/EditDialog.js:424
+#: js/user/EditDialog.js:462
+msgid "no quota set"
+msgstr "kwota nieustawiona"
 
-#: js/user/EditDialog.js:439
+#: js/user/EditDialog.js:434
+msgid "Current Mailbox size"
+msgstr "Rozmiar bieżącej skrzynki pocztowej"
+
+#: js/user/EditDialog.js:442
 msgid "Sieve Quota (MB)"
 msgstr "Kwota ograniczenia (MB)"
 
-#: js/user/EditDialog.js:458
-msgid "Sieve Quota"
-msgstr "Kwota ograniczenia"
+#: js/user/EditDialog.js:472
+msgid "Current Sieve size"
+msgstr "Rozmiar bieżącego filtra"
 
-#: js/user/EditDialog.js:466
-msgid "Sieve Size"
-msgstr "Rozmiar ograniczenia"
-
-#: js/user/EditDialog.js:475
-#: js/user/EditDialog.js:800
+#: js/user/EditDialog.js:481
+#: js/user/EditDialog.js:815
 msgid "Information"
 msgstr "Informacja"
 
-#: js/user/EditDialog.js:489
+#: js/user/EditDialog.js:495
 msgid "Last Login"
 msgstr "Ostatnie logowanie o"
 
-#: js/user/EditDialog.js:526
+#: js/user/EditDialog.js:532
 msgid "Email Alias"
 msgstr "Alias adresu e-mail"
 
-#: js/user/EditDialog.js:532
+#: js/user/EditDialog.js:538
 msgid "Add an alias address..."
 msgstr "Dodaj alias dla adresu e-mail..."
 
-#: js/user/EditDialog.js:545
+#: js/user/EditDialog.js:551
 msgid "Email Forward"
 msgstr "Przekaż e-mail"
 
-#: js/user/EditDialog.js:551
+#: js/user/EditDialog.js:557
 msgid "Add a forward address..."
 msgstr "Dodaj adres dla przekazywanych wiadomości..."
 
-#: js/user/EditDialog.js:563
+#: js/user/EditDialog.js:569
 msgid "Forward Only"
 msgstr "Tylko prześlij dalej"
 
-#: js/user/EditDialog.js:586
+#: js/user/EditDialog.js:592
 msgid "Password confirmation"
 msgstr "Powtórz hasło"
 
-#: js/user/EditDialog.js:603
+#: js/user/EditDialog.js:609
 msgid "Repeat password"
 msgstr "Zresetuj hasło"
 
-#: js/user/EditDialog.js:622
+#: js/user/EditDialog.js:628
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: js/user/EditDialog.js:630
+#: js/user/EditDialog.js:636
 msgid "Ok"
 msgstr "OK"
 
-#: js/user/EditDialog.js:666
+#: js/user/EditDialog.js:673
 msgid "Account"
 msgstr "Konto"
 
-#: js/user/EditDialog.js:681
+#: js/user/EditDialog.js:688
 msgid "First Name"
 msgstr "Imię"
 
-#: js/user/EditDialog.js:691
+#: js/user/EditDialog.js:698
 msgid "Last Name"
 msgstr "Nazwisko"
 
-#: js/user/EditDialog.js:696
+#: js/user/EditDialog.js:703
 #: js/AccessLog.js:132
 msgid "Login Name"
 msgstr "Login"
 
-#: js/user/EditDialog.js:701
+#: js/user/EditDialog.js:708
 msgid "Password"
 msgstr "Hasło"
 
-#: js/user/EditDialog.js:705
+#: js/user/EditDialog.js:712
 msgid "no password set"
 msgstr "brak hasła"
 
-#: js/user/EditDialog.js:732
+#: js/user/EditDialog.js:741
 msgid "Emailaddress"
 msgstr "Adres e-mail"
 
-#: js/user/EditDialog.js:766
+#: js/user/EditDialog.js:775
 #: js/Applications.js:237
 msgid "enabled"
 msgstr "włączone"
 
-#: js/user/EditDialog.js:766
+#: js/user/EditDialog.js:775
 #: js/Applications.js:234
 msgid "disabled"
 msgstr "wyłączone"
 
-#: js/user/EditDialog.js:766
+#: js/user/EditDialog.js:775
 msgid "expired"
 msgstr "wygasło"
 
-#: js/user/EditDialog.js:766
+#: js/user/EditDialog.js:775
 msgid "blocked"
 msgstr "zablokowany"
 
-#: js/user/EditDialog.js:774
+#: js/user/EditDialog.js:783
 #: js/GroupEditDialog.js:144
 msgid "Visibility"
 msgstr "Widoczność konta"
 
-#: js/user/EditDialog.js:780
+#: js/user/EditDialog.js:789
 #: js/GroupEditDialog.js:150
 msgid "Display in addressbook"
 msgstr "Wyświetlaj w książce adresowej"
 
-#: js/user/EditDialog.js:780
+#: js/user/EditDialog.js:789
 #: js/GroupEditDialog.js:150
 msgid "Hide from addressbook"
 msgstr "Ukryj w książce adresowej"
 
-#: js/user/EditDialog.js:790
+#: js/user/EditDialog.js:803
 #: js/GroupEditDialog.js:161
 msgid "Saved in Addressbook"
 msgstr "Zapisano w książce adresowej"
 
-#: js/user/EditDialog.js:817
-#: js/user/EditDialog.js:821
+#: js/user/EditDialog.js:832
+#: js/user/EditDialog.js:836
 msgid "don't know"
 msgstr "nie znam"
 
-#: js/user/EditDialog.js:823
+#: js/user/EditDialog.js:838
 msgid "Password set"
 msgstr "Hasło ustawiono"
 
-#: js/user/EditDialog.js:830
+#: js/user/EditDialog.js:845
 msgid "User groups"
 msgstr "Grupy użytkownika"
 
-#: js/user/EditDialog.js:836
+#: js/user/EditDialog.js:851
 msgid "User roles"
 msgstr "Role użytkownika"
 
-#: js/user/EditDialog.js:842
+#: js/user/EditDialog.js:857
 msgid "Fileserver"
 msgstr "Serwer plików"
 
-#: js/user/EditDialog.js:848
+#: js/user/EditDialog.js:863
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/user/EditDialog.js:857
+#: js/user/EditDialog.js:872
 msgid "SMTP"
 msgstr "SMTP"
 
@@ -699,15 +701,7 @@ msgstr "lp"
 msgid "Version"
 msgstr "Wersja"
 
-#: js/AdminPanel.js:63
-msgid "Change settings for application {0}"
-msgstr "Zmień ustawienia aplikacji {0}"
-
-#: js/AdminPanel.js:123
-msgid "Defaults"
-msgstr "Ustawienia domyślne"
-
-#: js/AdminPanel.js:135
+#: js/AdminPanel.js:48
 msgid "Default Addressbook for new contacts and groups"
 msgstr "Domyślna książka adresowa dla nowych kontaktów i grup"
 
@@ -908,6 +902,24 @@ msgstr "błąd"
 #: js/AccessLog.js:186
 msgid "success"
 msgstr "zakończone sukcesem"
+
+#~ msgid "Quota (MB)"
+#~ msgstr "Kwota (MB)"
+
+#~ msgid "Current Mail Size"
+#~ msgstr "Rozmiar wiadomości"
+
+#~ msgid "Sieve Quota"
+#~ msgstr "Kwota ograniczenia"
+
+#~ msgid "Sieve Size"
+#~ msgstr "Rozmiar ograniczenia"
+
+#~ msgid "Change settings for application {0}"
+#~ msgstr "Zmień ustawienia aplikacji {0}"
+
+#~ msgid "Defaults"
+#~ msgstr "Ustawienia domyślne"
 
 #~ msgid "Aliases"
 #~ msgstr "Aliasy"
