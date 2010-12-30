@@ -4,15 +4,14 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:TimeaccountFilter.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
- *
- * @todo        created_by filter should be replaced by a 'responsible/organizer' filter like in tasks
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  */
 
 /**
- * timeaccount filter Class
+ * Timeaccount filter Class
+ * 
  * @package     Timetracker
  */
 class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGroup implements Tinebase_Model_Filter_AclFilter 
@@ -39,8 +38,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'timetracker_timeaccount.id')),
         'created_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
-        'showClosed'     => array('custom' => true),
-        'isBookable'     => array('custom' => true),
+        'showClosed'     => array('filter' => 'Timetracker_Model_TimeaccountClosedFilter'),
     );
     
     /**
@@ -56,6 +54,23 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
      * @var boolean
      */
     protected $_isResolved = FALSE;
+    
+    /**
+     * constructs a new filter group
+     *
+     * @param  array $_data
+     * @param  string $_condition {AND|OR}
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    public function __construct(array $_data = array(), $_condition = '', $_options = array())
+    {
+        parent::__construct($_data, $_condition, $_options);
+        
+        if ($_options['showClosed'] && ! $this->isFilterSet('showClosed')) {
+            // add show closed = true filter if not already set
+            $this->createFilter('showClosed', 'equals', TRUE);
+        }
+    }
     
     /**
      * set options
@@ -81,7 +96,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     }
     
     /**
-     * appends custom filters to a given select object
+     * appends custom/acl filters to a given select object
      * 
      * @param  Zend_Db_Select                    $_select
      * @param  Tinebase_Backend_Sql_Abstract     $_backend
@@ -89,33 +104,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
      */
     public function appendFilterSql($_select, $_backend)
     {
-        // ensure acl policies
         $this->_appendAclSqlFilter($_select);
-        
-        // manage show closed
-        $this->_appendShowClosedSql($_select);
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
-    }
-    
-    /**
-     * append show closed filter
-     *
-     * @param Zend_Db_Select $_select
-     */
-    protected function _appendShowClosedSql($_select)
-    {
-        $showClosed = false;
-        foreach ($this->_customData as $customData) {
-            if ($customData['field'] == 'showClosed' && $customData['value'] == true) {
-                $showClosed = true;
-            }
-        }
-        if($showClosed || $this->_options['showClosed']){
-            // nothing to filter
-        } else {
-            $_select->where(Tinebase_Core::getDb()->quoteIdentifier('is_open') . ' = 1');
-        }
     }
     
     /**
@@ -133,10 +122,8 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
             // get all timeaccounts user has required grants for
             $result = array();
             foreach ($this->_requiredGrants as $grant) {
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . $this->_value);
                 $result = array_merge($result, Timetracker_Model_TimeaccountGrants::getTimeaccountsByAcl($grant, TRUE));
             }
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . $result);
             $this->_validTimeaccounts = array_unique($result);
             $this->_isResolved = TRUE;
         }
@@ -145,7 +132,6 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         
         $field = $db->quoteIdentifier('id');
         $where = $db->quoteInto("$field IN (?)", empty($this->_validTimeaccounts) ? array('') : $this->_validTimeaccounts);
-        
         
         $_select->where($where);
     }
@@ -162,7 +148,6 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         
         foreach ($result as &$filterData) {
             if ($filterData['field'] == 'id' && $_valueToJson == true && ! empty($filterData['value'])) {
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' value:' . print_r($filterData['value'], true));
                 try {
                     $filterData['value'] = Timetracker_Controller_Timeaccount::getInstance()->get($filterData['value'])->toArray();
                 } catch (Tinebase_Exception_NotFound $nfe) {
