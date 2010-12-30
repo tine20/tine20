@@ -2,7 +2,7 @@
 /**
  * Tine 2.0 - http://www.tine20.org
  * 
- * @package     Felamimail
+ * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
@@ -15,12 +15,8 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_ICalTests::main');
-}
-
 /**
- * Test class for Calendar_ICalTests
+ * Test class for Calendar_Import_ICal
  */
 class Calendar_Import_ICalTests extends Calendar_TestCase
 {
