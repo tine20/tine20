@@ -25,7 +25,7 @@ class Calendar_Export_Ical
         'summary'              => 'summary',
         'url'                  => 'url',
 //        'recurid'              => 'recurid',
-//        'exdate'               => array('allowEmpty' => true         ), //  array of Tinebase_DateTimeTinebase_DateTime's
+//        'exdate'               => 'exdate', //  array of Tinebase_DateTimeTinebase_DateTime's
 //        'rrule'                => 'rrule',
     );
     
@@ -34,16 +34,19 @@ class Calendar_Export_Ical
         $vcalendar = new qCal_Component_Vcalendar(array(
             'prodid'    => '-//tine20.org//Calendar v3.9//EN',
             'calscale'  => 'GREGORIAN',
-//            'version'   => '2.0',
+            'version'   => '2.0',
         ));
         
-//        $_event->setTimezone($_event->originator_tz);
+        // NOTE: we deliver events in originators tz
+        $_event->setTimezone($_event->originator_tz);
+        $vcalendar->attach(self::getVtimezone($_event->originator_tz));
+        
         $vevent = new qCal_Component_Vevent(array(
             'uid'           => $_event->uid,
             'sequence'      => $_event->seq,
             'summary'       => $_event->summary,
-            'dtstart'       => $_event->dtstart->format('Ymd\THis'),
-            'dtend'         => $_event->dtend->format('Ymd\THis'),
+            'dtstart'       => new qCal_Property_Dtstart(qCal_DateTime::factory($_event->dtstart->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz)),
+            'dtend'         => new qCal_Property_Dtend(qCal_DateTime::factory($_event->dtend->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz)),
         ));
         
         foreach(self::$_veventMap as $icalProp => $tineField) {
@@ -51,27 +54,6 @@ class Calendar_Export_Ical
                 $vevent->addProperty($icalProp, $_event->{$tineField});
             }
         }
-        
-//        // timezone
-//        $timezone = new qCal_Component_Vtimezone(array(
-//            'tzid'  => 'Europe/Berlin'
-//        ), array(
-//            new qCal_Component_Daylight(array(
-//                'tzoffsetfrom'  => '+0100',
-//                'tzoffsetto'    => '+0200',
-//                'tzname'        => 'GMT+02:00',
-//                'dtstart'       => '19810329T020000',
-//                'rrule'         => 'FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU',
-//            )),
-//            new qCal_Component_Standard(array(
-//                'tzoffsetfrom'  => '+0200',
-//                'tzoffsetto'    => '+0100',
-//                'tzname'        => 'GMT+01:00',
-//                'dtstart'       => '19961027T030000',
-//                'rrule'         => 'FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU',
-//            )),
-//        ));
-//        $vcalendar->attach($timezone);
         
         // rrule (until needs different format)
         // recurid (needs different format?)
@@ -84,22 +66,35 @@ class Calendar_Export_Ical
         $vcalendar->attach($vevent);
         
         return $vcalendar;
-        
-//$todo = new qCal_Component_Vtodo(array(
-//    'class' => 'private',
-//    'dtstart' => '20090909',
-//    'description' => 'Eat some bacon!!',
-//    'summary' => 'Eat bacon',
-//    'priority' => 1,
-//));
-//    $todo->attach(new qCal_Component_Valarm(array(
-//        'action' => 'audio',
-//        'trigger' => '20090423',
-//        'attach' => 'http://www.example.com/foo.wav',
-//    )));
-//$calendar->attach($todo);
-//
-//        $ical = new qCal_Component_Vcalendar();
-        
+    }
+    
+    // quick and dirty -> @improveme
+    public static function getVtimezone($tzName)
+    {
+        $tzinfo = ActiveSync_TimezoneConverter::getInstance()
+            ->getOffsetsForTimezone($tzName);
+
+            $standardOffset = ((-1 *  $tzinfo['bias']) > 0 ? '+' : '-') .
+                str_pad((string) floor(-1 * $tzinfo['bias'] / 60), 2, 0, STR_PAD_LEFT) . 
+                str_pad((string) floor(-1 * $tzinfo['bias'] % 60), 2, 0, STR_PAD_LEFT);
+                
+            $daylightOffset = ((-1 *  ($tzinfo['bias'] + $tzinfo['daylightBias'])) > 0 ? '+' : '-') .
+                str_pad((string) floor(-1 * ($tzinfo['bias'] + $tzinfo['daylightBias'])/ 60), 2, 0, STR_PAD_LEFT) . 
+                str_pad((string) floor(-1 * ($tzinfo['bias'] + $tzinfo['daylightBias']) % 60), 2, 0, STR_PAD_LEFT);
+                
+            return new qCal_Component_Vtimezone(array(
+            'tzid'  => $tzName
+        ), array(
+            new qCal_Component_Daylight(array(
+                'tzoffsetfrom'  => $standardOffset,
+                'tzoffsetto'    => $daylightOffset,
+                'rrule'         => "FREQ=YEARLY;BYMONTH={$tzinfo['daylightMonth']};BYDAY=" . ($tzinfo['daylightDay'] < 5 ? $tzinfo['daylightDay'] : '-1') . array_search($tzinfo['daylightDayOfWeek'], Calendar_Model_Rrule::$WEEKDAY_DIGIT_MAP),
+            )),
+            new qCal_Component_Standard(array(
+                'tzoffsetfrom'  => $daylightOffset,
+                'tzoffsetto'    => $standardOffset,
+                'rrule'         => "FREQ=YEARLY;BYMONTH={$tzinfo['standardMonth']};BYDAY=" . ($tzinfo['daylightDay'] < 5 ? $tzinfo['daylightDay'] : '-1') . array_search($tzinfo['standardDayOfWeek'], Calendar_Model_Rrule::$WEEKDAY_DIGIT_MAP),
+            )),
+        ));
     }
 }
