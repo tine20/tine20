@@ -17,34 +17,42 @@ echo "\n<!-- Tine 2.0 static files -->";
 // this variable gets replaced by the buildscript
 $tineBuildPath = '';
 
+
 $locale = Zend_Registry::get('locale');
+
 switch(TINE20_BUILDTYPE) {
     case 'DEVELOPMENT':
-        $includeFiles = Tinebase_Frontend_Http::getAllIncludeFiles();
+        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
+        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
         
-        // css files
-        foreach ($includeFiles['css'] as $name) {
-            echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'" />';
+        foreach ($orderedApplications as $application) {
+            $className = $application . '_Frontend_Http';
+            $httpFrontend = new $className;
+            
+            // css files
+            foreach ($httpFrontend->getCssFilesToInclude() as $name) {
+                echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'" />';
+            }
+            
+            // js files
+            foreach ($httpFrontend->getJsFilesToInclude() as $name) {
+                echo "\n    ". '<script type="text/javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
+            }
         }
-        
-        // js files
-        foreach ($includeFiles['js'] as $name) {
-            echo "\n    ". '<script type="text/javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
-        }
-        
         // laguage file
         echo "\n    ". '<script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
         break;
 
     case 'DEBUG':
-        echo "\n    <link rel='stylesheet' type='text/css' href='" . Tinebase_Frontend_Http_Abstract::_appendFileTime('Tinebase/css/' . $tineBuildPath . 'tine-all-debug.css') . "' />";
-        echo "\n    <script type=\"text/javascript\" src=\"" . Tinebase_Frontend_Http_Abstract::_appendFileTime('Tinebase/js/' . $tineBuildPath . 'tine-all-debug.js') . "\"></script>";
+        echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles&mode=debug' />";
+        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles&mode=debug\"></script>";
         echo "\n    <script type=\"text/javascript\" src=\"" . Tinebase_Frontend_Http_Abstract::_appendFileTime("Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js") ."\"></script>";
         break;
         
     case 'RELEASE':
-        echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/" . $tineBuildPath . "tine-all.css' />";
-        echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/" . $tineBuildPath . "tine-all.js\"></script>";
+        echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles&mode=release' />";
+        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles&mode=release\"></script>";
         echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all.js\"></script>";
         break;
 }
