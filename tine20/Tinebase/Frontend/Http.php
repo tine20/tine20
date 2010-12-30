@@ -617,8 +617,42 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         header('Content-Type: application/javascript');
         die($translations);
     }
+    
+    public function getJsFiles($mode = 'release')
+    {
+        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
+        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
+        
+        header('Content-Type: application/javascript');
+        ob_clean();
+        flush();
+        
+        foreach ($orderedApplications as $application) {
+            readfile($application . '/js/all' . $mode == 'debug' ? '-debug' : null . '.js');
+        }
+        
+        die();
+    }
       
-	/**
+    public function getCssFiles($mode = 'release')
+    {
+        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
+        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
+        
+        header('Content-Type: text/css');
+        ob_clean();
+        flush();
+        
+        foreach ($orderedApplications as $application) {
+            readfile($application . '/css/all' . $mode == 'debug' ? '-debug' : null . '.css');
+        }
+        
+        die();
+    }
+    
+    /**
 	 * activate user account
 	 *
 	 * @param 	string $id
