@@ -623,7 +623,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @param string $mode
      */
-    public function getJsFiles($mode = 'release')
+    public function getJsFiles()
     {
         $this->_deliverChangedFiles($mode, 'js');
         
@@ -635,7 +635,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @param string $mode
      */
-    public function getCssFiles($mode = 'release')
+    public function getCssFiles()
     {
         $this->_deliverChangedFiles($mode, 'css');
         
@@ -648,7 +648,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @param string $_mode     
      * @param string $_fileType
      */
-    protected function _deliverChangedFiles($_mode, $_fileType)
+    protected function _deliverChangedFiles($_fileType)
     {
         $cacheId         = null;
         $ifNoneMatch     = null;
@@ -669,9 +669,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         foreach ($orderedApplications as $application) {
             if ($_fileType == 'css') {
-                $filesToWatch[] = $application . '/css/all' . ($_mode == 'debug' ? '-debug' : null) . '.css';
+                $filesToWatch[] = $application . '/css/all' . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.css';
             } else {
-                $filesToWatch[] = $application . '/js/all' . ($_mode == 'debug' ? '-debug' : null) . '.js';
+                $filesToWatch[] = $application . '/js/all'  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
             }
         }
         
