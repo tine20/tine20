@@ -621,7 +621,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * return javascript files if changed
      * 
-     * @param string $mode
      */
     public function getJsFiles()
     {
@@ -633,7 +632,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * return css files if changed
      * 
-     * @param string $mode
      */
     public function getCssFiles()
     {
