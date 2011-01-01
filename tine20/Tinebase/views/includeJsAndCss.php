@@ -45,14 +45,14 @@ switch(TINE20_BUILDTYPE) {
         break;
 
     case 'DEBUG':
-        echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles&mode=debug' />";
-        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles&mode=debug\"></script>";
-        echo "\n    <script type=\"text/javascript\" src=\"" . Tinebase_Frontend_Http_Abstract::_appendFileTime("Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js") ."\"></script>";
+        echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles' />";
+        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles\"></script>";
+        echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js\"></script>";
         break;
         
     case 'RELEASE':
-        echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles&mode=release' />";
-        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles&mode=release\"></script>";
+        echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles' />";
+        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles\"></script>";
         echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all.js\"></script>";
         break;
 }
