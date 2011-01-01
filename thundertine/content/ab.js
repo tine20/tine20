@@ -131,7 +131,7 @@ var ab = {
 		if (aMonth<10) aMonth = '0' + aMonth;
 		var aDay = locDate.getDate();
 		if (aDay < 10) aDay = '0' + aDay;
-		tbDate = locDate.getFullYear() + '-' + aMonth + '-' + aDay; 
+		var tbDate = locDate.getFullYear() + '-' + aMonth + '-' + aDay; 
 		card.setProperty("BirthYear", tbDate.substr(0,4) );
 		card.setProperty("BirthMonth", tbDate.substr(5,2) );
 		card.setProperty("BirthDay", tbDate.substr(8,2) );

@@ -35,6 +35,8 @@ var ttine = {
   onUnLoad: function() {
 	if (config.syncBeforeClose)
 		this.sync();
+    else
+		config.write();
   },
 
   onMenuItemCommand: function(e) { 
