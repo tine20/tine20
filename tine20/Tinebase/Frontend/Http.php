@@ -618,38 +618,124 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         die($translations);
     }
     
+    /**
+     * return javascript files if changed
+     * 
+     * @param string $mode
+     */
     public function getJsFiles($mode = 'release')
     {
-        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
-        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
-        
-        header('Content-Type: application/javascript');
-        ob_clean();
-        flush();
-        
-        foreach ($orderedApplications as $application) {
-            readfile($application . '/js/all' . ($mode == 'debug' ? '-debug' : null) . '.js');
-        }
+        $this->_deliverChangedFiles($mode, 'js');
         
         die();
     }
       
+    /**
+     * return css files if changed
+     * 
+     * @param string $mode
+     */
     public function getCssFiles($mode = 'release')
     {
+        $this->_deliverChangedFiles($mode, 'css');
+        
+        die();
+    }
+    
+    /**
+     * check if js or css files have changed and return all js/css as one big file or return "HTTP/1.0 304 Not Modified" if files don't have changed
+     * 
+     * @param string $_mode     
+     * @param string $_fileType
+     */
+    protected function _deliverChangedFiles($_mode, $_fileType)
+    {
+        $cacheId         = null;
+        $ifNoneMatch     = null;
+        $ifModifiedSince = null;
+        $filesToWatch    = array();
+        
+        if (isset($_SERVER['If_None_Match'])) {
+            $ifNoneMatch     = trim($_SERVER['If_None_Match'], '"');
+            $ifModifiedSince = trim($_SERVER['If_Modified_Since'], '"');
+        } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+            $ifNoneMatch     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
+            $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"'); 
+        }
+        
         $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
         $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
         $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
         
-        header('Content-Type: text/css');
-        ob_clean();
-        flush();
-        
         foreach ($orderedApplications as $application) {
-            readfile($application . '/css/all' . ($mode == 'debug' ? '-debug' : null) . '.css');
+            if ($_fileType == 'css') {
+                $filesToWatch[] = $application . '/css/all' . ($_mode == 'debug' ? '-debug' : null) . '.css';
+            } else {
+                $filesToWatch[] = $application . '/js/all' . ($_mode == 'debug' ? '-debug' : null) . '.js';
+            }
         }
         
-        die();
+        $cache = new Zend_Cache_Frontend_File(array(
+            'master_files' => $filesToWatch
+        ));
+        $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
+        
+        if ($ifNoneMatch && $ifModifiedSince) {
+            $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $ifNoneMatch . $ifModifiedSince);
+        }
+        
+        header('Cache-Control: private, max-age=10800, pre-check=10800');
+        header("Expires: " . gmdate("D, d M Y H:i:s") . " GMT");
+        
+        // if the cache id is still valid, the files don't have changed on disk
+        if ($cacheId !== null && $cache->test($cacheId)) {
+            header("Last-Modified: " . $ifModifiedSince);
+            header("HTTP/1.0 304 Not Modified");
+            header('Content-Length: 0');
+        } else {
+            // recalculate etag
+            list($etag, $lastModified) = $this->_getEtag($filesToWatch);
+            
+            $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $etag . $lastModified);
+            
+            // do we need to update the cache? maybe the client did not send an etag
+            if (!$cache->test($cacheId)) {
+                $cache->save('dummy', $cacheId, array(), null);
+            }
+            
+            header("Last-Modified: " . $lastModified);
+            header('Content-Type: ' . ($_fileType == 'css' ? 'text/css' : 'application/javascript'));
+            header('Etag: "' . $etag . '"');
+            
+            ob_clean();
+            flush();
+            
+            // send files to client
+            foreach ($filesToWatch as $file) {
+                readfile($file);
+            }
+        }
+    }
+    
+    /**
+     * generate etag hash based on filenames and return etag and last modified timestamp
+     * 
+     * @param  array  $_files
+     * @return array
+     */
+    protected function _getEtag(array $_files)
+    {
+        $timeStamp = null;
+        
+        foreach ($_files as $file) {
+            $mtime = filemtime($file);
+            if ($mtime > $timeStamp) {
+                $timeStamp = $mtime;
+            }
+        }
+        $etag =  hash('sha1', implode('', $files));
+
+        return array($etag, gmdate("D, d M Y H:i:s", $timeStamp) . " GMT");
     }
     
     /**
