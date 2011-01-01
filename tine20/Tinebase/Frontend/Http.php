@@ -624,7 +624,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function getJsFiles()
     {
-        $this->_deliverChangedFiles($mode, 'js');
+        $this->_deliverChangedFiles('js');
         
         die();
     }
@@ -635,7 +635,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function getCssFiles()
     {
-        $this->_deliverChangedFiles($mode, 'css');
+        $this->_deliverChangedFiles('css');
         
         die();
     }
