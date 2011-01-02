@@ -183,13 +183,8 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
                 break;
                 
             case self::ENCRYPT_NTPASSWORD:
-                $password = pack('H*',hash('md4', $_password));
+                $password = strtoupper(bin2hex(pack('H*',hash('md4', $_password))));
                 
-                #$crypt = new Crypt_CHAP_MSv1();
-                #$password = strtoupper(bin2hex($crypt->ntPasswordHash($_password)));
-                
-                // @todo replace Crypt_CHAP_MSv1
-                //$password = hash('md4', Zend_Auth_Adapter_Http_Ntlm::toUTF16LE($_password), TRUE);
                 break;
                 
             default:
