@@ -649,15 +649,15 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function _deliverChangedFiles($_fileType)
     {
         $cacheId         = null;
-        $ifNoneMatch     = null;
+        $clientETag      = null;
         $ifModifiedSince = null;
         $filesToWatch    = array();
         
         if (isset($_SERVER['If_None_Match'])) {
-            $ifNoneMatch     = trim($_SERVER['If_None_Match'], '"');
+            $clientETag     = trim($_SERVER['If_None_Match'], '"');
             $ifModifiedSince = trim($_SERVER['If_Modified_Since'], '"');
         } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
-            $ifNoneMatch     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
+            $clientETag     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
             $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"'); 
         }
         
@@ -673,37 +673,39 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             }
         }
         
+        $serverETag = hash('sha1', implode('', $filesToWatch));
+        
         $cache = new Zend_Cache_Frontend_File(array(
             'master_files' => $filesToWatch
         ));
         $cache->setBackend(Tinebase_Core::get(Tinebase_Core::CACHE)->getBackend());
         
-        if ($ifNoneMatch && $ifModifiedSince) {
-            $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $ifNoneMatch . $ifModifiedSince);
+        if ($clientETag && $ifModifiedSince) {
+            $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $clientETag . $ifModifiedSince);
         }
         
         header('Cache-Control: private, max-age=10800, pre-check=10800');
         header("Expires: " . gmdate("D, d M Y H:i:s") . " GMT");
         
         // if the cache id is still valid, the files don't have changed on disk
-        if ($cacheId !== null && $cache->test($cacheId)) {
+        if ($clientETag == $serverETag && $cache->test($cacheId)) {
             header("Last-Modified: " . $ifModifiedSince);
             header("HTTP/1.0 304 Not Modified");
             header('Content-Length: 0');
         } else {
             // recalculate etag
-            list($etag, $lastModified) = $this->_getEtag($filesToWatch);
+            $lastModified = $this->_getLastModified($filesToWatch);
             
-            $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $etag . $lastModified);
+            $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $serverETag . $lastModified);
             
             // do we need to update the cache? maybe the client did not send an etag
             if (!$cache->test($cacheId)) {
-                $cache->save('dummy', $cacheId, array(), null);
+                $cache->save(TINE20_BUILDTYPE, $cacheId, array(), null);
             }
             
             header("Last-Modified: " . $lastModified);
             header('Content-Type: ' . ($_fileType == 'css' ? 'text/css' : 'application/javascript'));
-            header('Etag: "' . $etag . '"');
+            header('Etag: "' . $serverETag . '"');
             
             ob_clean();
             flush();
@@ -716,12 +718,12 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
     
     /**
-     * generate etag hash based on filenames and return etag and last modified timestamp
+     * return last modified timestamp formated in gmt
      * 
      * @param  array  $_files
      * @return array
      */
-    protected function _getEtag(array $_files)
+    protected function _getLastModified(array $_files)
     {
         $timeStamp = null;
         
@@ -731,9 +733,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 $timeStamp = $mtime;
             }
         }
-        $etag =  hash('sha1', implode('', $files));
 
-        return array($etag, gmdate("D, d M Y H:i:s", $timeStamp) . " GMT");
+        return gmdate("D, d M Y H:i:s", $timeStamp) . " GMT";
     }
     
     /**
