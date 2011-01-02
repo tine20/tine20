@@ -270,11 +270,13 @@ var wbxml = {
 			else if (cmd == 'inString') {
 				if (c == 0x00) {
 					cmd = '';
-					// replace forbidden xml characters
-					inString = inString.replace('<', '&lt;');
-					inString = inString.replace('>', '&gt;');
-					inString = inString.replace('"', '&quot;');
-					inString = inString.replace('&', '&amp;');
+					/* 
+					   replace forbidden xml characters (strings are not to be escaped?) <--> ab.commandCard()
+					*/
+					inString = inString.replace(/</g, '&lt;');
+					inString = inString.replace(/>/g, '&gt;');
+					//inString = inString.replace(/"/g, '&quot;');
+					inString = inString.replace(/&/g, '&amp;');
 					// inString = inString.replace("/'/g", '&apos;');
 					xml = xml + inString;
 				}
@@ -300,8 +302,6 @@ var wbxml = {
 			xml = xml + '</' + lastTags.pop()+ '>';
 		}
 		else if (c>=0x05) { 
-//if ( tag == 'FolderHierarchy_ParentId' )
-//  alert(c+'    '+this.codePages[page]+'   ');
 			// remove type addition from tags
 			var inside = true;
 			if(c > 0xC0) c = c - 0xC0;

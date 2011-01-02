@@ -423,8 +423,13 @@ var ab = {
 						var tbField = tbFieldX[0].firstChild.nodeValue;
 						if(tbField.substr(0,1) == '%')
 							this.setSpecialAbValue(card, tbField.substr(1,tbField.length-1), asValue); 
-						else
+						else {
+							// replace XML-escaped characters: <, > and & <--> wbxml.doXml()
+							asValue = asValue.replace(/&lt;/g, '<');
+							asValue = asValue.replace(/&gt;/g, '>');
+							asValue = asValue.replace(/&amp;/g, '&');
 							card.setProperty(tbField, asValue);
+						}
 						md5text = md5text + asValue; 
 					}
 					else {
