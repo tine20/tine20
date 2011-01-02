@@ -64,11 +64,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     const ENCRYPT_SSHA = 'ssha';
     
     /**
-     * lmpassword encryption
-     */
-    const ENCRYPT_LMPASSWORD = 'lmpassword';
-    
-    /**
      * ntpassword encryption
      */
     const ENCRYPT_NTPASSWORD = 'ntpassword';
@@ -123,7 +118,6 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
             self::ENCRYPT_SHA,
             self::ENCRYPT_SMD5,
             self::ENCRYPT_SSHA,
-            self::ENCRYPT_LMPASSWORD,
             self::ENCRYPT_NTPASSWORD
         );
     }
@@ -188,14 +182,11 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
                 }
                 break;
                 
-            case self::ENCRYPT_LMPASSWORD:
-                $crypt = new Crypt_CHAP_MSv1();
-                $password = strtoupper(bin2hex($crypt->lmPasswordHash($_password)));
-                break;
-                
             case self::ENCRYPT_NTPASSWORD:
-                $crypt = new Crypt_CHAP_MSv1();
-                $password = strtoupper(bin2hex($crypt->ntPasswordHash($_password)));
+                $password = pack('H*',hash('md4', $_password));
+                
+                #$crypt = new Crypt_CHAP_MSv1();
+                #$password = strtoupper(bin2hex($crypt->ntPasswordHash($_password)));
                 
                 // @todo replace Crypt_CHAP_MSv1
                 //$password = hash('md4', Zend_Auth_Adapter_Http_Ntlm::toUTF16LE($_password), TRUE);
