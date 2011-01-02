@@ -648,6 +648,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected function _deliverChangedFiles($_fileType)
     {
+	    // close session to allow other requests
+        Zend_Session::writeClose(true);
+        
         $cacheId         = null;
         $clientETag      = null;
         $ifModifiedSince = null;
