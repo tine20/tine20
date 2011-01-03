@@ -80,6 +80,7 @@
  */
 class qCal_Property_Exdate extends qCal_Property_MultiValue {
 
+    protected $allowMultiple = true;
 	protected $type = 'DATE-TIME';
 	protected $allowedComponents = array('VEVENT','VTODO','VJOURNAL','VTIMEZONE');
 
