@@ -19,28 +19,49 @@ class Calendar_Export_Ical
         'description'          => 'description',
         'geo'                  => 'geo',
         'location'             => 'location',
-//        'organizer'            => 'organizer',
         'priority'             => 'priority',
-//        'status_id'            => 'status',
         'summary'              => 'summary',
         'url'                  => 'url',
-//        'recurid'              => 'recurid',
-//        'exdate'               => 'exdate', //  array of Tinebase_DateTimeTinebase_DateTime's
-//        'rrule'                => 'rrule',
     );
     
-    public static function eventToIcal($_event)
+    /**
+     * @var array already attached timezones
+     */
+    protected $_attachedTimezones = array();
+    
+    /**
+     * @var qCal_Component_Vcalendar
+     */
+    protected $_vcalendar;
+    
+    public function __construct()
     {
+        
+        // start a new vcalendar
         $version = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->version;
-        $vcalendar = new qCal_Component_Vcalendar(array(
+        $this->_vcalendar = new qCal_Component_Vcalendar(array(
             'prodid'    => "-//tine20.org//Calendar v$version//EN",
             'calscale'  => 'GREGORIAN',
             'version'   => '2.0',
         ));
         
+    }
+    
+    public function eventToIcal($_event)
+    {
+        if ($_event instanceof Tinebase_Record_RecordSet) {
+            foreach($_event as $event) {
+                $this->eventToIcal($event);
+            }
+            
+            return $this->_vcalendar;
+        }
+        
         // NOTE: we deliver events in originators tz
         $_event->setTimezone($_event->originator_tz);
-        $vcalendar->attach(self::getVtimezone($_event->originator_tz));
+        if (! in_array($_event->originator_tz, $this->_attachedTimezones)) {
+            $this->_vcalendar->attach(self::getVtimezone($_event->originator_tz));
+        }
         
         $vevent = new qCal_Component_Vevent(array(
             'uid'           => $_event->uid,
@@ -56,20 +77,36 @@ class Calendar_Export_Ical
             }
         }
         
+        // rrule
         if ($_event->rrule) {
             $vevent->addProperty('rrule', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $_event->rrule));
+            
+            if ($exdateArray = $_event->exdate) {
+                $exdates = new qCal_Property_Exdate(qCal_DateTime::factory(array_shift($exdateArray)->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz));
+                foreach($exdateArray as $exdate) {
+                    $exdates->addValue(qCal_DateTime::factory($exdate->format('Ymd\THis'), $_event->originator_tz));
+                }
+                
+                $vevent->addProperty($exdates);
+            }
         }
-        // rrule (until needs different format)
-        // recurid (needs different format?)
+        
+        // recurid
+        if ($_event->isRecurException()) {
+            $originalDtStart = $_event->getOriginalDtStart();
+            $originalDtStart->setTimezone($_event->originator_tz);
+            
+            $vevent->addProperty(new qCal_Property_RecurrenceId(qCal_DateTime::factory($originalDtStart->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz)));
+        }
+        
         // status
         // organizer
         // alarms
         // attendee
-        // exdate
         
-        $vcalendar->attach($vevent);
+        $this->_vcalendar->attach($vevent);
         
-        return $vcalendar;
+        return $this->_vcalendar;
     }
     
     // quick and dirty -> @improveme
