@@ -710,7 +710,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             header('Content-Type: ' . ($_fileType == 'css' ? 'text/css' : 'application/javascript'));
             header('Etag: "' . $serverETag . '"');
             
-            ob_clean();
             flush();
             
             // send files to client
