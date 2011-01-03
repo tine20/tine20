@@ -61,15 +61,14 @@ Ext.namespace('Tine.Tasks');
      * @private
      */
     initComponent: function() {
-        // init tabpanels
         this.alarmPanel = new Tine.widgets.dialog.AlarmPanel({});
         this.linkPanel = new Tine.widgets.dialog.LinkPanel({
-            relatedRecords: {
+            relatedRecords: (Tine.Crm && Tine.Tinebase.common.hasRight('run', 'Crm')) ? {
                 Crm_Model_Lead: {
                     recordClass: Tine.Crm.Model.Lead,
                     dlgOpener: Tine.Crm.LeadEditDialog.openWindow
                 }
-            }
+            } : {}
         });
         
         Tine.Tasks.TaskEditDialog.superclass.initComponent.call(this);

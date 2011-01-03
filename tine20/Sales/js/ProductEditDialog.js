@@ -47,14 +47,13 @@ Tine.Sales.ProductEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     initComponent: function() {
-        // init tabpanels
         this.linkPanel = new Tine.widgets.dialog.LinkPanel({
-            relatedRecords: {
+            relatedRecords: (Tine.Crm && Tine.Tinebase.common.hasRight('run', 'Crm')) ? {
                 Crm_Model_Lead: {
                     recordClass: Tine.Crm.Model.Lead,
                     dlgOpener: Tine.Crm.LeadEditDialog.openWindow
                 }
-            }
+            } : {}
         });
         
         Tine.Sales.ProductEditDialog.superclass.initComponent.call(this);
