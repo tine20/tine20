@@ -472,7 +472,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $locale = Tinebase_Core::get('locale');
         
         // default credentials
-        if(isset(Tinebase_Core::getConfig()->login)) {
+        if (isset(Tinebase_Core::getConfig()->login)) {
             $loginConfig = Tinebase_Core::getConfig()->login;
             $defaultUsername = (isset($loginConfig->username)) ? $loginConfig->username : '';
             $defaultPassword = (isset($loginConfig->password)) ? $loginConfig->password : '';
@@ -505,10 +505,18 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $user = Tinebase_Core::getUser();
+            $userContactArray = array();
+            if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
+                try {
+                    $userContactArray = Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray();
+                } catch (Addressbook_Exception_NotFound $aenf) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' User not found in Addressbook: ' . $user->accountDisplayName);
+                }
+            }
             
             $registryData += array(    
                 'currentAccount'    => $user->toArray(),
-                'userContact'       => Addressbook_Controller_Contact::getInstance()->getContactByUserId($user->getId(), TRUE)->toArray(),
+                'userContact'       => $userContactArray,
                 'accountBackend'    => Tinebase_User::getConfiguredBackend(),
                 'jsonKey'           => Tinebase_Core::get('jsonKey'),
                 'userApplications'  => $user->getApplications()->toArray(),
