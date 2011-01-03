@@ -102,9 +102,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         } catch (Tinebase_Exception_NotFound $e) {
             $this->objects['user'] = Admin_Controller_User::getInstance()->create($this->objects['user'], 'lars', 'lars');
         }
-        
-        return;
-        
     }
 
     /**
@@ -150,12 +147,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $id = 12334567;
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        
-        // add account for group / role member tests
-        $user = Tinebase_User::getInstance()->getUserById($id);
-        
-        #$this->assertEquals($translate->_('unknown'), $user->accountDisplayName);
-        #$this->assertEquals($id, $user->accountId);
     }
 
     /**
@@ -168,12 +159,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $loginName = 'something';
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        
-        // add account for group / role member tests
-        $user = Tinebase_User::getInstance()->getUserByLoginName($loginName);
-        
-        #$this->assertEquals($translate->_('unknown'), $user->accountDisplayName);
-        #$this->assertEquals(0, $user->accountId);
     }
 
     /**
@@ -182,8 +167,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAddGroup()
     {
-        //print_r ($this->objects['initialGroup']->toArray());
-        
         $result = $this->_json->saveGroup($this->objects['initialGroup']->toArray(), array());
         
         $this->assertEquals($this->objects['initialGroup']->description, $result['description']);
@@ -212,12 +195,26 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * try to save a hidden account
+     *
+     */
+    public function testSaveHiddenAccount()
+    {
+        $accountData = $this->objects['user']->toArray();
+        $accountData['visibility'] = Tinebase_Model_User::VISIBILITY_HIDDEN;
+        
+        $account = $this->_json->saveUser($accountData);
+        
+        $this->assertTrue(is_array($account));
+        $this->assertTrue(! empty($account['contact_id']));
+    }    
+    
+    /**
      * try to delete accounts 
      *
      */
     public function testDeleteAccounts()
     {
-        #$this->_json->deleteUsers(array($this->objects['user']->accountId));
         Admin_Controller_User::getInstance()->delete($this->objects['user']->accountId);
         
         $this->setExpectedException('Exception');
