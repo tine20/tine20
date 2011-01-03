@@ -106,10 +106,16 @@ class Calendar_Export_Ical
             $vevent->addProperty(new qCal_Property_RecurrenceId(qCal_DateTime::factory($originalDtStart->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz)));
         }
         
-        // status
         // organizer
-        // alarms
+        $organizer = Addressbook_Controller_Contact::getInstance()->getMultiple((array) $_event->organizer, TRUE)->getFirstRecord();
+        if ($organizer && $organizerEmail = $organizer->getPreferedEmailAddress()) {
+            $vevent->addProperty(new qCal_Property_Organizer("MAILTO:$organizerEmail", array('CN' => $organizer->n_fileas)));
+        }
+        
         // attendee
+        
+        // status
+        // alarms
         
         $this->_vcalendar->attach($vevent);
         
