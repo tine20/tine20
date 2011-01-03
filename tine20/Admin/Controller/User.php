@@ -209,7 +209,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_user->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
         }
         
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && $_user->visibility == Tinebase_Model_User::VISIBILITY_DISPLAYED) {
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($_user->container_id)) {
             $_user->contact_id = $oldUser->contact_id;
             $contact = $this->createOrUpdateContact($_user);
             $_user->contact_id = $contact->getId();
@@ -259,7 +259,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
             $_user->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
         }
         
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && $_user->visibility == Tinebase_Model_User::VISIBILITY_DISPLAYED) {
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($_user->container_id)) {
             $contact = $this->createOrUpdateContact($_user);
             $_user->contact_id = $contact->getId();
         }
