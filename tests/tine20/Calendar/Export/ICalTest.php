@@ -145,4 +145,25 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
         $this->assertEquals(1, preg_match("/ATTENDEE;CN=\"Wulf, Paul\";CUTYPE=INDIVIDUAL;EMAIL=pwulf@tine20.org;PARTSTAT=\r\n ACCEPTED;ROLE=REQ-PARTICIPANT;RSVP=FALSE:mailto:pwulf@tine20.org\r\n/", $ics), 'ATTENDEE missing/broken');
     }
     
+    public function testExportAlarm()
+    {
+        // alarm handling is ugly...
+        $alarmTime = clone $this->_testEvent->dtstart;
+        $alarmTime->sub(15, Tinebase_DateTime::MODIFIER_MINUTE);
+            
+            
+        $this->_testEvent->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 15,
+                'alarm_time'     => $alarmTime
+            ), TRUE)
+        ));
+        
+        $exporter = new Calendar_Export_Ical();
+        $ics = $exporter->eventToIcal($this->_testEvent);
+//        echo $ics;
+
+        // assert organizer
+        $this->assertEquals(1, preg_match("/TRIGGER:-PT15M\r\n/", $ics), 'TRIGGER missing/broken');
+    }
 }
