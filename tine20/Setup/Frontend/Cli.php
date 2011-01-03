@@ -390,8 +390,10 @@ class Setup_Frontend_Cli
     {
     	$options = array();
     	foreach ($_args as $arg) {
-    		list($key, $value) = explode('=', $arg);
-    		$options[$key] = $value;
+    	    if (strpos($arg, '=') !== FALSE) {
+        		list($key, $value) = explode('=', $arg);
+        		$options[$key] = $value;
+    	    }
     	}
     	
     	return $options;
