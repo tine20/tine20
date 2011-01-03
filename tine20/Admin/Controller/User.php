@@ -205,11 +205,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        if ($_user->visibility == Tinebase_Model_User::VISIBILITY_DISPLAYED && empty($_user->container_id)) {
-            $_user->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
-        }
-        
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($_user->container_id)) {
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $_user->contact_id = $oldUser->contact_id;
             $contact = $this->createOrUpdateContact($_user);
             $_user->contact_id = $contact->getId();
@@ -255,11 +251,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
-        if ($_user->visibility == Tinebase_Model_User::VISIBILITY_DISPLAYED && empty($_user->container_id)) {
-            $_user->visibility = Tinebase_Model_User::VISIBILITY_HIDDEN;
-        }
-        
-        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true && ! empty($_user->container_id)) {
+        if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
             $contact = $this->createOrUpdateContact($_user);
             $_user->contact_id = $contact->getId();
         }
@@ -342,6 +334,11 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     public function createOrUpdateContact(Tinebase_Model_FullUser $_user)
     {
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        
+        if (empty($_user->container_id)) {
+            $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+            $_user->container_id = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+        }
         
         try {
             if (empty($_user->contact_id)) { // jump to catch block

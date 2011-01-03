@@ -204,11 +204,14 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     {
         $accountData = $this->objects['user']->toArray();
         $accountData['visibility'] = Tinebase_Model_User::VISIBILITY_HIDDEN;
+        $accountData['container_id'] = 0;
         
         $account = $this->_json->saveUser($accountData);
         
         $this->assertTrue(is_array($account));
         $this->assertTrue(! empty($account['contact_id']));
+        $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+        $this->assertEquals($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK], $account['container_id']['id']);
     }    
     
     /**
