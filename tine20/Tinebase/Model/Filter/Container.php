@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -272,6 +272,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      * @param  string $_function
      * @param  string $_ownerId    => needed for $_node == 'personal'
      * @return array of container ids
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     protected function _resolveContainerNode($_node, $_ownerId = NULL)
     {
@@ -283,8 +284,13 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             case 'personal':   return Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
             case 'shared':     return Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
             case 'otherUsers': return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
-            #case 'internal':   return array(Tinebase_Container::getInstance()->getInternalContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId());
-            default:           throw new Tinebase_Exception_UnexpectedValue('specialNode not supported.');
+            case 'internal':
+                // @todo remove legacy code
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                    . ' Trying to fetch obsolete "/internal" node. Please make sure this filter is no longer used because this is deprecated.');
+                $adminConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+                return array($adminConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK]);
+            default:           throw new Tinebase_Exception_UnexpectedValue('specialNode ' . $_node . ' not supported.');
         }
                 
         return $ids;
