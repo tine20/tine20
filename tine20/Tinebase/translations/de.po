@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-07-31 20:42+0100\n"
-"PO-Revision-Date: 2010-12-14 10:55+0100\n"
+"PO-Revision-Date: 2011-01-03 10:27+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1897,7 +1897,7 @@ msgstr "Daten"
 
 #: views/update.php:47
 msgid "Tine 2.0 needs to be updated or is not installed yet."
-msgstr "Tine 2.0 muss akutalisiert werden oder ist noch gar nicht installiert."
+msgstr "Tine 2.0 muss aktualisiert werden oder ist noch nicht komplett installiert."
 
 #: views/update.php:47
 msgid "Please wait or contact your administrator"
