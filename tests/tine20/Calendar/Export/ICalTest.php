@@ -123,6 +123,26 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
 //        echo $ics;
 
         // assert organizer
-        $this->assertEquals(1, preg_match("/ORGANIZER;CN=\"Wulf, Paul\":MAILTO:pwulf@tine20.org\r\n/", $ics), 'ORGANIZER missing/broken');
+        $this->assertEquals(1, preg_match("/ORGANIZER;CN=\"Wulf, Paul\":mailto:pwulf@tine20.org\r\n/", $ics), 'ORGANIZER missing/broken');
     }
+    
+    public function testExportAttendee()
+    {
+        $this->_testEvent->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array(
+                'role'          => Calendar_Model_Attender::ROLE_REQUIRED,
+                'status'        => Calendar_Model_Attender::STATUS_ACCEPTED,
+                'user_type'     => Calendar_Model_Attender::USERTYPE_USER,
+                'user_id'       => array_value('pwulf', Zend_Registry::get('personas'))->contact_id,
+            )
+        ));
+        
+        $exporter = new Calendar_Export_Ical();
+        $ics = $exporter->eventToIcal($this->_testEvent);
+//        echo $ics;
+
+        // assert organizer
+        $this->assertEquals(1, preg_match("/ATTENDEE;CN=\"Wulf, Paul\";CUTYPE=INDIVIDUAL;EMAIL=pwulf@tine20.org;PARTSTAT=\r\n ACCEPTED;ROLE=REQ-PARTICIPANT;RSVP=FALSE:mailto:pwulf@tine20.org\r\n/", $ics), 'ATTENDEE missing/broken');
+    }
+    
 }
