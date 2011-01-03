@@ -147,6 +147,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $id = 12334567;
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
+        $user = Tinebase_User::getInstance()->getUserById($id);
     }
 
     /**
@@ -159,6 +160,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $loginName = 'something';
         
         $this->setExpectedException('Tinebase_Exception_NotFound');
+        $user = Tinebase_User::getInstance()->getUserByLoginName($loginName);
     }
 
     /**
