@@ -82,20 +82,20 @@ class Calendar_Export_Ical
         if ($_event->rrule) {
             $vevent->addProperty('rrule', preg_replace('/(UNTIL=)(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})/', '$1$2$3$4T$5$6$7Z', $_event->rrule));
             
-            // use multiple EXDATE for the moment, as apple ical uses them
-            foreach($_event->exdate as $exdate) {
-                $exdates = new qCal_Property_Exdate(qCal_DateTime::factory($exdate->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz));
-                $vevent->addProperty($exdates);
-            }
+            if ($exdateArray = $_event->exdate) {
+                // use multiple EXDATE for the moment, as apple ical uses them
+                foreach($_event->exdate as $exdate) {
+                    $exdates = new qCal_Property_Exdate(qCal_DateTime::factory($exdate->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz));
+                    $vevent->addProperty($exdates);
+                }
             
-//            if ($exdateArray = $_event->exdate) {
 //                $exdates = new qCal_Property_Exdate(qCal_DateTime::factory(array_shift($exdateArray)->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz));
 //                foreach($exdateArray as $exdate) {
 //                    $exdates->addValue(qCal_DateTime::factory($exdate->format('Ymd\THis'), $_event->originator_tz));
 //                }
 //                
 //                $vevent->addProperty($exdates);
-//            }
+            }
         }
         
         // recurid
