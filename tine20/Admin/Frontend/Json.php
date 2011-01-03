@@ -321,7 +321,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveUser($recordData)
     {
-        $password = $recordData['accountPassword'];
+        $password = (isset($recordData['accountPassword'])) ? $recordData['accountPassword'] : '';
         
         $account = new Tinebase_Model_FullUser();
         
