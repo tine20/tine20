@@ -204,7 +204,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' $calendarId: ' . $calendarId);
 
-        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
+        $events = Calendar_Controller_MSEventFacade::getInstance()->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $calendarId),
         )));
         
@@ -226,23 +226,46 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' $calendarId: ' . $calendarId . ' $objectUri: ' . $objectUri);
         
-        $event = Calendar_Controller_Event::getInstance()->get($objectUri);
+        $event = Calendar_Controller_MSEventFacade::getInstance()->get($objectUri);
         return $this->_convertCalendarObject($event);
     }
 
+    /**
+     * converts events to calendar objects
+     * 
+     * @param Calendar_Model_Event $event (from MSFacade atm.)
+     */
     protected function _convertCalendarObject($event)
     {
         $eventId = $event->getId();
         $lastModified = $event->last_modified_time ? $event->last_modified_time : $event->creation_time;
         
-        $calData = Calendar_Export_Ical::eventToIcal($event);
-//        $calData = str_replace(array('DTSTART:20', 'DTEND:20'), array('DTSTART;TZID=Europe/Berlin:20', 'DTEND;TZID=Europe/Berlin:20'), $calData);
-        error_log($calData);
+        // we always use a event set to return exdates at once
+        $eventSet = new Tinebase_Record_RecordSet('Calendar_Model_Event', array($event));
+        
+        if ($event->rrule) {
+            foreach($event->exdate as $exEvent) {
+                if (! $exEvent->is_deleted) {
+                    $eventSet->addRecord($exEvent);
+                    $event->exdate->removeRecord($exEvent);
+                }
+            }
+            
+            // remaining exdates are fallouts
+            $event->exdate = $event->exdate->getOriginalDtStart();
+        }
+        
+        $exporter = new Calendar_Export_Ical();
+        $ics = $exporter->eventToIcal($eventSet);
+        
+        // work arround broken exdate handling in apple ical
+        
+        
         return array(
             'id'            => $eventId,
-            'uri'           => /*$event->uri ? $event->uri :*/ $eventId,
-            'lastmodified'  => time(), //$lastModified->getTimeStamp(),
-            'calendardata'  => $calData, //Calendar_Export_Ical::eventToIcal($event),
+            'uri'           => $eventId,
+            'lastmodified'  => $lastModified->getTimeStamp(),
+            'calendardata'  => $ics,
         );
     }
     
