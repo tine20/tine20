@@ -139,9 +139,27 @@ class Calendar_Export_Ical
             }
         }
         
-        
-        
         // alarms
+        if ($_event->alarms) {
+            foreach($_event->alarms as $alarm) {
+                $valarm = new qCal_Component_Valarm(array(
+                    'ACTION'        => 'DISPLAY',
+                    'DESCRIPTION'   =>  $_event->summary,
+                ));
+                
+                // qCal only support DURATION ;-(
+                $diffSeconds  = $_event->dtstart->php52compat_diff($alarm->alarm_time);
+                $valarm->addProperty(new qCal_Property_Trigger($diffSeconds));
+                
+//                if (is_numeric($alarm->minutes_before)) {
+//                    $valarm->addProperty(new qCal_Property_Trigger("-PT{$alarm->minutes_before}M"));
+//                } else {
+//                    $valarm->addProperty(new qCal_Property_Trigger(qCal_DateTime::factory($alarm->alarm_time->format('Ymd\THis'), $_event->originator_tz)), array('TZID' => $_event->originator_tz));
+//                }
+                
+                $vevent->attach($valarm);
+            }
+        }
         
         // @todo status
         
