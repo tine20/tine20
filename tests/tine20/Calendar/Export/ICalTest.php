@@ -87,7 +87,9 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
 //        echo $ics;
 
         // assert exdate
-        $this->assertEquals(1, preg_match("/EXDATE;TZID=Europe\/Berlin:20101231T130000,20110101T130000\r\n/", $ics), 'RECURRENCE-ID broken');
+//        $this->assertEquals(1, preg_match("/EXDATE;TZID=Europe\/Berlin:20101231T130000,20110101T130000\r\n/", $ics), 'RECURRENCE-ID broken');
+        $this->assertEquals(1, preg_match("/EXDATE;TZID=Europe\/Berlin:20101231T130000\r\n/", $ics), 'RECURRENCE-ID broken');
+        $this->assertEquals(1, preg_match("/EXDATE;TZID=Europe\/Berlin:20110101T130000\r\n/", $ics), 'RECURRENCE-ID broken');
     }
     
     public function testExportRecurSet()
@@ -110,5 +112,17 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
 //        echo $ics;
 
         $this->assertEquals(2, preg_match_all('/BEGIN:VEVENT\r\n/', $ics, $matches), 'There should be exactly 2 VEVENT compontents');
+    }
+    
+    public function testExportOrganizer()
+    {
+        $this->_testEvent->organizer = array_value('pwulf', Zend_Registry::get('personas'))->contact_id;
+        
+        $exporter = new Calendar_Export_Ical();
+        $ics = $exporter->eventToIcal($this->_testEvent);
+//        echo $ics;
+
+        // assert organizer
+        $this->assertEquals(1, preg_match("/ORGANIZER;CN=\"Wulf, Paul\":MAILTO:pwulf@tine20.org\r\n/", $ics), 'ORGANIZER missing/broken');
     }
 }
