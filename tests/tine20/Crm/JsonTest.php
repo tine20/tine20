@@ -4,8 +4,8 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  */
@@ -105,10 +105,8 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testGetSettings()
     {
-        $result = $this->_instance->getConfigSettings();
+        $result = $this->_instance->getSettings();
 
-        //print_r($result);
-        
         $this->assertEquals(array('leadstates', 'leadtypes', 'leadsources', 'defaults'), array_keys($result));
         $this->assertEquals(6, count($result[Crm_Model_Config::LEADSTATES]));
         $this->assertEquals(3, count($result[Crm_Model_Config::LEADTYPES]));
@@ -122,7 +120,7 @@ class Crm_JsonTest extends Crm_AbstractTest
      */
     public function testSaveSettings()
     {
-        $oldSettings = $this->_instance->getConfigSettings();
+        $oldSettings = $this->_instance->getSettings();
         
         // change some settings
         $newSettings = $oldSettings;
@@ -131,15 +129,15 @@ class Crm_JsonTest extends Crm_AbstractTest
             'id' => 5,
             'leadsource' => 'Another Leadsource'
         );
-        $anotherResult = $this->_instance->saveConfigSettings($newSettings);
+        $anotherResult = $this->_instance->saveSettings($newSettings);
         $this->assertEquals($anotherResult, $newSettings);
         
         // reset original settings
-        $result = $this->_instance->saveConfigSettings($oldSettings);
+        $result = $this->_instance->saveSettings($oldSettings);
         $this->assertEquals($oldSettings, $result);
         
         // test Crm_Model_Config::getOptionById
-        $settings = Crm_Controller::getInstance()->getConfigSettings();
+        $settings = Crm_Controller::getInstance()->getSettings();
         $this->assertEquals(array(), $settings->getOptionById(5, 'leadsources'));
     }
     

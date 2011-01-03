@@ -4,7 +4,7 @@
  * @package     Crm
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
@@ -111,7 +111,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {   
-        $settings = $this->getConfigSettings();
+        $settings = $this->getSettings();
         $defaults = $settings['defaults'];
         
         // get default container
@@ -151,7 +151,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @todo    return json store style with totalcount/result?
      */
-    public function getConfigSettings()
+    public function getSettings()
     {
         $result = Crm_Controller::getInstance()->getConfigSettings()->toArray();
         
@@ -163,7 +163,7 @@ class Crm_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @return array created/updated settings
      */
-    public function saveConfigSettings($recordData)
+    public function saveSettings($recordData)
     {
         $settings = new Crm_Model_Config($recordData);
         $result = Crm_Controller::getInstance()->saveConfigSettings($settings)->toArray();
