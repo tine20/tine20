@@ -351,8 +351,8 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
             
             foreach ($toConvert as $field => &$value) {
                 
-                if (! $value instanceof DateTime) {
-                    throw new Tinebase_Exception_Record_Validation($toConvert[$field] . 'must be an DateTime'); 
+                if (! method_exists($value, 'setTimezone')) {
+                    throw new Tinebase_Exception_Record_Validation($field . 'must be a method setTimezone'); 
                 } 
                 $value->setTimezone($_timezone);
             } 
