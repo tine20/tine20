@@ -259,7 +259,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
         $ics = $exporter->eventToIcal($eventSet);
         
         // work arround broken exdate handling in apple ical
-        
+        // -> not neccesary at the moment this is done generally in ics export
         
         return array(
             'id'            => $eventId,
