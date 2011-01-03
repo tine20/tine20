@@ -5,7 +5,7 @@
  * @package     Admin
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
@@ -138,9 +138,6 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         $this->checkRight('VIEW_ACCOUNTS');
         
         $user = $this->_userBackend->getUserById($_userId, 'Tinebase_Model_FullUser');
-        
-        #// add email user data here
-        #$user->emailUser = $this->_getEmailUser($user);
         
         return $user;
     }
