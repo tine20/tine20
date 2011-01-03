@@ -13,7 +13,15 @@
  */
 class Calendar_Export_Ical
 {
-    public static $_veventMap = array(
+    
+    public static $cutypeMap = array(
+        Calendar_Model_Attender::USERTYPE_USER          => 'INDIVIDUAL',
+        Calendar_Model_Attender::USERTYPE_GROUPMEMBER   => 'INDIVIDUAL',
+        Calendar_Model_Attender::USERTYPE_GROUP         => 'GROUP',
+        Calendar_Model_Attender::USERTYPE_RESOURCE      => 'RESOURCE',
+    );
+    
+    public static $veventMap = array(
         'transp'               => 'transp',
         'class'                => 'class',
         'description'          => 'description',
@@ -72,7 +80,7 @@ class Calendar_Export_Ical
             'dtend'         => new qCal_Property_Dtend(qCal_DateTime::factory($_event->dtend->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz)),
         ));
         
-        foreach(self::$_veventMap as $icalProp => $tineField) {
+        foreach(self::$veventMap as $icalProp => $tineField) {
             if (isset($_event[$tineField])) {
                 $vevent->addProperty($icalProp, $_event->{$tineField});
             }
@@ -109,13 +117,33 @@ class Calendar_Export_Ical
         // organizer
         $organizer = Addressbook_Controller_Contact::getInstance()->getMultiple((array) $_event->organizer, TRUE)->getFirstRecord();
         if ($organizer && $organizerEmail = $organizer->getPreferedEmailAddress()) {
-            $vevent->addProperty(new qCal_Property_Organizer("MAILTO:$organizerEmail", array('CN' => $organizer->n_fileas)));
+            $vevent->addProperty(new qCal_Property_Organizer("mailto:$organizerEmail", array('CN' => $organizer->n_fileas)));
         }
         
         // attendee
+        if ($_event->attendee) {
+            Calendar_Model_Attender::resolveAttendee($_event->attendee, FALSE);
+            
+            foreach($_event->attendee as $attender) {
+                $attenderEmail = $attender->getEmail();
+                if ($attenderEmail) {
+                    $vevent->addProperty(new qCal_Property_Attendee("mailto:$attenderEmail", array(
+                        'CN'        => $attender->getName(),
+                        'CUTYPE'    => self::$cutypeMap[$attender->user_type],
+                        'EMAIL'     => $attenderEmail,
+                        'PARTSTAT'  => $attender->status,
+                        'ROLE'      => "{$attender->role}-PARTICIPANT",
+                        'RSVP'      => 'FALSE'
+                    )));
+                }
+            }
+        }
         
-        // status
+        
+        
         // alarms
+        
+        // @todo status
         
         $this->_vcalendar->attach($vevent);
         
