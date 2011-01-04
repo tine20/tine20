@@ -23,5 +23,15 @@ interface Tinebase_Event_Interface
      *
      * @param Tinebase_Event_Abstract $_eventObject the eventobject
      */
-    public function handleEvents(Tinebase_Event_Abstract $_eventObject);
+    public function handleEvent(Tinebase_Event_Abstract $_eventObject);
+    
+    /**
+     * suspend processing of event
+     */
+    public function suspendEvents();
+
+    /**
+     * resume processing of events
+     */
+    public function resumeEvents();
 }

@@ -18,4 +18,27 @@
  */
 abstract class Tinebase_Event_Abstract
 {
+    /**
+     * @var string
+     */
+    protected $_id;
+    
+    public function __construct(array $_values = array())
+    {
+        $this->_id = Tinebase_Record_Abstract::generateUID();
+        
+        foreach($_values as $key => $value) {
+            $this->$key = $value;
+        }
+    }
+    
+    /**
+     * get id of event
+     * 
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->_id;
+    }
 }
