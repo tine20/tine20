@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Crm\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-23 21:45+0100\n"
+"PO-Revision-Date: 2011-01-04 16:18+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -530,7 +530,7 @@ msgstr "Wszystkie zapytania, które mam prawo czytać"
 
 #: Setup/Initialize.php:63
 msgid "Last modified by me"
-msgstr "Zmieniony ostatnio przeze mnie"
+msgstr "Ostatnio zmienione przeze mnie"
 
 #: Setup/Initialize.php:64
 msgid "All leads that I have last modified"
