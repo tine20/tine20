@@ -22,7 +22,7 @@
  * @package     ActiveSync
  * @subpackage  ActiveSync
  */
-class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tinebase_Event_Interface
+class ActiveSync_Controller extends Tinebase_Controller_Abstract
 {
     const CLASS_CONTACTS = 'Contacts';
     const CLASS_CALENDAR = 'Calendar';
@@ -80,20 +80,6 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract implements Tine
         }
         
         return self::$_instance;
-    }
-
-    /**
-     * event handler function
-     * 
-     * all events get routed through this function
-     *
-     * @param Tinebase_Event_Abstract $_eventObject the eventObject
-     * 
-     * @todo    write test
-     */
-    public function handleEvents(Tinebase_Event_Abstract $_eventObject)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));        
     }
 
     /**
