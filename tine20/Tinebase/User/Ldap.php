@@ -285,7 +285,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             'shadowlastchange' => floor(Tinebase_DateTime::now()->getTimestamp() / 86400)
         );
 
-        foreach ($this->_plugins as $plugin) {
+        foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectSetPassword($user, $_password, $_encrypt, $_mustChange, $ldapData);
         }
 
@@ -328,7 +328,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             );
         }
 
-        foreach ($this->_plugins as $plugin) {
+        foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectStatus($_status, $ldapData);
         }
 
@@ -356,7 +356,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
             $ldapData = array('shadowexpire' => array());
         }
 
-        foreach ($this->_plugins as $plugin) {
+        foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectExpiryDate($_expiryDate, $ldapData);
         }
 
@@ -379,7 +379,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         $ldapData = $this->_user2ldap($_account, $ldapEntry);
 
-        foreach ($this->_plugins as $plugin) {
+        foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectUpdateUser($_account, $ldapData, $ldapEntry);
         }
 
@@ -419,7 +419,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $ldapData['uidnumber'] = $this->_generateUidNumber();
         $ldapData['objectclass'] = $this->_requiredObjectClass;
 
-        foreach ($this->_plugins as $plugin) {
+        foreach ($this->_ldapPlugins as $plugin) {
             $plugin->inspectAddUser($_user, $ldapData);
         }
 
