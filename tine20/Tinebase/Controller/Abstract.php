@@ -3,10 +3,10 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Application
+ * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -15,7 +15,7 @@
  * controller abstract for applications
  *
  * @package     Tinebase
- * @subpackage  Application
+ * @subpackage  Controller
  */
 abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Interface
 {
@@ -173,21 +173,5 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         }
         
         return call_user_func(array($_controllerName, 'getInstance')); 
-    }
-    
-    /**
-     * suspend processing of event
-     */
-    public function suspendEvents()
-    {
-        $this->_disabledEvents = true;
-    }
-
-    /**
-     * resume processing of events
-     */
-    public function resumeEvents()
-    {
-        $this->_disabledEvents = false;
     }
 }
