@@ -237,6 +237,13 @@ class Tinebase_Group_Sql extends Tinebase_Group_Abstract
             $this->removeGroupMemberFromSqlBackend($groupId, $userId);
         }
         
+        $event = new Tinebase_Group_Event_SetGroupMemberships(array(
+        	'user'               => $_userId,
+            'addedMemberships'   => $addGroupMemberships,
+            'removedMemberships' => $removeGroupMemberships
+        ));
+        Tinebase_Event::fireEvent($event);
+        
         return $this->getGroupMemberships($userId);
     }
     
