@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-04 16:18+0100\n"
+"PO-Revision-Date: 2011-01-04 17:15+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -643,7 +643,7 @@ msgstr "Ostatnio zmienione przeze mnie"
 
 #: Setup/Initialize.php:146
 msgid "All contacts that I have last modified"
-msgstr "Wszystkie kontakty zmienione ostatnio przeze mnie"
+msgstr "Wszystkie kontakty ostatnio zmienione przeze mnie"
 
 #: Setup/setup.xml:694
 msgid "Internal Contacts"
