@@ -127,8 +127,6 @@ Ext.namespace('Tine.Felamimail');
             text: this.app.i18n._('Search Recipients'),
             handler: this.onSearchContacts,
             iconCls: 'AddressbookIconCls',
-            // disabled for the release while working on a redesign
-            //disabled: false,
             disabled: true,
             scope: this
         });
