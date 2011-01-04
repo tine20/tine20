@@ -82,6 +82,11 @@ class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_
                 Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->groupId);
                 break;
                 
+            case 'Tinebase_Group_Event_SetGroupMemberships':
+                #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') removed groupmember ' . (string) $_eventObject->userId . ' from group ' . (string) $_eventObject->groupId);
+                #Calendar_Controller_Event::getInstance()->onUpdateGroup($_eventObject->groupId);
+                break;
+                
             case 'Tinebase_Event_Container_BeforeCreate':
                 $this->_handleContainerBeforeCreateEvent($_eventObject);
                 break;
