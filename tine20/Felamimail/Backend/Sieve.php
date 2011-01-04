@@ -5,8 +5,8 @@
  * @package     Felamimail
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -33,9 +33,13 @@ class Felamimail_Backend_Sieve extends Zend_Mail_Protocol_Sieve
         try {
             parent::__construct($_config['host'], $_config['port'], $_config['ssl']);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
-            throw new Felamimail_Exception_Sieve('Could not connect to host ' . $_config['host'] . ' (' . $zmpe->getMessage() . ')');
+            throw new Felamimail_Exception_Sieve('Could not connect to host ' . $_config['host'] . ' (' . $zmpe->getMessage() . ').');
         }
         
-        $this->authenticate($_config['username'], $_config['password']);
+        try {
+            $this->authenticate($_config['username'], $_config['password']);
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            throw new Felamimail_Exception_Sieve('Could not authenticate with user ' . $_config['username'] . ' (' . $zmpe->getMessage() . ').');
+        }
     }
 }
