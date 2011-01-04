@@ -90,13 +90,16 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             this.mainActions = [
                 this.action_aboutTine,
                 '-',
-                this.action_showDebugConsole,
-                '-',
                 this.getUserActions(),
                 '-',
                 this.action_logout
             ];
+            
+            if (Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/)) {
+                this.mainActions.splice(1, 0, '-', this.action_showDebugConsole);
+            }
         }
+        
         return this.mainActions;
     },
     
@@ -125,7 +128,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         this.action_showDebugConsole = new Ext.Action({
             text: _('Debug Console (Ctrl + F11)'),
             handler: Tine.Tinebase.common.showDebugConsole,
-            hidden: ! Tine.Tinebase.registry.get("version").buildType.match(/(DEVELOPMENT|DEBUG)/),
             iconCls: 'tinebase-action-debug-console'
         });
         
