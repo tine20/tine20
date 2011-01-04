@@ -46,11 +46,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	if ( document.getElementById('host').value != '' && username != '') {
 		var logins = passwordManager.findLogins({}, url, null, 'Tine 2.0 Active Sync');  
 		for (var i = 0; i < logins.length; i++) { 
-			if (logins[i].username == username) {
+			if (logins[i].httpRealm == 'Tine 2.0 Active Sync') { 
 				var loginInfo = new nsLoginInfo(
 					url, null, 'Tine 2.0 Active Sync', document.getElementById('user').value, 
 					logins[i].password, '', ''
-				);
+				); 
 				passwordManager.removeLogin(loginInfo); 
 				document.getElementById('password').value = logins[i].password;
 				oldpwd = logins[i].password;
@@ -63,7 +63,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 	remoteFolders();
   }
 
-  function onclose(ok) {
+  /*
+	@ok within MS Windows: true=="Button Ok", undefined=="Button Cancel" 
+	Important: Closing PrefWindow will fire onclose twice, if "Button Ok" is pressed. 
+	First with true, sencond time with undefined!!
+  */
+  function onclose(ok) { 
+
 	// linux close button or Windows OK Button pressed
 	if (document.getElementById('ThundertinePreferences').instantApply || ok) { 
 		var passwordManager = Components.classes["@mozilla.org/login-manager;1"]
@@ -99,8 +105,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 		} 
 	}
 	// Windows cancel pressed -> remember old password and settings
-	else {
-		if (oldpwd != '') {
+	else if (ok==false) {
+		if (oldpwd != '') { 
 			var passwordManager = Components.classes["@mozilla.org/login-manager;1"]
 				.getService(Components.interfaces.nsILoginManager);
 			var url = 
@@ -111,8 +117,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 			var loginInfo = new nsLoginInfo(
 				url, null, 'Tine 2.0 Active Sync', prefs.getCharPref('user'), 
 				oldpwd, '', ''
-			);
+			); 
 			passwordManager.addLogin(loginInfo);
+			oldpwd = ''; // prevent saving password twice
 		}
 		// old settings
 		config = oldConfig;

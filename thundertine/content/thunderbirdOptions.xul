@@ -9,7 +9,8 @@
 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
 	onload="onopen();"
 	ondialogaccept="onclose(true);"
-	onunload="onclose();">
+	onunload="onclose();"
+	ondialogcancel="onclose(false)">
 
   <prefpane id="paneThunderTineHost" label="&ttine.prefwindowToolbarHost;" image="chrome://ttine/skin/tine.png">
 	<preferences>
