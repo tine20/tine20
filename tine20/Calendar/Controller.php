@@ -14,7 +14,7 @@
  *
  * @package     Calendar
  */
-class Calendar_Controller extends Tinebase_Controller_Abstract implements Tinebase_Event_Interface, Tinebase_Container_Interface
+class Calendar_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
 {
     /**
      * holds the instance of the singleton
@@ -52,7 +52,7 @@ class Calendar_Controller extends Tinebase_Controller_Abstract implements Tineba
      *
      * @param Tinebase_Event_Abstract $_eventObject the eventObject
      */
-    public function handleEvents(Tinebase_Event_Abstract $_eventObject)
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
