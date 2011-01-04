@@ -259,8 +259,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
-        $event = new Admin_Event_AddAccount();
-        $event->account = $user;
+        $event = new Admin_Event_AddAccount(array(
+        	'account' => $user
+        ));
         Tinebase_Event::fireEvent($event);
         
         if (!empty($_password) && !empty($_passwordRepeat)) {
