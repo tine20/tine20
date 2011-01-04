@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-28 19:03+0100\n"
+"PO-Revision-Date: 2011-01-04 16:18+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -616,32 +616,32 @@ msgstr[2] "listy"
 msgid "Lists"
 msgstr "Listy"
 
-#: Setup/Initialize.php:107
+#: Setup/Initialize.php:113
 #: Setup/Update/Release3.php:38
 msgid "All contacts I have read grants for"
 msgstr "Wszystkie kontakty, które wolno mi czytać"
 
-#: Setup/Initialize.php:112
+#: Setup/Initialize.php:118
 msgid "My company"
 msgstr "Moja firma"
 
-#: Setup/Initialize.php:113
+#: Setup/Initialize.php:119
 msgid "All coworkers in my company"
 msgstr "Wszyscy współpracownicy z mojej firmy"
 
-#: Setup/Initialize.php:126
+#: Setup/Initialize.php:132
 msgid "My contacts"
 msgstr "Moje kontakty"
 
-#: Setup/Initialize.php:127
+#: Setup/Initialize.php:133
 msgid "All contacts in my Addressbooks"
 msgstr "Wszystkie kontakty w mojej książce adresowej"
 
-#: Setup/Initialize.php:139
+#: Setup/Initialize.php:145
 msgid "Last modified by me"
-msgstr "Zmieniony ostatnio przeze mnie"
+msgstr "Ostatnio zmienione przeze mnie"
 
-#: Setup/Initialize.php:140
+#: Setup/Initialize.php:146
 msgid "All contacts that I have last modified"
 msgstr "Wszystkie kontakty zmienione ostatnio przeze mnie"
 
