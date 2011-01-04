@@ -137,7 +137,7 @@ class Crm_JsonTest extends Crm_AbstractTest
         $this->assertEquals($oldSettings, $result);
         
         // test Crm_Model_Config::getOptionById
-        $settings = Crm_Controller::getInstance()->getSettings();
+        $settings = Crm_Controller::getInstance()->getConfigSettings();
         $this->assertEquals(array(), $settings->getOptionById(5, 'leadsources'));
     }
     
