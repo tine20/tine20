@@ -65,6 +65,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         Tine.Felamimail.ContactGridPanel.superclass.initComponent.call(this);
         
         this.grid.on('rowdblclick', this.onRowDblClick, this);
+        this.grid.on('cellclick', this.onCellClick, this);
     },
     
     /**
@@ -82,7 +83,55 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             }
         });
         
+        this.radioTpl = new Ext.XTemplate('<input',
+            ' name="' + this.id + '_{id}"',
+            ' value="{type}"',
+            ' type="radio"',
+            ' autocomplete="off"',
+            ' class="x-form-radio x-form-field"',
+            ' {checked}',
+        '>');
+        
+        Ext.each(['To', 'CC', 'BCC', 'None'], function(type) {
+            columns.push({
+                header: this.app.i18n._(type),
+                dataIndex: Ext.util.Format.lowercase(type),
+                width: 50,
+                hidden: false,
+                renderer: this.typeRadioRenderer.createDelegate(this, [type], 0)
+            });
+            
+        }, this);
+            
         return columns;
+    },
+    
+    typeRadioRenderer: function(type, value, metaData, record, rowIndex, colIndex, store) {
+        return this.radioTpl.apply({
+            id: record.id, 
+            type: Ext.util.Format.lowercase(type),
+            checked: type === 'None' ? 'checked' : ''
+        });
+    },
+    
+    onCellClick: function(grid, row, col, e) {
+        var contact = this.store.getAt(row),
+            type = this.grid.getColumnModel().getDataIndex(col);
+            
+        // @todo reset to none if no address is available
+        Tine.log.info('Contact ' + contact.get('n_fileas') + ' is set to type: ' + type);
+    },
+    
+    setTypeRadio: function(records, type) {
+        var rs = [].concat(records);
+        
+        Ext.each(rs, function(r){
+            //@todo sort out contacts w.o. email
+            Ext.select('input[name=' + this.id + '_' + r.id + ']', this.grid.el).each(function(el) {
+                el.dom.checked = type === el.dom.value;
+            });
+            
+        }, this);
     },
     
     /**
@@ -177,9 +226,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      */
     onAddContact: function(type) {
         var selectedRows = this.grid.getSelectionModel().getSelections();
-        if (selectedRows.length > 0) {
-            this.fireEvent('addcontacts', selectedRows, type);
-        }
+        this.setTypeRadio(selectedRows, type);
     },
     
     /**
