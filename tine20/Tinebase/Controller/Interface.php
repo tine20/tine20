@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  * @version     $Id: Interface.php 9892 2009-08-12 14:31:31Z g.ciyiltepe@metaways.de $
  */
@@ -22,15 +22,5 @@ interface Tinebase_Controller_Interface
     /**
      * Instance of Controller Object.
      */
-    public static function getInstance();
-       
-    /**
-     * suspend processing of events
-     */
-    public function suspendEvents();
-
-    /**
-     * resume processing of events
-     */
-    public function resumeEvents();
+    public static function getInstance();       
 }
