@@ -19,16 +19,23 @@
 class Tinebase_Group_Event_SetGroupMemberships extends Tinebase_Event_Abstract
 {
     /**
-     * the group id
-     *
-     * @var string
-     */
-    public $groupId;
-
-    /**
      * the user id
      *
      * @var string
      */
-    public $userId;
+    public $user;
+
+    /**
+     * list of ids of added groupmemberships
+     *
+     * @var array
+     */
+    public $addedMemberships = array();
+    
+    /**
+     * list of ids of removed groupmemberships
+     *
+     * @var array
+     */
+    public $removedMemberships = array();
 }
