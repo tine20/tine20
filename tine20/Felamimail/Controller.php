@@ -19,7 +19,7 @@
  * @package     Felamimail
  * @subpackage  Controller
  */
-class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tinebase_Event_Interface
+class Felamimail_Controller extends Tinebase_Controller_Event
 {
     /**
      * holds the instance of the singleton
@@ -64,7 +64,7 @@ class Felamimail_Controller extends Tinebase_Controller_Abstract implements Tine
      *
      * @param Tinebase_Event_Abstract $_eventObject the eventObject
      */
-    public function handleEvents(Tinebase_Event_Abstract $_eventObject)
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
