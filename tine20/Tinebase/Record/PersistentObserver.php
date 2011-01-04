@@ -95,7 +95,7 @@ class Tinebase_Record_PersistentObserver
             // Tinebase_Model_PersistentObserver holds observer and observable
             $eventObject->observable = $observer;
             
-            $controller->handleEvents($eventObject);
+            $controller->handleEvent($eventObject);
         }
     } // end of member function fireEvent
 
