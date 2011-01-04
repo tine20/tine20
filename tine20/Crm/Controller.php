@@ -19,7 +19,7 @@
  * @package     Crm
  * @subpackage  Controller
  */
-class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Event_Interface, Tinebase_Container_Interface
+class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Container_Interface
 {
     /**
      * default settings
@@ -81,7 +81,7 @@ class Crm_Controller extends Tinebase_Controller_Abstract implements Tinebase_Ev
      *
      * @param Tinebase_Event_Abstract $_eventObject the eventObject
      */
-    public function handleEvents(Tinebase_Event_Abstract $_eventObject)
+    protected function _handleEvent(Tinebase_Event_Abstract $_eventObject)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') handle event of type ' . get_class($_eventObject));
         
