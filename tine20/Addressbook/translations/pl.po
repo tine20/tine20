@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-04 17:15+0100\n"
+"PO-Revision-Date: 2011-01-05 18:21+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -373,6 +373,14 @@ msgstr "Prywatne"
 #: js/ContactGridDetailsPanel.js:179
 msgid "Info"
 msgstr "Informacja"
+
+#: js/ContactGridDetailsPanel.js:215
+msgid "Insecure link"
+msgstr "Niebezpieczny link"
+
+#: js/ContactGridDetailsPanel.js:215
+msgid "Please review this link in edit dialog."
+msgstr "Proszę sprawdzić link w oknie dialogowym"
 
 #: js/Addressbook.js:29
 #: js/Model.js:97
