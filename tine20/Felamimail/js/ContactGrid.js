@@ -128,10 +128,12 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      * @return {String}
      */
     typeRadioRenderer: function(type, value, metaData, record, rowIndex, colIndex, store) {
+        var lowerType = Ext.util.Format.lowercase(type); 
+        
         return this.radioTpl.apply({
             id: record.id, 
-            type: Ext.util.Format.lowercase(type),
-            checked: type === 'None' ? 'checked' : ''
+            type: lowerType,
+            checked: lowerType === 'none' ? 'checked' : ''
         });
     },
     
@@ -147,8 +149,11 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         var contact = this.store.getAt(row),
             type = this.grid.getColumnModel().getDataIndex(col);
             
-        // @todo reset to none if no address is available
-        Tine.log.info('Contact ' + contact.get('n_fileas') + ' is set to type: ' + type);
+        if (! contact.hasEmail() && type !== 'none') {
+            this.setTypeRadio(contact, 'none');
+        } else {
+            Tine.log.info('Contact ' + contact.get('n_fileas') + ' is set to type: ' + type);
+        }
     },
     
     /**
@@ -160,12 +165,12 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     setTypeRadio: function(records, type) {
         var rs = [].concat(records);
         
-        Ext.each(rs, function(r){
-            //@todo sort out contacts w.o. email
-            Ext.select('input[name=' + this.id + '_' + r.id + ']', this.grid.el).each(function(el) {
-                el.dom.checked = type === el.dom.value;
-            });
-            
+        Ext.each(rs, function(r) {
+            if (r.hasEmail() || type === 'none') {
+                Ext.select('input[name=' + this.id + '_' + r.id + ']', this.grid.el).each(function(el) {
+                    el.dom.checked = type === el.dom.value;
+                });
+            }
         }, this);
     },
     
