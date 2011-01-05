@@ -75,6 +75,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         
         this.grid.on('rowdblclick', this.onRowDblClick, this);
         this.grid.on('cellclick', this.onCellClick, this);
+        this.store.on('load', this.onContactStoreLoad, this);
     },
     
     /**
@@ -135,6 +136,24 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             type: lowerType,
             checked: lowerType === 'none' ? 'checked' : ''
         });
+    },
+    
+    /**
+     * called after a new set of Records has been loaded
+     * 
+     * @param  {Ext.data.Store} this.store
+     * @param  {Array}          loaded records
+     * @param  {Array}          load options
+     * @return {Void}
+     */
+    onContactStoreLoad: function(store, records, options) {
+        Ext.each(records, function(record) {
+            Ext.each(['to', 'cc', 'bcc'], function(type) {
+                if (this.messageRecord.data[type].indexOf(Tine.Felamimail.getEmailStringFromContact(record)) !== -1) {
+                    this.setTypeRadio(record, type);
+                }
+            }, this);
+        }, this);
     },
     
     /**

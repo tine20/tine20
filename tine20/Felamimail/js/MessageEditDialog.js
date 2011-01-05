@@ -499,9 +499,7 @@ Ext.namespace('Tine.Felamimail');
      */
     onSearchContacts: function() {
         Tine.Felamimail.RecipientPickerDialog.openWindow({
-            record: new this.recordClass({
-                subject: this.record.get('subject')
-            }, Ext.id()),
+            record: new this.recordClass(Ext.copyTo({}, this.record.data, ['subject', 'to', 'cc', 'bcc']), Ext.id()),
             listeners: {
                 scope: this,
                 'update': function(record) {
