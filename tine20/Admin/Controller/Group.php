@@ -101,6 +101,49 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     }
     
     /**
+     * set all groups an user is member of
+     *
+     * @param  mixed  $_usertId   the account as integer or Tinebase_Model_User
+     * @param  mixed  $_groupIds
+     * @return array
+     */
+    public function setGroupMemberships($_userId, $_groupIds)
+    {
+        $this->checkRight('MANAGE_ACCOUNTS');
+        
+        if ($_groupIds instanceof Tinebase_Record_RecordSet) {
+            $_groupIds = $_groupIds->getArrayOfIds();
+        }
+        
+        if(count($_groupIds) === 0) {
+            throw new Tinebase_Exception_InvalidArgument('user must belong to at least one group');
+        }
+        
+        $userId = Tinebase_Model_user::convertUserIdToInt($_userId);
+        
+        $groupMemberships = Tinebase_Group::getInstance()->getGroupMemberships($userId);
+        
+        $removeGroupMemberships = array_diff($groupMemberships, $_groupIds);
+        $addGroupMemberships    = array_diff($_groupIds, $groupMemberships);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' current groupmemberships: ' . print_r($groupMemberships, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' new groupmemberships: ' . print_r($_groupIds, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' added groupmemberships: ' . print_r($addGroupMemberships, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' removed groupmemberships: ' . print_r($removeGroupMemberships, true));
+        
+        foreach ($addGroupMemberships as $groupId) {
+            $this->addGroupMember($groupId, $userId);
+        }
+        
+        foreach ($removeGroupMemberships as $groupId) {
+            $this->removeGroupMember($groupId, $userId);
+        }
+        
+        return Tinebase_Group::getInstance()->getGroupMemberships($userId);
+    }
+    
+    
+    /**
      * fetch one group identified by groupid
      *
      * @param int $_groupId
