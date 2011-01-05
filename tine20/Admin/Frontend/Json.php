@@ -365,7 +365,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // after user update or creation add user to selected groups
         if (isset($recordData['accountGroups']) && $recordData['accountGroups']) {
-			Tinebase_Group::getInstance()->setGroupMemberships($account->accountId, $recordData['accountGroups']);
+			Admin_Controller_Group::getInstance()->setGroupMemberships($account->accountId, $recordData['accountGroups']);
         }
         
         // after user update or creation add user to selected roles
