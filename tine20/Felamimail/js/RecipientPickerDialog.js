@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -19,10 +19,8 @@ Ext.namespace('Tine.Felamimail');
  * <p>Message Compose Dialog</p>
  * <p>This dialog is for searching contacts in the addressbook and adding them to the recipient list in the email compose dialog.</p>
  * <p>
- * TODO         add toolbar (add as to/cc/bcc)
  * TODO         update context menu
- * TODO         make doubleclick work
- * TODO         add favorites? 
+ * TODO         add favorites
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -82,32 +80,12 @@ Ext.namespace('Tine.Felamimail');
     getFormItems: function() {
         return {
             border: false,
-            frame: true,
-            layout: {
-                align: 'stretch',
-                type: 'hbox'
-            },
+            layout: 'fit',
             items: [{
                 xtype: 'felamimailcontactgrid',
-                title: this.app.i18n._('Contacts'),
-                frame: true,
+                messageRecord: this.record,
                 app: Tine.Tinebase.appMgr.get('Addressbook'),
-                flex: 3,
-                ref: '../contactgrid',
-                listeners: {
-                    scope: this,
-                    addcontacts: function(contacts, type) {
-                        this.recipientgrid.addRecordsToStore(contacts, type);
-                    }
-                }
-            }, {
-                xtype: 'felamimailrecipientgrid',
-                record: this.record,
-                i18n: this.app.i18n,
-                title: this.app.i18n._('Recipients (drag and drop contacts here to add)'),
-                flex: 2,
-                header: true,
-                ref: '../recipientgrid'
+                ref: '../contactgrid'
             }]
         };
     }
