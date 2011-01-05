@@ -181,8 +181,6 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      * @param {String} typeToSet
      */
     updateRecipients: function(contact, typeToSet) {
-        Tine.log.info('Contact ' + contact.get('n_fileas') + ' is set to type: ' + typeToSet);
-        
         var email = Tine.Felamimail.getEmailStringFromContact(contact),
             found = false;
             
