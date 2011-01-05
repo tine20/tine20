@@ -223,6 +223,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     deleteQueue: null,
     
+    /**
+     * disable 'select all pages' in paging toolbar
+     * @cfg {Bool} disableSelectAllPages
+     */
+    disableSelectAllPages: false,
+    
     layout: 'border',
     border: false,
     stateful: true,
@@ -674,7 +680,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 displayMsg: Tine.Tinebase.translation._('Displaying records {0} - {1} of {2}').replace(/records/, this.i18nRecordsName),
                 emptyMsg: String.format(Tine.Tinebase.translation._("No {0} to display"), this.i18nRecordsName),
                 displaySelectionHelper: true,
-                sm: this.selectionModel
+                sm: this.selectionModel,
+                disableSelectAllPages: this.disableSelectAllPages
             }, this.pagingConfig));
             // mark next grid refresh as paging-refresh
             this.pagingToolbar.on('beforechange', function() {

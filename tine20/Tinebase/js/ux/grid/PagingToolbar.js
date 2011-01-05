@@ -5,7 +5,7 @@
  * @subpackage  widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -38,6 +38,11 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
      * @cfg {Ext.grid.AbstractSelectionModel}
      */
     sm: null,
+    
+    /**
+     * @cfg {Bool} disableSelectAllPages
+     */
+    disableSelectAllPages: false,
     
     /**
      * @private
@@ -81,6 +86,7 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
             iconCls: 'x-ux-pagingtb-selectall',
             text: this.getSelHelperText('selectall'),
             scope: this,
+            disabled: this.disableSelectAllPages,
             handler: function() {this.sm.selectAll();}
         });
         this.selectVisibleBtn = new Ext.Action({
@@ -101,7 +107,6 @@ Ext.ux.grid.PagingToolbar = Ext.extend(Ext.PagingToolbar, {
             xtype: 'tbsplit',
             text: this.getSelHelperText('main'),
             iconCls: 'x-ux-pagingtb-main',
-            //handler: Ext.emptyFn,
             menu: new Ext.menu.Menu({
                 items: [
                     this.deselectBtn,
