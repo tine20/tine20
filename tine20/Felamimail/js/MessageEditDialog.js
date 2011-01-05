@@ -504,7 +504,7 @@ Ext.namespace('Tine.Felamimail');
                 scope: this,
                 'update': function(record) {
                     var messageWithRecipients = Ext.isString(record) ? new this.recordClass(Ext.decode(record)) : record;
-                    this.recipientGrid.syncRecipientsToStore(['to', 'cc', 'bcc'], messageWithRecipients, true);
+                    this.recipientGrid.syncRecipientsToStore(['to', 'cc', 'bcc'], messageWithRecipients, true, true);
                 }
             }
         });
