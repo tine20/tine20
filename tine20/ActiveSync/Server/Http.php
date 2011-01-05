@@ -54,7 +54,7 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
             return;                            
         }
         
-        if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER'])) {
+        if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER']) && empty($_SERVER['REDIRECT_REMOTE_USER'])) {
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
@@ -65,7 +65,7 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
         // when used with (f)cgi no PHP_AUTH variables are available without defining a special rewrite rule
         if(!isset($_SERVER['PHP_AUTH_USER'])) {
             // $_SERVER["REMOTE_USER"] == "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
-            $basicAuthData = base64_decode(substr($_SERVER["REMOTE_USER"],6));
+            $basicAuthData = base64_decode(substr(isset($_SERVER["REMOTE_USER"]) ? $_SERVER["REMOTE_USER"] : $_SERVER['REDIRECT_REMOTE_USER'], 6));
             list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(":", $basicAuthData);
         }
         
