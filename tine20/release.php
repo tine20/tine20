@@ -94,20 +94,16 @@ if ($opts->clean) {
     if ($opts->v) {
         echo "Cleaning old build...\n";
     }
-    $files = array(
-        'Tinebase/js/tine-all-debug.js',
-        'Tinebase/js/tine-all.js',
-        'Tinebase/css/tine-all-debug.css',
-        'Tinebase/css/tine-all.css',
-        'Setup/js/setup-all-debug.js',
-        'Setup/js/setup-all.js',
-        'Setup/css/setup-all-debug.css',
-        'Setup/css/setup-all.css',
-    );
-    foreach ($files as $file) {
-        if (file_exists("$tine20path/$file")) {
-            if ($opts->v) echo "    removing file $tine20path/$file \n";
-            unlink("$tine20path/$file");
+    
+    foreach(scandir($tine20path) as $appDir) {
+        foreach(array('js', 'css') as $type) {
+            foreach(array('all', 'all-debug') as $build) {
+                $path = "$tine20path/$appDir/$type/$build.$type";
+                if (is_file($path)) { 
+                    if ($opts->v) echo "    removing file $path \n";
+                    unlink($path);
+                }
+            }
         }
     }
     
@@ -121,20 +117,14 @@ if ($opts->clean) {
             }
         }
     }
-    
-    foreach (scandir("$tine20path/Tinebase/js") as $file) {
-        if (substr($file, -7) == '-all.js') {
-            unlink("$tine20path/Tinebase/js/$file");
-        }
-    }
 }
 
 $setupIncludeFiles = Setup_Frontend_Http::getAllIncludeFiles();
 
 if ($opts->a || $opts->s) {
     // tine 2.0 applications css files
-    foreach(scandir(dirname(__FILE__)) as $filename) {
-        if (file_exists(dirname(__FILE__) . DIRECTORY_SEPARATOR . $filename . DIRECTORY_SEPARATOR . 'Frontend' . DIRECTORY_SEPARATOR . 'Http.php')) {
+    foreach(scandir($tine20path) as $filename) {
+        if (file_exists($tine20path . DIRECTORY_SEPARATOR . $filename . DIRECTORY_SEPARATOR . 'Frontend' . DIRECTORY_SEPARATOR . 'Http.php')) {
             $className = $filename . '_Frontend_Http';
             $frontend = new $className;
             
@@ -150,8 +140,8 @@ if ($opts->a || $opts->s) {
 
 if ($opts->a || $opts->j) {
     // tine 2.0 applications css files
-    foreach(scandir(dirname(__FILE__)) as $filename) {
-        if (file_exists(dirname(__FILE__) . DIRECTORY_SEPARATOR . $filename . DIRECTORY_SEPARATOR . 'Frontend' . DIRECTORY_SEPARATOR . 'Http.php')) {
+    foreach(scandir($tine20path) as $filename) {
+        if (file_exists($tine20path . DIRECTORY_SEPARATOR . $filename . DIRECTORY_SEPARATOR . 'Frontend' . DIRECTORY_SEPARATOR . 'Http.php')) {
             $className = $filename . '_Frontend_Http';
             $frontend = new $className;
             
