@@ -142,7 +142,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                             '<span class="preview-panel-symbolcompare">' + this.il8n._('Fax') + '</span>{[this.encode(values.tel_fax)]}<br/>',
                             '<span class="preview-panel-symbolcompare">' + this.il8n._('E-Mail') 
                                 + '</span>{[this.getMailLink(values.email, ' + this.felamimail + ')]}<br/>',
-                            '<span class="preview-panel-symbolcompare">' + this.il8n._('Web') + '</span><a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url, "shorttext")]}</a><br/>',
+                            '<span class="preview-panel-symbolcompare">' + this.il8n._('Web') + '</span><a href="{[this.encode(values.url, "href")]}" target="_blank">{[this.encode(values.url, "shorttext")]}</a><br/>',
                         '</div>',
                     '</div>',
                 '</div>',
@@ -166,7 +166,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                         '<span class="preview-panel-symbolcompare">' + this.il8n._('Fax') + '</span>{[this.encode(values.tel_fax_home)]}<br/>',
                         '<span class="preview-panel-symbolcompare">' + this.il8n._('E-Mail') 
                             + '</span>{[this.getMailLink(values.email_home, ' + this.felamimail + ')]}<br/>',
-                        '<span class="preview-panel-symbolcompare">' + this.il8n._('Web') + '</span><a href="{[this.encode(values.url)]}" target="_blank">{[this.encode(values.url_home, "shorttext")]}</a><br/>',
+                        '<span class="preview-panel-symbolcompare">' + this.il8n._('Web') + '</span><a href="{[this.encode(values.url, "href")]}" target="_blank">{[this.encode(values.url_home, "shorttext")]}</a><br/>',
                     '</div>',                
                 '</div>',
                 
@@ -208,6 +208,12 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                     if (prefix) {
                                         value = prefix + value;
                                     }
+                                    break;
+                                case 'href':
+                                    if (! String(value).match(/^(https?|ftps?)/)) {
+                                        return "javascript:Ext.Msg.alert('unsecure link', 'please review this link in edit dialog');";
+                                    }
+                                    
                                     break;
                                 default:
                                     value += type;
