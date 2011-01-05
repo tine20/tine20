@@ -244,6 +244,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     public function addGroupMember($_groupId, $_userId)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
+        
         Tinebase_Group::getInstance()->addGroupMember($_groupId, $_userId);
         
         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -271,6 +272,7 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     public function removeGroupMember($_groupId, $_userId)
     {
         $this->checkRight('MANAGE_ACCOUNTS');
+        
         Tinebase_Group::getInstance()->removeGroupMember($_groupId, $_userId);
         
         if (Tinebase_Application::getInstance()->isInstalled('Addressbook') === true) {
@@ -354,6 +356,21 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     public function getGroupMembers($_groupId)
     {
         $result = Tinebase_Group::getInstance()->getGroupMembers($_groupId);
+        
+        return $result;
+    }
+    
+    /**
+     * return all groups an account is member of
+     *
+     * @param mixed $_accountId the account as integer or Tinebase_Model_User
+     * @return array
+     */
+    public function getGroupMemberships($_accountId)
+    {
+        $this->checkRight('VIEW_ACCOUNTS');
+        
+        $result = Tinebase_Group::getInstance()->getGroupMemberships($_accountId);
         
         return $result;
     }
