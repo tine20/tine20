@@ -3,31 +3,18 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
  * 
  * TODO         play sound
  * TODO         add webkit notifications -> this has to be resolved first: http://code.google.com/p/chromium/issues/detail?id=31736
  *              http://dev.w3.org/2006/webapi/WebNotifications/publish/
- * TODO         activate default notifications?
  */    
  
 Ext.ns('Ext.ux.Notification');
     
 Ext.ux.Notification = function(){
-    /*
-    var msgDiv;
-
-    function createBox(t, s){
-        return ['<div class="msg">',
-                '<div class="x-box-tl"><div class="x-box-tr"><div class="x-box-tc"></div></div></div>',
-                '<div class="x-box-ml"><div class="x-box-mr"><div class="x-box-mc"><h3>', t, '</h3>', s, '</div></div></div>',
-                '<div class="x-box-bl"><div class="x-box-br"><div class="x-box-bc"></div></div></div>',
-                '</div>'].join('');
-    }
-    */
-    
     return {
         show: function(title, text){
             
@@ -51,7 +38,7 @@ Ext.ux.Notification = function(){
                 });
                 
             // webkit notifications
-            } else if (window.webkitNotifications !== undefined) {
+//            } else if (window.webkitNotifications !== undefined) {
 //                console.log('webkitNotifications available');
 //                if (window.webkitNotifications.checkPermission() == 0) {
 //                    // you can pass any url as a parameter
@@ -59,7 +46,6 @@ Ext.ux.Notification = function(){
 //                } else {
 //                    window.webkitNotifications.requestPermission();
 //                }
-                
 //                var nc = window.webkitNotifications;
 //                document.tempNotif = nc.createNotification(iconUrl, title, text);
 //                document.tempNotif.ondisplay = function() {
@@ -82,25 +68,7 @@ Ext.ux.Notification = function(){
                 
             // default behaviour
             } else {
-                // TODO     make sliding in of notifications work correctly / beautify notfications
-                
-                /*
-                if(! msgDiv){
-                    msgDiv = Ext.DomHelper.insertBefore(document.body, {id:'msg-div'}, true);
-                }
-                msgDiv.alignTo(document, 't-t');
-                var box = Ext.DomHelper.append(msgDiv, {html:createBox(title, text)}, true);
-                box.slideIn('t').pause(4).ghost("t", {remove:true});
-                */
-                
-                /*
-                if(! msgDiv){
-                    msgDiv = Ext.DomHelper.insertAfter(document.body, {id:'msg-div'}, true);
-                }
-                msgDiv.alignTo(document, 'b-b');
-                var box = Ext.DomHelper.append(msgDiv, {html:createBox(title, text)}, true);
-                box.slideIn('b').pause(2).ghost("b", {remove:true});
-                */
+                Ext.ux.MessageBox.msg(title, text);
             }
         }
     };
