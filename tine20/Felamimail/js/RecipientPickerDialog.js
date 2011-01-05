@@ -19,7 +19,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>Message Compose Dialog</p>
  * <p>This dialog is for searching contacts in the addressbook and adding them to the recipient list in the email compose dialog.</p>
  * <p>
- * TODO         update context menu
  * TODO         add favorites
  * </p>
  * 
@@ -78,14 +77,58 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     getFormItems: function() {
+        var adbApp = Tine.Tinebase.appMgr.get('Addressbook');
+        
+        this.treePanel = new Tine.widgets.container.TreePanel({
+            region: 'west',
+            filterMode: 'filterToolbar',
+            recordClass: Tine.Addressbook.Model.Contact,
+            app: adbApp,
+            width: 200,
+            minSize: 100,
+            maxSize: 300,
+            border: false,
+            collapsible:true,
+            collapseMode: 'mini'
+        });
+        
         return {
             border: false,
-            layout: 'fit',
+            layout: 'border',
             items: [{
+                cls: 'tine-mainscreen-centerpanel-west',
+                region: 'west',
+                id: 'west',
+                stateful: false,
+                layout: 'border',
+                split: true,
+                width: 200,
+                minSize: 100,
+                maxSize: 300,
+                border: false,
+                collapsible:true,
+                collapseMode: 'mini',
+                header: false,
+                items: [{
+                    cls: 'tine-mainscreen-centerpanel-west-treecards',
+                    border: false,
+                    id: 'treecards',
+                    region: 'center',
+                    layout: 'card',
+                    activeItem: 0,
+                    items: [ this.treePanel
+//                        new Tine.widgets.persistentfilter.PickerPanel({
+//                            filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ContactFilter'}]
+//                        }), 
+                        ]
+                }]
+            }, {
+                region: 'center',
                 xtype: 'felamimailcontactgrid',
                 messageRecord: this.record,
-                app: Tine.Tinebase.appMgr.get('Addressbook'),
-                ref: '../contactgrid'
+                app: adbApp,
+                ref: '../contactgrid',
+                plugins: [this.treePanel.getFilterPlugin()]
             }]
         };
     }
