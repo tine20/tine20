@@ -47,7 +47,7 @@ class Tinebase_Event
                 continue;
             }
             if($controller instanceof Tinebase_Event_Interface) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') calling eventhandler of ' . (string) $application);
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ . ') calling eventhandler for event ' . get_class($_eventObject) . ' of application ' . (string) $application);
                 try {
                     $controller->handleEvent($_eventObject);
                 } catch (Exception $e) {
