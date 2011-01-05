@@ -35,7 +35,7 @@ class Tinebase_Server_WebDav implements Tinebase_Server_Interface
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is WebDav request.');
         
-        if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER'])) {
+        if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER']) && empty($_SERVER['REDIRECT_REMOTE_USER']) {
             header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             
@@ -45,7 +45,7 @@ class Tinebase_Server_WebDav implements Tinebase_Server_Interface
         // when used with (f)cgi no PHP_AUTH variables are available without defining a special rewrite rule
         if(!isset($_SERVER['PHP_AUTH_USER'])) {
             // $_SERVER["REMOTE_USER"] == "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
-            $basicAuthData = base64_decode(substr($_SERVER["REMOTE_USER"],6));
+            $basicAuthData = base64_decode(substr(isset($_SERVER["REMOTE_USER"]) ? $_SERVER["REMOTE_USER"] : $_SERVER['REDIRECT_REMOTE_USER'], 6));
             list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(":", $basicAuthData);
         }
         
