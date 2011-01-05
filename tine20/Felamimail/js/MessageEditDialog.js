@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -20,7 +20,6 @@ Ext.namespace('Tine.Felamimail');
  * <p>This dialog is for composing emails with recipients, body and attachments. 
  * you can choose from which account you want to send the mail.</p>
  * <p>
- * TODO         jump with one tab from subject to htmleditor textarea
  * TODO         make email note editable
  * </p>
  * 
