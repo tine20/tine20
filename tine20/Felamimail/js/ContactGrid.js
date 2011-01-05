@@ -35,6 +35,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
 
     hasDetailsPanel: false,
     hasFavoritesPanel: false,
+    disableSelectAllPages: true,
     hasQuickSearchFilterToolbarPlugin: false,
     stateId: 'FelamimailContactGrid',
     
