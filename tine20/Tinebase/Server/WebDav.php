@@ -67,10 +67,6 @@ class Tinebase_Server_WebDav implements Tinebase_Server_Interface
             new Sabre_DAV_Browser_Plugin()
         );
         
-        #$server->addPlugin(
-        #    new Sabre_CalDAV_Plugin()
-        #);
-        
         $server->exec();
     }
 }
