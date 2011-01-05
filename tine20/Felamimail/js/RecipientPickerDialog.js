@@ -19,11 +19,10 @@ Ext.namespace('Tine.Felamimail');
  * <p>Message Compose Dialog</p>
  * <p>This dialog is for searching contacts in the addressbook and adding them to the recipient list in the email compose dialog.</p>
  * <p>
- * TODO         add favorites
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id$
  * 
@@ -88,8 +87,14 @@ Ext.namespace('Tine.Felamimail');
             minSize: 100,
             maxSize: 300,
             border: false,
-            collapsible:true,
-            collapseMode: 'mini'
+            enableDrop: false
+        });
+        
+        this.contactGrid = new Tine.Felamimail.ContactGridPanel({
+            region: 'center',
+            messageRecord: this.record,
+            app: adbApp,
+            plugins: [this.treePanel.getFilterPlugin()]
         });
         
         return {
@@ -106,30 +111,24 @@ Ext.namespace('Tine.Felamimail');
                 minSize: 100,
                 maxSize: 300,
                 border: false,
-                collapsible:true,
+                collapsible: true,
                 collapseMode: 'mini',
                 header: false,
                 items: [{
-                    cls: 'tine-mainscreen-centerpanel-west-treecards',
                     border: false,
-                    id: 'treecards',
                     region: 'center',
-                    layout: 'card',
-                    activeItem: 0,
-                    items: [ this.treePanel
-//                        new Tine.widgets.persistentfilter.PickerPanel({
-//                            filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ContactFilter'}]
-//                        }), 
-                        ]
+                    items: [{
+                        xtype: 'tine.widgets.mainscreen.westpanel',
+                        app: adbApp,
+                        containerTreePanel: this.treePanel,
+                        favoritesPanel: new Tine.widgets.persistentfilter.PickerPanel({
+                            filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ContactFilter'}],
+                            app: adbApp,
+                            grid: this.contactGrid
+                        })
+                    }]
                 }]
-            }, {
-                region: 'center',
-                xtype: 'felamimailcontactgrid',
-                messageRecord: this.record,
-                app: adbApp,
-                ref: '../contactgrid',
-                plugins: [this.treePanel.getFilterPlugin()]
-            }]
+            }, this.contactGrid]
         };
     }
 });
