@@ -70,13 +70,12 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      * @var array
      */
     protected $_filters = array(
-        //'*'                   => 'StringTrim',
         'adr_one_countryname'   => array('StringTrim', 'StringToUpper'),
         'adr_two_countryname'   => array('StringTrim', 'StringToUpper'),
         'email'                 => array('StringTrim', 'StringToLower'),
         'email_home'            => array('StringTrim', 'StringToLower'),
-        'url'                   => array('StringTrim', 'StringToLower'),
-        'url_home'              => array('StringTrim', 'StringToLower'),
+        'url'                   => array('StringTrim'),
+        'url_home'              => array('StringTrim'),
     );
     
     /**
