@@ -307,7 +307,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         if (this.store.getCount() > this.numberOfRecordsForFixedHeight) {
             this.setHeight(155);
         } else {
-            this.setHeight(this.store.getCount()*24);
+            this.setHeight(this.store.getCount()*24 + 1);
         }
 
         if (doLayout && doLayout === true) {
