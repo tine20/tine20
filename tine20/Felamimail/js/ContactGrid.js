@@ -20,7 +20,6 @@ Ext.ns('Tine.Felamimail');
  * 
  * <p>Contact Grid Panel</p>
  * <p>
- * TODO         save/get recipients in/from record
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -166,19 +165,46 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      */
     onCellClick: function(grid, row, col, e) {
         var contact = this.store.getAt(row),
-            type = this.grid.getColumnModel().getDataIndex(col);
+            typeToSet = this.grid.getColumnModel().getDataIndex(col)
             
-        if (! contact.hasEmail() && type !== 'none') {
+        if (! contact.hasEmail() && typeToSet !== 'none') {
             this.setTypeRadio(contact, 'none');
         } else {
-            Tine.log.info('Contact ' + contact.get('n_fileas') + ' is set to type: ' + type);
+            this.updateRecipients(contact, typeToSet);
+        }
+    },
+    
+    /**
+     * update recipient
+     * 
+     * @param {Tine.Addressbook.Model.Contact} contact
+     * @param {String} typeToSet
+     */
+    updateRecipients: function(contact, typeToSet) {
+        Tine.log.info('Contact ' + contact.get('n_fileas') + ' is set to type: ' + typeToSet);
+        
+        var email = Tine.Felamimail.getEmailStringFromContact(contact),
+            found = false;
+            
+        Ext.each(['to', 'cc', 'bcc'], function(type) {
+            if (this.messageRecord.data[type].indexOf(email) !== -1) {
+                if (type !== typeToSet) {
+                    this.messageRecord.data[type].remove(email);
+                } else {
+                    found = true;
+                }
+            }
+        }, this);
+        
+        if (! found && typeToSet !== 'none') {
+            this.messageRecord.data[typeToSet].push(email);
         }
     },
     
     /**
      * update type radio buttons dom
      * 
-     * @param {Array} records
+     * @param {Array} records of type Tine.Addressbook.Model.Contact
      * @param {String} type
      */
     setTypeRadio: function(records, type) {
@@ -189,6 +215,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
                 Ext.select('input[name=' + this.id + '_' + r.id + ']', this.grid.el).each(function(el) {
                     el.dom.checked = type === el.dom.value;
                 });
+                this.updateRecipients(r, type);
             }
         }, this);
     },
