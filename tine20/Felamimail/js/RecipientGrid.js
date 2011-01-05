@@ -295,7 +295,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.store.add(new Ext.data.Record({type: type, 'address': Tine.Felamimail.getEmailStringFromContact(record)}));
                 added = true;
             }
-        }, this);        
+        }, this);
     },
     
     /**
@@ -306,6 +306,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     setFixedHeight: function (doLayout) {
         if (this.store.getCount() > this.numberOfRecordsForFixedHeight) {
             this.setHeight(155);
+        } else {
+            this.setHeight(this.store.getCount()*24);
         }
 
         if (doLayout && doLayout === true) {
@@ -355,14 +357,27 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
      * sync grid with record
      * -> update store
+     * 
+     * @param {Array} fields
+     * @param {Tine.Felamimail.Model.Message} record
+     * @param {Boolean} setHeight
+     * @param {Boolean} clearStore
      */
-    syncRecipientsToStore: function(fields, record, setHeight) {
+    syncRecipientsToStore: function(fields, record, setHeight, clearStore) {
+        if (clearStore) {
+            this.store.removeAll(true);
+        }
+        
         record = record || this.record;
         
         Ext.each(fields, function(field) {
             this._addRecipients(record.get(field), field);
         }, this);
         this.store.sort('address');
+        
+        if (clearStore) {
+            this.store.add(new Ext.data.Record({type: 'to', 'address': ''}));
+        }
         
         if (setHeight && setHeight === true) {
             this.setFixedHeight(true);
