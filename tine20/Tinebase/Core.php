@@ -149,7 +149,7 @@ class Tinebase_Core
         ini_set('iconv.internal_encoding', 'utf-8');
 
         $server = NULL;
-
+        
         /**************************** JSON API *****************************/
         if ( (isset($_SERVER['HTTP_X_TINE20_REQUEST_TYPE']) && $_SERVER['HTTP_X_TINE20_REQUEST_TYPE'] == 'JSON')  ||
             (isset($_SERVER['CONTENT_TYPE']) && substr($_SERVER['CONTENT_TYPE'],0,16) == 'application/json')  ||
@@ -171,27 +171,27 @@ class Tinebase_Core
 
 
             /**************************** ActiveSync API ****************************
-             * RewriteRule ^/Microsoft-Server-ActiveSync(.*) /index.php$1 [E=REDIRECT_ACTIVESYNC:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             * RewriteRule ^/Microsoft-Server-ActiveSync(.*) /index.php$1 [E=ACTIVESYNC:true,E=REDIRECT_ACTIVESYNC:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              */
         } elseif(isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') {
             $server = new ActiveSync_Server_Http();
 
 
-            /**************************** DAV API **********************************
+            /**************************** WEBDAV API **********************************
              * RewriteCond %{REQUEST_METHOD} !^(GET|POST)$
-             * RewriteRule ^/$      /index.php [E=REDIRECT_WEBDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             * RewriteRule ^/$      /index.php [E=WEBDAV:true,E=REDIRECT_WEBDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              *
-             * RewriteRule ^/webdav /index.php [E=REDIRECT_WEBDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             * RewriteRule ^/webdav /index.php [E=WEBDAV:true,E=REDIRECT_WEBDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              */
         } elseif(isset($_SERVER['REDIRECT_WEBDAV']) && $_SERVER['REDIRECT_WEBDAV'] == 'true') {
             $server = new Tinebase_Server_WebDav();
 
 
-            /**************************** DAV API **********************************
-             * RewriteRule ^/caldav /index.php [E=REDIRECT_CALDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+            /**************************** CALDAV API **********************************
+             * RewriteRule ^/caldav /index.php [E=CALDAV:true,E=REDIRECT_CALDAV:true,E=REMOTE_USER:%{HTTP:Authorization},L]
              */
         } elseif(isset($_SERVER['REDIRECT_CALDAV']) && $_SERVER['REDIRECT_CALDAV'] == 'true') {
-            $server = new Calendar_Server_CalDav();
+            $server = new Tinebase_Server_CalDav();
 
 
             /**************************** CLI API *****************************/
