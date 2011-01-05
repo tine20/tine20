@@ -37,7 +37,7 @@ class Calendar_Frontend_CalDAV extends Sabre_DAV_Directory
     public function getChild($_name) 
     {
         switch ($_name) {
-            case 'Calendar':
+            case 'caldav':
                 return $this;
                 break;
                 
@@ -65,11 +65,11 @@ class Calendar_Frontend_CalDAV extends Sabre_DAV_Directory
         return basename($this->_path);
     }
     
-    public function getNodeForPath() 
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' exists: ' . $this->_path);
-        
-        $objectTree = new Sabre_DAV_ObjectTree($this);
-        return $objectTree->getNodeForPath($this->_path);
-    }
+    #public function getNodeForPath() 
+    #{
+    #    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' exists: ' . $this->_path);
+    #    
+    #    $objectTree = new Sabre_DAV_ObjectTree($this);
+    #    return $objectTree->getNodeForPath($this->_path);
+    #}
 }
