@@ -176,7 +176,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     getGrid: function() {
         if (! this.grid) {
-            this.filterToolbar = this.app.getMainScreen().getCenterPanel();
+            this.grid = this.app.getMainScreen().getCenterPanel();
         }
         
         return this.grid;
