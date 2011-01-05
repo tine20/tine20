@@ -41,8 +41,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
     gridConfig: {
         loadMask: true,
         autoExpandColumn: 'n_fileas',
-        enableDragDrop: true,
-        ddGroup: 'recipientDDGroup'
+        enableDragDrop: false
     },
     
     /**
