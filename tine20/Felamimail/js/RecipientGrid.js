@@ -291,8 +291,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             added = false;
 
         Ext.each(records, function(record) {
-            hasEmail = ((record.get('email') !== null && record.get('email') !== '') || (record.get('email_home') !== null && record.get('email_home') !== ''));
-            if (hasEmail) {
+            if (record.hasEmail()) {
                 this.store.add(new Ext.data.Record({type: type, 'address': Tine.Felamimail.getEmailStringFromContact(record)}));
                 added = true;
             }
