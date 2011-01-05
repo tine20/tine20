@@ -212,10 +212,10 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
 
         // remove user from primary group, if primary group changes
         if($oldUser->accountPrimaryGroup != $user->accountPrimaryGroup) {
-            Tinebase_Group::getInstance()->removeGroupMember($oldUser->accountPrimaryGroup, $user);
+            Admin_Controller_Group::getInstance()->removeGroupMember($oldUser->accountPrimaryGroup, $user);
         }
         // always add user to primary group
-        Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
+        Admin_Controller_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
@@ -255,7 +255,7 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $user = $this->_userBackend->addUser($_user);
         
-        Tinebase_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
+        Admin_Controller_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
@@ -281,18 +281,18 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     {
         $this->checkRight('MANAGE_ACCOUNTS');
         
-        $groupsBackend = Tinebase_Group::getInstance();
+        $groupsController = Admin_Controller_Group::getInstance();
         
         foreach ((array)$_accountIds as $accountId) {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " about to remove user with id: {$accountId}");
             
             $oldUser = $this->get($accountId);
             
-            $memberships = $groupsBackend->getGroupMemberships($accountId);
+            $memberships = $groupsController->getGroupMemberships($accountId);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " removing user from groups: " . print_r($memberships, true));
             
             foreach ((array)$memberships as $groupId) {
-                $groupsBackend->removeGroupMember($groupId, $accountId);
+                $groupsController->removeGroupMember($groupId, $accountId);
             }
             
             if ($this->_manageImapEmailUser) {
