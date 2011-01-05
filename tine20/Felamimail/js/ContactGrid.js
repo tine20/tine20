@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -19,10 +19,13 @@ Ext.ns('Tine.Felamimail');
  * @extends     Tine.Addressbook.ContactGridPanel
  * 
  * <p>Contact Grid Panel</p>
+ * <p>
+ * TODO         save/get recipients in/from record
+ * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @param       {Object} config
@@ -42,6 +45,12 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         enableDragDrop: true,
         ddGroup: 'recipientDDGroup'
     },
+    
+    /**
+     * the message record with recipients
+     * @type Tine.Felamimail.Model.Message
+     */
+    messageRecord: null,
     
     /**
      * inits this cmp
@@ -92,7 +101,7 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             ' {checked}',
         '>');
         
-        Ext.each(['To', 'CC', 'BCC', 'None'], function(type) {
+        Ext.each(['To', 'Cc', 'Bcc', 'None'], function(type) { // _('None')
             columns.push({
                 header: this.app.i18n._(type),
                 dataIndex: Ext.util.Format.lowercase(type),
@@ -106,6 +115,18 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         return columns;
     },
     
+    /**
+     * render type radio buttons in grid
+     * 
+     * @param {String} type
+     * @param {String} value
+     * @param {Object} metaData
+     * @param {Object} record
+     * @param {Number} rowIndex
+     * @param {Number} colIndex
+     * @param {Store} store
+     * @return {String}
+     */
     typeRadioRenderer: function(type, value, metaData, record, rowIndex, colIndex, store) {
         return this.radioTpl.apply({
             id: record.id, 
@@ -114,6 +135,14 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         });
     },
     
+    /**
+     * cell click handler -> update recipients in record
+     * 
+     * @param {Grid} grid
+     * @param {Number} row
+     * @param {Number} col
+     * @param {Event} e
+     */
     onCellClick: function(grid, row, col, e) {
         var contact = this.store.getAt(row),
             type = this.grid.getColumnModel().getDataIndex(col);
@@ -122,6 +151,12 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
         Tine.log.info('Contact ' + contact.get('n_fileas') + ' is set to type: ' + type);
     },
     
+    /**
+     * update type radio buttons dom
+     * 
+     * @param {Array} records
+     * @param {String} type
+     */
     setTypeRadio: function(records, type) {
         var rs = [].concat(records);
         
