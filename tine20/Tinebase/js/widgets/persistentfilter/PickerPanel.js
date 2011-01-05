@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 Ext.ns('Tine.widgets.persistentfilter');
@@ -36,13 +36,18 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     filterMountId: null,
     
-    
     /**
      * @private
      */
     autoScroll: true,
     border: false,
     rootVisible: false,
+    
+    /**
+     * grid favorites panel belongs to
+     * @type Tine.widgets.grid.GridPanel
+     */
+    grid: null,
 
     /**
      * @private
@@ -107,7 +112,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      *       always the last listener, we directly remove the listener afterwards
      */
     onFilterSelect: function(persistentFilter) {
-        var store = this.app.getMainScreen().getCenterPanel().getStore();
+        var store = this.getGrid().getStore();
         
         // NOTE: this can be removed when all instances of filterplugins are removed
         store.on('beforeload', this.storeOnBeforeload, this);
@@ -115,6 +120,13 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             persistentFilter: persistentFilter
         });
     },
+    
+    /**
+     * storeOnBeforeload
+     * 
+     * @param {} store
+     * @param {} options
+     */
     storeOnBeforeload: function(store, options) {
         options.params.filter = options.persistentFilter.get('filters');
         store.un('beforeload', this.storeOnBeforeload, this);
@@ -150,7 +162,24 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * returns filter toolbar of mainscreen center panel of app this picker panel belongs to
      */
     getFilterToolbar: function() {
-        return this.app.getMainScreen().getCenterPanel().filterToolbar;
+        if (! this.filterToolbar) {
+            this.filterToolbar = this.getGrid().filterToolbar;
+        }
+        
+        return this.filterToolbar;
+    },
+    
+    /**
+     * get grid
+     * 
+     * @return {Tine.widgets.grid.GridPanel}
+     */
+    getGrid: function() {
+        if (! this.grid) {
+            this.filterToolbar = this.app.getMainScreen().getCenterPanel();
+        }
+        
+        return this.grid;
     },
     
     /**
