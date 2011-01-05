@@ -211,13 +211,13 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                                     break;
                                 case 'href':
                                     if (! String(value).match(/^(https?|ftps?)/)) {
-                                        return "javascript:Ext.Msg.alert('unsecure link', 'please review this link in edit dialog');";
+                                        var adb = Tine.Tinebase.appMgr.get('Addressbook');
+                                        return "javascript:Ext.Msg.alert('" + adb.i18n._('Insecure link') + "', '" + adb.i18n._('Please review this link in edit dialog.') + "');";
                                     }
-                                    
                                     break;
                                 default:
                                     value += type;
-                            }                           
+                            }
                         }
                         value = Ext.util.Format.htmlEncode(value);
                         return Ext.util.Format.nl2br(value);
