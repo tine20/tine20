@@ -274,11 +274,23 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             scope: this
         });
         
+        this.actions_setToNone = new Ext.Action({
+            requiredGrant: 'readGrant',
+            text: this.app.i18n._('Remove from recipients'),
+            disabled: true,
+            iconCls: 'action_delete',
+            actionUpdater: this.updateRecipientActions,
+            handler: this.onAddContact.createDelegate(this, ['none']),
+            allowMultiple: true,
+            scope: this
+        });
+        
         //register actions in updater
         this.actionUpdater.addActions([
             this.actions_addAsTo,
             this.actions_addAsCc,
-            this.actions_addAsBcc
+            this.actions_addAsBcc,
+            this.actions_setToNone
         ]);
     },
     
@@ -336,7 +348,8 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
             var items = [
                 this.actions_addAsTo,
                 this.actions_addAsCc,
-                this.actions_addAsBcc
+                this.actions_addAsBcc,
+                this.actions_setToNone
             ];
             this.contextMenu = new Ext.menu.Menu({items: items});
         }
