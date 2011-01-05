@@ -59,6 +59,11 @@ class Tinebase_Server_WebDav implements Tinebase_Server_Interface
         
         $server = new Sabre_DAV_Server($tree);
         
+        // compute base uri
+        $decodedUri = Sabre_DAV_URLUtil::decodePath($server->getRequestUri());
+        $baseUri = substr($decodedUri, 0, strpos($decodedUri, 'webdav/') + strlen('webdav/'));
+        $server->setBaseUri('/' . $baseUri);
+        
         #$lockBackend = new Sabre_DAV_Locks_Backend_FS('/var/www/phpfcgi/cache');
         #$lockPlugin = new Sabre_DAV_Locks_Plugin($lockBackend);
         #$server->addPlugin($lockPlugin);
