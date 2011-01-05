@@ -86,7 +86,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
             'role'                  => 'Role',
             'title'                 => 'Title',
             'url'                   => 'http://www.tine20.org',
-            'url_home'              => 'http://www.tine20.com',
+            'url_home'              => 'http://www.mundundzähne.de',
             'n_family'              => 'Kneschke',
             'n_fileas'              => 'Kneschke, Lars',
             'n_given'               => 'Laars',
