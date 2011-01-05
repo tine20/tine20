@@ -35,7 +35,7 @@ class Tinebase_Server_WebDav implements Tinebase_Server_Interface
         
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' is WebDav request.');
         
-        if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER']) && empty($_SERVER['REDIRECT_REMOTE_USER']) {
+        if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER']) && empty($_SERVER['REDIRECT_REMOTE_USER'])) {
             header('WWW-Authenticate: Basic realm="WebDav for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             
