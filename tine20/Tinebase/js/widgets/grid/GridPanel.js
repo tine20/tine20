@@ -535,6 +535,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.editBuffer = [];
         }
         
+//        options.preserveSelection = options.hasOwnProperty('preserveSelection') ? options.preserveSelection : true;
+//        options.preserveScroller = options.hasOwnProperty('preserveScroller') ? options.preserveScroller : true;
+        
         // fix nasty paging tb
         Ext.applyIf(options.params, this.defaultPaging);
     },
@@ -550,8 +553,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     onStoreLoad: function(store, records, options) {
         // we always focus the first row so that keynav starts in the grid
         if (this.store.getCount() > 0) {
-            // this resets scroller ;-(
-            //this.grid.getView().focusRow(0);
+//            this.grid.getView().focusRow(0);
         }
         
         // restore selection
@@ -568,6 +570,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (Ext.isNumber(options.preserveScroller)) {
             this.grid.getView().scroller.dom.scrollTop = options.preserveScroller;
         }
+        
+        // @todo reset autoLoad (and introduce autoload ;-))
     },
     
     /**
