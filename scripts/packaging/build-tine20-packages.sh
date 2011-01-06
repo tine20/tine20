@@ -84,7 +84,7 @@ function getOptions()
 function prepareYUICompressor()
 {
     local YUICOMPRELEASE="2.4.2"
-    local YUICOMPURL="http://www.julienlecomte.net/yuicompressor/yuicompressor-$YUICOMPRELEASE.zip"
+    local YUICOMPURL="http://yuilibrary.com/downloads/yuicompressor/yuicompressor-$YUICOMPRELEASE.zip"
     
     if [ ! -d $BASEDIR/yuicompressor ]; then
         test -e $MISCPACKAGESDIR/yuicompressor-$YUICOMPRELEASE.zip || wget -P $MISCPACKAGESDIR $YUICOMPURL
