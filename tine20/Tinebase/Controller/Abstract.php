@@ -72,10 +72,10 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         $right = strtoupper($_right);
         
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = convertCacheId('checkRight' . $this->_currentAccount->getId() . $_right . $this->_applicationName);
+        $cacheId = convertCacheId('checkRight' . Tinebase_Core::getUser()->getId() . $_right . $this->_applicationName);
         $result = $cache->load($cacheId);
         
-        if (!$result) {        
+        if (!$result) {
             $applicationRightsClass = $this->_applicationName . '_Acl_Rights';
             
             // array with the rights that should be checked, ADMIN is in it per default
@@ -95,7 +95,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
             
             foreach ($rightsToCheck as $rightToCheck) {
                 //echo "check right: " . $rightToCheck;
-                if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, $this->_currentAccount->getId(), $rightToCheck)) {
+                if (Tinebase_Acl_Roles::getInstance()->hasRight($this->_applicationName, Tinebase_Core::getUser()->getId(), $rightToCheck)) {
                     $result = TRUE;
                     break;    
                 }
