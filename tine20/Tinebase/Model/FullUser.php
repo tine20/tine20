@@ -25,6 +25,7 @@
  * @property    string                  accountDisplayName  displayname of the account
  * @property    string                  accountLoginName    account login name
  * @property    string                  container_id        
+ * @property    array                   groups              list of group memberships
  * @property    DateTime                lastLoginFailure    time of last login failure
  * @property    int						loginFailures       number of login failures
  * @subpackage  User
@@ -101,10 +102,10 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'contact_id'            => array('allowEmpty' => true),
             'container_id'          => array('allowEmpty' => true),
             'emailUser'             => array('allowEmpty' => true),
+            'groups'                => array('allowEmpty' => true),
             'imapUser'              => array('allowEmpty' => true),
             'smtpUser'              => array('allowEmpty' => true),
             'visibility'            => array(new Zend_Validate_InArray(array(Tinebase_Model_User::VISIBILITY_HIDDEN, Tinebase_Model_User::VISIBILITY_DISPLAYED)), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::VISIBILITY_DISPLAYED),
-            
         );
         
         parent::__construct($_data, $_bypassFilters, $_convertDates);
