@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  *
  */
@@ -410,7 +410,6 @@ class Tinebase_Core
         return $tmpdir;
     }
 
-
     /**
      * initializes the logger
      *
@@ -619,54 +618,8 @@ class Tinebase_Core
      */
     public static function startSession($_options = array(), $_namespace = 'tinebase')
     {
-        Zend_Session::setOptions(array_merge($_options, array(
-            'cookie_httponly'   => true,
-            'hash_function'     => 1
-        )));
-        
-        if (isset($_SERVER['REQUEST_URI'])) {
-            Zend_Session::setOptions(array(
-                'cookie_path'     => dirname($_SERVER['REQUEST_URI'])
-            ));
-        }
-        
-        if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
-            Zend_Session::setOptions(array(
-                'cookie_secure'     => true
-            ));
-        }
-        
-        $config = self::getConfig();
+        self::setSessionOptionsAndBackend($_options);
 
-        // set max session lifetime
-        // defaults to one day (86400 seconds)
-        $maxLifeTime     = $config->get('gc_maxlifetime', 86400);
-        ini_set('session.gc_maxlifetime', $maxLifeTime);
-
-        // set the session save path
-        $sessionSavepath = self::getSessionDir();
-        if (ini_set('session.save_path', $sessionSavepath) !== false) {
-            if (!is_dir($sessionSavepath)) {
-                mkdir($sessionSavepath, 0700);
-            }
-        }
-        /*
-        $options = array(
-            'keyPrefix' => SQL_TABLE_PREFIX . 'SESSIONS_',
-            'lifetime'  => $maxLifeTime,
-            'rediska'   => new Rediska(array(
-            	'name'      => 'session', 
-                'servers'   => array(
-                	array(
-                        'host'  => ($config->caching->host) ? $config->caching->host : 'localhost',
-                        'port'  => ($config->caching->port) ? $config->caching->port : 6379
-                    )
-                )                            
-            ))
-        );
-        $saveHandler = new Rediska_Zend_Session_SaveHandler_Redis($options);
-        Zend_Session::setSaveHandler($saveHandler);
-		*/
         try {
             Zend_Session::start();
         } catch (Zend_Session_Exception $zse) {
@@ -695,6 +648,74 @@ class Tinebase_Core
         self::set(self::SESSION, $session);
     }
 
+    /**
+     * set session options helper function
+     * 
+     * @param array $_options
+     */
+    public static function setSessionOptionsAndBackend($_options = array())
+    {
+        Zend_Session::setOptions(array_merge($_options, array(
+            'cookie_httponly'   => true,
+            'hash_function'     => 1
+        )));
+        
+        if (isset($_SERVER['REQUEST_URI'])) {
+            Zend_Session::setOptions(array(
+                'cookie_path'     => dirname($_SERVER['REQUEST_URI'])
+            ));
+        }
+        
+        if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) != 'OFF') {
+            Zend_Session::setOptions(array(
+                'cookie_secure'     => true
+            ));
+        }
+        
+        $config = self::getConfig();
+        $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : 'File';
+        $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400; // one day is default
+        switch ($backendType) {
+            case 'File':
+                if ($config->gc_maxlifetime) {
+                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'gc_maxlifetime' should be renamed to 'lifetime' and moved to 'session' group.");
+                    $maxLifeTime = $config->get('gc_maxlifetime', 86400);
+                }
+                ini_set('session.gc_maxlifetime', $maxLifeTime);
+                
+                $sessionSavepath = self::getSessionDir();
+                if (ini_set('session.save_path', $sessionSavepath) !== false) {
+                    if (!is_dir($sessionSavepath)) {
+                        mkdir($sessionSavepath, 0700);
+                    }
+                }
+                break;
+                
+            case 'Redis':
+                $options = array(
+                    'keyPrefix' => SQL_TABLE_PREFIX . 'SESSIONS_',
+                    'lifetime'  => $maxLifeTime,
+                    'rediska' => new Rediska(array(
+                        'name'      => 'session', 
+                        'servers'   => array(
+                            array(
+                                'host'  => ($config->session->host) ? $config->session->host : 'localhost',
+                                'port'  => ($config->session->port) ? $config->session->port : 6379
+                            )
+                        )
+                    ))
+                );
+                $saveHandler = new Rediska_Zend_Session_SaveHandler_Redis($options);
+                Zend_Session::setSaveHandler($saveHandler);
+                break;
+                
+            default:
+                break;
+        }
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Session of backend type '{$backendType}' configured.");
+    }
+    
     /**
      * initializes the database connection
      *
@@ -1111,24 +1132,30 @@ class Tinebase_Core
     }
 
     /**
-     * get temp dir string (without PATH_SEP at the end)
+     * get session dir string (without PATH_SEP at the end)
      *
      * @return string
+     * 
+     * @todo remove obsolete session config paths in 2011-05
      */
     public static function getSessionDir()
     {
         $sessionDirName ='tine20_sessions';
         $config = self::getConfig();
         
-        $sessionDir = $config->get('sessiondir', null);
+        $sessionDir = ($config->session && $config->session->path) ? $config->session->path : null;
         
         #####################################
-        # LEGACY/COMPATIBILITY: had to rename session.save_path key to sessiondir because otherwise the
+        # LEGACY/COMPATIBILITY: 
+        # (1) had to rename session.save_path key to sessiondir because otherwise the
         # generic save config method would interpret the "_" as array key/value seperator
+        # (2) moved session config to subgroup 'session'
         if (empty($sessionDir)) {
-            $sessionDir = $config->get('session.save_path', null);
-            if ($sessionDir) {
-                self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'session.save_path' should be renamed to 'sessiondir'");
+            foreach (array('session.save_path', 'sessiondir') as $deprecatedSessionDir) {
+                $sessionDir = $config->get($deprecatedSessionDir, null);
+                if ($sessionDir) {
+                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key '{$deprecatedSessionDir}' should be renamed to 'path' and moved to 'session' group.");
+                }
             }
         }
         #####################################
