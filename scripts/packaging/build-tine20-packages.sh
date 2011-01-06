@@ -98,7 +98,7 @@ function prepareYUICompressor()
 
 function activateReleaseMode()
 {
-    local DATETIME=`date --rfc-3339='seconds'`
+    local DATETIME=`date "+%F %X%:z"`
     
     # set buildtype to DEBUG for beta releases
     if [[ $RELEASE == *beta* ]]; then  
