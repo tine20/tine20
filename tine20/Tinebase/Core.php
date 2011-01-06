@@ -472,7 +472,7 @@ class Tinebase_Core
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
             $frontendOptions = array(
-                'cache_id_prefix' => SQL_TABLE_PREFIX,
+                'cache_id_prefix' => SQL_TABLE_PREFIX . 'CACHE_',
                 'lifetime' => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
                 'automatic_serialization' => true, // turn that off for more speed
                 'caching' => true
@@ -489,6 +489,7 @@ class Tinebase_Core
                             'hashed_directory_level' => 4  
                         );
                         break;
+                        
                     case 'Memcached':
                         $backendOptions = array(
                             'servers' => array(
@@ -497,6 +498,21 @@ class Tinebase_Core
                                 'persistent' => TRUE
                         ));
                         break;
+                        
+                    case 'Redis':
+                        $backendOptions = array(
+                            'rediska' => new Rediska(array(
+                            	'name'      => 'session', 
+                                'servers'   => array(
+                                    array(
+                                        'host'  => ($config->caching->host) ? $config->caching->host : 'localhost',
+                                        'port'  => ($config->caching->port) ? $config->caching->port : 6379
+                                    )
+                                )                            
+                            ))
+                        );
+                        break;
+                        
                     default:
                         $backendOptions = array();
                         break;
@@ -504,7 +520,7 @@ class Tinebase_Core
             }
 
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " cache of backend type '{$backendType}' enabled");
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " backend options: " . print_r($backendOptions, TRUE));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " backend options: " . print_r($backendOptions, TRUE));
 
         } else {
             Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . ' cache disabled');
@@ -518,7 +534,13 @@ class Tinebase_Core
 
         // getting a Zend_Cache_Core object
         try {
-            $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
+            if ($backendType == 'Redis') {
+                $backendType = 'Rediska_Zend_Cache_Backend_Redis';
+                $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions, false, true, true);
+            } else {
+                $cache = Zend_Cache::factory('Core', $backendType, $frontendOptions, $backendOptions);
+            }
+            
         } catch (Zend_Cache_Exception $e) {
             $enabled = FALSE;
             if ('File' === $backendType && !is_dir($backendOptions['cache_dir'])) {
@@ -628,7 +650,23 @@ class Tinebase_Core
                 mkdir($sessionSavepath, 0700);
             }
         }
-
+        /*
+        $options = array(
+            'keyPrefix' => SQL_TABLE_PREFIX . 'SESSIONS_',
+            'lifetime'  => $maxLifeTime,
+            'rediska'   => new Rediska(array(
+            	'name'      => 'session', 
+                'servers'   => array(
+                	array(
+                        'host'  => ($config->caching->host) ? $config->caching->host : 'localhost',
+                        'port'  => ($config->caching->port) ? $config->caching->port : 6379
+                    )
+                )                            
+            ))
+        );
+        $saveHandler = new Rediska_Zend_Session_SaveHandler_Redis($options);
+        Zend_Session::setSaveHandler($saveHandler);
+		*/
         try {
             Zend_Session::start();
         } catch (Zend_Session_Exception $zse) {
