@@ -128,12 +128,13 @@ class Crm_Controller extends Tinebase_Controller_Event implements Tinebase_Conta
      * Returns settings for crm app
      * - result is cached
      *
+     * @param boolean $_resolve if some values should be resolved (here yet unused)
      * @return  Crm_Model_Config
      * 
      * @todo check 'endslead' values
-     * @todo generalize this
+     * @todo generalize this / adopt Tinebase_Controller_Abstract::getConfigSettings()
      */
-    public function getConfigSettings()
+    public function getConfigSettings($_resolve = FALSE)
     {
         $cache = Tinebase_Core::get('cache');
         $cacheId = convertCacheId('getCrmSettings');
