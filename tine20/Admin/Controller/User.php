@@ -210,12 +210,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $user = $this->_userBackend->updateUser($_user);
 
-        // remove user from primary group, if primary group changes
-        if($oldUser->accountPrimaryGroup != $user->accountPrimaryGroup) {
-            Admin_Controller_Group::getInstance()->removeGroupMember($oldUser->accountPrimaryGroup, $user);
-        }
-        // always add user to primary group
-        Admin_Controller_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
+        // make sure primary groups is in the list of groupmemberships
+        $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
+        Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
@@ -255,7 +252,9 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
         
         $user = $this->_userBackend->addUser($_user);
         
-        Admin_Controller_Group::getInstance()->addGroupMember($user->accountPrimaryGroup, $user);
+        // make sure primary groups is in the list of groupmemberships
+        $groups = array_unique(array_merge(array($user->accountPrimaryGroup), (array) $_user->groups));
+        Admin_Controller_Group::getInstance()->setGroupMemberships($user, $groups);
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
