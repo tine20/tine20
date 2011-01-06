@@ -94,7 +94,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         
         // load stores for memberships
         if (this.record.id) {
-        	this.storeGroups.loadData(this.record.get('accountGroups'));
+        	this.storeGroups.loadData(this.record.get('groups'));
         	this.storeRoles.loadData(this.record.get('accountRoles'));
         }
         // add to store default primary group
@@ -143,7 +143,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         	newRoles.push(rec.data.id);	        
         });
         
-        this.record.set('accountGroups', newGroups);
+        this.record.set('groups', newGroups);
         this.record.set('accountRoles', newRoles);
         
         // unset localized datetime fields before saving

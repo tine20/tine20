@@ -47,7 +47,7 @@ Tine.Admin.Model.UserArray = [
     { name: 'accountDisplayName' },
     { name: 'accountFullName' },
     { name: 'accountStatus' },
-	{ name: 'accountGroups' },
+	{ name: 'groups' },
 	{ name: 'accountRoles' },
     { name: 'accountPrimaryGroup' },
     { name: 'accountExpires', type: 'date', dateFormat: Date.patterns.ISO8601Long },
