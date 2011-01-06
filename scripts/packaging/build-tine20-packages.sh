@@ -182,7 +182,7 @@ function createArchives()
                     # cleanup ExtJS
                     (cd $TEMPDIR/tine20/library/ExtJS/adapter; rm -rf $(ls | grep -v ext))
                     (cd $TEMPDIR/tine20/library/ExtJS/src;     rm -rf $(ls | grep -v debug.js))
-                    (cd $TEMPDIR/tine20/library/ExtJS;   rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
+                    (cd $TEMPDIR/tine20/library/ExtJS;         rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
                     
                     # cleanup HTMLPurifier
                     (cd $TEMPDIR/tine20/library/HTMLPurifier;  rm -rf $(ls HTMLPurifier.*.php | grep -v HTMLPurifier.auto))
