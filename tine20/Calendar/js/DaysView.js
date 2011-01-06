@@ -190,6 +190,9 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         this.initTimeScale();
         this.initTemplates();
         
+        this.calPanel.on('beforehide', this.onBeforeHide, this);
+        this.calPanel.on('show', this.onShow, this);
+        
         Tine.Tinebase.appMgr.on('activate', this.onAppActivate, this);
     },
     
@@ -511,6 +514,14 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         }, this);
         
         this.isScrolling = false;
+    },
+    
+    onShow: function() {
+        this.scroller.dom.scrollTop = this.lastScrollPos || this.getTimeOffset(new Date());
+    },
+    
+    onBeforeHide: function() {
+        this.lastScrollPos = this.scroller.dom.scrollTop;
     },
     
     /**

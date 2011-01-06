@@ -712,24 +712,24 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             tbar.on('refresh', this.refresh.createDelegate(this, [true]), this, {buffer: 200});
             
             var view;
-            switch (which) 
-            {
-            case 'day':
-                view = new Tine.Calendar.DaysView({
-                    startDate: tbar.getPeriod().from,
-                    numOfDays: 1
-                });
-                break;
-            case 'week':
-                view = new Tine.Calendar.DaysView({
-                    startDate: tbar.getPeriod().from,
-                    numOfDays: 7
-                });
-                break;
-            case 'month':
-                view = new Tine.Calendar.MonthView({
-                    period: tbar.getPeriod()
-                });
+            switch (which) {
+                case 'day':
+                    view = new Tine.Calendar.DaysView({
+                        startDate: tbar.getPeriod().from,
+                        numOfDays: 1
+                    });
+                    break;
+                case 'week':
+                    view = new Tine.Calendar.DaysView({
+                        startDate: tbar.getPeriod().from,
+                        numOfDays: 7
+                    });
+                    break;
+                case 'month':
+                    view = new Tine.Calendar.MonthView({
+                        period: tbar.getPeriod()
+                    });
+                    break;
             }
             
             view.on('changeView', this.changeView, this);
@@ -756,6 +756,8 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 var favoritesPanel  = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
                 favoritesPanel.selectFilter(defaultFavorite);
             }, this);
+            
+            this.calendarPanels[which].relayEvents(this, ['show', 'beforehide']);
         }
         
         return this.calendarPanels[which];
