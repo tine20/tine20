@@ -173,6 +173,7 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
     selectOnFocus: true,
     editable: false,
     lazyInit: false,
+    itemSelector: 'div.search-item',
     
     translation: null,
 	
@@ -184,7 +185,7 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
     	
 		this.store = Tine.Tasks.status.getStore();
 		if (!this.value) {
-			this.value = Tine.Tasks.status.getIdentifier(this.translation._('IN-PROCESS'));
+			this.value = Tine.Tasks.status.getIdentifier('IN-PROCESS');
 		}
 		if (this.autoExpand) {
             this.lazyInit = false;
@@ -197,15 +198,43 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
                 this.fireEvent('blur', this);
             }, this);
         }
-		//this.on('select', function(){console.log(this.value)});
+        this.initTemplate();
+        
 	    Tine.Tasks.status.ComboBox.superclass.initComponent.call(this);
 	},
     
+    /**
+     * init template
+     * @private
+     */
+    initTemplate: function() {
+        this.tpl = new Ext.XTemplate(
+        '<tpl for="."><div class="search-item">',
+            '{[this.encode(values.status_name)]}',
+        '</div></tpl>',
+            {
+                encode: function(value) {
+                    if (value) {
+                        // need to translate task status
+                        var app = Tine.Tinebase.appMgr.get('Tasks');
+                        return Ext.util.Format.htmlEncode(app.i18n._(value));
+                    } else {
+                        return '';
+                    }
+                }
+            }
+        );
+    },
+
     setValue: function(value) {
         if(! value) {
             return;
         }
         Tine.Tasks.status.ComboBox.superclass.setValue.call(this, value);
+        
+        // make sure status name gets translated
+        var status = this.store.getById(value);
+        Ext.form.ComboBox.superclass.setValue.call(this, this.translation._(status.get('status_name')));
     }
         
 });
