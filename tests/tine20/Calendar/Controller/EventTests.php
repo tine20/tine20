@@ -27,7 +27,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 {
     
     /**
-     * @var fCalendar_Controller_Event controller unter test
+     * @var Calendar_Controller_Event controller unter test
      */
     protected $_controller;
     
