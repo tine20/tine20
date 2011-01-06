@@ -181,7 +181,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
             }
         }
         
-        $this->_setImapQuota($_newUserProperties, $imap, $mailbox);
+        $this->_setImapQuota($_newUserProperties, $imap, $mailboxString);
         
         $this->inspectGetUserByProperty($_addedUser);
     }
