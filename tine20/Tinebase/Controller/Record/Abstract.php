@@ -507,6 +507,17 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * set checking ACL rights
+     * 
+     * @param boolean $_doContainerACLChecks
+     * @return void
+     */
+    public function setDoContainerACLChecks($_doContainerACLChecks = TRUE)
+    {
+    	$this->_doContainerACLChecks = $_doContainerACLChecks;
+    }
+    
+    /**
      * update multiple records
      * 
      * @param   Tinebase_Model_Filter_FilterGroup $_filter
