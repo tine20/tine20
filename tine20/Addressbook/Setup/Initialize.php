@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -92,7 +92,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
             
             $group->list_id = $list->getId();
             Tinebase_Group::getInstance()->updateGroup($group);
-      }
+        }
     }
     
     /**
