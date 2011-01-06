@@ -185,7 +185,7 @@ function createArchives()
                     (cd $TEMPDIR/tine20/library/ExtJS;   rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
                     
                     # cleanup HTMLPurifier
-                    (cd $TEMPDIR/tine20/library/HTMLPurifier;  rm -rf $(ls HTMLPurifier.*.php | grep -v HTMLPurifier.auto.php))
+                    (cd $TEMPDIR/tine20/library/HTMLPurifier;  rm -rf $(ls HTMLPurifier.*.php | grep -v HTMLPurifier.auto))
 
                     # cleanup OpenLayers
                     (cd $TEMPDIR/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
