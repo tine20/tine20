@@ -150,7 +150,7 @@ if ($opts->a || $opts->j) {
         }
     }
     
-    // setup css files
+    // setup js files
     concatJs($setupIncludeFiles['js'], 'Setup/js/all-debug.js');
     compress('Setup/js/all-debug.js', 'Setup/js/all.js');
 }
