@@ -5,8 +5,8 @@
  * @package     Felamimail
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        add __destruct with $_backend->logout()?
@@ -23,8 +23,16 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
     /**
      * script name
      *
+     * @var string
      */
     protected $_scriptName = 'felamimail2.0';
+
+    /**
+     * old script name (this is used to read filter settings from from egw for example and save them with the new name)
+     * 
+     * @var string
+     */
+    protected $_oldScriptName = 'felamimail';
     
     /**
      * application name (is needed in checkRight())
@@ -122,22 +130,25 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting list of SIEVE scripts: ' . print_r($scripts, TRUE));
    
-        if (count($scripts) > 0 && array_key_exists($this->_scriptName, $scripts)) {
-        
-            $scriptName = $scripts[$this->_scriptName]['name'];
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get SIEVE script: ' . $scriptName);
-            
-            $script = $this->_backend->getScript($scriptName);
-            if ($script) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got SIEVE script: ' . $script);
-                $result = new Felamimail_Sieve_Script($script);
+        foreach (array($this->_scriptName, $this->_oldScriptName) as $scriptNameToFetch) {
+            if (count($scripts) > 0 && array_key_exists($scriptNameToFetch, $scripts)) {
+                $scriptName = $scripts[$scriptNameToFetch]['name'];
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get SIEVE script: ' . $scriptName);
+                
+                $script = $this->_backend->getScript($scriptName);
+                if ($script) {
+                    if ($scriptNameToFetch == $this->_oldScriptName) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Got old SIEVE script for migration.');
+                    }
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Got SIEVE script: ' . $script);
+                    return new Felamimail_Sieve_Script($script);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not get SIEVE script: ' . $scriptName);
+                }
             } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not get SIEVE script: ' . $scriptName);
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No relevant SIEVE scripts found.');
             }
-            
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No relevant SIEVE scripts found.');
         }
         
         return $result;
