@@ -27,7 +27,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
 {
     
     /**
-     * @var Calendar_Controller_Event controller unter test
+     * @var fCalendar_Controller_Event controller unter test
      */
     protected $_controller;
     
@@ -566,6 +566,64 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
             ->filter('user_id', $this->_personasContacts['pwulf']->getId());
         $this->assertEquals(0, count($pwulf), 'pwulf is attender of event, but not should be');
+    }
+    
+    public function testAttendeeGroupMembersAddUser()
+    {
+        try {
+            // clenup if exists
+            $cleanupUser = Tinebase_User::getInstance()->getFullUserByLoginName('testAttendeeGroupMembersAddUser');
+            Tinebase_User::getInstance()->deleteUser($cleanupUser);
+        } catch (Exception $e) {
+            // do nothing
+        }
+        
+        
+        $defaultGroup = Tinebase_Group::getInstance()->getDefaultGroup();
+        
+        // create event and invite admin group
+        $event = $this->_getEvent();
+        
+        // only events in future will be changed!
+        $event->dtstart = Tinebase_DateTime::now()->addHour(1);
+        $event->dtend = Tinebase_DateTime::now()->addHour(2);
+        
+        $event->attendee = $this->_getAttendee();
+        $event->attendee[1] = new Calendar_Model_Attender(array(
+            'user_id'   => $defaultGroup->getId(),
+            'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+            'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+        ));
+        $persitentEvent = $this->_controller->create($event);
+        
+        // create a new user
+        $newUser = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array(
+//            'accountId'             => 'dflkjgldfgdfgd',
+            'accountLoginName'      => 'testAttendeeGroupMembersAddUser',
+            'accountStatus'         => 'enabled',
+            'accountExpires'        => NULL,
+            'accountPrimaryGroup'   => $defaultGroup->getId(),
+            'accountLastName'       => 'Tine 2.0',
+            'accountFirstName'      => 'PHPUnit',
+            'accountEmailAddress'   => 'phpunit@metaways.de'
+        )), Zend_Registry::get('testConfig')->password, Zend_Registry::get('testConfig')->password);
+        
+        // check if this user was added to event
+        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $user = $loadedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $newUser->contact_id);
+        $this->assertEquals(1, count($user), 'added user is not attender of event, but should be');
+        
+        // cleanup user
+        Admin_Controller_User::getInstance()->delete($newUser->getId());
+        
+        // check if user was removed from event
+        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $user = $loadedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $newUser->contact_id);
+        $this->assertEquals(0, count($user), 'added user is attender of event, but should be');
     }
     
     public function testUpdateRecuingDtstart()
