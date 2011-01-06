@@ -326,30 +326,12 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * on update after edit
      * 
      * @param {String} encodedRecordData (json encoded)
-     * 
-     * TODO there must be a simpler way to do this!
      */
     onUpdateRecord: function(encodedRecordData) {
-        var recordData = Ext.util.JSON.decode(encodedRecordData);
-        if (! recordData.id) {
-            recordData.id = this.store.getCount()+1;
-        } else {
-            this.store.remove(this.store.getById(recordData.id));
-        }
-        
-        this.store.loadData({
-            totalcount: 1,
-            results: [recordData]
-        }, true);
-        
-        this.store.sort('id', 'ASC');
-        
-        // TODO it should be done like this:
-        /*
-        var recordData = Ext.copyTo({}, folderData, Tine.Felamimail.Model.Folder.getFieldNames());
-        var newRecord = Tine.Felamimail.folderBackend.recordReader({responseText: Ext.util.JSON.encode(recordData)});
-        this.folderStore.add([newRecord]);
-        */
+        var newRecord = Tine.Felamimail.rulesBackend.recordReader({responseText: encodedRecordData});
+        this.store.addSorted(newRecord);
+        // TODO perhaps we can remove this
+        //this.store.sort('id', 'ASC');
     },
     
     /**
