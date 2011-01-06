@@ -276,7 +276,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             result += ' ' + record.get('action_argument');
         }
             
-        return result;
+        return Ext.util.Format.htmlEncode(result);
     },
 
     /**
@@ -319,7 +319,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
         
-        return result;
+        return Ext.util.Format.htmlEncode(result);
     },
     
     /**
