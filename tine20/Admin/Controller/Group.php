@@ -385,6 +385,11 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
     {
         $listsBackend = new Addressbook_Backend_List();
         
+        if (empty($_group->container_id)) {
+            $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
+            $_group->container_id = $appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK];
+        }
+        
         try {
             if (empty($_group->list_id)) { // jump to catch block
                 throw new Tinebase_Exception_NotFound('list_id is empty');
