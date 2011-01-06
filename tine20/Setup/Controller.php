@@ -1344,11 +1344,12 @@ class Setup_Controller
      */
     protected function _clearCache()
     {
-        // setup cache (via tinebase because it is disabled in setup per default)
+        // setup cache (via tinebase because it is disabled in setup by default)
         Tinebase_Core::setupCache(TRUE);
         
+        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Clearing cache ...');
+        
         // clear cache
-        $cache = Setup_Core::get(Setup_Core::CACHE);
-        $cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+        $cache = Setup_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_ALL);
     }
 }
