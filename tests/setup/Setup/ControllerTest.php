@@ -69,18 +69,25 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     }
        
     /**
-     * test uninstall application
+     * test uninstall application and cache clearing
      *
      */
     public function testUninstallApplications()
     {
+        $cache = Tinebase_Core::getCache();
+        $cacheId = 'unittestcache';
+        $cache->save('something', $cacheId);
+        
         try {
             $result = $this->_uit->uninstallApplications(array('ActiveSync'));
         } catch (Tinebase_Exception_NotFound $e) {
             $this->_uit->installApplications(array('ActiveSync'));
             $result = $this->_uit->uninstallApplications(array('ActiveSync'));
         }
-                
+        
+        // check if cache is cleared
+        $this->assertFalse($cache->test($cacheId));
+
         $apps = $this->_uit->searchApplications();
         
         // get active sync
@@ -95,9 +102,13 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(isset($activeSyncApp));
         $this->assertEquals('uninstalled', $activeSyncApp['install_status']);
 
-        $this->_uit->installApplications(array('ActiveSync')); //cleanup
+        // cleanup
+        $this->_uit->installApplications(array('ActiveSync'));
     }
     
+    /**
+     * testInstallAdminAccountOptions
+     */
     public function testInstallAdminAccountOptions()
     {
         $this->_uninstallAllApplications();
@@ -109,10 +120,13 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertNull(Tinebase_Auth::getBackendConfiguration('adminPassword'));
         $this->assertNull(Tinebase_Auth::getBackendConfiguration('adminConfirmation'));
         
-        //cleanup
+        // cleanup
         $this->_uninstallAllApplications();
     }
     
+    /**
+     * testSaveAuthenticationRedirectSettings
+     */
     public function testSaveAuthenticationRedirectSettings()
     {
         $originalRedirectSettings = array(
@@ -153,6 +167,9 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->_uit->saveAuthentication($originalRedirectSettings);
     }
     
+    /**
+     * testInstallGroupNameOptions
+     */
     public function testInstallGroupNameOptions()
     {
         $this->_uninstallAllApplications();
@@ -274,18 +291,29 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(16, count($result['results']));
     }
     
+    /**
+     * testLoginWithWrongUsernameAndPassword
+     */
     public function testLoginWithWrongUsernameAndPassword()
     {
         $result = $this->_uit->login('unknown_user_xxyz', 'wrong_password');
         $this->assertFalse($result);
     }
     
+    /**
+     * uninstallAllApplications
+     */
     protected function _uninstallAllApplications()
     {
         $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         $this->_uit->uninstallApplications($installedApplications->name);
     }
     
+    /**
+     * installAllApplications
+     * 
+     * @param array $_options
+     */
     protected function _installAllApplications($_options = null)
     {
         $installableApplications = $this->_uit->getInstallableApplications();
