@@ -227,7 +227,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $userArray['accountPrimaryGroup'] = $group->toArray();
         
         // encode the groups array
-        $userArray['accountGroups'] = array(
+        $userArray['groups'] = array(
 			'results' 		=> $userGroups,
 			'totalcount' 	=> count($userGroups)
 		);
@@ -336,7 +336,6 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 $account->imapUser  = new Tinebase_Model_EmailUser($recordData['emailUser']);
                 $account->smtpUser  = new Tinebase_Model_EmailUser($recordData['emailUser']);
             }
-            
         } catch (Tinebase_Exception_Record_Validation $e) {
             // invalid data in some fields sent from client
             $result = array(
@@ -363,16 +362,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $account = Admin_Controller_User::getInstance()->update($account, $password, $password);
         }
         
-        // after user update or creation add user to selected groups
-        if (isset($recordData['accountGroups']) && $recordData['accountGroups']) {
-			Admin_Controller_Group::getInstance()->setGroupMemberships($account->accountId, $recordData['accountGroups']);
-        }
-        
         // after user update or creation add user to selected roles
         if (isset($recordData['accountRoles']) && $recordData['accountRoles']) {
 			Tinebase_Acl_Roles::getInstance()->setRoleMemberships(array('id' => $account->accountId, 'type' => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER), $recordData['accountRoles']);
         }
-        
         
         $result = $account->toArray();
         
@@ -391,7 +384,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result['accountPrimaryGroup'] = $group;
         
         // encode the groups array
-        $result['accountGroups'] = array(
+        $result['groups'] = array(
 			'results' 		=> $userGroups,
 			'totalcount' 	=> count($userGroups)
 		);
