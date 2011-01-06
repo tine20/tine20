@@ -583,6 +583,18 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * validate fetching a complete message from amazon #2 -> check if images got removed correctly
+     */
+    public function testGetCompleteMessageAmazon2()
+    {
+        $cachedMessage = $this->messageTestHelper('Amazon2.eml', 'multipart/amazon2');
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertNotContains('<img', $message->body);
+    }
+    
+    /**
      * validate fetching a complete message from order form
      */
     public function testGetCompleteMessageOrder()
