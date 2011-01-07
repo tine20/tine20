@@ -177,8 +177,8 @@ function concatCss(array $_files, $_filename)
                 $cssContent = preg_replace('/(\.\.\/)+images/i', 'images', $cssContent);
                 $cssContent = preg_replace('/(\.\.\/)+library/i', 'library', $cssContent);
             } else {
-                $cssContent = preg_replace('/(\.\.\/)+images/i', '../../images', $cssContent);
-                $cssContent = preg_replace('/(\.\.\/)+library/i', '../../library', $cssContent);
+                $cssContent = preg_replace('/(\.\.\/){2,}images/i', '../../images', $cssContent);
+                $cssContent = preg_replace('/(\.\.\/){2,}library/i', '../../library', $cssContent);
             }
             fwrite($cssDebug, $cssContent . "\n");
         }
@@ -216,7 +216,7 @@ function concatJs(array $_files, $_filename)
             if (substr($filename, 0, 5) !== 'Setup') {
                 $jsContent = preg_replace('/(\.\.\/)+images/i', 'images', $jsContent);
             } else {
-                $jsContent = preg_replace('/(\.\.\/)+images/i', '../../images', $jsContent);
+                $jsContent = preg_replace('/(\.\.\/){2,}images/i', '../../images', $jsContent);
             }
             fwrite($jsDebug, $jsContent . "\n");
         }
