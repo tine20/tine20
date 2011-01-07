@@ -52,6 +52,7 @@ set_include_path(implode(PATH_SEPARATOR, $paths));
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
+Tinebase_Autoloader::initialize($autoloader);
 
 Tinebase_Core::dispatchRequest();
 
@@ -65,4 +66,10 @@ if(function_exists('memory_get_peak_usage')) {
     $memory = memory_get_usage(true);
 }
 
-Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ') TIME: ' . $time . ' seconds ' . $memory/1024/1024 . ' MBytes');
+if(function_exists('realpath_cache_size')) {
+    $realPathCacheSize = realpath_cache_size();
+} else {
+    $realPathCacheSize = 'unknown';
+}
+
+Tinebase_Core::getLogger()->info('index.php ('. __LINE__ . ') TIME: ' . $time . ' seconds  MEMORY' . $memory/1024/1024 . ' MBytes  REALPATHCACHESIZE ' . $realPathCacheSize);
