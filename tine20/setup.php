@@ -49,6 +49,7 @@ set_include_path(implode(PATH_SEPARATOR, $paths));
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
+Tinebase_Autoloader::initialize($autoloader);
 
 Setup_Core::dispatchRequest();
 
