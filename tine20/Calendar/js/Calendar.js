@@ -13,7 +13,7 @@ Ext.namespace('Tine.Calendar');
  * update app icon to reflect the current date
  */
 Ext.onReady(function(){
-    Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(../../images/view-calendar-day-' + new Date().getDate() + '.png) !important');
+    Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(../../images/view-calendar-day-' + new Date().getDate() + '.png)');
 });
 
 /**
