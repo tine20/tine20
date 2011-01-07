@@ -10,7 +10,6 @@ TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
 RELEASE="svn"
-REVISION=""
 CODENAME="Neele"
 SVNURL="http://svn.tine20.org/svn/trunk/tine20"
 PACKAGEDIR=""
@@ -25,8 +24,8 @@ function checkout()
     rm -rf $TEMPDIR/tine20
     svn checkout --quiet --non-interactive --trust-server-cert $1 $TEMPDIR/tine20
 
-    if [ -z "$REVISION" ]; then
-        REVISION=$(svn info $TEMPDIR/tine20 | grep Revision | cut -d " " -f 2)
+    if [ "$RELEASE" == "svn" ]; then
+        RELEASE=$RELEASE-$(svn info $TEMPDIR/tine20 | grep Revision | cut -d " " -f 2)
     fi
      
     # remove .svn files
@@ -51,7 +50,6 @@ function createDirectories()
 
 function getOptions()
 {
-    #echo "OPTIND starts at $OPTIND"
     while getopts ":pr:s:c:" optname
     do
         case "$optname" in
@@ -63,8 +61,7 @@ function getOptions()
             ;;
           "r")
             # release
-            RELEASE=$(echo $OPTARG| cut -d "-" -f 1) 
-            REVISION=$(echo $OPTARG| cut -d "-" -f 2)
+            RELEASE=$OPTARG 
             ;;
           "?")
             echo "Unknown option $OPTARG"
@@ -114,20 +111,20 @@ function activateReleaseMode()
     
     sed -i "s#'TINE20_CODENAME',      getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i "s#'TINE20SETUP_CODENAME', getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Setup/Core.php
-    sed -i "s/'TINE20_PACKAGESTRING', 'none'/'TINE20_PACKAGESTRING', '$RELEASE-$REVISION'/" $TEMPDIR/tine20/Tinebase/Core.php
-    sed -i "s/'TINE20SETUP_PACKAGESTRING', 'none'/'TINE20SETUP_PACKAGESTRING', '$RELEASE-$REVISION'/" $TEMPDIR/tine20/Setup/Core.php
+    sed -i "s/'TINE20_PACKAGESTRING', 'none'/'TINE20_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Tinebase/Core.php
+    sed -i "s/'TINE20SETUP_PACKAGESTRING', 'none'/'TINE20SETUP_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Setup/Core.php
     sed -i "s/'TINE20_RELEASETIME',   'none'/'TINE20_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i "s/'TINE20SETUP_RELEASETIME', 'none'/'TINE20SETUP_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Setup/Core.php
     
     sed -i "s/Tine.clientVersion.buildType = 'DEBUG';/Tine.clientVersion.buildType = '$BUILDTYPE';/" $TEMPDIR/tine20/release.php
     sed -i "s#Tine.clientVersion.codeName = '\$revisionInfo';#Tine.clientVersion.codeName = '$CODENAME';#" $TEMPDIR/tine20/release.php
-    sed -i "s/Tine.clientVersion.packageString = 'none'/Tine.clientVersion.packageString = '$RELEASE-$REVISION'/" $TEMPDIR/tine20/release.php
+    sed -i "s/Tine.clientVersion.packageString = 'none'/Tine.clientVersion.packageString = '$RELEASE'/" $TEMPDIR/tine20/release.php
 }
 
 function compressFiles()
 {
     echo -n "building compressed Javascript and CSS files ... "
-    sed -i "s/trim(\`whoami\`)/'$RELEASE-$REVISION'/" $TEMPDIR/tine20/release.php
+    sed -i "s/trim(\`whoami\`)/'$RELEASE'/" $TEMPDIR/tine20/release.php
     php -d include_path=".:$TEMPDIR/tine20:$TEMPDIR/tine20/library"  -f $TEMPDIR/tine20/release.php -- -y $BASEDIR/yuicompressor/build/yuicompressor.jar -a
     echo "done"
 }
@@ -157,8 +154,8 @@ function createArchives()
                     (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v all.js  | grep -v all-debug.js))
                     (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v all.css | grep -v all-debug.css | grep -v print.css))
                     echo "building "
-                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.tar.bz2 $FILE)
-                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.zip     $FILE)
+                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.tar.bz2 $FILE)
+                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.zip     $FILE)
                     ;;
 
                 Tinebase)
@@ -190,8 +187,8 @@ function createArchives()
                     
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library styles config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES release.php setup.php tine20.php"
-                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.tar.bz2 $FILES)
-                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.zip     $FILES)
+                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.tar.bz2 $FILES)
+                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.zip     $FILES)
                     
                     echo ""
                     ;;
@@ -202,8 +199,8 @@ function createArchives()
                     (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v all.js  | grep -v all-debug.js))
                     (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v all.css | grep -v all-debug.css))
                     echo "building "
-                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.tar.bz2 $FILE)
-                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.zip     $FILE)
+                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.tar.bz2 $FILE)
+                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.zip     $FILE)
                     ;;
             esac
             
@@ -218,11 +215,11 @@ function createSpecialArchives()
     mkdir $TEMPDIR/allinone
     
     for ARCHIVENAME in calendar tinebase crm felamimail sales tasks timetracker; do
-        (cd $TEMPDIR/allinone; tar xjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${ARCHIVENAME}_$RELEASE-$REVISION.tar.bz2)
+        (cd $TEMPDIR/allinone; tar xjf ../../packages/tine20/$RELEASE/tine20-${ARCHIVENAME}_$RELEASE.tar.bz2)
     done
     
-    (cd $TEMPDIR/allinone; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-allinone_$RELEASE-$REVISION.tar.bz2 .)
-    (cd $TEMPDIR/allinone; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-allinone_$RELEASE-$REVISION.zip     .)
+    (cd $TEMPDIR/allinone; tar cjf ../../packages/tine20/$RELEASE/tine20-allinone_$RELEASE.tar.bz2 .)
+    (cd $TEMPDIR/allinone; zip -qr ../../packages/tine20/$RELEASE/tine20-allinone_$RELEASE.zip     .)
     
 
     echo "building Tine 2.0 voip archive... "
@@ -230,16 +227,16 @@ function createSpecialArchives()
     mkdir $TEMPDIR/voip
     
     for ARCHIVENAME in phone voipmanager; do
-        (cd $TEMPDIR/voip; tar xjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${ARCHIVENAME}_$RELEASE-$REVISION.tar.bz2)
+        (cd $TEMPDIR/voip; tar xjf ../../packages/tine20/$RELEASE/tine20-${ARCHIVENAME}_$RELEASE.tar.bz2)
     done
     
-    (cd $TEMPDIR/voip; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-voip_$RELEASE-$REVISION.tar.bz2 .)
-    (cd $TEMPDIR/voip; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-voip_$RELEASE-$REVISION.zip     .)
+    (cd $TEMPDIR/voip; tar cjf ../../packages/tine20/$RELEASE/tine20-voip_$RELEASE.tar.bz2 .)
+    (cd $TEMPDIR/voip; zip -qr ../../packages/tine20/$RELEASE/tine20-voip_$RELEASE.zip     .)
 }
 
 function setupPackageDir()
 {
-    PACKAGEDIR="$BASEDIR/packages/tine20/$RELEASE-$REVISION"
+    PACKAGEDIR="$BASEDIR/packages/tine20/$RELEASE"
     rm -rf $PACKAGEDIR
     mkdir -p $PACKAGEDIR
 }
@@ -256,10 +253,10 @@ function buildChecksum()
 {
     echo -n "calculating SHA1 checksums... "
     
-    test -e $PACKAGEDIR/sha1sum_$RELEASE-$REVISION.txt && rm $PACKAGEDIR/sha1sum_$RELEASE-$REVISION.txt
+    test -e $PACKAGEDIR/sha1sum_$RELEASE.txt && rm $PACKAGEDIR/sha1sum_$RELEASE.txt
     
     for fileName in $PACKAGEDIR/*; do
-        (cd $PACKAGEDIR; sha1sum `basename $fileName`) >> $PACKAGEDIR/sha1sum_$RELEASE-$REVISION.txt 2>&1
+        (cd $PACKAGEDIR; sha1sum `basename $fileName`) >> $PACKAGEDIR/sha1sum_$RELEASE.txt 2>&1
     done
     
     echo "done"
