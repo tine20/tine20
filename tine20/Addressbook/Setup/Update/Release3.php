@@ -476,7 +476,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
                 <ondelete>cascade</ondelete>
             </index>');
         $this->_backend->addForeignKey('addressbook_image', $declaration);
-        $this->setTableVersion('addressbook_image', '2');
+        $this->setTableVersion('addressbook_image', '2', true);
         
         
         $declaration = new Setup_Backend_Schema_Field_Xml('
