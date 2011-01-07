@@ -13,10 +13,19 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:96
+#, python-format
+msgid "%s's personal files"
+msgstr ""
+
 #: Acl/Rights.php:98
 msgid "manage shared folders"
 msgstr ""
 
 #: Acl/Rights.php:99
 msgid "Create new shared folders"
+msgstr ""
+
+#: js/Application.js:31
+msgid "Filemanager"
 msgstr ""

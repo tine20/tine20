@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-15 12:21+0100\n"
+"PO-Revision-Date: 2011-01-07 14:17+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -12,6 +12,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller.php:96
+#, python-format
+msgid "%s's personal files"
+msgstr "Persönliche Dateien von %s"
+
 #: Acl/Rights.php:98
 msgid "manage shared folders"
 msgstr "Gemeinsame Ordner verwalten"
@@ -19,4 +24,8 @@ msgstr "Gemeinsame Ordner verwalten"
 #: Acl/Rights.php:99
 msgid "Create new shared folders"
 msgstr "Neue gemeinsame Ordner anlegen und verwalten"
+
+#: js/Application.js:31
+msgid "Filemanager"
+msgstr "Dateimanager"
 
