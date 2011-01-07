@@ -37,6 +37,9 @@ class Zend_Scheduler
     /** @var array Tasks */
     protected $_tasks = array();
 
+    /** @var $_removedTask */
+    protected $_removedTask = array();
+    
     /** @var array Controller */
     protected $_controller = null;
 
@@ -231,6 +234,8 @@ class Zend_Scheduler
         if ($this->hasTask($name)) {
             unset($this->_tasks[$name]);
         }
+        
+        $this->_removedTask[$name] = $name;
     }
 
     /**
@@ -303,10 +308,13 @@ class Zend_Scheduler
     {
         if ($this->_backend) {
             $this->_tasks = array_merge(
-                $this->_tasks, 
-                $this->_backend->loadQueue()
+                $this->_backend->loadQueue(),
+                $this->_tasks
             );
         }
+        
+        $this->_tasks = array_diff_key($this->_tasks, $this->_removedTask);
+        
         return $this->_tasks;
     }
     
@@ -318,10 +326,9 @@ class Zend_Scheduler
     public function saveTask()
     {
         $tasks = $this->mergeTasks();
-        if (! empty($tasks)) {
-            $this->_backend->saveQueue($tasks);
-            return true;
-        }
-        return false;
+        $this->_backend->saveQueue($tasks);
+        $this->_removedTask = array();
+        
+        return true;
     }
 }
