@@ -330,7 +330,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
              plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin({
                     criteriaIgnores: [
-                        {field: 'query',     operator: 'contains',     value: ''}
+                        {field: 'query',     operator: 'contains',     value: ''},
+                        {field: 'id' }
                     ]
                 })
              ]
