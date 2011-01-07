@@ -173,8 +173,8 @@ function concatCss(array $_files, $_filename)
         list($filename) = explode('?', $file);
         if (file_exists("$tine20path/$filename")) {
             $cssContent = file_get_contents("$tine20path/$filename");
-            $cssContent = preg_replace('/(\.\.\/){3,}images/i', 'images', $cssContent);
-            $cssContent = preg_replace('/(\.\.\/){3,}library/i', 'library', $cssContent);
+            $cssContent = preg_replace('/(\.\.\/)+images/i', 'images', $cssContent);
+            $cssContent = preg_replace('/(\.\.\/)+library/i', 'library', $cssContent);
             fwrite($cssDebug, $cssContent . "\n");
         }
     }
