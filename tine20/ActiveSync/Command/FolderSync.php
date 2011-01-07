@@ -129,7 +129,7 @@ class ActiveSync_Command_FolderSync extends ActiveSync_Command_Wbxml
                 try {
                     $folders = $dataController->getSupportedFolders();
                 } catch (Exception $e) {
-                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " failed to get folders for class $class. " . $e->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " failed to get folders for class $class. " . $e->getTraceAsString());
                     continue;
                 }
 
