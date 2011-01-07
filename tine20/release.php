@@ -127,6 +127,7 @@ if ($opts->a || $opts->s) {
             $frontend = new $className;
             
             concatCss($frontend->getCssFilesToInclude(), $filename . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'all-debug.css');
+            fixImagePath($filename . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'all-debug.css');
             compress($filename . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'all-debug.css', $filename . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'all.css');
         }
     }
@@ -140,9 +141,27 @@ if ($opts->a || $opts->j) {
             $frontend = new $className;
             
             concatJs($frontend->getJsFilesToInclude(), $filename . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'all-debug.js');
+            fixImagePath($filename . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'all-debug.js');
             compress($filename . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'all-debug.js', $filename . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'all.js');
         }
     }
+}
+
+function fixImagePath($_filename)
+{
+    global $tine20path;
+    
+    $content = file_get_contents("$tine20path/$_filename");
+    
+    if (substr($_filename, 0, 5) !== 'Setup') {
+        $content = preg_replace('/(\.\.\/)+images/i',  'images', $content);
+        $content = preg_replace('/(\.\.\/)+library/i', 'library', $content);
+    } else {
+        $content = preg_replace('/(\.\.\/){2,}images/i',  '../../images', $content);
+        $content = preg_replace('/(\.\.\/){2,}library/i', '../../library', $content);
+    }
+    
+    file_put_contents("$tine20path/$_filename", $content);
 }
 
 /**
@@ -163,13 +182,6 @@ function concatCss(array $_files, $_filename)
         list($filename) = explode('?', $file);
         if (file_exists("$tine20path/$filename")) {
             $cssContent = file_get_contents("$tine20path/$filename");
-            if (substr($filename, 0, 5) !== 'Setup') {
-                $cssContent = preg_replace('/(\.\.\/)+images/i', 'images', $cssContent);
-                $cssContent = preg_replace('/(\.\.\/)+library/i', 'library', $cssContent);
-            } else {
-                $cssContent = preg_replace('/(\.\.\/){2,}images/i', '../../images', $cssContent);
-                $cssContent = preg_replace('/(\.\.\/){2,}library/i', '../../library', $cssContent);
-            }
             fwrite($cssDebug, $cssContent . "\n");
         }
     }
@@ -203,11 +215,6 @@ function concatJs(array $_files, $_filename)
             $jsContent = preg_replace('/Tine\.clientVersion\.buildDate.*;/i',     "Tine.clientVersion.buildDate = '" . Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG) . "';", $jsContent);
             $jsContent = preg_replace('/Tine\.clientVersion\.packageString.*;/i', "Tine.clientVersion.packageString = 'none';", $jsContent);
             $jsContent = preg_replace('/Tine\.title = \'Tine 2\.0\';/i', "Tine.title = '" . TINE20_TITLE . "';", $jsContent);
-            if (substr($filename, 0, 5) !== 'Setup') {
-                $jsContent = preg_replace('/(\.\.\/)+images/i', 'images', $jsContent);
-            } else {
-                $jsContent = preg_replace('/(\.\.\/){2,}images/i', '../../images', $jsContent);
-            }
             fwrite($jsDebug, $jsContent . "\n");
         }
     }
