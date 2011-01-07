@@ -39,7 +39,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      */
     requestData : function(node, callback, scope){
         
-        if(this.fireEvent("beforeload", this, node, callback) !== false) {inspectCreateNode
+        if(this.fireEvent("beforeload", this, node, callback) !== false) {
             var fstore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore(),
                 folder = fstore.getById(node.attributes.folder_id),
                 path = (folder) ? folder.get('path') : node.attributes.path;
