@@ -20,143 +20,113 @@ msgstr ""
 msgid "%s's personal leads"
 msgstr "osobní leady uživatele %s"
 
-#: Controller.php:152 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:514 js/Contact.js:169 js/Contact.js:357
-#: js/Contact.js:397 js/LeadGridPanel.js:180
+#: Controller.php:153 js/Contact.js:169 js/Contact.js:357 js/Contact.js:397
+#: js/LeadGridDetailsPanel.js:47 js/LeadGridDetailsPanel.js:514
+#: js/LeadGridPanel.js:171
 msgid "Customer"
 msgstr "Zákazník"
 
-#: Controller.php:153 js/LeadGridDetailsPanel.js:47
-#: js/LeadGridDetailsPanel.js:497 js/Contact.js:189 js/Contact.js:358
-#: js/Contact.js:401 js/LeadGridPanel.js:179
+#: Controller.php:154 js/Contact.js:189 js/Contact.js:358 js/Contact.js:401
+#: js/LeadGridDetailsPanel.js:47 js/LeadGridDetailsPanel.js:497
+#: js/LeadGridPanel.js:170
 msgid "Partner"
 msgstr "Partner"
 
-#: Controller.php:154
+#: Controller.php:155
 msgid "Reseller"
 msgstr "Dealer"
 
-#: Controller.php:157
+#: Controller.php:158
 msgid "open"
 msgstr "otevřený"
 
-#: Controller.php:158
+#: Controller.php:159
 msgid "contacted"
 msgstr "kontaktovaný"
 
-#: Controller.php:159
+#: Controller.php:160
 msgid "waiting for feedback"
 msgstr "čeká se na odezvu"
 
-#: Controller.php:160
+#: Controller.php:161
 msgid "quote sent"
 msgstr "odeslána nabídka"
 
-#: Controller.php:161
+#: Controller.php:162
 msgid "accepted"
 msgstr "přijatý"
 
-#: Controller.php:162
+#: Controller.php:163
 msgid "lost"
 msgstr "ztracený"
 
-#: Controller.php:165
+#: Controller.php:166
 msgid "Market"
 msgstr "Trh"
 
-#: Controller.php:166 Export/Pdf.php:218
+#: Controller.php:167 Export/Pdf.php:215
 msgid "Email"
 msgstr "Email"
 
-#: Controller.php:167 Export/Pdf.php:217
+#: Controller.php:168 Export/Pdf.php:214
 msgid "Telephone"
 msgstr "Telefon"
 
-#: Controller.php:168
+#: Controller.php:169
 msgid "Website"
 msgstr "Web"
 
-#: Export/Pdf.php:76
-msgid "Lead Data"
-msgstr "Data leadu"
+#: Setup/Update/Release3.php:38 Setup/Initialize.php:56
+msgid "All leads I have read grants for"
+msgstr "Všechny leady, které jsem oprávněn číst"
 
-#: Export/Pdf.php:79 js/LeadStateFilterModel.js:32 js/AdminPanel.js:159
-#: js/LeadEditDialog.js:350 js/LeadGridPanel.js:181
-msgid "Leadstate"
-msgstr "Stav leadu"
+#: Setup/Initialize.php:63
+msgid "Last modified by me"
+msgstr ""
 
-#: Export/Pdf.php:82 js/LeadGridDetailsPanel.js:481 js/AdminPanel.js:173
-#: js/LeadEditDialog.js:369
-msgid "Leadtype"
-msgstr "Typ leadu"
+#: Setup/Initialize.php:64
+msgid "All leads that I have last modified"
+msgstr ""
 
-#: Export/Pdf.php:85 js/LeadGridDetailsPanel.js:486 js/AdminPanel.js:166
-#: js/LeadEditDialog.js:376
-msgid "Leadsource"
-msgstr "Zdroj leadu"
+#: Setup/Initialize.php:73
+msgid "My leads"
+msgstr ""
 
-#: Export/Pdf.php:88 js/LeadGridPanel.js:138 js/LeadGridPanel.js:183
-#: Controller/Lead.php:190
-msgid "Turnover"
-msgstr "Obrat"
+#: Setup/Initialize.php:74
+msgid "All leads that I am responsible for"
+msgstr ""
 
-#: Export/Pdf.php:91 js/LeadEditDialog.js:236 js/LeadGridPanel.js:137
-#: js/LeadGridPanel.js:182 Controller/Lead.php:191
-msgid "Probability"
-msgstr "Pravděpodobnost"
+#: Setup/Initialize.php:87
+msgid "Leads with overdue tasks"
+msgstr ""
 
-#: Export/Pdf.php:94 js/LeadGridDetailsPanel.js:471 js/LeadEditDialog.js:408
-#: Controller/Lead.php:187
-msgid "Start"
-msgstr "Začátek"
+#: Preference.php:36
+msgid "All leads"
+msgstr "Všechny leady"
 
-#: Export/Pdf.php:97 js/LeadEditDialog.js:243 Controller/Lead.php:189
-msgid "End"
-msgstr "Konec"
+#: Preference.php:80
+msgid "Get Notification Emails"
+msgstr "Dostávat e-maily s upozorněním"
 
-#: Export/Pdf.php:100
-msgid "End Scheduled"
-msgstr "Plánovaný konec"
+#: Preference.php:81
+msgid "The level of actions you want to be notified about."
+msgstr "Úroveň činností o kterých chcete být informováni."
 
-#: Export/Pdf.php:183
-msgid "Contacts"
-msgstr "Kontakty"
+#: Preference.php:85
+msgid "Send Notifications Emails for own actions"
+msgstr "Odesílat e-maily s upozorněním pro vlastní činnosti."
 
-#: Export/Pdf.php:210 js/Contact.js:239
-msgid "Address"
-msgstr "Adresa"
+#: Preference.php:86
+msgid "Get notifications emails for actions you did yourself"
+msgstr "Dostávat e-maily s upozorněním pro činnosti, které jste udělal(a)."
 
-#: Export/Pdf.php:231 js/Task.js:87 js/LeadEditDialog.js:259
-msgid "Tasks"
-msgstr "Úkoly"
+#: Preference.php:89
+msgid "Default Favorite"
+msgstr "Výchozí oblíbené položky CRM"
 
-#: Export/Pdf.php:250 js/Task.js:180
-msgid "Due Date"
-msgstr "Termín dokončení"
-
-#: Export/Pdf.php:255 js/Task.js:193
-msgid "Priority"
-msgstr "Priorita"
-
-#: Export/Pdf.php:270 js/Product.js:87 js/LeadEditDialog.js:270
-msgid "Products"
-msgstr "Produkty"
-
-#: Export/Pdf.php:311
-msgid "low"
-msgstr "nízká"
-
-#: Export/Pdf.php:312
-msgid "normal"
-msgstr "normální"
-
-#: Export/Pdf.php:313
-msgid "high"
-msgstr "vysoká"
-
-#: Export/Pdf.php:314
-msgid "urgent"
-msgstr "urgentní"
+#: Preference.php:90
+msgid "The default favorite which is loaded on crm startup"
+msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění CRM."
 
 #: Acl/Rights.php:107
 msgid "manage leads"
@@ -181,6 +151,10 @@ msgstr "spravovat sdílené oblíbené položky leadů"
 #: Acl/Rights.php:116
 msgid "Create or update shared leads favorites"
 msgstr "Vytvořit nebo aktualizovat sdílené oblíbené položky leadů"
+
+#: js/Product.js:87 js/LeadEditDialog.js:270 Export/Pdf.php:270
+msgid "Products"
+msgstr "Produkty"
 
 #: js/Product.js:136
 msgid "Product"
@@ -210,154 +184,6 @@ msgstr "Zrušit odkaz(y) na vybraný/é {0}"
 msgid "Search for Products to add ..."
 msgstr "Hledat produkty pro přidání ..."
 
-#: js/LeadStateFilterModel.js:37 js/LeadGridPanel.js:278
-msgid "Show closed"
-msgstr "Zobrazit uzavřené"
-
-#: js/Model.js:57 js/LeadEditDialog.js:282
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "Lead"
-msgstr[1] "Leady"
-msgstr[2] "Leadů"
-
-#: js/Model.js:61
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] "seznam leadů"
-msgstr[1] "seznamy leadů"
-msgstr[2] "seznamů leadů"
-
-#: js/Model.js:61
-msgid "lead lists"
-msgstr "seznamy leadů"
-
-#: js/Model.js:124
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] "Nastavení"
-msgstr[1] "Nastavení"
-msgstr[2] "Nastavení"
-
-#: js/Model.js:128
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "seznam záznamů"
-msgstr[1] "seznamy záznamů"
-msgstr[2] "seznamů záznamů"
-
-#: js/LeadGridDetailsPanel.js:50 js/Contact.js:253
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/LeadGridDetailsPanel.js:53
-msgid "Mobile"
-msgstr "Mobil"
-
-#: js/LeadGridDetailsPanel.js:56
-msgid "Fax"
-msgstr "Fax"
-
-#: js/LeadGridDetailsPanel.js:59
-msgid "E-Mail"
-msgstr "E-mail"
-
-#: js/LeadGridDetailsPanel.js:62
-msgid "Web"
-msgstr "Web"
-
-#: js/LeadGridDetailsPanel.js:220 js/LeadGridDetailsPanel.js:253
-#: js/AdminPanel.js:124
-msgid "Leadstates"
-msgstr "Status leadů"
-
-#: js/LeadGridDetailsPanel.js:231 js/AdminPanel.js:132
-msgid "Leadsources"
-msgstr "Zroje leadů"
-
-#: js/LeadGridDetailsPanel.js:242 js/AdminPanel.js:128
-msgid "Leadtypes"
-msgstr "Typy leadů"
-
-#: js/LeadGridDetailsPanel.js:466 js/Task.js:220
-msgid "Status"
-msgstr "Status"
-
-#: js/LeadGridDetailsPanel.js:476 js/LeadEditDialog.js:414
-msgid "Estimated end"
-msgstr "Odhadovaný konec"
-
-#: js/LinkGridPanel.js:37 js/LinkGridPanel.js:38
-msgid "Add new {0}"
-msgstr "Přidat nový {0}"
-
-#: js/LinkGridPanel.js:72
-msgid "Edit {0}"
-msgstr "Editovat {0}"
-
-#: js/LinkGridPanel.js:73
-msgid "Edit selected {0}"
-msgstr "Editovat vybraný/é {0}"
-
-#: js/LeadType.js:30
-msgid "Lead Type"
-msgid_plural "Lead Types"
-msgstr[0] "Typ leadů"
-msgstr[1] "Typy leadů"
-msgstr[2] "Typů leadů"
-
-#: js/LeadType.js:136
-msgid "Add a Leadtype..."
-msgstr "Přidat typ leadu"
-
-#: js/LeadGridContactFilter.js:46
-msgid "Contact"
-msgstr "Kontakt"
-
-#: js/LeadGridContactFilter.js:54
-msgid "CRM Role"
-msgstr "CRM role"
-
-#: js/Task.js:113
-msgid "No Tasks to display"
-msgstr "Žádné úkoly ke zobrazení"
-
-#: js/Task.js:172
-msgid "Summary"
-msgstr "Přehled"
-
-#: js/Task.js:176
-msgid "Add a task..."
-msgstr "Přidat úkol..."
-
-#: js/Task.js:207
-msgid "Percent"
-msgstr "Procent"
-
-#: js/AdminPanel.js:140
-msgid "Defaults"
-msgstr "Výchozí"
-
-#: js/LeadEditDialog.js:260
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr "Nemáte oprávnění ke spuštění aplikace Úkoly nebo aplikace není povolena."
-
-#: js/LeadEditDialog.js:271
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr "Nemáte oprávnění ke spuštění aplikace Prodej nebo aplikace není povolena."
-
-#: js/LeadEditDialog.js:309
-msgid "Enter short name"
-msgstr "Zadejte stručný název"
-
-#: js/LeadEditDialog.js:392
-msgid "Expected turnover"
-msgstr "Očekávaný obrat"
-
-#: js/LeadEditDialog.js:460
-msgid "Enter description"
-msgstr "Zadejte popis"
-
 #: js/Contact.js:170
 msgid "Change type to Customer"
 msgstr "Změnit typ na Zákazník"
@@ -386,9 +212,17 @@ msgstr "Hledat kontakty pro přidání"
 msgid "Name"
 msgstr "Jméno"
 
+#: js/Contact.js:239 Export/Pdf.php:207
+msgid "Address"
+msgstr "Adresa"
+
 #: js/Contact.js:250
 msgid "Data"
 msgstr "Data"
+
+#: js/Contact.js:253 js/LeadGridDetailsPanel.js:50
+msgid "Phone"
+msgstr "Telefon"
 
 #: js/Contact.js:254
 msgid "Cellphone"
@@ -397,17 +231,6 @@ msgstr "Mobilní telefon"
 #: js/Contact.js:260 Controller/Lead.php:185
 msgid "Role"
 msgstr "Role"
-
-#: js/LeadState.js:33
-msgid "Lead State"
-msgid_plural "Lead States"
-msgstr[0] "Status leadů"
-msgstr[1] "Statusy leadů"
-msgstr[2] "Statusů leadů"
-
-#: js/LeadState.js:168
-msgid "Add a Leadstate..."
-msgstr "Přidat stav leadu"
 
 #: js/LeadSource.js:30
 msgid "Lead Source"
@@ -420,89 +243,262 @@ msgstr[2] "Zrojů leadů"
 msgid "Add a Leadsource..."
 msgstr "Přidat zdroj leadu"
 
-#: js/LeadGridPanel.js:133
+#: js/LinkGridPanel.js:37 js/LinkGridPanel.js:38
+msgid "Add new {0}"
+msgstr "Přidat nový {0}"
+
+#: js/LinkGridPanel.js:72
+msgid "Edit {0}"
+msgstr "Editovat {0}"
+
+#: js/LinkGridPanel.js:73
+msgid "Edit selected {0}"
+msgstr "Editovat vybraný/é {0}"
+
+#: js/AdminPanel.js:124 js/LeadGridDetailsPanel.js:220
+#: js/LeadGridDetailsPanel.js:253
+msgid "Leadstates"
+msgstr "Status leadů"
+
+#: js/AdminPanel.js:128 js/LeadGridDetailsPanel.js:242
+msgid "Leadtypes"
+msgstr "Typy leadů"
+
+#: js/AdminPanel.js:132 js/LeadGridDetailsPanel.js:231
+msgid "Leadsources"
+msgstr "Zroje leadů"
+
+#: js/AdminPanel.js:140
+msgid "Defaults"
+msgstr "Výchozí"
+
+#: js/AdminPanel.js:159 js/LeadGridPanel.js:172 js/LeadStateFilterModel.js:34
+#: js/LeadEditDialog.js:350 Export/Pdf.php:79
+msgid "Leadstate"
+msgstr "Stav leadu"
+
+#: js/AdminPanel.js:166 js/LeadGridDetailsPanel.js:486
+#: js/LeadEditDialog.js:376 Export/Pdf.php:85
+msgid "Leadsource"
+msgstr "Zdroj leadu"
+
+#: js/AdminPanel.js:173 js/LeadGridDetailsPanel.js:481
+#: js/LeadEditDialog.js:369 Export/Pdf.php:82
+msgid "Leadtype"
+msgstr "Typ leadu"
+
+#: js/LeadGridContactFilter.js:46
+msgid "Contact"
+msgstr "Kontakt"
+
+#: js/LeadGridContactFilter.js:54
+msgid "CRM Role"
+msgstr "CRM role"
+
+#: js/LeadGridDetailsPanel.js:53
+msgid "Mobile"
+msgstr "Mobil"
+
+#: js/LeadGridDetailsPanel.js:56
+msgid "Fax"
+msgstr "Fax"
+
+#: js/LeadGridDetailsPanel.js:59
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: js/LeadGridDetailsPanel.js:62
+msgid "Web"
+msgstr "Web"
+
+#: js/LeadGridDetailsPanel.js:466 js/Task.js:220
+msgid "Status"
+msgstr "Status"
+
+#: js/LeadGridDetailsPanel.js:471 js/LeadEditDialog.js:408
+#: Controller/Lead.php:187 Export/Pdf.php:94
+msgid "Start"
+msgstr "Začátek"
+
+#: js/LeadGridDetailsPanel.js:476 js/LeadEditDialog.js:414
+msgid "Estimated end"
+msgstr "Odhadovaný konec"
+
+#: js/LeadType.js:30
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] "Typ leadů"
+msgstr[1] "Typy leadů"
+msgstr[2] "Typů leadů"
+
+#: js/LeadType.js:136
+msgid "Add a Leadtype..."
+msgstr "Přidat typ leadu"
+
+#: js/LeadState.js:33
+msgid "Lead State"
+msgid_plural "Lead States"
+msgstr[0] "Status leadů"
+msgstr[1] "Statusy leadů"
+msgstr[2] "Statusů leadů"
+
+#: js/LeadState.js:168
+msgid "Add a Leadstate..."
+msgstr "Přidat stav leadu"
+
+#: js/LeadGridPanel.js:119
 msgid "Quick search"
 msgstr "Rychlé hledání"
 
-#: js/LeadGridPanel.js:135 js/LeadGridPanel.js:178
+#: js/LeadGridPanel.js:121 js/LeadGridPanel.js:169
 msgid "Lead name"
 msgstr "Jméno leadu"
 
-#: js/LeadGridPanel.js:176
-msgid "Lead id"
-msgstr "ID Leadu"
+#: js/LeadGridPanel.js:123 js/LeadGridPanel.js:173 js/LeadEditDialog.js:236
+#: Controller/Lead.php:191 Export/Pdf.php:91
+msgid "Probability"
+msgstr "Pravděpodobnost"
 
-#: js/LeadGridPanel.js:177
-msgid "Tags"
-msgstr "Štítky"
+#: js/LeadGridPanel.js:124 js/LeadGridPanel.js:174 Controller/Lead.php:190
+#: Export/Pdf.php:88
+msgid "Turnover"
+msgstr "Obrat"
 
-#: js/LeadGridPanel.js:184
-msgid "Probable Turnover"
-msgstr "Předpokládaný obrat"
+#: js/LeadGridPanel.js:126
+msgid "Last modified"
+msgstr ""
 
-#: js/LeadGridPanel.js:185
+#: js/LeadGridPanel.js:127
+msgid "Last modifier"
+msgstr ""
+
+#: js/LeadGridPanel.js:128
 msgid "Creation Time"
 msgstr "Vytvořeno"
 
-#: js/LeadGridPanel.js:186
-msgid "Last Modified Time"
-msgstr "Naposledy změněno"
+#: js/LeadGridPanel.js:129
+msgid "Creator"
+msgstr ""
 
-#: js/LeadGridPanel.js:225
-msgid "Add task"
-msgstr "Přidat úkol"
+#: js/LeadGridPanel.js:167
+msgid "Lead id"
+msgstr "ID Leadu"
 
-#: js/LeadGridPanel.js:226
-msgid "Add task for selected lead"
-msgstr "Přiat úkol pro vybraný lead"
+#: js/LeadGridPanel.js:168
+msgid "Tags"
+msgstr "Štítky"
 
-#: js/LeadGridPanel.js:236
+#: js/LeadGridPanel.js:175
+msgid "Probable Turnover"
+msgstr "Předpokládaný obrat"
+
+#: js/LeadGridPanel.js:205
 msgid "Export Lead"
 msgstr "Exportovat lead"
 
-#: js/LeadGridPanel.js:245
+#: js/LeadGridPanel.js:214
 msgid "Export as PDF"
 msgstr "Exportovat do PDF"
 
-#: js/LeadGridPanel.js:252
+#: js/LeadGridPanel.js:221
 msgid "Export as CSV"
 msgstr "Exportovat do CSV"
 
-#: js/LeadGridPanel.js:259
+#: js/LeadGridPanel.js:228
 msgid "Export as ODS"
 msgstr "Exportovat do ODS"
 
-#: js/LeadGridPanel.js:266
+#: js/LeadGridPanel.js:235
 msgid "Export as XLS"
 msgstr "Exportovat do XLS"
 
-#: Preference.php:36
-msgid "All leads"
-msgstr "Všechny leady"
+#: js/LeadStateFilterModel.js:39
+msgid "Show closed"
+msgstr "Zobrazit uzavřené"
 
-#: Preference.php:80
-msgid "Get Notification Emails"
-msgstr "Dostávat e-maily s upozorněním"
+#: js/LeadEditDialog.js:243 Controller/Lead.php:189 Export/Pdf.php:97
+msgid "End"
+msgstr "Konec"
 
-#: Preference.php:81
-msgid "The level of actions you want to be notified about."
-msgstr "Úroveň činností o kterých chcete být informováni."
+#: js/LeadEditDialog.js:259 js/Task.js:87 Export/Pdf.php:228
+msgid "Tasks"
+msgstr "Úkoly"
 
-#: Preference.php:85
-msgid "Send Notifications Emails for own actions"
-msgstr "Odesílat e-maily s upozorněním pro vlastní činnosti."
+#: js/LeadEditDialog.js:260
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "Nemáte oprávnění ke spuštění aplikace Úkoly nebo aplikace není povolena."
 
-#: Preference.php:86
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Dostávat e-maily s upozorněním pro činnosti, které jste udělal(a)."
+#: js/LeadEditDialog.js:271
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "Nemáte oprávnění ke spuštění aplikace Prodej nebo aplikace není povolena."
 
-#: Preference.php:89
-msgid "Default Favorite"
-msgstr "Výchozí oblíbené položky CRM"
+#: js/LeadEditDialog.js:282 js/Model.js:49
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "Lead"
+msgstr[1] "Leady"
+msgstr[2] "Leadů"
 
-#: Preference.php:90
-msgid "The default favorite which is loaded on crm startup"
-msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění CRM."
+#: js/LeadEditDialog.js:309
+msgid "Enter short name"
+msgstr "Zadejte stručný název"
+
+#: js/LeadEditDialog.js:392
+msgid "Expected turnover"
+msgstr "Očekávaný obrat"
+
+#: js/LeadEditDialog.js:460
+msgid "Enter description"
+msgstr "Zadejte popis"
+
+#: js/Model.js:53
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "seznam leadů"
+msgstr[1] "seznamy leadů"
+msgstr[2] "seznamů leadů"
+
+#: js/Model.js:53
+msgid "lead lists"
+msgstr "seznamy leadů"
+
+#: js/Model.js:116
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "Nastavení"
+msgstr[1] "Nastavení"
+msgstr[2] "Nastavení"
+
+#: js/Model.js:120
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "seznam záznamů"
+msgstr[1] "seznamy záznamů"
+msgstr[2] "seznamů záznamů"
+
+#: js/Task.js:113
+msgid "No Tasks to display"
+msgstr "Žádné úkoly ke zobrazení"
+
+#: js/Task.js:172
+msgid "Summary"
+msgstr "Přehled"
+
+#: js/Task.js:176
+msgid "Add a task..."
+msgstr "Přidat úkol..."
+
+#: js/Task.js:180 Export/Pdf.php:248
+msgid "Due Date"
+msgstr "Termín dokončení"
+
+#: js/Task.js:193 Export/Pdf.php:255
+msgid "Priority"
+msgstr "Priorita"
+
+#: js/Task.js:207
+msgid "Percent"
+msgstr "Procent"
 
 #: Controller/Lead.php:184
 msgid "State"
@@ -543,9 +539,42 @@ msgstr "Lead %s byl změněn"
 msgid "Lead %s has been creaded"
 msgstr "Lead %s byl vytvořen"
 
-#: Setup/Update/Release3.php:38 Setup/Initialize.php:48
-msgid "All leads I have read grants for"
-msgstr "Všechny leady, které jsem oprávněn číst"
+#: Export/Pdf.php:76
+msgid "Lead Data"
+msgstr "Data leadu"
+
+#: Export/Pdf.php:100
+msgid "End Scheduled"
+msgstr "Plánovaný konec"
+
+#: Export/Pdf.php:180
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: Export/Pdf.php:311
+msgid "low"
+msgstr "nízká"
+
+#: Export/Pdf.php:312
+msgid "normal"
+msgstr "normální"
+
+#: Export/Pdf.php:313
+msgid "high"
+msgstr "vysoká"
+
+#: Export/Pdf.php:314
+msgid "urgent"
+msgstr "urgentní"
+
+#~ msgid "Last Modified Time"
+#~ msgstr "Naposledy změněno"
+
+#~ msgid "Add task"
+#~ msgstr "Přidat úkol"
+
+#~ msgid "Add task for selected lead"
+#~ msgstr "Přiat úkol pro vybraný lead"
 
 #~ msgid "Lead Name"
 #~ msgstr "Jméno leadu"
