@@ -16,68 +16,68 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Tinebase\n"
 
-#: User/Abstract.php:298 User/Abstract.php:299 User/Abstract.php:300
-#: User/Abstract.php:301 User/Abstract.php:302 js/ux/ConnectionStatus.js:59
+#: User/Abstract.php:284 User/Abstract.php:285 User/Abstract.php:286
+#: User/Abstract.php:287 User/Abstract.php:288 js/ux/ConnectionStatus.js:59
 msgid "unknown"
 msgstr "neznámý"
 
-#: Frontend/Http.php:564 js/ExceptionHandler.js:127
+#: Frontend/Http.php:565 js/ExceptionHandler.js:127
 msgid "Authorisation Required"
 msgstr "Je vyžadována autorizace"
 
-#: Frontend/Http.php:565
+#: Frontend/Http.php:566
 msgid "Your session is not valid. You need to login again."
 msgstr "Vaše relace je neplatná. Musíte se přihlásit znovu."
 
-#: Frontend/Http.php:591 js/ExceptionDialog.js:51
+#: Frontend/Http.php:592 js/ExceptionDialog.js:51
 msgid "Abnormal End"
 msgstr "Abnormální ukončení"
 
-#: Frontend/Http.php:592 js/ExceptionDialog.js:76
+#: Frontend/Http.php:593 js/ExceptionDialog.js:76
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
-#: Preference/Abstract.php:460
+#: Preference/Abstract.php:461
 msgid "default"
 msgstr ""
 
-#: Setup/setup.xml:2768
+#: Setup/setup.xml:3012
 msgid "note"
 msgstr "poznámka"
 
-#: Setup/setup.xml:2773
+#: Setup/setup.xml:3017
 msgid "default note type"
 msgstr "výchozí typ poznámky"
 
-#: Setup/setup.xml:2799
+#: Setup/setup.xml:3043
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:2804
+#: Setup/setup.xml:3048
 msgid "telephone call"
 msgstr "telefonní hovor"
 
-#: Setup/setup.xml:2830
+#: Setup/setup.xml:3074
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:2835
+#: Setup/setup.xml:3079
 msgid "email contact"
 msgstr "emailový kontakt"
 
-#: Setup/setup.xml:2861
+#: Setup/setup.xml:3105
 msgid "created"
 msgstr "vytvořeno"
 
-#: Setup/setup.xml:2866
+#: Setup/setup.xml:3110
 msgid "record created"
 msgstr "záznam byl vytvořen"
 
-#: Setup/setup.xml:2892
+#: Setup/setup.xml:3136
 msgid "changed"
 msgstr "změněno"
 
-#: Setup/setup.xml:2897
+#: Setup/setup.xml:3141
 msgid "record changed"
 msgstr "záznam byl změněn"
 
@@ -161,28 +161,28 @@ msgstr "spustit"
 msgid "run right description"
 msgstr "popis práva na spuštění"
 
-#: js/common.js:152
+#: js/common.js:173
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minuta"
 msgstr[1] "{0} minuty"
 msgstr[2] "{0} minut"
 
-#: js/common.js:153
+#: js/common.js:174
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} hodina"
 msgstr[1] "{0} hodiny"
 msgstr[2] "{0} hodin"
 
-#: js/common.js:154
+#: js/common.js:175
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} pracovní den"
 msgstr[1] "{0} pracovní dny"
 msgstr[2] "{0} pracovních dní"
 
-#: js/common.js:180
+#: js/common.js:202
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] ""
@@ -193,87 +193,87 @@ msgstr[2] ""
 msgid "User: {0}"
 msgstr "Uživatel: {0}"
 
-#: js/MainMenu.js:120 js/MainMenu.js:173
+#: js/MainMenu.js:123 js/MainMenu.js:175
 msgid "About {0}"
 msgstr "O {0}"
 
-#: js/MainMenu.js:126
+#: js/MainMenu.js:129
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Ladící konzole (Ctrl + F11)"
 
-#: js/MainMenu.js:133 js/widgets/dialog/PreferencesPanel.js:37
+#: js/MainMenu.js:135 js/widgets/dialog/PreferencesPanel.js:37
 msgid "Preferences"
 msgstr "Předvolby"
 
-#: js/MainMenu.js:140
+#: js/MainMenu.js:142
 msgid "Edit Profile"
 msgstr ""
 
-#: js/MainMenu.js:147
+#: js/MainMenu.js:149
 msgid "Change password"
 msgstr "Změnit heslo"
 
-#: js/MainMenu.js:154
+#: js/MainMenu.js:156
 msgid "Logout"
 msgstr "Odhlásit"
 
-#: js/MainMenu.js:155
+#: js/MainMenu.js:157
 msgid "Logout from {0}"
 msgstr "Odhlásit z {0}"
 
-#: js/MainMenu.js:188
+#: js/MainMenu.js:190
 msgid "About Tine 2.0"
 msgstr "O aplikaci Tine 2.0"
 
-#: js/MainMenu.js:228 js/widgets/persistentfilter/PickerPanel.js:200
-#: js/widgets/dialog/EditDialog.js:449 js/widgets/tree/ContextMenu.js:85
-#: js/widgets/grid/GridPanel.js:1052
+#: js/MainMenu.js:230 js/widgets/persistentfilter/PickerPanel.js:229
+#: js/widgets/dialog/EditDialog.js:451 js/widgets/tree/ContextMenu.js:85
+#: js/widgets/grid/GridPanel.js:1194
 msgid "Confirm"
 msgstr "Potvrdit"
 
-#: js/MainMenu.js:228
+#: js/MainMenu.js:230
 msgid "Are you sure you want to logout?"
 msgstr "Určitě se chcete odhlásit?"
 
-#: js/MainMenu.js:242
+#: js/MainMenu.js:244
 msgid "Logging you out..."
 msgstr "Odhlašuji Vás..."
 
-#: js/MainMenu.js:242 js/LoginPanel.js:353
+#: js/MainMenu.js:244 js/LoginPanel.js:353
 msgid "Please wait!"
 msgstr "Čekejte prosím!"
 
-#: js/AdminPanel.js:84
+#: js/AdminPanel.js:77
 msgid "Profile Information"
 msgstr ""
 
-#: js/AdminPanel.js:88 js/widgets/dialog/EditDialog.js:181
+#: js/AdminPanel.js:81 js/widgets/dialog/EditDialog.js:181
 #: js/widgets/EditRecord.js:169
 msgid "Apply"
 msgstr "Použít"
 
-#: js/AdminPanel.js:103 js/widgets/TimezoneChooser.js:78
-#: js/widgets/persistentfilter/PickerPanel.js:264 js/widgets/LangChooser.js:70
+#: js/AdminPanel.js:96 js/widgets/TimezoneChooser.js:78
+#: js/widgets/persistentfilter/PickerPanel.js:293 js/widgets/LangChooser.js:70
 msgid "Please Wait"
 msgstr "Čekejte prosím"
 
-#: js/AdminPanel.js:163 js/widgets/container/GrantsDialog.js:88
+#: js/AdminPanel.js:158 js/widgets/container/GrantsDialog.js:88
 msgid "Read"
 msgstr "Číst"
 
-#: js/AdminPanel.js:164
+#: js/AdminPanel.js:159
 msgid "The field is readable part of the profile"
 msgstr ""
 
-#: js/AdminPanel.js:168 js/widgets/container/GrantsDialog.js:100
+#: js/AdminPanel.js:163 js/widgets/container/GrantsDialog.js:100
 msgid "Edit"
 msgstr "Editovat"
 
-#: js/AdminPanel.js:169
+#: js/AdminPanel.js:164
 msgid "The field is editable part of the profile"
 msgstr ""
 
-#: js/AdminPanel.js:182
+#: js/AdminPanel.js:177
 msgid "Field Name"
 msgstr ""
 
@@ -405,7 +405,7 @@ msgstr "Přidat {0} poznámku..."
 msgid "Type"
 msgstr "Typ"
 
-#: js/widgets/ActivitiesPanel.js:465 js/widgets/grid/GridPanel.js:724
+#: js/widgets/ActivitiesPanel.js:465 js/widgets/grid/GridPanel.js:904
 msgid "Created By"
 msgstr "Vytvořil(a)"
 
@@ -437,81 +437,81 @@ msgstr "Čas"
 msgid "User"
 msgstr "Uživatel"
 
-#: js/widgets/persistentfilter/PickerPanel.js:59
+#: js/widgets/persistentfilter/PickerPanel.js:64
 msgid "My favorites"
 msgstr "Moje oblíbené položky"
 
-#: js/widgets/persistentfilter/PickerPanel.js:180
+#: js/widgets/persistentfilter/PickerPanel.js:209
 msgid "Delete Favorite"
 msgstr "Smazat oblíbenou položku"
 
-#: js/widgets/persistentfilter/PickerPanel.js:185
+#: js/widgets/persistentfilter/PickerPanel.js:214
 msgid "Rename Favorite"
 msgstr "Přejmenovat oblíbenou položku"
 
-#: js/widgets/persistentfilter/PickerPanel.js:200
+#: js/widgets/persistentfilter/PickerPanel.js:229
 msgid "Do you really want to delete the favorite \"{0}\"?"
 msgstr "Opravdu chcete smazat oblíbenou položku \"{0}\"?"
 
-#: js/widgets/persistentfilter/PickerPanel.js:202
-#: js/widgets/persistentfilter/PickerPanel.js:227
+#: js/widgets/persistentfilter/PickerPanel.js:231
+#: js/widgets/persistentfilter/PickerPanel.js:256
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:87
 #: js/widgets/tree/ContextMenu.js:144 js/widgets/container/GrantsDialog.js:169
 #: js/LoginPanel.js:341
 msgid "Please wait"
 msgstr "Čekejte prosím"
 
-#: js/widgets/persistentfilter/PickerPanel.js:202
+#: js/widgets/persistentfilter/PickerPanel.js:231
 msgid "Deleting Favorite \"{0}\""
 msgstr "Mažu oblíbenou položku \"{0}\""
 
-#: js/widgets/persistentfilter/PickerPanel.js:225
+#: js/widgets/persistentfilter/PickerPanel.js:254
 msgid "New Name"
 msgstr "Nový název"
 
-#: js/widgets/persistentfilter/PickerPanel.js:225
+#: js/widgets/persistentfilter/PickerPanel.js:254
 msgid "Please enter the new name for favorite \"{0}\"?"
 msgstr "Zadejte prosím nový název pro oblíbenou položku \"{0}\"?"
 
-#: js/widgets/persistentfilter/PickerPanel.js:227
+#: js/widgets/persistentfilter/PickerPanel.js:256
 msgid "Renaming Favorite \"{0}\""
 msgstr "Přejmenovávám oblíbenou položku \"{0}\""
 
-#: js/widgets/persistentfilter/PickerPanel.js:250
+#: js/widgets/persistentfilter/PickerPanel.js:279
 msgid "Could not save Favorite"
 msgstr "Nepodařilo se uložit oblíbenou položku"
 
-#: js/widgets/persistentfilter/PickerPanel.js:250
+#: js/widgets/persistentfilter/PickerPanel.js:279
 msgid "Your current view does not support favorites"
 msgstr "Vaše stávající zobrazení nepodporuje oblíbené položky"
 
-#: js/widgets/persistentfilter/PickerPanel.js:255
+#: js/widgets/persistentfilter/PickerPanel.js:284
 msgid "save filter"
 msgstr "uložit filtr"
 
-#: js/widgets/persistentfilter/PickerPanel.js:255
+#: js/widgets/persistentfilter/PickerPanel.js:284
 msgid "Please enter a name for the favorite"
 msgstr "Zadejte prosím název pro oblíbenou položku"
 
-#: js/widgets/persistentfilter/PickerPanel.js:258
-#: js/widgets/persistentfilter/PickerPanel.js:261
-#: js/widgets/persistentfilter/PickerPanel.js:270
+#: js/widgets/persistentfilter/PickerPanel.js:287
+#: js/widgets/persistentfilter/PickerPanel.js:290
+#: js/widgets/persistentfilter/PickerPanel.js:299
 msgid "Favorite not Saved"
 msgstr "Oblíbená položka nebyla uložena"
 
-#: js/widgets/persistentfilter/PickerPanel.js:258
+#: js/widgets/persistentfilter/PickerPanel.js:287
 msgid "You have to supply a name for the favorite!"
 msgstr "Musíte zadat název pro oblíbenou položku!"
 
-#: js/widgets/persistentfilter/PickerPanel.js:261
+#: js/widgets/persistentfilter/PickerPanel.js:290
 msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
 msgstr "Musíte zadat kratší název! Názvy oblíbených položek smí být nejvýše 40 znaků dlouhé."
 
-#: js/widgets/persistentfilter/PickerPanel.js:264
+#: js/widgets/persistentfilter/PickerPanel.js:293
 msgid "Saving favorite"
 msgstr "Ukládám oblíbenou položku"
 
-#: js/widgets/persistentfilter/PickerPanel.js:270
+#: js/widgets/persistentfilter/PickerPanel.js:299
 msgid "Overwriting system favorites is not yet supported"
 msgstr ""
 
@@ -555,7 +555,7 @@ msgstr "Editovat {0} \"{1}\""
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:441
+#: js/widgets/dialog/EditDialog.js:443
 #: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/PreferencesDialog.js:246
@@ -564,34 +564,42 @@ msgstr ""
 msgid "Errors"
 msgstr "Chyby"
 
-#: js/widgets/dialog/EditDialog.js:441
+#: js/widgets/dialog/EditDialog.js:443
 #: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:194 js/widgets/dialog/ExportDialog.js:131
 #: js/LoginPanel.js:370
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím uvedené chyby."
 
-#: js/widgets/dialog/EditDialog.js:449
+#: js/widgets/dialog/EditDialog.js:451
 msgid "Do you really want to delete this {0}?"
 msgstr "Opravdu chcete smazat {0}?"
 
-#: js/widgets/dialog/EditDialog.js:451 js/widgets/grid/GridPanel.js:1072
+#: js/widgets/dialog/EditDialog.js:453 js/widgets/grid/GridPanel.js:1227
 msgid "Deleting {0}"
 msgstr "Mažu {0}"
 
-#: js/widgets/dialog/EditDialog.js:461 js/widgets/grid/GridPanel.js:1091
+#: js/widgets/dialog/EditDialog.js:463 js/widgets/grid/GridPanel.js:1243
 #: js/widgets/tags/TagsPanel.js:292 js/widgets/tags/TagsPanel.js:402
 #: js/widgets/tags/TagsPanel.js:435
 msgid "Failed"
 msgstr "Nepodařilo se"
 
-#: js/widgets/dialog/EditDialog.js:461 js/widgets/grid/GridPanel.js:1091
+#: js/widgets/dialog/EditDialog.js:463 js/widgets/grid/GridPanel.js:1243
 msgid "Could not delete {0}."
 msgstr "Nepodařilo se smazat {0}."
 
 #: js/widgets/dialog/PreferencesPanel.js:155
 msgid "There are no preferences for this application."
 msgstr "Pro tuto aplikaci nejsou žádné předvolby."
+
+#: js/widgets/dialog/AdminPanel.js:61
+msgid "Change settings for application {0}"
+msgstr ""
+
+#: js/widgets/dialog/AdminPanel.js:109
+msgid "Defaults"
+msgstr ""
 
 #: js/widgets/dialog/CredentialsDialog.js:61 js/LoginPanel.js:92
 msgid "Username"
@@ -704,7 +712,7 @@ msgstr ""
 msgid "Alarms"
 msgstr "Alarmy"
 
-#: js/widgets/dialog/AlarmPanel.js:42
+#: js/widgets/dialog/AlarmPanel.js:42 js/widgets/dialog/AlarmPanel.js:69
 msgid "Custom Datetime"
 msgstr "Uživatelský čas"
 
@@ -739,10 +747,6 @@ msgstr "2 hodiny před"
 #: js/widgets/dialog/AlarmPanel.js:68
 msgid "1 day before"
 msgstr "1 den před"
-
-#: js/widgets/dialog/AlarmPanel.js:69
-msgid "Custom datetime"
-msgstr "Uživatelský čas"
 
 #: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
 msgid "New version of Tine 2.0 available"
@@ -808,7 +812,7 @@ msgstr "Aktualizuji {0} \"{1}\""
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Spravovat oprávnění pro {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:243 js/widgets/grid/GridPanel.js:349
+#: js/widgets/tree/ContextMenu.js:243 js/widgets/grid/GridPanel.js:365
 msgid "Add {0}"
 msgstr "Přidat {0}"
 
@@ -840,70 +844,70 @@ msgstr "Oblíbené"
 msgid "Save current view as favorite"
 msgstr "Uložit aktuální zobrazení jako oblíbené"
 
-#: js/widgets/grid/GridPanel.js:235
+#: js/widgets/grid/GridPanel.js:247
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "Nebyly nalezeny žádné {0}. Zkuste prosím změnit kritéria filtru, volby zobrazování nebo {1} ve kterém hledáte."
 
-#: js/widgets/grid/GridPanel.js:327
+#: js/widgets/grid/GridPanel.js:343
 msgid "Edit {0}"
 msgstr "Editovat {0}"
 
-#: js/widgets/grid/GridPanel.js:338
+#: js/widgets/grid/GridPanel.js:354
 msgid "Copy {0}"
 msgstr "Kopírovat {0}"
 
-#: js/widgets/grid/GridPanel.js:357
+#: js/widgets/grid/GridPanel.js:373
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:396 js/widgets/grid/GridPanel.js:397
-#: js/widgets/grid/GridPanel.js:399
+#: js/widgets/grid/GridPanel.js:412 js/widgets/grid/GridPanel.js:413
+#: js/widgets/grid/GridPanel.js:415
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Smazat {0}"
 msgstr[1] "Smazat {0}"
 msgstr[2] "Smazat {0}"
 
-#: js/widgets/grid/GridPanel.js:474
+#: js/widgets/grid/GridPanel.js:684
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zobrazuji záznamy {0} - {1} z {2}"
 
-#: js/widgets/grid/GridPanel.js:475
+#: js/widgets/grid/GridPanel.js:685
 msgid "No {0} to display"
 msgstr "Žádné {0} ke zobrazení"
 
-#: js/widgets/grid/GridPanel.js:688
+#: js/widgets/grid/GridPanel.js:868
 msgid "Tagging"
 msgstr "Štítkování"
 
-#: js/widgets/grid/GridPanel.js:723
+#: js/widgets/grid/GridPanel.js:903
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:725
+#: js/widgets/grid/GridPanel.js:905
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:726
+#: js/widgets/grid/GridPanel.js:906
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1032
+#: js/widgets/grid/GridPanel.js:1174
 msgid "Not Allowed"
 msgstr "Není povoleno"
 
-#: js/widgets/grid/GridPanel.js:1033
+#: js/widgets/grid/GridPanel.js:1175
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nemáte oprávnění smazat všechny stránky najednou."
 
-#: js/widgets/grid/GridPanel.js:1051
+#: js/widgets/grid/GridPanel.js:1193
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Opravdu chcete smazat vybraný záznam?"
 msgstr[1] "Opravdu chcete smazat vybrané záznamy?"
 msgstr[2] "Opravdu chcete smazat vybrané záznamy?"
 
-#: js/widgets/grid/GridPanel.js:1074
+#: js/widgets/grid/GridPanel.js:1227
 msgid " ... This may take a long time!"
 msgstr "... Toto může trvat dlouho!"
 
@@ -979,71 +983,71 @@ msgstr "končí s"
 msgid "select a operator"
 msgstr "vyberte operátor"
 
-#: js/widgets/grid/FilterModel.js:324
+#: js/widgets/grid/FilterModel.js:325
 msgid "Search Account ..."
 msgstr "Hledat účet ..."
 
-#: js/widgets/grid/FilterModel.js:446
+#: js/widgets/grid/FilterModel.js:447
 msgid "today"
 msgstr "dnes"
 
-#: js/widgets/grid/FilterModel.js:447
+#: js/widgets/grid/FilterModel.js:448
 msgid "yesterday"
 msgstr "včera"
 
-#: js/widgets/grid/FilterModel.js:448
+#: js/widgets/grid/FilterModel.js:449
 msgid "this week"
 msgstr "tento týden"
 
-#: js/widgets/grid/FilterModel.js:449
+#: js/widgets/grid/FilterModel.js:450
 msgid "last week"
 msgstr "minulý týden"
 
-#: js/widgets/grid/FilterModel.js:450
+#: js/widgets/grid/FilterModel.js:451
 msgid "the week before last"
 msgstr "předminulý týden"
 
-#: js/widgets/grid/FilterModel.js:451
+#: js/widgets/grid/FilterModel.js:452
 msgid "this month"
 msgstr "tento měsíc"
 
-#: js/widgets/grid/FilterModel.js:452
+#: js/widgets/grid/FilterModel.js:453
 msgid "last month"
 msgstr "minulý měsíc"
 
-#: js/widgets/grid/FilterModel.js:453
+#: js/widgets/grid/FilterModel.js:454
 msgid "this quarter"
 msgstr "toto čtvrtletí"
 
-#: js/widgets/grid/FilterModel.js:454
+#: js/widgets/grid/FilterModel.js:455
 msgid "last quarter"
 msgstr "minulé čtvrtletí"
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:456
 msgid "this year"
 msgstr "letos"
 
-#: js/widgets/grid/FilterModel.js:456
+#: js/widgets/grid/FilterModel.js:457
 msgid "last year"
 msgstr "loni"
 
-#: js/widgets/grid/FilterModel.js:460
+#: js/widgets/grid/FilterModel.js:461
 msgid "tomorrow"
 msgstr "zítra"
 
-#: js/widgets/grid/FilterModel.js:461
+#: js/widgets/grid/FilterModel.js:462
 msgid "next week"
 msgstr "příští týden"
 
-#: js/widgets/grid/FilterModel.js:462
+#: js/widgets/grid/FilterModel.js:463
 msgid "next month"
 msgstr "příští měsíc"
 
-#: js/widgets/grid/FilterModel.js:463
+#: js/widgets/grid/FilterModel.js:464
 msgid "next quarter"
 msgstr "příští čtvrtletí"
 
-#: js/widgets/grid/FilterModel.js:464
+#: js/widgets/grid/FilterModel.js:465
 msgid "next year"
 msgstr "příští rok"
 
@@ -1458,43 +1462,39 @@ msgstr "offline"
 msgid "enter searchfilter"
 msgstr "zadejte hledaný výraz"
 
-#: js/ux/grid/PagingToolbar.js:49
+#: js/ux/grid/PagingToolbar.js:54
 msgid "{0} selected"
 msgstr "vybráno {0}"
 
-#: js/ux/grid/PagingToolbar.js:50
+#: js/ux/grid/PagingToolbar.js:55
 msgid "Unselect all"
 msgstr "Zrušit výběr"
 
-#: js/ux/grid/PagingToolbar.js:51
+#: js/ux/grid/PagingToolbar.js:56
 msgid "Select all visible ({0} records)"
 msgstr "Vybrat všechny viditelné ({0} záznamů)"
 
-#: js/ux/grid/PagingToolbar.js:52
+#: js/ux/grid/PagingToolbar.js:57
 msgid "Select all pages ({0} records)"
 msgstr "Vybrat všechny stránky  ({0} záznamů)"
 
-#: js/ux/grid/PagingToolbar.js:53
+#: js/ux/grid/PagingToolbar.js:58
 msgid "Toggle selection"
 msgstr "Invertovat výběr"
 
-#: js/Container.js:143
+#: js/Container.js:116
 msgid "All {0}"
 msgstr "Všechny {0}"
 
-#: js/Container.js:144
+#: js/Container.js:117
 msgid "Shared {0}"
 msgstr "Sdílené {0}"
 
-#: js/Container.js:145
+#: js/Container.js:118
 msgid "Other Users {0}"
 msgstr "{0} ostatních uživatelů"
 
-#: js/Container.js:146
-msgid "Internal {0}"
-msgstr "Interní {0}"
-
-#: js/Container.js:150
+#: js/Container.js:122
 msgid "My {0}"
 msgstr "Moje {0}"
 
@@ -1576,6 +1576,17 @@ msgid_plural "Departments"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#: js/Models.js:419
+msgid "Config"
+msgid_plural "Configs"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Models.js:419
+msgid "Configs"
+msgstr ""
 
 #: js/AppManager.js:182
 msgid "Missing Applications"
@@ -1847,11 +1858,11 @@ msgstr "Činnosti"
 msgid "Data"
 msgstr "Data"
 
-#: views/update.php:47
+#: views/update.php:42
 msgid "Tine 2.0 needs to be updated or is not installed yet."
 msgstr ""
 
-#: views/update.php:47
+#: views/update.php:42
 msgid "Please wait or contact your administrator"
 msgstr ""
 
@@ -1862,6 +1873,12 @@ msgstr "(kým)"
 #: Notes.php:370
 msgid "Changed fields:"
 msgstr "Změněné položky"
+
+#~ msgid "Custom datetime"
+#~ msgstr "Uživatelský čas"
+
+#~ msgid "Internal {0}"
+#~ msgstr "Interní {0}"
 
 #~ msgid "Overwriteing system favorites is not yet supported"
 #~ msgstr "Změna systémových oblíbených položek zatím není podporována"
