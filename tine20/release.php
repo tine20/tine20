@@ -20,6 +20,7 @@ require_once 'Tinebase/Helper.php';
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
+Tinebase_Autoloader::initialize($autoloader);
 
 /**
  * path to tine 2.0 checkout
