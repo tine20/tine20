@@ -31,6 +31,26 @@ msgstr "a facturar"
 msgid "billed"
 msgstr "facturat"
 
+#: Setup/Initialize.php:34
+msgid "Timesheets today"
+msgstr ""
+
+#: Setup/Initialize.php:48
+msgid "Timesheets this week"
+msgstr ""
+
+#: Setup/Initialize.php:62
+msgid "Timesheets last week"
+msgstr ""
+
+#: Setup/Initialize.php:76
+msgid "Timesheets this month"
+msgstr ""
+
+#: Setup/Initialize.php:90
+msgid "Timesheets last month"
+msgstr ""
+
 #: Preference.php:65
 msgid "Timesheets ODS export configuration"
 msgstr "Configuració de l'exportació a ODS dels fulls de temps"

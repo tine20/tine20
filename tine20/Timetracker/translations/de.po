@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-08 14:23+0100\n"
+"PO-Revision-Date: 2011-01-07 14:24+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -33,6 +33,26 @@ msgstr "abzurechnen"
 #: js/TimeaccountEditDialog.js:128
 msgid "billed"
 msgstr "abgerechnet"
+
+#: Setup/Initialize.php:34
+msgid "Timesheets today"
+msgstr "Stundenzettel von heute"
+
+#: Setup/Initialize.php:48
+msgid "Timesheets this week"
+msgstr "Stundenzettel dieser Woche"
+
+#: Setup/Initialize.php:62
+msgid "Timesheets last week"
+msgstr "Stundenzettel letzter Woche"
+
+#: Setup/Initialize.php:76
+msgid "Timesheets this month"
+msgstr "Stundenzettel dieses Monats"
+
+#: Setup/Initialize.php:90
+msgid "Timesheets last month"
+msgstr "Stundenzettel letzten Monats"
 
 #: Preference.php:65
 msgid "Timesheets ODS export configuration"

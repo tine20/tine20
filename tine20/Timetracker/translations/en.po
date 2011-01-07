@@ -32,6 +32,26 @@ msgstr "to bill"
 msgid "billed"
 msgstr "billed"
 
+#: Setup/Initialize.php:34
+msgid "Timesheets today"
+msgstr "Timesheets today"
+
+#: Setup/Initialize.php:48
+msgid "Timesheets this week"
+msgstr "Timesheets this week"
+
+#: Setup/Initialize.php:62
+msgid "Timesheets last week"
+msgstr "Timesheets last week"
+
+#: Setup/Initialize.php:76
+msgid "Timesheets this month"
+msgstr "Timesheets this month"
+
+#: Setup/Initialize.php:90
+msgid "Timesheets last month"
+msgstr "Timesheets last month"
+
 #: Preference.php:65
 msgid "Timesheets ODS export configuration"
 msgstr "Timesheets ODS export configuration"
