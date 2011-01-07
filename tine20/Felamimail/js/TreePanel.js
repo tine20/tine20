@@ -454,7 +454,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var targetFolderId = dropEvent.target.attributes.folder_id,
             targetFolder = this.app.getFolderStore().getById(targetFolderId);
                 
-        this.app.getMainScreen().getCenterPanel().moveSelectedMessages(targetFolder);
+        this.app.getMainScreen().getCenterPanel().moveSelectedMessages(targetFolder, false);
         return true;
     },
     
@@ -490,6 +490,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         Tine.log.debug('Added new folder:' + newRecord.get('globalname'));
         
         this.folderStore.add([newRecord]);
+
+        // update paths in node
+        var appendedNode = this.getNodeById(newRecord.id);
+        appendedNode.attributes.path = newRecord.get('path');
+        appendedNode.attributes.parent_path = newRecord.get('parent_path');
     },
 
     /**
