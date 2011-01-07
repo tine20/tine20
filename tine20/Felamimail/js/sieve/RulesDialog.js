@@ -76,6 +76,7 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
+        this.i18nRecordName = this.app.i18n._('Sieve Filter Rules');
         
         var title = String.format(this.app.i18n._('Sieve Filter Rules for {0}'), this.account.get('name'));
         this.window.setTitle(title);
@@ -101,21 +102,26 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
-     * generic apply changes handler (get rules and send them to saveRules)
+     * apply changes handler (get rules and send them to saveRules)
      */
     onApplyChanges: function(button, event, closeWindow) {
-        
         var rules = [];
         this.rulesGrid.store.each(function(record) {
             rules.push(record.data);
         });
         
-        Tine.Felamimail.rulesBackend.saveRules(this.account.id, rules);
-        
-        if (closeWindow) {
-            this.purgeListeners();
-            this.window.close();
-        }
+        this.loadMask.show();
+        Tine.Felamimail.rulesBackend.saveRules(this.account.id, rules, {
+            scope: this,
+            success: function(record) {
+                if (closeWindow) {
+                    this.purgeListeners();
+                    this.window.close();
+                }
+            },
+            failure: this.onRequestFailed,
+            timeout: 150000 // 3 minutes
+        });
     }
 });
 
