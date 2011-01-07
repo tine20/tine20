@@ -61,7 +61,10 @@ Tine.Felamimail.setTreeContextMenus = function() {
                 },
                 scope: this,
                 success: function(result, request){
-                    if (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id) {
+                    var selectedNode = this.getSelectionModel().getSelectedNode(),
+                        isSelectedNode = (selectedNode && this.ctxNode.id == selectedNode.id);
+                        
+                    if (isSelectedNode) {
                         var newRecord = Tine.Felamimail.folderBackend.recordReader(result);
                         this.app.getFolderStore().updateFolder(newRecord);
                     } else {
@@ -207,7 +210,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
                     value: folderId
                 }];
                 
-                var isSelectedNode = (this.ctxNode.id == this.getSelectionModel().getSelectedNode().id);
+                var selectedNode = this.getSelectionModel().getSelectedNode(),
+                    isSelectedNode = (selectedNode && this.ctxNode.id == selectedNode.id);
                 
                 Tine.Felamimail.messageBackend.addFlags(filter, '\\Seen', {
                     callback: function() {
