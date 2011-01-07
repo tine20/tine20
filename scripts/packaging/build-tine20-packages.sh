@@ -157,8 +157,8 @@ function createArchives()
                     (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v all.js  | grep -v all-debug.js))
                     (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v all.css | grep -v all-debug.css | grep -v print.css))
                     echo "building "
-                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}-$RELEASE-$REVISION.tar.bz2 $FILE)
-                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}-$RELEASE-$REVISION.zip     $FILE)
+                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.tar.bz2 $FILE)
+                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.zip     $FILE)
                     ;;
 
                 Tinebase)
@@ -183,15 +183,15 @@ function createArchives()
                     (cd $TEMPDIR/tine20/library/ExtJS;         rm -rf $(ls | grep -v adapter | grep -v ext-all-debug.js | grep -v ext-all.js | grep -v resources | grep -v src))
                     
                     # cleanup HTMLPurifier
-                    (cd $TEMPDIR/tine20/library/HTMLPurifier;  rm -rf $(ls HTMLPurifier.*.php | grep -v HTMLPurifier.auto))
+                    (cd $TEMPDIR/tine20/library/HTMLPurifier;  rm -rf HTMLPurifier.*.php)
 
                     # cleanup OpenLayers
                     (cd $TEMPDIR/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
                     
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library styles config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES release.php setup.php tine20.php"
-                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}-$RELEASE-$REVISION.tar.bz2 $FILES)
-                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}-$RELEASE-$REVISION.zip     $FILES)
+                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.tar.bz2 $FILES)
+                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.zip     $FILES)
                     
                     echo ""
                     ;;
@@ -202,8 +202,8 @@ function createArchives()
                     (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v all.js  | grep -v all-debug.js))
                     (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v all.css | grep -v all-debug.css))
                     echo "building "
-                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}-$RELEASE-$REVISION.tar.bz2 $FILE)
-                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}-$RELEASE-$REVISION.zip     $FILE)
+                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.tar.bz2 $FILE)
+                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-${FILE,,}_$RELEASE-$REVISION.zip     $FILE)
                     ;;
             esac
             
@@ -218,11 +218,11 @@ function createSpecialArchives()
     mkdir $TEMPDIR/allinone
     
     for ARCHIVENAME in calendar tinebase crm felamimail sales tasks timetracker; do
-        (cd $TEMPDIR/allinone; tar xjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${ARCHIVENAME}-$RELEASE-$REVISION.tar.bz2)
+        (cd $TEMPDIR/allinone; tar xjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${ARCHIVENAME}_$RELEASE-$REVISION.tar.bz2)
     done
     
-    (cd $TEMPDIR/allinone; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-allinone-$RELEASE-$REVISION.tar.bz2 .)
-    (cd $TEMPDIR/allinone; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-allinone-$RELEASE-$REVISION.zip     .)
+    (cd $TEMPDIR/allinone; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-allinone_$RELEASE-$REVISION.tar.bz2 .)
+    (cd $TEMPDIR/allinone; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-allinone_$RELEASE-$REVISION.zip     .)
     
 
     echo "building Tine 2.0 voip archive... "
@@ -230,11 +230,11 @@ function createSpecialArchives()
     mkdir $TEMPDIR/voip
     
     for ARCHIVENAME in phone voipmanager; do
-        (cd $TEMPDIR/voip; tar xjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${ARCHIVENAME}-$RELEASE-$REVISION.tar.bz2)
+        (cd $TEMPDIR/voip; tar xjf ../../packages/tine20/$RELEASE-$REVISION/tine20-${ARCHIVENAME}_$RELEASE-$REVISION.tar.bz2)
     done
     
-    (cd $TEMPDIR/voip; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-voip-$RELEASE-$REVISION.tar.bz2 .)
-    (cd $TEMPDIR/voip; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-voip-$RELEASE-$REVISION.zip     .)
+    (cd $TEMPDIR/voip; tar cjf ../../packages/tine20/$RELEASE-$REVISION/tine20-voip_$RELEASE-$REVISION.tar.bz2 .)
+    (cd $TEMPDIR/voip; zip -qr ../../packages/tine20/$RELEASE-$REVISION/tine20-voip_$RELEASE-$REVISION.zip     .)
 }
 
 function setupPackageDir()
@@ -256,10 +256,10 @@ function buildChecksum()
 {
     echo -n "calculating SHA1 checksums... "
     
-    test -e $PACKAGEDIR/sha1sum-$RELEASE-$REVISION.txt && rm $PACKAGEDIR/sha1sum-$RELEASE-$REVISION.txt
+    test -e $PACKAGEDIR/sha1sum_$RELEASE-$REVISION.txt && rm $PACKAGEDIR/sha1sum_$RELEASE-$REVISION.txt
     
     for fileName in $PACKAGEDIR/*; do
-        (cd $PACKAGEDIR; sha1sum `basename $fileName`) >> $PACKAGEDIR/sha1sum-$RELEASE-$REVISION.txt 2>&1
+        (cd $PACKAGEDIR; sha1sum `basename $fileName`) >> $PACKAGEDIR/sha1sum_$RELEASE-$REVISION.txt 2>&1
     done
     
     echo "done"
