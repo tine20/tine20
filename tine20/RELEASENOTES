@@ -15,6 +15,7 @@ Contents
 4. Added action-queue
 5. User contact / group list records can now be saved in other Addressbooks
 6. Customfields are now sorted by order column
+7. Session directory config has moved and other session backends are possible now
 
 --------------------------------------------------------------
 1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
@@ -68,3 +69,27 @@ is saved in.
 6. Customfields are now sorted by order column
 
 - Please check the order of your customfields: they used to be sorted by name and are now sorted by the order column.
+
+--------------------------------------------------------------
+7. Session directory config has moved and other session backends are possible now
+
+- The session options (like sessiondir and lifetime) can be configured this way now (deprecated settings will show a warning in the logfile):
+
+  'session' => 
+  array (
+    'backend'   => 'File',
+    'path'      => '/tmp/tinesessiondir',
+    'lifetime'  => 86400,
+  ),
+
+- you can add a redis session backend like this:
+
+  'session' => 
+  array (
+    'backend'   => 'Redis',
+    'host'      => 'localhost',
+    'port'      => 6379,
+    'lifetime'  => 86400,
+  ),
+
+
