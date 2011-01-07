@@ -128,8 +128,6 @@ function compressFiles()
 {
     echo -n "building compressed Javascript and CSS files ... "
     sed -i "s/trim(\`whoami\`)/'$RELEASE-$REVISION'/" $TEMPDIR/tine20/release.php
-    ### we need to replace the path to the calendar icons ...
-    sed -i "s/..\/..\///g" $TEMPDIR/tine20/Calendar/js/Calendar.js
     php -d include_path=".:$TEMPDIR/tine20:$TEMPDIR/tine20/library"  -f $TEMPDIR/tine20/release.php -- -y $BASEDIR/yuicompressor/build/yuicompressor.jar -a
     echo "done"
 }
