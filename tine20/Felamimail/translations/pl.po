@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-05 18:22+0100\n"
+"PO-Revision-Date: 2011-01-07 13:18+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -679,7 +679,7 @@ msgstr "Kosz"
 
 #: js/Model.js:489
 #: js/Model.js:602
-#: js/Model.js:664
+#: js/Model.js:667
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Lista wiadomości"
@@ -693,21 +693,21 @@ msgstr[0] "Urlop"
 msgstr[1] "urlopy"
 msgstr[2] "urlopy"
 
-#: js/Model.js:660
+#: js/Model.js:664
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Reguła"
 msgstr[1] "reguły"
 msgstr[2] "reguły"
 
-#: js/Model.js:790
+#: js/Model.js:793
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flaga"
 msgstr[1] "flagi"
 msgstr[2] "flagi"
 
-#: js/Model.js:793
+#: js/Model.js:796
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Lista flag"
@@ -779,7 +779,11 @@ msgstr "mniejszy od"
 msgid "Header \"{0}\" contains \"{1}\""
 msgstr "Nagłówek \"{0}\" zawiera \"{1}\""
 
-#: js/sieve/RulesDialog.js:80
+#: js/sieve/RulesDialog.js:79
+msgid "Sieve Filter Rules"
+msgstr "Reguły filtrowania"
+
+#: js/sieve/RulesDialog.js:81
 msgid "Sieve Filter Rules for {0}"
 msgstr "Reguły filtrowania dla {0}"
 
