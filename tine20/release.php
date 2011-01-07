@@ -208,7 +208,7 @@ function concatJs(array $_files, $_filename)
             $jsContent = preg_replace('/Tine\.clientVersion\.buildDate.*;/i',     "Tine.clientVersion.buildDate = '" . Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG) . "';", $jsContent);
             $jsContent = preg_replace('/Tine\.clientVersion\.packageString.*;/i', "Tine.clientVersion.packageString = 'none';", $jsContent);
             $jsContent = preg_replace('/Tine\.title = \'Tine 2\.0\';/i', "Tine.title = '" . TINE20_TITLE . "';", $jsContent);
-            //$jsContent = preg_replace('/\$.*Build:.*\$/i', $build, $jsContent);
+            $jsContent = preg_replace('/(\.\.\/)+images/i', 'images', $jsContent);
             fwrite($jsDebug, $jsContent . "\n");
         }
     }
