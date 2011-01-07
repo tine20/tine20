@@ -225,6 +225,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 filter: filter,
                 width: 100,
                 emptyText: this.emptyText || '',
+                value: filter.get('operator') ? filter.get('operator') : '',
                 renderTo: el
             });
         } else {
