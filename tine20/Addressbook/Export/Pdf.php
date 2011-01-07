@@ -130,7 +130,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
             unlink($tmpPath);
         } catch (Exception $e) {
             // gif images are not supported yet by zf (or some other error)
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->__toString());
             $contactPhoto = NULL;
         }
         
@@ -143,7 +143,7 @@ class Addressbook_Export_Pdf extends Tinebase_Export_Pdf
             }
         }
         $title = implode(' ', $titleArray);
-        $subtitle = $_contact['org_name'];
+        $subtitle = $_contact->org_name;
         $titleIcon = "/images/oxygen/32x32/apps/system-users.png";
         
         // add data to array
