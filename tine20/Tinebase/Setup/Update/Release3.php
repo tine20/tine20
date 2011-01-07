@@ -1122,4 +1122,17 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '3.24');
     }
+    
+    /**
+     * update to 3.25
+     * - remove action queue task -> it's now a seperate cli method for a seperate cronjob
+     */
+    public function update_24()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        $scheduler->removeTask('Tinebase_ActionQueue');
+        $scheduler->saveTask();
+        
+        $this->setApplicationVersion('Tinebase', '3.25');
+    }
 }
