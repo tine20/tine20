@@ -71,7 +71,7 @@ class Tinebase_Server_Cli implements Tinebase_Server_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Is cli request. method: ' . (isset($opts->method) ? $opts->method : 'EMPTY'));
 
         $tinebaseServer = new Tinebase_Frontend_Cli();
-        if ($opts->method !== 'Tinebase.triggerAsyncEvents') {
+        if (! in_array($opts->method, array('Tinebase.triggerAsyncEvents', 'Tinebase.processQueue'))) {
             $tinebaseServer->authenticate($opts->username, $opts->password);
         }
         $result = $tinebaseServer->handle($opts);
