@@ -190,7 +190,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
 
         this.wrap.applyStyles('overflow: hidden; position: relative;');
         
-        this.wrap.on('mousemove', function(e) {
+//        this.wrap.on('mousemove', function(e) {
+        this.button_container.on('mousemove', function(e) {
             var xy = e.getXY();
             this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
         }, this);
