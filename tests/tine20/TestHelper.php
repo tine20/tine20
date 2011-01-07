@@ -5,7 +5,7 @@
  * @package     tests
  * @subpackage  test root
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * @version     $Id$
  */
@@ -21,8 +21,10 @@ error_reporting( E_ALL | E_STRICT );
  * Set include path
  */
  
-define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
-define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
+#define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../../tine20');
+#define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../../tine20/library');
+define('PATH_TO_REAL_DIR', dirname(__FILE__). '/../Tine 2.0');
+define('PATH_TO_TINE_LIBRARY', dirname(__FILE__). '/../Tine 2.0/library');
 define('PATH_TO_TEST_DIR', dirname(__FILE__));
 
 /*
@@ -48,6 +50,7 @@ set_include_path(implode(PATH_SEPARATOR, $path));
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->setFallbackAutoloader(true);
+Tinebase_Autoloader::initialize($autoloader);
 
 // init base framework
 TestServer::getInstance()->initFramework();
