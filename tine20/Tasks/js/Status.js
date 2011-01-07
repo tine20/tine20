@@ -164,7 +164,7 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
     
 	fieldLabel: 'status',
     name: 'status',
-    displayField: 'status_name',
+    displayField: 'i18n_status_name',
     valueField: 'id',
     mode: 'local',
     triggerAction: 'all',
@@ -173,7 +173,6 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
     selectOnFocus: true,
     editable: false,
     lazyInit: false,
-    itemSelector: 'div.search-item',
     
     translation: null,
 	
@@ -198,43 +197,15 @@ Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
                 this.fireEvent('blur', this);
             }, this);
         }
-        this.initTemplate();
         
 	    Tine.Tasks.status.ComboBox.superclass.initComponent.call(this);
 	},
     
-    /**
-     * init template
-     * @private
-     */
-    initTemplate: function() {
-        this.tpl = new Ext.XTemplate(
-        '<tpl for="."><div class="search-item">',
-            '{[this.encode(values.status_name)]}',
-        '</div></tpl>',
-            {
-                encode: function(value) {
-                    if (value) {
-                        // need to translate task status
-                        var app = Tine.Tinebase.appMgr.get('Tasks');
-                        return Ext.util.Format.htmlEncode(app.i18n._(value));
-                    } else {
-                        return '';
-                    }
-                }
-            }
-        );
-    },
-
-    setValue: function(value) {
+    setValue2: function(value) {
         if(! value) {
             return;
         }
         Tine.Tasks.status.ComboBox.superclass.setValue.call(this, value);
-        
-        // make sure status name gets translated
-        var status = this.store.getById(value);
-        Ext.form.ComboBox.superclass.setValue.call(this, this.translation._(status.get('status_name')));
     }
         
 });
@@ -253,6 +224,7 @@ Tine.Tasks.status.getStore = function() {
                 { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long }, 
                 { name: 'deleted_by'                                        },
                 { name: 'status_name'                                       },
+                { name: 'i18n_status_name'                                  },
                 { name: 'status_is_open',      type: 'bool'                 },
                 { name: 'status_icon'                                       }
            ],
@@ -261,6 +233,8 @@ Tine.Tasks.status.getStore = function() {
            autoLoad: true,
            id: 'id'
        });
+       var app = Tine.Tinebase.appMgr.get('Tasks');
+       store.each(function(r) {r.set('i18n_status_name', app.i18n._hidden(r.get('status_name')));}, this);
 	}
 	return store;
 };
