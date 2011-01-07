@@ -119,6 +119,34 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
+     * process queue tasks (simple queue processing, intendet to be executed from system cron job)
+     *  optional --numtasks param
+     *
+     * @param Zend_Console_Getopt $_opts
+     * @return boolean success
+     */
+    public function processQueue($_opts)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Start a worker for action queye from CLI.');
+        
+        try {
+            $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            // get user for cronjob from config / set default admin group
+            $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::CRONUSERID)->value;
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting user with id ' . $cronuserId . ' (cronuser) as user.');
+            $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
+        }
+        Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
+        
+        $actionQueue = Tinebase_ActionQueue::getInstance();
+        $r = $_opts->numtasks ? $actionQueue->processQueue($_opts->numtasks) : $actionQueue->processQueue();
+        
+        return TRUE;
+    }
+    
+    /**
      * clear table as defined in arguments
      * can clear the following tables:
      * - credential_cache
