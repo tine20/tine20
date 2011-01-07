@@ -55,7 +55,8 @@ class Tinebase_DateTime extends DateTime
      */
     public function __sleep(){
         $this->__sDT = $this->format('Y-m-d H:i:s');
-        $this->__sDTZ = $this->getTimezone()->getName();
+        $tz = $this->getTimezone();
+        $this->__sDTZ = $tz? $tz->getName() : 'UTC';
         return array('__sDT', '__sDTZ');
     }
 
@@ -63,7 +64,7 @@ class Tinebase_DateTime extends DateTime
      * @see http://bugs.php.net/bug.php?id=46891
      */
     public function __wakeup() {
-        $this->__construct($this->__sDT, new DateTimeZone($this->__sDTZ));
+        $this->__construct($this->__sDT, new DateTimeZone($this->__sDTZ ? $this->__sDTZ : 'UTC'));
         $this->__sDT = $this->__sDTZ = NULL;
     }
     
