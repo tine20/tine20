@@ -24,8 +24,32 @@ msgstr[0] "Календарь"
 msgstr[1] "Календаря"
 msgstr[2] "Календарей"
 
-#: Setup/Update/Release3.php:165 Setup/Initialize.php:42
+#: Setup/Update/Release3.php:165 Setup/Initialize.php:29
 msgid "All events I attend"
+msgstr ""
+
+#: Setup/Update/Release3.php:294
+msgid "Awaiting response"
+msgstr ""
+
+#: Setup/Update/Release3.php:295
+msgid "Events I have not yet respondet to"
+msgstr ""
+
+#: Setup/Update/Release3.php:313
+msgid "Declined events"
+msgstr ""
+
+#: Setup/Update/Release3.php:314
+msgid "Events I have declined"
+msgstr ""
+
+#: Setup/Update/Release3.php:330
+msgid "I'm organizer"
+msgstr ""
+
+#: Setup/Update/Release3.php:331
+msgid "Events I'm the organizer of"
 msgstr ""
 
 #: Preference.php:37
@@ -123,12 +147,12 @@ msgstr ""
 msgid "Location"
 msgstr "Местоположение"
 
-#: js/EventDetailsPanel.js:234 Model/Event.php:231
+#: js/EventDetailsPanel.js:234 js/Model.js:204 Model/Event.php:231
 msgid "Organizer"
 msgstr ""
 
 #: js/EventDetailsPanel.js:251 js/AttendeeGridPanel.js:77
-#: js/AttendeeFilterModel.js:37 js/Model.js:328
+#: js/AttendeeFilterModel.js:37 js/Model.js:329
 msgid "Attendee"
 msgstr "Участник"
 
@@ -233,7 +257,7 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:166 js/Model.js:502
+#: js/AttendeeGridPanel.js:166 js/Model.js:503
 #, fuzzy
 msgid "Resource"
 msgid_plural "Resources"
@@ -254,7 +278,7 @@ msgid "Click here to invite another attender..."
 msgstr "Нажмите здесь, чтобы пригласить другого участника..."
 
 #: js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
-#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:344
+#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:345
 msgid "No Information"
 msgstr "Нет информации"
 
@@ -270,19 +294,19 @@ msgstr "Необходимый"
 msgid "Optional"
 msgstr "Дополнительный"
 
-#: js/AttendeeGridPanel.js:513 js/Model.js:472 Model/Attender.php:46
+#: js/AttendeeGridPanel.js:513 js/Model.js:473 Model/Attender.php:46
 msgid "No response"
 msgstr "Без ответа"
 
-#: js/AttendeeGridPanel.js:516 js/Model.js:473 Model/Attender.php:47
+#: js/AttendeeGridPanel.js:516 js/Model.js:474 Model/Attender.php:47
 msgid "Accepted"
 msgstr "Принято"
 
-#: js/AttendeeGridPanel.js:519 js/Model.js:474 Model/Attender.php:48
+#: js/AttendeeGridPanel.js:519 js/Model.js:475 Model/Attender.php:48
 msgid "Declined"
 msgstr "Отклонено"
 
-#: js/AttendeeGridPanel.js:522 js/Model.js:475 Model/Attender.php:49
+#: js/AttendeeGridPanel.js:522 js/Model.js:476 Model/Attender.php:49
 msgid "Tentative"
 msgstr "Предполагается"
 
@@ -417,14 +441,14 @@ msgstr "Обновить всю серию"
 msgid "Update this event only"
 msgstr "Обновить только это событие"
 
-#: js/Model.js:64 js/Model.js:332
+#: js/Model.js:64 js/Model.js:333
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Событие"
 msgstr[1] "События"
 msgstr[2] "Событий"
 
-#: js/Model.js:64 js/Model.js:332
+#: js/Model.js:64 js/Model.js:333
 msgid "Events"
 msgstr "События"
 
@@ -436,14 +460,14 @@ msgstr "Календари"
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:328
+#: js/Model.js:329
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Участник"
 msgstr[1] "Участника"
 msgstr[2] "Участников"
 
-#: js/Model.js:502
+#: js/Model.js:503
 #, fuzzy
 msgid "Resources"
 msgstr "Повторения"
