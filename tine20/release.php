@@ -230,7 +230,7 @@ function compress($_infile, $_outfile)
 {
     global $opts, $tine20path, $yuiCompressorPath;
     
-if (file_exists($yuiCompressorPath)) {
+    if (file_exists($yuiCompressorPath)) {
         $contents = file_get_contents("$tine20path/$_infile");
         $contents = preg_replace('/Tine\.clientVersion\.buildType.*;/i', "Tine.clientVersion.buildType='RELEASE';", $contents);
         file_put_contents("$tine20path/$_outfile", $contents);
