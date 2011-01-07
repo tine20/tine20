@@ -361,15 +361,22 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 folder = app.getFolderStore().getById(appendedNode.id);
                 
             if (folder) {
-                Ext.DomHelper.insertAfter(this.elNode.lastChild, {tag: 'span', 'class': 'felamimail-node-statusbox', cn:[
-                    {'tag': 'img', 'src': Ext.BLANK_IMAGE_URL, 'class': 'felamimail-node-statusbox-progress'},
-                    {'tag': 'span', 'class': 'felamimail-node-statusbox-unread'}
-                    
-                ]});
-                
+                app.getMainScreen().getTreePanel().addStatusboxesToNodeUi(this);
                 app.getMainScreen().getTreePanel().updateFolderStatus(folder);
             }
         }, appendedNode.ui);
+    },
+    
+    /**
+     * add status boxes
+     * 
+     * @param {Object} nodeUi
+     */
+    addStatusboxesToNodeUi: function(nodeUi) {
+        Ext.DomHelper.insertAfter(nodeUi.elNode.lastChild, {tag: 'span', 'class': 'felamimail-node-statusbox', cn:[
+            {'tag': 'img', 'src': Ext.BLANK_IMAGE_URL, 'class': 'felamimail-node-statusbox-progress'},
+            {'tag': 'span', 'class': 'felamimail-node-statusbox-unread'}
+        ]});
     },
     
     /**
@@ -495,6 +502,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         var appendedNode = this.getNodeById(newRecord.id);
         appendedNode.attributes.path = newRecord.get('path');
         appendedNode.attributes.parent_path = newRecord.get('parent_path');
+        
+        // add unreadcount/progress/tooltip
+        this.addStatusboxesToNodeUi(appendedNode.ui);
+        this.updateFolderStatus(newRecord);
     },
 
     /**
