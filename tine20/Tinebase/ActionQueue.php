@@ -85,12 +85,21 @@
             unset($options['adapter']);
             
             $options['name'] = array_key_exists('name', $options) ? $options['name'] : 'tine20actionqueue';
-            if ($adapter == 'Db') {
-                // use default db settings if empty
-                $options['driverOptions'] = (array_key_exists('driverOptions', $options)) ? $options['driverOptions'] : Tinebase_Core::getConfig()->database->toArray();
-                if (! array_key_exists('type', $options['driverOptions'])) {
-                    $options['driverOptions']['type'] = (array_key_exists('adapter', $options['driverOptions'])) ? $options['driverOptions']['adapter'] : 'pdo_mysql';
-                }
+            
+            switch ($adapter) {
+                case 'Redis':
+                    $options['adapterNamespace'] = 'Rediska_Zend_Queue_Adapter';
+                    $options['driverOptions'] = (array_key_exists('driverOptions', $options)) ? $options['driverOptions'] : array ( 'namespace' => 'Application_' );
+                    break;
+                    
+                case 'Db':
+                    // use default db settings if empty
+                    $options['driverOptions'] = (array_key_exists('driverOptions', $options)) ? $options['driverOptions'] : Tinebase_Core::getConfig()->database->toArray();
+                    if (! array_key_exists('type', $options['driverOptions'])) {
+                        $options['driverOptions']['type'] = (array_key_exists('adapter', $options['driverOptions'])) ? $options['driverOptions']['adapter'] : 'pdo_mysql';
+                    }
+                    
+                    break;
             }
             
             $this->_queue = new Zend_Queue($adapter, $options);
