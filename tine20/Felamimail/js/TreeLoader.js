@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
  
@@ -15,7 +15,6 @@
  * 
  * <p>Felamimail Account/Folder Tree Loader</p>
  * <p>
- * TODO         remove obsolete code
  * </p>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
@@ -40,7 +39,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      */
     requestData : function(node, callback, scope){
         
-        if(this.fireEvent("beforeload", this, node, callback) !== false) {
+        if(this.fireEvent("beforeload", this, node, callback) !== false) {inspectCreateNode
             var fstore = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore(),
                 folder = fstore.getById(node.attributes.folder_id),
                 path = (folder) ? folder.get('path') : node.attributes.path;
@@ -68,9 +67,9 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
     },
     
     /**
-     * @private
+     * inspectCreateNode
      * 
-     * TODO     add qtip again (problem: it can't be changed later)?
+     * @private
      */
     inspectCreateNode: function(attr) {
         var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
