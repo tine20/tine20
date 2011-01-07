@@ -646,7 +646,11 @@ Tine.Felamimail.vacationBackend = new Tine.Tinebase.data.RecordProxy({
  * Rule Record Definition
  */ 
 Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
-    { name: 'id' },
+    { name: 'id', sortType: function(value) {
+        // should be sorted as int
+        return parseInt(value, 10);
+    }
+    },
     { name: 'action_type' },
     { name: 'action_argument' },
     { name: 'enabled', type: 'boolean'},
@@ -660,7 +664,6 @@ Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
     // ngettext('Rule', 'Rules', n);
     recordName: 'Rule',
     recordsName: 'Rules',
-    //containerProperty: 'container_id',
     // ngettext('record list', 'record lists', n);
     containerName: 'Rule list',
     containersName: 'Rule lists'    
