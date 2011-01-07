@@ -205,16 +205,20 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
             if ($_filterData['operator'] == 'equals' || $_filterData['operator'] == 'contains') {
                 $_select->having($db->quoteInto('flags LIKE ?', $value));
             } else if ($_filterData['operator'] == 'in' || $_filterData['operator'] == 'notin') {
-                $value = (array) $value;
-                $where = array();
-                $op = ($_filterData['operator'] == 'in') ? 'LIKE' : 'NOT LIKE';
-                $opImplode = ($_filterData['operator'] == 'in') ? ' OR ' : ' AND ';
-                foreach ($value as $flag) {
-                    $where[] = $db->quoteInto('flags ' . $op . ' ?', $flag);
-                }
-                $whereString = implode($opImplode, $where);
-                if ($_filterData['operator'] == 'notin') {
-                    $whereString = '(' . $whereString . ') OR flags IS NULL';
+                if (empty($value)) {
+                    $whereString = 'flags IS NULL';
+                } else {
+                    $value = (array) $value;
+                    $where = array();
+                    $op = ($_filterData['operator'] == 'in') ? 'LIKE' : 'NOT LIKE';
+                    $opImplode = ($_filterData['operator'] == 'in') ? ' OR ' : ' AND ';
+                    foreach ($value as $flag) {
+                        $where[] = $db->quoteInto('flags ' . $op . ' ?', $flag);
+                    }
+                    $whereString = implode($opImplode, $where);
+                    if ($_filterData['operator'] == 'notin') {
+                        $whereString = '(' . $whereString . ') OR flags IS NULL';
+                    }
                 }
                 $_select->having($whereString);
             } else {
