@@ -275,7 +275,7 @@ checkout $SVNURL
 setupPackageDir
 activateReleaseMode
 compressFiles
-fixImagesPath
+#fixImagesPath
 createArchives
 createSpecialArchives
 packageTranslations
