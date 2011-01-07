@@ -643,6 +643,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 nextRecord = (sm.getCount() == 1) ? this.getStore().getAt(++lastIdx) : null;
         }
         
+        var increaseUnreadCountInTargetFolder = 0;
         msgs.each(function(msg) {
             var isSeen = msg.hasFlag('\\Seen'),
                 currFolder = this.app.getFolderStore().getById(msg.get('folder_id')),
@@ -652,13 +653,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
             }
             if (folder) {
-                // update unread count of target folder (only when moving)
-                folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
+                increaseUnreadCountInTargetFolder += diff;
             }
            
             msgsIds.push(msg.id);
             this.getStore().remove(msg);    
         },  this);
+        
+        if (folder && increaseUnreadCountInTargetFolder > 0) {
+            // update unread count of target folder (only when moving)
+            folder.set('cache_unreadcount', folder.get('cache_unreadcount') + increaseUnreadCountInTargetFolder);
+        }            
         
         this.deleteQueue = this.deleteQueue.concat(msgsIds);
         this.pagingToolbar.refresh.disable();
