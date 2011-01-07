@@ -119,8 +119,6 @@ if ($opts->clean) {
     }
 }
 
-$setupIncludeFiles = Setup_Frontend_Http::getAllIncludeFiles();
-
 if ($opts->a || $opts->s) {
     // tine 2.0 applications css files
     foreach(scandir($tine20path) as $filename) {
@@ -132,10 +130,6 @@ if ($opts->a || $opts->s) {
             compress($filename . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'all-debug.css', $filename . DIRECTORY_SEPARATOR . 'css' . DIRECTORY_SEPARATOR . 'all.css');
         }
     }
-    
-    // setup css files
-    concatCss($setupIncludeFiles['css'], 'Setup/css/all-debug.css');
-    compress('Setup/css/all-debug.css', 'Setup/css/all.css');
 }
 
 if ($opts->a || $opts->j) {
@@ -149,10 +143,6 @@ if ($opts->a || $opts->j) {
             compress($filename . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'all-debug.js', $filename . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . 'all.js');
         }
     }
-    
-    // setup js files
-    concatJs($setupIncludeFiles['js'], 'Setup/js/all-debug.js');
-    compress('Setup/js/all-debug.js', 'Setup/js/all.js');
 }
 
 /**
