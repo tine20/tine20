@@ -128,31 +128,39 @@ msgstr "Session files"
 msgid "Session Files Path"
 msgstr "Session Files Path"
 
-#: js/ConfigManagerPanel.js:181
+#: js/ConfigManagerPanel.js:182
+msgid "Filestore directory"
+msgstr "Filestore directory"
+
+#: js/ConfigManagerPanel.js:187
+msgid "Filestore Path"
+msgstr "Filestore Path"
+
+#: js/ConfigManagerPanel.js:191
 msgid "Addressbook Map panel"
 msgstr "Addressbook Map panel"
 
-#: js/ConfigManagerPanel.js:184
+#: js/ConfigManagerPanel.js:194
 msgid "Map panel"
 msgstr "Map panel"
 
-#: js/ConfigManagerPanel.js:195
+#: js/ConfigManagerPanel.js:205
 msgid "disabled"
 msgstr "disabled"
 
-#: js/ConfigManagerPanel.js:195
+#: js/ConfigManagerPanel.js:205
 msgid "enabled"
 msgstr "enabled"
 
-#: js/ConfigManagerPanel.js:206
+#: js/ConfigManagerPanel.js:216
 msgid "Config file is not writable"
 msgstr "Config file is not writable"
 
-#: js/ConfigManagerPanel.js:208 js/AuthenticationPanel.js:678
+#: js/ConfigManagerPanel.js:218 js/AuthenticationPanel.js:678
 msgid "Save config"
 msgstr "Save config"
 
-#: js/ConfigManagerPanel.js:223
+#: js/ConfigManagerPanel.js:234
 msgid "Download config file"
 msgstr "Download config file"
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Setup\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-12-08 14:22+0100\n"
+"PO-Revision-Date: 2011-01-07 14:19+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -137,32 +137,40 @@ msgstr "Sitzungs-Dateien"
 msgid "Session Files Path"
 msgstr "Pfad für Sitzungs-Dateien"
 
-#: js/ConfigManagerPanel.js:181
+#: js/ConfigManagerPanel.js:182
+msgid "Filestore directory"
+msgstr "Datei-Ablage Verzeichnis"
+
+#: js/ConfigManagerPanel.js:187
+msgid "Filestore Path"
+msgstr "Datei-Ablage Verzeichnis"
+
+#: js/ConfigManagerPanel.js:191
 msgid "Addressbook Map panel"
 msgstr "Kartenfenster im Adressbuch"
 
-#: js/ConfigManagerPanel.js:184
+#: js/ConfigManagerPanel.js:194
 msgid "Map panel"
 msgstr "Kartenfenster"
 
-#: js/ConfigManagerPanel.js:195
+#: js/ConfigManagerPanel.js:205
 msgid "disabled"
 msgstr "deaktiviert"
 
-#: js/ConfigManagerPanel.js:195
+#: js/ConfigManagerPanel.js:205
 msgid "enabled"
 msgstr "aktiviert"
 
-#: js/ConfigManagerPanel.js:206
+#: js/ConfigManagerPanel.js:216
 msgid "Config file is not writable"
 msgstr "Konfigurationsdatei nicht schreibbar"
 
-#: js/ConfigManagerPanel.js:208
+#: js/ConfigManagerPanel.js:218
 #: js/AuthenticationPanel.js:678
 msgid "Save config"
 msgstr "Konfiguration speichern"
 
-#: js/ConfigManagerPanel.js:223
+#: js/ConfigManagerPanel.js:234
 msgid "Download config file"
 msgstr "Konfigurationsdatei herunterladen"
 

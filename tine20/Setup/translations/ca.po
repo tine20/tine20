@@ -127,31 +127,39 @@ msgstr "Fitxers de sessió"
 msgid "Session Files Path"
 msgstr "Camí als fitxers de sessió"
 
-#: js/ConfigManagerPanel.js:181
+#: js/ConfigManagerPanel.js:182
+msgid "Filestore directory"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:187
+msgid "Filestore Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:191
 msgid "Addressbook Map panel"
 msgstr "Tauler Mapa de llibreta d'adreces"
 
-#: js/ConfigManagerPanel.js:184
+#: js/ConfigManagerPanel.js:194
 msgid "Map panel"
 msgstr "Tauler Mapa"
 
-#: js/ConfigManagerPanel.js:195
+#: js/ConfigManagerPanel.js:205
 msgid "disabled"
 msgstr "inhabilitat"
 
-#: js/ConfigManagerPanel.js:195
+#: js/ConfigManagerPanel.js:205
 msgid "enabled"
 msgstr "habilitat"
 
-#: js/ConfigManagerPanel.js:206
+#: js/ConfigManagerPanel.js:216
 msgid "Config file is not writable"
 msgstr "El fitxer de configuració no es pot escriure"
 
-#: js/ConfigManagerPanel.js:208 js/AuthenticationPanel.js:678
+#: js/ConfigManagerPanel.js:218 js/AuthenticationPanel.js:678
 msgid "Save config"
 msgstr "Desa la configuració"
 
-#: js/ConfigManagerPanel.js:223
+#: js/ConfigManagerPanel.js:234
 msgid "Download config file"
 msgstr "Descarrega el fitxer de configuració"
 
