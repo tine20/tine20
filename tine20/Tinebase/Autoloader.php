@@ -30,6 +30,14 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
         
         $file = $topLevelDirectory . DIRECTORY_SEPARATOR . str_replace('_', DIRECTORY_SEPARATOR, $class) . '.php';
         
+        /**
+         * Security check
+         */
+        if (preg_match('/[^a-z0-9\\/\\\\_.:-]/i', $file)) {
+            require_once 'Zend/Exception.php';
+            throw new Zend_Exception('Security check: Illegal character in filename');
+        }
+        
         $fullPath = dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . $file;
         
         include_once $fullPath;
