@@ -173,8 +173,13 @@ function concatCss(array $_files, $_filename)
         list($filename) = explode('?', $file);
         if (file_exists("$tine20path/$filename")) {
             $cssContent = file_get_contents("$tine20path/$filename");
-            $cssContent = preg_replace('/(\.\.\/)+images/i', 'images', $cssContent);
-            $cssContent = preg_replace('/(\.\.\/)+library/i', 'library', $cssContent);
+            if (substr($filename, 0, 5) !== 'Setup') {
+                $cssContent = preg_replace('/(\.\.\/)+images/i', 'images', $cssContent);
+                $cssContent = preg_replace('/(\.\.\/)+library/i', 'library', $cssContent);
+            } else {
+                $cssContent = preg_replace('/(\.\.\/)+images/i', '../../images', $cssContent);
+                $cssContent = preg_replace('/(\.\.\/)+library/i', '../../library', $cssContent);
+            }
             fwrite($cssDebug, $cssContent . "\n");
         }
     }
@@ -210,6 +215,8 @@ function concatJs(array $_files, $_filename)
             $jsContent = preg_replace('/Tine\.title = \'Tine 2\.0\';/i', "Tine.title = '" . TINE20_TITLE . "';", $jsContent);
             if (substr($filename, 0, 5) !== 'Setup') {
                 $jsContent = preg_replace('/(\.\.\/)+images/i', 'images', $jsContent);
+            } else {
+                $jsContent = preg_replace('/(\.\.\/)+images/i', '../../images', $jsContent);
             }
             fwrite($jsDebug, $jsContent . "\n");
         }
