@@ -329,9 +329,27 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onUpdateRecord: function(encodedRecordData) {
         var newRecord = Tine.Felamimail.rulesBackend.recordReader({responseText: encodedRecordData});
+        
+        if (! newRecord.id) {
+            var lastRecord = null,
+                nextId = null;
+            do {
+                // get next free id
+                lastRecord = this.store.getAt(this.store.getCount()-1);
+                nextId = (parseInt(lastRecord.id, 10) + 1).toString();
+            } while (this.store.getById(newRecord.id));
+            
+            newRecord.set('id', nextId);
+            newRecord.id = nextId;
+        } else {
+            this.store.remove(this.store.getById(newRecord.id));
+        }
+        
         this.store.addSorted(newRecord);
-        // TODO perhaps we can remove this
-        //this.store.sort('id', 'ASC');
+        
+        // some eyecandy
+        var row = this.getView().getRow(this.store.indexOf(newRecord));
+        Ext.fly(row).highlight();
     },
     
     /**
