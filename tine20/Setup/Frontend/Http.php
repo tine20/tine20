@@ -26,13 +26,31 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected $_applicationName = 'Setup';
     
     /**
+     * Returns all CSS files which must be inclued for this app
+     *
+     * @return array Array of filenames
+     */
+    public function getCssFilesToInclude()
+    {
+        $tinebase = new Tinebase_Frontend_Http();
+        
+        $tinebaseCssFiles = $tinebase->getCssFilesToInclude();
+        $setupCssFiles    = parent::getCssFilesToInclude();
+        
+        return array_merge($tinebaseCssFiles, $setupCssFiles);
+    }
+    
+    /**
      * Returns all JS files which must be included for Setup
      *
      * @return array Array of filenames
      */
     public function getJsFilesToInclude()
     {
-        return array(
+        $tinebase = new Tinebase_Frontend_Http();
+        
+        $tinebaseJsFiles = $tinebase->getJsFilesToInclude();
+        $setupJsFiles    = array(
             'Setup/js/init.js',
             'Setup/js/Setup.js',
             'Setup/js/MainScreen.js',
@@ -43,6 +61,8 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Setup/js/AuthenticationPanel.js',
             'Setup/js/EmailPanel.js',
         );
+        
+        return array_merge($tinebaseJsFiles, $setupJsFiles);
     }
     
     /**
@@ -88,17 +108,13 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @return array 
      */
-    public static function getAllIncludeFiles() {
-        // we start with all Tinebase include files ...
-        $tinebase = new Tinebase_Frontend_Http();
-        $jsFiles  = $tinebase->getJsFilesToInclude();
-        $cssFiles = $tinebase->getCssFilesToInclude();
-        
-        // ... and add only the setup files
+    public static function getAllIncludeFiles() 
+    {
         $setup = new Setup_Frontend_Http();
+        
         return array(
-            'js'  => array_merge($jsFiles, $setup->getJsFilesToInclude()),
-            'css' => array_merge($cssFiles, $setup->getCssFilesToInclude())
+            'js'  => $setup->getJsFilesToInclude(),
+            'css' => $setup->getCssFilesToInclude()
         );
     }
     /**
