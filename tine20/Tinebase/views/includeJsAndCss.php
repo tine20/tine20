@@ -17,8 +17,7 @@ echo "\n<!-- Tine 2.0 static files -->";
 // this variable gets replaced by the buildscript
 $tineBuildPath = '';
 
-
-$locale = Zend_Registry::get('locale');
+$locale = (Tinebase_Core::isRegistered(Tinebase_Core::LOCALE)) ? Tinebase_Core::getLocale() : 'en';
 
 switch(TINE20_BUILDTYPE) {
     case 'DEVELOPMENT':
