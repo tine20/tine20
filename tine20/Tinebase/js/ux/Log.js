@@ -10,9 +10,9 @@ Ext.ns('Ext.ux');
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
-Ext.ux.log = console || {};
+Ext.ux.log = Ext.isIE ? {} : console;
 
-Ext.apply(console, {
+Ext.apply(Ext.ux.log, {
     /**
      * @cfg {Number} prio (defaults to 7)
      */
@@ -66,7 +66,7 @@ Ext.apply(console, {
     setPrio: function(prio) {
         this.PRIO = prio;
         for (var name in this.priorities) {
-            this[name] = this[name.toLowerCase()] = prio >= this.priorities[name] ? this.prioLogFnMap[name] : function(){};
+            this[name] = this[name.toLowerCase()] = prio >= this.priorities[name] ? this.prioLogFnMap[name] : Ext.emptyFn;
         }
     }
 });
