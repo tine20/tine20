@@ -28,7 +28,7 @@ msgstr "ACTION-REQUISE"
 msgid "COMPLETED"
 msgstr "TERMINE"
 
-#: Setup/setup.xml:339 js/Status.js:187
+#: Setup/setup.xml:339
 msgid "IN-PROCESS"
 msgstr "EN-COURS"
 
@@ -36,12 +36,36 @@ msgstr "EN-COURS"
 msgid "CANCELLED"
 msgstr "ANNULE"
 
-#: Setup/Update/Release3.php:66 Setup/Initialize.php:41
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:37
 msgid "All tasks of my taskslists"
 msgstr ""
 
-#: Preference.php:29
+#: Setup/Initialize.php:46
+msgid "My open tasks"
+msgstr ""
+
+#: Setup/Initialize.php:55
+msgid "My open tasks this week"
+msgstr ""
+
+#: Setup/Initialize.php:64 Preference.php:29
 msgid "All my tasks"
+msgstr ""
+
+#: Setup/Initialize.php:65
+msgid "All tasks that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:72
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:73
+msgid "All tasks that I have last modified"
+msgstr ""
+
+#: Setup/Initialize.php:82
+msgid "Tasks without responsible"
 msgstr ""
 
 #: Preference.php:71
@@ -76,94 +100,82 @@ msgstr ""
 msgid "Create or update shared tasks favorites"
 msgstr ""
 
-#: js/Status.js:33 js/GridPanel.js:190 js/TaskEditDialog.js:209
+#: js/Status.js:33 js/GridPanel.js:157 js/TaskEditDialog.js:208
 #: Model/Task.php:187
 msgid "Status"
 msgstr "Statut"
 
-#: js/GridPanel.js:56
+#: js/GridPanel.js:55
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer la tâche sélectionnée?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les tâches sélectionnées?"
 
-#: js/GridPanel.js:91
-msgid "Quick search"
-msgstr "Recherche rapide"
-
-#: js/GridPanel.js:93 js/GridPanel.js:144 js/TaskEditDialog.js:181
-msgid "Summary"
-msgstr "Résumé"
-
-#: js/GridPanel.js:94 js/GridPanel.js:155
-msgid "Due Date"
-msgstr "Date de fin"
-
-#: js/GridPanel.js:96 js/GridPanel.js:218
-msgid "Responsible"
-msgstr "Responsable"
-
-#: js/GridPanel.js:121
-msgid "Failed"
-msgstr "Échoué"
-
-#: js/GridPanel.js:121
-msgid "Could not save task."
-msgstr "Erreur de sauvegarde."
-
-#: js/GridPanel.js:140
+#: js/GridPanel.js:110
 msgid "Tags"
 msgstr "Marqueur"
 
-#: js/GridPanel.js:141 Model/Task.php:195
+#: js/GridPanel.js:111 Model/Task.php:195
 msgid "Lead"
 msgstr ""
 
-#: js/GridPanel.js:151
+#: js/GridPanel.js:114 js/TaskEditDialog.js:180 js/Tasks.js:140
+msgid "Summary"
+msgstr "Résumé"
+
+#: js/GridPanel.js:118
 msgid "Add a task..."
 msgstr "Ajouter"
 
-#: js/GridPanel.js:163 js/TaskEditDialog.js:189 Model/Task.php:186
+#: js/GridPanel.js:122 js/Tasks.js:141
+msgid "Due Date"
+msgstr "Date de fin"
+
+#: js/GridPanel.js:130 js/TaskEditDialog.js:188 Model/Task.php:186
 msgid "Priority"
 msgstr "Priorité"
 
-#: js/GridPanel.js:177 Model/Task.php:188
+#: js/GridPanel.js:144 Model/Task.php:188
 msgid "Percent"
 msgstr "Pourcent"
 
-#: js/GridPanel.js:204
+#: js/GridPanel.js:171 js/Tasks.js:147
 msgid "Creation Time"
 msgstr "Date de création"
 
-#: js/GridPanel.js:211 js/TaskEditDialog.js:213
+#: js/GridPanel.js:178 js/TaskEditDialog.js:212
 msgid "Completed"
 msgstr "Terminé"
 
-#: js/GridPanel.js:267
+#: js/GridPanel.js:185 js/Tasks.js:143
+msgid "Responsible"
+msgstr "Responsable"
+
+#: js/GridPanel.js:234
 msgid "Show closed"
 msgstr "Afficher terminées"
 
-#: js/TaskEditDialog.js:142
+#: js/TaskEditDialog.js:141
 msgid "You have to supply a due date, because an alarm ist set!"
 msgstr ""
 
-#: js/TaskEditDialog.js:186
+#: js/TaskEditDialog.js:185
 msgid "Due date"
 msgstr "Date de fin"
 
-#: js/TaskEditDialog.js:192
+#: js/TaskEditDialog.js:191
 msgid "Add Responsible ..."
 msgstr "Ajouter un responsable..."
 
-#: js/TaskEditDialog.js:199
+#: js/TaskEditDialog.js:198
 msgid "Notes"
 msgstr "Notes"
 
-#: js/TaskEditDialog.js:200
+#: js/TaskEditDialog.js:199
 msgid "Enter description..."
 msgstr "Saisissez une description..."
 
-#: js/TaskEditDialog.js:205
+#: js/TaskEditDialog.js:204
 msgid "Percentage"
 msgstr "Pourcentage"
 
@@ -186,6 +198,22 @@ msgstr[1] "tâches à faire"
 #: js/Tasks.js:103
 msgid "to do lists"
 msgstr "tâches à faire"
+
+#: js/Tasks.js:138
+msgid "Quick search"
+msgstr "Recherche rapide"
+
+#: js/Tasks.js:145
+msgid "Last modified"
+msgstr ""
+
+#: js/Tasks.js:146
+msgid "Last modifier"
+msgstr ""
+
+#: js/Tasks.js:148
+msgid "Creator"
+msgstr ""
 
 #: Model/Task.php:183
 msgid "Due"
@@ -210,3 +238,9 @@ msgstr ""
 #: Controller/Task.php:166
 msgid "Notification for Task "
 msgstr "Notification"
+
+#~ msgid "Failed"
+#~ msgstr "Échoué"
+
+#~ msgid "Could not save task."
+#~ msgstr "Erreur de sauvegarde."
