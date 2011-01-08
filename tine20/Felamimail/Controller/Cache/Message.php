@@ -355,6 +355,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             if ($this->_timeElapsed < $this->_availableUpdateTime) {
             
                 $begin = $_folder->cache_job_startuid > 0 ? $_folder->cache_job_startuid : $_folder->cache_totalcount;
+                // legacy handling => can be removed for next major release after Neele
+                if ($begin > $_folder->cache_totalcount) {
+                    $begin = $_folder->cache_totalcount;
+                }
+                
                 $firstMessageSequence = 0;
                  
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " $messagesToRemoveFromCache message to remove from cache. starting at $begin");
