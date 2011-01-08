@@ -56,6 +56,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     private static $_instance = NULL;
     
     /**
+     * @var Felamimail_Backend_Account
+     */
+    protected $_backend;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton
@@ -467,6 +472,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function updateCapabilities($_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL, $_delimiter = NULL)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->getId(), TRUE));
+        
         if ($_imapBackend === NULL) {
             $_imapBackend = $this->_getIMAPBackend($_account);
             if (! $_imapBackend) {
