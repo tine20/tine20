@@ -522,7 +522,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             // no folders
             return array();
         }
-    
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " accountData " . print_r($account->toArray(), true));
+        
         // update folder cache
         Felamimail_Controller_Cache_Folder::getInstance()->update($account);
         
