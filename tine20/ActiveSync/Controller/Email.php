@@ -516,6 +516,11 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         $defaultAccountId = Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT};
         
+        if (empty($defaultAccountId)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " no default account set. Can't sync any folders.");
+            return array();            
+        }
+        
         try {
             $account = Felamimail_Controller_Account::getInstance()->get($defaultAccountId);
         } catch (Tinebase_Exception_NotFound $ten) {
