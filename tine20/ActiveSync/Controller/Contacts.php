@@ -162,8 +162,7 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         if(! empty($data->$value)) {
                             try {
                                 $image = Tinebase_Controller::getInstance()->getImage('Addressbook', $data->getId());
-                                $image->resize(120, 160, Tinebase_Model_Image::RATIOMODE_PRESERVANDCROP);
-                                $jpegData = $image->getBlob('image/jpeg');
+                                $jpegData = $image->getBlob('image/jpeg', 36000);
                                 $nodeContent = base64_encode($jpegData);
                             } catch (Exception $e) {
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Image for contact {$data->getId()} not found or invalid");
@@ -294,7 +293,6 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
     /**
      * convert contact from xml to Addressbook_Model_Contact
      *
-     * @todo handle images
      * @param SimpleXMLElement $_data
      * @return Addressbook_Model_Contact
      */
@@ -315,9 +313,21 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     // do not change if not set
                     if(isset($xmlData->$fieldName)) {
                         if(!empty($xmlData->$fieldName)) {
-                            $contact->jpegphoto = base64_decode((string)$xmlData->$fieldName);
+                            $devicePhoto = base64_decode((string)$xmlData->$fieldName);
+                            
+                            try {
+                                $currentPhoto = Tinebase_Controller::getInstance()->getImage('Addressbook', $contact->getId())->getBlob('image/jpeg', 36000);
+                            } catch (Exception $e) {}
+                            
+                            if (isset($currentPhoto) && $currentPhoto == $devicePhoto) {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " photo did not change on device -> preserving server photo");
+                            } else {
+                                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " takeing new contact photo from device (" . strlen($devicePhoto) . "KB)");
+                                $contact->jpegphoto = $devicePhoto;
+                            }
                         } else {
                             $contact->jpegphoto = '';
+                            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . " deleting contact photo on device request");
                         }
                     }
                     break;
