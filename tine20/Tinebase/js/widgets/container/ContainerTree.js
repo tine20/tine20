@@ -227,7 +227,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * returns object of selected container or null/default
      * 
      * @param {String} [requiredGrant]
-     * @param {Object} [defaultContainer]
+     * @param {Tine.Tinebase.Model.Container} [defaultContainer]
+     * @return {Tine.Tinebase.Model.Container}
      */
     getSelectedContainer: function(requiredGrant, defaultContainer) {
         var container = defaultContainer,
@@ -244,6 +245,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                     }
                 }
             }, this);
+        } else {
+            // TODO check if favorite is selected
         }
         
         return container;
@@ -540,5 +543,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     selectContainerPath: function(containerPath, attr, callback) {
         return this.selectPath(this.getTreePath(containerPath), attr, callback);
+    },
+    
+    /**
+     * get default container for new records
+     * 
+     * @return {Tine.Tinebase.Model.Container}
+     */
+    getDefaultContainerForNewRecords: function() {
+        var container = Tine[this.appName].registry.get('defaultContainer');
+        return this.getSelectedContainer('addGrant', container);
     }
 });
