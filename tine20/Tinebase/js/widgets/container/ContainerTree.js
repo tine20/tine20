@@ -121,6 +121,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * init this treePanel
      */
     initComponent: function() {
+        if (! this.appName && this.recordClass) {
+            this.appName = this.recordClass.getMeta('appName');
+        }
         if (! this.app) {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
@@ -224,7 +227,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * returns object of selected container or null/default
+     * returns object of selected container/filter or null/default
      * 
      * @param {String} [requiredGrant]
      * @param {Tine.Tinebase.Model.Container} [defaultContainer]
@@ -235,21 +238,68 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             sm = this.getSelectionModel(),
             selection = typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
-        if (Ext.isArray(selection)) {
-            Ext.each(selection, function(node) {
-                if (node && Tine.Tinebase.container.pathIsContainer(node.attributes.container.path)) {
-                    if (! requiredGrant || this.hasGrant(node, requiredGrant)) {
-                        container = node.attributes.container;
-                        // take the first one
-                        return false;
-                    }
-                }
-            }, this);
-        } else {
-            // TODO check if favorite is selected
-        }
+        if (Ext.isArray(selection) && selection.length > 0) {
+            container = this.getContainerFromSelection() || container;
+        } 
+        // postpone this as we don't get the whole container record here
+//        else if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+//            container = this.getContainerFromFilter() || container;
+//        }
         
         return container;
+    },
+    
+    /**
+     * get container from selection
+     * 
+     * @param {Array} selection
+     * @param {String} requiredGrant
+     * @return {Tine.Tinebase.Model.Container}
+     */
+    getContainerFromSelection: function(selection, requiredGrant) {
+        var result = null;
+        
+        Ext.each(selection, function(node) {
+            if (node && Tine.Tinebase.container.pathIsContainer(node.attributes.container.path)) {
+                if (! requiredGrant || this.hasGrant(node, requiredGrant)) {
+                    container = node.attributes.container;
+                    // take the first one
+                    return false;
+                }
+            }
+        }, this);
+        
+        return result;
+    },
+
+    /**
+     * get container from filter toolbar
+     * 
+     * @param {String} requiredGrant
+     * @return {Tine.Tinebase.Model.Container}
+     * 
+     * TODO make this work -> atm we don't get the account grants here (why?)
+     */
+    getContainerFromFilter: function(requiredGrant) {
+        var result = null;
+        
+        // check if single container is selected in filter toolbar 
+        var ftb = this.filterPlugin.getGridPanel().filterToolbar,
+            filterValue = null;
+        ftb.filterStore.each(function(filter) {
+            if (filter.get('field') == this.recordClass.getMeta('containerProperty')) {
+                filterValue = filter.get('value');
+                if (filter.get('operator') == 'equals') {
+                    result = filterValue;
+                } else if (filter.get('operator') == 'in' && filterValue.length == 1){
+                    result = filterValue[0];
+                }
+                // take the first one
+                return false;
+            }
+        }, this);
+        
+        return result;
     },
     
     /**
