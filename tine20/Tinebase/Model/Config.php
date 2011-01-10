@@ -136,13 +136,15 @@ class Tinebase_Model_Config extends Tinebase_Record_Abstract
     const MAPPANEL = 'mapPanel';
     
     /**
-     * Config key for session ip validation
+     * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
+     * 
      * @var string
      */
     const SESSIONIPVALIDATION = 'sessionIpValidation';
     
     /**
-     * Config key for session user agent validation -> if this is set to FALSE no exception is thrown
+     * Config key for session user agent validation -> if this is set to FALSE no Zend_Session_Validator_HttpUserAgent is registered
+     * 
      * @var string
      */
     const SESSIONUSERAGENTVALIDATION = 'sessionUserAgentValidation';
