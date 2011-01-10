@@ -157,4 +157,18 @@ class Tinebase_ImageHelperTest extends PHPUnit_Framework_TestCase
         
     }
     
+    public function testGetBlobNoTouch()
+    {
+        $blob = $this->_testImage->getBlob('image/gif');
+        $this->assertTrue(file_get_contents($this->_testImagePath) == $blob);
+    }
+    
+    public function testGetBlobMaxSize()
+    {
+        $origBlobSize = strlen($this->_testImage->getBlob('image/jpeg'));
+        $maxBlobSize = $origBlobSize/3;
+        
+        $imageBlobSize = strlen($this->_testImage->getBlob('image/jpeg', $maxBlobSize));
+        $this->assertTrue($imageBlobSize <= $maxBlobSize);
+    }
 }
