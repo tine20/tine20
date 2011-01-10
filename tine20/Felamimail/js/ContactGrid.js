@@ -128,6 +128,10 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      * @return {String}
      */
     typeRadioRenderer: function(type, value, metaData, record, rowIndex, colIndex, store) {
+        if (! record.hasEmail()) {
+            return '';
+        }
+        
         var lowerType = Ext.util.Format.lowercase(type); 
         
         return this.radioTpl.apply({
