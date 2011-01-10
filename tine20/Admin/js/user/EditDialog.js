@@ -745,6 +745,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     }, {
                         //vtype: 'email',
                         fieldLabel: this.app.i18n.gettext('OpenID'),
+                        emptyText: '(' + this.app.i18n.gettext('Login Name') + ')',
                         name: 'openid',
                         columnWidth: 0.5
                     }], [{
