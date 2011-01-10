@@ -190,31 +190,46 @@ class Tinebase_Model_Image extends Tinebase_Record_Abstract
     /**
      * returns binary string in given format
      *
-     * @param string $_mime
+     * @param string    $_mime
+     * @param int       $_maxSize in bytes
      * @return string
      */
-    public function getBlob($_mime='image/jpeg')
+    public function getBlob($_mime='image/jpeg', $_maxSize=0)
     {
-        $img = @imagecreatefromstring($this->blob);
-        
-        $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
-        switch ($_mime) {
-            case ('image/png'):
-                imagepng($img, $tmpPath);
-                break;
-            case ('image/jpeg'):
-                imagejpeg($img, $tmpPath);
-                break;
-            case ('image/gif'):
-                imagegif($img, $tmpPath);
-                break;
-            default:
-                throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_mime);
-                break;
+        if ($this->mime != $_mime) {
+            $img = @imagecreatefromstring($this->blob);
+            
+            $tmpPath = tempnam(Tinebase_Core::getTempDir(), 'tine20_tmp_gd');
+            switch ($_mime) {
+                case ('image/png'):
+                    imagepng($img, $tmpPath, 0);
+                    break;
+                case ('image/jpeg'):
+                    imagejpeg($img, $tmpPath, 100);
+                    break;
+                case ('image/gif'):
+                    imagegif($img, $tmpPath);
+                    break;
+                default:
+                    throw new Tinebase_Exception_InvalidArgument("Unsupported image type: " . $_mime);
+                    break;
+            }
+            
+            $blob = file_get_contents($tmpPath);
+            unlink($tmpPath);
+        } else {
+            $blob = $this->blob;
         }
         
-        $blob = file_get_contents($tmpPath);
-        unlink($tmpPath);
+        if ($_maxSize && strlen($blob) > $_maxSize) {
+            $q = $_maxSize/strlen($blob);
+            $width = floor(sqrt(pow($this->width, 2) * $q));
+            $height = floor(sqrt(pow($this->height, 2) * $q));
+            
+            $this->resize($width, $height, self::RATIOMODE_PRESERVANDCROP);
+            return $this->getBlob($_mime, $_maxSize);
+        }
+        
         
         return $blob;
     }
