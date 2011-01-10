@@ -87,6 +87,11 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
             $_application->getId(), 
             Tinebase_Acl_Rights::REPORT_BUGS
         );
+        $roles->addSingleRight(
+            $userRole->getId(), 
+            $_application->getId(), 
+            Tinebase_Acl_Rights::MANAGE_OWN_STATE
+        );
     }
     
     /**

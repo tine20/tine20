@@ -63,6 +63,10 @@ class Tinebase_State
      */
     public function clearState($_name)
     {
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_OWN_STATE)) {
+            throw new Tinebase_Exception_AccessDenied("You don't have the right to manage your client state");
+        }
+        
         $stateInfo = $this->loadStateInfo();
         
         if (array_key_exists($_name, $stateInfo)) {
@@ -80,6 +84,10 @@ class Tinebase_State
      */
     public function setState($_name, $_value)
     {
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_OWN_STATE)) {
+            throw new Tinebase_Exception_AccessDenied("You don't have the right to manage your client state");
+        }
+        
         $stateInfo = $this->loadStateInfo();
         
     	$stateInfo[$_name] = $_value;
@@ -93,6 +101,11 @@ class Tinebase_State
      */
     public function saveStateInfo($_stateData)
     {
+        if (! Tinebase_Core::getUser()->hasRight('Tinebase', Tinebase_Acl_Rights::MANAGE_OWN_STATE)) {
+            throw new Tinebase_Exception_AccessDenied("You don't have the right to manage your client state");
+        }
+        
+        
         $userId = Tinebase_Core::getUser()->getId();
         
         try {

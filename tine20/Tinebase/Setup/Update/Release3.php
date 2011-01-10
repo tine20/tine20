@@ -1135,4 +1135,23 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '3.25');
     }
+    
+    /**
+     * update to 3.26
+     * - assign MANAGE_OWN_STATE right to all roles
+     */
+    public function update_25()
+    {
+        $roles = Tinebase_Acl_Roles::getInstance()->searchRoles(new Tinebase_Model_RoleFilter(array()), new Tasks_Model_Pagination(array()));
+        
+        foreach($roles as $role) {
+            Tinebase_Acl_Roles::getInstance()->addSingleRight(
+                $role->getId(), 
+                Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId(), 
+                Tinebase_Acl_Rights::MANAGE_OWN_STATE
+            );
+        }
+        
+        $this->setApplicationVersion('Tinebase', '3.26');
+    }
 }

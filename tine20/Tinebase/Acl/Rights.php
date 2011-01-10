@@ -46,6 +46,12 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_OWN_PROFILE = 'manage_own_profile';
     
     /**
+     * the right to manage the own (client) state
+     * @staticvar string
+     */
+    const MANAGE_OWN_STATE = 'manage_own_state';
+    
+    /**
      * account type anyone
      * @staticvar string
      */
@@ -117,6 +123,7 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 self::REPORT_BUGS,
                 self::CHECK_VERSION,
                 self::MANAGE_OWN_PROFILE,
+                self::MANAGE_OWN_STATE,
             );
         } else {
             $addRights = array();
@@ -148,6 +155,10 @@ class Tinebase_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_OWN_PROFILE  => array(
                 'text'          => $translate->_('Manage own profile'),
                 'description'   => $translate->_('The right to manage the own profile (selected contact data).'),
+            ),
+            self::MANAGE_OWN_STATE  => array(
+                'text'          => $translate->_('Manage own client state'),
+                'description'   => $translate->_('The right to manage the own client state.'),
             ),
         );
         
