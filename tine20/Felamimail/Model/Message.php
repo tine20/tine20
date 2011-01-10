@@ -236,12 +236,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     public function getPartStructure($_partId, $_useMessageStructure = TRUE)
     {
         // maybe we want no part at all => just return the whole structure
-        if($_partId == null) {
+        if ($_partId == null) {
             return $this->structure;
         }
         
         // maybe we want the first part => just return the whole structure
-        if($this->structure['partId'] == $_partId) {
+        if ($this->structure['partId'] == $_partId) {
             return $this->structure;
         }
                 
@@ -257,6 +257,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             }
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->structure, TRUE));
         throw new Felamimail_Exception("Structure for partId $_partId not found!");
     }
     
