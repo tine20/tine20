@@ -103,7 +103,6 @@ Ext.namespace('Tine.Felamimail');
             items: [{
                 cls: 'tine-mainscreen-centerpanel-west',
                 region: 'west',
-                id: 'west',
                 stateful: false,
                 layout: 'border',
                 split: true,
