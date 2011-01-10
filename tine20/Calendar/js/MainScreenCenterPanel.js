@@ -228,11 +228,11 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.startDate = startDate.clone();
         } else {
             // see if a recent startDate of that view fits
-            var lastStartDate = this.startDates[this.activeView],
+            var lastStartDate = this.startDates[view],
                 currentPeriod = this.getCalendarPanel(this.activeView).getView().getPeriod();
                 
             if (Ext.isDate(lastStartDate) && lastStartDate.between(currentPeriod.from, currentPeriod.until)) {
-                this.startDate = this.startDates[this.activeView].clone();
+                this.startDate = this.startDates[view].clone();
             }
         }
         
@@ -735,7 +735,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             view.on('changeView', this.changeView, this);
             view.on('changePeriod', function (period) {
                 this.startDate = period.from;
-                this.startDates[this.activeView] = this.startDate.clone();
+                this.startDates[which] = this.startDate.clone();
                 this.updateMiniCal();
             }, this);
             
