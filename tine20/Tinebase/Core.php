@@ -623,8 +623,7 @@ class Tinebase_Core
         try {
             Zend_Session::start();
         } catch (Zend_Session_Exception $zse) {
-            $errorMessage = $zse->getMessage();
-            self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $errorMessage);
+            self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $zse->getMessage());
             self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getTraceAsString());
             throw $zse;
         }
