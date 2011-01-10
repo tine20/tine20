@@ -35,6 +35,7 @@ class Addressbook_AllTests
         $suite->addTestSuite('Addressbook_PdfTest');
         $suite->addTestSuite('Addressbook_JsonTest');
         $suite->addTestSuite('Addressbook_CliTest');
+        $suite->addTestSuite('Addressbook_Model_ContactIdFilterTest');
         return $suite;
     }
 }
