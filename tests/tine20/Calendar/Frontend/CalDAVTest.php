@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Frontend_WebDavTest::main');
-}
-
 /**
  * Test class for Filemanager_Frontend_Tree
  * 
@@ -35,7 +31,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
      *
      * @var Tinebase_WebDav_Tree
      */
-    protected $_webdavTree;
+    protected $_CalDAVTree;
     
     /**
      * Runs the test methods of this class.
@@ -45,7 +41,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 webdav tree tests');
+		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 CalDAV tree tests');
         PHPUnit_TextUI_TestRunner::run($suite);
 	}
 
@@ -57,7 +53,7 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_webdavTree = new Tinebase_WebDav_Tree('/');
+        $this->_CalDAVTree = new Calendar_Frontend_CalDAV('caldav');
         
         $this->objects['nodes'] = array();
         
@@ -76,86 +72,35 @@ class Calendar_Frontend_CalDAVTest extends PHPUnit_Framework_TestCase
         } 
     }
     
-    public function testgetNodeForPath()
+    public function testDAVNode()
     {
-        $node = $this->_webdavTree->getNodeForPath(null);
+        $children = $this->_CalDAVTree->getChildren();
         
-        $this->assertType('Tinebase_WebDav_Root', $node);
-        
-        $children = $node->getChildren();
-        
-        $this->assertEquals('dav', $children[0]->getName());
-        
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
-        
-        $node->delete();
+        $this->assertEquals(2, count($children));
     }
     
-    public function testgetNodeForPath_dav()
+    public function testGetNodeForPath_calendars()
     {
-        
-        $node = $this->_webdavTree->getNodeForPath('dav');
-        
-        $this->assertType('Tinebase_WebDav_Root', $node);
-        $this->assertEquals('dav', $node->getName());
-        
-        $children = $node->getChildren();
-        
-        $this->assertType('Sabre_DAV_ICollection', $children[0]);
-        
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
-        
-        $node->delete();
-    }
-    
-    public function testgetNodeForPath_dav_calendar()
-    {
-        $node = $this->_webdavTree->getNodeForPath('dav/calendar');
-        
-        $this->assertType('Calendar_Frontend_WebDav', $node);
-        $this->assertEquals('calendar', $node->getName());
-        
-        $children = $node->getChildren();
-        
-        #$this->assertEquals(2, count($children));
-        #$this->assertType('Calendar_Frontend_WebDav', $children[0]);
-        
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
-        
-        $node->delete();
-    }
-    
-    public function testgetNodeForPath_dav_calendar_principals()
-    {
-        $node = $this->_webdavTree->getNodeForPath('dav/calendar/principals');
-        
-        $this->assertType('Sabre_DAV_Auth_PrincipalCollection', $node);
-        $this->assertEquals('principals', $node->getName());
-        
-        $children = $node->getChildren();
-        
-        #var_dump($children);
-        
-        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
-        
-        $node->delete();
-    }
-        
-    public function testgetNodeForPath_dav_calendar_calendars()
-    {
-        $node = $this->_webdavTree->getNodeForPath('dav/calendar/calendars');
+        $node = $this->_CalDAVTree->getChild('calendars');
         
         $this->assertType('Sabre_CalDAV_CalendarRootNode', $node);
-        $this->assertEquals('calendars', $node->getName());
-        
-        $children = $node->getChildren();
-        
-        #var_dump($children);
         
         $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
         
         $node->delete();
-    }    
+    }
+    
+    public function testGetNodeForPath_principals()
+    {
+        $node = $this->_CalDAVTree->getChild('principals');
+        
+        $this->assertType('Sabre_DAV_Auth_PrincipalCollection', $node);
+        
+        $this->setExpectedException('Sabre_DAV_Exception_Forbidden');
+        
+        $node->delete();
+    }
+   
 }		
 	
 
