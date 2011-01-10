@@ -106,7 +106,12 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
         
         foreach($result as $idx => $recordArray) {
             $recordIdx = $_records->getIndexById($recordArray['id']);
-            $result[$idx]['filters'] = $_records[$recordIdx]->filters->toArray(TRUE);
+            try {
+                $result[$idx]['filters'] = $_records[$recordIdx]->filters->toArray(TRUE);
+            } catch (Exception $e) {
+                // skip filter
+                unset ($result[$idx]);
+            }
         }
         
         return $result;
