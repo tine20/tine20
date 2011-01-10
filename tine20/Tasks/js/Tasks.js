@@ -4,7 +4,7 @@
  * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-201 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -23,13 +23,7 @@ Tine.Tasks.TreePanel = function(config) {
     this.filterMode = 'filterToolbar';
     Tine.Tasks.TreePanel.superclass.constructor.call(this);
 };
-
-Ext.extend(Tine.Tasks.TreePanel , Tine.widgets.container.TreePanel, {
-    getAddContainer: function() {
-        var container = Tine.Tasks.registry.get('defaultContainer');
-        return this.getSelectedContainer('addGrant', container);
-    },
-    
+Ext.extend(Tine.Tasks.TreePanel, Tine.widgets.container.TreePanel, {
     afterRender: function() {
         this.supr().afterRender.apply(this, arguments);
         //this.selectContainerPath(Tine.Tinebase.container.getMyNodePath());
@@ -40,7 +34,6 @@ Tine.Tasks.FilterPanel = function(config) {
     Ext.apply(this, config);
     Tine.Tasks.FilterPanel.superclass.constructor.call(this);
 };
-
 Ext.extend(Tine.Tasks.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
     filter: [{field: 'model', operator: 'equals', value: 'Tasks_Model_TaskFilter'}]
 });
@@ -119,7 +112,7 @@ Tine.Tasks.Task.getDefaultData = function() {
         'class': 'PUBLIC',
         percent: 0,
         organizer: Tine.Tinebase.registry.get('currentAccount'),
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getAddContainer()
+        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainerForNewRecords()
     };
 };
 
