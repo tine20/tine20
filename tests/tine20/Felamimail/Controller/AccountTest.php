@@ -4,7 +4,7 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  * 
@@ -129,6 +129,26 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         Tinebase_Event::fireEvent($event);
     }
 
+    /**
+     * check if default account pref is set
+     */
+    public function testDefaultAccountPreference()
+    {
+        $this->assertEquals($this->_account->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT});
+        
+        $userAccount = clone($this->_account);
+        unset($userAccount->id);
+        $userAccount->type = Felamimail_Model_Account::TYPE_USER;
+        $userAccount = $this->_controller->create($userAccount);
+        $this->_accountsToDelete[] = $userAccount;
+
+        // deleting original account and check if user account is new default account
+        $this->_controller->delete($this->_account->getId());
+        $this->assertEquals($userAccount->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT});
+        
+        $userAccount = $this->_controller->create($this->_account);
+    }
+    
     /**
      * test account capabilities
      */
