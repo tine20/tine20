@@ -787,6 +787,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testUnparseableMail
+     */
+    public function testUnparseableMail()
+    {
+        $cachedMessage = $this->messageTestHelper('unparseable.eml', 'multipart/unparseable');
+        $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertContains('NIL', $completeMessage->body);
+    }
+    
+    /**
      * test move to another account
      */
     public function testMoveMessageToAnotherAccount()
