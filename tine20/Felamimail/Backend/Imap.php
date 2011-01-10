@@ -6,7 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -480,20 +480,22 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * parse message structure
      * 
-     * Enter description here ...
-     * @param unknown_type $_structure
-     * @param unknown_type $_partId
+     * @param array $_structure
+     * @param integer $_partId
+     * @return array structure
      */
     public function parseStructure($_structure, $_partId = null)
     {
-        if(is_array($_structure[0])) {
-            $structure = $this->_parseStructureMultiPart($_structure, $_partId);
-        } else {
-            $structure = $this->_parseStructureNonMultiPart($_structure, $_partId);
+        try {
+            $structure = $this->_parsePartStructure($_structure, $_partId);
+        } catch (Felamimail_Exception_IMAP $fei) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not parse structure. Assuming text/plain default structure.');
+            $structure = $this->_getBasicNonMultipartStructure($_partId);
         }
         
-        if($structure['partId'] === null && empty($structure['parts'])) {
+        if ($structure['partId'] === null && empty($structure['parts'])) {
             $structure['partId'] = 1;
         }
         
@@ -501,10 +503,55 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
     }
     
     /**
+     * returns basic non multipart message structure
      * 
-     * Enter description here ...
-     * @param unknown_type $_structure
-     * @param unknown_type $_partId
+     * @param integer $_partId
+     * @return array
+     */
+    protected function _getBasicNonMultipartStructure($_partId)
+    {
+        $structure = array(
+            'partId'      => $_partId,
+            'contentType' => Felamimail_Model_Message::CONTENT_TYPE_PLAIN,
+            'type'        => 'text',
+            'subType'     => 'plain',
+            'parameters'  => array(),
+            'id'          => null,
+            'description' => null,
+            'encoding'    => null,
+            'size'        => null,
+            'lines'       => null,
+            'disposition' => null,
+            'language'    => null,
+            'location'    => null
+        );
+        
+        return $structure;
+    }
+    
+    /**
+     * parse message part structure (this is called recursivly by _parseStructureMultiPart() and  _parseStructureNonMultiPart())
+     * 
+     * @param array $_structure
+     * @param integer $_partId
+     * @return array structure
+     */
+    protected function _parsePartStructure($_structure, $_partId)
+    {
+        if (is_array($_structure[0])) {
+            $structure = $this->_parseStructureMultiPart($_structure, $_partId);
+        } else {
+            $structure = $this->_parseStructureNonMultiPart($_structure, $_partId);
+        }
+        
+        return $structure;
+    }
+    
+    /**
+     * parse multipart message structure
+     * 
+     * @param array $_structure
+     * @param integer $_partId
      */
     protected function _parseStructureMultiPart($_structure, $_partId)
     {
@@ -530,8 +577,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $index++;
             
             $partId = ($_partId === null) ? $index : $_partId . '.' . $index;
-            $structure['parts'][$partId] = $this->parseStructure($part, $partId);
-            
+            $structure['parts'][$partId] = $this->_parsePartStructure($part, $partId);
         }
 
         // content type
@@ -547,7 +593,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             $parameters = array();
             for($i=0; $i<count($_structure[$index]); $i++) {
                 $key   = strtolower($_structure[$index][$i]);
-                #$value = strtolower($_structure[$index][++$i]);
                 $value = $_structure[$index][++$i];
                 $parameters[$key] = $this->_mimeDecodeHeader($value);
             }
@@ -563,7 +608,6 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
                 $parameters = array();
                 for($i=0; $i<count($_structure[$index][1]); $i++) {
                     $key   = strtolower($_structure[$index][1][$i]);
-                    #$value = strtolower($_structure[$index][1][++$i]);
                     $value = $_structure[$index][1][++$i];
                     $parameters[$key] = $this->_mimeDecodeHeader($value);
                 }
@@ -596,26 +640,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
      */
     protected function _parseStructureNonMultiPart($_structure, $_partId)
     {
-        $structure = array(
-            'partId'      => $_partId,
-            'contentType' => null,
-            'type'        => null,
-            'subType'     => null,
-            'parameters'  => array(),
-            'id'          => null,
-            'description' => null,
-            'encoding'    => null,
-            'size'        => null,
-            'lines'       => null,
-            'disposition' => null,
-            'language'    => null,
-            'location'    => null
-        );
-        
         if (is_array($_structure[0]) || is_array($_structure[1])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
             throw new Felamimail_Exception_IMAP('Invalid structure. String expected, got array.');
         }
+        
+        $structure = $this->_getBasicNonMultipartStructure($_partId);
         
         /** basic fields begin **/
         
@@ -662,7 +692,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         if($type == 'message' && $subType == 'rfc822') {
             $structure['messageEnvelop'] = $_structure[7];
-            $structure['messageStructure'] = $this->parseStructure($_structure[8], $_partId);
+            $structure['messageStructure'] = $this->_parsePartStructure($_structure[8], $_partId);
             $structure['messageLines'] = $_structure[9];
             
             // index of the first element containing extension data 
