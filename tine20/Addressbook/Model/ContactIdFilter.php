@@ -53,19 +53,34 @@ class Addressbook_Model_ContactIdFilter extends Tinebase_Model_Filter_Id
         if ($_valueToJson) {
             if (is_array($result['value'])) {
                 foreach ($result['value'] as $key => $value) {
-                    if ($value === Addressbook_Model_Contact::CURRENTCONTACT) {
-                        $value = Tinebase_Core::getUser()->contact_id;
-                    }
-                    $result['value'][$key] = Addressbook_Controller_Contact::getInstance()->get($value)->toArray();
+                    $result['value'][$key] = $this->_resolveContact($value);
                 }
             } else {
-                if ($result['value'] === Addressbook_Model_Contact::CURRENTCONTACT) {
-                    $result['value'] = Tinebase_Core::getUser()->contact_id;
-                }
-                $result['value'] = Addressbook_Controller_Contact::getInstance()->get($result['value'])->toArray();
+                $result['value'] = $this->_resolveContact($result['value']);
             }
         }
         
         return $result;
+    }
+    
+    /**
+     * resolves a contact
+     * 
+     * @param string $value
+     * @return array
+     */
+    protected function _resolveContact($value)
+    {
+            if ($value === Addressbook_Model_Contact::CURRENTCONTACT) {
+                $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId(Tinebase_Core::getUser()->getId(), TRUE)->toArray();
+            } else {
+                try {
+                    $contact = Addressbook_Controller_Contact::getInstance()->get($value)->toArray();
+                } catch (Exception $e) {
+                    $contact = $value;
+                }
+            }
+            
+            return $contact;
     }
 }
