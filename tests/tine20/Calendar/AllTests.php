@@ -46,6 +46,7 @@ class Calendar_AllTests
         $suite->addTestSuite('Calendar_Import_ICalTest');
         $suite->addTestSuite('Calendar_Export_ICalTest');
         $suite->addTestSuite('Calendar_Frontend_CalDAVTest');
+        $suite->addTestSuite('Calendar_Frontend_CalDAV_BackendTest');
         return $suite;
     }
 }
