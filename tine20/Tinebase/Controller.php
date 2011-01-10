@@ -185,7 +185,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
         
         Zend_Session::regenerateId();
         
-        Tinebase_Core::getSession()->currentAccount = $user;
+        Tinebase_Core::getSession()->currentAccount = $_user;
     }
     
     /**
