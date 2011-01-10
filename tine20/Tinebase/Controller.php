@@ -70,6 +70,8 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
      * @param   string $_clientIdString
      * @return  bool
      * @throws  Tinebase_Exception_NotFound
+     * 
+     * @todo split this function in smaller parts!
      */
     public function login($_loginname, $_password, $_ipAddress, $_clientIdString = NULL)
     {
@@ -123,16 +125,9 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
         }
         
         if ($accessLog->result === Tinebase_Auth::SUCCESS && $user->accountStatus === Tinebase_User::STATUS_ENABLED) {
-            Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
-            if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
-                Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
-            } else {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
-            }
-            Zend_Session::regenerateId();
+            $this->_initSessionAfterLogin($user);
             
             Tinebase_Core::set(Tinebase_Core::USER, $user);
-            Tinebase_Core::getSession()->currentAccount = $user;
             
             $credentialCache = Tinebase_Auth_CredentialCache::getInstance()->cacheCredentials($accountName, $_password);
             Tinebase_Core::set(Tinebase_Core::USERCREDENTIALCACHE, $credentialCache);
@@ -167,6 +162,30 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
         Tinebase_AccessLog::getInstance()->create($accessLog);
         
         return $result;
+    }
+    
+    /**
+     * init session after successful login
+     * 
+     * @param Tinebase_Model_FullUser $_user
+     */
+    protected function _initSessionAfterLogin(Tinebase_Model_FullUser $_user)
+    {
+        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONUSERAGENTVALIDATION, NULL, TRUE)->value) {
+            Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
+        } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
+        }
+        
+        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
+            Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
+        } else {
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');
+        }
+        
+        Zend_Session::regenerateId();
+        
+        Tinebase_Core::getSession()->currentAccount = $user;
     }
     
     /**
