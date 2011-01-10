@@ -135,19 +135,30 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
         
         if(empty($localPart)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " invalid id: $id supplied");
-            return $false;
+            return false;
         }
                 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
-        
+
+        // try to get user by openid
         try {
             Tinebase_User::getInstance()->getUserByProperty(Tinebase_User_Abstract::PROPERTY_OPENID, $localPart);
-        } catch(Tinebase_Exception_NotFound $e) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " OpenID: $id not found");
-            return false;
+            return true;
+        } catch(Tinebase_Exception_NotFound $tenf) {
+            // do nothing
         }
         
-        return true;
+        // try to get user by login name
+        try {
+            Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $localPart);
+            return true;
+        } catch(Tinebase_Exception_NotFound $tenf) {
+            // do nothing
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " OpenID: $id not found");
+        
+        return false;
     }
     
     /**
@@ -165,12 +176,12 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
         
         if(empty($localPart)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " invalid id: $id supplied");
-            return $false;
+            return false;
         }
         
         if(empty($username)) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " \$username can not be empty");
-            return $false;
+            return false;
         }
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
@@ -187,7 +198,7 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
 
         $account = Tinebase_User::getInstance()->getUserByLoginName($username, 'Tinebase_Model_FullUser');
         
-        if($account->openid != $localPart) {
+        if(!empty($account->openid) && $account->openid != $localPart) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " localPart: $localPart does not match for authenticated account");
             return false;
         }
