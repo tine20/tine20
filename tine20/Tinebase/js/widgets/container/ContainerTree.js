@@ -239,7 +239,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             selection = typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
         if (Ext.isArray(selection) && selection.length > 0) {
-            container = this.getContainerFromSelection() || container;
+            container = this.getContainerFromSelection(selection, requiredGrant) || container;
         } 
         // postpone this as we don't get the whole container record here
 //        else if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
@@ -262,7 +262,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         Ext.each(selection, function(node) {
             if (node && Tine.Tinebase.container.pathIsContainer(node.attributes.container.path)) {
                 if (! requiredGrant || this.hasGrant(node, requiredGrant)) {
-                    container = node.attributes.container;
+                    result = node.attributes.container;
                     // take the first one
                     return false;
                 }
