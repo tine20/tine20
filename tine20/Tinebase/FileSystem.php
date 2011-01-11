@@ -249,11 +249,19 @@ class Tinebase_FileSystem
         return $node->hash;        
     }
     
+    /**
+     * return if path is directory
+     * 
+     * @param  string  $_path
+     * @return boolean
+     */
     public function isDir($_path)
     {
         try {
             $node = $this->stat($_path);
         } catch (Tinebase_Exception_InvalidArgument $teia) {
+            return false;
+        } catch (Tinebase_Exception_NotFound $tenf) {
             return false;
         }
         
