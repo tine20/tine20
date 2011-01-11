@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -91,7 +91,6 @@ Tine.Tinebase.ExceptionHandler = function() {
             args[i] = arguments[i];
         }
         
-        //var lines = ["The following JS error has occured:"];
         if (args[0] instanceof Error) { // Error object thrown in try...catch
             error.name        = args[0].name;
             error.message     = args[0].message;
@@ -107,6 +106,7 @@ Tine.Tinebase.ExceptionHandler = function() {
             error.message     = "An unknown JS error has occured.";
             error.description = 'The following information may be useful:' + "\n";
             for (var x = 0; x < args.length; x++) {
+                // TODO prevent "Uncaught TypeError: Converting circular structure to JSON"
                 error.description += (Ext.encode(args[x]) + "\n");
             }
         }
