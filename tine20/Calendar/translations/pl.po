@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-11 11:33+0100\n"
+"PO-Revision-Date: 2011-01-11 11:34+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -626,15 +626,15 @@ msgstr "Oczekują na odpowiedź"
 
 #: Setup/Initialize.php:49
 msgid "Events I have not yet responded to"
-msgstr "Zdarzenia pozostające bez mojej odpowiedzi"
+msgstr "Terminy pozostające bez mojej odpowiedzi"
 
 #: Setup/Initialize.php:64
 msgid "Declined events"
-msgstr "Zdarzenia odrzucone"
+msgstr "Terminy odrzucone"
 
 #: Setup/Initialize.php:65
 msgid "Events I have declined"
-msgstr "Zdarzenia, które odrzuciłem/-am"
+msgstr "Terminy, które odrzuciłem/-am"
 
 #: Setup/Initialize.php:78
 msgid "I'm organizer"
@@ -642,7 +642,7 @@ msgstr "Jestem organizatorem"
 
 #: Setup/Initialize.php:79
 msgid "Events I'm the organizer of"
-msgstr "Zdarzenia, które organizuję"
+msgstr "Terminy, które organizuję"
 
 #: Controller.php:104
 #, python-format
