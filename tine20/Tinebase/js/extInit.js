@@ -42,10 +42,11 @@ Ext.chart.Chart.CHART_URL = 'library/ExtJS/resources/charts.swf';
 /**
  * use native json implementation because we had problems with utf8 linebreaks (\u2028 for example)
  * @see http://www.tine20.org/bugtracker/view.php?id=3356
- * 
+ * @note IE is principally capable to use native json, but for *some reason* it's not working properly
+ *       so we don't use it for IE
  * @type Boolean
  */
-Ext.USE_NATIVE_JSON = true;
+Ext.USE_NATIVE_JSON = !Ext.isIE;
 
 /**
  * init ext quick tips
