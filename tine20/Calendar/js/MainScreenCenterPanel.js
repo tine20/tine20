@@ -400,10 +400,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                 this.deleteMethodWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                     title: this.app.i18n._('Delete Event'),
                     scope: this,
+                    height: 170,
                     options: [
                         {text: this.app.i18n._('Delete whole series'), name: 'all'},
                         {text: this.app.i18n._('Delete this and all future events'), name: 'future'},
-                        {text: this.app.i18n._('Delete this event only'), name: 'this'}
+                        {text: this.app.i18n._('Delete this event only'), name: 'this'},
+                        {text: this.app.i18n._('Delete nothing'), name: 'nothing'}
                     ],
                     handler: function (option) {
                         switch (option) 
