@@ -3,7 +3,7 @@
  * Tine 2.0 - http://www.tine20.org
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -29,12 +29,18 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     protected $_uit;
     
+    /**
+     * setUp
+     */
     public function setUp()
     {
         $this->tearDown();
         $this->_uit = new Tinebase_Frontend_Json_PersistentFilter();
     }
     
+    /**
+     * tearDown
+     */
     public function tearDown()
     {
         // purge
@@ -60,6 +66,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         return $savedFilterData;
     }
     
+    /**
+     * testGetSimpleFilter
+     */
     public function testGetSimpleFilter()
     {
         $exampleFilterData = self::getPersitentFilterData();
@@ -68,6 +77,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $this->_assertSavedFilterData($exampleFilterData, $loadedFilterData);
     }
     
+    /**
+     * testTimezoneConversion
+     */
     public function testTimezoneConversion()
     {
         $exampleFilterData = self::getPersitentFilterData();
@@ -84,6 +96,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $this->assertNotEquals($originalDueDateFilter['value'], $convertedDueDataFilter['value']);
     }
     
+    /**
+     * testSearchFilter
+     */
     public function testSearchFilter()
     {
         $exampleFilterData = self::getPersitentFilterData();
@@ -100,6 +115,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $this->_assertSavedFilterData($exampleFilterData, $searchResult['results'][0]);
     }
 
+    /**
+     * testSearchIncludesSharedFavorites
+     */
     public function testSearchIncludesSharedFavorites()
     {
         $sharedFavorite = self::getPersitentFilter();
@@ -128,6 +146,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $this->assertEquals(2, count(array_intersect($ids, array($persistentSharedFavirite->getId(), $savedFilterData['id']))));
     }
     
+    /**
+     * testInitialRegistry
+     */
     public function testInitialRegistry()
     {
         $exampleFilterData = self::getPersitentFilterData();
@@ -146,6 +167,9 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $this->assertEquals(1, count(array_intersect($ids, array($savedFilterData['id']))));
     }
     
+    /**
+     * testCreateFilterWithDeletedName
+     */
     public function testCreateFilterWithDeletedName()
     {
         $savedFilter = $this->testSaveFilter();
@@ -197,7 +221,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
     }
     
     /**
-     * returns data for an example persisten filter
+     * returns data for an example persistent filter
      * 
      * @return array
      */
@@ -219,7 +243,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
     }
     
     /**
-     * returns an example persisten filter
+     * returns an example persistent filter
      * 
      * @return Tinebase_Model_PersistentFilter
      */
@@ -243,9 +267,4 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
             }
         }
     }
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Frontend_Json_PersistentFilterTest::main') {
-    Tinebase_Frontend_Json_PersistentFilterTest::main();
 }
