@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Frontend_Json_PersistentFilterTest::main');
-}
-
 /**
  * Test class for Tinebase_Frontend_Json_PersistentFilter
  * 
@@ -58,8 +54,8 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     public function testSaveFilter($filterData = NULL)
     {
-        $exampleFilterData = $filterData ? $filterData : self::getPersitentFilterData();
-        $savedFilterData = $this->_uit->savePersistentFilter(self::getPersitentFilterData());
+        $exampleFilterData = $filterData ? $filterData : self::getPersistentFilterData();
+        $savedFilterData = $this->_uit->savePersistentFilter(self::getPersistentFilterData());
         
         $this->_assertSavedFilterData($exampleFilterData, $savedFilterData);
         
@@ -71,7 +67,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     public function testGetSimpleFilter()
     {
-        $exampleFilterData = self::getPersitentFilterData();
+        $exampleFilterData = self::getPersistentFilterData();
         $savedFilterData = $this->testSaveFilter($exampleFilterData);
         $loadedFilterData = $this->_uit->getPersistentFilter($savedFilterData['id']);
         $this->_assertSavedFilterData($exampleFilterData, $loadedFilterData);
@@ -82,7 +78,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     public function testTimezoneConversion()
     {
-        $exampleFilterData = self::getPersitentFilterData();
+        $exampleFilterData = self::getPersistentFilterData();
         $savedFilterData = $this->testSaveFilter($exampleFilterData);
         
         $testUserTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
@@ -101,7 +97,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     public function testSearchFilter()
     {
-        $exampleFilterData = self::getPersitentFilterData();
+        $exampleFilterData = self::getPersistentFilterData();
         $savedFilterData = $this->testSaveFilter($exampleFilterData);
         
         $filterData = array(
@@ -127,7 +123,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $backend = new Tinebase_PersistentFilter_Backend_Sql();
         $persistentSharedFavirite = $backend->create($sharedFavorite);
         
-        $exampleFilterData = self::getPersitentFilterData();
+        $exampleFilterData = self::getPersistentFilterData();
         $savedFilterData = $this->testSaveFilter($exampleFilterData);
         
         $filterData = array(
@@ -151,7 +147,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     public function testInitialRegistry()
     {
-        $exampleFilterData = self::getPersitentFilterData();
+        $exampleFilterData = self::getPersistentFilterData();
         $savedFilterData = $this->testSaveFilter($exampleFilterData);
         
         $tfj = new Tinebase_Frontend_Json();
@@ -175,10 +171,37 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         $savedFilter = $this->testSaveFilter();
         $this->_uit->deletePersistentFilters($savedFilter['id']);
         
-        // this failed with old db constrians, cause name was used with is_deleted
+        // this failed with old db constraints, cause name was used with is_deleted
         $this->testSaveFilter();
     }
 
+    /**
+     * testCheckSameFilterNameInDifferentApplications
+     */
+    public function testCheckSameFilterNameInDifferentApplications()
+    {
+        $savedFilter1 = $this->testSaveFilter();
+        
+        $filterData2 = self::getPersistentFilterData();
+        $filterData2['application_id'] = Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId();
+        $filterData2['model'] = 'Addressbook_Model_ContactFilter';
+        $filterData2['filters'] = array(
+            array('field' => 'query',        'operator' => 'contains',  'value' => 'test')
+        );
+        $savedFilter2 = $this->_uit->savePersistentFilter($filterData2);
+
+        foreach (array('model', 'filters', 'application_id') as $fieldToTest) {
+            $this->assertNotEquals($savedFilter1[$fieldToTest], $savedFilter2[$fieldToTest]);
+        }
+        $this->assertEquals($savedFilter1['name'], $savedFilter2['name']);
+        
+        $filter1 = Tinebase_PersistentFilter::getFilterById($savedFilter1['id']);
+        $filter2 = Tinebase_PersistentFilter::getFilterById($savedFilter2['id']);
+        
+        $this->assertEquals($savedFilter1['model'], get_class($filter1));
+        $this->assertEquals($savedFilter2['model'], get_class($filter2));
+    }
+    
     /**
      * assert saved filer matches expections for $this->_testFilterData
      * 
@@ -187,7 +210,6 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     protected function _assertSavedFilterData($expectedFilterData, $savedFilterData)
     {
-        
         $this->assertTrue(is_array($savedFilterData), 'saved filter should be an array');
         $this->assertEquals($expectedFilterData['name'],  $savedFilterData['name'], 'name does not match');
         
@@ -225,7 +247,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      * 
      * @return array
      */
-    public static function getPersitentFilterData()
+    public static function getPersistentFilterData()
     {
         return array(
             'name'              => 'PHPUnit testFilter',
@@ -249,7 +271,7 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
      */
     public static function getPersitentFilter()
     {
-        return new Tinebase_Model_PersistentFilter(self::getPersitentFilterData());
+        return new Tinebase_Model_PersistentFilter(self::getPersistentFilterData());
     }
     
     /**
