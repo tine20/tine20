@@ -34,23 +34,6 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
     initComponent: function() {
         this.store = this.getCountryStore();
         Tine.widgets.CountryCombo.superclass.initComponent.call(this);
-        
-        this.on('focus', function(searchField){
-            // initial load
-            if (this.getCountryStore().getCount() == 0) {
-                searchField.hasFocus = false;
-                this.getCountryStore().load({
-                    scope: this,
-                    callback: function() {
-                        searchField.hasFocus = true;
-                    }
-                });
-            }
-        }, this);
-        
-        this.on('select', function(searchField){
-            searchField.selectText();
-        },this);
     },
     /**
      * @private store has static content
@@ -73,9 +56,7 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
             });
             Ext.StoreMgr.add('Countries', store);
         }
-        //if (Tine.Tinebase.registry.get('CountryList')) {
-        //    store.loadData(Tine.Tinebase.registry.get('CountryList'));
-        //}
+        
         var countryList = Locale.getTranslationList('CountryList');
         if (countryList) {
             var storeData = {results: []};
@@ -85,23 +66,6 @@ Tine.widgets.CountryCombo = Ext.extend(Ext.form.ComboBox, {
             store.loadData(storeData);
         }
         return store;
-    },
-    /**
-     * @private
-     * expand after store load, as this is omited by the initial load hack
-     */
-    onTriggerClick: function(){
-        if (this.getCountryStore().getCount() == 0) {
-            this.getCountryStore().load({
-                scope: this,
-                callback: function() {
-                    Tine.widgets.CountryCombo.superclass.onTriggerClick.call(this);
-                }
-            });
-        } else {
-            Tine.widgets.CountryCombo.superclass.onTriggerClick.call(this);
-        }
-        
     }
 });
 
