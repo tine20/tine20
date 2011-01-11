@@ -72,10 +72,11 @@ Tine.Felamimail.sieve.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterT
  */
 Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel = function(app) {
     return [
-        {label: app.i18n._('From'),     field: 'from',     operators: ['contains']},
-        {label: app.i18n._('To'),       field: 'to',       operators: ['contains']},
-        {label: app.i18n._('Subject'),  field: 'subject',  operators: ['contains']},
+        {label: app.i18n._('From'),     field: 'from',     operators: ['contains'], emptyText: 'test@example.org'},
+        {label: app.i18n._('To'),       field: 'to',       operators: ['contains'], emptyText: 'test@example.org'},
+        {label: app.i18n._('Subject'),  field: 'subject',  operators: ['contains'], emptyText: app.i18n._('Subject')},
         {label: app.i18n._('Size'),     field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'},
-        {label: app.i18n._('Header contains'),   field: 'header',   operators: ['freeform'], defaultOperator: 'freeform', emptyText: app.i18n._('Header name')}
+        {label: app.i18n._('Header contains'),   field: 'header',   operators: ['freeform'], defaultOperator: 'freeform', 
+            emptyTextOperator: app.i18n._('Header name'), emptyText: app.i18n._('Header value')}
     ];
 };

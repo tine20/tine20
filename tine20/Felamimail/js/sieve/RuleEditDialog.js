@@ -292,12 +292,13 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                             account: this.account
                         }]
                     }, {
-                        // TODO add email validator
+                        // TODO add email validator?
                         id: this.idPrefix + 'redirect',
                         layout: 'form',
                         items: [{
                             name: 'action_argument_redirect',
                             xtype: 'textfield',
+                            emptyText: 'test@example.org',
                             width: 200,
                             hideLabel: true
                         }]

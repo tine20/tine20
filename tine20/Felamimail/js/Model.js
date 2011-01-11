@@ -673,21 +673,18 @@ Tine.Felamimail.Model.Rule = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
  * get default data for rules
  * 
  * @return {Object}
- * 
- * TODO remove some defaults
  */
 Tine.Felamimail.Model.Rule.getDefaultData = function() { 
     return {
         enabled: true,
-        // remove these default later
         conditions: [{
             test: 'address',
             header: 'from',
             comperator: 'contains',
-            key: 'test@example.org'
+            key: ''
         }],
         action_type: 'fileinto',
-        action_argument: 'Junk'
+        action_argument: ''
     };
 };
 
