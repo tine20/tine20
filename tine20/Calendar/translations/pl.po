@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-11 11:34+0100\n"
+"PO-Revision-Date: 2011-01-11 23:24+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -83,7 +83,7 @@ msgstr "klasyfikowanie prywatnych"
 
 #: js/EventUI.js:228
 msgid "recurring event"
-msgstr "zdarzenie wielokrotne"
+msgstr "termin wielokrotny"
 
 #: js/EventUI.js:235
 msgid "has alarm"
@@ -201,30 +201,34 @@ msgstr "Czy na pewno chcesz usunąć wszystkie terminy z serii terminów okresow
 msgid "Delete Event"
 msgstr "Usuń termin"
 
-#: js/MainScreenCenterPanel.js:404
+#: js/MainScreenCenterPanel.js:405
 msgid "Delete whole series"
 msgstr "Usuń całą serię terminów"
 
-#: js/MainScreenCenterPanel.js:405
+#: js/MainScreenCenterPanel.js:406
 msgid "Delete this and all future events"
 msgstr "Usuń ten oraz wszystkie przyszłe terminy"
 
-#: js/MainScreenCenterPanel.js:406
+#: js/MainScreenCenterPanel.js:407
 msgid "Delete this event only"
 msgstr "Usuń tylko ten jeden termin"
 
-#: js/MainScreenCenterPanel.js:455
+#: js/MainScreenCenterPanel.js:408
+msgid "Delete nothing"
+msgstr "Nie usuwaj niczego"
+
+#: js/MainScreenCenterPanel.js:457
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Czy na pewno chcesz usunąć ten termin?"
 msgstr[1] "Czy na pewno chcesz usunąć {0} zaznaczone terminy?"
 msgstr[2] "Czy na pewno chcesz usunąć {0} zaznaczonych terminów?"
 
-#: js/MainScreenCenterPanel.js:578
+#: js/MainScreenCenterPanel.js:580
 msgid "Could not Print"
 msgstr "Drukowanie nie jest możliwe"
 
-#: js/MainScreenCenterPanel.js:578
+#: js/MainScreenCenterPanel.js:580
 msgid "Sorry, your current view does not support printing."
 msgstr "Niestety, bieżący widok nie obsługuje drukowania."
 
@@ -770,9 +774,6 @@ msgstr "Otrzymywanie powiadomienia e-maila o własnych akcjach"
 
 #~ msgid "Do you want to delete the whole series, this and all future events of this series, or just this event"
 #~ msgstr "Czy chcesz usunąć całą serię terminów, tylko ten oraz wszystkie przyszłe terminy, czy tylko ten jeden termin?"
-
-#~ msgid "Delete nothing"
-#~ msgstr "Nie usuwaj niczego"
 
 #~ msgid "Every"
 #~ msgstr "Co"
