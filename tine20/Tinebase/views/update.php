@@ -22,6 +22,11 @@
 	<?php require 'Tinebase/views/includeJsAndCss.php'; ?>
 	
     <script type="text/javascript">
+    	Ext.namespace('Tine');
+    
+    	// indicate that Tine needs to be updates so we don't initialize Tine
+    	Tine.needUpdate = true;
+    
         Ext.onReady(function() {
         	Ext.namespace('Tine', 'Tine.Tinebase');
         	
