@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 Ext.ns('Tine.widgets.dialog');
@@ -75,6 +75,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * text of cancel button
      */
     cancelButtonText: '',
+    
+    /**
+     * @cfg {Boolean} copyRecord
+     * copy record
+     */
+    copyRecord: false,
 
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
@@ -259,16 +265,9 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * init record to edit
      */
     initRecord: function() {
-        // note: in local mode we expect a valid record
         if (this.mode !== 'local') {
             if (this.record && this.record.id) {
-                this.loadRequest = this.recordProxy.loadRecord(this.record, {
-                    scope: this,
-                    success: function(record) {
-                        this.record = record;
-                        this.onRecordLoad();
-                    }
-                });
+                this.loadRemoteRecord();
             } else {
                 if (! this.record) {
                     this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
@@ -276,11 +275,37 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 this.onRecordLoad();
             }
         } else {
+            // note: in local mode we expect a valid record
             if (! typeof this.record.beginEdit != 'function') {
                 this.record = this.recordProxy.recordReader({responseText: this.record});
             }
             this.onRecordLoad();
         }
+    },
+    
+    /**
+     * load record via record proxy
+     */
+    loadRemoteRecord: function() {
+        this.loadRequest = this.recordProxy.loadRecord(this.record, {
+            scope: this,
+            success: function(record) {
+                this.record = record;
+                this.onRecordLoad();
+            }
+        });
+    },
+
+    /**
+     * copy record
+     */
+    doCopyRecord: function() {
+        var omitFields = this.recordClass.getMeta('copyOmitFields') || [];
+        // always omit id
+        omitFields.push('id');
+        var fieldsToCopy = this.recordClass.getFieldNames().diff(omitFields),
+            recordData = Ext.copyTo({}, this.record.data, fieldsToCopy);
+        this.record = new this.recordClass(recordData, 0);
     },
     
     /**
@@ -292,11 +317,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-        
-        if (! this.record.id) {
-            this.window.setTitle(String.format(_('Add New {0}'), this.i18nRecordName));
+
+        if (this.copyRecord) {
+            this.doCopyRecord();
+            this.window.setTitle(String.format(_('Copy {0}'), this.i18nRecordName));
         } else {
-            this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
+            if (! this.record.id) {
+                this.window.setTitle(String.format(_('Add New {0}'), this.i18nRecordName));
+            } else {
+                this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
+            }
         }
         
         if (this.fireEvent('load', this) !== false) {
