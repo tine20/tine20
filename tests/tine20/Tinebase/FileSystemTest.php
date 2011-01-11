@@ -99,6 +99,9 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('PHPUNIT', $children));
     }
     
+    /**
+     * test for isDir with existing directory 
+     */
     public function testIsDir()
     {
         $this->testMkdir();
@@ -106,6 +109,16 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $result = $this->_controller->isDir($this->_basePath . '/PHPUNIT');
         
         $this->assertTrue($result);
+    }
+    
+    /**
+     * test for isDir with non existing directory
+     */
+    public function testIsDirNotExisting()
+    {
+        $result = $this->_controller->isDir($this->_basePath . '/PHPUNITNotExisting');
+        
+        $this->assertFalse($result);
     }
     
     public function testCreateFile()
