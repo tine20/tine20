@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  * 
@@ -71,11 +71,14 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
          
         // append query to select object
         foreach ((array)$this->_opSqlMap[$this->_operator]['sqlop'] as $num => $operator) {
-            if (get_parent_class($this) === 'Tinebase_Model_Filter_Date' || in_array($this->_operator, array('isnull', 'notnull'))) {
-                
-                $_select->where($field . $operator, $value[$num]);
+            if (array_key_exists($num, $value)) {
+                if (get_parent_class($this) === 'Tinebase_Model_Filter_Date' || in_array($this->_operator, array('isnull', 'notnull'))) {
+                    $_select->where($field . $operator, $value[$num]);
+                } else {
+                    $_select->where("DATE({$field})" . $operator, $value[$num]);
+                }
             } else {
-                $_select->where("DATE({$field})" . $operator, $value[$num]);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No filter value found, skipping operator: ' . $operator);
             }
         }
     }
@@ -86,9 +89,6 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
      * @param string $_operator
      * @param string $_value
      * @return array|string date value
-     * 
-     * @todo fix problem with day of week in 'this week' / 'in week #' filter (sunday is first day of the week in english locales) 
-     * --> get that info from locale
      */
     protected function _getDateValues($_operator, $_value)
     {
