@@ -236,6 +236,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                     focus: function (field) {
                                         if (! field.getValue()) {
                                             field.setValue('http://www.');
+                                            field.selectText.defer(100, field, [7, 11]);
                                         }
                                     },
                                     blur: function (field) {
