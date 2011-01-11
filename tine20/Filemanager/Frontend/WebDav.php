@@ -87,12 +87,19 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
             throw new Sabre_DAV_Exception_FileNotFound('The file with name: ' . $name . ' could not be found');
         }
     }
-    
+
+    /**
+     * get node for path
+     * 
+     * @return Sabre_DAV_INode
+     */
     public function getNodeForPath() 
     {
         if ($this->_container == null) {
             return new Filemanager_Frontend_WebDav($this->_path);
-        } elseif (Tinebase_FileSystem::getInstance()->isDir(substr($this->_fileSystemPath, 9))) {
+        }
+
+        if (Tinebase_FileSystem::getInstance()->isDir(substr($this->_fileSystemPath, 9))) {
             return new Filemanager_Frontend_WebDavDirectory($this->_path);
         } else {
             return new Filemanager_Frontend_WebDavFile($this->_path);
@@ -120,7 +127,7 @@ class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDavNode implem
      */
     public function createFile($name, $data = null) 
     {
-        throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename ' . $path . ')');
+        throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename ' . $name . ')');
     }
 
     /**
