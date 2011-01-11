@@ -96,7 +96,6 @@ class Filemanager_Frontend_WebDavDirectory extends Filemanager_Frontend_WebDavNo
         $path = $this->_fileSystemPath . '/' . $name;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' PATH: ' . $path);
-        #throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename ' . $path . ')');
 
         if (!$handle = fopen($path, 'x')) {
             throw new Sabre_DAV_Exception_Forbidden('Permission denied to create file (filename ' . $path . ')');
