@@ -347,6 +347,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     username: values.username,
                     password: values.password
                 },
+                timeout: 60000, // 1 minute
                 callback: function (request, httpStatus, response) {
                     var responseData = Ext.util.JSON.decode(response.responseText);
                     if (responseData.success === true) {
