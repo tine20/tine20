@@ -22,7 +22,7 @@ function checkout()
     echo -n "checkout files from svn url $1 to $TEMPDIR/tine20 ... "
     
     rm -rf $TEMPDIR/tine20
-    svn checkout --non-interactive --trust-server-cert $1 $TEMPDIR/tine20
+    svn checkout --quiet --non-interactive --trust-server-cert $1 $TEMPDIR/tine20
 
     if [ "$RELEASE" == "svn" ]; then
         RELEASE=$RELEASE-$(svn info $TEMPDIR/tine20 | grep Revision | cut -d " " -f 2)
