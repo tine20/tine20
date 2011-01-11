@@ -224,7 +224,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             var operator = new Ext.form.TextField({
                 filter: filter,
                 width: 100,
-                emptyText: this.emptyText || '',
+                emptyText: this.emptyTextOperator || '',
                 value: filter.get('operator') ? filter.get('operator') : '',
                 renderTo: el
             });
@@ -397,6 +397,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             case 'number':
             default:
                 value = new Ext.ux.form.ClearableTextField({
+                    emptyText: this.emptyText,
                     filter: filter,
                     width: fieldWidth,
                     id: 'tw-ftb-frow-valuefield-' + filter.id,
