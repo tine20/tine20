@@ -165,7 +165,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $result = $this->_backendConfig->search($filter, $pagination);
         
             if (count($result) > 0) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
                     . ' Got ' . count($result) . ' custom fields for app id ' . $applicationId
                     . print_r($result->toArray(), TRUE)
                 );
