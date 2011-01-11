@@ -145,7 +145,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
     /**
      * validate getSupportedFolders
      */
-    public function testGetFolders()
+    public function testGetSupportedFolders()
     {
         $controller = ActiveSync_Controller::dataFactory(ActiveSync_Controller::CLASS_EMAIL, $this->_getDevice(ActiveSync_Backend_Device::TYPE_IPHONE), new Tinebase_DateTime(null, null, 'de_DE'));
         
