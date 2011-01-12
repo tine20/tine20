@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-07 14:12+0100\n"
+"PO-Revision-Date: 2011-01-12 10:29+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -143,8 +143,8 @@ msgid "Add Account"
 msgstr "Konto hinzufügen"
 
 #: js/GridPanel.js:276
-#: js/GridPanel.js:1040
-#: js/GridPanel.js:1056
+#: js/GridPanel.js:1046
+#: js/GridPanel.js:1062
 #: js/MessageDisplayDialog.js:80
 msgid "Print Preview"
 msgstr "Druck Vorschau"
@@ -154,22 +154,22 @@ msgstr "Druck Vorschau"
 msgid "Print Message"
 msgstr "Nachricht drucken"
 
-#: js/GridPanel.js:416
+#: js/GridPanel.js:417
 msgid "Id"
 msgstr "Id"
 
-#: js/GridPanel.js:423
+#: js/GridPanel.js:424
 #: js/GridDetailsPanel.js:231
 #: js/MessageEditDialog.js:621
 msgid "Attachments"
 msgstr "Anhänge"
 
-#: js/GridPanel.js:430
+#: js/GridPanel.js:431
 #: js/Model.js:141
 msgid "Flags"
 msgstr "Flags"
 
-#: js/GridPanel.js:437
+#: js/GridPanel.js:438
 #: js/GridDetailsPanel.js:137
 #: js/sieve/RuleConditionsPanel.js:77
 #: js/Model.js:135
@@ -178,41 +178,41 @@ msgstr "Flags"
 msgid "Subject"
 msgstr "Betreff"
 
-#: js/GridPanel.js:443
+#: js/GridPanel.js:444
 #: js/Model.js:136
 msgid "From (Email)"
 msgstr "Von (Email)"
 
-#: js/GridPanel.js:449
+#: js/GridPanel.js:450
 #: js/Model.js:137
 msgid "From (Name)"
 msgstr "Von (Name)"
 
-#: js/GridPanel.js:455
+#: js/GridPanel.js:456
 msgid "Sender"
 msgstr "Absender"
 
-#: js/GridPanel.js:462
+#: js/GridPanel.js:463
 #: js/sieve/RuleConditionsPanel.js:76
 #: js/Model.js:138
 msgid "To"
 msgstr "An"
 
-#: js/GridPanel.js:469
+#: js/GridPanel.js:470
 #: js/Model.js:480
 msgid "Sent"
 msgstr "Gesendet"
 
-#: js/GridPanel.js:477
+#: js/GridPanel.js:478
 #: js/Model.js:144
 msgid "Received"
 msgstr "Empfangen"
 
-#: js/GridPanel.js:484
-#: js/TreeContextMenu.js:88
+#: js/GridPanel.js:485
 #: js/TreeContextMenu.js:91
 #: js/TreeContextMenu.js:94
-#: js/TreeContextMenu.js:185
+#: js/TreeContextMenu.js:97
+#: js/TreeContextMenu.js:188
 #: js/FolderFilterModel.js:32
 #: js/Model.js:53
 #: js/Model.js:486
@@ -221,21 +221,21 @@ msgid_plural "Folders"
 msgstr[0] "Ordner"
 msgstr[1] "Ordner"
 
-#: js/GridPanel.js:492
+#: js/GridPanel.js:493
 #: js/sieve/RuleConditionsPanel.js:78
 msgid "Size"
 msgstr "Größe"
 
-#: js/GridPanel.js:532
+#: js/GridPanel.js:533
 #: Controller/Message.php:36
 msgid "Answered"
 msgstr "Beantwortet"
 
-#: js/GridPanel.js:535
+#: js/GridPanel.js:536
 msgid "Forwarded"
 msgstr "Weitergeleitet"
 
-#: js/GridPanel.js:538
+#: js/GridPanel.js:539
 msgid "Recent"
 msgstr "Neu"
 
@@ -293,55 +293,55 @@ msgstr[1] "Nachrichten"
 msgid "Empty Folder"
 msgstr "Ordner leeren"
 
-#: js/TreeContextMenu.js:83
+#: js/TreeContextMenu.js:86
 msgid "Add Folder"
 msgstr "Ordner hinzufügen"
 
-#: js/TreeContextMenu.js:88
+#: js/TreeContextMenu.js:91
 msgid "New {0}"
 msgstr "Neuer {0}"
 
-#: js/TreeContextMenu.js:88
+#: js/TreeContextMenu.js:91
 msgid "Please enter the name of the new {0}:"
 msgstr "Bitte tragen Sie einen Namen für den neuen {0} ein:"
 
-#: js/TreeContextMenu.js:91
+#: js/TreeContextMenu.js:94
 msgid "No {0} added"
 msgstr "Kein {0} hinzugefügt"
 
-#: js/TreeContextMenu.js:91
+#: js/TreeContextMenu.js:94
 msgid "You have to supply a {0} name!"
 msgstr "Sie müssen einen {0} Namen eingeben!"
 
-#: js/TreeContextMenu.js:94
+#: js/TreeContextMenu.js:97
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/TreeContextMenu.js:94
+#: js/TreeContextMenu.js:97
 msgid "Creating {0}..."
 msgstr "Erzeuge {0} ..."
 
-#: js/TreeContextMenu.js:123
+#: js/TreeContextMenu.js:126
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
-#: js/TreeContextMenu.js:151
+#: js/TreeContextMenu.js:154
 msgid "Set Vacation Message"
 msgstr "Abwesenheitsnotiz setzen"
 
-#: js/TreeContextMenu.js:167
+#: js/TreeContextMenu.js:170
 msgid "Set Filter Rules"
 msgstr "Filterregeln definieren"
 
-#: js/TreeContextMenu.js:185
+#: js/TreeContextMenu.js:188
 msgid "Reload {0}"
 msgstr "Aktualisiere {0}"
 
-#: js/TreeContextMenu.js:198
+#: js/TreeContextMenu.js:201
 msgid "Mark Folder as read"
 msgstr "Ordner als gelesen markieren"
 
-#: js/TreeContextMenu.js:229
+#: js/TreeContextMenu.js:233
 msgid "Update Folder List"
 msgstr "Ordnerliste aktualisieren"
 
@@ -353,19 +353,19 @@ msgstr "Ordnerliste aktualisieren"
 msgid "None"
 msgstr "Keine"
 
-#: js/ContactGrid.js:244
+#: js/ContactGrid.js:248
 msgid "Add as \"To\""
 msgstr "Als \"To\" hinzufügen"
 
-#: js/ContactGrid.js:255
+#: js/ContactGrid.js:259
 msgid "Add as \"Cc\""
 msgstr "Als \"Cc\" hinzufügen"
 
-#: js/ContactGrid.js:266
+#: js/ContactGrid.js:270
 msgid "Add as \"Bcc\""
 msgstr "Als \"Bcc\" hinzufügen"
 
-#: js/ContactGrid.js:277
+#: js/ContactGrid.js:281
 msgid "Remove from recipients"
 msgstr "Aus der Empfängerliste entfernen"
 
@@ -400,23 +400,23 @@ msgstr "(neue Nachricht)"
 msgid "Select recipients for \"{0}\""
 msgstr "Empfänger für \"{0}\" auswählen"
 
-#: js/TreePanel.js:596
+#: js/TreePanel.js:612
 msgid "Total Messages:"
 msgstr "Nachrichten insgesamt:"
 
-#: js/TreePanel.js:600
+#: js/TreePanel.js:616
 msgid "Unread Messages:"
 msgstr "Ungelesene Nachrichten:"
 
-#: js/TreePanel.js:604
+#: js/TreePanel.js:620
 msgid "Name on Server:"
 msgstr "Name auf dem Server:"
 
-#: js/TreePanel.js:608
+#: js/TreePanel.js:624
 msgid "Last update:"
 msgstr "Zuletzt aktualisiert:"
 
-#: js/TreePanel.js:628
+#: js/TreePanel.js:644
 #, python-format
 msgid "Fetching messages... ({0}% done)"
 msgstr "Nachrichten abholen... ({0}% erledigt)"
@@ -425,56 +425,56 @@ msgstr "Nachrichten abholen... ({0}% erledigt)"
 msgid "Email"
 msgstr "Email"
 
-#: js/Felamimail.js:105
+#: js/Felamimail.js:103
 msgid "Active Vacation Message"
 msgstr "Aktive Abwesenheitsbenachrichtigung"
 
-#: js/Felamimail.js:106
+#: js/Felamimail.js:104
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Emailkonto {0} hat eine aktive Abwesenheitsbenachrichtigung"
 
-#: js/Felamimail.js:390
+#: js/Felamimail.js:387
 msgid "New mails"
 msgstr "Neue Emails"
 
-#: js/Felamimail.js:391
+#: js/Felamimail.js:388
 msgid "You got {0} new mail(s) in Folder {1}."
 msgstr "Sie haben {0} neue Nachricht(en) im Ordner {1}."
 
-#: js/Felamimail.js:426
+#: js/Felamimail.js:423
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Zugangsdaten für {0}"
 
-#: js/Felamimail.js:429
+#: js/Felamimail.js:426
 msgid "Credentials"
 msgstr "Zugangsdaten"
 
-#: js/Felamimail.js:605
-#: js/Felamimail.js:628
+#: js/Felamimail.js:602
+#: js/Felamimail.js:625
 msgid "IMAP Error"
 msgstr "IMAP Fehler"
 
-#: js/Felamimail.js:606
+#: js/Felamimail.js:603
 msgid "No connection to IMAP server."
 msgstr "Keine Verbindung zum IMAP Server"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:626
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr "Ein Ordner wurde von einem anderen Klienten gelöscht. Bitte aktualisieren Sie Ihren Browser."
 
-#: js/Felamimail.js:644
+#: js/Felamimail.js:641
 msgid "SMTP Error"
 msgstr "SMTP Fehler"
 
-#: js/Felamimail.js:645
+#: js/Felamimail.js:642
 msgid "No connection to SMTP server."
 msgstr "Keine Verbindung zum SMTP Server"
 
-#: js/Felamimail.js:653
+#: js/Felamimail.js:650
 msgid "Sieve Error"
 msgstr "Sieve Fehler"
 
-#: js/Felamimail.js:654
+#: js/Felamimail.js:651
 msgid "No connection to Sieve server."
 msgstr "Keine Verbindung zum Sieve Server."
 
@@ -522,9 +522,13 @@ msgstr "Header \"{0}\" enthält \"{1}\""
 msgid "Header contains"
 msgstr "Header enthält"
 
-#: js/sieve/RuleConditionsPanel.js:79
+#: js/sieve/RuleConditionsPanel.js:80
 msgid "Header name"
 msgstr "Headername"
+
+#: js/sieve/RuleConditionsPanel.js:80
+msgid "Header value"
+msgstr "Headerinhalt"
 
 #: js/sieve/RuleEditDialog.js:98
 msgid "Edit Filter Rule"
@@ -538,23 +542,23 @@ msgstr "Wenn alle Bedingungen erfüllt sind:"
 msgid "Do this action:"
 msgstr "Führe diese Aktion aus:"
 
-#: js/sieve/RuleEditDialog.js:350
+#: js/sieve/RuleEditDialog.js:351
 msgid "Move mail to folder"
 msgstr "Email in Ordner verschieben"
 
-#: js/sieve/RuleEditDialog.js:351
+#: js/sieve/RuleEditDialog.js:352
 msgid "Redirect mail to address"
 msgstr "Email an folgende Adresse weiterleiten"
 
-#: js/sieve/RuleEditDialog.js:352
+#: js/sieve/RuleEditDialog.js:353
 msgid "Reject mail with this text"
 msgstr "Email mit folgendem Text ablehnen"
 
-#: js/sieve/RuleEditDialog.js:353
+#: js/sieve/RuleEditDialog.js:354
 msgid "Discard mail"
 msgstr "Email verwerfen"
 
-#: js/sieve/RuleEditDialog.js:354
+#: js/sieve/RuleEditDialog.js:355
 msgid "Keep mail"
 msgstr "Email behalten"
 
@@ -669,13 +673,13 @@ msgid_plural "Rules"
 msgstr[0] "Regel"
 msgstr[1] "Regeln"
 
-#: js/Model.js:793
+#: js/Model.js:790
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flag"
 msgstr[1] "Flags"
 
-#: js/Model.js:796
+#: js/Model.js:793
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Flag-Liste"
