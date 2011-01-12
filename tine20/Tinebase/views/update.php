@@ -19,33 +19,21 @@
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all.js"></script>
 
-	<?php require 'Tinebase/views/includeJsAndCss.php'; ?>
-	
+<?php 
+    $i18n = Tinebase_Translation::getTranslation('Tinebase');
+    $msg = $i18n->_('Tine 2.0 needs to be updated or is not installed yet.');
+    $title = $i18n->_('Please wait or contact your administrator');
+ 
+    echo <<<EOT
     <script type="text/javascript">
-    	Ext.namespace('Tine', 'Tine.Tinebase');
-    
-    	// indicate that Tine needs to be updated so we don't initialize Tine
-    	Tine.needUpdate = true;
-    
+        Ext.BLANK_IMAGE_URL = "library/ExtJS/resources/images/default/s.gif";
         Ext.onReady(function() {
-        	Tine.Tinebase.translation = new Locale.Gettext();
-        	Tine.Tinebase.translation.textdomain('Tinebase');
-	        window._ = function (msgid) {
-	            return Tine.Tinebase.translation.dgettext('Tinebase', msgid);
-	        };
-        	
-            var viewPort = new Ext.Viewport({
-				layout: 'fit',
-                items: {
-                	xtype: 'container',
-					layout: 'fit'
-            	}
-			});
-            
-            Ext.MessageBox.wait(_('Tine 2.0 needs to be updated or is not installed yet.'), _('Please wait or contact your administrator'));
+            Ext.MessageBox.wait('$msg', '$title');
             window.setTimeout('location.href = location.href', 20000);
         }); 
     </script>
+EOT;
+?>
 
 </head>
 <body>
