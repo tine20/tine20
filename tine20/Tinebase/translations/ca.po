@@ -117,28 +117,36 @@ msgstr "Confirma el tancament de sessió"
 msgid "Show confirmation dialog on logout."
 msgstr "Mostra diàleg de confirmació al tancament de sessió."
 
-#: Acl/Rights.php:141
+#: Acl/Rights.php:148
 msgid "Report bugs"
 msgstr "Notifica errors de programació"
 
-#: Acl/Rights.php:142
+#: Acl/Rights.php:149
 msgid "Report bugs to the software vendor directly when they occur."
 msgstr "Notifica errors a l'autor del programari directament quan ocorrin."
 
-#: Acl/Rights.php:145
+#: Acl/Rights.php:152
 msgid "Check version"
 msgstr "Comprova la versió"
 
-#: Acl/Rights.php:146
+#: Acl/Rights.php:153
 msgid "Check for new versions of this software."
 msgstr "Cerca si hi ha nova versió del programari."
 
-#: Acl/Rights.php:149
+#: Acl/Rights.php:156
 msgid "Manage own profile"
 msgstr ""
 
-#: Acl/Rights.php:150
+#: Acl/Rights.php:157
 msgid "The right to manage the own profile (selected contact data)."
+msgstr ""
+
+#: Acl/Rights.php:160
+msgid "Manage own client state"
+msgstr ""
+
+#: Acl/Rights.php:161
+msgid "The right to manage the own client state."
 msgstr ""
 
 #: Acl/Rights/Abstract.php:72
@@ -218,8 +226,8 @@ msgid "About Tine 2.0"
 msgstr "Quant al Tine 2.0"
 
 #: js/MainMenu.js:230 js/widgets/persistentfilter/PickerPanel.js:229
-#: js/widgets/dialog/EditDialog.js:451 js/widgets/tree/ContextMenu.js:85
-#: js/widgets/grid/GridPanel.js:1194
+#: js/widgets/dialog/EditDialog.js:481 js/widgets/tree/ContextMenu.js:85
+#: js/widgets/grid/GridPanel.js:1175
 msgid "Confirm"
 msgstr "Confirma"
 
@@ -231,7 +239,7 @@ msgstr "Esteu segur que voleu sortir?"
 msgid "Logging you out..."
 msgstr "Tancant la sessió..."
 
-#: js/MainMenu.js:244 js/LoginPanel.js:353
+#: js/MainMenu.js:244 js/LoginPanel.js:354
 msgid "Please wait!"
 msgstr "Espereu!"
 
@@ -239,7 +247,7 @@ msgstr "Espereu!"
 msgid "Profile Information"
 msgstr ""
 
-#: js/AdminPanel.js:81 js/widgets/dialog/EditDialog.js:181
+#: js/AdminPanel.js:81 js/widgets/dialog/EditDialog.js:187
 #: js/widgets/EditRecord.js:169
 msgid "Apply"
 msgstr "Aplica"
@@ -367,7 +375,7 @@ msgstr "Notes"
 msgid "Enter new note:"
 msgstr "Introduïu la nova nota:"
 
-#: js/widgets/ActivitiesPanel.js:304 js/widgets/dialog/EditDialog.js:189
+#: js/widgets/ActivitiesPanel.js:304 js/widgets/dialog/EditDialog.js:195
 #: js/widgets/dialog/PreferencesDialog.js:118
 #: js/widgets/dialog/MultiOptionsDialog.js:109 js/widgets/EditRecord.js:179
 #: js/widgets/container/ContainerSelect.js:452
@@ -376,7 +384,7 @@ msgstr "Introduïu la nova nota:"
 msgid "Cancel"
 msgstr "Cancel·la"
 
-#: js/widgets/ActivitiesPanel.js:312 js/widgets/dialog/EditDialog.js:172
+#: js/widgets/ActivitiesPanel.js:312 js/widgets/dialog/EditDialog.js:178
 #: js/widgets/dialog/PreferencesDialog.js:110
 #: js/widgets/dialog/MultiOptionsDialog.js:102 js/widgets/EditRecord.js:158
 #: js/widgets/container/ContainerSelect.js:461
@@ -393,7 +401,7 @@ msgstr "Afegeix nota"
 msgid "Add a {0} Note"
 msgstr "Afegeix una nota de {0}"
 
-#: js/widgets/ActivitiesPanel.js:462 js/widgets/ActivitiesPanel.js:599
+#: js/widgets/ActivitiesPanel.js:462 js/widgets/ActivitiesPanel.js:600
 msgid "Type"
 msgstr "Tipus"
 
@@ -413,19 +421,19 @@ msgstr "Es mostren els registres històrics {0} - {1} de {2}"
 msgid "No history to display"
 msgstr "Sense històrics a mostrar"
 
-#: js/widgets/ActivitiesPanel.js:581
+#: js/widgets/ActivitiesPanel.js:582
 msgid "History"
 msgstr "Historial"
 
-#: js/widgets/ActivitiesPanel.js:593
+#: js/widgets/ActivitiesPanel.js:594
 msgid "Quick search"
 msgstr "Cerca ràpida"
 
-#: js/widgets/ActivitiesPanel.js:594 js/widgets/ActivitiesPanel.js:595
+#: js/widgets/ActivitiesPanel.js:595 js/widgets/ActivitiesPanel.js:596
 msgid "Time"
 msgstr "Hora"
 
-#: js/widgets/ActivitiesPanel.js:597
+#: js/widgets/ActivitiesPanel.js:598
 msgid "User"
 msgstr "Usuari"
 
@@ -525,58 +533,62 @@ msgstr "Preferències generals"
 msgid "My Profile"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:198 js/widgets/EditRecord.js:189
+#: js/widgets/dialog/EditDialog.js:204 js/widgets/EditRecord.js:189
 msgid "delete"
 msgstr "elimina"
 
-#: js/widgets/dialog/EditDialog.js:238 js/widgets/dialog/EditDialog.js:251
+#: js/widgets/dialog/EditDialog.js:244 js/widgets/dialog/EditDialog.js:257
 #: js/widgets/EditRecord.js:132
 msgid "Saved in"
 msgstr "Desat a"
 
-#: js/widgets/dialog/EditDialog.js:297
+#: js/widgets/dialog/EditDialog.js:323 js/widgets/grid/GridPanel.js:354
+msgid "Copy {0}"
+msgstr "Copia {0}"
+
+#: js/widgets/dialog/EditDialog.js:326
 msgid "Add New {0}"
 msgstr "Afegeix un nou {0}"
 
-#: js/widgets/dialog/EditDialog.js:299
+#: js/widgets/dialog/EditDialog.js:328
 msgid "Edit {0} \"{1}\""
 msgstr "Edita el {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:340
+#: js/widgets/dialog/EditDialog.js:370
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:443
+#: js/widgets/dialog/EditDialog.js:473
 #: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/PreferencesDialog.js:246
 #: js/widgets/dialog/PreferencesDialog.js:275
-#: js/widgets/dialog/ExportDialog.js:131 js/LoginPanel.js:370
+#: js/widgets/dialog/ExportDialog.js:131 js/LoginPanel.js:371
 msgid "Errors"
 msgstr "Errors"
 
-#: js/widgets/dialog/EditDialog.js:443
+#: js/widgets/dialog/EditDialog.js:473
 #: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:194 js/widgets/dialog/ExportDialog.js:131
-#: js/LoginPanel.js:370
+#: js/LoginPanel.js:371
 msgid "Please fix the errors noted."
 msgstr "Arregleu els errors notificats."
 
-#: js/widgets/dialog/EditDialog.js:451
+#: js/widgets/dialog/EditDialog.js:481
 msgid "Do you really want to delete this {0}?"
 msgstr "Esteu segur que voleu eliminar aquest {0}?"
 
-#: js/widgets/dialog/EditDialog.js:453 js/widgets/grid/GridPanel.js:1227
+#: js/widgets/dialog/EditDialog.js:483 js/widgets/grid/GridPanel.js:1212
 msgid "Deleting {0}"
 msgstr "Eliminant {0}"
 
-#: js/widgets/dialog/EditDialog.js:463 js/widgets/grid/GridPanel.js:1243
+#: js/widgets/dialog/EditDialog.js:493 js/widgets/grid/GridPanel.js:1228
 #: js/widgets/tags/TagsPanel.js:292 js/widgets/tags/TagsPanel.js:402
 #: js/widgets/tags/TagsPanel.js:435
 msgid "Failed"
 msgstr "Ha fallat"
 
-#: js/widgets/dialog/EditDialog.js:463 js/widgets/grid/GridPanel.js:1243
+#: js/widgets/dialog/EditDialog.js:493 js/widgets/grid/GridPanel.js:1228
 msgid "Could not delete {0}."
 msgstr "No s'ha pogut eliminar {0}."
 
@@ -842,10 +854,6 @@ msgstr "No s'ha trobat cap {0}. Proveu a canviar el criteri de filtre, les opcio
 msgid "Edit {0}"
 msgstr "Edita {0}"
 
-#: js/widgets/grid/GridPanel.js:354
-msgid "Copy {0}"
-msgstr "Copia {0}"
-
 #: js/widgets/grid/GridPanel.js:373
 msgid "Print Page"
 msgstr ""
@@ -881,21 +889,21 @@ msgstr ""
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1174
+#: js/widgets/grid/GridPanel.js:1155
 msgid "Not Allowed"
 msgstr "No teniu permís"
 
-#: js/widgets/grid/GridPanel.js:1175
+#: js/widgets/grid/GridPanel.js:1156
 msgid "You are not allowed to delete all pages at once"
 msgstr "No teniu permís per a eliminar totes les pàgines a la vegada"
 
-#: js/widgets/grid/GridPanel.js:1193
+#: js/widgets/grid/GridPanel.js:1174
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Esteu segur que voleu eliminar el registre seleccionat"
 msgstr[1] "Esteu segur que voleu eliminar els registres seleccionats"
 
-#: js/widgets/grid/GridPanel.js:1227
+#: js/widgets/grid/GridPanel.js:1212
 msgid " ... This may take a long time!"
 msgstr "... Això pot requerir un temps considerable!"
 
@@ -974,67 +982,67 @@ msgstr "seleccioneu un operador"
 msgid "Search Account ..."
 msgstr "Cerca un compte ..."
 
-#: js/widgets/grid/FilterModel.js:447
+#: js/widgets/grid/FilterModel.js:448
 msgid "today"
 msgstr "avui"
 
-#: js/widgets/grid/FilterModel.js:448
+#: js/widgets/grid/FilterModel.js:449
 msgid "yesterday"
 msgstr "ahir"
 
-#: js/widgets/grid/FilterModel.js:449
+#: js/widgets/grid/FilterModel.js:450
 msgid "this week"
 msgstr "aquesta setmana"
 
-#: js/widgets/grid/FilterModel.js:450
+#: js/widgets/grid/FilterModel.js:451
 msgid "last week"
 msgstr "la darrera setmana"
 
-#: js/widgets/grid/FilterModel.js:451
+#: js/widgets/grid/FilterModel.js:452
 msgid "the week before last"
 msgstr "la setmana anterior a la passada"
 
-#: js/widgets/grid/FilterModel.js:452
+#: js/widgets/grid/FilterModel.js:453
 msgid "this month"
 msgstr "aquest mes"
 
-#: js/widgets/grid/FilterModel.js:453
+#: js/widgets/grid/FilterModel.js:454
 msgid "last month"
 msgstr "el mes passat"
 
-#: js/widgets/grid/FilterModel.js:454
+#: js/widgets/grid/FilterModel.js:455
 msgid "this quarter"
 msgstr "aquest quadrimestre"
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:456
 msgid "last quarter"
 msgstr "el darrer quadrimestre"
 
-#: js/widgets/grid/FilterModel.js:456
+#: js/widgets/grid/FilterModel.js:457
 msgid "this year"
 msgstr "aquest any"
 
-#: js/widgets/grid/FilterModel.js:457
+#: js/widgets/grid/FilterModel.js:458
 msgid "last year"
 msgstr "l'any passat"
 
-#: js/widgets/grid/FilterModel.js:461
+#: js/widgets/grid/FilterModel.js:462
 msgid "tomorrow"
 msgstr "demà"
 
-#: js/widgets/grid/FilterModel.js:462
+#: js/widgets/grid/FilterModel.js:463
 msgid "next week"
 msgstr "la propera setmana"
 
-#: js/widgets/grid/FilterModel.js:463
+#: js/widgets/grid/FilterModel.js:464
 msgid "next month"
 msgstr "el proper mes"
 
-#: js/widgets/grid/FilterModel.js:464
+#: js/widgets/grid/FilterModel.js:465
 msgid "next quarter"
 msgstr "el proper quadrimestre"
 
-#: js/widgets/grid/FilterModel.js:465
+#: js/widgets/grid/FilterModel.js:466
 msgid "next year"
 msgstr "l'any que ve"
 
@@ -1207,21 +1215,21 @@ msgstr "{0} recentment utilitzat:"
 msgid "please select a {0}"
 msgstr "seleccioneu un {0}"
 
-#: js/widgets/container/ContainerTree.js:135
+#: js/widgets/container/ContainerTree.js:138
 msgid "container"
 msgid_plural "containers"
 msgstr[0] "contenidor"
 msgstr[1] "contenidors"
 
-#: js/widgets/container/ContainerTree.js:435
+#: js/widgets/container/ContainerTree.js:488
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr "No esteu autoritzat a seleccionar el {0} '{1}':"
 
-#: js/widgets/container/ContainerTree.js:436
+#: js/widgets/container/ContainerTree.js:489
 msgid "{0} grant is required for desired action"
 msgstr "El permís {0} és necessari per a l'acció desitjada"
 
-#: js/widgets/container/ContainerTree.js:437
+#: js/widgets/container/ContainerTree.js:490
 msgid "Insufficient Grants"
 msgstr "Permisos insuficients"
 
@@ -1605,11 +1613,11 @@ msgstr "Fòrums del Tine 2.0"
 msgid "about {0} minutes"
 msgstr "aproximadament {0} minuts"
 
-#: js/LoginPanel.js:197 js/LoginPanel.js:412
+#: js/LoginPanel.js:197 js/LoginPanel.js:413
 msgid "Tine 2.0 needs your help"
 msgstr "El Tine 2.0 necessita de la vostra ajuda"
 
-#: js/LoginPanel.js:199 js/LoginPanel.js:414
+#: js/LoginPanel.js:199 js/LoginPanel.js:415
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "Freqüentment necessitem la vostra opinió per tal que la següent versió del Tine 2.0 acompleixi les vostres necessitats encara millor. Ajudeu-nos i participeu:"
 
@@ -1649,19 +1657,19 @@ msgstr ""
 msgid "Logging you in..."
 msgstr "Iniciant sessió..."
 
-#: js/LoginPanel.js:353
+#: js/LoginPanel.js:354
 msgid "Login successful. Loading {0}..."
 msgstr "L'inici de sessió ha anat bé. Es carrega {0}..."
 
-#: js/LoginPanel.js:358
+#: js/LoginPanel.js:359
 msgid "Login failure"
 msgstr "L'inici de sessió ha fallat"
 
-#: js/LoginPanel.js:359
+#: js/LoginPanel.js:360
 msgid "Your username and/or your password are wrong!!!"
 msgstr "El vostre nom d'usuari i/o la vostra contrasenya són incorrectes!!!"
 
-#: js/LoginPanel.js:385
+#: js/LoginPanel.js:386
 msgid "Please enter your login data"
 msgstr "Introduïu les vostres dades d'inici de sessió"
 
@@ -1829,11 +1837,11 @@ msgstr "Activitats"
 msgid "Data"
 msgstr "Dades"
 
-#: views/update.php:42
+#: views/update.php:45
 msgid "Tine 2.0 needs to be updated or is not installed yet."
 msgstr ""
 
-#: views/update.php:42
+#: views/update.php:45
 msgid "Please wait or contact your administrator"
 msgstr ""
 
