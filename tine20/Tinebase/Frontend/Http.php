@@ -165,14 +165,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     
     /**
      * checks if a user is logged in. If not we redirect to login
-     * @todo $this->sessionTimedOut(); does not exist anymore
      */
     protected function checkAuth()
     {
         try {
             Tinebase_Core::getUser();
         } catch (Exception $e) {
-            $this->sessionTimedOut();
+            header('HTTP/1.0 403 Forbidden');
             exit;
         }
     }
