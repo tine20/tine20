@@ -696,27 +696,24 @@ Tine.Tinebase.tineInit = {
 };
 
 Ext.onReady(function () {
-	// initialize Tine only if there is no need to update
-	if (Tine.needUpdate !== true) {
-	    Tine.Tinebase.tineInit.initWindow();
-	    Tine.Tinebase.tineInit.initDebugConsole();
-	    Tine.Tinebase.tineInit.initBootSplash();
-	    Tine.Tinebase.tineInit.initLocale();
-	    Tine.Tinebase.tineInit.initAjax();
-	    Tine.Tinebase.tineInit.initRegistry();
-	    Tine.Tinebase.tineInit.initLibs();
-	    var waitForInits = function () {
-	        if (! Tine.Tinebase.tineInit.initList.initRegistry) {
-	            waitForInits.defer(100);
-	        } else {
-	            Tine.Tinebase.tineInit.initExtDirect();
-	            Tine.Tinebase.tineInit.initState();
-	            Tine.Tinebase.tineInit.initWindowMgr();
-	            //Tine.Tinebase.tineInit.onLangFilesLoad();
-	            //Tine.Tinebase.tineInit.checkSelfUpdate();
-	            Tine.Tinebase.tineInit.renderWindow();
-	        }
-	    };
-	    waitForInits();
-	}
+    Tine.Tinebase.tineInit.initWindow();
+    Tine.Tinebase.tineInit.initDebugConsole();
+    Tine.Tinebase.tineInit.initBootSplash();
+    Tine.Tinebase.tineInit.initLocale();
+    Tine.Tinebase.tineInit.initAjax();
+    Tine.Tinebase.tineInit.initRegistry();
+    Tine.Tinebase.tineInit.initLibs();
+    var waitForInits = function () {
+        if (! Tine.Tinebase.tineInit.initList.initRegistry) {
+            waitForInits.defer(100);
+        } else {
+            Tine.Tinebase.tineInit.initExtDirect();
+            Tine.Tinebase.tineInit.initState();
+            Tine.Tinebase.tineInit.initWindowMgr();
+            //Tine.Tinebase.tineInit.onLangFilesLoad();
+            //Tine.Tinebase.tineInit.checkSelfUpdate();
+            Tine.Tinebase.tineInit.renderWindow();
+        }
+    };
+    waitForInits();
 });
