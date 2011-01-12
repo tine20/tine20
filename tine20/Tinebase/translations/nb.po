@@ -118,28 +118,36 @@ msgstr ""
 msgid "Show confirmation dialog on logout."
 msgstr ""
 
-#: Acl/Rights.php:141
+#: Acl/Rights.php:148
 msgid "Report bugs"
 msgstr "Rapporter feil"
 
-#: Acl/Rights.php:142
+#: Acl/Rights.php:149
 msgid "Report bugs to the software vendor directly when they occur."
 msgstr ""
 
-#: Acl/Rights.php:145
+#: Acl/Rights.php:152
 msgid "Check version"
 msgstr "Kontroller versjon"
 
-#: Acl/Rights.php:146
+#: Acl/Rights.php:153
 msgid "Check for new versions of this software."
 msgstr ""
 
-#: Acl/Rights.php:149
+#: Acl/Rights.php:156
 msgid "Manage own profile"
 msgstr ""
 
-#: Acl/Rights.php:150
+#: Acl/Rights.php:157
 msgid "The right to manage the own profile (selected contact data)."
+msgstr ""
+
+#: Acl/Rights.php:160
+msgid "Manage own client state"
+msgstr ""
+
+#: Acl/Rights.php:161
+msgid "The right to manage the own client state."
 msgstr ""
 
 #: Acl/Rights/Abstract.php:72
@@ -219,8 +227,8 @@ msgid "About Tine 2.0"
 msgstr "Om Tine 2.0"
 
 #: js/MainMenu.js:230 js/widgets/persistentfilter/PickerPanel.js:229
-#: js/widgets/dialog/EditDialog.js:451 js/widgets/tree/ContextMenu.js:85
-#: js/widgets/grid/GridPanel.js:1194
+#: js/widgets/dialog/EditDialog.js:481 js/widgets/tree/ContextMenu.js:85
+#: js/widgets/grid/GridPanel.js:1175
 msgid "Confirm"
 msgstr "Bekreft"
 
@@ -232,7 +240,7 @@ msgstr "Er du sikker på at du vil logge ut?"
 msgid "Logging you out..."
 msgstr "Logger deg ut..."
 
-#: js/MainMenu.js:244 js/LoginPanel.js:353
+#: js/MainMenu.js:244 js/LoginPanel.js:354
 msgid "Please wait!"
 msgstr "Vennligst vent!"
 
@@ -240,7 +248,7 @@ msgstr "Vennligst vent!"
 msgid "Profile Information"
 msgstr ""
 
-#: js/AdminPanel.js:81 js/widgets/dialog/EditDialog.js:181
+#: js/AdminPanel.js:81 js/widgets/dialog/EditDialog.js:187
 #: js/widgets/EditRecord.js:169
 msgid "Apply"
 msgstr "Bruk"
@@ -368,7 +376,7 @@ msgstr "Notater"
 msgid "Enter new note:"
 msgstr "Tast inn nytt notat:"
 
-#: js/widgets/ActivitiesPanel.js:304 js/widgets/dialog/EditDialog.js:189
+#: js/widgets/ActivitiesPanel.js:304 js/widgets/dialog/EditDialog.js:195
 #: js/widgets/dialog/PreferencesDialog.js:118
 #: js/widgets/dialog/MultiOptionsDialog.js:109 js/widgets/EditRecord.js:179
 #: js/widgets/container/ContainerSelect.js:452
@@ -377,7 +385,7 @@ msgstr "Tast inn nytt notat:"
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: js/widgets/ActivitiesPanel.js:312 js/widgets/dialog/EditDialog.js:172
+#: js/widgets/ActivitiesPanel.js:312 js/widgets/dialog/EditDialog.js:178
 #: js/widgets/dialog/PreferencesDialog.js:110
 #: js/widgets/dialog/MultiOptionsDialog.js:102 js/widgets/EditRecord.js:158
 #: js/widgets/container/ContainerSelect.js:461
@@ -394,7 +402,7 @@ msgstr "Legg til Notat"
 msgid "Add a {0} Note"
 msgstr "Leg til et {0} Notat"
 
-#: js/widgets/ActivitiesPanel.js:462 js/widgets/ActivitiesPanel.js:599
+#: js/widgets/ActivitiesPanel.js:462 js/widgets/ActivitiesPanel.js:600
 msgid "Type"
 msgstr "Type"
 
@@ -414,19 +422,19 @@ msgstr "Viser historikk  {0} - {1} of {2}"
 msgid "No history to display"
 msgstr "Ingen historikk å vise"
 
-#: js/widgets/ActivitiesPanel.js:581
+#: js/widgets/ActivitiesPanel.js:582
 msgid "History"
 msgstr "Historikk"
 
-#: js/widgets/ActivitiesPanel.js:593
+#: js/widgets/ActivitiesPanel.js:594
 msgid "Quick search"
 msgstr "Hurtig søk"
 
-#: js/widgets/ActivitiesPanel.js:594 js/widgets/ActivitiesPanel.js:595
+#: js/widgets/ActivitiesPanel.js:595 js/widgets/ActivitiesPanel.js:596
 msgid "Time"
 msgstr "Tid"
 
-#: js/widgets/ActivitiesPanel.js:597
+#: js/widgets/ActivitiesPanel.js:598
 msgid "User"
 msgstr "Bruker"
 
@@ -526,58 +534,62 @@ msgstr "Generelle Instillinger"
 msgid "My Profile"
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:198 js/widgets/EditRecord.js:189
+#: js/widgets/dialog/EditDialog.js:204 js/widgets/EditRecord.js:189
 msgid "delete"
 msgstr "slett"
 
-#: js/widgets/dialog/EditDialog.js:238 js/widgets/dialog/EditDialog.js:251
+#: js/widgets/dialog/EditDialog.js:244 js/widgets/dialog/EditDialog.js:257
 #: js/widgets/EditRecord.js:132
 msgid "Saved in"
 msgstr "Lagret i"
 
-#: js/widgets/dialog/EditDialog.js:297
+#: js/widgets/dialog/EditDialog.js:323 js/widgets/grid/GridPanel.js:354
+msgid "Copy {0}"
+msgstr ""
+
+#: js/widgets/dialog/EditDialog.js:326
 msgid "Add New {0}"
 msgstr "Legg Til Ny {0}"
 
-#: js/widgets/dialog/EditDialog.js:299
+#: js/widgets/dialog/EditDialog.js:328
 msgid "Edit {0} \"{1}\""
 msgstr "Rediger {0} \"{1}\""
 
-#: js/widgets/dialog/EditDialog.js:340
+#: js/widgets/dialog/EditDialog.js:370
 msgid "Transferring {0}..."
 msgstr ""
 
-#: js/widgets/dialog/EditDialog.js:443
+#: js/widgets/dialog/EditDialog.js:473
 #: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/PreferencesDialog.js:246
 #: js/widgets/dialog/PreferencesDialog.js:275
-#: js/widgets/dialog/ExportDialog.js:131 js/LoginPanel.js:370
+#: js/widgets/dialog/ExportDialog.js:131 js/LoginPanel.js:371
 msgid "Errors"
 msgstr "Feil"
 
-#: js/widgets/dialog/EditDialog.js:443
+#: js/widgets/dialog/EditDialog.js:473
 #: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:194 js/widgets/dialog/ExportDialog.js:131
-#: js/LoginPanel.js:370
+#: js/LoginPanel.js:371
 msgid "Please fix the errors noted."
 msgstr "Vennligst fiks disse feilene."
 
-#: js/widgets/dialog/EditDialog.js:451
+#: js/widgets/dialog/EditDialog.js:481
 msgid "Do you really want to delete this {0}?"
 msgstr "Vil du virkelig slette dette {0}?"
 
-#: js/widgets/dialog/EditDialog.js:453 js/widgets/grid/GridPanel.js:1227
+#: js/widgets/dialog/EditDialog.js:483 js/widgets/grid/GridPanel.js:1212
 msgid "Deleting {0}"
 msgstr "Sletter {0}"
 
-#: js/widgets/dialog/EditDialog.js:463 js/widgets/grid/GridPanel.js:1243
+#: js/widgets/dialog/EditDialog.js:493 js/widgets/grid/GridPanel.js:1228
 #: js/widgets/tags/TagsPanel.js:292 js/widgets/tags/TagsPanel.js:402
 #: js/widgets/tags/TagsPanel.js:435
 msgid "Failed"
 msgstr "Feilet"
 
-#: js/widgets/dialog/EditDialog.js:463 js/widgets/grid/GridPanel.js:1243
+#: js/widgets/dialog/EditDialog.js:493 js/widgets/grid/GridPanel.js:1228
 msgid "Could not delete {0}."
 msgstr "Klarte ikke å slette {0}"
 
@@ -842,10 +854,6 @@ msgstr "Ingen {0} ble funnet. Vennligst forsøk å endre ditt filter-kriteria, v
 msgid "Edit {0}"
 msgstr "Rediger {0}"
 
-#: js/widgets/grid/GridPanel.js:354
-msgid "Copy {0}"
-msgstr ""
-
 #: js/widgets/grid/GridPanel.js:373
 msgid "Print Page"
 msgstr ""
@@ -881,21 +889,21 @@ msgstr ""
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1174
+#: js/widgets/grid/GridPanel.js:1155
 msgid "Not Allowed"
 msgstr "Ikke Tillatt"
 
-#: js/widgets/grid/GridPanel.js:1175
+#: js/widgets/grid/GridPanel.js:1156
 msgid "You are not allowed to delete all pages at once"
 msgstr "Du har ikke tilatelse til å slette alle sider på en gang"
 
-#: js/widgets/grid/GridPanel.js:1193
+#: js/widgets/grid/GridPanel.js:1174
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Vil du virkelig slette valgt post"
 msgstr[1] "Vil du virkelig slette valgte poster"
 
-#: js/widgets/grid/GridPanel.js:1227
+#: js/widgets/grid/GridPanel.js:1212
 msgid " ... This may take a long time!"
 msgstr "... Dette kan ta lang tid!"
 
@@ -974,67 +982,67 @@ msgstr "velg en operatør"
 msgid "Search Account ..."
 msgstr "Søke Konto ..."
 
-#: js/widgets/grid/FilterModel.js:447
+#: js/widgets/grid/FilterModel.js:448
 msgid "today"
 msgstr "i dag"
 
-#: js/widgets/grid/FilterModel.js:448
+#: js/widgets/grid/FilterModel.js:449
 msgid "yesterday"
 msgstr "i går"
 
-#: js/widgets/grid/FilterModel.js:449
+#: js/widgets/grid/FilterModel.js:450
 msgid "this week"
 msgstr "denne uken"
 
-#: js/widgets/grid/FilterModel.js:450
+#: js/widgets/grid/FilterModel.js:451
 msgid "last week"
 msgstr "forrige uke"
 
-#: js/widgets/grid/FilterModel.js:451
+#: js/widgets/grid/FilterModel.js:452
 msgid "the week before last"
 msgstr "uken før forrige"
 
-#: js/widgets/grid/FilterModel.js:452
+#: js/widgets/grid/FilterModel.js:453
 msgid "this month"
 msgstr "denn måneden"
 
-#: js/widgets/grid/FilterModel.js:453
+#: js/widgets/grid/FilterModel.js:454
 msgid "last month"
 msgstr "forrige måned"
 
-#: js/widgets/grid/FilterModel.js:454
+#: js/widgets/grid/FilterModel.js:455
 msgid "this quarter"
 msgstr "dette kvartalet"
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:456
 msgid "last quarter"
 msgstr "forrige kvartal"
 
-#: js/widgets/grid/FilterModel.js:456
+#: js/widgets/grid/FilterModel.js:457
 msgid "this year"
 msgstr "dette året"
 
-#: js/widgets/grid/FilterModel.js:457
+#: js/widgets/grid/FilterModel.js:458
 msgid "last year"
 msgstr "ifjor"
 
-#: js/widgets/grid/FilterModel.js:461
+#: js/widgets/grid/FilterModel.js:462
 msgid "tomorrow"
 msgstr "i morgen"
 
-#: js/widgets/grid/FilterModel.js:462
+#: js/widgets/grid/FilterModel.js:463
 msgid "next week"
 msgstr "neste uke"
 
-#: js/widgets/grid/FilterModel.js:463
+#: js/widgets/grid/FilterModel.js:464
 msgid "next month"
 msgstr "neste måned"
 
-#: js/widgets/grid/FilterModel.js:464
+#: js/widgets/grid/FilterModel.js:465
 msgid "next quarter"
 msgstr "neste kvartal"
 
-#: js/widgets/grid/FilterModel.js:465
+#: js/widgets/grid/FilterModel.js:466
 msgid "next year"
 msgstr "neste år"
 
@@ -1207,21 +1215,21 @@ msgstr "Nylig bruk {0}:"
 msgid "please select a {0}"
 msgstr "vennligst velg en {0}"
 
-#: js/widgets/container/ContainerTree.js:135
+#: js/widgets/container/ContainerTree.js:138
 msgid "container"
 msgid_plural "containers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/widgets/container/ContainerTree.js:435
+#: js/widgets/container/ContainerTree.js:488
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:436
+#: js/widgets/container/ContainerTree.js:489
 msgid "{0} grant is required for desired action"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:437
+#: js/widgets/container/ContainerTree.js:490
 msgid "Insufficient Grants"
 msgstr ""
 
@@ -1605,11 +1613,11 @@ msgstr "Tine 2.0 Forum"
 msgid "about {0} minutes"
 msgstr "om {0} minutter"
 
-#: js/LoginPanel.js:197 js/LoginPanel.js:412
+#: js/LoginPanel.js:197 js/LoginPanel.js:413
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 trenger din hjelp"
 
-#: js/LoginPanel.js:199 js/LoginPanel.js:414
+#: js/LoginPanel.js:199 js/LoginPanel.js:415
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "Vi trenger regelmessige tilbakemeldinger for å gjøre neste Tine 2.0 utgivelser passe dine behov enda bedre. Hjelp oss og degselv ved å delta:"
 
@@ -1649,19 +1657,19 @@ msgstr ""
 msgid "Logging you in..."
 msgstr "Logger deg inn..."
 
-#: js/LoginPanel.js:353
+#: js/LoginPanel.js:354
 msgid "Login successful. Loading {0}..."
 msgstr "Logg inn fullført. Laster {0}..."
 
-#: js/LoginPanel.js:358
+#: js/LoginPanel.js:359
 msgid "Login failure"
 msgstr "Logg inn feilet"
 
-#: js/LoginPanel.js:359
+#: js/LoginPanel.js:360
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ditt brukernavn og/eller passord er feil!!!"
 
-#: js/LoginPanel.js:385
+#: js/LoginPanel.js:386
 msgid "Please enter your login data"
 msgstr "Vennligst tast inn dine logg inn data"
 
@@ -1829,11 +1837,11 @@ msgstr "Aktiviteter"
 msgid "Data"
 msgstr ""
 
-#: views/update.php:42
+#: views/update.php:45
 msgid "Tine 2.0 needs to be updated or is not installed yet."
 msgstr ""
 
-#: views/update.php:42
+#: views/update.php:45
 msgid "Please wait or contact your administrator"
 msgstr ""
 
