@@ -2,10 +2,10 @@
 /**
  * Tine 2.0
  *
- * @package     Tinebase
+ * @package     Crm
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -116,5 +116,14 @@ class Crm_Setup_Update_Release3 extends Setup_Update_Abstract
         ))));
         
         $this->setApplicationVersion('Crm', '3.4');
+    }
+
+    /**
+     * update to 4.0
+     * @return void
+     */
+    public function update_4()
+    {
+        $this->setApplicationVersion('Crm', '4.0');
     }
 }

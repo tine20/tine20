@@ -5,7 +5,7 @@
  * @package     Courses
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -30,5 +30,14 @@ class Courses_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('courses', '4');
         
         $this->setApplicationVersion('Courses', '3.1');
+    }
+
+    /**
+     * update to 4.0
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Courses', '4.0');
     }
 }

@@ -33,4 +33,13 @@ class Admin_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Admin', '3.1');
     }
+    
+    /**
+     * update to 4.0
+     * @return void
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Admin', '4.0');
+    }
 }

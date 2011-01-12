@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -99,7 +99,6 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setApplicationVersion('Addressbook', '3.4');
     }
 
-    
     /**
      * update to 3.5
      * - convert internal container into shared container
@@ -565,5 +564,14 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         ))));
         
         $this->setApplicationVersion('Addressbook', '3.11');
+    }
+    
+    /**
+     * update to 4.0
+     * @return void
+     */
+    public function update_11()
+    {
+        $this->setApplicationVersion('Addressbook', '4.0');
     }
 }

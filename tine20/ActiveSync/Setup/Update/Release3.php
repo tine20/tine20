@@ -7,7 +7,7 @@
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -333,5 +333,14 @@ class ActiveSync_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setTableVersion('acsync_device', 2);
         $this->setApplicationVersion('ActiveSync', '3.5');
+    }
+    
+    /**
+     * update to 4.0
+     * @return void
+     */
+    public function update_5()
+    {
+        $this->setApplicationVersion('ActiveSync', '4.0');
     }
 }

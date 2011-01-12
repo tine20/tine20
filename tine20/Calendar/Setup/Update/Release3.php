@@ -4,7 +4,7 @@
  *
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  */
@@ -393,5 +393,14 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
             $resource->container_id = $container->getId();
             $rb->update($resource);
         }
+    }
+    
+    /**
+     * update to 4.0
+     * @return void
+     */
+    public function update_9()
+    {
+        $this->setApplicationVersion('Calendar', '4.0');
     }
 }

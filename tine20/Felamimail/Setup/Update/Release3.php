@@ -546,6 +546,15 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 4.0
+     * @return void
+     */
+    public function update_19()
+    {
+        $this->setApplicationVersion('Felamimail', '4.0');
+    }
+    
+    /**
      * clear cache tables and reset folder status
      */
     protected function _clearCache()

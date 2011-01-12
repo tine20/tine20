@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
@@ -125,5 +125,14 @@ class Timetracker_Setup_Update_Release3 extends Setup_Update_Abstract
         ))));
                 
         $this->setApplicationVersion('Timetracker', '3.3');
+    }
+    
+    /**
+     * update from 3.0 -> 4.0
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->setApplicationVersion('Timetracker', '4.0');
     }
 }

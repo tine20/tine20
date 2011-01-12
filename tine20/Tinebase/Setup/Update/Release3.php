@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -1153,5 +1153,14 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Tinebase', '3.26');
+    }
+    
+    /**
+     * update from 3.0 -> 4.0
+     * @return void
+     */
+    public function update_26()
+    {
+        $this->setApplicationVersion('Tinebase', '4.0');
     }
 }

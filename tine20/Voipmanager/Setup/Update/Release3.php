@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -120,5 +120,14 @@ class Voipmanager_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->_backend->addCol('asterisk_sip_peers', $declaration);
         
         $this->setApplicationVersion('Voipmanager', '3.2');
+    }
+    
+    /**
+     * update from 3.0 -> 4.0
+     * @return void
+     */
+    public function update_2()
+    {
+        $this->setApplicationVersion('Voipmanager', '4.0');
     }
 }
