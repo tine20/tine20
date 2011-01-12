@@ -16,6 +16,14 @@ Contents
 5. User contact / group list records can now be saved in other Addressbooks
 6. Customfields are now sorted by order column
 7. Session directory config has moved and other session backends are possible now
+8. New right has been added to Tinebase: Manage state
+9. Sieve rules/vacation support
+10. Added clear cache job to scheduler
+11. New config.inc.php value: 'filesdir'
+12. Added new email user backends
+13. IMAP authentication provider
+14. Added switch --passwordfile to CLI
+15. New CLI functions
 
 --------------------------------------------------------------
 1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
@@ -55,7 +63,7 @@ Contents
 
 - If you use the db-adapter, it is necessary to create the queue and message tables first. use the queue.sql script found in the [tine20dir]/library/Zend/Queue/Adapter/Db directory.
 
-- The queue is triggered by the scheduler and the scheduler can be run by the triggerAsyncEvents CLI function.
+- The queue is triggered by the processQueue CLI function.
 
 --------------------------------------------------------------
 5. User contact / group list records can now be saved in other Addressbooks
@@ -92,4 +100,49 @@ is saved in.
     'lifetime'  => 86400,
   ),
 
+--------------------------------------------------------------
+8. New right has been added to Tinebase: Manage state
 
+- With this right, you can control if the state of grids and other stateful widgets is saved for certain user roles.
+
+--------------------------------------------------------------
+9. Sieve rules/vacation support
+
+- We added support for Sieve filter rules and vacation messages. To activate this for the system email account, you need to add the Sieve server settings in the setup.php/Email Settings.
+For other email accounts, you just need to add the settings in the email account edit dialog. The IMAP credentials are used to authenticate with the Sieve server.
+ 
+--------------------------------------------------------------
+10. Added clear cache job to scheduler
+
+- A cache clearing job has been added to the scheduler. It runs every hour and removes obsolete cache entries.
+
+--------------------------------------------------------------
+11. New config.inc.php value: 'filesdir'
+
+- We added a new value to the config.inc.php: 'filesdir'. This is needed for the WebDav implementation and defines the directory on your server where files are saved in. Make sure that 
+the webserver has write permissions for this directory.
+
+--------------------------------------------------------------
+12. Added new email user backends
+
+- The email user administration now supports the Cyrus mailserver, Postfix and Dovecot MySQL. You can set it up in the setup.php script.
+
+--------------------------------------------------------------
+13. IMAP authentication provider
+
+- We added the possibility to authenticate against an IMAP server. You can set it up in the setup.php script.
+
+--------------------------------------------------------------
+14. Added switch --passwordfile to CLI
+
+- It is now possible to call the CLI-script with a --passwordfile parameter to define a file with the password for the user.
+
+--------------------------------------------------------------
+15. New CLI functions
+
+- Some new CLI functions have been added in this release (see the wiki page http://www.tine20.org/wiki/index.php/CLI_Functions for a full list and documentation):
+    - Tinebase.processQueue
+    - _Application_.import
+    - Tinebase.clearTable
+    - Tinebase.purgeDeletedRecords
+    - Tinebase.addCustomfield 
