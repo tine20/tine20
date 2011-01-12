@@ -125,7 +125,10 @@
             <identifier>tel_assistent</identifier>
         </column>
         <column>
-            <identifier>tel_car tel_cell</identifier>
+            <identifier>tel_car</identifier>
+        </column>
+        <column>
+            <identifier>tel_cell</identifier>
         </column>
         <column>
             <identifier>tel_cell_private</identifier>
