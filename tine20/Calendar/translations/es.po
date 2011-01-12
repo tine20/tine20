@@ -24,31 +24,31 @@ msgid_plural "Calendars"
 msgstr[0] "Calendario"
 msgstr[1] "Calendarios"
 
-#: Setup/Update/Release3.php:165 Setup/Initialize.php:29
+#: Setup/Update/Release3.php:165 Setup/Initialize.php:35
 msgid "All events I attend"
 msgstr ""
 
-#: Setup/Update/Release3.php:294
+#: Setup/Initialize.php:48
 msgid "Awaiting response"
 msgstr ""
 
-#: Setup/Update/Release3.php:295
-msgid "Events I have not yet respondet to"
+#: Setup/Initialize.php:49
+msgid "Events I have not yet responded to"
 msgstr ""
 
-#: Setup/Update/Release3.php:313
+#: Setup/Initialize.php:64
 msgid "Declined events"
 msgstr ""
 
-#: Setup/Update/Release3.php:314
+#: Setup/Initialize.php:65
 msgid "Events I have declined"
 msgstr ""
 
-#: Setup/Update/Release3.php:330
+#: Setup/Initialize.php:78
 msgid "I'm organizer"
 msgstr ""
 
-#: Setup/Update/Release3.php:331
+#: Setup/Initialize.php:79
 msgid "Events I'm the organizer of"
 msgstr ""
 
@@ -203,29 +203,33 @@ msgstr "¿Realmente desea eliminar todos los eventos de esta serie de eventos re
 msgid "Delete Event"
 msgstr "Eliminar Evento"
 
-#: js/MainScreenCenterPanel.js:404
+#: js/MainScreenCenterPanel.js:405
 msgid "Delete whole series"
 msgstr "Eliminar toda la serie"
 
-#: js/MainScreenCenterPanel.js:405
+#: js/MainScreenCenterPanel.js:406
 msgid "Delete this and all future events"
 msgstr "Eliminar éste y todos los eventos futuros"
 
-#: js/MainScreenCenterPanel.js:406
+#: js/MainScreenCenterPanel.js:407
 msgid "Delete this event only"
 msgstr "Eliminar sólo este evento"
 
-#: js/MainScreenCenterPanel.js:455
+#: js/MainScreenCenterPanel.js:408
+msgid "Delete nothing"
+msgstr "No Eliminar"
+
+#: js/MainScreenCenterPanel.js:457
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "¿Realmente desea eliminar este evento?"
 msgstr[1] "¿Realmente desea eliminar los {0} eventos seleccioniados?"
 
-#: js/MainScreenCenterPanel.js:578
+#: js/MainScreenCenterPanel.js:580
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:578
+#: js/MainScreenCenterPanel.js:580
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
@@ -500,64 +504,64 @@ msgstr "Anualmente"
 msgid "forever"
 msgstr "para siempre"
 
-#: js/RrulePanel.js:242
+#: js/RrulePanel.js:247
 msgid "Forever"
 msgstr "Para Siempre"
 
-#: js/RrulePanel.js:243
+#: js/RrulePanel.js:248
 msgid "at"
 msgstr "a"
 
-#: js/RrulePanel.js:283
+#: js/RrulePanel.js:288
 msgid "Until"
 msgstr "Hasta"
 
-#: js/RrulePanel.js:295
+#: js/RrulePanel.js:300
 msgid "Until has to be after event start"
 msgstr "Debe ocurrir hasta que el evento comience"
 
-#: js/RrulePanel.js:317
+#: js/RrulePanel.js:322
 msgid "Every {0}. Day"
 msgstr ""
 
-#: js/RrulePanel.js:347
+#: js/RrulePanel.js:352
 msgid "Every {0}. Week at"
 msgstr ""
 
-#: js/RrulePanel.js:416
+#: js/RrulePanel.js:421
 msgid "Every {0}. Month"
 msgstr ""
 
-#: js/RrulePanel.js:422 js/RrulePanel.js:471 js/RrulePanel.js:602
-#: js/RrulePanel.js:652
+#: js/RrulePanel.js:427 js/RrulePanel.js:476 js/RrulePanel.js:607
+#: js/RrulePanel.js:657
 msgid "at the"
 msgstr "en el (la)"
 
-#: js/RrulePanel.js:441 js/RrulePanel.js:621
+#: js/RrulePanel.js:446 js/RrulePanel.js:626
 msgid "first"
 msgstr "primero"
 
-#: js/RrulePanel.js:442 js/RrulePanel.js:622
+#: js/RrulePanel.js:447 js/RrulePanel.js:627
 msgid "second"
 msgstr "segundo"
 
-#: js/RrulePanel.js:443 js/RrulePanel.js:623
+#: js/RrulePanel.js:448 js/RrulePanel.js:628
 msgid "third"
 msgstr "tercero"
 
-#: js/RrulePanel.js:444 js/RrulePanel.js:624
+#: js/RrulePanel.js:449 js/RrulePanel.js:629
 msgid "fourth"
 msgstr "cuarto"
 
-#: js/RrulePanel.js:445 js/RrulePanel.js:625
+#: js/RrulePanel.js:450 js/RrulePanel.js:630
 msgid "last"
 msgstr "último"
 
-#: js/RrulePanel.js:595
+#: js/RrulePanel.js:600
 msgid "Every {0}. Year"
 msgstr ""
 
-#: js/RrulePanel.js:692 js/RrulePanel.js:704
+#: js/RrulePanel.js:697 js/RrulePanel.js:709
 msgid "of"
 msgstr "de"
 
@@ -715,9 +719,6 @@ msgstr "Detalles del Evento"
 
 #~ msgid "Do you want to delete the whole series, this and all future events of this series, or just this event"
 #~ msgstr "Desea eliminar la serie completa, éstsa y todos los eventos futuros de esta serie, o solamente éste evento"
-
-#~ msgid "Delete nothing"
-#~ msgstr "No Eliminar"
 
 #~ msgid "Every"
 #~ msgstr "Cada"

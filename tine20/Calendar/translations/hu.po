@@ -24,31 +24,31 @@ msgid_plural "Calendars"
 msgstr[0] "Naptár"
 msgstr[1] "Naptárak"
 
-#: Setup/Update/Release3.php:165 Setup/Initialize.php:29
+#: Setup/Update/Release3.php:165 Setup/Initialize.php:35
 msgid "All events I attend"
 msgstr "Minden esemény, amiben résztveszek"
 
-#: Setup/Update/Release3.php:294
+#: Setup/Initialize.php:48
 msgid "Awaiting response"
 msgstr ""
 
-#: Setup/Update/Release3.php:295
-msgid "Events I have not yet respondet to"
+#: Setup/Initialize.php:49
+msgid "Events I have not yet responded to"
 msgstr ""
 
-#: Setup/Update/Release3.php:313
+#: Setup/Initialize.php:64
 msgid "Declined events"
 msgstr ""
 
-#: Setup/Update/Release3.php:314
+#: Setup/Initialize.php:65
 msgid "Events I have declined"
 msgstr ""
 
-#: Setup/Update/Release3.php:330
+#: Setup/Initialize.php:78
 msgid "I'm organizer"
 msgstr ""
 
-#: Setup/Update/Release3.php:331
+#: Setup/Initialize.php:79
 msgid "Events I'm the organizer of"
 msgstr ""
 
@@ -203,29 +203,33 @@ msgstr "Biztosan törlöd ennek az ismétlődő esemény sorozatnak az összes e
 msgid "Delete Event"
 msgstr "Esemény törlése"
 
-#: js/MainScreenCenterPanel.js:404
+#: js/MainScreenCenterPanel.js:405
 msgid "Delete whole series"
 msgstr "Egész sorozat törlése"
 
-#: js/MainScreenCenterPanel.js:405
+#: js/MainScreenCenterPanel.js:406
 msgid "Delete this and all future events"
 msgstr "Mostani és az összes jövőbeni esemény törlése"
 
-#: js/MainScreenCenterPanel.js:406
+#: js/MainScreenCenterPanel.js:407
 msgid "Delete this event only"
 msgstr "Csak a mostani esemény törlése"
 
-#: js/MainScreenCenterPanel.js:455
+#: js/MainScreenCenterPanel.js:408
+msgid "Delete nothing"
+msgstr ""
+
+#: js/MainScreenCenterPanel.js:457
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Biztosan törlöd ezt az eseményt?"
 msgstr[1] "Biztosan törlöd a(z) {0} kiválasztott eseményt?"
 
-#: js/MainScreenCenterPanel.js:578
+#: js/MainScreenCenterPanel.js:580
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:578
+#: js/MainScreenCenterPanel.js:580
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
@@ -502,64 +506,64 @@ msgstr "Éves"
 msgid "forever"
 msgstr "örökre"
 
-#: js/RrulePanel.js:242
+#: js/RrulePanel.js:247
 msgid "Forever"
 msgstr "Örökre"
 
-#: js/RrulePanel.js:243
+#: js/RrulePanel.js:248
 msgid "at"
 msgstr "ekkor:"
 
-#: js/RrulePanel.js:283
+#: js/RrulePanel.js:288
 msgid "Until"
 msgstr "Eddig:"
 
-#: js/RrulePanel.js:295
+#: js/RrulePanel.js:300
 msgid "Until has to be after event start"
 msgstr "Az esemény indulása utánig"
 
-#: js/RrulePanel.js:317
+#: js/RrulePanel.js:322
 msgid "Every {0}. Day"
 msgstr "Minden {0}. napon"
 
-#: js/RrulePanel.js:347
+#: js/RrulePanel.js:352
 msgid "Every {0}. Week at"
 msgstr "Minden {0}. héten ekkor:"
 
-#: js/RrulePanel.js:416
+#: js/RrulePanel.js:421
 msgid "Every {0}. Month"
 msgstr "Minden {0}. hónapban"
 
-#: js/RrulePanel.js:422 js/RrulePanel.js:471 js/RrulePanel.js:602
-#: js/RrulePanel.js:652
+#: js/RrulePanel.js:427 js/RrulePanel.js:476 js/RrulePanel.js:607
+#: js/RrulePanel.js:657
 msgid "at the"
 msgstr "ekkor:"
 
-#: js/RrulePanel.js:441 js/RrulePanel.js:621
+#: js/RrulePanel.js:446 js/RrulePanel.js:626
 msgid "first"
 msgstr "első"
 
-#: js/RrulePanel.js:442 js/RrulePanel.js:622
+#: js/RrulePanel.js:447 js/RrulePanel.js:627
 msgid "second"
 msgstr "második"
 
-#: js/RrulePanel.js:443 js/RrulePanel.js:623
+#: js/RrulePanel.js:448 js/RrulePanel.js:628
 msgid "third"
 msgstr "harmadik"
 
-#: js/RrulePanel.js:444 js/RrulePanel.js:624
+#: js/RrulePanel.js:449 js/RrulePanel.js:629
 msgid "fourth"
 msgstr "negyedik"
 
-#: js/RrulePanel.js:445 js/RrulePanel.js:625
+#: js/RrulePanel.js:450 js/RrulePanel.js:630
 msgid "last"
 msgstr "utolsó"
 
-#: js/RrulePanel.js:595
+#: js/RrulePanel.js:600
 msgid "Every {0}. Year"
 msgstr "Minden {0}. évben"
 
-#: js/RrulePanel.js:692 js/RrulePanel.js:704
+#: js/RrulePanel.js:697 js/RrulePanel.js:709
 msgid "of"
 msgstr "hónap"
 
