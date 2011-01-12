@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Views
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -22,14 +22,12 @@
 	<?php require 'Tinebase/views/includeJsAndCss.php'; ?>
 	
     <script type="text/javascript">
-    	Ext.namespace('Tine');
+    	Ext.namespace('Tine', 'Tine.Tinebase');
     
     	// indicate that Tine needs to be updates so we don't initialize Tine
     	Tine.needUpdate = true;
     
         Ext.onReady(function() {
-        	Ext.namespace('Tine', 'Tine.Tinebase');
-        	
         	Tine.Tinebase.translation = new Locale.Gettext();
         	Tine.Tinebase.translation.textdomain('Tinebase');
 	        window._ = function (msgid) {
