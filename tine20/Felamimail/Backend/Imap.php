@@ -62,7 +62,12 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         $this->connectAndLogin($params);
         
-        $this->selectFolder(isset($params->folder) ? $params->folder : 'INBOX');
+        $folderToSelect = isset($params->folder) ? $params->folder : 'INBOX';
+        try {
+            $this->selectFolder($folderToSelect);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            throw new Felamimail_Exception_IMAPFolderNotFound('Could not select ' . $folderToSelect . '(' . $zmse->getMessage() . ')');
+        }
     }
     
     /**
