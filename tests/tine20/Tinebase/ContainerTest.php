@@ -318,7 +318,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(is_object($container));
         
         $containers = $this->_instance->getPersonalContainer(Tinebase_Core::getUser(), 'Addressbook', Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_READ);
-        $this->assertGreaterThan(1, count($containers));
         $container = $containers->find('name', $this->objects['initialContainer']->name);
         $this->assertTrue(is_object($container));
     }
