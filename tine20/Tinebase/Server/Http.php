@@ -67,7 +67,8 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
             $server->setClass('Tinebase_Frontend_Http', 'Tinebase');
             if ($exception instanceof Zend_Session_Exception) {
                 Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ .' Attempt to request a privileged Http-API method without valid session from "' . $_SERVER['REMOTE_ADDR']);
-                $server->handle(array('method' => 'Tinebase.sessionException'));
+                header('HTTP/1.0 403 Forbidden');
+                exit;
             } else {
                 // check if setup is required
                 $setupController = Setup_Controller::getInstance(); 
