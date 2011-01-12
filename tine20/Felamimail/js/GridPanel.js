@@ -201,7 +201,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_write = new Ext.Action({
             requiredGrant: 'addGrant',
             actionType: 'add',
-            text: this.app.i18n._('Write'),
+            text: this.app.i18n._('Compose'),
             handler: this.onMessageCompose.createDelegate(this),
             iconCls: this.app.appName + 'IconCls'
         });
