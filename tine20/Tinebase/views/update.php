@@ -24,7 +24,7 @@
     <script type="text/javascript">
     	Ext.namespace('Tine', 'Tine.Tinebase');
     
-    	// indicate that Tine needs to be updates so we don't initialize Tine
+    	// indicate that Tine needs to be updated so we don't initialize Tine
     	Tine.needUpdate = true;
     
         Ext.onReady(function() {
