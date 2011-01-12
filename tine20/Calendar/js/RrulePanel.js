@@ -227,7 +227,12 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
             requiredGrant : 'editGrant',
             width         : 100,
             emptyText     : this.app.i18n._('forever'),
-            onTriggerClick: Ext.form.DateField.prototype.onTriggerClick.createSequence(this.onAfterUnitTriggerClick, this)
+            onTriggerClick: Ext.form.DateField.prototype.onTriggerClick.createSequence(this.onAfterUnitTriggerClick, this),
+            listeners: {
+                scope: this,
+                // so dumb!
+                render: function(f) {f.wrap.setWidth.defer(100, f.wrap, [f.initialConfig.width]);}
+            }
         });
         
         /*
