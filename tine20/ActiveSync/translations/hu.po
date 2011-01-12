@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ActiveSync\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-09-14 20:47+0100\n"
-"Last-Translator: Gump <gump@gump.hu>\n"
+"PO-Revision-Date: 2011-01-09 21:50+0100\n"
+"Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,27 +23,27 @@ msgstr "Alapértelmezett szabály beállításra került a telepítés közben"
 
 #: Preference.php:75
 msgid "Default Addressbook"
-msgstr ""
+msgstr "Alapértelmezett Címjegyzék"
 
 #: Preference.php:76
 msgid "The default addressbook to create new contacts in."
-msgstr ""
+msgstr "Alapértelmezett Címjegyzék új kapcsolatok létrehozására."
 
 #: Preference.php:79
 msgid "Default Calendar"
-msgstr ""
+msgstr "Alapértelmezett Naptár"
 
 #: Preference.php:80
 msgid "The default calendar to create new events in."
-msgstr ""
+msgstr "Alapértelmezett Naptár új események létrehozására."
 
 #: Preference.php:83
 msgid "Default Task List"
-msgstr ""
+msgstr "Alapértelmezett Feladat Lista"
 
 #: Preference.php:84
 msgid "The default task list to create new tasks in."
-msgstr ""
+msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
 
 #: js/Model.js:47
 msgid "Device"
@@ -75,7 +75,8 @@ msgstr "Beállítás {0} szűrőként"
 msgid "Resetted Sync Filter"
 msgstr "Újraállított Sync szűrő"
 
-#: js/Application.js:96 js/Application.js:108
+#: js/Application.js:96
+#: js/Application.js:108
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr "\"{1}\" eszköz {0} szűrője most \"{2}\""
 
@@ -86,3 +87,4 @@ msgstr "újraállított"
 #: js/Application.js:107
 msgid "Set Sync Filter"
 msgstr "Sync szűrő beállítása"
+

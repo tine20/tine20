@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-09-11 18:02+0100\n"
-"Last-Translator: Gump <gump@gump.hu>\n"
+"PO-Revision-Date: 2011-01-09 21:48+0100\n"
+"Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -30,39 +30,44 @@ msgstr "Úr"
 msgid "Ms"
 msgstr "Asszony"
 
-#: Setup/setup.xml:764 js/ContactEditDialog.js:137 js/ContactEditDialog.js:424
-#: js/ContactGridDetailsPanel.js:132 js/ContactGrid.js:120 js/Model.js:28
+#: Setup/setup.xml:764
+#: js/ContactEditDialog.js:137
+#: js/ContactEditDialog.js:424
+#: js/ContactGridDetailsPanel.js:132
+#: js/ContactGrid.js:120
+#: js/Model.js:28
 #: js/Model.js:131
 msgid "Company"
 msgstr "Cég"
 
-#: Setup/Update/Release3.php:38 Setup/Initialize.php:113
+#: Setup/Update/Release3.php:38
+#: Setup/Initialize.php:113
 msgid "All contacts I have read grants for"
 msgstr "Összes kapcsolat, amihez olvasási engedélyem van"
 
 #: Setup/Initialize.php:118
 msgid "My company"
-msgstr ""
+msgstr "Saját cégem"
 
 #: Setup/Initialize.php:119
 msgid "All coworkers in my company"
-msgstr ""
+msgstr "Minden alkalmazott a saját cégemnél"
 
 #: Setup/Initialize.php:132
 msgid "My contacts"
-msgstr ""
+msgstr "Kapcsolataim"
 
 #: Setup/Initialize.php:133
 msgid "All contacts in my Addressbooks"
-msgstr ""
+msgstr "Minden kapcsolat a saját Címjegyzékemben"
 
 #: Setup/Initialize.php:145
 msgid "Last modified by me"
-msgstr ""
+msgstr "Utoljára módosítottam"
 
 #: Setup/Initialize.php:146
 msgid "All contacts that I have last modified"
-msgstr ""
+msgstr "Minden kapcsolat amit utoljára én módosítottam"
 
 #: Preference.php:34
 msgid "All contacts"
@@ -104,7 +109,8 @@ msgstr "Kedvenc megosztott címjegyzék készítése vagy frissítése"
 msgid "Searching..."
 msgstr "Keresés..."
 
-#: js/ContactEditDialog.js:37 js/ContactEditDialog.js:44
+#: js/ContactEditDialog.js:37
+#: js/ContactEditDialog.js:44
 msgid "Map"
 msgstr "Térkép"
 
@@ -112,57 +118,80 @@ msgstr "Térkép"
 msgid "Personal Information"
 msgstr "Személyes információk"
 
-#: js/ContactEditDialog.js:88 js/Model.js:30
+#: js/ContactEditDialog.js:88
+#: js/Model.js:30
 msgid "Salutation"
 msgstr "Megszólítás"
 
-#: js/ContactEditDialog.js:110 js/Model.js:23
+#: js/ContactEditDialog.js:110
+#: js/Model.js:23
 msgid "Title"
 msgstr "Előtag"
 
-#: js/ContactEditDialog.js:118 js/ContactGrid.js:117 js/Model.js:21
+#: js/ContactEditDialog.js:118
+#: js/ContactGrid.js:117
+#: js/Model.js:21
 #: js/Model.js:129
 msgid "First Name"
 msgstr "Kereszt név"
 
-#: js/ContactEditDialog.js:123 js/Model.js:22
+#: js/ContactEditDialog.js:123
+#: js/Model.js:22
 msgid "Middle Name"
 msgstr "Középső név"
 
-#: js/ContactEditDialog.js:128 js/ContactEditDialog.js:424
-#: js/ContactGrid.js:116 js/Model.js:20 js/Model.js:130
+#: js/ContactEditDialog.js:128
+#: js/ContactEditDialog.js:424
+#: js/ContactGrid.js:116
+#: js/Model.js:20
+#: js/Model.js:130
 msgid "Last Name"
 msgstr "Vezeték név"
 
-#: js/ContactEditDialog.js:142 js/ContactGrid.js:121 js/Model.js:29
+#: js/ContactEditDialog.js:142
+#: js/ContactGrid.js:121
+#: js/Model.js:29
 #: js/Model.js:132
 msgid "Unit"
 msgstr "Egység"
 
-#: js/ContactEditDialog.js:151 js/ContactGrid.js:119 js/Model.js:25
+#: js/ContactEditDialog.js:151
+#: js/ContactGrid.js:119
+#: js/Model.js:25
 msgid "Display Name"
 msgstr "Kijelzett név"
 
-#: js/ContactEditDialog.js:156 js/ContactGrid.js:122 js/Model.js:31
-#: js/Model.js:134 Export/Pdf.php:118
+#: js/ContactEditDialog.js:156
+#: js/ContactGrid.js:122
+#: js/Model.js:31
+#: js/Model.js:134
+#: Export/Pdf.php:118
 msgid "Job Title"
 msgstr "Beosztás"
 
-#: js/ContactEditDialog.js:162 js/ContactGrid.js:150 js/Model.js:27
-#: js/Model.js:138 Export/Pdf.php:115
+#: js/ContactEditDialog.js:162
+#: js/ContactGrid.js:150
+#: js/Model.js:27
+#: js/Model.js:138
+#: Export/Pdf.php:115
 msgid "Birthday"
 msgstr "Születésnap"
 
-#: js/ContactEditDialog.js:166 js/Model.js:24
+#: js/ContactEditDialog.js:166
+#: js/Model.js:24
 msgid "Suffix"
 msgstr "Utótag"
 
-#: js/ContactEditDialog.js:170 js/ContactGrid.js:123 js/Model.js:32
+#: js/ContactEditDialog.js:170
+#: js/ContactGrid.js:123
+#: js/Model.js:32
 #: js/Model.js:135
 msgid "Job Role"
 msgstr "Szerepkör"
 
-#: js/ContactEditDialog.js:174 js/ContactGrid.js:124 js/Model.js:34
+#: js/ContactEditDialog.js:174
+#: js/ContactGrid.js:124
+#: js/Model.js:34
 #: Export/Pdf.php:77
 msgid "Room"
 msgstr "Szoba"
@@ -171,87 +200,126 @@ msgstr "Szoba"
 msgid "Contact Information"
 msgstr "Kapcsolati információk"
 
-#: js/ContactEditDialog.js:186 js/ContactGridDetailsPanel.js:140
-#: js/ContactGridDetailsPanel.js:164 js/ContactGrid.js:136 js/Model.js:48
+#: js/ContactEditDialog.js:186
+#: js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164
+#: js/ContactGrid.js:136
+#: js/Model.js:48
 #: js/Model.js:133
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/ContactEditDialog.js:191 js/ContactGridDetailsPanel.js:141
-#: js/ContactGridDetailsPanel.js:165 js/ContactGrid.js:137 js/Model.js:49
+#: js/ContactEditDialog.js:191
+#: js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165
+#: js/ContactGrid.js:137
+#: js/Model.js:49
 msgid "Mobile"
 msgstr "Mobil"
 
-#: js/ContactEditDialog.js:196 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166 js/ContactGrid.js:138 js/Model.js:50
+#: js/ContactEditDialog.js:196
+#: js/ContactGridDetailsPanel.js:142
+#: js/ContactGridDetailsPanel.js:166
+#: js/ContactGrid.js:138
+#: js/Model.js:50
 msgid "Fax"
 msgstr "Fax"
 
-#: js/ContactEditDialog.js:201 js/ContactGrid.js:141 js/Model.js:54
+#: js/ContactEditDialog.js:201
+#: js/ContactGrid.js:141
+#: js/Model.js:54
 msgid "Phone (private)"
 msgstr "Telefon (privát)"
 
-#: js/ContactEditDialog.js:206 js/ContactGrid.js:143 js/Model.js:56
+#: js/ContactEditDialog.js:206
+#: js/ContactGrid.js:143
+#: js/Model.js:56
 msgid "Mobile (private)"
 msgstr "Mobil (privát)"
 
-#: js/ContactEditDialog.js:211 js/ContactGrid.js:142 js/Model.js:55
+#: js/ContactEditDialog.js:211
+#: js/ContactGrid.js:142
+#: js/Model.js:55
 msgid "Fax (private)"
 msgstr "Fax (privát)"
 
-#: js/ContactEditDialog.js:216 js/ContactGridDetailsPanel.js:143
-#: js/ContactGridDetailsPanel.js:167 js/Model.js:59
+#: js/ContactEditDialog.js:216
+#: js/ContactGridDetailsPanel.js:143
+#: js/ContactGridDetailsPanel.js:167
+#: js/Model.js:59
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: js/ContactEditDialog.js:222 js/Model.js:60
+#: js/ContactEditDialog.js:222
+#: js/Model.js:60
 msgid "E-Mail (private)"
 msgstr "E-Mail (privát)"
 
-#: js/ContactEditDialog.js:229 js/ContactGridDetailsPanel.js:145
-#: js/ContactGridDetailsPanel.js:169 js/ContactGrid.js:145 js/Model.js:61
+#: js/ContactEditDialog.js:229
+#: js/ContactGridDetailsPanel.js:145
+#: js/ContactGridDetailsPanel.js:169
+#: js/ContactGrid.js:145
+#: js/Model.js:61
 msgid "Web"
 msgstr "Web"
 
-#: js/ContactEditDialog.js:262 js/Model.js:139 js/Model.js:140 js/Model.js:141
+#: js/ContactEditDialog.js:262
+#: js/Model.js:139
+#: js/Model.js:140
+#: js/Model.js:141
 msgid "Company Address"
 msgstr "Céges cím"
 
-#: js/ContactEditDialog.js:265 js/ContactEditDialog.js:294
-#: js/ContactGrid.js:125 js/Model.js:139 js/Model.js:142
+#: js/ContactEditDialog.js:265
+#: js/ContactEditDialog.js:294
+#: js/ContactGrid.js:125
+#: js/Model.js:139
+#: js/Model.js:142
 msgid "Street"
 msgstr "Utca"
 
-#: js/ContactEditDialog.js:269 js/ContactEditDialog.js:298
+#: js/ContactEditDialog.js:269
+#: js/ContactEditDialog.js:298
 msgid "Street 2"
 msgstr "Utca 2"
 
-#: js/ContactEditDialog.js:273 js/ContactEditDialog.js:302
+#: js/ContactEditDialog.js:273
+#: js/ContactEditDialog.js:302
 #: js/ContactGrid.js:127
 msgid "Region"
 msgstr "Régió"
 
-#: js/ContactEditDialog.js:277 js/ContactEditDialog.js:306 js/Model.js:140
+#: js/ContactEditDialog.js:277
+#: js/ContactEditDialog.js:306
+#: js/Model.js:140
 #: js/Model.js:143
 msgid "Postal Code"
 msgstr "Irányítószám"
 
-#: js/ContactEditDialog.js:281 js/ContactEditDialog.js:310
-#: js/ContactGrid.js:126 js/Model.js:141 js/Model.js:144
+#: js/ContactEditDialog.js:281
+#: js/ContactEditDialog.js:310
+#: js/ContactGrid.js:126
+#: js/Model.js:141
+#: js/Model.js:144
 msgid "City"
 msgstr "Város"
 
-#: js/ContactEditDialog.js:286 js/ContactEditDialog.js:315
+#: js/ContactEditDialog.js:286
+#: js/ContactEditDialog.js:315
 #: js/ContactGrid.js:129
 msgid "Country"
 msgstr "Ország"
 
-#: js/ContactEditDialog.js:291 js/Model.js:142 js/Model.js:143 js/Model.js:144
+#: js/ContactEditDialog.js:291
+#: js/Model.js:142
+#: js/Model.js:143
+#: js/Model.js:144
 #: Export/Pdf.php:89
 msgid "Private Address"
 msgstr "Privát cím"
 
-#: js/ContactEditDialog.js:336 js/Model.js:65
+#: js/ContactEditDialog.js:336
+#: js/Model.js:65
 msgid "Description"
 msgstr "Leírás"
 
@@ -267,7 +335,8 @@ msgstr "Exportálás pdf-be"
 msgid "Either {0} or {1} must be given"
 msgstr "Vagy {0} vagy {1} megadása kötelező"
 
-#: js/ContactGridDetailsPanel.js:63 js/Model.js:93
+#: js/ContactGridDetailsPanel.js:63
+#: js/Model.js:93
 msgid "Contacts"
 msgstr "Kapcsolatok"
 
@@ -285,13 +354,14 @@ msgstr "Info"
 
 #: js/ContactGridDetailsPanel.js:215
 msgid "Insecure link"
-msgstr ""
+msgstr "Nem biztonságos link"
 
 #: js/ContactGridDetailsPanel.js:215
 msgid "Please review this link in edit dialog."
-msgstr ""
+msgstr "Kérlek ellenőrizd ezt a linket a szerkesztő ablakban."
 
-#: js/ContactGrid.js:114 js/Model.js:145
+#: js/ContactGrid.js:114
+#: js/Model.js:145
 msgid "Type"
 msgstr "Típus"
 
@@ -327,7 +397,8 @@ msgstr "Irányítószám (privát)"
 msgid "Country (private)"
 msgstr "Ország (privát)"
 
-#: js/ContactGrid.js:135 Export/Pdf.php:53
+#: js/ContactGrid.js:135
+#: Export/Pdf.php:53
 msgid "Email"
 msgstr "Email"
 
@@ -347,7 +418,8 @@ msgstr "Email (privát)"
 msgid "URL (private)"
 msgstr "URL (privát)"
 
-#: js/ContactGrid.js:147 js/Model.js:136
+#: js/ContactGrid.js:147
+#: js/Model.js:136
 msgid "Note"
 msgstr "Leírás"
 
@@ -381,7 +453,7 @@ msgstr "Exportálás XLS-be"
 
 #: js/ContactGrid.js:197
 msgid "Export as ..."
-msgstr ""
+msgstr "Exportálás mint ..."
 
 #: js/ContactGrid.js:213
 msgid "Call contact"
@@ -415,13 +487,17 @@ msgstr "Mobil privát"
 msgid "Internal Contact"
 msgstr "Belső kapcsolatok"
 
-#: js/Addressbook.js:29 js/Model.js:97 js/Model.js:200
+#: js/Addressbook.js:29
+#: js/Model.js:97
+#: js/Model.js:200
 msgid "Addressbook"
 msgid_plural "Addressbooks"
 msgstr[0] "Címjegyzék"
 msgstr[1] "Címjegyzékek"
 
-#: js/ContactFilterModel.js:37 js/Model.js:93 js/Model.js:124
+#: js/ContactFilterModel.js:37
+#: js/Model.js:93
+#: js/Model.js:124
 msgid "Contact"
 msgid_plural "Contacts"
 msgstr[0] "Kapcsolat"
@@ -479,7 +555,8 @@ msgstr "Ország (Privát cím)"
 msgid "Web (private)"
 msgstr "Web (privát)"
 
-#: js/Model.js:97 js/Model.js:200
+#: js/Model.js:97
+#: js/Model.js:200
 msgid "Addressbooks"
 msgstr "Címjegyzékek"
 
@@ -510,12 +587,12 @@ msgstr "Készítő"
 #: js/Model.js:196
 msgid "List"
 msgid_plural "Lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Lista"
+msgstr[1] "Listák"
 
 #: js/Model.js:196
 msgid "Lists"
-msgstr ""
+msgstr "Listák"
 
 #: Export/Pdf.php:38
 msgid "Business Contact Data"
