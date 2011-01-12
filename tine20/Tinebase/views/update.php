@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Views
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -19,30 +19,21 @@
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all.js"></script>
 
-	<?php require 'Tinebase/views/includeJsAndCss.php'; ?>
-	
+<?php 
+    $i18n = Tinebase_Translation::getTranslation('Tinebase');
+    $msg = $i18n->_('Tine 2.0 needs to be updated or is not installed yet.');
+    $title = $i18n->_('Please wait or contact your administrator');
+ 
+    echo <<<EOT
     <script type="text/javascript">
+        Ext.BLANK_IMAGE_URL = "library/ExtJS/resources/images/default/s.gif";
         Ext.onReady(function() {
-        	Ext.namespace('Tine', 'Tine.Tinebase');
-        	
-        	Tine.Tinebase.translation = new Locale.Gettext();
-        	Tine.Tinebase.translation.textdomain('Tinebase');
-	        window._ = function (msgid) {
-	            return Tine.Tinebase.translation.dgettext('Tinebase', msgid);
-	        };
-        	
-            var viewPort = new Ext.Viewport({
-				layout: 'fit',
-                items: {
-                	xtype: 'container',
-					layout: 'fit'
-            	}
-			});
-            
-            Ext.MessageBox.wait(_('Tine 2.0 needs to be updated or is not installed yet.'), _('Please wait or contact your administrator'));
+            Ext.MessageBox.wait('$msg', '$title');
             window.setTimeout('location.href = location.href', 20000);
         }); 
     </script>
+EOT;
+?>
 
 </head>
 <body>
