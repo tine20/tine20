@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
@@ -381,7 +381,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @return  Tinebase_Record_RecordSet of subtype Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getPersonalContainer($_accountId, $_application, $_owner, $_grant, $_ignoreACL=false)
+    public function getPersonalContainer($_accountId, $_application, $_owner, $_grant, $_ignoreACL = false)
     {
         $accountId   = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $ownerId     = Tinebase_Model_User::convertUserIdToInt($_owner);
@@ -416,10 +416,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         // if no containers where found,  maybe something went wrong when creating the initial folder
         // let's check if the controller of the application has a function to create the needed folders
-        if(empty($containersData) and $accountId === $ownerId) {
+        if (empty($containersData) and $accountId === $ownerId) {
             $application = Tinebase_Core::getApplicationInstance($application->name);
             
-            if($application instanceof Tinebase_Container_Interface) {
+            if ($application instanceof Tinebase_Container_Interface) {
                 return $application->createPersonalFolder($accountId);
             }
         }
@@ -437,15 +437,20 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param  Array|String      $_grant
      * @param  String            $_aclTableName
      * @return void
-     * @throws Tinebase_Exception_NotFound
      */
     public static function addGrantsSql($_select, $_accountId, $_grant, $_aclTableName = 'container_acl')
     {
         $db = $_select->getAdapter();
         
-        //@todo fetch wildcard from specific db adapter
-        $grant = is_array($_grant) ? $_grant : array($_grant);
-        $grants = str_replace('*', '%', $grant);
+        $grants = is_array($_grant) ? $_grant : array($_grant);
+        
+        // admin grant includes all other grants
+        if (! in_array(Tinebase_Model_Grants::GRANT_ADMIN, $grants)) {
+            $grants[] = Tinebase_Model_Grants::GRANT_ADMIN;
+        }
+
+        // @todo fetch wildcard from specific db adapter
+        $grants = str_replace('*', '%', $grants);
         
         if (empty($grants)) {
             $_select->where('1=0');
@@ -466,14 +471,12 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->orWhere("{$quotedActType} = ?", Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE);
         
         $grantsSelect = new Tinebase_Backend_Sql_Filter_GroupSelect($_select);
-        foreach($grants as $grant) {
+        foreach ($grants as $grant) {
             $grantsSelect->orWhere("{$quotedGrant} LIKE ?", $grant);
         }
         
-        
         $grantsSelect->appendWhere(Zend_Db_Select::SQL_AND);
         $accountSelect->appendWhere(Zend_Db_Select::SQL_AND);
-        
     }
     
     /**
