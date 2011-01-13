@@ -648,9 +648,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         try {
             $result = $this->_backend->create($messageToCache);
-            // store headers in cache / we need them later anyway
-            $cacheId = 'getMessageHeaders' . $result->getId();
-            Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));
+            // only cache message headers if received during the last day
+            if ( $messageToCache->received->isLater(Tinebase_DateTime::now()->subDay(1)) ) {
+                $cacheId = 'getMessageHeaders' . $result->getId();
+                Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));
+            }
         } catch (Zend_Db_Statement_Exception $zdse) {
             // perhaps we already have this message in our cache (duplicate)
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
