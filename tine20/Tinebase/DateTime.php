@@ -86,6 +86,11 @@ class Tinebase_DateTime extends DateTime
         } else {
             parent::__construct($time);
         }
+        
+        // Normalize Timezonename, as sometimes +00:00 is taken
+        if (is_numeric($_time)) {
+            $this->setTimezone('UTC');
+        }
     }
     
     public function __call($name, $arguments)
