@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -20,7 +20,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>
  * </p>
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id$
  * 
@@ -649,6 +649,15 @@ Tine.Felamimail.handleRequestException = function(exception) {
             Ext.Msg.show({
                title:   app.i18n._('Sieve Error'),
                msg:     exception.message ? exception.message : app.i18n._('No connection to Sieve server.'),
+               icon:    Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+            });
+            break;
+
+        case 931: // Felamimail_Exception_SievePutScriptFail
+            Ext.Msg.show({
+               title:   app.i18n._('Save Sieve Script Error'),
+               msg:     app.i18n._('Could not save script on Sieve server.') + (exception.message ? ' (' + exception.message + ')' : ''),
                icon:    Ext.MessageBox.ERROR,
                buttons: Ext.Msg.OK
             });
