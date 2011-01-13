@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-12 16:13+0100\n"
+"PO-Revision-Date: 2011-01-13 14:54+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -638,6 +638,14 @@ msgstr "Błąd filtrowania"
 msgid "No connection to Sieve server."
 msgstr "Brak połączenia z serwerem filtrów."
 
+#: js/Felamimail.js:659
+msgid "Save Sieve Script Error"
+msgstr "Zapisz błąd skryptu filtrującego"
+
+#: js/Felamimail.js:660
+msgid "Could not save script on Sieve server."
+msgstr "Zapisanie skryptu na serwerze filtrującym było niemożliwe."
+
 #: js/Model.js:134
 msgid "Subject/From"
 msgstr "Temat / Od"
@@ -779,11 +787,11 @@ msgstr "mniejszy od"
 msgid "Header \"{0}\" contains \"{1}\""
 msgstr "Nagłówek \"{0}\" zawiera \"{1}\""
 
-#: js/sieve/RulesDialog.js:79
+#: js/sieve/RulesDialog.js:53
 msgid "Sieve Filter Rules"
 msgstr "Reguły filtrowania"
 
-#: js/sieve/RulesDialog.js:81
+#: js/sieve/RulesDialog.js:84
 msgid "Sieve Filter Rules for {0}"
 msgstr "Reguły filtrowania dla {0}"
 
