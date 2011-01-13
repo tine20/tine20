@@ -31,10 +31,10 @@ class Phone_Controller extends Tinebase_Controller_Abstract
      */
     private function __construct() 
     {
-        $this->_callBackendType = Tinebase_Config::getInstance()->getConfigAsArray('snom', 'Tinebase', array(
+        $snomConfig = Tinebase_Config::getInstance()->getConfigAsArray('snom', 'Tinebase', array(
             'backend' => Phone_Backend_Factory::ASTERISK
         ));
-        
+        $this->_callBackendType = $snomConfig['backend']; 
         $this->_applicationName = 'Phone';
     }
 
