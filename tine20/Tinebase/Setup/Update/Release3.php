@@ -31,7 +31,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             </field>');
         $this->_backend->addCol('customfield_config', $declaration);
         
-        $this->setTableVersion('customfield_config', '4');
+        $this->setTableVersion('customfield_config', '4', TRUE);
         $this->setApplicationVersion('Tinebase', '3.1');
     }    
 
@@ -54,7 +54,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
         }
         
-        $this->setTableVersion('preferences', '5');
+        $this->setTableVersion('preferences', '5', TRUE);
         
         // remove all personal only prefs for anyone
         $this->_db->query("DELETE FROM " . SQL_TABLE_PREFIX . "preferences WHERE account_type LIKE 'anyone' AND name IN ('defaultCalendar', 'defaultAddressbook')");
@@ -110,7 +110,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         );
         
         // increase versions
-        $this->setTableVersion('importexport_definition', '3');
+        $this->setTableVersion('importexport_definition', '3', TRUE);
         $this->setApplicationVersion('Tinebase', '3.3');
     }
     
@@ -128,7 +128,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
                 </field>');
         $this->_backend->addCol('importexport_definition', $declaration);
         
-        $this->setTableVersion('importexport_definition', '4');
+        $this->setTableVersion('importexport_definition', '4', TRUE);
         $this->setApplicationVersion('Tinebase', '3.4');
     }    
 
@@ -164,7 +164,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->_db->query("UPDATE `" . SQL_TABLE_PREFIX . "container_acl` SET `account_grant`='deleteGrant' WHERE `account_grant` = '8'");
         $this->_db->query("UPDATE `" . SQL_TABLE_PREFIX . "container_acl` SET `account_grant`='adminGrant' WHERE `account_grant` = '16'");
         
-        $this->setTableVersion('container_acl', '2');
+        $this->setTableVersion('container_acl', '2', TRUE);
         $this->setApplicationVersion('Tinebase', '3.6');
     }
     
@@ -459,7 +459,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             </field>');
         $this->_backend->addCol('container', $declaration, 3);
         
-        $this->setTableVersion('container', '3');
+        $this->setTableVersion('container', '3', TRUE);
         $this->setApplicationVersion('Tinebase', '3.13');
     }
 
@@ -504,7 +504,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             </field>');
         $this->_backend->addCol('access_log', $declaration);
         
-        $this->setTableVersion('access_log', '2');
+        $this->setTableVersion('access_log', '2', TRUE);
         $this->setApplicationVersion('Tinebase', '3.15');
     }
     
@@ -683,7 +683,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $data, $this->_db->quoteInto("id = ?", $row['account_id']));
         }
         
-        $this->setTableVersion('accounts', '4');
+        $this->setTableVersion('accounts', '4', TRUE);
         $this->setApplicationVersion('Tinebase', '3.17');
     }
     
@@ -719,7 +719,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
             $this->_db->update(SQL_TABLE_PREFIX . 'accounts', $data, $this->_db->quoteInto("id = ?", $row['account_id']));
         }
         
-        $this->setTableVersion('accounts', '5');
+        $this->setTableVersion('accounts', '5', TRUE);
         $this->setApplicationVersion('Tinebase', '3.18');
     }
     
@@ -759,7 +759,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         ');        
         $this->_backend->addCol('groups', $declaration);
         
-        $this->setTableVersion('groups', 2);
+        $this->setTableVersion('groups', '2', TRUE);
         $this->setApplicationVersion('Tinebase', '3.19');
     }
     
@@ -801,7 +801,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         );
         
         // increase versions
-        $this->setTableVersion('filter', 2);
+        $this->setTableVersion('filter', '2', TRUE);
         $this->setApplicationVersion('Tinebase', '3.20');
     }
     
@@ -822,7 +822,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->_db->update(SQL_TABLE_PREFIX . 'accounts', array('login_failures' => 0));
                 
         // increase versions
-        $this->setTableVersion('accounts', 6);
+        $this->setTableVersion('accounts', 6, TRUE);
         $this->setApplicationVersion('Tinebase', '3.21');
     }
     
@@ -1118,7 +1118,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->_backend->dropIndex('tree_nodes', 'parent_id');
         
-        $this->setTableVersion('tree_nodes', 2);
+        $this->setTableVersion('tree_nodes', 2, TRUE);
         
         $this->setApplicationVersion('Tinebase', '3.24');
     }

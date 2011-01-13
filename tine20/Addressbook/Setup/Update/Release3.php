@@ -82,7 +82,7 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
                 <length>255</length>
             </field>');
         $this->_backend->addCol('addressbook_salutations', $declaration);
-        $this->setTableVersion('addressbook_salutations', '2');
+        $this->setTableVersion('addressbook_salutations', '2', TRUE);
         
         // update image paths
         $salutationTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'addressbook_salutations'));
