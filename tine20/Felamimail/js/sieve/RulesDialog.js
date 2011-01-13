@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -21,8 +21,7 @@ Ext.namespace('Tine.Felamimail.sieve');
  * <p>
  * </p>
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id$
  * 
@@ -47,14 +46,19 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     tbarItems: [],
     evalGrants: false,
     
+    //private
+    initComponent: function(){
+        Tine.Felamimail.sieve.RulesDialog.superclass.initComponent.call(this);
+        
+        this.i18nRecordName = this.app.i18n._('Sieve Filter Rules');
+    },
+    
     /**
      * overwrite update toolbars function (we don't have record grants yet)
      * 
      * @private
      */
-    updateToolbars: function() {
-
-    },
+    updateToolbars: Ext.emptyFn,
     
     /**
      * init record to edit
@@ -76,7 +80,6 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-        this.i18nRecordName = this.app.i18n._('Sieve Filter Rules');
         
         var title = String.format(this.app.i18n._('Sieve Filter Rules for {0}'), this.account.get('name'));
         this.window.setTitle(title);
@@ -119,7 +122,9 @@ Tine.Felamimail.sieve.RulesDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     this.window.close();
                 }
             },
-            failure: this.onRequestFailed,
+            failure: Tine.Felamimail.handleRequestException.createSequence(function() {
+                this.loadMask.hide();
+            }, this),
             timeout: 150000 // 3 minutes
         });
     }
