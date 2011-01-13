@@ -278,6 +278,9 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var store = this.getCalendarPanel(this.activeView).getStore();
         
         var options = {};
+        // NOTE: Only THIS.onStoreBeforeload is called. 
+        //       The store beforeLoad event is NOT fired!
+        //       This skips the period filter which comes form calendarPanel::onStoreBeforeLoad!
         this.onStoreBeforeload(store, options);
         
         return options.params.filter;
