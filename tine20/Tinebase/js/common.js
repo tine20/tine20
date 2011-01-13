@@ -294,6 +294,63 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * check whether given value can be interpreted as true
+     * 
+     * @param {String|Integer|Boolean} value
+     * @return {Boolean}
+     */
+    isTrue: function (value) {
+    	return value === 1 || value === '1' || value === true || value === 'true';
+    },
+    
+    /**
+     * check whether object is empty (has no property)
+     * 
+     * @param {Object} obj
+     * @return {Boolean}
+     */
+    isEmptyObject: function (obj) {
+    	for (var name in obj) {
+			if (obj.hasOwnProperty(name)) {
+				return false;
+			}
+		}
+		return true;
+    },
+    
+    /**
+	 * clone function
+	 * 
+	 * @param {Object/Array} o Object or array to clone
+	 * @return {Object/Array} Deep clone of an object or an array
+	 */
+    clone: function (o) {
+    	if (! o || 'object' !== typeof o) {
+	        return o;
+	    }
+	    
+	    if ('function' === typeof o.clone) {
+			return o.clone();
+	    }
+	    
+	    var c = '[object Array]' === Object.prototype.toString.call(o) ? [] : {},
+	    	p, v;
+	    	
+	    for (p in o) {
+	        if (o.hasOwnProperty(p)) {
+	            v = o[p];
+	            if (v && 'object' === typeof v) {
+	                c[p] = Ext.ux.clone(v);
+	            }
+	            else {
+	                c[p] = v;
+	            }
+	        }
+	    }
+	    return c;
+    },
+    
+    /**
      * check if user has right to view/manage this application/resource
      * 
      * @param   {String}      right (view, admin, manage)
