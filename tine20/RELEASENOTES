@@ -24,6 +24,7 @@ Contents
 13. IMAP authentication provider
 14. Added switch --passwordfile to CLI
 15. New CLI functions
+16. Voipmanager and Phone applications have been moved to separate package
 
 --------------------------------------------------------------
 1. Tinebase_Controller_Record_Abstract: new/renamed inspection functions (API)
@@ -146,3 +147,8 @@ the webserver has write permissions for this directory.
     - Tinebase.clearTable
     - Tinebase.purgeDeletedRecords
     - Tinebase.addCustomfield 
+
+--------------------------------------------------------------    
+16. Voipmanager and Phone applications have been moved to separate package
+
+- These two applications have been moved to a separate package that can be downloaded on the Tine 2.0 Download page.
