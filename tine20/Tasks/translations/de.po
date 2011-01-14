@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2011-01-07 14:21+0100\n"
+"PO-Revision-Date: 2011-01-14 15:45+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -41,16 +41,16 @@ msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
 
 #: Setup/Initialize.php:46
 msgid "My open tasks"
-msgstr "Meine offenen Aufgaben"
+msgstr "Offene Aufgaben für mich"
 
 #: Setup/Initialize.php:55
 msgid "My open tasks this week"
-msgstr "Meine offenen Aufgaben in dieser Woche"
+msgstr "Offene Aufgaben für mich (diese Woche)"
 
 #: Setup/Initialize.php:64
 #: Preference.php:29
 msgid "All my tasks"
-msgstr "Alle meine Aufgaben"
+msgstr "Alle Aufgaben für mich"
 
 #: Setup/Initialize.php:65
 msgid "All tasks that I am responsible for"
