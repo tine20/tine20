@@ -80,12 +80,20 @@ var ab = {
 				card.getProperty("BirthDay", "00"),
 				aHours,00,00,000
 			);
-			var rYear = dLoc.getUTCFullYear();
+			/*var rYear = dLoc.getUTCFullYear();
 			var rMonth = dLoc.getUTCMonth()+1;
 				if (rMonth<10) rMonth = '0'+rMonth;
 			var rDay = (dLoc.getUTCDate()>9) ? dLoc.getUTCDate() : '0'+dLoc.getUTCDate();
 			var rHour = (dLoc.getUTCHours()>9) ? dLoc.getUTCHours() : '0'+dLoc.getUTCHours();
 			var rMinute = (dLoc.getUTCMinutes()>9) ? dLoc.getUTCMinutes() : '0'+dLoc.getUTCMinutes();
+			var ret = rYear+'-'+rMonth+'-'+rDay+'T'+rHour+':'+rMinute+':00.000Z';*/
+			var dAs = new Date(dLoc.getTime() + (dLoc.getTimezoneOffset() * 60000));
+			var rYear = dAs.getFullYear();
+			var rMonth = dAs.getMonth()+1;
+				if (rMonth<10) rMonth = '0'+rMonth;
+			var rDay = (dAs.getDate()>9) ? dAs.getDate() : '0'+dAs.getDate();
+			var rHour = (dAs.getHours()>9) ? dAs.getHours() : '0'+dAs.getHours();
+			var rMinute = (dAs.getMinutes()>9) ? dAs.getMinutes() : '0'+dAs.getMinutes();
 			var ret = rYear+'-'+rMonth+'-'+rDay+'T'+rHour+':'+rMinute+':00.000Z';
 		}
 		else
