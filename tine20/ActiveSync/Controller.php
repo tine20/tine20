@@ -95,12 +95,12 @@ class ActiveSync_Controller extends Tinebase_Controller_Abstract
         switch($_class) {
             case self::CLASS_CONTACTS:
             case self::CLASS_CALENDAR:
-            case self::CLASS_EMAIL:
             case self::CLASS_TASKS:
                 $className = 'ActiveSync_Controller_' . $_class;
                 $backend = new $className($_device, $_syncTimeStamp);
                 break;
                 
+            case self::CLASS_EMAIL:
             case self::STORE_MAILBOX:
                 $className = 'ActiveSync_Controller_' . self::CLASS_EMAIL;
                 $backend = new $className($_device, $_syncTimeStamp);
