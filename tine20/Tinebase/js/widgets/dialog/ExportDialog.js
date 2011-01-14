@@ -50,7 +50,7 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             fields: Tine.Tinebase.Model.ImportExportDefinition,
             root: 'results',
             totalProperty: 'totalcount',
-            id: 'id',
+            idProperty: 'id',
             remoteSort: false
         });
         
@@ -100,7 +100,8 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 allowBlank: false,
                 forceSelection: true,
                 emptyText: _('Select Export Definition ...'),
-                valueField:'id'
+                valueField: 'id',
+                value: (this.definitionsStore.getCount() > 0) ? this.definitionsStore.getAt(0).id : null 
             }
             ]
         };
