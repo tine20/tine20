@@ -28,7 +28,7 @@ class Timetracker_Model_TimeaccountClosedFilter extends Tinebase_Model_Filter_Bo
     public function appendFilterSql($_select, $_backend)
     {
         $db = $_backend->getAdapter();
-         
+        
         // prepare value
         $value = $this->_value ? 1 : 0;
                  
