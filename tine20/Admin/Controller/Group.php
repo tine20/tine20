@@ -178,7 +178,17 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
             $_group->list_id = $list->getId();
         }
         
-        $group = Tinebase_Group::getInstance()->addGroup($_group);
+        
+        try {
+            $group = Tinebase_Group::getInstance()->addGroup($_group);
+        } catch (Exception $e) {
+            // remove list again, if group creation fails
+            if (isset($list)) {
+                $listsBackend = new Addressbook_Backend_List();
+                $listsBackend->delete($list);
+            }
+            throw $e;
+        }
         
         if (!empty($_group['members']) ) {
             Tinebase_Group::getInstance()->setGroupMembers($group->getId(), $_group['members']);
