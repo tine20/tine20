@@ -330,7 +330,8 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
      */
     public function createOrUpdateContact(Tinebase_Model_FullUser $_user)
     {
-        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
+        $contactsBackend = new Addressbook_Backend_Sql();
+        $contactsBackend->setGetDisabledContacts(true);
         
         if (empty($_user->container_id)) {
             $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
