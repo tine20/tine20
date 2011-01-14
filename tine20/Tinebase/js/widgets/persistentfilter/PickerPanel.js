@@ -429,7 +429,8 @@ Tine.widgets.persistentfilter.PickerTreePanelLoader = Ext.extend(Tine.widgets.tr
                 qtip: Ext.util.Format.htmlEncode(attr.description ? this.app.i18n._hidden(attr.description) : ''),
                 selected: attr.id === this.selectedFilterId,
                 id: attr.id,
-                leaf: attr.leaf === false ? attr.leaf : true
+                leaf: attr.leaf === false ? attr.leaf : true,
+                cls: 'tinebase-westpanel-node-favorite'
             });
         }
     }
