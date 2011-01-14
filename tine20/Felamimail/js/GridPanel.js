@@ -955,6 +955,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                            
                 if (folder) {
                     folder.set('cache_unreadcount', folder.get('cache_unreadcount') + diff);
+                    folder.commit();
                 }
             }
             
