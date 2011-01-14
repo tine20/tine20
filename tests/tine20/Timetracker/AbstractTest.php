@@ -174,9 +174,10 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * get Timeaccount filter
      *
+     * @param boolean $_showClosed
      * @return array
      */
-    protected function _getTimeaccountFilter()
+    protected function _getTimeaccountFilter($_showClosed = FALSE)
     {
         $result = array(
             array(
@@ -188,8 +189,16 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
                 'field' => 'containerType', 
                 'operator' => 'equals', 
                 'value' => Tinebase_Model_Container::TYPE_SHARED
-            ),     
+            ),
         );
+        
+        if ($_showClosed) {
+            $result[] = array(
+                'field' => 'showClosed', 
+                'operator' => 'equals', 
+                'value' => TRUE
+            );
+        }
 
         return $result;
     }

@@ -4,8 +4,8 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  * @todo        add test for contract <-> timeaccount relations
@@ -15,10 +15,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Timetracker_JsonTest::main');
-}
 
 /**
  * Test class for Timetracker_Frontent_Json
@@ -99,15 +95,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     {
         // create
         $timeaccount = $this->_getTimeaccount();
+        $timeaccount->is_open = 0;
         $timeaccountData = $this->_json->saveTimeaccount($timeaccount->toArray());
+        $this->_toDeleteIds['ta'][] = $timeaccountData['id'];
         
         // search & check
-        $search = $this->_json->searchTimeaccounts($this->_getTimeaccountFilter(), $this->_getPaging());
-        $this->assertEquals($timeaccount->description, $search['results'][0]['description']);
+        $timeaccountFilter = $this->_getTimeaccountFilter();
+        $search = $this->_json->searchTimeaccounts($timeaccountFilter, $this->_getPaging());
+        $this->assertEquals(0, $search['totalcount'], 'show closed filter not working');
+
+        $search = $this->_json->searchTimeaccounts($this->_getTimeaccountFilter(TRUE), $this->_getPaging());
         $this->assertEquals(1, $search['totalcount']);
-        
-        // cleanup
-        $this->_json->deleteTimeaccounts($timeaccountData['id']);
+        $this->assertEquals($timeaccount->description, $search['results'][0]['description']);
     }
     
     /**
