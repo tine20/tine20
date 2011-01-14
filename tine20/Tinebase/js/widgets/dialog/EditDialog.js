@@ -338,7 +338,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         //this.setHeight(Ext.fly(this.el.dom.parentNode).getHeight());
             
         this.loadMask = new Ext.LoadMask(ct, {msg: String.format(_('Transferring {0}...'), this.i18nRecordName)});
-        if (this.recordProxy !== null && this.recordProxy.isLoading(this.loadRequest)) {
+        if (this.mode !== 'local' && this.recordProxy !== null && this.recordProxy.isLoading(this.loadRequest)) {
             this.loadMask.show();
         }
     },
