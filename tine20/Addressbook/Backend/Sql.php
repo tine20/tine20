@@ -38,6 +38,13 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
+    
+    /**
+     * should the class return contacts of disabled users
+     * 
+     * @var boolean
+     */
+    protected $_getDisabledContacts = FALSE;
 
     /**
      * fetch one contact of a user identified by his user_id
@@ -102,6 +109,11 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         return $contact;
     }
     
+    public function setGetDisabledContacts($_value)
+    {
+        $this->_getDisabledContacts = !!$_value;
+    }
+    
     /**
      * returns contact image
      *
@@ -155,21 +167,23 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             /* select */ ($_cols == '*' || array_key_exists('account_id', (array)$_cols)) ? array('account_id' => 'accounts.id') : array()
         );
         
-        if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
-            $where = "/* is no user */ ISNULL(accounts.id) OR /* is user */ (NOT ISNULL(accounts.id) AND " . 
-                $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
-                " AND " . 
-                '('. $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . ' OR ' . $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.id') . ' = ?', Tinebase_Core::getUser()->getId()) . ')' .
-            ")";
-        } else {
-            $where = "/* is no user */ ISNULL(accounts.id) OR /* is user */ (NOT ISNULL(accounts.id) AND " . 
-                $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
-                " AND " . 
-                $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . 
-            ")";
+        if ($this->_getDisabledContacts !== true) {
+            if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
+                $where = "/* is no user */ ISNULL(accounts.id) OR /* is user */ (NOT ISNULL(accounts.id) AND " . 
+                    $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
+                    " AND " . 
+                    '('. $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . ' OR ' . $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.id') . ' = ?', Tinebase_Core::getUser()->getId()) . ')' .
+                ")";
+            } else {
+                $where = "/* is no user */ ISNULL(accounts.id) OR /* is user */ (NOT ISNULL(accounts.id) AND " . 
+                    $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
+                    " AND " . 
+                    $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.visibility') . ' = ?', 'displayed') . 
+                ")";
+            }
+            
+            $select->where($where);
         }
-        
-        $select->where($where);        
         
         if ($_cols == '*' || array_key_exists('jpegphoto', (array)$_cols)) {
             $select->joinLeft(
