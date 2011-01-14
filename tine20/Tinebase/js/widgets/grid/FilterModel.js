@@ -35,52 +35,62 @@ Tine.widgets.grid.FilterModel = function(config) {
 
 Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
     /**
-     * @cfg {String} label for the filter
+     * @cfg {String} label 
+     * label for the filter
      */
     label: '',
     
     /**
-     * @cfg {String} name of th field to filter
+     * @cfg {String} field
+     * name of th field to filter
      */
     field: '',
     
     /**
-     * @cfg {String} type of value
+     * @cfg {String} valueType
+     * type of value
      */
     valueType: 'string',
     
     /**
-     * @cfg {String} default value
+     * @cfg {String} defaultValue
+     * default value
      */
     defaultValue: null,
     
     /**
-     * @cfg {Array} valid operators
+     * @cfg {Array} operators
+     * valid operators
      */
     operators: null,
     
     /**
-     * @cfg {String} name of the default operator
+     * @cfg {String} defaultOperator
+     * name of the default operator
      */
     defaultOperator: null,
     
     /**
-     * @cfg {Array} define custom operators
+     * @cfg {Array} customOperators
+     * define custom operators
      */
     customOperators: null,
     
     /**
-     * @cfg {Ext.data.Store|Array} (used by combo valueType)
+     * @cfg {Ext.data.Store|Array} 
+     * used by combo valueType
      */
     store: null,
     
     /**
-     * @cfg {String} displayField (used by combo valueType)
+     * @cfg {String} displayField
+     * used by combo valueType
      */
     displayField: null,
     
     /**
-     * @cfg {String} valueField (used by combo valueType)
+     * @cfg {String} valueField
+     * used by combo valueType
      */
     valueField: null,
     filterValueWidth: 200,
