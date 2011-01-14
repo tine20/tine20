@@ -5,7 +5,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -56,23 +56,6 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     protected $_isResolved = FALSE;
     
     /**
-     * constructs a new filter group
-     *
-     * @param  array $_data
-     * @param  string $_condition {AND|OR}
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    public function __construct(array $_data = array(), $_condition = '', $_options = array())
-    {
-        parent::__construct($_data, $_condition, $_options);
-        
-        if (array_key_exists('showClosed', $_options) && ! $this->isFilterSet('showClosed')) {
-            // add show closed = true filter if not already set
-            $this->createFilter('showClosed', 'equals', $_options['showClosed']);
-        }
-    }
-    
-    /**
      * set options
      *
      * @param array $_options
@@ -80,7 +63,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
     protected function _setOptions(array $_options)
     {
         $_options['useTimesheetAcl']    = array_key_exists('useTimesheetAcl', $_options) ? $_options['useTimesheetAcl'] : FALSE;
-        $_options['showClosed']         = array_key_exists('showClosed', $_options)      ? $_options['showClosed']      : FALSE;
+        $_options['showClosed']         = array_key_exists('showClosed', $_options)      ? $_options['showClosed']      : 0;
         parent::_setOptions($_options);
     }
     
@@ -104,6 +87,11 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
      */
     public function appendFilterSql($_select, $_backend)
     {
+        if (! $this->isFilterSet('showClosed')) {
+            // add show closed filter if not already set
+            $this->addFilter($this->createFilter('showClosed', 'equals', $this->_options['showClosed']));
+        }
+        
         $this->_appendAclSqlFilter($_select);
     }
     
