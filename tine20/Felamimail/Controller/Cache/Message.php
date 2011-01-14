@@ -138,7 +138,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_addMessagesToCache($folder, $imap);
         $this->_checkForMissingMessages($folder, $imap);
         $this->_updateFolderStatus($folder);
-        $this->updateFlags($folder);
+        #$this->updateFlags($folder);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -237,24 +237,31 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             $decrementUnreadCounter   = 0;
             
             while ($messageSequence === null) {
-                $latestMessage = $this->_getLatestMessage($_folder);
+                $latestMessageUidArray = $this->_getLatestMessageUid($_folder);
                 
-                if ($latestMessage instanceof Felamimail_Model_Message) {
-                    if ($latestMessage->messageuid === $lastFailedUid) {
+                if (is_array($latestMessageUidArray)) {
+                    $latestMessageId  = key($latestMessageUidArray);
+                    $latestMessageUid = current($latestMessageUidArray);
+                    
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " $latestMessageId  $latestMessageUid");
+                    
+                    if ($latestMessageUid === $lastFailedUid) {
                         throw new Felamimail_Exception('failed to delete invalid messageuid from cache');
                     }
                     
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Check messageUid {$latestMessage->messageuid} in folder " . $_folder->globalname);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Check messageUid {$latestMessageUid} in folder " . $_folder->globalname);
                     
                     try {
-                        $this->_imapMessageSequence  = $_imap->resolveMessageUid($latestMessage->messageuid);
+                        $this->_imapMessageSequence  = $_imap->resolveMessageUid($latestMessageUid);
                         $this->_cacheMessageSequence = $_folder->cache_totalcount;
                         $messageSequence             = $this->_imapMessageSequence + 1;
                     } catch (Zend_Mail_Protocol_Exception $zmpe) {
                         // message does not exist on imap server anymore, remove from local cache
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " messageUid {$latestMessage->messageuid} not found => remove from cache");
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " messageUid {$latestMessageUid} not found => remove from cache");
                         
-                        $lastFailedUid = $latestMessage->messageuid;
+                        $lastFailedUid = $latestMessageUid;
+                        
+                        $latestMessage = $this->_backend->get($latestMessageId);
                         $this->_backend->delete($latestMessage);
                         
                         $_folder->cache_totalcount--;
@@ -318,6 +325,38 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     }
     
     /**
+     * get message with highest messageUid from cache 
+     * 
+     * @param  mixed  $_folderId
+     * @return Felamimail_Model_Message
+     */
+    protected function _getLatestMessageUid($_folderId) 
+    {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array(
+                'field'    => 'folder_id', 
+                'operator' => 'equals', 
+                'value'    => $folderId
+            )
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'limit' => 1,
+            'sort'  => 'messageuid',
+            'dir'   => 'DESC'
+        ));
+        
+        $result = $this->_backend->searchMessageUids($filter, $pagination);
+        
+        if(count($result) === 0) {
+            return null;
+        }
+        
+        return $result;
+    }
+    
+    /**
      * do we have time left for update (updates elapsed time)?
      * 
      * @return boolean
@@ -367,28 +406,28 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 for ($i=$begin; $i > 0; $i -= $this->_importCountPerStep) {
                     $firstMessageSequence = ($i-$this->_importCountPerStep) >= 0 ? $i-$this->_importCountPerStep : 0;
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " fetching from $firstMessageSequence");
-                    $cachedMessages = $this->_getCachedMessagesChunked($_folder, $firstMessageSequence);
-                    $cachedMessages->addIndices(array('messageuid'));
+                    $cachedMessageUids = $this->_getCachedMessageUidsChunked($_folder, $firstMessageSequence);
+                    #$cachedMessages->addIndices(array('messageuid'));
                     
-                    $messageUidsOnImapServer = $_imap->messageUidExists($cachedMessages->messageuid);
+                    $messageUidsOnImapServer = $_imap->messageUidExists($cachedMessageUids);
                     
-                    $difference = array_diff($cachedMessages->messageuid, $messageUidsOnImapServer);
-                    
+                    $difference = array_diff($cachedMessageUids, $messageUidsOnImapServer);
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  print_r($difference, true));
                     if (count($difference) > 0) {
                         $decrementMessagesCounter = 0;
                         $decrementUnreadCounter   = 0;
                         
-                        $cachedMessages->addIndices(array('messageuid'));
+                        #$cachedMessages->addIndices(array('messageuid'));
                         
                         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  
                             ' Delete ' . count($difference) . ' messages'
                         );
                         
+                        $messagesToBeDeleted = $this->_backend->getMultiple(array_keys($difference));
+                        
                         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
                         
-                        foreach ($difference as $deletedMessageUid) {
-                            $messageToBeDeleted = $cachedMessages->find('messageuid', $deletedMessageUid);
-                            
+                        foreach ($messagesToBeDeleted as $messageToBeDeleted) {
                             $this->_backend->delete($messageToBeDeleted);
                             
                             $_folder->cache_job_actions_done++;
@@ -435,6 +474,35 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache status: ' . $_folder->cache_status);      
         Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder cache actions to be done yet: ' . ($_folder->cache_job_actions_estimate - $_folder->cache_job_actions_done));        
+    }
+    
+    /**
+     * get message with highest messageUid from cache 
+     * 
+     * @param  mixed  $_folderId
+     * @return array
+     */
+    protected function _getCachedMessageUidsChunked($_folderId, $_firstMessageSequnce) 
+    {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        
+        $filter = new Felamimail_Model_MessageFilter(array(
+            array(
+                'field'    => 'folder_id', 
+                'operator' => 'equals', 
+                'value'    => $folderId
+            )
+        ));
+        $pagination = new Tinebase_Model_Pagination(array(
+            'start' => $_firstMessageSequnce,
+            'limit' => $this->_importCountPerStep,
+            'sort'  => 'messageuid',
+            'dir'   => 'ASC'
+        ));
+        
+        $result = $this->_backend->searchMessageUids($filter, $pagination);
+        
+        return $result;
     }
     
     /**

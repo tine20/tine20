@@ -60,6 +60,44 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         ),
     );
 
+    /**
+     * Search for records matching given filter
+     *
+     * @param  Tinebase_Model_Filter_FilterGroup    $_filter
+     * @param  Tinebase_Model_Pagination            $_pagination
+     * @return array
+     */
+    public function searchMessageUids(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)    
+    {
+        if ($_pagination === NULL) {
+            $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
+        }
+        
+        // build query
+        $select = $this->_db->select()
+            ->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array('id', 'messageuid'))
+            ->joinLeft(
+                /* table  */ array('felamimail_folder' => $this->_tablePrefix . 'felamimail_folder'), 
+                /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.folder_id') . ' = ' . $this->_db->quoteIdentifier('felamimail_folder.id'),
+                /* select */ array()
+            );
+        
+        if ($_filter !== NULL) {
+            $this->_addFilter($select, $_filter);
+        }
+        $_pagination->appendPaginationSql($select);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        
+        // get records
+        $stmt = $this->_db->query($select);
+        while ($row = $stmt->fetch(Zend_Db::FETCH_NUM)) {
+            $result[$row[0]] = $row[1];
+        }
+        
+        return $result;
+    }
+    
     /******************* overwritten functions *********************/
 
     /**
