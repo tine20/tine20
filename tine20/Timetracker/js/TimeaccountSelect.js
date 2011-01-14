@@ -4,7 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -17,11 +17,6 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
      * @cfg {Ext.data.DataProxy} recordProxy
      */
     recordProxy: Tine.Timetracker.timeaccountBackend,
-    /**
-     * @cfg {Bool} onlyBookable
-     * only show bookable TA's
-     */
-    onlyBookable: true,
     /**
      * @cfg {Bool} showClosed
      * also show closed TA's
@@ -67,7 +62,6 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
             sortInfo: {field: 'number', dir: 'ASC'},
             listeners: {
                 scope: this,
-                //'update': this.onStoreUpdate,
                 'beforeload': this.onStoreBeforeload
             }
         });
@@ -78,7 +72,6 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
                     '{[this.encode(values.number)]} - {[this.encode(values.title)]}' +
                     '<tpl if="is_open != 1 ">&nbsp;<i>(' + this.app.i18n._('closed') + ')</i></tpl>',
                 '</span>' +
-                //'{[this.encode(values.description)]}' +
             '</div></tpl>',
             {
                 encode: function(value) {
@@ -111,7 +104,6 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
                 
             } else if (typeof(value) == 'string') {
                 // NOTE: the string also could be the string for the display field!!!
-                //console.log('id');
                 
             } else {
                 // we try raw data
@@ -141,10 +133,6 @@ Tine.Timetracker.TimeAccountSelect = Ext.extend(Ext.form.ComboBox, {
         options.params.filter = [
             {field: 'query', operator: 'contains', value: store.baseParams.query}
         ];
-        
-        if (this.onlyBookable) {
-            options.params.filter.push({field: 'isBookable', operator: 'equals', value: 1 });
-        }
         
         if (this.showClosed) {
             options.params.filter.push({field: 'showClosed', operator: 'equals', value: 1 });
@@ -191,7 +179,6 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
         // value
         var value = new Tine.Timetracker.TimeAccountSelect({
             filter: filter,
-            onlyBookable: false,
             showClosed: true,
             blurOnSelect: true,
             width: 200,
@@ -205,7 +192,6 @@ Tine.Timetracker.TimeAccountGridFilter = Ext.extend(Tine.widgets.grid.FilterMode
                  this.onFiltertrigger();
              }
         }, this);
-        //value.on('select', this.onFiltertrigger, this);
         
         return value;
     }
