@@ -126,8 +126,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             }
         }
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), true));
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($folders, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . print_r($folders, true));
         
         // get folder recordset and sort it
         $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
@@ -283,8 +282,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         
         // do some mapping and save folder in db (if it doesn't exist
         foreach ($_folders as $folderData) {
-            if (! $folderData['isSelectable'] == '1') {
-                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Folder ' . $folderData['globalName'] . ' is not selectable.');
+            if (! $this->_isSelectable($folderData, $_account)) {
+                continue;
             }
             
             try {
@@ -336,6 +335,32 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         }
         
         $this->_removeFromCache($_account, $_parentFolder, $result->getArrayOfIds());
+        
+        return $result;
+    }
+    
+    /**
+     * check if folder is selectable: try to select folder on imap server if isSelectable is false/not set
+     * - courier imap servers subfolder have isSelectable = 0 but they still can be selected 
+     *   @see http://www.tine20.org/bugtracker/view.php?id=2736
+     * 
+     * @param array $_folderData
+     * @param unknown_type $_account
+     */
+    protected function _isSelectable($_folderData, $_account)
+    {
+        $result = TRUE;
+        
+        if (! $_folderData['isSelectable'] == '1') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Folder ' . $_folderData['globalName'] . ' is not selectable.');
+            $imap = Felamimail_Backend_ImapFactory::factory($_account);
+            try {
+                $folderData = $imap->selectFolder($_folderData['globalName']);
+            } catch (Zend_Mail_Storage_Exception $zmse) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not select folder. Skipping it.');
+                $result = FALSE;
+            }
+        }
         
         return $result;
     }
