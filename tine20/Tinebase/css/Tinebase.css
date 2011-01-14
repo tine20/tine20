@@ -344,6 +344,10 @@ html, body {
     background: 0;
 }
 
+.tinebase-westpanel-node-favorite img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/actions/knewstuff.png);
+}
+
 /* ----- login dialog --------------------------------------------------------*/
 .tb-login-panel form {
     padding: 20px 10px 20px 20px;
