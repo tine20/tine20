@@ -137,7 +137,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {String} operation
      */
     onUpdateFolderStore: function(store, record, operation) {
-        if (operation === Ext.data.Record.EDIT) {
+        if (operation === Ext.data.Record.EDIT && record.isModified('cache_totalcount') && record.isModified('cache_job_actions_done')) {
             var tree = this.app.getMainScreen().getTreePanel(),
                 selectedNodes = (tree) ? tree.getSelectionModel().getSelectedNodes() : [];
             
@@ -145,7 +145,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             if (this.getGrid().getSelectionModel().getCount() <= 1) {
                 var refresh = false;
                 for (var i = 0; i < selectedNodes.length; i++) {
-                    if (selectedNodes[i].id == record.id && (record.isModified('cache_totalcount') || record.isModified('cache_job_actions_done'))) {
+                    if (selectedNodes[i].id == record.id) {
                         refresh = true;
                         break;
                     }
