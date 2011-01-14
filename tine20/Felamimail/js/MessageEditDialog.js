@@ -23,8 +23,7 @@ Ext.namespace('Tine.Felamimail');
  * TODO         make email note editable
  * </p>
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id$
  * 
@@ -547,8 +546,11 @@ Ext.namespace('Tine.Felamimail');
     onRecordUpdate: function() {
 
         this.record.data.attachments = [];
-        this.attachmentGrid.store.each(function(record) {
-            this.record.data.attachments.push(record.data);
+        var attachmentData = null;
+        
+        this.attachmentGrid.store.each(function(attachment) {
+            attachmentData = Ext.copyTo({}, attachment.data, ['tempFile', 'name', 'path', 'size', 'type']);
+            this.record.data.attachments.push(attachmentData);
         }, this);
         
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
