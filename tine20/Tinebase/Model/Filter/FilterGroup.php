@@ -330,7 +330,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      *
      * @return array
      * 
-     * @todo remove after concreate filter backends are sperated from concrete filter models
+     * @todo remove after concrete filter backends are sperated from concrete filter models
      */
     public function getFilterObjects()
     {
