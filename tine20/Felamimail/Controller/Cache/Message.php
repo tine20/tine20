@@ -407,55 +407,59 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     $firstMessageSequence = ($i-$this->_importCountPerStep) >= 0 ? $i-$this->_importCountPerStep : 0;
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " fetching from $firstMessageSequence");
                     $cachedMessageUids = $this->_getCachedMessageUidsChunked($_folder, $firstMessageSequence);
-                    #$cachedMessages->addIndices(array('messageuid'));
-                    
-                    $messageUidsOnImapServer = $_imap->messageUidExists($cachedMessageUids);
-                    
-                    $difference = array_diff($cachedMessageUids, $messageUidsOnImapServer);
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  print_r($difference, true));
-                    if (count($difference) > 0) {
-                        $decrementMessagesCounter = 0;
-                        $decrementUnreadCounter   = 0;
+
+                    // $cachedMessageUids can be empty if we fetch the last chunk
+                    if (count($cachedMessageUids) > 0) {
+                        $messageUidsOnImapServer = $_imap->messageUidExists($cachedMessageUids);
                         
-                        #$cachedMessages->addIndices(array('messageuid'));
+                        $difference = array_diff($cachedMessageUids, $messageUidsOnImapServer);
                         
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  
-                            ' Delete ' . count($difference) . ' messages'
-                        );
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .  print_r($difference, true));
                         
-                        $messagesToBeDeleted = $this->_backend->getMultiple(array_keys($difference));
-                        
-                        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                        
-                        foreach ($messagesToBeDeleted as $messageToBeDeleted) {
-                            $this->_backend->delete($messageToBeDeleted);
+                        if (count($difference) > 0) {
+                            $decrementMessagesCounter = 0;
+                            $decrementUnreadCounter   = 0;
                             
-                            $_folder->cache_job_actions_done++;
-                            $_folder->cache_totalcount--;
-                            $decrementMessagesCounter++;
-                            if (! $messageToBeDeleted->hasSeenFlag()) {
-                                $decrementUnreadCounter++;
+                            #$cachedMessages->addIndices(array('messageuid'));
+                            
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  
+                                ' Delete ' . count($difference) . ' messages'
+                            );
+                            
+                            $messagesToBeDeleted = $this->_backend->getMultiple(array_keys($difference));
+                            
+                            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+                            
+                            foreach ($messagesToBeDeleted as $messageToBeDeleted) {
+                                $this->_backend->delete($messageToBeDeleted);
+                                
+                                $_folder->cache_job_actions_done++;
+                                $_folder->cache_totalcount--;
+                                $decrementMessagesCounter++;
+                                if (! $messageToBeDeleted->hasSeenFlag()) {
+                                    $decrementUnreadCounter++;
+                                }
+                                
+                                $messagesToRemoveFromCache--;
                             }
                             
-                            $messagesToRemoveFromCache--;
+                            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+                            
+                            Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
+                                'cache_totalcount'  => "-$decrementMessagesCounter",
+                                'cache_unreadcount' => "-$decrementUnreadCounter",
+                            ));
+                            
+                            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} messages to remove: $messagesToRemoveFromCache");
                         }
                         
-                        Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-                        
-                        Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
-                            'cache_totalcount'  => "-$decrementMessagesCounter",
-                            'cache_unreadcount' => "-$decrementUnreadCounter",
-                        ));
-                        
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} messages to remove: $messagesToRemoveFromCache");
+                        if ($messagesToRemoveFromCache <= 0) {
+                            $_folder->cache_job_startuid = 0;
+                            $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
+                            break;
+                        }
                     }
                     
-                    if ($messagesToRemoveFromCache <= 0) {
-                        $_folder->cache_job_startuid = 0;
-                        $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
-                        break;
-                    }
-                     
                     if (! $this->_timeLeft()) {
                         $_folder->cache_job_startuid = $i;
                         break;
