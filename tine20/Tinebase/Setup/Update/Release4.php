@@ -20,7 +20,7 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
 {    
     /**
      * update to 4.1
-     * - add value_search option field to customfield_config
+     * - add index for accounts.contact_id
      */
     public function update_0()
     {
@@ -38,5 +38,40 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Tinebase', '4.1');
+    }
+        
+    /**
+     * update to 4.2
+     * - add index for groups.list_id and access_log.sessionid
+     */
+    public function update_0()
+    {
+        if ($this->getTableVersion('groups') < 3) {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>list_id</name>
+                    <field>
+                        <name>list_id</name>
+                    </field>
+                </index>
+            ');
+            $this->_backend->addIndex('groups', $declaration);
+            $this->setTableVersion('groups', '3');
+        }
+        
+        if ($this->getTableVersion('access_log') < 3) {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>sessionid</name>
+                    <field>
+                        <name>sessionid</name>
+                    </field>
+                </index>
+            ');
+            $this->_backend->addIndex('access_log', $declaration);
+            $this->setTableVersion('access_log', '3');
+        }
+        
+        $this->setApplicationVersion('Tinebase', '4.2');
     }    
 }

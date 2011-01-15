@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>4.1</version>
+	<version>4.2</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -137,7 +137,7 @@
 
 		<table>
 			<name>groups</name>
-			<version>2</version>
+			<version>3</version>
 			<declaration>
                 <field>
                     <name>id</name>
@@ -189,6 +189,12 @@
 						<name>name</name>
 					</field>
 				</index>
+                <index>
+                    <name>list_id</name>
+                    <field>
+                        <name>list_id</name>
+                    </field>
+                </index>
 			</declaration>
 		</table>
 
@@ -714,7 +720,7 @@
 		</table>
 		<table>
 			<name>access_log</name>
-			<version>2</version>
+			<version>3</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -773,6 +779,12 @@
 						<name>id</name>
 					</field>
 				</index>
+                <index>
+                    <name>sessionid</name>
+                    <field>
+                        <name>sessionid</name>
+                    </field>
+                </index>
 			</declaration>
 		</table>
 
