@@ -91,6 +91,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         
         // get records
         $stmt = $this->_db->query($select);
+        $result = array();
+        
         while ($row = $stmt->fetch(Zend_Db::FETCH_NUM)) {
             $result[$row[0]] = $row[1];
         }
