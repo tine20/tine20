@@ -282,7 +282,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     	$sort = (isset($paging['sort']))    ? $paging['sort']   : 'accountDisplayName';
         $dir  = (isset($paging['dir']))     ? $paging['dir']    : 'ASC';
     	
-        $result = $this->getUsers($filter[0]['value'], $paging['sort'], $paging['dir'], $paging['start'], $paging['limit']);
+        $result = $this->getUsers($filter[0]['value'], $sort, $dir, $paging['start'], $paging['limit']);
         $result['filter'] = $filter[0];
         
         return $result;
