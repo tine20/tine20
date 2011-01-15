@@ -15,7 +15,7 @@ Ext.ns('Ext.ux', 'Ext.ux.tree');
  * @class       Ext.ux.tree.CheckboxSelectionModel
  * @extends     Ext.util.Observable
  * 
- * Ceckbox multi selection for a TreePanel.
+ * Checkbox multi selection for a TreePanel.
  */
 Ext.ux.tree.CheckboxSelectionModel = function(config){
    this.addEvents(
@@ -38,7 +38,7 @@ Ext.ux.tree.CheckboxSelectionModel = function(config){
     Ext.ux.tree.CheckboxSelectionModel.superclass.constructor.call(this);
 };
 
-Ext.ux.tree.CheckboxSelectionModel = Ext.extend(Ext.ux.tree.CheckboxSelectionModel, Ext.util.Observable, {
+Ext.extend(Ext.ux.tree.CheckboxSelectionModel, Ext.util.Observable, {
     /**
      * @cfg {Bool} activateLeafNodesOnly
      * true to only activate leaf nodes
