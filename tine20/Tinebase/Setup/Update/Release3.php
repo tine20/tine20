@@ -1154,4 +1154,24 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '3.26');
     }
+    
+    /**
+     * update to 3.27
+     * - add contact_id index
+     */
+    public function update_26()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>contact_id</name>
+                <field>
+                    <name>contact_id</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('accounts', $declaration);
+        $this->setTableVersion('accounts', '7');
+        
+        $this->setApplicationVersion('Tinebase', '3.27');
+    }    
 }

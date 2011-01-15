@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>3.26</version>
+	<version>3.27</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -194,7 +194,7 @@
 
 		<table>
 			<name>accounts</name>
-			<version>6</version>
+			<version>7</version>
 			<declaration>
                 <field>
                 	<name>id</name>
@@ -348,6 +348,12 @@
                 	<field>
                 		<name>primary_group_id</name>
                 	</field>
+                </index>
+                <index>
+                    <name>contact_id</name>
+                    <field>
+                        <name>contact_id</name>
+                    </field>
                 </index>
                 <index>
                 	<name>accounts::primary_group_id--groups::id</name>
