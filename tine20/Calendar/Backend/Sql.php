@@ -315,18 +315,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
                             $attendeeWhere,
             /* select */ array());
         
-        $_select->joinLeft(
-            /* table  */ array('attendeecontacts' => $this->_tablePrefix . 'addressbook'), 
-            /* on     */ $this->_db->quoteIdentifier('attendeecontacts.id') . ' = ' . $this->_db->quoteIdentifier('attendee.user_id') . 
-                            ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . '= ?', Calendar_Model_Attender::USERTYPE_USER),
-            /* select */ array());
-        
-        
-        
-        
+
+            
         $_select->joinLeft(
             /* table  */ array('attendeeaccounts' => $this->_tablePrefix . 'accounts'), 
-            /* on     */ $this->_db->quoteIdentifier('attendeeaccounts.contact_id') . ' = ' . $this->_db->quoteIdentifier('attendeecontacts.id'),
+            /* on     */ $this->_db->quoteIdentifier('attendeeaccounts.contact_id') . ' = ' . $this->_db->quoteIdentifier('attendee.user_id') . 
+                            ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . '= ?', Calendar_Model_Attender::USERTYPE_USER),
             /* select */ array());
         
         $_select->joinLeft(
