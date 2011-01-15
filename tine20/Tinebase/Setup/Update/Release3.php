@@ -1173,5 +1173,36 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setTableVersion('accounts', '7');
         
         $this->setApplicationVersion('Tinebase', '3.27');
+    }
+        
+    /**
+     * update to 3.28
+     * - add index for groups.list_id and access_log.sessionid
+     */
+    public function update_27()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>list_id</name>
+                <field>
+                    <name>list_id</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('groups', $declaration);
+        $this->setTableVersion('groups', '3');
+    
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+            <index>
+                <name>sessionid</name>
+                <field>
+                    <name>sessionid</name>
+                </field>
+            </index>
+        ');
+        $this->_backend->addIndex('access_log', $declaration);
+        $this->setTableVersion('access_log', '3');
+        
+        $this->setApplicationVersion('Tinebase', '3.28');
     }    
 }
