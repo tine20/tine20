@@ -44,7 +44,7 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
      * update to 4.2
      * - add index for groups.list_id and access_log.sessionid
      */
-    public function update_0()
+    public function update_1()
     {
         if ($this->getTableVersion('groups') < 3) {
             $declaration = new Setup_Backend_Schema_Index_Xml('
