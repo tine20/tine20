@@ -24,16 +24,18 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
      */
     public function update_0()
     {
-        $declaration = new Setup_Backend_Schema_Index_Xml('
-            <index>
-                <name>contact_id</name>
-                <field>
+        if ($this->getTableVersion('accounts') < 7) {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
                     <name>contact_id</name>
-                </field>
-            </index>
-        ');
-        $this->_backend->addIndex('accounts', $declaration);
-        $this->setTableVersion('accounts', '7');
+                    <field>
+                        <name>contact_id</name>
+                    </field>
+                </index>
+            ');
+            $this->_backend->addIndex('accounts', $declaration);
+            $this->setTableVersion('accounts', '7');
+        }
         
         $this->setApplicationVersion('Tinebase', '4.1');
     }    
