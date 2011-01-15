@@ -51,7 +51,7 @@ var ab = {
 	<Contacts_Birthday>%Birthday</Contacts_Birthday>\
 	<Contacts_Webpage>WebPage1</Contacts_Webpage>\
 	<Contacts_Suffix>Custom2</Contacts_Suffix>\
-	<Contacts_Picture>%Picture</Contacts_Picture>\
+	<Contacts_Picture ghosted="true">%Picture</Contacts_Picture>\
 	<Contacts_Categories>%Categories</Contacts_Categories>\
 </card>',
 
@@ -80,14 +80,17 @@ var ab = {
 				card.getProperty("BirthDay", "00"),
 				aHours,00,00,000
 			);
-			/*var rYear = dLoc.getUTCFullYear();
-			var rMonth = dLoc.getUTCMonth()+1;
-				if (rMonth<10) rMonth = '0'+rMonth;
-			var rDay = (dLoc.getUTCDate()>9) ? dLoc.getUTCDate() : '0'+dLoc.getUTCDate();
-			var rHour = (dLoc.getUTCHours()>9) ? dLoc.getUTCHours() : '0'+dLoc.getUTCHours();
-			var rMinute = (dLoc.getUTCMinutes()>9) ? dLoc.getUTCMinutes() : '0'+dLoc.getUTCMinutes();
-			var ret = rYear+'-'+rMonth+'-'+rDay+'T'+rHour+':'+rMinute+':00.000Z';*/
-			var dAs = new Date(dLoc.getTime() + (dLoc.getTimezoneOffset() * 60000));
+			var tzOff = dLoc.getTimezoneOffset() * 60000;
+			//
+			// WINDOWS can't handle timezones before 1970 !!
+			// patch it, if running windows for dates < 1970
+			//
+			if (navigator.platform.substr(0,3)=='Win') {
+				// Calculating with 1st february makes sure the year will be 1970 in normal time any case
+				var dTmp = new Date(1970, 01, 01, 00, 00, 00, 000); 
+				tzOff = dTmp.getTimezoneOffset() * 60000;
+			}
+			var dAs = new Date(dLoc.getTime() + tzOff);
 			var rYear = dAs.getFullYear();
 			var rMonth = dAs.getMonth()+1;
 				if (rMonth<10) rMonth = '0'+rMonth;
@@ -132,17 +135,24 @@ var ab = {
   },
 
   setSpecialAbValue: function(card, tbField, asValue) {
-	if (tbField=='Birthday' && asValue != '') {
-		var asDate = new Date(asValue.substr(0,4), asValue.substr(5,2)-1, asValue.substr(8,2), asValue.substr(11,2), asValue.substr(14,2) );
-		var locDate = new Date(asDate.getTime() + (asDate.getTimezoneOffset() * 60000 * -1));
-		var aMonth = (locDate.getMonth()+1);
-		if (aMonth<10) aMonth = '0' + aMonth;
-		var aDay = locDate.getDate();
-		if (aDay < 10) aDay = '0' + aDay;
-		var tbDate = locDate.getFullYear() + '-' + aMonth + '-' + aDay; 
-		card.setProperty("BirthYear", tbDate.substr(0,4) );
-		card.setProperty("BirthMonth", tbDate.substr(5,2) );
-		card.setProperty("BirthDay", tbDate.substr(8,2) );
+	if (tbField=='Birthday') {
+		if (asValue != '') {
+			var asDate = new Date(asValue.substr(0,4), asValue.substr(5,2)-1, asValue.substr(8,2), asValue.substr(11,2), asValue.substr(14,2) );
+			var locDate = new Date(asDate.getTime() + (asDate.getTimezoneOffset() * 60000 * -1));
+			var aMonth = (locDate.getMonth()+1);
+			if (aMonth<10) aMonth = '0' + aMonth;
+			var aDay = locDate.getDate();
+			if (aDay < 10) aDay = '0' + aDay;
+			var tbDate = locDate.getFullYear() + '-' + aMonth + '-' + aDay; 
+			card.setProperty("BirthYear", tbDate.substr(0,4) );
+			card.setProperty("BirthMonth", tbDate.substr(5,2) );
+			card.setProperty("BirthDay", tbDate.substr(8,2) );
+		}
+		else {
+			card.deleteProperty("BirthYear");
+			card.deleteProperty("BirthMonth");
+			card.deleteProperty("BirthDay"); 
+		}
 	}
 	else if (tbField=='Categories') {
 		var Customfield = '';
@@ -429,8 +439,8 @@ var ab = {
 					var tbFieldX = helper.doEvaluateXPath(mapDom, "//"+asField);
 					if (tbFieldX.length > 0) {
 						var tbField = tbFieldX[0].firstChild.nodeValue;
-						if(tbField.substr(0,1) == '%')
-							this.setSpecialAbValue(card, tbField.substr(1,tbField.length-1), asValue); 
+						if(tbField.substr(0,1) == '%') 
+							this.setSpecialAbValue(card, tbField.substr(1,tbField.length-1), asValue);
 						else {
 							// replace XML-escaped characters: <, > and & <--> wbxml.doXml()
 							asValue = asValue.replace(/&lt;/g, '<');
