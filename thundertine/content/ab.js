@@ -85,7 +85,7 @@ var ab = {
 			// WINDOWS can't handle timezones before 1970 !!
 			// patch it, if running windows for dates < 1970
 			//
-			if (navigator.platform.substr(0,3)=='Win') {
+			if ((navigator.platform.substr(0,3)=='Win') && (dLoc.getFullYear()<=1970)) {
 				// Calculating with 1st february makes sure the year will be 1970 in normal time any case
 				var dTmp = new Date(1970, 01, 01, 00, 00, 00, 000); 
 				tzOff = dTmp.getTimezoneOffset() * 60000;
