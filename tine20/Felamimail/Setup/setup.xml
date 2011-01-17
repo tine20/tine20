@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>3.20</version>
+    <version>3.21</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -235,7 +235,7 @@
         </table>
         <table>
             <name>felamimail_folder</name>
-            <version>5</version>
+            <version>6</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -363,7 +363,19 @@
                     </field>
                 </index>
                 <!-- @todo add unique key for account + globalname? seems to be too long ... -->
-                <!-- @todo add foreign key index to account? -->
+                <index>
+                    <name>felamimail_folder::account_id--felamimail_account::id</name>
+                    <field>
+                        <name>account_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>felamimail_account</table>
+                        <field>id</field>
+                        <ondelete>cascade</ondelete>
+                        <onupdate>cascade</onupdate>
+                    </reference>
+                </index>
             </declaration>
         </table>
         <table>

@@ -576,6 +576,50 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 3.20
+     * - add foreign key for account_id
+     */    
+    public function update_20()
+    {
+        // remove folder for which no account exists
+        $select = $this->_db->select()
+            ->from(array('felamimail_folder' => SQL_TABLE_PREFIX . 'felamimail_folder'), array('DISTINCT(account_id)'))
+            ->joinLeft(array('felamimail_account' => SQL_TABLE_PREFIX . 'felamimail_account'), 'felamimail_account.id = felamimail_folder.account_id', array())
+            ->where('felamimail_account.id IS NULL');
+            
+        $result = $this->_db->fetchAll($select);
+        
+        foreach ($result as $row) {
+            $where = array(
+                $this->_db->quoteInto('account_id = ?', $row['account_id'])
+            );
+            $this->_db->delete(SQL_TABLE_PREFIX . 'felamimail_folder', $where);
+        }
+        
+        // add foreign key
+        $declaration = new Setup_Backend_Schema_Index_Xml(
+            '<index>
+                <name>felamimail_folder::account_id--felamimail_account::id</name>
+                <field>
+                    <name>account_id</name>
+                </field>
+                <foreign>true</foreign>
+                <reference>
+                    <table>felamimail_account</table>
+                    <field>id</field>
+                    <ondelete>cascade</ondelete>
+                    <onupdate>cascade</onupdate>
+                </reference>
+            </index>'
+        );
+        $this->_backend->addForeignKey('felamimail_folder', $declaration);
+        
+        $this->setTableVersion('felamimail_folder', '6');
+        
+        $this->setApplicationVersion('Felamimail', '3.21');
+    }
+    
+    /**
      * clear cache tables and reset folder status
      */
     protected function _clearCache()
