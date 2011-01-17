@@ -5,8 +5,8 @@
  * @package     Felamimail
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        parse mail body and add <a> to telephone numbers?
@@ -1075,7 +1075,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             $this->_appendCharsetFilter($bodyPart, $partStructure);
             
-            $body = $bodyPart->getDecodedContent();
+            try {
+                $body = $bodyPart->getDecodedContent();
+            } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                return '';
+            }
             
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $body = $this->_purifyBodyContent($body);
