@@ -268,7 +268,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             var filter = this.getFilterPlugin().getFilter();
             ftb.addFilter(new ftb.record(filter));
         
-            console.log('filtertrigger');
             ftb.onFiltertrigger();
             
             // finally select the selected node, as filtertrigger clears all selections
