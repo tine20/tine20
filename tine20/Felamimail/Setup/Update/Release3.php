@@ -546,6 +546,36 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }
     
     /**
+     * update to 3.20
+     * - add keys for timestamp and received
+     */    
+    public function update_19()
+    {
+        $declaration = new Setup_Backend_Schema_Index_Xml(
+            '<index>
+                <name>received</name>
+                <field>
+                    <name>received</name>
+                </field>
+            </index>'
+        );
+        $this->_backend->addIndex('felamimail_cache_message', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml(
+            '<index>
+                <name>timestamp</name>
+                <field>
+                    <name>timestamp</name>
+                </field>
+            </index>'
+        );
+        $this->_backend->addIndex('felamimail_cache_message', $declaration);
+        $this->setTableVersion('felamimail_cache_message', '6');
+        
+        $this->setApplicationVersion('Felamimail', '3.20');
+    }
+    
+    /**
      * clear cache tables and reset folder status
      */
     protected function _clearCache()
