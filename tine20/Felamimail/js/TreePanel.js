@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -268,6 +268,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             var filter = this.getFilterPlugin().getFilter();
             ftb.addFilter(new ftb.record(filter));
         
+            console.log('filtertrigger');
             ftb.onFiltertrigger();
             
             // finally select the selected node, as filtertrigger clears all selections
@@ -395,7 +396,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         }
         
         if (node.id && node.id != '/' && node.attributes.globalname != '') {
-            this.filterPlugin.onFilterChange();
             var folder = this.app.getFolderStore().getById(node.id);
             if (folder) {
                 folder.set('cache_status', 'pending');
