@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 Ext.ns('Tine.widgets.grid');
@@ -1093,48 +1093,29 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onEditInNewWindow: function(button, event) {
         var record; 
-        if (button.actionType == 'edit') {
+        if (button.actionType == 'edit' || button.actionType == 'copy') {
             if (! this.action_editInNewWindow || this.action_editInNewWindow.isDisabled()) {
                 // if edit action is disabled or not available, we also don't open a new window
                 return false;
             }
             var selectedRows = this.grid.getSelectionModel().getSelections();
             record = selectedRows[0];
-            
-        } else if (button.actionType == 'copy') {
-            var selectedRows = this.grid.getSelectionModel().getSelections();
-            record = this.copyRecord(selectedRows[0].data);
-
         } else {
             record = new this.recordClass(this.recordClass.getDefaultData(), 0);
         }
         
-        var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'];
-        var popupWindow = editDialogClass.openWindow(Ext.copyTo(
+        var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
+            config = 
+            popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
                 record: record,
+                copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
                     'update': this.onUpdateRecord
                 }
-            }, 'record,listeners')
+            }, 'record,listeners,copyRecord')
         );
-    },
-    
-    /**
-     * copy record
-     * 
-     * @param {Object} recordData
-     * @return Record
-     */
-    copyRecord: function(recordData) {
-        var omitFields = this.recordClass.getMeta('copyOmitFields') || [];
-        // always omit id
-        omitFields.push('id'); 
-        for (var i = 0; i < omitFields.length; i++) {
-            delete recordData[omitFields[i]];
-        }
-        return new this.recordClass(recordData, 0);
     },
     
     /**
