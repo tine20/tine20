@@ -21,7 +21,6 @@ Ext.ns('Tine', 'Tine.Setup');
  * <p>Configuration Panel</p>
  * <p><pre>
  * TODO         make tabindex work correctly (there is some problem when tab is pressed in the setup username field, it takes 6x to reach the next field)
- * TODO         move map panel config to common config panel -> it should not be saved in config.inc.php
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -54,12 +53,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
      * @return {Array} items
      */
     getFormItems: function() {
-        return [/*{
-            xtype: 'panel',
-            title: this.app.i18n._('Informations'),
-            iconCls: 'setup_info',
-            html: ''
-        },*/ {
+        return [{
             title: this.app.i18n._('Setup Authentication'),
             items: [{
                 name: 'setupuser_username',
@@ -192,6 +186,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 tabIndex: 16
             }]
         }, {
+            // TODO move map panel config to common config panel -> it should not be saved in config.inc.php
             title: this.app.i18n._('Addressbook Map panel'),
             items: [{
                 name: 'mapPanel',
@@ -205,7 +200,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 allowEmpty: false,
                 triggerAction: 'all',
                 selectOnFocus:true,
-                value: 1,
+                value: Tine.Setup.registry.get(this.registryKey)['mapPanel'],
                 store: [[0, this.app.i18n._('disabled')], [1,this.app.i18n._('enabled')]]
             }] 
         }];
