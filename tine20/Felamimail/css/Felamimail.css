@@ -190,12 +190,13 @@
 }
 
 .preview-panel-felamimail-body {
-    overflow: 'auto';	
+    overflow: 'auto';
+    font-size: 13px;
 }
 
 .preview-panel-felamimail-body .x-form-textarea {
 	margin-top: 5px;
-	font: normal 12px courier;
+	font: normal 13px courier;
 	border: 0px;
 }
 
