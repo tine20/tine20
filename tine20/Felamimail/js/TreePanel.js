@@ -387,7 +387,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Ext.tree.AsyncTreeNode} node
      */
     onBeforeClick: function(node) {
-        console.log(node);
         if (Tine.Felamimail.loadAccountStore().getById(node.id)) {
             return false;
         }
