@@ -185,6 +185,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         initCtxMenu();
         
     	// add listeners
+        this.on('beforeclick', this.onBeforeClick, this);
         this.on('click', this.onClick, this);
         this.on('contextmenu', this.onContextMenu, this);
         this.on('beforenodedrop', this.onBeforenodedrop, this);
@@ -377,6 +378,19 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             {'tag': 'img', 'src': Ext.BLANK_IMAGE_URL, 'class': 'felamimail-node-statusbox-progress'},
             {'tag': 'span', 'class': 'felamimail-node-statusbox-unread'}
         ]});
+    },
+    
+    /**
+     * on before click handler -> accounts not yet clickable
+     * - added again because fetching all messages of account is too expensive
+     * 
+     * @param {Ext.tree.AsyncTreeNode} node
+     */
+    onBeforeClick: function(node) {
+        console.log(node);
+        if (Tine.Felamimail.loadAccountStore().getById(node.id)) {
+            return false;
+        }
     },
     
     /**
