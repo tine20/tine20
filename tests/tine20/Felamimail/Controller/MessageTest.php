@@ -591,7 +591,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
-        $this->assertNotContains('<img', $message->body);
+        $this->assertContains('Fritz Meier, wir haben Empfehlungen', $message->body);
+        $this->assertNotContains('<img', $message->body); 
+        $this->assertNotContains('style="background-image:url', $message->body);
+        $this->assertNotContains('http://www.xing.com/img/xing/newsletter/navigation_bg.gif', $message->body);
     }
     
     /**
