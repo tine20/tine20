@@ -5,8 +5,8 @@
  * @package     Addressbook
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -99,7 +99,6 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setApplicationVersion('Addressbook', '3.4');
     }
 
-    
     /**
      * update to 3.5
      * - convert internal container into shared container
@@ -565,5 +564,17 @@ class Addressbook_Setup_Update_Release3 extends Setup_Update_Abstract
         ))));
         
         $this->setApplicationVersion('Addressbook', '3.11');
+    }
+    
+    /**
+     * update to 3.12
+     * - remove invalid salutation ids
+     */
+    public function update_11()
+    {
+        $salutations = Addressbook_Controller_Salutation::getInstance()->getSalutations();
+        $ids  = implode(',', $salutations->getArrayOfIds());
+        $this->_db->query("UPDATE " . SQL_TABLE_PREFIX . "addressbook SET salutation_id = NULL WHERE salutation_id is not NULL and salutation_id not in (" . $ids . ") and salutation_id != ''");
+        $this->setApplicationVersion('Addressbook', '3.12');
     }
 }
