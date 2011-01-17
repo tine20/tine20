@@ -5,7 +5,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        move $this->_db calls to backend class
@@ -166,11 +166,15 @@ class Setup_Controller
      * checks if path in config is writable
      * 
      * @param string $_name
+     * @param string $_group
      * @return boolean
      */
-    public function checkDir($_name)
+    public function checkDir($_name, $_group = NULL)
     {
         $config = Setup_Core::getConfig();
+        if ($_group !== NULL) {
+            $config = $config->get($_group);
+        }
         $path = $config->get($_name, null);
         if (empty($path)) {
             return true;
@@ -573,13 +577,16 @@ class Setup_Controller
                 'priority' => '5'    
             ),
             'caching' => array(
-                   'active' => 1,
-                   'lifetime' => 3600,
-                   'backend' => 'File',
-                   'path' => $defaultPath,
+               'active' => 1,
+               'lifetime' => 3600,
+               'backend' => 'File',
+               'path' => $defaultPath,
             ),
             'tmpdir' => $defaultPath,
-            'sessiondir' => Setup_Core::getSessionDir(),
+            'session' => array(
+                'path'      => Setup_Core::getSessionDir(),
+                'liftime'   => 86400,
+            ),
         );
         
         return $result;
@@ -595,11 +602,21 @@ class Setup_Controller
         $configArray = Setup_Core::getConfig()->toArray();
         
         #####################################
-        # LEGACY/COMPATIBILITY: had to rename session.save_path key to sessiondir because otherwise the 
+        # LEGACY/COMPATIBILITY: 
+        # (1) had to rename session.save_path key to sessiondir because otherwise the
         # generic save config method would interpret the "_" as array key/value seperator
-        if (empty($configArray['sessiondir']) && !empty($configArray['session.save_path'])) {
-            $configArray['sessiondir'] = $configArray['session.save_path'];
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'session.save_path' should be renamed to 'sessiondir'");
+        # (2) moved session config to subgroup 'session'
+        if (empty($configArray['session']) || empty($configArray['session']['path'])) {
+            foreach (array('session.save_path', 'sessiondir') as $deprecatedSessionDir) {
+                $sessionDir = $configArray[$deprecatedSessionDir];
+                if (! empty($sessionDir)) {
+                    if (empty($configArray['session'])) {
+                        $configArray['session'] = array();
+                    }
+                    $configArray['session']['path'] = $sessionDir;
+                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key '{$deprecatedSessionDir}' should be renamed to 'path' and moved to 'session' group.");
+                }
+            }
         }
         #####################################
         
