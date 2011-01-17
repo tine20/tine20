@@ -780,7 +780,7 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         
         if (event) {
             this.fireEvent('dblclick', event, e);
-        } else if (dtStart) {
+        } else if (dtStart && !this.editing) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
             var dtend = dtStart.add(Date.HOUR, 1);
             if (dtStart.is_all_day_event) {
