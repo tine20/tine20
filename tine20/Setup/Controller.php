@@ -609,7 +609,7 @@ class Setup_Controller
         # (2) moved session config to subgroup 'session'
         if (empty($configArray['session']) || empty($configArray['session']['path'])) {
             foreach (array('session.save_path', 'sessiondir') as $deprecatedSessionDir) {
-                $sessionDir = $configArray[$deprecatedSessionDir];
+                $sessionDir = array_key_exists($deprecatedSessionDir, $configArray) ? $configArray[$deprecatedSessionDir] : '';
                 if (! empty($sessionDir)) {
                     if (empty($configArray['session'])) {
                         $configArray['session'] = array();
