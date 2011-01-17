@@ -171,11 +171,12 @@ class Setup_Controller
      */
     public function checkDir($_name, $_group = NULL)
     {
-        $config = Setup_Core::getConfig();
-        if ($_group !== NULL) {
-            $config = $config->get($_group);
+        $config = $this->getConfigData();
+        if ($_group !== NULL && array_key_exists($_group, $config)) {
+            $config = $config[$_group];
         }
-        $path = $config->get($_name, null);
+        
+        $path = array_key_exists($_name, $config) ? $config[$_name] : false;
         if (empty($path)) {
             return true;
         } else {
@@ -614,7 +615,7 @@ class Setup_Controller
                         $configArray['session'] = array();
                     }
                     $configArray['session']['path'] = $sessionDir;
-                    self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key '{$deprecatedSessionDir}' should be renamed to 'path' and moved to 'session' group.");
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key '{$deprecatedSessionDir}' should be renamed to 'path' and moved to 'session' group.");
                 }
             }
         }
