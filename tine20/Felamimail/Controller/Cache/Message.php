@@ -5,8 +5,8 @@
  * @package     Felamimail
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -24,6 +24,13 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @var integer
      */
     protected $_importCountPerStep = 50;
+    
+    /**
+     * number of fetched messages for one step of flag sync
+     *
+     * @var integer
+     */
+    protected $_flagSyncCountPerStep = 50;
     
     /**
      * initial cache status (used by updateCache and helper funcs)
@@ -138,7 +145,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_addMessagesToCache($folder, $imap);
         $this->_checkForMissingMessages($folder, $imap);
         $this->_updateFolderStatus($folder);
-        #$this->updateFlags($folder);
+        $this->updateFlags($folder);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -510,35 +517,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     }
     
     /**
-     * get message with highest messageUid from cache 
-     * 
-     * @param  mixed  $_folderId
-     * @return array
-     */
-    protected function _getCachedMessagesChunked($_folderId, $_firstMessageSequnce) 
-    {
-        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
-        
-        $filter = new Felamimail_Model_MessageFilter(array(
-            array(
-                'field'    => 'folder_id', 
-                'operator' => 'equals', 
-                'value'    => $folderId
-            )
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'start' => $_firstMessageSequnce,
-            'limit' => $this->_importCountPerStep,
-            'sort'  => 'messageuid',
-            'dir'   => 'ASC'
-        ));
-        
-        $result = $this->_backend->search($filter, $pagination);
-        
-        return $result;
-    }
-    
-    /**
      * add new messages to cache
      * 
      * @param Felamimail_Model_Folder $_folder
@@ -892,7 +870,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @param integer $_time
      * @return Felamimail_Model_Folder
      * 
-     * @todo only get flags of records
      * @todo only get flags of current batch of messages from imap?
      * @todo add status/progress to start at later messages when this is called next time?
      */
@@ -925,10 +902,10 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $flags = $imap->getFlags(1, INF);
         
         $unreadcount = $folder->cache_unreadcount;
-        for ($i = $folder->cache_totalcount; $i > 0; $i -= $this->_importCountPerStep) {
-            $firstMessageSequence = ($i - $this->_importCountPerStep) >= 0 ? $i - $this->_importCountPerStep : 0;
-            $cachedMessages = $this->_getCachedMessagesChunked($folder, $firstMessageSequence);
-            $this->_setFlagsOnCache($cachedMessages, $flags, $unreadcount);
+        for ($i = $folder->cache_totalcount; $i > 0; $i -= $this->_flagSyncCountPerStep) {
+            $firstMessageSequence = ($i - $this->_flagSyncCountPerStep) >= 0 ? $i - $this->_flagSyncCountPerStep : 0;
+            $flagsOfCachedMessages = $this->_backend->getFlagsForFolder($folder->getId(), $firstMessageSequence, $this->_flagSyncCountPerStep);
+            $this->_setFlagsOnCache($flagsOfCachedMessages, $flags, $unreadcount, $folder->getId());
             
             if(! $this->_timeLeft()) {
                 break;
@@ -945,20 +922,21 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     /**
      * set flags on cache if different
      * 
-     * @param Tinebase_Record_RecordSet $_messages
+     * @param array $_messages
      * @param array $_flags
      * @param integer $_unreadcount
+     * @param string $_folderId
      */
-    protected function _setFlagsOnCache($_messages, $_flags, &$_unreadcount)
+    protected function _setFlagsOnCache($_messages, $_flags, &$_unreadcount, $_folderId)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $updateCount = 0;
-        foreach ($_messages as $cachedMessage) {
-            if (array_key_exists($cachedMessage->messageuid, $_flags)) {
-                $newFlags = array_key_exists('flags', $_flags[$cachedMessage->messageuid]) ? $_flags[$cachedMessage->messageuid]['flags'] : arary();
-                $diff1 = array_diff($cachedMessage->flags, $newFlags);
-                $diff2 = array_diff($newFlags, $cachedMessage->flags);
+        foreach ($_messages as $id => $cachedMessage) {
+            if (array_key_exists($cachedMessage['messageuid'], $_flags)) {
+                $newFlags = $_flags[$cachedMessage['messageuid']]['flags'];
+                $diff1 = array_diff($cachedMessage['flags'], $newFlags);
+                $diff2 = array_diff($newFlags, $cachedMessage['flags']);
                 if (count($diff1) > 0 || count($diff2) > 0) {
                     if (in_array(Zend_Mail_Storage::FLAG_SEEN, $diff1)) {
                         $_unreadcount++;
@@ -966,7 +944,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         $_unreadcount--;
                     }
                     
-                    $this->_backend->setFlags($cachedMessage, $newFlags);
+                    $this->_backend->setFlags(array($id), $newFlags, $_folderId);
                     $updateCount++;
                 }
             }
