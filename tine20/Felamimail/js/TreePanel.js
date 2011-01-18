@@ -669,7 +669,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             count = folder.get('cache_unreadcount');
             
         if (! this.isDropSensitive) {
-            tip.body.dom.innerHTML = String.format(this.app.i18n.n_('{0} unread message', '{0} unread messages', count), count);
+            tip.body.dom.innerHTML = String.format(this.app.i18n.ngettext('{0} unread message', '{0} unread messages', count), count);
         } else {
             return false;
         }
