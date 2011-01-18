@@ -135,7 +135,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         //return;
         
         if (folder) {
-            executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval/1000, 120);
+            var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval/1000, 120);
             
             if (this.updateMessageCacheTransactionId && Tine.Felamimail.folderBackend.isLoading(this.updateMessageCacheTransactionId)) {
                 var currentRequestFolder = this.folderStore.query('cache_status', 'pending').first(),
@@ -202,7 +202,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         if (! parentPath) {
             // find first account that has unfetched folders
-            var index = accountStore.findExact('all_folders_fetched', false);
+            var index = accountStore.findExact('all_folders_fetched', false),
                 account = accountStore.getAt(index);
             
             if (account) {
