@@ -4,8 +4,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        replace some 'custom' filters with normal filter classes
@@ -46,6 +46,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'from_email'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'from_name'     => array('filter' => 'Tinebase_Model_Filter_Text'),
         'received'      => array('filter' => 'Tinebase_Model_Filter_DateTime'),
+        'messageuid'    => array('filter' => 'Tinebase_Model_Filter_Int'),
     // custom filters
         'path'          => array('custom' => true),
         'to'            => array('custom' => true),
@@ -53,7 +54,6 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'bcc'           => array('custom' => true),
         'flags'         => array('custom' => true),
         'account_id'    => array('custom' => true),
-        'messageuid'    => array('filter' => 'Tinebase_Model_Filter_Int'),
     );
 
     /**
@@ -97,28 +97,13 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     protected function _addAccountFilter($_select, $_backend, array $_accountIds = array())
     {
         $accountIds = (empty($_accountIds)) ? Felamimail_Controller_Account::getInstance()->search(NULL, NULL, FALSE, TRUE) : $_accountIds;
-        $folderIds = $this->_getFolderIdsForAccounts($accountIds);
-
         $db = $_backend->getAdapter();
-        $_select->where($db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.folder_id') . ' IN (?)', $folderIds));        
-    }
-    
-    /**
-     * get folders for account
-     * 
-     * @param array $_accountIds
-     * @return array
-     */
-    protected function _getFolderIdsForAccounts(array $_accountIds)
-    {
-        // get all folders of account
-        $folderFilter = new Felamimail_Model_FolderFilter(array(
-            array('field' => 'account_id',  'operator' => 'in', 'value' => $_accountIds)
-        ));
-        $folderBackend = new Felamimail_Backend_Folder();
-        $folderIds = $folderBackend->search($folderFilter, NULL, TRUE);
         
-        return $folderIds;
+        $what = array('folders' => SQL_TABLE_PREFIX . 'felamimail_folder');
+        $on = $db->quoteIdentifier("folders.id")      . " = felamimail_cache_message.folder_id";
+        $_select->joinLeft($what, $on, array());
+        
+        $_select->where($db->quoteInto($db->quoteIdentifier('folders' . '.account_id') . ' IN (?)', $accountIds));
     }
 
     /**
@@ -134,7 +119,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         $db = $_backend->getAdapter();
         
         $folderIds = array();
-        foreach((array)$_filterData['value'] as $filterValue) {
+        foreach ((array)$_filterData['value'] as $filterValue) {
             if ($filterValue === self::PATH_ALLINBOXES) {
                 $folderIds = array_merge($folderIds, $this->_getFolderIdsOfAllInboxes());
             } else {
@@ -142,15 +127,17 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                 array_shift($pathParts);
                 if (count($pathParts) == 1) {
                     // we only have an account id
-                    $folderIds = array_merge($folderIds, $this->_getFolderIdsForAccounts((array) $pathParts[0]));
+                    $this->_addAccountFilter($_select, $_backend, (array) $pathParts[0]);
                 } else if (count($pathParts) > 1) {
                     $folderIds[] = array_pop($pathParts);
                 }
             }
         }
         
-        $folderFilter = new Tinebase_Model_Filter_Id('folder_id', $_filterData['operator'], array_unique($folderIds));
-        $folderFilter->appendFilterSql($_select, $_backend);
+        if (count($folderIds) > 0) {
+            $folderFilter = new Tinebase_Model_Filter_Id('folder_id', $_filterData['operator'], array_unique($folderIds));
+            $folderFilter->appendFilterSql($_select, $_backend);
+        }
     }
     
     /**
