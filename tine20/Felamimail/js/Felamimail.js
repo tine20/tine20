@@ -135,11 +135,14 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         //return;
         
         if (folder) {
+            executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval/1000, 120);
+            
             if (this.updateMessageCacheTransactionId && Tine.Felamimail.folderBackend.isLoading(this.updateMessageCacheTransactionId)) {
-                var currentRequestFolder = this.folderStore.query('cache_status', 'pending').first();
-                
-                if (currentRequestFolder && currentRequestFolder !== folder) {
-                    Tine.log.debug('aborting current update message request');
+                var currentRequestFolder = this.folderStore.query('cache_status', 'pending').first(),
+                    expectedResponseIn = Math.floor((this.updateMessageCacheTransactionExpectedResponse.getTime() - new Date().getTime())/1000);
+            
+                if (currentRequestFolder && (currentRequestFolder !== folder || expectedResponseIn > executionTime)) {
+                    Tine.log.debug('aborting current update message request (expected response in ' + expectedResponseIn + ' seconds)');
                     Tine.Felamimail.folderBackend.abort(this.updateMessageCacheTransactionId);
                     currentRequestFolder.set('cache_status', 'incomplete');
                     currentRequestFolder.commit();
@@ -149,9 +152,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 }
             }
             
-            var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval/1000, 120);
             Tine.log.debug('updating message cache for folder "' + folder.get('localname') + '" with ' + executionTime + ' seconds max execution time');
             
+            this.updateMessageCacheTransactionExpectedResponse = new Date().add(Date.SECOND, executionTime);
             folder.set('cache_status', 'pending');
             folder.commit();
             
