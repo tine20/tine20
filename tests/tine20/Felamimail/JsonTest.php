@@ -4,8 +4,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  */
@@ -687,7 +687,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'from'                  => $this->_account->from . ' <' . $this->_account->email . '>',
             'days'                  => 7,
             'enabled'               => TRUE,
-            'reason'                => '<html><body><h1>unittest vacation message</h1></body></html>',
+            'reason'                => "\n<html><body><h1>unittest vacation message</h1></body></html>",
             'mime'                  => NULL,
         );
         
@@ -897,16 +897,19 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         if (array_key_exists('reason', $_sieveData)) {
             $resultSet = $this->_json->saveVacation($_sieveData);
             $this->assertEquals($this->_account->email, $resultSet['addresses'][0]);
-            unset($resultSet['addresses']);
             
             $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
             if (preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
                 $_sieveData['reason'] = strip_tags($_sieveData['reason']);
+                $_sieveData['reason'] = preg_replace('/\n/', "\r", $_sieveData['reason']);
             }
+            
+            $this->assertContains($_sieveData['reason'], $resultSet['reason']);
+            $this->assertEquals($_sieveData['subject'], $resultSet['subject']);
+            
         } else if (array_key_exists('action_type', $_sieveData[0])) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
+            $this->assertEquals($_sieveData, $resultSet);
         }
-    
-        $this->assertEquals($_sieveData, $resultSet);
     }
 }
