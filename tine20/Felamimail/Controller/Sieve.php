@@ -183,7 +183,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         
         $this->_setSieveBackendAndAuthenticate($account);
         $this->_addVacationUserData($_vacation, $account);
-        $this->_checkMimeCapability($_vacation);
+        $this->_fixNewlinesAndcheckMimeCapability($_vacation);
         
         $fsv = $_vacation->getFSV();
         
@@ -233,12 +233,14 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      * 
      * @param Felamimail_Model_Sieve_Vacation $_vacation
      */
-    protected function _checkMimeCapability(Felamimail_Model_Sieve_Vacation $_vacation)
+    protected function _fixNewlinesAndcheckMimeCapability(Felamimail_Model_Sieve_Vacation $_vacation)
     {
         if (preg_match('/dbmail/i', $this->_backend->getImplementation())) {
             // dbmail sieve does not support mime capability
             unset($_vacation->mime);
+            $_vacation->reason = preg_replace('/<br \/>/', "\r", $_vacation->reason);
         }
+        $_vacation->reason = preg_replace('/\n/', "", $_vacation->reason);
     }
     
     /**
