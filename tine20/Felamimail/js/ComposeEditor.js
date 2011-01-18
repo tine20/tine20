@@ -29,6 +29,7 @@ Ext.namespace('Tine.Felamimail');
  */
 Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
     
+    cls: 'felamimail-message-body-html',
     name: 'body',
     allowBlank: true,
 
@@ -39,6 +40,11 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
             + '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">'
             + '<title></title>'
             + '<style type="text/css">'
+                // standard css reset
+                + "html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{margin:0;padding:0;}img,body,html{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}ol,ul {list-style:none;}caption,th {text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;}q:before,q:after{content:'';}"
+                // small forms
+                + "html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{font-size: small;}"
+                // fmail spechial
                 + '.felamimail-body-blockquote {'
                     + 'margin: 5px 10px 0 3px;'
                     + 'padding-left: 10px;'
