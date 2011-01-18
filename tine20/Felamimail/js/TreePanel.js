@@ -600,7 +600,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 
                 // update progress
                 var progressEl = Ext.get(Ext.DomQuery.selectNode('img[class^=felamimail-node-statusbox-progress]', nodeEl));
-                progressEl.removeClass(['pie', 'loading']);
+                progressEl.removeClass(['felamimail-node-statusbox-progress-pie', 'felamimail-node-statusbox-progress-loading']);
                 if (! Ext.isNumber(progress)) {
                     progressEl.setStyle('background-position', 0 + 'px');
                     progressEl.addClass('felamimail-node-statusbox-progress-loading');
@@ -608,7 +608,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                     progressEl.setStyle('background-position', progress + '%');
                     progressEl.addClass('felamimail-node-statusbox-progress-pie');
                 }
-                progressEl.setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100);
+                progressEl.setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100 && lastCacheStatus !== 'complete');
             }
         }
     },
