@@ -426,6 +426,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $record = Felamimail_Controller_Sieve::getInstance()->getVacation($id);
         
+        $record->reason = nl2br($record->reason);
+        
         return $this->_recordToJson($record);
     }
 
