@@ -329,10 +329,17 @@
 	width: 16px;
     height: 16px;
     margin-top: 1px;
-    background-image:url(../../images/progress-pie.gif);
     background-repeat: no-repeat;
     vertical-align: top;
     margin-right: 5px;
+}
+
+.felamimail-node-statusbox-progress-pie {
+    background-image:url(../../images/progress-pie.gif);
+}
+
+.felamimail-node-statusbox-progress-loading {
+    background-image:url(../../library/ExtJS/resources/images/default/tree/loading.gif);
 }
 
 .ext-gecko .felamimail-node-statusbox-unread {
