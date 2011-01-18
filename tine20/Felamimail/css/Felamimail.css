@@ -106,13 +106,13 @@
 }
 
 .x-btn .action_email_download {
-    background-image:url(../../images/oxygen/16x16/actions/arrow-down.png);
+    background-image:url(../../images/oxygen/16x16/actions/document-save.png);
 }
 .x-btn-medium .action_email_download {
-    background-image:url(../../images/oxygen/22x22/actions/arrow-down.png);
+    background-image:url(../../images/oxygen/22x22/actions/document-save.png);
 }
 .x-btn-large .action_email_download {
-    background-image:url(../../images/oxygen/32x32/actions/arrow-down.png);
+    background-image:url(../../images/oxygen/32x32/actions/document-save.png);
 }
 
 /* rule grid actions */

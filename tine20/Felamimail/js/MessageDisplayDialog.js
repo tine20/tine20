@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
  
@@ -64,7 +64,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
         });
 
         this.action_download = new Ext.Action({
-            text: this.app.i18n._('Download'),
+            text: this.app.i18n._('Save'),
             handler: this.onMessageDownload.createDelegate(this),
             iconCls: 'action_email_download',
             disabled: this.record.id.match(/_/)
