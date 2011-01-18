@@ -409,9 +409,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         
         if (node.id && node.id != '/' && node.attributes.globalname != '') {
             var folder = this.app.getFolderStore().getById(node.id);
-            if (folder) {
-                folder.set('cache_status', 'pending');
-            }
             this.app.checkMailsDelayedTask.delay(0);
         }
     },
@@ -585,7 +582,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      */
     updateFolderStatus: function(folder) {
         var unreadcount = folder.get('cache_unreadcount'),
-            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 10) * 10 || 0,
+            progress    = Math.round(folder.get('cache_job_actions_done') / folder.get('cache_job_actions_estimate') * 10) * 10,
             node        = this.getNodeById(folder.id),
             ui = node ? node.getUI() : null,
             nodeEl = ui ? ui.getEl() : null,
@@ -594,16 +591,24 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             isSelected = folder.isCurrentSelection();
         
         if (node && node.ui.rendered) {
-            // update unreadcount
             var domNode = Ext.DomQuery.selectNode('span[class=felamimail-node-statusbox-unread]', nodeEl);
             if (domNode) {
+                
+                // update unreadcount + visibity
                 Ext.fly(domNode).update(unreadcount).setVisible(unreadcount > 0);
                 ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
                 
                 // update progress
-                var pie = Ext.get(Ext.DomQuery.selectNode('img[class=felamimail-node-statusbox-progress]', nodeEl)).setStyle('background-position', progress + '%').setVisible(
-                    isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100 && lastCacheStatus !== 'complete'
-                );
+                var progressEl = Ext.get(Ext.DomQuery.selectNode('img[class^=felamimail-node-statusbox-progress]', nodeEl));
+                progressEl.removeClass(['pie', 'loading']);
+                if (! Ext.isNumber(progress)) {
+                    progressEl.setStyle('background-position', 0 + 'px');
+                    progressEl.addClass('felamimail-node-statusbox-progress-loading');
+                } else {
+                    progressEl.setStyle('background-position', progress + '%');
+                    progressEl.addClass('felamimail-node-statusbox-progress-pie');
+                }
+                progressEl.setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100);
             }
         }
     },
