@@ -900,8 +900,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             
             $_sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
             if (preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
-                $_sieveData['reason'] = strip_tags($_sieveData['reason']);
-                $_sieveData['reason'] = preg_replace('/\n/', "\r", $_sieveData['reason']);
+                $_sieveData['reason'] = 'unittest vacation message';
             }
             
             $this->assertContains($_sieveData['reason'], $resultSet['reason']);
