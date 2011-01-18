@@ -495,12 +495,6 @@
                     </field>
                 </index>
                 <index>
-                    <name>timestamp</name>
-                    <field>
-                        <name>timestamp</name>
-                    </field>
-                </index>
-                <index>
                     <name>folder_id-messageuid</name>
                     <unique>true</unique>
                     <field>
