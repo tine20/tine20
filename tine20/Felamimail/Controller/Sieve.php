@@ -258,6 +258,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
             $this->_backend->putScript($this->_scriptName, $scriptToPut);
             $this->activateScript($_accountId);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getTraceAsString());
             throw new Felamimail_Exception_SievePutScriptFail($zmpe->getMessage());
         }
     }
