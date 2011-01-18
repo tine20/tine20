@@ -4,8 +4,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -74,6 +74,11 @@ class Felamimail_Model_Sieve_Vacation extends Tinebase_Record_Abstract
      */
     public function getFSV()
     {
+        if ($this->mime && $this->mime !== Felamimail_Sieve_Vacation::MIME_TYPE_TEXT_PLAIN) {
+            $this->reason = nl2br($this->reason);
+        }
+        $this->reason = preg_replace('/\n/', "\r", $this->reason);
+        
         $fsv = new Felamimail_Sieve_Vacation();
         
         $fsv->setEnabled($this->enabled)
