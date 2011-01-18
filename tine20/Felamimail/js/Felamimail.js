@@ -149,7 +149,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 }
             }
             
-            var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval, 120);
+            var executionTime = folder.isCurrentSelection() ? 10 : Math.min(this.updateInterval/1000, 120);
             Tine.log.debug('updating message cache for folder "' + folder.get('localname') + '" with ' + executionTime + ' seconds max execution time');
             
             folder.set('cache_status', 'pending');
