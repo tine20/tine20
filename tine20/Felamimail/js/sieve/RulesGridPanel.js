@@ -272,7 +272,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
         
-        if (record.get('action_argument') != '') {
+        if (record.get('action_argument') && record.get('action_argument') != '') {
             result += ' ' + record.get('action_argument');
         }
             
