@@ -214,10 +214,11 @@ Ext.namespace('Tine.Felamimail');
             
             showRecipients: function(value) {
                 if (value) {
-                    var result = '';
+                    var i18n = Tine.Tinebase.appMgr.get('Felamimail').i18n,
+                        result = '';
                     for (header in value) {
                         if (value.hasOwnProperty(header) && (header == 'to' || header == 'cc' || header == 'bcc')) {
-                            result += '<br/><b>' + header + ':</b> ' 
+                            result += '<br/><b>' + i18n._hidden(Ext.util.Format.capitalize(header)) + ':</b> ' 
                                 + Ext.util.Format.htmlEncode(value[header]);
                         }
                     }
