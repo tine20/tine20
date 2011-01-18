@@ -421,7 +421,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.store.fireEvent('update', this.store);
             }
         }, this);
-        this.ownerCt.doLayout();
+        
+        this.setFixedHeight(true);
     },
     
      onValidateEdit: function(o) {
