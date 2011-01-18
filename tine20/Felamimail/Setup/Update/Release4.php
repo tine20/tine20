@@ -96,4 +96,35 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Felamimail', '4.2');
     }
+    
+    /**
+     * update to 4.3
+     * - reverse key order
+     */    
+    public function update_2()
+    {
+        if ($this->getTableVersion('felamimail_cache_message') < 7) {
+            
+            $this->_backend->dropIndex('felamimail_cache_message', 'messageuid-folder_id');
+            
+            // add foreign key
+            $declaration = new Setup_Backend_Schema_Index_Xml(
+                '<index>
+                    <name>folder_id-messageuid</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>folder_id</name>
+                    </field>
+                    <field>
+                        <name>messageuid</name>
+                    </field>
+                </index>'
+            );
+            $this->_backend->addIndex('felamimail_cache_message', $declaration);
+            
+            $this->setTableVersion('felamimail_cache_message', '7');
+        }
+        
+        $this->setApplicationVersion('Felamimail', '4.3');
+    }
 }
