@@ -106,8 +106,8 @@ msgid "No Messages found or the cache is empty."
 msgstr "No Messages found or the cache is empty."
 
 #: js/GridPanel.js:204
-msgid "Write"
-msgstr "Write"
+msgid "Compose"
+msgstr "Compose"
 
 #: js/GridPanel.js:212 js/MessageDisplayDialog.js:48
 msgid "Reply"
@@ -138,7 +138,7 @@ msgstr "Delete"
 msgid "Add Account"
 msgstr "Add Account"
 
-#: js/GridPanel.js:276 js/GridPanel.js:1046 js/GridPanel.js:1062
+#: js/GridPanel.js:276 js/GridPanel.js:1047 js/GridPanel.js:1063
 #: js/MessageDisplayDialog.js:80
 msgid "Print Preview"
 msgstr "Print Preview"
@@ -151,7 +151,7 @@ msgstr "Print Message"
 msgid "Id"
 msgstr "Id"
 
-#: js/GridPanel.js:424 js/GridDetailsPanel.js:231 js/MessageEditDialog.js:621
+#: js/GridPanel.js:424 js/GridDetailsPanel.js:231 js/MessageEditDialog.js:623
 msgid "Attachments"
 msgstr "Attachments"
 
@@ -161,7 +161,7 @@ msgstr "Flags"
 
 #: js/GridPanel.js:438 js/GridDetailsPanel.js:137
 #: js/sieve/RuleConditionsPanel.js:77 js/Model.js:135
-#: js/MessageEditDialog.js:715 Controller/Message.php:730
+#: js/MessageEditDialog.js:717 Controller/Message.php:730
 msgid "Subject"
 msgstr "Subject"
 
@@ -230,7 +230,7 @@ msgid "Folders of all accounts"
 msgstr "Folders of all accounts"
 
 #: js/GridDetailsPanel.js:138 js/sieve/RuleConditionsPanel.js:75
-#: js/MessageEditDialog.js:701
+#: js/MessageEditDialog.js:703
 msgid "From"
 msgstr "From"
 
@@ -366,26 +366,32 @@ msgstr "(new message)"
 msgid "Select recipients for \"{0}\""
 msgstr "Select recipients for \"{0}\""
 
-#: js/TreePanel.js:612
+#: js/TreePanel.js:624
 msgid "Total Messages:"
 msgstr "Total Messages:"
 
-#: js/TreePanel.js:616
+#: js/TreePanel.js:628
 msgid "Unread Messages:"
 msgstr "Unread Messages:"
 
-#: js/TreePanel.js:620
+#: js/TreePanel.js:632
 msgid "Name on Server:"
 msgstr "Name on Server:"
 
-#: js/TreePanel.js:624
+#: js/TreePanel.js:636
 msgid "Last update:"
 msgstr "Last update:"
 
-#: js/TreePanel.js:644
+#: js/TreePanel.js:656
 #, python-format
 msgid "Fetching messages... ({0}% done)"
 msgstr "Fetching messages... ({0}% done)"
+
+#: js/TreePanel.js:672
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
+msgstr[0] "{0} unread message"
+msgstr[1] "{0} unread messages"
 
 #: js/Felamimail.js:69
 msgid "Email"
@@ -442,6 +448,14 @@ msgstr "Sieve Error"
 #: js/Felamimail.js:651
 msgid "No connection to Sieve server."
 msgstr "No connection to Sieve server."
+
+#: js/Felamimail.js:659
+msgid "Save Sieve Script Error"
+msgstr "Save Sieve Script Error"
+
+#: js/Felamimail.js:660
+msgid "Could not save script on Sieve server."
+msgstr "Could not save script on Sieve server."
 
 #: js/sieve/RulesGridPanel.js:79
 msgid "Move up"
@@ -559,17 +573,17 @@ msgstr "Advanced"
 msgid "Only send all X days to the same sender"
 msgstr "Only send all X days to the same sender"
 
-#: js/sieve/RulesDialog.js:79
+#: js/sieve/RulesDialog.js:53
 msgid "Sieve Filter Rules"
 msgstr "Sieve Filter Rules"
 
-#: js/sieve/RulesDialog.js:81
+#: js/sieve/RulesDialog.js:84
 msgid "Sieve Filter Rules for {0}"
 msgstr "Sieve Filter Rules for {0}"
 
 #: js/MessageDisplayDialog.js:67
-msgid "Download"
-msgstr "Download"
+msgid "Save"
+msgstr "Save"
 
 #: js/Model.js:134
 msgid "Subject/From"
@@ -645,91 +659,91 @@ msgid_plural "Flag lists"
 msgstr[0] "Flag list"
 msgstr[1] "Flag lists"
 
-#: js/MessageEditDialog.js:118
+#: js/MessageEditDialog.js:117
 msgid "Send"
 msgstr "Send"
 
-#: js/MessageEditDialog.js:126
+#: js/MessageEditDialog.js:125
 msgid "Search Recipients"
 msgstr "Search Recipients"
 
-#: js/MessageEditDialog.js:134
+#: js/MessageEditDialog.js:133
 msgid "Save As Draft"
 msgstr "Save As Draft"
 
-#: js/MessageEditDialog.js:142
+#: js/MessageEditDialog.js:141
 msgid "Save As Template"
 msgstr "Save As Template"
 
-#: js/MessageEditDialog.js:151
+#: js/MessageEditDialog.js:150
 msgid "Save Email Note"
 msgstr "Save Email Note"
 
-#: js/MessageEditDialog.js:159
+#: js/MessageEditDialog.js:158
 msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 msgstr "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 
-#: js/MessageEditDialog.js:177
+#: js/MessageEditDialog.js:176
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Click to search for and add recipients from the Addressbook."
 
-#: js/MessageEditDialog.js:253
+#: js/MessageEditDialog.js:252
 msgid "wrote"
 msgstr "wrote"
 
-#: js/MessageEditDialog.js:256
+#: js/MessageEditDialog.js:255
 msgid "Original message"
 msgstr "Original message"
 
-#: js/MessageEditDialog.js:396
+#: js/MessageEditDialog.js:395
 msgid "Re:"
 msgstr "Re:"
 
-#: js/MessageEditDialog.js:404
+#: js/MessageEditDialog.js:403
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#: js/MessageEditDialog.js:407
+#: js/MessageEditDialog.js:406
 msgid "{0} Message"
 msgstr "{0} Message"
 
-#: js/MessageEditDialog.js:465 js/MessageEditDialog.js:588
+#: js/MessageEditDialog.js:464 js/MessageEditDialog.js:590
 msgid "Failed"
 msgstr "Failed"
 
-#: js/MessageEditDialog.js:466
+#: js/MessageEditDialog.js:465
 msgid "{0} account setting empty."
 msgstr "{0} account setting empty."
 
-#: js/MessageEditDialog.js:483
+#: js/MessageEditDialog.js:482
 msgid "Errors"
 msgstr "Errors"
 
-#: js/MessageEditDialog.js:483
+#: js/MessageEditDialog.js:482
 msgid "Please fix the errors noted."
 msgstr "Please fix the errors noted."
 
-#: js/MessageEditDialog.js:525 js/MessageEditDialog.js:725
+#: js/MessageEditDialog.js:524 js/MessageEditDialog.js:727
 msgid "Compose email:"
 msgstr "Compose email:"
 
-#: js/MessageEditDialog.js:561
+#: js/MessageEditDialog.js:563
 msgid "Add Note"
 msgstr "Add Note"
 
-#: js/MessageEditDialog.js:562
+#: js/MessageEditDialog.js:564
 msgid "Edit Email Note Text:"
 msgstr "Edit Email Note Text:"
 
-#: js/MessageEditDialog.js:589
+#: js/MessageEditDialog.js:591
 msgid "Could not send {0}."
 msgstr "Could not send {0}."
 
-#: js/MessageEditDialog.js:590
+#: js/MessageEditDialog.js:592
 msgid "Error:"
 msgstr "Error:"
 
-#: js/MessageEditDialog.js:675 Controller/Message.php:730
+#: js/MessageEditDialog.js:677 Controller/Message.php:730
 msgid "Body"
 msgstr "Body"
 
