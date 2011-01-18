@@ -4,8 +4,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -218,6 +218,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         // appended messages already have the SEEN flag
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags), 'SEEN flag not found: ' . print_r($message->flags, TRUE));
+        // add another flag
+        Felamimail_Controller_Message::getInstance()->addFlags($message, Zend_Mail_Storage::FLAG_ANSWERED);
         
         while (! isset($updatedFolder) || $updatedFolder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
             $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
@@ -225,12 +227,14 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         
         // clear/add flag on imap
         $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
-        $this->_imap->addFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_FLAGGED));
+        $this->_imap->addFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT));
         
         $this->_controller->updateFlags($updatedFolder);
         
         $cachedMessage = Felamimail_Controller_Message::getInstance()->get($message->getId());
-        $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags), 'SEEN flag found: ' . print_r($cachedMessage->flags, TRUE));
-        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $cachedMessage->flags), 'FLAGGED flag not found: ' . print_r($cachedMessage->flags, TRUE));
+        $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags),  'SEEN flag found: ' .           print_r($cachedMessage->flags, TRUE));
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $cachedMessage->flags), 'FLAGGED flag not found: ' .    print_r($cachedMessage->flags, TRUE));
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_DRAFT, $cachedMessage->flags),   'DRAFT flag not found: ' .      print_r($cachedMessage->flags, TRUE));
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_ANSWERED, $cachedMessage->flags),'ANSWERED flag not found: ' .   print_r($cachedMessage->flags, TRUE));
     }
 }
