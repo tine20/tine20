@@ -383,11 +383,16 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount);
                 if (recents > 0 && record.isInbox()) {
                     Tine.log.info('show notification: ' + recents + ' new mails.');
-                    Ext.ux.Notification.show(
-                        this.i18n._('New mails'), 
-                        String.format(this.i18n._('You got {0} new mail(s) in Folder {1}.'), 
-                            recents, record.get('localname'))
-                    );
+                    var title = this.i18n._('New mails'),
+                        message = String.format(this.i18n._('You got {0} new mail(s) in Folder {1}.'), recents, record.get('localname')); 
+                    
+                    if (record.isCurrentSelection()) {
+                        // need to defer the notification because the new messages are not shown yet 
+                        // -> improve this with a callback fn or something like that / unread count should be updated when the messages become visible, too
+                        Ext.ux.Notification.show.defer(3500, this, [title, message]);
+                    } else {
+                        Ext.ux.Notification.show(title, message);
+                    }
                 }
             }
         }
