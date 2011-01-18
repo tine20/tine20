@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-12 10:29+0100\n"
+"PO-Revision-Date: 2011-01-18 10:38+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -105,7 +105,7 @@ msgid "No Messages found or the cache is empty."
 msgstr "Keine Nachrichten gefunden oder Emailcache leer."
 
 #: js/GridPanel.js:204
-msgid "Write"
+msgid "Compose"
 msgstr "Verfassen"
 
 #: js/GridPanel.js:212
@@ -143,8 +143,8 @@ msgid "Add Account"
 msgstr "Konto hinzufügen"
 
 #: js/GridPanel.js:276
-#: js/GridPanel.js:1046
-#: js/GridPanel.js:1062
+#: js/GridPanel.js:1047
+#: js/GridPanel.js:1063
 #: js/MessageDisplayDialog.js:80
 msgid "Print Preview"
 msgstr "Druck Vorschau"
@@ -160,7 +160,7 @@ msgstr "Id"
 
 #: js/GridPanel.js:424
 #: js/GridDetailsPanel.js:231
-#: js/MessageEditDialog.js:621
+#: js/MessageEditDialog.js:623
 msgid "Attachments"
 msgstr "Anhänge"
 
@@ -173,7 +173,7 @@ msgstr "Flags"
 #: js/GridDetailsPanel.js:137
 #: js/sieve/RuleConditionsPanel.js:77
 #: js/Model.js:135
-#: js/MessageEditDialog.js:715
+#: js/MessageEditDialog.js:717
 #: Controller/Message.php:730
 msgid "Subject"
 msgstr "Betreff"
@@ -257,7 +257,7 @@ msgstr "Ordner aller Emailkonten"
 
 #: js/GridDetailsPanel.js:138
 #: js/sieve/RuleConditionsPanel.js:75
-#: js/MessageEditDialog.js:701
+#: js/MessageEditDialog.js:703
 msgid "From"
 msgstr "Von"
 
@@ -400,26 +400,32 @@ msgstr "(neue Nachricht)"
 msgid "Select recipients for \"{0}\""
 msgstr "Empfänger für \"{0}\" auswählen"
 
-#: js/TreePanel.js:612
+#: js/TreePanel.js:624
 msgid "Total Messages:"
 msgstr "Nachrichten insgesamt:"
 
-#: js/TreePanel.js:616
+#: js/TreePanel.js:628
 msgid "Unread Messages:"
 msgstr "Ungelesene Nachrichten:"
 
-#: js/TreePanel.js:620
+#: js/TreePanel.js:632
 msgid "Name on Server:"
 msgstr "Name auf dem Server:"
 
-#: js/TreePanel.js:624
+#: js/TreePanel.js:636
 msgid "Last update:"
 msgstr "Zuletzt aktualisiert:"
 
-#: js/TreePanel.js:644
+#: js/TreePanel.js:656
 #, python-format
 msgid "Fetching messages... ({0}% done)"
 msgstr "Nachrichten abholen... ({0}% erledigt)"
+
+#: js/TreePanel.js:672
+msgid "{0} unread message"
+msgid_plural "{0} unread messages"
+msgstr[0] "{0} ungelesene Nachricht"
+msgstr[1] "{0} ungelesene Nachrichten"
 
 #: js/Felamimail.js:69
 msgid "Email"
@@ -477,6 +483,14 @@ msgstr "Sieve Fehler"
 #: js/Felamimail.js:651
 msgid "No connection to Sieve server."
 msgstr "Keine Verbindung zum Sieve Server."
+
+#: js/Felamimail.js:659
+msgid "Save Sieve Script Error"
+msgstr "Fehler beim Speichern des Sieve-Skriptes"
+
+#: js/Felamimail.js:660
+msgid "Could not save script on Sieve server."
+msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 
 #: js/sieve/RulesGridPanel.js:79
 msgid "Move up"
@@ -596,17 +610,17 @@ msgstr "Erweitert"
 msgid "Only send all X days to the same sender"
 msgstr "Nur alle X Tage an den gleichen Absender schicken"
 
-#: js/sieve/RulesDialog.js:79
+#: js/sieve/RulesDialog.js:53
 msgid "Sieve Filter Rules"
 msgstr "Sieve Filterregeln"
 
-#: js/sieve/RulesDialog.js:81
+#: js/sieve/RulesDialog.js:84
 msgid "Sieve Filter Rules for {0}"
 msgstr "Sieve Filterregeln für {0}"
 
 #: js/MessageDisplayDialog.js:67
-msgid "Download"
-msgstr "Download"
+msgid "Save"
+msgstr "Speichern"
 
 #: js/Model.js:134
 msgid "Subject/From"
@@ -685,93 +699,93 @@ msgid_plural "Flag lists"
 msgstr[0] "Flag-Liste"
 msgstr[1] "Flag-Listen"
 
-#: js/MessageEditDialog.js:118
+#: js/MessageEditDialog.js:117
 msgid "Send"
 msgstr "Senden"
 
-#: js/MessageEditDialog.js:126
+#: js/MessageEditDialog.js:125
 msgid "Search Recipients"
 msgstr "Suche Empfänger"
 
-#: js/MessageEditDialog.js:134
+#: js/MessageEditDialog.js:133
 msgid "Save As Draft"
 msgstr "Als Entwurf speichern"
 
-#: js/MessageEditDialog.js:142
+#: js/MessageEditDialog.js:141
 msgid "Save As Template"
 msgstr "Als Vorlage speichern"
 
-#: js/MessageEditDialog.js:151
+#: js/MessageEditDialog.js:150
 msgid "Save Email Note"
 msgstr "Emailnotiz anlegen"
 
-#: js/MessageEditDialog.js:159
+#: js/MessageEditDialog.js:158
 msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
 msgstr "Diesen Knopf aktivieren um die Email als Notiz bei dem Empfänger anzuhängen."
 
-#: js/MessageEditDialog.js:177
+#: js/MessageEditDialog.js:176
 msgid "Click to search for and add recipients from the Addressbook."
 msgstr "Klicken um Empfänger im Adressbuch zu suchen und zur Empfängerliste hinzuzufügen."
 
-#: js/MessageEditDialog.js:253
+#: js/MessageEditDialog.js:252
 msgid "wrote"
 msgstr "hat geschrieben"
 
-#: js/MessageEditDialog.js:256
+#: js/MessageEditDialog.js:255
 msgid "Original message"
 msgstr "Originalnachricht"
 
-#: js/MessageEditDialog.js:396
+#: js/MessageEditDialog.js:395
 msgid "Re:"
 msgstr "Re:"
 
-#: js/MessageEditDialog.js:404
+#: js/MessageEditDialog.js:403
 msgid "Fwd:"
 msgstr "Fwd:"
 
-#: js/MessageEditDialog.js:407
+#: js/MessageEditDialog.js:406
 msgid "{0} Message"
 msgstr "{0} Nachricht"
 
-#: js/MessageEditDialog.js:465
-#: js/MessageEditDialog.js:588
+#: js/MessageEditDialog.js:464
+#: js/MessageEditDialog.js:590
 msgid "Failed"
 msgstr "Fehlgeschlagen"
 
-#: js/MessageEditDialog.js:466
+#: js/MessageEditDialog.js:465
 msgid "{0} account setting empty."
 msgstr "{0} Emailaccount-Einstellung leer."
 
-#: js/MessageEditDialog.js:483
+#: js/MessageEditDialog.js:482
 msgid "Errors"
 msgstr "Fehler"
 
-#: js/MessageEditDialog.js:483
+#: js/MessageEditDialog.js:482
 msgid "Please fix the errors noted."
 msgstr "Bitte beheben Sie den genannten Fehler."
 
-#: js/MessageEditDialog.js:525
-#: js/MessageEditDialog.js:725
+#: js/MessageEditDialog.js:524
+#: js/MessageEditDialog.js:727
 msgid "Compose email:"
 msgstr "Email verfassen:"
 
-#: js/MessageEditDialog.js:561
+#: js/MessageEditDialog.js:563
 msgid "Add Note"
 msgstr "Notiz hinzufügen"
 
-#: js/MessageEditDialog.js:562
+#: js/MessageEditDialog.js:564
 msgid "Edit Email Note Text:"
 msgstr "Emailnotiz editieren:"
 
-#: js/MessageEditDialog.js:589
+#: js/MessageEditDialog.js:591
 msgid "Could not send {0}."
 msgstr "Konnte {0} nicht senden."
 
-#: js/MessageEditDialog.js:590
+#: js/MessageEditDialog.js:592
 msgid "Error:"
 msgstr "Fehler:"
 
-#: js/MessageEditDialog.js:675
+#: js/MessageEditDialog.js:677
 #: Controller/Message.php:730
 msgid "Body"
 msgstr "Nachricht"
@@ -923,6 +937,10 @@ msgstr "Entwurf"
 msgid "Flagged"
 msgstr "Markiert"
 
+#~ msgid "Write"
+#~ msgstr "Verfassen"
+#~ msgid "Download"
+#~ msgstr "Download"
 #~ msgid "All INBOXES of my email accounts"
 #~ msgstr "Alle Posteingänge meiner Emailkonten"
 #~ msgid "All INBOXES"
