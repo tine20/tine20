@@ -625,8 +625,6 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
      */    
     public function update_21()
     {
-        $this->_backend->dropIndex('felamimail_cache_message', 'messageuid-folder_id');
-        
         // add foreign key
         $declaration = new Setup_Backend_Schema_Index_Xml(
             '<index>
@@ -641,6 +639,9 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
             </index>'
         );
         $this->_backend->addIndex('felamimail_cache_message', $declaration);
+        
+        // remove old key
+        $this->_backend->dropIndex('felamimail_cache_message', 'messageuid-folder_id');
         
         $this->setTableVersion('felamimail_cache_message', '7');
         
