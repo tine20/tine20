@@ -508,9 +508,6 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             var selection = panel.getSelectionModel().getSelectedEvents();
             if (Ext.isArray(selection) && selection.length === 1) {
                 event = selection[0];
-                if (! event || event.dirty) {
-                    return;
-                }
             }
         }
         

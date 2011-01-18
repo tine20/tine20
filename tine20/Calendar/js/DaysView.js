@@ -778,7 +778,8 @@ Ext.extend(Tine.Calendar.DaysView, Ext.util.Observable, {
         var event = this.getTargetEvent(e);
         var dtStart = this.getTargetDateTime(e);
         
-        if (event) {
+        if (event && !event.id.match(/new/)) {
+            // NOTE: prevent gone away exceptoins as we save new events on blur
             this.fireEvent('dblclick', event, e);
         } else if (dtStart && !this.editing) {
             var newId = 'cal-daysviewpanel-new-' + Ext.id();
