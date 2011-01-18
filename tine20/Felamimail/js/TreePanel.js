@@ -601,7 +601,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 // update progress
                 var progressEl = Ext.get(Ext.DomQuery.selectNode('img[class^=felamimail-node-statusbox-progress]', nodeEl));
                 progressEl.removeClass(['pie', 'loading']);
-                console.log(progress);
                 if (! Ext.isNumber(progress)) {
                     progressEl.setStyle('background-position', 0 + 'px');
                     progressEl.addClass('felamimail-node-statusbox-progress-loading');
