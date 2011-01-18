@@ -660,11 +660,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
         
         // get original message
-        $originalMessage = ($_message->original_id) ? $this->get($_message->original_id) : NULL;
+        $originalMessage = ($_message->original_id && strpos('_', $_message->original_id) !== FALSE) ? $this->get($_message->original_id) : NULL;
 
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($_message->toArray(), TRUE));
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($account->toArray(), TRUE));
-        
         $mail = $this->_createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
         
         // set transport + send mail
