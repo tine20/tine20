@@ -660,7 +660,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
         
         // get original message
-        $originalMessage = ($_message->original_id && strpos('_', $_message->original_id) !== FALSE) ? $this->get($_message->original_id) : NULL;
+        $originalMessage = ($_message->original_id && strpos('_', $_message->original_id) === FALSE) ? $this->get($_message->original_id) : NULL;
 
         $mail = $this->_createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
         
