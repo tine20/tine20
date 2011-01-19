@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -19,8 +19,7 @@ Ext.namespace('Tine.Felamimail');
  * <p>Compose HTML Editor</p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  * @param       {Object} config
@@ -33,7 +32,6 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
     name: 'body',
     allowBlank: true,
 
-    // TODO get styles from head with css selector
     getDocMarkup: function(){
         var markup = '<html>'
             + '<head>'
@@ -44,7 +42,7 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
                 + "html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{margin:0;padding:0;}img,body,html{border:0;}address,caption,cite,code,dfn,em,strong,th,var{font-style:normal;font-weight:normal;}ol,ul {list-style:none;}caption,th {text-align:left;}h1,h2,h3,h4,h5,h6{font-size:100%;}q:before,q:after{content:'';}"
                 // small forms
                 + "html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,p,blockquote,th,td{font-size: small;}"
-                // fmail spechial
+                // fmail special
                 + '.felamimail-body-blockquote {'
                     + 'margin: 5px 10px 0 3px;'
                     + 'padding-left: 10px;'
@@ -64,13 +62,7 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
     initComponent: function() {
         
         this.plugins = [
-            // TODO which plugins to activate?
-            //new Ext.ux.form.HtmlEditor.Word(),  
-            //new Ext.ux.form.HtmlEditor.Divider(),  
-            //new Ext.ux.form.HtmlEditor.Table(),  
-            //new Ext.ux.form.HtmlEditor.HR(),
             new Ext.ux.form.HtmlEditor.IndentOutdent(),  
-            //new Ext.ux.form.HtmlEditor.SubSuperScript(),  
             new Ext.ux.form.HtmlEditor.RemoveFormat(),
             new Ext.ux.form.HtmlEditor.EndBlockquote()
         ];
