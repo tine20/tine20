@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-12 12:43+0100\n"
+"PO-Revision-Date: 2011-01-19 19:04+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -81,9 +81,9 @@ msgstr "Utworzono poprzez"
 msgid "Activities"
 msgstr "Aktywności"
 
-#: Preference/Abstract.php:461
+#: Preference/Abstract.php:468
 msgid "default"
-msgstr "domyślny"
+msgstr "domyślnie"
 
 #: Notes.php:363
 msgid "by"
@@ -293,7 +293,7 @@ msgid "Your username and/or your password are wrong!!!"
 msgstr "Twój login oraz / lub hasło są nieprawidłowe!!!"
 
 #: js/LoginPanel.js:371
-#: js/widgets/dialog/ExportDialog.js:131
+#: js/widgets/dialog/ExportDialog.js:132
 #: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/PreferencesDialog.js:246
 #: js/widgets/dialog/PreferencesDialog.js:275
@@ -303,7 +303,7 @@ msgid "Errors"
 msgstr "Błędy"
 
 #: js/LoginPanel.js:371
-#: js/widgets/dialog/ExportDialog.js:131
+#: js/widgets/dialog/ExportDialog.js:132
 #: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/EditDialog.js:473
@@ -409,7 +409,7 @@ msgstr "należy do"
 
 #: js/widgets/container/FilterModel.js:132
 #: js/widgets/container/FilterModel.js:136
-#: js/widgets/grid/FilterModel.js:156
+#: js/widgets/grid/FilterModel.js:166
 msgid "is equal to"
 msgstr "równa się"
 
@@ -537,7 +537,7 @@ msgstr "Nowa {0}"
 
 #: js/widgets/tree/ContextMenu.js:37
 msgid "Please enter the name of the new {0}:"
-msgstr "Proszę wprowadzić nazwę nowej {0}:"
+msgstr "Proszę wprowadzić nazwę dla: {0}"
 
 #: js/widgets/tree/ContextMenu.js:40
 msgid "No {0} added"
@@ -753,123 +753,123 @@ msgstr[0] "Widok ograniczony filtrem:"
 msgstr[1] "Widoki ograniczone {0} filtrami:"
 msgstr[2] "Widoki ograniczone {0} filtrami:"
 
-#: js/widgets/grid/FilterModel.js:155
+#: js/widgets/grid/FilterModel.js:165
 msgid "contains"
 msgstr "zawiera"
 
-#: js/widgets/grid/FilterModel.js:157
+#: js/widgets/grid/FilterModel.js:167
 msgid "is greater than"
 msgstr "większy od"
 
-#: js/widgets/grid/FilterModel.js:158
+#: js/widgets/grid/FilterModel.js:168
 msgid "is less than"
 msgstr "mniejszy od"
 
-#: js/widgets/grid/FilterModel.js:159
+#: js/widgets/grid/FilterModel.js:169
 msgid "is not"
 msgstr "nie jest"
 
-#: js/widgets/grid/FilterModel.js:160
+#: js/widgets/grid/FilterModel.js:170
 msgid "one of"
 msgstr "jeden z"
 
-#: js/widgets/grid/FilterModel.js:161
+#: js/widgets/grid/FilterModel.js:171
 msgid "none of"
 msgstr "żaden z"
 
-#: js/widgets/grid/FilterModel.js:162
+#: js/widgets/grid/FilterModel.js:172
 msgid "is before"
 msgstr "przed"
 
-#: js/widgets/grid/FilterModel.js:163
+#: js/widgets/grid/FilterModel.js:173
 msgid "is after"
 msgstr "następuje po"
 
-#: js/widgets/grid/FilterModel.js:164
+#: js/widgets/grid/FilterModel.js:174
 msgid "is within"
 msgstr "przypada na"
 
-#: js/widgets/grid/FilterModel.js:165
+#: js/widgets/grid/FilterModel.js:175
 msgid "is in week no."
 msgstr "jest w tygodniu"
 
-#: js/widgets/grid/FilterModel.js:166
+#: js/widgets/grid/FilterModel.js:176
 msgid "starts with"
 msgstr "zaczyna się od"
 
-#: js/widgets/grid/FilterModel.js:167
+#: js/widgets/grid/FilterModel.js:177
 msgid "ends with"
 msgstr "kończy się na"
 
-#: js/widgets/grid/FilterModel.js:208
+#: js/widgets/grid/FilterModel.js:218
 msgid "select a operator"
 msgstr "wybierz operator"
 
-#: js/widgets/grid/FilterModel.js:325
+#: js/widgets/grid/FilterModel.js:335
 msgid "Search Account ..."
 msgstr "Znajdź konto ..."
 
-#: js/widgets/grid/FilterModel.js:448
+#: js/widgets/grid/FilterModel.js:458
 msgid "today"
 msgstr "dzisiaj"
 
-#: js/widgets/grid/FilterModel.js:449
+#: js/widgets/grid/FilterModel.js:459
 msgid "yesterday"
 msgstr "wczoraj"
 
-#: js/widgets/grid/FilterModel.js:450
+#: js/widgets/grid/FilterModel.js:460
 msgid "this week"
 msgstr "bieżący tydzień"
 
-#: js/widgets/grid/FilterModel.js:451
+#: js/widgets/grid/FilterModel.js:461
 msgid "last week"
 msgstr "ubiegły tydzień"
 
-#: js/widgets/grid/FilterModel.js:452
+#: js/widgets/grid/FilterModel.js:462
 msgid "the week before last"
 msgstr "przedostatni tydzień"
 
-#: js/widgets/grid/FilterModel.js:453
+#: js/widgets/grid/FilterModel.js:463
 msgid "this month"
 msgstr "bieżący miesiąc"
 
-#: js/widgets/grid/FilterModel.js:454
+#: js/widgets/grid/FilterModel.js:464
 msgid "last month"
 msgstr "ubiegły miesiąc"
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:465
 msgid "this quarter"
 msgstr "bieżący kwartał"
 
-#: js/widgets/grid/FilterModel.js:456
+#: js/widgets/grid/FilterModel.js:466
 msgid "last quarter"
 msgstr "ubiegły kwartał"
 
-#: js/widgets/grid/FilterModel.js:457
+#: js/widgets/grid/FilterModel.js:467
 msgid "this year"
 msgstr "bieżący rok"
 
-#: js/widgets/grid/FilterModel.js:458
+#: js/widgets/grid/FilterModel.js:468
 msgid "last year"
 msgstr "ubiegły rok"
 
-#: js/widgets/grid/FilterModel.js:462
+#: js/widgets/grid/FilterModel.js:472
 msgid "tomorrow"
 msgstr "jutro"
 
-#: js/widgets/grid/FilterModel.js:463
+#: js/widgets/grid/FilterModel.js:473
 msgid "next week"
 msgstr "przyszły tydzień"
 
-#: js/widgets/grid/FilterModel.js:464
+#: js/widgets/grid/FilterModel.js:474
 msgid "next month"
 msgstr "przyszły miesiąc"
 
-#: js/widgets/grid/FilterModel.js:465
+#: js/widgets/grid/FilterModel.js:475
 msgid "next quarter"
 msgstr "przyszły kwartał"
 
-#: js/widgets/grid/FilterModel.js:466
+#: js/widgets/grid/FilterModel.js:476
 msgid "next year"
 msgstr "przyszły rok"
 
@@ -1880,43 +1880,43 @@ msgstr "Tine 2.0 wymaga aktualizacji albo jeszcze nie jest zainstalowana."
 msgid "Please wait or contact your administrator"
 msgstr "Proszę poczekać albo skontaktować się ze swoim administratorem"
 
-#: Setup/setup.xml:3012
+#: Setup/setup.xml:3030
 msgid "note"
 msgstr "zwykłą"
 
-#: Setup/setup.xml:3017
+#: Setup/setup.xml:3035
 msgid "default note type"
 msgstr "domyślny typ: notatka"
 
-#: Setup/setup.xml:3043
+#: Setup/setup.xml:3061
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3048
+#: Setup/setup.xml:3066
 msgid "telephone call"
 msgstr "telefon"
 
-#: Setup/setup.xml:3074
+#: Setup/setup.xml:3092
 msgid "email"
 msgstr "e-mail"
 
-#: Setup/setup.xml:3079
+#: Setup/setup.xml:3097
 msgid "email contact"
 msgstr "kontakt e-mail"
 
-#: Setup/setup.xml:3105
+#: Setup/setup.xml:3123
 msgid "created"
 msgstr "utworzony"
 
-#: Setup/setup.xml:3110
+#: Setup/setup.xml:3128
 msgid "record created"
 msgstr "wiersz utworzony"
 
-#: Setup/setup.xml:3136
+#: Setup/setup.xml:3154
 msgid "changed"
 msgstr "zmieniony"
 
-#: Setup/setup.xml:3141
+#: Setup/setup.xml:3159
 msgid "record changed"
 msgstr "wiersz zmieniony"
 
