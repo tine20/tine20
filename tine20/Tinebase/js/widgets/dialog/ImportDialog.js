@@ -4,8 +4,8 @@
  * @package     Tine
  * @subpackage  Widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -63,7 +63,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 
         this.record.data.files = [];
         this.uploadGrid.store.each(function(record) {
-            this.record.data.files.push(record.data);
+            this.record.data.files.push(Ext.ux.file.Uploader.file.getFileData(record));
         }, this);
         
         Tine.widgets.dialog.ImportDialog.superclass.onRecordUpdate.call(this);
@@ -130,7 +130,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     onApplyChanges: function(button, event, closeWindow) {
         var form = this.getForm();
-        if(form.isValid()) {
+        if (form.isValid()) {
             this.onRecordUpdate();
             
             if (this.record.get('files').length == 0) {
@@ -140,6 +140,7 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             if (this.sendRequest) {
                 this.loadMask.show();
+                console.log(this.record.get('files'));
                 
                 var params = {
                     method: this.appName + '.import' + this.record.get('model').getMeta('recordsName'),
