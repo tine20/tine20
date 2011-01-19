@@ -2,7 +2,7 @@
 /**
  * Tine 2.0
  *
- * @package     Calendar
+ * @package     Tasks
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
