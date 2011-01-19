@@ -30,7 +30,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      *
      * @var integer
      */
-    protected $_flagSyncCountPerStep = 50;
+    protected $_flagSyncCountPerStep = 1000;
     
     /**
      * initial cache status (used by updateCache and helper funcs)
