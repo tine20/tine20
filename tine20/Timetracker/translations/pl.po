@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-19 19:27+0100\n"
+"PO-Revision-Date: 2011-01-19 19:53+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -357,7 +357,7 @@ msgstr "Uprawnienia do dodawania kart godzin innych użytkowników"
 
 #: js/TimeaccountEditDialog.js:241
 msgid "Manage Clearing"
-msgstr "Edytuj przeliczanie"
+msgstr "Edytuj przeliczalne"
 
 #: js/TimeaccountEditDialog.js:242
 msgid "The grant to manage clearing of Timesheets"
