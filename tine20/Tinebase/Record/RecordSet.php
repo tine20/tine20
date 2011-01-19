@@ -569,6 +569,8 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
                 $this->addRecord($record);
             }
         }
+        
+        return $this;
     }
     
     /**
