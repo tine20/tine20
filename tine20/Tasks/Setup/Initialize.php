@@ -61,7 +61,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
         ))));
 
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "All my tasks",                          // _("All my tasks")
+            'name'              => "All tasks for me",                      // _("All tasks for me")
             'description'       => "All tasks that I am responsible for",   // _("All tasks that I am responsible for")
             'filters'           => array(
                 array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),

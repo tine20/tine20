@@ -130,7 +130,7 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
         ))));
 
         $pfe->create(new Tinebase_Model_PersistentFilter(array_merge($commonValues, array(
-            'name'              => "All my tasks",
+            'name'              => "All tasks for me",
             'description'       => "All tasks that I am responsible for",
             'filters'           => array(
                 array('field' => 'organizer',    'operator' => 'equals', 'value' => Tinebase_Model_User::CURRENTACCOUNT),
@@ -158,5 +158,16 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
         ))));
         
         $this->setApplicationVersion('Tasks', '3.4');
+    }
+
+    /**
+     * rename default favorite
+     */
+    public function update_4()
+    {
+        // rename persistent filter
+        $this->_db->query('UPDATE ' . SQL_TABLE_PREFIX . "filter SET name = 'All tasks for me' WHERE description = 'All tasks that I am responsible for'");
+
+        $this->setApplicationVersion('Tasks', '3.5');
     }
 }
