@@ -549,8 +549,7 @@ Ext.namespace('Tine.Felamimail');
         var attachmentData = null;
         
         this.attachmentGrid.store.each(function(attachment) {
-            attachmentData = Ext.copyTo({}, attachment.data, ['tempFile', 'name', 'path', 'size', 'type']);
-            this.record.data.attachments.push(attachmentData);
+            this.record.data.attachments.push(Ext.ux.file.Uploader.file.getFileData(attachment));
         }, this);
         
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
