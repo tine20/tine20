@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-18 22:27+0100\n"
+"PO-Revision-Date: 2011-01-19 19:10+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -37,14 +37,14 @@ msgstr "Wyróżniona"
 #: Controller/Message.php:732
 #: js/GridDetailsPanel.js:137
 #: js/GridPanel.js:438
-#: js/MessageEditDialog.js:717
+#: js/MessageEditDialog.js:716
 #: js/Model.js:135
 #: js/sieve/RuleConditionsPanel.js:77
 msgid "Subject"
 msgstr "Temat"
 
 #: Controller/Message.php:732
-#: js/MessageEditDialog.js:677
+#: js/MessageEditDialog.js:676
 msgid "Body"
 msgstr "wiadomość"
 
@@ -65,7 +65,7 @@ msgid "Create new email accounts"
 msgstr "tworzenie nowych kont pocztowych"
 
 #: js/GridDetailsPanel.js:138
-#: js/MessageEditDialog.js:703
+#: js/MessageEditDialog.js:702
 #: js/sieve/RuleConditionsPanel.js:75
 msgid "From"
 msgstr "Od"
@@ -89,7 +89,7 @@ msgstr "Pokaż lub ukryj informacje nagłówkowe"
 
 #: js/GridDetailsPanel.js:232
 #: js/GridPanel.js:424
-#: js/MessageEditDialog.js:623
+#: js/MessageEditDialog.js:622
 msgid "Attachments"
 msgstr "Załączniki"
 
@@ -288,7 +288,7 @@ msgstr "Wiadomość {0}"
 # The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
 #: js/MessageEditDialog.js:464
-#: js/MessageEditDialog.js:590
+#: js/MessageEditDialog.js:589
 msgid "Failed"
 msgstr "Próba nieudana"
 
@@ -305,23 +305,23 @@ msgid "Please fix the errors noted."
 msgstr "Proszę poprawić zgłoszone błędy."
 
 #: js/MessageEditDialog.js:524
-#: js/MessageEditDialog.js:727
+#: js/MessageEditDialog.js:726
 msgid "Compose email:"
 msgstr "Nowa wiadomość:"
 
-#: js/MessageEditDialog.js:563
+#: js/MessageEditDialog.js:562
 msgid "Add Note"
 msgstr "Dodaj notatkę"
 
-#: js/MessageEditDialog.js:564
+#: js/MessageEditDialog.js:563
 msgid "Edit Email Note Text:"
 msgstr "Edytuj tekst wiadomości:"
 
-#: js/MessageEditDialog.js:591
+#: js/MessageEditDialog.js:590
 msgid "Could not send {0}."
 msgstr "Wysłanie {0} było niemożliwe."
 
-#: js/MessageEditDialog.js:592
+#: js/MessageEditDialog.js:591
 msgid "Error:"
 msgstr "Błąd:"
 
@@ -802,37 +802,37 @@ msgstr "Reguły filtrowania"
 msgid "Sieve Filter Rules for {0}"
 msgstr "Reguły filtrowania dla {0}"
 
-#: js/sieve/VacationEditDialog.js:79
+#: js/sieve/VacationEditDialog.js:78
 msgid "Vacation Message for {0}"
 msgstr "Informacja o urlopie dla {0}"
 
-#: js/sieve/VacationEditDialog.js:97
+#: js/sieve/VacationEditDialog.js:96
 msgid "Incoming mails will be answered with this text:"
 msgstr "Tekst odpowiedzi na wiadomości przychodzące"
 
-#: js/sieve/VacationEditDialog.js:117
+#: js/sieve/VacationEditDialog.js:116
 msgid "General"
 msgstr "Ogólne"
 
-#: js/sieve/VacationEditDialog.js:136
-#: js/sieve/VacationEditDialog.js:170
+#: js/sieve/VacationEditDialog.js:135
+#: js/sieve/VacationEditDialog.js:169
 msgid "I am available (vacation message disabled)"
 msgstr "Jestem dostępny (wyłączona informacja o urlopie)"
 
-#: js/sieve/VacationEditDialog.js:143
-#: js/sieve/VacationEditDialog.js:171
+#: js/sieve/VacationEditDialog.js:142
+#: js/sieve/VacationEditDialog.js:170
 msgid "I am not available (vacation message enabled)"
 msgstr "Jestem niedostępny (włączona informacja o urlopie)"
 
-#: js/sieve/VacationEditDialog.js:159
+#: js/sieve/VacationEditDialog.js:158
 msgid "Status"
 msgstr "Status"
 
-#: js/sieve/VacationEditDialog.js:183
+#: js/sieve/VacationEditDialog.js:182
 msgid "Advanced"
 msgstr "Zaawansowane"
 
-#: js/sieve/VacationEditDialog.js:194
+#: js/sieve/VacationEditDialog.js:193
 msgid "Only send all X days to the same sender"
 msgstr "Wysyłaj zawsze co X dni do tego samego nadawcy"
 
@@ -886,7 +886,7 @@ msgstr "Wszystkie odebrane wiadomości z własnych kont pocztowych"
 
 #: Setup/Initialize.php:42
 msgid "All unread mail"
-msgstr "Wszystkie nieprzeczytane wiadomości"
+msgstr "Wszystkie nieprzeczytane"
 
 #: Setup/Initialize.php:43
 msgid "All unread mail of my email accounts"
@@ -922,7 +922,7 @@ msgstr "Domyślne konto e-mail dla wysyłanych wiadomości"
 
 #: Preference.php:105
 msgid "Email Update Interval"
-msgstr "Częstotliwość aktualicacji poczty"
+msgstr "Częstotliwość aktualizacji poczty"
 
 #: Preference.php:106
 msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
