@@ -244,14 +244,20 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     /**
      * get all flags for a given folder id
      *
+     * @param string $_folderId
+     * @param integer $_start
+     * @param integer $_limit
      * @return array
      */
-    public function getFlagsForFolder($_folderId, $_start, $_limits)    
+    public function getFlagsForFolder($_folderId, $_start = NULL, $_limit = NULL)    
     {
         $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
         
         $select = $this->_getSelect(array('messageuid' => 'messageuid', 'id' => 'id', 'flags' => 'felamimail_cache_message_flag.flag'));
         $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $folderId));
+        if ($_start !== NULL && $_limit !== NULL) {
+            $select->limit($_limit, $_start);
+        }
         
         $stmt = $this->_db->query($select);
         $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
