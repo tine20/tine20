@@ -105,6 +105,16 @@ Tine.Calendar.AttendeeFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo,
             height: this.layerHeight || 'auto',
             showNamesOnly: true
         });
+        this.attendeeGridPanel.store.on({
+        	'add': function (store) {
+        		this.action_ok.setDisabled(this.attendeeGridPanel.store.getCount() === 1);
+        	},
+        	'remove': function (store) {
+        		this.action_ok.setDisabled(this.attendeeGridPanel.store.getCount() === 1);
+        	},
+        	scope: this
+        });
+        
         var items = [this.attendeeGridPanel];
         
         return items;
