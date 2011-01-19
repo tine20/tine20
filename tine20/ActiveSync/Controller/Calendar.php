@@ -371,7 +371,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             }
             
             // handle exceptions of repeating events
-            if($data->exdate->count() > 0) {
+            if($data->exdate instanceof Tinebase_Record_RecordSet && $data->exdate->count() > 0) {
                 $exceptionsTag = $_xmlNode->appendChild(new DOMElement('Exceptions', null, 'uri:Calendar'));
                 
                 foreach ($data->exdate as $exception) {
@@ -587,18 +587,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         }
         
-        // new event, add current user as participant
-        if($event->getId() == null) {
-            $contactId = Tinebase_Core::getUser()->contact_id;
-            $newAttender = new Calendar_Model_Attender(array(
-                'user_id'   => $contactId,
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
-                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
-            ));
-            $event->attendee->addRecord($newAttender);
-        }
-        
         if(isset($xmlData->Attendees)) {
             $newAttendee = array();
             
@@ -688,15 +676,25 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                     unset($event->attendee[$index]);
                 }
             }
-        } elseif(count($event->attendee) == 0) {
-            $contactId = Tinebase_Core::getUser()->contact_id;
-            $newAttender = new Calendar_Model_Attender(array(
-                'user_id'   => $contactId,
-                'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
-                'role'      => Calendar_Model_Attender::ROLE_REQUIRED
-            ));
-            $event->attendee->addRecord($newAttender);
+        }
+        
+        // new event, add current user as participant
+        if($event->getId() == null) {
+            $selfContactId = Tinebase_Core::getUser()->contact_id;
+            $selfAttender = $event->attendee
+                ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
+                ->filter('user_id', $selfContactId);
+                    
+            if (count($selfAttender) == 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " added current user as attender for new event ");
+                $newAttender = new Calendar_Model_Attender(array(
+                    'user_id'   => $selfContactId,
+                    'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                    'status'    => Calendar_Model_Attender::STATUS_ACCEPTED,
+                    'role'      => Calendar_Model_Attender::ROLE_REQUIRED
+                ));
+                $event->attendee->addRecord($newAttender);
+            }
         }
         
         // handle recurrence
@@ -905,15 +903,21 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $allowedFolders = $this->_getSyncableFolders();
             
             $wantedFolders = null;
-            // maybe the user has defined a filter to limit the search results
-            if(!empty($this->_device->calendarfilter_id)) {
-                $persistentFilter = Tinebase_PersistentFilter::getFilterById($this->_device->calendarfilter_id);
+            
+            try {
+                $persistentFilterId = $this->_device->{$this->_filterProperty} ? 
+                    $this->_device->{$this->_filterProperty} : 
+                    Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter;
+                    
+                $persistentFilter = Tinebase_PersistentFilter::getFilterById($persistentFilterId);
                 
                 foreach($persistentFilter as $filter) {
                     if($filter instanceof Tinebase_Model_Filter_Container) {
                         $wantedFolders = array_flip($filter->getContainerIds());
                     }
                 }
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // filter got deleted already
             }
             
             $folders = $wantedFolders === null ? $allowedFolders : array_intersect_key($allowedFolders, $wantedFolders);
@@ -936,23 +940,16 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     {
         $folders = array();
         
-        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC);
+        $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC)
+            ->merge(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC))
+            ->merge(Tinebase_Container::getInstance()->getOtherUsersContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC));
+        
         foreach ($containers as $container) {
             $folders[$container->id] = array(
                 'folderId'      => $container->id,
                 'parentId'      => 0,
                 'displayName'   => $container->name,
                 'type'          => (count($folders) == 0) ? $this->_defaultFolderType : $this->_folderType
-            );
-        }
-        
-        $containers = Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC);
-        foreach ($containers as $container) {
-            $folders[$container->id] = array(
-                'folderId'      => $container->id,
-                'parentId'      => 0,
-                'displayName'   => $container->name,
-                'type'          => $this->_folderType
             );
         }
                 
