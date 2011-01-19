@@ -206,7 +206,6 @@ class Felamimail_Sieve_Vacation
         $plaintextReason = $this->_getPlaintext($reason);
         
         if (! empty($this->_mime)) {
-            var_dump($this->_mime);
             $mime = ':mime ';
             $contentType = 'Content-Type: ' . $this->_mime;
             if ($this->_mime == self::MIME_TYPE_MULTIPART_ALTERNATIVE) {
