@@ -178,6 +178,36 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
     },
     
     /**
+     * get buttons
+     * 
+     * @private
+     */
+    getButtons: function () {
+    	if (! this.hideButtons) {
+	    	this.action_ok = new Ext.Action({
+	    		text: _('Ok'),
+	            scope: this,
+	            handler: this.onOk,
+	            iconCls: 'action_saveAndClose'
+	    	});
+	    	
+	    	this.action_cancel = new Ext.Action({
+	    		text: _('Cancel'),
+				scope: this,
+	            handler: this.onCancel,
+	            iconCls: 'action_cancel'
+	    	});
+	    	
+	    	return [
+    			this.action_cancel,
+    			this.action_ok
+    		]; 
+    	}
+    	    	
+    	return false;
+    },
+    
+    /**
      * returns inner form of the layer
      * 
      */
@@ -190,17 +220,7 @@ Ext.extend(Ext.ux.form.LayerCombo, Ext.form.TriggerField, {
                 cls: 'tw-editdialog',
                 items: this.getItems(),
                 buttonAlign: 'right',
-                buttons: this.hideButtons ? false : [{
-                    text: _('Cancel'),
-                    scope: this,
-                    handler: this.onCancel,
-                    iconCls: 'action_cancel'
-                }, {
-                    text: _('Ok'),
-                    scope: this,
-                    handler: this.onOk,
-                    iconCls: 'action_saveAndClose'
-                }]
+                buttons: this.getButtons()
             }, this.formConfig));
         }
         
