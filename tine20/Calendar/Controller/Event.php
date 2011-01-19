@@ -631,6 +631,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 $this->doSendNotifications($notificationEvent, $this->_currentAccount, $notificationAction);
             } catch (Exception $e) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " " . $e->getTraceAsString());
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " could not send notification {$e->getMessage()}");
             }
         }
