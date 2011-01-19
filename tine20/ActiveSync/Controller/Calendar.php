@@ -941,8 +941,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         $folders = array();
         
         $containers = Tinebase_Container::getInstance()->getPersonalContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Core::getUser(), Tinebase_Model_Grants::GRANT_SYNC)
-            ->merge(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC))
-            ->merge(Tinebase_Container::getInstance()->getOtherUsersContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC));
+            ->merge(Tinebase_Container::getInstance()->getSharedContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC));
+//            ->merge(Tinebase_Container::getInstance()->getOtherUsersContainer(Tinebase_Core::getUser(), $this->_applicationName, Tinebase_Model_Grants::GRANT_SYNC));
         
         foreach ($containers as $container) {
             $folders[$container->id] = array(
