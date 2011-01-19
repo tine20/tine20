@@ -140,7 +140,6 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             
             if (this.sendRequest) {
                 this.loadMask.show();
-                console.log(this.record.get('files'));
                 
                 var params = {
                     method: this.appName + '.import' + this.record.get('model').getMeta('recordsName'),
