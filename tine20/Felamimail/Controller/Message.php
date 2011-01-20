@@ -469,7 +469,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $firstMessage = $_messages->getFirstRecord();
         $folder = Felamimail_Controller_Folder::getInstance()->get($firstMessage->folder_id);
         $imapBackend = Felamimail_Backend_ImapFactory::factory($firstMessage->account_id);
-        $imapBackend->selectFolder($folder->globalname);
+        $imapBackend->selectFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
         
         $imapMessageUids = array();
         foreach ($_messages as $message) {
@@ -548,7 +548,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Move ' . count($_uids) . ' messages to folder ' . $_targetFolderName . ' on imap server');
         try {
-            $_imap->copyMessage($_uids, $_targetFolderName);
+            $_imap->copyMessage($_uids, Felamimail_Model_Folder::encodeFolderName($_targetFolderName));
             $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
         } catch (Felamimail_Exception_IMAP $fei) {
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $fei->getMessage()); 
@@ -1240,7 +1240,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         try {
             $imapBackend = ($_imapBackend === NULL) ? Felamimail_Backend_ImapFactory::factory($_folder->account_id) : $_imapBackend;
             if ($_select && $imapBackend->getCurrentFolder() != $_folder->globalname) {
-                $backendFolderValues = $imapBackend->selectFolder($_folder->globalname);
+                $backendFolderValues = $imapBackend->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folder->globalname));
             }
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             // no imap connection

@@ -583,7 +583,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $foldersToCheck = array($account->sent_folder, $account->trash_folder);
         foreach ($foldersToCheck as $folderName) {
-            if ($imapBackend->getFolderStatus($folderName) === false) {
+            if ($imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $folderName . '. Trying to add it.');
                 
                 // get localname + parentfolder

@@ -113,7 +113,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         } else {
             try {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $this->_delimiter);
-                $folders = $imap->getFolders($_folderName . $this->_delimiter, '%');
+                $folders = $imap->getFolders(Felamimail_Model_Folder::encodeFolderName($_folderName) . $this->_delimiter, '%');
                 
             } catch (Zend_Mail_Storage_Exception $zmse) {
                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage() .' No subfolders found.');
@@ -192,7 +192,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
         
         // get folder values / status from imap server
-        $counter = $imap->examineFolder($folder->globalname);
+        $counter = $imap->examineFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
             
         // check validity
         $folder->cache_uidvalidity = $folder->imap_uidvalidity;
@@ -201,13 +201,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $folder->imap_status       = Felamimail_Model_Folder::IMAP_STATUS_OK;
         $folder->imap_timestamp    = Tinebase_DateTime::now();
         
-//        if (! array_key_exists('uidnext', $counter)) {
-//            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Non-standard IMAP server. Trying to guess uidnext by getting all Uids. Maybe it does not work.');
-//            $folder->imap_uidnext = 0;
-//        } else {
-//            $folder->imap_uidnext = $counter['uidnext'];
-//        }
-                    
         return $folder;
     }
     
@@ -355,7 +348,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Folder ' . $_folderData['globalName'] . ' is not selectable.');
             $imap = Felamimail_Backend_ImapFactory::factory($_account);
             try {
-                $folderData = $imap->selectFolder($_folderData['globalName']);
+                $folderData = $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folderData['globalName']));
             } catch (Zend_Mail_Storage_Exception $zmse) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Could not select folder. Skipping it.');
                 $result = FALSE;
