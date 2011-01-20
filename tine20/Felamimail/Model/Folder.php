@@ -4,9 +4,9 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  * 
  * @todo        rename unreadcount -> unseen
  */
@@ -146,4 +146,44 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         'cache_timestamp',
         'imap_timestamp',
     );
+    
+    /**
+     * encode foldername given by user (convert to UTF7-IMAP)
+     * 
+     * @param string $_folderName
+     * @return string
+     */
+    public static function encodeFolderName($_folderName)
+    {
+        if (extension_loaded('mbstring')) {
+            $result = mb_convert_encoding($_folderName, "UTF7-IMAP", "utf-8");
+        } else if (extension_loaded('imap')) {
+            $result = imap_utf7_encode(iconv('utf-8', 'ISO-8859-1', $_folderName));
+        } else {
+            // fallback
+            $result = replaceSpecialChars($_folderName);
+        }
+                
+        return $result;
+    }
+    
+    /**
+     * decode foldername given by IMAP server (convert from UTF7-IMAP to UTF8)
+     * 
+     * @param string $_folderName
+     * @return string
+     */
+    public static function decodeFolderName($_folderName)
+    {
+        if (extension_loaded('mbstring')) {
+            $result = mb_convert_encoding($_folderName, "utf-8", "UTF7-IMAP");
+        } else if (extension_loaded('imap')) {
+            $result = iconv('ISO-8859-1', 'utf-8', imap_utf7_decode($_folderName));
+        } else {
+            // fallback
+            $result = replaceSpecialChars($_folderName);
+        }
+        
+        return $result;
+    }
 }
