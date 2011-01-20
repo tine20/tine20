@@ -82,28 +82,46 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         this.defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
         Tine.log.debug('default account is "' + this.defaultAccount);
         
-        if (window.isMainWindow && Tine.Tinebase.appMgr.getActive() != this && this.updateInterval) {
-            var delayTime = this.updateInterval/20;
+        if (window.isMainWindow) {
+            if (Tine.Tinebase.appMgr.getActive() != this && this.updateInterval) {
+                var delayTime = this.updateInterval/20;
+                Tine.log.debug('start preloading mails in "' + delayTime/1000 + '" seconds');
+                this.checkMailsDelayedTask.delay(delayTime);
+            }
             
-            Tine.log.debug('start preloading mails in "' + delayTime/1000 + '" seconds');
-            this.checkMailsDelayedTask.delay(delayTime);
+            this.showActiveVacation();
+            this.checkAccounts();
         }
-        
-        this.showActiveVacation();
     },
     
     /**
      * show notification with active vacation information
      */
     showActiveVacation: function () {
-        if (window.isMainWindow) {
-            var accountsWithActiveVacation = Tine.Felamimail.loadAccountStore().query('sieve_vacation_active', true);
-            accountsWithActiveVacation.each(function(item) {
-                Ext.ux.Notification.show(
-                    this.i18n._('Active Vacation Message'), 
-                    String.format(this.i18n._('Email account "{0}" has an active vacation message.'), item.get('name'))
-                );
-            }, this);
+        var accountsWithActiveVacation = Tine.Felamimail.loadAccountStore().query('sieve_vacation_active', true);
+        accountsWithActiveVacation.each(function(item) {
+            Ext.ux.Notification.show(
+                this.i18n._('Active Vacation Message'), 
+                String.format(this.i18n._('Email account "{0}" has an active vacation message.'), item.get('name'))
+            );
+        }, this);
+    },
+
+    /**
+     * checks accounts
+     * 
+     * TODO perhaps we could set the account status to disconnect if checkAccounts fails
+     */
+    checkAccounts: function () {
+        // only checks system accounts atm
+        var systemAccounts = Tine.Felamimail.loadAccountStore().query('type', 'system'),
+            ids = [];
+        systemAccounts.each(function(item) {
+            ids.push(item.id);
+        }, this);
+        
+        if (ids.length > 0) {
+            Tine.Felamimail.accountBackend.checkAccounts(ids);
         }
     },
     
