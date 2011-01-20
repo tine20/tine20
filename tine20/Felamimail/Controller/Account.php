@@ -563,7 +563,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * check if sent/trash folders exists and create them if not
      * 
      * @param string|Felamimail_Model_Account $_account account record or id
-     * @return void
+     * @return boolean
      * 
      * @todo we should make this configurable
      */
@@ -572,7 +572,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $account = ($_account instanceof Felamimail_Model_Account) ? $_account : $this->get($_account);
         $imapBackend = $this->_getIMAPBackend($account);
         if (! $imapBackend) {
-            return;
+            return FALSE;
         }
         
         $changed = $this->_addFolderDefaults($account);
@@ -583,7 +583,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $foldersToCheck = array($account->sent_folder, $account->trash_folder);
         foreach ($foldersToCheck as $folderName) {
-            if ($imapBackend->getFolderStatus($folderName) === false) {
+            if ($imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $folderName . '. Trying to add it.');
                 
                 // get localname + parentfolder
@@ -596,6 +596,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder ' . $folderName . ' exists.');
             }
         }
+        
+        return TRUE;
     }
     
     /**

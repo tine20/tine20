@@ -106,8 +106,11 @@ Tine.Tinebase.ExceptionHandler = function() {
             error.message     = "An unknown JS error has occured.";
             error.description = 'The following information may be useful:' + "\n";
             for (var x = 0; x < args.length; x++) {
-                // TODO prevent "Uncaught TypeError: Converting circular structure to JSON"
-                error.description += (Ext.encode(args[x]) + "\n");
+                try {
+                    error.description += (Ext.encode(args[x]) + "\n");
+                } catch (e) {
+                    error.description += 'Could not encode error args: ' + e + "\n";
+                }
             }
         }
         return error;

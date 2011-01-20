@@ -181,11 +181,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     protected function _expungeCacheFolder(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
     {
         try {
-            $_imap->expunge($_folder->globalname);
+            $_imap->expunge(Felamimail_Model_Folder::encodeFolderName($_folder->globalname));
         } catch (Zend_Mail_Storage_Exception $zmse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Removing no longer existing folder ' . $_folder->globalname . ' from cache. ' .$zmse->getMessage() );
             Felamimail_Controller_Cache_Folder::getInstance()->delete($_folder->getId());
-            throw new Felamimail_Exception_IMAPFolderNotFound();
+            throw new Felamimail_Exception_IMAPFolderNotFound('Folder not found: ' . $_folder->globalname);
         }
     }
     
@@ -898,7 +898,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
 
         // get all flags for folder
         $imap = Felamimail_Backend_ImapFactory::factory($folder->account_id);
-        $imap->selectFolder($folder->globalname);
+        $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
         $flags = $imap->getFlags(1, INF);
         
         $unreadcount = $folder->cache_unreadcount;

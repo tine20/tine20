@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
  
@@ -22,8 +22,7 @@ Ext.namespace('Tine.Felamimail');
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  * @param       {Object} config
@@ -638,9 +637,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var msgs = this.getStore(),
                 nextRecord = null;
         } else {
-            var msgs = sm.getSelectionsCollection(),
-                lastIdx = this.getStore().indexOf(msgs.last()),
-                nextRecord = (sm.getCount() == 1) ? this.getStore().getAt(++lastIdx) : null;
+            var msgs = sm.getSelectionsCollection();
+            
+            if (sm.getCount() == 1 && this.getStore().getCount() > 1) {
+                // select next message (or previous if it was the last)
+                lastIdx = this.getStore().indexOf(msgs.last());
+                nextRecord = this.getStore().getAt(lastIdx + 1);
+                if (! nextRecord) {
+                    nextRecord = this.getStore().getAt(lastIdx - 1);
+                }
+            }
         }
         
         var increaseUnreadCountInTargetFolder = 0;

@@ -308,7 +308,7 @@ Tine.Admin.Applications.Main = function() {
                     _action_enable.setDisabled(false);
                     _action_disable.setDisabled(false);
                     // check if app has admin panel and is enabled
-                    if (Tine[selected[0].data.name].AdminPanel && selected[0].data.status == 'enabled') {
+                    if (Tine[selected[0].data.name] && Tine[selected[0].data.name].AdminPanel && selected[0].data.status == 'enabled') {
                         _action_settings.setDisabled(false);
                     } else {
                         _action_settings.setDisabled(true);

@@ -596,7 +596,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 
                 // update unreadcount + visibity
                 Ext.fly(domNode).update(unreadcount).setVisible(unreadcount > 0);
-                ui[unreadcount === 0 ? 'removeClass' : 'addClass']('felamimail-node-unread');
+                
+                this.setUnreadClass(node, unreadcount > 0);
                 
                 // update progress
                 var progressEl = Ext.get(Ext.DomQuery.selectNode('img[class^=felamimail-node-statusbox-progress]', nodeEl));
@@ -610,6 +611,22 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 }
                 progressEl.setVisible(isSelected && cacheStatus !== 'complete' && cacheStatus !== 'disconnect' && progress !== 100 && lastCacheStatus !== 'complete');
             }
+        }
+    },
+    
+    /**
+     * set unread class of node and parents
+     * 
+     * @param {Node} node
+     * @param {Boolean} addClass true to add / false to remove
+     */
+    setUnreadClass: function(node, addClass) {
+        var ui = node.getUI();
+        ui[addClass ? 'addClass' : 'removeClass']('felamimail-node-unread');
+        
+        // check + update parent (only if folder node)
+        if (node.parentNode && this.app.getFolderStore().getById(node.parentNode.id)) {
+            this.setUnreadClass(node.parentNode, addClass);
         }
     },
     

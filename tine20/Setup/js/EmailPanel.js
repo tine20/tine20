@@ -421,6 +421,22 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
                 name: 'sieve_port',
                 fieldLabel: this.app.i18n._('Port'),
                 xtype: 'numberfield'
+            }, {
+                fieldLabel: this.app.i18n._('Secure Connection'),
+                name: 'sieve_ssl',
+                typeAhead     : false,
+                triggerAction : 'all',
+                lazyRender    : true,
+                editable      : false,
+                mode          : 'local',
+                value: 'none',
+                xtype: 'combo',
+                listWidth: 300,
+                store: [
+                    ['none', this.app.i18n._('None')],
+                    ['tls',  this.app.i18n._('TLS')],
+                    ['ssl',  this.app.i18n._('SSL')]
+                ]
             }]
         }];
     },

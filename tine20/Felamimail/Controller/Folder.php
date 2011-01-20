@@ -5,12 +5,11 @@
  * @package     Felamimail
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        use other/shared namespaces
- * @todo        translate standard folder names
  * @todo        extend Tinebase_Controller_Record Abstract and add modlog fields and acl
  */
 
@@ -218,18 +217,21 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $account = ($_accountId instanceof Felamimail_Controller_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
-        $foldername = $this->_prepareFolderName($_folderName);
-        $globalname = (empty($_parentFolder)) ? $foldername : $_parentFolder . $this->_delimiter . $foldername;
+        $globalname = (empty($_parentFolder)) ? $_folderName : $_parentFolder . $this->_delimiter . $_folderName;
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Trying to create new folder: ' . $globalname . ' (parent: ' . $_parentFolder . ')');
         
         $imap = Felamimail_Backend_ImapFactory::factory($account);
         
         try {
-            $imap->createFolder($foldername, (empty($_parentFolder)) ? NULL : $_parentFolder, $this->_delimiter);
+            $imap->createFolder(
+                Felamimail_Model_Folder::encodeFolderName($_folderName), 
+                (empty($_parentFolder)) ? NULL : Felamimail_Model_Folder::encodeFolderName($_parentFolder), 
+                $this->_delimiter
+            );
 
             // create new folder
             $folder = new Felamimail_Model_Folder(array(
-                'localname'     => $foldername,
+                'localname'     => $_folderName,
                 'globalname'    => $globalname,
                 'account_id'    => $account->getId(),
                 'parent'        => $_parentFolder
@@ -255,18 +257,6 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $this->_updateHasChildren($_accountId, $_parentFolder, 1);
         
         return $folder;
-    }
-    
-    /**
-     * prepare foldername given by user (convert some bad chars)
-     * 
-     * @param string $_folderName
-     * @return string
-     */
-    protected function _prepareFolderName($_folderName)
-    {
-        $result = replaceSpecialChars($_folderName);
-        return $result;
     }
     
     /**
@@ -309,7 +299,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         
         try {
             $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
-            $imap->removeFolder($_folderName);
+            $imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($_folderName));
         } catch (Zend_Mail_Storage_Exception $zmse) {
             throw new Felamimail_Exception_IMAP('Could not delete folder ' . $_folderName . '. IMAP Error: ' . $zmse->getMessage());
         }
@@ -338,24 +328,22 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
-        $foldername = $this->_prepareFolderName($_newLocalName);
-        
         // remove old localname and build new globalname
         $globalNameParts = explode($this->_delimiter, $_oldGlobalName);
         array_pop($globalNameParts);
-        array_push($globalNameParts, $foldername);
+        array_push($globalNameParts, $_newLocalName);
         $newGlobalName = implode($this->_delimiter, $globalNameParts);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
         
         $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
-        $imap->renameFolder($_oldGlobalName, $newGlobalName);
+        $imap->renameFolder(Felamimail_Model_Folder::encodeFolderName($_oldGlobalName), Felamimail_Model_Folder::encodeFolderName($newGlobalName));
         
         // rename folder in db
         try {
             $folder = $this->getByBackendAndGlobalName($_accountId, $_oldGlobalName);
             $folder->globalname = $newGlobalName;
-            $folder->localname = $foldername;
+            $folder->localname = $_newLocalName;
             $folder = $this->update($folder);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -393,7 +381,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         try {
             // try to delete messages in imap folder
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete all messages in folder ' . $folder->globalname);
-            $imap->emptyFolder($folder->globalname);
+            $imap->emptyFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
 
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());

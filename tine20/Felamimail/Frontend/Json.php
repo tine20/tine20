@@ -5,9 +5,10 @@
  * This class handles all Json requests for the Felamimail application
  *
  * @package     Felamimail
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -414,6 +415,37 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return array('status' => ($result) ? 'success' : 'failure');
     }
     
+    /**
+     * check account
+     *  - the existance of sent/trash folders
+     *  
+     * @param $id
+     * 
+     * @todo check capabilities here too 
+     */
+    public function checkAccounts($ids)
+    {
+        $result = TRUE;
+
+        $accounts = Felamimail_Controller_Account::getInstance()->getMultiple($ids);
+        foreach ($accounts as $account) {
+            if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM) {
+                // check existance of sent/trash folder only for system accounts atm
+                try {
+                    $result = Felamimail_Controller_Account::getInstance()->checkSentTrash($account->getId());
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not check account: ' . $e->getMessage());
+                    $result = FALSE;
+                }
+                if (! $result) {
+                    break;
+                }
+            }
+        }
+        
+        return array('status' => ($result) ? 'success' : 'failure');
+    }
+    
     /***************************** sieve funcs *******************************/
     
     /**
@@ -492,12 +524,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         try {
             $accounts = $this->searchAccounts('');
-            foreach ($accounts['results'] as $account) {
-                if ($account['type'] == Felamimail_Model_Account::TYPE_SYSTEM) {
-                    // check existance of sent/trash folder only for system accounts atm
-                    Felamimail_Controller_Account::getInstance()->checkSentTrash($account['id']);
-                }
-            }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not get accounts: ' . $e->getMessage());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
