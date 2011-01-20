@@ -280,13 +280,9 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             }
             
             try {
-                // decode folder name
-                if (extension_loaded('mbstring')) {
-                    $folderData['localName'] = mb_convert_encoding($folderData['localName'], "utf-8", "UTF7-IMAP");
-                } else if (extension_loaded('imap')) {
-                    $folderData['localName'] = iconv('ISO-8859-1', 'utf-8', imap_utf7_decode($folderData['localName']));
-                }
-                
+                $folderData['localName'] = Felamimail_Model_Folder::decodeFolderName($folderData['localName']);
+                $folderData['globalName'] = Felamimail_Model_Folder::decodeFolderName($folderData['globalName']);
+                                
                 $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_account->getId(), $folderData['globalName']);
                 $folder->is_selectable = ($folderData['isSelectable'] == '1');
                 $folder->has_children = ($folderData['hasChildren'] == '1');
