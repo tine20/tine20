@@ -135,7 +135,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         if (count($this->_createdFolders) > 0) {
             foreach ($this->_createdFolders as $folderName) {
                 //echo "delete $folderName\n";
-                $this->_imap->removeFolder($folderName);
+                $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
             }
             Felamimail_Controller_Cache_Folder::getInstance()->clear($this->_account);
         }
@@ -214,7 +214,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $filter = $this->_getFolderFilter();
         $result = $this->_json->searchFolders($filter);
         
-        $foldernames = array('test' => 'test', 'Schlüssel' => 'Schluessel', 'test/1' => 'test1', 'test\2' => 'test2');
+        $foldernames = array('test' => 'test', 'Schlüssel' => 'Schlüssel', 'test//1' => 'test1', 'test\2' => 'test2');
         
         foreach ($foldernames as $foldername => $expected) {
             $result = $this->_json->addFolder($foldername, $this->_testFolderName, $this->_account->getId());
