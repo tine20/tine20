@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * TODO         think about adding a generic felamimail backend with the exception handler
@@ -83,6 +83,11 @@ Tine.Felamimail.Model.Message = Tine.Tinebase.data.Record.create([
         return false;
     },
     
+    /**
+     * check if body has been fetched
+     * 
+     * @return {Boolean}
+     */
     bodyIsFetched: function() {
         return this.get('body') !== undefined;
     },
@@ -441,7 +446,28 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
 Tine.Felamimail.accountBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Felamimail',
     modelName: 'Account',
-    recordClass: Tine.Felamimail.Model.Account
+    recordClass: Tine.Felamimail.Model.Account,
+    
+    /**
+     * check accounts
+     * 
+     * @param   {String} ids
+     * @param   {Object} options
+     * @return  {Number} Ext.Ajax transaction id
+     */
+    checkAccounts: function(ids, options) {
+        options = options || {};
+        options.params = options.params || {};
+        
+        var p = options.params;
+        
+        p.method = this.appName + '.checkAccounts';
+        p.ids = ids;
+        
+        //options.timeout = executionTime * 5000;
+                
+        return this.doXHTTPRequest(options);
+    }
 });
 
 /**
