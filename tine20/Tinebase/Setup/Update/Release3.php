@@ -1142,7 +1142,7 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
      */
     public function update_25()
     {
-        $roles = Tinebase_Acl_Roles::getInstance()->searchRoles(new Tinebase_Model_RoleFilter(array()), new Tasks_Model_Pagination(array()));
+        $roles = Tinebase_Acl_Roles::getInstance()->searchRoles(new Tinebase_Model_RoleFilter(array()), new Tinebase_Model_Pagination(array()));
         
         foreach($roles as $role) {
             Tinebase_Acl_Roles::getInstance()->addSingleRight(
