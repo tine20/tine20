@@ -110,7 +110,6 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
                 self::IMAP_STATUS_DISCONNECT,
             )
         ),
-        'imap_uidnext'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'imap_uidvalidity'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'imap_totalcount'        => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'imap_timestamp'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -125,7 +124,6 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
                 self::CACHE_STATUS_UPDATING
             )
         ),
-        'cache_uidnext'          => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 1),
         'cache_uidvalidity'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'cache_totalcount'       => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
         'cache_recentcount'      => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 0),
