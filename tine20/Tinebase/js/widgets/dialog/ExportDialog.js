@@ -4,8 +4,8 @@
  * @package     Tine
  * @subpackage  Widgets
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -79,6 +79,15 @@ Tine.widgets.dialog.ExportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      */
     getFormItems: function() {
+        if (this.record) {
+            // remove all definitions that does not share the (grid) model / store.filter() did not do the job
+            this.definitionsStore.each(function(record) {
+                if (record.get('model') !== this.record.get('model')) {
+                    this.definitionsStore.remove(record);
+                }
+            }, this);
+        }
+            
         return {
             bodyStyle: 'padding:5px;',
             buttonAlign: 'right',

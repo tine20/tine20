@@ -68,6 +68,9 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
         var filterSettings = this.sm.getSelectionFilter();
         
         if (this.showExportDialog) {
+            var gridRecordClass = this.gridPanel.recordClass,
+                model = gridRecordClass.getMeta('appName') + '_Model_' + gridRecordClass.getMeta('modelName');
+                
             Tine.widgets.dialog.ExportDialog.openWindow({
                 appName: this.gridPanel.app.appName,
                 record: new Tine.Tinebase.Model.ExportJob({
@@ -75,7 +78,8 @@ Ext.extend(Tine.widgets.grid.ExportButton, Ext.Action, {
                     format: this.format,
                     exportFunction: this.exportFunction,
                     count: this.sm.getCount(),
-                    recordsName: this.gridPanel.i18nRecordsName
+                    recordsName: this.gridPanel.i18nRecordsName,
+                    model: model
                 })
             });
         } else {
