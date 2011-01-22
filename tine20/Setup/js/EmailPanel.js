@@ -3,8 +3,8 @@
  * 
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -88,7 +88,6 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
         xtype: 'fieldset',
         autoHeight: 'auto',
         defaults: {width: 300}
-        //defaultType: 'textfield'
     },
     
     /**
@@ -106,24 +105,14 @@ Tine.Setup.EmailPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
      * Change IMAP card layout depending on selected combo box entry
      */
     onChangeImapBackend: function() {
-        var imapBackend = this.imapBackendCombo.getValue();
-        
-        var cardLayout = Ext.getCmp(this.imapBackendIdPrefix + 'CardLayout').getLayout();
-        if (cardLayout !== 'card') {
-            cardLayout.setActiveItem(this.imapBackendIdPrefix + imapBackend);
-        }
+        this.changeCard(this.imapBackendCombo, this.imapBackendIdPrefix);
     },
 
     /**
      * Change SMTP card layout depending on selected combo box entry
      */
     onChangeSmtpBackend: function() {
-        var smtpBackend = this.smtpBackendCombo.getValue();
-        
-        var cardLayout = Ext.getCmp(this.smtpBackendIdPrefix + 'CardLayout').getLayout();
-        if (cardLayout !== 'card') {
-            cardLayout.setActiveItem(this.smtpBackendIdPrefix + smtpBackend);
-        }
+        this.changeCard(this.smtpBackendCombo, this.smtpBackendIdPrefix);
     },
 
     /**

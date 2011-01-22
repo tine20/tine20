@@ -3,8 +3,8 @@
  * 
  * @package     form
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -264,5 +264,22 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
     isValid: function() {
         var form = this.getForm();
         return form.isValid();
+    },
+    
+    /**
+     * change card layout card according to combo value
+     * 
+     * @param {Ext.form.ComboBox} combo
+     * @param {String} backendIdPrefix
+     */
+    changeCard: function(combo, backendIdPrefix) {
+        var value = combo.getValue();
+        
+        var cardPanel = Ext.getCmp(backendIdPrefix + 'CardLayout'),
+            cardLayout = (cardPanel) ? cardPanel.getLayout() : null;
+            
+        if (cardLayout && cardLayout !== 'card') {
+            cardLayout.setActiveItem(backendIdPrefix + value);
+        }
     }
 });
