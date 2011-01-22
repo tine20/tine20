@@ -160,7 +160,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             text: this.app.i18n._('Export Contact'),
             iconCls: 'action_export',
             scope: this,
-            requiredGrant: 'readGrant',
             disabled: true,
             allowMultiple: true,
             menu: {
@@ -238,7 +237,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             allowMultiple: true
         });
         
-        //register actions in updater
+        // register actions in updater
         this.actionUpdater.addActions([
             this.actions_exportContact,
             this.actions_callContact,
