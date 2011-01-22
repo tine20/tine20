@@ -6,7 +6,7 @@
  * @subpackage  Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -126,5 +126,18 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Felamimail', '4.3');
+    }
+
+    /**
+     * update to 4.4
+     * - remove uidnext cols
+     */    
+    public function update_3()
+    {
+        $this->_backend->dropCol('felamimail_folder', 'imap_uidnext');
+        $this->_backend->dropCol('felamimail_folder', 'cache_uidnext');
+        
+        $this->setTableVersion('felamimail_folder', '7');
+        $this->setApplicationVersion('Felamimail', '4.4');
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>4.3</version>
+    <version>4.4</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -235,7 +235,7 @@
         </table>
         <table>
             <name>felamimail_folder</name>
-            <version>6</version>
+            <version>7</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -294,11 +294,6 @@
                     <length>40</length>
                 </field>
                 <field>
-                    <name>imap_uidnext</name>
-                    <type>integer</type>
-                    <length>64</length>
-                </field>
-                <field>
                     <name>imap_uidvalidity</name>
                     <type>text</type>
                     <length>40</length>
@@ -315,11 +310,6 @@
                     <name>cache_status</name>
                     <type>text</type>
                     <length>40</length>
-                </field>
-                <field>
-                    <name>cache_uidnext</name>
-                    <type>integer</type>
-                    <length>64</length>
                 </field>
                 <field>
                     <name>cache_totalcount</name>
