@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 Ext.ns('Tine.Tinebase.Model');
@@ -25,6 +25,8 @@ Tine.Tinebase.Model.genericFields = [
     
 /**
  * Model of the tine (simple) user account
+ * 
+ * @deprecated remove this?
  */
 /*Tine.Tinebase.Model.User = Ext.data.Record.create([
     { name: 'accountId' },
@@ -58,6 +60,8 @@ Tine.Tinebase.Model.Timezone = Ext.data.Record.create([
  * @extends   Tine.Tinebase.data.Record
  * 
  * Model of a user group
+ * 
+ * @deprecated remove this?
  */
 /*Tine.Tinebase.Model.Group = Tine.Tinebase.data.Record.create([
     {name: 'id'},
@@ -300,6 +304,7 @@ Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
     {name: 'format'                 },
     {name: 'exportFunction'         },
     {name: 'recordsName'            },
+    {name: 'model'                  },
     {name: 'count', type: 'int'     },
     {name: 'options'                }
 ], {
@@ -321,7 +326,8 @@ Tine.Tinebase.Model.ExportJob = Tine.Tinebase.data.Record.create([
 Tine.Tinebase.Model.ImportExportDefinition = Ext.data.Record.create([
     {name: 'id'             },
     {name: 'name'           },
-    {name: 'plugin'         }
+    {name: 'plugin'         },
+    {name: 'model'          }
 ]);
 
 /**
