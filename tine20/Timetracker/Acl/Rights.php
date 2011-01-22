@@ -5,8 +5,8 @@
  * @package     Timetracker
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  */
@@ -27,6 +27,12 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      * @staticvar string
      */
     const MANAGE_TIMEACCOUNTS = 'manage_timeaccounts';
+        
+    /**
+     * the right to add timeaccounts
+     * @staticvar string
+     */
+    const ADD_TIMEACCOUNTS = 'add_timeaccounts';
         
     /**
      * holds the instance of the singleton
@@ -78,6 +84,7 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         
         $addRights = array ( 
             self::MANAGE_TIMEACCOUNTS,
+            self::ADD_TIMEACCOUNTS,
             Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES,
         );
         $allRights = array_merge($allRights, $addRights);
@@ -99,8 +106,12 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('Manage timeaccounts'),
                 'description'   => $translate->_('Add, edit and delete timeaccounts'),
             ),
+            self::ADD_TIMEACCOUNTS  => array(
+                'text'          => $translate->_('Add timeaccounts'),
+                'description'   => $translate->_('Add timeaccounts'),
+            ),
             Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES => array(
-                'text'          => $translate->_('manage shared timetracker favorites'),
+                'text'          => $translate->_('Manage shared timetracker favorites'),
                 'description'   => $translate->_('Create or update shared timetracker favorites'),
             ),
         );

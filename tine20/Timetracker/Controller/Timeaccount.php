@@ -66,7 +66,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      */
     public function create(Tinebase_Record_Interface $_record)
     {   
-        $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS);
+        $this->_checkRight('create');
         
         // create container and add container_id to record
         $containerName = $_record->title;
@@ -116,21 +116,17 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      * @param   array $_ids       array of record identifiers
      * @param   bool  $_ignoreACL don't check acl grants
      * @return  Tinebase_Record_RecordSet of $this->_modelName
-     * 
-     * @todo    try to get this with one sql statement (@see Tinebase_Controller_Record_Abstract::getMultiple())
      */
     public function getMultiple($_ids, $_ignoreACL = FALSE)
     {
         $this->_checkRight('get');
         
-        $records = $this->_backend->getMultiple($_ids);
-        
-        foreach ($records as $record) {
-            if ($_ignoreACL !== TRUE && !$this->_checkGrant($record, 'get', FALSE)) {
-                $index = $records->getIndexById($record->getId());
-                unset($records[$index]);
-            } 
-        }
+        $filter = new Timetracker_Model_TimeaccountFilter(array(
+            array('field' => 'id',          'operator' => 'in',     'value' => $_ids),
+            array('field' => 'showClosed',  'operator' => 'equals', 'value' => TRUE),
+        ));
+        $records = $this->search($filter);
+
         return $records;
     }
     
@@ -168,6 +164,33 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         parent::_deleteLinkedObjects($_record);
     }
 
+    /**
+     * check timeaccount rights
+     * 
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        $hasRight = $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
+        
+        switch ($_action) {
+            case 'create':
+                $hasRight = $this->checkRight(Timetracker_Acl_Rights::ADD_TIMEACCOUNTS, FALSE);
+            case 'get':
+                // is allowed for everybody
+                $hasRight = TRUE;
+                break;
+        }
+        
+        if (! $hasRight) {
+            throw new Tinebase_Exception_AccessDenied('You are not allowed to ' . $_action . ' timeaccounts.');
+        }
+         
+        return;
+    }
+    
     /**
      * check grant for action (CRUD)
      *
