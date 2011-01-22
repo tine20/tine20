@@ -20,7 +20,9 @@ Ext.ns('Tine', 'Tine.Setup');
  * 
  * <p>Configuration Panel</p>
  * <p><pre>
+ * TODO         add cache backend config(s)
  * TODO         make tabindex work correctly (there is some problem when tab is pressed in the setup username field, it takes 6x to reach the next field)
+ *              -> perhaps we can use the solution from the email compose dialog
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -33,6 +35,12 @@ Ext.ns('Tine', 'Tine.Setup');
  */
 Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPanel, {
 
+    /**
+     * @property idPrefix DOM Id prefix
+     * @type String
+     */
+    idPrefix: null,
+    
     /**
      * @private
      * panel cfg
@@ -47,12 +55,68 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
     },
     
     /**
+     * session backend DOM Id prefix
+     * 
+     * @property sessionBackendIdPrefix
+     * @type String
+     */
+    sessionBackendIdPrefix: null,
+    
+    /**
+     * @private
+     */
+    initComponent: function() {
+        this.idPrefix                  = Ext.id();
+        this.sessionBackendIdPrefix    = this.idPrefix + '-sessionBackend-',
+
+        Tine.Setup.ConfigManagerPanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * Change IMAP card layout depending on selected combo box entry
+     */
+    onChangeSessionBackend: function() {
+        this.changeCard(this.sessionBackendCombo, this.sessionBackendIdPrefix);
+    },
+    
+    /**
+     * @private
+     */
+    onRender: function(ct, position) {
+        Tine.Setup.EmailPanel.superclass.onRender.call(this, ct, position);
+        
+        this.onChangeSessionBackend.defer(250, this);
+    },
+    
+    /**
      * returns config manager form
      * 
      * @private
      * @return {Array} items
      */
     getFormItems: function() {
+        
+        this.sessionBackendCombo = new Ext.form.ComboBox({
+            xtype: 'combo',
+            width: 283, // late rendering bug
+            listWidth: 300,
+            mode: 'local',
+            forceSelection: true,
+            allowEmpty: false,
+            triggerAction: 'all',
+            selectOnFocus: true,
+            value: 'File',
+            // TODO add redis again when we are ready
+            store: [['File', this.app.i18n._('File')]/*, ['Redis','Redis'] */],
+            name: 'session_backend',
+            fieldLabel: this.app.i18n._('Backend'),
+            listeners: {
+                scope: this,
+                change: this.onChangeSessionBackend,
+                select: this.onChangeSessionBackend
+            }
+        });
+        
         return [{
             title: this.app.i18n._('Setup Authentication'),
             items: [{
@@ -63,14 +127,12 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                     afterrender: function(field) {
                         field.focus(true, 500);
                     }
-                },
-                tabIndex: 1
+                }
             }, {
                 name: 'setupuser_password',
                 fieldLabel: this.app.i18n._('Password'),
                 inputType: 'password',
-                allowBlank: false,
-                tabIndex: 2
+                allowBlank: false
             }] 
         }, {
             title: this.app.i18n._('Database'),
@@ -83,33 +145,26 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             }, {
                 name: 'database_host',
                 fieldLabel: this.app.i18n._('Hostname'),
-                allowBlank: false,
-                tabIndex: 3
+                allowBlank: false
             }, {
                 name: 'database_port',
                 fieldLabel: this.app.i18n._('Port'),
-                xtype: 'numberfield',
-                tabIndex: 4
+                xtype: 'numberfield'
             }, {
                 name: 'database_dbname',
                 fieldLabel: this.app.i18n._('Database'),
-                allowBlank: false,
-                tabIndex: 5
+                allowBlank: false
             }, {
                 name: 'database_username',
                 fieldLabel: this.app.i18n._('User'),
-                allowBlank: false,
-                tabIndex: 6
+                allowBlank: false
             }, {
                 name: 'database_password',
                 fieldLabel: this.app.i18n._('Password'),
-                inputType: 'password',
-                tabIndex: 7
+                inputType: 'password'
             }, {
                 name: 'database_tableprefix',
-                fieldLabel: this.app.i18n._('Prefix'),
-                tabIndex: 8,
-                maxLength: 9
+                fieldLabel: this.app.i18n._('Prefix')
             }]
         }, {
             title: this.app.i18n._('Logging'),
@@ -118,8 +173,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             collapsed: true,
             items: [{
                 name: 'logger_filename',
-                fieldLabel: this.app.i18n._('Filename'),
-                tabIndex: 9
+                fieldLabel: this.app.i18n._('Filename')
             }, {
                 xtype: 'combo',
                 width: 283, // late rendering bug
@@ -131,8 +185,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
                 selectOnFocus:true,
                 store: [[0, 'Emergency'], [1,'Alert'], [2, 'Critical'], [3, 'Error'], [4, 'Warning'], [5, 'Notice'], [6, 'Informational'], [7, 'Debug'], [8, 'Trace']],
                 name: 'logger_priority',
-                fieldLabel: this.app.i18n._('Priority'),
-                tabIndex: 10
+                fieldLabel: this.app.i18n._('Priority')
             }]
         }, {
             title: this.app.i18n._('Caching'),
@@ -141,15 +194,13 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             collapsed: true,
             items: [{
                 name: 'caching_path',
-                fieldLabel: this.app.i18n._('Path'),
-                tabIndex: 11
+                fieldLabel: this.app.i18n._('Path')
             }, {
                 name: 'caching_lifetime',
                 fieldLabel: this.app.i18n._('Lifetime (seconds)'),
                 xtype: 'numberfield',
                 minValue: 0,
-                maxValue: 3600,
-                tabIndex: 12
+                maxValue: 3600
             }]
         }, {
             title: this.app.i18n._('Temporary files'),
@@ -157,23 +208,62 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             items: [{
                 name: 'tmpdir',
                 value: Tine.Setup.registry.get(this.registryKey).tmpdir,
-                fieldLabel: this.app.i18n._('Temporary Files Path'),
-                tabIndex: 13
+                fieldLabel: this.app.i18n._('Temporary Files Path')
             }]
         }, {
             title: this.app.i18n._('Session'),
             id: 'setup-session-group',
             items: [{
-                name: 'session_path',
-                fieldLabel: this.app.i18n._('Path'),
-                tabIndex: 14
-            }, {
                 name: 'session_lifetime',
                 fieldLabel: this.app.i18n._('Lifetime (seconds)'),
                 xtype: 'numberfield',
                 value: 86400, 
-                minValue: 0,
-                tabIndex: 15
+                minValue: 0
+            }, this.sessionBackendCombo, 
+            {
+                id: this.sessionBackendIdPrefix + 'CardLayout',
+                xtype: 'panel',
+                layout: 'card',
+                activeItem: this.sessionBackendIdPrefix + 'file',
+                border: false,
+                width: '100%',
+                defaults: {
+                    border: false
+                },
+                items: [{
+                    // file config options
+                    id: this.sessionBackendIdPrefix + 'File',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
+                    items: [{
+                        name: 'session_path',
+                        fieldLabel: this.app.i18n._('Path')
+                    }]
+                }, {
+                    // redis config options
+                    id: this.sessionBackendIdPrefix + 'Redis',
+                    layout: 'form',
+                    autoHeight: 'auto',
+                    defaults: {
+                        width: 300,
+                        xtype: 'textfield'
+                    },
+                    items: [{
+                        name: 'session_host',
+                        fieldLabel: this.app.i18n._('Hostname'),
+                        value: 'localhost'
+                    }, {
+                        name: 'session_port',
+                        fieldLabel: this.app.i18n._('Port'),
+                        xtype: 'numberfield',
+                        minValue: 0,
+                        value: 6379
+                    }]
+                }]
             }]
         }, {
             // TODO this should be not saved in the config.inc.php
@@ -182,8 +272,7 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             items: [{
                 name: 'filesdir',
                 value: Tine.Setup.registry.get(this.registryKey)['filesdir'],
-                fieldLabel: this.app.i18n._('Filestore Path'),
-                tabIndex: 16
+                fieldLabel: this.app.i18n._('Filestore Path')
             }]
         }, {
             // TODO move map panel config to common config panel -> it should not be saved in config.inc.php
@@ -191,7 +280,6 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             items: [{
                 name: 'mapPanel',
                 fieldLabel: this.app.i18n._('Map panel'),
-                tabIndex: 16,
                 xtype: 'combo',
                 width: 283, // late rendering bug
                 listWidth: 300,
