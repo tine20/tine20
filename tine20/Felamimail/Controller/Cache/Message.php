@@ -637,7 +637,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
                     }
                     
-                    if ($_folder->cache_totalcount == $_folder->imap_totalcount) {
+                    if ($_folder->cache_totalcount == $_folder->imap_totalcount || $messageSequenceStart == 1) {
                         $_folder->cache_job_lowestuid = 0;
                         $_folder->cache_status = Felamimail_Model_Folder::CACHE_STATUS_UPDATING;
                         break;
