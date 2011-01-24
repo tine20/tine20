@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @version     $Id$
  * 
@@ -436,7 +436,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * return filter object
      *
      * @param string $_field
-     * @return Tinebase_Model_Filter_Abstract
+     * @return Tinebase_Model_Filter_Abstract|array
      */
     protected function _findFilter($_field)
     {
@@ -446,6 +446,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 	                return $object;        
 	            }
         	}
+        }
+        
+        foreach ($this->_customData as $customFilter) {
+            if ($customFilter['field'] == $_field) {
+                return $customFilter;
+            }
         }
         
         return NULL;
