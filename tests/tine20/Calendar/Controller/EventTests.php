@@ -191,6 +191,28 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertEquals(3, count($eventsFound), 'sclever OR pwulf attends to tree events');
     }
     
+    public function testAttendeeGroupFilter()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
+            array('user_id' => Tinebase_Core::getUser()->contact_id),
+            array('user_id' => $this->_personasContacts['sclever']->getId())
+        ));
+        $persistentEvent = $this->_controller->create($event);
+        
+        $filter = new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'attender'    , 'operator' => 'in',     'value' => array(
+                array(
+                    'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
+                    'user_id'   => $this->_personas['sclever']->accountPrimaryGroup
+                )
+            )),
+        ));
+        $eventsFound = $this->_controller->search($filter, new Tinebase_Model_Pagination());
+        $this->assertEquals(1, count($eventsFound), 'sclever is groupmember');
+    }
+    
     public function testGetFreeBusyInfo()
     {
         $event = $this->_getEvent();
