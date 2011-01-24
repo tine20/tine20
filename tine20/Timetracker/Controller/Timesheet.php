@@ -220,9 +220,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 
-                foreach ($this->_fieldGrants as $field => $config) {
-                    if (isset($_record->$field) && $_record->$field != $config['default']) {
-                        $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
+                if ($hasGrant) {
+                    foreach ($this->_fieldGrants as $field => $config) {
+                        if (isset($_record->$field) && $_record->$field != $config['default']) {
+                            $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
+                        }
                     }
                 }
 
@@ -233,9 +235,11 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 
-                foreach ($this->_fieldGrants as $field => $config) {
-                    if (isset($_record->$field) && $_record->$field != $_oldRecord->$field) {
-                        $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
+                if ($hasGrant) {
+                    foreach ($this->_fieldGrants as $field => $config) {
+                        if (isset($_record->$field) && $_record->$field != $_oldRecord->$field) {
+                            $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
+                        }
                     }
                 }
 
