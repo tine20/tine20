@@ -336,7 +336,7 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             do {
                 // get next free id
                 lastRecord = this.store.getAt(this.store.getCount()-1);
-                nextId = (parseInt(lastRecord.id, 10) + 1).toString();
+                nextId = (lastRecord) ? (parseInt(lastRecord.id, 10) + 1).toString() : '1';
             } while (this.store.getById(newRecord.id));
             
             newRecord.set('id', nextId);
