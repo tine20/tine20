@@ -105,6 +105,22 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * Removes accounts where current user has no access to
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
+     */
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    {
+        $accountFilter = $_filter->getFilter('account_id');
+        
+        // force a $accountFilter filter (ACL) / all accounts of user
+        if ($accountFilter === NULL || $accountFilter['operator'] !== 'equals' || ! empty($accountFilter['value'])) {
+            $_filter->createFilter('account_id', 'equals', array());
+        }
+    }
+
+    /**
      * get complete message by id
      *
      * @param string|Felamimail_Model_Message  $_id
