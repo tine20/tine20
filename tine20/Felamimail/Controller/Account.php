@@ -5,8 +5,8 @@
  * @package     Felamimail
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @todo        make it possible to switch back to smtp creds = imap creds even if extra smtp creds have been created
@@ -231,19 +231,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
-        foreach ($_filter->getFilterObjects() as $filter) {
-            if ($filter->getField() === 'user_id') {
-                $userFilter = $filter;
-                $userFilter->setValue($this->_currentAccount->getId());
-            }
-        }
+        $userFilter = $_filter->getFilter('user_id');
         
-        if (! isset($userFilter)) {
-            // force a $userFilter filter (ACL)
+        // force a $userFilter filter (ACL)
+        if ($userFilter === NULL || $userFilter->getOperator() !== 'equals' || $userFilter->getValue() !== $this->_currentAccount->getId()) {
             $userFilter = $_filter->createFilter('user_id', 'equals', $this->_currentAccount->getId());
             $_filter->addFilter($userFilter);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding user_id filter.');
         }
     }
 
