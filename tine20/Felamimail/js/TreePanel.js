@@ -18,7 +18,7 @@ Ext.namespace('Tine.Felamimail');
  * 
  * <p>Felamimail Favorites Panel</p>
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @version     $Id$
  * 
@@ -317,9 +317,22 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     afterRender: function() {
         Tine.Felamimail.TreePanel.superclass.afterRender.call(this);
         this.initToolTips();
+        this.selectInbox();
         
-        var defaultAccount = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
-        this.expandPath('/root/' + defaultAccount + '/', null, function(sucess, parentNode) {
+        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
+            this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
+        }
+    },
+    
+    /**
+     * select inbox of account
+     * 
+     * @param {Record} account
+     */
+    selectInbox: function(account) {
+        var accountId = (account) ? account.id : Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+        
+        this.expandPath('/root/' + accountId + '/', null, function(success, parentNode) {
             Ext.each(parentNode.childNodes, function(node) {
                 if (Ext.util.Format.lowercase(node.attributes.localname) == 'inbox') {
                     node.select();
@@ -327,10 +340,6 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 }
             }, this);
         });
-        
-        if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
-            this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);
-        }
     },
     
     /**
