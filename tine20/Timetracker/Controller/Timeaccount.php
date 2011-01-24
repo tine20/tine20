@@ -218,9 +218,10 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), array(
                         Timetracker_Model_TimeaccountGrants::VIEW_ALL, 
                         Timetracker_Model_TimeaccountGrants::BOOK_OWN, 
-                        Timetracker_Model_TimeaccountGrants::BOOK_ALL), 
-                        Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE
-                    ));
+                        Timetracker_Model_TimeaccountGrants::BOOK_ALL, 
+                        Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE,
+                    ))
+                );
             case 'delete':
             case 'update':
                 $hasGrant = (
