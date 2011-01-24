@@ -189,7 +189,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $select->joinLeft(
                 /* table  */ array('image' => $this->_tablePrefix . 'addressbook_image'), 
                 /* on     */ $this->_db->quoteIdentifier('image.contact_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
-                /* select */ array('jpegphoto' => 'IF(ISNULL('. $this->_db->quoteIdentifier('image.image') .'), 0, 1)')
+                /* select */ array('jpegphoto' => 'IF(ISNULL('. $this->_db->quoteIdentifier('image.contact_id') .'), 0, 1)')
             );
         }
         
