@@ -5,9 +5,9 @@
  * @package     Timetracker
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  *
  */
 
@@ -199,7 +199,6 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      * @param boolean $_throw
      * @param string $_errorMessage
      * @param Timetracker_Model_Timeaccount $_oldRecord
-     * 
      * @return boolean
      * @throws Tinebase_Exception_AccessDenied
      */
@@ -216,11 +215,12 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
             case 'get':
                 $hasGrant = (
                     $hasGrant
-                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::VIEW_ALL)
-                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::BOOK_OWN)
-                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
-                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE) 
-                    );
+                    || Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), array(
+                        Timetracker_Model_TimeaccountGrants::VIEW_ALL, 
+                        Timetracker_Model_TimeaccountGrants::BOOK_OWN, 
+                        Timetracker_Model_TimeaccountGrants::BOOK_ALL), 
+                        Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE
+                    ));
             case 'delete':
             case 'update':
                 $hasGrant = (
