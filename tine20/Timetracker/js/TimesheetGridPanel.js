@@ -3,8 +3,8 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -23,8 +23,7 @@ Ext.namespace('Tine.Timetracker');
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  * @param       {Object} config
@@ -56,40 +55,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 
         this.gridConfig.cm = this.getColumnModel();
         this.initFilterToolbar();
-        this.actionToolbarItems = this.getToolbarItems();
         this.initDetailsPanel();
-        
-        // Quick hack for mass update, to be generalized!!!
-        // NOTE: The comment above means: do not CnP ;-)
-        this.contextMenuItems = [
-            '-', this.exportButton, '-', {
-            text: _('Mass Update'),
-            iconCls: 'action_edit',
-            disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),
-            scope: this,
-            menu: {
-                items: [
-                    '<b class="x-ux-menu-title">' + _('Update field:') + '</b>',
-                    {
-                        text: this.app.i18n._('Billable'),
-                        field: 'is_billable',
-                        scope: this,
-                        handler: this.onMassUpdate
-                    }, {
-                        text: this.app.i18n._('Cleared'),
-                        field: 'is_cleared',
-                        scope: this,
-                        handler: this.onMassUpdate
-                    }, {
-                        text: this.app.i18n._('Cleared in'),
-                        field: 'billed_in',
-                        scope: this,
-                        handler: this.onMassUpdate
-                    }
-                ]
-            }}
-        ];
-        // END OF QUICK HACK
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -458,18 +424,14 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * return additional tb items
-     * 
-     * @return {Array}
-     * 
-     * TODO add duplicate button
+     * @private
      */
-    getToolbarItems: function() {
-        this.exportButton = new Ext.Action({
-            text: _('Export'),
+    initActions: function() {
+        this.actions_exportTimesheet = new Ext.Action({
+            text: this.app.i18n._('Export Timesheets'),
             iconCls: 'action_export',
             scope: this,
-            requiredGrant: 'readGrant',
+            requiredGrant: 'exportGrant',
             disabled: true,
             allowMultiple: true,
             menu: {
@@ -499,12 +461,66 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         });
         
+        // register actions in updater
+        this.actionUpdater.addActions([
+            this.actions_exportTimesheet
+        ]);
+        
+        Tine.Timetracker.TimesheetGridPanel.superclass.initActions.call(this);
+    },
+    
+    /**
+     * add custom items to action toolbar
+     * 
+     * @return {Object}
+     */
+    getActionToolbarItems: function() {
         return [
-            Ext.apply(new Ext.Button(this.exportButton), {
+            Ext.apply(new Ext.Button(this.actions_exportTimesheet), {
                 scale: 'medium',
                 rowspan: 2,
                 iconAlign: 'top'
             })
         ];
-    } 
+    },
+    
+    /**
+     * add custom items to context menu
+     * 
+     * @return {Array}
+     */
+    getContextMenuItems: function() {
+        var items = [
+            '-',
+            this.actions_exportTimesheet,
+            '-', {
+            text: _('Mass Update'),
+            iconCls: 'action_edit',
+            disabled: !Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts'),
+            scope: this,
+            menu: {
+                items: [
+                    '<b class="x-ux-menu-title">' + _('Update field:') + '</b>',
+                    {
+                        text: this.app.i18n._('Billable'),
+                        field: 'is_billable',
+                        scope: this,
+                        handler: this.onMassUpdate
+                    }, {
+                        text: this.app.i18n._('Cleared'),
+                        field: 'is_cleared',
+                        scope: this,
+                        handler: this.onMassUpdate
+                    }, {
+                        text: this.app.i18n._('Cleared in'),
+                        field: 'billed_in',
+                        scope: this,
+                        handler: this.onMassUpdate
+                    }
+                ]
+            }
+        }];
+        
+        return items;
+    }
 });
