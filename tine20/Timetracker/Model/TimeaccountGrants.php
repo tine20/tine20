@@ -5,8 +5,8 @@
  * @package     Timetracker
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  *
  * @todo        extend Tinebase_Model_Grants?
@@ -154,8 +154,8 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     /**
      * wrapper for Tinebase_Container::hasGrant()
      *
-     * @param Timetracker_Model_Timeaccount $_timeaccount
-     * @param integer $_grant
+     * @param Timetracker_Model_Timeaccount     $_timeaccount
+     * @param array|string                      $_grant
      * @return boolean
      */
     public static function hasGrant($_timeaccountId, $_grant)
