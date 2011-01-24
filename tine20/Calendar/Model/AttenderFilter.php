@@ -102,6 +102,22 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
                         'user_id'   => $attenderValue['user_id']
                     )
                 );
+            } else if ($attenderValue['user_type'] == Calendar_Model_Attender::USERTYPE_GROUP) {
+                // resolve group members
+                $group = Tinebase_Group::getInstance()->getGroupById($attenderValue['user_id']);
+                $members = Addressbook_Controller_List::getInstance()->get($group->list_id)->members;
+
+                $attendee = array();
+                foreach($members as $member) {
+                    $attendee[] = array(
+                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                        'user_id'   => $member
+                    );
+                    $attendee[] = array(
+                        'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                        'user_id'   => $member
+                    );
+                }
             } else {
                 $attendee = array($attenderValue);
             }
@@ -136,4 +152,5 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
         
         return $result;
     }
+
 }
