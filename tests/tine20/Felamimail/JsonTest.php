@@ -456,6 +456,29 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * try search for a message with empty path filter
+     */
+    public function testSearchMessageEmptyPath()
+    {
+        $sentMessage = $this->_sendMessage();
+        
+        $filter = array(
+            array('field' => 'path',  'operator' => 'equals',   'value' => ''),
+        );
+        $result = $this->_json->searchMessages($filter, '');
+        
+        $this->assertEquals(0, $result['totalcount']);
+        $accountFilterFound = FALSE;
+        foreach ($result['filter'] as $filter) {
+            if ($filter['field'] === 'account_id' && empty($filter['value'])) {
+                $accountFilterFound = TRUE;
+                break;
+            }
+        }
+        $this->assertTrue($accountFilterFound);
+    }
+    
+    /**
      * test flags (add + clear + deleted)
      * 
      */
