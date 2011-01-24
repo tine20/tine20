@@ -5,11 +5,10 @@
  * @package     Felamimail
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
- * @todo        add default account settings ?
  * @todo        make UPDATEINTERVAL a free form preference
  */
 
@@ -65,7 +64,14 @@ class Felamimail_Preference extends Tinebase_Preference_Abstract
      *
      * @var string
      */
-    protected $_application = 'Felamimail';    
+    protected $_application = 'Felamimail';
+
+    /**
+     * preference names that have no default option
+     * 
+     * @var array
+     */
+    protected $_skipDefaultOption = array(self::DEFAULTACCOUNT);
         
     /**************************** public functions *********************************/
     
