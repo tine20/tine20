@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
- * @todo        replace some 'custom' filters with normal filter classes
+ * @todo        replace 'custom' filters with normal filter classes
  */
 
 /**
@@ -57,6 +57,13 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
     );
 
     /**
+     * only fetch user account ids once
+     * 
+     * @var array
+     */
+    protected $_userAccountIds = array();
+    
+    /**
      * appends custom filters to a given select object
      * 
      * @param  Zend_Db_Select                       $_select
@@ -65,23 +72,14 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $accountFilterAdded = FALSE;
         foreach ($this->_customData as $customData) {
             if ($customData['field'] == 'account_id') {
                 $this->_addAccountFilter($_select, $_backend, (array) $customData['value']);
-                $accountFilterAdded = TRUE;
-                
             } else if ($customData['field'] == 'path') {
                 $this->_addPathSql($_select, $_backend, $customData);
-                $accountFilterAdded = TRUE;
-                
             } else {
                 $this->_addRecipientAndFlagsSql($_select, $_backend, $customData);
             }
-        }
-        
-        if (! $accountFilterAdded) {
-            $this->_addAccountFilter($_select, $_backend);
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
@@ -96,14 +94,29 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected function _addAccountFilter($_select, $_backend, array $_accountIds = array())
     {
-        $accountIds = (empty($_accountIds)) ? Felamimail_Controller_Account::getInstance()->search(NULL, NULL, FALSE, TRUE) : $_accountIds;
+        $accountIds = (empty($_accountIds)) ? $this->_getUserAccountIds() : $_accountIds;
+        
         $db = $_backend->getAdapter();
         
-        $what = array('folders' => SQL_TABLE_PREFIX . 'felamimail_folder');
-        $on = $db->quoteIdentifier("folders.id")      . " = felamimail_cache_message.folder_id";
+        $correlationName = Tinebase_Record_Abstract::generateUID() . 'folder';
+        $what = array($correlationName => SQL_TABLE_PREFIX . 'felamimail_folder');
+        $on = $db->quoteIdentifier("$correlationName.id")      . " = felamimail_cache_message.folder_id";
         $_select->joinLeft($what, $on, array());
         
-        $_select->where($db->quoteInto($db->quoteIdentifier('folders' . '.account_id') . ' IN (?)', $accountIds));
+        $_select->where($db->quoteInto($db->quoteIdentifier("$correlationName.account_id") . ' IN (?)', $accountIds));
+    }
+    
+    /**
+     * get user account ids
+     * 
+     * @return array
+     */
+    protected function _getUserAccountIds()
+    {
+        if (empty($this->_userAccountIds)) {
+            $this->_userAccountIds = Felamimail_Controller_Account::getInstance()->search(NULL, NULL, FALSE, TRUE);
+        }
+        return $this->_userAccountIds; 
     }
 
     /**
@@ -120,9 +133,11 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         
         $folderIds = array();
         foreach ((array)$_filterData['value'] as $filterValue) {
-            if ($filterValue === self::PATH_ALLINBOXES) {
+            if (empty($filterValue)) {
+                $_select->where('1 = 0');
+            } else if ($filterValue === self::PATH_ALLINBOXES) {
                 $folderIds = array_merge($folderIds, $this->_getFolderIdsOfAllInboxes());
-            } else {
+            } else if (strpos('/', $filterValue) !== FALSE) {
                 $pathParts = explode('/', $filterValue);
                 array_shift($pathParts);
                 if (count($pathParts) == 1) {
