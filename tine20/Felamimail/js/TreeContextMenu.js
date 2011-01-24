@@ -251,7 +251,9 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         this.ctxNode.getUI().removeClass("x-tree-node-loading");
                         // clear query to query server again and reload subfolders
                         this.folderStore.resetQueryAndRemoveRecords('parent_path', (folder ? folder.get('path') : '/') + account.id);
-                        this.ctxNode.reload();
+                        this.ctxNode.reload(function(callback) {
+                            this.selectInbox(account);
+                        }, this);
                     },
                     failure: function() {
                         this.ctxNode.getUI().removeClass("x-tree-node-loading");
