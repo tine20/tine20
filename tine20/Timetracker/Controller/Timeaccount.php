@@ -116,21 +116,17 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      * @param   array $_ids       array of record identifiers
      * @param   bool  $_ignoreACL don't check acl grants
      * @return  Tinebase_Record_RecordSet of $this->_modelName
-     * 
-     * @todo    try to get this with one sql statement (@see Tinebase_Controller_Record_Abstract::getMultiple())
      */
     public function getMultiple($_ids, $_ignoreACL = FALSE)
     {
         $this->_checkRight('get');
         
-        $records = $this->_backend->getMultiple($_ids);
-        
-        foreach ($records as $record) {
-            if ($_ignoreACL !== TRUE && !$this->_checkGrant($record, 'get', FALSE)) {
-                $index = $records->getIndexById($record->getId());
-                unset($records[$index]);
-            } 
-        }
+        $filter = new Timetracker_Model_TimeaccountFilter(array(
+            array('field' => 'id',          'operator' => 'in',     'value' => $_ids),
+            array('field' => 'showClosed',  'operator' => 'equals', 'value' => TRUE),
+        ));
+        $records = $this->search($filter);
+
         return $records;
     }
     
