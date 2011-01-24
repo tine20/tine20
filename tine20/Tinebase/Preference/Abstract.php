@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        make this a real controller + singleton (create extra sql backend)
@@ -60,6 +60,13 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @var string
      */
     protected $_application = 'Tinebase';    
+    
+    /**
+     * preference names that have no default option
+     * 
+     * @var array
+     */
+    protected $_skipDefaultOption = array();
     
     /**************************** public abstract functions *********************************/
 
@@ -454,24 +461,26 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         }
         
         // get default pref
-        $default = $this->_getDefaultPreference($_preference->name); 
-        
-        // check if value is in options and use that label
-        $valueLabel = $default->value;
-        foreach ($options as $option) {
-            if ($default->value == $option[0]) {
-                $valueLabel = $option[1];
-                break;
+        if (! in_array($_preference->name, $this->_skipDefaultOption)) {
+            $default = $this->_getDefaultPreference($_preference->name); 
+            
+            // check if value is in options and use that label
+            $valueLabel = $default->value;
+            foreach ($options as $option) {
+                if ($default->value == $option[0]) {
+                    $valueLabel = $option[1];
+                    break;
+                }
             }
+            // add default setting to the top of options
+            $defaultLabel = Tinebase_Translation::getTranslation('Tinebase')->_('default') . 
+                            ' (' . $valueLabel . ')';
+            
+            array_unshift($options, array(
+                Tinebase_Model_Preference::DEFAULT_VALUE,
+                $defaultLabel,
+            ));
         }
-        // add default setting to the top of options
-        $defaultLabel = Tinebase_Translation::getTranslation('Tinebase')->_('default') . 
-                        ' (' . $valueLabel . ')';
-        
-        array_unshift($options, array(
-            Tinebase_Model_Preference::DEFAULT_VALUE,
-            $defaultLabel,
-        ));
         
         $_preference->options = $options;
     }
