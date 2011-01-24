@@ -211,20 +211,15 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                         Timetracker_Model_TimeaccountGrants::VIEW_ALL,
                         Timetracker_Model_TimeaccountGrants::BOOK_ALL
                     ))
-                    || (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
-                        && $_record->account_id == $this->_currentAccount->getId()
-                    ) 
+                    || ($_record->account_id == $this->_currentAccount->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
                 );
                 break;
             case 'create':
                 $hasGrant = (
-                    (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
-                        && $_record->account_id == $this->_currentAccount->getId()
-                    )
+                    ($_record->account_id == $this->_currentAccount->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 
-                // check field grants
                 foreach ($this->_fieldGrants as $field => $config) {
                     if (isset($_record->$field) && $_record->$field != $config['default']) {
                         $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
@@ -234,12 +229,10 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 break;
             case 'update':
                 $hasGrant = (
-                    (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
-                        && $_record->account_id == $this->_currentAccount->getId())
+                    ($_record->account_id == $this->_currentAccount->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 
-                // check field grants
                 foreach ($this->_fieldGrants as $field => $config) {
                     if (isset($_record->$field) && $_record->$field != $_oldRecord->$field) {
                         $hasGrant &= Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, $config['requiredGrant']);
@@ -249,9 +242,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 break;
             case 'delete':
                 $hasGrant = (
-                    (Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN)
-                        && $_record->account_id == $this->_currentAccount->getId()
-                    )
+                    ($_record->account_id == $this->_currentAccount->getId() && Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_OWN))
                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::BOOK_ALL) 
                 );
                 break;
