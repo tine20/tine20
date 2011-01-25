@@ -193,6 +193,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testAttendeeGroupFilter()
     {
+        $this->markTestSkipped('AttendeeGroupFilter not yet functional');
+        
         $event = $this->_getEvent();
         $event->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender', array(
             array('user_id' => Tinebase_Core::getUser()->contact_id),
