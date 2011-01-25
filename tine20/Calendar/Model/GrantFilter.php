@@ -12,7 +12,7 @@
 /**
  * Calendar Acl Filter
  * 
- * Manages calnedar grant for search actions
+ * Manages calendar grant for search actions
  * 
  * 
  * Assuring event grants is a two stage process for search operations.
@@ -23,7 +23,7 @@
  *       event rows in SQL (at the moment by the sql backend class.)
  *       As such there is no need to compute the effective grants in stage 2
  * 
- * NOTE: stage 2 is implcitly done in the models setFromArray
+ * NOTE: stage 2 is implicitly done in the models setFromArray
  * 
  * 
  * @package Calendar
@@ -38,7 +38,7 @@ class Calendar_Model_GrantFilter extends Tinebase_Model_Filter_Abstract implemen
     );
     
     /**
-     * @var array One of theese grants must be given
+     * @var array One of these grants must be given
      */
     protected $_requiredGrants = NULL;
     
@@ -57,6 +57,14 @@ class Calendar_Model_GrantFilter extends Tinebase_Model_Filter_Abstract implemen
         }
     }
     
+    /**
+     * set required grants
+     * 
+     * @param array $_grants
+     * 
+     * (non-PHPdoc)
+     * @see tine20/Tinebase/Model/Filter/Tinebase_Model_Filter_AclFilter::setRequiredGrants()
+     */
     public function setRequiredGrants(array $_grants)
     {
         $this->_requiredGrants = $_grants;
