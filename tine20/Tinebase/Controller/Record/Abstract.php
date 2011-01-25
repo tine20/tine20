@@ -5,11 +5,9 @@
  * @package     Tinebase
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- *
- * @todo        add (empty) sendNotifications()
  */
 
 /**
@@ -178,7 +176,45 @@ abstract class Tinebase_Controller_Record_Abstract
     {
         $currValue = $this->_sendNotifications;
         if (func_num_args() === 1) {
-            $this->_sendNotifications = (bool) func_get_arg(0);
+            $paramValue = (bool) func_get_arg(0);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting sendNotifications to ' . (int) $paramValue);
+            $this->_sendNotifications = $paramValue;
+        }
+        
+        return $currValue;
+    }
+    
+    /**
+     * set/get purging of record when deleting
+     * 
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function purgeRecords()
+    {
+        $currValue = $this->_purgeRecords;
+        if (func_num_args() === 1) {
+            $paramValue = (bool) func_get_arg(0);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting purgeRecords to ' . (int) $paramValue);
+            $this->_purgeRecords = $paramValue;
+        }
+        
+        return $currValue;
+    }
+    
+    /**
+     * set/get checking ACL rights
+     * 
+     * @param  boolean optional
+     * @return boolean
+     */
+    public function doContainerACLChecks()
+    {
+        $currValue = $this->_doContainerACLChecks;
+        if (func_num_args() === 1) {
+            $paramValue = (bool) func_get_arg(0);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting doContainerACLChecks to ' . (int) $paramValue);
+            $this->_doContainerACLChecks = $paramValue;
         }
         
         return $currValue;
@@ -482,39 +518,6 @@ abstract class Tinebase_Controller_Record_Abstract
     protected function _inspectAfterUpdate($_updatedRecord, $_record)
     {
         
-    }
-    
-    /**
-     * set purging of record when deleting
-     * 
-     * @param boolean $_purge
-     * @return void
-     */
-    public function setPurgeRecords($_purge = TRUE)
-    {
-    	$this->_purgeRecords = $_purge;
-    }
-    
-    /**
-     * set sending notifications
-     * 
-     * @param boolean $_notifications
-     * @return void
-     */
-    public function setSendNotifications($_notifications = FALSE)
-    {
-    	$this->_sendNotifications = $_notifications;
-    }
-    
-    /**
-     * set checking ACL rights
-     * 
-     * @param boolean $_doContainerACLChecks
-     * @return void
-     */
-    public function setDoContainerACLChecks($_doContainerACLChecks = TRUE)
-    {
-    	$this->_doContainerACLChecks = $_doContainerACLChecks;
     }
     
     /**
