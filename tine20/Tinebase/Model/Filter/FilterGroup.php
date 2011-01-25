@@ -443,7 +443,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         foreach ($this->_filterObjects as $object) {
         	if ($object instanceof Tinebase_Model_Filter_Abstract) {
 	            if ($object->getField() == $_field) {
-	                return $object;        
+	                return $object;
 	            }
         	}
         }
@@ -470,6 +470,12 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
 	                unset($this->_filterObjects[$key]);
 	            }
         	}
+        }
+
+        foreach ($this->_customData as $key => $customFilter) {
+            if ($customFilter['field'] == $_field) {
+                unset($this->_customData[$key]);
+            }
         }
     }
     
