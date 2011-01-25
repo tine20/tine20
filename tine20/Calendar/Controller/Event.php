@@ -429,18 +429,16 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 
-                $sendNotifications = $this->_sendNotifications;
-                $this->_sendNotifications = FALSE;
+                $sendNotifications = $this->sendNotifications(FALSE);
                 
                 // NOTE: We already checked the ACL above, and we don't wan't to collide with the std. parent checks
-                $doContainerACLChecks = $this->_doContainerACLChecks;
-                $this->_doContainerACLChecks = FALSE;
+                $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
                 parent::update($_record);
-                $this->_doContainerACLChecks = $doContainerACLChecks;
+                $this->doContainerACLChecks($doContainerACLChecks);
                 
                 $this->_saveAttendee($_record);
                 
-                $this->_sendNotifications = $sendNotifications;
+                $this->sendNotifications($sendNotifications);
                 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
@@ -487,7 +485,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $event->$field = $value;
             }
             
-            $this->update($event, FALSE);
+            $this->update($event);
         }
         
         return count($ids);
@@ -565,8 +563,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         }
         
         // we do notifications ourself
-        $sendNotifications = $this->_sendNotifications;
-        $this->_sendNotifications = FALSE;
+        $sendNotifications = $this->sendNotifications(FALSE);
         
         if ($_allFollowing) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " shorten rrule_until for: '{$_event->recurid}'");
@@ -618,7 +615,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
         }
         
-        $this->_sendNotifications = $sendNotifications;
+        $this->sendNotifications($sendNotifications);
         $notificationEvent = $notificationAction == 'created' ? $persistentExceptionEvent :  $updatedBaseEvent;
         
         // send notifications
@@ -1005,7 +1002,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             } catch (Exception $e) {
                 // otherwise create it implicilty
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating recur exception for a exceptional attendee status");
-                $this->_doContainerACLChecks = FALSE;
+                $doContainerAclChecks = $this->doContainerACLChecks(FALSE);
                 // NOTE: the user might have no edit grants, so let's be carefull
                 $diff = $baseEvent->dtstart->diff($baseEvent->dtend);
                 
@@ -1020,7 +1017,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 $eventInsance = $this->createRecurException($baseEvent);
                 $eventInsance->attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
-                $this->_doContainerACLChecks = TRUE;
+                $this->doContainerACLChecks($doContainerAclChecks);
                 
                 foreach ($attendee as $attender) {
                     $attender->setId(NULL);
@@ -1248,18 +1245,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             array('field' => 'dtstart', 'operator' => 'after', 'value' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG))
         ));
         
-        $doContainerACLChecks = $this->_doContainerACLChecks;
-        $this->_doContainerACLChecks = FALSE;
+        $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
         
         $events = $this->search($filter, new Tinebase_Model_Pagination(), FALSE, FALSE);
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') updated group ' . $events);
         
         foreach($events as $event) {
             Calendar_Model_Attender::resolveGroupMembers($event->attendee);
-            $this->update($event, FALSE);
+            $this->update($event);
         }
         
-        $this->_doContainerACLChecks = $doContainerACLChecks;
+         $this->doContainerACLChecks($doContainerACLChecks);
     }
     
     /****************************** alarm functions ************************/
@@ -1277,15 +1273,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to send alarm " . print_r($_alarm->toArray(), TRUE));
         
-        $doContainerACLChecks = $this->_doContainerACLChecks;
-        $this->_doContainerACLChecks = FALSE;
+        $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
         
         $event = $this->get($_alarm->record_id);
-        $this->_doContainerACLChecks = $doContainerACLChecks;
+        $this->doContainerACLChecks($doContainerACLChecks);
         
         $this->doSendNotifications($event, $this->_currentAccount, 'alarm');
-        
-        //if ($event->rrule)
     }
     
     /**
