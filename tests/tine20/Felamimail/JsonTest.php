@@ -438,6 +438,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->searchMessages($filter, '');
         $message = $this->_getMessageFromSearchResult($result, $sentMessage['subject']);
         $this->assertTrue(! empty($message), 'Sent message not found with path filter');
+        foreach ($result['results'] as $mail) {
+            $this->assertEquals($inbox->getId(), $mail['folder_id'], 'message is in wrong folder: ' . print_r($mail, TRUE));
+        }
     }
     
     /**
