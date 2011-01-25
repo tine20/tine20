@@ -137,7 +137,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
                 $_select->where('1 = 0');
             } else if ($filterValue === self::PATH_ALLINBOXES) {
                 $folderIds = array_merge($folderIds, $this->_getFolderIdsOfAllInboxes());
-            } else if (strpos('/', $filterValue) !== FALSE) {
+            } else if (strpos($filterValue, '/') !== FALSE) {
                 $pathParts = explode('/', $filterValue);
                 array_shift($pathParts);
                 if (count($pathParts) == 1) {
