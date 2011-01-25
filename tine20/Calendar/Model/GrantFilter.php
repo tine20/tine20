@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -40,18 +40,23 @@ class Calendar_Model_GrantFilter extends Tinebase_Model_Filter_Abstract implemen
     /**
      * @var array One of these grants must be given
      */
-    protected $_requiredGrants = array();
+    protected $_requiredGrants = NULL;
     
     /**
      * appends sql to given select statement
      * 
      * @param  Zend_Db_Select                    $_select
      * @param  Tinebase_Backend_Sql_Abstract     $_backend
-     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_AccessDenied
      */
     public function appendFilterSql($_select, $_backend)
     {
         $db = $_backend->getAdapter();
+        
+        if ($this->_requiredGrants === NULL) {
+            throw new Tinebase_Exception_AccessDenied('No grants have been defined.');
+        }
+        
         foreach ($this->_requiredGrants as $grant) {
             $_select->orHaving($db->quoteInto($db->quoteIdentifier($grant) . ' = ?', 1, Zend_Db::INT_TYPE));
         }
