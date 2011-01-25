@@ -37,9 +37,11 @@ abstract class Tinebase_Controller_Record_Abstract
     protected $_modelName;
     
     /**
-     * check for container ACLs?
+     * check for container ACLs
      *
      * @var boolean
+     * 
+     * @todo rename to containerACLChecks
      */
     protected $_doContainerACLChecks = TRUE;
 
