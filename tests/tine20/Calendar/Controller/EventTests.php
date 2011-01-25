@@ -46,23 +46,23 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     public function testCreateEvent()
     {
         $event = $this->_getEvent();
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
-        $this->assertEquals($event->description, $persitentEvent->description);
-        $this->assertTrue($event->dtstart->equals($persitentEvent->dtstart));
-        $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $persitentEvent->originator_tz);
+        $this->assertEquals($event->description, $persistentEvent->description);
+        $this->assertTrue($event->dtstart->equals($persistentEvent->dtstart));
+        $this->assertEquals(Tinebase_Core::get(Tinebase_Core::USERTIMEZONE), $persistentEvent->originator_tz);
         
-        return $persitentEvent;
+        return $persistentEvent;
     }
     
     public function testGetEvent()
     {
-        $persitentEvent = $this->testCreateEvent();
-        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::GRANT_READ});
-        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::GRANT_EDIT});
-        $this->assertTrue((bool) $persitentEvent->{Tinebase_Model_Grants::GRANT_DELETE});
+        $persistentEvent = $this->testCreateEvent();
+        $this->assertTrue((bool) $persistentEvent->{Tinebase_Model_Grants::GRANT_READ});
+        $this->assertTrue((bool) $persistentEvent->{Tinebase_Model_Grants::GRANT_EDIT});
+        $this->assertTrue((bool) $persistentEvent->{Tinebase_Model_Grants::GRANT_DELETE});
         
-        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
         $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_READ});
         $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_EDIT});
         $this->assertTrue((bool) $loadedEvent->{Tinebase_Model_Grants::GRANT_DELETE});
@@ -70,14 +70,14 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testUpdateEvent()
     {
-        $persitentEvent = $this->testCreateEvent();
+        $persistentEvent = $this->testCreateEvent();
         
         $currentTz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, 'farfaraway');
         
-        $persitentEvent->summary = 'Lunchtime';
-        $updatedEvent = $this->_controller->update($persitentEvent);
-        $this->assertEquals($persitentEvent->summary, $updatedEvent->summary);
+        $persistentEvent->summary = 'Lunchtime';
+        $updatedEvent = $this->_controller->update($persistentEvent);
+        $this->assertEquals($persistentEvent->summary, $updatedEvent->summary);
         $this->assertEquals($currentTz, $updatedEvent->originator_tz, 'originator_tz must not be touchet if dtsart is not updatet!');
         
         $updatedEvent->dtstart->addHour(1);
@@ -90,10 +90,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     
     public function testUpdateMultiple()
     {
-        $persitentEvent = $this->testCreateEvent();
+        $persistentEvent = $this->testCreateEvent();
         
         $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'id', 'operator' => 'in', 'value' => array($persitentEvent->getId()))
+            array('field' => 'id', 'operator' => 'in', 'value' => array($persistentEvent->getId()))
         ));
         
         $data = array(
@@ -102,7 +102,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $this->_controller->updateMultiple($filter, $data);
         
-        $updatedEvent = $this->_controller->get($persitentEvent->getId());
+        $updatedEvent = $this->_controller->get($persistentEvent->getId());
         $this->assertEquals('multipleTest', $updatedEvent->summary);
     }
     
@@ -444,19 +444,19 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->attendee = $this->_getAttendee();
         unset($event->attendee[1]);
         
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
         $filter = new Calendar_Model_EventFilter(array(
-            array('field' => 'uid',             'operator' => 'equals', 'value' => $persitentEvent->uid),
+            array('field' => 'uid',             'operator' => 'equals', 'value' => $persistentEvent->uid),
             array('field' => 'attender_status', 'operator' => 'not',    'value' => Calendar_Model_Attender::STATUS_DECLINED),
         ));
         
         $events = $this->_controller->search($filter);
         $this->assertEquals(1, count($events), 'event should be found, but is not');
         
-        $attender = $persitentEvent->attendee[0];
+        $attender = $persistentEvent->attendee[0];
         $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
-        $updatedPersistentEvent = $this->_controller->update($persitentEvent);
+        $updatedPersistentEvent = $this->_controller->update($persistentEvent);
         
         $events = $this->_controller->search($filter);
         $this->assertEquals(0, count($events), 'event should _not_ be found, but is');
@@ -478,8 +478,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
                 'role'      => Calendar_Model_Attender::ROLE_REQUIRED
             ),
         ));
-        $persitentEvent = $this->_controller->create($event);
-        $attender = $persitentEvent->attendee[0];
+        $persistentEvent = $this->_controller->create($event);
+        $attender = $persistentEvent->attendee[0];
         
         $this->assertTrue(empty($attender->displaycontainer_id), 'displaycontainer_id must not be set for contacts');
     }
@@ -501,13 +501,13 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->attendee = $this->_getAttendee();
         unset($event->attendee[1]);
         
-        $persitentEvent = $this->_controller->create($event);
-        $attendee = $persitentEvent->attendee[0];
+        $persistentEvent = $this->_controller->create($event);
+        $attendee = $persistentEvent->attendee[0];
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $from = new Tinebase_DateTime('2009-03-26 00:00:00');
         $until = new Tinebase_DateTime('2009-04-01 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persitentEvent, $exceptions, $from, $until);
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persistentEvent, $exceptions, $from, $until);
         
         $exception = $recurSet->getFirstRecord();
         $attendee = $exception->attendee[0];
@@ -517,7 +517,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
-            array('field' => 'uid', 'operator' => 'equals', 'value' => $persitentEvent->uid)
+            array('field' => 'uid', 'operator' => 'equals', 'value' => $persistentEvent->uid)
         )));
         $this->assertEquals(2, count($events));
     }
@@ -535,15 +535,15 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'role'      => Calendar_Model_Attender::ROLE_REQUIRED
         ));
         
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         $defaultUserGroupMembers = Tinebase_Group::getInstance()->getGroupMembers($defaultUserGroup->getId());
         // user as attender + group + all members - supressed user 
-        $this->assertEquals(1 + 1 + count($defaultUserGroupMembers) -1, count($persitentEvent->attendee));
+        $this->assertEquals(1 + 1 + count($defaultUserGroupMembers) -1, count($persistentEvent->attendee));
         
-        $groupAttender = $persitentEvent->attendee->find('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
-        $persitentEvent->attendee->removeRecord($groupAttender);
+        $groupAttender = $persistentEvent->attendee->find('user_type', Calendar_Model_Attender::USERTYPE_GROUP);
+        $persistentEvent->attendee->removeRecord($groupAttender);
         
-        $updatedPersistentEvent = $this->_controller->update($persitentEvent);
+        $updatedPersistentEvent = $this->_controller->update($persistentEvent);
         $this->assertEquals(1, count($updatedPersistentEvent->attendee));
     }
     
@@ -564,16 +564,16 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
             'role'      => Calendar_Model_Attender::ROLE_REQUIRED
         ));
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
         // assert test condition
-        $pwulf = $persitentEvent->attendee
+        $pwulf = $persistentEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
             ->filter('user_id', $this->_personasContacts['pwulf']->getId());
         $this->assertEquals(0, count($pwulf), 'invalid test condition, pwulf should not be member or admin group');
         
         Admin_Controller_Group::getInstance()->addGroupMember($defaultAdminGroup->getId(), $this->_personasContacts['pwulf']->account_id);
-        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
         // assert pwulf is in
         $pwulf = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
@@ -582,7 +582,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         
         Admin_Controller_Group::getInstance()->removeGroupMember($defaultAdminGroup->getId(), $this->_personasContacts['pwulf']->account_id);
-        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
         // assert pwulf is missing
         $pwulf = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
@@ -616,7 +616,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             'user_type' => Calendar_Model_Attender::USERTYPE_GROUP,
             'role'      => Calendar_Model_Attender::ROLE_REQUIRED
         ));
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
         // create a new user
         $newUser = Admin_Controller_User::getInstance()->create(new Tinebase_Model_FullUser(array(
@@ -631,7 +631,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         )), Zend_Registry::get('testConfig')->password, Zend_Registry::get('testConfig')->password);
         
         // check if this user was added to event
-        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
         $user = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
             ->filter('user_id', $newUser->contact_id);
@@ -641,7 +641,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         Admin_Controller_User::getInstance()->delete($newUser->getId());
         
         // check if user was removed from event
-        $loadedEvent = $this->_controller->get($persitentEvent->getId());
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
         $user = $loadedEvent->attendee
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
             ->filter('user_id', $newUser->contact_id);
@@ -653,10 +653,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
         $event->exdate = array(new Tinebase_DateTime('2009-04-07 13:00:00'));
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
         
-        $exception = clone $persitentEvent;
+        $exception = clone $persistentEvent;
         $exception->dtstart->addDay(2);
         $exception->dtend->addDay(2);
         
@@ -670,11 +670,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         
         
-        $persitentEvent->dtstart->addHour(5);
-        $persitentEvent->dtend->addHour(5);
+        $persistentEvent->dtstart->addHour(5);
+        $persistentEvent->dtend->addHour(5);
         
         
-        $updatedEvent = $this->_controller->update($persitentEvent);
+        $updatedEvent = $this->_controller->update($persistentEvent);
         
         
         $updatedException = $this->_controller->get($persitentException->getId());
@@ -710,12 +710,12 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             Tinebase_Model_Grants::GRANT_EDIT     => true,
         ));
         
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $from = new Tinebase_DateTime('2009-03-26 00:00:00');
         $until = new Tinebase_DateTime('2009-04-03 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persitentEvent, $exceptions, $from, $until); // 9 days
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persistentEvent, $exceptions, $from, $until); // 9 days
         
         // skip 27(exception), 31(exception), 03(until)
         $this->assertEquals(6, count($recurSet));
@@ -726,24 +726,24 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exceptionAfterDstBoundary = clone $recurSet[5]; // 02.
         $persistentExceptionAfterDstBoundary = $this->_controller->createRecurException($exceptionAfterDstBoundary);
         
-        $persitentEvent->dtstart->addDay(5); //30.
-        $persitentEvent->dtend->addDay(5);
+        $persistentEvent->dtstart->addDay(5); //30.
+        $persistentEvent->dtend->addDay(5);
         $from->addDay(5); //31
         $until->addDay(5); //08
         
         // NOTE: with this, also until, and exceptions get moved, but not the persistent exceptions
-        $updatedPersistenEvent = $this->_controller->update($persitentEvent);
+        $updatedPersistenEvent = $this->_controller->update($persistentEvent);
         
         $persistentEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
-            array('field' => 'uid', 'operator' => 'equals', 'value' => $persitentEvent->uid)
+            array('field' => 'uid', 'operator' => 'equals', 'value' => $persistentEvent->uid)
         )));
         
         //print_r($persistentEvents->toArray());
         // we don't 'see' the persistent exception from 28/
         $this->assertEquals(2, count($persistentEvents));
                 
-        $exceptions = $persistentEvents->filter('recurid', "/^{$persitentEvent->uid}-.*/", TRUE);
+        $exceptions = $persistentEvents->filter('recurid', "/^{$persistentEvent->uid}-.*/", TRUE);
         $recurSet = Calendar_Model_Rrule::computeRecuranceSet($updatedPersistenEvent, $exceptions, $from, $until);
         
         // skip 31(exception), and 8 (until)
@@ -755,9 +755,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
         $event->exdate = array(new Tinebase_DateTime('2009-04-07 13:00:00'));
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
-        $exception = clone $persitentEvent;
+        $exception = clone $persistentEvent;
         $exception->dtstart->addDay(2);
         $exception->dtend->addDay(2);
         $exception->setId(NULL);
@@ -766,8 +766,8 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
         $persitentException = $this->_controller->create($exception);
         
-        unset($persitentEvent->rrule);
-        $updatedEvent = $this->_controller->update($persitentEvent);
+        unset($persistentEvent->rrule);
+        $updatedEvent = $this->_controller->update($persistentEvent);
         $this->assertNull($updatedEvent->exdate);
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persitentException->getId());
@@ -776,11 +776,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     public function testDeleteEvent()
     {
         $event = $this->_getEvent();
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
-        $this->_controller->delete($persitentEvent->getId());
+        $this->_controller->delete($persistentEvent->getId());
         $this->setExpectedException('Tinebase_Exception_NotFound');
-        $this->_controller->get($persitentEvent->getId());
+        $this->_controller->get($persistentEvent->getId());
     }
     
     /**
@@ -792,9 +792,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
         $event->exdate = array(new Tinebase_DateTime('2009-04-07 13:00:00'));
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
-        $exception = clone $persitentEvent;
+        $exception = clone $persistentEvent;
         $exception->dtstart->addDay(2);
         $exception->dtend->addDay(2);
         $exception->setId(NULL);
@@ -803,7 +803,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
         $persitentException = $this->_controller->create($exception);
         
-        $this->_controller->delete($persitentEvent->getId());
+        $this->_controller->delete($persistentEvent->getId());
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $this->_controller->get($persitentException->getId());
     }
@@ -812,20 +812,20 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
-        $exception = clone $persitentEvent;
+        $exception = clone $persistentEvent;
         $exception->dtstart->addDay(3);
         $exception->dtend->addDay(3);
         $exception->summary = 'Abendbrot';
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
         $persitentException = $this->_controller->createRecurException($exception);
         
-        $persitentEvent = $this->_controller->get($persitentEvent->getId());
-        $this->assertEquals(1, count($persitentEvent->exdate));
+        $persistentEvent = $this->_controller->get($persistentEvent->getId());
+        $this->assertEquals(1, count($persistentEvent->exdate));
         
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $persistentEvent->uid),
         )));
         $this->assertEquals(2, count($events));
         
@@ -836,21 +836,21 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
         // create an exception (a fallout)
-        $exception = clone $persitentEvent;
+        $exception = clone $persistentEvent;
         $exception->dtstart->addDay(3);
         $exception->dtend->addDay(3);
         $exception->summary = 'Abendbrot';
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
-        $persitentEventWithExdate = $this->_controller->createRecurException($exception, true);
+        $persistentEventWithExdate = $this->_controller->createRecurException($exception, true);
         
-        $persitentEvent = $this->_controller->get($persitentEvent->getId());
-        $this->assertType('DateTime', $persitentEventWithExdate->exdate[0]);
-        $this->assertEquals($persitentEventWithExdate->exdate[0]->format('c'), $persitentEvent->exdate[0]->format('c'));
+        $persistentEvent = $this->_controller->get($persistentEvent->getId());
+        $this->assertType('DateTime', $persistentEventWithExdate->exdate[0]);
+        $this->assertEquals($persistentEventWithExdate->exdate[0]->format('c'), $persistentEvent->exdate[0]->format('c'));
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $persistentEvent->uid),
         )));
         $this->assertEquals(1, count($events));
     }
@@ -859,9 +859,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->rrule = 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-04-30 13:30:00';
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
-        $exception = clone $persitentEvent;
+        $exception = clone $persistentEvent;
         $exception->dtstart->addDay(3);
         $exception->dtend->addDay(3);
         $exception->summary = 'Abendbrot';
@@ -870,11 +870,11 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $this->_controller->delete($persitentException->getId());
         
-        $persitentEvent = $this->_controller->get($persitentEvent->getId());
+        $persistentEvent = $this->_controller->get($persistentEvent->getId());
         
-        $this->assertType('DateTime', $persitentEvent->exdate[0]);
+        $this->assertType('DateTime', $persistentEvent->exdate[0]);
         $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'uid',     'operator' => 'equals', 'value' => $persitentEvent->uid),
+            array('field' => 'uid',     'operator' => 'equals', 'value' => $persistentEvent->uid),
         )));
         $this->assertEquals(1, count($events));
     }
@@ -887,15 +887,15 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
                 'minutes_before' => 30
             ), TRUE)
         ));
-        $persitentEvent = $this->_controller->create($event);
-        $alarmTime = clone $persitentEvent->dtstart;
+        $persistentEvent = $this->_controller->create($event);
+        $alarmTime = clone $persistentEvent->dtstart;
         $alarmTime->subMinute(30);
-        $this->assertTrue($alarmTime->equals($persitentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
+        $this->assertTrue($alarmTime->equals($persistentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
         
         
-        $persitentEvent->dtstart->addHour(5);
-        $persitentEvent->dtend->addHour(5);
-        $updatedEvent = $this->_controller->update($persitentEvent);
+        $persistentEvent->dtstart->addHour(5);
+        $persistentEvent->dtend->addHour(5);
+        $updatedEvent = $this->_controller->update($persistentEvent);
         $alarmTime = clone $updatedEvent->dtstart;
         $alarmTime->subMinute(30);
         $this->assertTrue($alarmTime->equals($updatedEvent->alarms->getFirstRecord()->alarm_time), 'alarm of updated event is not adjusted');
@@ -910,21 +910,21 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
                 'minutes_before' => 30
             ), TRUE)
         ));
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
         // assert alarm time is just before next occurence
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persitentEvent, $exceptions, new Tinebase_DateTime());
+        $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, new Tinebase_DateTime());
         
         $alarmTime = clone $nextOccurance->dtstart;
         $alarmTime->subMinute(30);
-        $this->assertTrue($alarmTime->equals($persitentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
+        $this->assertTrue($alarmTime->equals($persistentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
         
         
         // move whole series
-        $persitentEvent->dtstart->addHour(5);
-        $persitentEvent->dtend->addHour(5);
-        $updatedEvent = $this->_controller->update($persitentEvent);
+        $persistentEvent->dtstart->addHour(5);
+        $persistentEvent->dtend->addHour(5);
+        $updatedEvent = $this->_controller->update($persistentEvent);
 
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($updatedEvent, $exceptions, new Tinebase_DateTime());
@@ -943,10 +943,10 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
                 'minutes_before' => 30
             ), TRUE)
         ));
-        $persitentEvent = $this->_controller->create($event);
+        $persistentEvent = $this->_controller->create($event);
         
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $exception = Calendar_Model_Rrule::computeNextOccurrence($persitentEvent, $exceptions, new Tinebase_DateTime());
+        $exception = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, new Tinebase_DateTime());
         $exception->dtstart->subHour(6);
         $exception->dtend->subHour(6);
         $persistentException = $this->_controller->createRecurException($exception);
