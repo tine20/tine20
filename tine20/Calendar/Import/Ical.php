@@ -143,7 +143,7 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
                 $result['failcount'] += 1;
             }
         }
-        $cc->sendNotifications($existingEvents);
+        $cc->sendNotifications($sendNotifications);
         
         return $result;
     }
