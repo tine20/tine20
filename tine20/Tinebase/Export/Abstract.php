@@ -290,6 +290,9 @@ abstract class Tinebase_Export_Abstract
                 Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId() 
             );
             
+        } else if (array_key_exists('definitionId', $_additionalOptions)) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->get($_additionalOptions['definitionId']);
+            
         } else {
             // get preference from db and set export definition name
             $exportName = $this->_defaultExportname;

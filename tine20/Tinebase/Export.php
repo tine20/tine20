@@ -42,6 +42,7 @@ class Tinebase_Export
         if (array_key_exists('definitionId', $_options)) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_options['definitionId']);
             $exportClass = $definition->plugin;
+            $_additionalOptions = $_options;
             
         } else if (array_key_exists('format', $_options)) {
             $appName = $_filter->getApplicationName();
