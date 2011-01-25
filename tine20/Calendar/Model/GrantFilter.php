@@ -40,7 +40,7 @@ class Calendar_Model_GrantFilter extends Tinebase_Model_Filter_Abstract implemen
     /**
      * @var array One of these grants must be given
      */
-    protected $_requiredGrants = NULL;
+    protected $_requiredGrants = array();
     
     /**
      * appends sql to given select statement
