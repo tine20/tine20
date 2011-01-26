@@ -60,6 +60,9 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         
+        // only eval grants in action updater if user does not have the right to manage timeaccounts
+        this.evalGrants = ! Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts');
+        
         Tine.Timetracker.TimesheetGridPanel.superclass.initComponent.call(this);
     },
     
