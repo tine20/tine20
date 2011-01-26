@@ -9,14 +9,25 @@ html, body {
 
 /* ----- actions -------------------------------------------------------------*/
 .action_add {
-    background-image:url(../../images/oxygen/16x16/actions/document-new.png) !important;
+    background-image:url(../../images/oxygen/16x16/actions/list-add.png) !important;
 }
 .x-btn-medium .action_add {
-    background-image:url(../../images/oxygen/22x22/actions/document-new.png) !important;
+    background-image:url(../../images/oxygen/22x22/actions/list-add.png) !important;
 }
 .x-btn-large .action_add {
-    background-image:url(../../images/oxygen/32x32/actions/document-new.png) !important;
+    background-image:url(../../images/oxygen/32x32/actions/list-add.png) !important;
 }
+
+.action_remove {
+    background-image:url(../../images/oxygen/16x16/actions/list-remove.png) !important;
+}
+.x-btn-medium .action_remove {
+    background-image:url(../../images/oxygen/22x22/actions/list-remove.png) !important;
+}
+.x-btn-large .action_remove {
+    background-image:url(../../images/oxygen/32x32/actions/list-remove.png) !important;
+}
+
 
 .action_edit {
     background-image:url(../../images/oxygen/16x16/actions/edit.png) !important;

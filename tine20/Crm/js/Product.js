@@ -187,7 +187,7 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             text: String.format(this.app.i18n._('Unlink {0}'), recordName),
             tooltip: String.format(this.app.i18n._('Unlink selected {0}'), recordName),
             disabled: true,
-            iconCls: 'actionRemove',
+            iconCls: 'action_remove',
             onlySingle: true,
             scope: this,
             handler: function(_button, _event) {                       

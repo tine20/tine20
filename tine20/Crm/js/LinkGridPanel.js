@@ -36,7 +36,7 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         requiredGrant: 'editGrant',
         text: String.format(this.app.i18n._('Add new {0}'), recordName),
         tooltip: String.format(this.app.i18n._('Add new {0}'), recordName),
-        iconCls: 'actionAdd',
+        iconCls: 'action_add',
         disabled: ! (this.record && this.record.get('container_id') 
             && this.record.get('container_id').account_grants 
             && this.record.get('container_id').account_grants.editGrant),
@@ -56,7 +56,7 @@ Tine.Crm.LinkGridPanel.initActions = function() {
         text: String.format(this.app.i18n._('Unlink {0}'), recordName),
         tooltip: String.format(this.app.i18n._('Unlink selected {0}'), recordName),
         disabled: true,
-        iconCls: 'actionRemove',
+        iconCls: 'action_remove',
         onlySingle: true,
         scope: this,
         handler: function(_button, _event) {                       
