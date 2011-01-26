@@ -104,7 +104,7 @@ class Timetracker_Acl_Rights extends Tinebase_Acl_Rights_Abstract
         $rightDescriptions = array(
             self::MANAGE_TIMEACCOUNTS  => array(
                 'text'          => $translate->_('Manage timeaccounts'),
-                'description'   => $translate->_('Add, edit and delete timeaccounts'),
+                'description'   => $translate->_('Add, edit and delete timeaccounts (includes all timesheet grants)'),
             ),
             self::ADD_TIMEACCOUNTS  => array(
                 'text'          => $translate->_('Add timeaccounts'),
