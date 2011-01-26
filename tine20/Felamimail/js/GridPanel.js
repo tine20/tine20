@@ -136,7 +136,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {String} operation
      */
     onUpdateFolderStore: function(store, record, operation) {
-        if (operation === Ext.data.Record.EDIT && record.isModified('cache_totalcount') && record.isModified('cache_job_actions_done')) {
+        if (operation === Ext.data.Record.EDIT && record.isModified('cache_totalcount')) {
             var tree = this.app.getMainScreen().getTreePanel(),
                 selectedNodes = (tree) ? tree.getSelectionModel().getSelectedNodes() : [];
             
