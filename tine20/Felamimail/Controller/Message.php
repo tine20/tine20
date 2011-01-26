@@ -22,14 +22,6 @@
 class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 {
     /**
-     * maximum file upload size (in bytes)
-     * 
-     * 0 -> max size = memory limit
-     * 2097152 = 2MB
-     */
-    const MAX_ATTACHMENT_SIZE = 0;
-    
-    /**
      * imap flags to constants translation
      * @var array
      */
@@ -953,8 +945,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
     {
-        $maxSize = (self::MAX_ATTACHMENT_SIZE == 0) ? convertToBytes(ini_get('upload_max_filesize')) : self::MAX_ATTACHMENT_SIZE;
-        
         if (isset($_message->attachments)) {
             $size = 0;
             foreach ($_message->attachments as $attachment) {
@@ -989,12 +979,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
                 $part->filename = $attachment['name'];
                 $part->type = $attachment['type'] . '; name="' . $attachment['name'] . '"';
-                
-                // check size
-                $size += $attachment['size'];
-                if ($size > $maxSize) {
-                    throw new Felamimail_Exception('Allowed attachment size exceeded! Tried to attach ' . $size . ' bytes.');
-                }
                 
                 $_mail->addAttachment($part);
             }
