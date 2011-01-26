@@ -131,15 +131,15 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
      * 
      * @param  mixed  $_folderId
      * @param  array  $_counters
+     * @return Felamimail_Model_Folder
      */
     public function updateFolderCounter($_folderId, array $_counters)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' folder: ' . $_folderId . ' - ' . print_r($_counters, true));
-        if (empty($_counters)) {
-            return; // nothing todo
-        }
-        
         $folder = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId : $this->get($_folderId);
+        if (empty($_counters)) {
+            return $folder; // nothing todo
+        }
         
         $data = array();
         $where = array();
@@ -165,5 +165,7 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getTraceAsString());
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data: ' . print_r($data, TRUE) . ' where: ' . print_r($where, TRUE));
         }
+        
+        return $this->get($folder->getId());
     }
 }
