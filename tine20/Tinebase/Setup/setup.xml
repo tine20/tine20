@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>4.3</version>
+	<version>4.4</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -206,7 +206,7 @@
 
 		<table>
 			<name>accounts</name>
-			<version>7</version>
+			<version>8</version>
 			<declaration>
                 <field>
                 	<name>id</name>
@@ -217,7 +217,7 @@
                 <field>
                 	<name>login_name</name>
                 	<type>text</type>
-                	<length>64</length>
+                	<length>255</length>
                 	<notnull>true</notnull>
                 </field>
                 <field>
@@ -298,17 +298,17 @@
                 <field>
                     <name>email</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>first_name</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>255</length>
                 </field>
                 <field>
                     <name>last_name</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>255</length>
                     <notnull>true</notnull>
                 </field>
                 <field>

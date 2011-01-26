@@ -96,4 +96,53 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '4.3');
     }
+    
+    /**
+     * update to 4.4
+     * - extend length of some accounts fields
+     */
+    public function update_3()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+    		<field>
+            	<name>login_name</name>
+            	<type>text</type>
+            	<length>255</length>
+            	<notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+    		<field>
+                <name>email</name>
+                <type>text</type>
+                <length>255</length>
+            </field>
+        ');
+        $this->_backend->alterCol('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+    		<field>
+                <name>first_name</name>
+                <type>text</type>
+                <length>255</length>
+            </field>
+        ');
+        $this->_backend->alterCol('accounts', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+    		<field>
+                <name>last_name</name>
+                <type>text</type>
+                <length>255</length>
+                <notnull>true</notnull>
+    		</field>
+        ');
+        $this->_backend->alterCol('accounts', $declaration);
+        
+        $this->setTableVersion('accounts', '8');
+        
+        $this->setApplicationVersion('Tinebase', '4.4');
+    }
 }
