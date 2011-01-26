@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 Ext.ns('Tine.widgets.grid');
@@ -17,10 +17,9 @@ Ext.ns('Tine.widgets.grid');
  * <p>
  * </p>
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @version     $Id:GridPanel.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
  * 
  * @param       {Object} config
  * 
@@ -44,18 +43,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @type Boolean
      * TODO     think about that -> when we deactivate the top toolbar, we lose the dropzone for files!
      */
-    showTopToolbar: true,
-    
-    /**
-     * actions
-     * 
-     * @type {Object}
-     * @private
-     */
-    actions: {
-        add: null,
-        remove: null
-    },
+    //showTopToolbar: null,
     
     /**
      * config values
@@ -125,23 +113,27 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     initToolbarAndContextMenu: function() {
-        this.actions.add = new Ext.Action(this.getAddAction());
+        this.action_add = new Ext.Action(this.getAddAction());
 
-        this.actions.remove = new Ext.Action({
+        this.action_remove = new Ext.Action({
             text: _('Remove file'),
-            iconCls: 'actionRemove',
+            iconCls: 'action_remove',
             scope: this,
             disabled: true,
             handler: this.onRemove
         });
         
-        this.tbar = (this.showTopToolbar === true) ? [
-            this.actions.add,
-            this.actions.remove
-        ] : [];
+//        this.tbar = (this.showTopToolbar === true) ? [
+//            this.action_add,
+//            this.action_remove
+//        ] : [];
+        this.tbar = [
+            this.action_add,
+            this.action_remove
+        ];
         
         this.contextMenu = new Ext.menu.Menu({
-            items:  this.actions.remove
+            items:  this.action_remove
         });
     },
     
@@ -165,7 +157,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     getAddAction: function () {
         return {
             text: _('Add file'),
-            iconCls: 'actionAdd',
+            iconCls: 'action_add',
             scope: this,
             plugins: [{
                 ptype: 'ux.browseplugin',
@@ -241,7 +233,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.selModel.on('selectionchange', function(selModel) {
             var rowCount = selModel.getCount();
-            this.actions.remove.setDisabled(rowCount == 0);
+            this.action_remove.setDisabled(rowCount == 0);
         }, this);
     },
     
@@ -252,8 +244,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @param {} e
      */
     onFilesSelect: function(fileSelector, e) {
-        //Tine.log.debug(fileSelector);
-        
         var uploader = new Ext.ux.file.Uploader({
             maxFileSize: 67108864, // 64MB
             fileSelector: fileSelector
