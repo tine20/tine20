@@ -73,5 +73,27 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Tinebase', '4.2');
-    }    
+    }
+        
+    /**
+     * update to 4.3
+     * - add index for applications.status
+     */
+    public function update_2()
+    {
+        if ($this->getTableVersion('applications') < 2) {
+            $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>status</name>
+                    <field>
+                        <name>status</name>
+                    </field>
+                </index>
+            ');
+            $this->_backend->addIndex('applications', $declaration);
+            $this->setTableVersion('applications', '7');
+        }
+        
+        $this->setApplicationVersion('Tinebase', '4.3');
+    }
 }
