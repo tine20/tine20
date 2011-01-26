@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  * @todo        when more formats switched to Tinebase_Export_Abstract, change creation of object (new $exportClass($_additionalOptions))
@@ -42,7 +42,8 @@ class Tinebase_Export
         if (array_key_exists('definitionId', $_options)) {
             $definition = Tinebase_ImportExportDefinition::getInstance()->get($_options['definitionId']);
             $exportClass = $definition->plugin;
-            $_additionalOptions = $_options;
+            // export plugin needs the definition id
+            $_additionalOptions = array_merge($_additionalOptions, $_options);
             
         } else if (array_key_exists('format', $_options)) {
             $appName = $_filter->getApplicationName();
