@@ -546,7 +546,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     
                     $messages = $_imap->getSummary($messageSequenceStart, $messageSequenceEnd, false);
 
-                    $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
+                    $_folder = $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
                     
                     $messageSequenceStart = $messageSequenceEnd + 1;
                     
@@ -570,6 +570,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param array $_messages
      * @param Felamimail_Model_Folder $_folder
+     * @return Felamimail_Model_Folder
      */
     protected function _addMessagesToCacheAndIncreaseCounters($_messages, $_folder)
     {
@@ -593,7 +594,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
-        Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
+        return Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
             'cache_totalcount'  => "+$incrementMessagesCounter",
             'cache_unreadcount' => "+$incrementUnreadCounter",
         ));
@@ -633,7 +634,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     
                     if (count($missingUids) != 0) {
                         $messages = $_imap->getSummary($missingUids);
-                        $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
+                        $_folder = $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
                     }
                     
                     if ($_folder->cache_totalcount == $_folder->imap_totalcount || $messageSequenceStart == 1) {

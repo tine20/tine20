@@ -289,6 +289,7 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      * 
      * @param  mixed  $_folderId
      * @param  array  $_counters
+     * @return Felamimail_Model_Folder
      */
     public function updateFolderCounter($_folderId, array $_counters)
     {
