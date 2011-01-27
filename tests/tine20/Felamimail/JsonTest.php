@@ -282,7 +282,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(! empty($system), 'no accounts found');
         $this->assertEquals('mail.metaways.net', $system['host']);
-        $this->assertEquals('mail01.metaways.net', $system['sieve_hostname']);
+        $this->assertEquals('mailproxy.metaways.net', $system['sieve_hostname']);
     }
     
     /**
