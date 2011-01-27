@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-08-13 19:05+0100\n"
+"PO-Revision-Date: 2011-01-27 17:25+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 #: Controller.php:97
 #, python-format
 msgid "%s's personal example records"
-msgstr "%s's przykładowe, osobiste wiersze"
+msgstr "%s przykładowe, osobiste wiersze"
 
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
@@ -25,7 +25,8 @@ msgstr "Przykładowa aplikacja"
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/ExampleRecordGridPanel.js:105 js/ExampleRecordEditDialog.js:106
+#: js/ExampleRecordGridPanel.js:105
+#: js/ExampleRecordEditDialog.js:106
 msgid "Name"
 msgstr "Nazwa"
 
@@ -77,6 +78,7 @@ msgstr[2] "listy przykładowych wierszy"
 #~ msgstr "Opis"
 
 #~ msgid "record list"
+
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista aplikacji"
 #~ msgstr[1] "listy aplikacji"
