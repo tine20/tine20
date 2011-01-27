@@ -7,7 +7,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -92,6 +92,8 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected function _downloadMessagePart($_messageId, $_partId = NULL)
     {
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
+        
         try {
             $part = Felamimail_Controller_Message::getInstance()->getMessagePart($_messageId, $_partId);
             
@@ -112,13 +114,17 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 header("Cache-Control: max-age=0");
                 header('Content-Disposition: attachment; filename="' . $filename . '"');
                 header("Content-Type: " . $contentType);
-
+                
                 $stream = ($_partId === NULL) ? $part->getRawStream() : $part->getDecodedStream();
                 fpassthru($stream);
+                fclose($stream);
             }
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Failed to get message part: ' . $e->getMessage());
         }
+        
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
+        
         exit;
     }
 }
