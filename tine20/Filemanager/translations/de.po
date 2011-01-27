@@ -28,4 +28,3 @@ msgstr "Neue gemeinsame Ordner anlegen und verwalten"
 #: js/Application.js:31
 msgid "Filemanager"
 msgstr "Dateimanager"
-

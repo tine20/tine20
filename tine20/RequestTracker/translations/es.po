@@ -13,11 +13,51 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: js/TreePanel.js:24
+msgid "All Queues"
+msgstr "Todas las colas"
+
 #: js/Model.js:42 js/TicketGridPanel.js:43
 msgid "Ticket"
 msgid_plural "Tickets"
 msgstr[0] "Boleto"
 msgstr[1] "Boletos"
+
+#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:69
+msgid "Ticket ID"
+msgstr "Id de Boleto"
+
+#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:72
+msgid "Queue"
+msgstr "Colas"
+
+#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:78
+msgid "Subject"
+msgstr "Tema"
+
+#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:84
+msgid "Requestors"
+msgstr "Solicitantes"
+
+#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:90
+msgid "Owner"
+msgstr "Propietario"
+
+#: js/TicketGridPanel.js:50
+msgid "Description"
+msgstr "Descripción"
+
+#: js/TicketGridPanel.js:96 js/StatusCombo.js:51
+msgid "Status"
+msgstr "Estado"
+
+#: js/TicketGridPanel.js:102
+msgid "Final Priority"
+msgstr "Prioridad Final"
+
+#: js/TicketGridPanel.js:108
+msgid "Due"
+msgstr "Debido"
 
 #: js/StatusCombo.js:26
 msgid "New"
@@ -50,43 +90,3 @@ msgstr "Rechazado"
 #: js/StatusCombo.js:33
 msgid "Deleted"
 msgstr "Borrado"
-
-#: js/StatusCombo.js:51 js/TicketGridPanel.js:96
-msgid "Status"
-msgstr "Estado"
-
-#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:69
-msgid "Ticket ID"
-msgstr "Id de Boleto"
-
-#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:72
-msgid "Queue"
-msgstr "Colas"
-
-#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:78
-msgid "Subject"
-msgstr "Tema"
-
-#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:84
-msgid "Requestors"
-msgstr "Solicitantes"
-
-#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:90
-msgid "Owner"
-msgstr "Propietario"
-
-#: js/TicketGridPanel.js:50
-msgid "Description"
-msgstr "Descripción"
-
-#: js/TicketGridPanel.js:102
-msgid "Final Priority"
-msgstr "Prioridad Final"
-
-#: js/TicketGridPanel.js:108
-msgid "Due"
-msgstr "Debido"
-
-#: js/TreePanel.js:24
-msgid "All Queues"
-msgstr "Todas las colas"

@@ -13,11 +13,51 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
+#: js/TreePanel.js:24
+msgid "All Queues"
+msgstr "Minden sor"
+
 #: js/Model.js:42 js/TicketGridPanel.js:43
 msgid "Ticket"
 msgid_plural "Tickets"
 msgstr[0] "Jegy"
 msgstr[1] "Jegyek"
+
+#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:69
+msgid "Ticket ID"
+msgstr "Jegy ID"
+
+#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:72
+msgid "Queue"
+msgstr "Sor"
+
+#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:78
+msgid "Subject"
+msgstr "Tárgy"
+
+#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:84
+msgid "Requestors"
+msgstr "Igénylők"
+
+#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:90
+msgid "Owner"
+msgstr "Tulajdonos"
+
+#: js/TicketGridPanel.js:50
+msgid "Description"
+msgstr "Leírás"
+
+#: js/TicketGridPanel.js:96 js/StatusCombo.js:51
+msgid "Status"
+msgstr "Státusz"
+
+#: js/TicketGridPanel.js:102
+msgid "Final Priority"
+msgstr "Végső prioritás"
+
+#: js/TicketGridPanel.js:108
+msgid "Due"
+msgstr "Esedékes"
 
 #: js/StatusCombo.js:26
 msgid "New"
@@ -50,43 +90,3 @@ msgstr "Visszautasítva"
 #: js/StatusCombo.js:33
 msgid "Deleted"
 msgstr "Törölve"
-
-#: js/StatusCombo.js:51 js/TicketGridPanel.js:96
-msgid "Status"
-msgstr "Státusz"
-
-#: js/TicketGridPanel.js:44 js/TicketGridPanel.js:69
-msgid "Ticket ID"
-msgstr "Jegy ID"
-
-#: js/TicketGridPanel.js:45 js/TicketGridPanel.js:72
-msgid "Queue"
-msgstr "Sor"
-
-#: js/TicketGridPanel.js:46 js/TicketGridPanel.js:78
-msgid "Subject"
-msgstr "Tárgy"
-
-#: js/TicketGridPanel.js:47 js/TicketGridPanel.js:84
-msgid "Requestors"
-msgstr "Igénylők"
-
-#: js/TicketGridPanel.js:48 js/TicketGridPanel.js:90
-msgid "Owner"
-msgstr "Tulajdonos"
-
-#: js/TicketGridPanel.js:50
-msgid "Description"
-msgstr "Leírás"
-
-#: js/TicketGridPanel.js:102
-msgid "Final Priority"
-msgstr "Végső prioritás"
-
-#: js/TicketGridPanel.js:108
-msgid "Due"
-msgstr "Esedékes"
-
-#: js/TreePanel.js:24
-msgid "All Queues"
-msgstr "Minden sor"

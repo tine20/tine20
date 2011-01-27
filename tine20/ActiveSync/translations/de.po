@@ -74,8 +74,7 @@ msgstr "Als {0} Filter Setzen"
 msgid "Resetted Sync Filter"
 msgstr "Sync Filter zurückgesetzt"
 
-#: js/Application.js:96
-#: js/Application.js:108
+#: js/Application.js:96 js/Application.js:108
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr "{0} Filter für das Gerät \"{1}\" ist jetzt \"{2}\""
 
@@ -86,4 +85,3 @@ msgstr "zurückgesetzt"
 #: js/Application.js:107
 msgid "Set Sync Filter"
 msgstr "Setze Sync Filter"
-

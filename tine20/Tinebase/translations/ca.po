@@ -17,7 +17,7 @@ msgstr ""
 msgid "unknown"
 msgstr "desconegut"
 
-#: Frontend/Http.php:565 js/ExceptionHandler.js:127
+#: Frontend/Http.php:565 js/ExceptionHandler.js:130
 msgid "Authorisation Required"
 msgstr "Autorització requerida"
 
@@ -33,47 +33,47 @@ msgstr "Finalització anormal"
 msgid "An error occurred, the program ended abnormal."
 msgstr "S'ha produït un error i el programa s'ha tancat inesperadament."
 
-#: Preference/Abstract.php:461
+#: Preference/Abstract.php:476
 msgid "default"
 msgstr ""
 
-#: Setup/setup.xml:3012
+#: Setup/setup.xml:3030
 msgid "note"
 msgstr "nota"
 
-#: Setup/setup.xml:3017
+#: Setup/setup.xml:3035
 msgid "default note type"
 msgstr "tipus de nota per defecte"
 
-#: Setup/setup.xml:3043
+#: Setup/setup.xml:3061
 msgid "telephone"
 msgstr "telèfon"
 
-#: Setup/setup.xml:3048
+#: Setup/setup.xml:3066
 msgid "telephone call"
 msgstr "trucada telefònica"
 
-#: Setup/setup.xml:3074
+#: Setup/setup.xml:3092
 msgid "email"
 msgstr "correu electrònic"
 
-#: Setup/setup.xml:3079
+#: Setup/setup.xml:3097
 msgid "email contact"
 msgstr "contacte de correu electrònic"
 
-#: Setup/setup.xml:3105
+#: Setup/setup.xml:3123
 msgid "created"
 msgstr "creat"
 
-#: Setup/setup.xml:3110
+#: Setup/setup.xml:3128
 msgid "record created"
 msgstr "registre creat"
 
-#: Setup/setup.xml:3136
+#: Setup/setup.xml:3154
 msgid "changed"
 msgstr "canviat"
 
-#: Setup/setup.xml:3141
+#: Setup/setup.xml:3159
 msgid "record changed"
 msgstr "registre canviat"
 
@@ -239,7 +239,7 @@ msgstr "Esteu segur que voleu sortir?"
 msgid "Logging you out..."
 msgstr "Tancant la sessió..."
 
-#: js/MainMenu.js:244 js/LoginPanel.js:354
+#: js/MainMenu.js:244 js/LoginPanel.js:353
 msgid "Please wait!"
 msgstr "Espereu!"
 
@@ -326,7 +326,7 @@ msgstr "Cerca usuaris ..."
 msgid "Search for groups ..."
 msgstr "Cerca grups ..."
 
-#: js/widgets/account/PickerGridPanel.js:254 js/Models.js:400
+#: js/widgets/account/PickerGridPanel.js:254 js/Models.js:406
 msgid "Name"
 msgstr "Nom"
 
@@ -563,14 +563,14 @@ msgstr ""
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/PreferencesDialog.js:246
 #: js/widgets/dialog/PreferencesDialog.js:275
-#: js/widgets/dialog/ExportDialog.js:131 js/LoginPanel.js:371
+#: js/widgets/dialog/ExportDialog.js:141 js/LoginPanel.js:370
 msgid "Errors"
 msgstr "Errors"
 
 #: js/widgets/dialog/EditDialog.js:473
 #: js/widgets/dialog/CredentialsDialog.js:129
-#: js/widgets/dialog/ImportDialog.js:194 js/widgets/dialog/ExportDialog.js:131
-#: js/LoginPanel.js:371
+#: js/widgets/dialog/ImportDialog.js:194 js/widgets/dialog/ExportDialog.js:141
+#: js/LoginPanel.js:370
 msgid "Please fix the errors noted."
 msgstr "Arregleu els errors notificats."
 
@@ -691,7 +691,7 @@ msgid "You need to select an option!"
 msgstr "Heu de seleccionar una opció!"
 
 #: js/widgets/dialog/ExportDialog.js:47
-#: js/widgets/container/GrantsDialog.js:112 js/Models.js:310
+#: js/widgets/container/GrantsDialog.js:112 js/Models.js:315
 #, fuzzy
 msgid "Export"
 msgid_plural "Export"
@@ -702,11 +702,11 @@ msgstr[1] "Exportació"
 msgid "Export {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/ExportDialog.js:93
+#: js/widgets/dialog/ExportDialog.js:102
 msgid "Export definition"
 msgstr ""
 
-#: js/widgets/dialog/ExportDialog.js:102
+#: js/widgets/dialog/ExportDialog.js:111
 msgid "Select Export Definition ..."
 msgstr ""
 
@@ -921,156 +921,156 @@ msgid_plural "Your view is limited by {0} criterias:"
 msgstr[0] "La visualització es troba limitada pel criteri {0}:"
 msgstr[1] "La visualització es troba limitada pels criteris {0}:"
 
-#: js/widgets/grid/FilterModel.js:155
+#: js/widgets/grid/FilterModel.js:165
 msgid "contains"
 msgstr "conté"
 
-#: js/widgets/grid/FilterModel.js:156 js/widgets/container/FilterModel.js:132
+#: js/widgets/grid/FilterModel.js:166 js/widgets/container/FilterModel.js:132
 #: js/widgets/container/FilterModel.js:136
 msgid "is equal to"
 msgstr "és igual a"
 
-#: js/widgets/grid/FilterModel.js:157
+#: js/widgets/grid/FilterModel.js:167
 msgid "is greater than"
 msgstr "és major que"
 
-#: js/widgets/grid/FilterModel.js:158
+#: js/widgets/grid/FilterModel.js:168
 msgid "is less than"
 msgstr "és menor que"
 
-#: js/widgets/grid/FilterModel.js:159
+#: js/widgets/grid/FilterModel.js:169
 msgid "is not"
 msgstr "és distint a"
 
-#: js/widgets/grid/FilterModel.js:160
+#: js/widgets/grid/FilterModel.js:170
 msgid "one of"
 msgstr "és un de"
 
-#: js/widgets/grid/FilterModel.js:161
+#: js/widgets/grid/FilterModel.js:171
 msgid "none of"
 msgstr "no és cap de"
 
-#: js/widgets/grid/FilterModel.js:162
+#: js/widgets/grid/FilterModel.js:172
 msgid "is before"
 msgstr "és abans de"
 
-#: js/widgets/grid/FilterModel.js:163
+#: js/widgets/grid/FilterModel.js:173
 msgid "is after"
 msgstr "és després de"
 
-#: js/widgets/grid/FilterModel.js:164
+#: js/widgets/grid/FilterModel.js:174
 msgid "is within"
 msgstr "es troba entre"
 
-#: js/widgets/grid/FilterModel.js:165
+#: js/widgets/grid/FilterModel.js:175
 msgid "is in week no."
 msgstr "és a la setmana que fa"
 
-#: js/widgets/grid/FilterModel.js:166
+#: js/widgets/grid/FilterModel.js:176
 msgid "starts with"
 msgstr "comença per"
 
-#: js/widgets/grid/FilterModel.js:167
+#: js/widgets/grid/FilterModel.js:177
 msgid "ends with"
 msgstr "acaba per"
 
-#: js/widgets/grid/FilterModel.js:208
+#: js/widgets/grid/FilterModel.js:218
 msgid "select a operator"
 msgstr "seleccioneu un operador"
 
-#: js/widgets/grid/FilterModel.js:325
+#: js/widgets/grid/FilterModel.js:335
 msgid "Search Account ..."
 msgstr "Cerca un compte ..."
 
-#: js/widgets/grid/FilterModel.js:448
+#: js/widgets/grid/FilterModel.js:458
 msgid "today"
 msgstr "avui"
 
-#: js/widgets/grid/FilterModel.js:449
+#: js/widgets/grid/FilterModel.js:459
 msgid "yesterday"
 msgstr "ahir"
 
-#: js/widgets/grid/FilterModel.js:450
+#: js/widgets/grid/FilterModel.js:460
 msgid "this week"
 msgstr "aquesta setmana"
 
-#: js/widgets/grid/FilterModel.js:451
+#: js/widgets/grid/FilterModel.js:461
 msgid "last week"
 msgstr "la darrera setmana"
 
-#: js/widgets/grid/FilterModel.js:452
+#: js/widgets/grid/FilterModel.js:462
 msgid "the week before last"
 msgstr "la setmana anterior a la passada"
 
-#: js/widgets/grid/FilterModel.js:453
+#: js/widgets/grid/FilterModel.js:463
 msgid "this month"
 msgstr "aquest mes"
 
-#: js/widgets/grid/FilterModel.js:454
+#: js/widgets/grid/FilterModel.js:464
 msgid "last month"
 msgstr "el mes passat"
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:465
 msgid "this quarter"
 msgstr "aquest quadrimestre"
 
-#: js/widgets/grid/FilterModel.js:456
+#: js/widgets/grid/FilterModel.js:466
 msgid "last quarter"
 msgstr "el darrer quadrimestre"
 
-#: js/widgets/grid/FilterModel.js:457
+#: js/widgets/grid/FilterModel.js:467
 msgid "this year"
 msgstr "aquest any"
 
-#: js/widgets/grid/FilterModel.js:458
+#: js/widgets/grid/FilterModel.js:468
 msgid "last year"
 msgstr "l'any passat"
 
-#: js/widgets/grid/FilterModel.js:462
+#: js/widgets/grid/FilterModel.js:472
 msgid "tomorrow"
 msgstr "demà"
 
-#: js/widgets/grid/FilterModel.js:463
+#: js/widgets/grid/FilterModel.js:473
 msgid "next week"
 msgstr "la propera setmana"
 
-#: js/widgets/grid/FilterModel.js:464
+#: js/widgets/grid/FilterModel.js:474
 msgid "next month"
 msgstr "el proper mes"
 
-#: js/widgets/grid/FilterModel.js:465
+#: js/widgets/grid/FilterModel.js:475
 msgid "next quarter"
 msgstr "el proper quadrimestre"
 
-#: js/widgets/grid/FilterModel.js:466
+#: js/widgets/grid/FilterModel.js:476
 msgid "next year"
 msgstr "l'any que ve"
 
-#: js/widgets/grid/FileUploadGrid.js:104 js/ux/form/ImageField.js:159
+#: js/widgets/grid/FileUploadGrid.js:92 js/ux/form/ImageField.js:159
 msgid "Upload Failed"
 msgstr "Ha fallat la càrrega"
 
-#: js/widgets/grid/FileUploadGrid.js:105
+#: js/widgets/grid/FileUploadGrid.js:93
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "No s'ha pogut carregar el fitxer. La mida del fitxer potser sigui massa gran. Aviseu l'administrador. Mida màxima per a càrregues:"
 
-#: js/widgets/grid/FileUploadGrid.js:131
+#: js/widgets/grid/FileUploadGrid.js:119
 msgid "Remove file"
 msgstr "Elimina el fitxer"
 
-#: js/widgets/grid/FileUploadGrid.js:167
+#: js/widgets/grid/FileUploadGrid.js:159
 msgid "Add file"
 msgstr "Afegeix un fitxer"
 
-#: js/widgets/grid/FileUploadGrid.js:206
+#: js/widgets/grid/FileUploadGrid.js:198
 msgid "name"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:221
+#: js/widgets/grid/FileUploadGrid.js:213
 msgid "size"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:228
+#: js/widgets/grid/FileUploadGrid.js:220
 msgid "type"
 msgstr ""
 
@@ -1525,47 +1525,47 @@ msgstr "Ha fallat"
 msgid "The new passwords mismatch, please correct them."
 msgstr "Les contrasenyes no coincideixen, corregiu-ho."
 
-#: js/Models.js:74
+#: js/Models.js:78
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Grup"
 msgstr[1] "Grups"
 
-#: js/Models.js:74
+#: js/Models.js:78
 msgid "Groups"
 msgstr "Grups"
 
-#: js/Models.js:284
+#: js/Models.js:288
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "Importació"
 msgstr[1] "Importacions"
 
-#: js/Models.js:343
+#: js/Models.js:349
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "Credencial"
 msgstr[1] "Credencials"
 
-#: js/Models.js:370
+#: js/Models.js:376
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Relació"
 msgstr[1] "Relacions"
 
-#: js/Models.js:392
+#: js/Models.js:398
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:419
+#: js/Models.js:425
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Models.js:419
+#: js/Models.js:425
 msgid "Configs"
 msgstr ""
 
@@ -1613,11 +1613,11 @@ msgstr "Fòrums del Tine 2.0"
 msgid "about {0} minutes"
 msgstr "aproximadament {0} minuts"
 
-#: js/LoginPanel.js:197 js/LoginPanel.js:413
+#: js/LoginPanel.js:197 js/LoginPanel.js:412
 msgid "Tine 2.0 needs your help"
 msgstr "El Tine 2.0 necessita de la vostra ajuda"
 
-#: js/LoginPanel.js:199 js/LoginPanel.js:415
+#: js/LoginPanel.js:199 js/LoginPanel.js:414
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "Freqüentment necessitem la vostra opinió per tal que la següent versió del Tine 2.0 acompleixi les vostres necessitats encara millor. Ajudeu-nos i participeu:"
 
@@ -1657,83 +1657,83 @@ msgstr ""
 msgid "Logging you in..."
 msgstr "Iniciant sessió..."
 
-#: js/LoginPanel.js:354
+#: js/LoginPanel.js:353
 msgid "Login successful. Loading {0}..."
 msgstr "L'inici de sessió ha anat bé. Es carrega {0}..."
 
-#: js/LoginPanel.js:359
+#: js/LoginPanel.js:358
 msgid "Login failure"
 msgstr "L'inici de sessió ha fallat"
 
-#: js/LoginPanel.js:360
+#: js/LoginPanel.js:359
 msgid "Your username and/or your password are wrong!!!"
 msgstr "El vostre nom d'usuari i/o la vostra contrasenya són incorrectes!!!"
 
-#: js/LoginPanel.js:386
+#: js/LoginPanel.js:385
 msgid "Please enter your login data"
 msgstr "Introduïu les vostres dades d'inici de sessió"
 
-#: js/ExceptionHandler.js:128
+#: js/ExceptionHandler.js:131
 msgid "Your session timed out. You need to login again."
 msgstr "La vostra sessió ha expirat. Heu d'iniciar sessió altra vegada."
 
-#: js/ExceptionHandler.js:145
+#: js/ExceptionHandler.js:148
 msgid "Insufficient Rights"
 msgstr "Els vostres permisos són insuficients"
 
-#: js/ExceptionHandler.js:146
+#: js/ExceptionHandler.js:149
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "No se us permet realitzar aquesta acció"
 
-#: js/ExceptionHandler.js:155
+#: js/ExceptionHandler.js:158
 msgid "Not Found"
 msgstr "No s'ha trobat"
 
-#: js/ExceptionHandler.js:156
+#: js/ExceptionHandler.js:159
 msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
 msgstr "La vostra petició no s'ha pogut completar perquè no s'ha pogut trobar la informació demanada. La majoria dels casos això significa que algú ja ha eliminat la informació. Refresqueu la visualització actual."
 
-#: js/ExceptionHandler.js:165
+#: js/ExceptionHandler.js:168
 msgid "Concurrent Updates"
 msgstr "Actualitzacions concurrents"
 
-#: js/ExceptionHandler.js:166
+#: js/ExceptionHandler.js:169
 msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
 msgstr "Algú ha desat aquest registre quan estàveu editant la informació. Cal que el torneu a carregar i apliqueu els canvis altra vegada."
 
-#: js/ExceptionHandler.js:176
+#: js/ExceptionHandler.js:179
 msgid "Service Unavailable"
 msgstr "El servei no es troba disponible"
 
-#: js/ExceptionHandler.js:177
+#: js/ExceptionHandler.js:180
 msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
 msgstr "El servidor en aquests moments no pot respondre a la petició degut a una sobrecàrrega puntual o per manteniment del servidor. Intenteu-ho altra vegada o contacteu l'administrador."
 
-#: js/ExceptionHandler.js:184
+#: js/ExceptionHandler.js:187
 msgid "Connection lost, please check your network!"
 msgstr "La connexió s'ha perdut, comproveu l'estat de la xarxa!"
 
-#: js/ExceptionHandler.js:190
+#: js/ExceptionHandler.js:193
 msgid "Timeout"
 msgstr "El plaç de temps ha expirat"
 
-#: js/ExceptionHandler.js:191
+#: js/ExceptionHandler.js:194
 msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 msgstr "S'ha produït un temps excedit mentre es processava la vostra petició. Actualitzeu el navegador, toneu-ho a provar o contacteu l'administrador."
 
-#: js/ExceptionHandler.js:200
+#: js/ExceptionHandler.js:203
 msgid "No Response"
 msgstr "Sense resposta"
 
-#: js/ExceptionHandler.js:201
+#: js/ExceptionHandler.js:204
 msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 msgstr "El servidor no ha respost amb cap informació. Actualitzeu el navegador, toneu-ho a provar o contacteu l'administrador."
 
-#: js/ExceptionHandler.js:210
+#: js/ExceptionHandler.js:213
 msgid "No Role Memberships"
 msgstr "Sense rol"
 
-#: js/ExceptionHandler.js:211
+#: js/ExceptionHandler.js:214
 msgid "Your user account has no role memberships. Please contact your administrator."
 msgstr "El vostre compte d'usuari no disposa de rol. Contacteu l'administrador."
 
@@ -1837,11 +1837,11 @@ msgstr "Activitats"
 msgid "Data"
 msgstr "Dades"
 
-#: views/update.php:45
+#: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
 msgstr ""
 
-#: views/update.php:45
+#: views/update.php:25
 msgid "Please wait or contact your administrator"
 msgstr ""
 

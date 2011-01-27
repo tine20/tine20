@@ -179,57 +179,57 @@ msgstr "Semana"
 msgid "Month"
 msgstr "Mes"
 
-#: js/MainScreenCenterPanel.js:321
+#: js/MainScreenCenterPanel.js:324
 msgid "Set my response"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:372
+#: js/MainScreenCenterPanel.js:375
 msgid "Please Change Selection"
 msgstr "Por favor Cambie la Selección"
 
-#: js/MainScreenCenterPanel.js:373
+#: js/MainScreenCenterPanel.js:376
 msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
 msgstr "Los elementos seleccionados contienen eventos repetitivos. ¡Los eventos repetitivos deben eliminarse por separado!"
 
-#: js/MainScreenCenterPanel.js:387
+#: js/MainScreenCenterPanel.js:390
 msgid "Confirm Deletion of Series"
 msgstr "Confirme la Eliminación de las Series"
 
-#: js/MainScreenCenterPanel.js:388
+#: js/MainScreenCenterPanel.js:391
 msgid "Do you really want to delete all events of this recurring event series?"
 msgstr "¿Realmente desea eliminar todos los eventos de esta serie de eventos repetitivos?"
 
-#: js/MainScreenCenterPanel.js:401
+#: js/MainScreenCenterPanel.js:404
 msgid "Delete Event"
 msgstr "Eliminar Evento"
 
-#: js/MainScreenCenterPanel.js:405
+#: js/MainScreenCenterPanel.js:408
 msgid "Delete whole series"
 msgstr "Eliminar toda la serie"
 
-#: js/MainScreenCenterPanel.js:406
+#: js/MainScreenCenterPanel.js:409
 msgid "Delete this and all future events"
 msgstr "Eliminar éste y todos los eventos futuros"
 
-#: js/MainScreenCenterPanel.js:407
+#: js/MainScreenCenterPanel.js:410
 msgid "Delete this event only"
 msgstr "Eliminar sólo este evento"
 
-#: js/MainScreenCenterPanel.js:408
+#: js/MainScreenCenterPanel.js:411
 msgid "Delete nothing"
 msgstr "No Eliminar"
 
-#: js/MainScreenCenterPanel.js:457
+#: js/MainScreenCenterPanel.js:460
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "¿Realmente desea eliminar este evento?"
 msgstr[1] "¿Realmente desea eliminar los {0} eventos seleccioniados?"
 
-#: js/MainScreenCenterPanel.js:580
+#: js/MainScreenCenterPanel.js:583
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:580
+#: js/MainScreenCenterPanel.js:583
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 

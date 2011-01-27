@@ -13,16 +13,13 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Frontend/Json.php:245
-#: js/Models.js:42
-#: js/CourseEditDialog.js:138
+#: Frontend/Json.php:245 js/Models.js:42 js/CourseEditDialog.js:138
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurzus"
 msgstr[1] "Kurzusok"
 
-#: Setup/setup.xml:4
-#: js/Courses.js:33
+#: Setup/setup.xml:4 js/Courses.js:33
 msgid "Courses"
 msgstr "Kurzusok"
 
@@ -38,13 +35,11 @@ msgstr "Név"
 msgid "Type"
 msgstr "Típus"
 
-#: js/CourseGridPanel.js:86
-#: js/CourseEditDialog.js:183
+#: js/CourseGridPanel.js:86 js/CourseEditDialog.js:183
 msgid "Internet Access"
 msgstr "Internet elérés"
 
-#: js/CourseGridPanel.js:93
-#: js/CourseEditDialog.js:189
+#: js/CourseGridPanel.js:93 js/CourseEditDialog.js:189
 msgid "Fileserver Access"
 msgstr "Fileszerver elérés"
 
@@ -96,8 +91,7 @@ msgstr "Kurzus tagok importálása"
 msgid "Course Name"
 msgstr "Kurzus név"
 
-#: js/CourseEditDialog.js:158
-#: js/CourseEditDialog.js:165
+#: js/CourseEditDialog.js:158 js/CourseEditDialog.js:165
 msgid "Course / School Type"
 msgstr "Kurzus / Iskola típus"
 
@@ -140,4 +134,3 @@ msgstr "Tanár"
 #: Controller/Course.php:117
 msgid "Teacher Account"
 msgstr "Tanár felhasználó"
-

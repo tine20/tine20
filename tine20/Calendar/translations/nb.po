@@ -179,57 +179,57 @@ msgstr "Uke"
 msgid "Month"
 msgstr "Måned"
 
-#: js/MainScreenCenterPanel.js:321
+#: js/MainScreenCenterPanel.js:324
 msgid "Set my response"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:372
+#: js/MainScreenCenterPanel.js:375
 msgid "Please Change Selection"
 msgstr "Vennligst Endre Valg"
 
-#: js/MainScreenCenterPanel.js:373
+#: js/MainScreenCenterPanel.js:376
 msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
 msgstr "Dine valg inneholder gjentagende hendelser. Gjentagende hendelser må slettes separat!"
 
-#: js/MainScreenCenterPanel.js:387
+#: js/MainScreenCenterPanel.js:390
 msgid "Confirm Deletion of Series"
 msgstr "Bekreft Sletting av Serie"
 
-#: js/MainScreenCenterPanel.js:388
+#: js/MainScreenCenterPanel.js:391
 msgid "Do you really want to delete all events of this recurring event series?"
 msgstr "Vil du virkelig slette alle hendelser av denne gjentagende hendelses serien?"
 
-#: js/MainScreenCenterPanel.js:401
+#: js/MainScreenCenterPanel.js:404
 msgid "Delete Event"
 msgstr "Slette Hendelse"
 
-#: js/MainScreenCenterPanel.js:405
+#: js/MainScreenCenterPanel.js:408
 msgid "Delete whole series"
 msgstr "Slett hele serien"
 
-#: js/MainScreenCenterPanel.js:406
+#: js/MainScreenCenterPanel.js:409
 msgid "Delete this and all future events"
 msgstr "Slett denne og alle framtidige hendelser"
 
-#: js/MainScreenCenterPanel.js:407
+#: js/MainScreenCenterPanel.js:410
 msgid "Delete this event only"
 msgstr "Slette kun denne hendelsen"
 
-#: js/MainScreenCenterPanel.js:408
+#: js/MainScreenCenterPanel.js:411
 msgid "Delete nothing"
 msgstr "Slett ingenting"
 
-#: js/MainScreenCenterPanel.js:457
+#: js/MainScreenCenterPanel.js:460
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Vil du virkelig slette denn hendelsen?"
 msgstr[1] "Vil du virkelig slette disse {0} hendelsene?"
 
-#: js/MainScreenCenterPanel.js:580
+#: js/MainScreenCenterPanel.js:583
 msgid "Could not Print"
 msgstr ""
 
-#: js/MainScreenCenterPanel.js:580
+#: js/MainScreenCenterPanel.js:583
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 

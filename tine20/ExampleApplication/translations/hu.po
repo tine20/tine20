@@ -18,33 +18,17 @@ msgstr ""
 msgid "%s's personal example records"
 msgstr "%s személyes példa rekordjai"
 
-#: js/Model.js:33
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] "példa rekord"
-msgstr[1] "példa rekordok"
-
-#: js/Model.js:37
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] "példa rekord lista"
-msgstr[1] "példa rekord listák"
-
-#: js/ExampleRecordEditDialog.js:89
-msgid "ExampleRecord"
-msgstr "PéldaRekord"
-
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
-msgid "Name"
-msgstr "Név"
-
-#: js/ExampleApplication.js:27
-msgid "Example Application"
-msgstr "Példa Alkalmazás"
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr "PéldaAlkalmazás"
 
 #: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
 msgstr "Gyors keresés"
+
+#: js/ExampleRecordGridPanel.js:105 js/ExampleRecordEditDialog.js:106
+msgid "Name"
+msgstr "Név"
 
 #: js/ExampleRecordGridPanel.js:111
 msgid "Title"
@@ -62,6 +46,22 @@ msgstr "Költség"
 msgid "Show closed"
 msgstr "Mutasd a lezártakat"
 
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
-msgstr "PéldaAlkalmazás"
+#: js/ExampleRecordEditDialog.js:89
+msgid "ExampleRecord"
+msgstr "PéldaRekord"
+
+#: js/ExampleApplication.js:27
+msgid "Example Application"
+msgstr "Példa Alkalmazás"
+
+#: js/Model.js:33
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] "példa rekord"
+msgstr[1] "példa rekordok"
+
+#: js/Model.js:37
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] "példa rekord lista"
+msgstr[1] "példa rekord listák"

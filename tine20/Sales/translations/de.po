@@ -12,6 +12,10 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Setup/setup.xml:243
+msgid "Shared Contracts"
+msgstr "Gemeinsame Verträge"
+
 #: Acl/Rights.php:104
 msgid "manage products"
 msgstr "Produkte verwalten"
@@ -20,22 +24,66 @@ msgstr "Produkte verwalten"
 msgid "add, edit and delete products"
 msgstr "Hinzufügen, Editieren und Löschen von Produkten"
 
-#: js/ContractEditDialog.js:97 js/ContractGridPanel.js:88
-msgid "Title"
-msgstr "Titel"
+#: js/ProductEditDialog.js:104 js/ProductGridPanel.js:125
+msgid "Name"
+msgstr "Name"
 
-#: js/ContractEditDialog.js:102 js/ProductGridPanel.js:128
-#: js/ProductEditDialog.js:126
+#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:129
+msgid "Price"
+msgstr "Preis"
+
+#: js/ProductEditDialog.js:117 js/ProductGridPanel.js:126
+msgid "Manufacturer"
+msgstr "Hersteller"
+
+#: js/ProductEditDialog.js:121 js/ProductGridPanel.js:127
+msgid "Category"
+msgstr "Kategorie"
+
+#: js/ProductEditDialog.js:125 js/ContractEditDialog.js:102
+#: js/ProductGridPanel.js:128
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/ContractEditDialog.js:103 js/ProductEditDialog.js:127
+#: js/ProductEditDialog.js:126 js/ContractEditDialog.js:103
 msgid "Enter description..."
 msgstr "Bitte geben Sie eine Beschreibung ein..."
 
-#: js/ContractGridPanel.js:62 js/Models.js:79
+#: js/Models.js:41
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Produkt"
+msgstr[1] "Produkte"
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "Vertragsliste"
+msgstr[1] "Vertragslisten"
+
+#: js/Models.js:79 js/ContractGridPanel.js:62
 msgid "Quick search"
 msgstr "Schnellsuche"
+
+#: js/Models.js:80
+msgid "Product name"
+msgstr "Produktname"
+
+#: js/Models.js:113
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Vertrag"
+msgstr[1] "Verträge"
+
+#: js/Models.js:117
+msgid "contracts list"
+msgid_plural "contracts lists"
+msgstr[0] "Vertragsliste"
+msgstr[1] "Vertragslisten"
+
+#: js/ContractEditDialog.js:97 js/ContractGridPanel.js:88
+msgid "Title"
+msgstr "Titel"
 
 #: js/ContractGridPanel.js:63
 msgid "Summary"
@@ -68,51 +116,3 @@ msgstr "Alle Verträge"
 #: js/ProductGridPanel.js:124
 msgid "Tags"
 msgstr "Tags"
-
-#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:105
-msgid "Name"
-msgstr "Name"
-
-#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:118
-msgid "Manufacturer"
-msgstr "Hersteller"
-
-#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:122
-msgid "Category"
-msgstr "Kategorie"
-
-#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:111
-msgid "Price"
-msgstr "Preis"
-
-#: js/Models.js:41
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Produkt"
-msgstr[1] "Produkte"
-
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Vertragsliste"
-msgstr[1] "Vertragslisten"
-
-#: js/Models.js:80
-msgid "Product name"
-msgstr "Produktname"
-
-#: js/Models.js:113
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Vertrag"
-msgstr[1] "Verträge"
-
-#: js/Models.js:117
-msgid "contracts list"
-msgid_plural "contracts lists"
-msgstr[0] "Vertragsliste"
-msgstr[1] "Vertragslisten"
-
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Gemeinsame Verträge"
