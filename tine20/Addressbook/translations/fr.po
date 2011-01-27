@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Addressbook\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2009-12-08 17:42+0100\n"
-"Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
+"PO-Revision-Date: 2010-12-24 11:12+0100\n"
+"Last-Translator: Etienne Quesselaire <etienne@arrakeen.net>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,7 +24,7 @@ msgstr "Contacts internes"
 
 #: Setup/setup.xml:716
 msgid "Mr"
-msgstr "Mr"
+msgstr "M"
 
 #: Setup/setup.xml:738
 msgid "Ms"
@@ -34,11 +34,11 @@ msgstr "Mme"
 #: js/ContactGridDetailsPanel.js:132 js/ContactGrid.js:120 js/Model.js:28
 #: js/Model.js:131
 msgid "Company"
-msgstr "Entreprise"
+msgstr "Société"
 
 #: Setup/Update/Release3.php:38 Setup/Initialize.php:113
 msgid "All contacts I have read grants for"
-msgstr ""
+msgstr "Tous les contacts auxquels j'ai accès"
 
 #: Setup/Initialize.php:118
 msgid "My company"
@@ -66,23 +66,23 @@ msgstr ""
 
 #: Preference.php:34
 msgid "All contacts"
-msgstr ""
+msgstr "Tous les contacts"
 
 #: Preference.php:71
 msgid "Default Addressbook"
-msgstr "Carnet d'adresses (défaut)"
+msgstr "Carnet d'adresses par défaut"
 
 #: Preference.php:72
 msgid "The default addressbook for new contacts"
-msgstr "Carnet d'adresses par défaut pour les nouveau contacts"
+msgstr "Carnet d'adresses par défaut pour les nouveaux contacts"
 
 #: Preference.php:75
 msgid "Default Favorite"
-msgstr ""
+msgstr "Favoris par défauts"
 
 #: Preference.php:76
 msgid "The default favorite which is loaded on addressbook startup"
-msgstr ""
+msgstr "Les favoris chargés par défaut au démarrage"
 
 #: Acl/Rights.php:99
 msgid "manage shared addressbooks"
@@ -90,23 +90,23 @@ msgstr "gérer les carnets d'adresse partagés"
 
 #: Acl/Rights.php:100
 msgid "Create new shared addressbook folders"
-msgstr "Créer un nouveau dossier de carnets d'adresses partagés"
+msgstr "Créer de nouveaux dossiers de carnets d'adresses partagés"
 
 #: Acl/Rights.php:103
 msgid "manage shared addressbook favorites"
-msgstr ""
+msgstr "gérer les favoris du carnet d'adresses partagé"
 
 #: Acl/Rights.php:104
 msgid "Create or update shared addressbook favorites"
-msgstr ""
+msgstr "Créer ou mettre à jour les favoris du carnet d'adresses partagé"
 
 #: js/SearchCombo.js:91
 msgid "Searching..."
-msgstr "Recherche..."
+msgstr "Recherche en cours..."
 
 #: js/ContactEditDialog.js:37 js/ContactEditDialog.js:44
 msgid "Map"
-msgstr ""
+msgstr "Carte"
 
 #: js/ContactEditDialog.js:67
 msgid "Personal Information"
@@ -160,7 +160,7 @@ msgstr "Suffixe"
 #: js/ContactEditDialog.js:170 js/ContactGrid.js:123 js/Model.js:32
 #: js/Model.js:135
 msgid "Job Role"
-msgstr "Rôle"
+msgstr "Fonction"
 
 #: js/ContactEditDialog.js:174 js/ContactGrid.js:124 js/Model.js:34
 #: Export/Pdf.php:77
@@ -211,7 +211,7 @@ msgstr "E-Mail (personnel)"
 #: js/ContactEditDialog.js:229 js/ContactGridDetailsPanel.js:145
 #: js/ContactGridDetailsPanel.js:169 js/ContactGrid.js:145 js/Model.js:61
 msgid "Web"
-msgstr "Web"
+msgstr "Site Internet"
 
 #: js/ContactEditDialog.js:263 js/Model.js:139 js/Model.js:140 js/Model.js:141
 msgid "Company Address"
@@ -261,11 +261,11 @@ msgstr "Saisir une description"
 
 #: js/ContactEditDialog.js:400
 msgid "Export as pdf"
-msgstr "Exporter en pdf"
+msgstr "Exporter en PDF"
 
 #: js/ContactEditDialog.js:425
 msgid "Either {0} or {1} must be given"
-msgstr "il faut renseigner soit {0} soit {1}"
+msgstr "{0} ou {1} doivent être renseignés"
 
 #: js/ContactGridDetailsPanel.js:63 js/Model.js:93
 msgid "Contacts"
@@ -273,7 +273,7 @@ msgstr "Contacts"
 
 #: js/ContactGridDetailsPanel.js:66
 msgid "Select contact"
-msgstr "Sélectionner"
+msgstr "Sélectionner un contact"
 
 #: js/ContactGridDetailsPanel.js:156
 msgid "Private"
@@ -309,27 +309,27 @@ msgstr "Code postal"
 
 #: js/ContactGrid.js:130
 msgid "Street (private)"
-msgstr "Rue (personnel)"
+msgstr "Rue (domicile)"
 
 #: js/ContactGrid.js:131
 msgid "City (private)"
-msgstr "Ville (personnel)"
+msgstr "Ville (domicile)"
 
 #: js/ContactGrid.js:132
 msgid "Region (private)"
-msgstr "Région (personnel)"
+msgstr "Région (domicile)"
 
 #: js/ContactGrid.js:133
 msgid "Postalcode (private)"
-msgstr "Code postal (personnel)"
+msgstr "Code postal (domicile)"
 
 #: js/ContactGrid.js:134
 msgid "Country (private)"
-msgstr "Pays (personnel)"
+msgstr "Pays (domicile)"
 
 #: js/ContactGrid.js:135 Export/Pdf.php:53
 msgid "Email"
-msgstr "Email"
+msgstr "Courriel"
 
 #: js/ContactGrid.js:139
 msgid "Car phone"
@@ -341,11 +341,11 @@ msgstr "Pager"
 
 #: js/ContactGrid.js:144
 msgid "Email (private)"
-msgstr "Email (personnel)"
+msgstr "Courriel (personnel)"
 
 #: js/ContactGrid.js:146
 msgid "URL (private)"
-msgstr "URL (personnel)"
+msgstr "Site Internet (personnel)"
 
 #: js/ContactGrid.js:147 js/Model.js:136
 msgid "Note"
@@ -361,39 +361,39 @@ msgstr "Localisation géographique"
 
 #: js/ContactGrid.js:160
 msgid "Export Contact"
-msgstr "Exporter"
+msgstr "Exporter ce contact"
 
 #: js/ContactGrid.js:168
 msgid "Export as PDF"
-msgstr "Exporter en PDF"
+msgstr "Exporter au format PDF"
 
 #: js/ContactGrid.js:175
 msgid "Export as CSV"
-msgstr "Exporter en CSV"
+msgstr "Exporter au format CSV"
 
 #: js/ContactGrid.js:182
 msgid "Export as ODS"
-msgstr ""
+msgstr "Exporter au format ODS"
 
 #: js/ContactGrid.js:189
 msgid "Export as XLS"
-msgstr ""
+msgstr "Exporter au format XLS"
 
 #: js/ContactGrid.js:196
 msgid "Export as ..."
-msgstr ""
+msgstr "Exporter..."
 
 #: js/ContactGrid.js:212
 msgid "Call contact"
-msgstr "Appeler"
+msgstr "Appeler ce contact"
 
 #: js/ContactGrid.js:222
 msgid "Compose email"
-msgstr "Écrire"
+msgstr "Écrire un courriel"
 
 #: js/ContactGrid.js:232
 msgid "Import contacts"
-msgstr ""
+msgstr "Importer des contacts"
 
 #: js/ContactGrid.js:321
 msgid "Work"
@@ -401,7 +401,7 @@ msgstr "Bureau"
 
 #: js/ContactGrid.js:330
 msgid "Home"
-msgstr "Maison"
+msgstr "Domicile"
 
 #: js/ContactGrid.js:339
 msgid "Cell"
@@ -413,14 +413,13 @@ msgstr "Portable personnel"
 
 #: js/ContactGrid.js:456
 msgid "Internal Contact"
-msgstr "Contact"
+msgstr "Contact internet"
 
 #: js/Addressbook.js:29 js/Model.js:97 js/Model.js:200
-#, fuzzy
 msgid "Addressbook"
 msgid_plural "Addressbooks"
 msgstr[0] "Carnet d'adresses"
-msgstr[1] "Carnet d'adresses"
+msgstr[1] "Carnets d'adresses"
 
 #: js/ContactFilterModel.js:37 js/Model.js:93 js/Model.js:124
 msgid "Contact"
@@ -430,59 +429,59 @@ msgstr[1] "Contacts"
 
 #: js/Model.js:35
 msgid "Street (Company Address)"
-msgstr ""
+msgstr "Rue (bureau)"
 
 #: js/Model.js:36
 msgid "Street 2 (Company Address)"
-msgstr ""
+msgstr "Rue 2 (bureau)"
 
 #: js/Model.js:37
 msgid "City (Company Address)"
-msgstr ""
+msgstr "Ville (bureau)"
 
 #: js/Model.js:38
 msgid "Region (Company Address)"
-msgstr ""
+msgstr "Région (bureau)"
 
 #: js/Model.js:39
 msgid "Postal Code (Company Address)"
-msgstr ""
+msgstr "Code postal (bureau)"
 
 #: js/Model.js:40
 msgid "Country (Company Address)"
-msgstr ""
+msgstr "Pays (bureau)"
 
 #: js/Model.js:42
 msgid "Street (Private Address)"
-msgstr ""
+msgstr "Rue (domicile)"
 
 #: js/Model.js:43
 msgid "Street 2 (Private Address)"
-msgstr ""
+msgstr "Rue 2 (domicile)"
 
 #: js/Model.js:44
 msgid "City (Private Address)"
-msgstr ""
+msgstr "Ville (domicile)"
 
 #: js/Model.js:45
 msgid "Region (Private Address)"
-msgstr ""
+msgstr "Région (domicile)"
 
 #: js/Model.js:46
 msgid "Postal Code (Private Address)"
-msgstr ""
+msgstr "Code postal (domicile)"
 
 #: js/Model.js:47
 msgid "Country (Private Address)"
-msgstr ""
+msgstr "Pays (domicile)"
 
 #: js/Model.js:62
 msgid "Web (private)"
-msgstr ""
+msgstr "Site Internet (personnel)"
 
 #: js/Model.js:97 js/Model.js:200
 msgid "Addressbooks"
-msgstr ""
+msgstr "Carnets d'adresses"
 
 #: js/Model.js:124
 msgid "User Account"
@@ -494,11 +493,11 @@ msgstr "Recherche rapide"
 
 #: js/Model.js:146
 msgid "Last modified"
-msgstr ""
+msgstr "Date d'édition"
 
 #: js/Model.js:147
 msgid "Last modifier"
-msgstr ""
+msgstr "Éditeur"
 
 #: js/Model.js:148
 msgid "Creation Time"
@@ -506,17 +505,17 @@ msgstr "Date de création"
 
 #: js/Model.js:149
 msgid "Creator"
-msgstr ""
+msgstr "Créateur"
 
 #: js/Model.js:196
 msgid "List"
 msgid_plural "Lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Liste"
+msgstr[1] "Listes"
 
 #: js/Model.js:196
 msgid "Lists"
-msgstr ""
+msgstr "Listes"
 
 #: Export/Pdf.php:38
 msgid "Business Contact Data"
@@ -532,7 +531,7 @@ msgstr "Adresse professionnelle"
 
 #: Export/Pdf.php:56
 msgid "Telephone Work"
-msgstr "Téléphone (bureau)"
+msgstr "Téléphone (professionnel)"
 
 #: Export/Pdf.php:59
 msgid "Telephone Cellphone"
@@ -552,7 +551,7 @@ msgstr "Pager"
 
 #: Export/Pdf.php:71
 msgid "URL"
-msgstr "URL"
+msgstr "Site Internet"
 
 #: Export/Pdf.php:74
 msgid "Role"
@@ -572,11 +571,11 @@ msgstr "Informations personnelles du contact"
 
 #: Export/Pdf.php:97
 msgid "Email Home"
-msgstr "Email personnel"
+msgstr "Courriel personnel"
 
 #: Export/Pdf.php:100
 msgid "Telephone Home"
-msgstr "Téléphone personnel"
+msgstr "Téléphone domicile"
 
 #: Export/Pdf.php:103
 msgid "Telephone Cellphone Private"
@@ -588,7 +587,7 @@ msgstr "Fax personnel"
 
 #: Export/Pdf.php:109
 msgid "URL Home"
-msgstr "Site web"
+msgstr "Site Internet"
 
 #: Export/Pdf.php:113
 msgid "Other Data"

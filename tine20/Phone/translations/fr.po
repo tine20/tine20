@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-12-07 16:00+0100\n"
-"Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
+"PO-Revision-Date: 2011-01-22 16:32+0100\n"
+"Last-Translator: Etienne Quesselaire <etienne@arrakeen.net>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,14 +14,13 @@ msgstr ""
 
 #: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
 msgid "Edit phone settings"
-msgstr "Éditer les paramètres de téléphone"
+msgstr "Éditer les paramètres du téléphone"
 
 #: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
-#, fuzzy
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Téléphone"
-msgstr[1] "Téléphone"
+msgstr[1] "Téléphones"
 
 #: js/Phone.js:69
 msgid "Phones"
@@ -45,11 +44,11 @@ msgstr "Composer"
 
 #: js/Phone.js:324
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 #: js/Phone.js:325
 msgid "Not possible to dial."
-msgstr ""
+msgstr "Numérotation impossible."
 
 #: js/Phone.js:468
 msgid "Dial number"
@@ -130,8 +129,8 @@ msgstr "ID d'appel"
 #: js/Models.js:74
 msgid "phones list"
 msgid_plural "phones lists"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Liste de téléphones"
+msgstr[1] "Listes de téléphones"
 
 #~ msgid "Dial phone number"
 #~ msgstr "Composer un numéro"

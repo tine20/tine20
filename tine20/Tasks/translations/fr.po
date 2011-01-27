@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tasks\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-12-08 19:21+0100\n"
-"Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
+"PO-Revision-Date: 2011-01-22 16:48+0100\n"
+"Last-Translator: Etienne Quesselaire <etienne@arrakeen.net>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -38,7 +38,7 @@ msgstr "ANNULE"
 
 #: Setup/Update/Release3.php:66 Setup/Initialize.php:37
 msgid "All tasks of my taskslists"
-msgstr ""
+msgstr "Toutes les tâches de ma liste"
 
 #: Setup/Initialize.php:46
 msgid "My open tasks"
@@ -70,23 +70,23 @@ msgstr ""
 
 #: Preference.php:29
 msgid "All my tasks"
-msgstr ""
+msgstr "Toutes mes tâches"
 
 #: Preference.php:71
 msgid "Default Favorite"
-msgstr ""
+msgstr "Favoris par défaut"
 
 #: Preference.php:72
 msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
+msgstr "Le favori par défaut qui est chargé au démarrage des Tâches"
 
 #: Preference.php:75
 msgid "Default Task List"
-msgstr ""
+msgstr "Liste par défaut des Tâches"
 
 #: Preference.php:76
 msgid "The default task list to create new tasks in."
-msgstr ""
+msgstr "La liste de tâches par défaut où créer les nouvelles tâches"
 
 #: Acl/Rights.php:90
 msgid "manage shared task lists"
@@ -98,11 +98,11 @@ msgstr "Ajouter une liste de tâches partagées"
 
 #: Acl/Rights.php:94
 msgid "manage shared tasks favorites"
-msgstr ""
+msgstr "gérer les favoris des tâches partagées"
 
 #: Acl/Rights.php:95
 msgid "Create or update shared tasks favorites"
-msgstr ""
+msgstr "Créer ou mettre a jour les favoris des tâches partagées"
 
 #: js/Status.js:33 js/GridPanel.js:157 js/TaskEditDialog.js:208
 #: Model/Task.php:187
@@ -121,7 +121,7 @@ msgstr "Marqueur"
 
 #: js/GridPanel.js:111 Model/Task.php:195
 msgid "Lead"
-msgstr ""
+msgstr "Propsect"
 
 #: js/GridPanel.js:114 js/TaskEditDialog.js:180 js/Tasks.js:133
 msgid "Summary"
@@ -161,7 +161,7 @@ msgstr "Afficher terminées"
 
 #: js/TaskEditDialog.js:141
 msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
+msgstr "Vous devez indiquer une date prévue, car l'alerte est activée !"
 
 #: js/TaskEditDialog.js:185
 msgid "Due date"
@@ -233,11 +233,11 @@ msgstr "Description"
 
 #: Model/Task.php:201
 msgid "Telephone"
-msgstr ""
+msgstr "Téléphone"
 
 #: Model/Task.php:202
 msgid "Email"
-msgstr ""
+msgstr "Courriel"
 
 #: Controller/Task.php:166
 msgid "Notification for Task "

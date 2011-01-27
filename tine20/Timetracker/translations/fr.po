@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Timetracker\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2009-12-08 19:39+0100\n"
-"Last-Translator: Rémi Peltier <rpeltier@agglo-clermont.fr>\n"
+"PO-Revision-Date: 2011-01-22 17:00+0100\n"
+"Last-Translator: Etienne Quesselaire <etienne@arrakeen.net>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -14,7 +14,7 @@ msgstr ""
 
 #: Setup/setup.xml:4
 msgid "Timetracker"
-msgstr ""
+msgstr "Planificateur"
 
 #: Setup/setup.xml:80 js/TimeaccountSelect.js:236
 #: js/TimeaccountEditDialog.js:126
@@ -53,15 +53,15 @@ msgstr ""
 
 #: Preference.php:65
 msgid "Timesheets ODS export configuration"
-msgstr ""
+msgstr "Configuration de l'exportation des feuilles de temps au format ODS"
 
 #: Preference.php:66
 msgid "Use this configuration for the timesheet ODS export."
-msgstr ""
+msgstr "Utiliser cette configuration pour l'exportation des feuilles de temps au format ODS. "
 
 #: Preference.php:117
 msgid "default"
-msgstr ""
+msgstr "défaut"
 
 #: Acl/Rights.php:106
 msgid "Manage timeaccounts"
@@ -81,7 +81,7 @@ msgstr ""
 
 #: Acl/Rights.php:115
 msgid "Create or update shared timetracker favorites"
-msgstr ""
+msgstr "Créer ou mettre à jour les favoris des planifications partagées"
 
 #: js/TimesheetGridPanel.js:119
 msgid "Update {0} records"
@@ -203,7 +203,7 @@ msgstr "Exporter en CSV"
 
 #: js/TimesheetGridPanel.js:457
 msgid "Export as ..."
-msgstr ""
+msgstr "Exporter au format..."
 
 #: js/TimesheetGridPanel.js:500
 msgid "Mass Update"
@@ -253,15 +253,15 @@ msgstr "Acquitté"
 
 #: js/TimesheetEditDialog.js:265
 msgid "Failed"
-msgstr ""
+msgstr "Échec"
 
 #: js/TimesheetEditDialog.js:266
 msgid "Could not save {0}."
-msgstr ""
+msgstr "Impossible de sauver {0}."
 
 #: js/TimesheetEditDialog.js:267
 msgid "Booking deadline for this Timeaccount has been exceeded."
-msgstr ""
+msgstr "La date limite de réservation pour ce compte a été dépassée."
 
 #: js/TimeaccountSelect.js:73 js/TimeaccountEditDialog.js:116
 msgid "closed"
@@ -356,15 +356,15 @@ msgstr "Facturé"
 
 #: js/TimeaccountEditDialog.js:137
 msgid "Booking deadline"
-msgstr ""
+msgstr "Date limite de réservation"
 
 #: js/TimeaccountEditDialog.js:145
 msgid "none"
-msgstr ""
+msgstr "aucun"
 
 #: js/TimeaccountEditDialog.js:146
 msgid "last week"
-msgstr ""
+msgstr "semaine dernière"
 
 #: js/TimeaccountEditDialog.js:150
 msgid "Timesheets are billable"
@@ -385,7 +385,7 @@ msgstr "Réserver tout"
 
 #: js/TimeaccountEditDialog.js:225
 msgid "The grant to add Timesheets to this Timeaccount"
-msgstr ""
+msgstr "Le droit d'ajouter des feuilles de temps à ce compte"
 
 #: js/TimeaccountEditDialog.js:229
 msgid "View All"
@@ -393,7 +393,7 @@ msgstr "Voir tout"
 
 #: js/TimeaccountEditDialog.js:230
 msgid "The grant to view Timesheets of other users"
-msgstr ""
+msgstr "Le droit de voir les feuilles de temps des autres utilisateurs"
 
 #: js/TimeaccountEditDialog.js:235
 msgid "Book All"
@@ -401,7 +401,7 @@ msgstr "Réserver tout"
 
 #: js/TimeaccountEditDialog.js:236
 msgid "The grant to add Timesheets for other users"
-msgstr ""
+msgstr "Le droit d'ajouter des feuilles de temps pour les autres utilisateurs"
 
 #: js/TimeaccountEditDialog.js:241
 msgid "Manage Clearing"
@@ -409,11 +409,11 @@ msgstr "Gérer les acquittements"
 
 #: js/TimeaccountEditDialog.js:242
 msgid "The grant to manage clearing of Timesheets"
-msgstr ""
+msgstr "Le droit de gérer l'effacement des feuilles de temps"
 
 #: js/TimeaccountEditDialog.js:248
 msgid "The grant to export Timesheets of Timeaccount"
-msgstr ""
+msgstr "Le droit d'exporter les feuilles de temps d'un compte"
 
 #: js/TimeaccountEditDialog.js:253
 msgid "Manage All"
@@ -421,7 +421,7 @@ msgstr "Gérer tout"
 
 #: js/TimeaccountEditDialog.js:254
 msgid "Includes all other grants"
-msgstr ""
+msgstr "Inclure tous les autres droits"
 
 #: js/TimeaccountEditDialog.js:262
 msgid "Permissions"
@@ -457,3 +457,6 @@ msgstr "Permissions"
 #, fuzzy
 #~ msgid "Filter"
 #~ msgstr "Supprimer un filtre"
+
+#~ msgid "manage shared timetracker favorites"
+#~ msgstr "gérer les favoris des planifications partagées"
