@@ -21,63 +21,63 @@ msgstr ""
 msgid "unknown"
 msgstr "неизвестно"
 
-#: Frontend/Http.php:565 js/ExceptionHandler.js:127
+#: Frontend/Http.php:564 js/ExceptionHandler.js:130
 msgid "Authorisation Required"
 msgstr "Необходима регистрация"
 
-#: Frontend/Http.php:566
+#: Frontend/Http.php:565
 msgid "Your session is not valid. You need to login again."
 msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
 
-#: Frontend/Http.php:592 js/ExceptionDialog.js:51
+#: Frontend/Http.php:591 js/ExceptionDialog.js:51
 msgid "Abnormal End"
 msgstr "Неправильное завершение"
 
-#: Frontend/Http.php:593 js/ExceptionDialog.js:76
+#: Frontend/Http.php:592 js/ExceptionDialog.js:76
 msgid "An error occurred, the program ended abnormal."
 msgstr "Произошла ошибка, программа завершилась неправильно."
 
-#: Preference/Abstract.php:461
+#: Preference/Abstract.php:476
 msgid "default"
 msgstr ""
 
-#: Setup/setup.xml:3012
+#: Setup/setup.xml:3036
 msgid "note"
 msgstr "заметка"
 
-#: Setup/setup.xml:3017
+#: Setup/setup.xml:3041
 msgid "default note type"
 msgstr "тип заметки по умолчанию"
 
-#: Setup/setup.xml:3043
+#: Setup/setup.xml:3067
 msgid "telephone"
 msgstr "телефон"
 
-#: Setup/setup.xml:3048
+#: Setup/setup.xml:3072
 msgid "telephone call"
 msgstr "телефонный звонок"
 
-#: Setup/setup.xml:3074
+#: Setup/setup.xml:3098
 msgid "email"
 msgstr "электронная почта"
 
-#: Setup/setup.xml:3079
+#: Setup/setup.xml:3103
 msgid "email contact"
 msgstr "контакт электронной почты"
 
-#: Setup/setup.xml:3105
+#: Setup/setup.xml:3129
 msgid "created"
 msgstr "создано"
 
-#: Setup/setup.xml:3110
+#: Setup/setup.xml:3134
 msgid "record created"
 msgstr "запись создана"
 
-#: Setup/setup.xml:3136
+#: Setup/setup.xml:3160
 msgid "changed"
 msgstr "изменено"
 
-#: Setup/setup.xml:3141
+#: Setup/setup.xml:3165
 msgid "record changed"
 msgstr "запись изменена"
 
@@ -342,7 +342,7 @@ msgstr ""
 msgid "Search for groups ..."
 msgstr "Поиск..."
 
-#: js/widgets/account/PickerGridPanel.js:254 js/Models.js:400
+#: js/widgets/account/PickerGridPanel.js:254 js/Models.js:406
 msgid "Name"
 msgstr "Имя"
 
@@ -395,7 +395,7 @@ msgstr "Введите новое примечание:"
 #: js/widgets/dialog/PreferencesDialog.js:118
 #: js/widgets/dialog/MultiOptionsDialog.js:109 js/widgets/EditRecord.js:179
 #: js/widgets/container/ContainerSelect.js:452
-#: js/widgets/tags/TagsMassAttachAction.js:90 js/ux/form/LayerCombo.js:194
+#: js/widgets/tags/TagsMassAttachAction.js:90 js/ux/form/LayerCombo.js:195
 #: js/PasswordChangeDialog.js:61 js/ExceptionDialog.js:59
 msgid "Cancel"
 msgstr "Отмена"
@@ -404,7 +404,7 @@ msgstr "Отмена"
 #: js/widgets/dialog/PreferencesDialog.js:110
 #: js/widgets/dialog/MultiOptionsDialog.js:102 js/widgets/EditRecord.js:158
 #: js/widgets/container/ContainerSelect.js:461
-#: js/widgets/tags/TagsMassAttachAction.js:96 js/ux/form/LayerCombo.js:199
+#: js/widgets/tags/TagsMassAttachAction.js:96 js/ux/form/LayerCombo.js:188
 #: js/PasswordChangeDialog.js:67
 msgid "Ok"
 msgstr "Ок"
@@ -580,13 +580,13 @@ msgstr ""
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/PreferencesDialog.js:246
 #: js/widgets/dialog/PreferencesDialog.js:275
-#: js/widgets/dialog/ExportDialog.js:131 js/LoginPanel.js:371
+#: js/widgets/dialog/ExportDialog.js:141 js/LoginPanel.js:371
 msgid "Errors"
 msgstr "Ошибки"
 
 #: js/widgets/dialog/EditDialog.js:473
 #: js/widgets/dialog/CredentialsDialog.js:129
-#: js/widgets/dialog/ImportDialog.js:194 js/widgets/dialog/ExportDialog.js:131
+#: js/widgets/dialog/ImportDialog.js:194 js/widgets/dialog/ExportDialog.js:141
 #: js/LoginPanel.js:371
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте отмеченные ошибки."
@@ -709,7 +709,7 @@ msgid "You need to select an option!"
 msgstr ""
 
 #: js/widgets/dialog/ExportDialog.js:47
-#: js/widgets/container/GrantsDialog.js:112 js/Models.js:310
+#: js/widgets/container/GrantsDialog.js:112 js/Models.js:315
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] ""
@@ -720,11 +720,11 @@ msgstr[2] ""
 msgid "Export {0} {1}"
 msgstr ""
 
-#: js/widgets/dialog/ExportDialog.js:93
+#: js/widgets/dialog/ExportDialog.js:102
 msgid "Export definition"
 msgstr ""
 
-#: js/widgets/dialog/ExportDialog.js:102
+#: js/widgets/dialog/ExportDialog.js:111
 msgid "Select Export Definition ..."
 msgstr ""
 
@@ -944,159 +944,159 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/widgets/grid/FilterModel.js:155
+#: js/widgets/grid/FilterModel.js:165
 msgid "contains"
 msgstr "содержит"
 
-#: js/widgets/grid/FilterModel.js:156 js/widgets/container/FilterModel.js:132
+#: js/widgets/grid/FilterModel.js:166 js/widgets/container/FilterModel.js:132
 #: js/widgets/container/FilterModel.js:136
 msgid "is equal to"
 msgstr "равно"
 
-#: js/widgets/grid/FilterModel.js:157
+#: js/widgets/grid/FilterModel.js:167
 msgid "is greater than"
 msgstr "больше чем"
 
-#: js/widgets/grid/FilterModel.js:158
+#: js/widgets/grid/FilterModel.js:168
 msgid "is less than"
 msgstr "меньше чем"
 
-#: js/widgets/grid/FilterModel.js:159
+#: js/widgets/grid/FilterModel.js:169
 msgid "is not"
 msgstr "не"
 
-#: js/widgets/grid/FilterModel.js:160
+#: js/widgets/grid/FilterModel.js:170
 #, fuzzy
 msgid "one of"
 msgstr "Нет"
 
-#: js/widgets/grid/FilterModel.js:161
+#: js/widgets/grid/FilterModel.js:171
 msgid "none of"
 msgstr ""
 
-#: js/widgets/grid/FilterModel.js:162
+#: js/widgets/grid/FilterModel.js:172
 msgid "is before"
 msgstr "перед"
 
-#: js/widgets/grid/FilterModel.js:163
+#: js/widgets/grid/FilterModel.js:173
 msgid "is after"
 msgstr "после"
 
-#: js/widgets/grid/FilterModel.js:164
+#: js/widgets/grid/FilterModel.js:174
 msgid "is within"
 msgstr "в"
 
-#: js/widgets/grid/FilterModel.js:165
+#: js/widgets/grid/FilterModel.js:175
 #, fuzzy
 msgid "is in week no."
 msgstr "эта неделя"
 
-#: js/widgets/grid/FilterModel.js:166
+#: js/widgets/grid/FilterModel.js:176
 msgid "starts with"
 msgstr "начинается с"
 
-#: js/widgets/grid/FilterModel.js:167
+#: js/widgets/grid/FilterModel.js:177
 msgid "ends with"
 msgstr "заканчивается на"
 
-#: js/widgets/grid/FilterModel.js:208
+#: js/widgets/grid/FilterModel.js:218
 msgid "select a operator"
 msgstr "выберите оператор"
 
-#: js/widgets/grid/FilterModel.js:325
+#: js/widgets/grid/FilterModel.js:335
 #, fuzzy
 msgid "Search Account ..."
 msgstr "Поиск..."
 
-#: js/widgets/grid/FilterModel.js:448
+#: js/widgets/grid/FilterModel.js:458
 msgid "today"
 msgstr "сегодня"
 
-#: js/widgets/grid/FilterModel.js:449
+#: js/widgets/grid/FilterModel.js:459
 msgid "yesterday"
 msgstr "вчера"
 
-#: js/widgets/grid/FilterModel.js:450
+#: js/widgets/grid/FilterModel.js:460
 msgid "this week"
 msgstr "эта неделя"
 
-#: js/widgets/grid/FilterModel.js:451
+#: js/widgets/grid/FilterModel.js:461
 msgid "last week"
 msgstr "последняя неделя"
 
-#: js/widgets/grid/FilterModel.js:452
+#: js/widgets/grid/FilterModel.js:462
 msgid "the week before last"
 msgstr "предпоследняя неделя"
 
-#: js/widgets/grid/FilterModel.js:453
+#: js/widgets/grid/FilterModel.js:463
 msgid "this month"
 msgstr "этот месяц"
 
-#: js/widgets/grid/FilterModel.js:454
+#: js/widgets/grid/FilterModel.js:464
 msgid "last month"
 msgstr "последний месяц"
 
-#: js/widgets/grid/FilterModel.js:455
+#: js/widgets/grid/FilterModel.js:465
 msgid "this quarter"
 msgstr "этот квартал"
 
-#: js/widgets/grid/FilterModel.js:456
+#: js/widgets/grid/FilterModel.js:466
 msgid "last quarter"
 msgstr "последний квартал"
 
-#: js/widgets/grid/FilterModel.js:457
+#: js/widgets/grid/FilterModel.js:467
 msgid "this year"
 msgstr "этот год"
 
-#: js/widgets/grid/FilterModel.js:458
+#: js/widgets/grid/FilterModel.js:468
 msgid "last year"
 msgstr "прошлый год"
 
-#: js/widgets/grid/FilterModel.js:462
+#: js/widgets/grid/FilterModel.js:472
 msgid "tomorrow"
 msgstr "завтра"
 
-#: js/widgets/grid/FilterModel.js:463
+#: js/widgets/grid/FilterModel.js:473
 msgid "next week"
 msgstr "следующая неделя"
 
-#: js/widgets/grid/FilterModel.js:464
+#: js/widgets/grid/FilterModel.js:474
 msgid "next month"
 msgstr "следующий месяц"
 
-#: js/widgets/grid/FilterModel.js:465
+#: js/widgets/grid/FilterModel.js:475
 msgid "next quarter"
 msgstr "следующий квартал"
 
-#: js/widgets/grid/FilterModel.js:466
+#: js/widgets/grid/FilterModel.js:476
 msgid "next year"
 msgstr "следующий год"
 
-#: js/widgets/grid/FileUploadGrid.js:104 js/ux/form/ImageField.js:159
+#: js/widgets/grid/FileUploadGrid.js:92 js/ux/form/ImageField.js:159
 msgid "Upload Failed"
 msgstr "Загрузка не удалась"
 
-#: js/widgets/grid/FileUploadGrid.js:105
+#: js/widgets/grid/FileUploadGrid.js:93
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:131
+#: js/widgets/grid/FileUploadGrid.js:119
 msgid "Remove file"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:167
+#: js/widgets/grid/FileUploadGrid.js:159
 msgid "Add file"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:206
+#: js/widgets/grid/FileUploadGrid.js:198
 msgid "name"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:221
+#: js/widgets/grid/FileUploadGrid.js:213
 msgid "size"
 msgstr ""
 
-#: js/widgets/grid/FileUploadGrid.js:228
+#: js/widgets/grid/FileUploadGrid.js:220
 msgid "type"
 msgstr ""
 
@@ -1560,32 +1560,32 @@ msgstr "Сбой"
 msgid "The new passwords mismatch, please correct them."
 msgstr "Новые пароли не совпадают, пожалуйста, исправьте их."
 
-#: js/Models.js:74
+#: js/Models.js:78
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:74
+#: js/Models.js:78
 msgid "Groups"
 msgstr ""
 
-#: js/Models.js:284
+#: js/Models.js:288
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:343
+#: js/Models.js:349
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:370
+#: js/Models.js:376
 #, fuzzy
 msgid "Relation"
 msgid_plural "Relations"
@@ -1593,21 +1593,21 @@ msgstr[0] "Приложения"
 msgstr[1] "Приложения"
 msgstr[2] "Приложения"
 
-#: js/Models.js:392
+#: js/Models.js:398
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:419
+#: js/Models.js:425
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/Models.js:419
+#: js/Models.js:425
 msgid "Configs"
 msgstr ""
 
@@ -1717,68 +1717,68 @@ msgstr "Ваше имя пользователя и/или Ваш пароль �
 msgid "Please enter your login data"
 msgstr "Пожалуйста, введите свои данные входа в систему"
 
-#: js/ExceptionHandler.js:128
+#: js/ExceptionHandler.js:131
 msgid "Your session timed out. You need to login again."
 msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
 
-#: js/ExceptionHandler.js:145
+#: js/ExceptionHandler.js:148
 msgid "Insufficient Rights"
 msgstr "Недостаточно прав"
 
-#: js/ExceptionHandler.js:146
+#: js/ExceptionHandler.js:149
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "К сожалению Вам не позволяется выполнить это действие"
 
-#: js/ExceptionHandler.js:155
+#: js/ExceptionHandler.js:158
 msgid "Not Found"
 msgstr "Не найден"
 
-#: js/ExceptionHandler.js:156
+#: js/ExceptionHandler.js:159
 #, fuzzy
 msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
 msgstr "К сожалению, ваш запрос не может быть завершён, поскольку необходимые данные не могут быть найдены. В большинстве случаев это означает, что кто-то уже удалил данные. Просьба обновить ваш текущий вид."
 
-#: js/ExceptionHandler.js:165
+#: js/ExceptionHandler.js:168
 msgid "Concurrent Updates"
 msgstr "Параллельные обновления"
 
-#: js/ExceptionHandler.js:166
+#: js/ExceptionHandler.js:169
 msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
 msgstr "Вовремя того, как вы изменяли  эту запись, она была изменена кем-то другим. Вам нужно обновить и сделать изменения снова."
 
-#: js/ExceptionHandler.js:176
+#: js/ExceptionHandler.js:179
 msgid "Service Unavailable"
 msgstr ""
 
-#: js/ExceptionHandler.js:177
+#: js/ExceptionHandler.js:180
 msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:184
+#: js/ExceptionHandler.js:187
 msgid "Connection lost, please check your network!"
 msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
 
-#: js/ExceptionHandler.js:190
+#: js/ExceptionHandler.js:193
 msgid "Timeout"
 msgstr ""
 
-#: js/ExceptionHandler.js:191
+#: js/ExceptionHandler.js:194
 msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:200
+#: js/ExceptionHandler.js:203
 msgid "No Response"
 msgstr ""
 
-#: js/ExceptionHandler.js:201
+#: js/ExceptionHandler.js:204
 msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:210
+#: js/ExceptionHandler.js:213
 msgid "No Role Memberships"
 msgstr ""
 
-#: js/ExceptionHandler.js:211
+#: js/ExceptionHandler.js:214
 msgid "Your user account has no role memberships. Please contact your administrator."
 msgstr ""
 
@@ -1884,11 +1884,11 @@ msgstr "Действия"
 msgid "Data"
 msgstr ""
 
-#: views/update.php:45
+#: views/update.php:24
 msgid "Tine 2.0 needs to be updated or is not installed yet."
 msgstr ""
 
-#: views/update.php:45
+#: views/update.php:25
 msgid "Please wait or contact your administrator"
 msgstr ""
 

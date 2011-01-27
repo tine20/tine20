@@ -17,19 +17,19 @@ msgstr ""
 msgid "%s's personal addressbook"
 msgstr "%sの個人用アドレス帳"
 
-#: Setup/setup.xml:694
+#: Setup/setup.xml:690
 msgid "Internal Contacts"
 msgstr "内部コンタクト"
 
-#: Setup/setup.xml:720
+#: Setup/setup.xml:716
 msgid "Mr"
 msgstr "ミスター"
 
-#: Setup/setup.xml:742
+#: Setup/setup.xml:738
 msgid "Ms"
 msgstr "ミス"
 
-#: Setup/setup.xml:764 js/ContactEditDialog.js:137 js/ContactEditDialog.js:424
+#: Setup/setup.xml:760 js/ContactEditDialog.js:137 js/ContactEditDialog.js:425
 #: js/ContactGridDetailsPanel.js:132 js/ContactGrid.js:120 js/Model.js:28
 #: js/Model.js:131
 msgid "Company"
@@ -130,7 +130,7 @@ msgstr "姓"
 msgid "Middle Name"
 msgstr "ミドルネーム"
 
-#: js/ContactEditDialog.js:128 js/ContactEditDialog.js:424
+#: js/ContactEditDialog.js:128 js/ContactEditDialog.js:425
 #: js/ContactGrid.js:116 js/Model.js:20 js/Model.js:130
 msgid "Last Name"
 msgstr "名"
@@ -214,58 +214,58 @@ msgstr "Eメール (プライベート)"
 msgid "Web"
 msgstr "Web"
 
-#: js/ContactEditDialog.js:262 js/Model.js:139 js/Model.js:140 js/Model.js:141
+#: js/ContactEditDialog.js:263 js/Model.js:139 js/Model.js:140 js/Model.js:141
 msgid "Company Address"
 msgstr "会社の住所"
 
-#: js/ContactEditDialog.js:265 js/ContactEditDialog.js:294
+#: js/ContactEditDialog.js:266 js/ContactEditDialog.js:295
 #: js/ContactGrid.js:125 js/Model.js:139 js/Model.js:142
 msgid "Street"
 msgstr "通り"
 
-#: js/ContactEditDialog.js:269 js/ContactEditDialog.js:298
+#: js/ContactEditDialog.js:270 js/ContactEditDialog.js:299
 msgid "Street 2"
 msgstr "通り（２）"
 
-#: js/ContactEditDialog.js:273 js/ContactEditDialog.js:302
+#: js/ContactEditDialog.js:274 js/ContactEditDialog.js:303
 #: js/ContactGrid.js:127
 msgid "Region"
 msgstr "リージョン"
 
-#: js/ContactEditDialog.js:277 js/ContactEditDialog.js:306 js/Model.js:140
+#: js/ContactEditDialog.js:278 js/ContactEditDialog.js:307 js/Model.js:140
 #: js/Model.js:143
 msgid "Postal Code"
 msgstr "郵便番号"
 
-#: js/ContactEditDialog.js:281 js/ContactEditDialog.js:310
+#: js/ContactEditDialog.js:282 js/ContactEditDialog.js:311
 #: js/ContactGrid.js:126 js/Model.js:141 js/Model.js:144
 msgid "City"
 msgstr "市"
 
-#: js/ContactEditDialog.js:286 js/ContactEditDialog.js:315
+#: js/ContactEditDialog.js:287 js/ContactEditDialog.js:316
 #: js/ContactGrid.js:129
 msgid "Country"
 msgstr "国"
 
-#: js/ContactEditDialog.js:291 js/Model.js:142 js/Model.js:143 js/Model.js:144
+#: js/ContactEditDialog.js:292 js/Model.js:142 js/Model.js:143 js/Model.js:144
 #: Export/Pdf.php:89
 msgid "Private Address"
 msgstr "自宅の住所"
 
-#: js/ContactEditDialog.js:336 js/Model.js:65
+#: js/ContactEditDialog.js:337 js/Model.js:65
 msgid "Description"
 msgstr "説明"
 
-#: js/ContactEditDialog.js:350
+#: js/ContactEditDialog.js:351
 msgid "Enter description"
 msgstr "説明を入力してください"
 
-#: js/ContactEditDialog.js:399
+#: js/ContactEditDialog.js:400
 #, fuzzy
 msgid "Export as pdf"
 msgstr "PDFにエキスポートする"
 
-#: js/ContactEditDialog.js:424
+#: js/ContactEditDialog.js:425
 msgid "Either {0} or {1} must be given"
 msgstr ""
 
@@ -367,56 +367,56 @@ msgstr "ジオ"
 msgid "Export Contact"
 msgstr "コンタクト"
 
-#: js/ContactGrid.js:169
+#: js/ContactGrid.js:168
 msgid "Export as PDF"
 msgstr "PDFとしてエクスポート"
 
-#: js/ContactGrid.js:176
+#: js/ContactGrid.js:175
 msgid "Export as CSV"
 msgstr "CSVとしてエクスポート"
 
-#: js/ContactGrid.js:183
+#: js/ContactGrid.js:182
 msgid "Export as ODS"
 msgstr ""
 
-#: js/ContactGrid.js:190
+#: js/ContactGrid.js:189
 msgid "Export as XLS"
 msgstr ""
 
-#: js/ContactGrid.js:197
+#: js/ContactGrid.js:196
 msgid "Export as ..."
 msgstr ""
 
-#: js/ContactGrid.js:213
+#: js/ContactGrid.js:212
 #, fuzzy
 msgid "Call contact"
 msgstr "コールコンタクト"
 
-#: js/ContactGrid.js:223
+#: js/ContactGrid.js:222
 msgid "Compose email"
 msgstr ""
 
-#: js/ContactGrid.js:233
+#: js/ContactGrid.js:232
 msgid "Import contacts"
 msgstr ""
 
-#: js/ContactGrid.js:322
+#: js/ContactGrid.js:321
 msgid "Work"
 msgstr "仕事"
 
-#: js/ContactGrid.js:331
+#: js/ContactGrid.js:330
 msgid "Home"
 msgstr "自宅"
 
-#: js/ContactGrid.js:340
+#: js/ContactGrid.js:339
 msgid "Cell"
 msgstr "携帯"
 
-#: js/ContactGrid.js:349
+#: js/ContactGrid.js:348
 msgid "Cell private"
 msgstr "個人携帯"
 
-#: js/ContactGrid.js:457
+#: js/ContactGrid.js:456
 #, fuzzy
 msgid "Internal Contact"
 msgstr "内部コンタクト"

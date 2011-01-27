@@ -75,8 +75,7 @@ msgstr "Beállítás {0} szűrőként"
 msgid "Resetted Sync Filter"
 msgstr "Újraállított Sync szűrő"
 
-#: js/Application.js:96
-#: js/Application.js:108
+#: js/Application.js:96 js/Application.js:108
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr "\"{1}\" eszköz {0} szűrője most \"{2}\""
 
@@ -87,4 +86,3 @@ msgstr "újraállított"
 #: js/Application.js:107
 msgid "Set Sync Filter"
 msgstr "Sync szűrő beállítása"
-

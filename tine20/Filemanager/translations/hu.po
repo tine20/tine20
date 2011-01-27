@@ -28,4 +28,3 @@ msgstr "Új megosztott könyvtár létrehozása"
 #: js/Application.js:31
 msgid "Filemanager"
 msgstr "Filekezelő"
-

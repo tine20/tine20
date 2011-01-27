@@ -12,16 +12,13 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Frontend/Json.php:245
-#: js/Models.js:42
-#: js/CourseEditDialog.js:138
+#: Frontend/Json.php:245 js/Models.js:42 js/CourseEditDialog.js:138
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Klasse"
 msgstr[1] "Klassen"
 
-#: Setup/setup.xml:4
-#: js/Courses.js:33
+#: Setup/setup.xml:4 js/Courses.js:33
 msgid "Courses"
 msgstr "Klassen"
 
@@ -37,13 +34,11 @@ msgstr "Name"
 msgid "Type"
 msgstr "Typ"
 
-#: js/CourseGridPanel.js:86
-#: js/CourseEditDialog.js:183
+#: js/CourseGridPanel.js:86 js/CourseEditDialog.js:183
 msgid "Internet Access"
 msgstr "Internet freigegeben"
 
-#: js/CourseGridPanel.js:93
-#: js/CourseEditDialog.js:189
+#: js/CourseGridPanel.js:93 js/CourseEditDialog.js:189
 msgid "Fileserver Access"
 msgstr "Zugriff auf Fileserver gesperrt"
 
@@ -95,8 +90,7 @@ msgstr "Klassenmitglieder importieren"
 msgid "Course Name"
 msgstr "Klassenname"
 
-#: js/CourseEditDialog.js:158
-#: js/CourseEditDialog.js:165
+#: js/CourseEditDialog.js:158 js/CourseEditDialog.js:165
 msgid "Course / School Type"
 msgstr "Schultyp"
 
@@ -139,4 +133,3 @@ msgstr "Lehrer"
 #: Controller/Course.php:117
 msgid "Teacher Account"
 msgstr "Lehrer Zugang"
-
