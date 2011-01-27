@@ -162,21 +162,11 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
         }
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
-                
-        $authResult = Tinebase_Auth::getInstance()->authenticate($username, $password);
 
-        if ($authResult->isValid() !== true) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " authentication for $id({$account->accountLoginName}) failed");
-            return false;
-        }
-        
-        // we can't destroy the whole session, only the Zend_Auth stuff must get removed
-        unset($_SESSION['Zend_Auth']);
+        $authResult = Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'OpenId');
 
-        $account = Tinebase_User::getInstance()->getUserByLoginName($username, 'Tinebase_Model_FullUser');
-        
-        if(!empty($account->openid) && $account->openid != $localPart) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " localPart: $localPart does not match for authenticated account");
+        if ($authResult !== true) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " authentication for $id failed");
             return false;
         }
         
