@@ -4,8 +4,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  */
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Felamimail_Controller_MessageTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -533,6 +529,31 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('\Seen', $message->flags);
         $this->assertContains('11AC BA4F 4778 E3F6 E4ED  F38E B27B 944E 3488 4E85', $message->body);
         $this->assertEquals('add-removals.1239580800.log', $message->attachments[0]["filename"]);
+    }
+
+    /**
+     * validate fetching a complete message in 'other' dir and check its body 
+     * 
+     * howto:
+     * - copy mails to tests/tine20/Felamimail/files/other
+     * - add following header:
+     *      X-Tine20TestMessage: _filename_
+     * - run the test!
+     */
+    public function testCheckOtherMails()
+    {
+        $otherFilesDir = dirname(dirname(__FILE__)) . '/files/other';
+        foreach (new DirectoryIterator($otherFilesDir) as $item) {
+            $appName = $item->getFileName();
+            if ($item->isFile()) {
+                $fileName = 'other/' . $item->getFileName();
+                echo "\nchecking message: " . $fileName;
+                $cachedMessage = $this->messageTestHelper($fileName, $item->getFileName());
+                $message = $this->_controller->getCompleteMessage($cachedMessage);
+                //echo $message->body;
+                $this->assertTrue(! empty($message->body));
+            }
+        }
     }
     
     /**
