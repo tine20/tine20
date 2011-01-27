@@ -661,7 +661,11 @@ class Tinebase_Core
                 $decodedUri = Sabre_DAV_URLUtil::decodePath($_SERVER['REQUEST_URI']);
                 $baseUri = '/' . substr($decodedUri, 0, strpos($decodedUri, 'caldav/') + strlen('caldav/'));
             } else {
-                $baseUri = $_SERVER['REQUEST_URI'];
+                $baseUri = dirname($_SERVER['REQUEST_URI']);
+            }
+            
+            if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+                $baseUri = '/' . $_SERVER['HTTP_HOST'] . $baseUri;
             }
             
             Zend_Session::setOptions(array(
