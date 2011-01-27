@@ -402,12 +402,19 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     {
         $filter = new $this->_contentFilterClass();
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
+                
         try {
             $persistentFilterId = $this->_device->{$this->_filterProperty} ? 
                 $this->_device->{$this->_filterProperty} : 
                 Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter;
                 
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " defaultpersistentfilter: " . Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter id: " . $persistentFilterId);
+            
             $filter = Tinebase_PersistentFilter::getFilterById($persistentFilterId);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
         } catch (Tinebase_Exception_NotFound $tenf) {
             // filter got deleted already
         }
