@@ -635,7 +635,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     
                     if (count($missingUids) != 0) {
                         $messages = $_imap->getSummary($missingUids);
-                        $_folder = $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
+                        $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
                     }
                     
                     if ($_folder->cache_totalcount == $_folder->imap_totalcount || $messageSequenceStart == 1) {
