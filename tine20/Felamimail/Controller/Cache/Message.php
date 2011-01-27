@@ -546,7 +546,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                     
                     $messages = $_imap->getSummary($messageSequenceStart, $messageSequenceEnd, false);
 
-                    $_folder = $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
+                    $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
                     
                     $messageSequenceStart = $messageSequenceEnd + 1;
                     
@@ -594,7 +594,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
-        return Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
+        Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
             'cache_totalcount'  => "+$incrementMessagesCounter",
             'cache_unreadcount' => "+$incrementUnreadCounter",
         ));
