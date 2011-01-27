@@ -116,7 +116,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                 $folders = $imap->getFolders(Felamimail_Model_Folder::encodeFolderName($_folderName) . $this->_delimiter, '%');
                 
             } catch (Zend_Mail_Storage_Exception $zmse) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage() .' No subfolders found.');
+                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No subfolders of ' . $_folderName . ' found.');
                 $folders = array();
             }
             
@@ -205,7 +205,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
     }
     
     /**
-     * get folder status/values from imap server and update folder cache record in database
+     * get folder cache counts from database
      * 
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_Imap|boolean $_imap
