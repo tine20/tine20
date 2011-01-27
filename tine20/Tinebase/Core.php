@@ -664,6 +664,10 @@ class Tinebase_Core
                 $baseUri = dirname($_SERVER['REQUEST_URI']);
             }
             
+            if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+                $baseUri = '/' . $_SERVER['HTTP_HOST'] . $baseUri;
+            }
+            
             Zend_Session::setOptions(array(
                 'cookie_path'     => $baseUri
             ));
