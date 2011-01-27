@@ -132,9 +132,14 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
      * @param  mixed  $_folderId
      * @param  array  $_counters
      * @return Felamimail_Model_Folder
+     * @throws Tinebase_Exception_InvalidArgument
      */
     public function updateFolderCounter($_folderId, array $_counters)
     {
+        if (empty($_folderId)) {
+            throw new Tinebase_Exception_InvalidArgument('Missing folder or folder id.');
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' folder: ' . $_folderId . ' - ' . print_r($_counters, true));
         $folder = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId : $this->get($_folderId);
         if (empty($_counters)) {
@@ -146,13 +151,19 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
         foreach ($_counters as $counter => $value) {
             if ($value{0} == '+' || $value{0} == '-') {
                 // increment or decrement values
-                $data[$counter] = new Zend_Db_Expr($this->_db->quoteIdentifier($counter) . ' ' . $value{0} . ' ' . substr($value, 1));
+                $intValue = (int) substr($value, 1);
+                $quotedIdentifier = $this->_db->quoteIdentifier($counter);
                 if ($value{0} == '-') {
-                    $where[] = $this->_db->quoteIdentifier($counter) . ' > 0';
+                    $data[$counter] = new Zend_Db_Expr('IF(' . $quotedIdentifier . ' >= ' . $intValue . ',' . $quotedIdentifier . ' - ' . $intValue . ', 0)');
+                    $folder->{$counter} = ($folder->{$counter} >= $intValue) ? $folder->{$counter} - $intValue : 0;
+                } else {
+                    $data[$counter] = new Zend_Db_Expr($this->_db->quoteIdentifier($counter) . ' + ' . $intValue);
+                    $folder->{$counter} += $intValue;
                 }
             } else {
                 // set values
                 $data[$counter] = ($value >= 0) ? (int)$value : 0;
+                $folder->{$counter} = ($value >= 0) ? (int)$value : 0;
             }
         }
         
@@ -166,6 +177,6 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data: ' . print_r($data, TRUE) . ' where: ' . print_r($where, TRUE));
         }
         
-        return $this->get($folder->getId());
+        return $folder;
     }
 }
