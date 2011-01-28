@@ -37,7 +37,11 @@ Ext.ux.Notification = function(){
                 
             // webkit notifications
             } else if (window.webkitNotifications !== undefined && window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
-                window.webkitNotifications.createNotification(iconUrl, title, text).show();
+                var notification = window.webkitNotifications.createNotification(iconUrl, title, text);
+                notification.show();
+                setTimeout(function(){
+                    notification.cancel();
+                }, 15000);
                 
             // default behaviour
             } else {
