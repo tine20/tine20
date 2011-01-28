@@ -657,6 +657,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 
             if (currFolder) {
                 currFolder.set('cache_unreadcount', currFolder.get('cache_unreadcount') - diff);
+                currFolder.set('cache_totalcount', currFolder.get('cache_totalcount') - 1);
             }
             if (folder) {
                 increaseUnreadCountInTargetFolder += diff;
