@@ -140,4 +140,16 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_folder', '7');
         $this->setApplicationVersion('Felamimail', '4.4');
     }
+
+    /**
+     * update to 4.5
+     * - remove user_id col
+     */    
+    public function update_4()
+    {
+        $this->_backend->dropCol('felamimail_folder', 'user_id');
+        
+        $this->setTableVersion('felamimail_folder', '8');
+        $this->setApplicationVersion('Felamimail', '4.5');
+    }
 }

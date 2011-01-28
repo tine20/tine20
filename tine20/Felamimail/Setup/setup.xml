@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Felamimail</name>
-    <version>4.4</version>
+    <version>4.5</version>
     <order>30</order>
     <status>enabled</status>
     <depends>
@@ -235,7 +235,7 @@
         </table>
         <table>
             <name>felamimail_folder</name>
-            <version>7</version>
+            <version>8</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -248,10 +248,6 @@
                     <type>text</type>
                     <length>40</length>
                     <notnull>true</notnull>
-                </field>
-                <field>
-                    <name>user_id</name>
-                    <type>integer</type>
                 </field>
                 <field>
                     <name>localname</name>
