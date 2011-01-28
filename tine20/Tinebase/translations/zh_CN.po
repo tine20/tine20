@@ -187,60 +187,63 @@ msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] ""
 
-#: js/MainMenu.js:75
+#: js/MainMenu.js:65
 msgid "User: {0}"
 msgstr "用户：{0}"
 
-#: js/MainMenu.js:123 js/MainMenu.js:175
+#: js/MainMenu.js:114 js/MainMenu.js:177
 #, fuzzy
 msgid "About {0}"
 msgstr "添加{0}"
 
-#: js/MainMenu.js:129
+#: js/MainMenu.js:120
 msgid "Debug Console (Ctrl + F11)"
 msgstr ""
 
-#: js/MainMenu.js:135 js/widgets/dialog/PreferencesPanel.js:37
+#: js/MainMenu.js:126 js/widgets/dialog/PreferencesPanel.js:37
 msgid "Preferences"
 msgstr "参考"
 
-#: js/MainMenu.js:142
+#: js/MainMenu.js:133
 msgid "Edit Profile"
 msgstr ""
 
-#: js/MainMenu.js:149
+#: js/MainMenu.js:140
 msgid "Change password"
 msgstr "修改密码"
 
-#: js/MainMenu.js:156
+#: js/MainMenu.js:147
 msgid "Logout"
 msgstr "登出"
 
-#: js/MainMenu.js:157
+#: js/MainMenu.js:148
 #, fuzzy
 msgid "Logout from {0}"
 msgstr "从 Tine 2.0 登出"
 
-#: js/MainMenu.js:190
-#, fuzzy
-msgid "About Tine 2.0"
-msgstr "从 Tine 2.0 登出"
+#: js/MainMenu.js:155
+msgid "Allow desktop notifications"
+msgstr ""
 
-#: js/MainMenu.js:230 js/widgets/persistentfilter/PickerPanel.js:229
+#: js/MainMenu.js:156
+msgid "Request permissions for webkit desktop notifications."
+msgstr ""
+
+#: js/MainMenu.js:221 js/widgets/persistentfilter/PickerPanel.js:229
 #: js/widgets/dialog/EditDialog.js:481 js/widgets/tree/ContextMenu.js:85
 #: js/widgets/grid/GridPanel.js:1175
 msgid "Confirm"
 msgstr "确认"
 
-#: js/MainMenu.js:230
+#: js/MainMenu.js:221
 msgid "Are you sure you want to logout?"
 msgstr "确实想登出？"
 
-#: js/MainMenu.js:244
+#: js/MainMenu.js:235
 msgid "Logging you out..."
 msgstr "正在登出 ..."
 
-#: js/MainMenu.js:244 js/LoginPanel.js:354
+#: js/MainMenu.js:235 js/LoginPanel.js:354
 msgid "Please wait!"
 msgstr "请等待！"
 
@@ -1868,6 +1871,10 @@ msgstr "由"
 #: Notes.php:370
 msgid "Changed fields:"
 msgstr "已修改的字段："
+
+#, fuzzy
+#~ msgid "About Tine 2.0"
+#~ msgstr "从 Tine 2.0 登出"
 
 #, fuzzy
 #~ msgid "Filter"

@@ -25,8 +25,7 @@ msgstr "Przykładowa aplikacja"
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/ExampleRecordGridPanel.js:105
-#: js/ExampleRecordEditDialog.js:106
+#: js/ExampleRecordGridPanel.js:105 js/ExampleRecordEditDialog.js:106
 msgid "Name"
 msgstr "Nazwa"
 
@@ -78,7 +77,6 @@ msgstr[2] "listy przykładowych wierszy"
 #~ msgstr "Opis"
 
 #~ msgid "record list"
-
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista aplikacji"
 #~ msgstr[1] "listy aplikacji"

@@ -138,7 +138,7 @@ msgstr "Törlés"
 msgid "Add Account"
 msgstr "Fiók hozzáadása"
 
-#: js/GridPanel.js:275 js/GridPanel.js:1053 js/GridPanel.js:1069
+#: js/GridPanel.js:275 js/GridPanel.js:1054 js/GridPanel.js:1070
 #: js/MessageDisplayDialog.js:80
 msgid "Print Preview"
 msgstr "Nyomtatási nézet"
@@ -405,55 +405,55 @@ msgstr "Aktív szabadság üzenet"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Email fiók \"{0}\" rendelkezik aktív szabadság üzenettel."
 
-#: js/Felamimail.js:407
+#: js/Felamimail.js:408
 msgid "New mails"
 msgstr "Új levelek"
 
-#: js/Felamimail.js:408
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "{0} új üzeneted van a {1} mappában."
+#: js/Felamimail.js:409
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr ""
 
-#: js/Felamimail.js:449
+#: js/Felamimail.js:450
 msgid "IMAP Credentials for {0}"
 msgstr "{0} IMAP belépési adatai"
 
-#: js/Felamimail.js:452
+#: js/Felamimail.js:453
 msgid "Credentials"
 msgstr "Belépési adatok"
 
-#: js/Felamimail.js:628 js/Felamimail.js:651
+#: js/Felamimail.js:629 js/Felamimail.js:652
 msgid "IMAP Error"
 msgstr "IMAP hiba"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:630
 msgid "No connection to IMAP server."
 msgstr "Nincs kapcsolat az IMAP szerverrel."
 
-#: js/Felamimail.js:652
+#: js/Felamimail.js:653
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr "Egy a mappáid közül egy másik kliensen törölve lett, kérlek töltsd újra a böngésződet"
 
-#: js/Felamimail.js:667
+#: js/Felamimail.js:668
 msgid "SMTP Error"
 msgstr "SMTP hiba"
 
-#: js/Felamimail.js:668
+#: js/Felamimail.js:669
 msgid "No connection to SMTP server."
 msgstr "Nincs kapcsolat az SMTP szerverrel."
 
-#: js/Felamimail.js:676
+#: js/Felamimail.js:677
 msgid "Sieve Error"
 msgstr "Sieve hiba"
 
-#: js/Felamimail.js:677
+#: js/Felamimail.js:678
 msgid "No connection to Sieve server."
 msgstr "Nincs kapcsolat a Sieve szerverrel."
 
-#: js/Felamimail.js:685
+#: js/Felamimail.js:686
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:686
+#: js/Felamimail.js:687
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -891,6 +891,9 @@ msgstr "Piszkozat"
 #: Controller/Message.php:32
 msgid "Flagged"
 msgstr "Zászlóval jelölt"
+
+#~ msgid "You got {0} new mail(s) in Folder {1}."
+#~ msgstr "{0} új üzeneted van a {1} mappában."
 
 #~ msgid "Write"
 #~ msgstr "Új üzenet"

@@ -137,7 +137,7 @@ msgstr "Supprimer"
 msgid "Add Account"
 msgstr "ajouter un compte"
 
-#: js/GridPanel.js:275 js/GridPanel.js:1053 js/GridPanel.js:1069
+#: js/GridPanel.js:275 js/GridPanel.js:1054 js/GridPanel.js:1070
 #: js/MessageDisplayDialog.js:80
 msgid "Print Preview"
 msgstr "Aperçu avant impression"
@@ -404,55 +404,55 @@ msgstr "Message d'absence actuel"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "L'alerte absence est activée sur le compte courriel \"{0}\"."
 
-#: js/Felamimail.js:407
+#: js/Felamimail.js:408
 msgid "New mails"
 msgstr "Nouveaux messages"
 
-#: js/Felamimail.js:408
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "Vous avez {0} nouveau(x) courriel(s) dans le dossier {1}."
+#: js/Felamimail.js:409
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr ""
 
-#: js/Felamimail.js:449
+#: js/Felamimail.js:450
 msgid "IMAP Credentials for {0}"
 msgstr "Authentification IMAP de {0}"
 
-#: js/Felamimail.js:452
+#: js/Felamimail.js:453
 msgid "Credentials"
 msgstr "Identifiants"
 
-#: js/Felamimail.js:628 js/Felamimail.js:651
+#: js/Felamimail.js:629 js/Felamimail.js:652
 msgid "IMAP Error"
 msgstr "Erreur IMAP"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:630
 msgid "No connection to IMAP server."
 msgstr "Pas de connexion au serveur IMAP."
 
-#: js/Felamimail.js:652
+#: js/Felamimail.js:653
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr "Un de vos dossiers a été supprimé par un autre client courriel, veuillez recharger votre navigateur"
 
-#: js/Felamimail.js:667
+#: js/Felamimail.js:668
 msgid "SMTP Error"
 msgstr "Erreur SMTP"
 
-#: js/Felamimail.js:668
+#: js/Felamimail.js:669
 msgid "No connection to SMTP server."
 msgstr "Pas de connexion au serveur SMTP."
 
-#: js/Felamimail.js:676
+#: js/Felamimail.js:677
 msgid "Sieve Error"
 msgstr "Erreur Sieve"
 
-#: js/Felamimail.js:677
+#: js/Felamimail.js:678
 msgid "No connection to Sieve server."
 msgstr "Pas de connexion au serveur Sieve."
 
-#: js/Felamimail.js:685
+#: js/Felamimail.js:686
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:686
+#: js/Felamimail.js:687
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -888,6 +888,9 @@ msgstr "Brouillon"
 #: Controller/Message.php:32
 msgid "Flagged"
 msgstr "Marqué"
+
+#~ msgid "You got {0} new mail(s) in Folder {1}."
+#~ msgstr "Vous avez {0} nouveau(x) courriel(s) dans le dossier {1}."
 
 #~ msgid "Write"
 #~ msgstr "Écrire"
