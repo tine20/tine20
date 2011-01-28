@@ -346,6 +346,9 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
                 $rule->setFromFSR($fsr);
                 $result->addRecord($rule);
             }
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result->toArray(), TRUE));
+        } else {
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Sieve script empty or could not parse it.');            
         }
         
         return $result;
