@@ -407,55 +407,55 @@ msgstr ""
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr ""
 
-#: js/Felamimail.js:407
+#: js/Felamimail.js:408
 msgid "New mails"
 msgstr "Nové zprávy"
 
-#: js/Felamimail.js:408
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "Máte {0} nových zrpáv ve složce {1}."
+#: js/Felamimail.js:409
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr ""
 
-#: js/Felamimail.js:449
+#: js/Felamimail.js:450
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP přihlášovací údaje pro {0}"
 
-#: js/Felamimail.js:452
+#: js/Felamimail.js:453
 msgid "Credentials"
 msgstr "Přihlašovací údaje"
 
-#: js/Felamimail.js:628 js/Felamimail.js:651
+#: js/Felamimail.js:629 js/Felamimail.js:652
 msgid "IMAP Error"
 msgstr "IMAP chyba"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:630
 msgid "No connection to IMAP server."
 msgstr "Není spojení na IMAP server."
 
-#: js/Felamimail.js:652
+#: js/Felamimail.js:653
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr ""
 
-#: js/Felamimail.js:667
+#: js/Felamimail.js:668
 msgid "SMTP Error"
 msgstr "SMTP chyba"
 
-#: js/Felamimail.js:668
+#: js/Felamimail.js:669
 msgid "No connection to SMTP server."
 msgstr "Není spojení na SMTP server."
 
-#: js/Felamimail.js:676
+#: js/Felamimail.js:677
 msgid "Sieve Error"
 msgstr ""
 
-#: js/Felamimail.js:677
+#: js/Felamimail.js:678
 msgid "No connection to Sieve server."
 msgstr ""
 
-#: js/Felamimail.js:685
+#: js/Felamimail.js:686
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:686
+#: js/Felamimail.js:687
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -898,6 +898,9 @@ msgstr ""
 #: Controller/Message.php:40
 msgid "Flagged"
 msgstr ""
+
+#~ msgid "You got {0} new mail(s) in Folder {1}."
+#~ msgstr "Máte {0} nových zrpáv ve složce {1}."
 
 #~ msgid "Write"
 #~ msgstr "Napsat"

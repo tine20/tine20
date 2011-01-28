@@ -405,55 +405,55 @@ msgstr "Active Vacation Message"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Email account \"{0}\" has an active vacation message."
 
-#: js/Felamimail.js:407
+#: js/Felamimail.js:408
 msgid "New mails"
 msgstr "New mails"
 
-#: js/Felamimail.js:408
-msgid "You got {0} new mail(s) in Folder {1}."
-msgstr "You got {0} new mail(s) in Folder {1}."
+#: js/Felamimail.js:409
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "You got {0} new mail(s) in folder {1} ({2})."
 
-#: js/Felamimail.js:449
+#: js/Felamimail.js:450
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Credentials for {0}"
 
-#: js/Felamimail.js:452
+#: js/Felamimail.js:453
 msgid "Credentials"
 msgstr "Credentials"
 
-#: js/Felamimail.js:628 js/Felamimail.js:651
+#: js/Felamimail.js:629 js/Felamimail.js:652
 msgid "IMAP Error"
 msgstr "IMAP Error"
 
-#: js/Felamimail.js:629
+#: js/Felamimail.js:630
 msgid "No connection to IMAP server."
 msgstr "No connection to IMAP server."
 
-#: js/Felamimail.js:652
+#: js/Felamimail.js:653
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr "One of your folders was deleted from an other client, please reload you browser"
 
-#: js/Felamimail.js:667
+#: js/Felamimail.js:668
 msgid "SMTP Error"
 msgstr "SMTP Error"
 
-#: js/Felamimail.js:668
+#: js/Felamimail.js:669
 msgid "No connection to SMTP server."
 msgstr "No connection to SMTP server."
 
-#: js/Felamimail.js:676
+#: js/Felamimail.js:677
 msgid "Sieve Error"
 msgstr "Sieve Error"
 
-#: js/Felamimail.js:677
+#: js/Felamimail.js:678
 msgid "No connection to Sieve server."
 msgstr "No connection to Sieve server."
 
-#: js/Felamimail.js:685
+#: js/Felamimail.js:686
 msgid "Save Sieve Script Error"
 msgstr "Save Sieve Script Error"
 
-#: js/Felamimail.js:686
+#: js/Felamimail.js:687
 msgid "Could not save script on Sieve server."
 msgstr "Could not save script on Sieve server."
 

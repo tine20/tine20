@@ -190,57 +190,61 @@ msgid_plural "{0} seconds"
 msgstr[0] "{0} másodperc"
 msgstr[1] "{0} másodperc"
 
-#: js/MainMenu.js:75
+#: js/MainMenu.js:65
 msgid "User: {0}"
 msgstr "Felhasználó: {0}"
 
-#: js/MainMenu.js:123 js/MainMenu.js:175
+#: js/MainMenu.js:114 js/MainMenu.js:177
 msgid "About {0}"
 msgstr "Erről: {0}"
 
-#: js/MainMenu.js:129
+#: js/MainMenu.js:120
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Debug konzol (Ctrl + F11)"
 
-#: js/MainMenu.js:135 js/widgets/dialog/PreferencesPanel.js:37
+#: js/MainMenu.js:126 js/widgets/dialog/PreferencesPanel.js:37
 msgid "Preferences"
 msgstr "Tulajdonságok"
 
-#: js/MainMenu.js:142
+#: js/MainMenu.js:133
 msgid "Edit Profile"
 msgstr "Profil szerkesztése"
 
-#: js/MainMenu.js:149
+#: js/MainMenu.js:140
 msgid "Change password"
 msgstr "Jelszó megváltoztatása"
 
-#: js/MainMenu.js:156
+#: js/MainMenu.js:147
 msgid "Logout"
 msgstr "Kijelentkezés"
 
-#: js/MainMenu.js:157
+#: js/MainMenu.js:148
 msgid "Logout from {0}"
 msgstr "Kijelentkezés ebből: {0}"
 
-#: js/MainMenu.js:190
-msgid "About Tine 2.0"
-msgstr "Tine 2.0-ról"
+#: js/MainMenu.js:155
+msgid "Allow desktop notifications"
+msgstr ""
 
-#: js/MainMenu.js:230 js/widgets/persistentfilter/PickerPanel.js:229
+#: js/MainMenu.js:156
+msgid "Request permissions for webkit desktop notifications."
+msgstr ""
+
+#: js/MainMenu.js:221 js/widgets/persistentfilter/PickerPanel.js:229
 #: js/widgets/dialog/EditDialog.js:481 js/widgets/tree/ContextMenu.js:85
 #: js/widgets/grid/GridPanel.js:1175
 msgid "Confirm"
 msgstr "Confirm"
 
-#: js/MainMenu.js:230
+#: js/MainMenu.js:221
 msgid "Are you sure you want to logout?"
 msgstr "Biztosan ki akarsz jelentkezni?"
 
-#: js/MainMenu.js:244
+#: js/MainMenu.js:235
 msgid "Logging you out..."
 msgstr "Kijelentkezés..."
 
-#: js/MainMenu.js:244 js/LoginPanel.js:353
+#: js/MainMenu.js:235 js/LoginPanel.js:353
 msgid "Please wait!"
 msgstr "Kérlek várj!"
 
@@ -1855,6 +1859,9 @@ msgstr "által"
 #: Notes.php:370
 msgid "Changed fields:"
 msgstr "Változtatott mezők:"
+
+#~ msgid "About Tine 2.0"
+#~ msgstr "Tine 2.0-ról"
 
 #~ msgid "Custom datetime"
 #~ msgstr "Egyedi időpont"
