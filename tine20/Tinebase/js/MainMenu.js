@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -53,16 +53,6 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
         this.supr().initComponent.call(this);
     },
     
-    /*
-    afterRender: function() {
-        this.supr().afterRender.apply(this, arguments);
-        
-        this.items.each(function(item) {
-            Ext.select('.tine-mainscreen-mainmenu .x-toolbar .x-btn tbody tr:first-child').remove();
-        }, this);
-    },
-    */
-    
     getItems: function() {
         return [{
             text: Tine.title,
@@ -108,7 +98,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             this.userActions = [
                 this.action_editProfile,
                 this.action_showPreferencesDialog,
-                this.action_changePassword
+                this.action_changePassword,
+                this.action_notificationPermissions
             ];
         }
         return this.userActions;
@@ -159,6 +150,17 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             handler: this.onLogout,
             scope: this
         });
+        
+        this.action_notificationPermissions = new Ext.Action({
+            text: _('Allow desktop notifications'),
+            tooltip:  _('Request permissions for webkit desktop notifications.'),
+            iconCls: 'action_edit',
+            disabled: ! (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0),
+            handler: function() {
+                window.webkitNotifications.requestPermission();
+            },
+            scope: this
+        });
     },
     
     /**
@@ -181,20 +183,9 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                     '<div class="tb-about-copyright">Copyright: 2007-' + new Date().getFullYear() + '&nbsp;<a href="http://www.metaways.de" target="_blank">Metaways Infosystems GmbH</a></div>' +
                 '</div>',
             width: 400,
-            //height: 200,
             buttons: Ext.Msg.OK,
             animEl: 'elId'
         });
-        /*
-        Ext.Msg.show({
-           title: _('About Tine 2.0'),
-           msg: 'Version: 2009-02-10',
-           buttons: Ext.Msg.OK,
-           //fn: processResult,
-           animEl: 'elId',
-           icon: 'mb-about'
-        });
-        */
     },
     
     /**
