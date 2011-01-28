@@ -406,7 +406,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 if (recents > 0 && record.isInbox()) {
                     Tine.log.info('show notification: ' + recents + ' new mails.');
                     var title = this.i18n._('New mails'),
-                        message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} of account {2}.'), recents, record.get('localname'), account.get('name')); 
+                        message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} ({2}).'), recents, record.get('localname'), account.get('name')); 
                     
                     if (record.isCurrentSelection()) {
                         // need to defer the notification because the new messages are not shown yet 
