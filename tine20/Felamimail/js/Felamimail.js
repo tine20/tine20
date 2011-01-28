@@ -391,7 +391,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {String} operation
      */
     onUpdateFolder: function(store, record, operation) {
-        if (operation === Ext.data.Record.EDIT) {
+        if (operation === Ext.data.Record.EDIT && record.isModified('cache_status')) {
             Tine.log.info('Folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
             
             // as soon as we get a folder with status != complete we need to trigger checkmail soon!
@@ -401,11 +401,12 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             
             // only show notifications for inbox if unreadcount changed
             if (record.isModified('cache_unreadcount')) {
-                var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount);
+                var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount),
+                    account = Tine.Felamimail.loadAccountStore().getById(record.get('account_id'));
                 if (recents > 0 && record.isInbox()) {
                     Tine.log.info('show notification: ' + recents + ' new mails.');
                     var title = this.i18n._('New mails'),
-                        message = String.format(this.i18n._('You got {0} new mail(s) in Folder {1}.'), recents, record.get('localname')); 
+                        message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} ({2}).'), recents, record.get('localname'), account.get('name')); 
                     
                     if (record.isCurrentSelection()) {
                         // need to defer the notification because the new messages are not shown yet 

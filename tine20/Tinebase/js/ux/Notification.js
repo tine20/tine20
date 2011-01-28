@@ -2,14 +2,12 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * 
  * TODO         play sound
- * TODO         add webkit notifications -> this has to be resolved first: http://code.google.com/p/chromium/issues/detail?id=31736
- *              http://dev.w3.org/2006/webapi/WebNotifications/publish/
  */    
  
 Ext.ns('Ext.ux.Notification');
@@ -38,33 +36,12 @@ Ext.ux.Notification = function(){
                 });
                 
             // webkit notifications
-//            } else if (window.webkitNotifications !== undefined) {
-//                console.log('webkitNotifications available');
-//                if (window.webkitNotifications.checkPermission() == 0) {
-//                    // you can pass any url as a parameter
-//                    window.webkitNotifications.createNotification(iconUrl, title, text).show(); 
-//                } else {
-//                    window.webkitNotifications.requestPermission();
-//                }
-//                var nc = window.webkitNotifications;
-//                document.tempNotif = nc.createNotification(iconUrl, title, text);
-//                document.tempNotif.ondisplay = function() {
-//                    setTimeout(function(){
-//                        document.tempNotif.cancel();
-//                        document.tempNotif = false;
-//                    },5000); 
-//                };
-//                document.tempNotif.show();
-//                
-//                var nc = window.webkitNotifications;
-//                if (nc.checkPermission()) { 
-//                    //console.log('request permission for ');
-//                    //console.log(webkitNotification);
-//                    //nc.requestPermission(webkitNotification);
-//                    nc.requestPermission(Ext.ux.Notification.webkit); 
-//                } else { 
-//                    webkitNotification(iconUrl, title, text);
-//                }
+            } else if (window.webkitNotifications !== undefined && window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
+                var notification = window.webkitNotifications.createNotification(iconUrl, title, text);
+                notification.show();
+                setTimeout(function(){
+                    notification.cancel();
+                }, 15000);
                 
             // default behaviour
             } else {
