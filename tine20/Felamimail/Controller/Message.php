@@ -1073,7 +1073,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $cache = Tinebase_Core::getCache();
-        $cacheId = 'getMessageBody_' . $message->getId() . str_replace('.', '', $_partId) . substr($_contentType, -4);
+        $cacheId = 'getMessageBody_' . $message->getId() . str_replace('.', '', $_partId) . substr($_contentType, -4) . (($_account !== NULL) ? 'acc' : '');
         
         if ($cache->test($cacheId)) {
             return $cache->load($cacheId);
