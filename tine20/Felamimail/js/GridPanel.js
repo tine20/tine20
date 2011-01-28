@@ -849,8 +849,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var record = this.grid.getSelectionModel().getSelected(),
             folder = this.app.getFolderStore().getById(record.get('folder_id')),
             account = Tine.Felamimail.loadAccountStore().getById(folder.get('account_id'));
-            action = (folder.get('globalname') == account.get('templates_folder')) ? 'senddraft' :
-                     folder.get('globalname') == account.get('drafts_folder') ? 'sendtemplate' : null;
+            action = (folder.get('globalname') == account.get('drafts_folder')) ? 'senddraft' :
+                     folder.get('globalname') == account.get('templates_folder') ? 'sendtemplate' : null;
         
         // check folder to determine if mail should be opened in compose dlg
         if (action !== null) {

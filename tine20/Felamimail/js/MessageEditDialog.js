@@ -456,6 +456,8 @@ Ext.namespace('Tine.Felamimail');
      * @param {String} folderField
      */
     onSaveInFolder: function (folderField) {
+        this.onRecordUpdate();
+        
         var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id'));
         var folderName = account.get(folderField);
         
@@ -466,14 +468,12 @@ Ext.namespace('Tine.Felamimail');
             );
         } else if (this.isValid()) {
             this.loadMask.show();
-            this.onRecordUpdate();
             this.recordProxy.saveInFolder(this.record, folderName, {
                 scope: this,
                 success: function(record) {
                     this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
                     this.purgeListeners();
                     this.window.close();
-                    // TODO reload target folder message cache!
                 },
                 failure: this.onRequestFailed,
                 timeout: 150000 // 3 minutes
