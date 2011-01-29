@@ -392,7 +392,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     }    
     
     /**
-     * get id's of all contacts available on the server
+     * get id's of all entries available on the server
      *
      * @param string $_folderId
      * @param int $_filterType
