@@ -270,10 +270,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     /**
      * set geodata of record
      * 
-     * @param $_record
+     * @param Addressbook_Model_Contact $_record
      * @return void
      */
-    protected function _setGeoData($_record)
+    protected function _setGeoData(Addressbook_Model_Contact $_record)
     {
         if (! $this->_setGeoDataForContacts) {
             return;
@@ -289,26 +289,31 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             }
             
             if (!empty($_record->adr_one_street)) {
-                $street = $_record->adr_one_street;
-                $number = $this->_splitNumberAndStreet($street);
-                $nominatim->setStreet($street);
-                if (! empty($number)) {
-                    // @todo fix this, it does not seem to work correctly
-                    // see http://www.tine20.org/bugtracker/view.php?id=2876
-                    $nominatim->setNumber($number);
-                }
+                $nominatim->setStreet($_record->adr_one_street);
             }
             
             if (!empty($_record->adr_one_countryname)) {
-                $nominatim->setCountry($_record->adr_one_countryname);
+                $country = Zend_Locale::getTranslation($_record->adr_one_countryname, 'Country', $_record->adr_one_countryname);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' country ' . $country);
+                $nominatim->setCountry($country);
             }
             
             try {            
                 $places = $nominatim->search();
                 
                 if (count($places) > 0) {
-                    $_record->lon = $places->current()->lon;
-                    $_record->lat = $places->current()->lat;
+                    $place = $places->current();
+                    
+                    $_record->lon = $place->lon;
+                    $_record->lat = $place->lat;
+                    
+                    if (empty($_record->adr_one_countryname) && !empty($place->country_code)) {
+                        $_record->adr_one_countryname = $place->country_code;
+                    }
+                    if (empty($_record->adr_one_postalcode) && !empty($place->postcode)) {
+                        $_record->adr_one_postalcode = $place->postcode;
+                    }
+                    
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
                 } else {
                     Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find place.');
