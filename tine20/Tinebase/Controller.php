@@ -207,6 +207,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
          * we use this to validate passwords for OpenId for example
          */ 
         unset($_SESSION['Zend_Auth']);
+        unset(Tinebase_Core::getSession()->currentAccount);
         
         return $result;
     }
