@@ -88,41 +88,6 @@ class Zend_Service_Nominatim_Result
     public $type;
 
     /**
-     * The license the photo is available under.
-     *
-     * @var string
-     */
-    public $license;
-
-    /**
-     * The date the photo was uploaded.
-     *
-     * @var string
-     */
-    public $dateupload;
-
-    /**
-     * The date the photo was taken.
-     *
-     * @var string
-     */
-    public $datetaken;
-
-    /**
-     * The screenname of the owner.
-     *
-     * @var string
-     */
-    public $ownername;
-
-    /**
-     * The server used in assembling icon URLs.
-     *
-     * @var string
-     */
-    public $iconserver;
-
-    /**
      * Parse the Flickr Result
      *
      * @param  SimpleXMLElement    $place
@@ -138,5 +103,12 @@ class Zend_Service_Nominatim_Result
         $this->displayName  = (string)$place['display_name'];
         $this->class        = (string)$place['class'];
         $this->type         = (string)$place['type'];
+
+        foreach(array('country', 'country_code', 'postcode', 'state') as $key) {
+            if(isset($place->$key)) {
+                $this->$key      = (string)$place->$key;
+            }
+        }
+        
     }
 }
