@@ -120,33 +120,35 @@ class Zend_Service_Nominatim
     {
         $this->_httpClient->resetParameters();
 
-        $url = $this->_url . 'search';
-        
-        if(!empty($this->_country)) {
-            $url .= '/' . rawurlencode($this->_country);
-        }
-        
-        if(!empty($this->_postcode)) {
-            $url .= '/' . rawurlencode($this->_postcode);
-        }
-        
-        if(!empty($this->_village)) {
-            $url .= '/' . rawurlencode($this->_village);
-        }
+        $queryParts = array();
         
         if(!empty($this->_street)) {
-            $url .= '/' . rawurlencode($this->_street);
+            $queryParts[] = $this->_street;
         }
         
         if(!empty($this->_number)) {
-            $url .= '/' . rawurlencode($this->_number);
+            $queryParts[] = $this->_number;
+        }
+        
+        if(!empty($this->_postcode)) {
+            $queryParts[] = $this->_postcode;
+        }
+        
+        if(!empty($this->_village)) {
+            $queryParts[] = $this->_village;
+        }
+        
+        if(!empty($this->_country)) {
+            $queryParts[] = $this->_country;
         }
 
-        $this->_httpClient->setUri($url);
+        $this->_httpClient->setUri($this->_url . 'search');
+        $this->_httpClient->setParameterGet('q', implode(',', $queryParts));
         $this->_httpClient->setParameterGet('format', 'xml');
         $this->_httpClient->setParameterGet('addressdetails', 1);
+        $this->_httpClient->setParameterGet('osm_type', 'way');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Connecting to Nominating with uri ' . $url);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Connecting to Nominatim with uri ' . $this->_httpClient->getUri(true));
         
         $response = $this->_httpClient->request();
         
