@@ -100,8 +100,8 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $server = new Tinebase_OpenId_Provider(
             null,
             null,
-            null,
-            new Tinebase_OpenId_Provider_Storage
+            new Tinebase_OpenId_Provider_User_Tine20(),
+            new Tinebase_OpenId_Provider_Storage()
         );
         $server->setOpEndpoint(dirname(Zend_OpenId::selfUrl()) . '/index.php?method=Tinebase.openId');
         
