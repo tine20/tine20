@@ -5,26 +5,17 @@
  * @package     Tinebase
  * @subpackage  OpenID
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
  */
 
 /**
- * @see Zend_OpenId_Provider_Storage
- */
-require_once "Zend/OpenId/Provider/Storage.php";
-
-/**
  * External storage implemmentation using sql table
  *
  * @package     Tinebase
  * @subpackage  OpenID
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
 {
@@ -156,15 +147,16 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
             return false;
         }
         
-        if(empty($username)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " \$username can not be empty");
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
+        
+        try {
+            $account = $this->_getAccountForId($id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
             return false;
         }
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
-
-        $authResult = Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'OpenId');
-
+        $authResult = Tinebase_Controller::getInstance()->authenticate($account->accountLoginName, $password, $_SERVER['REMOTE_ADDR'], 'OpenId');
+        
         if ($authResult !== true) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " authentication for $id failed");
             return false;
