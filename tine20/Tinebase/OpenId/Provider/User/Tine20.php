@@ -24,14 +24,7 @@ class Tinebase_OpenId_Provider_User_Tine20 extends Zend_OpenId_Provider_User
      *
      * @var Zend_Session_Namespace
      */
-    protected $_tine20Session;
-
-    /**
-     * Zend_Auth session namespace
-     *
-     * @var Zend_Session_Namespace
-     */
-    protected $_openIdSession;
+    protected $_sessionNameSpace;
     
     /**
      * constructor
@@ -40,8 +33,7 @@ class Tinebase_OpenId_Provider_User_Tine20 extends Zend_OpenId_Provider_User
      */
     public function __construct(Zend_Session_Namespace $session = null)
     {
-        $this->_tine20Session = new Zend_Session_Namespace("Zend_Auth");
-        $this->_openIdSession = new Zend_Session_Namespace("openid");
+        $this->_sessionNameSpace = new Zend_Session_Namespace("openid");
     }
 
     /**
@@ -52,7 +44,8 @@ class Tinebase_OpenId_Provider_User_Tine20 extends Zend_OpenId_Provider_User
      */
     public function setLoggedInUser($id)
     {
-        $this->_openIdSession->logged_in = $id;
+        $this->_sessionNameSpace->logged_in = $id;
+        
         return true;
     }
 
@@ -63,11 +56,14 @@ class Tinebase_OpenId_Provider_User_Tine20 extends Zend_OpenId_Provider_User
      */
     public function getLoggedInUser()
     {
-        if (isset($this->_tine20Session->storage)) {
-            return dirname(Zend_OpenId::selfUrl()) . '/users/' . $this->_tine20Session->storage;
+        // user is logged in via Tine 2.0 already
+        if (($user = Tinebase_Core::getUser()) instanceof Tinebase_Model_FullUser) {
+            return dirname(Zend_OpenId::selfUrl()) . '/users/' . (isset($user->openid) ? $user->openid : $user->accountLoginName);
         }
-        if (isset($this->_openIdSession->logged_in)) {
-            return $this->_openIdSession->logged_in;
+        
+        // user has authenticated via OpenId before
+        if (isset($this->_sessionNameSpace->logged_in)) {
+            return $this->_sessionNameSpace->logged_in;
         }
         
         return false;
@@ -80,7 +76,7 @@ class Tinebase_OpenId_Provider_User_Tine20 extends Zend_OpenId_Provider_User
      */
     public function delLoggedInUser()
     {
-        unset($this->_openIdSession->logged_in);
+        unset($this->_sessionNameSpace->logged_in);
         
         return true;
     }
