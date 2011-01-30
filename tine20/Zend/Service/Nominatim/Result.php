@@ -104,7 +104,7 @@ class Zend_Service_Nominatim_Result
         $this->class        = (string)$place['class'];
         $this->type         = (string)$place['type'];
 
-        foreach(array('country', 'country_code', 'postcode', 'state') as $key) {
+        foreach(array('country', 'country_code', 'postcode', 'state', 'city') as $key) {
             if(isset($place->$key)) {
                 $this->$key      = (string)$place->$key;
             }
