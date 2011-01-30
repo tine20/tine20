@@ -260,7 +260,14 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        $this->_setGeoData($_record);
+        if (
+            ($_record->adr_one_locality    != $_oldRecord->adr_one_locality) ||
+            ($_record->adr_one_postalcode  != $_oldRecord->adr_one_postalcode) ||
+            ($_record->adr_one_street      != $_oldRecord->adr_one_street) ||
+            ($_record->adr_one_countryname != $_oldRecord->adr_one_countryname)
+        ) {
+            $this->_setGeoData($_record);
+        }
         
         if (isset($_oldRecord->type) && $_oldRecord->type == Addressbook_Model_Contact::CONTACTTYPE_USER) {
             $_record->type = Addressbook_Model_Contact::CONTACTTYPE_USER;
@@ -279,59 +286,69 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             return;
         }
         
-        if (! empty($_record->adr_one_locality)) {
-            $nominatim = new Zend_Service_Nominatim();
+        if(empty($_record->adr_one_locality) && empty($_record->adr_one_postalcode) && empty($_record->adr_one_street) && empty($_record->adr_one_countryname)) {
+            $_record->lon = NULL;
+            $_record->lat = NULL;
             
+            return;
+        }
+        
+        $nominatim = new Zend_Service_Nominatim();
+
+        // use city for only if no postalcode is set
+        // pickhuben 2,metaways founds nothing, while pickhuben 2,20457 find the correct address
+        if (!empty($_record->adr_one_locality) && empty($_record->adr_one_postalcode)) {
             $nominatim->setVillage($_record->adr_one_locality);
+        }
+        
+        if (!empty($_record->adr_one_postalcode)) {
+            $nominatim->setPostcode($_record->adr_one_postalcode);
+        }
+        
+        if (!empty($_record->adr_one_street)) {
+            $nominatim->setStreet($_record->adr_one_street);
+        }
+        
+        if (!empty($_record->adr_one_countryname)) {
+            $country = Zend_Locale::getTranslation($_record->adr_one_countryname, 'Country', $_record->adr_one_countryname);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' country ' . $country);
+            $nominatim->setCountry($country);
+        }
+        
+        try {            
+            $places = $nominatim->search();
             
-            if (!empty($_record->adr_one_postalcode)) {
-                $nominatim->setPostcode($_record->adr_one_postalcode);
-            }
-            
-            if (!empty($_record->adr_one_street)) {
-                $nominatim->setStreet($_record->adr_one_street);
-            }
-            
-            if (!empty($_record->adr_one_countryname)) {
-                $country = Zend_Locale::getTranslation($_record->adr_one_countryname, 'Country', $_record->adr_one_countryname);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' country ' . $country);
-                $nominatim->setCountry($country);
-            }
-            
-            try {            
-                $places = $nominatim->search();
+            if (count($places) > 0) {
+                $place = $places->current();
                 
-                if (count($places) > 0) {
-                    $place = $places->current();
-                    
-                    $_record->lon = $place->lon;
-                    $_record->lat = $place->lat;
-                    
-                    if (empty($_record->adr_one_countryname) && !empty($place->country_code)) {
-                        $_record->adr_one_countryname = $place->country_code;
-                    }
-                    if (empty($_record->adr_one_postalcode) && !empty($place->postcode)) {
-                        $_record->adr_one_postalcode = $place->postcode;
-                    }
-                    
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
-                } else {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find place.');
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->adr_one_street . ', ' 
-                        . $_record->adr_one_postalcode . ', ' . $_record->adr_one_locality . ', ' . $_record->adr_one_countryname
-                    );
+                $_record->lon = $place->lon;
+                $_record->lat = $place->lat;
+                
+                if (empty($_record->adr_one_countryname) && !empty($place->country_code)) {
+                    $_record->adr_one_countryname = $place->country_code;
                 }
-            } catch (Exception $e) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            }
-        } else {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No locality given: Do not search for geodata.');
-            
-            if (! empty($_record->lon) && ! empty($_record->lat)) {
-                // reset geodata
+                if (empty($_record->adr_one_postalcode) && !empty($place->postcode)) {
+                    $_record->adr_one_postalcode = $place->postcode;
+                }
+                if (empty($_record->adr_one_locality) && !empty($place->city)) {
+                    $_record->adr_one_locality = $place->city;
+                }
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
+            } else {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find place.');
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->adr_one_street . ', ' 
+                    . $_record->adr_one_postalcode . ', ' . $_record->adr_one_locality . ', ' . $_record->adr_one_countryname
+                );
                 $_record->lon = NULL;
                 $_record->lat = NULL;
             }
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            
+            // the address has changed, the old values for lon/lat can not be valid anymore
+            $_record->lon = NULL;
+            $_record->lat = NULL;
         }
     }
     
