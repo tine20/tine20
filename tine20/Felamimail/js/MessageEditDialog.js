@@ -392,12 +392,14 @@ Ext.namespace('Tine.Felamimail');
             if (! this.subject) {
                 if (this.replyTo) {
                     // check if there is already a 'Re:' prefix
-                    var replyPrefix = this.app.i18n._('Re:');
-                    var signatureRegexp = new RegExp('^' + replyPrefix);
-                    if (! this.replyTo.get('subject').match(signatureRegexp)) {
-                        this.subject = replyPrefix + ' ' +  this.replyTo.get('subject');
+                    var replyPrefix = this.app.i18n._('Re:'),
+                        signatureRegexp = new RegExp('^' + replyPrefix),
+                        replySubject = (this.replyTo.get('subject')) ? this.replyTo.get('subject') : '';
+                        
+                    if (! replySubject.match(signatureRegexp)) {
+                        this.subject = replyPrefix + ' ' +  replySubject;
                     } else {
-                        this.subject = this.replyTo.get('subject');
+                        this.subject = replySubject;
                     }
                 } else if (this.forwardMsgs) {
                     this.subject =  this.app.i18n._('Fwd:') + ' ';
