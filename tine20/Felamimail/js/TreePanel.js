@@ -598,15 +598,15 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             cacheStatus = folder.get('cache_status'),
             lastCacheStatus = folder.modified ? folder.modified.cache_status : null,
             isSelected = folder.isCurrentSelection();
-        
+
+        this.setUnreadClass(folder.id);
+            
         if (node && node.ui.rendered) {
             var domNode = Ext.DomQuery.selectNode('span[class=felamimail-node-statusbox-unread]', nodeEl);
             if (domNode) {
                 
                 // update unreadcount + visibity
                 Ext.fly(domNode).update(unreadcount).setVisible(unreadcount > 0);
-                
-                this.setUnreadClass(node, unreadcount > 0);
                 
                 // update progress
                 var progressEl = Ext.get(Ext.DomQuery.selectNode('img[class^=felamimail-node-statusbox-progress]', nodeEl));
@@ -624,18 +624,34 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * set unread class of node and parents
+     * set unread class of folder node and parents
      * 
-     * @param {Node} node
-     * @param {Boolean} addClass true to add / false to remove
+     * @param {Tine.Felamimail.Model.Folder} folder
      */
-    setUnreadClass: function(node, addClass) {
-        var ui = node.getUI();
-        ui[addClass ? 'addClass' : 'removeClass']('felamimail-node-unread');
+    setUnreadClass: function(folderId) {
+        var folder              = this.app.getFolderStore().getById(folderId),
+            node                = this.getNodeById(folderId),
+            isUnread            = folder.get('cache_unreadcount') > 0,
+            hasUnreadChildren   = folder.get('unread_children').length > 0;
+            
+        if (node && node.ui.rendered) {
+            var ui = node.getUI();
+            ui[(isUnread || hasUnreadChildren) ? 'addClass' : 'removeClass']('felamimail-node-unread');
+        }
         
-        // check + update parent (only if folder node)
-        if (node.parentNode && this.app.getFolderStore().getById(node.parentNode.id)) {
-            this.setUnreadClass(node.parentNode, addClass);
+        // get parent, update and call recursivly
+        var parentFolder = this.app.getFolderStore().getParent(folder);
+        if (parentFolder) {
+            // need to create a copy of the array here (and make sure it is unique)
+            var unreadChildren = Ext.unique(parentFolder.get('unread_children'));
+                
+            if (isUnread || hasUnreadChildren) {
+                unreadChildren.push(folderId);
+            } else {
+                unreadChildren.remove(folderId);
+            }
+            parentFolder.set('unread_children', unreadChildren);
+            this.setUnreadClass(parentFolder.id);
         }
     },
     
