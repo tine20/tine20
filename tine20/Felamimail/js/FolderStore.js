@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -172,7 +172,7 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
         var parentPath, path;
         Ext.each(records, function(record) {
             if (givenParentPath === null) {
-                var parent = this.getParentByAccountIdAndGlobalname(record.get('account_id'), record.get('parent'));
+                var parent = this.getParent(record);
                 parentPath = (parent) ? parent.get('path') : '/' + record.get('account_id');
             } else {
                 parentPath = givenParentPath;
@@ -233,20 +233,19 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
     },
     
     /**
-     * get by account id and globalname
+     * get parent folder
      * 
-     * @param {String} accountId
-     * @param {String} globalname
+     * @param {Tine.Felamimail.Model.Folder} folder
      * @return {Tine.Felamimail.Model.Folder|null}
      */
-    getParentByAccountIdAndGlobalname: function(accountId, globalname) {
+    getParent: function(folder) {
         var result = this.queryBy(function(record, id) {
-            if (record.get('account_id') == accountId && record.get('globalname') == globalname) {
+            if (record.get('account_id') == folder.get('account_id') && record.get('globalname') == folder.get('parent')) {
                 return true;
             }
         });
         
         return result.first() || null;
-    }
+    }    
 });
 
