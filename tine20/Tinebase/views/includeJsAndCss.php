@@ -36,23 +36,23 @@ switch(TINE20_BUILDTYPE) {
             
             // js files
             foreach ($httpFrontend->getJsFilesToInclude() as $name) {
-                echo "\n    ". '<script type="text/javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
+                echo "\n    ". '<script defer type="text/javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
             }
         }
         // laguage file
-        echo "\n    ". '<script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
+        echo "\n    ". '<script defer type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
         break;
 
     case 'DEBUG':
         echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles' />";
-        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles\"></script>";
-        echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js\"></script>";
+        echo "\n    <script defer type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles\"></script>";
+        echo "\n    <script defer type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js\"></script>";
         break;
         
     case 'RELEASE':
         echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles' />";
-        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles\"></script>";
-        echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all.js\"></script>";
+        echo "\n    <script defer type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles\"></script>";
+        echo "\n    <script defer type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all.js\"></script>";
         break;
 }
 
