@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage	Export
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -119,6 +119,9 @@ abstract class Tinebase_Export_Spreadsheet_Abstract extends Tinebase_Export_Abst
                 } elseif (in_array($_field->type, $this->_userFields) || in_array($_field->identifier, $this->_userFields)) {
                     // resolved user
                     $result = $this->_getUserValue($_record, $_field);
+                } else if (is_object($_record->{$_field->identifier}) && method_exists($_record->{$_field->identifier}, '__toString')) {
+                    // call __toString
+                    $result = $_record->{$_field->identifier}->__toString();
                 } else {
                     // all remaining
                     $result = $_record->{$_field->identifier};
