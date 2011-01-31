@@ -112,7 +112,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->_recordToJson($result);
     }
     
-    
     /**
      * update folder cache
      *
