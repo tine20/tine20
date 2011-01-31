@@ -46,6 +46,7 @@
         
 </head>
 <body>
+    Loading Tine 2.0 ...
     <noscript><p>You need to enable javascript to use <a href="http://www.tine20.org">Tine 2.0</a></p></noscript>
 </body>
 </html>
