@@ -197,10 +197,15 @@ Tine.Felamimail.setTreeContextMenus = function() {
             if (this.ctxNode) {
                 var folderId = this.ctxNode.id,
                     filter = [{
-                    field: 'folder_id',
-                    operator: 'equals',
-                    value: folderId
-                }];
+                        field: 'folder_id',
+                        operator: 'equals',
+                        value: folderId
+                    }, {
+                        field: 'flags',
+                        operator: 'notin',
+                        value: ['\\Seen']
+                    }
+                ];
                 
                 var selectedNode = this.getSelectionModel().getSelectedNode(),
                     isSelectedNode = (selectedNode && this.ctxNode.id == selectedNode.id);
