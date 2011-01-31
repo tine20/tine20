@@ -15,14 +15,10 @@ Ext.namespace('Tine.Felamimail');
  * get felamimail tree panel context menus
  * this is used in Tine.Felamimail.TreePanel (with createDelegate)
  * 
- * TODO add reload account again
- * TODO add other actions again?
  * TODO use Ext.apply to get this
  */
 Tine.Felamimail.setTreeContextMenus = function() {
         
-    // define additional actions
-    
     // inactive
     /*
     var updateCacheConfigAction = {
@@ -45,8 +41,21 @@ Tine.Felamimail.setTreeContextMenus = function() {
             });
         }
     };
+
+    var reloadFolderAction = {
+        text: String.format(_('Reload {0}'), this.app.i18n._('Folder')),
+        iconCls: 'x-tbar-loading',
+        scope: this,
+        handler: function() {
+            if (this.ctxNode) {
+                // call update folder status from felamimail app
+                //this.updateFolderStatus([this.ctxNode]);
+            }
+        }
+    };
     */
 
+    // define additional actions
     var emptyFolderAction = {
         text: this.app.i18n._('Empty Folder'),
         iconCls: 'action_folder_emptytrash',
@@ -173,30 +182,13 @@ Tine.Felamimail.setTreeContextMenus = function() {
         handler: function() {
             var accountId = this.ctxNode.attributes.account_id;
             var account = this.accountStore.getById(accountId);
-            //var record = new Tine.Felamimail.Model.Vacation({id: accountId}, accountId);
             
             var popupWindow = Tine.Felamimail.sieve.RulesDialog.openWindow({
                 account: account
-                //record: record
             });
         }
     };
 
-    // inactive
-    /*
-    var reloadFolderAction = {
-        text: String.format(_('Reload {0}'), this.app.i18n._('Folder')),
-        iconCls: 'x-tbar-loading',
-        scope: this,
-        handler: function() {
-            if (this.ctxNode) {
-                // call update folder status from felamimail app
-                //this.updateFolderStatus([this.ctxNode]);
-            }
-        }
-    };
-    */
-    
     var markFolderSeenAction = {
         text: this.app.i18n._('Mark Folder as read'),
         iconCls: 'action_mark_read',
