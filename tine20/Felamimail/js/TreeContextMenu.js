@@ -287,5 +287,9 @@ Tine.Felamimail.setTreeContextMenus = function() {
         scope: this,
         backend: 'Felamimail',
         backendModel: 'Account'
-    });        
+    });
+    
+    // context menu for unselectable folders (like public/shared namespace)
+    config.actions = ['add'];
+    this.unselectableFolder = Tine.widgets.tree.ContextMenu.getMenu(config);
 };
