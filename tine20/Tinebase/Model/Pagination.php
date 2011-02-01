@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -58,15 +58,26 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
             $_select->limit($this->limit, $this->start);
         }
         if (!empty($this->sort) && !empty($this->dir)){
-            if (is_array($this->sort)) {
-                $order = array();
-                foreach ($this->sort as $sort) {
-                    $order[] = $sort . ' ' . $this->dir;
-                }
-            } else {
-                $order = $this->sort . ' ' . $this->dir;
-            }
-            $_select->order($order);
+            $_select->order($this->_getSortCols());
         }
+    }
+    
+    /**
+     * get columns for select order statement
+     * 
+     * @return array
+     */
+    protected function _getSortCols()
+    {
+        if (is_array($this->sort)) {
+            $order = array();
+            foreach ($this->sort as $sort) {
+                $order[] = $sort . ' ' . $this->dir;
+            }
+        } else {
+            $order = array($this->sort . ' ' . $this->dir);
+        }
+        
+        return $order;
     }
 }
