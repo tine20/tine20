@@ -13,7 +13,7 @@ Ext.namespace('Tine.Calendar');
  * update app icon to reflect the current date
  */
 Ext.onReady(function(){
-    Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(../../images/view-calendar-day-' + new Date().getDate() + '.png)' + (Ext.isIE ? '' : ' !important'));
+    Ext.util.CSS.updateRule('.CalendarIconCls', 'background-image', 'url(../../images/view-calendar-day-' + new Date().getDate() + '.png');
 });
 
 /**
@@ -33,6 +33,23 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     getTitle: function() {
         return this.i18n.ngettext('Calendar', 'Calendars', 1);
+    },
+    
+    /**
+     * returns iconCls of this application
+     * 
+     * @param {String} target
+     * @return {String}
+     */
+    getIconCls: function(target) {
+        switch(target){
+            case 'PreferencesTreePanel':
+            return 'PreferencesTreePanel-CalendarIconCls';
+            break;
+        default:
+            return 'CalendarIconCls';
+            break;
+        }
     }
 });
 
