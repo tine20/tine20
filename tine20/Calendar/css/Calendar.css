@@ -8,6 +8,15 @@
     background-image:url(../../images/oxygen/32x32/apps/korganizer.png);
 }
 
+.PreferencesTreePanel-CalendarIconCls {
+    background-image:url(../../images/oxygen/16x16/apps/korganizer.png) !important;
+}
+.x-btn-medium .PreferencesTreePanel-CalendarIconCls {
+    background-image:url(../../images/oxygen/22x22/apps/korganizer.png) !important;
+}
+.x-btn-large .PreferencesTreePanel-CalendarIconCls {
+    background-image:url(../../images/oxygen/32x32/apps/korganizer.png) !important;
+}
 
 .cal-today-action {
     background-image:url(../../images/oxygen/16x16/actions/go-jump-today.png) !important;
