@@ -93,6 +93,7 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                     id: 'username',
                     name: 'username',
                     allowBlank: false,
+                    validateOnBlur: false,
                     selectOnFocus: true,
                     value: this.defaultUsername ? this.defaultUsername : undefined,
                     listeners: {
