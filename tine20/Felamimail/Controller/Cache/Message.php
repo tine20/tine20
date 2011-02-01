@@ -697,7 +697,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($messageToCache->toArray(), TRUE));
         
-        $updateCounter = FALSE;
         try {
             $result = $this->_backend->create($messageToCache);
             // only cache message headers if received during the last day
@@ -705,16 +704,16 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 $cacheId = 'getMessageHeaders' . $result->getId();
                 Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));
             }
-            $updateCounter = TRUE;
         } catch (Zend_Db_Statement_Exception $zdse) {
             // perhaps we already have this message in our cache (duplicate)
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
             $result = $this->_backend->getByProperty($messageToCache->messageuid, 'messageuid');
+            $_updateFolderCounter = FALSE;
         }
         
-        if ($_updateFolderCounter == true) {
+        if ($_updateFolderCounter == TRUE) {
             Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
-                'cache_totalcount'  => (  $updateCounter                )   ? '+1' : '+0',
+                'cache_totalcount'  => '+1',
                 'cache_unreadcount' => (! $messageToCache->hasSeenFlag())   ? '+1' : '+0',
             ));
         }
