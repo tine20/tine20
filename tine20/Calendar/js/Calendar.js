@@ -42,7 +42,6 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
      * @return {String}
      */
     getIconCls: function(target) {
-        return this.appName + 'IconCls';
         switch(target){
             case 'PreferencesTreePanel':
             return 'PreferencesTreePanel-CalendarIconCls';
