@@ -100,7 +100,7 @@ Tine.widgets.dialog.PreferencesTreePanel = Ext.extend(Ext.tree.TreePanel, {
                 text: app.getTitle(),
                 cls: 'file',
                 id: app.appName,
-                iconCls: app.appName + 'IconCls',
+                iconCls: app.getIconCls('PreferencesTreePanel'),
                 leaf: null
             });
     
