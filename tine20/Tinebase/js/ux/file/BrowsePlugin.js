@@ -190,11 +190,18 @@ Ext.ux.file.BrowsePlugin.prototype = {
 
         this.wrap.applyStyles('overflow: hidden; position: relative;');
         
-//        this.wrap.on('mousemove', function(e) {
+        // ALL but IE
+        this.wrap.on('mousemove', function(e) {
+            var xy = e.getXY();
+            this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
+        }, this, {buffer: 20});
+        
+        // IE
         this.button_container.on('mousemove', function(e) {
             var xy = e.getXY();
             this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
-        }, this);
+        }, this, {buffer: 30});
+        
         this.input_file.setOpacity(0.0);
 
         Ext.fly(this.input_file).on('click', function(e) {
