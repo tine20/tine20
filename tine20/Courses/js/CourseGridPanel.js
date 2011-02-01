@@ -3,8 +3,8 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -36,8 +36,8 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.initFilterToolbar();
         //this.actionToolbarItems = this.getToolbarItems();
         
-        //this.plugins = this.plugins || [];
-        //this.plugins.push(this.filterToolbar);
+        this.plugins = this.plugins || [];
+        this.plugins.push(this.filterToolbar);
         
         Tine.Courses.CourseGridPanel.superclass.initComponent.call(this);
     },
