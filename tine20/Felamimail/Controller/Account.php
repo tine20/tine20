@@ -477,7 +477,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         // get imap server capabilities and save delimiter / personal namespace in account
         $capabilities = $_imapBackend->getCapabilityAndNamespace();
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
         
         if (isset($capabilities['namespace'])) {
             $_account->delimiter     = $capabilities['namespace']['personal']['delimiter'];

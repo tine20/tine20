@@ -271,20 +271,17 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         }
         
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemFolders, TRUE));
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_folders, TRUE));
         
         // do some mapping and save folder in db (if it doesn't exist
         foreach ($_folders as $folderData) {
-            if (! $this->_isSelectable($folderData, $_account)) {
-                continue;
-            }
-            
             try {
                 $folderData['localName'] = Felamimail_Model_Folder::decodeFolderName($folderData['localName']);
                 $folderData['globalName'] = Felamimail_Model_Folder::decodeFolderName($folderData['globalName']);
+                $isSelectable = $this->_isSelectable($folderData, $_account);
                                 
                 $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_account->getId(), $folderData['globalName']);
-                $folder->is_selectable = ($folderData['isSelectable'] == '1');
+                $folder->is_selectable = $isSelectable;
                 $folder->has_children = ($folderData['hasChildren'] == '1');
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update cached folder ' . $folderData['globalName']);
@@ -303,7 +300,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                     $folder = new Felamimail_Model_Folder(array(
                         'localname'         => $folderData['localName'],
                         'globalname'        => $folderData['globalName'],
-                        'is_selectable'     => ($folderData['isSelectable'] == '1'),
+                        'is_selectable'     => $isSelectable,
                         'has_children'      => ($folderData['hasChildren'] == '1'),
                         'account_id'        => $_account->getId(),
                         'imap_timestamp'    => Tinebase_DateTime::now(),
@@ -334,7 +331,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      *   @see http://www.tine20.org/bugtracker/view.php?id=2736
      * 
      * @param array $_folderData
-     * @param unknown_type $_account
+     * @param Felamimail_Model_Account $_account
+     * @return boolean
      */
     protected function _isSelectable($_folderData, $_account)
     {

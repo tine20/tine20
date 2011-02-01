@@ -390,13 +390,14 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     },
     
     /**
-     * on before click handler -> accounts not yet clickable
-     * - added again because fetching all messages of account is too expensive
+     * on before click handler
+     * - accounts are not clickable because fetching all messages of account is too expensive
+     * - skip event for folders that are not selectable
      * 
      * @param {Ext.tree.AsyncTreeNode} node
      */
     onBeforeClick: function(node) {
-        if (Tine.Felamimail.loadAccountStore().getById(node.id)) {
+        if (Tine.Felamimail.loadAccountStore().getById(node.id) || ! this.app.getFolderStore().getById(node.id).get('is_selectable')) {
             return false;
         }
     },
@@ -461,8 +462,10 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         } else {
             if (folder.get('globalname') === account.get('trash_folder') || folder.get('globalname').match(/junk/i)) {
                 this.contextMenuTrash.showAt(event.getXY());
+            } else if (! folder.get('is_selectable')){
+                this.unselectableFolder.showAt(event.getXY());
             } else if (folder.get('system_folder')) {
-                this.contextMenuSystemFolder.showAt(event.getXY());    
+                this.contextMenuSystemFolder.showAt(event.getXY());
             } else {
                 this.contextMenuUserFolder.showAt(event.getXY());
             }
