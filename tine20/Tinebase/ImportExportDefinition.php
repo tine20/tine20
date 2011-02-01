@@ -7,7 +7,7 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:ImportExportDefinition.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
+ * @version     $Id$
  * 
  */
 
