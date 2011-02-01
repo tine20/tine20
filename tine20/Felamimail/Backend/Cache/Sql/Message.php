@@ -32,9 +32,32 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     protected $_modelName = 'Felamimail_Model_Message';
     
+    /**
+     * placeholder for id column for searchImproved()/_getSelectImproved()
+     * 
+     * @todo move this to Tinebase_Backend_Sql_Abstract
+     */
     const IDCOL             = '_id_';
+    
+    /**
+     * fetch single column with db query
+     * 
+     * @todo move this to Tinebase_Backend_Sql_Abstract
+     */
     const FETCH_MODE_SINGLE = 'fetch_single';
+
+    /**
+     * fetch two columns (id + X) with db query
+     * 
+     * @todo move this to Tinebase_Backend_Sql_Abstract
+     */
     const FETCH_MODE_PAIR   = 'fetch_pair';
+    
+    /**
+     * fetch all columns with db query
+     * 
+     * @todo move this to Tinebase_Backend_Sql_Abstract
+     */
     const FETCH_ALL         = 'fetch_all';
     
     /**
