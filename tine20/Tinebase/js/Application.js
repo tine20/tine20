@@ -60,9 +60,10 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
     /**
      * returns iconCls of this application
      * 
+     * @param {String} target
      * @return {String}
      */
-    getIconCls: function() {
+    getIconCls: function(target) {
         return this.appName + 'IconCls';
     },
     
