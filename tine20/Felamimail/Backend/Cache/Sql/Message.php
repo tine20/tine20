@@ -32,6 +32,11 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     protected $_modelName = 'Felamimail_Model_Message';
     
+    const IDCOL             = '_id_';
+    const FETCH_MODE_SINGLE = 'fetch_single';
+    const FETCH_MODE_PAIR   = 'fetch_pair';
+    const FETCH_ALL         = 'fetch_all';
+    
     /**
      * foreign tables (key => tablename)
      *
@@ -65,7 +70,150 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      *
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
      * @param  Tinebase_Model_Pagination            $_pagination
+     * @param  array|string|Zend_Db_Expr            $_cols columns to get, * per default / use self::IDCOL to get only ids
+     * @return Tinebase_Record_RecordSet|array
+     * 
+     * @todo move this to Tinebase_Backend_Sql_Abstract
+     */
+    public function searchImproved(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')    
+    {
+        if ($_pagination === NULL) {
+            $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
+        }
+        
+        // (1) get ids
+        $getIdValuePair = (is_array($_cols) && in_array(self::IDCOL, $_cols) && count($_cols) == 2);
+        $cols = $getIdValuePair ? $_cols : self::IDCOL;
+        $select = $this->_getSelectImproved($cols);
+        
+        if ($_filter !== NULL) {
+            $this->_addFilter($select, $_filter);
+        }
+        $_pagination->appendPaginationSql($select);
+        
+        if ($getIdValuePair) {
+            return $this->_fetch($select, self::FETCH_MODE_PAIR);
+        } else {
+            $ids = $this->_fetch($select);
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Fetched ' . count($ids) .' ids.');
+        
+        if ($_cols === self::IDCOL) {
+            $result = $ids;
+        } else if (empty($ids)) {
+            return new Tinebase_Record_RecordSet($this->_modelName);
+        } else {
+            // (2) get other columns and do joins
+            $select = $this->_getSelectImproved($_cols);
+            $this->_addWhereIdIn($select, $ids);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+            
+            $rows = $this->_fetch($select, self::FETCH_ALL);
+            $result = $this->_rawDataToRecordSet($rows);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * adds 'id in (...)' where stmt
+     * 
+     * @param Zend_Db_Select $_select
+     * @param string|array $_ids
+     * @return Zend_Db_Select
+     * 
+     * @todo move this to Tinebase_Backend_Sql_Abstract
+     */
+    protected function _addWhereIdIn(Zend_Db_Select $_select, $_ids)
+    {
+        $_select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier . ' in (?)', (array) $_ids));
+        
+        return $_select;
+    }
+    
+    /**
+     * fetch rows from db
+     * 
+     * @param Zend_Db_Select $_select
+     * @param string $_mode
      * @return array
+     * 
+     * @todo move this to Tinebase_Backend_Sql_Abstract
+     */
+    protected function _fetch(Zend_Db_Select $_select, $_mode = self::FETCH_MODE_SINGLE)
+    {
+        $stmt = $this->_db->query($_select);
+        
+        if ($_mode === self::FETCH_ALL) {
+            $result = (array) $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        } else {
+            $result = array();
+            while ($row = $stmt->fetch(Zend_Db::FETCH_NUM)) {
+                if ($_mode === self::FETCH_MODE_SINGLE) {
+                    $result[] = $row[0];
+                } else if ($_mode === self::FETCH_MODE_PAIR) {
+                    $result[$row[0]] = $row[1];
+                }
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param array|string $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     * 
+     * @todo move this to Tinebase_Backend_Sql_Abstract
+     */
+    protected function _getSelectImproved($_cols = '*', $_getDeleted = FALSE)
+    {
+        if ($_cols !== '*' ) {
+            $cols = array();
+            foreach ((array) $_cols as $col) {
+                $cols[] = ($col === self::IDCOL) ? $this->_tableName . '.' . $this->_identifier : $col;
+            }
+        }
+        
+        $select = $this->_db->select();
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $cols);
+        
+        if (!$_getDeleted && $this->_modlogActive) {
+            // don't fetch deleted objects
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
+        }
+        
+        if (! in_array(self::IDCOL, (array)$_cols) && ! empty($this->_foreignTables)) {
+            $select->group($this->_tableName . '.id');
+            foreach ($this->_foreignTables as $modelName => $join) {
+                if ($cols == '*' || in_array($modelName, (array)$cols)) {
+                    // only join if field is in cols
+                    $selectArray = array($modelName => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')');
+                    $select->joinLeft(
+                        /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
+                        /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
+                        /* select */ $selectArray
+                    );
+                }
+            }
+        }
+        
+        return $select;
+    }
+    
+    /**
+     * Search for records matching given filter
+     *
+     * @param  Tinebase_Model_Filter_FilterGroup    $_filter
+     * @param  Tinebase_Model_Pagination            $_pagination
+     * @return array
+     * 
+     * @todo use searchImproved()
      */
     public function searchMessageUids(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)    
     {
