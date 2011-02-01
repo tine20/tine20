@@ -160,6 +160,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         options.params = options.params || {};
         
         var filter = options.params.filter ? options.params.filter : [];
+        
         filter.push({field: 'period', operator: 'within', value: this.getView().getPeriod() });
     },
     
