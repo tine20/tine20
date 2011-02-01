@@ -221,6 +221,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     changeView: function (view, startDate) {
+        Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::changeView(' + view + ',' + startDate + ')');
         // save current startDate
         this.startDates[this.activeView] = this.startDate.clone();
         
@@ -280,7 +281,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         var options = {};
         // NOTE: Only THIS.onStoreBeforeload is called. 
         //       The store beforeLoad event is NOT fired!
-        //       This skips the period filter which comes form calendarPanel::onStoreBeforeLoad!
+        //       This skips the period filter which comes form calendarPanel::onBeforeLoad!
         this.onStoreBeforeload(store, options);
         
         return options.params.filter;
@@ -632,6 +633,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     refresh: function (refresh) {
+        Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::refresh(' + refresh + ')');
         var panel = this.getCalendarPanel(this.activeView);
         panel.getStore().load({
             refresh: refresh
@@ -668,6 +670,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     },
     
     updateView: function (which) {
+        Tine.log.debug('Tine.Calendar.MainScreenCenterPanel::updateView(' + which + ')');
         var panel = this.getCalendarPanel(which);
         var period = panel.getTopToolbar().getPeriod();
         
@@ -762,6 +765,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             this.calendarPanels[which].on('render', function () {
                 var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName);
                 var favoritesPanel  = this.app.getMainScreen().getWestPanel().getFavoritesPanel();
+                // NOTE: this perfoms the initial load!
                 favoritesPanel.selectFilter(defaultFavorite);
             }, this);
             

@@ -38,7 +38,7 @@ Tine.Calendar.FilterPanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel
         options.params.filter = this.store.getById(this.getSelectionModel().getSelectedNode().id).get('filters');
         
         var cp = Tine.Tinebase.appMgr.get('Calendar').getMainScreen().getCenterPanel();
-        var period = cp.getCalendarPanel(cp.activeView).getTopToolbar().getPeriod();
+        var period = cp.getCalendarPanel(cp.activeView).getView().getPeriod();
         
         // remove all existing period filters
         Ext.each(options.params.filter, function(filter) {
