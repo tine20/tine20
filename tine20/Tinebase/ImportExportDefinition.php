@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:ImportExportDefinition.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
  * 
  */
@@ -133,6 +133,10 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
     public static function getOptionsAsZendConfigXml(Tinebase_Model_ImportExportDefinition $_definition, $_additionalOptions = array())
     {
         $tmpfname = tempnam(Tinebase_Core::getTempDir(), "tine_tempfile_");
+        
+        if (! $tmpfname) {
+            throw new Tinebase_Exception_AccessDenied('Could not create temporary file.');
+        }
         
         $handle = fopen($tmpfname, "w");
         fwrite($handle, $_definition->plugin_options);
