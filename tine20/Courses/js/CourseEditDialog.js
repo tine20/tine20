@@ -154,11 +154,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Course Name'), 
                         name:'name',
                         allowBlank: false
-                    }, /*{
-                        fieldLabel: this.app.i18n._('Course / School Type'), 
-                        name:'type',
-                        allowBlank: false
-                    }*/ {
+                    }, {
                         xtype:'reccombo',
                         name: 'type',
                         allowBlank: false,
@@ -178,7 +174,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         preventScrollbars:false,
                         xtype: 'textarea',
                         height: 60
-                    }, {
+                    }/*, {
                         hideLabel: true,
                         boxLabel: this.app.i18n._('Internet Access'),
                         name: 'internet',
@@ -190,7 +186,7 @@ Tine.Courses.CourseEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         name: 'fileserver',
                         xtype: 'checkbox',
                         columnWidth: 0.5
-                    }]]
+                    }*/]]
                 }, {
                     // activities and tags
                     layout: 'accordion',

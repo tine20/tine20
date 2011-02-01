@@ -34,10 +34,10 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.gridConfig.columns = this.getColumns();
         this.initFilterToolbar();
-        this.actionToolbarItems = this.getToolbarItems();
+        //this.actionToolbarItems = this.getToolbarItems();
         
-        this.plugins = this.plugins || [];
-        this.plugins.push(this.filterToolbar);
+        //this.plugins = this.plugins || [];
+        //this.plugins.push(this.filterToolbar);
         
         Tine.Courses.CourseGridPanel.superclass.initComponent.call(this);
     },
@@ -87,14 +87,16 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             width: 150,
             sortable: true,
             dataIndex: 'internet',
-            renderer: Tine.Tinebase.common.booleanRenderer
+            renderer: Tine.Tinebase.common.booleanRenderer,
+            hidden: true
         },{
             id: 'fileserver',
             header: this.app.i18n._("Fileserver Access"),
             width: 150,
             sortable: true,
             dataIndex: 'fileserver',
-            renderer: Tine.Tinebase.common.booleanRenderer
+            renderer: Tine.Tinebase.common.booleanRenderer,
+            hidden: true
         }];
     },
     
