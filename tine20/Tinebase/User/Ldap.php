@@ -589,12 +589,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         }
 
         // fetch also the uidnumbers of machine accounts, if needed
-        if (isset($this->_options['machineDn'])) {
+        // @todo move this to samba plugin
+        if (isset(Tinebase_Core::getConfig()->samba) && Tinebase_Core::getConfig()->samba->get('manageSAM', FALSE) == true) {
             $accounts = $this->_ldap->search(
-            $filter,
-            $this->_options['machineDn'],
-            Zend_Ldap::SEARCH_SCOPE_SUB,
-            array('uidnumber')
+                $filter,
+                Tinebase_Core::getConfig()->samba->get('machineDn'),
+                Zend_Ldap::SEARCH_SCOPE_SUB,
+                array('uidnumber')
             );
 
             foreach ($accounts as $userData) {
