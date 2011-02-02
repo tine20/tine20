@@ -50,6 +50,12 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.Panel, {
     currentCalMap: null,
     
     /**
+     * @cfg {String} requiredGrant
+     * grant which is required to select leaf node(s)
+     */
+    requiredGrant: 'editGrant',
+    
+    /**
      * edit dialog
      * 
      * @type Tine.Calendar.EventEditDialog
@@ -150,6 +156,7 @@ Ext.extend(Tine.Calendar.CalendarSelectWidget, Ext.Panel, {
             containerName: this.app.i18n.n_hidden(this.recordClass.getMeta('containerName'), this.recordClass.getMeta('containersName'), 1),
             containersName: this.app.i18n._hidden(this.recordClass.getMeta('containersName')),
             appName: this.app.appName,
+            requiredGrant: this.requiredGrant,
             hideTrigger2: false,
             trigger2Class: 'cal-invitation-trigger',
             onTrigger2Click: this.fakeCombo.onTriggerClick.createDelegate(this.fakeCombo),
