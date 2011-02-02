@@ -105,7 +105,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         }
         
         // (1) get ids or id/value pair
-        list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols);
+        list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter);
         $select = $this->_getSelectImproved($colsToFetch);
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
@@ -138,25 +138,39 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * returns columns to fetch in first query and if an id/value pair is requested 
      * 
      * @param array|string $_cols
+     * @param Tinebase_Model_Filter_FilterGroup    $_filter
      * @return array
      */
-    protected function _getColumnsToFetch($_cols)
+    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter)
     {
         $getIdValuePair = FALSE;
-        
-        if ($_cols !== '*') {
-            $cols = (array) $_cols;
-            if (in_array(self::IDCOL, $cols) && count($cols) == 2) {
+
+        if ($_cols === '*') {
+            $colsToFetch = array('id' => self::IDCOL);
+        } else {
+            $colsToFetch = (array) $_cols;
+            
+            if (in_array(self::IDCOL, $colsToFetch) && count($colsToFetch) == 2) {
                 // id/value pair requested
                 $getIdValuePair = TRUE;
-            } else if (! in_array(self::IDCOL, $cols) && count($cols) == 1) {
+            } else if (! in_array(self::IDCOL, $colsToFetch) && count($colsToFetch) == 1) {
                 // only one non-id column was requested -> add id and treat it like id/value pair
-                array_push($cols, self::IDCOL);
+                array_push($colsToFetch, self::IDCOL);
                 $getIdValuePair = TRUE;
+            } else {
+                $colsToFetch = array('id' => self::IDCOL);
             }
         }
         
-        $colsToFetch = ($getIdValuePair) ? $cols : self::IDCOL;
+        if ($_filter !== NULL) {
+            // need to ask filter if it needs additional columns
+            $filterCols = $_filter->getRequiredColumnsForSelect();
+            foreach ($filterCols as $key => $filterCol) {
+                if (! array_key_exists($key, $colsToFetch)) {
+                    $colsToFetch[$key] = $filterCol;
+                }
+            }
+        }
         
         return array($colsToFetch, $getIdValuePair);
     }
