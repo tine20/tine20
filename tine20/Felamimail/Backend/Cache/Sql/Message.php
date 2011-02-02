@@ -226,6 +226,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                 $key = (is_numeric($id)) ? ($col === self::IDCOL) ? $this->_identifier : $col : $id;
                 $cols[$key] = ($col === self::IDCOL) ? $this->_tableName . '.' . $this->_identifier : $col;
             }
+        } else {
+            $cols = '*';
         }
         
         $select = $this->_db->select();
@@ -289,7 +291,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {        
-        $select = $this->_getSelect(array('count' => 'COUNT(*)', 'flags' => 'felamimail_cache_message_flag.flag'));
+        $select = $this->_getSelectImproved(array('count' => 'COUNT(*)', 'flags' => 'felamimail_cache_message_flag.flag'));
         $this->_addFilter($select, $_filter);
         
         $stmt = $this->_db->query($select);
