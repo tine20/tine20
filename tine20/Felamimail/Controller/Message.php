@@ -102,6 +102,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
+     * 
+     * @todo move logic to Felamimail_Model_MessageFilter
      */
     public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {

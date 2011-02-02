@@ -9,10 +9,12 @@
  * @version     $Id$
  *
  * @todo        replace 'custom' filters with normal filter classes
+ * @todo        should implement acl filter
  */
 
 /**
  * cache entry filter Class
+ * 
  * @package     Felamimail
  */
 class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup 
