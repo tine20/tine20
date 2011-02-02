@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        use new searchImproved from fmail backend
  * @todo        parse mail body and add <a> to telephone numbers?
  * @todo        check html purifier config (allow some tags/attributes?)
  */
@@ -97,6 +96,37 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         return self::$_instance;
     }
     
+    /**
+     * get list of records
+     *
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param boolean $_getRelations
+     * @param boolean $_onlyIds
+     * @param string $_action for right/acl check
+     * @return Tinebase_Record_RecordSet|array
+     * 
+     * @todo move this to Tinebase_Controller_Record_Abstract
+     */
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
+    {
+        $this->_checkRight($_action);
+        $this->checkFilterACL($_filter, $_action);
+        
+        $result = $this->_backend->searchImproved($_filter, $_pagination, ($_onlyIds) ? Felamimail_Backend_Cache_Sql_Message::IDCOL : '*');
+        
+        if (! $_onlyIds) {
+            if ($_getRelations) {
+                $result->setByIndices('relations', Tinebase_Relations::getInstance()->getMultipleRelations($this->_modelName, $this->_backend->getType(), $result->getId()));
+            }
+            if ($this->_doResolveCustomfields()) {
+                Tinebase_CustomField::getInstance()->resolveMultipleCustomfields($result);
+            }
+        }
+        
+        return $result;    
+    }
+        
     /**
      * Removes accounts where current user has no access to
      * 
