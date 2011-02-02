@@ -97,6 +97,26 @@ msgstr "Értesítő emailek küldése saját tevékenységekről"
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Értesítő emailek fogadása saját magadnak készített tevékenységekről"
 
+#: Preference.php:156
+msgid "Never"
+msgstr ""
+
+#: Preference.php:156
+msgid "On invitation and cancellation only"
+msgstr ""
+
+#: Preference.php:156
+msgid "On time changes"
+msgstr ""
+
+#: Preference.php:156
+msgid "On all updates but attendee responses"
+msgstr ""
+
+#: Preference.php:156
+msgid "On attendee responses too"
+msgstr ""
+
 #: Acl/Rights.php:97
 msgid "manage shared calendars"
 msgstr "megosztott naptárak kezelése"

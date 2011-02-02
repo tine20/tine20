@@ -96,6 +96,26 @@ msgstr "Send Notifications Emails of own Actions"
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Get notifications emails for actions you did yourself"
 
+#: Preference.php:156
+msgid "Never"
+msgstr "Never"
+
+#: Preference.php:156
+msgid "On invitation and cancellation only"
+msgstr "On invitation and cancellation only"
+
+#: Preference.php:156
+msgid "On time changes"
+msgstr "On time changes"
+
+#: Preference.php:156
+msgid "On all updates but attendee responses"
+msgstr "On all updates but attendee responses"
+
+#: Preference.php:156
+msgid "On attendee responses too"
+msgstr "On attendee responses too"
+
 #: Acl/Rights.php:97
 msgid "manage shared calendars"
 msgstr "manage shared calendars"
