@@ -93,7 +93,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      *
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
      * @param  Tinebase_Model_Pagination            $_pagination
-     * @param  array|string|Zend_Db_Expr            $_cols columns to get, * per default / use self::IDCOL to get only ids
+     * @param  array|string                         $_cols columns to get, * per default / use self::IDCOL to get only ids
      * @return Tinebase_Record_RecordSet|array
      * 
      * @todo move this to Tinebase_Backend_Sql_Abstract
@@ -104,11 +104,9 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
         }
         
-        // (1) get ids
-        $getIdValuePair = (is_array($_cols) && in_array(self::IDCOL, $_cols) && count($_cols) == 2);
-        $cols = $getIdValuePair ? $_cols : self::IDCOL;
-        $select = $this->_getSelectImproved($cols);
-        
+        // (1) get ids or id/value pair
+        list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols);
+        $select = $this->_getSelectImproved($colsToFetch);
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
         }
@@ -123,7 +121,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Fetched ' . count($ids) .' ids.');
         
         if ($_cols === self::IDCOL) {
-            $result = $ids;
+            return $ids;
         } else if (empty($ids)) {
             return new Tinebase_Record_RecordSet($this->_modelName);
         } else {
@@ -132,10 +130,35 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $this->_addWhereIdIn($select, $ids);
             
             $rows = $this->_fetch($select, self::FETCH_ALL);
-            $result = $this->_rawDataToRecordSet($rows);
+            return $this->_rawDataToRecordSet($rows);
+        }
+    }
+    
+    /**
+     * returns columns to fetch in first query and if an id/value pair is requested 
+     * 
+     * @param array|string $_cols
+     * @return array
+     */
+    protected function _getColumnsToFetch($_cols)
+    {
+        $getIdValuePair = FALSE;
+        
+        if ($_cols !== '*') {
+            $cols = (array) $_cols;
+            if (in_array(self::IDCOL, $cols) && count($cols) == 2) {
+                // id/value pair requested
+                $getIdValuePair = TRUE;
+            } else if (! in_array(self::IDCOL, $cols) && count($cols) == 1) {
+                // only one non-id column was requested -> add id and treat it like id/value pair
+                array_push($cols, self::IDCOL);
+                $getIdValuePair = TRUE;
+            }
         }
         
-        return $result;
+        $colsToFetch = ($getIdValuePair) ? $cols : self::IDCOL;
+        
+        return array($colsToFetch, $getIdValuePair);
     }
     
     /**
