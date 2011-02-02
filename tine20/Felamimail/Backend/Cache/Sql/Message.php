@@ -389,6 +389,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @param integer $_start
      * @param integer $_limit
      * @return array
+     * 
+     * @todo replace with searchImproved
      */
     public function getFlagsForFolder($_folderId, $_start = NULL, $_limit = NULL)    
     {
@@ -480,6 +482,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      *
      * @param  mixed  $_folderId
      * @return array
+     * 
+     * @todo replace with searchImproved
      */
     public function getMessageuidsByFolderId($_folderId)
     {
