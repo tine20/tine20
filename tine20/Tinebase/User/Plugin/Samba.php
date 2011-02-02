@@ -176,13 +176,15 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
      */
     protected function _getGroupSID($_groupId)
     {
+        $ldapOptions = Tinebase_User::getBackendConfiguration();
+        
         $filter = Zend_Ldap_Filter::equals(
-            $this->_options['groupUUIDAttribute'], Zend_Ldap::filterEscape($_groupId)
+            $ldapOptions['groupUUIDAttribute'], Zend_Ldap::filterEscape($_groupId)
         );
         
         $groups = $this->_ldap->search(
             $filter, 
-            $this->_options['groupsDn'], 
+            $ldapOptions['groupsDn'], 
             Zend_Ldap::SEARCH_SCOPE_SUB, 
             array('sambasid')
         );
@@ -217,8 +219,8 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
                         case 'logoffTime':
                         case 'kickoffTime':
                         case 'sid':
-                        case 'acctFlags':
                         case 'primaryGroupSID':
+                        case 'acctFlags':
                             // do nothing
                             break;
                             
@@ -243,11 +245,18 @@ class Tinebase_User_Plugin_Samba  extends Tinebase_User_Plugin_LdapAbstract
             $uidNumer = isset($_ldapData['uidnumber']) ? $_ldapData['uidnumber'] : $_ldapEntry['uidnumber'][0];
             $_ldapData['sambasid'] = $this->_options['sid'] . '-' . (2 * $uidNumer + 1000);
         }
-
-        $_ldapData['sambaacctflags']     = !empty($_ldapEntry['sambaacctflags']) ? $_ldapEntry['sambaacctflags'][0] : '[U          ]';
-        $_ldapData['sambaacctflags'][2]  = ($_user->accountStatus != 'enabled') ? 'D' : ' ';
         
-        #$_ldapData['sambaprimarygroupsid'] = $this->_getGroupSID($_user->accountPrimaryGroup);
+        $_ldapData['sambaacctflags']    = !empty($_ldapEntry['sambaacctflags']) ? $_ldapEntry['sambaacctflags'][0] : '[U          ]';
+        if ($_user->sambaSAM instanceof Tinebase_Model_SAMUser) {
+            $_ldapData['sambaacctflags'][1] = !empty($_user->sambaSAM->acctFlags) ? $_user->sambaSAM->acctFlags[1] : 'U';
+        }
+        $_ldapData['sambaacctflags'][2] = ($_user->accountStatus != 'enabled') ? 'D' : ' ';
+        
+        try {
+            $_ldapData['sambaprimarygroupsid'] = $this->_getGroupSID($_user->accountPrimaryGroup);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $_ldapData['sambaprimarygroupsid'] = array();
+        }
         
         // check if user has all required object classes. This is needed
         // when updating users which where created using different requirements
