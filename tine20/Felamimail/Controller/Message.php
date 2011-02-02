@@ -171,7 +171,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 'messageuid'  => $message->messageuid,
                 'folder_id'   => $message->folder_id,
                 'received'    => $message->received,
-                'size'        => $structure['size'],
+                'size'        => (array_key_exists('size', $structure)) ? $structure['size'] : 0,
                 'partid'      => $_partId,
                 'body'        => $body,
                 'headers'     => $headers,
