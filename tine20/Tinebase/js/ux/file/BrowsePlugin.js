@@ -83,6 +83,9 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.component = cmp;
         
         cmp.on('afterrender', this.onRender, this);
+        cmp.on('show', this.syncWrap, this);
+        cmp.on('resize', this.syncWrap, this);
+        cmp.on('afterlayout', this.syncWrap, this);
         
         // chain fns
         if (typeof cmp.setDisabled == 'function') {
@@ -135,7 +138,11 @@ Ext.ux.file.BrowsePlugin.prototype = {
                     this.wrap.insertBefore(this.component.el)
                     this.wrap.insertFirst(this.component.el);
                 }
+                this.syncWrap();
             }, this);
+            
+            this.component.ownerCt.on('show', this.syncWrap, this);
+            this.component.ownerCt.on('resize', this.syncWrap, this);
         }
         
         this.createInputFile();
@@ -172,6 +179,13 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 
                 this.onInputFileChange(null, null, null, files);
             }, this);
+        }
+    },
+    
+    syncWrap: function() {
+        if (this.button_container) {
+            var button_size = this.button_container.getSize();
+            this.wrap.setSize(button_size);
         }
     },
     
