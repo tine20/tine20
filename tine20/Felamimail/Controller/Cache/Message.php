@@ -319,6 +319,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             'dir'   => 'DESC'
         ));
         
+        // @todo replace with searchImproved
         $result = $this->_backend->search($filter, $pagination);
         
         if(count($result) === 0) {
@@ -786,6 +787,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             )
         ));
         
+        // @todo replace with searchImproved
         $messageUidsInCache = $this->_backend->search($filter)->messageuid;
         
         $result = array_diff($_messageUids, $messageUidsInCache);
@@ -821,6 +823,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             )
         ));
         
+        // @todo replace with searchImproved
         $foundUids = $this->_backend->search($filter)->messageuid;
         
         $missingUids = array_diff($_uids, $foundUids);
