@@ -197,5 +197,6 @@ cal-monthview-wkcell-header {
 	position: absolute;
 	border-bottom: 1px solid #E1E1E1;
 	overflow-y: auto;
+	overflow-x: hidden;
 	z-index: 5000;
 }
