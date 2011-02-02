@@ -171,9 +171,10 @@ class Tinebase_Core
 
 
             /**************************** ActiveSync API ****************************
-             * RewriteRule ^/Microsoft-Server-ActiveSync(.*) /index.php$1 [E=ACTIVESYNC:true,E=REDIRECT_ACTIVESYNC:true,E=REMOTE_USER:%{HTTP:Authorization},L]
+             * RewriteRule ^/Microsoft-Server-ActiveSync(.*) /index.php?frontend=activesync [E=REMOTE_USER:%{HTTP:Authorization},L,QSA]
              */
-        } elseif(isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') {
+        } elseif((isset($_SERVER['REDIRECT_ACTIVESYNC']) && $_SERVER['REDIRECT_ACTIVESYNC'] == 'true') ||
+                 (isset($_REQUEST['frontend']) && $_REQUEST['frontend'] == 'activesync')) {
             $server = new ActiveSync_Server_Http();
 
 
@@ -202,10 +203,13 @@ class Tinebase_Core
             /**************************** HTTP API ****************************/
         } else {
 
-            /**************************** OpenID *****************************/
+            /**************************** OpenID ****************************
+             * RewriteRule ^/users/(.*)                      /index.php?frontend=openid&username=$1 [L,QSA]
+             */
             if (isset($_SERVER['HTTP_ACCEPT']) && stripos($_SERVER['HTTP_ACCEPT'], 'application/xrds+xml') !== FALSE) {
                 $_REQUEST['method'] = 'Tinebase.getXRDS';
-            } elseif (isset($_SERVER['REDIRECT_USERINFOPAGE']) && $_SERVER['REDIRECT_USERINFOPAGE'] == 'true') {
+            } elseif ((isset($_SERVER['REDIRECT_USERINFOPAGE']) && $_SERVER['REDIRECT_USERINFOPAGE'] == 'true') ||
+                      (isset($_REQUEST['frontend']) && $_REQUEST['frontend'] == 'openid')) {
                 $_REQUEST['method'] = 'Tinebase.userInfoPage';
             }
             
