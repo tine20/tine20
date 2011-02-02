@@ -429,18 +429,12 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     }
                 }
                 
-                $sendNotifications = $this->_sendNotifications;
-                $this->_sendNotifications = FALSE;
+                $sendNotifications = $this->sendNotifications(FALSE);
                 
-                // NOTE: We already checked the ACL above, and we don't wan't to collide with the std. parent checks
-                $doContainerACLChecks = $this->_doContainerACLChecks;
-                $this->_doContainerACLChecks = FALSE;
                 parent::update($_record);
-                $this->_doContainerACLChecks = $doContainerACLChecks;
-                
                 $this->_saveAttendee($_record);
                 
-                $this->_sendNotifications = $sendNotifications;
+                $this->sendNotifications($sendNotifications);
                 
             } else if ($_record->attendee instanceof Tinebase_Record_RecordSet) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " user has no editGrant for event: {$_record->id}, updating attendee status with valid authKey only");
