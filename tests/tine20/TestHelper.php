@@ -28,18 +28,27 @@ define('PATH_TO_TEST_DIR', dirname(__FILE__));
 /*
  * Set white / black lists
  */
-PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TEST_DIR);
-PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TINE_LIBRARY);
-PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Setup');
-PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Zend');
+$phpUnitVersion = explode(' ',PHPUnit_Runner_Version::getVersionString());
+
+if (! version_compare($phpUnitVersion[1], "3.5.0")) {
+    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TEST_DIR);
+    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TINE_LIBRARY);
+    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Setup');
+    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Zend');
+} else {
+    PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
+    PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
+    PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Setup');
+    PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Zend');
+}
 
 $path = array(
     PATH_TO_REAL_DIR,
     PATH_TO_TEST_DIR,
-	PATH_TO_TINE_LIBRARY,
+    PATH_TO_TINE_LIBRARY,
     get_include_path(),
 );
-        
+
 set_include_path(implode(PATH_SEPARATOR, $path));
 
 /**
