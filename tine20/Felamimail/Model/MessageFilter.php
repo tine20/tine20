@@ -54,7 +54,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'to'            => array('custom' => true),
         'cc'            => array('custom' => true),
         'bcc'           => array('custom' => true),
-        'flags'         => array('custom' => true),
+        'flags'         => array('custom' => true, 'requiredCols' => array('flags' => 'felamimail_cache_message_flag.flag')),
         'account_id'    => array('custom' => true),
     );
 
@@ -64,6 +64,31 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
      * @var array
      */
     protected $_userAccountIds = array();
+    
+    /**
+     * gets additional columns required for from() of search Zend_Db_Select 
+     * 
+     * @return array
+     * 
+     * @todo move this to Tinebase_Model_Filter_FilterGroup?
+     */
+    public function getRequiredColumnsForSelect()
+    {
+        $result = array();
+        
+        foreach ($this->getFilterObjects() as $filter) {
+            // @todo check single filters for requirements
+        }
+        
+        foreach ($this->_customData as $custom) {
+            // check custom filter for requirements
+            if (array_key_exists('requiredCols', $this->_filterModel[$custom['field']])) {
+                $result = array_merge($result, $this->_filterModel[$custom['field']]['requiredCols']);
+            }
+        }
+        
+        return $result;
+    }
     
     /**
      * appends custom filters to a given select object
