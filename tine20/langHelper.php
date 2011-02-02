@@ -185,7 +185,7 @@ function generatePOTFiles($_verbose)
 {
     global $tine20path;
     if (file_exists("$tine20path/Tinebase/js/tine-all.js")) {
-        die("You need to run ./release.php -c before updateing lang files! \n");
+        die("You need to run ./release.php -c before updating lang files! \n");
     }
     
     foreach (Tinebase_Translation::getTranslationDirs() as $appName => $translationPath) {
