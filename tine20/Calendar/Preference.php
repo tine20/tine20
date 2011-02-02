@@ -152,7 +152,8 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::NOTIFICATION_LEVEL:
                 $translate = Tinebase_Translation::getTranslation($this->_application);
-                
+                // need to put the translations strings here because they were not found in the xml below :/
+                // _('Never') _('On invitation and cancellation only') _('On time changes') _('On all updates but attendee responses') _('On attendee responses too')
                 $preference->value      = Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_RESCHEDULE;
                 $preference->options    = '<?xml version="1.0" encoding="UTF-8"?>
                     <options>
@@ -162,7 +163,7 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                         </option>
                         <option>
                             <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_INVITE_CANCEL . '</value>
-                            <label>'. $translate->_('On invitaion and cancelation only') . '</label>
+                            <label>'. $translate->_('On invitation and cancellation only') . '</label>
                         </option>
                         <option>
                             <value>'. Calendar_Controller_EventNotifications::NOTIFICATION_LEVEL_EVENT_RESCHEDULE . '</value>
