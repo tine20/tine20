@@ -387,7 +387,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     /**
      * get all flags for a given folder id
      *
-     * @param string $_folderId
+     * @param string|Felamimail_Model_Folder $_folderId
      * @param integer $_start
      * @param integer $_limit
      * @return array
@@ -477,33 +477,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         $seenCount = $this->_db->fetchOne($select);
                 
         return $seenCount;
-    }
-    
-    /**
-     * get messageuids by folder (id)
-     *
-     * @param  mixed  $_folderId
-     * @return array
-     * 
-     * @todo replace with searchImproved
-     */
-    public function getMessageuidsByFolderId($_folderId)
-    {
-        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
-        
-        $select = $this->_db->select();
-        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $this->_tableName . '.messageuid')
-                ->where($this->_db->quoteInto($this->_db->quoteIdentifier('folder_id') . ' = ?', $folderId));
-        
-        $stmt = $this->_db->query($select);
-        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $result = array();
-        foreach ($rows as $row) {
-            $result[] = $row['messageuid'];
-        }
-
-        return $result;
     }
     
     /**
