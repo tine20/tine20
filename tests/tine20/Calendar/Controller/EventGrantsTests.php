@@ -384,6 +384,26 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         $this->assertEquals(0, count($events), 'testuser has not edit grant, but serach for action update found the event');
     }
     
+    /**
+     * test that an update can't save in a container w.o. grants
+     * @see #0003858 
+     */
+    public function testUpdateEventMissingGrants()
+    {
+        $persistentEvent = $this->_createEventInPersonasCalendar('jsmith', 'jsmith', 'jsmith');
+        
+        $persistentEvent['container_id'] = $this->_personasDefaultCals['rwright']->getId();
+        try {
+            $this->_uit->update($persistentEvent);
+        } catch (Tinebase_Exception_AccessDenied $e) {
+            $this->_uit->sendNotifications(TRUE);
+            return;
+        }
+        
+        $this->fail();
+        
+    }
+   
     protected function _createEventInPersonasCalendar($_calendarPersona, $_organizerPersona = NULL, $_attenderPersona = NULL, $_classification = Calendar_Model_Event::CLASS_PUBLIC)
     {
         $calendarId  = $this->_personasDefaultCals[$_calendarPersona]->getId();
