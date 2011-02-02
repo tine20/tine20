@@ -296,9 +296,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     {
         $result = array();
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
-
-        if ($_structure['type'] != 'text') {
+        if (! array_key_exists('type', $_structure) || $_structure['type'] != 'text') {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Structure has no type key or type != text: ' . print_r($_structure, TRUE));
             return $result;
         }
         
