@@ -131,8 +131,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $select = $this->_getSelectImproved($_cols);
             $this->_addWhereIdIn($select, $ids);
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-            
             $rows = $this->_fetch($select, self::FETCH_ALL);
             $result = $this->_rawDataToRecordSet($rows);
         }
@@ -151,7 +149,7 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     protected function _addWhereIdIn(Zend_Db_Select $_select, $_ids)
     {
-        $_select->where($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier . ' in (?)', (array) $_ids));
+        $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' in (?)', (array) $_ids));
         
         return $_select;
     }
@@ -167,6 +165,8 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     protected function _fetch(Zend_Db_Select $_select, $_mode = self::FETCH_MODE_SINGLE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
+        
         $stmt = $this->_db->query($_select);
         
         if ($_mode === self::FETCH_ALL) {
@@ -198,9 +198,9 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     {
         if ($_cols !== '*' ) {
             $cols = array();
-            // prepend tablename and fix keys
+            // make sure cols is an array, prepend tablename and fix keys
             foreach ((array) $_cols as $id => $col) {
-                $key = (is_numeric($id)) ? $col : $id;
+                $key = (is_numeric($id)) ? ($col === self::IDCOL) ? $this->_identifier : $col : $id;
                 $cols[$key] = ($col === self::IDCOL) ? $this->_tableName . '.' . $this->_identifier : $col;
             }
         }
@@ -213,13 +213,28 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
             $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
         }
         
-        if (! in_array(self::IDCOL, (array)$_cols) && ! empty($this->_foreignTables)) {
-            $select->group($this->_tableName . '.id');
-            foreach ($this->_foreignTables as $modelName => $join) {
-                if ($cols == '*' || in_array($modelName, (array)$cols)) {
+        $this->_addForeignTableJoins($select, $cols);
+        
+        return $select;
+    }
+    
+    /**
+     * add foreign table joins
+     * 
+     * @param Zend_Db_Select $_select
+     * @param array|string $_cols columns to get, * per default
+     */
+    protected function _addForeignTableJoins(Zend_Db_Select $_select, $_cols, $_groupBy = NULL)
+    {
+        if (! empty($this->_foreignTables)) {
+            $groupBy = ($_groupBy !== NULL) ? $_groupBy : $this->_tableName . '.' . $this->_identifier;
+            $_select->group($groupBy);
+            
+            foreach ($this->_foreignTables as $foreignColumn => $join) {
+                if ($_cols == '*' || array_key_exists($foreignColumn, $_cols)) {
                     // only join if field is in cols
-                    $selectArray = array($modelName => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')');
-                    $select->joinLeft(
+                    $selectArray = array($foreignColumn => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')');
+                    $_select->joinLeft(
                         /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
                         /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
                         /* select */ $selectArray
@@ -227,8 +242,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
                 }
             }
         }
-        
-        return $select;
     }
     
     /**
@@ -390,32 +403,17 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @param string|Felamimail_Model_Folder $_folderId
      * @param integer $_start
      * @param integer $_limit
-     * @return array
-     * 
-     * @todo replace with searchImproved
+     * @return Tinebase_Record_RecordSet
      */
     public function getFlagsForFolder($_folderId, $_start = NULL, $_limit = NULL)    
     {
-        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        $filter = $this->_getMessageFilterWithFolderId($_folderId);
+        $pagination = ($_start !== NULL || $_limit !== NULL) ? new Tinebase_Model_Pagination(array(
+            'start' => $_start,
+            'limit' => $_limit,
+        ), TRUE) : NULL;
         
-        $select = $this->_getSelect(array('messageuid' => 'messageuid', 'id' => 'id', 'flags' => 'felamimail_cache_message_flag.flag'));
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $folderId));
-        if ($_start !== NULL && $_limit !== NULL) {
-            $select->limit($_limit, $_start);
-        }
-        
-        $stmt = $this->_db->query($select);
-        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $result = array();
-        foreach ($rows as $row) {
-            $result[$row['id']] = array(
-                'messageuid'    => $row['messageuid'],
-                'flags'         => (! empty($row['flags'])) ? explode(',', $row['flags']) : array(),
-            );
-        }
-
-        return $result;
+        return $this->searchImproved($filter, $pagination, array('messageuid' => 'messageuid', 'id' => self::IDCOL, 'flags' => 'felamimail_cache_message_flag.flag'));
     }
     
     /**
