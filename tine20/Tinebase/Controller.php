@@ -189,6 +189,29 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
     }
     
     /**
+     * authenticate user but don't log in
+     *
+     * @param   string $_loginname
+     * @param   string $_password
+     * @param   string $_ipAddress
+     * @param   string $_clientIdString
+     * @return  bool
+     */
+    public function authenticate($_loginname, $_password, $_ipAddress, $_clientIdString = NULL)
+    {
+        $result = $this->login($_loginname, $_password, $_ipAddress, $_clientIdString);
+        
+        /**
+         * we unset the Zend_Auth session variable. This way we keep the session,
+         * but the user is not logged into Tine 2.0
+         * we use this to validate passwords for OpenId for example
+         */ 
+        unset($_SESSION['Zend_Auth']);
+        unset(Tinebase_Core::getSession()->currentAccount);
+        
+        return $result;
+    }
+    /**
      * change user password
      *
      * @param string $_oldPassword
