@@ -302,39 +302,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @param  mixed  $_folderId
      * @return Felamimail_Model_Message
      */
-    protected function _getLatestMessage($_folderId) 
-    {
-        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
-        
-        $filter = new Felamimail_Model_MessageFilter(array(
-            array(
-                'field'    => 'folder_id', 
-                'operator' => 'equals', 
-                'value'    => $folderId
-            )
-        ));
-        $pagination = new Tinebase_Model_Pagination(array(
-            'limit' => 1,
-            'sort'  => 'messageuid',
-            'dir'   => 'DESC'
-        ));
-        
-        // @todo replace with searchImproved
-        $result = $this->_backend->search($filter, $pagination);
-        
-        if(count($result) === 0) {
-            return null;
-        }
-        
-        return $result[0];
-    }
-    
-    /**
-     * get message with highest messageUid from cache 
-     * 
-     * @param  mixed  $_folderId
-     * @return Felamimail_Model_Message
-     */
     protected function _getLatestMessageUid($_folderId) 
     {
         $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
