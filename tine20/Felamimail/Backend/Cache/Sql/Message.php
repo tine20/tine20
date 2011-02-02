@@ -198,8 +198,10 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     {
         if ($_cols !== '*' ) {
             $cols = array();
-            foreach ((array) $_cols as $col) {
-                $cols[] = ($col === self::IDCOL) ? $this->_tableName . '.' . $this->_identifier : $col;
+            // prepend tablename and fix keys
+            foreach ((array) $_cols as $id => $col) {
+                $key = (is_numeric($id)) ? $col : $id;
+                $cols[$key] = ($col === self::IDCOL) ? $this->_tableName . '.' . $this->_identifier : $col;
             }
         }
         
