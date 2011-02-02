@@ -904,8 +904,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $unreadcount = $folder->cache_unreadcount;
         for ($i = $folder->cache_totalcount; $i > 0; $i -= $this->_flagSyncCountPerStep) {
             $firstMessageSequence = ($i - $this->_flagSyncCountPerStep) >= 0 ? $i - $this->_flagSyncCountPerStep : 0;
-            $flagsOfCachedMessages = $this->_backend->getFlagsForFolder($folder->getId(), $firstMessageSequence, $this->_flagSyncCountPerStep);
-            $this->_setFlagsOnCache($flagsOfCachedMessages, $flags, $unreadcount, $folder->getId());
+            $messagesWithFlags = $this->_backend->getFlagsForFolder($folder->getId(), $firstMessageSequence, $this->_flagSyncCountPerStep);
+            $this->_setFlagsOnCache($messagesWithFlags, $flags, $unreadcount, $folder->getId());
             
             if(! $this->_timeLeft()) {
                 break;
@@ -922,7 +922,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     /**
      * set flags on cache if different
      * 
-     * @param array $_messages
+     * @param Tinebase_Record_RecordSet $_messages
      * @param array $_flags
      * @param integer $_unreadcount
      * @param string $_folderId
@@ -932,11 +932,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         $updateCount = 0;
-        foreach ($_messages as $id => $cachedMessage) {
-            if (array_key_exists($cachedMessage['messageuid'], $_flags)) {
-                $newFlags = $_flags[$cachedMessage['messageuid']]['flags'];
-                $diff1 = array_diff($cachedMessage['flags'], $newFlags);
-                $diff2 = array_diff($newFlags, $cachedMessage['flags']);
+        foreach ($_messages as $cachedMessage) {
+            if (array_key_exists($cachedMessage->messageuid, $_flags)) {
+                $newFlags = $_flags[$cachedMessage->messageuid]['flags'];
+                $diff1 = array_diff($cachedMessage->flags, $newFlags);
+                $diff2 = array_diff($newFlags, $cachedMessage->flags);
                 if (count($diff1) > 0 || count($diff2) > 0) {
                     if (in_array(Zend_Mail_Storage::FLAG_SEEN, $diff1)) {
                         $_unreadcount++;
@@ -944,7 +944,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         $_unreadcount--;
                     }
                     
-                    $this->_backend->setFlags(array($id), $newFlags, $_folderId);
+                    $this->_backend->setFlags(array($cachedMessage->getId()), $newFlags, $_folderId);
                     $updateCount++;
                 }
             }
