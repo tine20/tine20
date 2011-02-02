@@ -442,15 +442,26 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      */
     public function searchCountByFolderId($_folderId)
     {
-        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
+        $filter = $this->_getMessageFilterWithFolderId($_folderId);
+        $count = $this->searchCount($filter);
         
+        return $count;
+    }
+    
+    /**
+     * get folder id message filter
+     * 
+     * @param mixed $_folderId
+     * @return Felamimail_Model_MessageFilter
+     */
+    protected function _getMessageFilterWithFolderId($_folderId)
+    {
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
         $filter = new Felamimail_Model_MessageFilter(array(
             array('field' => 'folder_id', 'operator' => 'equals', 'value' => $folderId)
         ));
         
-        $count = $this->searchCount($filter);
-        
-        return $count;
+        return $filter;
     }
     
     /**
