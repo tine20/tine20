@@ -73,7 +73,7 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * @return {Tine.widgets.app.MainScreen}
      */
     getMainScreen: function() {
-        if (!this.mainScreen) {
+        if (! this.mainScreen && typeof Tine[this.appName].MainScreen === 'function') {
             this.mainScreen = new Tine[this.appName].MainScreen({
                 app: this
             });

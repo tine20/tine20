@@ -643,7 +643,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     initialLoad: function() {
         var defaultFavorite = Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite(this.app.appName);
-        var favoritesPanel  = typeof this.app.getMainScreen().getWestPanel().getFavoritesPanel === 'function' && this.hasFavoritesPanel 
+        var favoritesPanel  = this.app.getMainScreen() && typeof this.app.getMainScreen().getWestPanel().getFavoritesPanel === 'function' && this.hasFavoritesPanel 
             ? this.app.getMainScreen().getWestPanel().getFavoritesPanel() 
             : null;
         if (defaultFavorite && favoritesPanel) {
