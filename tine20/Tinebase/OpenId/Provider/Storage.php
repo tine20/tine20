@@ -5,26 +5,17 @@
  * @package     Tinebase
  * @subpackage  OpenID
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
  */
 
 /**
- * @see Zend_OpenId_Provider_Storage
- */
-require_once "Zend/OpenId/Provider/Storage.php";
-
-/**
  * External storage implemmentation using sql table
  *
  * @package     Tinebase
  * @subpackage  OpenID
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
 {
@@ -130,35 +121,12 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
      */
     public function hasUser($id)
     {
-        // strip of everything before last /
-        $localPart = substr(strrchr($id, '/'), 1);
-        
-        if(empty($localPart)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " invalid id: $id supplied");
+        try {
+            $this->_getAccountForId($id);
+            return true;
+        } catch (Tinebase_Exception_NotFound $tenf) {
             return false;
         }
-                
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
-
-        // try to get user by openid
-        try {
-            Tinebase_User::getInstance()->getUserByProperty(Tinebase_User_Abstract::PROPERTY_OPENID, $localPart);
-            return true;
-        } catch(Tinebase_Exception_NotFound $tenf) {
-            // do nothing
-        }
-        
-        // try to get user by login name
-        try {
-            Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $localPart);
-            return true;
-        } catch(Tinebase_Exception_NotFound $tenf) {
-            // do nothing
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " OpenID: $id not found");
-        
-        return false;
     }
     
     /**
@@ -179,27 +147,18 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
             return false;
         }
         
-        if(empty($username)) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " \$username can not be empty");
-            return false;
-        }
-        
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
-                
-        $authResult = Tinebase_Auth::getInstance()->authenticate($username, $password);
-
-        if ($authResult->isValid() !== true) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " authentication for $id({$account->accountLoginName}) failed");
+        
+        try {
+            $account = $this->_getAccountForId($id);
+        } catch (Tinebase_Exception_NotFound $tenf) {
             return false;
         }
         
-        // we can't destroy the whole session, only the Zend_Auth stuff must get removed
-        unset($_SESSION['Zend_Auth']);
-
-        $account = Tinebase_User::getInstance()->getUserByLoginName($username, 'Tinebase_Model_FullUser');
+        $authResult = Tinebase_Controller::getInstance()->authenticate($account->accountLoginName, $password, $_SERVER['REMOTE_ADDR'], 'OpenId');
         
-        if(!empty($account->openid) && $account->openid != $localPart) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " localPart: $localPart does not match for authenticated account");
+        if ($authResult !== true) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " authentication for $id failed");
             return false;
         }
         
@@ -320,13 +279,19 @@ class Tinebase_OpenId_Provider_Storage extends Zend_OpenId_Provider_Storage
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " localPart: $localPart");
         
+        // try to get user by openid
         try {
             $account = Tinebase_User::getInstance()->getUserByProperty(Tinebase_User_Abstract::PROPERTY_OPENID, $localPart, 'Tinebase_Model_FullUser');
-        } catch(Tinebase_Exception_NotFound $e) {
-            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " OpenID: $_id not found");
-            throw $e;
+            return $account;
+        } catch(Tinebase_Exception_NotFound $tenf) {
+            // try to get user by login name
+            try {
+                $account = Tinebase_User::getInstance()->getUserByProperty('accountLoginName', $localPart, 'Tinebase_Model_FullUser');
+                return $account;
+            } catch(Tinebase_Exception_NotFound $tenf) {
+                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . " OpenID: $_id not found");
+                throw $e;
+            }
         }
-
-        return $account;
     }
 }
