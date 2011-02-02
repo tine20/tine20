@@ -765,9 +765,10 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     }
     
     /**
-     * get message with highest messageUid from cache 
+     * get uids missing from cache
      * 
      * @param  mixed  $_folderId
+     * @param  array $_messageUids
      * @return array
      */
     protected function _getMissingMessageUids($_folderId, array $_messageUids) 
@@ -787,8 +788,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             )
         ));
         
-        // @todo replace with searchImproved
-        $messageUidsInCache = $this->_backend->search($filter)->messageuid;
+        $messageUidsInCache = $this->_backend->searchImproved($filter, NULL, array('messageuid'));
         
         $result = array_diff($_messageUids, $messageUidsInCache);
         
