@@ -455,6 +455,8 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     public function resolveOptions(Tinebase_Model_Preference $_preference)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_preference->toArray(), TRUE));
+        
         $options = array();
         if (! empty($_preference->options)) {
              $options = $this->_convertXmlOptionsToArray($_preference->options);
@@ -495,12 +497,17 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         $result = array();
         $optionsXml = new SimpleXMLElement($_xmlOptions);
+        
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' app ' . $this->_application);
+        //$translate = Tinebase_Translation::getTranslation($this->_application);
 
         if ($optionsXml->special) {
            $result = $this->_getSpecialOptions($optionsXml->special);
         } else {
             foreach ($optionsXml->option as $option) {
-                $result[] = array((string)$option->value, (string)$option->label);
+                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' translate ' .$option->label);
+                //$result[] = array((string) $option->value, $translate->_((string) $option->label));
+                $result[] = array((string) $option->value, (string) $option->label);
             }
         }
 

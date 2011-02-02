@@ -37,7 +37,7 @@ msgstr "Abnormální ukončení"
 msgid "An error occurred, the program ended abnormal."
 msgstr "Došlo k chybě, program se neukončil korektně."
 
-#: Preference/Abstract.php:476
+#: Preference/Abstract.php:478
 msgid "default"
 msgstr ""
 
@@ -251,7 +251,7 @@ msgstr "Určitě se chcete odhlásit?"
 msgid "Logging you out..."
 msgstr "Odhlašuji Vás..."
 
-#: js/MainMenu.js:235 js/LoginPanel.js:354
+#: js/MainMenu.js:235 js/LoginPanel.js:355
 msgid "Please wait!"
 msgstr "Čekejte prosím!"
 
@@ -469,7 +469,7 @@ msgstr "Opravdu chcete smazat oblíbenou položku \"{0}\"?"
 #: js/widgets/persistentfilter/PickerPanel.js:256
 #: js/widgets/tree/ContextMenu.js:43 js/widgets/tree/ContextMenu.js:87
 #: js/widgets/tree/ContextMenu.js:144 js/widgets/container/GrantsDialog.js:169
-#: js/LoginPanel.js:341
+#: js/LoginPanel.js:342
 msgid "Please wait"
 msgstr "Čekejte prosím"
 
@@ -576,14 +576,14 @@ msgstr ""
 #: js/widgets/dialog/ImportDialog.js:194
 #: js/widgets/dialog/PreferencesDialog.js:246
 #: js/widgets/dialog/PreferencesDialog.js:275
-#: js/widgets/dialog/ExportDialog.js:141 js/LoginPanel.js:371
+#: js/widgets/dialog/ExportDialog.js:141 js/LoginPanel.js:372
 msgid "Errors"
 msgstr "Chyby"
 
 #: js/widgets/dialog/EditDialog.js:473
 #: js/widgets/dialog/CredentialsDialog.js:129
 #: js/widgets/dialog/ImportDialog.js:194 js/widgets/dialog/ExportDialog.js:141
-#: js/LoginPanel.js:371
+#: js/LoginPanel.js:372
 msgid "Please fix the errors noted."
 msgstr "Opravte prosím uvedené chyby."
 
@@ -621,7 +621,7 @@ msgstr ""
 msgid "Username"
 msgstr "Uživatelské jméno"
 
-#: js/widgets/dialog/CredentialsDialog.js:65 js/LoginPanel.js:108
+#: js/widgets/dialog/CredentialsDialog.js:65 js/LoginPanel.js:109
 msgid "Password"
 msgstr "Heslo"
 
@@ -1620,87 +1620,87 @@ msgstr ""
 msgid "Remove Formatting"
 msgstr ""
 
-#: js/LoginPanel.js:82 js/LoginPanel.js:119
+#: js/LoginPanel.js:82 js/LoginPanel.js:120
 msgid "Login"
 msgstr "Přihlásit"
 
-#: js/LoginPanel.js:138
+#: js/LoginPanel.js:139
 msgid "Tine 2.0 is made for you"
 msgstr "Tine 2.0 byl vytvořen pro Vás"
 
-#: js/LoginPanel.js:140
+#: js/LoginPanel.js:141
 msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
 msgstr "Tine 2.0 se snaží udělat pracovní spolupráci jednodušší a zábavnější - takovou jakou potřebujete! Budeme rádi, když nám sdělíte své připomínky, podělíte se s námi o nápady na zlepšení a pomůžete nám."
 
-#: js/LoginPanel.js:146
+#: js/LoginPanel.js:147
 msgid "Tine 2.0 Homepage"
 msgstr "Domovská stránka Tine 2.0"
 
-#: js/LoginPanel.js:147
+#: js/LoginPanel.js:148
 msgid "Tine 2.0 Forum"
 msgstr "Diskusní fórum Tine 2.0"
 
-#: js/LoginPanel.js:192
+#: js/LoginPanel.js:193
 msgid "about {0} minutes"
 msgstr "asi {0} minut"
 
-#: js/LoginPanel.js:197 js/LoginPanel.js:413
+#: js/LoginPanel.js:198 js/LoginPanel.js:414
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 potřebuje Vaši pomoc"
 
-#: js/LoginPanel.js:199 js/LoginPanel.js:415
+#: js/LoginPanel.js:200 js/LoginPanel.js:416
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "Aby mohla další vydání Tine 2.0 ještě lépe splňovat Vaše požadavky, potřebujeme od Vás pravidelně dostávat zpětnou vazbu. Pomůžete sobě i nám, když se zapojíte:"
 
-#: js/LoginPanel.js:205
+#: js/LoginPanel.js:206
 msgid "participate!"
 msgstr "zapojte se!"
 
-#: js/LoginPanel.js:227
+#: js/LoginPanel.js:228
 msgid "Languages"
 msgstr "Jazyky"
 
-#: js/LoginPanel.js:228
+#: js/LoginPanel.js:229
 msgid "Duration"
 msgstr "Trvání"
 
-#: js/LoginPanel.js:268
+#: js/LoginPanel.js:269
 msgid "Browser incompatible"
 msgstr ""
 
-#: js/LoginPanel.js:270
+#: js/LoginPanel.js:271
 msgid "Your browser is not supported by Tine 2.0."
 msgstr ""
 
-#: js/LoginPanel.js:275
+#: js/LoginPanel.js:276
 msgid "Browser incompatible?"
 msgstr ""
 
-#: js/LoginPanel.js:277
+#: js/LoginPanel.js:278
 msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
 msgstr ""
 
-#: js/LoginPanel.js:283
+#: js/LoginPanel.js:284
 msgid "You might try one of these browsers:"
 msgstr ""
 
-#: js/LoginPanel.js:341
+#: js/LoginPanel.js:342
 msgid "Logging you in..."
 msgstr "Přihlašuji Vás..."
 
-#: js/LoginPanel.js:354
+#: js/LoginPanel.js:355
 msgid "Login successful. Loading {0}..."
 msgstr "Přihlášení bylo úspěšné. Načítám {0}..."
 
-#: js/LoginPanel.js:359
+#: js/LoginPanel.js:360
 msgid "Login failure"
 msgstr "Chybné přihlášení"
 
-#: js/LoginPanel.js:360
+#: js/LoginPanel.js:361
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Vaše uživatelské jméno a/nebo heslo je chybné!!!"
 
-#: js/LoginPanel.js:386
+#: js/LoginPanel.js:387
 msgid "Please enter your login data"
 msgstr "Zadejte prosím Vaše přihlašovací údaje"
 

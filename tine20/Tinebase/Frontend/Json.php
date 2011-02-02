@@ -629,6 +629,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         if ($backend) {
             $records = $backend->search($filter);
             $result = $this->_multipleRecordsToJson($records, $filter);
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, TRUE));
             
             // add translated labels and descriptions
             $translations = $backend->getTranslatedPreferences();

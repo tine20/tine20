@@ -95,6 +95,26 @@ msgstr "Envoyer une notification de ses propres actions"
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Recevoir des notification par courriels de vos propres actions"
 
+#: Preference.php:155
+msgid "Never"
+msgstr ""
+
+#: Preference.php:155
+msgid "On invitation and cancellation only"
+msgstr ""
+
+#: Preference.php:155
+msgid "On time changes"
+msgstr ""
+
+#: Preference.php:155
+msgid "On all updates but attendee responses"
+msgstr ""
+
+#: Preference.php:155
+msgid "On attendee responses too"
+msgstr ""
+
 #: Acl/Rights.php:97
 msgid "manage shared calendars"
 msgstr "gérer les calendriers partagés"
@@ -178,57 +198,57 @@ msgstr "Semaine"
 msgid "Month"
 msgstr "Mois"
 
-#: js/MainScreenCenterPanel.js:324
+#: js/MainScreenCenterPanel.js:325
 msgid "Set my response"
 msgstr "Définir ma présence"
 
-#: js/MainScreenCenterPanel.js:375
+#: js/MainScreenCenterPanel.js:376
 msgid "Please Change Selection"
 msgstr "Veuillez Changer la sélection"
 
-#: js/MainScreenCenterPanel.js:376
+#: js/MainScreenCenterPanel.js:377
 msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
 msgstr "La sélection contient des évènements récurrents. Les évènements récurrents doivent être supprimés séparément!"
 
-#: js/MainScreenCenterPanel.js:390
+#: js/MainScreenCenterPanel.js:391
 msgid "Confirm Deletion of Series"
 msgstr "Confirmer la suppression de la série"
 
-#: js/MainScreenCenterPanel.js:391
+#: js/MainScreenCenterPanel.js:392
 msgid "Do you really want to delete all events of this recurring event series?"
 msgstr "Êtes-vous sûr de vouloir supprimer tous les évènement récurrents de cette série?"
 
-#: js/MainScreenCenterPanel.js:404
+#: js/MainScreenCenterPanel.js:405
 msgid "Delete Event"
 msgstr "Supprimer"
 
-#: js/MainScreenCenterPanel.js:408
+#: js/MainScreenCenterPanel.js:409
 msgid "Delete whole series"
 msgstr "Supprimer toute la série"
 
-#: js/MainScreenCenterPanel.js:409
+#: js/MainScreenCenterPanel.js:410
 msgid "Delete this and all future events"
 msgstr "Supprimer cet évènement et tous les suivants"
 
-#: js/MainScreenCenterPanel.js:410
+#: js/MainScreenCenterPanel.js:411
 msgid "Delete this event only"
 msgstr "Supprimer cet évènement seulement"
 
-#: js/MainScreenCenterPanel.js:411
+#: js/MainScreenCenterPanel.js:412
 msgid "Delete nothing"
 msgstr "Ne rien supprimer"
 
-#: js/MainScreenCenterPanel.js:460
+#: js/MainScreenCenterPanel.js:461
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Êtes-vous sûr de vouloir supprimer l'évènement sélectionné?"
 msgstr[1] "Êtes-vous sûr de vouloir supprimer les {0} évènements sélectionnés?"
 
-#: js/MainScreenCenterPanel.js:586
+#: js/MainScreenCenterPanel.js:587
 msgid "Could not Print"
 msgstr "L'impression a échoué"
 
-#: js/MainScreenCenterPanel.js:586
+#: js/MainScreenCenterPanel.js:587
 msgid "Sorry, your current view does not support printing."
 msgstr "Désolé, cette vue n'est pas imprimable."
 
@@ -395,43 +415,43 @@ msgstr "Présence du participant"
 msgid "Loading events, please wait..."
 msgstr "Chargement, veuillez patienter..."
 
-#: js/CalendarPanel.js:226
+#: js/CalendarPanel.js:227
 msgid "Scheduling Conflict"
 msgstr "Conflit de planification"
 
-#: js/CalendarPanel.js:228
+#: js/CalendarPanel.js:229
 msgid "The following attendee are busy at the requested time:"
 msgstr "Le participant suivant est déjà occupé à l'heure demandée :"
 
-#: js/CalendarPanel.js:232
+#: js/CalendarPanel.js:233
 msgid "Ignore Conflict"
 msgstr "Ignorer le conflit"
 
-#: js/CalendarPanel.js:233
+#: js/CalendarPanel.js:234
 msgid "Edit Event"
 msgstr "Modifier l'évènement"
 
-#: js/CalendarPanel.js:267
+#: js/CalendarPanel.js:268
 msgid "Confirm Update of Series"
 msgstr "Confirmer la mise à jour de la série"
 
-#: js/CalendarPanel.js:268
+#: js/CalendarPanel.js:269
 msgid "Do you really want to update all events of this recurring event series?"
 msgstr "Confirmez-vous la mise à jour de toutes les occurrences de cette série ?"
 
-#: js/CalendarPanel.js:282
+#: js/CalendarPanel.js:283
 msgid "Update Event"
 msgstr "Mettre à jour un évènement"
 
-#: js/CalendarPanel.js:285
+#: js/CalendarPanel.js:286
 msgid "Update nothing"
 msgstr "Ne rien mettre à jour"
 
-#: js/CalendarPanel.js:286
+#: js/CalendarPanel.js:287
 msgid "Update whole series"
 msgstr "Mettre à jour toute la série"
 
-#: js/CalendarPanel.js:287
+#: js/CalendarPanel.js:288
 msgid "Update this event only"
 msgstr "Mettre à jour cet évènement seulement"
 
