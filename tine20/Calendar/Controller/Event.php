@@ -431,11 +431,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 
                 $sendNotifications = $this->sendNotifications(FALSE);
                 
-                // NOTE: We already checked the ACL above, and we don't wan't to collide with the std. parent checks
-                $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
                 parent::update($_record);
-                $this->doContainerACLChecks($doContainerACLChecks);
-                
                 $this->_saveAttendee($_record);
                 
                 $this->sendNotifications($sendNotifications);
