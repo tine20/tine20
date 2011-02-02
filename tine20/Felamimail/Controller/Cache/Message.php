@@ -796,44 +796,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     }
     
     /**
-     * this function returns all messsageUids which are not yet in the local cache
-     * 
-     * @param  Felamimail_Model_Folder  $_folder
-     * @param  array                    $_uids
-     * @return array  the missing messageUids in local cache
-     */
-    protected function _getMissingUids(Felamimail_Model_Folder $_folder, $_uids)
-    {
-        $uids = (array) $_uids;
-        
-        if (empty($uids)) {
-            return $uids;
-        }
-        
-        $filter = new Felamimail_Model_MessageFilter(array(
-            array(
-                'field'    => 'messageuid',
-                'operator' => 'in',
-                'value'    => $uids
-            ),
-            array(
-                'field'    => 'folder_id',
-                'operator' => 'equals',
-                'value'    => $_folder->getId()
-            )
-        ));
-        
-        // @todo replace with searchImproved
-        $foundUids = $this->_backend->search($filter)->messageuid;
-        
-        $missingUids = array_diff($_uids, $foundUids);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' missing uids in local cache: ' . print_r($missingUids, TRUE));
-        
-        return $missingUids;
-    }
-    
-    /**
      * remove all cached messages for this folder and reset folder values / folder status is updated in the database
      *
      * @param string|Felamimail_Model_Folder $_folder
