@@ -30,16 +30,16 @@ define('PATH_TO_TEST_DIR', dirname(__FILE__));
  */
 $phpUnitVersion = explode(' ',PHPUnit_Runner_Version::getVersionString());
 
-if (! version_compare($phpUnitVersion[1], "3.5.0")) {
-    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TEST_DIR);
-    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TINE_LIBRARY);
-    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Setup');
-    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Zend');
-} else {
+if (version_compare($phpUnitVersion[1], "3.5.0") >= 0) {
     PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TEST_DIR);
     PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_TINE_LIBRARY);
     PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Setup');
     PHP_CodeCoverage_Filter::getInstance()->addDirectoryToBlacklist(PATH_TO_REAL_DIR.'/Zend');
+} else {
+    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TEST_DIR);
+    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_TINE_LIBRARY);
+    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Setup');
+    PHPUnit_Util_Filter::addDirectoryToFilter(PATH_TO_REAL_DIR.'/Zend');
 }
 
 $path = array(
