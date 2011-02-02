@@ -183,7 +183,7 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
                 break;
                 
             case self::ENCRYPT_NTPASSWORD:
-                $password = strtoupper(bin2hex(pack('H*',hash('md4', $_password))));
+                $password = strtoupper(hash('md4', iconv('UTF-8','UTF-16LE',$_password)));
                 
                 break;
                 
