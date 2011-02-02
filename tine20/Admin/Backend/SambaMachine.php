@@ -39,15 +39,14 @@ class Admin_Backend_SambaMachine implements Tinebase_Backend_Interface
     public function __construct(array $_options)
     {
         $_options['baseDn']    = $_options['machineDn'];
-        $_options['plugins'][] = Tinebase_User_Ldap::PLUGIN_SAMBA;
-        $_options[Tinebase_User_Ldap::PLUGIN_SAMBA] = Tinebase_Core::getConfig()->samba->toArray();
+        $_options['plugins'][] = new Tinebase_User_Plugin_Samba(Tinebase_Core::getConfig()->samba->toArray());
         
         $this->_options = $_options;
         
-        if(isset($_options['minMachineId'])) {
+        if (isset($this->_options['minMachineId'])) {
             $this->_options['minUserId'] = $_options['minMachineId'];
         }
-        if(isset($_options['maxMachineId'])) {
+        if (isset($this->_options['maxMachineId'])) {
             $this->_options['maxUserId'] = $_options['maxMachineId'];
         }
         
@@ -156,6 +155,7 @@ class Admin_Backend_SambaMachine implements Tinebase_Backend_Interface
         $samAccount->acctFlags       = '[W          ]';
         
         $posixAccount = new Tinebase_Model_FullUser($allData, true);
+        $posixAccount->accountStatus = 'enabled';
         $posixAccount->sambaSAM = $samAccount;
         
         $posixAccount = $this->_ldap->addUserToSyncBackend($posixAccount);
