@@ -66,6 +66,7 @@ try {
         'zend|z'          => 'Build Zend Translation Lists',
         'yui|y=s'         => 'Path to yuicompressor.jar',
         'help|h'          => 'Display this help Message',
+        'getjsincludes'   => 'get js include files',
     ));
     $opts->parse();
 } catch (Zend_Console_Getopt_Exception $e) {
