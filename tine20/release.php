@@ -78,6 +78,20 @@ if (count($opts->toArray()) === 0 || $opts->h) {
     exit;
 }
 
+if ($opts->getjsincludes) {
+    $http = new Tinebase_Frontend_Http();
+//    $includeFiles = array('js' => $http->getJsFilesToInclude());
+//    $includeFiles = $http->getAllIncludeFiles(array('RequestTracker', 'Sales', 'Tasks', 'Timetracker', 'Voipmanager'));
+    $includeFiles = $http->getAllIncludeFiles();
+    
+    foreach($includeFiles['js'] as $idx => $file) {
+        $includeFiles['js'][$idx] = $tine20path . '/' . $includeFiles['js'][$idx];
+    }
+    
+    echo implode(' ', $includeFiles['js']);
+    exit;
+}
+
 $build = trim(`whoami`) . ' '. Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
 
 if ($opts->yui) {
