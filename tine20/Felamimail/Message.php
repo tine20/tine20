@@ -180,6 +180,7 @@ class Felamimail_Message extends Zend_Mail_Message
         
         if($_from == Zend_Mime::TYPE_TEXT && $_to == Zend_Mime::TYPE_HTML) {
             $text = htmlspecialchars($_text, ENT_COMPAT, 'utf-8');
+            $text = nl2br($text);
             $text = self::addHtmlMarkup($text);
         } else {
             $text = preg_replace('/\<br *\/*\>/', "\r\n", $_text);
@@ -210,7 +211,7 @@ class Felamimail_Message extends Zend_Mail_Message
             . '</style>'
             . '</head>'
             . '<body>'
-            . nl2br($_body)
+            . $_body
             . '</body></html>';
             
         return $result;
