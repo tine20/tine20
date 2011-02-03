@@ -87,7 +87,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * don't use the constructor. use the singleton
      */
     private function __construct() {
-        $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
+        //$this->_backend = new Felamimail_Backend_Cache_Sql_Message();
+        $this->_backend = new Felamimail_Backend_Cache_Sql_MessageSearchImproved();
         $this->_currentAccount = Tinebase_Core::getUser();
     }
     
