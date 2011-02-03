@@ -58,7 +58,7 @@ class Felamimail_Backend_Cache_Sql_MessageSearchImproved extends Felamimail_Back
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
         // just a wrapper to searchImproved atm
-        return $this->_backend->searchImproved($_filter, $_pagination, $_onlyIds);
+        return $this->searchImproved($_filter, $_pagination, $_onlyIds);
     }
     
     /**
