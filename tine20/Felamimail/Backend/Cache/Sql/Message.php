@@ -8,7 +8,6 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
- * 
  */
 
 /**
@@ -31,34 +30,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_modelName = 'Felamimail_Model_Message';
-    
-    /**
-     * placeholder for id column for searchImproved()/_getSelectImproved()
-     * 
-     * @todo move this to Tinebase_Backend_Sql_Abstract
-     */
-    const IDCOL             = '_id_';
-    
-    /**
-     * fetch single column with db query
-     * 
-     * @todo move this to Tinebase_Backend_Sql_Abstract
-     */
-    const FETCH_MODE_SINGLE = 'fetch_single';
-
-    /**
-     * fetch two columns (id + X) with db query
-     * 
-     * @todo move this to Tinebase_Backend_Sql_Abstract
-     */
-    const FETCH_MODE_PAIR   = 'fetch_pair';
-    
-    /**
-     * fetch all columns with db query
-     * 
-     * @todo move this to Tinebase_Backend_Sql_Abstract
-     */
-    const FETCH_ALL         = 'fetch_all';
     
     /**
      * foreign tables (key => tablename)
@@ -93,206 +64,41 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      *
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
      * @param  Tinebase_Model_Pagination            $_pagination
-     * @param  array|string                         $_cols columns to get, * per default / use self::IDCOL to get only ids
-     * @return Tinebase_Record_RecordSet|array
+     * @return array
      * 
-     * @todo move this to Tinebase_Backend_Sql_Abstract
+     * @deprecated should be removed when we switch to new search
      */
-    public function searchImproved(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*')    
+    public function searchMessageUids(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)    
     {
         if ($_pagination === NULL) {
             $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
         }
         
-        // (1) get ids or id/value pair
-        list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter);
-        $select = $this->_getSelectImproved($colsToFetch);
+        // build query
+        $select = $this->_db->select()
+            ->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array('id', 'messageuid'))
+            ->joinLeft(
+                /* table  */ array('felamimail_folder' => $this->_tablePrefix . 'felamimail_folder'), 
+                /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.folder_id') . ' = ' . $this->_db->quoteIdentifier('felamimail_folder.id'),
+                /* select */ array()
+            );
+        
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
         }
         $_pagination->appendPaginationSql($select);
         
-        if ($getIdValuePair) {
-            return $this->_fetch($select, self::FETCH_MODE_PAIR);
-        } else {
-            $ids = $this->_fetch($select);
-        }
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Fetched ' . count($ids) .' ids.');
+        // get records
+        $stmt = $this->_db->query($select);
+        $result = array();
         
-        if ($_cols === self::IDCOL) {
-            return $ids;
-        } else if (empty($ids)) {
-            return new Tinebase_Record_RecordSet($this->_modelName);
-        } else {
-            // (2) get other columns and do joins
-            $select = $this->_getSelectImproved($_cols);
-            $this->_addWhereIdIn($select, $ids);
-            
-            $rows = $this->_fetch($select, self::FETCH_ALL);
-            return $this->_rawDataToRecordSet($rows);
-        }
-    }
-    
-    /**
-     * returns columns to fetch in first query and if an id/value pair is requested 
-     * 
-     * @param array|string $_cols
-     * @param Tinebase_Model_Filter_FilterGroup    $_filter
-     * @return array
-     */
-    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter)
-    {
-        $getIdValuePair = FALSE;
-
-        if ($_cols === '*') {
-            $colsToFetch = array('id' => self::IDCOL);
-        } else {
-            $colsToFetch = (array) $_cols;
-            
-            if (in_array(self::IDCOL, $colsToFetch) && count($colsToFetch) == 2) {
-                // id/value pair requested
-                $getIdValuePair = TRUE;
-            } else if (! in_array(self::IDCOL, $colsToFetch) && count($colsToFetch) == 1) {
-                // only one non-id column was requested -> add id and treat it like id/value pair
-                array_push($colsToFetch, self::IDCOL);
-                $getIdValuePair = TRUE;
-            } else {
-                $colsToFetch = array('id' => self::IDCOL);
-            }
-        }
-        
-        if ($_filter !== NULL) {
-            // need to ask filter if it needs additional columns
-            $filterCols = $_filter->getRequiredColumnsForSelect();
-            foreach ($filterCols as $key => $filterCol) {
-                if (! array_key_exists($key, $colsToFetch)) {
-                    $colsToFetch[$key] = $filterCol;
-                }
-            }
-        }
-        
-        return array($colsToFetch, $getIdValuePair);
-    }
-    
-    /**
-     * adds 'id in (...)' where stmt
-     * 
-     * @param Zend_Db_Select $_select
-     * @param string|array $_ids
-     * @return Zend_Db_Select
-     * 
-     * @todo move this to Tinebase_Backend_Sql_Abstract
-     */
-    protected function _addWhereIdIn(Zend_Db_Select $_select, $_ids)
-    {
-        $_select->where($this->_db->quoteInto($this->_db->quoteIdentifier($this->_tableName . '.' . $this->_identifier) . ' in (?)', (array) $_ids));
-        
-        return $_select;
-    }
-    
-    /**
-     * fetch rows from db
-     * 
-     * @param Zend_Db_Select $_select
-     * @param string $_mode
-     * @return array
-     * 
-     * @todo move this to Tinebase_Backend_Sql_Abstract
-     */
-    protected function _fetch(Zend_Db_Select $_select, $_mode = self::FETCH_MODE_SINGLE)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $_select->__toString());
-        
-        $stmt = $this->_db->query($_select);
-        
-        if ($_mode === self::FETCH_ALL) {
-            $result = (array) $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        } else {
-            $result = array();
-            while ($row = $stmt->fetch(Zend_Db::FETCH_NUM)) {
-                if ($_mode === self::FETCH_MODE_SINGLE) {
-                    $result[] = $row[0];
-                } else if ($_mode === self::FETCH_MODE_PAIR) {
-                    $result[$row[0]] = $row[1];
-                }
-            }
+        while ($row = $stmt->fetch(Zend_Db::FETCH_NUM)) {
+            $result[$row[0]] = $row[1];
         }
         
         return $result;
-    }
-    
-    /**
-     * get the basic select object to fetch records from the database
-     *  
-     * @param array|string $_cols columns to get, * per default
-     * @param boolean $_getDeleted get deleted records (if modlog is active)
-     * @return Zend_Db_Select
-     * 
-     * @todo move this to Tinebase_Backend_Sql_Abstract
-     */
-    protected function _getSelectImproved($_cols = '*', $_getDeleted = FALSE)
-    {
-        if ($_cols !== '*' ) {
-            $cols = array();
-            // make sure cols is an array, prepend tablename and fix keys
-            foreach ((array) $_cols as $id => $col) {
-                $key = (is_numeric($id)) ? ($col === self::IDCOL) ? $this->_identifier : $col : $id;
-                $cols[$key] = ($col === self::IDCOL) ? $this->_tableName . '.' . $this->_identifier : $col;
-            }
-        } else {
-            $cols = '*';
-        }
-        
-        $select = $this->_db->select();
-        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $cols);
-        
-        if (!$_getDeleted && $this->_modlogActive) {
-            // don't fetch deleted objects
-            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
-        }
-        
-        $this->_addForeignTableJoins($select, $cols);
-        
-        return $select;
-    }
-    
-    /**
-     * add foreign table joins
-     * 
-     * @param Zend_Db_Select $_select
-     * @param array|string $_cols columns to get, * per default
-     */
-    protected function _addForeignTableJoins(Zend_Db_Select $_select, $_cols, $_groupBy = NULL)
-    {
-        if (! empty($this->_foreignTables)) {
-            $groupBy = ($_groupBy !== NULL) ? $_groupBy : $this->_tableName . '.' . $this->_identifier;
-            $_select->group($groupBy);
-            
-            foreach ($this->_foreignTables as $foreignColumn => $join) {
-                if ($_cols == '*' || array_key_exists($foreignColumn, $_cols)) {
-                    // only join if field is in cols
-                    $selectArray = array($foreignColumn => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')');
-                    $_select->joinLeft(
-                        /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
-                        /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
-                        /* select */ $selectArray
-                    );
-                }
-            }
-        }
-    }
-    
-    /**
-     * Search for records matching given filter
-     *
-     * @param  Tinebase_Model_Filter_FilterGroup    $_filter
-     * @param  Tinebase_Model_Pagination            $_pagination
-     * @return array
-     */
-    public function searchMessageUids(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)    
-    {
-        return $this->searchImproved($_filter, $_pagination, array(self::IDCOL, 'messageuid'));
     }
     
     /******************* overwritten functions *********************/
@@ -302,10 +108,12 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
+     * 
+     * @deprecated should be removed when we switch to new search
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {        
-        $select = $this->_getSelectImproved(array('count' => 'COUNT(*)', 'flags' => 'felamimail_cache_message_flag.flag'));
+        $select = $this->_getSelect(array('count' => 'COUNT(*)', 'flags' => 'felamimail_cache_message_flag.flag'));
         $this->_addFilter($select, $_filter);
         
         $stmt = $this->_db->query($select);
@@ -439,20 +247,35 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     /**
      * get all flags for a given folder id
      *
-     * @param string|Felamimail_Model_Folder $_folderId
+     * @param string $_folderId
      * @param integer $_start
      * @param integer $_limit
-     * @return Tinebase_Record_RecordSet
+     * @return array
+     * 
+     * @deprecated should be removed when we switch to new search
      */
     public function getFlagsForFolder($_folderId, $_start = NULL, $_limit = NULL)    
     {
-        $filter = $this->_getMessageFilterWithFolderId($_folderId);
-        $pagination = ($_start !== NULL || $_limit !== NULL) ? new Tinebase_Model_Pagination(array(
-            'start' => $_start,
-            'limit' => $_limit,
-        ), TRUE) : NULL;
+        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
         
-        return $this->searchImproved($filter, $pagination, array('messageuid' => 'messageuid', 'id' => self::IDCOL, 'flags' => 'felamimail_cache_message_flag.flag'));
+        $select = $this->_getSelect(array('messageuid' => 'messageuid', 'id' => 'id', 'flags' => 'felamimail_cache_message_flag.flag'));
+        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $folderId));
+        if ($_start !== NULL && $_limit !== NULL) {
+            $select->limit($_limit, $_start);
+        }
+        
+        $stmt = $this->_db->query($select);
+        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $result = array();
+        foreach ($rows as $row) {
+            $result[$row['id']] = array(
+                'messageuid'    => $row['messageuid'],
+                'flags'         => (! empty($row['flags'])) ? explode(',', $row['flags']) : array(),
+            );
+        }
+
+        return $result;
     }
     
     /**
