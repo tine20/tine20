@@ -198,69 +198,119 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     public function addFlags($_messages, $_flags)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Add flags: ' . print_r($_flags, TRUE));
-        
-        // we always need to read the messages from cache to get the current flags
-        $messagesToFlag = $this->_convertToRecordSet($_messages, TRUE);
-        $messagesToFlag->sort('folder_id');
-        
+        return $this->_addOrClearFlags($_messages, $_flags, 'add');
+    }
+    
+    /**
+     * clear message flag(s)
+     *
+     * @param mixed                     $_messages
+     * @param array                     $_flags
+     * @return Tinebase_Record_RecordSet with affected folders
+     */
+    public function clearFlags($_messages, $_flags)
+    {
+        return $this->_addOrClearFlags($_messages, $_flags, 'clear');
+    }
+    
+    /**
+     * add or clear message flag(s)
+     *
+     * @param mixed                     $_messages
+     * @param array                     $_flags
+     * @param string                    $_mode add/clear
+     * @return Tinebase_Record_RecordSet with affected folders
+     */
+    protected function _addOrClearFlags($_messages, $_flags, $_mode = 'add')
+    {
         $flags = (array) $_flags;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Retrieved ' . count($messagesToFlag) . ' messages from cache.');
-                
-        $lastFolderId = null;
-        $imapBackend  = null;
-        $folderCounterById    = array();
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_mode. ' flags: ' . print_r($_flags, TRUE));
         
-        // set flags on imap server
-        foreach ($messagesToFlag as $message) {
-            //if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($message->toArray(), TRUE));
+        // only get the first 100 messages if we got a filtergroup
+        $pagination = ($_messages instanceof Tinebase_Model_Filter_FilterGroup) ? new Tinebase_Model_Pagination(array('sort' => 'folder_id', 'start' => 0, 'limit' => 100)) : NULL;
+        $messagesToUpdate = $this->_convertToRecordSet($_messages, TRUE, $pagination);
+        
+        $lastFolderId       = null;
+        $imapBackend        = null;
+        $folderCounterById  = array();
+        
+        while (count($messagesToUpdate) > 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Retrieved ' . count($messagesToUpdate) . ' messages from cache.');
             
-            // write flags on imap (if folder changes or count messages > 50)
-            if ($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Folder changed, writing flags.');
-                $this->_addFlagsOnImap($imapMessageUids, $flags, $imapBackend);
-                $imapMessageUids = array();
+            // update flags on imap server
+            foreach ($messagesToUpdate as $message) {
+                // write flags on imap (if folder changes)
+                if ($imapBackend !== null && ($lastFolderId != $message->folder_id)) {
+                    $this->_updateFlagsOnImap($imapMessageUids, $flags, $imapBackend, $_mode);
+                    $imapMessageUids = array();
+                }
+                
+                // init new folder
+                if ($lastFolderId != $message->folder_id) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting new IMAP backend for folder ' . $message->folder_id);
+                    $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
+                    $lastFolderId             = $message->folder_id;
+                    
+                    if ($_mode === 'add') {
+                        $folderCounterById[$lastFolderId] = array(
+                            'decrementMessagesCounter' => 0, 
+                            'decrementUnreadCounter'   => 0
+                        );
+                    } else if ($_mode === 'clear') {
+                        $folderCounterById[$lastFolderId] = array(
+                            'incrementUnreadCounter' => 0
+                        );                        
+                    }
+                }
+                
+                $imapMessageUids[] = $message->messageuid;
             }
             
-            // init new folder
-            if ($lastFolderId != $message->folder_id) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Getting new IMAP backend for folder ' . $message->folder_id);
-                $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
-                $lastFolderId             = $message->folder_id;
-                $folderCounterById[$lastFolderId] = array(
-                    'decrementMessagesCounter' => 0, 
-                    'decrementUnreadCounter'   => 0
-                );
+            // write remaining flags
+            if ($imapBackend !== null && count($imapMessageUids) > 0) {
+                $this->_updateFlagsOnImap($imapMessageUids, $flags, $imapBackend, $_mode);
+            }
+    
+            if ($_mode === 'add') {
+                $folderCounterById = $this->_addFlagsOnCache($messagesToUpdate, $flags, $folderCounterById);
+            } else if ($_mode === 'clear') {
+                $folderCounterById = $this->_clearFlagsOnCache($messagesToUpdate, $flags, $folderCounterById);
             }
             
-            $imapMessageUids[] = $message->messageuid;
+            // get next 100 messages if we had a filter
+            if ($_messages instanceof Tinebase_Model_Filter_FilterGroup) {
+                $pagination->start += 100;
+                $messagesToUpdate = $this->_convertToRecordSet($_messages, TRUE, $pagination);
+            } else {
+                $messagesToUpdate = array();
+            }
         }
         
-        // write remaining flags
-        if ($imapBackend !== null && count($imapMessageUids) > 0) {
-            $this->_addFlagsOnImap($imapMessageUids, $flags, $imapBackend);
-        }    
-
-        $folderCounts = $this->_addFlagsOnCache($messagesToFlag, $flags, $folderCounterById);
-        $affectedFolders = $this->_updateFolderCounts($folderCounts);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_mode . 'ed flags');
         
+        $affectedFolders = $this->_updateFolderCounts($folderCounterById);
         return $affectedFolders;
     }
     
     /**
-     * add flags on imap server
+     * add/clear flags on imap server
      * 
-     * @param array $_uids
+     * @param array $_imapMessageUids
      * @param array $_flags
-     * @param Felamimail_Backend_ImapProxy $_imap
+     * @param Felamimail_Backend_ImapProxy $_imapBackend
      * @throws Felamimail_Exception_IMAP
      */
-    protected function _addFlagsOnImap($_uids, $_flags, Felamimail_Backend_ImapProxy $_imap)
+    protected function _updateFlagsOnImap($_imapMessageUids, $_flags, $_imapBackend, $_mode)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set flags on imap server for ' . count($_uids) . ' messages.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Writing flags on IMAP server for ' . count($_imapMessageUids) . ' messages.');
+        
         try {
-            $_imap->addFlags($_uids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+            if ($_mode === 'add') {
+                $_imapBackend->addFlags($_imapMessageUids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+            } else if ($_mode === 'clear') {
+                $_imapBackend->clearFlags($_imapMessageUids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+            }
         } catch (Zend_Mail_Storage_Exception $zmse) {
             throw new Felamimail_Exception_IMAP($zmse->getMessage());
         }
@@ -345,74 +395,33 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * clear message flag(s)
-     *
-     * @param mixed                     $_messages
-     * @param array                     $_flags
-     * @param Felamimail_Model_Folder   $_folder [optional]
-     * @return Tinebase_Record_RecordSet with affected folders
+     * clears flags in local database
+     * 
+     * @param Tinebase_Record_RecordSet $_messagesToFlag
+     * @param array $_flags
+     * @param array $_folderCounts
+     * @return array folder counts
      */
-    public function clearFlags($_messages, $_flags, $_folder = NULL)
+    protected function _clearFlagsOnCache(Tinebase_Record_RecordSet $_messagesToUnflag, $_flags, $_folderCounts)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' clear flags: ' . print_r($_flags, TRUE));
-        
-        // we always need to read the messages from cache to get the current flags
-        $messagesToUnflag = $this->_convertToRecordSet($_messages, TRUE);
-        
-        $messagesToUnflag->sort('folder_id');
-        
-        $flags = (array) $_flags;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' retrieved ' . count($messagesToUnflag) . ' messages from cache');
-                
-        $lastFolderId = null;
-        $imapBackend  = null;
-        $folderCounterById    = array();
-        
-        // set flags on imap server
-        foreach ($messagesToUnflag as $message) {
-            if($imapBackend !== null && ($lastFolderId != $message->folder_id || count($imapMessageUids) >= 50)) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' clear flags on imap server');
-                $imapBackend->clearFlags($imapMessageUids, array_intersect($flags, array_keys(self::$_allowedFlags)));
-                $imapMessageUids = array();
-            }
-            
-            if ($lastFolderId != $message->folder_id) {
-                $imapBackend              = $this->_getBackendAndSelectFolder($message->folder_id);
-                $lastFolderId             = $message->folder_id;
-                $folderCounterById[$lastFolderId] = array(
-                    'incrementUnreadCounter' => 0
-                );
-            }
-            
-            $imapMessageUids[] = $message->messageuid;
-            
-        }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' clear flags on imap server');
-        
-        if($imapBackend !== null && count($imapMessageUids) > 0) {
-            $imapBackend->clearFlags($imapMessageUids, array_intersect($flags, array_keys(self::$_allowedFlags)));
-        }
-            
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cleared flags on imap server');
+        $folderCounts = $_folderCounts;
         
         // set flags in local database
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
         
         // store flags in local cache
-        foreach($messagesToUnflag as $message) {
-            if (in_array(Zend_Mail_Storage::FLAG_SEEN, $flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
+        foreach($_messagesToUnflag as $message) {
+            if (in_array(Zend_Mail_Storage::FLAG_SEEN, $_flags) && in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
                 // count messages with seen flag for the first time
-                $folderCounterById[$message->folder_id]['incrementUnreadCounter']++;
+                $folderCounts[$message->folder_id]['incrementUnreadCounter']++;
             }
             
-            $this->_backend->clearFlag($message, $flags);
+            $this->_backend->clearFlag($message, $_flags);
         }
         
         // mark message as changed in the cache backend
         $this->_backend->updateMultiple(
-            $messagesToUnflag->getArrayOfIds(), 
+            $_messagesToUnflag->getArrayOfIds(), 
             array(
                 'timestamp' => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
             )
@@ -420,10 +429,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' cleared flags on cache');
-        
-        $affectedFolders = $this->_updateFolderCounts($folderCounterById);
-        return $affectedFolders;
+        return $folderCounts;
     }
     
     /**
