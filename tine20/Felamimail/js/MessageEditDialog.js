@@ -285,7 +285,12 @@ Ext.namespace('Tine.Felamimail');
                     folder = folderId ? mainApp.getFolderStore().getById(folderId) : null
                     accountId = folder ? folder.get('account_id') : null;
                     
-                this.accountId = accountId || mainApp.getActiveAccount().id;
+                if (! accountId) {
+                    var activeAccount = mainApp.getActiveAccount();
+                    accountId = (activeAccount) ? activeAccount.id : null;
+                }
+                
+                this.accountId = accountId;
             }
             
             this.record.set('account_id', this.accountId);

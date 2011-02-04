@@ -436,6 +436,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             account = Tine.Felamimail.loadAccountStore().getById(Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'));
         }
         
+        if (account === null) {
+            // try to get first account in store
+            account = Tine.Felamimail.loadAccountStore().getAt(0);
+        }
+        
         return account;
     },
     

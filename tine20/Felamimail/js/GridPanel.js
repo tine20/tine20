@@ -809,7 +809,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onDeleteRecords: function() {
         var account = this.app.getActiveAccount(),
-            trashId = account.getTrashFolderId(),
+            trashId = (account) ? account.getTrashFolderId() : null,
             trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
             
         return trash && !trash.isCurrentSelection() ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();

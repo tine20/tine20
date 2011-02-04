@@ -188,7 +188,9 @@ Ext.namespace('Tine.Felamimail');
                 body = body || '';
                 if (body) {
                     var account = this.app.getActiveAccount();
-                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && messageData.body_content_type == 'text/plain')) {
+                    if (account && (account.get('display_format') == 'plain' || 
+                        (account.get('display_format') == 'content_type' && messageData.body_content_type == 'text/plain'))
+                    ) {
                         var width = this.panel.body.getWidth()-25,
                             height = this.panel.body.getHeight()-90,
                             id = Ext.id();
