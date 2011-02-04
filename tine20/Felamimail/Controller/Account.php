@@ -182,7 +182,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $result = parent::create($_record);
         
         // set as default account if it is the only account
-        if ($this->searchCount(new Felamimail_Model_AccountFilter(array())) === 1) {
+        $accountCount = $this->searchCount(new Felamimail_Model_AccountFilter(array()));
+        if ($accountCount == 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $result->name . ' as new default email account.');
             Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $result->getId();
         }
         
