@@ -993,14 +993,15 @@ abstract class Tinebase_Controller_Record_Abstract
      * 
      * @param mixed $_mixed
      * @param boolean $_refresh if this is TRUE, refresh the recordset by calling getMultiple
+     * @param Tinebase_Model_Pagination $_pagination (only valid if $_mixed instanceof Tinebase_Model_Filter_FilterGroup)
      * @return Tinebase_Record_RecordSet
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _convertToRecordSet($_mixed, $_refresh = FALSE)
+    protected function _convertToRecordSet($_mixed, $_refresh = FALSE, Tinebase_Model_Pagination $_pagination = NULL)
     {
         if ($_mixed instanceof Tinebase_Model_Filter_FilterGroup) {
             // FILTER (Tinebase_Model_Filter_FilterGroup)
-            $result = $this->search($_mixed);
+            $result = $this->search($_mixed, $_pagination);
         } elseif ($_mixed instanceof Tinebase_Record_RecordSet) {
             // RECORDSET (Tinebase_Record_RecordSet)
             $result = ($_refresh) ? $this->_backend->getMultiple($_mixed->getArrayOfIds()) : $_mixed;
