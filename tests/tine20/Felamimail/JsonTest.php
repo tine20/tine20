@@ -495,7 +495,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $message = $this->_json->getMessage($message['id']);
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']), 'seen flag not set');
         
-        $this->_json->clearFlags(array($message['id']), Zend_Mail_Storage::FLAG_SEEN);
+        // try with a filter
+        $filter = array(
+            array('field' => 'id', 'operator' => 'in', array($message['id']))
+        );
+        $this->_json->clearFlags($filter, Zend_Mail_Storage::FLAG_SEEN);
         
         $message = $this->_json->getMessage($message['id']);
         $this->assertFalse(in_array(Zend_Mail_Storage::FLAG_SEEN, $message['flags']), 'seen flag should not be set');
