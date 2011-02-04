@@ -78,8 +78,9 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
 
 /**
  * @namespace   Tine.Addressbook.Model
- * @class       Tine.Addressbook.Model
- * @extends     Tine.Addressbook.Model.Contact
+ * @class       Tine.Addressbook.Model.Contact
+ * @extends     Tine.Tinebase.data.Record
+ * @constructor
  * Model of a contact<br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
