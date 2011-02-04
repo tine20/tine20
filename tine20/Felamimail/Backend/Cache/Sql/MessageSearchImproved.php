@@ -86,7 +86,7 @@ class Felamimail_Backend_Cache_Sql_MessageSearchImproved extends Felamimail_Back
         }
         
         // (1) get ids or id/value pair
-        list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter);
+        list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter, $_pagination);
         $select = $this->_getSelectImproved($colsToFetch);
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
@@ -119,12 +119,13 @@ class Felamimail_Backend_Cache_Sql_MessageSearchImproved extends Felamimail_Back
      * returns columns to fetch in first query and if an id/value pair is requested 
      * 
      * @param array|string $_cols
-     * @param Tinebase_Model_Filter_FilterGroup    $_filter
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Pagination $_pagination
      * @return array
      * 
      * @todo move this to Tinebase_Backend_Sql_Abstract
      */
-    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter)
+    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Model_Pagination $_pagination = NULL)
     {
         $getIdValuePair = FALSE;
 
@@ -153,6 +154,10 @@ class Felamimail_Backend_Cache_Sql_MessageSearchImproved extends Felamimail_Back
                     $colsToFetch[$key] = $filterCol;
                 }
             }
+        }
+        
+        if ($_pagination->sort && ! array_key_exists($_pagination->sort, $colsToFetch)) {
+            $colsToFetch[$_pagination->sort] = $_pagination->sort;
         }
         
         return array($colsToFetch, $getIdValuePair);
