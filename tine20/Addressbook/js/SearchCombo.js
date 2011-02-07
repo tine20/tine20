@@ -148,7 +148,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      * @param {Ext.data.Store} store
      */
     onStoreBeforeLoadRecords: function(o, options, success, store) {
-        if (this.lastStoreTransactionId && options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
+        if (! this.lastStoreTransactionId || options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
             Tine.log.debug('cancelling old transaction request.');
             return false;
         }
