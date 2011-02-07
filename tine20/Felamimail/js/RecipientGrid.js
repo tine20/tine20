@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -22,9 +22,8 @@ Ext.namespace('Tine.Felamimail');
  * </pre>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:MessageEditDialog.js 7170 2009-03-05 10:58:55Z p.schuele@metaways.de $
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -156,6 +155,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             listeners: {
                 scope: this,
                 specialkey: function(combo, e) {
+                    // TODO cancel loading when ENTER is pressed
+//                    if (e.getKey() == e.ENTER) {
+//                        this.stopEditing(true);
+//                    }
+
                     // jump to subject if we are in the last row and it is empty
                     var sm = this.getSelectionModel(),
                         record = sm.getSelected();
@@ -165,10 +169,13 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 },
                 blur: function(combo) {
                     // need to update record because we relay blur event and it might not be updated otherwise
-                    var value = combo.getValue();
-                    if (this.activeEditor && this.activeEditor.record.get('address') != value) {
-                        this.activeEditor.record.set('address', value);
+                    if (this.activeEditor) {
+                        var value = combo.getValue();
+                        if (this.activeEditor.record.get('address') != value) {
+                            this.activeEditor.record.set('address', value);
+                        }
                     }
+                    this.stopEditing();
                 }
             }
         });
