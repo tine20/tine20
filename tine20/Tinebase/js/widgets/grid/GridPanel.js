@@ -1124,7 +1124,27 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {String|Tine.Tinebase.data.Record} record
      */
     onUpdateRecord: function(record) {
-        this.addToEditBuffer(record);
+        if (Ext.isString(record)) {
+            record = this.recordProxy.recordReader({responseText: record});
+        } else if (record && Ext.isFunction(record.copy)) {
+            record = record.copy();
+        }
+        
+        if (record && Ext.isFunction(record.copy)) {
+            var idx = this.getStore().indexOfId(record.id);
+            if (idx >=0) {
+                var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
+                this.getStore().removeAt(idx);
+                this.getStore().insert(idx, [record]);
+                if (isSelected) {
+                    this.getGrid().getSelectionModel().selectRow(idx, true);
+                }
+            } else {
+                this.getStore().add([record]);
+            }
+            this.addToEditBuffer(record);
+        }
+        
         this.loadGridData({
             removeStrategy: 'keepBuffered'
         });
