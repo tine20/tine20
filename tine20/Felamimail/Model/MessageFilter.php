@@ -51,9 +51,9 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         'messageuid'    => array('filter' => 'Tinebase_Model_Filter_Int'),
     // custom filters
         'path'          => array('custom' => true),
-        'to'            => array('custom' => true),
-        'cc'            => array('custom' => true),
-        'bcc'           => array('custom' => true),
+        'to'            => array('custom' => true, 'requiredCols' => array('to' => 'felamimail_cache_message_to.*')),
+        'cc'            => array('custom' => true, 'requiredCols' => array('cc' => 'felamimail_cache_message_cc.*')),
+        'bcc'           => array('custom' => true, 'requiredCols' => array('bcc' => 'felamimail_cache_message_bcc.*')),
         'flags'         => array('custom' => true, 'requiredCols' => array('flags' => 'felamimail_cache_message_flag.flag')),
         'account_id'    => array('custom' => true),
     );
@@ -79,6 +79,8 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         foreach ($this->getFilterObjects() as $filter) {
             // @todo check single filters for requirements
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_customData, TRUE));
         
         foreach ($this->_customData as $custom) {
             // check custom filter for requirements
@@ -214,7 +216,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         $foreignTables = $_backend->getForeignTables();
         
         // add conditions
-        $tablename  = $_backend->getTablePrefix() . $foreignTables[$_filterData['field']]['table'];
+        $tablename  = $foreignTables[$_filterData['field']]['table'];
         if ($_filterData['field'] !== 'flags') {
             $fieldName  = $tablename . '.name';
             $fieldEmail = $tablename . '.email';
