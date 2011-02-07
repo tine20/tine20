@@ -311,7 +311,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         // check for incompletes
         var incompletes = this.folderStore.queryBy(function(folder) {
-            return folder.get('cache_status') !== 'complete';
+            return (folder.get('cache_status') !== 'complete' && folder.get('is_selectable'));
         }, this);
         if (incompletes.getCount() > 0) {
             return incompletes.first();
@@ -319,6 +319,10 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         // check for outdated
         var outdated = this.folderStore.queryBy(function(folder) {
+            if (! folder.get('is_selectable')) {
+                return false;
+            }
+            
             var timestamp = folder.get('client_access_time');
             if (! Ext.isDate(timestamp)) {
                 return true;

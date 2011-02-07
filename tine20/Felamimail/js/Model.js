@@ -546,6 +546,10 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
      * returns true if current folder needs an update
      */
     needsUpdate: function(updateInterval) {
+        if (! this.get('is_selectable')) {
+            return false;
+        }
+        
         var timestamp = this.get('client_access_time');
         return this.get('cache_status') !== 'complete' || ! Ext.isDate(timestamp) || timestamp.getElapsed() > updateInterval;
     }
