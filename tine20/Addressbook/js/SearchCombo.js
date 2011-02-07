@@ -4,8 +4,8 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -28,8 +28,7 @@ Ext.ns('Tine.Addressbook');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -74,7 +73,7 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      * @cfg {String} nameField
      */
     nameField: 'n_fn',
-
+    
     /**
      * use account objects/records in get/setValue
      * 
@@ -84,6 +83,12 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
      * TODO remove this later
      */
     useAccountRecord: false,
+    
+    /**
+     * @property lastStoreTransactionId 
+     * @type String
+     */
+    lastStoreTransactionId: null,
     
     //private
     initComponent: function(){
@@ -96,6 +101,57 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
         Tine.Addressbook.SearchCombo.superclass.initComponent.call(this);        
 
         this.on('beforequery', this.onBeforeQuery, this);
+    },
+    
+    /**
+     * onRender
+     * 
+     * @param {} ct
+     * @param {} position
+     * @private
+     */
+    onRender : function(ct, position){
+        Tine.Addressbook.SearchCombo.superclass.onRender.call(this, ct, position);
+        
+        var c = this.getEl();
+ 
+        this.mon(c, {
+            scope: this,
+            contextmenu: Ext.emptyFn
+        });
+ 
+        this.relayEvents(c, ['contextmenu']);        
+    },
+    
+    /**
+     * called before store queries for data
+     */
+    onStoreBeforeload: function(store, options) {
+        // define a transaction
+        this.lastStoreTransactionId = options.transactionId = Ext.id();
+        
+        // prepare filter / get paging from combo
+        options.params.paging = {
+            start: options.params.start,
+            limit: options.params.limit,
+            sort: 'n_family',
+            dir: 'ASC'
+        };
+    },
+
+    /**
+     * onStoreBeforeLoadRecords
+     * 
+     * @param {Object} o
+     * @param {Object} options
+     * @param {Boolean} success
+     * @param {Ext.data.Store} store
+     */
+    onStoreBeforeLoadRecords: function(o, options, success, store) {
+        if (! this.lastStoreTransactionId || options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
+            Tine.log.debug('cancelling old transaction request.');
+            return false;
+        }
     },
     
     /**
@@ -249,16 +305,9 @@ Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
                     direction: 'ASC'
                 }            
             });
-    
-            // prepare filter / get paging from combo
-            this.store.on('beforeload', function(store, options){
-                options.params.paging = {
-                    start: options.params.start,
-                    limit: options.params.limit,
-                    sort: 'n_family',
-                    dir: 'ASC'
-                };
-            }, this);
+            
+            this.store.on('beforeload', this.onStoreBeforeload, this);
+            this.store.on('beforeloadrecords', this.onStoreBeforeLoadRecords, this);
         }
         
         return this.store;
