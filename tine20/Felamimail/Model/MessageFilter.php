@@ -187,7 +187,7 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         $foreignTables = $_backend->getForeignTables();
         
         // add conditions
-        $tablename  = $_backend->getTablePrefix() . $foreignTables[$_filterData['field']]['table'];
+        $tablename  = $foreignTables[$_filterData['field']]['table'];
         if ($_filterData['field'] !== 'flags') {
             $fieldName  = $tablename . '.name';
             $fieldEmail = $tablename . '.email';
