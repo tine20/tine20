@@ -168,7 +168,7 @@ class Felamimail_Backend_Cache_Sql_MessageSearchImproved extends Felamimail_Back
             // need to ask filter if it needs additional columns
             $filterCols = $_filter->getRequiredColumnsForSelect();
             foreach ($filterCols as $key => $filterCol) {
-                if (! array_key_exists($key, $colsToFetch)) {
+                if (! array_key_exists($key, $_colsToFetch)) {
                     $_colsToFetch[$key] = $filterCol;
                 }
             }
