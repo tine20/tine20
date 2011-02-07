@@ -207,6 +207,16 @@ Tine.Tinebase.ExceptionHandler = function() {
                 });
                 break;
             
+            // memory exhausted
+            case 550: 
+                Ext.MessageBox.show({
+                    title: _('Out of Resources'), 
+                    msg: _('Sorry, the Server stated a "memory exhausted" condition. Please contact your administrator.'),
+                    buttons: Ext.Msg.OK,
+                    icon: Ext.MessageBox.WARNING
+                });
+                break;
+                
             // user in no role
             case 610:
             Ext.MessageBox.show({
