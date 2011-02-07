@@ -155,10 +155,10 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             listeners: {
                 scope: this,
                 specialkey: function(combo, e) {
-                    // TODO cancel loading when ENTER is pressed
-//                    if (e.getKey() == e.ENTER) {
-//                        this.stopEditing(true);
-//                    }
+                    // cancel loading when ENTER is pressed
+                    if (e.getKey() == e.ENTER) {
+                        combo.lastStoreTransactionId = null;
+                    }
 
                     // jump to subject if we are in the last row and it is empty
                     var sm = this.getSelectionModel(),
