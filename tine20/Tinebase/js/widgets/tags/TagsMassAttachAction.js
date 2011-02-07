@@ -62,6 +62,7 @@ Ext.extend(Tine.widgets.tags.TagsMassAttachAction, Ext.Action, {
             app: this.app,
             listeners: {
                 scope: this,
+                render: function(field){field.focus(false, 500);},
                 select: function() {
                     this.onOk();
                 }
