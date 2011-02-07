@@ -90,7 +90,6 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
             text: this.app.i18n._hidden(attr.localname)
     	});
         
-        
         // show standard folders icons 
         if (account) {
             if (account.get('trash_folder') == attr.globalname) {
@@ -115,6 +114,10 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         }
         if ('Junk' == attr.globalname) {
             attr.cls = 'felamimail-node-junk';
+        }
+
+        if (! attr.is_selectable) {
+            attr.cls = 'felamimail-node-unselectable';
         }
     }
 });

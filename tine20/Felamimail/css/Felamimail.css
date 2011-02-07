@@ -285,6 +285,17 @@
 }
 
 
+.felamimail-node-unselectable img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/16x16/places/folder-grey.png);
+}
+.x-btn-medium .felamimail-node-unselectable img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/22x22/places/folder-grey.png);
+}
+.x-btn-large .felamimail-node-unselectable img.x-tree-node-icon {
+    background-image:url(../../images/oxygen/32x32/places/folder-grey.png);
+}
+
+
 .felamimail-node-intelligent-marked img.x-tree-node-icon {
     background-image:url(../../images/oxygen/16x16/places/folder-important.png);
 }
