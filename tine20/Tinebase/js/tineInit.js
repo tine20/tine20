@@ -320,6 +320,7 @@ Tine.Tinebase.tineInit = {
          *        
          *  NOTE: Illegal json data responses are mapped to error code 530
          *        Empty resonses (Ext.Decode can't deal with them) are maped to 540
+         *        Memory exhausted to 550
          */
         Ext.Ajax.on('requestcomplete', function (connection, response, options) {
             
@@ -332,6 +333,14 @@ Tine.Tinebase.tineInit = {
                     request: options.jsonData,
                     response: response.responseText
                 };
+                
+                // Fatal error: Allowed memory size of n bytes exhausted (tried to allocate m bytes) 
+                if (response.responseText.match(/^Fatal error: Allowed memory size of /m)) {
+                    Ext.apply(exception, {
+                        code: 550,
+                        message: response.responseText
+                    });
+                }
                 
                 // encapsulate as jsonrpc response
                 var requestOptions = Ext.decode(options.jsonData);
