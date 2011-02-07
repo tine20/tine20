@@ -146,21 +146,35 @@ class Felamimail_Backend_Cache_Sql_MessageSearchImproved extends Felamimail_Back
             }
         }
         
-        if ($_filter !== NULL) {
-            // need to ask filter if it needs additional columns
-            $filterCols = $_filter->getRequiredColumnsForSelect();
-            foreach ($filterCols as $key => $filterCol) {
-                if (! array_key_exists($key, $colsToFetch)) {
-                    $colsToFetch[$key] = $filterCol;
-                }
-            }
-        }
+        $colsToFetch = $this->_addFilterColumns($colsToFetch, $_filter);
         
         if ($_pagination->sort && ! array_key_exists($_pagination->sort, $colsToFetch)) {
             $colsToFetch[$_pagination->sort] = $_pagination->sort;
         }
         
         return array($colsToFetch, $getIdValuePair);
+    }
+    
+    /**
+     * add columns from filter
+     * 
+     * @param array $_colsToFetch
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return array
+     */
+    protected function _addFilterColumns($_colsToFetch, Tinebase_Model_Filter_FilterGroup $_filter)
+    {
+        if ($_filter !== NULL) {
+            // need to ask filter if it needs additional columns
+            $filterCols = $_filter->getRequiredColumnsForSelect();
+            foreach ($filterCols as $key => $filterCol) {
+                if (! array_key_exists($key, $colsToFetch)) {
+                    $_colsToFetch[$key] = $filterCol;
+                }
+            }
+        }
+        
+        return $_colsToFetch;
     }
     
     /**
@@ -232,6 +246,8 @@ class Felamimail_Backend_Cache_Sql_MessageSearchImproved extends Felamimail_Back
             $cols = '*';
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($cols, TRUE));
+        
         $select = $this->_db->select();
         $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $cols);
         
@@ -291,7 +307,8 @@ class Felamimail_Backend_Cache_Sql_MessageSearchImproved extends Felamimail_Back
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {        
-        $select = $this->_getSelectImproved(array('count' => 'COUNT(*)', 'flags' => 'felamimail_cache_message_flag.flag'));
+        $colsToFetch = $this->_addFilterColumns(array('count' => 'COUNT(*)', 'flags' => 'felamimail_cache_message_flag.flag'), $_filter);
+        $select = $this->_getSelectImproved($colsToFetch);
         $this->_addFilter($select, $_filter);
         
         $stmt = $this->_db->query($select);
