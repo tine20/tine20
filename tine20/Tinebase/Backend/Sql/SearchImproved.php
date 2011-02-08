@@ -20,7 +20,7 @@
 class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
 {
     /**
-     * placeholder for id column for searchImproved()/_getSelectImproved()
+     * placeholder for id column for searchImproved()/_getSelect()
      */
     const IDCOL             = '_id_';
     
@@ -72,7 +72,7 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
     {
         $colsToFetch = array_merge(array('count' => 'COUNT(*)'), $this->_additionalSearchCountCols);
         $colsToFetch = $this->_addFilterColumns($colsToFetch, $_filter);
-        $select = $this->_getSelectImproved($colsToFetch);
+        $select = $this->_getSelect($colsToFetch);
         $this->_addFilter($select, $_filter);
         
         $stmt = $this->_db->query($select);
@@ -106,7 +106,7 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
         
         // (1) get ids or id/value pair
         list($colsToFetch, $getIdValuePair) = $this->_getColumnsToFetch($_cols, $_filter, $_pagination);
-        $select = $this->_getSelectImproved($colsToFetch);
+        $select = $this->_getSelect($colsToFetch);
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
         }
@@ -126,7 +126,7 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
             return new Tinebase_Record_RecordSet($this->_modelName);
         } else {
             // (2) get other columns and do joins
-            $select = $this->_getSelectImproved($_cols);
+            $select = $this->_getSelect($_cols);
             $this->_addWhereIdIn($select, $ids);
             
             $rows = $this->_fetch($select, self::FETCH_ALL);
@@ -244,7 +244,7 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
      * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
      */
-    protected function _getSelectImproved($_cols = '*', $_getDeleted = FALSE)
+    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
         if ($_cols !== '*' ) {
             $cols = array();
