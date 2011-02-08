@@ -356,7 +356,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
     
-    
     /**
      * try to search for Timesheets
      *
