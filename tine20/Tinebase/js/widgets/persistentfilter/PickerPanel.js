@@ -141,7 +141,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {PersistentFilter} record
      */
     checkReload: function(record) {
-        if (record.get('application_id') === this.app.id && this.root) {
+        if (record.get('application_id') === this.app.id && this.root && this.root.rendered) {
             this.root.reload(function(callback) {
             });
             return true;
@@ -363,17 +363,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
                     scope: this,
                     success: function(savedRecord){
-                        var persistentFilterNode = this.getPersistentFilterNode();
-                        
-                        if (persistentFilterNode && persistentFilterNode.isExpanded()) {
-                            var existingNode = persistentFilterNode.findChild('id', savedRecord.id);
-                            if (! existingNode) {
-                                var newNode = this.loader.createNode(savedRecord.copy().data);
-                                persistentFilterNode.appendChild(newNode);
-                            }
-                        }
                         this.store.addSorted(savedRecord);
-                        
                         Ext.Msg.hide();
                         
                         // reload this filter?
