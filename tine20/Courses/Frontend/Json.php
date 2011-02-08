@@ -50,7 +50,17 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $this->_controller = Courses_Controller_Course::getInstance();
         $this->_groupController = Admin_Controller_Group::getInstance();
         
-        $this->_config = isset(Tinebase_Core::getConfig()->courses) ? Tinebase_Core::getConfig()->courses : new Zend_Config(array());
+        $this->setConfig();
+    }
+    
+    /**
+     * set config
+     * 
+     * @param array $_config
+     */
+    public function setConfig($_config = array())
+    {
+        $this->_config = isset(Tinebase_Core::getConfig()->courses) ? Tinebase_Core::getConfig()->courses : new Zend_Config($_config);
     }
     
     /************************************** protected helper functions **********************/
@@ -304,7 +314,9 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name); 
         
         // get definition and start import with admin user import csv plugin
-        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($this->_config->get('import_definition', 'admin_user_import_csv'));
+        $definitionName = $this->_config->get('import_definition', 'admin_user_import_csv');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using import definition: ' . $definitionName);
+        $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($definitionName);
         $importer = Admin_Import_Csv::createFromDefinition($definition, array(
             //'accountLoginNamePrefix'    => $course->name . '-',
             'group_id'                      => $groupId,
