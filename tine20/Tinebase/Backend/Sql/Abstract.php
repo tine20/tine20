@@ -730,12 +730,12 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     protected function _explodeForeignValues(Tinebase_Record_Interface $_record)
     {
         foreach (array_keys($this->_foreignTables) as $field) {
-            if (!empty($_record->{$field})) {
-                $_record->{$field} = (array_key_exists('singleValue', $this->_foreignTables[$field]) && $this->_foreignTables[$field]['singleValue'])
-                    ? $_record->{$field}
-                    : explode(',', $_record->{$field});
+            $isSingleValue = (array_key_exists('singleValue', $this->_foreignTables[$field]) && $this->_foreignTables[$field]['singleValue']);
+            
+            if (! empty($_record->{$field})) {
+                $_record->{$field} = $isSingleValue ? $_record->{$field} : explode(',', $_record->{$field});
             } else {
-                $_record->{$field} = array();
+                $_record->{$field} = $isSingleValue ? NULL : array();
             }
         }
     }
