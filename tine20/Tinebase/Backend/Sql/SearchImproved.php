@@ -13,7 +13,7 @@
  */
 
 /**
- * extended sql cache backend class for Felamimail messages with improved search
+ * extended sql cache backend class for improved search
  *
  * @package     Tinebase
  */
@@ -97,7 +97,7 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
             $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
         }
         
-        // legacy: $_cols param was $_onlyIds ...
+        // legacy: $_cols param was $_onlyIds (boolean) ...
         if ($_cols === TRUE) {
             $_cols = self::IDCOL;
         } else if ($_cols === FALSE) {
