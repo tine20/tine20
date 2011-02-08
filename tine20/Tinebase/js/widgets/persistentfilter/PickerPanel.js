@@ -55,6 +55,10 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     initComponent: function() {
         this.store = Tine.widgets.persistentfilter.store.getPersistentFilterStore();
         
+        this.store.on('update', this.onStoreUpdate, this);
+        this.store.on('remove', this.onStoreRemove, this);
+        this.store.on('add', this.onStoreAdd, this);
+        
         this.loader = new Tine.widgets.persistentfilter.PickerTreePanelLoader({
             app: this.app,
             store: this.store
@@ -99,6 +103,49 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
         
         // due to dependencies isues we need to wait after render
         this.getFilterToolbar().on('change', this.onFilterChange, this);
+    },
+    
+    /**
+     * need to reload filter if records in store were updated (only if the have the same app id)
+     */
+    onStoreUpdate: function(store, record)
+    {
+        this.checkReload(record);
+    },
+
+    /**
+     * need to reload filter if records in store were removed (only if the have the same app id)
+     */
+    onStoreRemove: function(store, record)
+    {
+        this.checkReload(record);
+    },
+
+    /**
+     * need to reload filter if records in store were added (only if the have the same app id)
+     */
+    onStoreAdd: function(store, records)
+    {
+        var reload = false;
+        Ext.each(records, function(record) {
+            reload = this.checkReload(record);
+            if (reload) {
+                return;
+            }
+        }, this);
+    },
+    
+    /**
+     * reload nodes if filters for this app have changed
+     * 
+     * @param {PersistentFilter} record
+     */
+    checkReload: function(record) {
+        if (record.get('application_id') === this.app.id && this.root && this.root.rendered) {
+            this.root.reload(function(callback) {
+            });
+            return true;
+        }
     },
     
     /**
@@ -233,10 +280,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 var record = this.store.getById(node.id);
                 Tine.widgets.persistentfilter.model.persistentFilterProxy.deleteRecords([record], {
                     scope: this,
-                    //failure: this.onProxyFail,
                     success: function(){
-                        node.unselect();
-                        node.remove();
                         this.store.remove(record);
                         Ext.MessageBox.hide();
                     }
@@ -259,9 +303,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 record.set('name', _newName);
                 Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
                     scope: this,
-                    //failure: this.onProxyFail,
                     success: function(updatedRecord){
-                        node.setText(updatedRecord.get('name'));
                         this.store.remove(record);
                         this.store.addSorted(updatedRecord);
                         Ext.MessageBox.hide();
@@ -321,17 +363,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
                     scope: this,
                     success: function(savedRecord){
-                        var persistentFilterNode = this.getPersistentFilterNode();
-                        
-                        if (persistentFilterNode && persistentFilterNode.isExpanded()) {
-                            var existingNode = persistentFilterNode.findChild('id', savedRecord.id);
-                            if (! existingNode) {
-                                var newNode = this.loader.createNode(savedRecord.copy().data);
-                                persistentFilterNode.appendChild(newNode);
-                            }
-                        }
                         this.store.addSorted(savedRecord);
-                        
                         Ext.Msg.hide();
                         
                         // reload this filter?

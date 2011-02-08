@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 Ext.ns('Tine.widgets.persistentfilter.store');
@@ -33,23 +33,30 @@ Tine.widgets.persistentfilter.store.PersistentFilterStore = Ext.extend(Ext.data.
  * get store of all persistent filters
  * 
  * @static
- * @sigleton
+ * @singleton
  * @return {PersistentFilterStore}
  */
 Tine.widgets.persistentfilter.store.getPersistentFilterStore = function() {
     if (! Tine.widgets.persistentfilter.store.persistentFilterStore) {
-        // create store
-        var s = Tine.widgets.persistentfilter.store.persistentFilterStore = new Tine.widgets.persistentfilter.store.PersistentFilterStore({
-            fields: Tine.widgets.persistentfilter.model.PersistentFilter.getFieldDefinitions(),
-            sortInfo: {field: 'name', direction: 'ASC'}
-        });
         
-        // populate store
-        var persistentFiltersData = Tine.Tinebase.registry.get("persistentFilters").results;
-        Ext.each(persistentFiltersData, function(data) {
-            var r = new Tine.widgets.persistentfilter.model.PersistentFilter(data);
-            s.addSorted(r);
-        }, this);
+        if (window.isMainWindow) {
+            // create store
+            var s = Tine.widgets.persistentfilter.store.persistentFilterStore = new Tine.widgets.persistentfilter.store.PersistentFilterStore({
+                fields: Tine.widgets.persistentfilter.model.PersistentFilter.getFieldDefinitions(),
+                sortInfo: {field: 'name', direction: 'ASC'}
+            });
+            
+            // populate store
+            var persistentFiltersData = Tine.Tinebase.registry.get("persistentFilters").results;
+            Ext.each(persistentFiltersData, function(data) {
+                var r = new Tine.widgets.persistentfilter.model.PersistentFilter(data);
+                s.addSorted(r);
+            }, this);
+        } else {
+            // TODO test this in IE!
+            var mainWindow = Ext.ux.PopupWindowMgr.getMainWindow();
+            Tine.widgets.persistentfilter.store.persistentFilterStore = mainWindow.Tine.widgets.persistentfilter.store.getPersistentFilterStore();
+        }
     }
     
     return Tine.widgets.persistentfilter.store.persistentFilterStore;
