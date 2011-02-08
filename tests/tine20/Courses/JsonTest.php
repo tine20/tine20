@@ -287,7 +287,7 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertGreaterThan(0, $result['results']);
             
         } else {
-            $importer = call_user_func($_definition->plugin . '::createFromDefinition', $definition, array(
+            $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, array(
                     'group_id'                  => $courseData['group_id'],
                     'accountHomeDirectoryPrefix' => '//base/school/' . $courseData['name'] . '/',
                     'accountEmailDomain'        => 'school.org',
