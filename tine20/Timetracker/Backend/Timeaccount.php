@@ -6,8 +6,8 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id$
  */
 
 
@@ -17,7 +17,7 @@
  * @package     Timetracker
  * @subpackage  Backend
  */
-class Timetracker_Backend_Timeaccount extends Tinebase_Backend_Sql_Abstract
+class Timetracker_Backend_Timeaccount extends Tinebase_Backend_Sql_SearchImproved
 {
     /**
      * Table name without prefix
