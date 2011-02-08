@@ -47,6 +47,20 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
     protected $_additionalSearchCountCols = array();
     
     /**
+     * use subselect in searchCount fn
+     *
+     * @var boolean
+     */
+    protected $_useSubselectForCount = TRUE;
+    
+    /**
+     * default secondary sort criteria
+     * 
+     * @var string
+     */
+    protected $_defaultSecondarySort = NULL;
+        
+    /**
      * Search for records matching given filter
      *
      * @param  Tinebase_Model_Filter_FilterGroup $_filter
@@ -65,20 +79,26 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return int
-     * 
-     * @todo allow to use subselect count -> @see Tinebase_Backend_Sql_Abstract::searchCount()
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {
-        $colsToFetch = array_merge(array('count' => 'COUNT(*)'), $this->_additionalSearchCountCols);
-        $colsToFetch = $this->_addFilterColumns($colsToFetch, $_filter);
-        $select = $this->_getSelect($colsToFetch);
-        $this->_addFilter($select, $_filter);
+        $searchCountCols = array_merge(array('count' => 'COUNT(*)'), $this->_additionalSearchCountCols);
         
-        $stmt = $this->_db->query($select);
-        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        if ($this->_useSubselectForCount) {
+            // use normal search query as subselect to get count -> select count(*) from (select [...]) as count
+            $select = $this->_getSelect();
+            $this->_addFilter($select, $_filter);
+            $countSelect = $this->_db->select()->from($select, $searchCountCols);
+            
+        } else {
+            $countSelect = $this->_getSelect($searchCountCols);
+            $this->_addFilter($countSelect, $_filter);
+        }
         
-        return count($rows);        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect);
+        $result = $this->_db->fetchOne($countSelect);
+        
+        return $result;
     }
     
     /**
@@ -110,6 +130,7 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
         if ($_filter !== NULL) {
             $this->_addFilter($select, $_filter);
         }
+        $this->_addSecondarySort($_pagination);
         $_pagination->appendPaginationSql($select);
         
         if ($getIdValuePair) {
@@ -165,8 +186,10 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
         
         $colsToFetch = $this->_addFilterColumns($colsToFetch, $_filter);
         
-        if ($_pagination->sort && ! array_key_exists($_pagination->sort, $colsToFetch)) {
-            $colsToFetch[$_pagination->sort] = $_pagination->sort;
+        foreach((array) $_pagination->sort as $sort) {
+            if (! array_key_exists($sort, $colsToFetch)) {
+                $colsToFetch[$sort] = $this->_tableName . '.' . $sort;
+            }
         }
         
         return array($colsToFetch, $getIdValuePair);
@@ -192,6 +215,18 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
         }
         
         return $_colsToFetch;
+    }
+    
+    /**
+     * add default secondary sort criteria
+     * 
+     * @param Tinebase_Model_Pagination $_pagination
+     */
+    protected function _addSecondarySort(Tinebase_Model_Pagination $_pagination)
+    {
+        if (! empty($this->_defaultSecondarySort)) {
+            $_pagination->sort = array_merge((array)$_pagination->sort, array($this->_defaultSecondarySort));
+        }
     }
     
     /**
@@ -292,10 +327,11 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
                         : ((array_key_exists('field', $join) && (! array_key_exists('singleValue', $join) || ! $join['singleValue']))
                             ? array($foreignColumn => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')')
                             : array($foreignColumn => $join['table'] . '.id'));
-                        
+                    $joinId = (array_key_exists('joinId', $join)) ? $joinId : $this->_identifier;
+                            
                     $_select->joinLeft(
                         /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
-                        /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
+                        /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.' . $joinId) . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
                         /* select */ $selectArray
                     );
                 }
