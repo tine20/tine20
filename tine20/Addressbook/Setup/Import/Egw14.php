@@ -227,7 +227,6 @@ class Adressbook_Setup_Import_Egw14 extends Tinebase_Setup_Import_Egw14_Abstract
                 ) 
             );
            
-            //$tineContact = Addressbook_Backend_Sql::getInstance()->create($tineContact);
             $tineContact = Addressbook_Controller_Contact::getInstance()->create($tineContact);
             echo " ok.<br/>";
             
