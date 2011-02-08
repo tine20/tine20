@@ -115,14 +115,14 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
     /**
      * create new temp file
      * 
-     * @param $_path
-     * @param $_name
-     * @param $_type
-     * @param $_size
-     * @param $_error
+     * @param string $_path
+     * @param string $_name
+     * @param string $_type
+     * @param integer $_size
+     * @param integer $_error
      * @return Tinebase_Model_TempFile
      */
-    public function createTempFile($_path, $_name, $_type, $_size, $_error)
+    public function createTempFile($_path, $_name = 'tempfile.tmp', $_type = 'unknown', $_size = 0, $_error = 0)
     {
         $id = Tinebase_Model_TempFile::generateUID();
         $tempFile = new Tinebase_Model_TempFile(array(
