@@ -54,9 +54,10 @@ class Addressbook_Backend_SqlSearchImproved extends Tinebase_Backend_Sql_SearchI
      */
     protected $_foreignTables = array(
         'jpegphoto'    => array(
-            'table'  => 'addressbook_image',
-            'joinOn' => 'contact_id',
-            'select' => array('jpegphoto' => 'IF(ISNULL(addressbook_image.contact_id), 0, 1)'),
+            'table'         => 'addressbook_image',
+            'joinOn'        => 'contact_id',
+            'select'        => array('jpegphoto' => 'IF(ISNULL(addressbook_image.contact_id), 0, 1)'),
+            'singleValue'   => TRUE,
         ),
         'account_id'    => array(
             'table'  => 'accounts',
@@ -165,7 +166,7 @@ class Addressbook_Backend_SqlSearchImproved extends Tinebase_Backend_Sql_SearchI
     public function _saveImage($_contactId, $imageData)
     {
         $this->_db->delete($this->_tablePrefix . 'addressbook_image', $this->_db->quoteInto($this->_db->quoteIdentifier('contact_id') . ' = ?', $_contactId));
-        if (! empty($imageData) && ! is_array($imageData)) {
+        if (! empty($imageData)) {
             $this->_db->insert($this->_tablePrefix . 'addressbook_image', array(
                 'contact_id'    => $_contactId,
                 'image'         => base64_encode($imageData)
@@ -225,19 +226,6 @@ class Addressbook_Backend_SqlSearchImproved extends Tinebase_Backend_Sql_SearchI
         
         // add account.id column as we always need this filter for disabled/invisible users
         $result['account_id'] = 'accounts.id';
-        return $result;
-    }
-    
-    /**
-     * converts record into raw data for adapter
-     *
-     * @param  Tinebase_Record_Abstract $_record
-     * @return array
-     */
-    protected function _recordToRawData($_record)
-    {
-        $result = parent::_recordToRawData($_record);
-
         return $result;
     }
 }
