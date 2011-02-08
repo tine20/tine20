@@ -67,8 +67,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     private function __construct() {
         $this->_modelName = 'Felamimail_Model_Message';
         $this->_doContainerACLChecks = FALSE;
-        //$this->_backend = new Felamimail_Backend_Cache_Sql_Message();
-        $this->_backend = new Felamimail_Backend_Cache_Sql_MessageSearchImproved();
+        $this->_backend = new Felamimail_Backend_Cache_Sql_Message();
         
         $this->_currentAccount = Tinebase_Core::getUser();
         
