@@ -896,6 +896,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         if (! empty($this->_foreignTables)) {
             
             foreach ($this->_foreignTables as $modelName => $join) {
+                
+                if (! array_key_exists('field', $join)) {
+                    continue;
+                }
+                
                 $idsToAdd    = array();
                 $idsToRemove = array();
                 
