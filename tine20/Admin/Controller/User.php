@@ -323,14 +323,14 @@ class Admin_Controller_User extends Tinebase_Controller_Abstract
     }
     
     /**
-     * create or update contact in addressbook sql backend
+     * create or update contact in addressbook backend
      * 
      * @param  Tinebase_Model_FullUser $_user
      * @return Addressbook_Model_Contact
      */
     public function createOrUpdateContact(Tinebase_Model_FullUser $_user)
     {
-        $contactsBackend = new Addressbook_Backend_Sql();
+        $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         $contactsBackend->setGetDisabledContacts(true);
         
         if (empty($_user->container_id)) {
