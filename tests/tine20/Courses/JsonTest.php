@@ -4,8 +4,8 @@
  * 
  * @package     Courses
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  */
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Courses_JsonTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -186,7 +182,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('admin_user_import_csv');
         $result = $this->_importHelper(dirname(dirname(__FILE__)) . '/Admin/files/testHeadline.csv', $definition);
-        //print_r($result);
 
         $this->assertEquals(4, count($result['members']));
     }
@@ -196,39 +191,8 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testImportMembersIntoCourse2()
     {
-        try {
-            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('course_user_import_csv');
-        } catch (Tinebase_Exception_NotFound $e) {
-            $definition = Tinebase_ImportExportDefinition::getInstance()->create(new Tinebase_Model_ImportExportDefinition(array(
-                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(),
-                    'name'              => 'course_user_import_csv',
-                    'type'              => 'import',
-                    'model'             => 'Tinebase_Model_FullUser',
-                    'plugin'            => 'Admin_Import_Csv',
-                    'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
-            <config>
-                <headline>1</headline>
-                <use_headline>0</use_headline>
-                <dryrun>0</dryrun>
-                <encoding>UTF-8</encoding>
-                <delimiter>;</delimiter>
-                <mapping>
-                    <field>
-                        <source>lastname</source>
-                        <destination>accountLastName</destination>
-                    </field>
-                    <field>
-                        <source>firstname</source>
-                        <destination>accountFirstName</destination>
-                    </field>
-                </mapping>
-            </config>')
-            ));
-        }
+        $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt');
         
-        $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt', $definition);
-        
-        //print_r($result);
         $this->assertEquals(5, count($result['members']));
         
         // find philipp lahm
@@ -243,10 +207,20 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         
         // get user and check email
         $user = Tinebase_User::getInstance()->getFullUserById($lahm['id']);
-        //print_r($user->toArray());
         $this->assertEquals('lahmph', $user->accountLoginName);
         $this->assertEquals('lahmph@school.org', $user->accountEmailAddress);
         $this->assertEquals('//base/school/' . $result['name'] . '/' . $user->accountLoginName, $user->accountHomeDirectory);
+    }
+    
+    /**
+     * test for import of members (3) / json import
+     */
+    public function testImportMembersIntoCourse3()
+    {
+        $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt', NULL, TRUE);
+        print_r($result);
+        
+        $this->assertEquals(5, count($result['members']));
     }
     
     /************ protected helper funcs *************/
@@ -303,30 +277,81 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
      * @param Tinebase_Model_ImportExportDefinition $_definition
      * @return array course data
      */
-    protected function _importHelper($_filename, Tinebase_Model_ImportExportDefinition $_definition)
+    protected function _importHelper($_filename, Tinebase_Model_ImportExportDefinition $_definition = NULL, $_useJsonImportFn = FALSE)
     {
+        $definition = ($_definition !== NULL) ? $_definition : $this->_getCourseImportDefinition();
+        
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
         
         $this->_coursesToDelete[] = $courseData['id'];
         
-        // import data
-        $importer = call_user_func($_definition->plugin . '::createFromDefinition', $_definition, array(
-                'group_id'                  => $courseData['group_id'],
-                'accountHomeDirectoryPrefix' => '//base/school/' . $courseData['name'] . '/',
-                'accountEmailDomain'        => 'school.org',
-                'password'                  => $courseData['name'],
-                'samba'                     => array(
-                    'homePath'    => '//basehome/',
-                    'homeDrive'   => 'H:',
-                    'logonScript' => 'logon.bat',
-                    'profilePath' => '\\\\profile\\',
+        if ($_useJsonImportFn) {
+            $tempFileBackend = new Tinebase_TempFile();
+            $tempFile = $tempFileBackend->createTempFile($_filename);
+            $this->_json->setConfig(array('import_definition' => 'course_user_import_csv'));
+            $result = $this->_json->importMembers($tempFile->getId(), $courseData['group_id'], $courseData['id']);
+            
+            $this->assertGreaterThan(0, $result['results']);
+            
+        } else {
+            $importer = call_user_func($_definition->plugin . '::createFromDefinition', $definition, array(
+                    'group_id'                  => $courseData['group_id'],
+                    'accountHomeDirectoryPrefix' => '//base/school/' . $courseData['name'] . '/',
+                    'accountEmailDomain'        => 'school.org',
+                    'password'                  => $courseData['name'],
+                    'samba'                     => array(
+                        'homePath'    => '//basehome/',
+                        'homeDrive'   => 'H:',
+                        'logonScript' => 'logon.bat',
+                        'profilePath' => '\\\\profile\\',
+                    )
                 )
-            )
-        );
-        $importer->importFile($_filename);
+            );
+            $importer->importFile($_filename);
+        }
         $courseData = $this->_json->getCourse($courseData['id']);
 
         return $courseData;
+    }
+    
+    /**
+     * returns course import definition
+     * 
+     * @return Tinebase_Model_ImportExportDefinition
+     */
+    protected function _getCourseImportDefinition()
+    {
+        try {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->getByName('course_user_import_csv');
+        } catch (Tinebase_Exception_NotFound $e) {
+            $definition = Tinebase_ImportExportDefinition::getInstance()->create(new Tinebase_Model_ImportExportDefinition(array(
+                    'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Admin')->getId(),
+                    'name'              => 'course_user_import_csv',
+                    'type'              => 'import',
+                    'model'             => 'Tinebase_Model_FullUser',
+                    'plugin'            => 'Admin_Import_Csv',
+                    'plugin_options'    => '<?xml version="1.0" encoding="UTF-8"?>
+            <config>
+                <headline>1</headline>
+                <use_headline>0</use_headline>
+                <dryrun>0</dryrun>
+                <encoding>UTF-8</encoding>
+                <delimiter>;</delimiter>
+                <mapping>
+                    <field>
+                        <source>lastname</source>
+                        <destination>accountLastName</destination>
+                    </field>
+                    <field>
+                        <source>firstname</source>
+                        <destination>accountFirstName</destination>
+                    </field>
+                </mapping>
+            </config>')
+            ));
+        }
+        
+        return $definition;
     }
 }
