@@ -285,9 +285,14 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
             $_select->group($groupBy);
             
             foreach ($this->_foreignTables as $foreignColumn => $join) {
+                // only join if field is in cols
                 if ($_cols == '*' || array_key_exists($foreignColumn, $_cols)) {
-                    // only join if field is in cols
-                    $selectArray = array($foreignColumn => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')');
+                    $selectArray = (array_key_exists('select', $join))
+                        ? $join['select'] 
+                        : ((array_key_exists('field', $join))
+                            ? array($foreignColumn => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')')
+                            : array($foreignColumn => $join['table'] . '.id'));
+                        
                     $_select->joinLeft(
                         /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
                         /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
