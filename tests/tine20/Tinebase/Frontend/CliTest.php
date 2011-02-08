@@ -4,8 +4,8 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Frontend_CliTest::main');
-}
 
 /**
  * Test class for Tinebase_Frontend_Cli
@@ -115,7 +111,7 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Removing all deleted entries before', $out);
         $this->assertContains('Cleared table addressbook (deleted ', $out);
 
-        $contactBackend = new Addressbook_Backend_Sql();
+        $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         $this->setExpectedException('Tinebase_Exception_NotFound');
         $deletedRecord = $contactBackend->get($deletedRecord->getId(), TRUE);
     }
@@ -137,7 +133,7 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         $this->assertContains('Cleared table addressbook (deleted ', $out);
         $this->assertContains('Cleared table metacrm_lead (deleted ', $out);
 
-        $contactBackend = new Addressbook_Backend_Sql();
+        $contactBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         $contacts = $contactBackend->getMultipleByProperty($deletedContact->getId(), 'id', TRUE);
         $this->assertEquals(0, count($contacts));
 
