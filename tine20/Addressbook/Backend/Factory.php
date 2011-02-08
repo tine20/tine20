@@ -62,8 +62,8 @@ class Addressbook_Backend_Factory
         switch ($_type) {
             case self::SQL:
                 if (!isset(self::$_backends[$_type])) {
-                    //self::$_backends[$_type] = new Addressbook_Backend_Sql();
-                    self::$_backends[$_type] = new Addressbook_Backend_SqlSearchImproved();
+                    self::$_backends[$_type] = new Addressbook_Backend_Sql();
+                    //self::$_backends[$_type] = new Addressbook_Backend_SqlSearchImproved();
                 }
                 $instance = self::$_backends[$_type];
                 break;            
