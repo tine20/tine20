@@ -289,7 +289,7 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
                 if ($_cols == '*' || array_key_exists($foreignColumn, $_cols)) {
                     $selectArray = (array_key_exists('select', $join))
                         ? $join['select'] 
-                        : ((array_key_exists('field', $join))
+                        : ((array_key_exists('field', $join) && (! array_key_exists('singleValue', $join) || ! $join['singleValue']))
                             ? array($foreignColumn => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')')
                             : array($foreignColumn => $join['table'] . '.id'));
                         
