@@ -92,8 +92,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
         
-        //print_r($courseData);
-        
         // checks
         $this->assertEquals($course['description'], $courseData['description']);
         $this->assertEquals($course['type'], $courseData['type']['value']);
@@ -136,15 +134,11 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
         $course = $this->_getCourseData();
         $courseData = $this->_json->saveCourse($course);
 
-        //print_r($courseData);
-        
         // update Course
         $courseData['description'] = "blubbblubb";
         $courseData['members'] = array();
         $courseData['type'] = $courseData['type']['value'];
         $courseUpdated = $this->_json->saveCourse($courseData);
-        
-        //print_r($courseUpdated);
         
         // check
         $this->assertEquals($courseData['id'], $courseUpdated['id']);
@@ -218,8 +212,6 @@ class Courses_JsonTest extends PHPUnit_Framework_TestCase
     public function testImportMembersIntoCourse3()
     {
         $result = $this->_importHelper(dirname(__FILE__) . '/files/import.txt', NULL, TRUE);
-        print_r($result);
-        
         $this->assertEquals(5, count($result['members']));
     }
     
