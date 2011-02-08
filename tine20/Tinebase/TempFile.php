@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -107,26 +107,37 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
             if (! move_uploaded_file($uploadedFile['tmp_name'], $path)) {
                 throw new Tinebase_Exception_NotFound('No valid upload file found or some other error occurred while uploading! ' . print_r($uploadedFile, true));
             }
-            
-            
         }
         
-        //$type = mime_content_type($path);
-        //Tinebase_Core::getLogger()->CRIT(__METHOD__ . '::' . __LINE__ . " {$type}");
-        
+        return $this->createTempFile($path, $name, $type, $size, $error);
+    }
+    
+    /**
+     * create new temp file
+     * 
+     * @param $_path
+     * @param $_name
+     * @param $_type
+     * @param $_size
+     * @param $_error
+     * @return Tinebase_Model_TempFile
+     */
+    public function createTempFile($_path, $_name, $_type, $_size, $_error)
+    {
         $id = Tinebase_Model_TempFile::generateUID();
         $tempFile = new Tinebase_Model_TempFile(array(
            'id'          => $id,
            'session_id'  => session_id(),
            'time'        => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG),
-           'path'        => $path,
-           'name'        => $name,
-           'type'        => !empty($type) ? $type : 'unknown',
-           'error'       => !empty($error) ? $error : 0,
-           'size'        => !empty($size) ? $size : filesize($path),
+           'path'        => $_path,
+           'name'        => $_name,
+           'type'        => !empty($_type) ? $_type : 'unknown',
+           'error'       => !empty($_error) ? $_error : 0,
+           'size'        => !empty($_size) ? $_size : filesize($_path),
         ));
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " tempfile data: " . print_r($tempFile->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " tempfile data: " . print_r($tempFile->toArray(), TRUE));
+        
         $this->create($tempFile);
         
         return $tempFile;
