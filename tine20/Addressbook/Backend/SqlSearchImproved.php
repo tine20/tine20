@@ -60,8 +60,9 @@ class Addressbook_Backend_SqlSearchImproved extends Tinebase_Backend_Sql_SearchI
             'singleValue'   => TRUE,
         ),
         'account_id'    => array(
-            'table'  => 'accounts',
-            'joinOn' => 'contact_id',
+            'table'         => 'accounts',
+            'joinOn'        => 'contact_id',
+            'singleValue'   => TRUE,
         ),
     );
     
