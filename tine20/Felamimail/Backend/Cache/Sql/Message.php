@@ -15,7 +15,7 @@
  *
  * @package     Felamimail
  */
-class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
+class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_SearchImproved
 {
     /**
      * Table name without prefix
@@ -60,70 +60,43 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
     );
 
     /**
+     * additional search count columns
+     * 
+     * @var array
+     */
+    protected $_additionalSearchCountCols = array('flags' => 'felamimail_cache_message_flag.flag');
+    
+    /**
      * Search for records matching given filter
      *
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
      * @param  Tinebase_Model_Pagination            $_pagination
      * @return array
-     * 
-     * @deprecated should be removed when we switch to new search
      */
     public function searchMessageUids(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)    
     {
-        if ($_pagination === NULL) {
-            $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
-        }
-        
-        // build query
-        $select = $this->_db->select()
-            ->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), array('id', 'messageuid'))
-            ->joinLeft(
-                /* table  */ array('felamimail_folder' => $this->_tablePrefix . 'felamimail_folder'), 
-                /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.folder_id') . ' = ' . $this->_db->quoteIdentifier('felamimail_folder.id'),
-                /* select */ array()
-            );
-        
-        if ($_filter !== NULL) {
-            $this->_addFilter($select, $_filter);
-        }
-        $_pagination->appendPaginationSql($select);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-        
-        // get records
-        $stmt = $this->_db->query($select);
-        $result = array();
-        
-        while ($row = $stmt->fetch(Zend_Db::FETCH_NUM)) {
-            $result[$row[0]] = $row[1];
-        }
-        
-        return $result;
+        return $this->search($_filter, $_pagination, array(self::IDCOL, 'messageuid'));
     }
     
-    /******************* overwritten functions *********************/
-
     /**
-     * Gets total count of search with $_filter
-     * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return int
-     * 
-     * @deprecated should be removed when we switch to new search
+     * get all flags for a given folder id
+     *
+     * @param string|Felamimail_Model_Folder $_folderId
+     * @param integer $_start
+     * @param integer $_limit
+     * @return Tinebase_Record_RecordSet
      */
-    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
-    {        
-        $select = $this->_getSelect(array('count' => 'COUNT(*)', 'flags' => 'felamimail_cache_message_flag.flag'));
-        $this->_addFilter($select, $_filter);
+    public function getFlagsForFolder($_folderId, $_start = NULL, $_limit = NULL)    
+    {
+        $filter = $this->_getMessageFilterWithFolderId($_folderId);
+        $pagination = ($_start !== NULL || $_limit !== NULL) ? new Tinebase_Model_Pagination(array(
+            'start' => $_start,
+            'limit' => $_limit,
+        ), TRUE) : NULL;
         
-        $stmt = $this->_db->query($select);
-        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
+        return $this->search($filter, $pagination, array('messageuid' => 'messageuid', 'id' => self::IDCOL, 'flags' => 'felamimail_cache_message_flag.flag'));
+    }
         
-        return count($rows);        
-    }    
-        
-    /******************* public functions *********************/
-    
     /**
      * update foreign key values
      * 
@@ -242,40 +215,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
         );
         
         $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
-    }
-    
-    /**
-     * get all flags for a given folder id
-     *
-     * @param string $_folderId
-     * @param integer $_start
-     * @param integer $_limit
-     * @return array
-     * 
-     * @deprecated should be removed when we switch to new search
-     */
-    public function getFlagsForFolder($_folderId, $_start = NULL, $_limit = NULL)    
-    {
-        $folderId = ($_folderId instanceof Felamimail_Model_Folder) ? $_folderId->getId() : $_folderId;
-        
-        $select = $this->_getSelect(array('messageuid' => 'messageuid', 'id' => 'id', 'flags' => 'felamimail_cache_message_flag.flag'));
-        $select->where($this->_db->quoteInto($this->_db->quoteIdentifier('felamimail_cache_message.folder_id') . ' = ?', $folderId));
-        if ($_start !== NULL && $_limit !== NULL) {
-            $select->limit($_limit, $_start);
-        }
-        
-        $stmt = $this->_db->query($select);
-        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-        
-        $result = array();
-        foreach ($rows as $row) {
-            $result[$row['id']] = array(
-                'messageuid'    => $row['messageuid'],
-                'flags'         => (! empty($row['flags'])) ? explode(',', $row['flags']) : array(),
-            );
-        }
-
-        return $result;
     }
     
     /**
