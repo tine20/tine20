@@ -450,6 +450,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'flags', 'operator' => 'notin',    'value' => Zend_Mail_Storage::FLAG_FLAGGED),
         );
         $result = $this->_json->searchMessages($filter, '');
+        $this->assertGreaterThan(0, $result['totalcount']);
+        $this->assertEquals($result['totalcount'], count($result['results']));
+        
         $message = $this->_getMessageFromSearchResult($result, $sentMessage['subject']);
         $this->assertTrue(! empty($message), 'Sent message not found with all inboxes filter');
     }
