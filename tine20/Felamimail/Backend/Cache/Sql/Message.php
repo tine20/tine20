@@ -60,13 +60,6 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_SearchIm
     );
 
     /**
-     * additional search count columns
-     * 
-     * @var array
-     */
-    protected $_additionalSearchCountCols = array('flags' => 'felamimail_cache_message_flag.flag');
-    
-    /**
      * Search for records matching given filter
      *
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
