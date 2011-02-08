@@ -4,8 +4,8 @@
  * @package     Courses
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -292,6 +292,8 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string $tempFileId
      * @param string $groupId
      * @param string $courseName
+     * 
+     * @todo write test!!
      */
     public function importMembers($tempFileId, $groupId, $courseId)
     {
@@ -303,27 +305,23 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         // get definition and start import with admin user import csv plugin
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($this->_config->get('import_definition', 'admin_user_import_csv'));
-        $importer = new $definition->plugin(
-            $definition, 
-            Admin_Controller_User::getInstance(),
-            array(
-                'group_id'                      => $groupId,
-                //'accountLoginNamePrefix'    => $course->name . '-',
-                'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
-                'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
-                'password'                      => $course->name,
-                'course'                        => $course,
-                'samba'                         => (isset($this->_config->samba)) ? array(
-                    'homePath'      => $this->_config->samba->basehomepath,
-                    'homeDrive'     => $this->_config->samba->homedrive,
-                    'logonScript'   => $course->name . $this->_config->samba->logonscript_postfix_member,
-                    'profilePath'   => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $course->name . '\\',
-                    'pwdCanChange'  => new Tinebase_DateTime('@1'),
-                    'pwdMustChange' => new Tinebase_DateTime('@1')
-                ) : array(),
-            )
-        );
-        $importer->import($tempFile->path);
+        $importer = Admin_Import_Csv::createFromDefinition($definition, array(
+            //'accountLoginNamePrefix'    => $course->name . '-',
+            'group_id'                      => $groupId,
+            'accountEmailDomain'            => (isset($this->_config->domain)) ? $this->_config->domain : '',
+            'accountHomeDirectoryPrefix'    => (isset($this->_config->basehomedir)) ? $this->_config->basehomedir . $schoolName . '/'. $course->name . '/' : '',
+            'password'                      => $course->name,
+            'course'                        => $course,
+            'samba'                         => (isset($this->_config->samba)) ? array(
+                'homePath'      => $this->_config->samba->basehomepath,
+                'homeDrive'     => $this->_config->samba->homedrive,
+                'logonScript'   => $course->name . $this->_config->samba->logonscript_postfix_member,
+                'profilePath'   => $this->_config->samba->baseprofilepath . $schoolName . '\\' . $course->name . '\\',
+                'pwdCanChange'  => new Tinebase_DateTime('@1'),
+                'pwdMustChange' => new Tinebase_DateTime('@1')
+            ) : array(),
+        ));
+        $importer->importFile($tempFile->path);
         
         // return members to update members grid and add to student group
         $members = $this->_getCourseMembers($groupId);
