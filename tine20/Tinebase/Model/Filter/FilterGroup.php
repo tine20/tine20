@@ -169,7 +169,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                     $this->_customData[] = $filterData;
                 
                 } else {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' skipping filter (filter syntax problem)'. print_r($filterData, TRUE));
+                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' skipping filter (filter syntax problem) -> ' 
+                        . $this->_className . ' with filter data: ' . print_r($filterData, TRUE));
                 }
             }
         }
