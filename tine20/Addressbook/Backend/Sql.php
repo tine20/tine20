@@ -8,6 +8,7 @@
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
+ * @deprecated  replace this with Addressbook_Backend_SqlSearchImproved
  * @todo        move visibility='displayed' check from getSelect to contact filter
  */
 
