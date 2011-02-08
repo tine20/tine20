@@ -33,7 +33,7 @@ Tine.widgets.persistentfilter.store.PersistentFilterStore = Ext.extend(Ext.data.
  * get store of all persistent filters
  * 
  * @static
- * @sigleton
+ * @singleton
  * @return {PersistentFilterStore}
  */
 Tine.widgets.persistentfilter.store.getPersistentFilterStore = function() {
