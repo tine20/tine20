@@ -652,6 +652,10 @@ html, body {
     white-space: normal;
 }
 
+.tine-grid-row-nolongerinfilter td {
+    color: #aaaaaa;
+}
+
 /******** downloads ***********/
 
 .tinebase-download-link{
