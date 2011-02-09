@@ -669,7 +669,7 @@ class Tinebase_Core
             }
             
             if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
-                $baseUri = '/' . $_SERVER['HTTP_HOST'] . $baseUri;
+                $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
             }
             
             Zend_Session::setOptions(array(
