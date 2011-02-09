@@ -437,7 +437,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             });
         } else {
             this.store = new Tine.Tinebase.data.RecordStore({
-                //autoLoad: true,
                 recordClass: this.recordClass
             });
         }
@@ -447,7 +446,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * returns view row class
      */
     getViewRowClass: function(record, index, rowParams, store) {
-        var noLongerInFilter = record.get('not_in_filter');
+        var noLongerInFilter = record.not_in_filter;
         
         var className = '';
         if (noLongerInFilter) {
@@ -627,8 +626,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 records.push(newRecord);
                 recordsIds.push(newRecord.id);
             } else if (options.removeStrategy === 'keepAll' || (options.removeStrategy === 'keepBuffered' && this.editBuffer.indexOf(record.id) >= 0)) {
-                record.set('not_in_filter', true);
-                records.push(record.copy());
+                var copiedRecord = record.copy();
+                copiedRecord.not_in_filter = true;
+                records.push(copiedRecord);
                 recordsIds.push(record.id);
             }
         }, this);
