@@ -259,6 +259,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      */
     protected function _getOrCreateFolders(array $_folders, $_account, $_parentFolder)
     {
+        $parentFolder = ($_parentFolder !== NULL) ? $_parentFolder : '';
         $result = new Tinebase_Record_RecordSet('Felamimail_Model_Folder');
         $systemFolders = Felamimail_Controller_Folder::getInstance()->getSystemFolders($_account);
         
@@ -305,7 +306,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'account_id'        => $_account->getId(),
                         'imap_timestamp'    => Tinebase_DateTime::now(),
                         'user_id'           => $this->_currentAccount->getId(),
-                        'parent'            => $_parentFolder,
+                        'parent'            => $parentFolder,
                         'system_folder'     => in_array(strtolower($folderData['localName']), $systemFolders),
                         'delimiter'         => $delimiter,
                     ));
@@ -320,7 +321,7 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             $result->addRecord($folder);
         }
         
-        $this->_removeFromCache($_account, $_parentFolder, $result->getArrayOfIds());
+        $this->_removeFromCache($_account, $parentFolder, $result->getArrayOfIds());
         
         return $result;
     }
