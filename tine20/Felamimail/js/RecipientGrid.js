@@ -107,22 +107,36 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         
         Tine.Felamimail.RecipientGrid.superclass.initComponent.call(this);
         
-        this.on('rowcontextmenu', function(grid, row, e) {
-            e.stopEvent();
-            var selModel = grid.getSelectionModel();
-            if (!selModel.isSelected(row)) {
-                selModel.selectRow(row);
-            }
-            
-            var record = this.store.getAt(row);
-            this.action_remove.setDisabled(record.get('address') == '');
-            
-            this.contextMenu.showAt(e.getXY());
-        }, this);
+        this.on('rowcontextmenu', this.onCtxMenu, this);
+        // this is relayed by the contact search combo
+        this.on('contextmenu', this.onCtxMenu.createDelegate(this, [this, null], 0), this);
             
         this.on('beforeedit', this.onBeforeEdit, this);
         this.on('afteredit', this.onAfterEdit, this);
         this.on('validateedit', this.onValidateEdit, this);
+    },
+    
+    /**
+     * show context menu
+     * 
+     * @param {Tine.Felamimail.RecipientGrid} grid
+     * @param {Number} row
+     * @param {Event} e
+     */
+    onCtxMenu: function(grid, row, e) {
+        var activeRow = row || this.activeEditor.row;
+        
+        e.stopEvent();
+        var selModel = grid.getSelectionModel();
+        if (! selModel.isSelected(activeRow)) {
+            selModel.selectRow(activeRow);
+        }
+        
+        var record = this.store.getAt(activeRow);
+        if (record) {
+            this.action_remove.setDisabled(record.get('address') == '');
+            this.contextMenu.showAt(e.getXY());
+        }
     },
     
     /**
