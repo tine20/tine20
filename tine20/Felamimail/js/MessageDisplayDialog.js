@@ -98,6 +98,11 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
                 xtype: 'buttongroup',
                 columns: 5,
                 items: [
+                    Ext.apply(new Ext.Button(this.action_deleteRecord), {
+                        scale: 'medium',
+                        rowspan: 2,
+                        iconAlign: 'top'
+                    }),
                     Ext.apply(new Ext.Button(this.action_reply), {
                         scale: 'medium',
                         rowspan: 2,
@@ -124,16 +129,6 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
                         rowspan: 2,
                         iconAlign:'top',
                         arrowAlign:'right'
-                    })
-                ]
-            }, '->', {
-                xtype: 'buttongroup',
-                columns: 1,
-                items: [
-                    Ext.apply(new Ext.Button(this.action_deleteRecord), {
-                        scale: 'medium',
-                        rowspan: 2,
-                        iconAlign: 'top'
                     })
                 ]
             }]
