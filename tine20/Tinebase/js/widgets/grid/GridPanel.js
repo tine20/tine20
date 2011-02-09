@@ -190,12 +190,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     contextMenu: null,
     
     /**
-     * @type function
-     * @property getViewRowClass 
-     */
-    getViewRowClass: null,
-    
-    /**
      * @cfg {Bool} hasFavoritesPanel 
      */
     hasFavoritesPanel: true,
@@ -450,6 +444,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     },
     
     /**
+     * returns view row class
+     */
+    getViewRowClass: function(record, index, rowParams, store) {
+        var noLongerInFilter = record.get('not_in_filter');
+        
+        var className = '';
+        if (noLongerInFilter) {
+            className += 'tine-grid-row-nolongerinfilter';
+        }
+        return className;    
+    },    
+    
+    /**
      * new entry event -> add new record to store
      * 
      * @param {Object} recordData
@@ -620,6 +627,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 records.push(newRecord);
                 recordsIds.push(newRecord.id);
             } else if (options.removeStrategy === 'keepAll' || (options.removeStrategy === 'keepBuffered' && this.editBuffer.indexOf(record.id) >= 0)) {
+                record.set('not_in_filter', true);
                 records.push(record.copy());
                 recordsIds.push(record.id);
             }
