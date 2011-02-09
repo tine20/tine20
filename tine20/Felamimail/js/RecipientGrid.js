@@ -227,11 +227,17 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     mode          : 'local',
                     value         : null,
                     forceSelection: true,
+                    lazyInit      : false,
                     store         : [
                         ['to',  app.i18n._('To:')],
                         ['cc',  app.i18n._('Cc:')],
                         ['bcc', app.i18n._('Bcc:')]
-                    ]
+                    ],
+                    listeners: {
+                        focus: function(combo) {
+                            combo.onTriggerClick();
+                        }
+                    }
                 })
             },{
                 resizable: true,
