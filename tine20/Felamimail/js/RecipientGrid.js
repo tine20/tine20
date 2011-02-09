@@ -159,6 +159,19 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                     if (e.getKey() == e.ENTER) {
                         combo.lastStoreTransactionId = null;
                     }
+                    
+                    // remove row on backspace if we have more than 1 rows in grid
+                    if (e.getKey() == e.BACKSPACE) {
+                        var value = combo.getValue();
+                        if (value == '' && this.store.getCount() > 1 && this.activeEditor.row > 0) {
+                            this.store.remove(this.activeEditor.record);
+                            this.activeEditor.row -= 1;
+                            this.setFixedHeight(false);
+                            this.ownerCt.doLayout();
+                            this.startEditing.defer(50, this, [this.activeEditor.row, this.activeEditor.col]);
+                            return false;
+                        }
+                    }
 
                     // jump to subject if we are in the last row and it is empty
                     var sm = this.getSelectionModel(),
@@ -397,8 +410,9 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {} o
      */
     onAfterEdit: function(o) {
+        console.log(o);
         if (o.field == 'address') {
-            if (o.originalValue == '') {
+            if (o.originalValue == '' || this.store.findExact('address', '') === -1) {
                 // use selected type to create new row with empty address and start editing
                 this.store.add(new Ext.data.Record({type: o.record.data.type, 'address': ''}));
                 this.store.commitChanges();
