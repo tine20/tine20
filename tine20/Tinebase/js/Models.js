@@ -20,8 +20,7 @@ Tine.Tinebase.Model.genericFields = [
     { name: 'last_modified_by'},
     { name: 'is_deleted',         type: 'boolean'              },
     { name: 'deleted_time',       type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'deleted_by'},
-    { name: 'not_in_filter',      type: 'bool', defaultValue: false } // client only
+    { name: 'deleted_by'}
 ];
     
 /**
