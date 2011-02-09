@@ -424,6 +424,9 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function checkAccounts($ids)
     {
+        // close session to allow other requests
+        Zend_Session::writeClose(true);
+        
         $result = TRUE;
 
         $accounts = Felamimail_Controller_Account::getInstance()->getMultiple($ids);

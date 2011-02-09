@@ -90,7 +90,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
             
             this.showActiveVacation();
-            this.checkAccounts();
+            this.checkAccounts.defer(10000);
         }
     },
     
