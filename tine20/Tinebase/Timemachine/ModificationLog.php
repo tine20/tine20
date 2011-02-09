@@ -271,7 +271,7 @@ class Tinebase_Timemachine_ModificationLog
                     $resolved->addRecord($diff);
                 } else {
                     Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " non resolvable conflict!");
-                    throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency confilict!');
+                    throw new Tinebase_Timemachine_Exception_ConcurrencyConflict('concurrency conflict!');
                 }
             }
         }
