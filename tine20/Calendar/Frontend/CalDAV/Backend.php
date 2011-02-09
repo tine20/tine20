@@ -32,7 +32,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
      */
     function getCalendarsForUser($principalUri)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' $principalUri: ' . $principalUri);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $principalUri: ' . $principalUri);
         
         $principalParts = explode('/', $principalUri);
         if (count($principalParts) == 2) {
@@ -54,7 +54,8 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
                 'uri'               => /*$uri ? $uri : */$containerId,
                 'principaluri'      => $principalUri,
                 '{DAV:}displayname' => $container->name,
-                '{http://apple.com/ns/ical/}calendar-color' => $container->color
+                '{http://apple.com/ns/ical/}calendar-color' => $container->color,
+                '{' . Sabre_CalDAV_Plugin::NS_CALDAV . '}supported-calendar-component-set' => new Sabre_CalDAV_Property_SupportedCalendarComponentSet(array('VEVENT')),
             );
         }
         
@@ -79,7 +80,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
     {
         throw new Sabre_DAV_Exception_MethodNotAllowed('createCalendar');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' $principalUri: ' . $principalUri . ' $calendarUri: ' . $calendarUri . ' $properties' . print_r($properties, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $principalUri: ' . $principalUri . ' $calendarUri: ' . $calendarUri . ' $properties' . print_r($properties, TRUE));
         
         $container = new Tinebase_Model_Container(array(
             'name'              => $properties['{DAV:}displayname'],
@@ -150,7 +151,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
     {
         throw new Sabre_DAV_Exception_MethodNotAllowed('updateCalendar');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' $calendarId: ' . $calendarId . ' $properties' . print_r($properties, TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId . ' $properties' . print_r($properties, TRUE));
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
@@ -182,7 +183,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
     {
         throw new Sabre_DAV_Exception_MethodNotAllowed('deleteCalendar');
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' $calendarId: ' . $calendarId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId);
         Tinebase_Container::getInstance()->deleteContainer($calendarId);
     }
 
@@ -202,7 +203,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
     {
         $calendarObjects = array();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' $calendarId: ' . $calendarId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId);
 
         $events = Calendar_Controller_MSEventFacade::getInstance()->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $calendarId),
@@ -224,10 +225,14 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
      */
     function getCalendarObject($calendarId,$objectUri)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . ' ' . __LINE__ . ' $calendarId: ' . $calendarId . ' $objectUri: ' . $objectUri);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId . ' $objectUri: ' . $objectUri);
         
-        $event = Calendar_Controller_MSEventFacade::getInstance()->get($objectUri);
-        return $this->_convertCalendarObject($event);
+        try {
+            $event = Calendar_Controller_MSEventFacade::getInstance()->get($objectUri);
+            return $this->_convertCalendarObject($event);
+        } catch (Tinebase_Exception_NotFound $e) {
+            return array();
+        }
     }
 
     /**
@@ -279,6 +284,7 @@ class Calendar_Frontend_CalDAV_Backend extends Sabre_CalDAV_Backend_Abstract
      */
     function createCalendarObject($calendarId,$objectUri,$calendarData)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' $calendarId: ' . $calendarId . ' $objectUri: ' . $objectUri. ' $calendarData: '. print_r($calendarData, TRUE));
         throw new Sabre_DAV_Exception_MethodNotAllowed('createCalendarObject');
     }
 
