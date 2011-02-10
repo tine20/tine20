@@ -47,7 +47,7 @@ class Zend_Mime_Part {
     protected $_content;
     protected $_isStream = false;
     protected $_decodeFilters = array();
-
+    protected $_decodeFilterResources = array();
 
     /**
      * create a new Mime Part.
@@ -114,7 +114,6 @@ class Zend_Mime_Part {
             throw new Zend_Mime_Exception('Attempt to get a stream from a string part');
         }
 
-        //stream_filter_remove(); // ??? is that right?
         switch ($this->encoding) {
             case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
                 $filter = stream_filter_append(
@@ -167,43 +166,40 @@ class Zend_Mime_Part {
         
         switch ($this->encoding) {
             case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                $filter = stream_filter_append(
-                    $this->_content,
-                    'convert.quoted-printable-decode',
-                    STREAM_FILTER_READ
-                );
-                if (!is_resource($filter)) {
-                    require_once 'Zend/Mime/Exception.php';
-                    throw new Zend_Mime_Exception('Failed to append quoted-printable filter');
-                }
+                $this->_appendFilterToStream('convert.quoted-printable-decode');
                 break;
             case Zend_Mime::ENCODING_BASE64:
-                $filter = stream_filter_append(
-                    $this->_content,
-                    'convert.base64-decode',
-                    STREAM_FILTER_READ
-                );
-                if (!is_resource($filter)) {
-                    require_once 'Zend/Mime/Exception.php';
-                    throw new Zend_Mime_Exception('Failed to append base64 filter');
-                }
+                $this->_appendFilterToStream('convert.base64-decode');
                 break;
             default:
         }
         
         foreach ($this->_decodeFilters as $filter) {
-            $filter = stream_filter_append(
-                $this->_content,
-                $filter,
-                STREAM_FILTER_READ
-            );
-            if (!is_resource($filter)) {
-                require_once 'Zend/Mime/Exception.php';
-                throw new Zend_Mime_Exception("Failed to append $filter filter");
-            }
+            $this->_appendFilterToStream($filter);
         }
         
         return $this->_content;
+    }
+    
+    /**
+     * append filter to stream
+     * 
+     * @param string $_filterString
+     * @throws Zend_Mime_Exception
+     */
+    protected function _appendFilterToStream($_filterString)
+    {
+        $filter = stream_filter_append(
+            $this->_content,
+            $_filterString,
+            STREAM_FILTER_READ
+        );
+        if (!is_resource($filter)) {
+            require_once 'Zend/Mime/Exception.php';
+            throw new Zend_Mime_Exception('Failed to append ' . $_filterString . ' filter');
+        }
+                
+        $this->_decodeFilterResources[] = $filter;
     }
     
     /**
@@ -214,6 +210,25 @@ class Zend_Mime_Part {
     public function appendDecodeFilter($filter)
     {
         $this->_decodeFilters[] = $filter;
+    }
+
+    /**
+     * reset filters and rewinds the stream
+     */
+    public function resetStream()
+    {
+        if (!$this->_isStream) {
+            require_once 'Zend/Mime/Exception.php';
+            throw new Zend_Mime_Exception('Attempt to reset the stream of a string part');
+        }
+        
+        foreach ($this->_decodeFilterResources as $filter) {
+            stream_filter_remove($filter);
+        }
+        $this->_decodeFilters = array();
+        $this->_decodeFilterResources = array();
+        
+        rewind($this->_content);
     }
     
     /**
