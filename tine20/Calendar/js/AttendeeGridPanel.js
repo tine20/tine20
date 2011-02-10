@@ -4,7 +4,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -150,7 +150,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         }, {
             id: 'user_type',
             dataIndex: 'user_type',
-            width: 20,
+            width: 40,
             sortable: true,
             resizable: false,
             header: '&#160;',
@@ -528,17 +528,25 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderType: function(type, metadata, attender) {
+        var cssClass = '';
         switch (type) {
             case 'user':
-                metadata.css = 'renderer_accountUserIcon';
+                cssClass = 'renderer_accountUserIcon';
                 break;
             case 'group':
-                metadata.css = 'renderer_accountGroupIcon';
+                cssClass = 'renderer_accountGroupIcon';
                 break;
             default:
-                metadata.css = 'cal-attendee-type-' + type;
+                cssClass = 'cal-attendee-type-' + type;
                 break;
         }
-        return '';
+        
+        var result = '<div style="background-position:0px;" class="' + cssClass + '">&#160</div>';
+        
+        if (! attender.get('user_id')) {
+            result = Tine.Tinebase.common.cellEditorHintRenderer(result);
+        }
+        
+        return result;
     }
 });
