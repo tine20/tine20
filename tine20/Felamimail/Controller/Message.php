@@ -1087,12 +1087,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             $this->_appendCharsetFilter($bodyPart, $partStructure);
             
+            // need to set error handler because stream_get_contents just throws a E_WARNING
+            set_error_handler('Felamimail_Controller_Message::decodingErrorHandler', E_WARNING);
             try {
                 $body = $bodyPart->getDecodedContent();
-            } catch (Exception $e) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-                return '';
+                restore_error_handler();
+            } catch (Felamimail_Exception $e) {
+                restore_error_handler();
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
+                $bodyPart->resetStream();
+                $bodyPart->appendDecodeFilter($this->_getDecodeFilter());
+                $body = $bodyPart->getDecodedContent();
             }
             
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
@@ -1115,6 +1120,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $cache->save($messageBody, $cacheId, array('getMessageBody'));
         
         return $messageBody;
+    }
+    
+    /**
+     * error exception handler for iconv decoding errors / only gets E_WARNINGs
+     *
+     * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default,
+     * so we convert them into exceptions manually
+     *
+     * @param integer $severity
+     * @param string $errstr
+     * @param string $errfile
+     * @param integer $errline
+     * @throws Felamimail_Exception
+     */
+    public static function decodingErrorHandler($severity, $errstr, $errfile, $errline)
+    {
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+        
+        throw new Felamimail_Exception($errstr);
     }
     
     /**
@@ -1144,9 +1168,22 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $charset = self::DEFAULT_FALLBACK_CHARSET;
         }
         
-        $filter = "convert.iconv.$charset/utf-8//IGNORE";
+        $_part->appendDecodeFilter($this->_getDecodeFilter($charset));
+    }
+    
+    /**
+     * get decode filter for stream_filter_append
+     * 
+     * @param string $_charset
+     * @return string
+     */
+    protected function _getDecodeFilter($_charset = self::DEFAULT_FALLBACK_CHARSET)
+    {
+        $filter = "convert.iconv.$_charset/utf-8//IGNORE";
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
-        $_part->appendDecodeFilter($filter);
+        
+        return $filter;
     }
     
     /**
