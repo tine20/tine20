@@ -59,6 +59,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected $_backend = NULL;
     
+    /**
+     * fallback charset constant
+     * 
+     * @var string
+     */
     const DEFAULT_FALLBACK_CHARSET = 'iso-8859-15';
     
     /**
