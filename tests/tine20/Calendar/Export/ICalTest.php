@@ -59,6 +59,21 @@ class Calendar_Export_ICalTest extends PHPUnit_Framework_TestCase //extends Cale
         $this->assertEquals(1, preg_match("/RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20151230T130000Z\r\n/", $ics), 'RRULE broken');
     }
     
+    public function testExportAllDayEvent()
+    {
+        $this->_testEvent->is_all_day_event = TRUE;
+        $this->_testEvent->dtend = $this->_testEvent->dtend->addDay(1);
+        
+        $exporter = new Calendar_Export_Ical();
+        $ics = $exporter->eventToIcal($this->_testEvent);
+//        echo $ics;
+        
+        // assert dtstart/dtend tz
+        $this->assertEquals(1, preg_match("/DTSTART;VALUE=DATE:20101230\r\n/", $ics), 'DTSTART not correct');
+        $this->assertEquals(1, preg_match("/DTEND;VALUE=DATE:20101231\r\n/", $ics), 'DTEND not correct');
+        
+    }
+    
     public function testExportRecurId()
     {
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
