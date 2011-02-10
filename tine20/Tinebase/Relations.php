@@ -67,12 +67,15 @@ class Tinebase_Relations
      */
     public function setRelations($_model, $_backend, $_id, $_relationData, $_ignoreACL = FALSE)
     {
-//        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', $_relationData, true);
         $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
         foreach((array) $_relationData as $relationData) {
-            $relation = new Tinebase_Model_Relation(NULL, TRUE);
-            $relation->setFromJsonInUsersTimezone($relationData);
-            $relations->addRecord($relation);
+            if ($relationData instanceof Tinebase_Model_Relation) {
+                $relations->addRecord($relationData);
+            } else {
+                $relation = new Tinebase_Model_Relation(NULL, TRUE);
+                $relation->setFromJsonInUsersTimezone($relationData);
+                $relations->addRecord($relation);
+            }
         }
         
         // own id sanitising
