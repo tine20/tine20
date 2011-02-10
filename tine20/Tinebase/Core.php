@@ -310,7 +310,7 @@ class Tinebase_Core
     }
     
     /**
-     * tines error expeption handler for catchable fatal errors
+     * tines error exception handler for catchable fatal errors
      *
      * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default,
      * so we convert them into exceptions manually
@@ -358,10 +358,7 @@ class Tinebase_Core
                     error_log(" $errstr in {$errfile}::{$errline} ($severity)");
                 }
                 break;
-
-
         }
-
     }
 
     /**
