@@ -67,7 +67,14 @@ class Tinebase_Relations
      */
     public function setRelations($_model, $_backend, $_id, $_relationData, $_ignoreACL = FALSE)
     {
-        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', $_relationData, true);
+//        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation', $_relationData, true);
+        $relations = new Tinebase_Record_RecordSet('Tinebase_Model_Relation');
+        foreach((array) $_relationData as $relationData) {
+            $relation = new Tinebase_Model_Relation(NULL, TRUE);
+            $relation->setFromJsonInUsersTimezone($relationData);
+            $relations->addRecord($relation);
+        }
+        
         // own id sanitising
         $relations->own_model   = $_model;
         $relations->own_backend = $_backend;
@@ -120,8 +127,8 @@ class Tinebase_Relations
                     'notes',
                 )
             )) {
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($current->related_record->toArray(), true));
-                //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($update->related_record->toArray(), true));
+//              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($current->related_record->toArray(), true));
+//              if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($update->related_record->toArray(), true));
                 $this->_setAppRecord($update);
             }
             
