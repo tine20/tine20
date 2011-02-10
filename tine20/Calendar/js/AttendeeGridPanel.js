@@ -528,6 +528,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     renderAttenderType: function(type, metadata, attender) {
+        metadata.css = 'tine-grid-cell-no-dirty';
         var cssClass = '';
         switch (type) {
             case 'user':
