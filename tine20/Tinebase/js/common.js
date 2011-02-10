@@ -258,6 +258,8 @@ Tine.Tinebase.common = {
     
     /**
      * Returns account type icon
+     * 
+     * @return String
      */
     accountTypeRenderer: function (type) {
         var iconCls = (type) === 'user' ? 'renderer_accountUserIcon' : 'renderer_accountGroupIcon';
@@ -265,6 +267,15 @@ Tine.Tinebase.common = {
         return '<div style="background-position: 0px" class="' + iconCls  + '">&#160;</div>'; 
     },
     
+    /**
+     * Returns dropdown hint icon for editor grid columns with comboboxes
+     * 
+     * @return String
+     */
+    cellEditorHintRenderer: function (value) {
+        return '<div style="position:relative">' + value + '<div class="tine-grid-cell-hint">&#160;</div></div>'; 
+    },
+
     /**
      * return yes or no in the selected language for a boolean value
      * 

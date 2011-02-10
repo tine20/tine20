@@ -656,6 +656,15 @@ html, body {
     color: #aaaaaa;
 }
 
+/******* grid row classes *********/
+.tine-grid-cell-hint {
+	background-image:url("../../library/ExtJS/resources/images/default/button/arrow.gif");
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 10px;
+}
+
 /******** downloads ***********/
 
 .tinebase-download-link{
