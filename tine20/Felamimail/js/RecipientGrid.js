@@ -231,6 +231,8 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                             break;
                     }
                     
+                    result = Tine.Tinebase.common.cellEditorHintRenderer(result);
+                    
                     return '<div qtip="' + qtip +'">' + result + '</div>';
                 },
                 editor: new Ext.form.ComboBox({
