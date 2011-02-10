@@ -72,12 +72,20 @@ class Calendar_Export_Ical
             $this->_attachedTimezones[] = $_event->originator_tz;
         }
         
+        if ($_event->is_all_day_event) {
+            $dtstart = new qCal_Property_Dtstart($_event->dtstart->format('Ymd'), array('VALUE' => 'DATE'));
+            $dtend = new qCal_Property_Dtend($_event->dtend->format('Ymd'), array('VALUE' => 'DATE'));
+        } else {
+            $dtstart = new qCal_Property_Dtstart(qCal_DateTime::factory($_event->dtstart->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz));
+            $dtend = new qCal_Property_Dtend(qCal_DateTime::factory($_event->dtend->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz));
+        }
+        
         $vevent = new qCal_Component_Vevent(array(
             'uid'           => $_event->uid,
             'sequence'      => $_event->seq,
             'summary'       => $_event->summary,
-            'dtstart'       => new qCal_Property_Dtstart(qCal_DateTime::factory($_event->dtstart->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz)),
-            'dtend'         => new qCal_Property_Dtend(qCal_DateTime::factory($_event->dtend->format('Ymd\THis'), $_event->originator_tz), array('TZID' => $_event->originator_tz)),
+            'dtstart'       => $dtstart,
+            'dtend'         => $dtend,
         ));
         
         foreach(self::$veventMap as $icalProp => $tineField) {
