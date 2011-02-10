@@ -1,3 +1,12 @@
+Ext.override(Ext.data.Store, {
+    /**
+     * String cast the id, as otherwise the entries are not found
+     */
+    indexOfId : function(id){
+        return this.data.indexOfKey(String(id));
+    }
+});
+
 /**
  * for some reasons the original fix insertes two <br>'s on enter for webkit. But this is one to much
  */
