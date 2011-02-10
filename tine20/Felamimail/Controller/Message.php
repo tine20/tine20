@@ -67,6 +67,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected $_backend = NULL;
     
+    const DEFAULT_FALLBACK_CHARSET = 'iso-8859-15';
+    
     /**
      * the constructor
      *
@@ -1099,7 +1101,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             
             $this->_appendCharsetFilter($bodyPart, $partStructure);
             
-            $body = $bodyPart->getDecodedContent();
+            // need to set error handler because stream_get_contents just throws a E_WARNING
+            set_error_handler('Felamimail_Controller_Message::decodingErrorHandler', E_WARNING);
+            try {
+                $body = $bodyPart->getDecodedContent();
+                restore_error_handler();
+            } catch (Felamimail_Exception $e) {
+                restore_error_handler();
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
+                $bodyPart->resetStream();
+                $bodyPart->appendDecodeFilter($this->_getDecodeFilter());
+                $body = $bodyPart->getDecodedContent();
+            }
             
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $body = $this->_purifyBodyContent($body);
@@ -1124,36 +1137,67 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * error exception handler for iconv decoding errors / only gets E_WARNINGs
+     *
+     * NOTE: PHP < 5.3 don't throws exceptions for Catchable fatal errors per default,
+     * so we convert them into exceptions manually
+     *
+     * @param integer $severity
+     * @param string $errstr
+     * @param string $errfile
+     * @param integer $errline
+     * @throws Felamimail_Exception
+     */
+    public static function decodingErrorHandler($severity, $errstr, $errfile, $errline)
+    {
+        Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " $errstr in {$errfile}::{$errline} ($severity)");
+        
+        throw new Felamimail_Exception($errstr);
+    }
+    
+    /**
      * convert charset
      *
      * @param  Zend_Mime_Part  $_part
      * @param  array           $_structure
      * @param  string          $_contentType
-     * 
-     * @todo   try to add a fallback if iconv decoding fails (@see http://www.tine20.org/bugtracker/view.php?id=2892)
      */
     protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
     {
-        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-15';
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
+        
+        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : self::DEFAULT_FALLBACK_CHARSET;
         
         if ($charset == 'utf8') {
             $charset = 'utf-8';
+        } else if ($charset == 'us-ascii') {
+            // us-ascii caused problems with iconv encoding to utf-8
+            $charset = self::DEFAULT_FALLBACK_CHARSET;
+        } else if (strpos($charset, '.') !== false) {
+            // the stream filter does not like charsets with a dot in its name
+            // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
+            $charset = self::DEFAULT_FALLBACK_CHARSET;
+        } else if (iconv($charset, 'utf-8', '') === false) {
+            // check if charset is supported by iconv
+            $charset = self::DEFAULT_FALLBACK_CHARSET;
         }
         
-        // the stream filter does not like charsets with a dot in its name
-        // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
-        if (strpos($charset, '.') !== false) {
-            $charset = 'iso-8859-15';
-        }
+        $_part->appendDecodeFilter($this->_getDecodeFilter($charset));
+    }
+    
+    /**
+     * get decode filter for stream_filter_append
+     * 
+     * @param string $_charset
+     * @return string
+     */
+    protected function _getDecodeFilter($_charset = self::DEFAULT_FALLBACK_CHARSET)
+    {
+        $filter = "convert.iconv.$_charset/utf-8//IGNORE";
         
-        // check if charset is supported by iconv
-        if (iconv($charset, 'utf-8', '') === false) {
-            $charset = 'iso-8859-15';
-        }
-        
-        $filter = "convert.iconv.$charset/utf-8//IGNORE";
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Appending decode filter: ' . $filter);
-        $_part->appendDecodeFilter($filter);
+        
+        return $filter;
     }
     
     /**
