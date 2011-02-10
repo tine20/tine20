@@ -369,8 +369,10 @@ class Setup_Frontend_Cli
                 $result[$key][$subKey] = $value;
             } else {
                 if (preg_match('/:/', $part)) {
-                    list($key, $value) = explode(':', $part);
-                    $result[$key] = $value;
+                    $exploded = explode(':', $part);
+                    // first element is always the key -> no ':' allowed in keys
+                    $key = array_shift($exploded);
+                    $result[$key] = implode(':', $exploded);
                 } else {
                     $result = $value;
                 }
