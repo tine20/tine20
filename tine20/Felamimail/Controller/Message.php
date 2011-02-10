@@ -59,6 +59,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected $_backend = NULL;
     
+    const DEFAULT_FALLBACK_CHARSET = 'iso-8859-15';
+    
     /**
      * the constructor
      *
@@ -1121,26 +1123,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  Zend_Mime_Part  $_part
      * @param  array           $_structure
      * @param  string          $_contentType
-     * 
-     * @todo   try to add a fallback if iconv decoding fails (@see http://www.tine20.org/bugtracker/view.php?id=2892)
      */
     protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
     {
-        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : 'iso-8859-15';
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_structure, TRUE));
+        
+        $charset = isset($_structure['parameters']['charset']) ? $_structure['parameters']['charset'] : self::DEFAULT_FALLBACK_CHARSET;
         
         if ($charset == 'utf8') {
             $charset = 'utf-8';
-        }
-        
-        // the stream filter does not like charsets with a dot in its name
-        // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
-        if (strpos($charset, '.') !== false) {
-            $charset = 'iso-8859-15';
-        }
-        
-        // check if charset is supported by iconv
-        if (iconv($charset, 'utf-8', '') === false) {
-            $charset = 'iso-8859-15';
+        } else if ($charset == 'us-ascii') {
+            // us-ascii caused problems with iconv encoding to utf-8
+            $charset = self::DEFAULT_FALLBACK_CHARSET;
+        } else if (strpos($charset, '.') !== false) {
+            // the stream filter does not like charsets with a dot in its name
+            // stream_filter_append(): unable to create or locate filter "convert.iconv.ansi_x3.4-1968/utf-8//IGNORE"
+            $charset = self::DEFAULT_FALLBACK_CHARSET;
+        } else if (iconv($charset, 'utf-8', '') === false) {
+            // check if charset is supported by iconv
+            $charset = self::DEFAULT_FALLBACK_CHARSET;
         }
         
         $filter = "convert.iconv.$charset/utf-8//IGNORE";
