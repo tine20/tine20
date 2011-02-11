@@ -170,7 +170,7 @@ class Zend_Mime_Part {
      * @param array $_params
      * @throws Zend_Mime_Exception
      */
-    protected function _appendFilterToStream($_filterString, $_params = NULL)
+    protected function _appendFilterToStream($_filterString, $_params = array())
     {
         $filter = stream_filter_append(
             $this->_content,
