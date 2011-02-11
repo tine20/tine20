@@ -142,12 +142,21 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateUser()
     {
-        $user = $this->testAddUser();
-        $user->accountLoginName = 'tine20phpunituser-updated';
+        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::LDAP);
         
+        $user = $this->testAddUser();
+        $groupsBackend->addGroupMemberInSyncBackend($user->accountPrimaryGroup, $user);
+        $groupsBeforeUpdate = $groupsBackend->getGroupMembershipsFromSyncBackend($user);
+        
+        $user->accountLoginName = 'tine20phpunituser-updated';
         $testUser = $this->_backend->updateUser($user);
+        $groupsAfterUpdate = $groupsBackend->getGroupMembershipsFromSyncBackend($testUser);
+        
+        sort($groupsBeforeUpdate);
+        sort($groupsAfterUpdate);
         
         $this->assertEquals($user->accountLoginName, $testUser->accountLoginName);
+        $this->assertEquals($groupsBeforeUpdate, $groupsAfterUpdate);
     }
     
     /**
