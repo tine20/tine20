@@ -22,11 +22,11 @@
  */
 class Hash_Password_Crypt
 {
-    const CRYPT          = '{CRYPT}';
-    const CRYPT_MD5      = '{CRYPT-MD5}';
-    const CRYPT_BLOWFISH = '{CRYPT-BLOWFISH}';
-    const CRYPT_SHA256   = '{CRYPT-SHA256}';
-    const CRYPT_SHA512   = '{CRYPT-SHA512}';
+    const CRYPT          = 'CRYPT';
+    const CRYPT_MD5      = 'CRYPT-MD5';
+    const CRYPT_BLOWFISH = 'CRYPT-BLOWFISH';
+    const CRYPT_SHA256   = 'CRYPT-SHA256';
+    const CRYPT_SHA512   = 'CRYPT-SHA512';
     
     /**
      * generate crypt hash
@@ -73,7 +73,7 @@ class Hash_Password_Crypt
                 break;
         }
         
-        $hash = ($addPrefix === true ? self::CRYPT : null) . crypt($password, $salt);
+        $hash = ($addPrefix === true ? '{' . self::CRYPT . '}' : null) . crypt($password, $salt);
         
         return $hash;
     }        
