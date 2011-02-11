@@ -394,10 +394,26 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
         $dn = Zend_Ldap_Dn::factory($ldapEntry['dn'], null);
         $rdn = $dn->getRdn();
         
+        // do we need to rename the entry?
         if (isset($ldapData[key($rdn)]) && $rdn[key($rdn)] != $ldapData[key($rdn)]) {
+            $groupsBackend = Tinebase_Group::factory(Tinebase_Group::LDAP);
+            
+            // get the current groupmemberships
+            $memberships = $groupsBackend->getGroupMembershipsFromSyncBackend($_account);
+            
+            // remove the user from current groups, because the dn/uid has changed
+            foreach ($memberships as $groupId) {
+                $groupsBackend->removeGroupMemberInSyncBackend($groupId, $_account);
+            }
+            
             $newDN = $this->_generateDn($_account);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  rename ldap entry to: ' . $newDN);
             $this->_ldap->rename($dn, $newDN);
+            
+            // add the user to current groups again
+            foreach ($memberships as $groupId) {
+                $groupsBackend->addGroupMemberInSyncBackend($groupId, $_account);
+            }
         }
         
         // refetch user from ldap backend
