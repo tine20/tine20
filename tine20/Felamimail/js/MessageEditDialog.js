@@ -249,8 +249,11 @@ Ext.namespace('Tine.Felamimail');
                     }
                     
                     if (this.replyTo) {
-                        this.msgBody = /*'<br/>' + */Ext.util.Format.htmlEncode(this.replyTo.get('from_name')) + ' ' + this.app.i18n._('wrote') + ':<br/>'
-                             + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
+                        this.msgBody = String.format(this.app.i18n._('On {0}, {1} wrote'), 
+                            Tine.Tinebase.common.dateTimeRenderer(new Date()), 
+                            Ext.util.Format.htmlEncode(this.replyTo.get('from_name'))
+                        ) + ':<br/>'
+                          + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
                     } else if (this.forwardMsgs && this.forwardMsgs.length === 1) {
                         this.msgBody = '<br/>-----' + this.app.i18n._('Original message') + '-----<br/>'
                             + Tine.Felamimail.GridPanel.prototype.formatHeaders(this.forwardMsgs[0].get('headers'), false, true) + '<br/><br/>'
