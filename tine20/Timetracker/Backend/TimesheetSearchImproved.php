@@ -53,9 +53,9 @@ class Timetracker_Backend_TimesheetSearchImproved extends Tinebase_Backend_Sql_S
      */
     protected $_additionalSearchCountCols =  array(
         'count'                => 'COUNT(*)', 
-        'countBillable'        => 'SUM(timetracker_timesheet.is_billable*ta.is_billable)',
+        'countBillable'        => 'SUM(is_billable_combined)',
         'sum'                  => 'SUM(duration)',
-        'sumBillable'          => 'SUM(duration*timetracker_timesheet.is_billable*ta.is_billable)',
+        'sumBillable'          => 'SUM(duration*is_billable_combined)',
     );
     
     /**
@@ -68,14 +68,14 @@ class Timetracker_Backend_TimesheetSearchImproved extends Tinebase_Backend_Sql_S
             'table'         => 'timetracker_timeaccount',
             'joinOn'        => 'id',
             'joinId'        => 'timeaccount_id',
-            'select'        => array('is_billable_combined'    => '(timetracker_timesheet.is_billable*ta.is_billable)'),
+            'select'        => array('is_billable_combined'    => '(timetracker_timesheet.is_billable*timetracker_timeaccount.is_billable)'),
             'singleValue'   => TRUE,
         ),
         'is_cleared_combined'    => array(
             'table'         => 'timetracker_timeaccount',
             'joinOn'        => 'id',
             'joinId'        => 'timeaccount_id',
-            'select'        => array('is_cleared_combined'    => "(timetracker_timesheet.is_cleared|(IF(STRCMP(ta.status, 'billed'),0,1)))"),
+            'select'        => array('is_cleared_combined'    => "(timetracker_timesheet.is_cleared|(IF(STRCMP(timetracker_timeaccount.status, 'billed'),0,1)))"),
             'singleValue'   => TRUE,
         ),
     );
