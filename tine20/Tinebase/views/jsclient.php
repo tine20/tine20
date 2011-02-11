@@ -17,6 +17,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+    <link rel="chrome-application-definition" href="chrome_web_app.json">
 
     <!-- EXT JS -->
      <?php
