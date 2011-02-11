@@ -686,8 +686,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $cacheId = __CLASS__ . "_". __FUNCTION__ . hash('sha1', $clientETag . $ifModifiedSince);
         }
         
-        header('Cache-Control: private, max-age=10800, pre-check=10800');
-        header("Expires: " . gmdate("D, d M Y H:i:s") . " GMT");
+        // cache for 60 seconds
+        $maxAge = 60;
+        header('Cache-Control: private, max-age=' . $maxAge);
+        header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
+        
+        // overwrite Pragma header from session
+        header("Pragma: cache");
         
         // if the cache id is still valid, the files don't have changed on disk
         if ($clientETag == $serverETag && $cache->test($cacheId)) {
