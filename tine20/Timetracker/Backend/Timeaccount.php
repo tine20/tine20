@@ -8,6 +8,8 @@
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id:Category.php 5576 2008-11-21 17:04:48Z p.schuele@metaways.de $
+ * 
+ * @deprecated should be replaced by Tinebase_Backend_Sql_SearchImproved
  */
 
 
