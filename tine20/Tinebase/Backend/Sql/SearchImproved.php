@@ -96,7 +96,12 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect);
-        $result = $this->_db->fetchOne($countSelect);
+        
+        if (! empty($this->_additionalSearchCountCols)) {
+            $result = $this->_db->fetchRow($countSelect);
+        } else {
+            $result = $this->_db->fetchOne($countSelect);
+        }
         
         return $result;
     }
@@ -327,13 +332,18 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
                         : ((array_key_exists('field', $join) && (! array_key_exists('singleValue', $join) || ! $join['singleValue']))
                             ? array($foreignColumn => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')')
                             : array($foreignColumn => $join['table'] . '.id'));
-                    $joinId = (array_key_exists('joinId', $join)) ? $joinId : $this->_identifier;
-                            
-                    $_select->joinLeft(
-                        /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
-                        /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.' . $joinId) . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
-                        /* select */ $selectArray
-                    );
+                    $joinId = (array_key_exists('joinId', $join)) ? $join['joinId'] : $this->_identifier;
+                    
+                    try {
+                        $_select->joinLeft(
+                            /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
+                            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.' . $joinId) . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
+                            /* select */ $selectArray
+                        );
+                    } catch (Zend_Db_Select_Exception $zdse) {
+                        // @todo get joins from Zend_Db_Select before trying to join the same tables twice
+                        $_select->columns($selectArray, $join['table']);
+                    }
                 }
             }
         }
