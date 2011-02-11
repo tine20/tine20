@@ -17,7 +17,7 @@
  * @subpackage  Filter
  * 
  * filters for all of the given filterstrings if it is contained in at least 
- * one of the defined fileds
+ * one of the defined fields
  * 
  * The fields to query in _must_ be defined in the options key 'fields'
  * The value string is space exploded into multibple filterstrings
