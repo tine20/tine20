@@ -135,6 +135,7 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('Job Title'),                                                field: 'title'},
         {label: app.i18n._('Job Role'),                                                 field: 'role'},
         {label: app.i18n._('Note'),                                                     field: 'note'},
+        {label: app.i18n._('E-Mail'),                                                   field: 'email_query'},
         {filtertype: 'tinebase.tag', app: app},
         //{label: app.i18n._('Birthday'),    field: 'bday', valueType: 'date'},
         {label: app.i18n._('Street') + ' (' + app.i18n._('Company Address') + ')',      field: 'adr_one_street',     defaultOperator: 'equals'},
