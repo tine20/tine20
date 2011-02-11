@@ -365,6 +365,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // create
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // search & check
         $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
@@ -372,10 +373,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
         $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
         $this->assertEquals(1, $search['totalcount']);
-        $this->assertEquals(30, $search['totalsum']);
-        
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
+        $this->assertEquals(1, count($search['results']));
+        $this->assertEquals(30, $search['totalsum'], 'totalsum mismatch');
     }
 
     /**
@@ -441,6 +440,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         // create
         $timesheet = $this->_getTimesheet();
         $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
         
         // update timeaccount -> is_billable = false
         $ta = Timetracker_Controller_Timeaccount::getInstance()->get($timesheetData['timeaccount_id']['id']);
@@ -449,14 +449,11 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         // search & check
         $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
-        $this->assertEquals(0, $search['results'][0]['is_billable_combined']);
-        $this->assertEquals(0, $search['results'][0]['is_cleared_combined']);
+        $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
+        $this->assertEquals(0, $search['results'][0]['is_cleared_combined'], 'is_cleared_combined mismatch');
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals(30, $search['totalsum']);
         $this->assertEquals(0, $search['totalsumbillable']);
-        
-        // cleanup
-        $this->_json->deleteTimeaccounts($timesheetData['timeaccount_id']['id']);
     }
 
     /******* persistent filter tests *****************/
