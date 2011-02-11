@@ -116,34 +116,16 @@ class Zend_Mime_Part {
 
         switch ($this->encoding) {
             case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
-                $filter = stream_filter_append(
-                    $this->_content,
-                    'convert.quoted-printable-encode',
-                    STREAM_FILTER_READ,
-                    array(
-                        'line-length'      => 76,
-                        'line-break-chars' => Zend_Mime::LINEEND
-                    )
-                );
-                if (!is_resource($filter)) {
-                    require_once 'Zend/Mime/Exception.php';
-                    throw new Zend_Mime_Exception('Failed to append quoted-printable filter');
-                }
+                $this->_appendFilterToStream('convert.quoted-printable-encode', array(
+                    'line-length'      => 76,
+                    'line-break-chars' => Zend_Mime::LINEEND
+                ));
                 break;
             case Zend_Mime::ENCODING_BASE64:
-                $filter = stream_filter_append(
-                    $this->_content,
-                    'convert.base64-encode',
-                    STREAM_FILTER_READ,
-                    array(
-                        'line-length'      => 76,
-                        'line-break-chars' => Zend_Mime::LINEEND
-                    )
-                );
-                if (!is_resource($filter)) {
-                    require_once 'Zend/Mime/Exception.php';
-                    throw new Zend_Mime_Exception('Failed to append base64 filter');
-                }
+                $this->_appendFilterToStream('convert.base64-encode', array(
+                    'line-length'      => 76,
+                    'line-break-chars' => Zend_Mime::LINEEND
+                ));
                 break;
             default:
         }
@@ -185,14 +167,16 @@ class Zend_Mime_Part {
      * append filter to stream
      * 
      * @param string $_filterString
+     * @param array $_params
      * @throws Zend_Mime_Exception
      */
-    protected function _appendFilterToStream($_filterString)
+    protected function _appendFilterToStream($_filterString, $_params = NULL)
     {
         $filter = stream_filter_append(
             $this->_content,
             $_filterString,
-            STREAM_FILTER_READ
+            STREAM_FILTER_READ,
+            $_params
         );
         if (!is_resource($filter)) {
             require_once 'Zend/Mime/Exception.php';
