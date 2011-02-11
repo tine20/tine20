@@ -177,6 +177,12 @@ class Felamimail_Backend_Folder extends Tinebase_Backend_Sql_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' data: ' . print_r($data, TRUE) . ' where: ' . print_r($where, TRUE));
         }
         
+        // sanitize unreadcount
+        $updatedFolder = $this->get($folder->getId());
+        if ($updatedFolder->cache_totalcount === 0 && $updatedFolder->cache_unreadcount >= 0) {
+            $this->updateFolderCounter($folder, array('cache_unreadcount' => 0));
+        }
+        
         return $folder;
     }
 }
