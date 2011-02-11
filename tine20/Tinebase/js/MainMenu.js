@@ -99,7 +99,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 this.action_editProfile,
                 this.action_showPreferencesDialog,
                 this.action_changePassword,
-                this.action_notificationPermissions
+                this.action_notificationPermissions,
+                this.action_installChromeWebApp
             ];
         }
         return this.userActions;
@@ -158,6 +159,17 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
             disabled: ! (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0),
             handler: function() {
                 window.webkitNotifications.requestPermission();
+            },
+            scope: this
+        });
+        
+        this.action_installChromeWebApp = new Ext.Action({
+            text: _('Install web app'),
+            tooltip:  _('Install Tine 2.0 as web app in your browser.'),
+            iconCls: 'action_edit',
+            disabled: ! (chrome && chrome.app && !chrome.app.isInstalled),
+            handler: function() {
+                chrome.app.install();
             },
             scope: this
         });
