@@ -1,0 +1,10 @@
+{
+  "name": "Tine 2.0",
+  "description": "Open Source Online Groupware and Crm",
+  "launch_url": "index.php",
+  "launch_container": "panel",
+  "icons": {
+    "128": "images/favicon.ico"
+  },
+  "permissions": ["geolocation", "notifications", "unlimitedStorage"]
+}
