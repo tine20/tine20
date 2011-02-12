@@ -495,7 +495,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'codeName'      => TINE20_CODENAME,
                 'packageString' => TINE20_PACKAGESTRING,
                 'releaseTime'   => TINE20_RELEASETIME,
-                'filesHash'     => $tbFrontendHttp->getJsCssHash()
+                'filesHash'     => TINE20_BUILDTYPE != 'DEVELOPMENT' ? $tbFrontendHttp->getJsCssHash() : null
             ),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
