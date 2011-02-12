@@ -470,6 +470,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $locale = Tinebase_Core::get('locale');
+        $tbFrontendHttp = new Tinebase_Frontend_Http();
         
         // default credentials
         if (isset(Tinebase_Core::getConfig()->login)) {
@@ -482,7 +483,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         $registryData =  array(
-            'serviceMap'       => Tinebase_Frontend_Http::getServiceMap(),
+            'serviceMap'       => $tbFrontendHttp->getServiceMap(),
             'timeZone'         => Tinebase_Core::get(Tinebase_Core::USERTIMEZONE),
             'locale'           => array(
                 'locale'   => $locale->toString(), 
@@ -494,6 +495,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'codeName'      => TINE20_CODENAME,
                 'packageString' => TINE20_PACKAGESTRING,
                 'releaseTime'   => TINE20_RELEASETIME,
+                'filesHash'     => $tbFrontendHttp->getJsCssHash()
             ),
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
