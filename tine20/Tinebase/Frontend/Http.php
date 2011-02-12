@@ -629,6 +629,32 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
       
     /**
+     * return hash for js files
+     * hash changes if files get changed or list of filesnames changes
+     * 
+     */
+    public function getJsCssHash()
+    {
+        // hash for js files
+        $filesToWatch = $this->_getFilesToWatch('js');
+        
+        $serverETag = hash('sha1', implode('', $filesToWatch));
+        $lastModified = $this->_getLastModified($filesToWatch);
+        
+        $hash = hash('sha1', $serverETag . $lastModified);
+        
+        // hash for css files + hash of js files
+        $filesToWatch = $this->_getFilesToWatch('css');
+        
+        $serverETag = hash('sha1', implode('', $filesToWatch));
+        $lastModified = $this->_getLastModified($filesToWatch);
+        
+        $hash = hash('sha1', $hash . $serverETag . $lastModified);
+        
+        return $hash;
+    }
+    
+    /**
      * return css files if changed
      * 
      */
@@ -642,7 +668,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     /**
      * check if js or css files have changed and return all js/css as one big file or return "HTTP/1.0 304 Not Modified" if files don't have changed
      * 
-     * @param string $_mode     
      * @param string $_fileType
      */
     protected function _deliverChangedFiles($_fileType)
@@ -663,17 +688,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"'); 
         }
         
-        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
-        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
-        
-        foreach ($orderedApplications as $application) {
-            if ($_fileType == 'css') {
-                $filesToWatch[] = $application . '/css/all' . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.css';
-            } else {
-                $filesToWatch[] = $application . '/js/all'  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
-            }
-        }
+        $filesToWatch = $this->_getFilesToWatch($_fileType);
         
         $serverETag = hash('sha1', implode('', $filesToWatch));
         
@@ -721,6 +736,27 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                 readfile($file);
             }
         }
+    }
+    
+    /**
+     * @param string $_fileType
+     * @return array
+     */
+    protected function _getFilesToWatch($_fileType)
+    {
+        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
+        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
+        
+        foreach ($orderedApplications as $application) {
+            if ($_fileType == 'css') {
+                $filesToWatch[] = $application . '/css/all' . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.css';
+            } else {
+                $filesToWatch[] = $application . '/js/all'  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+            }
+        }
+        
+        return $filesToWatch;
     }
     
     /**
