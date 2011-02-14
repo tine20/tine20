@@ -169,10 +169,11 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_SearchIm
         $this->_db->delete($this->_tablePrefix . $this->_foreignTables['flags']['table'], $where);
         
         $flags = (array) $_flags;
+        $touchedMessages = array();
 
         foreach ($flags as $flag) {
             foreach ($messages as $message) {
-                $id = ($message instanceof Felamimail_Model_Message) ? $message->getId() : $message;
+                $id = $touchedMessages[] = ($message instanceof Felamimail_Model_Message) ? $message->getId() : $message;
                 $folderId = ($message instanceof Felamimail_Model_Message) ? $message->folder_id : $_folderId;
                 
                 $data = array(
@@ -183,6 +184,9 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_SearchIm
                 $this->_db->insert($this->_tablePrefix . $this->_foreignTables['flags']['table'], $data);
             }
         }
+        
+        // touch messages so sync can find the updates
+        $this->updateMultiple($touchedMessages, array('timestamp' => Tinebase_DateTime::now()));
     }
     
     /**
