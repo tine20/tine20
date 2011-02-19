@@ -155,7 +155,9 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
             $select = $this->_getSelect($_cols);
             $this->_addWhereIdIn($select, $ids);
             if ($_pagination !== null && !empty($_pagination->sort)) {
-                $select->order($_pagination->sort . ' ' . $_pagination->dir);
+                foreach((array)$_pagination->sort as $sort) {
+                    $select->order($sort . (!empty($_pagination->dir) ? ' ' . $_pagination->dir : null));
+                }
             }
             
             $rows = $this->_fetch($select, self::FETCH_ALL);
