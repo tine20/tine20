@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-02-11 22:33+0100\n"
+"PO-Revision-Date: 2011-02-19 19:49+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -732,7 +732,7 @@ msgstr "Nieprzeczytane wiadomości:"
 
 #: js/TreePanel.js:682
 msgid "Name on Server:"
-msgstr "Nazwa serwera:"
+msgstr "Skrzynka pocztowa:"
 
 #: js/TreePanel.js:686
 msgid "Last update:"
