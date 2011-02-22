@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-02-22 21:17+0100\n"
+"PO-Revision-Date: 2011-02-22 21:19+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -934,7 +934,7 @@ msgstr "Zastosuj w książce adresowej"
 
 #: Preference.php:116
 msgid "Compose Emails from the Addressbook with Felamimail."
-msgstr "Użyj Felamimail do tworzenia wiadomości pocztowych w oparciu o książkę adresową."
+msgstr "Użyj Felamimail do tworzenia wiadomości pocztowych w oparciu o książkę adresową"
 
 #: Preference.php:119
 msgid "Use for NOTES"
