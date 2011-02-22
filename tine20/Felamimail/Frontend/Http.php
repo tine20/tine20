@@ -109,9 +109,14 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
                     //. ' ' . stream_get_contents($part->getDecodedStream())
                 );
                 
-                header("Pragma: public");
-                header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-                header("Cache-Control: max-age=0");
+                // cache for 3600 seconds
+                $maxAge = 3600;
+                header('Cache-Control: private, max-age=' . $maxAge);
+                header("Expires: " . gmdate('D, d M Y H:i:s', Tinebase_DateTime::now()->addSecond($maxAge)->getTimestamp()) . " GMT");
+                
+                // overwrite Pragma header from session
+                header("Pragma: cache");
+                
                 header('Content-Disposition: attachment; filename="' . $filename . '"');
                 header("Content-Type: " . $contentType);
                 
