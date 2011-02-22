@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-02-19 19:49+0100\n"
+"PO-Revision-Date: 2011-02-22 21:17+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -926,7 +926,7 @@ msgstr "Częstotliwość aktualizacji poczty"
 
 #: Preference.php:112
 msgid "How often should Felamimail check for new Emails (in minutes). \"0\" means never."
-msgstr "Jak często Felamimail ma sprawdzać pocztę (w minutach). \"0\" oznacza nigdy."
+msgstr "Jak często Felamimail ma sprawdzać pocztę (w minutach). \"0\" oznacza nigdy"
 
 #: Preference.php:115
 msgid "Use in Addressbook"
