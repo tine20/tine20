@@ -120,7 +120,7 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                         '<div class="bordercorner_2"></div>',
                         '<div class="bordercorner_3"></div>',
                         '<div class="bordercorner_4"></div>',
-                        '<img src="{[this.getImageUrl(values.jpegphoto, 90, 113)]}"/>',
+                        '<img src="{[this.getImageUrl(values.jpegphoto, 90, 113, values)]}"/>',
                     '</div>',
                 
                     '<!-- Preview office -->',
@@ -242,12 +242,14 @@ Tine.Addressbook.ContactGridDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsP
                 /**
                  * get image url
                  */
-                getImageUrl: function(url, width, height) {
+                getImageUrl: function(url, width, height, contact) {
+                    var mtime = contact.last_modified_time || contact.creation_time;
                     if (url.match(/&/)) {
                         url = Ext.ux.util.ImageURL.prototype.parseURL(url);
                         url.width = width;
                         url.height = height;
                         url.ratiomode = 0;
+                        url.mtime = Ext.isDate(mtime) ? mtime.getTime() : new Date().getTime();
                     }
                     return url;
                 },
