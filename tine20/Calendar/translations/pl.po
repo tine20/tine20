@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-02-10 19:43+0100\n"
+"PO-Revision-Date: 2011-02-22 20:56+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -739,11 +739,11 @@ msgstr "Wybierz poziom szczegółowości powiadomień o wykonywanych akcjach. Za
 
 #: Preference.php:101
 msgid "Send Notifications Emails of own Actions"
-msgstr "Wysyłanie powiadomienia e-mail o własnych akcjach"
+msgstr "Wysyłaj powiadomienia e-mail o własnych akcjach"
 
 #: Preference.php:102
 msgid "Get notifications emails for actions you did yourself"
-msgstr "Otrzymywanie powiadomienia e-maila o własnych akcjach"
+msgstr "Odbieraj powiadomienia e-mail o własnych akcjach"
 
 #: Preference.php:156
 msgid "Never"
