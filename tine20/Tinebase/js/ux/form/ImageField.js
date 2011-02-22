@@ -292,7 +292,8 @@ Ext.ux.util.ImageURL = function (config) {
         location: 'tempFile',
         width: 90,
         height: 120,
-        ratiomode: 0
+        ratiomode: 0,
+        mtime: new Date().getTime()
     }); 
 };
 /**
@@ -309,7 +310,7 @@ Ext.ux.util.ImageURL.prototype.toString = function () {
         "&width=" + this.width + 
         "&height=" + this.height + 
         "&ratiomode=" + this.ratiomode + 
-        "&" + new Date().getTime();
+        "&mtime=" + this.mtime;
 };
 /**
  * parses an imageurl
