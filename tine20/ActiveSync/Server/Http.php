@@ -54,20 +54,31 @@ class ActiveSync_Server_Http implements Tinebase_Server_Interface
             return;                            
         }
         
-        if(empty($_SERVER['PHP_AUTH_USER']) && empty($_SERVER['REMOTE_USER']) && empty($_SERVER['REDIRECT_REMOTE_USER'])) {
+        // when used with (f)cgi no PHP_AUTH* variables are available without defining a special rewrite rule
+        if(!isset($_SERVER['PHP_AUTH_USER'])) {
+            // "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
+            if (isset($_SERVER["REMOTE_USER"])) {
+                $basicAuthData = base64_decode(substr($_SERVER["REMOTE_USER"], 6));
+            } elseif (isset($_SERVER["REDIRECT_REMOTE_USER"])) {
+                $basicAuthData = base64_decode(substr($_SERVER["REDIRECT_REMOTE_USER"], 6));
+            } elseif (isset($_SERVER["Authorization"])) {
+                $basicAuthData = base64_decode(substr($_SERVER["Authorization"], 6));
+            } elseif (isset($_SERVER["HTTP_AUTHORIZATION"])) {
+                $basicAuthData = base64_decode(substr($_SERVER["HTTP_AUTHORIZATION"], 6));
+            }
+
+            if (isset($basicAuthData)) {
+                list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(":", $basicAuthData);
+            }
+        }
+        
+        if(empty($_SERVER['PHP_AUTH_USER'])) {
             header('WWW-Authenticate: Basic realm="ActiveSync for Tine 2.0"');
             header('HTTP/1.1 401 Unauthorized');
             return;
         }
         
         $syncFrontend = new ActiveSync_Frontend_Http();
-        
-        // when used with (f)cgi no PHP_AUTH variables are available without defining a special rewrite rule
-        if(!isset($_SERVER['PHP_AUTH_USER'])) {
-            // $_SERVER["REMOTE_USER"] == "Basic didhfiefdhfu4fjfjdsa34drsdfterrde..."
-            $basicAuthData = base64_decode(substr(isset($_SERVER["REMOTE_USER"]) ? $_SERVER["REMOTE_USER"] : $_SERVER['REDIRECT_REMOTE_USER'], 6));
-            list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(":", $basicAuthData);
-        }
         
         switch($_SERVER['REQUEST_METHOD']) {
             case 'OPTIONS':
