@@ -555,6 +555,18 @@ class Felamimail_Setup_Update_Release3 extends Setup_Update_Abstract
     }
     
     /**
+     * update from 3.0 -> 4.0
+     * 
+     * Neele release received updates up to 3.22 after branching
+     * 
+     * @return void
+     */
+    public function update_22()
+    {
+        $this->setApplicationVersion('Felamimail', '4.0');
+    }
+    
+    /**
      * clear cache tables and reset folder status
      */
     protected function _clearCache()
