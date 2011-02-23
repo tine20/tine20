@@ -35,6 +35,9 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
 	        // handle all kind of session exceptions as 'Not Authorised'
 	        if ($exception instanceof Zend_Session_Exception) {
                 $exception = new Tinebase_Exception_AccessDenied('Not Authorised', 401);
+                
+                // expire session cookie for client
+                Zend_Session::expireSessionCookie();
             }
         }
         
