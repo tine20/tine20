@@ -168,4 +168,16 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Tasks', '4.0');
     }
+    
+    /**
+     * update from 3.0 -> 4.0
+     * 
+     * Neele release received updates up to 3.22 after branching
+     * 
+     * @return void
+     */
+    public function update_5()
+    {
+        $this->setApplicationVersion('Tasks', '4.0');
+    }
 }
