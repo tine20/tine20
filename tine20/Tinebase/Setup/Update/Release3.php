@@ -1163,4 +1163,16 @@ class Tinebase_Setup_Update_Release3 extends Setup_Update_Abstract
     {
         $this->setApplicationVersion('Tinebase', '4.0');
     }
+    
+    /**
+     * update from 3.0 -> 4.0
+     * 
+     * Neele release received updates up to 3.28 after branching
+     * 
+     * @return void
+     */
+    public function update_28()
+    {
+        $this->setApplicationVersion('Tinebase', '4.0');
+    }
 }
