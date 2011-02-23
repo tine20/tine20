@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-02-22 20:33+0100\n"
+"PO-Revision-Date: 2011-02-23 20:09+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -1944,11 +1944,11 @@ msgstr "wiersz zmieniony"
 
 #: Preference.php:89
 msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr "Strefa czasowa, w której Tine 2.0 wyświetla dane."
+msgstr "Strefa czasowa, w której Tine 2.0 wyświetla dane"
 
 #: Preference.php:93
 msgid "The language of the Tine 2.0 GUI."
-msgstr "Język dla GUI w Tine 2.0."
+msgstr "Język dla GUI w Tine 2.0"
 
 #: Preference.php:96
 msgid "Default Application"
@@ -1956,7 +1956,7 @@ msgstr "Domyślna aplikacja"
 
 #: Preference.php:97
 msgid "The default application to show after login."
-msgstr "Domyślna aplikacja wyświetlana po zalogowaniu."
+msgstr "Domyślna aplikacja wyświetlana po zalogowaniu"
 
 #: Preference.php:100
 msgid "Window Type"
@@ -1964,7 +1964,7 @@ msgstr "Typ okna"
 
 #: Preference.php:101
 msgid "You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr "Możesz wybrać styl okien ExtJs albo zwykłe okna wyskakujące w przeglądarce."
+msgstr "Możesz wybrać styl okien ExtJs albo zwykłe okna wyskakujące w przeglądarce"
 
 #: Preference.php:104
 msgid "Confirm Logout"
@@ -1972,7 +1972,7 @@ msgstr "Potwierdź wylogowanie"
 
 #: Preference.php:105
 msgid "Show confirmation dialog on logout."
-msgstr "Wyświetl okno dialogowe potwierdzające chęć wylogowania."
+msgstr "Wyświetl okno dialogowe potwierdzające chęć wylogowania"
 
 #: Frontend/Http.php:565
 msgid "Your session is not valid. You need to login again."
