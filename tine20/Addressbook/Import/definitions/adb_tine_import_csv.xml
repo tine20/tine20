@@ -196,6 +196,7 @@
         <field>
             <source>tags</source>
             <destination>tags</destination>
+            <separator>,</separator>
         </field>
     </mapping>
 </config>
