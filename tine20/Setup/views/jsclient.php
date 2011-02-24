@@ -41,14 +41,14 @@
         switch(TINE20_BUILDTYPE) {
             case 'RELEASE':
                 echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/all.css' />";
-                echo "\n    <script defer type='text/javascript' language='javascript' src='Setup/js/all.js'></script>";
-                echo "\n    <script defer type='text/javascript' language='javascript' src='Tinebase/js/Locale/build/" . (string)$locale . "-all.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/all.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Locale/build/" . (string)$locale . "-all.js'></script>";
                 break;
                 
             case 'DEBUG':
                 echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/all-debug.css' />";
-                echo "\n    <script defer type='text/javascript' language='javascript' src='Setup/js/all-debug.js'></script>";
-                echo "\n    <script defer type='text/javascript' language='javascript' src='Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/all-debug.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js'></script>";
                 break;
                 
             case 'DEVELOPMENT':
@@ -62,11 +62,11 @@
                 
                 //css files
                 foreach ($includeFiles['js'] as $name) {
-                    echo "\n    ". '<script defer type="text/javascript" language="javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
+                    echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
                 }
                 
                 // laguage file
-                echo "\n    ". '<script defer type="text/javascript" language="javascript" src="setup.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
+                echo "\n    ". '<script type="text/javascript" language="javascript" src="setup.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
                 break;
         }?>
 </head>
