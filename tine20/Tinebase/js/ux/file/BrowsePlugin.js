@@ -161,8 +161,11 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 e.stopPropagation();
                 e.preventDefault();
                 
-                // prevents drop in FF ;-(
-                if (! Ext.isGecko) {
+                // try to set the effectAllowed to copy (not all UA's accept this)
+                e.browserEvent.dataTransfer.effectAllowed = 'copy';
+                    
+                // set drop effect to copy if allowed
+                if (e.browserEvent.dataTransfer.effectAllowed.match(/all|copy/i)) {
                     e.browserEvent.dataTransfer.dropEffect = 'copy';
                 }
             }, this);
