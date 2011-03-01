@@ -954,7 +954,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Message $_originalMessage
-     * @throws Felamimail_Exception if max attachment size exceeded or no originalMessage available for forward
      * 
      * @todo use getMessagePart() for attachments too?
      */
@@ -966,12 +965,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
                 
-                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
-                    
-                    if ($_originalMessage === NULL) {
-                        throw new Felamimail_Exception('No original message available for forward!');
-                    }
-                    
+                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_originalMessage !== NULL) {
                     $part = $this->getMessagePart($_originalMessage);
                     $part->decodeContent();
                     
@@ -988,7 +982,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     
                     // get contents from uploaded files
                     $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
-                    $part->encoding = Zend_Mime::ENCODING_BASE64;
+                    
+                    // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
+                    $part->encoding = ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
                 }
                 
                 $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
