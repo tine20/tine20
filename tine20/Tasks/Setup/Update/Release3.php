@@ -172,7 +172,7 @@ class Tasks_Setup_Update_Release3 extends Setup_Update_Abstract
     /**
      * update from 3.0 -> 4.0
      * 
-     * Neele release received updates up to 3.22 after branching
+     * Neele release received updates up to 3.5 after branching
      * 
      * @return void
      */
