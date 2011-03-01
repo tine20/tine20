@@ -84,6 +84,7 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
             $name =       $_SERVER['HTTP_X_FILE_NAME'];
             $size = (int) $_SERVER['HTTP_X_FILE_SIZE'];
             $type =       $_SERVER['HTTP_X_FILE_TYPE'];
+            $error =      0;
             
             $success = copy("php://input", $path);
             if (! $success) {
