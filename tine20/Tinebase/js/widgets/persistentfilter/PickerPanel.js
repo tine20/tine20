@@ -141,8 +141,8 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {PersistentFilter} record
      */
     checkReload: function(record) {
-        if (record.get('application_id') === this.app.id && this.root && this.root.rendered) {
-            this.root.reload(function(callback) {
+        if (record.get('application_id') === this.app.id && this.filterNode && this.filterNode.rendered) {
+            this.filterNode.reload(function(callback) {
             });
             return true;
         }
