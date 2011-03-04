@@ -576,6 +576,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $account = $this->_backend->update($account);
         }
         
+        // make sure that we have the root level of folders in the cache first
+        Felamimail_Controller_Folder::getInstance()->search(new Felamimail_Model_FolderFilter(array(
+            array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())
+        )));
+        
         $foldersToCheck = array($account->sent_folder, $account->trash_folder);
         foreach ($foldersToCheck as $folderName) {
             if ($imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
