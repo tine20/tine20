@@ -163,7 +163,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * check for sent/trash folders and create them if they do not exist
+     * check for sent/trash folders and create them if they do not exist / begin with filled folder cache
      */
     public function testCheckSentTrashFolders()
     {
@@ -172,6 +172,24 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
             array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
         )));
         
+        $this->_sentTrashCheckHelper();
+    }
+
+    /**
+     * check for sent/trash folders and create them if they do not exist / begin with empty folder cache
+     */
+    public function testCheckSentTrashFoldersEmptyCache()
+    {
+        Felamimail_Controller_Cache_Folder::getInstance()->clear($this->_account->getId());
+        
+        $this->_sentTrashCheckHelper();
+    }
+    
+    /**
+     * helper fn for testCheckSentTrashFolders and testCheckSentTrashFoldersEmpty
+     */
+    protected function _sentTrashCheckHelper()
+    {
         $account = clone($this->_account);
         $account->sent_folder = 'INBOX' . $account->delimiter . 'testsent';
         $account->trash_folder = 'INBOX' . $account->delimiter . 'testtrash';
