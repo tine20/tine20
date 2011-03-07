@@ -23,6 +23,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     autoEl: 'div',
     value: '',
     increment: 15,
+    markedInvalid: false,
     
     initComponent: function () {
         Ext.ux.form.DateTimeField.superclass.initComponent.call(this);
@@ -31,10 +32,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     clearInvalid: function () {
-        if (this.dateField && this.timeField) {
-            this.dateField.clearInvalid();
-            this.timeField.clearInvalid();
-        }
+    	this.markedInvalid = false;
+    	
+		this.dateField.clearInvalid();
+		this.timeField.clearInvalid();
     },
     
     clearTime: function () {
@@ -80,6 +81,8 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     },
     
     markInvalid: function (msg) {
+    	this.markedInvalid = true;
+    	
         this.dateField.markInvalid(msg);
         this.timeField.markInvalid(msg);
     },
@@ -99,6 +102,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             hideTrigger: this.hideTrigger,
             disabled: this.disabled,
             tabIndex: this.tabIndex === -1 ? this.tabIndex : false,
+            allowBlank: this.allowBlank,
             value: this.value,
             listeners: {
                 scope: this,
@@ -115,6 +119,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             hideTrigger: this.hideTrigger,
             disabled: this.disabled,
             tabIndex: this.tabIndex === -1 ? this.tabIndex : false,
+            allowBlank: this.allowBlank,
             value: this.value,
             listeners: {
                 scope: this,
@@ -135,7 +140,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         Ext.ux.form.DateTimeField.superclass.onResize.apply(this, arguments);
         
         // needed for readonly
-        this.el.setHeight(15);
+        this.el.setHeight(16);
         
         this.el.setStyle({'position': 'relative'});
         
@@ -189,6 +194,10 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
         } else {
             this.reset();
         }
+    },
+    
+    isValid: function (preventMark) {
+		return this.dateField.isValid(preventMark) && this.timeField.isValid(preventMark) && ! this.markedInvalid;
     }
 });
 Ext.reg('datetimefield', Ext.ux.form.DateTimeField);
