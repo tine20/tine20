@@ -2,188 +2,169 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-01-12 12:43+0100\n"
+"PO-Revision-Date: 2011-03-07 20:22+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: \n"
 "X-Poedit-Language: Polish\n"
 "X-Poedit-Country: POLAND\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: Controller.php:104
-#, python-format
-msgid "%s's personal calendar"
-msgstr ""
+#: Controller/EventNotifications.php:261
+msgid "Alarm for event \"%1$s\" at %2$s"
+msgstr "Przypomnienie o terminie \"%1$s\" o %2$s"
 
-#: Setup/setup.xml:4 js/Calendar.js:35 js/Model.js:68
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+#: Controller/EventNotifications.php:264
+msgid "Event invitation \"%1$s\" at %2$s"
+msgstr "Zaproszenie na \"%1$s\" o %2$s"
 
-#: Setup/Update/Release3.php:165 Setup/Initialize.php:35
-msgid "All events I attend"
-msgstr ""
+#: Controller/EventNotifications.php:267
+msgid "Event \"%1$s\" at %2$s has been canceled"
+msgstr "Termin \"%1$s\" at %2$s został anulowany"
 
-#: Setup/Initialize.php:48
-msgid "Awaiting response"
-msgstr ""
+#: Controller/EventNotifications.php:272
+msgid "Event \"%1$s\" at %2$s has been rescheduled"
+msgstr "Termin \"%1$s\" at %2$s został przełożony"
 
-#: Setup/Initialize.php:49
-msgid "Events I have not yet responded to"
-msgstr ""
+#: Controller/EventNotifications.php:276
+msgid "Event \"%1$s\" at %2$s has been updated"
+msgstr "Termin \"%1$s\" at %2$s został zaktualizowany"
 
-#: Setup/Initialize.php:64
-msgid "Declined events"
-msgstr ""
+#: Controller/EventNotifications.php:286
+msgid "%1$s accepted event \"%2$s\" at %3$s"
+msgstr "%1$s zaakceptowany termin \"%2$s\" o %3$s"
 
-#: Setup/Initialize.php:65
-msgid "Events I have declined"
-msgstr ""
+#: Controller/EventNotifications.php:290
+msgid "%1$s declined event \"%2$s\" at %3$s"
+msgstr "%1$s odwołany termin \"%2$s\" o %3$s"
 
-#: Setup/Initialize.php:78
-msgid "I'm organizer"
-msgstr ""
+#: Controller/EventNotifications.php:294
+msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Niezobowiązująca odpowiedź od %1$s dotycząca terminu \"%2$s\" o %3$s"
 
-#: Setup/Initialize.php:79
-msgid "Events I'm the organizer of"
-msgstr ""
+#: Controller/EventNotifications.php:298
+msgid "No response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Brak odpowiedzi od %1$s dotyczącej terminu \"%2$s\" o %3$s"
 
-#: Preference.php:37
-msgid "All my events"
-msgstr ""
-
-#: Preference.php:85 js/EventDetailsPanel.js:215 js/EventEditDialog.js:101
-msgid "Start Time"
-msgstr ""
-
-#: Preference.php:86
-msgid "Position on the left time axis, day and week view should start with"
-msgstr ""
-
-#: Preference.php:89
-msgid "Default Calendar"
-msgstr ""
-
-#: Preference.php:90
-msgid "The default calendar for invitations and new events"
-msgstr ""
-
-#: Preference.php:93
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:94
-msgid "The default favorite which is loaded on calendar startup"
-msgstr ""
-
-#: Preference.php:97
-msgid "Get Notification Emails"
-msgstr ""
-
-#: Preference.php:98
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr ""
-
-#: Preference.php:101
-msgid "Send Notifications Emails of own Actions"
-msgstr ""
-
-#: Preference.php:102
-msgid "Get notifications emails for actions you did yourself"
-msgstr ""
-
-#: Preference.php:156
-msgid "Never"
-msgstr ""
-
-#: Preference.php:156
-msgid "On invitation and cancellation only"
-msgstr ""
-
-#: Preference.php:156
-msgid "On time changes"
-msgstr ""
-
-#: Preference.php:156
-msgid "On all updates but attendee responses"
-msgstr ""
-
-#: Preference.php:156
-msgid "On attendee responses too"
-msgstr ""
+#: Controller/EventNotifications.php:302
+msgid "Attendee changes for event \"%1$s\" at %2$s"
+msgstr "Zmiana składu uczestników dotycząca terminu \"%1$s\" o %2$s"
 
 #: Acl/Rights.php:97
 msgid "manage shared calendars"
-msgstr ""
+msgstr "edytowanie wspólnych kalendarzy"
 
 #: Acl/Rights.php:98
 msgid "Create new shared calendars"
-msgstr ""
+msgstr "Utwórz nowe, wspólne kalendarze"
 
 #: Acl/Rights.php:101
 msgid "manage shared calendars favorites"
-msgstr ""
+msgstr "zarządzanie ulubionymi ze wspólnego kalendarza"
 
 #: Acl/Rights.php:102
 msgid "Create or update shared calendars favorites"
-msgstr ""
+msgstr "Utwórz albo uaktualnij ulubione ze wspólnego kalendarza"
 
 #: Acl/Rights.php:105
 msgid "manage resources"
-msgstr ""
+msgstr "edytowanie zasobów"
 
 #: Acl/Rights.php:106
 msgid "All Rights to administrate resources"
-msgstr ""
+msgstr "Wszelkie uprawnienia do zarządzania zasobami"
 
-#: js/EventDetailsPanel.js:51
-msgid "Unknown calendar"
-msgstr ""
+#: js/EventUI.js:221
+msgid "private classification"
+msgstr "klasyfikowanie prywatnych"
 
-#: js/EventDetailsPanel.js:62
-msgid "{0} {1} o'clock"
-msgstr ""
+#: js/EventUI.js:228
+msgid "recurring event"
+msgstr "termin wielokrotny"
 
-#: js/EventDetailsPanel.js:179 js/EventEditDialog.js:89 Model/Event.php:234
-msgid "Summary"
-msgstr ""
+#: js/EventUI.js:235
+msgid "has alarm"
+msgstr "z alarmem"
 
-#: js/EventDetailsPanel.js:220 js/EventEditDialog.js:116
-msgid "End Time"
-msgstr ""
+#: js/CalendarPanel.js:41
+msgid "Loading events, please wait..."
+msgstr "Ładowanie terminów, proszę czekać..."
 
-#: js/EventDetailsPanel.js:225 Model/Event.php:227
-msgid "Blocking"
-msgstr ""
+#: js/CalendarPanel.js:227
+msgid "Scheduling Conflict"
+msgstr "Przełożenie terminu powoduje konflikt terminów"
 
-#: js/EventDetailsPanel.js:230 js/ResourcesGridPanel.js:54
-#: js/EventEditDialog.js:96 Model/Event.php:230
-msgid "Location"
-msgstr ""
+#: js/CalendarPanel.js:229
+msgid "The following attendee are busy at the requested time:"
+msgstr "W żądanym czasie następujący uczestnicy są zajęci:"
 
-#: js/EventDetailsPanel.js:234 js/Model.js:204 Model/Event.php:231
-msgid "Organizer"
-msgstr ""
+#: js/CalendarPanel.js:233
+msgid "Ignore Conflict"
+msgstr "Zignoruj konflikt"
 
-#: js/EventDetailsPanel.js:251 js/AttendeeGridPanel.js:77
-#: js/AttendeeFilterModel.js:37 js/Model.js:329
-msgid "Attendee"
-msgstr ""
+#: js/CalendarPanel.js:234
+msgid "Edit Event"
+msgstr "Edytuj termin"
 
-#: js/ResourcesGridPanel.js:43 js/AttendeeGridPanel.js:174
+#: js/CalendarPanel.js:268
+msgid "Confirm Update of Series"
+msgstr "Potwierdź aktualizację serii terminów"
+
+#: js/CalendarPanel.js:269
+msgid "Do you really want to update all events of this recurring event series?"
+msgstr "Czy na pewno chcesz uaktualnić wszystkie terminy z serii terminów okresowych?"
+
+#: js/CalendarPanel.js:283
+msgid "Update Event"
+msgstr "Aktualizuj termin"
+
+#: js/CalendarPanel.js:286
+msgid "Update nothing"
+msgstr "Nie aktualizuj"
+
+#: js/CalendarPanel.js:287
+msgid "Update whole series"
+msgstr "Aktualizuj całą serię"
+
+#: js/CalendarPanel.js:288
+msgid "Update this event only"
+msgstr "Aktualizuj wyłącznie ten jeden termin"
+
+#: js/DaysView.js:90
+#: js/MonthView.js:82
+msgid "New Event"
+msgstr "Nowy termin"
+
+#: js/DaysView.js:95
+msgid "{0}, the {1}. of {2}"
+msgstr "{0}, {1} z {2}"
+
+#: js/PagingToolbar.js:276
+#: js/MainScreenCenterPanel.js:136
+msgid "Week"
+msgstr "Tydzień"
+
+#: js/ResourcesGridPanel.js:43
 #: js/ResourceEditDialog.js:58
+#: js/AttendeeGridPanel.js:174
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/ResourcesGridPanel.js:49 js/ResourceEditDialog.js:63
+#: js/ResourcesGridPanel.js:49
+#: js/ResourceEditDialog.js:63
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
+
+#: js/ResourcesGridPanel.js:54
+#: js/EventDetailsPanel.js:230
+#: js/EventEditDialog.js:96
+#: Model/Event.php:230
+msgid "Location"
+msgstr "Miejsce"
 
 #: js/MainScreenCenterPanel.js:119
 msgid "Print Page"
@@ -191,82 +172,380 @@ msgstr "Drukuj stronę"
 
 #: js/MainScreenCenterPanel.js:127
 msgid "Day"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:136 js/PagingToolbar.js:276
-msgid "Week"
-msgstr ""
+msgstr "Dzień"
 
 #: js/MainScreenCenterPanel.js:145
 msgid "Month"
-msgstr ""
+msgstr "Miesiąc"
 
-#: js/MainScreenCenterPanel.js:324
+#: js/MainScreenCenterPanel.js:325
 msgid "Set my response"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:375
-msgid "Please Change Selection"
-msgstr ""
+msgstr "Ustaw odpowiedź"
 
 #: js/MainScreenCenterPanel.js:376
-msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
-msgstr ""
+msgid "Please Change Selection"
+msgstr "Proszę zmienić wybór"
 
-#: js/MainScreenCenterPanel.js:390
-msgid "Confirm Deletion of Series"
-msgstr ""
+#: js/MainScreenCenterPanel.js:377
+msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
+msgstr "Twój wybór zawiera terminy okresowe. Terminy okresowe należy usuwać pojedynczo!"
 
 #: js/MainScreenCenterPanel.js:391
+msgid "Confirm Deletion of Series"
+msgstr "Potwierdź usunięcie serii terminów lub zrezygnuj"
+
+#: js/MainScreenCenterPanel.js:392
 msgid "Do you really want to delete all events of this recurring event series?"
-msgstr ""
+msgstr "Czy na pewno chcesz usunąć wszystkie terminy z serii terminów okresowych?"
 
-#: js/MainScreenCenterPanel.js:404
+#: js/MainScreenCenterPanel.js:405
 msgid "Delete Event"
-msgstr ""
-
-#: js/MainScreenCenterPanel.js:408
-msgid "Delete whole series"
-msgstr ""
+msgstr "Usuń termin"
 
 #: js/MainScreenCenterPanel.js:409
-msgid "Delete this and all future events"
-msgstr ""
+msgid "Delete whole series"
+msgstr "Usuń całą serię terminów"
 
 #: js/MainScreenCenterPanel.js:410
-msgid "Delete this event only"
-msgstr ""
+msgid "Delete this and all future events"
+msgstr "Usuń ten oraz wszystkie przyszłe terminy"
 
 #: js/MainScreenCenterPanel.js:411
-msgid "Delete nothing"
-msgstr ""
+msgid "Delete this event only"
+msgstr "Usuń tylko ten jeden termin"
 
-#: js/MainScreenCenterPanel.js:460
+#: js/MainScreenCenterPanel.js:412
+msgid "Delete nothing"
+msgstr "Niczego nie usuwaj"
+
+#: js/MainScreenCenterPanel.js:461
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Czy na pewno chcesz usunąć ten termin?"
+msgstr[1] "Czy na pewno chcesz usunąć {0} zaznaczone terminy?"
+msgstr[2] "Czy na pewno chcesz usunąć {0} zaznaczonych terminów?"
 
-#: js/MainScreenCenterPanel.js:583
+#: js/MainScreenCenterPanel.js:584
 msgid "Could not Print"
-msgstr ""
+msgstr "Drukowanie nie jest możliwe"
 
-#: js/MainScreenCenterPanel.js:583
+#: js/MainScreenCenterPanel.js:584
 msgid "Sorry, your current view does not support printing."
-msgstr ""
+msgstr "Niestety, bieżący widok nie obsługuje drukowania."
+
+#: js/Calendar.js:35
+#: js/Model.js:68
+#: Setup/setup.xml:4
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Kalendarz"
+msgstr[1] "kalendarze"
+msgstr[2] "kalendarze"
+
+#: js/AttendeeStatusFilterModel.js:33
+msgid "Attendee Status"
+msgstr "Status uczestnika"
+
+#: js/ResourceEditDialog.js:69
+#: js/ResourceEditDialog.js:70
+msgid "Is a location"
+msgstr "Jest miejscem"
+
+#: js/ResourceEditDialog.js:74
+#: js/EventEditDialog.js:198
+#: Model/Event.php:229
+msgid "Description"
+msgstr "Opis"
+
+#: js/ResourceEditDialog.js:75
+msgid "Enter description..."
+msgstr "Wprowadź opis..."
+
+#: js/CalendarSelectWidget.js:126
+msgid "Originally"
+msgstr "Pierwotny kalendarz"
+
+#: js/MonthView.js:87
+#: js/MainScreenWestPanel.js:54
+msgid "WK"
+msgstr "TK"
+
+#: js/MonthView.js:92
+msgid "{0} more..."
+msgstr "i jeszcze {0} ..."
+
+#: js/EventDetailsPanel.js:51
+msgid "Unknown calendar"
+msgstr "Nieznany kalendarz"
+
+#: js/EventDetailsPanel.js:62
+msgid "{0} {1} o'clock"
+msgstr "godzina {0} {1}"
+
+#: js/EventDetailsPanel.js:179
+#: js/EventEditDialog.js:89
+#: Model/Event.php:234
+msgid "Summary"
+msgstr "Streszczenie"
+
+#: js/EventDetailsPanel.js:215
+#: js/EventEditDialog.js:101
+#: Preference.php:85
+msgid "Start Time"
+msgstr "Początek"
+
+#: js/EventDetailsPanel.js:220
+#: js/EventEditDialog.js:116
+msgid "End Time"
+msgstr "Koniec"
+
+#: js/EventDetailsPanel.js:225
+#: Model/Event.php:227
+msgid "Blocking"
+msgstr "Blokowanie"
+
+#: js/EventDetailsPanel.js:234
+#: js/Model.js:204
+#: Model/Event.php:231
+msgid "Organizer"
+msgstr "Notes"
+
+#: js/EventDetailsPanel.js:251
+#: js/Model.js:329
+#: js/AttendeeFilterModel.js:37
+#: js/AttendeeGridPanel.js:77
+msgid "Attendee"
+msgstr "Uczestnik"
+
+#: js/Printer/DaysView.js:36
+msgid "Week {0} :"
+msgstr "Tydzień {0}:"
+
+#: js/Printer/Base.js:66
+#: js/EventEditDialog.js:124
+msgid "whole day"
+msgstr "cały dzień"
+
+#: js/Model.js:64
+#: js/Model.js:333
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "termin"
+msgstr[1] "terminy"
+msgstr[2] "terminy"
+
+#: js/Model.js:64
+#: js/Model.js:333
+msgid "Events"
+msgstr "Terminy"
+
+#: js/Model.js:68
+msgid "Calendars"
+msgstr "Terminy"
+
+#: js/Model.js:200
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/Model.js:329
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] "Uczestnik"
+msgstr[1] "uczestników"
+msgstr[2] "uczestników"
+
+#: js/Model.js:345
+#: js/AttendeeGridPanel.js:433
+#: js/AttendeeGridPanel.js:451
+#: js/AttendeeGridPanel.js:464
+#: js/AttendeeGridPanel.js:476
+msgid "No Information"
+msgstr "Brak informacji"
+
+#: js/Model.js:473
+#: js/AttendeeGridPanel.js:513
+#: Model/Attender.php:46
+msgid "No response"
+msgstr "Brak odpowiedzi"
+
+#: js/Model.js:474
+#: js/AttendeeGridPanel.js:516
+#: Model/Attender.php:47
+msgid "Accepted"
+msgstr "Zaakceptowany"
+
+#: js/Model.js:475
+#: js/AttendeeGridPanel.js:519
+#: Model/Attender.php:48
+msgid "Declined"
+msgstr "Odrzucony"
+
+#: js/Model.js:476
+#: js/AttendeeGridPanel.js:522
+#: Model/Attender.php:49
+msgid "Tentative"
+msgstr "Brak ostatecznej decyzji"
+
+#: js/Model.js:503
+#: js/AttendeeGridPanel.js:166
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Zasób"
+msgstr[1] "zasoby"
+msgstr[2] "zasoby"
+
+#: js/Model.js:503
+msgid "Resources"
+msgstr "Zasoby"
+
+#: js/AdminPanel.js:46
+msgid "Manage Resources"
+msgstr "Zarządzaj zasobami"
+
+#: js/AttendeeFilterModel.js:104
+msgid "Select Attendee"
+msgstr "Wybierz uczestnika"
+
+#: js/RrulePanel.js:29
+msgid "Recurrances"
+msgstr "Powtarzalność"
+
+#: js/RrulePanel.js:37
+msgid "No recurring rule defined"
+msgstr "Termin się nie powtarza"
+
+#: js/RrulePanel.js:77
+msgid "None"
+msgstr "Brak"
+
+#: js/RrulePanel.js:84
+msgid "Daily"
+msgstr "Codziennie"
+
+#: js/RrulePanel.js:91
+msgid "Weekly"
+msgstr "Co tydzień"
+
+#: js/RrulePanel.js:98
+msgid "Monthly"
+msgstr "Co miesiąc"
+
+#: js/RrulePanel.js:105
+msgid "Yearly"
+msgstr "Co rok"
+
+#: js/RrulePanel.js:229
+msgid "forever"
+msgstr "zawsze"
+
+#: js/RrulePanel.js:247
+msgid "Forever"
+msgstr "Zawsze"
+
+#: js/RrulePanel.js:248
+msgid "at"
+msgstr "o"
+
+#: js/RrulePanel.js:288
+msgid "Until"
+msgstr "do"
+
+#: js/RrulePanel.js:300
+msgid "Until has to be after event start"
+msgstr "Termin zakończenia musi przypadać po terminie rozpoczęcia"
+
+#: js/RrulePanel.js:322
+msgid "Every {0}. Day"
+msgstr "co {0} dzień"
+
+#: js/RrulePanel.js:352
+msgid "Every {0}. Week at"
+msgstr "co {0} tydzień w"
+
+#: js/RrulePanel.js:421
+msgid "Every {0}. Month"
+msgstr "co {0} miesiąc"
+
+#: js/RrulePanel.js:427
+#: js/RrulePanel.js:476
+#: js/RrulePanel.js:607
+#: js/RrulePanel.js:657
+msgid "at the"
+msgstr "dzień:"
+
+#: js/RrulePanel.js:446
+#: js/RrulePanel.js:626
+msgid "first"
+msgstr "pierwszy(a)"
+
+#: js/RrulePanel.js:447
+#: js/RrulePanel.js:627
+msgid "second"
+msgstr "drugi(a)"
+
+#: js/RrulePanel.js:448
+#: js/RrulePanel.js:628
+msgid "third"
+msgstr "trzeci(a)"
+
+#: js/RrulePanel.js:449
+#: js/RrulePanel.js:629
+msgid "fourth"
+msgstr "czwarty(a)"
+
+#: js/RrulePanel.js:450
+#: js/RrulePanel.js:630
+msgid "last"
+msgstr "ostatni(a)"
+
+#: js/RrulePanel.js:600
+msgid "Every {0}. Year"
+msgstr "co {0} rok"
+
+#: js/RrulePanel.js:697
+#: js/RrulePanel.js:709
+msgid "of"
+msgstr "miesiąc:"
+
+#: js/MainScreenWestPanel.js:32
+msgid "Mini Calendar"
+msgstr "Mini kalendarz"
+
+#: js/EventEditDialog.js:132
+msgid "non-blocking"
+msgstr "nie blokuj"
+
+#: js/EventEditDialog.js:157
+msgid "Private"
+msgstr "Osobiste"
+
+#: js/EventEditDialog.js:212
+msgid "Enter description"
+msgstr "Wprowadź opis"
+
+#: js/EventEditDialog.js:342
+msgid "End date is not valid"
+msgstr "Nieprawidłowa data zakończenia"
+
+#: js/EventEditDialog.js:345
+msgid "End date must be after start date"
+msgstr "Data zakończenia musi przypadać po dacie rozpoczęcia"
+
+#: js/EventEditDialog.js:358
+msgid "Start date is not valid"
+msgstr "Nieprawidłowa data rozpoczęcia"
 
 #: js/AttendeeGridPanel.js:103
 msgid "Role"
-msgstr ""
+msgstr "Rola"
 
 #: js/AttendeeGridPanel.js:112
 msgid "Quantity"
-msgstr ""
+msgstr "Ilość"
 
 #: js/AttendeeGridPanel.js:121
 msgid "This is the calendar where the attender has saved this event in"
-msgstr ""
+msgstr "W tym kalendarzu uczestnik zapisał niniejszy termin"
 
 #: js/AttendeeGridPanel.js:157
 msgid "Type"
@@ -277,360 +556,143 @@ msgid "User"
 msgstr "Użytkownik"
 
 #: js/AttendeeGridPanel.js:165
-#, fuzzy
 msgid "Group"
 msgstr "Grupa"
 
-#: js/AttendeeGridPanel.js:166 js/Model.js:503
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/AttendeeGridPanel.js:182 Model/Event.php:233
+#: js/AttendeeGridPanel.js:182
+#: Model/Event.php:233
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: js/AttendeeGridPanel.js:320
 msgid "Remove Attender"
-msgstr ""
+msgstr "Usuń uczestnika"
 
 #: js/AttendeeGridPanel.js:415
 msgid "Click here to invite another attender..."
-msgstr ""
-
-#: js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
-#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:345
-msgid "No Information"
-msgstr ""
+msgstr "Aby zaprosić innego uczestnika, kliknij tutaj..."
 
 #: js/AttendeeGridPanel.js:438
 msgid "(as a group member)"
-msgstr ""
+msgstr "(jako uczestnik grupy)"
 
 #: js/AttendeeGridPanel.js:488
 msgid "Required"
-msgstr ""
+msgstr "Obowiązkowy"
 
 #: js/AttendeeGridPanel.js:491
 msgid "Optional"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:513 js/Model.js:473 Model/Attender.php:46
-msgid "No response"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:516 js/Model.js:474 Model/Attender.php:47
-msgid "Accepted"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:519 js/Model.js:475 Model/Attender.php:48
-msgid "Declined"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:522 js/Model.js:476 Model/Attender.php:49
-msgid "Tentative"
-msgstr ""
-
-#: js/MainScreenWestPanel.js:32
-msgid "Mini Calendar"
-msgstr ""
-
-#: js/MainScreenWestPanel.js:54 js/MonthView.js:87
-msgid "WK"
-msgstr ""
-
-#: js/AdminPanel.js:46
-msgid "Manage Resources"
-msgstr ""
-
-#: js/EventEditDialog.js:124 js/Printer/Base.js:66
-msgid "whole day"
-msgstr ""
-
-#: js/EventEditDialog.js:132
-msgid "non-blocking"
-msgstr ""
-
-#: js/EventEditDialog.js:157
-msgid "Private"
-msgstr "Osobiste"
-
-#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:74 Model/Event.php:229
-msgid "Description"
-msgstr "Opis"
-
-#: js/EventEditDialog.js:212
-msgid "Enter description"
-msgstr ""
-
-#: js/EventEditDialog.js:342
-msgid "End date is not valid"
-msgstr ""
-
-#: js/EventEditDialog.js:345
-msgid "End date must be after start date"
-msgstr ""
-
-#: js/EventEditDialog.js:358
-msgid "Start date is not valid"
-msgstr ""
-
-#: js/CalendarSelectWidget.js:120
-msgid "Originally"
-msgstr ""
-
-#: js/MonthView.js:82 js/DaysView.js:90
-msgid "New Event"
-msgstr ""
-
-#: js/MonthView.js:92
-msgid "{0} more..."
-msgstr ""
-
-#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
-msgid "Is a location"
-msgstr ""
-
-#: js/ResourceEditDialog.js:75
-msgid "Enter description..."
-msgstr ""
-
-#: js/EventUI.js:221
-msgid "private classification"
-msgstr ""
-
-#: js/EventUI.js:228
-msgid "recurring event"
-msgstr ""
-
-#: js/EventUI.js:235
-msgid "has alarm"
-msgstr ""
-
-#: js/AttendeeFilterModel.js:104
-msgid "Select Attendee"
-msgstr ""
-
-#: js/AttendeeStatusFilterModel.js:33
-msgid "Attendee Status"
-msgstr ""
-
-#: js/CalendarPanel.js:41
-msgid "Loading events, please wait..."
-msgstr ""
-
-#: js/CalendarPanel.js:226
-msgid "Scheduling Conflict"
-msgstr ""
-
-#: js/CalendarPanel.js:228
-msgid "The following attendee are busy at the requested time:"
-msgstr ""
-
-#: js/CalendarPanel.js:232
-msgid "Ignore Conflict"
-msgstr ""
-
-#: js/CalendarPanel.js:233
-msgid "Edit Event"
-msgstr ""
-
-#: js/CalendarPanel.js:267
-msgid "Confirm Update of Series"
-msgstr ""
-
-#: js/CalendarPanel.js:268
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr ""
-
-#: js/CalendarPanel.js:282
-msgid "Update Event"
-msgstr ""
-
-#: js/CalendarPanel.js:285
-msgid "Update nothing"
-msgstr ""
-
-#: js/CalendarPanel.js:286
-msgid "Update whole series"
-msgstr ""
-
-#: js/CalendarPanel.js:287
-msgid "Update this event only"
-msgstr ""
-
-#: js/Model.js:64 js/Model.js:333
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:64 js/Model.js:333
-msgid "Events"
-msgstr "Terminy"
-
-#: js/Model.js:68
-msgid "Calendars"
-msgstr ""
-
-#: js/Model.js:200
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/Model.js:329
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:503
-msgid "Resources"
-msgstr ""
-
-#: js/Printer/DaysView.js:36
-msgid "Week {0} :"
-msgstr ""
-
-#: js/DaysView.js:95
-msgid "{0}, the {1}. of {2}"
-msgstr ""
-
-#: js/RrulePanel.js:29
-msgid "Recurrances"
-msgstr ""
-
-#: js/RrulePanel.js:37
-msgid "No recurring rule defined"
-msgstr ""
-
-#: js/RrulePanel.js:77
-msgid "None"
-msgstr "Brak"
-
-#: js/RrulePanel.js:84
-msgid "Daily"
-msgstr ""
-
-#: js/RrulePanel.js:91
-msgid "Weekly"
-msgstr ""
-
-#: js/RrulePanel.js:98
-msgid "Monthly"
-msgstr ""
-
-#: js/RrulePanel.js:105
-msgid "Yearly"
-msgstr ""
-
-#: js/RrulePanel.js:229
-msgid "forever"
-msgstr ""
-
-#: js/RrulePanel.js:247
-msgid "Forever"
-msgstr ""
-
-#: js/RrulePanel.js:248
-msgid "at"
-msgstr ""
-
-#: js/RrulePanel.js:288
-msgid "Until"
-msgstr ""
-
-#: js/RrulePanel.js:300
-msgid "Until has to be after event start"
-msgstr ""
-
-#: js/RrulePanel.js:322
-msgid "Every {0}. Day"
-msgstr ""
-
-#: js/RrulePanel.js:352
-msgid "Every {0}. Week at"
-msgstr ""
-
-#: js/RrulePanel.js:421
-msgid "Every {0}. Month"
-msgstr ""
-
-#: js/RrulePanel.js:427 js/RrulePanel.js:476 js/RrulePanel.js:607
-#: js/RrulePanel.js:657
-msgid "at the"
-msgstr ""
-
-#: js/RrulePanel.js:446 js/RrulePanel.js:626
-msgid "first"
-msgstr ""
-
-#: js/RrulePanel.js:447 js/RrulePanel.js:627
-msgid "second"
-msgstr ""
-
-#: js/RrulePanel.js:448 js/RrulePanel.js:628
-msgid "third"
-msgstr ""
-
-#: js/RrulePanel.js:449 js/RrulePanel.js:629
-msgid "fourth"
-msgstr ""
-
-#: js/RrulePanel.js:450 js/RrulePanel.js:630
-msgid "last"
-msgstr ""
-
-#: js/RrulePanel.js:600
-msgid "Every {0}. Year"
-msgstr ""
-
-#: js/RrulePanel.js:697 js/RrulePanel.js:709
-msgid "of"
-msgstr ""
+msgstr "Dobrowolny"
+
+#: views/eventNotification.php:13
+msgid "Updates"
+msgstr "Aktualizacje"
+
+#: views/eventNotification.php:21
+msgid "%1$s changed from \"%2$s\" to \"%3$s\""
+msgstr "%1$s changed from \"%2$s\" to \"%3$s\""
+
+#: views/eventNotification.php:28
+msgid "%1$s has been invited"
+msgstr "%1$s został zaproszony"
+
+#: views/eventNotification.php:33
+msgid "%1$s has been removed"
+msgstr "%1$s został usunięty"
+
+#: views/eventNotification.php:40
+msgid "%1$s accepted invitation"
+msgstr "%1$s przyjęte zaproszenie"
+
+#: views/eventNotification.php:44
+msgid "%1$s declined invitation"
+msgstr "%1$s odwołane zaproszenie"
+
+#: views/eventNotification.php:48
+msgid "Tentative response from %1$s"
+msgstr "Wstępna akceptacja %1$s"
+
+#: views/eventNotification.php:52
+msgid "No response from %1$s"
+msgstr "Brak odpowiedzi od %1$s"
+
+#: views/eventNotification.php:61
+msgid "Event details"
+msgstr "Szczegóły terminu"
+
+#: Setup/Initialize.php:35
+#: Setup/Update/Release3.php:165
+msgid "All events I attend"
+msgstr "Wszystkie terminy dodane przeze mnie"
+
+#: Setup/Initialize.php:48
+msgid "Awaiting response"
+msgstr "Oczekują na odpowiedź"
+
+#: Setup/Initialize.php:49
+msgid "Events I have not yet responded to"
+msgstr "Terminy pozostające bez mojej odpowiedzi"
+
+#: Setup/Initialize.php:64
+msgid "Declined events"
+msgstr "Terminy odrzucone"
+
+#: Setup/Initialize.php:65
+msgid "Events I have declined"
+msgstr "Terminy, które odrzuciłem/-am"
+
+#: Setup/Initialize.php:78
+msgid "I'm organizer"
+msgstr "Jestem organizatorem"
+
+#: Setup/Initialize.php:79
+msgid "Events I'm the organizer of"
+msgstr "Terminy, które organizuję"
+
+#: Controller.php:104
+#, python-format
+msgid "%s's personal calendar"
+msgstr "%s's kalendarz osobisty"
 
 #: Model/Event.php:225
 msgid "Start"
-msgstr ""
+msgstr "Początek"
 
 #: Model/Event.php:226
 msgid "End"
-msgstr ""
+msgstr "Koniec"
 
 #: Model/Event.php:228
 msgid "Classification"
-msgstr ""
+msgstr "Klasyfikacja"
 
 #: Model/Event.php:232
 msgid "Priority"
-msgstr ""
+msgstr "Priorytet"
 
 #: Model/Event.php:235
 msgid "Url"
-msgstr ""
+msgstr "URL"
 
 #: Model/Event.php:236
 msgid "Recurrance rule"
-msgstr ""
+msgstr "Reguły powtarzalności"
 
 #: Model/Event.php:237
 msgid "Is all day event"
-msgstr ""
+msgstr "Termin codzienny"
 
 #: Model/Event.php:238
 msgid "Organizer timezone"
-msgstr ""
+msgstr "Notatnik - strefa czasowa"
 
 #: Model/Event.php:263
 msgid "Yes"
-msgstr ""
+msgstr "Tak"
 
 #: Model/Event.php:263
 msgid "No"
-msgstr ""
+msgstr "Brak"
 
 #: Model/Attender.php:168
 msgid "unknown"
@@ -638,87 +700,71 @@ msgstr "nieznany"
 
 #: Model/Attender.php:316
 msgid "This contact has been automatically added by the system as an event attender"
-msgstr ""
+msgstr "Niniejszy kontakt został dodany automatycznie podczas synchronizacji systemu"
 
 #: Model/Attender.php:204
 msgid "unknown)"
-msgstr ""
+msgstr "nieznane)"
 
-#: Controller/EventNotifications.php:261
-msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr ""
+#: Preference.php:37
+msgid "All my events"
+msgstr "Wszystkie moje terminy"
 
-#: Controller/EventNotifications.php:264
-msgid "Event invitation \"%1$s\" at %2$s"
-msgstr ""
+#: Preference.php:86
+msgid "Position on the left time axis, day and week view should start with"
+msgstr "Pozycja na lewej osi czasu, niech widok dni i tygodni zaczyna się od"
 
-#: Controller/EventNotifications.php:267
-msgid "Event \"%1$s\" at %2$s has been canceled"
-msgstr ""
+#: Preference.php:89
+msgid "Default Calendar"
+msgstr "Domyślny kalendarz"
 
-#: Controller/EventNotifications.php:272
-msgid "Event \"%1$s\" at %2$s has been rescheduled"
-msgstr ""
+#: Preference.php:90
+msgid "The default calendar for invitations and new events"
+msgstr "Domyślny kalendarz dla zaproszeń i nowych terminów"
 
-#: Controller/EventNotifications.php:276
-msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr ""
+#: Preference.php:93
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
 
-#: Controller/EventNotifications.php:286
-msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr ""
+#: Preference.php:94
+msgid "The default favorite which is loaded on calendar startup"
+msgstr "Domyślny ulubiony termin ładowany przy uruchamianiu kalendarza"
 
-#: Controller/EventNotifications.php:290
-msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr ""
+#: Preference.php:97
+msgid "Get Notification Emails"
+msgstr "Powiadomienie e-mail o terminach"
 
-#: Controller/EventNotifications.php:294
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+#: Preference.php:98
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "Wybierz poziom szczegółowości powiadomień o wykonywanych akcjach. Zauważ proszę, że organizatorzy otrzymują powiadomienia o każdej aktualizacji, łącznie z odpowiedziami uczestników, o ile niniejsza opcja nie zostanie ustawiona na wartość \"Nigdy\""
 
-#: Controller/EventNotifications.php:298
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr ""
+#: Preference.php:101
+msgid "Send Notifications Emails of own Actions"
+msgstr "Wysyłaj powiadomienia e-mail o własnych akcjach"
 
-#: Controller/EventNotifications.php:302
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr ""
+#: Preference.php:102
+msgid "Get notifications emails for actions you did yourself"
+msgstr "Odbieraj powiadomienia e-mail o własnych akcjach"
 
-#: views/eventNotification.php:13
-msgid "Updates"
-msgstr ""
+#: Preference.php:156
+msgid "Never"
+msgstr "Nigdy"
 
-#: views/eventNotification.php:21
-msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr ""
+#: Preference.php:156
+msgid "On invitation and cancellation only"
+msgstr "Tylko w przypadku zaproszenia albo odrzucenia"
 
-#: views/eventNotification.php:28
-msgid "%1$s has been invited"
-msgstr ""
+#: Preference.php:156
+msgid "On time changes"
+msgstr "Przy zmianach czasu"
 
-#: views/eventNotification.php:33
-msgid "%1$s has been removed"
-msgstr ""
+#: Preference.php:156
+msgid "On all updates but attendee responses"
+msgstr "Przy aktualizacjach za wyjątkiem odpowiedzi uczestnika"
 
-#: views/eventNotification.php:40
-msgid "%1$s accepted invitation"
-msgstr ""
-
-#: views/eventNotification.php:44
-msgid "%1$s declined invitation"
-msgstr ""
-
-#: views/eventNotification.php:48
-msgid "Tentative response from %1$s"
-msgstr ""
-
-#: views/eventNotification.php:52
-msgid "No response from %1$s"
-msgstr ""
-
-#: views/eventNotification.php:61
-msgid "Event details"
-msgstr ""
+#: Preference.php:156
+msgid "On attendee responses too"
+msgstr "Także w przypadku odpowiedzi uczestnika"
 
 #~ msgid "admin"
 #~ msgstr "administrowanie"
@@ -728,1490 +774,3 @@ msgstr ""
 
 #~ msgid "run"
 #~ msgstr "uruchamianie"
-
-# Before you'll make a change here, please see the german translation.
-# Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetzung an.
-#~ msgid "run right description"
-#~ msgstr "Aby uzyskać dostęp do aplikacji, trzeba mieć uprawnienia do wykonywania"
-
-#~ msgid "Report bugs"
-#~ msgstr "raportowanie błędów"
-
-#~ msgid "Report bugs to the software vendor directly when they occur."
-#~ msgstr "Zgłoś błędy do dostawcy oprogramowania w chwili ich wystąpienia"
-
-#~ msgid "Check version"
-#~ msgstr "sprawdzanie wersji"
-
-#~ msgid "Check for new versions of this software."
-#~ msgstr "Sprawdź dostępność nowej wersji niniejszego oprogramowania"
-
-#~ msgid "Manage own profile"
-#~ msgstr "Zarządzaj własnym profilem"
-
-#~ msgid "The right to manage the own profile (selected contact data)."
-#~ msgstr "Uprawnienia do zarządzania własnym profilem (zaznaczone dane kontaktowe)."
-
-#~ msgid "Manage own client state"
-#~ msgstr "Zarządzaj statusem swojego klienta"
-
-#~ msgid "The right to manage the own client state."
-#~ msgstr "Uprawnienia do zarządzania statusem swojego klienta."
-
-#~ msgid "Data"
-#~ msgstr "Data"
-
-#~ msgid "Tags"
-#~ msgstr "Znaczniki"
-
-#~ msgid "Created by"
-#~ msgstr "Utworzono poprzez"
-
-#~ msgid "Activities"
-#~ msgstr "Aktywności"
-
-#~ msgid "default"
-#~ msgstr "domyślny"
-
-#~ msgid "by"
-#~ msgstr "przez"
-
-#~ msgid "Changed fields:"
-#~ msgstr "Zmienione pola:"
-
-#~ msgid "{0} minute"
-#~ msgid_plural "{0} minutes"
-#~ msgstr[0] "{0} minuta"
-#~ msgstr[1] "{0} minuty"
-#~ msgstr[2] "{0} minut"
-
-#~ msgid "{0} hour"
-#~ msgid_plural "{0} hours"
-#~ msgstr[0] "{0} godzina"
-#~ msgstr[1] "{0} godziny"
-#~ msgstr[2] "{0} godzin"
-
-#~ msgid "{0} workday"
-#~ msgid_plural "{0} workdays"
-#~ msgstr[0] "{0} dzień roboczy"
-#~ msgstr[1] "{0} dni robocze"
-#~ msgstr[2] "{0} dni roboczych"
-
-#~ msgid "{0} second"
-#~ msgid_plural "{0} seconds"
-#~ msgstr[0] "{0} sekund"
-#~ msgstr[1] "{0} sekundy"
-#~ msgstr[2] "{0} sekund"
-
-#~ msgid "Registration Wizard"
-#~ msgstr "Kreator rejestracji"
-
-#~ msgid "Given name"
-#~ msgstr "Imię"
-
-#~ msgid "Family name"
-#~ msgstr "Nazwisko"
-
-#~ msgid "Login name"
-#~ msgstr "Login"
-
-#~ msgid "Emailaddress"
-#~ msgstr "Adres e-mail"
-
-#~ msgid "Congratulations!"
-#~ msgstr "Gratulacje!"
-
-#~ msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
-#~ msgstr "Wszystkie wymagane informacje zostały wprowadzone. Jeśli naciśniesz przycisk Wyślij, prześlemy Tobie e-mail z potwierdzeniem rejestracji."
-
-#~ msgid "Outdent Text"
-#~ msgstr "Tekst bez wcięć"
-
-#~ msgid "Indent Text"
-#~ msgstr "Tekst z wcięciami"
-
-#~ msgid "Remove Formatting"
-#~ msgstr "Usuń formatowanie"
-
-#~ msgid "All {0}"
-#~ msgstr "Wszystkie {0}"
-
-#~ msgid "Shared {0}"
-#~ msgstr "Wspólne {0}"
-
-#~ msgid "Other Users {0}"
-#~ msgstr "{0} innych użytkowników"
-
-#~ msgid "My {0}"
-#~ msgstr "Moje {0}"
-
-#~ msgid "Your password expired. Please enter a new user password:"
-#~ msgstr "Twoje hasło wygasło. Proszę wprowadzić nowe hasło użytkownika:"
-
-#~ msgid "Login"
-#~ msgstr "Zaloguj się"
-
-#~ msgid "Username"
-#~ msgstr "Użytkownik"
-
-#~ msgid "Password"
-#~ msgstr "Hasło"
-
-#~ msgid "Tine 2.0 is made for you"
-#~ msgstr "To dla Ciebie rozwijamy Tine 2.0"
-
-#~ msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
-#~ msgstr "Tine 2.0 ma ułatwić prowadzenie biznesu i przybliżyć realizację procesów biznesowych do Twoich potrzeb. Dlatego uprzejmie zapraszamy do dyskusji z nami, prezentacji własnych sugestii i w razie potrzeby oferujemy pomoc."
-
-#~ msgid "Tine 2.0 Homepage"
-#~ msgstr "Strona domowa Tine 2.0"
-
-#~ msgid "Tine 2.0 Forum"
-#~ msgstr "Forum Tine 2.0"
-
-#~ msgid "about {0} minutes"
-#~ msgstr "około {0} minut"
-
-#~ msgid "Tine 2.0 needs your help"
-#~ msgstr "Tine 2.0 liczy na Twoją pomoc"
-
-#~ msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
-#~ msgstr "Aby następne wydania Tine 2.0 coraz lepiej spełniały Twoje oczekiwania, nieprzerwanie potrzebujemy odzewu na nasz produkt. Współpracując, pomóż nam i sobie."
-
-#~ msgid "participate!"
-#~ msgstr "współpracuj"
-
-#~ msgid "Languages"
-#~ msgstr "Języki"
-
-#~ msgid "Duration"
-#~ msgstr "Czas wypełniania ankiety"
-
-#~ msgid "Browser incompatible"
-#~ msgstr "Nieobsługiwana przeglądarka WWW"
-
-#~ msgid "Your browser is not supported by Tine 2.0."
-#~ msgstr "Tine 2.0 nie obsługuje przeglądarki WWW, której używasz."
-
-#~ msgid "Browser incompatible?"
-#~ msgstr "Nieobsługiwana przeglądarka WWW?"
-
-#~ msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
-#~ msgstr "Używasz nieobsługiwanej przeglądarki WWW. Może się ona zachować w niespodziewany sposób."
-
-#~ msgid "You might try one of these browsers:"
-#~ msgstr "Spróbuj skorzystać z następujących przeglądarek WWW:"
-
-#~ msgid "Logging you in..."
-#~ msgstr "Trwa logowanie …"
-
-#~ msgid "Please wait"
-#~ msgstr "Proszę czekać"
-
-#~ msgid "Login successful. Loading {0}..."
-#~ msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
-
-#~ msgid "Please wait!"
-#~ msgstr "Proszę czekać!"
-
-#~ msgid "Login failure"
-#~ msgstr "Błąd logowania"
-
-#~ msgid "Your username and/or your password are wrong!!!"
-#~ msgstr "Twój login oraz / lub hasło są nieprawidłowe!!!"
-
-#~ msgid "Errors"
-#~ msgstr "Błędy"
-
-#~ msgid "Please fix the errors noted."
-#~ msgstr "Proszę poprawić wskazane błędy."
-
-#~ msgid "Please enter your login data"
-#~ msgstr "Proszę wprowadzić dane logowania"
-
-#~ msgid "Search User"
-#~ msgstr "Znajdź użytkownika"
-
-#~ msgid "Search Group"
-#~ msgstr "Znajdź grupę"
-
-#~ msgid "Add Anyone"
-#~ msgstr "Dodaj kogokolwiek"
-
-#~ msgid "Anyone"
-#~ msgstr "Ktokolwiek"
-
-#~ msgid "Search for users ..."
-#~ msgstr "Znajdź użytkowników..."
-
-#~ msgid "Search for groups ..."
-#~ msgstr "Znajdź grupy..."
-
-#~ msgid "container"
-#~ msgid_plural "containers"
-#~ msgstr[0] "kontener"
-#~ msgstr[1] "kontenery"
-#~ msgstr[2] "kontenery"
-
-#~ msgid "You are not allowed to select the {0} '{1}':"
-#~ msgstr "Nie masz uprawnień, aby wybrać {0} '{1}':"
-
-#~ msgid "{0} grant is required for desired action"
-#~ msgstr "Dla tej akcji wymagane są uprawnienia {0}"
-
-#~ msgid "Insufficient Grants"
-#~ msgstr "Niewystarczające uprawnienia"
-
-#~ msgid "choose other {0}..."
-#~ msgstr "Wybierz z: {0}..."
-
-#~ msgid "Select a {0}"
-#~ msgstr "Wybierz {0}"
-
-#~ msgid "Recently used {0}:"
-#~ msgstr "Ostatnio używany {0}:"
-
-#~ msgid "please select a {0}"
-#~ msgstr "Proszę wybrać {0}"
-
-#~ msgid "Cancel"
-#~ msgstr "Anuluj"
-
-#~ msgid "Ok"
-#~ msgstr "OK"
-
-#~ msgid "is personal of"
-#~ msgstr "należy do"
-
-#~ msgid "is equal to"
-#~ msgstr "równa się"
-
-#~ msgid "Selected  {0}"
-#~ msgstr "Zaznaczone {0}"
-
-#~ msgid "Folder"
-#~ msgstr "Katalog"
-
-#~ msgid "Read"
-#~ msgstr "Odczyt"
-
-#~ msgid "The grant to read records of this container"
-#~ msgstr "Uprawnienia do czytania wierszy w kontenerze"
-
-#~ msgid "Add"
-#~ msgstr "Dodaj"
-
-#~ msgid "The grant to add records to this container"
-#~ msgstr "Uprawnienia do dodawania wierszy do kontenera"
-
-#~ msgid "Edit"
-#~ msgstr "Edytuj"
-
-#~ msgid "The grant to edit records in this container"
-#~ msgstr "Uprawnienia do edytowania wierszy w kontenerze"
-
-#~ msgid "Delete"
-#~ msgstr "Usuwanie"
-
-#~ msgid "The grant to delete records in this container"
-#~ msgstr "Uprawnienia do usuwania wierszy z kontenera"
-
-#~ msgid "Export"
-#~ msgid_plural "Export"
-#~ msgstr[0] "Eksport"
-#~ msgstr[1] "eksport"
-#~ msgstr[2] "eksport"
-
-#~ msgid "The grant to export records from this container"
-#~ msgstr "Uprawnienia do eksportowania wierszy z kontenera"
-
-#~ msgid "Sync"
-#~ msgstr "Synchronizuj"
-
-#~ msgid "The grant to synchronise records with this container"
-#~ msgstr "Uprawnienia do synchronizacji wierszy z kontenera"
-
-#~ msgid "Free Busy"
-#~ msgstr "Dostępny Zajęty"
-
-#~ msgid "The grant to access free busy information of events in this calendar"
-#~ msgstr "Prawo dostępu do informacji o terminach w tym kalendarzu"
-
-#~ msgid "The grant to access records marked as private in this container"
-#~ msgstr "Uprawnienia dostępu do wierszy w kontenerze oznaczonych jako osobiste"
-
-#~ msgid "Admin"
-#~ msgstr "Administrator"
-
-#~ msgid "The grant to administrate this container"
-#~ msgstr "Uprawnienia administratora kontenera"
-
-#~ msgid "Updating Grants"
-#~ msgstr "Aktualizacja uprawnień"
-
-#~ msgid "Error"
-#~ msgstr "Błąd"
-
-#~ msgid "You are not allowed to remove all admins for this container!"
-#~ msgstr "Nie masz uprawnień, aby usunąć wszystkich administratorów niniejszego kontenera."
-
-#~ msgid "Timezone"
-#~ msgstr "Strefa czasowa"
-
-#~ msgid "setting new timezone..."
-#~ msgstr "ustawianie nowej strefy czasowej..."
-
-#~ msgid "Please Wait"
-#~ msgstr "Proszę czekać"
-
-#~ msgid "New {0}"
-#~ msgstr "Nowa {0}"
-
-#~ msgid "Please enter the name of the new {0}:"
-#~ msgstr "Proszę wprowadzić nazwę nowej {0}:"
-
-#~ msgid "No {0} added"
-#~ msgstr "{0} nie została dodana"
-
-#~ msgid "You have to supply a {0} name!"
-#~ msgstr "Musisz wprowadzić nazwę {0}!"
-
-#~ msgid "Creating {0}..."
-#~ msgstr "Tworzenie {0}..."
-
-#~ msgid "Confirm"
-#~ msgstr "Proszę o odpowiedź"
-
-#~ msgid "Do you really want to delete the {0} \"{1}\"?"
-#~ msgstr "Czy na pewno chcesz usunąć {0} \"{1}\"?"
-
-#~ msgid "Deleting {0} \"{1}\""
-#~ msgstr "Usuwanie {0} \"{1}\""
-
-#~ msgid "Please enter the new name of the {0}:"
-#~ msgstr "Proszę wprowadzić nową nazwę w kategorii: {0}:"
-
-#~ msgid "Not renamed {0}"
-#~ msgstr "Nazwa {0} nie została zmieniona"
-
-#~ msgid "Updating {0} \"{1}\""
-#~ msgstr "Aktualizacja {0} \"{1}\""
-
-#~ msgid "Manage Permissions for {0} \"{1}\""
-#~ msgstr "Edytuj uprawnienia dla {0} \"{1}\""
-
-#~ msgid "Add {0}"
-#~ msgstr "Dodaj {0}"
-
-#~ msgid "Rename {0}"
-#~ msgstr "Zmień nazwę w: {0}"
-
-#~ msgid "Set color for {0}"
-#~ msgstr "Ustaw kolor dla: {0}"
-
-#~ msgid "Manage permissions"
-#~ msgstr "Edytu uprawnienia"
-
-#~ msgid "Reload {0}"
-#~ msgstr "Przeładuj {0}"
-
-#~ msgid "Show"
-#~ msgstr "Wyświetl"
-
-#~ msgid "add new filter"
-#~ msgstr "dodaj nowy filtr"
-
-#~ msgid "reset all filters"
-#~ msgstr "Resetuj filtry"
-
-#~ msgid "start search"
-#~ msgstr "Znajdź"
-
-#~ msgid "save as favorite"
-#~ msgstr "zapisz jako ulubione"
-
-#~ msgid "select a field"
-#~ msgstr "zaznacz pole"
-
-#~ msgid "Delete this filter"
-#~ msgstr "Usuń ten filtr"
-
-#~ msgid "and"
-#~ msgstr "i"
-
-#~ msgid "Remove record"
-#~ msgstr "Usuń wiersz"
-
-#~ msgid "Search for records ..."
-#~ msgstr "Znajdź wiersze ..."
-
-#~ msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-#~ msgstr "{0} nie zostały znalezione. Proszę spróbować zmienić kryteria wyszukiwania, opcje wyświetlania albo {1}, w których szukasz."
-
-#~ msgid "Edit {0}"
-#~ msgstr "Edytuj {0}"
-
-#~ msgid "Copy {0}"
-#~ msgstr "Kopiuj {0}"
-
-#~ msgid "Delete {0}"
-#~ msgid_plural "Delete {0}"
-#~ msgstr[0] "Usuń {0}"
-#~ msgstr[1] "Usuń {0}"
-#~ msgstr[2] "Usuń {0}"
-
-#~ msgid "Displaying records {0} - {1} of {2}"
-#~ msgstr "Wyświetlane wiersze {0} - {1} z {2}"
-
-#~ msgid "No {0} to display"
-#~ msgstr "{0} niezdefiniowane"
-
-#~ msgid "Tagging"
-#~ msgstr "Przypisywanie znaczników"
-
-#~ msgid "Creation Time"
-#~ msgstr "Czas utworzenia"
-
-#~ msgid "Created By"
-#~ msgstr "Utworzona przez"
-
-#~ msgid "Last Modified Time"
-#~ msgstr "Data ostatniej zmiany"
-
-#~ msgid "Last Modified By"
-#~ msgstr "Ostatnio zmienione przez"
-
-#~ msgid "Not Allowed"
-#~ msgstr "Brak uprawnień"
-
-#~ msgid "You are not allowed to delete all pages at once"
-#~ msgstr "Nie masz uprawnień, aby usunąć wszystkie strony na raz"
-
-#~ msgid "Do you really want to delete the selected record"
-#~ msgid_plural "Do you really want to delete the selected records"
-#~ msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
-#~ msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
-#~ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
-
-#~ msgid "Deleting {0}"
-#~ msgstr "Usuwanie {0}"
-
-#~ msgid " ... This may take a long time!"
-#~ msgstr "... To może długo potrwać!"
-
-#~ msgid "Failed"
-#~ msgstr "Próba nieudana"
-
-#~ msgid "Could not delete {0}."
-#~ msgstr "Usunięcie {0} było niemożliwe."
-
-#~ msgid "show details"
-#~ msgstr "pokaż / ukryj  szczegóły"
-
-#~ msgid "Always show advanced filters"
-#~ msgstr "Zawsze pokazuj zaawansowane filtry"
-
-#~ msgid "Your view is limited by {0} criteria:"
-#~ msgid_plural "Your view is limited by {0} criterias:"
-#~ msgstr[0] "Widok ograniczony filtrem:"
-#~ msgstr[1] "Widoki ograniczone {0} filtrami:"
-#~ msgstr[2] "Widoki ograniczone {0} filtrami:"
-
-#~ msgid "contains"
-#~ msgstr "zawiera"
-
-#~ msgid "is greater than"
-#~ msgstr "większy od"
-
-#~ msgid "is less than"
-#~ msgstr "mniejszy od"
-
-#~ msgid "is not"
-#~ msgstr "nie jest"
-
-#~ msgid "one of"
-#~ msgstr "jeden z"
-
-#~ msgid "none of"
-#~ msgstr "żaden z"
-
-#~ msgid "is before"
-#~ msgstr "przed"
-
-#~ msgid "is after"
-#~ msgstr "następuje po"
-
-#~ msgid "is within"
-#~ msgstr "przypada na"
-
-#~ msgid "is in week no."
-#~ msgstr "jest w tygodniu"
-
-#~ msgid "starts with"
-#~ msgstr "zaczyna się od"
-
-#~ msgid "ends with"
-#~ msgstr "kończy się na"
-
-#~ msgid "select a operator"
-#~ msgstr "wybierz operator"
-
-#~ msgid "Search Account ..."
-#~ msgstr "Znajdź konto ..."
-
-#~ msgid "today"
-#~ msgstr "dzisiaj"
-
-#~ msgid "yesterday"
-#~ msgstr "wczoraj"
-
-#~ msgid "this week"
-#~ msgstr "bieżący tydzień"
-
-#~ msgid "last week"
-#~ msgstr "ubiegły tydzień"
-
-#~ msgid "the week before last"
-#~ msgstr "przedostatni tydzień"
-
-#~ msgid "this month"
-#~ msgstr "bieżący miesiąc"
-
-#~ msgid "last month"
-#~ msgstr "ubiegły miesiąc"
-
-#~ msgid "this quarter"
-#~ msgstr "bieżący kwartał"
-
-#~ msgid "last quarter"
-#~ msgstr "ubiegły kwartał"
-
-#~ msgid "this year"
-#~ msgstr "bieżący rok"
-
-#~ msgid "last year"
-#~ msgstr "ubiegły rok"
-
-#~ msgid "tomorrow"
-#~ msgstr "jutro"
-
-#~ msgid "next week"
-#~ msgstr "przyszły tydzień"
-
-#~ msgid "next month"
-#~ msgstr "przyszły miesiąc"
-
-#~ msgid "next quarter"
-#~ msgstr "przyszły kwartał"
-
-#~ msgid "next year"
-#~ msgstr "przyszły rok"
-
-#~ msgid "Upload Failed"
-#~ msgstr "Wysyłanie zakończone niepowodzeniem"
-
-#~ msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-#~ msgstr "Przesłanie pliku było niemożliwe. Możliwe, że rozmiar pliku jest za duży. Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku:"
-
-#~ msgid "Remove file"
-#~ msgstr "Usuń plik"
-
-#~ msgid "Add file"
-#~ msgstr "Dodaj plik"
-
-#~ msgid "name"
-#~ msgstr "nazwa"
-
-#~ msgid "size"
-#~ msgstr "rozmiar"
-
-#~ msgid "type"
-#~ msgstr "typ"
-
-#~ msgid "Remove"
-#~ msgstr "Usuń"
-
-#~ msgid "Add a Note..."
-#~ msgstr "Dodaj notatkę..."
-
-#~ msgid "Note"
-#~ msgstr "Notatka"
-
-#~ msgid "Add new note"
-#~ msgstr "Dodaj nową notatkę"
-
-#~ msgid "Notes"
-#~ msgstr "Notatki"
-
-#~ msgid "Enter new note:"
-#~ msgstr "Napisz nową notatkę"
-
-#~ msgid "Add Note"
-#~ msgstr "Dodaj notatkę"
-
-#~ msgid "Add a {0} Note"
-#~ msgstr "Dodaj notatkę ({0})"
-
-#~ msgid "Timestamp"
-#~ msgstr "Znacznik czasu"
-
-#~ msgid "Displaying history records {0} - {1} of {2}"
-#~ msgstr "Wyświetlanie historii, wiersze {0} - {1} z {2}"
-
-#~ msgid "No history to display"
-#~ msgstr "Brak historii"
-
-#~ msgid "History"
-#~ msgstr "Historia"
-
-#~ msgid "Time"
-#~ msgstr "Czas"
-
-#~ msgid "containers"
-#~ msgstr "kontenery"
-
-#~ msgid "Favorites"
-#~ msgstr "Ulubione"
-
-#~ msgid "Save current view as favorite"
-#~ msgstr "Zapisz bieżący widok w ulubionych"
-
-#~ msgid "Alarms"
-#~ msgstr "Przypomnienia"
-
-#~ msgid "Custom Datetime"
-#~ msgstr "Data i czas użytkownika"
-
-#~ msgid "Send Alarm"
-#~ msgstr "Wyślij przypomnienie"
-
-#~ msgid "0 minutes before"
-#~ msgstr "0 minut wcześniej"
-
-#~ msgid "15 minutes before"
-#~ msgstr "15 minut wcześniej"
-
-#~ msgid "30 minutes before"
-#~ msgstr "30 minut wcześniej"
-
-#~ msgid "1 hour before"
-#~ msgstr "1 godzinę wcześniej"
-
-#~ msgid "2 hours before"
-#~ msgstr "2 godziny wcześniej"
-
-#~ msgid "1 day before"
-#~ msgstr "1 dzień wcześniej"
-
-#~ msgid "Links"
-#~ msgstr "Linki"
-
-#~ msgid "What would you like to do?"
-#~ msgstr "Proszę o podjęcie decyzji:"
-
-#~ msgid "You need to select an option!"
-#~ msgstr "Należy zaznaczyć opcję."
-
-#~ msgid "Export {0} {1}"
-#~ msgstr "Eksport {0} {1}"
-
-#~ msgid "Export definition"
-#~ msgstr "Definicja eksportu"
-
-#~ msgid "Select Export Definition ..."
-#~ msgstr "Wybierz definicję eksportu ..."
-
-#~ msgid "Please enter your credentials"
-#~ msgstr "Proszę wpisać swoje dane dostępowe"
-
-#~ msgid "Admin Mode"
-#~ msgstr "Tryb administratora"
-
-#~ msgid "Applications"
-#~ msgstr "Aplikacje"
-
-#~ msgid "Edit Preferences"
-#~ msgstr "Edytuj ustawienia"
-
-#~ msgid "Loading ..."
-#~ msgstr "Ładowanie ..."
-
-#~ msgid "You need to correct the red marked fields before config could be saved"
-#~ msgstr "Przed zapisaniem konfiguracji należy poprawić wskazane pola"
-
-#~ msgid "Saving of preferences failed."
-#~ msgstr "Zapisywanie ustawień zakończone niepowodzeniem."
-
-#~ msgid "Preferences"
-#~ msgstr "Ustawienia"
-
-#~ msgid "There are no preferences for this application."
-#~ msgstr "Brak ustawień dla tej aplikacji."
-
-#~ msgid "Files"
-#~ msgstr "Pliki"
-
-#~ msgid "Import definition"
-#~ msgstr "Definicja importu"
-
-#~ msgid "Import into {0}"
-#~ msgstr "Importuj do: {0}"
-
-#~ msgid "Dry run"
-#~ msgstr "Przetestuj"
-
-#~ msgid "No files added"
-#~ msgstr "Nie dodano plików"
-
-#~ msgid "You need to add files to import."
-#~ msgstr "Należy dodać plik(i) z danymi do zaimportowania"
-
-#~ msgid "Dry run results"
-#~ msgstr "Wyniki testów"
-
-#~ msgid "Import test successful for {0} records, import test failed for {1} records."
-#~ msgstr "Testy importu powiodły się dla {0} wierszy, testy importu nie powiodły się dla {1} wierszy."
-
-#~ msgid "Import results"
-#~ msgstr "Wyniki importu"
-
-#~ msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
-#~ msgstr "Import skuteczny dla {0} wierszy / import nieskuteczny dla {1} wierszy / znaleziono {2} powtórzenia"
-
-#~ msgid "Change settings for application {0}"
-#~ msgstr "Zmień ustawienia aplikacji {0}"
-
-#~ msgid "Defaults"
-#~ msgstr "Ustawienia domyślne"
-
-#~ msgid "Apply"
-#~ msgstr "Akceptuj"
-
-#~ msgid "delete"
-#~ msgstr "usuń"
-
-#~ msgid "Saved in"
-#~ msgstr "Zapisz w"
-
-#~ msgid "Add New {0}"
-#~ msgstr "Dodaj {0}"
-
-#~ msgid "Edit {0} \"{1}\""
-#~ msgstr "Edytuj {0} \"{1}\""
-
-#~ msgid "Transferring {0}..."
-#~ msgstr "Przesyłanie {0}..."
-
-#~ msgid "Do you really want to delete this {0}?"
-#~ msgstr "Czy na pewno chcesz usunąć ten {0}?"
-
-#~ msgid "General Preferences"
-#~ msgstr "Ogólne ustawienia"
-
-#~ msgid "My Profile"
-#~ msgstr "Mój profil"
-
-#~ msgid "Language"
-#~ msgstr "Język"
-
-#~ msgid "setting new language..."
-#~ msgstr "ustawianie nowego języka..."
-
-#~ msgid "Add a new personal tag"
-#~ msgstr "Dodaj nowy, osobisty znacznik"
-
-#~ msgid "Add New Personal Tag"
-#~ msgstr "Dodaj nowy, osobisty znacznik"
-
-#~ msgid "Please note: You create a personal tag. Only you can see it!"
-#~ msgstr "Pamiętaj proszę, że tworzysz nowy, osobisty znacznik. Tylko Ty będziesz go widzieć!"
-
-#~ msgid "Enter tag name:"
-#~ msgstr "Wpisz nazwę znacznika:"
-
-#~ msgid "personal"
-#~ msgstr "osobisty"
-
-#~ msgid "No Tags to display"
-#~ msgstr "Brak znaczników"
-
-#~ msgid "Detach tag"
-#~ msgid_plural "Detach tags"
-#~ msgstr[0] "Odłącz znacznik"
-#~ msgstr[1] "Odłącz znaczniki"
-#~ msgstr[2] "Odłącz znaczniki"
-
-#~ msgid "Edit tag"
-#~ msgstr "Edytuj znacznik"
-
-#~ msgid "Rename Tag"
-#~ msgstr "Zmień nazwę znacznika"
-
-#~ msgid "Please enter a new name:"
-#~ msgstr "Proszę wprowadzić nową nazwę:"
-
-#~ msgid "Edit Description"
-#~ msgstr "Edytuj opis"
-
-#~ msgid "Description for tag"
-#~ msgstr "Opis znacznika"
-
-#~ msgid "Please enter new description:"
-#~ msgstr "Proszę wprowadzić nowy opis:"
-
-#~ msgid "Change Color"
-#~ msgstr "Zmień kolor"
-
-#~ msgid "Delete Tag"
-#~ msgid_plural "Delete Tags"
-#~ msgstr[0] "Usuń znacznik"
-#~ msgstr[1] "Usuń znaczniki"
-#~ msgstr[2] "Usuń znaczniki"
-
-#~ msgid "Realy Delete Selected Tag?"
-#~ msgid_plural "Realy Delete Selected Tags?"
-#~ msgstr[0] "Na pewno usunąć wybrany znacznik?"
-#~ msgstr[1] "Na pewno usunąć wybrane znaczniki?"
-#~ msgstr[2] "Na pewno usunąć wybrane znaczniki?"
-
-#~ msgid "the selected tag will be deleted and disapear for all entries"
-#~ msgid_plural "The selected tags will be removed and disapear for all entries"
-#~ msgstr[0] "Wybrany znacznik zostanie usunięty i zniknie dla wszystkich wpisów"
-#~ msgstr[1] "Wybrane znaczniki zostaną usunięte i znikną dla wszystkich wpisów"
-#~ msgstr[2] "Wybrane znaczniki zostaną usunięte i znikną dla wszystkich wpisów"
-
-#~ msgid "Please wait a moment..."
-#~ msgstr "Proszę chwilę poczekać..."
-
-#~ msgid "Deleting Tag"
-#~ msgid_plural "Deleting Tags"
-#~ msgstr[0] "Usuwanie znacznika"
-#~ msgstr[1] "Usuwanie znaczników"
-#~ msgstr[2] "Usuwanie znaczników"
-
-#~ msgid "Could not delete Tag(s)."
-#~ msgstr "Usunięcie znacznika/znaczników było niemożliwe."
-
-#~ msgid "Notice"
-#~ msgstr "Uwaga"
-
-#~ msgid "The minimum tag length is three."
-#~ msgstr "Minimalna długość znacznika wynosi trzy znaki."
-
-#~ msgid "Could not create tag."
-#~ msgstr "Utworzenie znacznika było niemożliwe."
-
-#~ msgid "Could not update tag."
-#~ msgstr "Aktualizacja znacznika była niemożliwa."
-
-#~ msgid "Enter tag name"
-#~ msgstr "Wpisz nazwę znacznika"
-
-#~ msgid "Searching..."
-#~ msgstr "Wyszukiwanie..."
-
-#~ msgid "Color"
-#~ msgstr "Kolor"
-
-#~ msgid "tag name"
-#~ msgstr "nazwa znacznika"
-
-#~ msgid "Add Tag"
-#~ msgstr "Dodaj znacznik"
-
-#~ msgid "Attach the following tag to all selected items:"
-#~ msgstr "Przypisz następujący znacznik do wszystkich zaznaczonych pozycji"
-
-#~ msgid "Select Tag"
-#~ msgstr "Wybierz znacznik"
-
-#~ msgid "Tag"
-#~ msgstr "Znacznik"
-
-#~ msgid "Favorite"
-#~ msgid_plural "Favorites"
-#~ msgstr[0] "Ulubiony"
-#~ msgstr[1] "ulubione"
-#~ msgstr[2] "ulubione"
-
-#~ msgid "My favorites"
-#~ msgstr "Moje ulubione"
-
-#~ msgid "Delete Favorite"
-#~ msgstr "Usuń z ulubionych"
-
-#~ msgid "Rename Favorite"
-#~ msgstr "Zmień nazwę ulubionych"
-
-#~ msgid "Do you really want to delete the favorite \"{0}\"?"
-#~ msgstr "Czy na pewno chcesz usunąć ulubione \"{0}\"?"
-
-#~ msgid "Deleting Favorite \"{0}\""
-#~ msgstr "Usuwanie \"{0}\" z ulubionych"
-
-#~ msgid "New Name"
-#~ msgstr "Nowa nazwa"
-
-#~ msgid "Please enter the new name for favorite \"{0}\"?"
-#~ msgstr "Proszę zmienić nazwę \"{0}\" w ulubionych."
-
-#~ msgid "Renaming Favorite \"{0}\""
-#~ msgstr "Zmień nazwę \"{0}\" w ulubionych"
-
-#~ msgid "Could not save Favorite"
-#~ msgstr "Nie mogłem zapisać w ulubionych"
-
-#~ msgid "Your current view does not support favorites"
-#~ msgstr "Twój bieżący widok nie obsługuje ulubionych"
-
-#~ msgid "save filter"
-#~ msgstr "Zapisz filtr"
-
-#~ msgid "Please enter a name for the favorite"
-#~ msgstr "Proszę dodać nazwę do ulubionych"
-
-#~ msgid "Favorite not Saved"
-#~ msgstr "Nie zapisano do ulubionych"
-
-#~ msgid "You have to supply a name for the favorite!"
-#~ msgstr "Wprowadź nazwę do ulubionych."
-
-#~ msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
-#~ msgstr "Wpisz krótszą nazwę. Nazwy ulubionych nie mogą być dłuższe niż 40 znaków."
-
-#~ msgid "Saving favorite"
-#~ msgstr "Zapisywanie ulubionych"
-
-#~ msgid "Overwriting system favorites is not yet supported"
-#~ msgstr "Nadpisywanie systemowych ulubionych jeszcze nie jest obsługiwane"
-
-#~ msgid "New version of Tine 2.0 available"
-#~ msgstr "Dostępna jest nowa wersja Tine 2.0"
-
-#~ msgid "Version \"{0}\" of Tine 2.0 is available."
-#~ msgstr "Dostępna jest wersja \"{0}\" Tine 2.0."
-
-#~ msgid "It's a critical update and must be installed as soon as possible!"
-#~ msgstr "To jest krytyczna aktualizacja i musi być zainstalowana jak najszybciej!"
-
-#~ msgid "Please consider updating!"
-#~ msgstr "Proszę rozważyć aktualizację!"
-
-#~ msgid "Invalid configuration"
-#~ msgstr "Nieprawidłowa konfiguracja"
-
-#~ msgid "Transferring Configuration..."
-#~ msgstr "Konfiguracja przesyłania..."
-
-#~ msgid "Save config"
-#~ msgstr "Zapisz konfigurację"
-
-#~ msgid "Reload config"
-#~ msgstr "Przeładuj plik konfiguracyjny"
-
-#~ msgid "low"
-#~ msgstr "niski"
-
-#~ msgid "normal"
-#~ msgstr "normalny"
-
-#~ msgid "high"
-#~ msgstr "wysoki"
-
-#~ msgid "urgent"
-#~ msgstr "pilny"
-
-#~ msgid "Custom Fields"
-#~ msgstr "Pola użytkownika"
-
-#~ msgid "General"
-#~ msgstr "Uwagi ogólne"
-
-#~ msgid "There are no custom fields yet"
-#~ msgstr "Brak pól użytkownika"
-
-#~ msgid "User: {0}"
-#~ msgstr "Użytkownik: {0}"
-
-#~ msgid "About {0}"
-#~ msgstr "O {0}"
-
-#~ msgid "Debug Console (Ctrl + F11)"
-#~ msgstr "Konsola debuggera (Ctrl + F11)"
-
-#~ msgid "Edit Profile"
-#~ msgstr "Edytuj profil"
-
-#~ msgid "Change password"
-#~ msgstr "Zmień hasło"
-
-#~ msgid "Logout"
-#~ msgstr "Wyloguj"
-
-#~ msgid "Logout from {0}"
-#~ msgstr "Wyloguj z {0}"
-
-#~ msgid "About Tine 2.0"
-#~ msgstr "O Tine 2.0"
-
-#~ msgid "Are you sure you want to logout?"
-#~ msgstr "Czy na pewno chcesz się wylogować?"
-
-#~ msgid "Logging you out..."
-#~ msgstr "Wylogowanie..."
-
-#~ msgid "enter searchfilter"
-#~ msgstr "wpisz szukaną frazę"
-
-#~ msgid "{0} selected"
-#~ msgstr "zaznaczonych {0}"
-
-#~ msgid "Unselect all"
-#~ msgstr "Odznacz wszystko"
-
-#~ msgid "Select all visible ({0} records)"
-#~ msgstr "Zaznacz wszystkie widoczne ({0} wiersze /-y)"
-
-#~ msgid "Select all pages ({0} records)"
-#~ msgstr "Zaznacz wszystkie strony ({0} wiersze /-y)"
-
-#~ msgid "Toggle selection"
-#~ msgstr "Odwróć zaznaczenie"
-
-#~ msgid "online"
-#~ msgstr "online"
-
-#~ msgid "offline"
-#~ msgstr "offline"
-
-#~ msgid "Loading"
-#~ msgstr "Ładowanie"
-
-#~ msgid "Click to edit"
-#~ msgstr "Kliknij, aby edytować"
-
-#~ msgid "Not An Image"
-#~ msgstr "To nie jest plik graficzny"
-
-#~ msgid "Please select an image file (gif/png/jpeg)"
-#~ msgstr "Proszę wybrać plik graficzny (gif/png/jpeg)"
-
-#~ msgid "Could not upload image. Please notify your Administrator"
-#~ msgstr "Wysłanie grafiki było niemożliwe. Proszę powiadomić swojego administratora"
-
-#~ msgid "Change Image"
-#~ msgstr "Zmień grafikę"
-
-#~ msgid "Crop Image"
-#~ msgstr "Dopasuj rozmiar grafiki"
-
-#~ msgid "Delete Image"
-#~ msgstr "Usuń grafikę"
-
-#~ msgid "Show Original Image"
-#~ msgstr "Pokaż oryginalną grafikę"
-
-#~ msgid "Image Failed"
-#~ msgstr "Przetwarzanie grafiki zakończone niepowodzeniem"
-
-#~ msgid "Could not load image. Please notify your Administrator"
-#~ msgstr "Załadowanie grafiki było niemożliwe. Proszę powiadomić swojego administratora"
-
-#~ msgid "Software Version"
-#~ msgstr "Wersja oprogramowania"
-
-#~ msgid "Missing Applications"
-#~ msgstr "Brakujące aplikacje"
-
-#~ msgid "There are no applications enabled for you. Please contact your administrator."
-#~ msgstr "Nie masz włączonych aplikacji. Proszę się skontaktować ze swoim administratorem."
-
-#~ msgid "Abnormal End"
-#~ msgstr "Zakończenie awaryjne"
-
-#~ msgid "Send Report"
-#~ msgstr "Wyślij raport"
-
-#~ msgid "An error occurred, the program ended abnormal."
-#~ msgstr "Wystąpił błąd. Praca programu została zakończona awaryjnie."
-
-#~ msgid "The last action you made was potentially not performed correctly."
-#~ msgstr "Prawdopodobnie ostatnia akcja nie została wykonana poprawnie."
-
-#~ msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
-#~ msgstr "Prosimy o pomoc w ulepszaniu niniejszego oprogramowania i załączenie krótkiego opisu czynności wykonywanych zanim wystąpił błąd."
-
-#~ msgid "Send Contact Information"
-#~ msgstr "Wyślij informację o kontakcie"
-
-#~ msgid "Details:"
-#~ msgstr "Szczegóły:"
-
-#~ msgid "Sending report..."
-#~ msgstr "Wysyłanie raportu …"
-
-#~ msgid "Please wait a moment"
-#~ msgstr "Proszę chwilę poczekać"
-
-#~ msgid "Transmission Completed"
-#~ msgstr "Transmisja zakończona"
-
-#~ msgid "Your report has been sent. Thanks for your contribution"
-#~ msgstr "Twój raport został wysłany. Dziękujemy za pomoc w ulepszaniu oprogramowania."
-
-#~ msgid "Please restart your browser now!"
-#~ msgstr "Proszę ponownie uruchomić przeglądarkę!"
-
-#~ msgid "Change Password For \"{0}\""
-#~ msgstr "Zmień hasło dla \"{0}\""
-
-#~ msgid "Old Password"
-#~ msgstr "Stare hasło"
-
-#~ msgid "New Password"
-#~ msgstr "Nowe hasło"
-
-#~ msgid "Repeat new Password"
-#~ msgstr "Powtórz nowe hasło"
-
-#~ msgid "Please Wait!"
-#~ msgstr "Proszę czekać!"
-
-#~ msgid "changing password..."
-#~ msgstr "zmiana hasła…"
-
-#~ msgid "Success"
-#~ msgstr "Zakończone sukcesem"
-
-#~ msgid "Your password has been changed."
-#~ msgstr "Twoje hasło zostało zmienione."
-
-#~ msgid "Failure"
-#~ msgstr "Próba nieudana"
-
-#~ msgid "The new passwords mismatch, please correct them."
-#~ msgstr "Nowe hasła nie są takie same, proszę je poprawić."
-
-#~ msgid "Profile Information"
-#~ msgstr "Informacja o profilu"
-
-#~ msgid "The field is readable part of the profile"
-#~ msgstr "To pole jest częścią profilu do odczytu"
-
-#~ msgid "The field is editable part of the profile"
-#~ msgstr "To pole jest częścią profilu do edycji"
-
-#~ msgid "Field Name"
-#~ msgstr "Nazwa pola"
-
-#~ msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
-#~ msgstr "Błąd krytyczny. Aktualizacja danych klienta nie powiodła się. Proszę się skontaktować ze swoim administratorem i / lub zrestartować / przeładować przeglądarkę."
-
-#~ msgid "Authorisation Required"
-#~ msgstr "Konieczne uwierzytelnienie"
-
-#~ msgid "Your session timed out. You need to login again."
-#~ msgstr "Twoja sesja wygasła. Musisz się ponownie zalogować."
-
-#~ msgid "Insufficient Rights"
-#~ msgstr "Niewystarczające uprawnienia"
-
-#~ msgid "Sorry, you are not permitted to perform this action"
-#~ msgstr "Niestety nie masz uprawnień do wykonania tej akcji"
-
-#~ msgid "Not Found"
-#~ msgstr "Nie znaleziono"
-
-#~ msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
-#~ msgstr "Niestety Twoje zapytanie nie zostało wykonane, ponieważ nie zostały znalezione wymagane dane. W większości przypadków oznacza to, że ktoś te dane usunął. Proszę odświeżyć obecny widok."
-
-#~ msgid "Concurrent Updates"
-#~ msgstr "Bieżące aktualizacje"
-
-#~ msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
-#~ msgstr "Podczas edycji danych ktoś inny zapisał ten wiersz. Przeładuj stonę i ponownie wprowadź zmiany."
-
-#~ msgid "Service Unavailable"
-#~ msgstr "Usługa niedostępna"
-
-#~ msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
-#~ msgstr "Serwer nie może teraz zrealizować zapytania z powodu chwilowego przeciążenia albo prac konserwacyjnych. Proszę spróbować ponownie lub powiadomić swojego administratora."
-
-#~ msgid "Connection lost, please check your network!"
-#~ msgstr "Połączenie zostało przerwane, proszę sprawdzić sieć!"
-
-#~ msgid "Timeout"
-#~ msgstr "Limit czasu"
-
-#~ msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
-#~ msgstr "Niestety, dozwolony czas przetwarzania Twojego zapytania został przekroczony. Proszę przeładuj przeglądarkę."
-
-#~ msgid "No Response"
-#~ msgstr "Brak odpowiedzi"
-
-#~ msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
-#~ msgstr "Niestety serwer nie przesłał żadnych danych. Proszę przeładować przeglądarkę WWW, ponowić próbę albo skontaktować się ze swoim administratorem"
-
-#~ msgid "No Role Memberships"
-#~ msgstr "Brak przypisania do funkcji"
-
-#~ msgid "Your user account has no role memberships. Please contact your administrator."
-#~ msgstr "Twoje konto nie jest przypisane do funkcji. Proszę się skontaktować ze swoim administratorem."
-
-#~ msgid "Groups"
-#~ msgstr "Grupy"
-
-#~ msgid "Import"
-#~ msgid_plural "Imports"
-#~ msgstr[0] "Import"
-#~ msgstr[1] "Importy"
-#~ msgstr[2] "Importy"
-
-#~ msgid "Credentials"
-#~ msgid_plural "Credentials"
-#~ msgstr[0] "Dane uwierzytelniające"
-#~ msgstr[1] "dane uwierzytelniające"
-#~ msgstr[2] "dane uwierzytelniające"
-
-#~ msgid "Relation"
-#~ msgid_plural "Relations"
-#~ msgstr[0] "Relacja"
-#~ msgstr[1] "Relacje"
-#~ msgstr[2] "Relacje"
-
-#~ msgid "Department"
-#~ msgid_plural "Departments"
-#~ msgstr[0] "Dział"
-#~ msgstr[1] "działy"
-#~ msgstr[2] "działy"
-
-#~ msgid "Config"
-#~ msgid_plural "Configs"
-#~ msgstr[0] "Plik konfiguracyjny"
-#~ msgstr[1] "pliki konfiguracyjne"
-#~ msgstr[2] "pliki konfiguracyjne"
-
-#~ msgid "Configs"
-#~ msgstr "Pliki konfiguracyjne"
-
-#~ msgid "Task"
-#~ msgid_plural "Tasks"
-#~ msgstr[0] "Zadanie"
-#~ msgstr[1] "zadania"
-#~ msgstr[2] "zadania"
-
-#~ msgid "to do list"
-#~ msgid_plural "to do lists"
-#~ msgstr[0] "Lista zadań"
-#~ msgstr[1] "listy zadań"
-#~ msgstr[2] "listy zadań"
-
-#~ msgid "Tine 2.0 needs to be updated or is not installed yet."
-#~ msgstr "Tine 2.0 wymaga aktualizacji albo jeszcze nie jest zainstalowana."
-
-#~ msgid "Please wait or contact your administrator"
-#~ msgstr "Proszę poczekać albo skontaktować się ze swoim administratorem"
-
-#~ msgid "note"
-#~ msgstr "zwykłą"
-
-#~ msgid "default note type"
-#~ msgstr "domyślny typ: notatka"
-
-#~ msgid "telephone"
-#~ msgstr "telefon"
-
-#~ msgid "telephone call"
-#~ msgstr "telefon"
-
-#~ msgid "email"
-#~ msgstr "e-mail"
-
-#~ msgid "email contact"
-#~ msgstr "kontakt e-mail"
-
-#~ msgid "created"
-#~ msgstr "utworzony"
-
-#~ msgid "record created"
-#~ msgstr "wiersz utworzony"
-
-#~ msgid "changed"
-#~ msgstr "zmieniony"
-
-#~ msgid "record changed"
-#~ msgstr "wiersz zmieniony"
-
-#~ msgid "The timezone in which dates are shown in Tine 2.0."
-#~ msgstr "Strefa czasowa, w której Tine 2.0 wyświetla dane."
-
-#~ msgid "The language of the Tine 2.0 GUI."
-#~ msgstr "Język dla GUI w Tine 2.0."
-
-#~ msgid "Default Application"
-#~ msgstr "Domyślna aplikacja"
-
-#~ msgid "The default application to show after login."
-#~ msgstr "Domyślna aplikacja wyświetlana po zalogowaniu."
-
-#~ msgid "Window Type"
-#~ msgstr "Typ okna"
-
-#~ msgid "You can choose between ExtJs style windows or normal Browser popup windows."
-#~ msgstr "Możesz wybrać styl okien ExtJs albo zwykłe okna wyskakujące w przeglądarce."
-
-#~ msgid "Confirm Logout"
-#~ msgstr "Potwierdź wylogowanie"
-
-#~ msgid "Show confirmation dialog on logout."
-#~ msgstr "Wyświetl okno dialogowe potwierdzające chęć wylogowania."
-
-#~ msgid "Your session is not valid. You need to login again."
-#~ msgstr "Twoja sesja wygasła. Musisz się ponownie zalogować."
-
-#~ msgid "Custom datetime"
-#~ msgstr "Data i czas użytkownika"
-
-#~ msgid "Internal {0}"
-#~ msgstr "Wewnętrzne {0}"
-
-#~ msgid "Overwriteing system favorites is not yet supported"
-#~ msgstr "Nadpisywanie systemowych ulubionych nie jest jeszcze obsługiwane"
-
-#~ msgid "Filter"
-#~ msgstr "Filtr"
-
-#~ msgid "Transfering Configuration..."
-#~ msgstr "Przesyłanie konfiguracji..."
-
-#~ msgid "Transfering {0}..."
-#~ msgstr "Dodaję {0}..."
-
-#~ msgid "Install Google Gears"
-#~ msgstr "Zainstaluj (Google) Gears"
-
-#~ msgid "Installing Gears will improve the performance of Tine 2.0 by caching all needed files locally on this computer."
-#~ msgstr "Instalacja (Google) Gears przyczyni się do poprawy wydajności Tine 2.0 dzięki lokalnemu buforowaniu na tym komputerze wszystkich wymaganych plików."
-
-#~ msgid "Application picker style"
-#~ msgstr "Sposób wyboru aplikacji"
-
-#~ msgid "Please enter a name for the filter"
-#~ msgstr "Proszę wprowadzić nazwę filtra"
-
-#~ msgid "Filter not Saved"
-#~ msgstr "Filtr nie został zapisany"
-
-#~ msgid "You have to supply a name for the filter!"
-#~ msgstr "Musisz wprowadzić nazwę filtra!"
-
-#~ msgid "You have to supply a shorter name! Names of saved filters can only be up to 40 characters long."
-#~ msgstr "Musisz wprowadzić krótszą nazwę! Nazwy zapisanych filtrów nie mogą przekraczać 40 znaków."
-
-#~ msgid "Saving filter"
-#~ msgstr "Zapisywanie filtra"
-
-#~ msgid "My saved filters"
-#~ msgstr "Moje filtry"
-
-#~ msgid "Delete Filter"
-#~ msgstr "Usuń filtr"
-
-#~ msgid "Do you really want to delete the Filter \"{0}\"?"
-#~ msgstr "Czy na pewno chcesz usunąć filtr \"{0}\"?"
-
-#~ msgid "Deleting Filter \"{0}\""
-#~ msgstr "Usuwanie filtra \"{0}\""
-
-#~ msgid "Rename Filter"
-#~ msgstr "Zmień nazwę filtra"
-
-#~ msgid "Please enter the new name for filter \"{0}\"?"
-#~ msgstr "Proszę wprowadzić nową nazwę filtra \"{0}\"."
-
-#~ msgid "Renaming Filter \"{0}\""
-#~ msgstr "Zmienianie nazwy filtra \"{0}\""
-
-#~ msgid "Saved filter"
-#~ msgstr "filtry"
-
-#~ msgid "Report bugs to tine20.org directly when they occur"
-#~ msgstr "W przypadku wystąpienia błędów, prosimy o zgłaszanie ich bezpośrednio do tine20.org"
-
-#~ msgid "Check tine20.org for new versions"
-#~ msgstr "Sprawdź na stronach tine20.org, czy są nowe wersje Tine"
-
-#~ msgid "Sorry"
-#~ msgstr "Przykro mi"
-
-#~ msgid "Remove account"
-#~ msgstr "usuń konto"
-
-#~ msgid "shared"
-#~ msgstr "wspólnych"
-
-#~ msgid "Permission Denied"
-#~ msgstr "Brak uprawnień"
-
-#~ msgid "You don't have the required grant to select this {0}"
-#~ msgstr "Nie masz wymaganych uprawnień, aby usunąć {0}"
-
-#~ msgid "Import successful for {0} records, import failed for {1} records."
-#~ msgstr "Udany import {0} wierszy, nieudany import {1} wierszy."
-
-#~ msgid "is in"
-#~ msgstr "jest w"
-
-#~ msgid "remove record"
-#~ msgstr "usuń wiersz"
-
-#~ msgid "Search"
-#~ msgstr "Znajdź"
-
-#~ msgid "Browse"
-#~ msgstr "Przeszukaj"
-
-#~ msgid "click to edit"
-#~ msgstr "kliknij, aby edytować"
-
-#~ msgid "Plase select an image file (gif/png/jpeg)"
-#~ msgstr "Proszę wybrać plik graficzny (gif/png/jpeg)"
-
-#~ msgid "Please Select a Group"
-#~ msgstr "Proszę zaznaczyć grupę"
-
-#~ msgid "Register"
-#~ msgstr "Zarejestruj się"
-
-#~ msgid "The server did not respond to your request. Please check your network or contact your administrator."
-#~ msgstr "Serwer nie odpowiedział na Twoje zapytanie. Proszę sprawdzić połączenie sieciowe albo skontaktować się ze swoim administratorem."
-
-#~ msgid "Permissions"
-#~ msgstr "Uprawnienia"
-
-#~ msgid "Could not save {0}."
-#~ msgstr "Zapisanie było niemożliwe {0}."
-
-#~ msgid "add account"
-#~ msgstr "dodaj konto"
-
-#~ msgid "nobody"
-#~ msgstr "brak"
-
-#~ msgid "please select an account"
-#~ msgstr "Proszę zaznaczyć konto"
-
-#~ msgid "loading new language..."
-#~ msgstr "ładowanie nowego języka..."
-
-#~ msgid "Export Date"
-#~ msgstr "Data eksportu"
-
-#~ msgid "Login successful. Loading Tine 2.0..."
-#~ msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
-
-#~ msgid "Logout from Tine 2.0"
-#~ msgstr "Wylogowanie z Tine 2.0"
-
-#~ msgid "Our Forum for questions and ideas"
-#~ msgstr "Nasze forum do zadawania pytań i wpisywania sugestii"
