@@ -612,9 +612,11 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
             if($_structure[$index][1] != 'NIL') {
                 $parameters = array();
                 for($i=0; $i<count($_structure[$index][1]); $i++) {
-                    $key   = strtolower($_structure[$index][1][$i]);
-                    $value = $_structure[$index][1][++$i];
-                    $parameters[$key] = $this->_mimeDecodeHeader($value);
+                    if ($_structure[$index][1][$i] != 'NIL') {
+                        $key   = strtolower($_structure[$index][1][$i]);
+                        $value = $_structure[$index][1][++$i];
+                        $parameters[$key] = $this->_mimeDecodeHeader($value);
+                    }
                 }
                 $structure['disposition']['parameters'] = $parameters;
             }
