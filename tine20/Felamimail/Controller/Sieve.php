@@ -235,8 +235,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
      */
     protected function _fixNewlinesAndcheckMimeCapability(Felamimail_Model_Sieve_Vacation $_vacation)
     {
-        if (preg_match('/dbmail/i', $this->_backend->getImplementation())) {
-            // dbmail sieve does not support mime capability
+        if (! in_array('mime', $this->_backend->capability())) {
             unset($_vacation->mime);
             $_vacation->reason = preg_replace('/<br \/>/', "\r", $_vacation->reason);
         }
