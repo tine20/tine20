@@ -4,8 +4,8 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
@@ -358,6 +358,8 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     {
         $result = array();
         foreach ($_tags as $tag) {
+            $tag = trim($tag);
+            
             // only check non-empty tags
             if (empty($tag)) {
                 continue; 
