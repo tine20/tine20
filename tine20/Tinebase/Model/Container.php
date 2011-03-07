@@ -119,8 +119,8 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
             $id = (int) $_containerId;
         }
         
-        if($id === 0) {
-            throw new Tinebase_Exception_InvalidArgument('Container id can not be 0.');
+        if ($id === 0) {
+            throw new Tinebase_Exception_InvalidArgument('Container id can not be 0 (' . $_containerId . ').');
         }
         
         return $id;
