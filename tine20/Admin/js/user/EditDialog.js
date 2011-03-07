@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
  
@@ -24,7 +24,6 @@ Ext.ns('Tine.Admin.user');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  * @param       {Object} config
@@ -153,6 +152,54 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         }, this);
     },
 
+    /**
+     * is form valid?
+     * 
+     * @return {Boolean}
+     */
+    isValid: function() {
+        var result = Tine.Admin.UserEditDialog.superclass.isValid.call(this);
+        if (! result) {
+            return false;
+        }
+        
+        if (Tine.Admin.registry.get('manageSmtpEmailUser')) {
+            var emailValue = this.getForm().findField('accountEmailAddress').getValue();
+            if (! this.checkEmailDomain(emailValue)) {
+                result = false;
+                this.getForm().markInvalid([{
+                    id: 'accountEmailAddress',
+                    msg: this.app.i18n._("Domain is not allowed. Check your SMTP domain configuration.")
+                }]);
+            }
+        }
+        
+        return result;
+    },
+    
+    /**
+     * check valid email domain (if email domain is set in config)
+     * 
+     * @param {String} email
+     * @return {Boolean}
+     * 
+     * TODO use this for smtp aliases, too
+     */
+    checkEmailDomain: function(email) {
+        if (! Tine.Admin.registry.get('smtpConfig').primarydomain) {
+            return true;
+        }
+        
+        var allowedDomains = [Tine.Admin.registry.get('smtpConfig').primarydomain],
+            emailDomain = email.split('@')[1];
+            
+        if (Tine.Admin.registry.get('secondarydomains')) {
+            allowedDomains.concat(Tine.Admin.registry.get('secondarydomains').split(','));
+        }
+        
+        return (allowedDomains.indexOf(emailDomain) !== -1);
+    },
+    
     /**
      * Validate confirmed password
      */
@@ -732,8 +779,6 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             }
                         },
                         validateValue: function (value) {
-                        	console.log('validateValue - ' + this.passwordsMatch);
-                        	console.log(this);
                             return this.passwordsMatch;
                         }
                     }], [{

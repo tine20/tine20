@@ -75,6 +75,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'manageSAM'                     => $this->_manageSAM,
             'manageImapEmailUser'           => $this->_manageImapEmailUser,
             'manageSmtpEmailUser'           => $this->_manageSmtpEmailUser,
+            'smtpConfig'                    => Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP),
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
             'defaultInternalAddressbook'    => ($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL) 
                 ? Tinebase_Container::getInstance()->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray() 
