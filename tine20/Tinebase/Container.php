@@ -779,8 +779,13 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     public function hasGrant($_accountId, $_containerId, $_grant) 
     {
         $accountId = Tinebase_Model_User::convertUserIdToInt($_accountId);
-        $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
-        
+        try {
+            $containerId = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
+        } catch (Tinebase_Exception_InvalidArgument $teia) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $teia->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $teia->getTraceAsString());
+            return FALSE;
+        }
 
         $cache = Tinebase_Core::get('cache');
         $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . implode('', (array)$_grant));
