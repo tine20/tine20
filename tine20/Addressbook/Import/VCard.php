@@ -9,9 +9,10 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Yann Le Moigne <segfaultmaker@gmail.com>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Controller.php 18288 2011-01-04 14:15:26Z l.kneschke@metaways.de $
+ * @version     $Id$
  * 
  * @todo        add test
+ * @todo        remove some code duplication (_getDuplicateSearchFilter/_importRecord/_addSharedTags/_setController/...)
  */
 
 require_once 'vcardphp/vcard.php';
