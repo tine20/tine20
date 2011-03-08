@@ -506,7 +506,7 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
  * 
  * @todo move this to Helper.php
  */
-function in_array_case($str, $arr)
+function in_array_case($arr, $str)
 {
     if (! is_array($arr)) {
         return false;
