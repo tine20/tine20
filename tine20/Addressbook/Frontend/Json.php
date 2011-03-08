@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * @todo        use functions from Tinebase_Frontend_Json_Abstract
@@ -243,7 +243,8 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {
         $filter = new Tinebase_Model_ImportExportDefinitionFilter(array(
-            array('field' => 'plugin', 'operator' => 'equals', 'value' => 'Addressbook_Import_Csv'),
+            array('field' => 'application_id',  'operator' => 'equals', 'value' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()),
+            array('field' => 'type',            'operator' => 'equals', 'value' => 'import'),
         ));
         $importDefinitions = Tinebase_ImportExportDefinition::getInstance()->search($filter);
         try {
