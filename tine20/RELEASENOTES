@@ -9,3 +9,14 @@ Date:       $LastChangedDate$
 
 Contents
 --
+
+1. VCard import in addressbook
+
+
+-----------------
+
+1. VCard import in addressbook
+
+- It is now possible to import vcards into the addressbook and the plugin is usable in the import framework (js client + CLI)
+- We use the vcardphp class by Frank Hellwig (http://vcardphp.sourceforge.net) to parse the file 
+and the import plugin by Yann Le Moigne <segfaultmaker@gmail.com> 
