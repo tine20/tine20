@@ -508,6 +508,10 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
  */
 function in_array_case($str, $arr)
 {
+    if (! is_array($arr)) {
+        return false;
+    }
+    
     foreach ($arr as $s) {
         if (strcasecmp($str, $s) == 0) {
             return true;
