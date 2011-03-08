@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <name>adb_tine_import_csv</name>
+    <model>Addressbook_Model_Contact</model>
+    <plugin>Addressbook_Import_VCard</plugin>
+    <type>import</type>
+    <dryrun>0</dryrun>
+    <description>Import vCard in AdressBook</description>
+    <urlIsHome>0</urlIsHome>
+    <mapNicknameToField></mapNicknameToField>
+</config>
