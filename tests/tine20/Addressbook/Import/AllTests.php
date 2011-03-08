@@ -4,8 +4,8 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id: AllTests.php 1197 2008-03-19 05:49:21Z lkneschke $
  */
 
@@ -29,6 +29,7 @@ class Addressbook_Import_AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook All Import Tests');
         $suite->addTestSuite('Addressbook_Import_CsvTest');
+        $suite->addTestSuite('Addressbook_Import_VCardTest');
         return $suite;
     }
 }
