@@ -48,6 +48,12 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      *
      */
     const CONTENT_TYPE_PLAIN = 'text/plain';
+
+    /**
+     * content type multipart/alternative
+     *
+     */
+    const CONTENT_TYPE_MULTIPART = 'multipart/alternative';
     
     /**
      * attachment filename regexp 
@@ -213,17 +219,36 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
     protected function _setBodyContentType()
     {
         if (array_key_exists('parts', $this->structure)) {
-            $bodyContentTypes = array();
-            foreach ($this->structure['parts'] as $part) {
-                if (in_array($part['contentType'], array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)) && ! $this->_partIsAttachment($part)) {
-                    $bodyContentTypes[] = $part['contentType'];
-                }
-            }
+            $bodyContentTypes = $this->_getBodyContentTypes($this->structure['parts']);
             // HTML > plain
             $this->body_content_type = (in_array(self::CONTENT_TYPE_HTML, $bodyContentTypes)) ? self::CONTENT_TYPE_HTML : self::CONTENT_TYPE_PLAIN;
         } else {
             $this->body_content_type = $this->content_type;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set body content type to ' . $this->body_content_type);
+    }
+    
+    /**
+     * get all content types of mail body
+     * 
+     * @param array $_parts
+     * @return array
+     */
+    protected function _getBodyContentTypes($_parts)
+    {
+        $_bodyContentTypes = array();
+        foreach ($_parts as $part) {
+            if (is_array($part) && array_key_exists('contentType', $part)) {
+                if (in_array($part['contentType'], array(self::CONTENT_TYPE_HTML, self::CONTENT_TYPE_PLAIN)) && ! $this->_partIsAttachment($part)) {
+                    $_bodyContentTypes[] = $part['contentType'];
+                } else if ($part['contentType'] == self::CONTENT_TYPE_MULTIPART && array_key_exists('parts', $part)) {
+                    $_bodyContentTypes = array_merge($_bodyContentTypes, $this->_getBodyContentTypes($part['parts']));
+                }
+            }
+        }
+        
+        return $_bodyContentTypes;
     }
     
     /**
