@@ -243,7 +243,8 @@ Ext.namespace('Tine.Felamimail');
                     
                     this.msgBody = message.get('body');
                     
-                    var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id'));
+                    var account = this.Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+            
                     if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('content_type') == 'text/plain')) {
                         this.msgBody = Ext.util.Format.nl2br(this.msgBody);
                     }
@@ -282,14 +283,13 @@ Ext.namespace('Tine.Felamimail');
     initFrom: function() {
         if (! this.record.get('account_id')) {
             if (! this.accountId) {
-                var mainApp = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail'),
-                    message = this.getMessageFromConfig(),
+                var message = this.getMessageFromConfig(),
                     folderId = message ? message.get('folder_id') : null, 
-                    folder = folderId ? mainApp.getFolderStore().getById(folderId) : null
+                    folder = folderId ? this.Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(folderId) : null,
                     accountId = folder ? folder.get('account_id') : null;
                     
                 if (! accountId) {
-                    var activeAccount = mainApp.getActiveAccount();
+                    var activeAccount = this.Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
                     accountId = (activeAccount) ? activeAccount.id : null;
                 }
                 
@@ -367,8 +367,9 @@ Ext.namespace('Tine.Felamimail');
                 this.cc = this.replyTo.get('cc');
                 
                 // remove own email from to/cc
-                var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id'));
-                var emailRegexp = new RegExp(account.get('email'));
+                var account = this.Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
+                    emailRegexp = new RegExp(account.get('email'));
+                    
                 Ext.each(['to', 'cc'], function(field) {
                     for (var i=0; i < this[field].length; i++) {
                         if (emailRegexp.test(this[field][i])) {
@@ -468,9 +469,9 @@ Ext.namespace('Tine.Felamimail');
     onSaveInFolder: function (folderField) {
         this.onRecordUpdate();
         
-        var account = Tine.Felamimail.loadAccountStore().getById(this.record.get('account_id'));
-        var folderName = account.get(folderField);
-        
+        var account = this.Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
+            folderName = account.get(folderField);
+                    
         if (! folderName || folderName == '') {
             Ext.MessageBox.alert(
                 this.app.i18n._('Failed'), 
@@ -687,7 +688,7 @@ Ext.namespace('Tine.Felamimail');
             flex: 1  // Take up all *remaining* vertical space
         });
         
-        var accountStore = Tine.Felamimail.loadAccountStore();
+        var accountStore = this.Tine.Tinebase.appMgr.get('Felamimail').getAccountStore();
         
         return {
             border: false,
@@ -754,7 +755,6 @@ Ext.namespace('Tine.Felamimail');
         var result = (! this.attachmentGrid.isUploading());
         return (result && Tine.Felamimail.MessageEditDialog.superclass.isValid.call(this));
     }
-        
 });
 
 /**

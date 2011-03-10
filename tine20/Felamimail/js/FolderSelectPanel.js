@@ -113,7 +113,8 @@ Tine.Felamimail.FolderSelectPanel = Ext.extend(Ext.Panel, {
                 id: 'root'
             });
         
-            Tine.Felamimail.loadAccountStore().each(function(record) {
+            var mainApp = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr.get('Felamimail');
+            mainApp.getAccountStore().each(function(record) {
                 // TODO generalize this
                 var node = new Ext.tree.AsyncTreeNode({
                     id: record.data.id,

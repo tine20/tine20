@@ -555,7 +555,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     accountAndFolderRenderer: function(folderId, metadata, record) {
         var folderStore = this.app.getFolderStore(),
-            account = Tine.Felamimail.loadAccountStore().getById(record.get('account_id')),
+            account = this.app.getAccountStore().getById(record.get('account_id')),
             result = (account) ? account.get('name') : record.get('account_id'),
             folder = folderStore.getById(folderId);
         
@@ -716,7 +716,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             affectedMsgs = msgs;
         }
         
-        var composerAccount = Tine.Felamimail.loadAccountStore().getById(composedMsg.get('account_id')),
+        var composerAccount = this.app.getAccountStore().getById(composedMsg.get('account_id')),
             sendFolderId = composerAccount ? composerAccount.getSendFolderId() : null,
             sendFolder = sendFolderId ? this.app.getFolderStore().getById(sendFolderId) : null;
             
@@ -849,7 +849,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         var record = this.grid.getSelectionModel().getSelected(),
             folder = this.app.getFolderStore().getById(record.get('folder_id')),
-            account = Tine.Felamimail.loadAccountStore().getById(folder.get('account_id'));
+            account = this.app.getAccountStore().getById(folder.get('account_id'));
             action = (folder.get('globalname') == account.get('drafts_folder')) ? 'senddraft' :
                      folder.get('globalname') == account.get('templates_folder') ? 'sendtemplate' : null;
         
@@ -884,7 +884,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folderId = msg ? msg.get('folder_id') : null,
             folder = folderId ? this.app.getFolderStore().getById(folderId) : null,
             accountId = folder ? folder.get('account_id') : null,
-            account = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId) : null,
+            account = accountId ? this.app.getAccountStore().getById(accountId) : null,
             trashId = account ? account.getTrashFolderId() : null,
             trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
             

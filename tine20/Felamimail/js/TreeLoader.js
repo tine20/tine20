@@ -72,7 +72,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
      * @private
      */
     inspectCreateNode: function(attr) {
-        var account = Tine.Felamimail.loadAccountStore().getById(attr.account_id);
+        var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(attr.account_id);
         
         // NOTE cweiss 2010-06-15 this has to be precomputed on server side!
         attr.has_children = (account && account.get('has_children_support')) ? attr.has_children : true;

@@ -199,7 +199,7 @@ Tine.Felamimail.MessageDisplayDialog = Ext.extend(Tine.Felamimail.GridDetailsPan
             folderId = this.record.get('folder_id'),
             folder = mainApp.getFolderStore().getById(folderId),
             accountId = folder ? folder.get('account_id') : null,
-            account = Tine.Felamimail.loadAccountStore().getById(accountId),
+            account = mainApp.getAccountStore().getById(accountId),
             trashId = account ? account.getTrashFolderId() : null;
             
         this.loadMask.show();

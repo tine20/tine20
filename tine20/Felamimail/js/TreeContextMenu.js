@@ -233,8 +233,8 @@ Tine.Felamimail.setTreeContextMenus = function() {
         handler: function() {
             if (this.ctxNode) {
                 var folder = this.app.getFolderStore().getById(this.ctxNode.id),
-                    account = folder ? Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')) :
-                                       Tine.Felamimail.loadAccountStore().getById(this.ctxNode.id);
+                    account = folder ? this.app.getAccountStore().getById(folder.get('account_id')) :
+                                       this.app.getAccountStore().getById(this.ctxNode.id);
                 this.ctxNode.getUI().addClass("x-tree-node-loading");
                 // call update folder cache
                 Ext.Ajax.request({

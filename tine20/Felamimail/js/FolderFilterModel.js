@@ -60,7 +60,7 @@ Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMult
                 if (! record) {
                     // try account
                     var accountId = path.substr(1, 40);
-                    record = Tine.Felamimail.loadAccountStore().getById(accountId);
+                    record = this.app.getAccountStore().getById(accountId);
                 }
                 if (record) {
                     this.currentValue.push(path);

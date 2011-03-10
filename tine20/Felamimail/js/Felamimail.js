@@ -49,6 +49,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     folderStore: null,
     
     /**
+     * @type Ext.data.JsonStore
+     */
+    accountStore: null,
+    
+    /**
      * @property updateInterval user defined update interval (milliseconds)
      * @type Number
      */
@@ -90,7 +95,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
             
             this.showActiveVacation();
-            this.checkAccounts.defer(10000);
+            this.checkAccounts.defer(10000, this);
         }
     },
     
@@ -98,7 +103,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * show notification with active vacation information
      */
     showActiveVacation: function () {
-        var accountsWithActiveVacation = Tine.Felamimail.loadAccountStore().query('sieve_vacation_active', true);
+        var accountsWithActiveVacation = this.getAccountStore().query('sieve_vacation_active', true);
         accountsWithActiveVacation.each(function(item) {
             Ext.ux.Notification.show(
                 this.i18n._('Active Vacation Message'), 
@@ -114,7 +119,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     checkAccounts: function () {
         // only checks system accounts atm
-        var systemAccounts = Tine.Felamimail.loadAccountStore().query('type', 'system'),
+        var systemAccounts = this.getAccountStore().query('type', 'system'),
             ids = [];
         systemAccounts.each(function(item) {
             ids.push(item.id);
@@ -181,7 +186,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 callback: callback,
                 failure: this.onBackgroundRequestFail,
                 success: function(folder) {
-                    Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')).setLastIMAPException(null);
+                    this.getAccountStore().getById(folder.get('account_id')).setLastIMAPException(null);
                     this.getFolderStore().updateFolder(folder);
                     
                     if (folder.get('cache_status') === 'updating') {
@@ -214,7 +219,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      */
     fetchSubfolders: function(parentPath) {
         var folderStore = this.getFolderStore(),
-            accountStore = Tine.Felamimail.loadAccountStore(),
+            accountStore = this.getAccountStore(),
             doQuery = true,
             allFoldersFetched = false;
         
@@ -354,7 +359,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     onBackgroundRequestFail: function(exception) {
         var currentRequestFolder = this.folderStore.query('cache_status', 'pending').first();
         var accountId   = currentRequestFolder.get('account_id'),
-            account     = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId): null,
+            account     = accountId ? this.getAccountStore().getById(accountId): null,
             imapStatus  = account ? account.get('imap_status') : null;
             
         if (account) {
@@ -406,7 +411,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             // only show notifications for inbox if unreadcount changed
             if (record.isModified('cache_unreadcount')) {
                 var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount),
-                    account = Tine.Felamimail.loadAccountStore().getById(record.get('account_id'));
+                    account = this.getAccountStore().getById(record.get('account_id'));
                 if (recents > 0 && record.isInbox()) {
                     Tine.log.info('show notification: ' + recents + ' new mails.');
                     var title = this.i18n._('New mails'),
@@ -437,15 +442,40 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
         
         if (account === null) {
-            account = Tine.Felamimail.loadAccountStore().getById(Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'));
+            account = this.getAccountStore().getById(Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount'));
         }
         
         if (account === null) {
             // try to get first account in store
-            account = Tine.Felamimail.loadAccountStore().getAt(0);
+            account = this.getAccountStore().getAt(0);
         }
         
         return account;
+    },
+    
+    /**
+     * get account store
+     * 
+     * @return {Ext.data.JsonStore}
+     */
+    getAccountStore: function() {
+        if (! this.accountStore) {
+            Tine.log.debug('creating account store');
+            
+            // create store (get from initial data)
+            this.accountStore = new Ext.data.JsonStore({
+                fields: Tine.Felamimail.Model.Account,
+                data: Tine.Felamimail.registry.get('accounts'),
+                autoLoad: true,
+                id: 'id',
+                root: 'results',
+                totalProperty: 'totalcount',
+                proxy: Tine.Felamimail.accountBackend,
+                reader: Tine.Felamimail.accountBackend.getReader()
+            });
+        } 
+    
+        return this.accountStore;
     },
     
     /**
@@ -472,7 +502,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                     if (folderStore.queriesPending.length > 0) {
                         // reload all folders of account and try to select inbox
                         var accountId = folderStore.queriesPending[0].substring(16, 56),
-                            account = Tine.Felamimail.loadAccountStore().getById(accountId),
+                            account = this.getAccountStore().getById(accountId),
                             accountNode = this.getMainScreen().getTreePanel().getNodeById(accountId);
                             
                         folderStore.resetQueryAndRemoveRecords('parent_path', '/' + accountId);
@@ -515,37 +545,6 @@ Tine.Felamimail.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
 });
 
 /**
- * get account store
- *
- * @param {Boolean} reload
- * @return {Ext.data.JsonStore}
- */
-Tine.Felamimail.loadAccountStore = function(reload) {
-    
-    var store = Ext.StoreMgr.get('FelamimailAccountStore');
-    
-    if (!store) {
-        // create store (get from initial data)
-        store = new Ext.data.JsonStore({
-            fields: Tine.Felamimail.Model.Account,
-
-            // initial data from http request
-            data: Tine.Felamimail.registry.get('accounts'),
-            autoLoad: true,
-            id: 'id',
-            root: 'results',
-            totalProperty: 'totalcount',
-            proxy: Tine.Felamimail.accountBackend,
-            reader: Tine.Felamimail.accountBackend.getReader()
-        });
-        
-        Ext.StoreMgr.add('FelamimailAccountStore', store);
-    } 
-
-    return store;
-};
-
-/**
  * get flags store
  *
  * @param {Boolean} reload
@@ -581,7 +580,8 @@ Tine.Felamimail.loadFlagsStore = function(reload) {
 Tine.Felamimail.getSignature = function(id) {
         
     var result = '',
-        activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getMainScreen().getTreePanel().getActiveAccount();
+        app = Tine.Tinebase.appMgr.get('Felamimail'),
+        activeAccount = app.getMainScreen().getTreePanel().getActiveAccount();
         
     id = id || (activeAccount ? activeAccount.id : 'default');
     
@@ -589,7 +589,7 @@ Tine.Felamimail.getSignature = function(id) {
         id = Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
     }
     
-    var defaultAccount = Tine.Felamimail.loadAccountStore().getById(id);
+    var defaultAccount = app.getAccountStore().getById(id);
     var signature = (defaultAccount) ? defaultAccount.get('signature') : '';
     if (signature && signature != '') {
         signature = Ext.util.Format.nl2br(signature);
@@ -644,7 +644,7 @@ Tine.Felamimail.handleRequestException = function(exception) {
             
         case 912: // Felamimail_Exception_IMAPInvalidCredentials
             var accountId   = exception.account && exception.account.id ? exception.account.id : '',
-                account     = accountId ? Tine.Felamimail.loadAccountStore().getById(accountId): null,
+                account     = accountId ? app.getAccountStore().getById(accountId): null,
                 imapStatus  = account ? account.get('imap_status') : null;
                 
             if (account) {

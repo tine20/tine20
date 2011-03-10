@@ -205,7 +205,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @private
      */
     initAccounts: function() {
-        this.accountStore = Tine.Felamimail.loadAccountStore();
+        this.accountStore = this.app.getAccountStore();
         this.accountStore.each(this.addAccount, this);
         this.accountStore.on('update', this.onAccountUpdate, this);
     },
@@ -397,7 +397,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Ext.tree.AsyncTreeNode} node
      */
     onBeforeClick: function(node) {
-        if (Tine.Felamimail.loadAccountStore().getById(node.id) || ! this.app.getFolderStore().getById(node.id).get('is_selectable')) {
+        if (this.accountStore.getById(node.id) || ! this.app.getFolderStore().getById(node.id).get('is_selectable')) {
             return false;
         }
     },
@@ -440,8 +440,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         this.ctxNode = node;
         
         var folder = this.app.getFolderStore().getById(node.id),
-            account = folder ? Tine.Felamimail.loadAccountStore().getById(folder.get('account_id')) :
-                               Tine.Felamimail.loadAccountStore().getById(node.id);
+            account = folder ? this.accountStore.getById(folder.get('account_id')) :
+                               this.accountStore.getById(node.id);
         
         if (! folder) {
             // edit/remove account
@@ -665,7 +665,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
     updateFolderTip: function(tip) {
         var folderId = this.getElsParentsNodeId(tip.triggerElement),
             folder = this.app.getFolderStore().getById(folderId),
-            account = Tine.Felamimail.loadAccountStore().getById(folderId);
+            account = this.accountStore.getById(folderId);
             
         if (folder && !this.isDropSensitive) {
             var info = [
@@ -764,7 +764,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             listeners: {
                 scope: this,
                 load: function(node) {
-                    var account = Tine.Felamimail.loadAccountStore().getById(node.id);
+                    var account = this.accountStore.getById(node.id);
                     this.updateAccountStatus(account);
                 }
             }
