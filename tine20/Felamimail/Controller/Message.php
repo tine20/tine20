@@ -321,20 +321,25 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     /**
      * returns supported flags
      * 
+     * @param boolean translated
      * @return array
      * 
      * @todo add gettext for flags
      */
-    public function getSupportedFlags()
+    public function getSupportedFlags($_translated = TRUE)
     {
-        $result = array();
-        $translate = Tinebase_Translation::getTranslation('Felamimail');
-        
-        foreach (self::$_allowedFlags as $flag) {
-            $result[] = array('id'        => $flag,      'name'      => $translate->_(substr($flag, 1)));
+        if ($_translated) {
+            $result = array();
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            
+            foreach (self::$_allowedFlags as $flag) {
+                $result[] = array('id'        => $flag,      'name'      => $translate->_(substr($flag, 1)));
+            }
+            
+            return $result;
+        } else {
+            return self::$_allowedFlags;
         }
-        
-        return $result;
     }
     
     /**
