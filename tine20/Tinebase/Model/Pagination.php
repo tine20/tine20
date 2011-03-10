@@ -54,12 +54,35 @@ class Tinebase_Model_Pagination extends Tinebase_Record_Abstract
      */
     public function appendPaginationSql($_select)
     {
+        $this->appendLimit($_select);
+        $this->appendSort($_select);
+    }
+    
+    /**
+     * Appends limit statement to a given select object
+     * 
+     * @param  Zend_Db_Select
+     * @return void
+     */
+    public function appendLimit($_select)
+    {
         if (!empty($this->limit)) {
             $_select->limit($this->limit, $this->start);
         }
+    }
+    
+
+    /**
+     * Appends sort statement to a given select object
+     * 
+     * @param  Zend_Db_Select
+     * @return void
+     */
+    public function appendSort($_select)
+    {
         if (!empty($this->sort) && !empty($this->dir)){
             $_select->order($this->_getSortCols());
-        }
+        }        
     }
     
     /**
