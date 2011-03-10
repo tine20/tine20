@@ -5,7 +5,7 @@
  * @subpackage  Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: tineInit.js 7831 2009-04-22 22:37:18Z c.weiss@metaways.de $
  *
  * TODO         allow to add user defined part to Tine.title
@@ -680,7 +680,12 @@ Tine.Tinebase.tineInit = {
      * initialise application manager
      */
     initAppMgr: function () {
-        Tine.Tinebase.appMgr = new Tine.Tinebase.AppManager();
+        if (! Ext.isIE && ! window.isMainWindow) {
+            // return app from main window for non-IE browsers
+            Tine.Tinebase.appMgr = Ext.ux.PopupWindowMgr.getMainWindow().Tine.Tinebase.appMgr;
+        } else {
+            Tine.Tinebase.appMgr = new Tine.Tinebase.AppManager();
+        }
     },
     
     /**
