@@ -16,7 +16,7 @@
  * @package     Timetracker
  * @subpackage  Backend
  */
-class Timetracker_Backend_TimesheetSearchImproved extends Tinebase_Backend_Sql_SearchImproved
+class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_SearchImproved
 {
     /**
      * Table name without prefix
