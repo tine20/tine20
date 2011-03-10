@@ -44,7 +44,7 @@ class Timetracker_Backend_TimesheetSearchImproved extends Tinebase_Backend_Sql_S
      * 
      * @var string
      */
-    protected $_defaultSecondarySort = 'creation_time';
+    protected $_defaultSecondarySort = 'timetracker_timesheet.creation_time';
     
     /**
      * additional search count columns
