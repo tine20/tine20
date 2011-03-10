@@ -633,7 +633,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $subject = 'Tine 2.0 bei Metaways - Verbessurngsvorschlag';
         $message = $this->_searchForMessageBySubject($subject, $this->_testFolderName);
-        //print_r($message);
         
         $fwdSubject = 'Fwd: ' . $subject;
         $forwardMessageData = array(
@@ -647,15 +646,18 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
                 'name'  => $subject,
             )),
+            'flags'         => Zend_Mail_Storage::FLAG_PASSED,
         );
         
         $this->_foldersToClear[] = 'INBOX';
         $this->_json->saveMessage($forwardMessageData);
         $forwardMessage = $this->_searchForMessageBySubject($fwdSubject);
         
-        //print_r($forwardMessage);
-        
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardMessage['structure']['parts'][2]['contentType']);
+
+        // check forwarded/passed flag
+        $message = $this->_json->getMessage($message['id']);
+        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_PASSED, $message['flags']));
     }
     
     /**
