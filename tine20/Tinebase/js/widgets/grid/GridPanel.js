@@ -492,6 +492,23 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             
         return true;
     },
+
+    /**
+     * header is clicked
+     * 
+     * @param {Object} grid
+     * @param {Number} colIdx
+     * @param {Event} e
+     * @return {Boolean}
+     */
+    onHeaderClick: function(grid, colIdx, e) {
+        Ext.apply(this.store.lastOptions, {
+            preserveCursor:     true,
+            preserveSelection:  true, 
+            preserveScroller:   true, 
+            removeStrategy:     'default'
+        });
+    },
     
     /**
      * called when the store gets updated, e.g. from editgrid
@@ -603,7 +620,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         if (options.preserveScroller) {
             options.preserveScroller = this.grid.getView().scroller.dom.scrollTop;
         }
-        
         
         // apply removeStrategy
         if (! options.removeStrategy || options.removeStrategy === 'default') {
@@ -745,6 +761,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.grid.on('rowclick',    this.onRowClick,        this);
         this.grid.on('rowdblclick', this.onRowDblClick,     this);
         this.grid.on('newentry',    this.onStoreNewEntry,   this);
+        this.grid.on('headerclick', this.onHeaderClick,   this);
         
         this.grid.on('rowcontextmenu', function(grid, row, e) {
             e.stopEvent();
@@ -799,6 +816,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         this.store.load(options);
     },
     
+    /**
+     * get action toolbar
+     * 
+     * @return {Ext.Toolbar}
+     */
     getActionToolbar: function() {
         if (! this.actionToolbar) {
             var additionalItems = this.getActionToolbarItems();
