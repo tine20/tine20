@@ -154,11 +154,7 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
             // (2) get other columns and do joins
             $select = $this->_getSelect($_cols);
             $this->_addWhereIdIn($select, $ids);
-            if ($_pagination !== null && !empty($_pagination->sort)) {
-                foreach((array)$_pagination->sort as $sort) {
-                    $select->order($sort . (!empty($_pagination->dir) ? ' ' . $_pagination->dir : null));
-                }
-            }
+            $_pagination->appendSort($select);
             
             $rows = $this->_fetch($select, self::FETCH_ALL);
             
