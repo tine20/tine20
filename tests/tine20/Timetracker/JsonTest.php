@@ -448,7 +448,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Timetracker_Controller_Timeaccount::getInstance()->update($ta);
         
         // search & check
-        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging());
+        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging('is_billable_combined'));
         $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
         $this->assertEquals(0, $search['results'][0]['is_cleared_combined'], 'is_cleared_combined mismatch');
         $this->assertEquals(1, $search['totalcount']);

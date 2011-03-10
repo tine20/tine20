@@ -159,14 +159,15 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
     /**
      * get paging
      *
+     * @param string $_sort
      * @return array
      */
-    protected function _getPaging()
+    protected function _getPaging($_sort = 'creation_time')
     {
         return array(
             'start' => 0,
             'limit' => 50,
-            'sort' => 'creation_time',
+            'sort' => $_sort,
             'dir' => 'ASC',
         );
     }
