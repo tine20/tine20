@@ -336,6 +336,8 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
                             : array($foreignColumn => $join['table'] . '.id'));
                     $joinId = (array_key_exists('joinId', $join)) ? $join['joinId'] : $this->_identifier;
                     
+                    $this->_removeColFromSelect($_select, $_cols, $foreignColumn);
+                    
                     try {
                         $_select->joinLeft(
                             /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
@@ -347,6 +349,29 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
                         $_select->columns($selectArray, $join['table']);
                     }
                 }
+            }
+        }
+    }
+    
+    /**
+     * remove column from select to avoid duplicates 
+     * 
+     * @param Zend_Db_Select $_select
+     * @param array|string $_cols
+     * @param string $_column
+     */
+    protected function _removeColFromSelect(Zend_Db_Select $_select, $_cols, $_column)
+    {
+        if (! is_array($_cols)) {
+            return;
+        }
+            
+        foreach ($_cols as $name => $correlation) {
+            if ($name == $_column) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Removing ' . $_column . ' from columns.');
+                unset($_cols[$_column]);
+                $_select->reset(Zend_Db_Select::COLUMNS);
+                $_select->columns($_cols);
             }
         }
     }
