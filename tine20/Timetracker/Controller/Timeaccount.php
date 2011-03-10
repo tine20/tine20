@@ -26,8 +26,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
      */
     private function __construct() {        
         $this->_applicationName = 'Timetracker';
-        //$this->_backend = new Timetracker_Backend_Timeaccount();
-        $this->_backend = new Timetracker_Backend_TimeaccountSearchImproved();
+        $this->_backend = new Timetracker_Backend_Timeaccount();
         $this->_modelName = 'Timetracker_Model_Timeaccount';
         $this->_currentAccount = Tinebase_Core::getUser();   
         $this->_purgeRecords = FALSE;

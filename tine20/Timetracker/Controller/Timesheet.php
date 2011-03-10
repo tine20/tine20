@@ -27,8 +27,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
         
         // config
         $this->_applicationName = 'Timetracker';
-        //$this->_backend = new Timetracker_Backend_Timesheet();
-        $this->_backend = new Timetracker_Backend_TimesheetSearchImproved();
+        $this->_backend = new Timetracker_Backend_Timesheet();
         $this->_modelName = 'Timetracker_Model_Timesheet';
         $this->_currentAccount = Tinebase_Core::getUser();
         $this->_resolveCustomFields = TRUE;
