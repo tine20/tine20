@@ -243,7 +243,7 @@ Ext.namespace('Tine.Felamimail');
                     
                     this.msgBody = message.get('body');
                     
-                    var account = this.Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
+                    var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
             
                     if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('content_type') == 'text/plain')) {
                         this.msgBody = Ext.util.Format.nl2br(this.msgBody);
@@ -285,11 +285,11 @@ Ext.namespace('Tine.Felamimail');
             if (! this.accountId) {
                 var message = this.getMessageFromConfig(),
                     folderId = message ? message.get('folder_id') : null, 
-                    folder = folderId ? this.Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(folderId) : null,
+                    folder = folderId ? Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(folderId) : null,
                     accountId = folder ? folder.get('account_id') : null;
                     
                 if (! accountId) {
-                    var activeAccount = this.Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
+                    var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
                     accountId = (activeAccount) ? activeAccount.id : null;
                 }
                 
@@ -367,7 +367,7 @@ Ext.namespace('Tine.Felamimail');
                 this.cc = this.replyTo.get('cc');
                 
                 // remove own email from to/cc
-                var account = this.Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
+                var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
                     emailRegexp = new RegExp(account.get('email'));
                     
                 Ext.each(['to', 'cc'], function(field) {
@@ -469,7 +469,7 @@ Ext.namespace('Tine.Felamimail');
     onSaveInFolder: function (folderField) {
         this.onRecordUpdate();
         
-        var account = this.Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
+        var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
             folderName = account.get(folderField);
                     
         if (! folderName || folderName == '') {
@@ -688,7 +688,7 @@ Ext.namespace('Tine.Felamimail');
             flex: 1  // Take up all *remaining* vertical space
         });
         
-        var accountStore = this.Tine.Tinebase.appMgr.get('Felamimail').getAccountStore();
+        var accountStore = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore();
         
         return {
             border: false,
