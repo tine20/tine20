@@ -193,6 +193,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         
         // get folder values / status from imap server
         $counter = $imap->examineFolder(Felamimail_Model_Folder::encodeFolderName($folder->globalname));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ .  ' ' . print_r($counter, TRUE));
             
         // check validity
         $folder->cache_uidvalidity = $folder->imap_uidvalidity;
