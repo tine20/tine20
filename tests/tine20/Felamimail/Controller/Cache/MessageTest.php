@@ -175,6 +175,22 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * test message cache unread counter sanitizing
+     */
+    public function testFolderCounterSanitizing()
+    {
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $unreadcount = $updatedFolder->cache_unreadcount;
+        
+        // change unreadcount of folder
+        Felamimail_Controller_Folder::getInstance()->updateFolderCounter($updatedFolder, array('cache_unreadcount' => '+1'));
+        
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        
+        $this->assertEquals($unreadcount, $updatedFolder->cache_unreadcount, 'unreadcount should have been sanitized');
+    }    
+    
+    /**
      * get folder
      *
      * @return Felamimail_Model_Folder
