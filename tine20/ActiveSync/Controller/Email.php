@@ -209,8 +209,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 // strip off any non printable control characters
                 if (!ctype_print($nodeContent)) {
                     # another way to remove non printing characters
-                    #$nodeContent = preg_replace("/[^[:print:]]+/", null, $nodeContent);
-                    $nodeContent = preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null, $nodeContent);
+                    $nodeContent = $this->removeControlChars($nodeContent);
                 }
                 
                 // ... and now add the content (DomText takes care of special chars)
@@ -235,10 +234,10 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 foreach ($attachments as $attachment) {
                     $tagAttachment = $tagAttachments->appendChild(new DOMElement('Attachment', null, 'uri:AirSyncBase'));
                     
-                    $tagAttachment->appendChild(new DOMElement('DisplayName', $attachment['filename'], 'uri:AirSyncBase'));
+                    $tagAttachment->appendChild(new DOMElement('DisplayName', $this->removeControlChars($attachment['filename']), 'uri:AirSyncBase'));
                     $tagAttachment->appendChild(new DOMElement('FileReference', $_serverId . '-' . $attachment['partId'], 'uri:AirSyncBase'));
                     $tagAttachment->appendChild(new DOMElement('Method', 1, 'uri:AirSyncBase'));
-                    $tagAttachment->appendChild(new DOMElement('EstimatedDataSize', $attachment['size'], 'uri:AirSyncBase'));
+                    $tagAttachment->appendChild(new DOMElement('EstimatedDataSize', $this->removeControlChars($attachment['size']), 'uri:AirSyncBase'));
                 }
             }
         }
@@ -310,6 +309,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             $messageBody = $this->_contentController->getMessageBody($_serverId, null, $airSyncBaseType == 2 ? Zend_Mime::TYPE_HTML : Zend_Mime::TYPE_TEXT, NULL, true);
         }
         
+        // remove control chars
+        $messageBody = $this->removeControlChars($messageBody);
+        
         if($truncateAt !== null && strlen($messageBody) > $truncateAt) {
             $messageBody  = substr($messageBody, 0, $truncateAt);
             // maybe the last character is no unicode character anymore
@@ -374,7 +376,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         }
         */
     }
-        
+    
     /**
      * delete entry
      *

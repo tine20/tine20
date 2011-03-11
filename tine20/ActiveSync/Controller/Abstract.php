@@ -459,5 +459,16 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      * @param string      $_serverId  the local entry id
      * @param boolean     $_withBody  retrieve body of entry
      */
-    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false);    
+    abstract public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false);
+    
+    /**
+     * removed control chars from string which are not allowd in ActiveSync
+     * 
+     * @param  string|array $_dirty
+     * @return string
+     */
+    public function removeControlChars($_dirty)
+    {
+        return preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null, $_dirty);
+    }
 }
