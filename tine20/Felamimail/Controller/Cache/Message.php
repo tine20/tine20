@@ -885,7 +885,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                 ' Do not update flags of incomplete folder ' . $folder->globalname
             );
-            return;
+            return $folder;
         }
         
         if ($this->_availableUpdateTime == 0) {
