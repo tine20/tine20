@@ -934,8 +934,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 $_sieveData['reason'] = 'unittest vacation message';
             }
             
+            if (preg_match('/dbmail/i', $_sieveBackend->getImplementation())) {
+                $translate = Tinebase_Translation::getTranslation('Felamimail');
+                $this->assertEquals($translate->_('Out of Office reply'), $resultSet['subject']);
+            } else {
+                $this->assertEquals($_sieveData['subject'], $resultSet['subject']);
+            }
             $this->assertContains($_sieveData['reason'], $resultSet['reason']);
-            $this->assertEquals($_sieveData['subject'], $resultSet['subject']);
             
         } else if (array_key_exists('action_type', $_sieveData[0])) {
             $resultSet = $this->_json->saveRules($this->_account->getId(), $_sieveData);
