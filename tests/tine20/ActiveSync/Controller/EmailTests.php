@@ -118,6 +118,23 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(3716, strlen($this->_domDocument->getElementsByTagNameNS('uri:ItemOperations', 'Data')->item(0)->nodeValue), $this->_domDocument->saveXML());
     }
     
+    public function testInvalidBodyChars()
+    {
+        //invalid_body_chars.eml
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM)); 
+    	
+    	$message = $this->_emailTestClass->messageTestHelper('invalid_body_chars.eml', 'invalidBodyChars');
+    	
+    	$options = array();
+    	$properties = $this->_domDocument->createElementNS('uri:ItemOperations', 'Properties');
+        $controller->appendXML($properties, $message->folder_id, $message->getId(), $options);
+        $this->_domDocument->documentElement->appendChild($properties);
+        
+        $this->_domDocument->formatOutput = true;
+        $xml = $this->_domDocument->saveXML();
+        
+        $this->assertEquals($xml, preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null, $xml));
+    }
     /**
      * validate fetching email by filereference(hashid-partid)
      */
