@@ -184,6 +184,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $this->_setSieveBackendAndAuthenticate($account);
         $this->_addVacationUserData($_vacation, $account);
         $this->_fixNewlinesAndcheckMimeCapability($_vacation);
+        $this->_addVacationSubject($_vacation);
         
         $fsv = $_vacation->getFSV();
         
@@ -242,6 +243,20 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         $_vacation->reason = preg_replace('/\n/', "", $_vacation->reason);
     }
     
+    /**
+     * add vacation subject
+     * 
+     * @param Felamimail_Model_Sieve_Vacation $_vacation
+     */
+    protected function _addVacationSubject(Felamimail_Model_Sieve_Vacation $_vacation)
+    {
+        if (preg_match('/dbmail/i', $this->_backend->getImplementation())) {
+            // dbmail seems to have problems with different subjects and sends vacation responses to the same recipients again and again
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            $_vacation->subject = $translate->_('Out of Office reply');
+        }
+    }
+        
     /**
      * put updated sieve script
      * 
