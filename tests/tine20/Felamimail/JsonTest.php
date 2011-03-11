@@ -704,6 +704,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->_account->email, $result['addresses'][0]);
         unset($result['addresses']);
+        
+        $sieveBackend = Felamimail_Backend_SieveFactory::factory($this->_account->getId());
+        if (preg_match('/dbmail/i', $sieveBackend->getImplementation())) {
+            $translate = Tinebase_Translation::getTranslation('Felamimail');
+            $vacationData['subject'] = $translate->_('Out of Office reply');
+        }
+        
         $this->assertEquals($vacationData, $result);
     }
     
