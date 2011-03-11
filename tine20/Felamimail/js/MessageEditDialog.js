@@ -90,6 +90,12 @@ Ext.namespace('Tine.Felamimail');
     to: null,
     
     /**
+     * if sending
+     * @type Boolean
+     */
+    sending: false,
+    
+    /**
      * @private
      */
     windowNamePrefix: 'MessageEditWindow_',
@@ -106,6 +112,13 @@ Ext.namespace('Tine.Felamimail');
      * @private
      */
     updateToolbars: Ext.emptyFn,
+    
+    //private
+    initComponent: function() {
+         Tine.Felamimail.MessageEditDialog.superclass.initComponent.call(this);
+         
+         this.on('save', this.onSave, this);
+    },
     
     /**
      * init buttons
@@ -316,6 +329,13 @@ Ext.namespace('Tine.Felamimail');
                 this.onSaveAndClose();
             }
         }, this);
+    },
+    
+    /**
+     * message is sending
+     */
+    onSave: function() {
+        this.sending = true;
     },
     
     /**
@@ -591,7 +611,8 @@ Ext.namespace('Tine.Felamimail');
             this.app.i18n._('Failed'), 
             String.format(this.app.i18n._('Could not send {0}.'), this.i18nRecordName) 
                 + ' ( ' + this.app.i18n._('Error:') + ' ' + response.message + ')'
-        ); 
+        );
+        this.sending = false;
         this.loadMask.hide();
     },
     
@@ -659,7 +680,8 @@ Ext.namespace('Tine.Felamimail');
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
             record: this.record,
             i18n: this.app.i18n,
-            hideLabel: true
+            hideLabel: true,
+            composeDlg: this
         });
         
         this.southPanel = new Ext.Panel({
