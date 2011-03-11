@@ -174,32 +174,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.searchCombo = new Tine.Felamimail.ContactSearchCombo({
             listeners: {
                 scope: this,
-                specialkey: function(combo, e) {
-                    // cancel loading when ENTER is pressed
-                    if (e.getKey() == e.ENTER) {
-                        combo.lastStoreTransactionId = null;
-                    }
-                    
-                    // remove row on backspace if we have more than 1 rows in grid
-                    if (e.getKey() == e.BACKSPACE) {
-                        var value = combo.getValue();
-                        if (value == '' && this.store.getCount() > 1 && this.activeEditor.row > 0) {
-                            this.store.remove(this.activeEditor.record);
-                            this.activeEditor.row -= 1;
-                            this.setFixedHeight(false);
-                            this.ownerCt.doLayout();
-                            this.startEditing.defer(50, this, [this.activeEditor.row, this.activeEditor.col]);
-                            return false;
-                        }
-                    }
-
-                    // jump to subject if we are in the last row and it is empty
-                    var sm = this.getSelectionModel(),
-                        record = sm.getSelected();
-                    if ((! record || record.get('address') == '') && ! sm.hasNext()) {
-                        this.fireEvent('specialkey', combo, e);
-                    }
-                },
+                specialkey: this.onSearchComboSpecialkey,
                 blur: function(combo) {
                     // need to update record because we relay blur event and it might not be updated otherwise
                     if (this.activeEditor) {
@@ -271,6 +246,60 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
             }
         ]);
     },
+    
+    /**
+     * specialkey is pressed in search combo
+     * 
+     * @param {Combo} combo
+     * @param {Event} e
+     */
+    onSearchComboSpecialkey: function(combo, e) {
+        if (! this.activeEditor) {
+            return;
+        }
+        
+        var value = combo.getValue();
+        
+        if (e.getKey() == e.ENTER) {
+            // cancel loading when ENTER is pressed
+            combo.lastStoreTransactionId = null;
+            if (value != '' && this.activeEditor.record.get('address') == value) {
+                // add another row here as this is not detected by onAfterEdit
+                this.addRowAndDoLayout(this.activeEditor.record);
+                return true;
+            }
+        } else if (e.getKey() == e.BACKSPACE) {
+            // remove row on backspace if we have more than 1 rows in grid
+            if (value == '' && this.store.getCount() > 1 && this.activeEditor.row > 0) {
+                this.store.remove(this.activeEditor.record);
+                this.activeEditor.row -= 1;
+                this.setFixedHeight(false);
+                this.ownerCt.doLayout();
+                this.startEditing.defer(50, this, [this.activeEditor.row, this.activeEditor.col]);
+                return true;
+            }
+        }
+
+        // jump to subject if we are in the last row and it is empty
+        if (value == '' && this.store.getCount() == this.activeEditor.row + 1) {
+            this.fireEvent('specialkey', combo, e);
+            if (this.activeEditor.row == 0) {
+                return false;
+            }
+        }
+    },
+                
+    /**
+     * adds row and adjusts layout
+     * 
+     * @param {} oldRecord
+     */
+    addRowAndDoLayout: function(oldRecord) {
+        this.store.add(new Ext.data.Record({type: oldRecord.data.type, 'address': ''}));
+        this.store.commitChanges();
+        this.setFixedHeight(false);
+        this.ownerCt.doLayout();
+    },        
     
     /**
      * start editing (check if message compose dlg is sending first)
@@ -451,17 +480,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     onAfterEdit: function(o) {
         if (o.field == 'address') {
-            if (o.originalValue == '' || this.store.findExact('address', '') === -1) {
+            if (o.value != '' && (o.originalValue == '' || this.store.findExact('address', '') === -1)) {
                 // use selected type to create new row with empty address and start editing
-                this.store.add(new Ext.data.Record({type: o.record.data.type, 'address': ''}));
-                this.store.commitChanges();
+                this.addRowAndDoLayout(o.record);
                 this.startEditing.defer(50, this, [o.row +1, o.column]);
-            } else if (o.value == '') {
-                this.store.remove(o.record);
+                this.searchCombo.focus.defer(80, this.searchCombo);
             }
-            this.setFixedHeight(false);
-            this.ownerCt.doLayout();
-            this.searchCombo.focus.defer(80, this.searchCombo);
         }
     },    
     
