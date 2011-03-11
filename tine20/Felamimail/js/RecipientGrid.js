@@ -44,6 +44,12 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     record: null,
     
     /**
+     * message compose dlg
+     * @type Tine.Felamimail.MessageEditDialog
+     */
+    composeDlg: null,
+    
+    /**
      * @type Ext.Menu
      * @property contextMenu
      */
@@ -264,6 +270,18 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 editor: this.searchCombo
             }
         ]);
+    },
+    
+    /**
+     * start editing (check if message compose dlg is sending first)
+     * 
+     * @param {} row
+     * @param {} col
+     */
+    startEditing: function(row, col) {
+        if (! this.composeDlg || ! this.composeDlg.sending) {
+            Tine.Felamimail.RecipientGrid.superclass.startEditing.apply(this, arguments);
+        }
     },
     
     /**
