@@ -518,9 +518,28 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         Tine.log.debug('Added new folder:' + newRecord.get('globalname'));
         
         this.folderStore.add([newRecord]);
-
+        this.initNewFolderNode(newRecord);
+    },
+    
+    /**
+     * init new folder node
+     * 
+     * @param {Tine.Felamimail.Model.Folder} newRecord
+     */
+    initNewFolderNode: function(newRecord) {
         // update paths in node
         var appendedNode = this.getNodeById(newRecord.id);
+        
+        if (! appendedNode) {
+            // node is not yet rendered -> reload parent
+            var parentId = newRecord.get('parent_path').split('/').pop(),
+                parentNode = this.getNodeById(parentId);
+            parentNode.reload(function() {
+                this.initNewFolderNode(newRecord);
+            }, this);
+            return;
+        }
+        
         appendedNode.attributes.path = newRecord.get('path');
         appendedNode.attributes.parent_path = newRecord.get('parent_path');
         
