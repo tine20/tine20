@@ -131,7 +131,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
              * @event load
              * Fired when record is loaded
              */
-            'load'
+            'load',
+            /**
+             * @event save
+             * Fired when remote record is saving
+             */
+            'save'
         );
         
         if (this.recordClass) {
@@ -431,6 +436,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.loadMask.show();
             
             if (this.mode !== 'local') {
+                this.fireEvent('save');
                 this.recordProxy.saveRecord(this.record, {
                     scope: this,
                     success: function(record) {
