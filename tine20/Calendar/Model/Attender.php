@@ -449,6 +449,7 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
                     $typeMap[$type] = Addressbook_Controller_Contact::getInstance()->getMultiple(array_unique($ids), TRUE);
                     break;
                 case self::USERTYPE_GROUP:
+                case Calendar_Model_AttenderFilter::USERTYPE_MEMBEROF:
                     // first fetch the groups, then the lists identified by list_id
                     $typeMap[$type] = Tinebase_Group::getInstance()->getMultiple(array_unique($ids));
                     $typeMap[self::USERTYPE_LIST] = Addressbook_Controller_List::getInstance()->getMultiple($typeMap[$type]->list_id, true);
