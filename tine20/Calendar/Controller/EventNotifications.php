@@ -328,6 +328,12 @@
         // NOTE: this is a contact as we only support users and groupmembers
         $contact = $_attender->getResolvedUser();
         $sender = $_action == 'alarm' ? $organizer : $_updater;
-        Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody);
+        
+        try {
+            Tinebase_Notification::getInstance()->send($sender, array($contact), $messageSubject, $messageBody);
+        } catch (Exception $e) {
+            Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " could not send notification :" . $e);
+            return;
+        }
     }
  }

@@ -209,11 +209,12 @@
             if (! method_exists($controller, $actionName)) {
                 throw new Exception('Could not execute action, requested action does not exist');
             }
+            
+            call_user_func_array(array($controller, $actionName), $_decodedMessage['params']);
+            
         } catch (Exception $e) {
             Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . " could not execute action :" . $e);
             return;
         }
-        
-        call_user_func_array(array($controller, $actionName), $_decodedMessage['params']);
     }
 }
