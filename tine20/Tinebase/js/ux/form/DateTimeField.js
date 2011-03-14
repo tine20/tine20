@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -34,8 +34,12 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     clearInvalid: function () {
     	this.markedInvalid = false;
     	
-		this.dateField.clearInvalid();
-		this.timeField.clearInvalid();
+        if (this.dateField) {
+            this.dateField.clearInvalid();
+        }
+        if (this.timeField) {
+            this.timeField.clearInvalid();
+        }
     },
     
     clearTime: function () {
