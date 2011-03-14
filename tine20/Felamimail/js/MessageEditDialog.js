@@ -675,6 +675,41 @@ Ext.namespace('Tine.Felamimail');
     },
     
     /**
+     * init account (from) combobox
+     */
+    initAccountCombo: function() {
+        var accountStore = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore();
+            accountComboStore = new Ext.data.ArrayStore({
+            fields   : Tine.Felamimail.Model.Account
+        });
+        
+        accountStore.each(function(account) {
+            accountComboStore.add(account);
+            if (account.get('type') == 'system') {
+                // TODO add identities / aliases to store (for systemaccounts)
+                //console.log('system');
+            }
+        }, this);
+            
+        this.accountCombo = new Ext.form.ComboBox({
+            name: 'account_id',
+            ref: '../../accountCombo',
+            plugins: [ Ext.ux.FieldLabeler ],
+            fieldLabel: this.app.i18n._('From'),
+            displayField: 'name',
+            valueField: 'id',
+            editable: false,
+            triggerAction: 'all',
+            store: accountComboStore,
+            mode: 'local',
+            listeners: {
+                scope: this,
+                select: this.onFromSelect
+            }
+        });
+    },
+    
+    /**
      * returns dialog
      * 
      * NOTE: when this method gets called, all initialisation is done.
@@ -685,6 +720,7 @@ Ext.namespace('Tine.Felamimail');
     getFormItems: function() {
         
         this.initAttachmentGrid();
+        this.initAccountCombo();
         
         this.recipientGrid = new Tine.Felamimail.RecipientGrid({
             record: this.record,
@@ -710,8 +746,6 @@ Ext.namespace('Tine.Felamimail');
             flex: 1  // Take up all *remaining* vertical space
         });
         
-        var accountStore = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore();
-        
         return {
             border: false,
             frame: true,
@@ -727,22 +761,9 @@ Ext.namespace('Tine.Felamimail');
                     'afterlayout': this.fixLayout,
                     scope: this
                 },
-                items: [{
-                    xtype:'combo',
-                    name: 'account_id',
-                    ref: '../../accountCombo',
-                    plugins: [ Ext.ux.FieldLabeler ],
-                    fieldLabel: this.app.i18n._('From'),
-                    displayField: 'name',
-                    valueField: 'id',
-                    editable: false,
-                    triggerAction: 'all',
-                    store: accountStore,
-                    listeners: {
-                        scope: this,
-                        select: this.onFromSelect
-                    }
-                }, this.recipientGrid, 
+                items: [
+                    this.accountCombo, 
+                    this.recipientGrid, 
                 {
                     xtype:'textfield',
                     plugins: [ Ext.ux.FieldLabeler ],
