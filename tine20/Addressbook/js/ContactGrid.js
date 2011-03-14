@@ -348,7 +348,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                    text: this.app.i18n._('Cell private') + ' ' + contact.data.tel_cell_private + '',
                    scope: this,
                    handler: this.onCallContact,
-                   field: 'tel_cell'
+                   field: 'tel_cell_private'
                 });
                 action.setDisabled(false);
             }
@@ -377,7 +377,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         } else if (!Ext.isEmpty(contact.data.tel_cell_private)) {
             number = contact.data.tel_cell_private;
         } else if (!Ext.isEmpty(contact.data.tel_home)) {
-            number = contact.data.tel_work;
+            number = contact.data.tel_home;
         }
 
         Tine.Phone.dialPhoneNumber(number);
