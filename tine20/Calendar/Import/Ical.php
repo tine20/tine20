@@ -196,6 +196,11 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
             }
         }
         
+        // truncate string
+        if (array_key_exists('uid', $eventData) && strlen($eventData['uid']) > 40) {
+            $eventData['uid'] = substr($eventData['uid'], 0, 40);
+        }
+        
         $event = new Calendar_Model_Event($eventData);
         $event->setTimezone('UTC');
                         
