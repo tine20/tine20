@@ -5,10 +5,9 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @deprecated  replace this with Addressbook_Backend_SqlSearchImproved
  * @todo        move visibility='displayed' check from getSelect to contact filter
  */
 
@@ -17,7 +16,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
+class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
 {
     /**
      * Table name without prefix
@@ -47,6 +46,25 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     protected $_getDisabledContacts = FALSE;
 
+    /**
+     * foreign tables (key => tablename)
+     *
+     * @var array
+     */
+    protected $_foreignTables = array(
+        'jpegphoto'    => array(
+            'table'         => 'addressbook_image',
+            'joinOn'        => 'contact_id',
+            'select'        => array('jpegphoto' => 'IF(ISNULL(addressbook_image.contact_id), 0, 1)'),
+            'singleValue'   => TRUE,
+        ),
+        'account_id'    => array(
+            'table'         => 'accounts',
+            'joinOn'        => 'contact_id',
+            'singleValue'   => TRUE,
+        ),
+    );
+    
     /**
      * fetch one contact of a user identified by his user_id
      *
@@ -110,6 +128,11 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         return $contact;
     }
     
+    /**
+     * get disabled contacts?
+     * 
+     * @param boolean $_value
+     */
     public function setGetDisabledContacts($_value)
     {
         $this->_getDisabledContacts = !!$_value;
@@ -157,18 +180,15 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
      * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
+     * 
+     * @todo remove this when visibility/status check is moved to contact filter
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {        
         $select = parent::_getSelect($_cols, $_getDeleted);
         
-        $select->joinLeft(
-            /* table  */ array('accounts' => $this->_tablePrefix . 'accounts'), 
-            /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier('accounts.contact_id'),
-            /* select */ ($_cols == '*' || array_key_exists('account_id', (array)$_cols)) ? array('account_id' => 'accounts.id') : array()
-        );
-        
-        if ($this->_getDisabledContacts !== true) {
+        // @todo move this to a 'disabled' contact filter
+        if ($this->_getDisabledContacts !== true && ($_cols == '*' || array_key_exists('account_id', $_cols))) {
             if (Tinebase_Core::getUser() instanceof Tinebase_Model_FullUser) {
                 $where = "/* is no user */ ISNULL(accounts.id) OR /* is user */ (NOT ISNULL(accounts.id) AND " . 
                     $this->_db->quoteInto($this->_db->quoteIdentifier('accounts.status') . ' = ?', 'enabled') . 
@@ -186,27 +206,24 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $select->where($where);
         }
         
-        if ($_cols == '*' || array_key_exists('jpegphoto', (array)$_cols)) {
-            $select->joinLeft(
-                /* table  */ array('image' => $this->_tablePrefix . 'addressbook_image'), 
-                /* on     */ $this->_db->quoteIdentifier('image.contact_id') . ' = ' . $this->_db->quoteIdentifier($this->_tableName . '.id'),
-                /* select */ array('jpegphoto' => 'IF(ISNULL('. $this->_db->quoteIdentifier('image.contact_id') .'), 0, 1)')
-            );
-        }
-        
         return $select;
     }
     
     /**
-     * converts record into raw data for adapter
-     *
-     * @param  Tinebase_Record_Abstract $_record
+     * add columns from filter
+     * 
+     * @param array $_colsToFetch
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return array
+     * 
+     * @todo remove this when visibility/status check is moved to contact filter
      */
-    protected function _recordToRawData($_record)
+    protected function _addFilterColumns($_colsToFetch, Tinebase_Model_Filter_FilterGroup $_filter)
     {
-        $result = parent::_recordToRawData($_record);
-
+        $result = parent::_addFilterColumns($_colsToFetch, $_filter);
+        
+        // add account.id column as we always need this filter for disabled/invisible users
+        $result['account_id'] = 'accounts.id';
         return $result;
     }
 }
