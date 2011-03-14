@@ -24,6 +24,12 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     enableHdMenu: false,
     
     /**
+     * @cfg {Boolean} showGroupMemberType
+     * show user_type groupmember in type selection
+     */
+    showMemberOfType: false,
+    
+    /**
      * @cfg {Boolean} showNamesOnly
      * true to only show types and names in the list
      */
@@ -164,7 +170,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                     ['user',     this.app.i18n._('User')   ],
                     ['group',    this.app.i18n._('Group')  ],
                     ['resource', this.app.i18n._('Resource')]
-                ]
+                ].concat(this.showMemberOfType ? [['memberOf', this.app.i18n._('Member of group')  ]] : [])
             })
         }, {
             id: 'user_id',
@@ -280,6 +286,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 break;
                 
                 case 'group':
+                case 'memberOf':
                 colModel.config[o.column].setEditor(new Tine.Tinebase.widgets.form.RecordPickerComboBox({
                     blurOnSelect: true,
                     recordClass: Tine.Addressbook.Model.List,
@@ -449,6 +456,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return Ext.util.Format.htmlEncode(name);
         }
         return Tine.Tinebase.appMgr.get('Calendar').i18n._('No Information');
+    },
+    
+    renderAttenderMemberofName: function(name) {
+        return Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderGroupName.apply(this, arguments);
     },
     
     renderAttenderResourceName: function(name) {

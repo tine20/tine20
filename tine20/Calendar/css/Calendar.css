@@ -79,6 +79,7 @@
     background-repeat:no-repeat;
 }
 
+.cal-attendee-type-memberOf,
 .cal-attendee-type-groupmember {
     background-image:url(../../images/groupmember.png) !important;
     background-repeat: no-repeat;
