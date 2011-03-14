@@ -61,7 +61,9 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
     {
         // create mail object
         $mail = new Tinebase_Mail('UTF-8');
-        $mail->setHeaderEncoding(Zend_Mime::ENCODING_BASE64);
+        // this seems to break some subjects, removing it for the moment 
+        // -> see 0004070: sometimes we can't decode message subjects (calendar notifications?)
+        //$mail->setHeaderEncoding(Zend_Mime::ENCODING_BASE64);
         $mail->setSubject($_subject);
         $mail->setBodyText($_messagePlain);
         
