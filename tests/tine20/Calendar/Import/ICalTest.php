@@ -76,4 +76,18 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         
         $this->assertEquals(3, $events->count(), 'events where not imported');
     }
+    
+    public function testImportHorde()
+    {
+        $importer = new Calendar_Import_Ical(array(
+            'importContainerId' => $this->_testCalendar->getId(),
+        ));
+        
+        $importer->importFile(dirname(__FILE__) . '/files/horde.ics');
+        $events = Calendar_Controller_Event::getInstance()->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId())
+        )), NULL);
+        
+        $this->assertEquals(1, $events->count(), 'events where not imported');
+    }
 }
