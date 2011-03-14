@@ -134,7 +134,7 @@ Date.prototype.toJSON = function(key) {
 };
 
 /**
- * addidional formats
+ * additional formats
  */
 Ext.util.Format = Ext.apply(Ext.util.Format, {
     euMoney: function(v){
