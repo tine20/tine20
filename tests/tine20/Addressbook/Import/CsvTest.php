@@ -75,7 +75,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      */
     public function testImport()
     {
-        $result = $this->_doImport(array('dryrun' => 1), new Addressbook_Model_ContactFilter(array(
+        $result = $this->_doImport(array('dryrun' => 1), 'adb_tine_import_csv', new Addressbook_Model_ContactFilter(array(
             array(
                 'field'    => 'n_fileas',
                 'operator' => 'equals',
@@ -98,7 +98,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
             'container_id'  => $internalContainer->getId(),
             'duplicates'    => 1,
         );
-        $result = $this->_doImport($options, new Addressbook_Model_ContactFilter(array(
+        $result = $this->_doImport($options, 'adb_tine_import_csv', new Addressbook_Model_ContactFilter(array(
             array('field' => 'container_id',    'operator' => 'equals', 'value' => $internalContainer->getId()),
         )));
         
@@ -128,7 +128,7 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
      * @param Addressbook_Model_ContactFilter $_exportFilter
      * @return array
      */
-    protected function _doImport(array $_options, $_definitionName = 'adb_tine_import_csv', Addressbook_Model_ContactFilter $_exportFilter = NULL)
+    protected function _doImport(array $_options, $_definitionName, Addressbook_Model_ContactFilter $_exportFilter = NULL)
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->getByName($_definitionName);
         $this->_instance = Addressbook_Import_Csv::createFromDefinition($definition, $_options);
