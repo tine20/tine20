@@ -694,7 +694,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         $mail = $this->_createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
-        $this->_sendMailViaTransport($mail, $account, $_message, true);
+        $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -709,8 +709,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Account $_account
      * @param boolean $_saveInSent
      * @param Felamimail_Model_Message $_message
+     * @param array $_nonPrivateRecipients
      */
-    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, $_saveInSent = false)
+    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, $_saveInSent = false, $_nonPrivateRecipients = array())
     {
         $smtpConfig = $_account->getSmtpConfig();
         if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
@@ -737,7 +738,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     
                 // add email notes to contacts (only to/cc)
                 if ($_message->note) {
-                    $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $_message->getPlainTextBody());
+                    $this->_addEmailNote($_nonPrivateRecipients, $_message->subject, $_message->getPlainTextBody());
                 }
             }
         } else {
@@ -903,10 +904,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected function _setMailFrom(Tinebase_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
     {
         $_mail->clearFrom();
+        
         $from = (isset($_account->from) && ! empty($_account->from)) 
             ? $_account->from 
             : Tinebase_Core::getUser()->accountFullName;
         
+        $email = ($_message !== NULL && ! empty($_message->email_from)) ? $_message->email_from : $_account->email;
+            
         $_mail->setFrom($_account->email, $from);
     }
     
