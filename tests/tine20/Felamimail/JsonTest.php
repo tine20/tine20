@@ -365,7 +365,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // send email
         $messageToSend = $this->_getMessageData('unittestalias@tine20.org');
         $messageToSend['note'] = 1;
-        print_r($messageToSend);
+        //print_r($messageToSend);
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
         
