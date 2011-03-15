@@ -305,6 +305,7 @@ Tine.Felamimail.messageBackend = new Tine.Tinebase.data.RecordProxy({
  */ 
 Tine.Felamimail.Model.Account = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
+    { name: 'original_id' }, // client only, used in message compose dialog for accounts combo
     { name: 'user_id' },
     { name: 'name' },
     { name: 'type' },

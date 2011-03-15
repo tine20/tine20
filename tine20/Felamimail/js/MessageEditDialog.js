@@ -571,6 +571,7 @@ Ext.namespace('Tine.Felamimail');
     /**
      * executed when record gets updated from form
      * - add attachments to record here
+     * - add alias / from
      * 
      * @private
      */
@@ -583,8 +584,15 @@ Ext.namespace('Tine.Felamimail');
             this.record.data.attachments.push(Ext.ux.file.Uploader.file.getFileData(attachment));
         }, this);
         
+        var accountId = this.accountCombo.getValue();
+            account = this.accountCombo.getStore().getById(accountId),
+            emailFrom = account.get('email');
+        this.record.set('from_email', emailFrom);
+        
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
 
+        this.record.set('account_id', account.get('original_id'));
+        
         /*
         if (this.record.data.note) {
             // show message box with note editing textfield
@@ -624,26 +632,7 @@ Ext.namespace('Tine.Felamimail');
         this.sending = false;
         this.loadMask.hide();
     },
-    
-    /**
-     * if 'account_id' is changed we need to update the signature
-     * 
-     * @param {} combo
-     * @param {} newValue
-     * @param {} oldValue
-     */
-     onFromSelect: function(combo, record, index) {
-        // get new signature
-        var newSignature = Tine.Felamimail.getSignature(record.id);
-        var signatureRegexp = new RegExp('<br><br><span id="felamimail\-body\-signature">\-\-<br>.*</span>');
-        
-        // update signature
-        var bodyContent = this.htmlEditor.getValue();
-        bodyContent = bodyContent.replace(signatureRegexp, newSignature);
-        
-        this.htmlEditor.setValue(bodyContent);
-    },
-    
+
     /**
      * init attachment grid + add button to toolbar
      */
@@ -676,21 +665,43 @@ Ext.namespace('Tine.Felamimail');
     
     /**
      * init account (from) combobox
+     * 
+     * - need to create a new store with an account record for each alias
      */
     initAccountCombo: function() {
-        var accountStore = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore();
+        var accountStore = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore(),
             accountComboStore = new Ext.data.ArrayStore({
-            fields   : Tine.Felamimail.Model.Account
-        });
+                fields   : Tine.Felamimail.Model.Account
+            });
         
+        var aliasAccount = null,
+            aliases = null,
+            id = null
+            
         accountStore.each(function(account) {
-            accountComboStore.add(account);
+            aliases = [ account.get('email') ];
+
             if (account.get('type') == 'system') {
-                // TODO add identities / aliases to store (for systemaccounts)
-                //console.log('system');
+                // add identities / aliases to store (for systemaccounts)
+                var user = Tine.Tinebase.registry.get('currentAccount');
+                if (user.emailUser && user.emailUser.emailAliases && user.emailUser.emailAliases.length > 0) {
+                    aliases = aliases.concat(user.emailUser.emailAliases);
+                }
+            }
+            
+            for (var i = 0; i < aliases.length; i++) {
+                id = (i == 0) ? account.id : Ext.id();
+                aliasAccount = account.copy(id);
+                if (i > 0) {
+                    aliasAccount.data.id = id;
+                    aliasAccount.set('email', aliases[i]);
+                }
+                aliasAccount.set('name', aliasAccount.get('name') + ' (' + aliases[i] +')');
+                aliasAccount.set('original_id', account.id);
+                accountComboStore.add(aliasAccount);
             }
         }, this);
-            
+        
         this.accountCombo = new Ext.form.ComboBox({
             name: 'account_id',
             ref: '../../accountCombo',
@@ -707,6 +718,27 @@ Ext.namespace('Tine.Felamimail');
                 select: this.onFromSelect
             }
         });
+    },
+    
+    /**
+     * if 'account_id' is changed we need to update the signature
+     * 
+     * @param {} combo
+     * @param {} newValue
+     * @param {} oldValue
+     */
+     onFromSelect: function(combo, record, index) {
+        
+        // get new signature
+        var accountId = record.get('original_id');
+        var newSignature = Tine.Felamimail.getSignature(accountId);
+        var signatureRegexp = new RegExp('<br><br><span id="felamimail\-body\-signature">\-\-<br>.*</span>');
+        
+        // update signature
+        var bodyContent = this.htmlEditor.getValue();
+        bodyContent = bodyContent.replace(signatureRegexp, newSignature);
+        
+        this.htmlEditor.setValue(bodyContent);
     },
     
     /**
