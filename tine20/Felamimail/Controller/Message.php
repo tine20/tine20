@@ -831,14 +831,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
         $this->_setMailFrom($mail, $account);
-        
-        // add user agent
-        $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
-        
-        // set organization
-        if (isset($account->organization) && ! empty($account->organization)) {
-            $_mail->addHeader('Organization', $account->organization);
-        }
+        $this->_setMailHeaders($mail, $account);
         
         // set transport + send mail
         $smtpConfig = $account->getSmtpConfig();
