@@ -879,78 +879,115 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param array $_nonPrivateRecipients
      * @param Felamimail_Model_Message $_originalMessage
      * @return Tinebase_Mail
-     * 
-     * @todo what has to be set in the 'In-Reply-To' header?
-     * @todo add name for to/cc/bcc
      */
     protected function _createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
     {
         // create new mail to send
         $mail = new Tinebase_Mail('UTF-8');
+        $mail->setSubject($_message->subject);
         
-        // build mail content
+        $this->_setMailBody($mail, $_message);
+        $this->_setMailFrom($mail, $_message, $_account);
+        $this->_setMailRecipients($mail, $_message, $_nonPrivateRecipients);
+        $this->_addAttachments($mail, $_message, $_originalMessage);
+        
+        return $mail;
+    }
+    
+    /**
+     * set mail body
+     * 
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Message $_message
+     */
+    protected function _setMailBody(Tinebase_Mail $_mail, Felamimail_Model_Message $_message)
+    {
         if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
             $plainBodyText = $_message->getPlainTextBody();
-            $mail->setBodyText($plainBodyText);
-            $mail->setBodyHtml(Felamimail_Message::addHtmlMarkup($_message->body));
+            $_mail->setBodyText($plainBodyText);
+            $_mail->setBodyHtml(Felamimail_Message::addHtmlMarkup($_message->body));
         } else {
-            $mail->setBodyText($_message->body);
+            $_mail->setBodyText($_message->body);
         }
-        
-        // set from
+    }
+    
+    /**
+     * set from in mail to be sent
+     * 
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Account $_account
+     */
+    protected function _setMailFrom(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, Felamimail_Model_Account $_account)
+    {
         $from = (isset($_account->from) && ! empty($_account->from)) 
             ? $_account->from 
             : substr($_account->email, 0, strpos($_account->email, '@'));
         
-        $mail->setFrom($_account->email, $from);
-
-        // set in reply to
-        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_originalMessage !== NULL) {
-            $mail->addHeader('In-Reply-To', $_originalMessage->messageuid);
-        }
-        
-        // add recipients
+        $_mail->setFrom($_account->email, $from);
+    }
+    
+    /**
+     * set mail recipients
+     * 
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Message $_message
+     * @param array $_nonPrivateRecipients
+     * 
+     *  @todo add name for to/cc/bcc
+     */
+    protected function _setMailRecipients(Tinebase_Mail $_mail, Felamimail_Model_Message $_message,  &$_nonPrivateRecipients = array())
+    {
         if (isset($_message->to)) {
             foreach ($_message->to as $to) {
-                $mail->addTo($to);
+                $_mail->addTo($to);
                 $_nonPrivateRecipients[] = $to;
             }
         }
         if (isset($_message->cc)) {
             foreach ($_message->cc as $cc) {
-                $mail->addCc($cc);
+                $_mail->addCc($cc);
                 $_nonPrivateRecipients[] = $cc;
             }
         }
         if (isset($_message->bcc)) {
             foreach ($_message->bcc as $bcc) {
-                $mail->addBcc($bcc);
+                $_mail->addBcc($bcc);
             }
         }
-        
-        // set subject
-        $mail->setSubject($_message->subject);
-        
-        // add attachments
-        $this->_addAttachments($mail, $_message, $_originalMessage);
+    }
+    
+    /**
+     * set headers in mail to be sent
+     * 
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Account $_account
+     * 
+     * @todo what has to be set in the 'In-Reply-To' header?
+     */
+    protected function _setMailHeaders(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, Felamimail_Model_Account $_account)
+    {
+        // set in reply to
+        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_originalMessage !== NULL) {
+            $_mail->addHeader('In-Reply-To', $_originalMessage->messageuid);
+        }
         
         // add user agent
-        $mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
+        $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
         
         // set organization
         if (isset($_account->organization) && ! empty($_account->organization)) {
-            $mail->addHeader('Organization', $_account->organization);
+            $_mail->addHeader('Organization', $_account->organization);
         }
         
         // add other headers
         if (! empty($_message->headers) && is_array($_message->headers)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
             foreach ($_message->headers as $key => $value) {
-                $mail->addHeader($key, $value);
+                $_mail->addHeader($key, $value);
             }
         }
-        
-        return $mail;
     }
     
     /**
