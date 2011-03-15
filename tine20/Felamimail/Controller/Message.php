@@ -824,10 +824,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             ' Sending message with subject ' . $_mail->getSubject() 
         );
 
-        $oldMaxExcecutionTime = ini_get('max_execution_time');
-        
         // increase execution time (sending message with attachments can take a long time)
-        Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         // get account
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
