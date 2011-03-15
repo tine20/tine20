@@ -870,7 +870,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $this->_setMailBody($mail, $_message);
         $this->_setMailFrom($mail, $_account, $_message);
         $this->_setMailRecipients($mail, $_message, $_nonPrivateRecipients);
-        $this->_setMailHeaders($mail, $_account, $_message);
+        $this->_setMailHeaders($mail, $_account, $_message, $_originalMessage);
         
         $this->_addAttachments($mail, $_message, $_originalMessage);
         
@@ -952,10 +952,11 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Account $_account
      * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Message $_originalMessage
      * 
      * @todo what has to be set in the 'In-Reply-To' header?
      */
-    protected function _setMailHeaders(Tinebase_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
+    protected function _setMailHeaders(Tinebase_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, Felamimail_Model_Message $_originalMessage = NULL)
     {
         // add user agent
         $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
