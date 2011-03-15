@@ -882,6 +882,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $this->_setMailBody($mail, $_message);
         $this->_setMailFrom($mail, $_account, $_message);
         $this->_setMailRecipients($mail, $_message, $_nonPrivateRecipients);
+        $this->_setMailHeaders($mail, $_account, $_message);
+        
         $this->_addAttachments($mail, $_message, $_originalMessage);
         
         return $mail;
@@ -955,18 +957,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * set headers in mail to be sent
      * 
      * @param Tinebase_Mail $_mail
-     * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Message $_message
      * 
      * @todo what has to be set in the 'In-Reply-To' header?
      */
-    protected function _setMailHeaders(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, Felamimail_Model_Account $_account)
+    protected function _setMailHeaders(Tinebase_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
     {
-        // set in reply to
-        if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_originalMessage !== NULL) {
-            $_mail->addHeader('In-Reply-To', $_originalMessage->messageuid);
-        }
-        
         // add user agent
         $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
         
@@ -975,11 +972,18 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $_mail->addHeader('Organization', $_account->organization);
         }
         
-        // add other headers
-        if (! empty($_message->headers) && is_array($_message->headers)) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
-            foreach ($_message->headers as $key => $value) {
-                $_mail->addHeader($key, $value);
+        if ($_message !== NULL) {
+            // set in reply to
+            if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_originalMessage !== NULL) {
+                $_mail->addHeader('In-Reply-To', $_originalMessage->messageuid);
+            }
+        
+            // add other headers
+            if (! empty($_message->headers) && is_array($_message->headers)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
+                foreach ($_message->headers as $key => $value) {
+                    $_mail->addHeader($key, $value);
+                }
             }
         }
     }
