@@ -694,7 +694,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         $mail = $this->_createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
-        $this->_sendMailViaTransport($mail, $account);
+        $this->_sendMailViaTransport($mail, $account, $_message, true);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -707,9 +707,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * 
      * @param Zend_Mail $_mail
      * @param Felamimail_Model_Account $_account
+     * @param boolean $_saveInSent
      * @param Felamimail_Model_Message $_message
      */
-    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
+    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, $_saveInSent = false)
     {
         $smtpConfig = $_account->getSmtpConfig();
         if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
@@ -721,7 +722,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
             
             // append mail to sent folder
-            $this->_saveInSent($transport, $_account);
+            if ($_saveInSent) {
+                $this->_saveInSent($transport, $_account);
+            }
             
             if ($_message !== NULL) {
                 // add reply/forward flags if set
@@ -825,10 +828,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param  Zend_Mail  $_message
      * @param  bool       $_saveInSent
      * @return Zend_Mail
-     * 
-     * @todo remove code duplication by generalizing the send functions 
      */
-    public function sendZendMail($_accountId, Zend_Mail $_mail, $_saveInSent = null)
+    public function sendZendMail($_accountId, Zend_Mail $_mail, $_saveInSent = false)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_mail->getSubject() 
@@ -842,24 +843,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $this->_setMailFrom($mail, $account);
         $this->_setMailHeaders($mail, $account);
-        
-        // set transport + send mail
-        $smtpConfig = $account->getSmtpConfig();
-        if (! empty($smtpConfig)) {
-            $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
-            
-            // send message via smtp
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to send message via SMTP ...');
-            Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
-            
-            // append mail to sent folder
-            if ($_saveInSent == true) {
-                $this->_saveInSent($transport, $account);
-            }
-        } else {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
-        }
+        $this->_sendMailViaTransport($mail, $account, $_saveInSent);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
