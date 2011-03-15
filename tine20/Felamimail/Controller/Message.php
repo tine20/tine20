@@ -911,6 +911,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $email = ($_message !== NULL && ! empty($_message->from_email)) ? $_message->from_email : $_account->email;
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set from for mail: ' . $email . ' / ' . $from);
+        
         $_mail->setFrom($email, $from);
     }
     
