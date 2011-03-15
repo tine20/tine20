@@ -679,10 +679,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
 
-        $oldMaxExcecutionTime = ini_get('max_execution_time');
-        
         // increase execution time (sending message with attachments can take a long time)
-        Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
         // get account
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
@@ -696,40 +694,52 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         $mail = $this->_createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
-        
-        // set transport + send mail
-        $smtpConfig = $account->getSmtpConfig();
-        if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
-            $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
-            
-            // send message via smtp
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to send message via SMTP ...');
-            Tinebase_Smtp::getInstance()->sendMessage($mail, $transport);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
-            
-            // add email notes to contacts (only to/cc)
-            if ($_message->note) {
-                $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $_message->getPlainTextBody());
-            }
-        
-            // append mail to sent folder
-            $this->_saveInSent($transport, $account);
-            
-            // add reply/forward flags if set
-            if (! empty($_message->flags) 
-                && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
-                && $originalMessage !== NULL
-            ) {
-                $this->addFlags($originalMessage, array($_message->flags));
-            }
-        } else {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
-        }
+        $this->_sendMailViaTransport($mail, $account);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $_message;
+    }
+    
+    /**
+     * send mail via transport (smtp)
+     * 
+     * @param Zend_Mail $_mail
+     * @param Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Message $_message
+     */
+    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
+    {
+        $smtpConfig = $_account->getSmtpConfig();
+        if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
+            $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
+            
+            // send message via smtp
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to send message via SMTP ...');
+            Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
+            
+            // append mail to sent folder
+            $this->_saveInSent($transport, $_account);
+            
+            if ($_message !== NULL) {
+                // add reply/forward flags if set
+                if (! empty($_message->flags) 
+                    && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
+                    && $originalMessage !== NULL
+                ) {
+                    $this->addFlags($originalMessage, array($_message->flags));
+                }
+    
+                // add email notes to contacts (only to/cc)
+                if ($_message->note) {
+                    $this->_addEmailNote($nonPrivateRecipients, $_message->subject, $_message->getPlainTextBody());
+                }
+            }
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
+        }
     }
     
     /**
