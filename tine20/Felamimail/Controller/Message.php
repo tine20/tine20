@@ -832,12 +832,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         // get account
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
-        // set from
-        $_mail->clearFrom();
-        $from = (isset($account->from) && ! empty($account->from)) 
-            ? $account->from 
-            : Tinebase_Core::getUser()->accountFullName;
-        $_mail->setFrom($account->email, $from);
+        $this->_setMailFrom($mail, $account);
         
         // add user agent
         $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
@@ -887,7 +882,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $mail->setSubject($_message->subject);
         
         $this->_setMailBody($mail, $_message);
-        $this->_setMailFrom($mail, $_message, $_account);
+        $this->_setMailFrom($mail, $_account, $_message);
         $this->_setMailRecipients($mail, $_message, $_nonPrivateRecipients);
         $this->_addAttachments($mail, $_message, $_originalMessage);
         
@@ -915,14 +910,15 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * set from in mail to be sent
      * 
      * @param Tinebase_Mail $_mail
-     * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Message $_message
      */
-    protected function _setMailFrom(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, Felamimail_Model_Account $_account)
+    protected function _setMailFrom(Tinebase_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
     {
+        $_mail->clearFrom();
         $from = (isset($_account->from) && ! empty($_account->from)) 
             ? $_account->from 
-            : substr($_account->email, 0, strpos($_account->email, '@'));
+            : Tinebase_Core::getUser()->accountFullName;
         
         $_mail->setFrom($_account->email, $from);
     }
