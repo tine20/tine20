@@ -350,7 +350,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test send message
-     *
      */
     public function testSendMessage()
     {
@@ -364,16 +363,17 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
 
         // send email
-        $messageToSend = $this->_getMessageData();
+        $messageToSend = $this->_getMessageData('unittestalias@tine20.org');
         $messageToSend['note'] = 1;
-        //print_r($messageToSend);
+        print_r($messageToSend);
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
         
         // check if message is in sent folder
         $message = $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
-        $this->assertEquals($message['subject'],  $messageToSend['subject']);
-        $this->assertEquals($message['to'][0],    $messageToSend['to'][0], 'recipient not found');
+        $this->assertEquals($message['from_email'], $messageToSend['from_email']);
+        $this->assertEquals($message['to'][0],      $messageToSend['to'][0], 'recipient not found');
+        $this->assertEquals($message['subject'],    $messageToSend['subject']);
         
         // check if email note has been added to contact(s)
         $contact = Addressbook_Controller_Contact::getInstance()->get($contact->getId());
@@ -821,15 +821,15 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getMessageData()
+    protected function _getMessageData($_emailFrom = '')
     {
         return array(
-            'account_id'=> $this->_account->getId(),
-            'subject'   => 'test',
-            'to'        => array('unittest@tine20.org'),
-            'body'      => 'aaaaaä <br>',
-            //'flags'     => array('\Answered'),
-            'headers'   => array('X-Tine20TestMessage' => 'jsontest'),
+            'account_id'    => $this->_account->getId(),
+            'subject'       => 'test',
+            'to'            => array('unittest@tine20.org'),
+            'body'          => 'aaaaaä <br>',
+            'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
+            'from_email'    => $_emailFrom,
         );
     }
 
