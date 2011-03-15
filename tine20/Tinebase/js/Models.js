@@ -327,6 +327,7 @@ Tine.Tinebase.Model.ImportExportDefinition = Ext.data.Record.create([
     {name: 'id'             },
     {name: 'name'           },
     {name: 'plugin'         },
+    {name: 'description'    },
     {name: 'model'          }
 ]);
 
