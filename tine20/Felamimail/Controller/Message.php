@@ -909,7 +909,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             ? $_account->from 
             : Tinebase_Core::getUser()->accountFullName;
         
-        $email = ($_message !== NULL && ! empty($_message->email_from)) ? $_message->email_from : $_account->email;
+        $email = ($_message !== NULL && ! empty($_message->from_email)) ? $_message->from_email : $_account->email;
             
         $_mail->setFrom($_account->email, $from);
     }
