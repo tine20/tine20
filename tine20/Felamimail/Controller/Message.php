@@ -694,7 +694,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
 
         $mail = $this->_createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
-        $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients);
+        $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients, $originalMessage);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -710,8 +710,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param boolean $_saveInSent
      * @param Felamimail_Model_Message $_message
      * @param array $_nonPrivateRecipients
+     * @param Felamimail_Model_Message $_originalMessage
      */
-    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, $_saveInSent = false, $_nonPrivateRecipients = array())
+    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, $_saveInSent = false, $_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
     {
         $smtpConfig = $_account->getSmtpConfig();
         if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
@@ -731,9 +732,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                 // add reply/forward flags if set
                 if (! empty($_message->flags) 
                     && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
-                    && $originalMessage !== NULL
+                    && $_originalMessage !== NULL
                 ) {
-                    $this->addFlags($originalMessage, array($_message->flags));
+                    $this->addFlags($_originalMessage, array($_message->flags));
                 }
     
                 // add email notes to contacts (only to/cc)
