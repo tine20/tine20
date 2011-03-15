@@ -917,7 +917,7 @@ abstract class Tinebase_Controller_Record_Abstract
         
         if ($_record instanceof Tinebase_Record_RecordSet) {
             
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record set.");
             
             $alarms->addIndices(array('record_id'));
             foreach ($_record as $record) {
@@ -932,7 +932,7 @@ abstract class Tinebase_Controller_Record_Abstract
             
         } else if ($_record instanceof Tinebase_Record_Interface) {
             
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record.");
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Resolving alarms and add them to record.");
             
             $_record->alarms = $alarms;
 
