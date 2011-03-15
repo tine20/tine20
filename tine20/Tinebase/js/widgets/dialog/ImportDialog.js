@@ -103,7 +103,24 @@ Tine.widgets.dialog.ImportDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 editable: false,
                 allowBlank: false,
                 forceSelection: true,
-                valueField:'id'
+                valueField:'id',
+                listeners: {
+                    scope: this,
+                    'select': function(combo, record, index) {
+                        this.getForm().findField('description').setValue(record.get('description'));
+                    }
+                }
+            }, {
+                xtype: 'displayfield',
+                fieldLabel: _('Import description'),
+                name: 'description',
+                height: 70,
+                value: this.definitionsStore.getById(this.record.get('import_definition_id')).get('description'),
+                style: {
+                    border: 'silver 1px solid',
+                    padding: '3px',
+                    height: '11px'
+                }
             }, new Tine.widgets.container.selectionComboBox({
                 id: this.app.appName + 'EditDialogContainerSelector',
                 fieldLabel: String.format(_('Import into {0}'), containerName),
