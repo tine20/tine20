@@ -675,9 +675,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             foreach((array) $deletedInstanceDtStarts as $deletedInstanceDtStart) {
                 $fakeEvent = clone $baseEvent;
                 $fakeEvent->setId(NULL);
-                unset($fakeEvent->exdate);
-                unset($fakeEvent->rrule);
-                unset($fakeEvent->rrule_until);
                 
                 $fakeEvent->dtstart = clone $deletedInstanceDtStart;
                 $fakeEvent->dtend = clone $deletedInstanceDtStart;
@@ -688,6 +685,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $exceptions->addRecord($fakeEvent);
             }
         }
+        
+        $exceptions->exdate = NULL;
+        $exceptions->rrule = NULL;
+        $exceptions->rrule_until = NULL;
         
         return $exceptions;
     }
