@@ -106,7 +106,14 @@ class Calendar_Import_Ical extends Tinebase_Import_Abstract
         $icalData = stream_get_contents($_resource);
         
         $parser = new qCal_Parser();
-        $ical = $parser->parse($icalData);
+        try {
+            $ical = $parser->parse($icalData);
+        } catch (Exception $e) {
+            // rethrow a mal formated ics
+            $isce = new Calendar_Exception_IcalParser();
+            $isce->setParseError($e);
+            throw $isce;
+        }
         
         $events = $result['results'] = $this->_getEvents($ical);
 //        print_r($events->toArray());

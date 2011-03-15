@@ -90,4 +90,17 @@ class Calendar_Import_ICalTest extends Calendar_TestCase
         
         $this->assertEquals(1, $events->count(), 'events where not imported');
     }
+    
+    /**
+     * test for gracefull shutdown if ical is malformated
+     */
+    public function testImportHordeBroken()
+    {
+        $importer = new Calendar_Import_Ical(array(
+            'importContainerId' => $this->_testCalendar->getId(),
+        ));
+        
+        $this->setExpectedException('Calendar_Exception_IcalParser');
+        $importer->importFile(dirname(__FILE__) . '/files/horde_broken.ics');
+    }
 }
