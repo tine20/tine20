@@ -200,7 +200,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-        if (!isset($_data['n_family']) && !isset($_data['org_name'])) {
+        if (! array_key_exists('org_name', $_data)) {
             $_data['org_name'] = '';
         }
         
