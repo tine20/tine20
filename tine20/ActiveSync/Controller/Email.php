@@ -172,7 +172,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
     {
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " append email " . $_serverId/* . ' options ' . print_r($_options, true)*/);
         
-        $data = $this->_contentController->get($_serverId);
+        $data = $_serverId instanceof Tinebase_Record_Abstract ? $_serverId : $this->_contentController->get($_serverId);
         
         foreach($this->_mapping as $key => $value) {
             if(!empty($data->$value) || $data->$value == 0) {

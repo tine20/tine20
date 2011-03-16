@@ -491,9 +491,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             $commands = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Commands'));
                         }
                         
+                        
                         /**
                          * process added entries
                          */
+                        // fetch estimated entries in one batch
+                        $serverEntries = $dataController->getContentController()->getMultiple(array_slice($serverAdds, 0, abs($collectionData['windowSize'] - $this->_totalCount), TRUE));
+                        
                         foreach($serverAdds as $id => $serverId) {
                             if($this->_totalCount === $collectionData['windowSize']) {
                                 break;
@@ -503,9 +507,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 #$add = $commands->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Add'));
                                 $add = $this->_outputDom->createElementNS('uri:AirSync', 'Add');
                                 
+                                 
+                                $entriesIdx = $serverEntries->getIndexById($serverId);
+                                $serverEntriy = $entriesIdx !== FALSE ? $serverEntries[$entriesIdx] : $serverId;
+                                
                                 $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                                 $applicationData = $add->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, $collectionData);
+                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverEntriy, $collectionData);
         
                                 $commands->appendChild($add);
                                 
@@ -516,7 +524,8 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
                             }
                             // mark as send to the client, even the conversion to xml might have failed                 
-                            $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);              
+                            $this->_addContentState($collectionData['class'], $collectionData['collectionId'], $serverId);
+                            if ($serverEntriy instanceof Tinebase_Record_Abstract) $serverEntries->removeRecord($serverEntriy);
                             unset($serverAdds[$id]);    
                         }
     
@@ -531,16 +540,20 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                             try {
                                 $change = $this->_outputDom->createElementNS('uri:AirSync', 'Change');
                                 
+                                $entriesIdx = $serverEntries->getIndexById($serverId);
+                                $serverEntriy = $entriesIdx !== FALSE ? $serverEntries[$entriesIdx] : $serverId;
+                                
                                 $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ServerId', $serverId));
                                 $applicationData = $change->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'ApplicationData'));
-                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverId, $collectionData);
+                                $dataController->appendXML($applicationData, $collectionData['collectionId'], $serverEntriy, $collectionData);
         
                                 $commands->appendChild($change);
                                 
                                 $this->_totalCount++;
                             } catch (Exception $e) {
                                 Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " unable to convert entry to xml: " . $e->getMessage());
-                            } 
+                            }
+                            if ($serverEntriy instanceof Tinebase_Record_Abstract) $serverEntries->removeRecord($serverEntriy);
                             unset($serverChanges[$id]);    
                         }
     

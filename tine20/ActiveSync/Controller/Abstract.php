@@ -166,6 +166,16 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     abstract public function getSupportedFolders();
     
     /**
+     * returns content controller of this backend
+     * 
+     * @return Tinebase_Controller_Record_Abstract
+     */
+    public function getContentController()
+    {
+        return $this->_contentController;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see ActiveSync/Controller/ActiveSync_Controller_Interface#moveItem()
      */

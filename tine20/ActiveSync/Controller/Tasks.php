@@ -118,7 +118,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
      */
     public function appendXML(DOMElement $_xmlNode, $_folderId, $_serverId, array $_options, $_neverTruncate = false)
     {
-        $data = $_serverId instanceof Tasks_Model_Task ? $_serverId : $this->_contentController->get($_serverId);
+        $data = $_serverId instanceof Tinebase_Record_Abstract ? $_serverId : $this->_contentController->get($_serverId);
         
         foreach ($this->_mapping as $key => $value) {
             if (!empty($data->$value)) {
