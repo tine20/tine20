@@ -313,12 +313,12 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      * cleans up data to only contain freebusy infos
      * removes all fields except dtstart/dtend/id/modlog fields
      * 
-     * @return void
+     * @return boolean TRUE if cleanup took place
      */
     public function doFreeBusyCleanup()
     {
     	if ($this->hasGrant(Tinebase_Model_Grants::GRANT_READ)) {
-    	   return;
+    	   return FALSE;
     	}
     	
         $this->_properties = array_intersect_key($this->_properties, array_flip(array(
@@ -338,6 +338,8 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             'deleted_time',
             'deleted_by',
         )));
+        
+        return TRUE;
     }
     
     /**

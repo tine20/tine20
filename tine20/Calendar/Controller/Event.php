@@ -354,8 +354,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         
+        // freebusy cleanup
         if (! $_onlyIds) {
-            $events->doFreeBusyCleanup();
+            foreach($events as $event) {
+                $doFreeBusyCleanup = $event->doFreeBusyCleanup();
+                if ($doFreeBusyCleanup && $_action !== 'get') {
+                    $events->removeRecord($event);
+                }
+            }
         }
         
         return $events;
