@@ -78,7 +78,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     public function get($_id)
     {
         $event = $this->_eventController->get($_id);
-        $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+        if ($event->rrule) {
+            $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+        }
         
         return $event;
     }
@@ -93,7 +95,16 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     {
         $events = $this->_eventController->getMultiple($_ids);
         foreach ($events as $event) {
-            $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+            try {
+                if ($event->rrule) {
+                    $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+                }
+            } catch (Tinebase_Exception_AccessDenied $ade) {
+                // if we don't have permissions for the exdates, this is likely a freebusy info only -> remove from set
+                $events->removeRecord($event);
+            } catch (Exception $e) {
+                $event->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+            }
         }
         
         return $events;
@@ -111,7 +122,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     {
         $events = $this->_eventController->getAll($_orderBy, $_orderDirection);
         foreach ($events as $event) {
-            $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+            if ($event->rrule) {
+                $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+            }
         }
         
         return $events;
@@ -138,7 +151,9 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         if (! $_onlyIds) {
             foreach($events as $event) {
-                $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+                if ($event->rrule) {
+                    $event->exdate = $this->_eventController->getRecurExceptions($event, TRUE);
+                }
             }
         }
         
@@ -190,7 +205,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
             }
         }
         
-        $savedEvent->exdate = $this->_eventController->getRecurExceptions($savedEvent, TRUE);
+        if ($savedEvent->rrule) {
+            $savedEvent->exdate = $this->_eventController->getRecurExceptions($savedEvent, TRUE);
+        }
+        
         return $savedEvent;
     }
     
@@ -212,7 +230,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         $exceptions = $_event->exdate instanceof Tinebase_Record_RecordSet ? $_event->exdate : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $_event->exdate = $exceptions->getOriginalDtStart();
         
-        $currentPersistentExceptions = $this->_eventController->getRecurExceptions($_event, FALSE);
+        $currentPersistentExceptions = $_event->rrule ? $this->_eventController->getRecurExceptions($_event, FALSE) : new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $newPersistentExceptions = $exceptions->filter('is_deleted', 0);
         $this->_prepareException($_event, $newPersistentExceptions);
         
@@ -230,7 +248,10 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
         
         $updatedBaseEvent = $this->_eventController->update($_event, $_checkBusyConficts);
         
-        $updatedBaseEvent->exdate = $this->_eventController->getRecurExceptions($updatedBaseEvent, TRUE);
+        if ($updatedBaseEvent->rrule) {
+            $updatedBaseEvent->exdate = $this->_eventController->getRecurExceptions($updatedBaseEvent, TRUE);
+        }
+            
         return $updatedBaseEvent;
     }
     
