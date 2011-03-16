@@ -74,6 +74,6 @@ class Felamimail_Model_AccountTest extends PHPUnit_Framework_TestCase
             $this->assertContains($smtpConfig['primarydomain'], $accountSmtpConfig['username']);
         }
         
-        $this->assertEquals('mail.metaways.net', $accountSmtpConfig['hostname']);
+        $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $accountSmtpConfig['hostname']);
     }
 }

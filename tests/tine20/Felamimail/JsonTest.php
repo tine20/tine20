@@ -277,8 +277,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $system = $this->_getSystemAccount();
         
         $this->assertTrue(! empty($system), 'no accounts found');
-        $this->assertEquals('mail.metaways.net', $system['host']);
-        $this->assertEquals('mailproxy.metaways.net', $system['sieve_hostname']);
+        $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $system['host']);
+        $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $system['sieve_hostname']);
     }
     
     /**
@@ -313,7 +313,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $accountRecord = new Felamimail_Model_Account($account, TRUE);
         $accountRecord->resolveCredentials(FALSE);
-        $this->assertEquals('mail.metaways.net', $account['host']);
+        $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $account['host']);
         
         $this->_json->changeCredentials($account['id'], $accountRecord->user, 'neuespasswort');
         $account = $this->_json->getAccount($account['id']);
