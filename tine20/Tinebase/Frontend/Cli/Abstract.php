@@ -178,14 +178,14 @@ class Tinebase_Frontend_Cli_Abstract
                 if ($this->_applicationName == 'Timetracker') {
                     // @todo remove this when we no longer have the mapping for timeaccount grants 
                     //       or allow to define app CLI frontend to define this in its own fn
-                    echo "Set grants for timeaccount '{$container->name}' for userid $accountId ($accountType)\n";
+                    echo "Set grants for timeaccount '{$container->name}'.\n";
                     $timeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $grantsArray);
                     $grants = Timetracker_Model_TimeaccountGrants::doMapping($timeaccountGrants);
                     // we can allow timeaccounts without admin grant because of the "manage timeaccounts" right
                     $failSafe = FALSE;
                     
                 } else {
-                    echo "Set grants for container '{$container->name}' for userid $accountType $accountId.\n";
+                    echo "Set grants for container '{$container->name}'.\n";
                     $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grantsArray);
                     $failSafe = TRUE;
                 }
