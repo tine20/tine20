@@ -244,7 +244,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 quickHack: this
             }), new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
-                record_id: this.record.id,
+                record_id: (! this.copyRecord) ? this.record.id : null,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };

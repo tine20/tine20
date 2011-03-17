@@ -368,7 +368,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             }, this.mapPanel,
             new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
-                record_id: (this.record) ? this.record.id : '',
+                record_id: (this.record && ! this.copyRecord) ? this.record.id : '',
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             }),
             new Tine.Tinebase.widgets.customfields.CustomfieldsPanel({

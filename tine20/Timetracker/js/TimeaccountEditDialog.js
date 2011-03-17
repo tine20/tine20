@@ -201,7 +201,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 items: [this.getGrantsGrid()]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
-                record_id: this.record.id,
+                record_id: (! this.copyRecord) ? this.record.id : null,
                 record_model: this.appName + '_Model_' + this.recordClass.getMeta('modelName')
             })]
         };
