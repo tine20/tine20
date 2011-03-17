@@ -306,10 +306,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     doCopyRecord: function() {
         var omitFields = this.recordClass.getMeta('copyOmitFields') || [];
-        // always omit id
-        omitFields.concat(['id', 'notes']);
+        // always omit id + notes
+        omitFields = omitFields.concat(['id', 'notes']);
+        
         var fieldsToCopy = this.recordClass.getFieldNames().diff(omitFields),
             recordData = Ext.copyTo({}, this.record.data, fieldsToCopy);
+
         this.record = new this.recordClass(recordData, 0);
     },
     
