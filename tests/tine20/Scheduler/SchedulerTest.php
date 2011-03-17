@@ -4,7 +4,7 @@
  * 
  * @package     Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  * @version     $Id$
  */
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Scheduler_SchedulerTest::main');
-}
 
 /**
  * Test class for Scheduler Test
@@ -365,9 +361,9 @@ class Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testCleanupCacheTriggeredByScheduler
+     * testCleanupCacheTriggeredByScheduler (this is only for code coverage)
      * 
-     * @todo find a way to check if cache cleanup has been successful -> this is only for code coverage at the moment
+     * @see Tinebase_ControllerTest::testCleanupCache() for the real cache cleanup test
      */
     public function testCleanupCacheTriggeredByScheduler()
     {
