@@ -4,8 +4,8 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_CliTest::main');
-}
 
 /**
  * Test class for Addressbook_Frontend_Cli
@@ -71,21 +67,42 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testSetContainerGrants()
     {
-        $opts = new Zend_Console_Getopt('abp:');
-        $params = array('containerId=' . $this->_container->getId(), 'accountId=' . Tinebase_Core::getUser()->getId(), 'grants=privateGrant');
-        $opts->setArguments($params);
-        
-        ob_start();
-        $this->_cli->setContainerGrants($opts);
-        $out = ob_get_clean();
-        
+        $out = $this->_cliHelper(array('containerId=' . $this->_container->getId(), 'accountId=' . Tinebase_Core::getUser()->getId(), 'grants=privateGrant'));
         $this->assertContains("Added grants to container.", $out);        
         
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
         $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
     }
-}       
+
+    /**
+     * test to set container grants with filter and overwrite old grants
+     * 
+     * @todo implement
+     */
+    public function testSetContainerGrantsWithFilterAndOverwrite()
+    {
+        
+//        $this->assertContains("Added grants to container.", $out);        
+//        
+//        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
+//        $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
+    }
     
-if (PHPUnit_MAIN_METHOD == 'Addressbook_CliTest::main') {
-    Addressbook_CliTest::main();
-}
+    /**
+     * call setContainerGrants cli function with params
+     * 
+     * @param array $_params
+     * @return string
+     */
+    protected function _cliHelper($_params)
+    {
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments($_params);
+        
+        ob_start();
+        $this->_cli->setContainerGrants($opts);
+        $out = ob_get_clean();
+        
+        return $out;
+    }
+}       
