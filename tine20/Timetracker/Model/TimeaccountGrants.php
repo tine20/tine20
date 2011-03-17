@@ -210,7 +210,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     
     /**
      * returns account_grants of given timeaccount
-     * - this function caches its result (with cache tag 'timeaccountGrants')
+     * - this function caches its result (with cache tag 'container')
      *
      * @param  Tinebase_Model_User|int              $_accountId
      * @param  Timetracker_Model_Timeaccount|string $_timeaccountId
@@ -239,7 +239,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
             $result = $account_grants->toArray();
             
-            $cache->save($result, $cacheId, array('timeaccountGrants'));
+            $cache->save($result, $cacheId, array('container'));
         }
         
         return $result;
@@ -247,7 +247,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     
     /**
      * get timeaccounts by grant
-     * - this function caches its result (with cache tag 'timeaccountGrants')
+     * - this function caches its result (with cache tag 'container')
      *
      * @param integer $_grant
      * @param boolean $_onlyIds
@@ -285,7 +285,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
                 $result = $result->getArrayOfIds();
             }
             
-            $cache->save($result, $cacheId, array('timeaccountGrants'));
+            $cache->save($result, $cacheId, array('container'));
         }
         
         return $result;
@@ -293,7 +293,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     
     /**
      * returns all grants of a given timeaccount
-     * - this function caches its result (with cache tag 'timeaccountGrants')
+     * - this function caches its result (with cache tag 'container')
      *
      * @param  Timetracker_Model_Timeaccount $_timeaccount
      * @param  boolean $_ignoreACL
@@ -332,7 +332,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
 
             $result = $allTimeaccountGrants;
             
-            $cache->save($result, $cacheId, array('timeaccountGrants'));
+            $cache->save($result, $cacheId, array('container'));
         }
         
         return $result;
@@ -359,9 +359,6 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
         $grants = self::doMapping($_grants);
         
         Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $grants, TRUE, FALSE);
-        
-        // invalidate cache
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('timeaccountGrants'));
     }
     
     /**
