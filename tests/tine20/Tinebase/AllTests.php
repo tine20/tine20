@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * @version     $Id$
  */
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_AllTests::main');
-}
 
 class Tinebase_AllTests
 {
@@ -50,9 +46,7 @@ class Tinebase_AllTests
         $suite->addTestSuite('Tinebase_Tree_AllTests');
         $suite->addTestSuite('Tinebase_FileSystem_StreamWrapperTest');
         $suite->addTestSuite('Tinebase_FileSystemTest');
-        
-        // @todo add the controller test to the suite -> somehow this does not work because of @runInSeparateProcess
-        //$suite->addTestSuite('Tinebase_ControllerTest');
+        $suite->addTestSuite('Tinebase_ControllerTest');
         
         $suite->addTest(Tinebase_User_AllTests::suite());
         $suite->addTest(Tinebase_Group_AllTests::suite());
@@ -62,8 +56,4 @@ class Tinebase_AllTests
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_AllTests::main') {
-    Tinebase_AllTests::main();
 }
