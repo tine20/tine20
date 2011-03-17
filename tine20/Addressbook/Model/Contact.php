@@ -157,6 +157,7 @@ class Addressbook_Model_Contact extends Tinebase_Record_Abstract
         'tel_work'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tel_other'             => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'tz'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+		'geo'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'lon'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'lat'                   => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // tine 2.0 generic fields
