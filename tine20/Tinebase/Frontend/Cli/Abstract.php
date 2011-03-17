@@ -78,7 +78,9 @@ class Tinebase_Frontend_Cli_Abstract
     /**
      * set container grants
      * 
-     * example usage: php tine20.php --method=Calendar.setContainerGrants containerId=3339 accountId=15 accountType=group grants=readGrant
+     * example usages: 
+     * (1) $ php tine20.php --method=Calendar.setContainerGrants containerId=3339 accountId=15 accountType=group grants=readGrant
+     * (2) $ php tine20.php --method=Timetracker.setContainerGrants namefilter="timeaccount name" accountId=15,30 accountType=group grants=book_own,manage_billable overwrite=1
      * 
      * @param Zend_Console_Getopt $_opts
      * @return boolean
@@ -148,10 +150,12 @@ class Tinebase_Frontend_Cli_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Changing grants of containers: ' . print_r($_containers->name, TRUE));
         
+        $overwrite = (array_key_exists('overwrite', $_params) && $_params['overwrite'] == '1');
+        $grantsArray = ($overwrite) ? array() : (array) $_params['grants'];
+        
         foreach($_containers as $container) {
             foreach ($accountIds as $accountId) {
-                if (array_key_exists('overwrite', $_params) && $_params['overwrite'] == '1') {
-                    $grantsArray = array();
+                if ($overwrite) {
                     foreach((array) $_params['grants'] as $grant) {
                         $grantsArray[] = array(
                             'account_id'    => $accountId,
@@ -159,30 +163,35 @@ class Tinebase_Frontend_Cli_Abstract
                             $grant          => TRUE,
                         );                        
                     }
-                    
+                } else {
                     if ($this->_applicationName == 'Timetracker') {
-                        // @todo remove this when we no longer have the mapping for timeaccount grants 
-                        //       or allow to define app CLI frontend to define this in its own fn
-                        echo "Set grants for timeaccount '{$container->name}'.\n";
-                        $timeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $grantsArray);
-                        $grants = Timetracker_Model_TimeaccountGrants::doMapping($timeaccountGrants);
-                        // we can allow timeaccounts without admin grant because of the "manage timeaccounts" right
-                        $failSafe = FALSE;
-                        
-                    } else {
-                        echo "Set grants for container '{$container->name}'.\n";
-                        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grantsArray);
-                        $failSafe = TRUE;
+                        echo "You can only set grants in the Timetracker with the 'overwrite' parameter.\n";
+                        return;
                     }
                     
-                    Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE);
-                    
-                } else {
-                    Tinebase_Container::getInstance()->addGrants($container->getId(), $accountType, $accountId, (array) $_params['grants'], TRUE);
-                    echo "Added grants to container '{$container->name}'.\n";
+                    Tinebase_Container::getInstance()->addGrants($container->getId(), $accountType, $accountId, $grantsArray, TRUE);
+                    echo "Added grants to container '{$container->name}' for userid $accountId ($accountType).\n";
                 }
             }
             
+            if ($overwrite) {
+                if ($this->_applicationName == 'Timetracker') {
+                    // @todo remove this when we no longer have the mapping for timeaccount grants 
+                    //       or allow to define app CLI frontend to define this in its own fn
+                    echo "Set grants for timeaccount '{$container->name}' for userid $accountId ($accountType)\n";
+                    $timeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $grantsArray);
+                    $grants = Timetracker_Model_TimeaccountGrants::doMapping($timeaccountGrants);
+                    // we can allow timeaccounts without admin grant because of the "manage timeaccounts" right
+                    $failSafe = FALSE;
+                    
+                } else {
+                    echo "Set grants for container '{$container->name}' for userid $accountType $accountId.\n";
+                    $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grantsArray);
+                    $failSafe = TRUE;
+                }
+                
+                Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, $failSafe);
+            }
         }        
     }
     
