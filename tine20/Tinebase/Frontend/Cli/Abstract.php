@@ -146,20 +146,42 @@ class Tinebase_Frontend_Cli_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Changing grants of containers: ' . print_r($_containers->name, TRUE));
+        
         foreach($_containers as $container) {
             foreach ($accountIds as $accountId) {
                 if (array_key_exists('overwrite', $_params) && $_params['overwrite'] == '1') {
-                    // remove this when we no longer have the mapping for timeaccount grants
+                    $grantsArray = array();
+                    foreach((array) $_params['grants'] as $grant) {
+                        $grantsArray[] = array(
+                            'account_id'    => $accountId,
+                            'account_type'  => $accountType,
+                            $grant          => TRUE,
+                        );                        
+                    }
+                    
                     if ($this->_applicationName == 'Timetracker') {
+                        // @todo remove this when we no longer have the mapping for timeaccount grants 
+                        //       or allow to define app CLI frontend to define this in its own fn
+                        echo "Set grants for timeaccount '{$container->name}'.\n";
+                        $timeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $grantsArray);
+                        $grants = Timetracker_Model_TimeaccountGrants::doMapping($timeaccountGrants);
+                        // we can allow timeaccounts without admin grant because of the "manage timeaccounts" right
+                        $failSafe = FALSE;
                         
                     } else {
-                        
+                        echo "Set grants for container '{$container->name}'.\n";
+                        $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grantsArray);
+                        $failSafe = TRUE;
                     }
+                    
+                    Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE);
+                    
                 } else {
                     Tinebase_Container::getInstance()->addGrants($container->getId(), $accountType, $accountId, (array) $_params['grants'], TRUE);
+                    echo "Added grants to container '{$container->name}'.\n";
                 }
             }
-            echo "Updated grants for container '{$container->name}'.\n";
+            
         }        
     }
     
