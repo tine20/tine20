@@ -4,8 +4,8 @@
  * @package     Tinebase
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
  */
@@ -92,7 +92,11 @@ class Tinebase_Frontend_Cli_Abstract
         $data = $this->_parseArgs($_opts, array('accountId', 'grants'));
         
         $containers = $this->_getContainers($data);
-        $this->_setGrantsForContainers($containers, $data);
+        if (count($containers) == 0) {
+            echo "No matching containers found.\n";
+        } else {
+            $this->_setGrantsForContainers($containers, $data);
+        }
         
         return TRUE;
     }
@@ -103,7 +107,6 @@ class Tinebase_Frontend_Cli_Abstract
      * @param array $_params
      * @return Tinebase_Record_RecordSet
      * @throws Timetracker_Exception_UnexpectedValue
-     * @throws Timetracker_Exception_NotFound
      */
     protected function _getContainers($_params)
     {
@@ -121,9 +124,7 @@ class Tinebase_Frontend_Cli_Abstract
         }
         
         $containers = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter($containerFilterData));
-        if (count($containers) == 0) {
-            throw new Timetracker_Exception_NotFound('No matching containers found!');
-        }
+        
         
         return $containers;
     }
