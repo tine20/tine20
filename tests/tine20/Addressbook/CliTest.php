@@ -72,7 +72,7 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
             'accountId=' . Tinebase_Core::getUser()->getId(), 
             'grants=privateGrant'
         ));
-        $this->assertContains("Updated grants for container", $out);        
+        $this->assertContains("Added grants to container", $out);        
         
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
         $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
@@ -80,24 +80,21 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
 
     /**
      * test to set container grants with filter and overwrite old grants
-     * 
-     * @todo implement
      */
     public function testSetContainerGrantsWithFilterAndOverwrite()
     {
-//        $out = $this->_cliHelper(array(
-//            'namefilter="Tine 2.0 Admin Account"', 
-//            'accountId=' . Tinebase_Core::getUser()->getId(), 
-//            'grants=privateGrant,adminGrant',
-//            'overwrite=1'
-//        ));
-//        
-//        echo $out;
+        $out = $this->_cliHelper(array(
+            'namefilter="Tine 2.0 Admin Account"', 
+            'accountId=' . Tinebase_Core::getUser()->getId(), 
+            'grants=privateGrant,adminGrant',
+            'overwrite=1'
+        ));
         
-//        $this->assertContains("Added grants to container.", $out);        
-//        
-//        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
-//        $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
+        $this->assertContains("Set grants for container", $out);        
+        
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
+        $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
+        $this->assertTrue(($grants->getFirstRecord()->adminGrant == 1));
     }
     
     /**
