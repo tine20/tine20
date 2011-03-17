@@ -209,7 +209,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             if (empty($_data_indexed)) {
                 // use import definition order
                 
-                if ($field['destination'] == '' || !isset($_data[$index])) {
+                if (! array_key_exists('destination', $field) || $field['destination'] == '' || !isset($_data[$index])) {
                     continue;
                 }
             
