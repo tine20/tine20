@@ -1062,6 +1062,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (!$cache || !$cache->getOption('caching')) {
             return;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Removing all container entries from cache.');
 
         $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
     }
