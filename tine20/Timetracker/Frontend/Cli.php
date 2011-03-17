@@ -4,10 +4,9 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  * 
- * @todo        add verbose + dryrun to updateTimeaccountGrants()
  */
 
 /**
@@ -68,46 +67,7 @@ class Timetracker_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         echo "done.\n";
     }
 
-    /**
-     * replace single user accounts with one or more groups for each timeaccount in filter
-     * 
-     * @return void
-     */
-    public function updateTimeaccountGrants()
-    {
-        // get tas matching filter
-        $filter = new Timetracker_Model_TimeaccountFilter(array(
-            array('field' => 'query', 'operator' => 'contains', 'value' => 'some value')
-        ));
-        $tas = Timetracker_Controller_Timeaccount::getInstance()->search($filter);
-        
-        // group ids to set book own grant for
-        $groupIds = array(1, 2);
-        
-        echo 'Updating timeaccount grants';
-        // loop tas and update with new grants
-        foreach ($tas as $ta) {
-            $grants = array();
-            foreach($groupIds as $id) {
-                $grants[] = array(
-                    'account_id'    => $id,
-                    'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP,
-                    'book_own'      => TRUE,
-                );
-            }
-            $ta->grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $grants);
-            
-            // @todo add dryrun
-            Timetracker_Controller_Timeaccount::getInstance()->update($ta);
-            // @todo verbose
-            //echo 'updating ' . $ta->number . "\n";
-            echo '.';
-        }
-        echo "done.\n";
-    }
-    
-
-    /**
+   /**
      * search and show duplicate timeaccounts
      * 
      * @return void
