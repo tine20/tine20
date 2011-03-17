@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
@@ -282,11 +282,13 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
     
     /**
      * remove obsolete/outdated stuff from cache
+     * 
+     * @param string $_mode
      */
-    public function cleanupCache()
+    public function cleanupCache($_mode = Zend_Cache::CLEANING_MODE_ALL)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Cleaning up the cache.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Cleaning up the cache (mode: ' . $_mode . ')');
         
-        Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_OLD);
+        Tinebase_Core::getCache()->clean($_mode);
     }
 }
