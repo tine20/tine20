@@ -78,6 +78,8 @@ class Tinebase_Frontend_Cli_Abstract
     /**
      * set container grants
      * 
+     * example usage: php tine20.php --method=Calendar.setContainerGrants containerId=3339 accountId=15 accountType=group grants=readGrant
+     * 
      * @param Zend_Console_Getopt $_opts
      * @return boolean
      */
@@ -87,14 +89,16 @@ class Tinebase_Frontend_Cli_Abstract
             return FALSE; 
         }
         
-        $data = $this->_parseArgs($_opts, array('accountId', 'containerId', 'grants'));
+        $data = $this->_parseArgs($_opts, array('accountId', 'grants'));
         
-        $container = Tinebase_Container::getInstance()->getContainerById($data['containerId']);
-        
-        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        if ($application->getId() !== $container->application_id) {
-            echo "Container does not belong this Application!\n";
-            return FALSE;
+        if (array_key_exists('containerId', $data)) {
+            $containers = array(Tinebase_Container::getInstance()->getContainerById($data['containerId']));
+            
+            $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+            if ($application->getId() !== $containers[0]->application_id) {
+                echo "Container does not belong to this Application!\n";
+                return FALSE;
+            }
         }
         
         if ($data['accountId'] == '0') {
@@ -102,9 +106,11 @@ class Tinebase_Frontend_Cli_Abstract
         } else {
             $accountType = (array_key_exists('accountType', $data)) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
         }
-        Tinebase_Container::getInstance()->addGrants($data['containerId'], $accountType, $data['accountId'], (array) $data['grants'], TRUE);
         
-        echo "Added grants to container.\n";
+        foreach($containers as $container) {
+            Tinebase_Container::getInstance()->addGrants($container->getId(), $accountType, $data['accountId'], (array) $data['grants'], TRUE);
+            echo "Added grants to container {$container->name}.\n";
+        }
         
         return TRUE;
     }
