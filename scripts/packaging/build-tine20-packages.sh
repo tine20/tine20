@@ -2,7 +2,9 @@
 
 # Version: $Id$
 
-# build-tine20-packages.sh -s "http://svn.tine20.org/svn/trunk/tine20" -r "2011_01_beta3-1" -c "Neele"
+# examples
+# $ ./build-tine20-packages.sh -s "http://svn.tine20.org/svn/trunk/tine20" -r "2011_01_beta3-1" -c "Neele"
+# $ ./build-tine20-packages.sh -s "http://svn.tine20.org/svn/branches/2011-01/tine20" -r "2011-01-3" -c "Neele"
 
 ## GLOBAL VARIABLES ##
 BASEDIR="./tine20build"
