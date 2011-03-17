@@ -67,8 +67,12 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testSetContainerGrants()
     {
-        $out = $this->_cliHelper(array('containerId=' . $this->_container->getId(), 'accountId=' . Tinebase_Core::getUser()->getId(), 'grants=privateGrant'));
-        $this->assertContains("Added grants to container.", $out);        
+        $out = $this->_cliHelper(array(
+            'containerId=' . $this->_container->getId(), 
+            'accountId=' . Tinebase_Core::getUser()->getId(), 
+            'grants=privateGrant'
+        ));
+        $this->assertContains("Updated grants for container", $out);        
         
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
         $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
@@ -81,6 +85,14 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testSetContainerGrantsWithFilterAndOverwrite()
     {
+//        $out = $this->_cliHelper(array(
+//            'namefilter="Tine 2.0 Admin Account"', 
+//            'accountId=' . Tinebase_Core::getUser()->getId(), 
+//            'grants=privateGrant,adminGrant',
+//            'overwrite=1'
+//        ));
+//        
+//        echo $out;
         
 //        $this->assertContains("Added grants to container.", $out);        
 //        

@@ -91,28 +91,76 @@ class Tinebase_Frontend_Cli_Abstract
         
         $data = $this->_parseArgs($_opts, array('accountId', 'grants'));
         
-        if (array_key_exists('containerId', $data)) {
-            $containers = array(Tinebase_Container::getInstance()->getContainerById($data['containerId']));
-            
-            $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-            if ($application->getId() !== $containers[0]->application_id) {
-                echo "Container does not belong to this Application!\n";
-                return FALSE;
-            }
-        }
-        
-        if ($data['accountId'] == '0') {
-            $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
-        } else {
-            $accountType = (array_key_exists('accountType', $data)) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
-        }
-        
-        foreach($containers as $container) {
-            Tinebase_Container::getInstance()->addGrants($container->getId(), $accountType, $data['accountId'], (array) $data['grants'], TRUE);
-            echo "Added grants to container {$container->name}.\n";
-        }
+        $containers = $this->_getContainers($data);
+        $this->_setGrantsForContainers($containers, $data);
         
         return TRUE;
+    }
+    
+    /**
+     * get container for setContainerGrants
+     * 
+     * @param array $_params
+     * @return Tinebase_Record_RecordSet
+     * @throws Timetracker_Exception_UnexpectedValue
+     * @throws Timetracker_Exception_NotFound
+     */
+    protected function _getContainers($_params)
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $containerFilterData = array(
+            array('field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()),
+        );
+        
+        if (array_key_exists('containerId', $_params)) {
+            $containerFilterData[] = array('field' => 'id', 'operator' => 'equals', 'value' => $_params['containerId']);
+        } else if (array_key_exists('namefilter', $_params)) {
+            $containerFilterData[] = array('field' => 'name', 'operator' => 'contains', 'value' => $_params['namefilter']);
+        } else {
+            throw new Timetracker_Exception_UnexpectedValue('Parameter containerId or namefilter missing!');
+        }
+        
+        $containers = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter($containerFilterData));
+        if (count($containers) == 0) {
+            throw new Timetracker_Exception_NotFound('No matching containers found!');
+        }
+        
+        return $containers;
+    }
+    
+    /**
+     * set container grants
+     * 
+     * @param Tinebase_Record_RecordSet $_containers
+     * @param array $_params
+     */
+    protected function _setGrantsForContainers($_containers, $_params)
+    {
+        if ($_params['accountId'] === '0') {
+            $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
+        } else {
+            $accountType = (array_key_exists('accountType', $_params)) ? $_params['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
+        }
+        
+        $accountIds = (array) $_params['accountId'];
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Changing grants of containers: ' . print_r($_containers->name, TRUE));
+        foreach($_containers as $container) {
+            foreach ($accountIds as $accountId) {
+                if (array_key_exists('overwrite', $_params) && $_params['overwrite'] == '1') {
+                    // remove this when we no longer have the mapping for timeaccount grants
+                    if ($this->_applicationName == 'Timetracker') {
+                        
+                    } else {
+                        
+                    }
+                } else {
+                    Tinebase_Container::getInstance()->addGrants($container->getId(), $accountType, $accountId, (array) $_params['grants'], TRUE);
+                }
+            }
+            echo "Updated grants for container '{$container->name}'.\n";
+        }        
     }
     
     /**
@@ -135,6 +183,7 @@ class Tinebase_Frontend_Cli_Abstract
                 if (strpos($value, ',') !== false) {
                     $value = explode(',', $value);
                 }
+                $value = str_replace('"', '', $value);
                 $result[$key] = $value;
             } else {
                 $result[$_otherKey][] = $arg;
