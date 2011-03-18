@@ -216,18 +216,17 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _getImageLink($contactArray)
     {
+        $link = 'images/empty_photo_blank.png';
         if (! empty($contactArray['jpegphoto'])) {
             $link = 'index.php?method=Tinebase.getImage&application=Addressbook&location=&id=' . $contactArray['id'] . '&width=90&height=90&ratiomode=0';
         } else {
-        	if (isset($contactArray['salutation_id']) && $contactArray['salutation_id']) {
-        		$salutation = Addressbook_Controller_Salutation::getInstance()->getSalutation($contactArray['salutation_id'])->toArray();
-				$link = $salutation['image_path'];	
-				if (empty($link)) {
-					$link = 'images/empty_photo_blank.png';
-				}
-        	}
-        	else {        	
-            	$link = 'images/empty_photo_blank.png';
+        	if (isset($contactArray['salutation_id']) && ! empty($contactArray['salutation_id'])) {
+        	    try {
+                    $salutation = Addressbook_Controller_Salutation::getInstance()->getSalutation($contactArray['salutation_id'])->toArray();
+    				$link = $salutation['image_path'];	
+        	    } catch (Tinebase_Exception_NotFound $tenf) {
+        	        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find salution record for id ' . $contactArray['salutation_id']);
+        	    }
         	}
         }
         
