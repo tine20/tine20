@@ -1169,19 +1169,27 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      */
     protected function _getDecodedBodyContent(Zend_Mime_Part $_bodyPart, $_partStructure)
     {
-        $this->_appendCharsetFilter($_bodyPart, $_partStructure);
+        $charset = $this->_appendCharsetFilter($_bodyPart, $_partStructure);
             
         // need to set error handler because stream_get_contents just throws a E_WARNING
         set_error_handler('Felamimail_Controller_Message::decodingErrorHandler', E_WARNING);
         try {
             $body = $_bodyPart->getDecodedContent();
             restore_error_handler();
+            
         } catch (Felamimail_Exception $e) {
+			// trying to fix decoding problems
             restore_error_handler();
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
             $_bodyPart->resetStream();
-            $_bodyPart->appendDecodeFilter($this->_getDecodeFilter());
-            $body = $_bodyPart->getDecodedContent();
+            if (preg_match('/convert\.quoted-printable-decode/', $e->getMessage())) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Trying workaround for http://bugs.php.net/50363.');
+                $body = quoted_printable_decode(stream_get_contents($_bodyPart->getRawStream()));
+                $body = iconv($charset, 'utf-8', $body);
+            } else {
+                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
+                $_bodyPart->appendDecodeFilter($this->_getDecodeFilter());
+                $body = $_bodyPart->getDecodedContent();
+            }
         }
         
         return $body;
@@ -1207,11 +1215,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * convert charset
+     * convert charset (and return charset)
      *
      * @param  Zend_Mime_Part  $_part
      * @param  array           $_structure
      * @param  string          $_contentType
+     * @return string   
      */
     protected function _appendCharsetFilter(Zend_Mime_Part $_part, $_structure)
     {
@@ -1234,6 +1243,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $_part->appendDecodeFilter($this->_getDecodeFilter($charset));
+        
+        return $charset;
     }
     
     /**
