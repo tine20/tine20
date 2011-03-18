@@ -1089,10 +1089,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string $_partId
      * @param string $_contentType
      * @param Felamimail_Model_Account $_account
-     * @param boolean $_readOnly
      * @return string
      */
-    public function getMessageBody($_messageId, $_partId, $_contentType, $_account = NULL, $_readOnly = false)
+    public function getMessageBody($_messageId, $_partId, $_contentType, $_account = NULL)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Get Message body of content type ' . $_contentType);
         
@@ -1109,8 +1108,26 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return $cache->load($cacheId);
         }
         
-        $structure = $message->getPartStructure($_partId);
-        $bodyParts = $message->getBodyParts($structure, $_contentType);
+        $messageBody = $this->_getAndDecodeMessageBody($message, $_partId, $_contentType, $_account);
+        
+        $cache->save($messageBody, $cacheId, array('getMessageBody'));
+        
+        return $messageBody;
+    }
+    
+    /**
+     * get and decode message body
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param string $_partId
+     * @param string $_contentType
+     * @param Felamimail_Model_Account $_account
+     * @return string
+     */
+    protected function _getAndDecodeMessageBody(Felamimail_Model_Message $_message, $_partId, $_contentType, $_account = NULL)
+    {
+        $structure = $_message->getPartStructure($_partId);
+        $bodyParts = $_message->getBodyParts($structure, $_contentType);
         
         if (empty($bodyParts)) {
             return '';
@@ -1119,22 +1136,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $messageBody = '';
         
         foreach ($bodyParts as $partId => $partStructure) {
-            $bodyPart = $this->getMessagePart($message, $partId);
+            $bodyPart = $this->getMessagePart($_message, $partId);
             
-            $this->_appendCharsetFilter($bodyPart, $partStructure);
-            
-            // need to set error handler because stream_get_contents just throws a E_WARNING
-            set_error_handler('Felamimail_Controller_Message::decodingErrorHandler', E_WARNING);
-            try {
-                $body = $bodyPart->getDecodedContent();
-                restore_error_handler();
-            } catch (Felamimail_Exception $e) {
-                restore_error_handler();
-                if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
-                $bodyPart->resetStream();
-                $bodyPart->appendDecodeFilter($this->_getDecodeFilter());
-                $body = $bodyPart->getDecodedContent();
-            }
+            $body = $this->_getDecodedBodyContent($bodyPart, $partStructure);
             
             if ($partStructure['contentType'] != Zend_Mime::TYPE_TEXT) {
                 $body = $this->_purifyBodyContent($body);
@@ -1153,9 +1157,34 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $messageBody .= $body;
         }
         
-        $cache->save($messageBody, $cacheId, array('getMessageBody'));
-        
         return $messageBody;
+    }
+    
+    /**
+     * get decoded body content
+     * 
+     * @param Zend_Mime_Part $_bodyPart
+     * @param array $partStructure
+     * @return string
+     */
+    protected function _getDecodedBodyContent(Zend_Mime_Part $_bodyPart, $_partStructure)
+    {
+        $this->_appendCharsetFilter($_bodyPart, $_partStructure);
+            
+        // need to set error handler because stream_get_contents just throws a E_WARNING
+        set_error_handler('Felamimail_Controller_Message::decodingErrorHandler', E_WARNING);
+        try {
+            $body = $_bodyPart->getDecodedContent();
+            restore_error_handler();
+        } catch (Felamimail_Exception $e) {
+            restore_error_handler();
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Try again with fallback encoding.');
+            $_bodyPart->resetStream();
+            $_bodyPart->appendDecodeFilter($this->_getDecodeFilter());
+            $body = $_bodyPart->getDecodedContent();
+        }
+        
+        return $body;
     }
     
     /**
