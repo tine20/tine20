@@ -57,6 +57,7 @@ class Tinebase_Translation
         'pl',      // Polish               Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>
         //'pt',      // Portuguese           Holger Rothemund <holger@rothemund.org>
         'ru',      // Russian              Nikolay Parukhin <parukhin@gmail.com> 
+        'sv',      // Swedish              Andreas Storbjörk <andreas.storbjork@rambolo.net>
         'zh_CN',   // Chinese Simplified   Jason Qi <qry@yahoo.com>
         'zh_TW',   // Chinese Traditional  Frank Huang <frank.cchuang@gmail.com>
     );
