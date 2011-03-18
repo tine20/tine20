@@ -282,10 +282,12 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
     
     /**
      * remove obsolete/outdated stuff from cache
+     * notes: CLEANING_MODE_OLD -> removes obsolete cache entries (files for file cache)
+     *        CLEANING_MODE_ALL -> removes complete cache structure (directories for file cache) + cache entries
      * 
      * @param string $_mode
      */
-    public function cleanupCache($_mode = Zend_Cache::CLEANING_MODE_ALL)
+    public function cleanupCache($_mode = Zend_Cache::CLEANING_MODE_OLD)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Cleaning up the cache (mode: ' . $_mode . ')');
         
