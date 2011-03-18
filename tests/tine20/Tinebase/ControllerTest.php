@@ -91,25 +91,51 @@ class Tinebase_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testCleanupCache()
     {
+        $this->_instance->cleanupCache(Zend_Cache::CLEANING_MODE_ALL);
+        
         $cache = Tinebase_Core::getCache();
+        $oldLifetime = $cache->getOption('lifetime');
+        $cache->setLifetime(1);
         $cacheId = convertCacheId('testCleanupCache');
         $cache->save('value', $cacheId);
+        sleep(3);
         
+        // cleanup with CLEANING_MODE_OLD
         $this->_instance->cleanupCache();
+        $cache->setLifetime($oldLifetime);
+        
         $this->assertFalse($cache->load($cacheId));
         
         // check for cache files
         $config = Tinebase_Core::getConfig();
         if ($config->caching && $config->caching->backend == 'File' && $config->caching->path) {
-            $cacheDirFound = FALSE;
-            foreach (new DirectoryIterator($config->caching->path) as $item) {
-                $appName = $item->getFileName();
-                if ($item->isDir() && preg_match('/^zend_cache/', $item->getFileName())) {
-                    $cacheDirFound = TRUE;
-                    break;
-                }
-            }
-            $this->assertFalse($cacheDirFound, 'found cache dir: ' . $item->getFileName());
+            $cacheFile = $this->_lookForCacheFile($config->caching->path);
+            $this->assertEquals(NULL, $cacheFile, 'found cache file: ' . $cacheFile);
         }
+    }
+    
+    /**
+     * look for cache files
+     * 
+     * @param string $_path
+     * @param boolean $_firstLevel
+     * @return string|NULL
+     */
+    protected function _lookForCacheFile($_path, $_firstLevel = TRUE)
+    {
+        foreach (new DirectoryIterator($_path) as $item) {
+            if ($item->isDir() && preg_match('/^zend_cache/', $item->getFileName())) {
+                //echo 'scanning ' . $item->getFileName();
+                if ($this->_lookForCacheFile($item->getPathname(), FALSE)) {
+                    // file found in subdir
+                    return $item->getPathname();
+                }
+            } else if ($item->isFile() && ! $_firstLevel) {
+                // file found
+                return $item->getPathname();
+            }
+        }
+        
+        return NULL;
     }
 }
