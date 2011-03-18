@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2010-07-27 10:16+0100\n"
 "Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,105 +17,6 @@ msgstr ""
 #, python-format
 msgid "%s's personal calendar"
 msgstr "Osobní kalendář uživatele %s"
-
-#: Setup/setup.xml:4 js/Calendar.js:35 js/Model.js:68
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] "Kalendář"
-msgstr[1] "Kalendáře"
-msgstr[2] "Kalendářů"
-
-#: Setup/Update/Release3.php:165 Setup/Initialize.php:35
-msgid "All events I attend"
-msgstr "Všechny události, kterých se účastním"
-
-#: Setup/Initialize.php:48
-msgid "Awaiting response"
-msgstr ""
-
-#: Setup/Initialize.php:49
-msgid "Events I have not yet responded to"
-msgstr ""
-
-#: Setup/Initialize.php:64
-msgid "Declined events"
-msgstr ""
-
-#: Setup/Initialize.php:65
-msgid "Events I have declined"
-msgstr ""
-
-#: Setup/Initialize.php:78
-msgid "I'm organizer"
-msgstr ""
-
-#: Setup/Initialize.php:79
-msgid "Events I'm the organizer of"
-msgstr ""
-
-#: Preference.php:37
-msgid "All my events"
-msgstr "Všechny mé události"
-
-#: Preference.php:85 js/EventDetailsPanel.js:215 js/EventEditDialog.js:101
-msgid "Start Time"
-msgstr "Počáteční čas"
-
-#: Preference.php:86
-msgid "Position on the left time axis, day and week view should start with"
-msgstr ""
-
-#: Preference.php:89
-msgid "Default Calendar"
-msgstr "Výchozí kalendář"
-
-#: Preference.php:90
-msgid "The default calendar for invitations and new events"
-msgstr "Výchozí kalendář pro pozvání a nové události"
-
-#: Preference.php:93
-msgid "Default Favorite"
-msgstr "Výchozí oblíbené položky kalendáře"
-
-#: Preference.php:94
-msgid "The default favorite which is loaded on calendar startup"
-msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění kalendáře"
-
-#: Preference.php:97
-msgid "Get Notification Emails"
-msgstr "Dostávat e-maily s upozorněním"
-
-#: Preference.php:98
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "Úroveň (re)akcí o nichž chcete být informován(a). Pamatujte prosím, že organizátoři dostávají upozornění na všechny změny, včetně odpovědí účastníků, pokud tato volba není nastavena na \"Nikdy\""
-
-#: Preference.php:101
-msgid "Send Notifications Emails of own Actions"
-msgstr "Zasílat e-maily s upozorněním na vlastní akce"
-
-#: Preference.php:102
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Dostávat e-maily s upozorněním na akce, které pořádám"
-
-#: Preference.php:155
-msgid "Never"
-msgstr ""
-
-#: Preference.php:155
-msgid "On invitation and cancellation only"
-msgstr ""
-
-#: Preference.php:155
-msgid "On time changes"
-msgstr ""
-
-#: Preference.php:155
-msgid "On all updates but attendee responses"
-msgstr ""
-
-#: Preference.php:155
-msgid "On attendee responses too"
-msgstr ""
 
 #: Acl/Rights.php:97
 msgid "manage shared calendars"
@@ -140,48 +42,141 @@ msgstr "spravovat zdroje"
 msgid "All Rights to administrate resources"
 msgstr "Všechna oprávnění k administraci zdrojů"
 
-#: js/EventDetailsPanel.js:51
-msgid "Unknown calendar"
-msgstr "Neznámý kalendář"
+#: Model/Attender.php:46 js/Model.js:473 js/AttendeeGridPanel.js:524
+msgid "No response"
+msgstr "Bez odpovědi"
 
-#: js/EventDetailsPanel.js:62
-msgid "{0} {1} o'clock"
-msgstr "{0} {1}"
+#: Model/Attender.php:47 js/Model.js:474 js/AttendeeGridPanel.js:527
+msgid "Accepted"
+msgstr "Přijatá"
 
-#: js/EventDetailsPanel.js:179 js/EventEditDialog.js:89 Model/Event.php:234
-msgid "Summary"
-msgstr "Shrnutí"
+#: Model/Attender.php:48 js/Model.js:475 js/AttendeeGridPanel.js:530
+msgid "Declined"
+msgstr "Odmítnutá"
 
-#: js/EventDetailsPanel.js:220 js/EventEditDialog.js:116
-msgid "End Time"
-msgstr "Čas ukončení"
+#: Model/Attender.php:49 js/Model.js:476 js/AttendeeGridPanel.js:533
+msgid "Tentative"
+msgstr "Předběžná"
 
-#: js/EventDetailsPanel.js:225 Model/Event.php:227
+#: Model/Attender.php:168
+msgid "unknown"
+msgstr "neznámý"
+
+#: Model/Attender.php:316
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "Systém automaticky přídal kontakt jako účastníka události"
+
+#: Model/Attender.php:204
+msgid "unknown)"
+msgstr "neznámý)"
+
+#: Model/Event.php:225
+msgid "Start"
+msgstr "Začátek"
+
+#: Model/Event.php:226
+msgid "End"
+msgstr "Konec"
+
+#: Model/Event.php:227 js/EventDetailsPanel.js:225
 msgid "Blocking"
 msgstr "Blokující"
 
-#: js/EventDetailsPanel.js:230 js/ResourcesGridPanel.js:54
-#: js/EventEditDialog.js:96 Model/Event.php:230
+#: Model/Event.php:228
+msgid "Classification"
+msgstr "Kategorie"
+
+#: Model/Event.php:229 js/ResourceEditDialog.js:74 js/EventEditDialog.js:198
+msgid "Description"
+msgstr "Popis"
+
+#: Model/Event.php:230 js/EventDetailsPanel.js:230 js/EventEditDialog.js:96
+#: js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "Umístění"
 
-#: js/EventDetailsPanel.js:234 js/Model.js:204 Model/Event.php:231
+#: Model/Event.php:231 js/Model.js:204 js/EventDetailsPanel.js:234
 msgid "Organizer"
 msgstr "Organizátor"
 
-#: js/EventDetailsPanel.js:251 js/AttendeeGridPanel.js:77
-#: js/AttendeeFilterModel.js:37 js/Model.js:329
-msgid "Attendee"
-msgstr "Účastníci"
+#: Model/Event.php:232
+msgid "Priority"
+msgstr "Priorita"
 
-#: js/ResourcesGridPanel.js:43 js/AttendeeGridPanel.js:174
-#: js/ResourceEditDialog.js:58
-msgid "Name"
-msgstr "Název"
+#: Model/Event.php:233 js/AttendeeGridPanel.js:188
+msgid "Status"
+msgstr "Stav"
 
-#: js/ResourcesGridPanel.js:49 js/ResourceEditDialog.js:63
-msgid "Email"
-msgstr "Email"
+#: Model/Event.php:234 js/EventDetailsPanel.js:179 js/EventEditDialog.js:89
+msgid "Summary"
+msgstr "Shrnutí"
+
+#: Model/Event.php:235
+msgid "Url"
+msgstr "URL"
+
+#: Model/Event.php:236
+msgid "Recurrance rule"
+msgstr "Pravidlo opakování"
+
+#: Model/Event.php:237
+msgid "Is all day event"
+msgstr "Celodenní událost"
+
+#: Model/Event.php:238
+msgid "Organizer timezone"
+msgstr "Časové pásmo organizátora"
+
+#: Model/Event.php:263
+msgid "Yes"
+msgstr "Ano"
+
+#: Model/Event.php:263
+msgid "No"
+msgstr "Ne"
+
+#: views/eventNotification.php:13
+msgid "Updates"
+msgstr "Aktualizace"
+
+#: views/eventNotification.php:21
+msgid "%1$s changed from \"%2$s\" to \"%3$s\""
+msgstr "%1$s bylo změněno z \"%2$s\" na \"%3$s\""
+
+#: views/eventNotification.php:28
+msgid "%1$s has been invited"
+msgstr "%1$s byl(a) pozván(a)"
+
+#: views/eventNotification.php:33
+msgid "%1$s has been removed"
+msgstr "%1$s bylo odstraněno"
+
+#: views/eventNotification.php:40
+msgid "%1$s accepted invitation"
+msgstr "%1$s přijal(a) pozvání"
+
+#: views/eventNotification.php:44
+msgid "%1$s declined invitation"
+msgstr "%1$s odmíntul(a) pozvání"
+
+#: views/eventNotification.php:48
+msgid "Tentative response from %1$s"
+msgstr "Předběžná odpověď od %1$s"
+
+#: views/eventNotification.php:52
+msgid "No response from %1$s"
+msgstr "Žádná odpověď od %1$s"
+
+#: views/eventNotification.php:61
+msgid "Event details"
+msgstr "Detaily události"
+
+#: js/Calendar.js:35 js/Model.js:68 Setup/setup.xml:4
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Kalendář"
+msgstr[1] "Kalendáře"
+msgstr[2] "Kalendářů"
 
 #: js/MainScreenCenterPanel.js:119
 msgid "Print Page"
@@ -254,81 +249,80 @@ msgstr ""
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/AttendeeGridPanel.js:103
-msgid "Role"
-msgstr "Role"
+#: js/EventUI.js:221
+msgid "private classification"
+msgstr ""
 
-#: js/AttendeeGridPanel.js:112
-msgid "Quantity"
-msgstr "Množství"
+#: js/EventUI.js:228
+msgid "recurring event"
+msgstr ""
 
-#: js/AttendeeGridPanel.js:121
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "Toto je kalendář, do kterého účastník tuto událost uložil"
+#: js/EventUI.js:235
+msgid "has alarm"
+msgstr ""
 
-#: js/AttendeeGridPanel.js:157
-msgid "Type"
-msgstr "Typ"
+#: js/AttendeeStatusFilterModel.js:33
+msgid "Attendee Status"
+msgstr "Stav účastníků"
 
-#: js/AttendeeGridPanel.js:164
-msgid "User"
-msgstr "Uživatel"
+#: js/Model.js:64 js/Model.js:333
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Událost"
+msgstr[1] "Události"
+msgstr[2] "Událostí"
 
-#: js/AttendeeGridPanel.js:165
-msgid "Group"
-msgstr "Skupina"
+#: js/Model.js:64 js/Model.js:333
+msgid "Events"
+msgstr "Události"
 
-#: js/AttendeeGridPanel.js:166 js/Model.js:503
+#: js/Model.js:68
+msgid "Calendars"
+msgstr "Kalendáře"
+
+#: js/Model.js:200
+msgid "Quick search"
+msgstr "Rychlé hledání"
+
+#: js/Model.js:329
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] "Účastník"
+msgstr[1] "Účástníci"
+msgstr[2] "Účastníků"
+
+#: js/Model.js:329 js/EventDetailsPanel.js:251 js/AttendeeFilterModel.js:37
+#: js/AttendeeGridPanel.js:83
+msgid "Attendee"
+msgstr "Účastníci"
+
+#: js/Model.js:345 js/AttendeeGridPanel.js:440 js/AttendeeGridPanel.js:458
+#: js/AttendeeGridPanel.js:475 js/AttendeeGridPanel.js:487
+msgid "No Information"
+msgstr "Žádné informace"
+
+#: js/Model.js:503 js/AttendeeGridPanel.js:172
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Zdroj"
 msgstr[1] "Zdroje"
 msgstr[2] "Zdrojů"
 
-#: js/AttendeeGridPanel.js:182 Model/Event.php:233
-msgid "Status"
-msgstr "Stav"
+#: js/Model.js:503
+msgid "Resources"
+msgstr "Zdroje"
 
-#: js/AttendeeGridPanel.js:320
-msgid "Remove Attender"
-msgstr "Odebrat účastníka"
+#: js/CalendarSelectWidget.js:126
+msgid "Originally"
+msgstr "Původně"
 
-#: js/AttendeeGridPanel.js:415
-msgid "Click here to invite another attender..."
-msgstr "Klikněte sem pro pozvání dalšího účastníka"
+#: js/DaysView.js:90 js/MonthView.js:82
+msgid "New Event"
+msgstr "Nová událost"
 
-#: js/AttendeeGridPanel.js:433 js/AttendeeGridPanel.js:451
-#: js/AttendeeGridPanel.js:464 js/AttendeeGridPanel.js:476 js/Model.js:345
-msgid "No Information"
-msgstr "Žádné informace"
-
-#: js/AttendeeGridPanel.js:438
-msgid "(as a group member)"
-msgstr "(jako člen skupiny)"
-
-#: js/AttendeeGridPanel.js:488
-msgid "Required"
-msgstr "Povinné"
-
-#: js/AttendeeGridPanel.js:491
-msgid "Optional"
-msgstr "Volitelné"
-
-#: js/AttendeeGridPanel.js:513 js/Model.js:473 Model/Attender.php:46
-msgid "No response"
-msgstr "Bez odpovědi"
-
-#: js/AttendeeGridPanel.js:516 js/Model.js:474 Model/Attender.php:47
-msgid "Accepted"
-msgstr "Přijatá"
-
-#: js/AttendeeGridPanel.js:519 js/Model.js:475 Model/Attender.php:48
-msgid "Declined"
-msgstr "Odmítnutá"
-
-#: js/AttendeeGridPanel.js:522 js/Model.js:476 Model/Attender.php:49
-msgid "Tentative"
-msgstr "Předběžná"
+#: js/DaysView.js:95
+msgid "{0}, the {1}. of {2}"
+msgstr "{0}, {1}. {2}"
 
 #: js/MainScreenWestPanel.js:32
 msgid "Mini Calendar"
@@ -338,13 +332,58 @@ msgstr "Malý kalendář"
 msgid "WK"
 msgstr "Týd"
 
+#: js/ResourceEditDialog.js:58 js/AttendeeGridPanel.js:180
+#: js/ResourcesGridPanel.js:43
+msgid "Name"
+msgstr "Název"
+
+#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
+msgid "Email"
+msgstr "Email"
+
+#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
+msgid "Is a location"
+msgstr "Je umístění"
+
+#: js/ResourceEditDialog.js:75
+msgid "Enter description..."
+msgstr "Zadejte popis..."
+
+#: js/EventDetailsPanel.js:51
+msgid "Unknown calendar"
+msgstr "Neznámý kalendář"
+
+#: js/EventDetailsPanel.js:62
+msgid "{0} {1} o'clock"
+msgstr "{0} {1}"
+
+#: js/EventDetailsPanel.js:215 js/EventEditDialog.js:101 Preference.php:85
+msgid "Start Time"
+msgstr "Počáteční čas"
+
+#: js/EventDetailsPanel.js:220 js/EventEditDialog.js:116
+msgid "End Time"
+msgstr "Čas ukončení"
+
+#: js/Printer/DaysView.js:36
+msgid "Week {0} :"
+msgstr ""
+
+#: js/Printer/Base.js:66 js/EventEditDialog.js:124
+msgid "whole day"
+msgstr "celý den"
+
+#: js/MonthView.js:92
+msgid "{0} more..."
+msgstr "{0} více..."
+
+#: js/AttendeeFilterModel.js:104
+msgid "Select Attendee"
+msgstr "Vybrat účastníky"
+
 #: js/AdminPanel.js:46
 msgid "Manage Resources"
 msgstr "Spravovat zdroje"
-
-#: js/EventEditDialog.js:124 js/Printer/Base.js:66
-msgid "whole day"
-msgstr "celý den"
 
 #: js/EventEditDialog.js:132
 msgid "non-blocking"
@@ -353,10 +392,6 @@ msgstr "neblokující"
 #: js/EventEditDialog.js:157
 msgid "Private"
 msgstr "Soukromé"
-
-#: js/EventEditDialog.js:198 js/ResourceEditDialog.js:74 Model/Event.php:229
-msgid "Description"
-msgstr "Popis"
 
 #: js/EventEditDialog.js:212
 msgid "Enter description"
@@ -373,46 +408,6 @@ msgstr "Datum ukončení musí být po počátečním datu"
 #: js/EventEditDialog.js:358
 msgid "Start date is not valid"
 msgstr "Počáteční datum je neplatné"
-
-#: js/CalendarSelectWidget.js:120
-msgid "Originally"
-msgstr "Původně"
-
-#: js/MonthView.js:82 js/DaysView.js:90
-msgid "New Event"
-msgstr "Nová událost"
-
-#: js/MonthView.js:92
-msgid "{0} more..."
-msgstr "{0} více..."
-
-#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
-msgid "Is a location"
-msgstr "Je umístění"
-
-#: js/ResourceEditDialog.js:75
-msgid "Enter description..."
-msgstr "Zadejte popis..."
-
-#: js/EventUI.js:221
-msgid "private classification"
-msgstr ""
-
-#: js/EventUI.js:228
-msgid "recurring event"
-msgstr ""
-
-#: js/EventUI.js:235
-msgid "has alarm"
-msgstr ""
-
-#: js/AttendeeFilterModel.js:104
-msgid "Select Attendee"
-msgstr "Vybrat účastníky"
-
-#: js/AttendeeStatusFilterModel.js:33
-msgid "Attendee Status"
-msgstr "Stav účastníků"
 
 #: js/CalendarPanel.js:41
 msgid "Loading events, please wait..."
@@ -457,44 +452,6 @@ msgstr "Aktualizovat celou řadu"
 #: js/CalendarPanel.js:288
 msgid "Update this event only"
 msgstr "Aktualizovat jen tuto událost"
-
-#: js/Model.js:64 js/Model.js:333
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Událost"
-msgstr[1] "Události"
-msgstr[2] "Událostí"
-
-#: js/Model.js:64 js/Model.js:333
-msgid "Events"
-msgstr "Události"
-
-#: js/Model.js:68
-msgid "Calendars"
-msgstr "Kalendáře"
-
-#: js/Model.js:200
-msgid "Quick search"
-msgstr "Rychlé hledání"
-
-#: js/Model.js:329
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] "Účastník"
-msgstr[1] "Účástníci"
-msgstr[2] "Účastníků"
-
-#: js/Model.js:503
-msgid "Resources"
-msgstr "Zdroje"
-
-#: js/Printer/DaysView.js:36
-msgid "Week {0} :"
-msgstr ""
-
-#: js/DaysView.js:95
-msgid "{0}, the {1}. of {2}"
-msgstr "{0}, {1}. {2}"
 
 #: js/RrulePanel.js:29
 msgid "Recurrances"
@@ -589,57 +546,113 @@ msgstr "Každý {0}. rok"
 msgid "of"
 msgstr "z"
 
-#: Model/Event.php:225
-msgid "Start"
-msgstr "Začátek"
+#: js/AttendeeGridPanel.js:109
+msgid "Role"
+msgstr "Role"
 
-#: Model/Event.php:226
-msgid "End"
-msgstr "Konec"
+#: js/AttendeeGridPanel.js:118
+msgid "Quantity"
+msgstr "Množství"
 
-#: Model/Event.php:228
-msgid "Classification"
-msgstr "Kategorie"
+#: js/AttendeeGridPanel.js:127
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "Toto je kalendář, do kterého účastník tuto událost uložil"
 
-#: Model/Event.php:232
-msgid "Priority"
-msgstr "Priorita"
+#: js/AttendeeGridPanel.js:163
+msgid "Type"
+msgstr "Typ"
 
-#: Model/Event.php:235
-msgid "Url"
-msgstr "URL"
+#: js/AttendeeGridPanel.js:170
+msgid "User"
+msgstr "Uživatel"
 
-#: Model/Event.php:236
-msgid "Recurrance rule"
-msgstr "Pravidlo opakování"
+#: js/AttendeeGridPanel.js:171
+msgid "Group"
+msgstr "Skupina"
 
-#: Model/Event.php:237
-msgid "Is all day event"
-msgstr "Celodenní událost"
+#: js/AttendeeGridPanel.js:173
+msgid "Member of group"
+msgstr ""
 
-#: Model/Event.php:238
-msgid "Organizer timezone"
-msgstr "Časové pásmo organizátora"
+#: js/AttendeeGridPanel.js:327
+msgid "Remove Attender"
+msgstr "Odebrat účastníka"
 
-#: Model/Event.php:263
-msgid "Yes"
-msgstr "Ano"
+#: js/AttendeeGridPanel.js:422
+msgid "Click here to invite another attender..."
+msgstr "Klikněte sem pro pozvání dalšího účastníka"
 
-#: Model/Event.php:263
-msgid "No"
-msgstr "Ne"
+#: js/AttendeeGridPanel.js:445
+msgid "(as a group member)"
+msgstr "(jako člen skupiny)"
 
-#: Model/Attender.php:168
-msgid "unknown"
-msgstr "neznámý"
+#: js/AttendeeGridPanel.js:499
+msgid "Required"
+msgstr "Povinné"
 
-#: Model/Attender.php:316
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "Systém automaticky přídal kontakt jako účastníka události"
+#: js/AttendeeGridPanel.js:502
+msgid "Optional"
+msgstr "Volitelné"
 
-#: Model/Attender.php:204
-msgid "unknown)"
-msgstr "neznámý)"
+#: Preference.php:37
+msgid "All my events"
+msgstr "Všechny mé události"
+
+#: Preference.php:86
+msgid "Position on the left time axis, day and week view should start with"
+msgstr ""
+
+#: Preference.php:89
+msgid "Default Calendar"
+msgstr "Výchozí kalendář"
+
+#: Preference.php:90
+msgid "The default calendar for invitations and new events"
+msgstr "Výchozí kalendář pro pozvání a nové události"
+
+#: Preference.php:93
+msgid "Default Favorite"
+msgstr "Výchozí oblíbené položky kalendáře"
+
+#: Preference.php:94
+msgid "The default favorite which is loaded on calendar startup"
+msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění kalendáře"
+
+#: Preference.php:97
+msgid "Get Notification Emails"
+msgstr "Dostávat e-maily s upozorněním"
+
+#: Preference.php:98
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "Úroveň (re)akcí o nichž chcete být informován(a). Pamatujte prosím, že organizátoři dostávají upozornění na všechny změny, včetně odpovědí účastníků, pokud tato volba není nastavena na \"Nikdy\""
+
+#: Preference.php:101
+msgid "Send Notifications Emails of own Actions"
+msgstr "Zasílat e-maily s upozorněním na vlastní akce"
+
+#: Preference.php:102
+msgid "Get notifications emails for actions you did yourself"
+msgstr "Dostávat e-maily s upozorněním na akce, které pořádám"
+
+#: Preference.php:156
+msgid "Never"
+msgstr ""
+
+#: Preference.php:156
+msgid "On invitation and cancellation only"
+msgstr ""
+
+#: Preference.php:156
+msgid "On time changes"
+msgstr ""
+
+#: Preference.php:156
+msgid "On all updates but attendee responses"
+msgstr ""
+
+#: Preference.php:156
+msgid "On attendee responses too"
+msgstr ""
 
 #: Controller/EventNotifications.php:261
 msgid "Alarm for event \"%1$s\" at %2$s"
@@ -681,41 +694,33 @@ msgstr "Žádná odpověď od %1$s na událost \"%2$s\" v %3$s"
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Změna účastníků pro událost \"%1$s\" v %2$s"
 
-#: views/eventNotification.php:13
-msgid "Updates"
-msgstr "Aktualizace"
+#: Setup/Update/Release3.php:165 Setup/Initialize.php:35
+msgid "All events I attend"
+msgstr "Všechny události, kterých se účastním"
 
-#: views/eventNotification.php:21
-msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr "%1$s bylo změněno z \"%2$s\" na \"%3$s\""
+#: Setup/Initialize.php:48
+msgid "Awaiting response"
+msgstr ""
 
-#: views/eventNotification.php:28
-msgid "%1$s has been invited"
-msgstr "%1$s byl(a) pozván(a)"
+#: Setup/Initialize.php:49
+msgid "Events I have not yet responded to"
+msgstr ""
 
-#: views/eventNotification.php:33
-msgid "%1$s has been removed"
-msgstr "%1$s bylo odstraněno"
+#: Setup/Initialize.php:64
+msgid "Declined events"
+msgstr ""
 
-#: views/eventNotification.php:40
-msgid "%1$s accepted invitation"
-msgstr "%1$s přijal(a) pozvání"
+#: Setup/Initialize.php:65
+msgid "Events I have declined"
+msgstr ""
 
-#: views/eventNotification.php:44
-msgid "%1$s declined invitation"
-msgstr "%1$s odmíntul(a) pozvání"
+#: Setup/Initialize.php:78
+msgid "I'm organizer"
+msgstr ""
 
-#: views/eventNotification.php:48
-msgid "Tentative response from %1$s"
-msgstr "Předběžná odpověď od %1$s"
-
-#: views/eventNotification.php:52
-msgid "No response from %1$s"
-msgstr "Žádná odpověď od %1$s"
-
-#: views/eventNotification.php:61
-msgid "Event details"
-msgstr "Detaily události"
+#: Setup/Initialize.php:79
+msgid "Events I'm the organizer of"
+msgstr ""
 
 #~ msgid "Do you want to update the whole series, or just this event"
 #~ msgstr "Chete aktuaklizovat celou řadu nebo jen tuto událost"

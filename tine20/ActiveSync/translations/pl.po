@@ -13,6 +13,17 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: js/Model.js:47
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Urządzenie"
+msgstr[1] "urządzenia"
+msgstr[2] "urządzenia"
+
+#: js/Model.js:47
+msgid "Devices"
+msgstr "Urządzenia"
+
 #: js/Application.js:32
 msgid "Active Sync"
 msgstr "Zdalna synchronizacja"
@@ -33,8 +44,7 @@ msgstr "Ustaw jako filtr: {0}"
 msgid "Resetted Sync Filter"
 msgstr "Zresetowany filtr synchronizacji"
 
-#: js/Application.js:96
-#: js/Application.js:108
+#: js/Application.js:96 js/Application.js:108
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr "Filtrem {0} dla urządzenia \"{1}\"  jest teraz \"{2}\""
 
@@ -45,25 +55,6 @@ msgstr "zresetowane"
 #: js/Application.js:107
 msgid "Set Sync Filter"
 msgstr "Ustaw filtr synchronizacji"
-
-#: js/Model.js:47
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Urządzenie"
-msgstr[1] "urządzenia"
-msgstr[2] "urządzenia"
-
-#: js/Model.js:47
-msgid "Devices"
-msgstr "Urządzenia"
-
-#: Setup/setup.xml:473
-msgid "Default Policy"
-msgstr "Domyślna polityka"
-
-#: Setup/setup.xml:478
-msgid "Default Policy installed during setup"
-msgstr "Domyślna polityka określona podczas definiowania ustawień"
 
 #: Preference.php:75
 msgid "Default Addressbook"
@@ -89,3 +80,10 @@ msgstr "Domyślna lista zadań"
 msgid "The default task list to create new tasks in."
 msgstr "Domyślna lista dla nowo tworzonych zadań"
 
+#: Setup/setup.xml:473
+msgid "Default Policy"
+msgstr "Domyślna polityka"
+
+#: Setup/setup.xml:478
+msgid "Default Policy installed during setup"
+msgstr "Domyślna polityka określona podczas definiowania ustawień"

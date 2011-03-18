@@ -5,44 +5,13 @@ msgstr ""
 "PO-Revision-Date: 2010-12-08 14:05+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: German\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-
-#: Setup/setup.xml:473
-msgid "Default Policy"
-msgstr "Standard Policy"
-
-#: Setup/setup.xml:478
-msgid "Default Policy installed during setup"
-msgstr "Standard Policy aus dem Setup Prozess"
-
-#: Preference.php:75
-msgid "Default Addressbook"
-msgstr "Standard-Adressbuch"
-
-#: Preference.php:76
-msgid "The default addressbook to create new contacts in."
-msgstr "Das Standard-Adressbuch, in dem neue Kontakte angelegt werden."
-
-#: Preference.php:79
-msgid "Default Calendar"
-msgstr "Standard-Kalender"
-
-#: Preference.php:80
-msgid "The default calendar to create new events in."
-msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
-
-#: Preference.php:83
-msgid "Default Task List"
-msgstr "Standard-Aufgabenliste"
-
-#: Preference.php:84
-msgid "The default task list to create new tasks in."
-msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
 
 #: js/Model.js:47
 msgid "Device"
@@ -85,3 +54,35 @@ msgstr "zurückgesetzt"
 #: js/Application.js:107
 msgid "Set Sync Filter"
 msgstr "Setze Sync Filter"
+
+#: Preference.php:75
+msgid "Default Addressbook"
+msgstr "Standard-Adressbuch"
+
+#: Preference.php:76
+msgid "The default addressbook to create new contacts in."
+msgstr "Das Standard-Adressbuch, in dem neue Kontakte angelegt werden."
+
+#: Preference.php:79
+msgid "Default Calendar"
+msgstr "Standard-Kalender"
+
+#: Preference.php:80
+msgid "The default calendar to create new events in."
+msgstr "Der Standard-Kalender, in dem neue Termine angelegt werden."
+
+#: Preference.php:83
+msgid "Default Task List"
+msgstr "Standard-Aufgabenliste"
+
+#: Preference.php:84
+msgid "The default task list to create new tasks in."
+msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+
+#: Setup/setup.xml:473
+msgid "Default Policy"
+msgstr "Standard Policy"
+
+#: Setup/setup.xml:478
+msgid "Default Policy installed during setup"
+msgstr "Standard Policy aus dem Setup Prozess"

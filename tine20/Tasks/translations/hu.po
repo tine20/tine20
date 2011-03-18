@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2011-01-09 21:17+0100\n"
 "Last-Translator: Faragó Tamás <admin@kemenyfem.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,6 +18,185 @@ msgstr ""
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%s személyes feladatok"
+
+#: Acl/Rights.php:90
+msgid "manage shared task lists"
+msgstr "megosztott feladatalisták kezelése"
+
+#: Acl/Rights.php:91
+msgid "Create new shared tasks lists"
+msgstr "Új megosztott feladatlisták készítése"
+
+#: Acl/Rights.php:94
+msgid "manage shared tasks favorites"
+msgstr "kedvenc megosztott feladatok kezelése"
+
+#: Acl/Rights.php:95
+msgid "Create or update shared tasks favorites"
+msgstr "Kedvenc megosztott feladatok készítése vagy frissítése"
+
+#: Model/Task.php:183
+msgid "Due"
+msgstr "Esedékes"
+
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr "Szervező"
+
+#: Model/Task.php:185
+msgid "Description"
+msgstr "Leírás"
+
+#: Model/Task.php:186 js/TaskEditDialog.js:188 js/GridPanel.js:130
+msgid "Priority"
+msgstr "Prioritás"
+
+#: Model/Task.php:187 js/TaskEditDialog.js:208 js/GridPanel.js:157
+#: js/Status.js:33
+msgid "Status"
+msgstr "Állapot"
+
+#: Model/Task.php:188 js/GridPanel.js:144
+msgid "Percent"
+msgstr "Százalék"
+
+#: Model/Task.php:195 js/GridPanel.js:111
+msgid "Lead"
+msgstr "Ügylet"
+
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Model/Task.php:202
+msgid "Email"
+msgstr "Email"
+
+#: js/Tasks.js:92
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Feladat"
+msgstr[1] "Feladatok"
+
+#: js/Tasks.js:92
+msgid "Tasks"
+msgstr "Feladatok"
+
+#: js/Tasks.js:96
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "teendő lista"
+msgstr[1] "teendő listák"
+
+#: js/Tasks.js:96
+msgid "to do lists"
+msgstr "teendő listák"
+
+#: js/Tasks.js:131
+msgid "Quick search"
+msgstr "Gyors keresés"
+
+#: js/Tasks.js:133 js/TaskEditDialog.js:180 js/GridPanel.js:114
+msgid "Summary"
+msgstr "Összegzés"
+
+#: js/Tasks.js:134 js/GridPanel.js:122
+msgid "Due Date"
+msgstr "Lejárati idő"
+
+#: js/Tasks.js:136 js/GridPanel.js:185
+msgid "Responsible"
+msgstr "Felelős"
+
+#: js/Tasks.js:138
+msgid "Last modified"
+msgstr "Utoljára módosítva"
+
+#: js/Tasks.js:139
+msgid "Last modifier"
+msgstr "Utolsó módosító"
+
+#: js/Tasks.js:140 js/GridPanel.js:171
+msgid "Creation Time"
+msgstr "Készítés ideje"
+
+#: js/Tasks.js:141
+msgid "Creator"
+msgstr "Készítő"
+
+#: js/TaskEditDialog.js:141
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Meg kell adnod egy lejárati időt, mert riasztás van beállítva!"
+
+#: js/TaskEditDialog.js:185
+msgid "Due date"
+msgstr "Lejárati idő"
+
+#: js/TaskEditDialog.js:191
+msgid "Add Responsible ..."
+msgstr "Felelős hozzáadása..."
+
+#: js/TaskEditDialog.js:198
+msgid "Notes"
+msgstr "Megjegyzések"
+
+#: js/TaskEditDialog.js:199
+msgid "Enter description..."
+msgstr "Leírás megadása..."
+
+#: js/TaskEditDialog.js:204
+msgid "Percentage"
+msgstr "Százalék"
+
+#: js/TaskEditDialog.js:212 js/GridPanel.js:178
+msgid "Completed"
+msgstr "Teljesítve"
+
+#: js/GridPanel.js:55
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Biztosan törlöd a kiválasztott feladatot?"
+msgstr[1] "Biztosan törlöd a kiválasztott feladatokat?"
+
+#: js/GridPanel.js:110
+msgid "Tags"
+msgstr "Címkék"
+
+#: js/GridPanel.js:118
+msgid "Add a task..."
+msgstr "Feladat hozzáadása..."
+
+#: js/GridPanel.js:234
+msgid "Show closed"
+msgstr "Lezártak mutatása"
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr "Minden feladatom"
+
+#: Preference.php:71
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
+
+#: Preference.php:72
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Alapértelmezett kedvenc, ami a Feladatok indításakor betöltődik"
+
+#: Preference.php:75
+msgid "Default Task List"
+msgstr "Alap Feladat Lista"
+
+#: Preference.php:76
+msgid "The default task list to create new tasks in."
+msgstr "Az alapértelmezett feladat lista amiben az új feladatokat létrehozom."
+
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Értesítés a Feladathoz"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:37
+msgid "All tasks of my taskslists"
+msgstr "Minden feladat a feladatlistámon"
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
@@ -33,10 +213,6 @@ msgstr "FELDOLGOZÁS ALATT"
 #: Setup/setup.xml:361
 msgid "CANCELLED"
 msgstr "TÖRÖLVE"
-
-#: Setup/Update/Release3.php:66 Setup/Initialize.php:37
-msgid "All tasks of my taskslists"
-msgstr "Minden feladat a feladatlistámon"
 
 #: Setup/Initialize.php:46
 msgid "My open tasks"
@@ -65,181 +241,6 @@ msgstr "Minden feladat amit utoljára én módosítottam"
 #: Setup/Initialize.php:82
 msgid "Tasks without responsible"
 msgstr "Feladatok felelős nélkül"
-
-#: Preference.php:29
-msgid "All my tasks"
-msgstr "Minden feladatom"
-
-#: Preference.php:71
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
-
-#: Preference.php:72
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Alapértelmezett kedvenc, ami a Feladatok indításakor betöltődik"
-
-#: Preference.php:75
-msgid "Default Task List"
-msgstr "Alap Feladat Lista"
-
-#: Preference.php:76
-msgid "The default task list to create new tasks in."
-msgstr "Az alapértelmezett feladat lista amiben az új feladatokat létrehozom."
-
-#: Acl/Rights.php:90
-msgid "manage shared task lists"
-msgstr "megosztott feladatalisták kezelése"
-
-#: Acl/Rights.php:91
-msgid "Create new shared tasks lists"
-msgstr "Új megosztott feladatlisták készítése"
-
-#: Acl/Rights.php:94
-msgid "manage shared tasks favorites"
-msgstr "kedvenc megosztott feladatok kezelése"
-
-#: Acl/Rights.php:95
-msgid "Create or update shared tasks favorites"
-msgstr "Kedvenc megosztott feladatok készítése vagy frissítése"
-
-#: js/Status.js:33 js/GridPanel.js:157 js/TaskEditDialog.js:208
-#: Model/Task.php:187
-msgid "Status"
-msgstr "Állapot"
-
-#: js/GridPanel.js:55
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Biztosan törlöd a kiválasztott feladatot?"
-msgstr[1] "Biztosan törlöd a kiválasztott feladatokat?"
-
-#: js/GridPanel.js:110
-msgid "Tags"
-msgstr "Címkék"
-
-#: js/GridPanel.js:111 Model/Task.php:195
-msgid "Lead"
-msgstr "Ügylet"
-
-#: js/GridPanel.js:114 js/TaskEditDialog.js:180 js/Tasks.js:133
-msgid "Summary"
-msgstr "Összegzés"
-
-#: js/GridPanel.js:118
-msgid "Add a task..."
-msgstr "Feladat hozzáadása..."
-
-#: js/GridPanel.js:122 js/Tasks.js:134
-msgid "Due Date"
-msgstr "Lejárati idő"
-
-#: js/GridPanel.js:130 js/TaskEditDialog.js:188 Model/Task.php:186
-msgid "Priority"
-msgstr "Prioritás"
-
-#: js/GridPanel.js:144 Model/Task.php:188
-msgid "Percent"
-msgstr "Százalék"
-
-#: js/GridPanel.js:171 js/Tasks.js:140
-msgid "Creation Time"
-msgstr "Készítés ideje"
-
-#: js/GridPanel.js:178 js/TaskEditDialog.js:212
-msgid "Completed"
-msgstr "Teljesítve"
-
-#: js/GridPanel.js:185 js/Tasks.js:136
-msgid "Responsible"
-msgstr "Felelős"
-
-#: js/GridPanel.js:234
-msgid "Show closed"
-msgstr "Lezártak mutatása"
-
-#: js/TaskEditDialog.js:141
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Meg kell adnod egy lejárati időt, mert riasztás van beállítva!"
-
-#: js/TaskEditDialog.js:185
-msgid "Due date"
-msgstr "Lejárati idő"
-
-#: js/TaskEditDialog.js:191
-msgid "Add Responsible ..."
-msgstr "Felelős hozzáadása..."
-
-#: js/TaskEditDialog.js:198
-msgid "Notes"
-msgstr "Megjegyzések"
-
-#: js/TaskEditDialog.js:199
-msgid "Enter description..."
-msgstr "Leírás megadása..."
-
-#: js/TaskEditDialog.js:204
-msgid "Percentage"
-msgstr "Százalék"
-
-#: js/Tasks.js:92
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Feladat"
-msgstr[1] "Feladatok"
-
-#: js/Tasks.js:92
-msgid "Tasks"
-msgstr "Feladatok"
-
-#: js/Tasks.js:96
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "teendő lista"
-msgstr[1] "teendő listák"
-
-#: js/Tasks.js:96
-msgid "to do lists"
-msgstr "teendő listák"
-
-#: js/Tasks.js:131
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/Tasks.js:138
-msgid "Last modified"
-msgstr "Utoljára módosítva"
-
-#: js/Tasks.js:139
-msgid "Last modifier"
-msgstr "Utolsó módosító"
-
-#: js/Tasks.js:141
-msgid "Creator"
-msgstr "Készítő"
-
-#: Model/Task.php:183
-msgid "Due"
-msgstr "Esedékes"
-
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Szervező"
-
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Leírás"
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr "Telefon"
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr "Email"
-
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Értesítés a Feladathoz"
 
 #~ msgid "Failed"
 #~ msgstr "Sikertelen"

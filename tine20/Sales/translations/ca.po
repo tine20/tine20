@@ -5,16 +5,13 @@ msgstr ""
 "PO-Revision-Date: \n"
 "Last-Translator: Damià Verger <dverger@joomla.cat>\n"
 "Language-Team: Tine 2.0 Translators <dverger@joomla.cat>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
-
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Contractes compartits"
 
 #: Acl/Rights.php:104
 msgid "manage products"
@@ -24,66 +21,22 @@ msgstr "gestiona productes"
 msgid "add, edit and delete products"
 msgstr "afegeix, edita i elimina productes"
 
-#: js/ProductEditDialog.js:104 js/ProductGridPanel.js:125
-msgid "Name"
-msgstr "Nom"
-
-#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:129
-msgid "Price"
-msgstr "Preu"
-
-#: js/ProductEditDialog.js:117 js/ProductGridPanel.js:126
-msgid "Manufacturer"
-msgstr "Fabricant"
-
-#: js/ProductEditDialog.js:121 js/ProductGridPanel.js:127
-msgid "Category"
-msgstr "Categoria"
-
-#: js/ProductEditDialog.js:125 js/ContractEditDialog.js:102
-#: js/ProductGridPanel.js:128
-msgid "Description"
-msgstr "Descripció"
-
-#: js/ProductEditDialog.js:126 js/ContractEditDialog.js:103
-msgid "Enter description..."
-msgstr "Introduïu una descripció..."
-
-#: js/Models.js:41
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Producte"
-msgstr[1] "Productes"
-
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "llista de registres"
-msgstr[1] "llistes de registres"
-
-#: js/Models.js:79 js/ContractGridPanel.js:62
-msgid "Quick search"
-msgstr "Cerca ràpida"
-
-#: js/Models.js:80
-msgid "Product name"
-msgstr "Nom del producte"
-
-#: js/Models.js:113
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Contracte"
-msgstr[1] "Contractes"
-
-#: js/Models.js:117
-msgid "contracts list"
-msgid_plural "contracts lists"
-msgstr[0] "llista de contractes"
-msgstr[1] "llistes de contractes"
-
 #: js/ContractEditDialog.js:97 js/ContractGridPanel.js:88
 msgid "Title"
 msgstr "Títol"
+
+#: js/ContractEditDialog.js:102 js/ProductGridPanel.js:128
+#: js/ProductEditDialog.js:125
+msgid "Description"
+msgstr "Descripció"
+
+#: js/ContractEditDialog.js:103 js/ProductEditDialog.js:126
+msgid "Enter description..."
+msgstr "Introduïu una descripció..."
+
+#: js/ContractGridPanel.js:62 js/Models.js:79
+msgid "Quick search"
+msgstr "Cerca ràpida"
 
 #: js/ContractGridPanel.js:63
 msgid "Summary"
@@ -116,3 +69,51 @@ msgstr "Tots els contractes"
 #: js/ProductGridPanel.js:124
 msgid "Tags"
 msgstr "Etiquetes"
+
+#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:104
+msgid "Name"
+msgstr "Nom"
+
+#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:117
+msgid "Manufacturer"
+msgstr "Fabricant"
+
+#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:121
+msgid "Category"
+msgstr "Categoria"
+
+#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:110
+msgid "Price"
+msgstr "Preu"
+
+#: js/Models.js:41
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Producte"
+msgstr[1] "Productes"
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "llista de registres"
+msgstr[1] "llistes de registres"
+
+#: js/Models.js:80
+msgid "Product name"
+msgstr "Nom del producte"
+
+#: js/Models.js:113
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Contracte"
+msgstr[1] "Contractes"
+
+#: js/Models.js:117
+msgid "contracts list"
+msgid_plural "contracts lists"
+msgstr[0] "llista de contractes"
+msgstr[1] "llistes de contractes"
+
+#: Setup/setup.xml:243
+msgid "Shared Contracts"
+msgstr "Contractes compartits"

@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2011-03-08 11:05+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,6 +18,185 @@ msgstr ""
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%ss persönliche Aufgaben"
+
+#: Acl/Rights.php:90
+msgid "manage shared task lists"
+msgstr "Gemeinsame Aufgabenlisten verwalten"
+
+#: Acl/Rights.php:91
+msgid "Create new shared tasks lists"
+msgstr "Neue gemeinse Aufgabenliste anlegen"
+
+#: Acl/Rights.php:94
+msgid "manage shared tasks favorites"
+msgstr "Gemeinsame Aufgaben Favoriten verwalten"
+
+#: Acl/Rights.php:95
+msgid "Create or update shared tasks favorites"
+msgstr "Gemeinsame Aufgaben Favoriten erstellen oder bearbeiten"
+
+#: Model/Task.php:183
+msgid "Due"
+msgstr "Fälligkeit"
+
+#: Model/Task.php:184
+msgid "Organizer"
+msgstr "Organisator"
+
+#: Model/Task.php:185
+msgid "Description"
+msgstr "Beschreibung"
+
+#: Model/Task.php:186 js/TaskEditDialog.js:188 js/GridPanel.js:130
+msgid "Priority"
+msgstr "Priorität"
+
+#: Model/Task.php:187 js/TaskEditDialog.js:208 js/GridPanel.js:157
+#: js/Status.js:33
+msgid "Status"
+msgstr "Status"
+
+#: Model/Task.php:188 js/GridPanel.js:144
+msgid "Percent"
+msgstr "Prozent"
+
+#: Model/Task.php:195 js/GridPanel.js:111
+msgid "Lead"
+msgstr "Lead"
+
+#: Model/Task.php:201
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Model/Task.php:202
+msgid "Email"
+msgstr "Email"
+
+#: js/Tasks.js:92
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Aufgabe"
+msgstr[1] "Aufgaben"
+
+#: js/Tasks.js:92
+msgid "Tasks"
+msgstr "Aufgaben"
+
+#: js/Tasks.js:96
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "Aufgabenliste"
+msgstr[1] "Aufgabenlisten"
+
+#: js/Tasks.js:96
+msgid "to do lists"
+msgstr "Aufgabenlisten"
+
+#: js/Tasks.js:131
+msgid "Quick search"
+msgstr "Schnellsuche"
+
+#: js/Tasks.js:133 js/TaskEditDialog.js:180 js/GridPanel.js:114
+msgid "Summary"
+msgstr "Beschreibung"
+
+#: js/Tasks.js:134 js/GridPanel.js:122
+msgid "Due Date"
+msgstr "Fällig am"
+
+#: js/Tasks.js:136 js/GridPanel.js:185
+msgid "Responsible"
+msgstr "Verantwortlich"
+
+#: js/Tasks.js:138
+msgid "Last modified"
+msgstr "Zuletzt bearbeitet"
+
+#: js/Tasks.js:139
+msgid "Last modifier"
+msgstr "Letzter Bearbeiter"
+
+#: js/Tasks.js:140 js/GridPanel.js:171
+msgid "Creation Time"
+msgstr "Angelegt am"
+
+#: js/Tasks.js:141
+msgid "Creator"
+msgstr "Ersteller"
+
+#: js/TaskEditDialog.js:141
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
+
+#: js/TaskEditDialog.js:185
+msgid "Due date"
+msgstr "Fälligkeitsdatum"
+
+#: js/TaskEditDialog.js:191
+msgid "Add Responsible ..."
+msgstr "Verantwortlichen hinzufügen ..."
+
+#: js/TaskEditDialog.js:198
+msgid "Notes"
+msgstr "Anmerkungen"
+
+#: js/TaskEditDialog.js:199
+msgid "Enter description..."
+msgstr "Beschreibung eingeben..."
+
+#: js/TaskEditDialog.js:204
+msgid "Percentage"
+msgstr "Prozent"
+
+#: js/TaskEditDialog.js:212 js/GridPanel.js:178
+msgid "Completed"
+msgstr "Abgeschlossen"
+
+#: js/GridPanel.js:55
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
+msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
+
+#: js/GridPanel.js:110
+msgid "Tags"
+msgstr "Tags"
+
+#: js/GridPanel.js:118
+msgid "Add a task..."
+msgstr "Aufgabe hinzufügen..."
+
+#: js/GridPanel.js:234
+msgid "Show closed"
+msgstr "Geschlossene Aufgaben anzeigen"
+
+#: Preference.php:29
+msgid "All my tasks"
+msgstr "Alle meine Aufgaben"
+
+#: Preference.php:71
+msgid "Default Favorite"
+msgstr "Standard Favorit"
+
+#: Preference.php:72
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
+
+#: Preference.php:75
+msgid "Default Task List"
+msgstr "Standard-Aufgabenliste"
+
+#: Preference.php:76
+msgid "The default task list to create new tasks in."
+msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+
+#: Controller/Task.php:166
+msgid "Notification for Task "
+msgstr "Benachrichtigung für Aufgabe"
+
+#: Setup/Update/Release3.php:66 Setup/Initialize.php:37
+msgid "All tasks of my taskslists"
+msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
@@ -33,11 +213,6 @@ msgstr "IN BEARBEITUNG"
 #: Setup/setup.xml:361
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
-
-#: Setup/Update/Release3.php:66
-#: Setup/Initialize.php:37
-msgid "All tasks of my taskslists"
-msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
 
 #: Setup/Initialize.php:46
 msgid "My open tasks"
@@ -67,195 +242,8 @@ msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
 msgid "Tasks without responsible"
 msgstr "Aufgaben ohne Verantwortlichen"
 
-#: Preference.php:29
-msgid "All my tasks"
-msgstr "Alle meine Aufgaben"
-
-#: Preference.php:71
-msgid "Default Favorite"
-msgstr "Standard Favorit"
-
-#: Preference.php:72
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
-
-#: Preference.php:75
-msgid "Default Task List"
-msgstr "Standard-Aufgabenliste"
-
-#: Preference.php:76
-msgid "The default task list to create new tasks in."
-msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
-
-#: Acl/Rights.php:90
-msgid "manage shared task lists"
-msgstr "Gemeinsame Aufgabenlisten verwalten"
-
-#: Acl/Rights.php:91
-msgid "Create new shared tasks lists"
-msgstr "Neue gemeinse Aufgabenliste anlegen"
-
-#: Acl/Rights.php:94
-msgid "manage shared tasks favorites"
-msgstr "Gemeinsame Aufgaben Favoriten verwalten"
-
-#: Acl/Rights.php:95
-msgid "Create or update shared tasks favorites"
-msgstr "Gemeinsame Aufgaben Favoriten erstellen oder bearbeiten"
-
-#: js/Status.js:33
-#: js/GridPanel.js:157
-#: js/TaskEditDialog.js:208
-#: Model/Task.php:187
-msgid "Status"
-msgstr "Status"
-
-#: js/GridPanel.js:55
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Wollen Sie die ausgewählte Aufgabe wirklich löschen?"
-msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
-
-#: js/GridPanel.js:110
-msgid "Tags"
-msgstr "Tags"
-
-#: js/GridPanel.js:111
-#: Model/Task.php:195
-msgid "Lead"
-msgstr "Lead"
-
-#: js/GridPanel.js:114
-#: js/TaskEditDialog.js:180
-#: js/Tasks.js:133
-msgid "Summary"
-msgstr "Beschreibung"
-
-#: js/GridPanel.js:118
-msgid "Add a task..."
-msgstr "Aufgabe hinzufügen..."
-
-#: js/GridPanel.js:122
-#: js/Tasks.js:134
-msgid "Due Date"
-msgstr "Fällig am"
-
-#: js/GridPanel.js:130
-#: js/TaskEditDialog.js:188
-#: Model/Task.php:186
-msgid "Priority"
-msgstr "Priorität"
-
-#: js/GridPanel.js:144
-#: Model/Task.php:188
-msgid "Percent"
-msgstr "Prozent"
-
-#: js/GridPanel.js:171
-#: js/Tasks.js:140
-msgid "Creation Time"
-msgstr "Angelegt am"
-
-#: js/GridPanel.js:178
-#: js/TaskEditDialog.js:212
-msgid "Completed"
-msgstr "Abgeschlossen"
-
-#: js/GridPanel.js:185
-#: js/Tasks.js:136
-msgid "Responsible"
-msgstr "Verantwortlich"
-
-#: js/GridPanel.js:234
-msgid "Show closed"
-msgstr "Geschlossene Aufgaben anzeigen"
-
-#: js/TaskEditDialog.js:141
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Sie müssen ein Fälligkeitsdatum angeben, da ein Alarm gesetzt wurde!"
-
-#: js/TaskEditDialog.js:185
-msgid "Due date"
-msgstr "Fälligkeitsdatum"
-
-#: js/TaskEditDialog.js:191
-msgid "Add Responsible ..."
-msgstr "Verantwortlichen hinzufügen ..."
-
-#: js/TaskEditDialog.js:198
-msgid "Notes"
-msgstr "Anmerkungen"
-
-#: js/TaskEditDialog.js:199
-msgid "Enter description..."
-msgstr "Beschreibung eingeben..."
-
-#: js/TaskEditDialog.js:204
-msgid "Percentage"
-msgstr "Prozent"
-
-#: js/Tasks.js:92
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Aufgabe"
-msgstr[1] "Aufgaben"
-
-#: js/Tasks.js:92
-msgid "Tasks"
-msgstr "Aufgaben"
-
-#: js/Tasks.js:96
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "Aufgabenliste"
-msgstr[1] "Aufgabenlisten"
-
-#: js/Tasks.js:96
-msgid "to do lists"
-msgstr "Aufgabenlisten"
-
-#: js/Tasks.js:131
-msgid "Quick search"
-msgstr "Schnellsuche"
-
-#: js/Tasks.js:138
-msgid "Last modified"
-msgstr "Zuletzt bearbeitet"
-
-#: js/Tasks.js:139
-msgid "Last modifier"
-msgstr "Letzter Bearbeiter"
-
-#: js/Tasks.js:141
-msgid "Creator"
-msgstr "Ersteller"
-
-#: Model/Task.php:183
-msgid "Due"
-msgstr "Fälligkeit"
-
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Organisator"
-
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Beschreibung"
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr "Telefon"
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr "Email"
-
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Benachrichtigung für Aufgabe"
-
 #~ msgid "Failed"
 #~ msgstr "Fehlgeschlagen"
+
 #~ msgid "Could not save task."
 #~ msgstr "Konnte Aufgabe nicht speichern."
-

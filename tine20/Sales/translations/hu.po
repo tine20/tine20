@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2010-07-12 20:07+0100\n"
 "Last-Translator: Gump <gump@gump.hu>\n"
 "Language-Team: gump <admin@kemenyfem.hu>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,10 +13,6 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Megosztott szerződések"
 
 #: Acl/Rights.php:104
 msgid "manage products"
@@ -25,66 +22,22 @@ msgstr "termékek kezelése"
 msgid "add, edit and delete products"
 msgstr "termékek hozzáadása, szerkesztése és törlése"
 
-#: js/ProductEditDialog.js:104 js/ProductGridPanel.js:125
-msgid "Name"
-msgstr "Név"
-
-#: js/ProductEditDialog.js:110 js/ProductGridPanel.js:129
-msgid "Price"
-msgstr "Ár"
-
-#: js/ProductEditDialog.js:117 js/ProductGridPanel.js:126
-msgid "Manufacturer"
-msgstr "Gyártó"
-
-#: js/ProductEditDialog.js:121 js/ProductGridPanel.js:127
-msgid "Category"
-msgstr "Kategória"
-
-#: js/ProductEditDialog.js:125 js/ContractEditDialog.js:102
-#: js/ProductGridPanel.js:128
-msgid "Description"
-msgstr "Leírás"
-
-#: js/ProductEditDialog.js:126 js/ContractEditDialog.js:103
-msgid "Enter description..."
-msgstr "Leírás bevitele..."
-
-#: js/Models.js:41
-msgid "Product"
-msgid_plural "Products"
-msgstr[0] "Termék"
-msgstr[1] "Termékek"
-
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "adat lista"
-msgstr[1] "adat listák"
-
-#: js/Models.js:79 js/ContractGridPanel.js:62
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/Models.js:80
-msgid "Product name"
-msgstr "Termék neve"
-
-#: js/Models.js:113
-msgid "Contract"
-msgid_plural "Contracts"
-msgstr[0] "Szerződés"
-msgstr[1] "Szerződések"
-
-#: js/Models.js:117
-msgid "contracts list"
-msgid_plural "contracts lists"
-msgstr[0] "szerződés lista"
-msgstr[1] "szerződés listák"
-
 #: js/ContractEditDialog.js:97 js/ContractGridPanel.js:88
 msgid "Title"
 msgstr "Cím"
+
+#: js/ContractEditDialog.js:102 js/ProductGridPanel.js:128
+#: js/ProductEditDialog.js:125
+msgid "Description"
+msgstr "Leírás"
+
+#: js/ContractEditDialog.js:103 js/ProductEditDialog.js:126
+msgid "Enter description..."
+msgstr "Leírás bevitele..."
+
+#: js/ContractGridPanel.js:62 js/Models.js:79
+msgid "Quick search"
+msgstr "Gyors keresés"
 
 #: js/ContractGridPanel.js:63
 msgid "Summary"
@@ -117,3 +70,51 @@ msgstr "Összes szerződés"
 #: js/ProductGridPanel.js:124
 msgid "Tags"
 msgstr "Címke"
+
+#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:104
+msgid "Name"
+msgstr "Név"
+
+#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:117
+msgid "Manufacturer"
+msgstr "Gyártó"
+
+#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:121
+msgid "Category"
+msgstr "Kategória"
+
+#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:110
+msgid "Price"
+msgstr "Ár"
+
+#: js/Models.js:41
+msgid "Product"
+msgid_plural "Products"
+msgstr[0] "Termék"
+msgstr[1] "Termékek"
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "adat lista"
+msgstr[1] "adat listák"
+
+#: js/Models.js:80
+msgid "Product name"
+msgstr "Termék neve"
+
+#: js/Models.js:113
+msgid "Contract"
+msgid_plural "Contracts"
+msgstr[0] "Szerződés"
+msgstr[1] "Szerződések"
+
+#: js/Models.js:117
+msgid "contracts list"
+msgid_plural "contracts lists"
+msgstr[0] "szerződés lista"
+msgstr[1] "szerződés listák"
+
+#: Setup/setup.xml:243
+msgid "Shared Contracts"
+msgstr "Megosztott szerződések"

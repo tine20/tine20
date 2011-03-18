@@ -5,6 +5,7 @@ msgstr ""
 "PO-Revision-Date: 2008-07-29 21:14+0100\n"
 "Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -18,16 +19,32 @@ msgstr ""
 msgid "%s's personal example records"
 msgstr ""
 
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
+#: js/Model.js:33
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:37
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/ExampleRecordEditDialog.js:89
+msgid "ExampleRecord"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
+msgid "Name"
+msgstr ""
+
+#: js/ExampleApplication.js:27
+msgid "Example Application"
 msgstr ""
 
 #: js/ExampleRecordGridPanel.js:77
 msgid "Quick search"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:105 js/ExampleRecordEditDialog.js:106
-msgid "Name"
 msgstr ""
 
 #: js/ExampleRecordGridPanel.js:111
@@ -46,22 +63,6 @@ msgstr ""
 msgid "Show closed"
 msgstr ""
 
-#: js/ExampleRecordEditDialog.js:89
-msgid "ExampleRecord"
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
 msgstr ""
-
-#: js/ExampleApplication.js:27
-msgid "Example Application"
-msgstr ""
-
-#: js/Model.js:33
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Model.js:37
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
