@@ -184,10 +184,20 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         
         // change unreadcount of folder
         Felamimail_Controller_Folder::getInstance()->updateFolderCounter($updatedFolder, array('cache_unreadcount' => '+1'));
-        
         $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
-        
         $this->assertEquals($unreadcount, $updatedFolder->cache_unreadcount, 'unreadcount should have been sanitized');
+        
+        // add new unread message
+        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $this->assertEquals($unreadcount+1, $updatedFolder->cache_unreadcount, 'unreadcount should have been increased by 1');
+        
+        // mark message as seen twice
+        Felamimail_Controller_Message::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
+        Felamimail_Controller_Message::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $this->assertEquals($unreadcount, $updatedFolder->cache_unreadcount, 'unreadcount should be the same as before');
     }    
     
     /**
