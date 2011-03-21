@@ -226,7 +226,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
         $stmt->closeCursor();
                 
         if (!$queryResult) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Postfix config for user ' . $userId . ' not found!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Postfix config for user ' . $userId . ' not found!');
             return;
         }
         

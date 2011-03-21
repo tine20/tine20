@@ -334,13 +334,13 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
 
-        // Perferom query - retrieve user from database
+        // Perform query - retrieve user from database
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetch();
         $stmt->closeCursor();
                 
         if (!$queryResult) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 'Dovecot config for user ' . $userId . ' not found!');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Dovecot config for user ' . $userId . ' not found!');
             return;
         }
         
