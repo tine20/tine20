@@ -369,7 +369,14 @@ class Setup_Frontend_Cli
                     list($subKey, $value) = explode(':', $sub);
                     $result[$key][$subKey] = $value;
                 } else {
-                    throw new Timetracker_Exception_UnexpectedValue('You have an error in the config syntax (":" expected): ' . $sub);
+                    // might be a '_' in the value
+                    if (preg_match('/:/', $part)) {
+                        $exploded = explode(':', $part);
+                        $key = array_shift($exploded);
+                        $result[$key] = implode(':', $exploded);
+                    } else {
+                        throw new Timetracker_Exception_UnexpectedValue('You have an error in the config syntax (":" expected): ' . $part);
+                    }
                 }
             } else {
                 if (preg_match('/:/', $part)) {
