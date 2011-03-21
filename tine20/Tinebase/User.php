@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -474,6 +474,7 @@ class Tinebase_User
      *  'adminPassword'     => 'lars',
      *  'adminFirstName'    => 'Tine 2.0',
      *  'adminLastName'     => 'Admin Account',
+     *  'adminEmailAddress' => 'admin@tine20domain.org',
      * );
      * </code>
      *
@@ -506,7 +507,7 @@ class Tinebase_User
             'accountDisplayName'    => $_options['adminLastName'] . ', ' . $_options['adminFirstName'],
             'accountFirstName'      => $_options['adminFirstName'],
             'accountExpires'        => NULL,
-            'accountEmailAddress'   => NULL,
+            'accountEmailAddress'   => (array_key_exists('adminEmailAddress', $_options)) ? $_options['adminEmailAddress'] : NULL,
         ));
 
         // update or create user in local sql backend
@@ -514,7 +515,8 @@ class Tinebase_User
             $userBackend->getUserByProperty('accountLoginName', $_options['adminLoginName']);
             $user = $userBackend->updateUserInSqlBackend($user);
         } catch (Tinebase_Exception_NotFound $ten) {
-            $user = $userBackend->addUserInSqlBackend($user);
+            // call addUser here to make sure, sql user plugins (email, ...) are triggered
+            $user = $userBackend->addUser($user);
         }
         
         // set the password for the account
