@@ -483,12 +483,14 @@ class Tinebase_User
      */
     public static function createInitialAccounts($_options)
     {
-        if (! isset($_options['adminPassword']) || ! isset($_options['adminLoginName'] )) {
+        if (! isset($_options['adminPassword']) || ! isset($_options['adminLoginName'])) {
             throw new Tinebase_Exception_InvalidArgument('Admin password and login name have to be set when creating initial account.');
         }
         
-        $_options['adminFirstName']     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';
-        $_options['adminLastName']      = isset($_options['adminLastName'])     ? $_options['adminLastName']  : 'Admin Account';
+        $adminLoginName     = $_options['adminLoginName'];
+        $adminFirstName     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';
+        $adminLastName      = isset($_options['adminLastName'])     ? $_options['adminLastName']  : 'Admin Account';
+        $adminEmailAddress  = (array_key_exists('adminEmailAddress', $_options)) ? $_options['adminEmailAddress'] : NULL;
 
         // get admin & user groups
         $userBackend   = Tinebase_User::factory(Tinebase_User::SQL);
@@ -497,22 +499,22 @@ class Tinebase_User
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         $userGroup  = $groupsBackend->getDefaultGroup();
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user(' . $_options['adminLoginName'] . ')');
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating initial admin user (login: ' . $adminLoginName . ' / email: ' . $adminEmailAddress . ')');
 
         $user = new Tinebase_Model_FullUser(array(
-            'accountLoginName'      => $_options['adminLoginName'],
+            'accountLoginName'      => $adminLoginName,
             'accountStatus'         => 'enabled',
             'accountPrimaryGroup'   => $userGroup->getId(),
-            'accountLastName'       => $_options['adminLastName'],
-            'accountDisplayName'    => $_options['adminLastName'] . ', ' . $_options['adminFirstName'],
-            'accountFirstName'      => $_options['adminFirstName'],
+            'accountLastName'       => $adminLastName,
+            'accountDisplayName'    => $adminLastName . ', ' . $adminFirstName,
+            'accountFirstName'      => $adminFirstName,
             'accountExpires'        => NULL,
-            'accountEmailAddress'   => (array_key_exists('adminEmailAddress', $_options)) ? $_options['adminEmailAddress'] : NULL,
+            'accountEmailAddress'   => $adminEmailAddress
         ));
 
         // update or create user in local sql backend
         try {
-            $userBackend->getUserByProperty('accountLoginName', $_options['adminLoginName']);
+            $userBackend->getUserByProperty('accountLoginName', $adminLoginName);
             $user = $userBackend->updateUserInSqlBackend($user);
         } catch (Tinebase_Exception_NotFound $ten) {
             // call addUser here to make sure, sql user plugins (email, ...) are triggered
