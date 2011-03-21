@@ -187,7 +187,7 @@ class Addressbook_Setup_Initialize extends Setup_Initialize
     {
         $result = array();
         $accounts = isset($_options['authenticationData']['authentication'][Tinebase_User::SQL]) ? $_options['authenticationData']['authentication'][Tinebase_User::SQL] : array();
-        $keys = array('adminLoginName', 'adminPassword');
+        $keys = array('adminLoginName', 'adminPassword', 'adminEmailAddress');
         foreach ($keys as $key) {
             if (isset($_options[$key])) {
                 $result[$key] = $_options[$key];
