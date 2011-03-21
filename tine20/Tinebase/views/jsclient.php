@@ -15,6 +15,7 @@
 <head>
     <title>Tine 2.0</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=8; IE=7" >
 
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
 
@@ -35,7 +36,7 @@
         }
      ?>
     
-    <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
     
     <!--  not yet
