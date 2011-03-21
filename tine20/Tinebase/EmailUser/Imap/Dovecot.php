@@ -39,7 +39,7 @@ UNIQUE (`username`)
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dovecot_quotas`
+-- Table structure for table `dovecot_usage`
 --
 
 CREATE TABLE IF NOT EXISTS `dovecot_usage` (
