@@ -186,6 +186,8 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         $authResult = Tinebase_Auth::getInstance()->authenticate($testConfig->username, 'some pw');
         $this->assertFalse($authResult->isValid());
         $this->assertEquals(Tinebase_Auth::FAILURE_CREDENTIAL_INVALID, $authResult->getCode());
-        $this->assertEquals(array('Invalid credentials for user unittest@tine20.org', ''), $authResult->getMessages());
+        if ($testConfig->email) {
+            $this->assertEquals(array('Invalid credentials for user ' . $testConfig->email, ''), $authResult->getMessages());
+        }
     }
 }
