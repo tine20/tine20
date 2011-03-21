@@ -4,8 +4,8 @@
  * @package     Admin
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * TODO         refactor this (don't use Ext.getCmp, extend generic grid panel, ...)
@@ -34,7 +34,6 @@ Tine.Admin.Groups.Main = {
          * onclick handler for addBtn
          */
         addGroup: function (button, event) {
-            //Tine.Admin.Groups.EditDialog.openWindow({});
             this.openEditWindow(null);
         },
 
@@ -43,7 +42,6 @@ Tine.Admin.Groups.Main = {
          */
         editGroup: function (button, event) {
             var selectedRows = Ext.getCmp('AdminGroupsGrid').getSelectionModel().getSelections();
-            //Tine.Admin.Groups.EditDialog.openWindow({group: selectedRows[0]});
             this.openEditWindow(selectedRows[0]);
         },
 
@@ -234,7 +232,7 @@ Tine.Admin.Groups.Main = {
                 resizable: true
             },
             columns: [
-                { id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 10, hidden: true },
+                { id: 'id', header: this.translation.gettext('ID'), dataIndex: 'id', width: 50, hidden: true },
                 { id: 'name', header: this.translation.gettext('Name'), dataIndex: 'name', width: 50 },
                 { id: 'description', header: this.translation.gettext('Description'), dataIndex: 'description' }
             ]
@@ -280,8 +278,9 @@ Tine.Admin.Groups.Main = {
                 forceFit: true,
                 ignoreAdd: true,
                 emptyText: this.translation.gettext('No groups to display')
-            })            
-            
+            }),
+            enableHdMenu: false,
+            plugins: [new Ext.ux.grid.GridViewMenuPlugin()]
         });
         
         this.gridPanel.on('rowcontextmenu', function (grid, rowIndex, eventObject) {
@@ -307,7 +306,6 @@ Tine.Admin.Groups.Main = {
         this.gridPanel.on('rowdblclick', function (gridPar, rowIndexPar, ePar) {
         	if (Tine.Tinebase.common.hasRight('manage', 'Admin', 'accounts')) {
                 var record = gridPar.getStore().getAt(rowIndexPar);
-                //Tine.Admin.Groups.EditDialog.openWindow({group: record});
                 this.openEditWindow(record);
         	}
         }, this);
