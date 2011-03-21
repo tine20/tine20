@@ -488,6 +488,7 @@ class Tinebase_User
         }
         
         $adminLoginName     = $_options['adminLoginName'];
+        $adminPassword      = $_options['adminPassword'];
         $adminFirstName     = isset($_options['adminFirstName'])    ? $_options['adminFirstName'] : 'Tine 2.0';
         $adminLastName      = isset($_options['adminLastName'])     ? $_options['adminLastName']  : 'Admin Account';
         $adminEmailAddress  = (array_key_exists('adminEmailAddress', $_options)) ? $_options['adminEmailAddress'] : NULL;
@@ -511,6 +512,12 @@ class Tinebase_User
             'accountExpires'        => NULL,
             'accountEmailAddress'   => $adminEmailAddress
         ));
+        
+        if ($adminEmailAddress !== NULL) {
+            $user->imapUser = new Tinebase_Model_EmailUser(array(
+                'emailPassword' => $adminPassword
+            ));
+        }
 
         // update or create user in local sql backend
         try {
@@ -522,7 +529,7 @@ class Tinebase_User
         }
         
         // set the password for the account
-        Tinebase_User::getInstance()->setPassword($user, $_options['adminPassword']);
+        Tinebase_User::getInstance()->setPassword($user, $adminPassword);
 
         // add the admin account to all groups
         Tinebase_Group::getInstance()->addGroupMember($adminGroup, $user);
