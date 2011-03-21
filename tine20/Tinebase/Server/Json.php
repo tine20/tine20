@@ -77,6 +77,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
             	   $this->_handle($server, $request);
             } else {
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Got empty request options: skip request.');
+                $response[] = NULL;
             }
         }
         
@@ -158,7 +159,18 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         $exceptionData['message'] = htmlentities($exception->getMessage(), ENT_COMPAT, 'UTF-8');
         $exceptionData['code']    = $exception->getCode();
         if (Tinebase_Core::getConfig()->suppressExceptionTraces !== TRUE) {
-            $exceptionData['trace']   = $exception->getTrace();
+            $trace = $exception->getTrace();
+            
+            $exceptionData['trace'] = array();
+            $basePath = dirname(dirname(dirname(__FILE__)));
+            
+            foreach($trace as $part) {
+                if (array_key_exists('file', $part)) {
+                    // don't send full pathes to the client
+                    $part['file'] = str_replace($basePath, '...', $part['file']);
+                }
+                $exceptionData['trace'][] = $part;
+            }
         }
         
         $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
