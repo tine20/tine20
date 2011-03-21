@@ -649,6 +649,12 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
             }
         }
         
+        foreach (array('uid', 'gid') as $key) {
+            if (! array_key_exists($key, $rawData)) {
+                $rawData[$key] = $this->_config[$key];
+            }
+        }
+        
         $rawData[$this->_propertyMapping['emailUserId']]   = $_user->getId();
         $rawData[$this->_propertyMapping['emailUsername']] = $this->_appendDomain($_user->accountLoginName);
         
