@@ -517,6 +517,9 @@ class Tinebase_User
             $user->imapUser = new Tinebase_Model_EmailUser(array(
                 'emailPassword' => $adminPassword
             ));
+            $user->smtpUser = new Tinebase_Model_EmailUser(array(
+                'emailPassword' => $adminPassword
+            ));
         }
 
         // update or create user in local sql backend
