@@ -38,6 +38,7 @@ abstract class Tinebase_User_Plugin_Abstract implements Tinebase_User_Plugin_Sql
     public function inspectUpdateUser(Tinebase_Model_FullUser $_updatedUser, Tinebase_Model_FullUser $_newUserProperties)
     {
         if (!isset($_newUserProperties->imapUser)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' No imap properties found!');
             return;
         }
         
