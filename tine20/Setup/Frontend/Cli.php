@@ -365,8 +365,12 @@ class Setup_Frontend_Cli
         foreach ($parts as $part) {
             if (preg_match('/_/', $part)) {
                 list($key, $sub) = explode('_', $part);
-                list($subKey, $value) = explode(':', $sub);
-                $result[$key][$subKey] = $value;
+                if (preg_match('/:/', $sub)) {
+                    list($subKey, $value) = explode(':', $sub);
+                    $result[$key][$subKey] = $value;
+                } else {
+                    throw new Timetracker_Exception_UnexpectedValue('You have an error in the config syntax (":" expected): ' . $sub);
+                }
             } else {
                 if (preg_match('/:/', $part)) {
                     $exploded = explode(':', $part);
