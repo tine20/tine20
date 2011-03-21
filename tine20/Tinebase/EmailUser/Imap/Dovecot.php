@@ -274,6 +274,8 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
         $this->_config['emailHome']   = $this->_config['home'];
         $this->_config['emailUID']    = $this->_config['uid'];
         $this->_config['emailGID']    = $this->_config['gid'];
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_config, TRUE));
     }
     
     /**
