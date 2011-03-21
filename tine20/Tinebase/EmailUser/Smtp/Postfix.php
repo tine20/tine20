@@ -478,7 +478,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
         // Set Aliases
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting aliases for ' . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': ' . print_r($_smtpSettings[$this->_propertyMapping['emailAliases']], TRUE));
 
-        if (is_array($_smtpSettings[$this->_propertyMapping['emailAliases']])) {
+        if (array_key_exists($this->_propertyMapping['emailAliases'], $_smtpSettings) && is_array($_smtpSettings[$this->_propertyMapping['emailAliases']])) {
             foreach ($_smtpSettings[$this->_propertyMapping['emailAliases']] as $aliasAddress) {
                 // check if in primary or secondary domains
                 if (! empty($aliasAddress) && $this->_checkDomain($aliasAddress)) {
@@ -497,7 +497,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
         // Set Forwards
         #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting forwards for ' . $_smtpSettings[$this->_propertyMapping['emailUsername']] . ': ' . print_r($_smtpSettings[$this->_propertyMapping['emailForwards']], TRUE));
 
-        if (is_array($_smtpSettings[$this->_propertyMapping['emailForwards']])) {
+        if (array_key_exists($this->_propertyMapping['emailForwards'], $_smtpSettings) && is_array($_smtpSettings[$this->_propertyMapping['emailForwards']])) {
             foreach ($_smtpSettings[$this->_propertyMapping['emailForwards']] as $forwardAddress) {
                 if (! empty($forwardAddress)) {
                     // create email -> forward
