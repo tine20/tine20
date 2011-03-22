@@ -267,6 +267,9 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
      */
     public static function getTestRecord()
     {
+        $config = Zend_Registry::get('testConfig');
+        $emailDomain = ($config->mailserver) ? $config->mailserver : tine20.org;
+        
         $user  = new Tinebase_Model_FullUser(array(
             'accountLoginName'      => 'tine20phpunituser',
             'accountStatus'         => 'enabled',
@@ -274,7 +277,7 @@ class Tinebase_User_LdapTest extends PHPUnit_Framework_TestCase
             'accountPrimaryGroup'   => Tinebase_Group::getInstance()->getDefaultGroup()->id,
             'accountLastName'       => 'Tine 2.0',
             'accountFirstName'      => 'PHPUnit User',
-            'accountEmailAddress'   => 'phpunit@tine20.org'
+            'accountEmailAddress'   => 'phpunit@' . $emailDomain
         )); 
         
         return $user;
