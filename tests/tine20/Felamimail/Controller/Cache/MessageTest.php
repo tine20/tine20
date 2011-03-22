@@ -143,7 +143,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $this->assertEquals(0, $updatedFolder->cache_job_actions_done, 'done/estimate wrong');
             $this->assertEquals(0, $updatedFolder->cache_job_actions_estimate, 'done/estimate wrong');
         } else {
-            $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal');
+            $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal: ' . print_r($updatedFolder->toArray(), TRUE));
             $this->assertGreaterThan(-1, Tinebase_DateTime::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
             $this->assertNotEquals(0, $updatedFolder->cache_job_actions_done, 'done wrong');
             $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'estimate wrong');
