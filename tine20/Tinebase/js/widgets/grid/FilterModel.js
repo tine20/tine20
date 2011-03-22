@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  * TODO         add year to 'inweek' filter?
@@ -120,6 +120,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 case 'number':
                 case 'percentage':
                 case 'combo':
+                case 'country':
                     this.defaultOperator = 'equals';
                     break;
                 case 'string':
@@ -146,6 +147,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                 case 'group':
                 case 'user':
                 case 'number':
+                case 'country':
                 default:
                     break;
             }
@@ -291,7 +293,6 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                     filter.formFields.value = filter.datePicker;                
             }
         }
-        //console.log('operator change');
     },
     
     /**
@@ -301,20 +302,22 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        var value;
-        var fieldWidth = this.filterValueWidth;
+        var value,
+            fieldWidth = this.filterValueWidth,
+            commonOptions = {
+                filter: filter,
+                width: fieldWidth,
+                id: 'tw-ftb-frow-valuefield-' + filter.id,
+                renderTo: el,
+                value: filter.data.value ? filter.data.value : this.defaultValue
+            };
         
         switch (this.valueType) {
             case 'date':
                 value = this.dateValueRenderer(filter, el);
                 break;
             case 'percentage':
-                value = new Ext.ux.PercentCombo({
-                    filter: filter,
-                    width: fieldWidth,
-                    id: 'tw-ftb-frow-valuefield-' + filter.id,
-                    value: filter.data.value ? filter.data.value : this.defaultValue,
-                    renderTo: el,
+                value = new Ext.ux.PercentCombo(Ext.apply(commonOptions, {
                     listeners: {
                         'specialkey': function(field, e) {
                              if(e.getKey() == e.ENTER){
@@ -324,21 +327,16 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                         'select': this.onFiltertrigger,
                         scope: this
                     }
-                });
+                }));
                 break;
             case 'user':
-                value = new Tine.Addressbook.SearchCombo({
-                    width: fieldWidth,
+                value = new Tine.Addressbook.SearchCombo(Ext.apply(commonOptions, {
                     listWidth: 350,
-                    id: 'tw-ftb-frow-valuefield-' + filter.id,
-                    value: filter.data.value ? filter.data.value : this.defaultValue,
                     emptyText: _('Search Account ...'),
                     userOnly: true,
                     name: 'organizer',
                     nameField: 'n_fileas',
                     useAccountRecord: true,
-                    filter: filter,
-                    renderTo: el,
                     listeners: {
                         'specialkey': function(field, e) {
                              if(e.getKey() == e.ENTER){
@@ -348,15 +346,10 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                         'select': this.onFiltertrigger,
                         scope: this
                     }
-                });
+                }));
                 break;
             case 'bool':
-                value = new Ext.form.ComboBox({
-                    filter: filter,
-                    width: fieldWidth,
-                    id: 'tw-ftb-frow-valuefield-' + filter.id,
-                    value: filter.data.value ? filter.data.value : this.defaultValue,
-                    renderTo: el,
+                value = new Ext.form.ComboBox(Ext.apply(commonOptions, {
                     mode: 'local',
                     forceSelection: true,
                     triggerAction: 'all',
@@ -373,15 +366,10 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                         'select': this.onFiltertrigger,
                         scope: this
                     }
-                });
+                }));
                 break;
             case 'combo':
-                var comboConfig = {
-                    filter: filter,
-                    width: fieldWidth,
-                    id: 'tw-ftb-frow-valuefield-' + filter.id,
-                    value: filter.data.value ? filter.data.value : this.defaultValue,
-                    renderTo: el,
+                var comboConfig = Ext.apply(commonOptions, {
                     mode: 'local',
                     forceSelection: true,
                     triggerAction: 'all',
@@ -395,24 +383,23 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                         'select': this.onFiltertrigger,
                         scope: this
                     }
-                };
+                });
                 if (this.displayField !== null && this.valueField !== null) {
                     comboConfig.displayField = this.displayField;
                     comboConfig.valueField = this.valueField;
                 }
                 value = new Ext.form.ComboBox(comboConfig);
                 break;
+            case 'country':
+                value = new Tine.widgets.CountryCombo(Ext.apply(commonOptions, {
+                }));
+                break;
             case 'customfield':
             case 'string':
             case 'number':
             default:
-                value = new Ext.ux.form.ClearableTextField({
+                value = new Ext.ux.form.ClearableTextField(Ext.apply(commonOptions, {
                     emptyText: this.emptyText,
-                    filter: filter,
-                    width: fieldWidth,
-                    id: 'tw-ftb-frow-valuefield-' + filter.id,
-                    value: filter.data.value ? filter.data.value : this.defaultValue,
-                    renderTo: el,
                     listeners: {
                         scope: this,
                         specialkey: function(field, e){
@@ -421,7 +408,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
                             }
                         }
                     }
-                });
+                }));
                 break;
         }
         
