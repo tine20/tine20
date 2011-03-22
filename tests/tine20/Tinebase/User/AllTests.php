@@ -35,7 +35,7 @@ class Tinebase_User_AllTests
         $suite->addTestSuite('Tinebase_User_ModelTest');
         $suite->addTestSuite('Tinebase_User_AbstractTest');
         
-        #$suite->addTestSuite('Tinebase_User_EmailUser_AllTests');
+        $suite->addTestSuite('Tinebase_User_EmailUser_AllTests');
         return $suite;
     }
 }
