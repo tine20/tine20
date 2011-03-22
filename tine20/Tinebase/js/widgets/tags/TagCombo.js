@@ -89,8 +89,6 @@ Tine.widgets.tags.TagCombo = Ext.extend(Ext.ux.form.ClearableComboBox, {
             value = value.id;
         }
         Tine.widgets.tags.TagCombo.superclass.setValue.call(this, value);
-        
-        console.log(this.getValue());
     },
     
     /**
