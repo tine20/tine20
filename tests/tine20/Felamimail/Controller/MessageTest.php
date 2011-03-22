@@ -183,6 +183,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testBodyStructureTextPlain()
     {
+        // dovecot -> 17 lines / dbmail -> 18 lines
+        $expectedLinesGreaterThan = 16;
         $expectedStructure = array(
             'partId'      => 1,
             'contentType' => 'text/plain',
@@ -195,7 +197,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'description' => '',
             'encoding'    => '7bit',
             'size'        => 388,
-            'lines'       => 18,
             'disposition' => '',
             'language'    => '',
             'location'    => '',
@@ -204,7 +205,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
 
         $message = $this->messageTestHelper('text_plain.eml', 'text/plain');
         
+        $lines = $message['structure']['lines'];
+        $structure = $message['structure'];
+        unset($structure['lines']);
+        
         $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+        $this->assertGreaterThan($expectedLinesGreaterThan, $lines);
     }
     
     /**
