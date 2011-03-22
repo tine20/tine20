@@ -179,7 +179,7 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
 
         $loadedTaskData = $this->_backend->getTask($persistentTaskData['id']);
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_FAILURE, $loadedTaskData['alarms'][0]['sent_status']);
-        $this->assertContains('535 5.7.8 Error: authentication failed: authentication failure', $loadedTaskData['alarms'][0]['sent_message'], 
+        $this->assertContains('535 5.7.8 Error: authentication failed', $loadedTaskData['alarms'][0]['sent_message'], 
             'got: ' . $loadedTaskData['alarms'][0]['sent_message']);
     }
     
