@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
  
@@ -141,9 +141,11 @@ Tine.Addressbook.Model.Contact.getFilterModel = function() {
         {label: app.i18n._('Street') + ' (' + app.i18n._('Company Address') + ')',      field: 'adr_one_street',     defaultOperator: 'equals'},
         {label: app.i18n._('Postal Code') + ' (' + app.i18n._('Company Address') + ')', field: 'adr_one_postalcode', defaultOperator: 'equals'},
         {label: app.i18n._('City') + '  (' + app.i18n._('Company Address') + ')',       field: 'adr_one_locality'},
+        {label: app.i18n._('Country') + '  (' + app.i18n._('Company Address') + ')',    field: 'adr_one_countryname', valueType: 'country'},
         {label: app.i18n._('Street') + ' (' + app.i18n._('Private Address') + ')',      field: 'adr_two_street',     defaultOperator: 'equals'},
         {label: app.i18n._('Postal Code') + ' (' + app.i18n._('Private Address') + ')', field: 'adr_two_postalcode', defaultOperator: 'equals'},
         {label: app.i18n._('City') + ' (' + app.i18n._('Private Address') + ')',        field: 'adr_two_locality'},
+        {label: app.i18n._('Country') + '  (' + app.i18n._('Private Address') + ')',    field: 'adr_two_countryname', valueType: 'country'},
         {label: app.i18n._('Type'), defaultValue: 'contact', valueType: 'combo',        field: 'type',               store: typeStore},
         {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},
         {label: app.i18n._('Last modifier'),                                            field: 'last_modified_by', 	 valueType: 'user'},

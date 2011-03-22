@@ -5,7 +5,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -75,9 +75,11 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
         'adr_one_street'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_one_postalcode'   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_one_locality'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'adr_one_countryname'  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_two_street'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_two_postalcode'   => array('filter' => 'Tinebase_Model_Filter_Text'),
         'adr_two_locality'     => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'adr_two_countryname'  => array('filter' => 'Tinebase_Model_Filter_Text'),
         'email'                => array('filter' => 'Tinebase_Model_Filter_Text'),
         'email_home'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tel_assistent'        => array('filter' => 'Tinebase_Model_Filter_Text'),
