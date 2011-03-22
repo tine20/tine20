@@ -4,8 +4,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -38,7 +38,7 @@ class Felamimail_AllTests
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
         if (! empty($imapConfig) && array_key_exists('useSystemAccount', $imapConfig) && $imapConfig['useSystemAccount']) {
             $suite->addTestSuite('Felamimail_Controller_Cache_MessageTest');
-            $suite->addTestSuite('Felamimail_JsonTest');
+            #$suite->addTestSuite('Felamimail_JsonTest');
             #$suite->addTestSuite('Felamimail_Controller_FolderTest');
             #$suite->addTestSuite('Felamimail_Controller_MessageTest');
             #$suite->addTestSuite('Felamimail_Controller_AccountTest');
