@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_User_EmailUser_Smtp_PostfixTest::main');
-}
 
 /**
  * Test class for Tinebase_PostfixTest
@@ -36,6 +32,13 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
      */
     protected $_objects = array();
 
+    /**
+     * mailserver domain
+     * 
+     * @var string
+     */
+    protected $_mailDomain = 'tine20.org';
+    
     /**
      * Runs the test methods of this class.
      *
@@ -56,18 +59,6 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
      */
     protected function setUp()
     {
-        /*$smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
-        if (!isset($smtpConfig['backend']) || !(ucfirst($smtpConfig['backend']) == Tinebase_EmailUser::POSTFIX) || $smtpConfig['active'] != true) {
-            $this->markTestSkipped('Postfix MySQL backend not configured or not enabled');
-        }
-        
-        $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
-        
-        $personas = Zend_Registry::get('personas');
-        $this->_objects['user'] = clone $personas['jsmith'];
-
-        $this->_objects['addedUsers'] = array();
-        */
         $this->_backend = Tinebase_User::getInstance();
         
         if (!array_key_exists('Tinebase_EmailUser_Smtp_Postfix', $this->_backend->getPlugins())) {
@@ -75,6 +66,11 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         }
         
         $this->objects['users'] = array();
+        
+        $config = Zend_Registry::get('testConfig');
+        if ($config->mailserver) {
+            $this->_mailDomain = $config->mailserver;
+        }
     }
 
     /**
@@ -101,15 +97,15 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
 		$user->smtpUser = new Tinebase_Model_EmailUser(array(
 		    'emailAddress'     => $user->accountEmailAddress,
 		    'emailForwardOnly' => true,
-            'emailForwards'    => array('unittest@tine20.org', 'test@tine20.org'),
-            'emailAliases'     => array('bla@tine20.org', 'blubb@tine20.org')
+            'emailForwards'    => array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain),
+            'emailAliases'     => array('bla@' . $this->_mailDomain, 'blubb@' . $this->_mailDomain)
 		));
 		
         $testUser = $this->_backend->addUser($user);
         $this->objects['users']['testUser'] = $testUser;
 
-        $this->assertEquals(array('unittest@tine20.org', 'test@tine20.org'), $testUser->smtpUser->emailForwards);
-        $this->assertEquals(array('bla@tine20.org', 'blubb@tine20.org'),     $testUser->smtpUser->emailAliases);
+        $this->assertEquals(array('unittest@' . $this->_mailDomain, 'test@' . $this->_mailDomain), $testUser->smtpUser->emailForwards);
+        $this->assertEquals(array('bla@' . $this->_mailDomain, 'blubb@' . $this->_mailDomain),     $testUser->smtpUser->emailAliases);
         $this->assertEquals(true,                                            $testUser->smtpUser->emailForwardOnly);
         $this->assertEquals($user->accountEmailAddress,                      $testUser->smtpUser->emailAddress);
         
@@ -126,16 +122,16 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
         
         // update user
         $user->smtpUser->emailForwardOnly = 1;
-        $user->smtpUser->emailAliases = array('bla@tine20.org');
+        $user->smtpUser->emailAliases = array('bla@' . $this->_mailDomain);
         $user->smtpUser->emailForwards = array();
-        $user->accountEmailAddress = 'j.smith@tine20.org';
+        $user->accountEmailAddress = 'j.smith@' . $this->_mailDomain;
         
         $testUser = $this->_backend->updateUser($user);
         
         $this->assertEquals(array(),                 $testUser->smtpUser->emailForwards, 'forwards mismatch');
-        $this->assertEquals(array('bla@tine20.org'), $testUser->smtpUser->emailAliases,  'aliases mismatch');
+        $this->assertEquals(array('bla@' . $this->_mailDomain), $testUser->smtpUser->emailAliases,  'aliases mismatch');
         $this->assertEquals(false,                   $testUser->smtpUser->emailForwardOnly);
-        $this->assertEquals('j.smith@tine20.org',    $testUser->smtpUser->emailAddress);
+        $this->assertEquals('j.smith@' . $this->_mailDomain,    $testUser->smtpUser->emailAddress);
     }
     
     /**
@@ -163,6 +159,8 @@ class Tinebase_User_EmailUser_Smtp_PostfixTest extends PHPUnit_Framework_TestCas
     
     /**
      * try to update an email account
+     * 
+     * @todo add assertion again
      */
     public function testSetPassword()
     {
