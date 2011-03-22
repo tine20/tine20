@@ -88,6 +88,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Message::getInstance();  
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
+        try {
+            $this->_imap->createFolder($this->_testFolderName, '', $this->_account->delimiter);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // exists
+        }
         $this->_imap->selectFolder($this->_testFolderName);
         $this->_cache      = Felamimail_Controller_Cache_Message::getInstance();
         $this->_folder     = $this->_getFolder($this->_testFolderName);
