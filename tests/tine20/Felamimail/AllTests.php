@@ -14,10 +14,6 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (! defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Felamimail_AllTests::main');
-}
-
 class Felamimail_AllTests
 {
     /**
@@ -43,18 +39,14 @@ class Felamimail_AllTests
         if (! empty($imapConfig) && array_key_exists('useSystemAccount', $imapConfig) && $imapConfig['useSystemAccount']) {
             $suite->addTestSuite('Felamimail_Controller_Cache_MessageTest');
             $suite->addTestSuite('Felamimail_JsonTest');
-            $suite->addTestSuite('Felamimail_Controller_FolderTest');
-            $suite->addTestSuite('Felamimail_Controller_MessageTest');
-            $suite->addTestSuite('Felamimail_Controller_AccountTest');
-            $suite->addTestSuite('Felamimail_Model_MessageTest');
-            $suite->addTestSuite('Felamimail_Model_AccountTest');
+            #$suite->addTestSuite('Felamimail_Controller_FolderTest');
+            #$suite->addTestSuite('Felamimail_Controller_MessageTest');
+            #$suite->addTestSuite('Felamimail_Controller_AccountTest');
+            #$suite->addTestSuite('Felamimail_Model_MessageTest');
+            #$suite->addTestSuite('Felamimail_Model_AccountTest');
         }
         $suite->addTestSuite('Felamimail_Sieve_ScriptTest');
         
         return $suite;
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Felamimail_AllTests::main') {
-    Felamimail_AllTests::main();
 }
