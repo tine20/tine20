@@ -155,11 +155,12 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
     public function testGetAccountCapabilities()
     {
         $account = $this->_controller->updateCapabilities($this->_account);
+        $accountToString = print_r($this->_account->toArray(), TRUE);
         
-        $this->assertEquals('', $account->ns_personal);
-        $this->assertEquals('/', $account->delimiter);
-        $this->assertEquals('#Users', $account->ns_other);
-        $this->assertEquals('#Public', $account->ns_shared);
+        $this->assertEquals('', $account->ns_personal, $accountToString);
+        $this->assertTrue(preg_match('@/|\.@', $account->delimiter), $accountToString);
+        $this->assertEquals('#Users', $account->ns_other, $accountToString);
+        $this->assertEquals('#Public', $account->ns_shared, $accountToString);
     }
     
     /**
