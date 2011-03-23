@@ -1086,7 +1086,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $result = Felamimail_Controller_Folder::getInstance()->search($filter);
         $folder = $result->filter('localname', $folderName)->getFirstRecord();
         if (empty($folder)) {
-            $folder = Felamimail_Controller_Folder::getInstance()->create($_account, $_folderName);
+            $folder = Felamimail_Controller_Folder::getInstance()->create($account, $_folderName);
         }
 
         return $folder;
