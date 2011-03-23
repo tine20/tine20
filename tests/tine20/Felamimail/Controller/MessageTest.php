@@ -334,10 +334,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     'size'        => 2787,
                     'disposition' => array(
                         'type'    => 'attachment',
-                        'parameters' => array(
-                            'foobar'   => 'Test Subjäct',
-                            'filename' => 'add-removals.1239580800.log'
-                        )
                     ),
                     'language'    => '',
                     'location'    => '',
@@ -351,7 +347,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             ),
             'language'    => '',
             'location'    => '',
-            
+        );
+        
+        $expectedParameters = array(
+            'foobar'   => 'Test Subjäct',
+            'filename' => 'add-removals.1239580800.log'
         );
         
         $message = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
@@ -365,7 +365,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_PLAIN, $message['body_content_type']);
         $this->assertTrue(in_array($lines[1], array(61, 62)));
         $this->assertTrue(in_array($lines[2], array(52, 53)));
-        $this->assertTrue($expectedStructure['parts'][2]['disposition']['parameters'] == $parameters);
+        $this->assertTrue($expectedParameters == $parameters);
     }
     
     /**
@@ -447,7 +447,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                         'language'    => '',
                         'location'    => '',
                     ),
-                    'messageLines'    => 81,
                 )
             ),
             'parameters'  => array (
@@ -466,7 +465,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         unset($structure['parts'][2]['messageStructure']['lines']);
         unset($structure['parts'][2]['messageLines']);
         // remove disposition -> dbmail finds none, dovecot does
-        $expectedStructure['parts'][2]['disposition'] = null;
+        $structure['parts'][2]['disposition'] = null;
         
         $this->assertEquals($expectedStructure, $structure, 'structure does not match');
         $this->assertTrue(in_array($lines[1], array(4, 5)));
@@ -863,7 +862,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('unparseable.eml', 'multipart/unparseable');
         $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
         
-        $this->assertContains('NIL', $completeMessage->body, 'parsed mail body:' . $completeMessage->body);
+        $this->assertEquals(1, preg_match('@NIL|Content-Type: image/jpeg@', $completeMessage->body), 'parsed mail body:' . $completeMessage->body);
     }
     
     /**
