@@ -403,6 +403,8 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
             throw new Felamimail_Exception_IMAPServiceUnavailable($zmpe->getMessage());
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Folder could be empty (' . $zmse->getMessage() . ')');
         }
         
         $folder = Felamimail_Controller_Cache_Message::getInstance()->clear($_folderId);
