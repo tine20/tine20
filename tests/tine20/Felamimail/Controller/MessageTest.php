@@ -914,6 +914,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testDeleteMessagesInDifferentAccounts()
     {
         $clonedAccount = $this->_cloneAccount();
+        
+        try {
+            $this->_imap->createFolder('Trash', '', $this->_account->delimiter);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // exists
+        }
+        
         $trashFolderMainAccount = $this->_getFolder('Trash');
         $trashFolderClonedAccount = $this->_getFolder('Trash', $clonedAccount);
         
