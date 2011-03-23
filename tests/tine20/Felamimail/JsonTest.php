@@ -122,6 +122,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // create test folder if it does not exist
         try {
             $this->_imap->createFolder($this->_testFolderName, '', $this->_account->delimiter);
+            Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account);
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // exists
         }

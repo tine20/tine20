@@ -90,6 +90,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
         try {
             $this->_imap->createFolder($this->_testFolderName, '', $this->_account->delimiter);
+            Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account);
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // exists
         }
@@ -776,6 +777,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         ));
         $this->_controller->sendMessage($forwardMessage);
         
+        try {
+            $this->_imap->createFolder('Sent', '', $this->_account->delimiter);
+            Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // exists
+        }
+        
         $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('INBOX'));
         $forwardedMessageInSent = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('Sent'));
         $completeForwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
@@ -916,6 +924,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         try {
             $this->_imap->createFolder('Trash', '', $this->_account->delimiter);
+            Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account);
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // exists
         }
