@@ -67,7 +67,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * active sieve script name to be restored
      * 
-     * @var array
+     * @var string
      */
     protected $_oldActiveSieveScriptName = NULL;
 
@@ -81,9 +81,16 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * sieve script name to delete
      * 
-     * @var array
+     * @var string
      */
     protected $_testSieveScriptName = NULL;
+
+    /**
+     * test email domain
+     * 
+     * @var string
+     */
+    protected $_mailDomain = 'tine20.org';
 
     /**
      * Runs the test methods of this class.
@@ -118,6 +125,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // exists
         }
+        
+        $config = TestServer::getInstance()->getConfig();
+        $this->_mailDomain = ($config->mailserver) ? $config->mailserver : 'tine20.org';
     }
 
     /**
@@ -293,7 +303,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $results['totalcount']);
         $system = array();
         foreach ($results['results'] as $result) {
-            if ($result['name'] == 'unittest@tine20.org') {
+            if ($result['name'] == 'unittest@' . $this->_mailDomain) {
                 $system = $result;
             }
         }
@@ -363,7 +373,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $contact = Addressbook_Controller_Contact::getInstance()->update($contact);
 
         // send email
-        $messageToSend = $this->_getMessageData('unittestalias@tine20.org');
+        $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
         $messageToSend['note'] = 1;
         //print_r($messageToSend);
         $returned = $this->_json->saveMessage($messageToSend);
@@ -638,7 +648,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $forwardMessageData = array(
             'account_id'    => $this->_account->getId(),
             'subject'       => $fwdSubject,
-            'to'            => array('unittest@tine20.org'),
+            'to'            => array('unittest@' . $this->_mailDomain),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'original_id'   => $message['id'],
@@ -826,7 +836,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         return array(
             'account_id'    => $this->_account->getId(),
             'subject'       => 'test',
-            'to'            => array('unittest@tine20.org'),
+            'to'            => array('unittest@' . $this->_mailDomain),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'from_email'    => $_emailFrom,
