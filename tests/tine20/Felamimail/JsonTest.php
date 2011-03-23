@@ -124,8 +124,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_json = new Felamimail_Frontend_Json();
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
         
-        // create test folder if it does not exist
-        $this->_folder = $this->_getFolder($this->_testFolderName);
+        foreach (array($this->_testFolderName, $this->_account->sent_folder, $this->_account->trash_folder) as $folderToCreate) {
+            // create folder if it does not exist
+            $this->_getFolder($folderToCreate);
+        }
         
         $config = TestServer::getInstance()->getConfig();
         $this->_mailDomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
@@ -193,8 +195,8 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $expectedFolders = array('INBOX', $this->_testFolderName);
         
         $foundCount = 0;
-        foreach ($result['results'] as $index => $folderName) {
-            if (in_array($folderName, $expectedFolders)) {
+        foreach ($result['results'] as $index => $folder) {
+            if (in_array($folder['localname'], $expectedFolders)) {
                 $foundCount++;
             }
         }
