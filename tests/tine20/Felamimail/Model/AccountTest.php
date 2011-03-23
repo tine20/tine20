@@ -74,7 +74,7 @@ class Felamimail_Model_AccountTest extends PHPUnit_Framework_TestCase
             $this->assertContains($smtpConfig['primarydomain'], $accountSmtpConfig['username']);
         }
         
-        if ($accountSmtpConfig['hostname'] !== 'localhost') {
+        if (TestServer::getInstance()->getConfig()->mailserver) {
             $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $accountSmtpConfig['hostname']);
         }
     }

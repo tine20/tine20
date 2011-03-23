@@ -128,7 +128,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_folder = $this->_getFolder($this->_testFolderName);
         
         $config = TestServer::getInstance()->getConfig();
-        $this->_mailDomain = ($config->mailserver) ? $config->mailserver : 'tine20.org';
+        $this->_mailDomain = ($config->maildomain) ? $config->maildomain : 'tine20.org';
     }
 
     /**
@@ -288,8 +288,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $system = $this->_getSystemAccount();
         
         $this->assertTrue(! empty($system), 'no accounts found');
-        $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $system['host']);
-        $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $system['sieve_hostname']);
+        if (TestServer::getInstance()->getConfig()->mailserver) {
+            $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $system['host']);
+            $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $system['sieve_hostname']);
+        }
     }
     
     /**
@@ -324,7 +326,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $accountRecord = new Felamimail_Model_Account($account, TRUE);
         $accountRecord->resolveCredentials(FALSE);
-        $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $account['host']);
+        if (TestServer::getInstance()->getConfig()->mailserver) {
+            $this->assertEquals(TestServer::getInstance()->getConfig()->mailserver, $account['host']);
+        }
         
         $this->_json->changeCredentials($account['id'], $accountRecord->user, 'neuespasswort');
         $account = $this->_json->getAccount($account['id']);
