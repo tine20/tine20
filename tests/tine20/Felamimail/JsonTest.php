@@ -91,6 +91,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      * @var string
      */
     protected $_mailDomain = 'tine20.org';
+    
+    /**
+     * @var Felamimail_Model_Folder
+     */
+    protected $_folder = NULL;
 
     /**
      * Runs the test methods of this class.
@@ -120,12 +125,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
         
         // create test folder if it does not exist
-        try {
-            $this->_imap->createFolder($this->_testFolderName, '', $this->_account->delimiter);
-            Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account);
-        } catch (Zend_Mail_Storage_Exception $zmse) {
-            // exists
-        }
+        $this->_folder = $this->_getFolder($this->_testFolderName);
         
         $config = TestServer::getInstance()->getConfig();
         $this->_mailDomain = ($config->mailserver) ? $config->mailserver : 'tine20.org';
@@ -822,7 +822,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     protected function _getFolder($_name)
     {
         Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account->getId());
-        $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $_name);
+        try {
+            $folder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($this->_account->getId(), $_name);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $folder = Felamimail_Controller_Folder::getInstance()->create($this->_account, $_name);
+        }
         
         return $folder;
     }

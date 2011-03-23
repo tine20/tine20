@@ -88,15 +88,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Message::getInstance();  
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
-        try {
-            $this->_imap->createFolder($this->_testFolderName, '', $this->_account->delimiter);
-            Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account);
-        } catch (Zend_Mail_Storage_Exception $zmse) {
-            // exists
-        }
+        
+        $this->_folder     = $this->_getFolder($this->_testFolderName);
         $this->_imap->selectFolder($this->_testFolderName);
         $this->_cache      = Felamimail_Controller_Cache_Message::getInstance();
-        $this->_folder     = $this->_getFolder($this->_testFolderName);
         $this->_createdMessages = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
     }
 
@@ -108,7 +103,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+        try {
+            $this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // do nothing
+        }
         
         foreach ($this->_accountsToDelete as $account) {
             Felamimail_Controller_Account::getInstance()->delete($account);
@@ -775,17 +774,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                 'name'  => $cachedMessage->subject,
             )),
         ));
+        $sentFolder = $this->_getFolder('Sent');
+
         $this->_controller->sendMessage($forwardMessage);
         
-        try {
-            $this->_imap->createFolder('Sent', '', $this->_account->delimiter);
-            Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account);
-        } catch (Zend_Mail_Storage_Exception $zmse) {
-            // exists
-        }
-        
         $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('INBOX'));
-        $forwardedMessageInSent = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('Sent'));
+        $forwardedMessageInSent = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $sentFolder);
         $completeForwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
         
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
@@ -922,13 +916,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $clonedAccount = $this->_cloneAccount();
         
-        try {
-            $this->_imap->createFolder('Trash', '', $this->_account->delimiter);
-            Felamimail_Controller_Cache_Folder::getInstance()->update($this->_account);
-        } catch (Zend_Mail_Storage_Exception $zmse) {
-            // exists
-        }
-        
         $trashFolderMainAccount = $this->_getFolder('Trash');
         $trashFolderClonedAccount = $this->_getFolder('Trash', $clonedAccount);
         
@@ -950,6 +937,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * clones the account
+     * 
+     * @return Felamimail_Model_Account
      */
     protected function _cloneAccount()
     {
@@ -1097,7 +1086,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $result = Felamimail_Controller_Folder::getInstance()->search($filter);
         $folder = $result->filter('localname', $folderName)->getFirstRecord();
         if (empty($folder)) {
-            throw new Exception('folder not found');
+            $folder = Felamimail_Controller_Folder::getInstance()->create($_account, $_folderName);
         }
 
         return $folder;
