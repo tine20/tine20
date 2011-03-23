@@ -32,7 +32,7 @@ class ActiveSync_Controller_AllTests
         $suite->addTestSuite('ActiveSync_Controller_ContactsTests');
         $suite->addTestSuite('ActiveSync_Controller_CalendarTests');
         $suite->addTestSuite('ActiveSync_Controller_TasksTests');
-        #$suite->addTestSuite('ActiveSync_Controller_EmailTests');
+        $suite->addTestSuite('ActiveSync_Controller_EmailTests');
         $suite->addTestSuite('ActiveSync_Controller_DeviceTests');
         
         return $suite;
