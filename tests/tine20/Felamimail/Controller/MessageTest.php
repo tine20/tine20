@@ -761,10 +761,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
         
         // forward message
+        $config = TestServer::getInstance()->getConfig();
+        $email = ($config->email) ? $config->email : 'unittest@tine20.org';
         $forwardMessage = new Felamimail_Model_Message(array(
             'account_id'    => $this->_account->getId(),
             'subject'       => 'test forward',
-            'to'            => array('unittest@tine20.org'),
+            'to'            => array($email),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822),
             'original_id'   => $cachedMessage->getId(),
@@ -881,7 +883,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testMoveMessageToAnotherAccount()
     {
         $clonedAccount = $this->_cloneAccount();
-        $folder = $this->_getFolder('Drafts', $clonedAccount);
+        $folder = $this->_getFolder('INBOX', $clonedAccount);
         
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
