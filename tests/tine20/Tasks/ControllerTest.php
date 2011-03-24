@@ -223,6 +223,25 @@ class Tasks_ControllerTest extends PHPUnit_Framework_TestCase //Tinebase_Abstrac
         $this->_controller->update($resolvableConcurrencyTask);
     }
 
+    public function testConcurrencyDateTime()
+    {
+        $utask = $this->testUpdateTask();
+        
+        sleep(1);
+        $resolvableConcurrencyTask = clone $utask;
+        $resolvableConcurrencyTask->last_modified_time = Tinebase_DateTime::now()->addHour(-1);
+        $resolvableConcurrencyTask->percent = 50;
+        $resolvableConcurrencyTask->summary = 'Update of test task 1';
+        $this->_controller->update($resolvableConcurrencyTask);
+        
+        sleep(1);
+        $resolvableConcurrencyTask = clone $utask;
+        $resolvableConcurrencyTask->last_modified_time = Tinebase_DateTime::now()->addHour(-1);
+        $resolvableConcurrencyTask->due = $resolvableConcurrencyTask->due->addMonth(1);
+        $resolvableConcurrencyTask->percent = 50;
+        $resolvableConcurrencyTask->summary = 'Update of test task 1';
+        $this->_controller->update($resolvableConcurrencyTask);
+    }
     
     /**
      * test if non resolvable concurrency problem gets detected
