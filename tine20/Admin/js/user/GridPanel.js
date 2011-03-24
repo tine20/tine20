@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  *
  */
@@ -36,7 +36,7 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     initComponent: function() {
-        this.gridConfig.columns = this.getColumns();
+        this.gridConfig.cm = this.getColumnModel();
         this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
@@ -151,23 +151,41 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * returns cm
+     * returns column model
+     * 
+     * @return Ext.grid.ColumnModel
      * @private
+     */
+    getColumnModel: function() {
+        return new Ext.grid.ColumnModel({ 
+            defaults: {
+                sortable: true,
+                hidden: true,
+                resizable: true
+            },
+            columns: this.getColumns()
+        });
+    },
+    
+    /**
+     * returns columns
+     * @private
+     * @return Array
      */
     getColumns: function(){
         return [
-            { header: this.app.i18n._('ID'), id: 'accountId', dataIndex: 'accountId', hidden: true, width: 50},
+            { header: this.app.i18n._('ID'), id: 'accountId', dataIndex: 'accountId', width: 50},
             { header: this.app.i18n._('Status'), id: 'accountStatus', dataIndex: 'accountStatus', hidden: this.isLdapBackend, width: 50, renderer: this.statusRenderer},
-            { header: this.app.i18n._('Displayname'), id: 'accountDisplayName', dataIndex: 'accountDisplayName'},
-            { header: this.app.i18n._('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName', width: 160},
-            { header: this.app.i18n._('Last name'), id: 'accountLastName', dataIndex: 'accountLastName', hidden: true},
-            { header: this.app.i18n._('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName', hidden: true},
-            { header: this.app.i18n._('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200},
-            { header: this.app.i18n._('OpenID'), id: 'openid', dataIndex: 'openid', width: 200, hidden: true},
+            { header: this.app.i18n._('Displayname'), id: 'accountDisplayName', dataIndex: 'accountDisplayName', hidden: false},
+            { header: this.app.i18n._('Loginname'), id: 'accountLoginName', dataIndex: 'accountLoginName', width: 160, hidden: false},
+            { header: this.app.i18n._('Last name'), id: 'accountLastName', dataIndex: 'accountLastName'},
+            { header: this.app.i18n._('First name'), id: 'accountFirstName', dataIndex: 'accountFirstName'},
+            { header: this.app.i18n._('Email'), id: 'accountEmailAddress', dataIndex: 'accountEmailAddress', width: 200, hidden: false},
+            { header: this.app.i18n._('OpenID'), id: 'openid', dataIndex: 'openid', width: 200},
             { header: this.app.i18n._('Last login at'), id: 'accountLastLogin', dataIndex: 'accountLastLogin', hidden: this.isLdapBackend, width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
             { header: this.app.i18n._('Last login from'), id: 'accountLastLoginfrom', hidden: this.isLdapBackend, dataIndex: 'accountLastLoginfrom'},
-            { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer},
-            { header: this.app.i18n._('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer}
+            { header: this.app.i18n._('Password changed'), id: 'accountLastPasswordChange', dataIndex: 'accountLastPasswordChange', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false},
+            { header: this.app.i18n._('Expires'), id: 'accountExpires', dataIndex: 'accountExpires', width: 140, renderer: Tine.Tinebase.common.dateTimeRenderer, hidden: false}
         ];
     },
     
