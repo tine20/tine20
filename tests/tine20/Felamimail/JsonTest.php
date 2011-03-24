@@ -170,7 +170,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // sieve cleanup
         if ($this->_testSieveScriptName !== NULL) {
             Felamimail_Controller_Sieve::getInstance()->setScriptName($this->_testSieveScriptName);
-            Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
+            try {
+                Felamimail_Controller_Sieve::getInstance()->deleteScript($this->_account->getId());
+            } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                // do not delete script if active
+            }            
             Felamimail_Controller_Account::getInstance()->setVacationActive($this->_account, $this->_oldSieveVacationActiveState);
         }
         if ($this->_oldActiveSieveScriptName !== NULL) {
@@ -704,8 +708,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetVacation()
     {
-        $this->markTestSkipped('skip vacation tests for the moment');
-        
         $vacationData = array(
             'id'                    => $this->_account->getId(),
             'subject'               => 'unittest vacation subject',
@@ -743,8 +745,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testMimeVacation()
     {
-        $this->markTestSkipped('skip vacation tests for the moment');
-        
         $vacationData = array(
             'id'                    => $this->_account->getId(),
             'subject'               => 'unittest vacation subject',
@@ -768,8 +768,6 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetRules()
     {
-        $this->markTestSkipped('skip vacation tests for the moment');
-        
         $ruleData = array(array(
             'id'            => 1,
             'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
