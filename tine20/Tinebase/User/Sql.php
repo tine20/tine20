@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
@@ -55,8 +55,20 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     protected $_db;
     
+    /**
+     * sql user plugins
+     * 
+     * @var array
+     */
     protected $_sqlPlugins = array();
-
+    
+    /**
+     * Table name without prefix
+     *
+     * @var string
+     */
+    protected $_tableName = 'accounts';
+    
     /**
      * the constructor
      *
@@ -92,7 +104,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             ->limit($_limit, $_start);
             
         if ($_sort !== NULL && isset($this->rowNameMapping[$_sort])) {
-            $select->order($this->rowNameMapping[$_sort] . ' ' . $_dir);
+            $select->order($this->_db->table_prefix . $this->_tableName . '.' . $this->rowNameMapping[$_sort] . ' ' . $_dir);
         }
 
         if (!empty($_filter)) {
