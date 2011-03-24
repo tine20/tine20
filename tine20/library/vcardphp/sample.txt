@@ -1,0 +1,98 @@
+BEGIN:VCARD
+N:Smith;Jim;Alvin;Mr.
+FN:Jim A. Smith
+CATEGORIES:Family
+BDAY:1977-01-27
+ADR;WORK:;Suite 900;11 5th Street;Coco Beach;FL;32082
+ADR;HOME:;;198 Elm Street;Coco Beach;FL;32082
+TEL;WORK:904-555-9384;
+TEL;HOME:904-873-0394
+TEL;CELL:904-934-3429
+END:VCARD
+
+BEGIN:VCARD
+N:Barnes;Julie
+FN:Julie Barnes
+CATEGORIES:Business
+ADR:;Suite 520;177 Bovet Road;San Mateo;CA;94402
+TEL;WORK:650-573-3215
+TEL;FAX:650-573-3244
+EMAIL;INTERNET:jbarnes@virage.com
+TITLE:Business Development Manager
+ORG:Virage, Inc.
+END:VCARD
+
+BEGIN:VCARD
+N:Barnes & Nobel
+FN:Barnes & Nobel
+CATEGORIES:Business
+TEL;PREF:410-203-9001
+END:VCARD
+
+BEGIN:VCARD
+N:Best Buy
+FN:Best Buy
+CATEGORIES:Business
+TEL;PREF:410-312-4900
+END:VCARD
+
+BEGIN:VCARD
+N:Hatfield;Jane
+FN:Jane Hatfield
+CATEGORIES:Business,Personal
+TEL;WORK;CELL:439-994-3928
+TEL;HOME;CELL:439-344-4323
+TEL;FAX:439-344-9543
+ORG:Coca Cola, Inc.
+TITLE:VP Marketing
+ADR;HOME:;;98 Crater Drive;Denver;CO;80301
+ADR;WORK:Mail Stop 9;Suite 105;1001 Pop Road;Denver;CO;80301
+END:VCARD
+
+BEGIN:VCARD
+N:Clark's Do It Center
+FN:Clark's Do It Center
+CATEGORIES:Business
+TEL;PREF:410-313-8100
+END:VCARD
+
+BEGIN:VCARD
+N:Ashton;Ted;;Dr.
+FN:Dr. Ted Ashton
+CATEGORIES:Business
+REV:2002-08-26T22:03:26
+TEL;WORK:301-431-9342
+TITLE:Head of Surgery
+ROLE:ENT
+ORG:Oxford Medical Clinic
+END:VCARD
+
+BEGIN:VCARD
+N:Hair Cuttery;Hickory Ridge
+FN:Hickory Ridge Hair Cuttery
+CATEGORIES:Business
+REV:2002-08-26T22:04:54
+TEL;PREF:410-531-5781
+END:VCARD
+
+BEGIN:VCARD
+N:Home Depot
+FN:Home Depot
+CATEGORIES:Business
+TEL;PREF:410-750-2199
+END:VCARD
+
+BEGIN:VCARD
+N:Verizon Wireless
+FN:Verizon Wireless
+CATEGORIES:Business
+TEL;PREF:410-872-7200
+NOTE:To reload the roaming table, dial *228 and select option 2.
+END:VCARD
+
+BEGIN:VCARD
+N:WBJC 91.5
+FN:WBJC 91.5
+CATEGORIES:Business
+TEL;PREF:410-462-8444
+END:VCARD

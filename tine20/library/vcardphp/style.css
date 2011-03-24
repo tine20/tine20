@@ -1,0 +1,84 @@
+body {
+    color: black;
+    background: white;
+    margin: 1em;
+    font: normal 8pt Verdana, Arial, sans-serif;
+}
+
+h1 {
+    font: bold 12pt Verdana, Arial, sans-serif;
+    text-align: center;
+}
+
+h2 {
+    font: normal 12pt Verdana, Arial, sans-serif;
+    color: navy;
+    margin-left: -1px;
+    border-bottom: thin solid navy;
+}
+
+p {
+    font: normal 8pt Verdana, Arial, sans-serif;
+}
+
+p.categories {
+    margin-left: 2px;
+}
+
+p.name {
+    padding: 2px;
+    margin: 0;
+}
+
+p.property-even {
+    background: #eee;
+    padding: 2px;
+    margin: 0;
+}
+
+p.property-odd {
+    background: #ddd;
+    padding: 2px;
+    margin: 0;
+}
+
+td {
+    padding: 2px;
+}
+
+td.vcard {
+    border: thin solid #f99;
+    background: #cbdced;
+}
+
+dt, li {
+    margin-top: 1ex;
+}
+
+a {
+    cursor: pointer
+}
+
+a:link {
+    color: blue;
+    background: transparent;
+    text-decoration: none
+}
+
+a:visited {
+    color: blue;
+    background: transparent;
+    text-decoration: none
+}
+
+a:active {
+    color: blue;
+    background: transparent;
+    text-decoration: none
+}
+
+a:hover {
+    color: red;
+    background: transparent;
+    text-decoration: underline
+}

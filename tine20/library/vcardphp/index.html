@@ -1,0 +1,103 @@
+<html>
+  <head>
+    <title>vCard PHP</title>
+    <link href='style.css' type='text/css' rel='stylesheet'>
+  </head>
+  <body>
+    <h1>vCard PHP - A vCard Address Book</h1>
+    <h2>Download</h2>
+    <p>
+    Download the latest release from
+    <a href='http://sourceforge.net/projects/vcardphp/'>http://sourceforge.net/projects/vcardphp/</a>.
+    Scroll down to the <b>Latest File Releases</b> section and select the <b>Download</b> link.
+    </p>
+    <h2>Example</h2>
+    <ul>
+      <li>
+      Original vCard file: <a href='sample.txt'>sample.txt</a>
+      </li>
+      <li>
+      Processed by: <a href='vbook.php?file=sample.txt'>vbook.php?file=sample.txt</a>
+      </li>
+      <li>
+      With category filtering: <a href='vbook.php?file=sample.txt&cat=Business,Personal'>vbook.php?file=sample.txt&cat=Business,Personal</a>
+      (Mr. Smith is no longer listed.)
+      </li>
+      <li>
+      With category wildcard: <a href='vbook.php?file=sample.txt&cat=*'>vbook.php?file=sample.txt&cat=*</a>
+      (The categories are enumerated.)
+      </li>
+      <li>
+      With the NOTE and any type=HOME property hidden: <a href='vbook.php?file=sample.txt&hide=note,home'>vbook.php?file=sample.txt&hide=note,home</a>
+      </li>
+    </ul>
+    <h2>What it does</h2>
+    <ul>
+      <li>
+      Parses and prints an address book file consisting of one or more vCards.
+      </li>
+      <li>
+      Supports both the vCard version 2.1 and 3.0 syntax.
+      </li>
+      <li>
+      Supports the <font size='-1'>CATEGORIES</font>
+      property and provides filtering using the <b>cat</b> query parameter.
+      </li>
+      <li>
+      Provides an internal stylesheet or allows an external stylesheet to be specified
+      using the <b>style</b> query parameter.
+      </li>
+    </ul>
+    <h2>What it does not do</h2>
+    <ul>
+      <li>
+      Property groups such as <font size='-1'>A.N</font>.
+      </li>
+      <li>
+      Binary encoded data such as images.
+      </li>
+      <li>
+      Nested vCards.
+      </li>
+      <li>
+      Property validation.
+      For example, the date syntax of the <font size='-1'>BDAY</font>
+      property is not checked.
+      </li>
+    </ul>
+    <h2>Usage</h2>
+    <p>
+    http://host/path/vbook.php?file=<i>filename</i>&amp;title=<i>title</i>&amp;style=<i>stylesheet</i>&amp;cat=<i>cat1,cat2,... | *</i>&amp;hide=<i>hide list</i>
+    </p>
+    <h2>Query Parameters</h2>
+    <p>[defaults shown in brackets]</p>
+    <p>
+    <dl>
+      <dt><b>file</b>=<i>filename</i></dt>
+      <dd>Specifies the file or URL to parse.
+      If this is not specified, then nothing is displayed allowing the
+      vbook.php file to be included in another page and the
+      print_vcard_address_book function to be called programatically.
+      <dt><b>title</b>=<i>title</i></dt>
+      <dd>The title at the top of the page. [filename]</dd>
+      <dt><b>style</b>=<i>stylesheet</i></dt>
+      <dd>The stylesheet. [style.css]</dd>
+      <dt><b>cat</b>=<i>cat1,cat2,...</i></dt>
+      <dd>A comma delimited list of categories to show. [All]</dd>
+      <dt><b>cat</b>=*</dt>
+      <dd>This has the same effect as <b>cat=All</b> but the categories are listed
+      individually instead of just the string 'All' being displayed.
+      This feature can be used to determine all of the categories in the file.</dd>
+      <dt><b>hide</b>=<i>hide list</i></dt>
+      <dd>A comma delimited list of properties or types to hide. The list items are
+      case insensitive. For example, to hide the NOTE property and any HOME information
+      for all properties, set the list to <b>note,home</b>.</dd>
+    </dl>
+    </p>
+    <h2>Hosted By</h2>
+    <p>
+    <A href="http://sourceforge.net"> <IMG src="http://sourceforge.net/sflogo.php?group_id=61840&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo"></A>
+    </p>
+    <hr>
+  </body>
+</html>
