@@ -192,7 +192,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->searchFolders($filter);
         
         $this->assertGreaterThan(1, $result['totalcount']);
-        $expectedFolders = array('INBOX', $this->_testFolderName);
+        $expectedFolders = array('INBOX', $this->_testFolderName, $this->_account->trash_folder, $this->_account->sent_folder);
         
         $foundCount = 0;
         foreach ($result['results'] as $index => $folder) {
