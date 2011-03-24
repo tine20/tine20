@@ -339,9 +339,11 @@ class Zend_Mail_Protocol_Sieve
             if($tokens[0] == 'OK') {
                 break;
             } elseif($tokens[0] == 'NO') {
-                $message = (is_string($tokens[1])) ? $tokens[1] : 'Could not read response from server.';
+                $message = (is_string($tokens[1])) 
+                    ? $tokens[1] 
+                    : ((is_string($tokens[2])) ? $tokens[2] : 'Could not read response from server: ' . print_r($tokens, TRUE));
                 throw new Zend_Mail_Protocol_Exception($message);
-            }        
+            }
             
             $lines[] = $tokens;
         }
