@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -74,8 +74,13 @@ class Tinebase_Frontend_Json_PersistentFilter extends Tinebase_Frontend_Json_Abs
     {
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
             $obj = new Tinebase_Frontend_Json_PersistentFilter();
+            
+            // return only filters of activated apps
+            $applicationIds = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->getArrayOfIds();
+            
             return $obj->searchPersistentFilter(array(
-                array('field' => 'account_id',   'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
+                array('field' => 'account_id',      'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId()),
+                array('field' => 'application_id',  'operator' => 'in',     'value' => $applicationIds),
             ), NULL);
         }
     }
