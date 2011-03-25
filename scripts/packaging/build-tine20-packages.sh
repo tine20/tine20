@@ -3,17 +3,18 @@
 # Version: $Id$
 
 # examples
-# $ ./build-tine20-packages.sh -s "http://svn.tine20.org/svn/trunk/tine20" -r "2011_01_beta3-1" -c "Neele"
-# $ ./build-tine20-packages.sh -s "http://svn.tine20.org/svn/branches/2011-01/tine20" -r "2011-01-3" -c "Neele"
+# $ ./build-tine20-packages.sh -s "http://git.tine20.org/git/tine20" -b master -r "2011_01_beta3-1" -c "Neele"
+# $ ./build-tine20-packages.sh -s "http://git.tine20.org/git/tine20" -b 2011-01 -r "2011-01-3" -c "Neele"
 
 ## GLOBAL VARIABLES ##
 BASEDIR="./tine20build"
 TEMPDIR="$BASEDIR/temp"
 MISCPACKAGESDIR="$BASEDIR/packages/misc"
 
-RELEASE="svn"
+RELEASE=""
 CODENAME="Neele"
-SVNURL="http://svn.tine20.org/svn/trunk/tine20"
+GITURL="http://git.tine20.org/git/tine20"
+GITBRANCH="master"
 PACKAGEDIR=""
 
 #
@@ -21,17 +22,25 @@ PACKAGEDIR=""
 #
 function checkout()
 {
-    echo -n "checkout files from svn url $1 to $TEMPDIR/tine20 ... "
-    
+    echo "checkout files from branch $2 at git url $1 to $TEMPDIR/tine20 ... "
     rm -rf $TEMPDIR/tine20
-    svn checkout --quiet --non-interactive --trust-server-cert $1 $TEMPDIR/tine20
-
-    if [ "$RELEASE" == "svn" ]; then
-        RELEASE=$RELEASE-$(svn info $TEMPDIR/tine20 | grep Revision | cut -d " " -f 2)
+    
+    rm -rf $TEMPDIR/tine20.git
+    mkdir $TEMPDIR/tine20.git
+    cd $TEMPDIR/tine20.git
+    
+    git init
+    git remote add -t $2 -f origin $1
+    git checkout $2
+    
+    if [ "$RELEASE" == "" ]; then
+        RELEASE=$2-$(git log --pretty=oneline -1 | grep Revision | cut -d " " -f 1)
     fi
-     
-    # remove .svn files
-    find $TEMPDIR/tine20 -name .svn -type d -print0 | xargs -0 rm -rf {}
+    
+    cd - > /dev/null
+    
+    mv $TEMPDIR/tine20.git/tine20 $TEMPDIR/tine20
+    rm -Rf $TEMPDIR/tine20.git
     
     echo "done"
 }
@@ -52,14 +61,17 @@ function createDirectories()
 
 function getOptions()
 {
-    while getopts ":pr:s:c:" optname
+    while getopts ":pr:s:b:c:" optname
     do
         case "$optname" in
           "c")
             CODENAME=$OPTARG
             ;;
+          "b")
+            GITBRANCH=$OPTARG
+            ;;
           "s")
-            SVNURL=$OPTARG
+            GITURL=$OPTARG
             ;;
           "r")
             # release
@@ -268,7 +280,7 @@ getOptions $*
                  
 createDirectories
 prepareYUICompressor
-checkout $SVNURL
+checkout $GITURL $GITBRANCH
 setupPackageDir
 activateReleaseMode
 compressFiles
