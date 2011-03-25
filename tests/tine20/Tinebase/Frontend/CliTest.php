@@ -180,8 +180,13 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         
         return $newLead;
     }
-}       
     
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Frontend_CliTest::main') {
-    Tinebase_Frontend_CliTest::main();
+    /**
+     * test trigger events
+     */
+    public function testTriggerAsyncEvents()
+    {
+        // @todo check if cronuser is created
+        // @todo check if scheduler is run
+    }
 }
