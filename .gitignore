@@ -3,3 +3,5 @@
 .cache
 .settings
 nbproject
+tine20/config.inc.php
+tests/tine20/phpunitconfig.inc.php
