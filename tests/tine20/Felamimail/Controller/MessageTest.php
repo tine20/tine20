@@ -585,15 +585,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testCheckOtherMails()
     {
         $otherFilesDir = dirname(dirname(__FILE__)) . '/files/other';
-        foreach (new DirectoryIterator($otherFilesDir) as $item) {
-            $appName = $item->getFileName();
-            if ($item->isFile()) {
-                $fileName = 'other/' . $item->getFileName();
-                echo "\nchecking message: " . $fileName;
-                $cachedMessage = $this->messageTestHelper($fileName, $item->getFileName());
-                $message = $this->_controller->getCompleteMessage($cachedMessage);
-                echo $message->body;
-                $this->assertTrue(! empty($message->body));
+        if (file_exists($otherFilesDir)) {
+            foreach (new DirectoryIterator($otherFilesDir) as $item) {
+                $appName = $item->getFileName();
+                if ($item->isFile()) {
+                    $fileName = 'other/' . $item->getFileName();
+                    echo "\nchecking message: " . $fileName;
+                    $cachedMessage = $this->messageTestHelper($fileName, $item->getFileName());
+                    $message = $this->_controller->getCompleteMessage($cachedMessage);
+                    echo $message->body;
+                    $this->assertTrue(! empty($message->body));
+                }
             }
         }
     }
