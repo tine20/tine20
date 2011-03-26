@@ -34,7 +34,7 @@ function checkout()
     git checkout $2
     
     if [ "$RELEASE" == "" ]; then
-        RELEASE=$2-$(git log --pretty=oneline -1 | grep Revision | cut -d " " -f 1)
+        RELEASE=$2-$(git log --abbrev-commit --pretty=oneline -1 | cut -d " " -f 1)
     fi
     
     cd - > /dev/null
