@@ -1,6 +1,5 @@
 .buildpath
 .project
+.cache
 .settings
-tests/tine20/phpunitconfig.inc.php
-tine20/config.inc.php
-
+nbproject
