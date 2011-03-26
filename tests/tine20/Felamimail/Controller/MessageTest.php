@@ -4,8 +4,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  */
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Felamimail_Controller_MessageTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -92,9 +88,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Message::getInstance();  
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
+        
+        $this->_folder     = $this->_getFolder($this->_testFolderName);
         $this->_imap->selectFolder($this->_testFolderName);
         $this->_cache      = Felamimail_Controller_Cache_Message::getInstance();
-        $this->_folder     = $this->_getFolder($this->_testFolderName);
         $this->_createdMessages = new Tinebase_Record_RecordSet('Felamimail_Model_Message');
     }
 
@@ -106,7 +103,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        $this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+        try {
+            $this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // do nothing
+        }
         
         foreach ($this->_accountsToDelete as $account) {
             Felamimail_Controller_Account::getInstance()->delete($account);
@@ -194,7 +195,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'description' => '',
             'encoding'    => '7bit',
             'size'        => 388,
-            'lines'       => 18,
             'disposition' => '',
             'language'    => '',
             'location'    => '',
@@ -203,7 +203,13 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
 
         $message = $this->messageTestHelper('text_plain.eml', 'text/plain');
         
-        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+        $lines = $message['structure']['lines'];
+        $structure = $message['structure'];
+        unset($structure['lines']);
+        
+        $this->assertEquals($expectedStructure, $structure, 'structure does not match');
+        // dbmail always has one more line than dovecot
+        $this->assertTrue(in_array($lines, array(17, 18)));
     }
     
     /**
@@ -229,7 +235,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     'description' => '',
                     'encoding'    => 'quoted-printable',
                     'size'        => 1726,
-                    'lines'       => 50,
                     'disposition' => '',
                     'language'    => '',
                     'location'    => '',
@@ -246,7 +251,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     'description' => '',
                     'encoding'    => 'quoted-printable',
                     'size'        => 10713,
-                    'lines'       => 173,
                     'disposition' => '',
                     'language'    => '',
                     'location'    => '',
@@ -261,9 +265,30 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             
         );
         
-        $message = $this->messageTestHelper('multipart_alternative.eml', 'multipart/alternative'); 
+        $message = $this->messageTestHelper('multipart_alternative.eml', 'multipart/alternative');
+        $structure = $message['structure'];
+        $lines = $this->_getLinesFromPartsAndRemoveFromStructure($structure);
         
-        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+        $this->assertEquals($expectedStructure, $structure, 'structure does not match');
+        $this->assertTrue(in_array($lines[1], array(49, 50)));
+        $this->assertTrue(in_array($lines[2], array(172, 173)));
+    }
+    
+    /**
+     * get lines from structure parts and remove them from structure array
+     * 
+     * @param array $_structure
+     * @return array
+     */
+    protected function _getLinesFromPartsAndRemoveFromStructure(&$_structure)
+    {
+        $lines = array();
+        foreach ($_structure['parts'] as $key => $part) {
+            $lines[$key] = $part['lines'];
+            unset($_structure['parts'][$key]['lines']);
+        }
+        
+        return $lines;
     }
     
     /**
@@ -289,7 +314,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     'description' => null,
                     'encoding'    => '7bit',
                     'size'        => 3896,
-                    'lines'       => 62,
                     'disposition' => array(
                         'type'    => 'inline'
                     ),
@@ -308,13 +332,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     'description' => '',
                     'encoding'    => '7bit',
                     'size'        => 2787,
-                    'lines'       => 53,
                     'disposition' => array(
                         'type'    => 'attachment',
-                        'parameters' => array(
-                            'foobar'   => 'Test Subjäct',
-                            'filename' => 'add-removals.1239580800.log'
-                        )
                     ),
                     'language'    => '',
                     'location'    => '',
@@ -328,13 +347,25 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             ),
             'language'    => '',
             'location'    => '',
-            
+        );
+        
+        $expectedParameters = array(
+            'foobar'   => 'Test Subjäct',
+            'filename' => 'add-removals.1239580800.log'
         );
         
         $message = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $structure = $message['structure'];
+        $lines = $this->_getLinesFromPartsAndRemoveFromStructure($structure);
+        // attachment parameters could have different order
+        $parameters = $structure['parts'][2]['disposition']['parameters'];
+        unset($structure['parts'][2]['disposition']['parameters']);
         
-        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+        $this->assertEquals($expectedStructure, $structure, 'structure does not match');
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_PLAIN, $message['body_content_type']);
+        $this->assertTrue(in_array($lines[1], array(61, 62)));
+        $this->assertTrue(in_array($lines[2], array(52, 53)));
+        $this->assertTrue($expectedParameters == $parameters);
     }
     
     /**
@@ -361,7 +392,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     'description' => null,
                     'encoding'    => '7bit',
                     'size'        => 49,
-                    'lines'       => 5,
                     'disposition' => null,
                     'language'    => '',
                     'location'    => '',
@@ -378,7 +408,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     'description' => '',
                     'encoding'    => '7bit',
                     'size'        => 4121,
-                    'lines'       => null,
                     'disposition' => null,
                     'language'    => null,
                     'location'    => null,
@@ -414,12 +443,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                         'description' => null,
                         'encoding'    => '7bit',
                         'size'        => 1562,
-                        'lines'       => 34,
                         'disposition' => null,
                         'language'    => '',
                         'location'    => '',
                     ),
-                    'messageLines'    => 81,
                 )
             ),
             'parameters'  => array (
@@ -428,12 +455,23 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'disposition' => null,
             'language'    => '',
             'location'    => '',
-            
         );
         
         $message = $this->messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
+        $structure = $message['structure'];
+        $lines = $this->_getLinesFromPartsAndRemoveFromStructure($structure);
+        $lines[3] = $structure['parts'][2]['messageStructure']['lines'];
+        $lines[4] = $structure['parts'][2]['messageLines'];
+        unset($structure['parts'][2]['messageStructure']['lines']);
+        unset($structure['parts'][2]['messageLines']);
+        // remove disposition -> dbmail finds none, dovecot does
+        $structure['parts'][2]['disposition'] = null;
         
-        $this->assertEquals($expectedStructure, $message['structure'], 'structure does not match');
+        $this->assertEquals($expectedStructure, $structure, 'structure does not match');
+        $this->assertTrue(in_array($lines[1], array(4, 5)));
+        $this->assertEquals(NULL, $lines[2]);
+        $this->assertTrue(in_array($lines[3], array(33, 34)));
+        $this->assertTrue(in_array($lines[4], array(80, 81)));
     }
     
     /**
@@ -534,6 +572,31 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertContains('11AC BA4F 4778 E3F6 E4ED  F38E B27B 944E 3488 4E85', $message->body);
         $this->assertEquals('add-removals.1239580800.log', $message->attachments[0]["filename"]);
     }
+
+    /**
+     * validate fetching a complete message in 'other' dir and check its body 
+     * 
+     * howto:
+     * - copy mails to tests/tine20/Felamimail/files/other
+     * - add following header:
+     *      X-Tine20TestMessage: _filename_
+     * - run the test!
+     */
+    public function testCheckOtherMails()
+    {
+        $otherFilesDir = dirname(dirname(__FILE__)) . '/files/other';
+        foreach (new DirectoryIterator($otherFilesDir) as $item) {
+            $appName = $item->getFileName();
+            if ($item->isFile()) {
+                $fileName = 'other/' . $item->getFileName();
+                echo "\nchecking message: " . $fileName;
+                $cachedMessage = $this->messageTestHelper($fileName, $item->getFileName());
+                $message = $this->_controller->getCompleteMessage($cachedMessage);
+                echo $message->body;
+                $this->assertTrue(! empty($message->body));
+            }
+        }
+    }
     
     /**
      * validate fetching a complete message
@@ -543,11 +606,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
-        #var_dump($message->toArray());
+        
         $this->assertEquals('1', $message->text_partid, 'no text part found');
         $this->assertEquals('1', $message->has_attachment, 'no attachments found');
         $this->assertEquals('2.1', $message->html_partid, 'no html part found');
-        $this->assertEquals('38455', $message->size);
+        $this->assertTrue(in_array($message->size, array('38455', '38506')));
         $this->assertContains("Tine 2.0 bei Metaways", $message->subject);
         $this->assertContains('\Seen', $message->flags);
         $this->assertContains('Autovervollständigung', $message->body);
@@ -591,7 +654,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $message = $this->_controller->getCompleteMessage($cachedMessage);
         
-        $this->assertNotContains('<img', $message->body);
+        $this->assertContains('Fritz Meier, wir haben Empfehlungen', $message->body);
+        $this->assertNotContains('<img', $message->body); 
+        $this->assertNotContains('style="background-image:url', $message->body);
+        $this->assertNotContains('http://www.xing.com/img/xing/newsletter/navigation_bg.gif', $message->body);
     }
     
     /**
@@ -694,10 +760,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
         
         // forward message
+        $config = TestServer::getInstance()->getConfig();
+        $email = ($config->email) ? $config->email : 'unittest@tine20.org';
         $forwardMessage = new Felamimail_Model_Message(array(
             'account_id'    => $this->_account->getId(),
             'subject'       => 'test forward',
-            'to'            => array('unittest@tine20.org'),
+            'to'            => array($email),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822),
             'original_id'   => $cachedMessage->getId(),
@@ -706,10 +774,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                 'name'  => $cachedMessage->subject,
             )),
         ));
+        $sentFolder = $this->_getFolder('Sent');
+
         $this->_controller->sendMessage($forwardMessage);
         
         $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('INBOX'));
-        $forwardedMessageInSent = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('Sent'));
+        $forwardedMessageInSent = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $sentFolder);
         $completeForwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
         
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
@@ -794,7 +864,18 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage = $this->messageTestHelper('unparseable.eml', 'multipart/unparseable');
         $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
         
-        $this->assertContains('NIL', $completeMessage->body);
+        $this->assertEquals(1, preg_match('@NIL|Content-Type: image/jpeg@', $completeMessage->body), 'parsed mail body:' . $completeMessage->body);
+    }
+    
+    /**
+     * testGetMessageWithQuotedPrintableDecodeProblem
+     */
+    public function testGetMessageWithQuotedPrintableDecodeProblem()
+    {
+        $cachedMessage = $this->messageTestHelper('Terminbestaetigung.eml', 'Terminbestaetigung.eml');
+        $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        $this->assertContains('Veröffentlichungen, Prospekte und Ähnliches bereithalten würden.', $completeMessage->body);
     }
     
     /**
@@ -803,7 +884,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testMoveMessageToAnotherAccount()
     {
         $clonedAccount = $this->_cloneAccount();
-        $folder = $this->_getFolder('Drafts', $clonedAccount);
+        $folder = $this->_getFolder('INBOX', $clonedAccount);
         
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
@@ -834,6 +915,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testDeleteMessagesInDifferentAccounts()
     {
         $clonedAccount = $this->_cloneAccount();
+        
         $trashFolderMainAccount = $this->_getFolder('Trash');
         $trashFolderClonedAccount = $this->_getFolder('Trash', $clonedAccount);
         
@@ -855,6 +937,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * clones the account
+     * 
+     * @return Felamimail_Model_Account
      */
     protected function _cloneAccount()
     {
@@ -1002,7 +1086,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $result = Felamimail_Controller_Folder::getInstance()->search($filter);
         $folder = $result->filter('localname', $folderName)->getFirstRecord();
         if (empty($folder)) {
-            throw new Exception('folder not found');
+            $folder = Felamimail_Controller_Folder::getInstance()->create($account, $_folderName);
         }
 
         return $folder;
