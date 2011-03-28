@@ -275,8 +275,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     {
         $result = array();
         
-        $installedApplications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-        foreach ($installedApplications as $application) {
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED);
+        foreach ($enabledApplications as $application) {
             $result = array_merge($result, Tinebase_Application::getInstance()->getApplicationTables($application));
         }
         
