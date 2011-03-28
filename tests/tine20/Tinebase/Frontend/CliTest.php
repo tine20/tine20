@@ -186,7 +186,19 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testTriggerAsyncEvents()
     {
-        // @todo check if cronuser is created
-        // @todo check if scheduler is run
+        $opts = new Zend_Console_Getopt('abp:');
+        $opts->setArguments(array());
+        
+        ob_start();
+        $this->_cli->triggerAsyncEvents($opts);
+        $out = ob_get_clean();
+
+        $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::CRONUSERID)->value;
+        $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
+        $this->assertEquals('cronuser', $cronuser->accountLoginName);
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $this->assertEquals($adminGroup->getId(), $cronuser->accountPrimaryGroup);
+
+        $this->assertContains('Tine 2.0 scheduler run (Tinebase_Alarm) complete', $out);
     }
 }
