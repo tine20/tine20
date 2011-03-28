@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Courses\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-03-07 20:22+0100\n"
+"PO-Revision-Date: 2011-03-28 19:07+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -42,19 +42,27 @@ msgstr "edytowanie zasobów"
 msgid "All Rights to administrate resources"
 msgstr "Wszelkie uprawnienia do zarządzania zasobami"
 
-#: Model/Attender.php:46 js/Model.js:473 js/AttendeeGridPanel.js:524
+#: Model/Attender.php:46
+#: js/Model.js:473
+#: js/AttendeeGridPanel.js:524
 msgid "No response"
 msgstr "Brak odpowiedzi"
 
-#: Model/Attender.php:47 js/Model.js:474 js/AttendeeGridPanel.js:527
+#: Model/Attender.php:47
+#: js/Model.js:474
+#: js/AttendeeGridPanel.js:527
 msgid "Accepted"
 msgstr "Zaakceptowany"
 
-#: Model/Attender.php:48 js/Model.js:475 js/AttendeeGridPanel.js:530
+#: Model/Attender.php:48
+#: js/Model.js:475
+#: js/AttendeeGridPanel.js:530
 msgid "Declined"
 msgstr "Odrzucony"
 
-#: Model/Attender.php:49 js/Model.js:476 js/AttendeeGridPanel.js:533
+#: Model/Attender.php:49
+#: js/Model.js:476
+#: js/AttendeeGridPanel.js:533
 msgid "Tentative"
 msgstr "Brak ostatecznej decyzji"
 
@@ -78,7 +86,8 @@ msgstr "Początek"
 msgid "End"
 msgstr "Koniec"
 
-#: Model/Event.php:227 js/EventDetailsPanel.js:225
+#: Model/Event.php:227
+#: js/EventDetailsPanel.js:225
 msgid "Blocking"
 msgstr "Blokowanie"
 
@@ -86,16 +95,22 @@ msgstr "Blokowanie"
 msgid "Classification"
 msgstr "Klasyfikacja"
 
-#: Model/Event.php:229 js/ResourceEditDialog.js:74 js/EventEditDialog.js:198
+#: Model/Event.php:229
+#: js/ResourceEditDialog.js:74
+#: js/EventEditDialog.js:198
 msgid "Description"
 msgstr "Opis"
 
-#: Model/Event.php:230 js/EventDetailsPanel.js:230 js/EventEditDialog.js:96
+#: Model/Event.php:230
+#: js/EventDetailsPanel.js:230
+#: js/EventEditDialog.js:96
 #: js/ResourcesGridPanel.js:54
 msgid "Location"
 msgstr "Miejsce"
 
-#: Model/Event.php:231 js/Model.js:204 js/EventDetailsPanel.js:234
+#: Model/Event.php:231
+#: js/Model.js:204
+#: js/EventDetailsPanel.js:234
 msgid "Organizer"
 msgstr "Notes"
 
@@ -103,11 +118,14 @@ msgstr "Notes"
 msgid "Priority"
 msgstr "Priorytet"
 
-#: Model/Event.php:233 js/AttendeeGridPanel.js:188
+#: Model/Event.php:233
+#: js/AttendeeGridPanel.js:188
 msgid "Status"
 msgstr "Status"
 
-#: Model/Event.php:234 js/EventDetailsPanel.js:179 js/EventEditDialog.js:89
+#: Model/Event.php:234
+#: js/EventDetailsPanel.js:179
+#: js/EventEditDialog.js:89
 msgid "Summary"
 msgstr "Streszczenie"
 
@@ -171,7 +189,9 @@ msgstr "Brak odpowiedzi od %1$s"
 msgid "Event details"
 msgstr "Szczegóły terminu"
 
-#: js/Calendar.js:35 js/Model.js:68 Setup/setup.xml:4
+#: js/Calendar.js:35
+#: js/Model.js:68
+#: Setup/setup.xml:4
 msgid "Calendar"
 msgid_plural "Calendars"
 msgstr[0] "Kalendarz"
@@ -186,7 +206,8 @@ msgstr "Drukuj stronę"
 msgid "Day"
 msgstr "Dzień"
 
-#: js/MainScreenCenterPanel.js:136 js/PagingToolbar.js:276
+#: js/MainScreenCenterPanel.js:136
+#: js/PagingToolbar.js:276
 msgid "Week"
 msgstr "Tydzień"
 
@@ -265,14 +286,16 @@ msgstr "z alarmem"
 msgid "Attendee Status"
 msgstr "Status uczestnika"
 
-#: js/Model.js:64 js/Model.js:333
+#: js/Model.js:64
+#: js/Model.js:333
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "termin"
 msgstr[1] "terminy"
 msgstr[2] "terminy"
 
-#: js/Model.js:64 js/Model.js:333
+#: js/Model.js:64
+#: js/Model.js:333
 msgid "Events"
 msgstr "Terminy"
 
@@ -291,17 +314,23 @@ msgstr[0] "Uczestnik"
 msgstr[1] "uczestników"
 msgstr[2] "uczestników"
 
-#: js/Model.js:329 js/EventDetailsPanel.js:251 js/AttendeeFilterModel.js:37
+#: js/Model.js:329
+#: js/EventDetailsPanel.js:251
+#: js/AttendeeFilterModel.js:37
 #: js/AttendeeGridPanel.js:83
 msgid "Attendee"
 msgstr "Uczestnik"
 
-#: js/Model.js:345 js/AttendeeGridPanel.js:440 js/AttendeeGridPanel.js:458
-#: js/AttendeeGridPanel.js:475 js/AttendeeGridPanel.js:487
+#: js/Model.js:345
+#: js/AttendeeGridPanel.js:440
+#: js/AttendeeGridPanel.js:458
+#: js/AttendeeGridPanel.js:475
+#: js/AttendeeGridPanel.js:487
 msgid "No Information"
 msgstr "Brak informacji"
 
-#: js/Model.js:503 js/AttendeeGridPanel.js:172
+#: js/Model.js:503
+#: js/AttendeeGridPanel.js:172
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Zasób"
@@ -316,7 +345,8 @@ msgstr "Zasoby"
 msgid "Originally"
 msgstr "Pierwotny kalendarz"
 
-#: js/DaysView.js:90 js/MonthView.js:82
+#: js/DaysView.js:90
+#: js/MonthView.js:82
 msgid "New Event"
 msgstr "Nowy termin"
 
@@ -328,20 +358,24 @@ msgstr "{0}, {1} z {2}"
 msgid "Mini Calendar"
 msgstr "Mini kalendarz"
 
-#: js/MainScreenWestPanel.js:54 js/MonthView.js:87
+#: js/MainScreenWestPanel.js:54
+#: js/MonthView.js:87
 msgid "WK"
 msgstr "TK"
 
-#: js/ResourceEditDialog.js:58 js/AttendeeGridPanel.js:180
+#: js/ResourceEditDialog.js:58
+#: js/AttendeeGridPanel.js:180
 #: js/ResourcesGridPanel.js:43
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/ResourceEditDialog.js:63 js/ResourcesGridPanel.js:49
+#: js/ResourceEditDialog.js:63
+#: js/ResourcesGridPanel.js:49
 msgid "Email"
 msgstr "E-mail"
 
-#: js/ResourceEditDialog.js:69 js/ResourceEditDialog.js:70
+#: js/ResourceEditDialog.js:69
+#: js/ResourceEditDialog.js:70
 msgid "Is a location"
 msgstr "Jest miejscem"
 
@@ -357,11 +391,14 @@ msgstr "Nieznany kalendarz"
 msgid "{0} {1} o'clock"
 msgstr "godzina {0} {1}"
 
-#: js/EventDetailsPanel.js:215 js/EventEditDialog.js:101 Preference.php:85
+#: js/EventDetailsPanel.js:215
+#: js/EventEditDialog.js:101
+#: Preference.php:85
 msgid "Start Time"
 msgstr "Początek"
 
-#: js/EventDetailsPanel.js:220 js/EventEditDialog.js:116
+#: js/EventDetailsPanel.js:220
+#: js/EventEditDialog.js:116
 msgid "End Time"
 msgstr "Koniec"
 
@@ -369,7 +406,8 @@ msgstr "Koniec"
 msgid "Week {0} :"
 msgstr "Tydzień {0}:"
 
-#: js/Printer/Base.js:66 js/EventEditDialog.js:124
+#: js/Printer/Base.js:66
+#: js/EventEditDialog.js:124
 msgid "whole day"
 msgstr "cały dzień"
 
@@ -513,28 +551,35 @@ msgstr "co {0} tydzień w"
 msgid "Every {0}. Month"
 msgstr "co {0} miesiąc"
 
-#: js/RrulePanel.js:427 js/RrulePanel.js:476 js/RrulePanel.js:607
+#: js/RrulePanel.js:427
+#: js/RrulePanel.js:476
+#: js/RrulePanel.js:607
 #: js/RrulePanel.js:657
 msgid "at the"
 msgstr "dzień:"
 
-#: js/RrulePanel.js:446 js/RrulePanel.js:626
+#: js/RrulePanel.js:446
+#: js/RrulePanel.js:626
 msgid "first"
 msgstr "pierwszy(a)"
 
-#: js/RrulePanel.js:447 js/RrulePanel.js:627
+#: js/RrulePanel.js:447
+#: js/RrulePanel.js:627
 msgid "second"
 msgstr "drugi(a)"
 
-#: js/RrulePanel.js:448 js/RrulePanel.js:628
+#: js/RrulePanel.js:448
+#: js/RrulePanel.js:628
 msgid "third"
 msgstr "trzeci(a)"
 
-#: js/RrulePanel.js:449 js/RrulePanel.js:629
+#: js/RrulePanel.js:449
+#: js/RrulePanel.js:629
 msgid "fourth"
 msgstr "czwarty(a)"
 
-#: js/RrulePanel.js:450 js/RrulePanel.js:630
+#: js/RrulePanel.js:450
+#: js/RrulePanel.js:630
 msgid "last"
 msgstr "ostatni(a)"
 
@@ -542,7 +587,8 @@ msgstr "ostatni(a)"
 msgid "Every {0}. Year"
 msgstr "co {0} rok"
 
-#: js/RrulePanel.js:697 js/RrulePanel.js:709
+#: js/RrulePanel.js:697
+#: js/RrulePanel.js:709
 msgid "of"
 msgstr "miesiąc:"
 
@@ -572,7 +618,7 @@ msgstr "Grupa"
 
 #: js/AttendeeGridPanel.js:173
 msgid "Member of group"
-msgstr ""
+msgstr "Uczestnik grupy"
 
 #: js/AttendeeGridPanel.js:327
 msgid "Remove Attender"
@@ -694,7 +740,8 @@ msgstr "Brak odpowiedzi od %1$s dotyczącej terminu \"%2$s\" o %3$s"
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Zmiana składu uczestników dotycząca terminu \"%1$s\" o %2$s"
 
-#: Setup/Update/Release3.php:165 Setup/Initialize.php:35
+#: Setup/Update/Release3.php:165
+#: Setup/Initialize.php:35
 msgid "All events I attend"
 msgstr "Wszystkie terminy dodane przeze mnie"
 
@@ -825,6 +872,7 @@ msgstr "Terminy, które organizuję"
 #~ msgstr "Konto nauczyciela"
 
 #~ msgid "Course"
+
 #~ msgid_plural "Courses"
 #~ msgstr[0] "Kurs"
 #~ msgstr[1] "kursy"
@@ -885,12 +933,14 @@ msgstr "Terminy, które organizuję"
 #~ msgstr "Wszystkie kursy"
 
 #~ msgid "record list"
+
 #~ msgid_plural "record lists"
 #~ msgstr[0] "lista kursów"
 #~ msgstr[1] "listy kursów"
 #~ msgstr[2] "list kursów"
 
 #~ msgid "Course Type"
+
 #~ msgid_plural "Course Types"
 #~ msgstr[0] "Rodzaj kursu"
 #~ msgstr[1] "rodzaje kursu"
