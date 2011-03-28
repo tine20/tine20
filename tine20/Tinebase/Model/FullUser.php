@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -85,7 +85,11 @@ class Tinebase_Model_FullUser extends Tinebase_Model_User
             'accountLastLogin'      => array('allowEmpty' => true),
             'accountLastLoginfrom'  => array('allowEmpty' => true),
             'accountLastPasswordChange' => array('allowEmpty' => true),
-            'accountStatus'         => array(new Zend_Validate_InArray(array('enabled', 'disabled', 'expired')), Zend_Filter_Input::DEFAULT_VALUE => 'enabled'),
+            'accountStatus'         => array(new Zend_Validate_InArray(array(
+                Tinebase_Model_User::ACCOUNT_STATUS_ENABLED, 
+                Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+                Tinebase_Model_User::ACCOUNT_STATUS_EXPIRED)
+            ), Zend_Filter_Input::DEFAULT_VALUE => Tinebase_Model_User::ACCOUNT_STATUS_ENABLED),
             'accountExpires'        => array('allowEmpty' => true),
             'accountPrimaryGroup'   => array('presence' => 'required'),
             'accountDisplayName'    => array('presence' => 'required'),
