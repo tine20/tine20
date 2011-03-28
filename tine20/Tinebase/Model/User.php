@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  * 
@@ -33,8 +33,40 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
      */
     const CURRENTACCOUNT = 'currentAccount';
     
+    /**
+     * hidden from addressbook
+     * 
+     * @var string
+     */
     const VISIBILITY_HIDDEN    = 'hidden';
+    
+    /**
+     * visible in addressbook
+     * 
+     * @var string
+     */
     const VISIBILITY_DISPLAYED = 'displayed';
+    
+    /**
+     * account is enabled
+     * 
+     * @var string
+     */
+    const ACCOUNT_STATUS_ENABLED = 'enabled';
+    
+    /**
+     * account is disabled
+     * 
+     * @var string
+     */
+    const ACCOUNT_STATUS_DISABLED = 'disabled';
+    
+    /**
+     * account is expired
+     * 
+     * @var string
+     */
+    const ACCOUNT_STATUS_EXPIRED = 'expired';
     
     /**
      * list of zend inputfilter
@@ -88,7 +120,6 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         
         parent::setFromArray($_data);
     }
-    
     
    /**
      * key in $_validators/$_properties array for the filed which 
