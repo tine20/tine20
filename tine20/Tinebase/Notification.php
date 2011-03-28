@@ -3,9 +3,9 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Server
+ * @subpackage  Notification
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @version     $Id$
  */
@@ -14,7 +14,7 @@
  * primary class to handle notifications
  *
  * @package     Tinebase
- * @subpackage  Notifications
+ * @subpackage  Notification
  */
 class Tinebase_Notification
 {
@@ -74,12 +74,16 @@ class Tinebase_Notification
         $contactsBackend = Addressbook_Backend_Factory::factory(Addressbook_Backend_Factory::SQL);
         
         $exception = NULL;
+        $sentContactIds = array();
         foreach($_recipients as $recipient) {
             try {
                 if (!$recipient instanceof Addressbook_Model_Contact) {
                     $recipient = $contactsBackend->get($recipient);
                 }
-                $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachements);
+                if (! in_array($recipient->getId(), $sentContactIds)) {
+                    $this->_smtpBackend->send($_updater, $recipient, $_subject, $_messagePlain, $_messageHtml, $_attachements);
+                    $sentContactIds[] = $recipient->getId();
+                }
             } catch (Exception $e) {
                 $exception = $e;
                 $message = "Failed to send notification message to " . $recipient->email . ". Error: " . $e->getMessage();
