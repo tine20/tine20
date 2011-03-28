@@ -81,8 +81,9 @@ function getDevelopmentRevision()
         $dir = realpath(dirname(dirname(dirname(__FILE__)))) . '/.git';
         if (file_exists($dir)) {
             $HEAD = trim(str_replace('ref: ', '', @file_get_contents("$dir/HEAD")));
+            $explodedHead = explode('/', $HEAD);
             
-            $branch = array_pop(explode('/', $HEAD));
+            $branch = array_pop($explodedHead);
             $rev = trim(@file_get_contents("$dir/$HEAD"));
             
             $hashes = str_split($rev, 2);
