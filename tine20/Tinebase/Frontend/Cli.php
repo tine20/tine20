@@ -3,8 +3,8 @@
  * Tine 2.0
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
 
@@ -104,18 +104,61 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            // get user for cronjob from config / set default admin group
-            $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::CRONUSERID)->value;
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting user with id ' . $cronuserId . ' as cronuser.');
-            $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
+            $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
         $scheduler = Tinebase_Core::getScheduler();
-        $scheduler->run();
+        $responses = $scheduler->run();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ' . print_r($responses, TRUE));
+        
+        echo "\nTine 2.0 scheduler run (" . implode(',', array_keys($responses)) . ') complete.';
         
         return TRUE;
+    }
+    
+    /**
+     * try to get user for cronjob from config
+     * 
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _getCronuserFromConfigOrCreateOnTheFly()
+    {
+        try {
+            $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::CRONUSERID)->value;
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting user with id ' . $cronuserId . ' as cronuser.');
+            $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+            
+            $cronuser = $this->_createCronuser();
+            Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::CRONUSERID, $cronuser->getId());
+        }
+        
+        return $cronuser;
+    }
+    
+    /**
+     * create new cronuser
+     * 
+     * @return Tinebase_Model_FullUser
+     */
+    protected function _createCronuser()
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Creating new cronuser.');
+        
+        $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        $cronuser = new Tinebase_Model_FullUser(array(
+            'accountLoginName'      => 'cronuser',
+            'accountStatus'         => Tinebase_Model_User::ACCOUNT_STATUS_DISABLED,
+            'visibility'            => Tinebase_Model_FullUser::VISIBILITY_HIDDEN,
+            'accountPrimaryGroup'   => $adminGroup->getId(),
+            'accountLastName'       => 'cronuser',
+            'accountDisplayName'    => 'cronuser',
+            'accountExpires'        => NULL,
+        ));
+        return Tinebase_User::getInstance()->addUser($cronuser);
     }
     
     /**
