@@ -120,19 +120,19 @@ function activateReleaseMode()
     
     echo "CODENAME: $CODENAME BUILDTYPE: $BUILDTYPE";
     
-    sed -i "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Tinebase/Core.php
-    sed -i "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Setup/Core.php
+    sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Tinebase/Core.php
+    sed -i -e "s/'buildtype', 'DEVELOPMENT'/'buildtype', '$BUILDTYPE'/" $TEMPDIR/tine20/Setup/Core.php
     
-    sed -i "s#'TINE20_CODENAME',      getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Tinebase/Core.php
-    sed -i "s#'TINE20SETUP_CODENAME', getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Setup/Core.php
-    sed -i "s/'TINE20_PACKAGESTRING', 'none'/'TINE20_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Tinebase/Core.php
-    sed -i "s/'TINE20SETUP_PACKAGESTRING', 'none'/'TINE20SETUP_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Setup/Core.php
-    sed -i "s/'TINE20_RELEASETIME',   'none'/'TINE20_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Tinebase/Core.php
-    sed -i "s/'TINE20SETUP_RELEASETIME', 'none'/'TINE20SETUP_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Setup/Core.php
+    sed -i -e "s#'TINE20_CODENAME',      getDevelopmentRevision()#'TINE20_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Tinebase/Core.php
+    sed -i -e "s#'TINE20SETUP_CODENAME', getDevelopmentRevision()#'TINE20SETUP_CODENAME',      '$CODENAME'#" $TEMPDIR/tine20/Setup/Core.php
+    sed -i -e "s/'TINE20_PACKAGESTRING', 'none'/'TINE20_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Tinebase/Core.php
+    sed -i -e "s/'TINE20SETUP_PACKAGESTRING', 'none'/'TINE20SETUP_PACKAGESTRING', '$RELEASE'/" $TEMPDIR/tine20/Setup/Core.php
+    sed -i -e "s/'TINE20_RELEASETIME',   'none'/'TINE20_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Tinebase/Core.php
+    sed -i -e "s/'TINE20SETUP_RELEASETIME', 'none'/'TINE20SETUP_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Setup/Core.php
     
-    sed -i "s/Tine.clientVersion.buildType = 'DEBUG';/Tine.clientVersion.buildType = '$BUILDTYPE';/" $TEMPDIR/tine20/release.php
-    sed -i "s#Tine.clientVersion.codeName = '\$revisionInfo';#Tine.clientVersion.codeName = '$CODENAME';#" $TEMPDIR/tine20/release.php
-    sed -i "s/Tine.clientVersion.packageString = 'none'/Tine.clientVersion.packageString = '$RELEASE'/" $TEMPDIR/tine20/release.php
+    sed -i -e "s/Tine.clientVersion.buildType = 'DEBUG';/Tine.clientVersion.buildType = '$BUILDTYPE';/" $TEMPDIR/tine20/release.php
+    sed -i -e "s#Tine.clientVersion.codeName = '\$revisionInfo';#Tine.clientVersion.codeName = '$CODENAME';#" $TEMPDIR/tine20/release.php
+    sed -i -e "s/Tine.clientVersion.packageString = 'none'/Tine.clientVersion.packageString = '$RELEASE'/" $TEMPDIR/tine20/release.php
 }
 
 function compressFiles()
