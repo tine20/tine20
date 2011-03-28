@@ -31,6 +31,13 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
     protected $_cli;
     
     /**
+     * test user
+     * 
+     * @var Tinebase_Model_FullUser
+     */
+    protected $_testUser;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -51,6 +58,7 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_cli = new Tinebase_Frontend_Cli();
+        $this->_testUser = Tinebase_Core::getUser();
     }
 
     /**
@@ -61,6 +69,10 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        $currentUser = Tinebase_Core::getUser();
+        if ($currentUser->accountLoginName !== $this->_testUser->accountLoginName) {
+            Tinebase_Core::set(Tinebase_Core::USER, $this->_testUser);
+        }
     }
     
     /**
