@@ -77,27 +77,27 @@ function getDevelopmentRevision()
     $date = '';
     
     try {
-        $file = @fopen(dirname(dirname(__FILE__)) . '/.svn/entries', 'r');
-        while ($line = @fgets($file)) {
+        // try to find the .git dir
+        $dir = realpath(dirname(dirname(dirname(__FILE__)))) . '/.git';
+        if (file_exists($dir)) {
+            $HEAD = trim(str_replace('ref: ', '', @file_get_contents("$dir/HEAD")));
             
-            if ((int)$line > 4700) {
-                $rev = (int)$line;
-            }
-            if (preg_match('/^\d{4}-\d{2}-\d{2}[T ]+\d{2}:\d{2}:\d{2}/', $line)) {
-                $date = trim($line);
-            }
+            $branch = array_pop(explode('/', $HEAD));
+            $rev = trim(@file_get_contents("$dir/$HEAD"));
             
-            if (empty($branch) && preg_match('/svn\.tine20\.org\/svn/', $line)) {
-                $parts = explode('/', $line);
-                $branch = $parts[count($parts)-2];
-            }
-            if (! empty($branch) && ! empty($date) && $line) {
-                break;
+            $hashes = str_split($rev, 2);
+
+            $objPath = "$dir/objects";
+            while (count($hashes) != 0) {
+                $objPath .= '/' . array_shift($hashes);
+                $objFile = "$objPath/" . implode('', $hashes);
+                if (@file_exists($objFile)) {
+                    $date = date_create('@' . filemtime($objFile))->format(Tinebase_Record_Abstract::ISO8601LONG);
+                    break;
+                }
             }
         }
-        
         $revision = "$branch: $rev ($date)";
-        @fclose($file);
     } catch (Exception $e) {
         $revision = 'not resolvable';
     }
