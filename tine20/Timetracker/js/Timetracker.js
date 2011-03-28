@@ -3,8 +3,8 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id$
  */
  
@@ -32,7 +32,7 @@ Tine.Timetracker.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
  * @class       Tine.Timetracker.TreePanel
  * @extends     Tine.widgets.persistentfilter.PickerPanel
  * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  * 
  * @constructor
@@ -61,7 +61,11 @@ Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPane
                     id: 'alltimesheets',
                     leaf: true
                 }]
-            }, {
+            }]
+        };
+        
+        if (Tine.Tinebase.common.hasRight('manage', 'Timetracker', 'timeaccounts')) {
+            this.root.children.push({
                 text: this.app.i18n._('Timeaccounts'),
                 id: 'Timeaccount',
                 iconCls: 'TimetrackerTimeaccount',
@@ -71,8 +75,8 @@ Tine.Timetracker.TreePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPane
                     id: 'alltimeaccounts',
                     leaf: true
                 }]
-            }]
-        };
+            });
+        }
         
     	Tine.Timetracker.TreePanel.superclass.initComponent.call(this);
         
