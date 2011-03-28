@@ -259,11 +259,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $applicationId = Tinebase_Application::getInstance()->getApplicationByName($_application)->getId();
         $grant         = $_ignoreACL ? '*' : $_grant;
         
-        $cache = Tinebase_Core::get('cache');
+        $cache = Tinebase_Core::getCache();
         $cacheId = convertCacheId('getContainerByACL' . $accountId . $applicationId . implode('', (array)$grant) . $_onlyIds);
         $result = $cache->load($cacheId);
         
-        if (!$result) {
+        if ($result === FALSE) {
             $select = $this->_getSelect($_onlyIds ? 'id' : '*')
                 ->join(array(
                     /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
@@ -326,12 +326,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $cacheId = 'getContainerById' . $containerId . 'd' . (int)$_getDeleted;
 
         // load from cache
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cache = Tinebase_Core::getCache();
         $result = $cache->load($cacheId);
 
-        if(!$result) {
+        if($result === FALSE) {
             $result = $this->get($containerId, $_getDeleted);
-
             $cache->save($result, $cacheId, array('container'));
         }
         
@@ -787,11 +786,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             return FALSE;
         }
 
-        $cache = Tinebase_Core::get('cache');
+        $cache = Tinebase_Core::getCache();
         $cacheId = convertCacheId('hasGrant' . $accountId . $containerId . implode('', (array)$_grant));
         $result = $cache->load($cacheId);
         
-        if (! $result) {
+        if ($result === FALSE) {
             // NOTE: some tests ask for already deleted container ;-)
             $select = $this->_getSelect('*', TRUE)
             ->where("{$this->_db->quoteIdentifier('container.id')} = ?", $containerId)
@@ -877,12 +876,9 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
         
         $cacheKey = convertCacheId('getGrantsOfAccount' . $containerId . $accountId);
-        // load from cache
-
-        $cache = Tinebase_Core::get('cache');
+        $cache = Tinebase_Core::getCache();
         $grants = $cache->load($cacheKey);
-
-        if(!$grants) {
+        if($grants === FALSE) {
             $select = $this->_getSelect('*', TRUE)
                 ->where("{$this->_db->quoteIdentifier('container.id')} = ?", $containerId)
                 ->join(array(
