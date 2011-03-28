@@ -219,11 +219,11 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      */
     public static function getGrantsOfAccount($_accountId, $_timeaccountId, $_ignoreAcl = FALSE)
     {
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cache = Tinebase_Core::getCache();
         $cacheId = convertCacheId('getGrantsOfAccount' . Tinebase_Model_User::convertUserIdToInt($_accountId) . (($_timeaccountId instanceof Timetracker_Model_Timeaccount) ? $_timeaccountId->getId() : $_timeaccountId) . $_ignoreAcl);
         $result = $cache->load($cacheId);
         
-        if (!$result) {
+        if ($result === FALSE) {
         
             $timeaccount = $_timeaccountId instanceof Timetracker_Model_Timeaccount ? $_timeaccountId : 
                 Timetracker_Controller_Timeaccount::getInstance()->get($_timeaccountId);
@@ -255,13 +255,14 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      */
     public static function getTimeaccountsByAcl($_grant, $_onlyIds = FALSE)
     {
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' get grant: ' . print_r($_grant, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' get grant: ' . print_r($_grant, true));
         
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cache = Tinebase_Core::getCache();
         $cacheId = convertCacheId('getTimeaccountsByAcl' . Tinebase_Core::getUser()->getId() . $_grant . $_onlyIds);
+        
         $result = $cache->load($cacheId);
         
-        if (!$result) {
+        if ($result === FALSE) {
             
             $containerIds = Tinebase_Container::getInstance()->getContainerByACL(
                 Tinebase_Core::getUser()->getId(),
@@ -270,7 +271,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
                 TRUE
             );
             
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got containers: ' . print_r($containerIds, true));
+            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' got containers: ' . print_r($containerIds, true));
             
             $filter = new Tinebase_Model_Filter_FilterGroup(array());
             $filter->addFilter(new Tinebase_Model_Filter_Container('container_id', 'in', $containerIds, array(
@@ -309,11 +310,11 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             }
         }
         
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cache = Tinebase_Core::getCache();
         $cacheId = convertCacheId('getTimeaccountGrants' . Tinebase_Core::getUser()->getId() . $_timeaccount->getId() . $_ignoreACL);
         $result = $cache->load($cacheId);
         
-        if (!$result) {
+        if ($result === FALSE) {
                 
             $allContainerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_timeaccount->container_id, true);
             $allTimeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants');
