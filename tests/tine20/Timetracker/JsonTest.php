@@ -396,9 +396,18 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     }
     
     /**
+     * try to search for Timesheets with date filtering (using monthLast operator)
+     *
+     */
+    public function testSearchTimesheetsWithDateMonthLast()
+    {
+        // @todo implement
+    }
+    
+    /**
      * date filter test helper
      * 
-     * @param string $_type weekThis|inweek
+     * @param string $_type weekThis|inweek|monthLast
      */
     protected function _dateFilterTest($_type = 'weekThis')
     {
@@ -410,13 +419,8 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $dayOfWeek = $today->get('w');
         $lastSunday = $today->subDay($dayOfWeek);
         
-        // create
-        $timesheet = $this->_getTimesheet(NULL, $lastSunday);
-        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
-        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
+        $search = $this->_createTsAndSearch($lastSunday, $_type);
         
-        // search & check
-        $search = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_type), $this->_getPaging());
         $this->assertEquals(1, $search['totalcount'], 'timesheet not found in english locale');
         $this->assertEquals($timesheet->description, $search['results'][0]['description']);
         $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
@@ -429,6 +433,24 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $this->assertEquals(($dayOfWeek == 0) ? 1 : 0, $search['totalcount'], 'filter not working in german locale');
         
         Tinebase_Core::set(Tinebase_Core::LOCALE, $oldLocale);
+    }
+    
+    /**
+     * create timesheet and search with filter
+     * 
+     * @param Tinebase_DateTime $_startDate
+     * @param string $_filterType
+     * @return array
+     */
+    protected function _createTsAndSearch($_startDate, $_filterType)
+    {
+        $timesheet = $this->_getTimesheet(NULL, $_startDate);
+        $timesheetData = $this->_json->saveTimesheet($timesheet->toArray());
+        $this->_toDeleteIds['ta'][] = $timesheetData['timeaccount_id']['id'];
+        
+        $result = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_filterType), $this->_getPaging());
+        
+        return $result;
     }
     
     /**
