@@ -405,9 +405,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     {
         $today = Tinebase_DateTime::now();
         $lastMonth = $today->setDate($today->get('Y'), $today->get('m') - 1, 1);
-        $search = $this->_createTsAndSearch($lastMonth, 'monthLast');
-        
-        $this->assertEquals(1, $search['totalcount'], 'timesheet not found with last month filter');
+        $this->_createTsAndSearch($lastMonth, 'monthLast');
     }
     
     /**
@@ -425,12 +423,7 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         $dayOfWeek = $today->get('w');
         $lastSunday = $today->subDay($dayOfWeek);
         
-        $search = $this->_createTsAndSearch($lastSunday, $_type);
-        
-        $this->assertEquals(1, $search['totalcount'], 'timesheet not found in english locale');
-        $this->assertEquals($timesheet->description, $search['results'][0]['description']);
-        $this->assertType('array', $search['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
-        $this->assertType('array', $search['results'][0]['account_id'], 'account_id is not resolved');
+        $this->_createTsAndSearch($lastSunday, $_type);
         
         // change locale to de_DE -> timesheet should no longer be found because monday is the first day of the week
         Tinebase_Core::set(Tinebase_Core::LOCALE, new Zend_Locale('de_DE'));
@@ -446,7 +439,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      * 
      * @param Tinebase_DateTime $_startDate
      * @param string $_filterType
-     * @return array
      */
     protected function _createTsAndSearch($_startDate, $_filterType)
     {
@@ -456,7 +448,10 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         
         $result = $this->_json->searchTimesheets($this->_getTimesheetDateFilter($_filterType), $this->_getPaging());
         
-        return $result;
+        $this->assertEquals(1, $result['totalcount'], 'timesheet not found with ' . $_filterType . ' filter');
+        $this->assertEquals($timesheet->description, $result['results'][0]['description']);
+        $this->assertType('array', $result['results'][0]['timeaccount_id'], 'timeaccount_id is not resolved');
+        $this->assertType('array', $result['results'][0]['account_id'], 'account_id is not resolved');
     }
     
     /**
