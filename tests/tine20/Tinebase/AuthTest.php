@@ -163,6 +163,11 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
     {
         // use imap config for the auth config
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        
+        if (empty($imapConfig)) {
+             $this->markTestSkipped('No IMAP config found.');
+        }
+        
         $authConfig = array(
             'host'      => $imapConfig['host'],
             'port'      => $imapConfig['port'],
