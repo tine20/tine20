@@ -397,11 +397,14 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     
     /**
      * try to search for Timesheets with date filtering (using monthLast operator)
-     *
      */
     public function testSearchTimesheetsWithDateMonthLast()
     {
-        // @todo implement
+        $today = Tinebase_DateTime::now();
+        $lastMonth = $today->setDate($today->get('Y'), $today->get('m') - 1, 1);
+        $search = $this->_createTsAndSearch($lastMonth, 'monthLast');
+        
+        $this->assertEquals(1, $search['totalcount'], 'timesheet not found with last month filter');
     }
     
     /**

@@ -114,7 +114,12 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
                 case 'monthNext':
                     $date->add(2, Tinebase_DateTime::MODIFIER_MONTH);
                 case 'monthLast':
-                    $date->sub(1, Tinebase_DateTime::MODIFIER_MONTH);
+                    $month = $date->get('m');
+                    if ($month > 1) {
+                        $date = $date->setDate($date->get('Y'), $month - 1, 1);
+                    } else {
+                        $date->subMonth(1);
+                    }
                 case 'monthThis':
                     $dayOfMonth = $date->get('j');
                     $monthDays = $date->get('t');
@@ -194,6 +199,7 @@ class Tinebase_Model_Filter_Date extends Tinebase_Model_Filter_Abstract
         } else  {
             $value = substr($_value, 0, 10);
         }
+        
         return $value;
     }
     
