@@ -4,8 +4,8 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @version     $Id$
  */
 
@@ -13,10 +13,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_CliTest::main');
-}
 
 /**
  * Test class for Addressbook_Frontend_Cli
@@ -38,9 +34,9 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
      */
     public static function main()
     {
-		$suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Cli Tests');
+        $suite  = new PHPUnit_Framework_TestSuite('Tine 2.0 Addressbook Cli Tests');
         PHPUnit_TextUI_TestRunner::run($suite);
-	}
+    }
 
     /**
      * Sets up the fixture.
@@ -71,21 +67,51 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testSetContainerGrants()
     {
+        $out = $this->_cliHelper(array(
+            'containerId=' . $this->_container->getId(), 
+            'accountId=' . Tinebase_Core::getUser()->getId(), 
+            'grants=privateGrant'
+        ));
+        $this->assertContains("Added grants to container", $out);        
+        
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
+        $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
+    }
+
+    /**
+     * test to set container grants with filter and overwrite old grants
+     */
+    public function testSetContainerGrantsWithFilterAndOverwrite()
+    {
+        $out = $this->_cliHelper(array(
+            'namefilter="Tine 2.0 Admin Account"', 
+            'accountId=' . Tinebase_Core::getUser()->getId(), 
+            'grants=privateGrant,adminGrant',
+            'overwrite=1'
+        ));
+        
+        $this->assertContains("Set grants for container", $out);        
+        
+        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
+        $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
+        $this->assertTrue(($grants->getFirstRecord()->adminGrant == 1));
+    }
+    
+    /**
+     * call setContainerGrants cli function with params
+     * 
+     * @param array $_params
+     * @return string
+     */
+    protected function _cliHelper($_params)
+    {
         $opts = new Zend_Console_Getopt('abp:');
-        $params = array('containerId=' . $this->_container->getId(), 'accountId=' . Tinebase_Core::getUser()->getId(), 'grants=privateGrant');
-        $opts->setArguments($params);
+        $opts->setArguments($_params);
         
         ob_start();
         $this->_cli->setContainerGrants($opts);
         $out = ob_get_clean();
         
-        $this->assertContains("Added grants to container.", $out);        
-        
-        $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
-        $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
+        return $out;
     }
 }       
-    
-if (PHPUnit_MAIN_METHOD == 'Addressbook_CliTest::main') {
-    Addressbook_CliTest::main();
-}
