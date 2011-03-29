@@ -311,7 +311,7 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
             $result[] = array(
                 'field' => 'start_date', 
                 'operator' => 'within', 
-                'value' => 'weekThis'
+                'value' => $_type
             );
         }
         
