@@ -9,10 +9,6 @@
  * @version     $Id$
  */
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Timetracker_JsonTest::main');
-}
-
 /**
  * Timetracker_AbstractTest Test class
  */
@@ -203,7 +199,6 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
 
         return $result;
     }
-    
     
     /**
      * get Timesheet filter
