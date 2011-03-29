@@ -162,6 +162,10 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testAlarmSendingFailure()
     {
+        if (empty($this->_smtpConfig)) {
+             $this->markTestSkipped('No SMTP config found.');
+        }
+        
         // send old alarms first
         $this->_sendAlarm();
 
