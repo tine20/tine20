@@ -49,6 +49,8 @@
  *  This will return an array containing all the timezones belonging to 
  *  CEST/CET (UTC/GMT +2 hours), including "Europe/Berlin"
  *  </code>
+ *  
+ *  @package     ActiveSync
  */
 class ActiveSync_TimezoneConverter 
 {

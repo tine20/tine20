@@ -15,8 +15,9 @@
  * This class handles generation of tempfiles and registers them in a tempFile table.
  * To access a tempFile, the session of the client must match
  * 
+ * @package     Tinebase
+ * 
  * @todo automatic garbage collection via cron
- *
  */
 class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
 {
