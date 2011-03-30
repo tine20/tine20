@@ -145,8 +145,8 @@ Tine.widgets.dialog.PreferencesPanel = Ext.extend(Ext.Panel, {
                     // what does that do??
                     pref.fieldObj = fieldObj;
                 } catch (e) {
-                	//console.log(e);
-                    console.error('Unable to create preference field "' + pref.get('name') + '". Check definition!');
+                    Tine.log.debug(e);
+                    Tine.log.err('Unable to create preference field "' + pref.get('name') + '". Check definition!');
                     this.prefStore.remove(pref);
                 }
             }, this);
