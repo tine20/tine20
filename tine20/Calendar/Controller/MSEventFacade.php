@@ -3,6 +3,7 @@
  * Tine 2.0
  * 
  * @package     Calendar
+ * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -25,6 +26,9 @@
  * when creating/updating events, make sure to have the original start time (ExceptionStartTime)
  * of recur event instances stored in the property:
  * -> Calendar_Model_Event::recurid
+ * 
+ * @package     Calendar
+ * @subpackage  Controller
  */
 class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_Interface
 {
