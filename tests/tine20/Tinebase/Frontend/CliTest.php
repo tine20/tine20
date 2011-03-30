@@ -213,8 +213,8 @@ class Tinebase_Frontend_CliTest extends PHPUnit_Framework_TestCase
         $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
         $this->assertEquals('cronuser', $cronuser->accountLoginName);
         $adminGroup = Tinebase_Group::getInstance()->getDefaultAdminGroup();
+        
         $this->assertEquals($adminGroup->getId(), $cronuser->accountPrimaryGroup);
-
-        $this->assertContains('Tine 2.0 scheduler run (Tinebase_Alarm) complete', $out);
+        $this->assertContains('Tine 2.0 scheduler run', $out, $out);
     }
 }
