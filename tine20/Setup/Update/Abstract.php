@@ -109,7 +109,7 @@ class Setup_Update_Abstract
 	 * @return void
 	 * @throws Setup_Exception_NotFound
 	 */	 
-    public function setTableVersion($_tableName, $_version, $_createIfNotExist = FALSE, $_application = 'Tinebase')
+    public function setTableVersion($_tableName, $_version, $_createIfNotExist = TRUE, $_application = 'Tinebase')
     {
         if ($this->getTableVersion($_tableName) == 0) {
             if ($_createIfNotExist) {
