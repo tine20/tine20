@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 
 /**
@@ -661,8 +660,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $messageToCache->has_attachment = (count($attachments) > 0) ? true : false;
         
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($messageToCache->toArray(), TRUE));
-        
         try {
             $result = $this->_backend->create($messageToCache);
             // only cache message headers if received during the last day
@@ -674,7 +671,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             // perhaps we already have this message in our cache (duplicate)
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
             $result = $this->_backend->getByProperty($messageToCache->messageuid, 'messageuid');
-            $_updateFolderCounter = FALSE;
         }
         
         if ($_updateFolderCounter == TRUE) {
@@ -684,17 +680,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             ));
         }
         
-        /*
-        // store in local cache if received during the last day
-        // disabled again for performance reason
-        if($createdMessage->received->compare(Tinebase_DateTime::now()->subDay(1)) == 1) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . 
-                ' prefetch imap message to local cache ' . $createdMessage->getId()
-            );            
-            $this->getCompleteMessage($createdMessage);
-        }
-        */
-
         return $result;
     }
     
