@@ -179,25 +179,8 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
      * @private
      */
     onAboutTine20: function() {
-        
-        var version = (Tine.Tinebase.registry.get('version')) ? Tine.Tinebase.registry.get('version') : {
-            codeName: 'unknown',
-            packageString: 'unknown'
-        };
-        
-        Ext.Msg.show({
-            title: String.format(_('About {0}'), Tine.title),
-            msg: 
-                '<div class="tb-about-dlg">' +
-                    '<div class="tb-about-img"><a href="' + Tine.weburl + '" target="_blank"><img src="' + Tine.Tinebase.LoginPanel.prototype.loginLogo + '" /></a></div>' +
-                    '<div class="tb-about-version">Version: ' + version.codeName + '</div>' +
-                    '<div class="tb-about-build">( ' + version.packageString + ' )</div>' +
-                    '<div class="tb-about-copyright">Copyright: 2007-' + new Date().getFullYear() + '&nbsp;<a href="http://www.metaways.de" target="_blank">Metaways Infosystems GmbH</a></div>' +
-                '</div>',
-            width: 400,
-            buttons: Ext.Msg.OK,
-            animEl: 'elId'
-        });
+        var aboutDialog = new Tine.Tinebase.AboutDialog();
+        aboutDialog.show();
     },
     
     /**
