@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Common.js 4995 2008-10-20 10:20:01Z c.weiss@metaways.de $
  */
 
 /*global Ext, Tine, Locale*/
