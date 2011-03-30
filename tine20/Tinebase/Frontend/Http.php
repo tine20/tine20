@@ -263,7 +263,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/ux/Printer/renderers/Base.js',
             'Tinebase/js/ux/Printer/renderers/GridPanel.js',
             'Tinebase/js/ux/Printer/renderers/ColumnTree.js',
-        // Tinebase
+        // Tinebase core stuff
             // NOTE: All the data stuff is going to and extra worker build
             //'Tinebase/js/data/sync/Ping.js',
             //'Tinebase/js/data/schemaProc/sqlGenerator.js',
@@ -276,18 +276,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/StateProvider.js',
             'Tinebase/js/ExceptionHandler.js',
             'Tinebase/js/ExceptionDialog.js',
-            'Tinebase/js/PasswordChangeDialog.js',
             'Tinebase/js/Container.js',
             'Tinebase/js/Models.js',
             'Tinebase/js/Application.js',
-            'Tinebase/js/AppManager.js',
-            'Tinebase/js/AppPile.js',
-            'Tinebase/js/AppTabsPanel.js',
-            'Tinebase/js/MainMenu.js',
-            'Tinebase/js/MainScreen.js',
-            'Tinebase/js/LoginPanel.js',
-            'Tinebase/js/AdminPanel.js',
-            'Tinebase/js/UserProfilePanel.js',
             'Tinebase/js/common.js',
         // Tine 2.0 specific widgets
             'Tinebase/js/widgets/LangChooser.js',
@@ -344,6 +335,17 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
             'Tinebase/js/widgets/persistentfilter/Model.js',
             'Tinebase/js/widgets/persistentfilter/Store.js',
             'Tinebase/js/widgets/persistentfilter/PickerPanel.js',
+          // Tinebase app stuff
+            'Tinebase/js/PasswordChangeDialog.js',
+            'Tinebase/js/AboutDialog.js',
+            'Tinebase/js/AppManager.js',
+            'Tinebase/js/AppPile.js',
+            'Tinebase/js/AppTabsPanel.js',
+            'Tinebase/js/MainMenu.js',
+            'Tinebase/js/MainScreen.js',
+            'Tinebase/js/LoginPanel.js',
+            'Tinebase/js/AdminPanel.js',
+            'Tinebase/js/UserProfilePanel.js',
         // translations for prototypes
             'Tinebase/js/prototypeTranslations.js',
         // yui stuff

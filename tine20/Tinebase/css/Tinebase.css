@@ -407,6 +407,9 @@ html, body {
 .tb-about-dlg {
     text-align: center;
 }
+.tb-about-img {
+    margin-top: 10px;
+}
 .tb-about-version{
     margin-top: 50px;
     font-weight: bold;
