@@ -148,7 +148,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULTPERSISTENTFILTER:
                 $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Calendar', $_accountId, "All my events");
-                $preference->personal_only  = TRUE;
                 break;
             case self::NOTIFICATION_LEVEL:
                 $translate = Tinebase_Translation::getTranslation($this->_application);

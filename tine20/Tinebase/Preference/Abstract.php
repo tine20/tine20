@@ -795,7 +795,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
         $containers = Tinebase_Container::getInstance()->getPersonalContainer($accountId, $appName, $accountId, 0, true);
         
         $_preference->value  = $containers->getFirstRecord()->getId();
-        $_preference->personal_only = TRUE;
         $_preference->options = '<?xml version="1.0" encoding="UTF-8"?>
             <options>
                 <special>' . $_optionName . '</special>

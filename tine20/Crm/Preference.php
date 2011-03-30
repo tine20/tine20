@@ -144,7 +144,6 @@ class Crm_Preference extends Tinebase_Preference_Abstract
                 break;
             case self::DEFAULTPERSISTENTFILTER:
                 $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Crm', $_accountId, self::DEFAULTPERSISTENTFILTER_NAME);
-                $preference->personal_only  = TRUE;
                 break;
             default:
                 throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');

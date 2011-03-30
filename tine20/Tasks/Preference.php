@@ -95,7 +95,6 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
         switch($_preferenceName) {
             case self::DEFAULTPERSISTENTFILTER:
                 $preference->value          = Tinebase_PersistentFilter::getPreferenceValues('Tasks', $_accountId, self::DEFAULTPERSISTENTFILTER_NAME);
-                $preference->personal_only  = TRUE;
                 break;
             case self::DEFAULTTASKLIST:
                 $this->_getDefaultContainerPreferenceDefaults($preference, $_accountId);
