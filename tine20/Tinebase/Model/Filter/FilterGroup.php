@@ -430,10 +430,11 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         $result = array();
         
         foreach ($this->getFilterObjects() as $filter) {
-            // @todo check single filters for requirements
+            $field = $filter->getField();
+            if (array_key_exists('options', $this->_filterModel[$field]) && array_key_exists('requiredCols', $this->_filterModel[$field]['options'])) {
+                $result = array_merge($result, $this->_filterModel[$field]['options']['requiredCols']);
+            }
         }
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->_customData, TRUE));
         
         foreach ($this->_customData as $custom) {
             // check custom filter for requirements
@@ -441,6 +442,8 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 $result = array_merge($result, $this->_filterModel[$custom['field']]['requiredCols']);
             }
         }
+
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, TRUE));
         
         return $result;
     }
