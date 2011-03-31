@@ -96,11 +96,11 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
     public function getFromFile($_filename, $_applicationId, $_name = NULL)
     {
         if (file_exists($_filename)) {
-            
+            $basename = basename($_filename);
             $content = file_get_contents($_filename);
             $config = new Zend_Config_Xml($_filename);
             if ($_name === NULL) {
-                $name = ($config->name) ? $config->name : $_filename;
+                $name = ($config->name) ? $config->name : preg_replace("/\.xml/", '', $basename);
             } else {
                 $name = $_name;
             }
@@ -112,7 +112,8 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
                 'type'              => $config->type,
                 'model'             => $config->model,
                 'plugin'            => $config->plugin,
-                'plugin_options'    => $content
+                'plugin_options'    => $content,
+                'filename'          => $basename,
             ));
             
             return $definition;
@@ -165,9 +166,6 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
             $_name
         );
         
-        // @todo remove path from filename here instead of just using the name
-        $definition->filename = $definition->name . '.xml';
-
         // try to get definition and update if it exists
         try {
             $existing = $this->getByName($definition->name);
