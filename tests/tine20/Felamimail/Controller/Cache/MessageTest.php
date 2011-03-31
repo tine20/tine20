@@ -131,7 +131,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
      * test update message cache
      *
      */
-    public function testUpdate()
+    public function testUpdateCache()
     {
         // update message cache
         $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
