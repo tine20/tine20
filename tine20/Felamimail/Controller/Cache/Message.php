@@ -746,7 +746,9 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         
         $messageUidsInCache = $this->_backend->search($filter, NULL, array('messageuid'));
         
-        $result = array_diff($_messageUids, $messageUidsInCache);
+        $result = array_diff($_messageUids, array_keys($messageUidsInCache));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, TRUE));
         
         return $result;
     }
