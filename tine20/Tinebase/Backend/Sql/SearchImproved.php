@@ -326,9 +326,12 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
             $groupBy = ($_groupBy !== NULL) ? $_groupBy : $this->_tableName . '.' . $this->_identifier;
             $_select->group($groupBy);
             
+            $cols = (array) $_cols;
             foreach ($this->_foreignTables as $foreignColumn => $join) {
                 // only join if field is in cols
-                if ($_cols == '*' || array_key_exists($foreignColumn, $_cols)) {
+                if (in_array('*', $cols) || array_key_exists($foreignColumn, $cols)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' foreign column: ' . $foreignColumn);
+                    
                     $selectArray = (array_key_exists('select', $join))
                         ? $join['select'] 
                         : ((array_key_exists('field', $join) && (! array_key_exists('singleValue', $join) || ! $join['singleValue']))
@@ -336,7 +339,7 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
                             : array($foreignColumn => $join['table'] . '.id'));
                     $joinId = (array_key_exists('joinId', $join)) ? $join['joinId'] : $this->_identifier;
                     
-                    $this->_removeColFromSelect($_select, $_cols, $foreignColumn);
+                    $this->_removeColFromSelect($_select, $cols, $foreignColumn);
                     
                     try {
                         $_select->joinLeft(
@@ -344,6 +347,10 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
                             /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.' . $joinId) . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
                             /* select */ $selectArray
                         );
+                        // need to add it to cols to prevent _removeColFromSelect from removing it
+                        if (array_key_exists('preserve', $join) && $join['preserve'] && array_key_exists($foreignColumn, $selectArray)) {
+                            $cols[$foreignColumn] = $selectArray[$foreignColumn];
+                        }
                     } catch (Zend_Db_Select_Exception $zdse) {
                         // @todo get joins from Zend_Db_Select before trying to join the same tables twice
                         $_select->columns($selectArray, $join['table']);
@@ -360,12 +367,12 @@ class Tinebase_Backend_Sql_SearchImproved extends Tinebase_Backend_Sql_Abstract
      * @param array|string $_cols
      * @param string $_column
      */
-    protected function _removeColFromSelect(Zend_Db_Select $_select, $_cols, $_column)
+    protected function _removeColFromSelect(Zend_Db_Select $_select, &$_cols, $_column)
     {
         if (! is_array($_cols)) {
             return;
         }
-            
+        
         foreach ($_cols as $name => $correlation) {
             if ($name == $_column) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Removing ' . $_column . ' from columns.');
