@@ -6,17 +6,12 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @version     $Id$
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Felamimail_Controller_Cache_MessageTest::main');
-}
 
 /**
  * Test class for Felamimail_Controller_Cache_*
@@ -54,6 +49,13 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
      * @var string
      */
     protected $_testFolderName = 'Junk';
+    
+    /**
+     * delete messages with this header in tearDown
+     * 
+     * @var string
+     */
+    protected $_headerValueToDelete = NULL;
     
     /**
      * Runs the test methods of this class.
@@ -108,6 +110,15 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
         }
+        
+        if ($this->_headerValueToDelete !== NULL) {
+            $result = $this->_imap->search(array(
+                $this->_headerValueToDelete
+            ));
+            foreach($result as $messageUid) {
+                $this->_imap->removeMessage($messageUid);
+            }
+        }
     }
     
     /**
@@ -151,6 +162,39 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'estimate wrong');
         }
     }
+
+    /**
+     * test update message cache
+     *
+     */
+    public function testUpdateCacheAgain()
+    {
+        // add three messages to folder
+        for($i = 0; $i < 3; $i++) {
+            $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        }
+        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
+        
+        // update message cache
+        $loopCount = 0;
+        do {
+            $updatedFolder = $this->_controller->updateCache($this->_folder, 10);
+            $loopCount++;
+        } while ($updatedFolder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $loopCount < 10);
+        
+        $this->assertGreaterThan(0, $updatedFolder->cache_totalcount);
+        $this->assertNotEquals(10, $loopCount, 'should complete cache update with < 10 iterations.');
+        
+        // now lets delete one message from folder and add another one
+        $result = $this->_imap->search(array(
+            $this->_headerValueToDelete
+        ));
+        $this->_imap->removeMessage($result[0]);
+        $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        
+        $updatedFolderAgain = $this->_controller->updateCache($this->_folder, 30);
+        $this->assertEquals($updatedFolder->cache_totalcount, $updatedFolderAgain->cache_totalcount);
+    }
     
     /**
      * test update of message cache counters only
@@ -161,19 +205,10 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
         
         $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
         
-        $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage multipart/alternative'
-        ));
-        
-        // update message cache
+        // update message cache + check folder status after update
         $updatedFolder = $this->_controller->updateCache($this->_folder, 0);
-        
-        foreach($result as $messageUid) {
-            $this->_imap->removeMessage($messageUid);
-        }
-        
-        // check folder status after update
         $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE, $updatedFolder->cache_status);
         $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal');
         $this->assertGreaterThan(-1, Tinebase_DateTime::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
