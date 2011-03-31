@@ -361,6 +361,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             return null;
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' got last message uid: ' . print_r($result, TRUE));
+        
         return $result;
     }
     
@@ -706,10 +708,10 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));
             }
         } catch (Zend_Db_Statement_Exception $zdse) {
+            // @todo write test for this case
             // perhaps we already have this message in our cache (duplicate)
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
-            $result = $this->_backend->getByProperty($messageToCache->messageuid, 'messageuid');
-            $_updateFolderCounter = FALSE;
+            return FALSE;
         }
         
         if ($_updateFolderCounter == TRUE) {
