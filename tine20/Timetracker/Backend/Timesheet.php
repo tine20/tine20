@@ -78,5 +78,12 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_SearchImproved
             'select'        => array('is_cleared_combined'    => "(timetracker_timesheet.is_cleared|(IF(STRCMP(timetracker_timeaccount.status, 'billed'),0,1)))"),
             'singleValue'   => TRUE,
         ),
+        'timetracker_timeaccount.is_billable'    => array(
+            'table'         => 'timetracker_timeaccount',
+            'joinOn'        => 'id',
+            'joinId'        => 'timeaccount_id',
+            'select'        => array('timetracker_timeaccount.is_billable'    => 'timetracker_timeaccount.is_billable'),
+            'singleValue'   => TRUE,
+        ),
     );
 }

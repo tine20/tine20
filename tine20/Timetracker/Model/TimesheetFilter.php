@@ -46,7 +46,7 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         ),
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'is_billable'    => array('filter' => 'Tinebase_Model_Filter_Bool',         'options' => array('fields' => array('timetracker_timesheet.is_billable','ta.is_billable'))),
+        'is_billable'    => array('filter' => 'Tinebase_Model_Filter_Bool',         'options' => array('fields' => array('timetracker_timesheet.is_billable','timetracker_timeaccount.is_billable'))),
         //'is_cleared'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
         'is_cleared'     => array('custom' => TRUE),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag',          'options' => array('idProperty' => 'timetracker_timesheet.id')),
@@ -84,6 +84,8 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
      * @param  Zend_Db_Select                    $_select
      * @param  Tinebase_Backend_Sql_Abstract     $_backend
      * @return void
+     * 
+     * @todo replace custom filter!
      */
     public function appendFilterSql($_select, $_backend)
     {
@@ -93,15 +95,35 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         foreach ($this->_customData as $customData) {
             $value = $customData['value'];
             if ($customData['field'] == 'is_cleared') {
+                $_select->joinLeft(
+                    /* table  */ array('ta' => $db->table_prefix . 'timetracker_timeaccount'), 
+                    /* on     */ $db->quoteIdentifier('ta.id') . ' = ' . $db->quoteIdentifier('timetracker_timesheet.timeaccount_id'),
+                    /* select */ array()
+                );
+                
                 $opStatus = $value ? '=' : '<>';
                 $op = $value ? ' OR ' : ' AND ';
                 $_select->where(
                     $db->quoteInto($customData['field']  . ' = ?', $value) . $op .
-                    $db->quoteInto('ta.status' . $opStatus . ' ?', 'billed')
+                    $db->quoteInto('ta.status' . $opStatus . ' ? ', 'billed')
                 );
             }
         }
     }
+    
+    /**
+     * gets additional columns required for from() of search Zend_Db_Select 
+     * 
+     * @return array
+     */
+    public function getRequiredColumnsForSelect()
+    {
+        $result = parent::getRequiredColumnsForSelect();
+        
+        $result[] = 'timetracker_timeaccount.is_billable';
+        
+        return $result;
+    }    
     
     /**
      * append acl filter

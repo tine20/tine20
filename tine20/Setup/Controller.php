@@ -3,10 +3,10 @@
  * Tine 2.0
  *
  * @package     Setup
+ * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  * @todo        move $this->_db calls to backend class
  * @todo        add role rights (run, admin) to all new installed apps
@@ -22,6 +22,7 @@ require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'Tinebase' . DIR
  * class to handle setup of Tine 2.0
  *
  * @package     Setup
+ * @subpackage  Controller
  */
 class Setup_Controller
 {
@@ -1127,7 +1128,14 @@ class Setup_Controller
                 foreach (new DirectoryIterator($path) as $item) {
                     $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
                     if (preg_match("/\.xml/", $filename)) {
-                        Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($filename, $_application, preg_replace("/\.xml/", '', $item->getFileName()), TRUE);
+                        // @todo move try catch here and remove param from updateOrCreateFromFilename
+                        try {
+                            Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($filename, $_application);
+                        } catch (Tinebase_Exception_Record_Validation $terv) {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $terv->getMessage());
+                        }  catch (Zend_Db_Statement_Exception $zdse) {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $zdse->getMessage());
+                        } 
                     }
                 }
             }
