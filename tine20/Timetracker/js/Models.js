@@ -137,17 +137,6 @@ Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
         {filtertype: 'tinebase.tag', app: app}
     ];
 }
-/**
- * filter model for timeaccounts
- *
-Tine.Timetracker.Model.TimeaccountFilter = [
-    {field: 'query',        filter: Tine.Tinebase.Model.filter.Query},
-    {field: 'tags',         filter: Tine.Tinebase.Model.filter.Tag, options: {appName: 'Timetracker'} },
-    {field: 'description',  filter: Tine.Tinebase.Model.filter.Text, options: {operators: ['contains']} },
-    {field: 'created_by',   filter: Tine.Tinebase.Model.filter.User},
-    {field: 'status',       filter: Tine.Timetracker.TimeAccountStatusGridFilter}
-];
-*/
 
 /**
  * Model of a grant
