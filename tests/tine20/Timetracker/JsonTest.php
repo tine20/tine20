@@ -453,7 +453,6 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
     
     /**
      * try to search for Timesheets (with combined is_billable + cleared)
-     *
      */
     public function testSearchTimesheetsWithCombinedIsBillableAndCleared()
     {
@@ -468,12 +467,24 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
         Timetracker_Controller_Timeaccount::getInstance()->update($ta);
         
         // search & check
-        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(), $this->_getPaging('is_billable_combined'));
+        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(array(
+            'field' => 'is_cleared_combined', 
+            'operator' => 'equals', 
+            'value' => FALSE,
+        )), $this->_getPaging('is_billable_combined'));
         $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
         $this->assertEquals(0, $search['results'][0]['is_cleared_combined'], 'is_cleared_combined mismatch');
         $this->assertEquals(1, $search['totalcount']);
         $this->assertEquals(30, $search['totalsum']);
         $this->assertEquals(0, $search['totalsumbillable']);
+        
+        // search again with is_billable filter
+        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(array(
+            'field' => 'is_billable_combined', 
+            'operator' => 'equals', 
+            'value' => FALSE,
+        )), $this->_getPaging('is_billable_combined'));
+        $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
     }
 
     /******* persistent filter tests *****************/
