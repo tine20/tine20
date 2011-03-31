@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 
 /**
@@ -70,6 +69,8 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_SearchImproved
             'joinId'        => 'timeaccount_id',
             'select'        => array('is_billable_combined'    => '(timetracker_timesheet.is_billable*timetracker_timeaccount.is_billable)'),
             'singleValue'   => TRUE,
+            // needs to be preserved in select
+            'preserve'      => TRUE,
         ),
         'is_cleared_combined'    => array(
             'table'         => 'timetracker_timeaccount',
@@ -77,13 +78,8 @@ class Timetracker_Backend_Timesheet extends Tinebase_Backend_Sql_SearchImproved
             'joinId'        => 'timeaccount_id',
             'select'        => array('is_cleared_combined'    => "(timetracker_timesheet.is_cleared|(IF(STRCMP(timetracker_timeaccount.status, 'billed'),0,1)))"),
             'singleValue'   => TRUE,
-        ),
-        'timetracker_timeaccount.is_billable'    => array(
-            'table'         => 'timetracker_timeaccount',
-            'joinOn'        => 'id',
-            'joinId'        => 'timeaccount_id',
-            'select'        => array('timetracker_timeaccount.is_billable'    => 'timetracker_timeaccount.is_billable'),
-            'singleValue'   => TRUE,
+            // needs to be preserved in select
+            'preserve'      => TRUE,
         ),
     );
 }
