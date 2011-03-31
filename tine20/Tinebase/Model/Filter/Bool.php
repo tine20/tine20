@@ -5,9 +5,8 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -58,6 +57,8 @@ class Tinebase_Model_Filter_Bool extends Tinebase_Model_Filter_Abstract
                      $_select->orwhere($quotedField . $action['sqlop'], $value);
                  }
              }
+         } else if (! empty($this->_options['leftOperand'])) {
+             $_select->where($this->_options['leftOperand'] . $action['sqlop'], $value);
          } else {  
              $_select->where($this->_getQuotedFieldName($_backend) . $action['sqlop'], $value);
          }
