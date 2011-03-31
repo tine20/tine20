@@ -1128,14 +1128,13 @@ class Setup_Controller
                 foreach (new DirectoryIterator($path) as $item) {
                     $filename = $path . DIRECTORY_SEPARATOR . $item->getFileName();
                     if (preg_match("/\.xml/", $filename)) {
-                        // @todo move try catch here and remove param from updateOrCreateFromFilename
                         try {
                             Tinebase_ImportExportDefinition::getInstance()->updateOrCreateFromFilename($filename, $_application);
-                        } catch (Tinebase_Exception_Record_Validation $terv) {
-                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $terv->getMessage());
-                        }  catch (Zend_Db_Statement_Exception $zdse) {
-                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Not installing import/export definion: ' . $zdse->getMessage());
-                        } 
+                        } catch (Exception $e) {
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                . ' Not installing import/export definion from file: ' . $filename
+                                . $e->getMessage());
+                        }
                     }
                 }
             }
