@@ -187,8 +187,8 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {label: this.app.i18n._('Account'),      field: 'account_id', valueType: 'user'},
                 {label: this.app.i18n._('Date'),         field: 'start_date', valueType: 'date', pastOnly: true},
                 {label: this.app.i18n._('Description'),  field: 'description', defaultOperator: 'contains'},
-                {label: this.app.i18n._('Billable'),     field: 'is_billable', valueType: 'bool', defaultValue: true },
-                {label: this.app.i18n._('Cleared'),      field: 'is_cleared',  valueType: 'bool', defaultValue: false },
+                {label: this.app.i18n._('Billable'),     field: 'is_billable_combined', valueType: 'bool', defaultValue: true },
+                {label: this.app.i18n._('Cleared'),      field: 'is_cleared_combined',  valueType: 'bool', defaultValue: false },
                 {filtertype: 'tinebase.tag', app: this.app},
                 {filtertype: 'timetracker.timeaccount'}
              ].concat(this.getCustomfieldFilters()),

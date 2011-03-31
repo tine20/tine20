@@ -5,9 +5,8 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -46,9 +45,14 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         ),
         'account_id'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
-        'is_billable'    => array('filter' => 'Tinebase_Model_Filter_Bool',         'options' => array('fields' => array('timetracker_timesheet.is_billable','timetracker_timeaccount.is_billable'))),
-        //'is_cleared'     => array('filter' => 'Tinebase_Model_Filter_Bool'),
-        'is_cleared'     => array('custom' => TRUE),
+        'is_billable_combined'  => array(
+            'filter' => 'Tinebase_Model_Filter_Bool', 
+            'options' => array('leftOperand' => '(timetracker_timesheet.is_billable*timetracker_timeaccount.is_billable)'),
+        ),
+        'is_cleared_combined'   => array(
+            'filter' => 'Tinebase_Model_Filter_Bool', 
+            'options' => array('leftOperand' => "(timetracker_timesheet.is_cleared|(IF(STRCMP(timetracker_timeaccount.status, 'billed'),0,1)))"),
+        ),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag',          'options' => array('idProperty' => 'timetracker_timesheet.id')),
         'customfield'    => array('filter' => 'Tinebase_Model_Filter_CustomField',  'options' => array('idProperty' => 'timetracker_timesheet.id')),
     );
@@ -110,20 +114,6 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
             }
         }
     }
-    
-    /**
-     * gets additional columns required for from() of search Zend_Db_Select 
-     * 
-     * @return array
-     */
-    public function getRequiredColumnsForSelect()
-    {
-        $result = parent::getRequiredColumnsForSelect();
-        
-        $result[] = 'timetracker_timeaccount.is_billable';
-        
-        return $result;
-    }    
     
     /**
      * append acl filter
