@@ -48,6 +48,29 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
     }
     
     /**
+     * qCal library loader
+     *
+     * NOTE: qCal expects to be in the include path. As qCal is rearly used, we wait 
+     *       for its first load request before we register the lib
+     *       
+     * @param $name
+     * @throws Zend_Exception
+     */
+    public static function qCal($name)
+    {
+        $qCalPath = dirname(dirname(__FILE__)) . '/library/qCal/lib/';
+        set_include_path(implode(PATH_SEPARATOR, array($qCalPath, get_include_path())));
+        
+        require_once "$qCalPath/qCal/Loader.php";
+        
+        $autoloader = Zend_Loader_Autoloader::getInstance();
+        $autoloader->unregisterNamespace('qCal');
+        $autoloader->pushAutoloader(array('qCal_Loader', 'loadClass'), 'qCal');
+        
+        qCal_Loader::loadClass($name);
+    }
+    
+    /**
      * initialize Tine 2.0 autoloader for different prefixes
      * 
      * @param Zend_Loader_Autoloader $_autoloader
@@ -55,5 +78,6 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
     public static function initialize(Zend_Loader_Autoloader $_autoloader)
     {
         $_autoloader->unshiftAutoloader(new self(), array('Rediska', 'HTMLPurifier'));
+        $_autoloader->pushAutoloader(array('Tinebase_Autoloader', 'qCal'), 'qCal');
     }
 }
