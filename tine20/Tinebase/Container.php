@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  * 
  * @todo        refactor that: remove code duplication, remove Zend_Db_Table_Abstract usage
  * @todo        move (or replace from) functions to backend
@@ -218,20 +217,25 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 break;
         }
         
-        //$existingGrants = $this->getGrantsOfAccount($accountId, $containerId);
+        $containerGrants = $this->getGrantsOfContainer($containerId, TRUE);
+        $containerGrants->addIndices(array('account_type', 'account_id'));
+        $existingGrants = $containerGrants->filter('account_type', $_accountType)->filter('account_id', $_accountId)->getFirstRecord();
+        
         $id = Tinebase_Record_Abstract::generateUID();
-         
+        
         foreach($_grants as $grant) {
-            $data = array(
-                'id'            => $id,
-                'container_id'  => $containerId,
-                'account_type'  => $_accountType,
-                'account_id'    => $accountId,
-                'account_grant' => $grant
-            );
-            $this->_getContainerAclTable()->insert($data);
+            if ($existingGrants === NULL || ! $existingGrants->{$grant}) {
+                $data = array(
+                    'id'            => $id,
+                    'container_id'  => $containerId,
+                    'account_type'  => $_accountType,
+                    'account_id'    => $accountId,
+                    'account_grant' => $grant
+                );
+                $this->_getContainerAclTable()->insert($data);
+            }
         }
-
+        
         $this->_clearCache();
         
         return true;

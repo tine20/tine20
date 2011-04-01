@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -259,7 +258,10 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($grants[1]["readGrant"]);
     }
     
-    public function testOverwriteGrants()
+    /**
+     * testDuplicateGrantsWithSetGrants
+     */
+    public function testDuplicateGrantsWithSetGrants()
     {
         $this->testSetGrants();
         
@@ -279,6 +281,23 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $rows = $stmt->fetchAll();
         
         $this->assertEquals(1, count($rows));
+    }
+    
+    /**
+     * testOverwriteGrantsWithAddGrants
+     * 
+     * -> addGrants() should create no duplicates! 
+     */
+    public function testOverwriteGrantsWithAddGrants()
+    {
+        $result = $this->_instance->addGrants($this->objects['initialContainer'], 'user', Tinebase_Core::getUser()->getId(), array(Tinebase_Model_Grants::GRANT_ADMIN));
+        $this->assertTrue($result);
+        
+        // check num of db rows
+        $stmt = Tinebase_Core::getDb()->query("select * from tine20_container_acl where container_id = ?;", $this->objects['initialContainer']->getId());
+        $rows = $stmt->fetchAll();
+        
+        $this->assertEquals(7, count($rows));
     }
     
     /**
