@@ -430,9 +430,13 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         $result = array();
         
         foreach ($this->getFilterObjects() as $filter) {
-            $field = $filter->getField();
-            if (array_key_exists('options', $this->_filterModel[$field]) && array_key_exists('requiredCols', $this->_filterModel[$field]['options'])) {
-                $result = array_merge($result, $this->_filterModel[$field]['options']['requiredCols']);
+            if ($filter instanceof Tinebase_Model_Filter_Abstract) {
+                $field = $filter->getField();
+                if (array_key_exists('options', $this->_filterModel[$field]) && array_key_exists('requiredCols', $this->_filterModel[$field]['options'])) {
+                    $result = array_merge($result, $this->_filterModel[$field]['options']['requiredCols']);
+                }
+            } else if ($filter instanceof Tinebase_Model_Filter_FilterGroup) {
+                $result = array_merge($result, $filter->getRequiredColumnsForSelect());
             }
         }
         
