@@ -268,10 +268,6 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
             new Tinebase_Model_Grants(array(
                     'account_id'     => Tinebase_Core::getUser()->getId(),
                     'account_type'   => 'user',
-                    Tinebase_Model_Grants::GRANT_READ      => true,
-                    Tinebase_Model_Grants::GRANT_ADD       => false,
-                    Tinebase_Model_Grants::GRANT_EDIT      => true,
-                    Tinebase_Model_Grants::GRANT_DELETE    => true,
                     Tinebase_Model_Grants::GRANT_ADMIN     => true
              ))
         );
@@ -279,7 +275,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, count($grants));
         
         // check num of db rows
-        $rows = Tinebase_Core::getDb()->query("select * from tine20_container_acl where container_id = ?;", $this->objects['initialContainer']->getId());
+        $stmt = Tinebase_Core::getDb()->query("select * from tine20_container_acl where container_id = ?;", $this->objects['initialContainer']->getId());
+        $rows = $stmt->fetchAll();
+        
         $this->assertEquals(1, count($rows));
     }
     
