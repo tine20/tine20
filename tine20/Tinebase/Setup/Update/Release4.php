@@ -161,4 +161,33 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '4.4');
     }
+    
+    /**
+     * update to 4.5
+     * - remove container acl duplicates
+     */
+    public function update_4()
+    {
+        $tablePrefix = SQL_TABLE_PREFIX;
+        
+        $brokenACLs = $this->_db->query("
+            SELECT *, COUNT(`container_id`) as `cnt` 
+            FROM `{$tablePrefix}container_acl`
+            GROUP BY `container_id`, `account_type`, `account_id`, `account_grant`
+            HAVING `cnt` > 1;
+        ")->fetchAll(Zend_Db::FETCH_ASSOC);
+        
+        $deleteCount = 0;
+        foreach ($brokenACLs as $brokenACL) {
+            $deleteCount += $this->_db->delete("{$tablePrefix}container_acl", array(
+                "`container_id` = ?" => $brokenACL['container_id'],
+                "`account_type` LIKE ?" => $brokenACL['account_type'],
+                "`account_id` LIKE ?" => $brokenACL['account_id'],
+                "`account_grant` LIKE ?" => $brokenACL['account_grant'],
+                "`id` NOT LIKE ?" => $brokenACL['id'],
+            ));
+        }
+        
+        $this->setApplicationVersion('Tinebase', '4.5');
+    }
 }
