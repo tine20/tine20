@@ -1,0 +1,2 @@
+<?php
+class qCal_DateTime_Exception_InvalidRecurrenceRule extends qCal_DateTime_Exception {}
