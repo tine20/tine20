@@ -833,7 +833,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                /* select */ array('*', 'account_grants' => "GROUP_CONCAT(container_acl.account_grant)")
+                /* select */ array('*', 'account_grants' => "GROUP_CONCAT( DISTINCT container_acl.account_grant)")
             )
             ->group(array('container.id', 'container_acl.account_type', 'container_acl.account_id'));
             
@@ -884,7 +884,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 ->join(array(
                     /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                     /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                    /* select */ array('*', 'account_grants' => "GROUP_CONCAT(container_acl.account_grant)")
+                    /* select */ array('*', 'account_grants' => "GROUP_CONCAT( DISTINCT container_acl.account_grant)")
                 )
                 ->group('container_acl.account_grant');
     
@@ -928,7 +928,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             ->join(array(
                 /* table  */ 'container_acl' => SQL_TABLE_PREFIX . 'container_acl'), 
                 /* on     */ "{$this->_db->quoteIdentifier('container_acl.container_id')} = {$this->_db->quoteIdentifier('container.id')}",
-                /* select */ array('*', 'account_grants' => "GROUP_CONCAT(container_acl.account_grant)")
+                /* select */ array('*', 'account_grants' => "GROUP_CONCAT( DISTINCT container_acl.account_grant)")
             )
             ->joinLeft(array(
                 /* table  */ 'owner' => SQL_TABLE_PREFIX . 'container_acl'), 
