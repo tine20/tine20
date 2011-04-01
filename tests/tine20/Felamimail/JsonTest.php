@@ -396,7 +396,9 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // check if message is in sent folder
         $message = $this->_searchForMessageBySubject($messageToSend['subject'], $this->_account->sent_folder);
+        //print_r($message);
         $this->assertEquals($message['from_email'], $messageToSend['from_email']);
+        $this->assertTrue(isset($message['to'][0]));
         $this->assertEquals($message['to'][0],      $messageToSend['to'][0], 'recipient not found');
         $this->assertEquals($message['subject'],    $messageToSend['subject']);
         
