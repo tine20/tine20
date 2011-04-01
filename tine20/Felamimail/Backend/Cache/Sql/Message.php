@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 
 /**
@@ -38,24 +37,28 @@ class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_SearchIm
      */
     protected $_foreignTables = array(
         'to'    => array(
-            'table'  => 'felamimail_cache_message_to',
-            'joinOn' => 'message_id',
-            'field'  => 'email'
+            'table'     => 'felamimail_cache_message_to',
+            'joinOn'    => 'message_id',
+            'field'     => 'email',
+            'preserve'  => TRUE,
         ),
         'cc'    => array(
             'table'  => 'felamimail_cache_message_cc',
             'joinOn' => 'message_id',
-            'field'  => 'email'
+            'field'  => 'email',
+            'preserve'  => TRUE,
         ),
         'bcc'    => array(
             'table'  => 'felamimail_cache_message_bcc',
             'joinOn' => 'message_id',
-            'field'  => 'email'
+            'field'  => 'email',
+            'preserve'  => TRUE,
         ),
         'flags'    => array(
             'table'         => 'felamimail_cache_message_flag',
             'joinOn'        => 'message_id',
             'field'         => 'flag',
+            'preserve'  => TRUE,
         ),
     );
 
