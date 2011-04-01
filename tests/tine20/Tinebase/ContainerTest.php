@@ -259,6 +259,30 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($grants[1]["readGrant"]);
     }
     
+    public function testOverwriteGrants()
+    {
+        $this->testSetGrants();
+        
+        $newGrants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
+        $newGrants->addRecord(
+            new Tinebase_Model_Grants(array(
+                    'account_id'     => Tinebase_Core::getUser()->getId(),
+                    'account_type'   => 'user',
+                    Tinebase_Model_Grants::GRANT_READ      => true,
+                    Tinebase_Model_Grants::GRANT_ADD       => false,
+                    Tinebase_Model_Grants::GRANT_EDIT      => true,
+                    Tinebase_Model_Grants::GRANT_DELETE    => true,
+                    Tinebase_Model_Grants::GRANT_ADMIN     => true
+             ))
+        );
+        $grants = $this->_instance->setGrants($this->objects['initialContainer'], $newGrants);
+        $this->assertEquals(1, count($grants));
+        
+        // check num of db rows
+        $rows = Tinebase_Core::getDb()->query("select * from tine20_container_acl where container_id = ?;", $this->objects['initialContainer']->getId());
+        $this->assertEquals(1, count($rows));
+    }
+    
     /**
      * try to other users who gave grants to current account
      *
