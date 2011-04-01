@@ -45,7 +45,7 @@ class Tinebase_Export
             // export plugin needs the definition id
             $_additionalOptions = array_merge($_additionalOptions, $_options);
             
-        } else if (array_key_exists('format', $_options)) {
+        } else if (array_key_exists('format', $_options) && ! empty($_options['format'])) {
             $appName = $_filter->getApplicationName();
             $model = $_filter->getModelName();
             
