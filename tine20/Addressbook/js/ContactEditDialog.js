@@ -4,8 +4,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -20,7 +19,6 @@ Ext.ns('Tine.Addressbook');
  * Addressbook Edit Dialog <br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
@@ -440,8 +438,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
         var downloader = new Ext.ux.file.Download({
             params: {
                 method: 'Addressbook.exportContacts',
-                _filter: this.record.id,
-                _format: 'pdf'
+                filter: this.record.id,
+                options: Ext.util.JSON.encode({
+                    format: 'pdf'
+                })
             }
         });
         downloader.start();
