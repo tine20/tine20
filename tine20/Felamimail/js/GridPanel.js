@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -23,7 +22,6 @@ Ext.namespace('Tine.Felamimail');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor
@@ -49,6 +47,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @type Number
      */
     deleteTransactionId: null,
+    
+    /**
+     * this is true if messages are moved/deleted
+     * 
+     * @type Boolean
+     */
+    movingOrDeleting: false,
     
     /**
      * @private model cfg
@@ -163,7 +168,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     }
                 }
                 
-                if (refresh) {
+                if (refresh && this.noDeleteRequestInProgress()) {
+                    Tine.log.debug('Refresh grid because of folder update.');
                     this.loadGridData({
                         removeStrategy: 'keepBuffered'
                     });
@@ -629,6 +635,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Boolean} toTrash
      */
     moveOrDeleteMessages: function(folder, toTrash) {
+        
+        // this is needed to prevent grid reloads while messages are moved or deleted
+        this.movingOrDeleting = true;
+        
         var sm = this.getGrid().getSelectionModel(),
             filter = sm.getSelectionFilter(),
             msgsIds = [];
@@ -745,12 +755,26 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onAfterDelete: function(ids, folder) {
         this.editBuffer = this.editBuffer.diff(ids);
+        this.movingOrDeleting = false;
 
-        if (! this.deleteTransactionId || ! Tine.Felamimail.messageBackend.isLoading(this.deleteTransactionId)) {
+        if (this.noDeleteRequestInProgress()) {
+            Tine.log.debug('Loading grid data after delete.');
             this.loadGridData({
                 removeStrategy: 'keepBuffered'
             });
         }
+    },
+    
+    /**
+     * check if delete/move action is running atm
+     * 
+     * @return {Boolean}
+     */
+    noDeleteRequestInProgress: function() {
+        return (
+            ! this.movingOrDeleting && 
+            (! this.deleteTransactionId || ! Tine.Felamimail.messageBackend.isLoading(this.deleteTransactionId))
+        );
     },
     
     /**
