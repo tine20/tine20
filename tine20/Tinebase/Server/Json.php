@@ -186,15 +186,17 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
     protected function _getTraceAsArray(Exception $_exception)
     {
         $trace = $_exception->getTrace();
-        $exceptionData['trace'] = array();
+        $traceArray = array();
         
         foreach($trace as $part) {
             if (array_key_exists('file', $part)) {
                 // don't send full paths to the client
                 $part['file'] = $this->_replaceBasePath($part['file']);
             }
-            $exceptionData['trace'][] = $part;
+            $traceArray[] = $part;
         }
+        
+        return $traceArray;
     }
     
     /**
