@@ -193,8 +193,12 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
                 // don't send full paths to the client
                 $part['file'] = $this->_replaceBasePath($part['file']);
             }
+            // unset args to make sure no passwords are shown
+            unset($part['args']);
             $traceArray[] = $part;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . print_r($traceArray, TRUE));
         
         return $traceArray;
     }
@@ -202,7 +206,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
     /**
      * replace base path in string
      * 
-     * @param string $_string
+     * @param string|array $_string
      * @return string
      */
     protected function _replaceBasePath($_string)
@@ -221,6 +225,9 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
             $traceString = $_exception->getTraceAsString();
             $traceString = $this->_replaceBasePath($traceString);
+            // remove login pws
+            $traceString = preg_replace("/->login\('([^']*)', '[^']*'/", "->login('$1', '********'", $traceString);
+             
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $traceString);
         }
     }
