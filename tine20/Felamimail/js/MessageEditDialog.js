@@ -5,8 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
- *
  */
  
 Ext.namespace('Tine.Felamimail');
@@ -25,7 +23,6 @@ Ext.namespace('Tine.Felamimail');
  * 
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor
@@ -381,18 +378,17 @@ Ext.namespace('Tine.Felamimail');
             var replyTo = this.replyTo.get('headers')['reply-to'];
             
             this.to = [replyTo ? replyTo : this.replyTo.get('from_name') + ' <' + this.replyTo.get('from_email') + '>'];
-                
+            
             if (this.replyToAll) {
                 this.to = this.to.concat(this.replyTo.get('to'));
                 this.cc = this.replyTo.get('cc');
                 
-                // remove own email from to/cc
+                // remove own email and all non-email strings from to/cc
                 var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
-                    emailRegexp = new RegExp(account.get('email'));
-                    
+                    ownEmailRegexp = new RegExp(account.get('email'));
                 Ext.each(['to', 'cc'], function(field) {
                     for (var i=0; i < this[field].length; i++) {
-                        if (emailRegexp.test(this[field][i])) {
+                        if (ownEmailRegexp.test(this[field][i]) || ! this[field][i].match(/@/)) {
                             this[field].splice(i, 1);
                         }
                     }
