@@ -278,6 +278,13 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
                 this.startEditing.defer(50, this, [this.activeEditor.row, this.activeEditor.col]);
                 return true;
             }
+        } else if (e.getKey() == e.ESC) {
+            // TODO should ESC close the compose window if search combo is already empty?
+//            if (value == '') {
+//                this.fireEvent('specialkey', this, e);
+//            }
+            this.startEditing.defer(50, this, [this.activeEditor.row, this.activeEditor.col]);
+            return true;
         }
 
         // jump to subject if we are in the last row and it is empty
