@@ -5,9 +5,8 @@
  * @package     Tinebase
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -151,7 +150,7 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
      * @param Zend_Json_Server $server
      * @param Zend_Json_Server_Request_Http $request
      * @param Exception $exception
-     * @return string json data
+     * @return Zend_Json_Server_Response
      */
     protected function _handleException($server, $request, $exception)
     {
@@ -160,17 +159,21 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         $exceptionData['code']    = $exception->getCode();
         if (Tinebase_Core::getConfig()->suppressExceptionTraces !== TRUE) {
             $trace = $exception->getTrace();
+            $exceptionString = $exception->__toString();
             
             $exceptionData['trace'] = array();
             $basePath = dirname(dirname(dirname(__FILE__)));
             
             foreach($trace as $part) {
                 if (array_key_exists('file', $part)) {
-                    // don't send full pathes to the client
+                    // don't send full paths to the client
                     $part['file'] = str_replace($basePath, '...', $part['file']);
                 }
                 $exceptionData['trace'][] = $part;
             }
+            $exceptionString = str_replace($basePath, '...', $exceptionString);
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $exceptionString);
         }
         
         $server->fault($exceptionData['message'], $exceptionData['code'], $exceptionData);
@@ -183,8 +186,6 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
             $response->setVersion($version);
         }
     
-        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $exception);
-        
         return $response;
     }
     
