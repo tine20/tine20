@@ -84,10 +84,12 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
         $user = NULL;
         if ($accessLog->result == Tinebase_Auth::SUCCESS) {
             $user = $this->_getLoginUser($authResult->getIdentity(), $accessLog);
-            $this->_checkUserStatus($user, $accessLog);
+            if ($user !== NULL) {
+                $this->_checkUserStatus($user, $accessLog);
+            }
         }
         
-        if ($accessLog->result === Tinebase_Auth::SUCCESS && $user && $user->accountStatus === Tinebase_User::STATUS_ENABLED) {
+        if ($accessLog->result === Tinebase_Auth::SUCCESS && $user !== NULL && $user->accountStatus === Tinebase_User::STATUS_ENABLED) {
             $this->_initUser($user, $accessLog, $_password);
             $result = true;
         } else {
@@ -110,7 +112,8 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
     protected function _getLoginUser($_username, Tinebase_Model_AccessLog $_accessLog)
     {
         $accountsController = Tinebase_User::getInstance();
-        
+        $user = NULL;
+                
         try {
             // does the user exist in the user database?
             if ($accountsController instanceof Tinebase_User_Interface_SyncAble) {
@@ -118,9 +121,11 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
             }
             $user = $accountsController->getFullUserByLoginName($_username);
         } catch (Tinebase_Exception_NotFound $e) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 'Account ' . $_username . ' not found in account storage.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Account ' . $_username . ' not found in account storage.');
             $_accessLog->result = Tinebase_Auth::FAILURE_IDENTITY_NOT_FOUND;
-            $user = NULL;
+        } catch (Zend_Db_Adapter_Exception $zdae) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Some database connection failed: ' . $zdae->getMessage());
+            $_accessLog->result = Tinebase_Auth::FAILURE_DATABASE_CONNECTION;
         }
         
         return $user;
@@ -219,7 +224,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
      */
     protected function _loginFailed($_loginname, Tinebase_Model_AccessLog $_accessLog)
     {
-        $accountsController->setLastLoginFailure($_loginname);
+        Tinebase_User::getInstance()->setLastLoginFailure($_loginname);
         
         $_accessLog->login_name = $_loginname;
         $_accessLog->lo = Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG);
