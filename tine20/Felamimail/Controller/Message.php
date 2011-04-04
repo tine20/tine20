@@ -1022,7 +1022,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                     $part->encoding = ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
                 }
                 
-                $part->disposition = Zend_Mime::ENCODING_BASE64; // is needed for attachment filenames
+                $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
                 $part->filename = $attachment['name'];
                 $part->type = $attachment['type'] . '; name="' . $attachment['name'] . '"';
                 
