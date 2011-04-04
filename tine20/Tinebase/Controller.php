@@ -166,7 +166,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
     protected function _initUser(Tinebase_Model_FullUser $_user, Tinebase_Model_AccessLog $_accessLog, $_password)
     {
         if ($_accessLog->result === Tinebase_Auth::SUCCESS && $_user->accountStatus === Tinebase_User::STATUS_ENABLED) {
-            $this->_initSessionAfterLogin($_user);
+            $this->_initUserSession($_user);
             
             Tinebase_Core::set(Tinebase_Core::USER, $_user);
             
@@ -192,7 +192,7 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
      * 
      * @param Tinebase_Model_FullUser $_user
      */
-    protected function _initSessionAfterLogin(Tinebase_Model_FullUser $_user)
+    protected function _initUserSession(Tinebase_Model_FullUser $_user)
     {
         if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONUSERAGENTVALIDATION, NULL, TRUE)->value) {
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
