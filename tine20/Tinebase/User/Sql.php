@@ -409,9 +409,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         return $result;
     }
     
+    /**
+     * set last login failure in accounts table
+     * 
+     * @param string $_loginName
+     * @see Tinebase/User/Tinebase_User_Interface::setLastLoginFailure()
+     */
     public function setLastLoginFailure($_loginName)
     {
-        Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Invalid password provided for: ' . $_loginName);
+        Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Login of user ' . $_loginName . ' failed.');
         
         try {
             $user = $this->getUserByLoginName($_loginName);
