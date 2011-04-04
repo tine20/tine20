@@ -485,6 +485,14 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'value' => FALSE,
         )), $this->_getPaging('is_billable_combined'));
         $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
+
+        // search again with is_billable filter and no sorting
+        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(array(
+            'field' => 'is_billable_combined', 
+            'operator' => 'equals', 
+            'value' => FALSE,
+        )), $this->_getPaging());
+        $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
     }
 
     /******* persistent filter tests *****************/
