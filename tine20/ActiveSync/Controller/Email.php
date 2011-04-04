@@ -537,21 +537,17 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         // get folders
         $folderController = Felamimail_Controller_Folder::getInstance();
-        
-        $filter = new Felamimail_Model_FolderFilter(array(
-            array(
-                'field'     => 'account_id',
-                'operator'  => 'equals',
-                'value'     => $account->getId()
-            )
-        ));
-        
-        $folders = $folderController->getSubfolders($account->getId(), '');
+        $folders = $folderController->getSubfolders($account->getId(), $account->ns_personal);
 
         $result = array();
-        
         foreach ($folders as $folder) {
-            if (!empty($folder['parent'])) {
+            // skip folders in shared namespace
+            if (preg_match('/^' . $account->ns_shared . '/', $folder->globalname)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Skipping folder in shared namespace: ' . $folder->globalname);
+                continue;
+            }
+            
+            if (! empty($folder->parent)) {
                 try {
                     $parent   = $folderController->getByBackendAndGlobalName($folder->account_id, $folder->parent);
                     $parentId = $parent->getId();
@@ -562,7 +558,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 $parentId = 0;
             }
             
-            $result[$folder['id']] = array(
+            $result[$folder->getId()] = array(
                 'folderId'      => $folder['id'],
                 'parentId'      => $parentId,
                 'displayName'   => $folder['localname'],
@@ -570,7 +566,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             );
         }
         
-        #if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " folder result " . print_r($result, true));
         
         return $result;
     }
