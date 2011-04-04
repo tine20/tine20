@@ -198,8 +198,6 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
             $traceArray[] = $part;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . print_r($traceArray, TRUE));
-        
         return $traceArray;
     }
     
