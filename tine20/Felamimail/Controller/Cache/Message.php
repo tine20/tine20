@@ -866,7 +866,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         foreach ($_messages as $cachedMessage) {
             if (array_key_exists($cachedMessage->messageuid, $_flags)) {
                 $newFlags = $_flags[$cachedMessage->messageuid]['flags'];
-                $cachedFlags = array_intersect($cachedMessage->flags, array_keys(Felamimail_Controller_Message::getInstance()->getSupportedFlags(FALSE)));
+                $cachedFlags = array_intersect($cachedMessage->flags, array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE)));
                 $diff1 = array_diff($cachedFlags, $newFlags);
                 $diff2 = array_diff($newFlags, $cachedFlags);
                 if (count($diff1) > 0 || count($diff2) > 0) {

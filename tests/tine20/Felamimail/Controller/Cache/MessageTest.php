@@ -236,8 +236,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($unreadcount+1, $updatedFolder->cache_unreadcount, 'unreadcount should have been increased by 1');
         
         // mark message as seen twice
-        Felamimail_Controller_Message::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
-        Felamimail_Controller_Message::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
         $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
         $this->assertEquals($unreadcount, $updatedFolder->cache_unreadcount, 'unreadcount should be the same as before');
     }    
@@ -287,7 +287,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         // appended messages already have the SEEN flag
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags), 'SEEN flag not found: ' . print_r($message->flags, TRUE));
         // add another flag
-        Felamimail_Controller_Message::getInstance()->addFlags($message, Zend_Mail_Storage::FLAG_ANSWERED);
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, Zend_Mail_Storage::FLAG_ANSWERED);
         
         while (! isset($updatedFolder) || $updatedFolder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
             $updatedFolder = $this->_controller->updateCache($this->_folder, 30);

@@ -273,7 +273,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter = $filterData;
         }
         
-        $affectedFolders = Felamimail_Controller_Message::getInstance()->addFlags($filter, (array) $flags);
+        $affectedFolders = Felamimail_Controller_Message_Flags::getInstance()->addFlags($filter, (array) $flags);
         
         return array(
             'status'    => 'success',
@@ -300,7 +300,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $filter = $filterData;
         }
-        $affectedFolders = Felamimail_Controller_Message::getInstance()->clearFlags($filter, (array) $flags);
+        $affectedFolders = Felamimail_Controller_Message_Flags::getInstance()->clearFlags($filter, (array) $flags);
         
         return array(
             'status' => 'success'
@@ -535,7 +535,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             );
         }
         
-        $supportedFlags = Felamimail_Controller_Message::getInstance()->getSupportedFlags();
+        $supportedFlags = Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags();
         
         $result = array(
             'accounts'              => $accounts,

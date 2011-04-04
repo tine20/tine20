@@ -398,7 +398,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " moved entry $_id to trash folder");
         } else {
             // set delete flag
-            $this->_contentController->addFlags($_id, Zend_Mail_Storage::FLAG_DELETED);
+            Felamimail_Controller_Message_Flags::getInstance()->addFlags($_id, Zend_Mail_Storage::FLAG_DELETED);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " deleted entry " . $_id);
         }
     }
@@ -441,9 +441,9 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if(isset($xmlData->Read)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " CollectionId: $_collectionId Id: $_id set read flag: $xmlData->Read");
             if((int)$xmlData->Read === 1) {
-                $this->_contentController->addFlags($_id, Zend_Mail_Storage::FLAG_SEEN);
+                Felamimail_Controller_Message_Flags::getInstance()->addFlags($_id, Zend_Mail_Storage::FLAG_SEEN);
             } else {
-                $this->_contentController->clearFlags($_id, Zend_Mail_Storage::FLAG_SEEN);
+                Felamimail_Controller_Message_Flags::getInstance()->clearFlags($_id, Zend_Mail_Storage::FLAG_SEEN);
             }
             
             $message = $this->_contentController->get($_id);
