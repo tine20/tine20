@@ -4,9 +4,8 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * @todo        add generic mechanism for value pre/postfixes? (see accountLoginNamePrefix in Admin_User_Import)
  * @todo        add more conversions e.g. date/accounts
@@ -23,6 +22,7 @@
  * 
  * some documentation for the xml import definition:
  * 
+ * <delimiter>TAB</delimiter>:           use tab as delimiter
  * <config> main tags
  * <container_id>34</container_id>:     container id for imported records (required)
  * <encoding>UTF-8</encoding>:          encoding of input file
@@ -43,9 +43,6 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
     protected $_options = array(
         'maxLineLength'     => 8000,
         'delimiter'         => ',',
-        'specialDelimiter'  => array(
-            'TAB'   => "\t"
-        ),
         'enclosure'         => '"',
         'escape'            => '\\',
         'encoding'          => 'UTF-8',
@@ -68,6 +65,15 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      * @var Tinebase_Controller_Record_Interface
      */
     protected $_controller = NULL;
+
+    /**
+     * special delimiters
+     * 
+     * @var array
+     */
+    protected $_specialDelimiter = array(
+        'TAB'   => "\t"
+    );
     
     /**
      * constructs a new importer from given config
@@ -172,10 +178,12 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
      */
     protected function _getRawData($_resource) 
     {
+        $delimiter = (array_key_exists($this->_options['delimiter'], $this->_specialDelimiter)) ? $this->_specialDelimiter[$this->_options['delimiter']] : $this->_options['delimiter'];
+        
         $lineData = fgetcsv(
             $_resource, 
             $this->_options['maxLineLength'], 
-            $this->_options['delimiter'], 
+            $delimiter,
             $this->_options['enclosure'] 
             // escape param is only available in PHP >= 5.3.0
             // $this->_options['escape']
