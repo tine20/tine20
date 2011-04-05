@@ -394,7 +394,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         if ($_options['deletesAsMoves'] === true && !empty($account->trash_folder)) {
             // move message to trash folder
             $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account, $account->trash_folder);
-            $this->_contentController->moveMessages($_id, $trashFolder);
+            Felamimail_Controller_Message_Move::getInstance()->moveMessages($_id, $trashFolder);
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " moved entry $_id to trash folder");
         } else {
             // set delete flag
@@ -580,7 +580,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
             )
         ));
         
-        Felamimail_Controller_Message::getInstance()->moveMessages($filter, $_dstFolder);
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $_dstFolder);
         
         return $_srcItem;
     }

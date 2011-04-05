@@ -896,7 +896,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
-        $this->_controller->moveMessages($cachedMessage, $folder);
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($cachedMessage, $folder);
         $message = $this->_searchMessage('multipart/mixed', $folder);
         
         $folder = $this->_cache->updateCache($folder, 30);
