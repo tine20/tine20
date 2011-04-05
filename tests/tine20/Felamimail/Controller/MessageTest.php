@@ -26,11 +26,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected $_controller = NULL;
     
     /**
-     * @var Felamimail_Controller_Message_Get
-     */
-    protected $_getController = NULL;
-    
-    /**
      * @var Felamimail_Model_Account
      */
     protected $_account = NULL;
@@ -92,7 +87,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Message::getInstance();
-        $this->_getController = Felamimail_Controller_Message_Get::getInstance();
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
         
         $this->_folder     = $this->_getFolder($this->_testFolderName);
@@ -564,7 +558,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
-        $message = $this->_getController->getCompleteMessage($cachedMessage);
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertEquals('robbat2@gentoo.org', $message->from_email);
         $this->assertEquals($this->_account->getId(), $message->account_id);
         $this->assertEquals('Robin H. Johnson', $message->from_name);
@@ -598,7 +592,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
                     $fileName = 'other/' . $item->getFileName();
                     echo "\nchecking message: " . $fileName;
                     $cachedMessage = $this->messageTestHelper($fileName, $item->getFileName());
-                    $message = $this->_getController->getCompleteMessage($cachedMessage);
+                    $message = $this->_controller->getCompleteMessage($cachedMessage);
                     echo $message->body;
                     $this->assertTrue(! empty($message->body));
                 }
@@ -613,7 +607,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
         
-        $message = $this->_getController->getCompleteMessage($cachedMessage);
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertEquals('1', $message->text_partid, 'no text part found');
         $this->assertEquals('1', $message->has_attachment, 'no attachments found');
@@ -632,7 +626,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
         
-        $message = $this->_getController->getCompleteMessage($cachedMessage);
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertEquals('multipart/mixed', $message->content_type);
         $this->assertEquals('5377', $message->size);
         $this->assertContains("Fwd: [Officespot-cs-svn] r15209 - trunk/tine20/Tinebase", $message->subject);
@@ -647,7 +641,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('Amazon.eml', 'multipart/amazon');
         
-        $message = $this->_getController->getCompleteMessage($cachedMessage);
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertEquals('multipart/alternative', $message->content_type);
         $this->assertContains('Samsung Wave S8500 Smartphone', $message->subject);
         $this->assertContains('Sie suchen Produkte aus der Kategorie Elektronik &amp; Foto?', $message->body);
@@ -660,7 +654,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('Amazon2.eml', 'multipart/amazon2');
         
-        $message = $this->_getController->getCompleteMessage($cachedMessage);
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertContains('Fritz Meier, wir haben Empfehlungen', $message->body);
         $this->assertNotContains('<img', $message->body); 
@@ -675,7 +669,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('Angebotsformular.eml', 'text/angebot');
         
-        $message = $this->_getController->getCompleteMessage($cachedMessage);
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
         $this->assertEquals('text/plain', $message->content_type);
         $this->assertContains('Angebotsformular', $message->subject);
         $this->assertContains('*Formular-Weiterleitungs-Service*', $message->body);
@@ -688,7 +682,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('UmlauteUTF8TextISO-8859-15Signatur.eml', 'text/different');
         
-        $message = $this->_getController->getCompleteMessage($cachedMessage);
+        $message = $this->_controller->getCompleteMessage($cachedMessage);
         //print_r($message->toArray());
         $this->assertEquals('text/plain', $message->content_type);
         $this->assertContains('Umlaute UTF8 Text + ISO-8859-15 Signatur', $message->subject);
@@ -702,7 +696,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('multipart_rfc2822.eml', 'multipart/rfc2822');
         
-        $message = $this->_getController->getCompleteMessage($cachedMessage, 2);
+        $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
         $this->assertEquals('4121', $message->size);
         $this->assertContains("[Officespot-cs-svn] r15209 - trunk/tine20/Tinebase", $message->subject);
         $this->assertContains('getLogger()-&gt;debug', $message->body);
@@ -715,7 +709,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('multipart_rfc2822-2.eml', 'multipart/rfc2822-2');
         
-        $message = $this->_getController->getCompleteMessage($cachedMessage, 2);
+        $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
         #var_dump($message->toArray());
         #$this->assertEquals('1', $message->text_partid);
         #$this->assertEquals('2.1', $message->html_partid);
@@ -788,7 +782,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('INBOX'));
         $forwardedMessageInSent = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $sentFolder);
-        $completeForwardedMessage = $this->_getController->getCompleteMessage($forwardedMessage);
+        $completeForwardedMessage = $this->_controller->getCompleteMessage($forwardedMessage);
         
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
         $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name']);
@@ -847,7 +841,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testGetMessageWithoutFromHeader()
     {
         $cachedMessage = $this->messageTestHelper('withoutfrom.eml', 'text/withoutfrom');
-        $completeMessage = $this->_getController->getCompleteMessage($cachedMessage);
+        $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertContains('Hier ist Ihr Hot Web Email-Deal Angebot von M&amp;M Computer.', $completeMessage->body);
     }
@@ -858,7 +852,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testGetMessageWithCommaInTo()
     {
         $cachedMessage = $this->messageTestHelper('mail_to_comma.eml', 'text/comma');
-        $completeMessage = $this->_getController->getCompleteMessage($cachedMessage);
+        $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertEquals('inscription@arrakeen.net', $completeMessage->to[0]);
         $this->assertEquals('November 2010 Crystal Newsletter - Cut the Rope Update Released!', $completeMessage->subject);
@@ -870,7 +864,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testUnparseableMail()
     {
         $cachedMessage = $this->messageTestHelper('unparseable.eml', 'multipart/unparseable');
-        $completeMessage = $this->_getController->getCompleteMessage($cachedMessage);
+        $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertEquals(1, preg_match('@NIL|Content-Type: image/jpeg@', $completeMessage->body), 'parsed mail body:' . $completeMessage->body);
     }
@@ -881,7 +875,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     public function testGetMessageWithQuotedPrintableDecodeProblem()
     {
         $cachedMessage = $this->messageTestHelper('Terminbestaetigung.eml', 'Terminbestaetigung.eml');
-        $completeMessage = $this->_getController->getCompleteMessage($cachedMessage);
+        $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
         
         $this->assertContains('Veröffentlichungen, Prospekte und Ähnliches bereithalten würden.', $completeMessage->body);
     }
@@ -913,7 +907,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(isset($foundMessage));
         $this->_createdMessages[] = $foundMessage;
-        $completeMessage = $this->_getController->getCompleteMessage($foundMessage);
+        $completeMessage = $this->_controller->getCompleteMessage($foundMessage);
         $this->assertContains('The attached list notes all of the packages that were added or removed', $completeMessage->body);
     }
     

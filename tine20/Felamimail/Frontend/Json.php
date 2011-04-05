@@ -177,7 +177,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $partId    = null;
         }
         
-        $message = Felamimail_Controller_Message_Get::getInstance()->getCompleteMessage($messageId, $partId, false);
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId, $partId, false);
         $message->id = $id;
         
         return $this->_recordToJson($message);
