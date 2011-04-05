@@ -13,7 +13,7 @@
  * SQL Backend for Tasks 2.0
  * 
  * The Tasks 2.0 Sql backend consists of various tables. Properties with single
- * appearance are stored in the egw_tasks table. Properties which could appear
+ * appearance are stored in the tasks table. Properties which could appear
  * more than one time are stored in corresponding tables.
  * 
  * @package     Tasks
@@ -95,8 +95,8 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
     {
         parent::create($_record);
         
-        $taskParts = $this->seperateTaskData($_record);
-        $this->insertDependentRows($taskParts);
+        $taskParts = $this->_seperateTaskData($_record);
+        $this->_insertDependentRows($taskParts);
         
         return $this->get($_record->getId());
     }
@@ -112,9 +112,9 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
     {
         parent::update($_record);
         
-        $taskParts = $this->seperateTaskData($_record);
-        $this->deleteDependentRows($_record->getId());
-        $this->insertDependentRows($taskParts);
+        $taskParts = $this->_seperateTaskData($_record);
+        $this->_deleteDependentRows($_record->getId());
+        $this->_insertDependentRows($taskParts);
         
         return $this->get($_record->getId(), TRUE);
     }
@@ -124,12 +124,12 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
      *
      * @param array $_taskparts
      */
-    protected function insertDependentRows($_taskParts)
+    protected function _insertDependentRows($_taskParts)
     {
         foreach (array('contact') as $table) {
             if (!empty($_taskParts[$table])) {
                 $items = explode(',', $_taskParts[$table]);
-                $TableObject = $this->getTableInstance($table);
+                $TableObject = $this->_getTableInstance($table);
                 foreach ($items as $itemId) {
                     $TableObject->insert(array(
                         'task_id'    => $taskId,
@@ -146,11 +146,11 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
      * @param string $_parentTaskId
      * @return int number of deleted rows
      */
-    protected function deleteDependentRows($_parentTaskId)
+    protected function _deleteDependentRows($_parentTaskId)
     {
         $deletedRows = 0;
         foreach (array('contact') as $table) {
-            $TableObject = $this->getTableInstance($table);
+            $TableObject = $this->_getTableInstance($table);
             $deletedRows += $TableObject->delete(
                 $this->_db->quoteInto('task_id = ?', $_parentTaskId)
             );
@@ -164,11 +164,11 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
      * @param Tasks_Model_Task $_task
      * @return array array of arrays
      */
-    protected function seperateTaskData($_task)
+    protected function _seperateTaskData($_task)
     {
     	$_task->convertDates = true;
         $taskArray = $_task->toArray();
-        $TableDescr = $this->getTableInstance('tasks')->info();
+        $TableDescr = $this->_getTableInstance('tasks')->info();
         $taskparts['tasks'] = array_intersect_key($taskArray, array_flip($TableDescr['cols']));
         
         foreach (array('contact') as $table) {
@@ -187,7 +187,7 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
      * @param string $_tablename
      * @return Tinebase_Db_Table
      */
-    protected function getTableInstance($_tablename)
+    protected function _getTableInstance($_tablename)
     {
         if (!isset($this->_tables[$_tablename])) {
             $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tablePrefix . $this->_tableNames[$_tablename]));
