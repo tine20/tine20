@@ -537,21 +537,12 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
         
         // get folders
         $folderController = Felamimail_Controller_Folder::getInstance();
-        
-        $filter = new Felamimail_Model_FolderFilter(array(
-            array(
-                'field'     => 'account_id',
-                'operator'  => 'equals',
-                'value'     => $account->getId()
-            )
-        ));
-        
         $folders = $folderController->getSubfolders($account->getId(), '');
 
         $result = array();
         
         foreach ($folders as $folder) {
-            if (!empty($folder['parent'])) {
+            if (! empty($folder->parent)) {
                 try {
                     $parent   = $folderController->getByBackendAndGlobalName($folder->account_id, $folder->parent);
                     $parentId = $parent->getId();
@@ -562,11 +553,11 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                 $parentId = 0;
             }
             
-            $result[$folder['id']] = array(
-                'folderId'      => $folder['id'],
+            $result[$folder->getId()] = array(
+                'folderId'      => $folder->getId(),
                 'parentId'      => $parentId,
-                'displayName'   => $folder['localname'],
-                'type'          => $this->_getFolderType($folder['localname'])
+                'displayName'   => $folder->localname,
+                'type'          => $this->_getFolderType($folder->localname)
             );
         }
         
