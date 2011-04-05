@@ -3,10 +3,10 @@
  * Sql Calendar 
  * 
  * @package     Calendar
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +17,7 @@
  * 
  * 
  * @package Calendar 
+ * @subpackage  Backend
  */
 class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
@@ -341,9 +342,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         //       taken into account for grants calculation 
         $attendeeWhere = FALSE;
         if ($_attenderFilter instanceof Calendar_Model_AttenderFilter) {
-            $attedeeSelect = $this->_db->select();
-            $_attenderFilter->appendFilterSql($attedeeSelect, $this);
-            $attendeeWhere = ' AND ' . array_value(0, $attedeeSelect->getPart(Zend_Db_Select::SQL_WHERE));
+            $attendeeSelect = $this->_db->select();
+            $_attenderFilter->appendFilterSql($attendeeSelect, $this);
+            $whereArray = $attendeeSelect->getPart(Zend_Db_Select::SQL_WHERE);
+            if (! empty($whereArray)) {
+                $attendeeWhere = ' AND ' . array_value(0, $whereArray);
+            }
         }
         
         $_select->joinLeft(
