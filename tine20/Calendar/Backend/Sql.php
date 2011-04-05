@@ -156,7 +156,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         // we use a an extra select to reduce data amount where grants etc. have to be computed for.
         // the exdate is already appended here, to reduce virtual row numbers later
-        $subselect = parent::_getSelect('id', $_getDeleted);
+        $subselect = $this->_getSelectSimple('id', $_getDeleted);
         
         $subselect->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'),
@@ -197,7 +197,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $exdates[$row['id']] = $row['exdate'];
         }
 
-        $select = parent::_getSelect('*', $_getDeleted);
+        $select = $this->_getSelectSimple('*', $_getDeleted);
         $select->where($this->_db->quoteInto("{$this->_db->quoteIdentifier('cal_events.id')} IN (?)", !empty($ids) ? $ids : ' ' ));
         
         // append grants filters : only take limited set of attendee into account for grants computation
@@ -242,6 +242,27 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     */
+    protected function _getSelectSimple($_cols = '*', $_getDeleted = FALSE)
+    {        
+        $select = $this->_db->select();
+
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $_cols);
+        
+        if (!$_getDeleted && $this->_modlogActive) {
+            // don't fetch deleted objects
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
+        }
+        
+        return $select;
+    }
+    
+    /**
      * Gets total count of search with $_filter
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
@@ -249,21 +270,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
     {   
-        if ($this->_useSubselectForCount) {
-            // use normal search query as subselect to get count -> select count(*) from (select [...]) as count
-            $select = $this->_getSelect();
-            $this->_addFilter($select, $_filter);
-            $countSelect = $this->_db->select()->from($select, array('count' => 'COUNT(*)'));
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect->__toString());
-            
-            $result = $this->_db->fetchOne($countSelect);
-        } else {
-            $select = $this->_getSelect(array('count' => 'COUNT(*)'));
-            $this->_addFilter($select, $_filter);
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+        $select = $this->_getSelect(array('count' => 'COUNT(*)'));
+        $this->_addFilter($select, $_filter);
 
-            $result = $this->_db->fetchOne($select);
-        }
+        $result = $this->_db->fetchOne($select);
         
         return $result;        
     }    
@@ -299,8 +309,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
-        $select = parent::_getSelect($_cols, $_getDeleted);
-        
+        $select = $this->_getSelectSimple();
+
         $this->_appendEffectiveGrantCalculationSql($select);
         
         $select->joinLeft(
