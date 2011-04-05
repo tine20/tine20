@@ -6,8 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -24,7 +23,7 @@
  * @todo    add function for complete removal of tasks?
  * @todo    split backend (status/tasks)?
  */
-class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
+class Tasks_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
 {
     /**
      * Table name without prefix
@@ -67,6 +66,20 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @var array
      */
     protected $_tables = array();
+    
+    /**
+     * foreign tables (key => tablename)
+     *
+     * @var array
+     */
+    protected $_foreignTables = array(
+        'status'    => array(
+            'table'         => 'tasks_status',
+            'joinOn'        => 'id',
+            'joinId'        => 'status_id',
+            'singleValue'   => TRUE,
+        ),
+    );
     
     /**
      * Creates new entry
@@ -182,32 +195,17 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         return $this->_tables[$_tablename];
     }
     
-    /********************************** protected funcs **********************************/
-    
     /**
      * Returns a common select Object
      * 
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
      * @return Zend_Db_Select
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
-        $cols = (array)$_cols;
-        
-        if (array_key_exists('count', $cols)) {
-            $cols['count'] = "COUNT({$this->_db->quoteIdentifier('tasks.id')})";
-        } else {
-            $cols['is_due'] = "LENGTH({$this->_db->quoteIdentifier('tasks.due')})";
-        }
-        
-        $select = $this->_db->select()
-            ->from(array('tasks' => $this->_tablePrefix . $this->_tableNames['tasks']), $cols)
-            ->joinLeft(array('status'  => $this->_tablePrefix . $this->_tableNames['status']), 'tasks.status_id = status.id', array());
-            
-        if ($_getDeleted !== TRUE) {
-            $select->where($this->_db->quoteIdentifier('tasks.is_deleted') . ' = FALSE');
-        }
+        $select = parent::_getSelect($_cols, $_getDeleted);
         
         return $select;
     }
-   
 }
