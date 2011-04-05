@@ -233,8 +233,8 @@ class Addressbook_Controller_ListTest extends PHPUnit_Framework_TestCase
         
         $list = Addressbook_Controller_List::getInstance()->addListMember($list, $this->objects['contact1']);
         
-        $this->assertTrue(in_array($this->objects['contact1']->getId(), $list->members));
-        $this->assertTrue(in_array($this->objects['contact2']->getId(), $list->members));
+        $this->assertTrue(in_array($this->objects['contact1']->getId(), $list->members), 'contact1 not found in members: ' . print_r($list->members, TRUE));
+        $this->assertTrue(in_array($this->objects['contact2']->getId(), $list->members), 'contact2 not found in members: ' . print_r($list->members, TRUE));
     }
 
     /**
