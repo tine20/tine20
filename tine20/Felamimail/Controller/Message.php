@@ -22,16 +22,6 @@
 class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 {
     /**
-     * imap flags to constants translation
-     * @var array
-     */
-    protected static $_allowedFlags = array('\Answered' => Zend_Mail_Storage::FLAG_ANSWERED,    // _("Answered")
-                                            '\Seen'     => Zend_Mail_Storage::FLAG_SEEN,        // _("Seen")
-                                            '\Deleted'  => Zend_Mail_Storage::FLAG_DELETED,     // _("Deleted")
-                                            '\Draft'    => Zend_Mail_Storage::FLAG_DRAFT,       // _("Draft")
-                                            '\Flagged'  => Zend_Mail_Storage::FLAG_FLAGGED);    // _("Flagged")
-    
-    /**
      * application name (is needed in checkRight())
      *
      * @var string
