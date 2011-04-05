@@ -6,8 +6,7 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -22,12 +21,13 @@ interface Tinebase_Backend_Interface
     /**
      * Search for records matching given filter
      *
-     * @param  Tinebase_Model_Filter_FilterGroup $_filter
-     * @param  Tinebase_Model_Pagination         $_pagination
-     * @param  boolean                           $_onlyIds
+     * 
+     * @param  Tinebase_Model_Filter_FilterGroup    $_filter
+     * @param  Tinebase_Model_Pagination            $_pagination
+     * @param  array|string|boolean                 $_cols columns to get, * per default / use self::IDCOL or TRUE to get only ids
      * @return Tinebase_Record_RecordSet
      */
-    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE);
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_cols = '*');
     
     /**
      * Gets total count of search with $_filter
