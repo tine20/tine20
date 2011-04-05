@@ -3,10 +3,10 @@
  * Tine 2.0
  *
  * @package     Crm
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -15,8 +15,9 @@
  * backend for leads
  *
  * @package     Crm
+ * @subpackage  Backend
  */
-class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
+class Crm_Backend_Lead extends Tinebase_Backend_Sql_SearchImproved
 {
     /**
      * the constructor
@@ -39,7 +40,7 @@ class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
      * 
      * @param $_filter
      * @param $_field
-     * @return unknown_type
+     * @return integer
      * 
      * @todo generalize
      */
