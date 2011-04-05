@@ -198,6 +198,9 @@ function createArchives()
 
                     # cleanup OpenLayers
                     (cd $TEMPDIR/tine20/library/OpenLayers;    rm -rf $(ls | grep -v img | grep -v license.txt | grep -v OpenLayers.js | grep -v theme))
+
+                    # cleanup PHPExcel
+                    (cd $TEMPDIR/tine20/library/PHPExcel/PHPExcel/Shared;  rm -rf PDF)
                     
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library styles config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES release.php setup.php tine20.php"
