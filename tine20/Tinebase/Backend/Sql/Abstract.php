@@ -624,6 +624,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * 
      * @param Zend_Db_Select $_select
      * @param array|string $_cols columns to get, * per default
+     * 
+     * @todo find a way to preserve columns if needed without the need for the preserve setting
+     * @todo get joins from Zend_Db_Select before trying to join the same tables twice (+ remove try/catch)
      */
     protected function _addForeignTableJoins(Zend_Db_Select $_select, $_cols, $_groupBy = NULL)
     {
@@ -657,7 +660,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
                             $cols[$foreignColumn] = $selectArray[$foreignColumn];
                         }
                     } catch (Zend_Db_Select_Exception $zdse) {
-                        // @todo get joins from Zend_Db_Select before trying to join the same tables twice
                         $_select->columns($selectArray, $join['table']);
                     }
                 }
