@@ -23,7 +23,7 @@
  * @todo    add function for complete removal of tasks?
  * @todo    split backend (status/tasks)?
  */
-class Tasks_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
+class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
@@ -193,19 +193,5 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
             $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tablePrefix . $this->_tableNames[$_tablename]));
         }
         return $this->_tables[$_tablename];
-    }
-    
-    /**
-     * Returns a common select Object
-     * 
-     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
-     * @param boolean $_getDeleted get deleted records (if modlog is active)
-     * @return Zend_Db_Select
-     */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {
-        $select = parent::_getSelect($_cols, $_getDeleted);
-        
-        return $select;
     }
 }

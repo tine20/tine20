@@ -14,7 +14,7 @@
  *
  * @package     Felamimail
  */
-class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_SearchImproved
+class Felamimail_Backend_Cache_Sql_Message extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix

@@ -16,7 +16,7 @@
  *
  * @package     Addressbook
  */
-class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_SearchImproved
+class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * Table name without prefix
