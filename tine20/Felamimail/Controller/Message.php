@@ -960,8 +960,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Message $_originalMessage
-     * 
-     * @todo use getMessagePart() for attachments too?
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
     {
@@ -988,8 +986,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
                         continue;
                     }
                     
-                    // get contents from uploaded files
-                    $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
+                    // get contents from uploaded file
+                    $stream = fopen($attachment['path'], 'r');
+                    $part = new Zend_Mime_Part($stream);
                     
                     // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
                     $part->encoding = ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
