@@ -112,32 +112,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * save message in folder (target folder can be within a different account)
-     * 
-     * @param string|Felamimail_Model_Folder $_folder globalname or folder record
-     * @param Felamimail_Model_Message $_message
-     * @return Felamimail_Model_Message
-     */
-    public function saveMessageInFolder($_folder, $_message)
-    {
-        $sourceAccount = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
-        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
-        $targetAccount = ($_message->account_id == $folder->account_id) ? $sourceAccount : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
-        
-        $mailToAppend = $this->_createMailForSending($_message, $sourceAccount);
-        
-        $transport = new Felamimail_Transport();
-        $mailAsString = $transport->getRawMessage($mailToAppend);
-        $flags = ($folder->globalname === $targetAccount->drafts_folder) ? array(Zend_Mail_Storage::FLAG_DRAFT) : null;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Appending message ' . $_message->subject . ' to folder ' . $folder->globalname . ' in account ' . $targetAccount->name);
-        Felamimail_Backend_ImapFactory::factory($targetAccount)->appendMessage($mailAsString, $folder->globalname, $flags);
-        
-        return $_message;
-    }
-    
-    /**
      * append a new message to given folder
      *
      * @param  string|Felamimail_Model_Folder  $_folder   id of target folder

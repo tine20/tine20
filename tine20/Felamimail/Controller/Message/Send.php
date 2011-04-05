@@ -92,6 +92,57 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     }
     
     /**
+     * save message in folder (target folder can be within a different account)
+     * 
+     * @param string|Felamimail_Model_Folder $_folder globalname or folder record
+     * @param Felamimail_Model_Message $_message
+     * @return Felamimail_Model_Message
+     */
+    public function saveMessageInFolder($_folder, $_message)
+    {
+        $sourceAccount = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
+        $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
+        $targetAccount = ($_message->account_id == $folder->account_id) ? $sourceAccount : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
+        
+        $mailToAppend = $this->_createMailForSending($_message, $sourceAccount);
+        
+        $transport = new Felamimail_Transport();
+        $mailAsString = $transport->getRawMessage($mailToAppend);
+        $flags = ($folder->globalname === $targetAccount->drafts_folder) ? array(Zend_Mail_Storage::FLAG_DRAFT) : null;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Appending message ' . $_message->subject . ' to folder ' . $folder->globalname . ' in account ' . $targetAccount->name);
+        Felamimail_Backend_ImapFactory::factory($targetAccount)->appendMessage($mailAsString, $folder->globalname, $flags);
+        
+        return $_message;
+    }
+
+    /**
+     * create new mail for sending via SMTP
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Account $_account
+     * @param array $_nonPrivateRecipients
+     * @param Felamimail_Model_Message $_originalMessage
+     * @return Tinebase_Mail
+     */
+    protected function _createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
+    {
+        // create new mail to send
+        $mail = new Tinebase_Mail('UTF-8');
+        $mail->setSubject($_message->subject);
+        
+        $this->_setMailBody($mail, $_message);
+        $this->_setMailFrom($mail, $_account, $_message);
+        $this->_setMailRecipients($mail, $_message, $_nonPrivateRecipients);
+        $this->_setMailHeaders($mail, $_account, $_message, $_originalMessage);
+        
+        $this->_addAttachments($mail, $_message, $_originalMessage);
+        
+        return $mail;
+    }
+    
+    /**
      * send mail via transport (smtp)
      * 
      * @param Zend_Mail $_mail
@@ -240,31 +291,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
         return $_mail;
-    }
-    
-    /**
-     * create new mail for sending via SMTP
-     * 
-     * @param Felamimail_Model_Message $_message
-     * @param Felamimail_Model_Account $_account
-     * @param array $_nonPrivateRecipients
-     * @param Felamimail_Model_Message $_originalMessage
-     * @return Tinebase_Mail
-     */
-    protected function _createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
-    {
-        // create new mail to send
-        $mail = new Tinebase_Mail('UTF-8');
-        $mail->setSubject($_message->subject);
-        
-        $this->_setMailBody($mail, $_message);
-        $this->_setMailFrom($mail, $_account, $_message);
-        $this->_setMailRecipients($mail, $_message, $_nonPrivateRecipients);
-        $this->_setMailHeaders($mail, $_account, $_message, $_originalMessage);
-        
-        $this->_addAttachments($mail, $_message, $_originalMessage);
-        
-        return $mail;
     }
     
     /**

@@ -243,7 +243,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $message = new Felamimail_Model_Message();
         $message->setFromJsonInUsersTimezone($recordData);
         
-        $result = Felamimail_Controller_Message::getInstance()->saveMessageInFolder($folderName, $message);
+        $result = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($folderName, $message);
         $result = $this->_recordToJson($result);
         
         return $result;
