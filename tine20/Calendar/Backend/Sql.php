@@ -242,6 +242,33 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    {   
+        if ($this->_useSubselectForCount) {
+            // use normal search query as subselect to get count -> select count(*) from (select [...]) as count
+            $select = $this->_getSelect();
+            $this->_addFilter($select, $_filter);
+            $countSelect = $this->_db->select()->from($select, array('count' => 'COUNT(*)'));
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect->__toString());
+            
+            $result = $this->_db->fetchOne($countSelect);
+        } else {
+            $select = $this->_getSelect(array('count' => 'COUNT(*)'));
+            $this->_addFilter($select, $_filter);
+            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
+
+            $result = $this->_db->fetchOne($select);
+        }
+        
+        return $result;        
+    }    
+    
+    /**
      * Updates existing entry
      *
      * @param Tinebase_Record_Interface $_record
