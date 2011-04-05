@@ -113,56 +113,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
 
     /**
-     * update folder count after moving messages
-     * 
-     * @param Tinebase_Record_RecordSet $_messages
-     * @param array $_folderCounterById
-     * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
-     */
-    protected function _updateCountsAfterMove(Tinebase_Record_RecordSet $_messages)
-    {
-        $folderCounterById = array();
-        foreach($_messages as $message) {
-            if (! array_key_exists($message->folder_id, $folderCounterById)) {
-                $folderCounterById[$message->folder_id] = array(
-                    'decrementUnreadCounter'    => 0,
-                    'decrementMessagesCounter'  => 0,
-                );
-            }
-            
-            if (!is_array($message->flags) || !in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags)) {
-                // count messages with seen flag for the first time
-                $folderCounterById[$message->folder_id]['decrementUnreadCounter']++;
-            }
-            $folderCounterById[$message->folder_id]['decrementMessagesCounter']++;
-        }
-        $affectedFolders = $this->_updateFolderCounts($folderCounterById);
-
-        return $affectedFolders;
-    }
-    
-    /**
-     * move messages on imap server
-     * 
-     * @param array $_uids
-     * @param string $_targetFolderName
-     * @param Felamimail_Backend_ImapProxy $_imap
-     * 
-     * @todo perhaps we should check the existance of the messages on the imap instead of catching the exception here
-     */
-    protected function _moveBatchOfMessages($_uids, $_targetFolderName, Felamimail_Backend_ImapProxy $_imap)
-    {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Move ' . count($_uids) . ' messages to folder ' . $_targetFolderName . ' on imap server');
-        try {
-            $_imap->copyMessage($_uids, Felamimail_Model_Folder::encodeFolderName($_targetFolderName));
-            $_imap->addFlags($_uids, array(Zend_Mail_Storage::FLAG_DELETED));
-        } catch (Felamimail_Exception_IMAP $fei) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $fei->getMessage()); 
-        }
-    }
-    
-    /**
      * update folder counts and returns list of affected folders
      * 
      * @param array $_folderCounter (folderId => unreadcounter)
