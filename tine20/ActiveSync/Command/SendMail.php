@@ -95,6 +95,6 @@ class ActiveSync_Command_SendMail
     {
         $mail = Tinebase_Mail::createFromZMM($this->_incomingMessage);
         
-        Felamimail_Controller_Message::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
+        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
     }    
 }

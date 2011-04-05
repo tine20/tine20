@@ -221,7 +221,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r(Zend_Json::decode($recordData), TRUE));
         
         try {
-            $result = Felamimail_Controller_Message::getInstance()->sendMessage($message);
+            $result = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
             $result = $this->_recordToJson($result);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $zmpe->getMessage());

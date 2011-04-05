@@ -56,4 +56,367 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         
         return self::$_instance;
     }
+    
+    /**
+     * send one message through smtp
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @return Felamimail_Model_Message
+     */
+    public function sendMessage(Felamimail_Model_Message $_message)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
+
+        // increase execution time (sending message with attachments can take a long time)
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        
+        // get account
+        $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
+        
+        // get original message
+        try {
+            $originalMessage = ($_message->original_id) ? $this->get($_message->original_id) : NULL;
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Did not find original message.');
+            $originalMessage = NULL;
+        }
+
+        $mail = $this->_createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
+        $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients, $originalMessage);
+        
+        // reset max execution time to old value
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
+        
+        return $_message;
+    }
+    
+    /**
+     * send mail via transport (smtp)
+     * 
+     * @param Zend_Mail $_mail
+     * @param Felamimail_Model_Account $_account
+     * @param boolean $_saveInSent
+     * @param Felamimail_Model_Message $_message
+     * @param array $_nonPrivateRecipients
+     * @param Felamimail_Model_Message $_originalMessage
+     */
+    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, $_saveInSent = false, $_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
+    {
+        $smtpConfig = $_account->getSmtpConfig();
+        if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
+            $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
+            
+            // send message via smtp
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to send message via SMTP ...');
+            Tinebase_Smtp::getInstance()->sendMessage($_mail, $transport);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' successful.');
+            
+            // append mail to sent folder
+            if ($_saveInSent) {
+                $this->_saveInSent($transport, $_account);
+            }
+            
+            if ($_message !== NULL) {
+                // add reply/forward flags if set
+                if (! empty($_message->flags) 
+                    && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
+                    && $_originalMessage !== NULL
+                ) {
+                    Felamimail_Controller_Message_Flags::getInstance()->addFlags($_originalMessage, array($_message->flags));
+                }
+    
+                // add email notes to contacts (only to/cc)
+                if ($_message->note) {
+                    $this->_addEmailNote($_nonPrivateRecipients, $_message->subject, $_message->getPlainTextBody());
+                }
+            }
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message, no smtp config found.');
+        }
+    }
+    
+    /**
+     * add email notes to contacts with email addresses in $_recipients
+     *
+     * @param array $_recipients
+     * @param string $_subject
+     * 
+     * @todo add email home (when we have OR filters)
+     * @todo add link to message in sent folder?
+     */
+    protected function _addEmailNote($_recipients, $_subject, $_body)
+    {
+        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_recipients, TRUE));
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'email', 'operator' => 'in', 'value' => $_recipients)
+            // OR: array('field' => 'email_home', 'operator' => 'in', 'value' => $_recipients)
+        ));
+        $contacts = Addressbook_Controller_Contact::getInstance()->search($filter);
+        
+        if (count($contacts)) {
+        
+            $translate = Tinebase_Translation::getTranslation($this->_applicationName);
+            
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding email notes to ' . count($contacts) . ' contacts.');
+            
+            $noteText = $translate->_('Subject') . ':' . $_subject . "\n\n" . $translate->_('Body') . ':' . substr($_body, 0, 4096);
+            
+            foreach ($contacts as $contact) {
+                $note = new Tinebase_Model_Note(array(
+                    'note_type_id'           => Tinebase_Notes::getInstance()->getNoteTypeByName('email')->getId(),
+                    'note'                   => $noteText,
+                    'record_id'              => $contact->getId(),
+                    'record_model'           => 'Addressbook_Model_Contact',
+                ));
+                
+                Tinebase_Notes::getInstance()->addNote($note);
+            }
+        } else {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Found no contacts to add notes to.');
+        }
+    }
+    
+    /**
+     * append mail to send folder
+     * 
+     * @param Felamimail_Transport $_transport
+     * @param Felamimail_Model_Account $_account
+     * @return void
+     */
+    protected function _saveInSent(Felamimail_Transport $_transport, Felamimail_Model_Account $_account)
+    {
+        try {
+            $mailAsString = $_transport->getRawMessage();
+            $sentFolder = ($_account->sent_folder && ! empty($_account->sent_folder)) ? $_account->sent_folder : 'Sent';
+            
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder (' . $sentFolder . ') ...');
+            Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder);
+            
+            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Saved sent message in "' . $sentFolder . '".'
+            );
+        } catch (Zend_Mail_Protocol_Exception $zmpe) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                . ' Could not save sent message in "' . $sentFolder . '".'
+                . ' Please check if a folder with this name exists.'
+                . '(' . $zmpe->getMessage() . ')'
+            );
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                . ' Could not save sent message in "' . $sentFolder . '".'
+                . ' Please check if a folder with this name exists.'
+                . '(' . $zmse->getMessage() . ')'
+            );
+        }
+    }
+    
+    /**
+     * send Zend_Mail message via smtp
+     * 
+     * @param  mixed      $_accountId
+     * @param  Zend_Mail  $_message
+     * @param  bool       $_saveInSent
+     * @return Zend_Mail
+     */
+    public function sendZendMail($_accountId, Zend_Mail $_mail, $_saveInSent = false)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Sending message with subject ' . $_mail->getSubject() 
+        );
+
+        // increase execution time (sending message with attachments can take a long time)
+        $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
+        
+        // get account
+        $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
+        
+        $this->_setMailFrom($mail, $account);
+        $this->_setMailHeaders($mail, $account);
+        $this->_sendMailViaTransport($mail, $account, $_saveInSent);
+        
+        // reset max execution time to old value
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
+        
+        return $_mail;
+    }
+    
+    /**
+     * create new mail for sending via SMTP
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Account $_account
+     * @param array $_nonPrivateRecipients
+     * @param Felamimail_Model_Message $_originalMessage
+     * @return Tinebase_Mail
+     */
+    protected function _createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
+    {
+        // create new mail to send
+        $mail = new Tinebase_Mail('UTF-8');
+        $mail->setSubject($_message->subject);
+        
+        $this->_setMailBody($mail, $_message);
+        $this->_setMailFrom($mail, $_account, $_message);
+        $this->_setMailRecipients($mail, $_message, $_nonPrivateRecipients);
+        $this->_setMailHeaders($mail, $_account, $_message, $_originalMessage);
+        
+        $this->_addAttachments($mail, $_message, $_originalMessage);
+        
+        return $mail;
+    }
+    
+    /**
+     * set mail body
+     * 
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Message $_message
+     */
+    protected function _setMailBody(Tinebase_Mail $_mail, Felamimail_Model_Message $_message)
+    {
+        if ($_message->content_type == Felamimail_Model_Message::CONTENT_TYPE_HTML) {
+            $plainBodyText = $_message->getPlainTextBody();
+            $_mail->setBodyText($plainBodyText);
+            $_mail->setBodyHtml(Felamimail_Message::addHtmlMarkup($_message->body));
+        } else {
+            $_mail->setBodyText($_message->body);
+        }
+    }
+    
+    /**
+     * set from in mail to be sent
+     * 
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Message $_message
+     */
+    protected function _setMailFrom(Tinebase_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
+    {
+        $_mail->clearFrom();
+        
+        $from = (isset($_account->from) && ! empty($_account->from)) 
+            ? $_account->from 
+            : Tinebase_Core::getUser()->accountFullName;
+        
+        $email = ($_message !== NULL && ! empty($_message->from_email)) ? $_message->from_email : $_account->email;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set from for mail: ' . $email . ' / ' . $from);
+        
+        $_mail->setFrom($email, $from);
+    }
+    
+    /**
+     * set mail recipients
+     * 
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Message $_message
+     * @param array $_nonPrivateRecipients
+     * 
+     *  @todo add name for to/cc/bcc
+     */
+    protected function _setMailRecipients(Tinebase_Mail $_mail, Felamimail_Model_Message $_message,  &$_nonPrivateRecipients = array())
+    {
+        if (isset($_message->to)) {
+            foreach ($_message->to as $to) {
+                $_mail->addTo($to);
+                $_nonPrivateRecipients[] = $to;
+            }
+        }
+        if (isset($_message->cc)) {
+            foreach ($_message->cc as $cc) {
+                $_mail->addCc($cc);
+                $_nonPrivateRecipients[] = $cc;
+            }
+        }
+        if (isset($_message->bcc)) {
+            foreach ($_message->bcc as $bcc) {
+                $_mail->addBcc($bcc);
+            }
+        }
+    }
+    
+    /**
+     * set headers in mail to be sent
+     * 
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Message $_originalMessage
+     * 
+     * @todo what has to be set in the 'In-Reply-To' header?
+     */
+    protected function _setMailHeaders(Tinebase_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, Felamimail_Model_Message $_originalMessage = NULL)
+    {
+        // add user agent
+        $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
+        
+        // set organization
+        if (isset($_account->organization) && ! empty($_account->organization)) {
+            $_mail->addHeader('Organization', $_account->organization);
+        }
+        
+        if ($_message !== NULL) {
+            // set in reply to
+            if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_originalMessage !== NULL) {
+                $_mail->addHeader('In-Reply-To', $_originalMessage->messageuid);
+            }
+        
+            // add other headers
+            if (! empty($_message->headers) && is_array($_message->headers)) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding custom headers: ' . print_r($_message->headers, TRUE));
+                foreach ($_message->headers as $key => $value) {
+                    $_mail->addHeader($key, $value);
+                }
+            }
+        }
+    }
+    
+    /**
+     * add attachments to mail
+     *
+     * @param Tinebase_Mail $_mail
+     * @param Felamimail_Model_Message $_message
+     * @param Felamimail_Model_Message $_originalMessage
+     * 
+     * @todo use getMessagePart() for attachments too?
+     */
+    protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
+    {
+        if (isset($_message->attachments)) {
+            $size = 0;
+            foreach ($_message->attachments as $attachment) {
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
+                
+                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_originalMessage !== NULL) {
+                    $part = $this->getMessagePart($_originalMessage);
+                    $part->decodeContent();
+                    
+                    if (! array_key_exists('size', $attachment) || empty($attachment['size']) ) {
+                        $attachment['size'] = $_originalMessage->size;
+                    }
+                    $attachment['name'] .= '.eml';
+                    
+                } else {
+                    if (! array_key_exists('path', $attachment)) {
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find attachment.');
+                        continue;
+                    }
+                    
+                    // get contents from uploaded files
+                    $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
+                    
+                    // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
+                    $part->encoding = ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
+                }
+                
+                $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+                $part->filename = $attachment['name'];
+                $part->type = $attachment['type'] . '; name="' . $attachment['name'] . '"';
+                
+                $_mail->addAttachment($part);
+            }
+        }
+    }
 }

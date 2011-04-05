@@ -68,6 +68,6 @@ class ActiveSync_Command_SmartForward extends ActiveSync_Command_SendMail
         
         $mail->addAttachment($rfc822);
         
-        Felamimail_Controller_Message::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
+        Felamimail_Controller_Message_Send::getInstance()->sendZendMail($this->_account, $mail, $this->_saveInSent);        
     }    
 }

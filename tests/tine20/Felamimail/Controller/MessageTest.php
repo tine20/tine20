@@ -784,7 +784,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         ));
         $sentFolder = $this->_getFolder('Sent');
 
-        $this->_controller->sendMessage($forwardMessage);
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($forwardMessage);
         
         $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('INBOX'));
         $forwardedMessageInSent = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $sentFolder);
