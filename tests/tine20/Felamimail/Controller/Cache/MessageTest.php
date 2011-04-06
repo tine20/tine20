@@ -164,10 +164,25 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test update message cache
-     *
+     * test update message cache, remove oldest mail on imap + add new
      */
-    public function testUpdateCacheAgain()
+    public function testUpdateCacheAgainRemoveOldest()
+    {
+        $this->_updateAgainHelper('oldest');
+    }
+    
+    /**
+     * test update message cache again, remove latest mail on imap + add new
+     */
+    public function testUpdateCacheAgainRemoveLatest()
+    {
+        $this->_updateAgainHelper('latest');
+    }
+    
+    /**
+     * helper function for update again tests
+     */
+    protected function _updateAgainHelper($_mode)
     {
         // add three messages to folder
         for($i = 0; $i < 3; $i++) {
@@ -189,13 +204,20 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $result = $this->_imap->search(array(
             $this->_headerValueToDelete
         ));
-        $this->_imap->removeMessage($result[0]);
-        $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        
+        if ($_mode == 'oldest') {
+            $this->_imap->removeMessage($result[0]);
+            $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+            $expected = $updatedFolder->cache_totalcount;
+        } else {
+            $this->_imap->removeMessage($result[count($result) - 1]);
+            $expected = $updatedFolder->cache_totalcount - 1;
+        }
         
         $updatedFolderAgain = $this->_controller->updateCache($this->_folder, 30);
-        $this->assertEquals($updatedFolder->cache_totalcount, $updatedFolderAgain->cache_totalcount);
+        $this->assertEquals($expected, $updatedFolderAgain->cache_totalcount);
     }
-    
+
     /**
      * test update of message cache counters only
      */
