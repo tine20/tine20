@@ -294,18 +294,25 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         }
         
         // clear/add flag on imap
-        $flagsToAdd = array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT /*, Zend_Mail_Storage::FLAG_PASSED */);
         $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
-        $this->_imap->addFlags($message->messageuid, $flagsToAdd);
+        $flagsToAdd = array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT, Zend_Mail_Storage::FLAG_PASSED);
+        try {
+            $this->_imap->addFlags($message->messageuid, $flagsToAdd);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // some imap servers (dbmail, ...) do not support PASSED flag
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
+            $this->_imap->addFlags($message->messageuid,  array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT));
+        }
         
         $this->_controller->updateFlags($updatedFolder);
         
         $cachedMessage = Felamimail_Controller_Message::getInstance()->get($message->getId());
-        $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags),  'SEEN flag found: ' .           print_r($cachedMessage->flags, TRUE));
-        $expectedFlags = $flagsToAdd;
-        $expectedFlags[] = Zend_Mail_Storage::FLAG_ANSWERED;
-        foreach ($flagsToAdd as $expectedFlag) {
-            $this->assertTrue(in_array($expectedFlag, $cachedMessage->flags), $expectedFlag . ' flag not found: ' .    print_r($cachedMessage->flags, TRUE));
+        $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags),  'SEEN flag found: ' . print_r($cachedMessage->flags, TRUE));
+        
+        $expectedFlags = array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT, Zend_Mail_Storage::FLAG_ANSWERED);
+        $this->assertEquals(3, count($cachedMessage->flags), 'found too many flags: ' . print_r($cachedMessage->flags, TRUE));
+        foreach ($expectedFlags as $expectedFlag) {
+            $this->assertTrue(in_array($expectedFlag, $cachedMessage->flags), $expectedFlag . ' flag not found: ' . print_r($cachedMessage->flags, TRUE));
         }
         
         $this->_controller->updateFlags($updatedFolder);
