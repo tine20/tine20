@@ -857,16 +857,19 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * @param Tinebase_Record_RecordSet $_messages
      * @param array $_flags
      * @param string $_folderId
+     * 
+     * @todo check which flags our imap server supports and allow more
      */
     protected function _setFlagsOnCache($_messages, $_flags, $_folderId)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+        $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE));
         
         $updateCount = 0;
         foreach ($_messages as $cachedMessage) {
             if (array_key_exists($cachedMessage->messageuid, $_flags)) {
-                $newFlags = $_flags[$cachedMessage->messageuid]['flags'];
-                $cachedFlags = array_intersect($cachedMessage->flags, array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE)));
+                $newFlags = array_intersect($_flags[$cachedMessage->messageuid]['flags'], $supportedFlags);
+                $cachedFlags = array_intersect($cachedMessage->flags, $supportedFlags);
                 $diff1 = array_diff($cachedFlags, $newFlags);
                 $diff2 = array_diff($newFlags, $cachedFlags);
                 if (count($diff1) > 0 || count($diff2) > 0) {
