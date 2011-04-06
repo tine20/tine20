@@ -4,19 +4,14 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Felamimail_Controller_Cache_MessageTest::main');
-}
 
 /**
  * Test class for Felamimail_Controller_Cache_*
@@ -56,6 +51,13 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     protected $_testFolderName = 'Junk';
     
     /**
+     * delete messages with this header in tearDown
+     * 
+     * @var string
+     */
+    protected $_headerValueToDelete = NULL;
+    
+    /**
      * Runs the test methods of this class.
      *
      * @access public
@@ -81,6 +83,11 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         // init controller and imap backend
         $this->_controller = Felamimail_Controller_Cache_Message::getInstance();
         $this->_imap = Felamimail_Backend_ImapFactory::factory($this->_account);
+        try {
+            $this->_imap->createFolder($this->_testFolderName, '', $this->_account->delimiter);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            // exists
+        }
         $this->_imap->selectFolder($this->_testFolderName);
         
         // init folder cache and get INBOX
@@ -102,6 +109,15 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     {
         if ($this->_emailTestClass instanceof Felamimail_Controller_MessageTest) {
             $this->_emailTestClass->tearDown();
+        }
+        
+        if ($this->_headerValueToDelete !== NULL) {
+            $result = $this->_imap->search(array(
+                $this->_headerValueToDelete
+            ));
+            foreach($result as $messageUid) {
+                $this->_imap->removeMessage($messageUid);
+            }
         }
     }
     
@@ -126,7 +142,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
      * test update message cache
      *
      */
-    public function testUpdate()
+    public function testUpdateCache()
     {
         // update message cache
         $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
@@ -137,12 +153,47 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $this->assertGreaterThan(-1, Tinebase_DateTime::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
             $this->assertEquals(0, $updatedFolder->cache_job_actions_done, 'done/estimate wrong');
             $this->assertEquals(0, $updatedFolder->cache_job_actions_estimate, 'done/estimate wrong');
+        } else if ($updatedFolder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_EMPTY) {
+            $this->assertEquals(0, $updatedFolder->cache_totalcount, 'cache should be empty');
         } else {
-            $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal');
+            $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal: ' . print_r($updatedFolder->toArray(), TRUE));
             $this->assertGreaterThan(-1, Tinebase_DateTime::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
             $this->assertNotEquals(0, $updatedFolder->cache_job_actions_done, 'done wrong');
             $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'estimate wrong');
         }
+    }
+
+    /**
+     * test update message cache
+     *
+     */
+    public function testUpdateCacheAgain()
+    {
+        // add three messages to folder
+        for($i = 0; $i < 3; $i++) {
+            $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        }
+        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
+        
+        // update message cache
+        $loopCount = 0;
+        do {
+            $updatedFolder = $this->_controller->updateCache($this->_folder, 10);
+            $loopCount++;
+        } while ($updatedFolder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $loopCount < 10);
+        
+        $this->assertGreaterThan(0, $updatedFolder->cache_totalcount);
+        $this->assertNotEquals(10, $loopCount, 'should complete cache update with < 10 iterations.');
+        
+        // now lets delete one message from folder and add another one
+        $result = $this->_imap->search(array(
+            $this->_headerValueToDelete
+        ));
+        $this->_imap->removeMessage($result[0]);
+        $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        
+        $updatedFolderAgain = $this->_controller->updateCache($this->_folder, 30);
+        $this->assertEquals($updatedFolder->cache_totalcount, $updatedFolderAgain->cache_totalcount);
     }
     
     /**
@@ -154,19 +205,10 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
         
         $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
+        $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
         
-        $result = $this->_imap->search(array(
-            'HEADER X-Tine20TestMessage multipart/alternative'
-        ));
-        
-        // update message cache
+        // update message cache + check folder status after update
         $updatedFolder = $this->_controller->updateCache($this->_folder, 0);
-        
-        foreach($result as $messageUid) {
-            $this->_imap->removeMessage($messageUid);
-        }
-        
-        // check folder status after update
         $this->assertEquals(Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE, $updatedFolder->cache_status);
         $this->assertNotEquals($updatedFolder->imap_totalcount, $updatedFolder->cache_totalcount, 'totalcounts should not be equal');
         $this->assertGreaterThan(-1, Tinebase_DateTime::now()->compare($updatedFolder->cache_timestamp), 'timestamp incorrect'); // later or equals
@@ -174,6 +216,32 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertNotEquals(0, $updatedFolder->cache_job_actions_estimate, 'estimate wrong');
     }
 
+    /**
+     * test message cache unread counter sanitizing
+     */
+    public function testFolderCounterSanitizing()
+    {
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $unreadcount = $updatedFolder->cache_unreadcount;
+        
+        // change unreadcount of folder
+        Felamimail_Controller_Folder::getInstance()->updateFolderCounter($updatedFolder, array('cache_unreadcount' => '+1'));
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $this->assertEquals($unreadcount, $updatedFolder->cache_unreadcount, 'unreadcount should have been sanitized');
+        
+        // add new unread message
+        $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $this->assertEquals($unreadcount+1, $updatedFolder->cache_unreadcount, 'unreadcount should have been increased by 1');
+        
+        // mark message as seen twice
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $this->assertEquals($unreadcount, $updatedFolder->cache_unreadcount, 'unreadcount should be the same as before');
+    }    
+    
     /**
      * get folder
      *
@@ -218,19 +286,31 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         // appended messages already have the SEEN flag
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_SEEN, $message->flags), 'SEEN flag not found: ' . print_r($message->flags, TRUE));
+        // add another flag
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, Zend_Mail_Storage::FLAG_ANSWERED);
         
         while (! isset($updatedFolder) || $updatedFolder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
             $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
         }
         
         // clear/add flag on imap
+        $flagsToAdd = array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT /*, Zend_Mail_Storage::FLAG_PASSED */);
         $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
-        $this->_imap->addFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_FLAGGED));
+        $this->_imap->addFlags($message->messageuid, $flagsToAdd);
         
         $this->_controller->updateFlags($updatedFolder);
         
         $cachedMessage = Felamimail_Controller_Message::getInstance()->get($message->getId());
-        $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags), 'SEEN flag found: ' . print_r($cachedMessage->flags, TRUE));
-        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $cachedMessage->flags), 'FLAGGED flag not found: ' . print_r($cachedMessage->flags, TRUE));
+        $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags),  'SEEN flag found: ' .           print_r($cachedMessage->flags, TRUE));
+        $expectedFlags = $flagsToAdd;
+        $expectedFlags[] = Zend_Mail_Storage::FLAG_ANSWERED;
+        foreach ($flagsToAdd as $expectedFlag) {
+            $this->assertTrue(in_array($expectedFlag, $cachedMessage->flags), $expectedFlag . ' flag not found: ' .    print_r($cachedMessage->flags, TRUE));
+        }
+        
+        $this->_controller->updateFlags($updatedFolder);
+        $cachedMessageAgain = Felamimail_Controller_Message::getInstance()->get($message->getId());
+        // cached message should not have been updated again
+        $this->assertEquals($cachedMessage->timestamp->__toString(), $cachedMessageAgain->timestamp->__toString());
     }
 }
