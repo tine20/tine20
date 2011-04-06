@@ -294,15 +294,23 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         }
         
         // clear/add flag on imap
+        $flagsToAdd = array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT /*, Zend_Mail_Storage::FLAG_PASSED */);
         $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
-        $this->_imap->addFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_FLAGGED, Zend_Mail_Storage::FLAG_DRAFT));
+        $this->_imap->addFlags($message->messageuid, $flagsToAdd);
         
         $this->_controller->updateFlags($updatedFolder);
         
         $cachedMessage = Felamimail_Controller_Message::getInstance()->get($message->getId());
         $this->assertTrue(! in_array(Zend_Mail_Storage::FLAG_SEEN, $cachedMessage->flags),  'SEEN flag found: ' .           print_r($cachedMessage->flags, TRUE));
-        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_FLAGGED, $cachedMessage->flags), 'FLAGGED flag not found: ' .    print_r($cachedMessage->flags, TRUE));
-        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_DRAFT, $cachedMessage->flags),   'DRAFT flag not found: ' .      print_r($cachedMessage->flags, TRUE));
-        $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_ANSWERED, $cachedMessage->flags),'ANSWERED flag not found: ' .   print_r($cachedMessage->flags, TRUE));
+        $expectedFlags = $flagsToAdd;
+        $expectedFlags[] = Zend_Mail_Storage::FLAG_ANSWERED;
+        foreach ($flagsToAdd as $expectedFlag) {
+            $this->assertTrue(in_array($expectedFlag, $cachedMessage->flags), $expectedFlag . ' flag not found: ' .    print_r($cachedMessage->flags, TRUE));
+        }
+        
+        $this->_controller->updateFlags($updatedFolder);
+        $cachedMessageAgain = Felamimail_Controller_Message::getInstance()->get($message->getId());
+        // cached message should not have been updated again
+        $this->assertEquals($cachedMessage->timestamp->__toString(), $cachedMessageAgain->timestamp->__toString());
     }
 }
