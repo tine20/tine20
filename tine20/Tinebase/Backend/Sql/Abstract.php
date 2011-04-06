@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
- * @todo        removed obsolete search/searchCount/getSelect fns
  * @todo        reorder protected functions
  * @todo        use const for type (set in constructor)
  * @todo        move custom fields handling to controller?
@@ -312,74 +311,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         
         return $result;
     }
-    
-    /**
-     * Search for records matching given filter
-     *
-     * @param  Tinebase_Model_Filter_FilterGroup    $_filter
-     * @param  Tinebase_Model_Pagination            $_pagination
-     * @param  boolean                              $_onlyIds
-     * @return Tinebase_Record_RecordSet|array
-     */
-//    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
-//    {
-//        if ($_pagination === NULL) {
-//            $_pagination = new Tinebase_Model_Pagination(NULL, TRUE);
-//        }
-//        
-//        // build query
-//        $selectCols = ($_onlyIds) ? $this->_tableName . '.id' : '*';
-//        $select = $this->_getSelect($selectCols);
-//        
-//        if ($_filter !== NULL) {
-//            $this->_addFilter($select, $_filter);
-//        }
-//        $_pagination->appendPaginationSql($select);
-//        
-//        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-//        
-//        // get records
-//        $stmt = $this->_db->query($select);
-//        $rows = (array)$stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-//        
-//        if ($_onlyIds) {
-//            $result = array();
-//            foreach ($rows as $row) {
-//                $result[] = $row[$this->_getRecordIdentifier()];
-//            }
-//        } else {
-//            $result = $this->_rawDataToRecordSet($rows);
-//        }
-//        
-//        return $result;
-//    }
-    
-    /**
-     * Gets total count of search with $_filter
-     * 
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return int
-     */
-//    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
-//    {   
-//        if ($this->_useSubselectForCount) {
-//            // use normal search query as subselect to get count -> select count(*) from (select [...]) as count
-//            $select = $this->_getSelect();
-//            $this->_addFilter($select, $_filter);
-//            $countSelect = $this->_db->select()->from($select, array('count' => 'COUNT(*)'));
-//            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $countSelect->__toString());
-//            
-//            $result = $this->_db->fetchOne($countSelect);
-//        } else {
-//            $select = $this->_getSelect(array('count' => 'COUNT(*)'));
-//            $this->_addFilter($select, $_filter);
-//            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-//
-//            $result = $this->_db->fetchOne($select);
-//        }
-//        
-//        return $result;        
-//    }    
     
     /**
      * Search for records matching given filter
@@ -996,46 +927,6 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     {
         return $this->_db;
     }
-    
-    /**
-     * get the basic select object to fetch records from the database
-     *  
-     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
-     * @param boolean $_getDeleted get deleted records (if modlog is active)
-     * @return Zend_Db_Select
-     * 
-     * @todo think about adding custom fields here
-     */
-//    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-//    {        
-//        $select = $this->_db->select();
-//
-//        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $_cols);
-//        
-//        if (!$_getDeleted && $this->_modlogActive) {
-//            // don't fetch deleted objects
-//            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
-//        }
-//        
-//        if (! empty($this->_foreignTables)) {
-//            $select->group($this->_tableName . '.id');
-//            foreach ($this->_foreignTables as $modelName => $join) {
-//                if ($_cols == '*' || array_key_exists($modelName, (array)$_cols)) {
-//                    $selectArray = array($modelName => 'GROUP_CONCAT(DISTINCT ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['field']) . ')');
-//                } else {
-//                    $selectArray = array();
-//                }
-//                
-//                $select->joinLeft(
-//                    /* table  */ array($join['table'] => $this->_tablePrefix . $join['table']), 
-//                    /* on     */ $this->_db->quoteIdentifier($this->_tableName . '.id') . ' = ' . $this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']),
-//                    /* select */ $selectArray
-//                );
-//            }
-//        }
-//        
-//        return $select;
-//    }
     
     /**
      * converts record into raw data for adapter
