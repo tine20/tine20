@@ -461,7 +461,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                         }
                     },
                     failure: this.onRequestFailed,
-                    timeout: 150000 // 3 minutes
+                    timeout: 300000 // 5 minutes
                 });
             } else {
                 this.onRecordLoad();
