@@ -982,6 +982,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $message = $this->_searchMessage($_testHeaderValue, $folder);
         
         $cachedMessage = $this->_cache->addMessage($message, $folder);
+        if ($cachedMessage === FALSE) {
+            // try to add message again (it had a duplicate)
+            $this->_cache->clear($folder);
+            $cachedMessage = $this->_cache->addMessage($message, $folder);
+        }
+        
         $this->_createdMessages->addRecord($cachedMessage);
         
         return $cachedMessage;
