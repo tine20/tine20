@@ -272,7 +272,6 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         $latestMessage = $this->_backend->get($latestMessageId);
                         $this->_backend->delete($latestMessage);
                         
-                        $_folder->cache_totalcount--;
                         $decrementMessagesCounter++;
                         if (! $latestMessage->hasSeenFlag()) {
                             $decrementUnreadCounter++;
@@ -527,6 +526,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _addMessagesToCache(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " cache sequence: {$this->_imapMessageSequence} / imap count: {$_folder->imap_totalcount}");
+    
         // add new messages to cache
         if ($_folder->imap_totalcount > 0 && $this->_imapMessageSequence < $_folder->imap_totalcount) {
                         
