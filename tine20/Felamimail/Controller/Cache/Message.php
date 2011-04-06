@@ -939,7 +939,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
     protected function _setFlagsOnCache($_messages, $_flags, $_folderId)
     {
         $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-        $supportedFlags = array_keys(Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags(FALSE));
+        $supportedFlags = array_keys(Felamimail_Controller_Message::getInstance()->getSupportedFlags(FALSE));
         
         $updateCount = 0;
         foreach ($_messages as $id => $cachedMessage) {
