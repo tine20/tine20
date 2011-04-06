@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -15,17 +14,13 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_Relation_RelationTest::main();
-}
-
 /**
  * Test class for Tinebase_Relations
  */
 class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var    Tinebase_Relation
+     * @var    Tinebase_Relations
      */
     protected $_object;
     
@@ -276,6 +271,9 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         
     }
     
+    /**
+     * test search relations
+     */
     public function testSearchRelations()
     {
         // fetch a set of addressbook ids
@@ -283,7 +281,7 @@ class Tinebase_Relation_RelationTest extends PHPUnit_Framework_TestCase
         $relatedContacts = $relations->filter('related_model', 'Addressbook_Model_Contact');
         $adbFilterResult = $relatedContacts->related_id;
         
-        // get all lead relations wehre the set of adbids is related to
+        // get all lead relations where the set of adb ids is related to
         $filter = new Tinebase_Model_RelationFilter(array(
             array('field' => 'own_model',     'operator' => 'equals', 'value' => 'Crm_Model_Lead'),
             array('field' => 'related_model', 'operator' => 'equals', 'value' => 'Addressbook_Model_Contact'),
