@@ -8,7 +8,7 @@
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
- * @todo        reorder protected functions
+ * @todo        think about removing the appendForeignRecord* functions
  * @todo        use const for type (set in constructor)
  * @todo        move custom fields handling to controller?
  */
@@ -188,6 +188,49 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     }
 
     /**
+     * converts a int, string or Tinebase_Record_Interface to a id
+     *
+     * @param int|string|Tinebase_Record_Interface $_id the id to convert
+     * @return int
+     */
+    protected function _convertId($_id)
+    {
+        if($_id instanceof $this->_modelName) {
+            $identifier = $this->_getRecordIdentifier();
+            if(empty($_id->$identifier)) {
+                throw new Tinebase_Exception_InvalidArgument('No id set!');
+            }
+            $id = $_id->$identifier;
+        } elseif (is_array($_id)) {
+            throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
+        } else {
+            $id = $_id;
+        }
+        
+        if($id === 0) {
+            throw new Tinebase_Exception_InvalidArgument($this->_modelName . '.id can not be 0!');
+        }
+        
+        return $id;
+    }
+    
+    /**
+     * splits identifier if table name is given (i.e. for joined tables)
+     *
+     * @return string identifier name
+     */
+    protected function _getRecordIdentifier()
+    {
+        if (preg_match("/\./", $this->_identifier)) {
+            list($table, $identifier) = explode('.', $this->_identifier);
+        } else {
+            $identifier = $this->_identifier;
+        }
+        
+        return $identifier;    
+    }
+
+    /**
      * Gets one entry (by property)
      *
      * @param  mixed  $_value
@@ -219,6 +262,36 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     }
     
     /**
+     * converts raw data from adapter into a single record
+     *
+     * @param  array $_rawData
+     * @return Tinebase_Record_Abstract
+     */
+    protected function _rawDataToRecord(array $_rawData)
+    {
+        $result = new $this->_modelName($_rawData, true);
+        
+        $this->_explodeForeignValues($result);
+        
+        return $result;
+    }
+    
+    /**
+     * explode foreign values
+     * 
+     * @param Tinebase_Record_Interface $_record
+     */
+    protected function _explodeForeignValues(Tinebase_Record_Interface $_record)
+    {
+        foreach (array_keys($this->_foreignTables) as $field) {
+            $isSingleValue = (array_key_exists('singleValue', $this->_foreignTables[$field]) && $this->_foreignTables[$field]['singleValue']);
+            if (! $isSingleValue) {
+                $_record->{$field} = (! empty($_record->{$field})) ? explode(',', $_record->{$field}) : array();
+            }
+        }
+    }
+    
+    /**
      * gets multiple entries (by property)
      *
      * @param  mixed  $_value
@@ -244,6 +317,25 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $resultSet->addIndices(array($_property));
         
         return $resultSet;
+    }
+    
+    /**
+     * converts raw data from adapter into a set of records
+     *
+     * @param  array $_rawDatas of arrays
+     * @return Tinebase_Record_RecordSet
+     */
+    protected function _rawDataToRecordSet(array $_rawDatas)
+    {
+        $result = new Tinebase_Record_RecordSet($this->_modelName, $_rawDatas, true);
+        
+        if (! empty($this->_foreignTables)) {
+            foreach ($result as $record) {
+                $this->_explodeForeignValues($record);
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -365,7 +457,19 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             return $this->_rawDataToRecordSet($rows);
         }
     }
-        
+
+    /**
+     * add the fields to search for to the query
+     *
+     * @param  Zend_Db_Select                       $_select current where filter
+     * @param  Tinebase_Model_Filter_FilterGroup    $_filter the string to search for
+     * @return void
+     */
+    protected function _addFilter(Zend_Db_Select $_select, /*Tinebase_Model_Filter_FilterGroup */$_filter)
+    {
+        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($_select, $_filter, $this);
+    }
+    
     /**
      * Gets total count of search with $_filter
      * 
@@ -688,6 +792,151 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     }
     
     /**
+     * returns true if id is a hash value and false if integer
+     *
+     * @return  boolean
+     * @todo    remove that when all tables use hash ids 
+     */
+    protected function _hasHashId()
+    {
+        $identifier = $this->_getRecordIdentifier();
+        $result = (in_array($this->_schema[$identifier]['DATA_TYPE'], array('varchar', 'VARCHAR2')) && $this->_schema[$identifier]['LENGTH'] == 40);
+        
+        return $result;
+    }
+    
+    /**
+     * converts record into raw data for adapter
+     *
+     * @param  Tinebase_Record_Abstract $_record
+     * @return array
+     */
+    protected function _recordToRawData($_record)
+    {
+        return $_record->toArray();
+    }
+    
+    /**
+     * prepare record data array
+     * - replace int and bool values by Zend_Db_Expr
+     *
+     * @param array &$_recordArray
+     * @return array with the prepared data
+     */
+    protected function _prepareData(&$_recordArray) 
+    {
+        
+        foreach ($_recordArray as $key => $value) {
+            if (is_bool($value)) {
+                $_recordArray[$key] = ($value) ? new Zend_Db_Expr('1') : new Zend_Db_Expr('0');
+            } elseif (is_int($value)) {
+                $_recordArray[$key] = new Zend_Db_Expr((string) $value);
+            }
+        }
+    }
+    
+    /**
+     * update foreign key values
+     * 
+     * @param string $_mode create|update
+     * @param Tinebase_Record_Abstract $_record
+     */
+    protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
+    {
+        if (! empty($this->_foreignTables)) {
+            
+            foreach ($this->_foreignTables as $modelName => $join) {
+                
+                if (! array_key_exists('field', $join)) {
+                    continue;
+                }
+                
+                $idsToAdd    = array();
+                $idsToRemove = array();
+                
+                if (!empty($_record->$modelName)) {
+                    $idsToAdd = $this->_getIdsFromMixed($_record->$modelName);
+                }
+                
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
+                
+                if ($_mode == 'update') {
+                    $select = $this->_db->select();
+        
+                    $select->from(array($join['table'] => $this->_tablePrefix . $join['table']), array($join['field']))
+                        ->where($this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']) . ' = ?', $_record->getId());
+                        
+                    $stmt = $this->_db->query($select);
+                    $currentIds = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+                    $stmt->closeCursor();
+                    
+                    $idsToRemove = array_diff($currentIds, $idsToAdd);
+                    $idsToAdd    = array_diff($idsToAdd, $currentIds);
+                }
+                
+                if (!empty($idsToRemove)) {
+                    $where = '(' . 
+                        $this->_db->quoteInto($this->_tablePrefix . $join['table'] . '.' . $join['joinOn'] . ' = ?', $_record->getId()) . 
+                        ' AND ' . 
+                        $this->_db->quoteInto($this->_tablePrefix . $join['table'] . '.' . $join['field'] . ' IN (?)', $idsToRemove) . 
+                    ')';
+                        
+                    $this->_db->delete($this->_tablePrefix . $join['table'], $where);
+                }
+                
+                foreach ($idsToAdd as $id) {
+                    $recordArray = array (
+                        $join['joinOn'] => $_record->getId(),
+                        $join['field']  => $id
+                    );
+                    $this->_db->insert($this->_tablePrefix . $join['table'], $recordArray);
+                }
+                    
+                
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            }
+        }
+    }
+
+    /**
+     * convert recordset, array of ids or records to array of ids
+     * 
+     * @param  mixed  $_mixed
+     * @return array
+     */
+    protected function _getIdsFromMixed($_mixed)
+    {
+        if ($_mixed instanceof Tinebase_Record_RecordSet) { // Record set
+            $ids = $_mixed->getArrayOfIds();
+            
+        } elseif (is_array($_mixed)) { // array
+            foreach ($_mixed as $mixed) {
+                if ($mixed instanceof Tinebase_Record_Abstract) {
+                    $ids[] = $mixed->getId();
+                } else {
+                    $ids[] = $mixed;
+                }
+            }
+            
+        } else { // string
+            $ids[] = $_mixed instanceof Tinebase_Record_Abstract ? $_mixed->getId() : $_mixed;
+        }
+        
+        return $ids;
+    }
+    
+    /**
+     * do something after creation of record
+     * 
+     * @param Tinebase_Record_Abstract $_newRecord
+     * @param Tinebase_Record_Abstract $_recordToCreate
+     * @return void
+     */
+    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_newRecord, Tinebase_Record_Abstract $_recordToCreate)
+    {
+    }
+    
+    /**
      * Updates existing entry
      *
      * @param Tinebase_Record_Interface $_record
@@ -926,254 +1175,5 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     public function getAdapter()
     {
         return $this->_db;
-    }
-    
-    /**
-     * converts record into raw data for adapter
-     *
-     * @param  Tinebase_Record_Abstract $_record
-     * @return array
-     */
-    protected function _recordToRawData($_record)
-    {
-        return $_record->toArray();
-    }
-    
-    /**
-     * converts raw data from adapter into a single record
-     *
-     * @param  array $_rawData
-     * @return Tinebase_Record_Abstract
-     */
-    protected function _rawDataToRecord(array $_rawData)
-    {
-        $result = new $this->_modelName($_rawData, true);
-        
-        $this->_explodeForeignValues($result);
-        
-        return $result;
-    }
-    
-    /**
-     * explode foreign values
-     * 
-     * @param Tinebase_Record_Interface $_record
-     */
-    protected function _explodeForeignValues(Tinebase_Record_Interface $_record)
-    {
-        foreach (array_keys($this->_foreignTables) as $field) {
-            $isSingleValue = (array_key_exists('singleValue', $this->_foreignTables[$field]) && $this->_foreignTables[$field]['singleValue']);
-            if (! $isSingleValue) {
-                $_record->{$field} = (! empty($_record->{$field})) ? explode(',', $_record->{$field}) : array();
-            }
-        }
-    }
-    
-    /**
-     * converts raw data from adapter into a set of records
-     *
-     * @param  array $_rawDatas of arrays
-     * @return Tinebase_Record_RecordSet
-     */
-    protected function _rawDataToRecordSet(array $_rawDatas)
-    {
-        $result = new Tinebase_Record_RecordSet($this->_modelName, $_rawDatas, true);
-        
-        if (! empty($this->_foreignTables)) {
-            foreach ($result as $record) {
-                $this->_explodeForeignValues($record);
-            }
-        }
-        
-        return $result;
-    }
-    
-    /**
-     * add the fields to search for to the query
-     *
-     * @param  Zend_Db_Select                       $_select current where filter
-     * @param  Tinebase_Model_Filter_FilterGroup    $_filter the string to search for
-     * @return void
-     */
-    protected function _addFilter(Zend_Db_Select $_select, /*Tinebase_Model_Filter_FilterGroup */$_filter)
-    {
-        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($_select, $_filter, $this);
-    }
-    
-    /**
-     * converts a int, string or Tinebase_Record_Interface to a id
-     *
-     * @param int|string|Tinebase_Record_Interface $_id the id to convert
-     * @return int
-     */
-    protected function _convertId($_id)
-    {
-        if($_id instanceof $this->_modelName) {
-            $identifier = $this->_getRecordIdentifier();
-            if(empty($_id->$identifier)) {
-                throw new Tinebase_Exception_InvalidArgument('No id set!');
-            }
-            $id = $_id->$identifier;
-        } elseif (is_array($_id)) {
-            throw new Tinebase_Exception_InvalidArgument('Id can not be an array!');
-        } else {
-            $id = $_id;
-        }
-        
-        if($id === 0) {
-            throw new Tinebase_Exception_InvalidArgument($this->_modelName . '.id can not be 0!');
-        }
-        
-        return $id;
-    }
-    
-    /**
-     * returns true if id is a hash value and false if integer
-     *
-     * @return  boolean
-     * @todo    remove that when all tables use hash ids 
-     */
-    protected function _hasHashId()
-    {
-        $identifier = $this->_getRecordIdentifier();
-        $result = (in_array($this->_schema[$identifier]['DATA_TYPE'], array('varchar', 'VARCHAR2')) && $this->_schema[$identifier]['LENGTH'] == 40);
-        
-        return $result;
-    }
-    
-    /**
-     * splits identifier if table name is given (i.e. for joined tables)
-     *
-     * @return string identifier name
-     */
-    protected function _getRecordIdentifier()
-    {
-        if (preg_match("/\./", $this->_identifier)) {
-            list($table, $identifier) = explode('.', $this->_identifier);
-        } else {
-            $identifier = $this->_identifier;
-        }
-        
-        return $identifier;    
-    }
-
-    /**
-     * prepare record data array
-     * - replace int and bool values by Zend_Db_Expr
-     *
-     * @param array &$_recordArray
-     * @return array with the prepared data
-     */
-    protected function _prepareData(&$_recordArray) 
-    {
-        
-        foreach ($_recordArray as $key => $value) {
-            if (is_bool($value)) {
-                $_recordArray[$key] = ($value) ? new Zend_Db_Expr('1') : new Zend_Db_Expr('0');
-            } elseif (is_int($value)) {
-                $_recordArray[$key] = new Zend_Db_Expr((string) $value);
-            }
-        }
-    }
-    
-    /**
-     * do something after creation of record
-     * 
-     * @param Tinebase_Record_Abstract $_newRecord
-     * @param Tinebase_Record_Abstract $_recordToCreate
-     * @return void
-     */
-    protected function _inspectAfterCreate(Tinebase_Record_Abstract $_newRecord, Tinebase_Record_Abstract $_recordToCreate)
-    {
-    }
-    
-    /**
-     * convert recordset, array of ids or records to array of ids
-     * 
-     * @param  mixed  $_mixed
-     * @return array
-     */
-    protected function _getIdsFromMixed($_mixed)
-    {
-        if ($_mixed instanceof Tinebase_Record_RecordSet) { // Record set
-            $ids = $_mixed->getArrayOfIds();
-            
-        } elseif (is_array($_mixed)) { // array
-            foreach ($_mixed as $mixed) {
-                if ($mixed instanceof Tinebase_Record_Abstract) {
-                    $ids[] = $mixed->getId();
-                } else {
-                    $ids[] = $mixed;
-                }
-            }
-            
-        } else { // string
-            $ids[] = $_mixed instanceof Tinebase_Record_Abstract ? $_mixed->getId() : $_mixed;
-        }
-        
-        return $ids;
-    }
-    
-    /**
-     * update foreign key values
-     * 
-     * @param string $_mode create|update
-     * @param Tinebase_Record_Abstract $_record
-     */
-    protected function _updateForeignKeys($_mode, Tinebase_Record_Abstract $_record)
-    {
-        if (! empty($this->_foreignTables)) {
-            
-            foreach ($this->_foreignTables as $modelName => $join) {
-                
-                if (! array_key_exists('field', $join)) {
-                    continue;
-                }
-                
-                $idsToAdd    = array();
-                $idsToRemove = array();
-                
-                if (!empty($_record->$modelName)) {
-                    $idsToAdd = $this->_getIdsFromMixed($_record->$modelName);
-                }
-                
-                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction(Tinebase_Core::getDb());
-                
-                if ($_mode == 'update') {
-                    $select = $this->_db->select();
-        
-                    $select->from(array($join['table'] => $this->_tablePrefix . $join['table']), array($join['field']))
-                        ->where($this->_db->quoteIdentifier($join['table'] . '.' . $join['joinOn']) . ' = ?', $_record->getId());
-                        
-                    $stmt = $this->_db->query($select);
-                    $currentIds = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-                    $stmt->closeCursor();
-                    
-                    $idsToRemove = array_diff($currentIds, $idsToAdd);
-                    $idsToAdd    = array_diff($idsToAdd, $currentIds);
-                }
-                
-                if (!empty($idsToRemove)) {
-                    $where = '(' . 
-                        $this->_db->quoteInto($this->_tablePrefix . $join['table'] . '.' . $join['joinOn'] . ' = ?', $_record->getId()) . 
-                        ' AND ' . 
-                        $this->_db->quoteInto($this->_tablePrefix . $join['table'] . '.' . $join['field'] . ' IN (?)', $idsToRemove) . 
-                    ')';
-                        
-                    $this->_db->delete($this->_tablePrefix . $join['table'], $where);
-                }
-                
-                foreach ($idsToAdd as $id) {
-                    $recordArray = array (
-                        $join['joinOn'] => $_record->getId(),
-                        $join['field']  => $id
-                    );
-                    $this->_db->insert($this->_tablePrefix . $join['table'], $recordArray);
-                }
-                    
-                
-                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            }
-        }
     }
 }
