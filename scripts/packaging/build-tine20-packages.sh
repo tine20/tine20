@@ -138,7 +138,7 @@ function activateReleaseMode()
 function compressFiles()
 {
     echo -n "building compressed Javascript and CSS files ... "
-    sed -i "s/trim(\`whoami\`)/'$RELEASE'/" $TEMPDIR/tine20/release.php
+    sed -i -e "s/trim(\`whoami\`)/'$RELEASE'/" $TEMPDIR/tine20/release.php
     php -d include_path=".:$TEMPDIR/tine20:$TEMPDIR/tine20/library"  -f $TEMPDIR/tine20/release.php -- -y $BASEDIR/yuicompressor/build/yuicompressor.jar -a
     echo "done"
 }
@@ -146,7 +146,7 @@ function compressFiles()
 function fixImagesPath()
 {
     echo "Fixing image path ../../images => ../images"
-    find $TEMPDIR/tine20 \( -path $TEMPDIR/tine20/Setup -prune -a -name "all-debug.js" -o -name "all.js" -o -name "all-debug.css" -o -name "all.css" \) -print0 | xargs -0 -n 1 sed -i "s/\.\.\/\.\.\/images/..\/images/g"
+    find $TEMPDIR/tine20 \( -path $TEMPDIR/tine20/Setup -prune -a -name "all-debug.js" -o -name "all.js" -o -name "all-debug.css" -o -name "all.css" \) -print0 | xargs -0 -n 1 sed -i -e "s/\.\.\/\.\.\/images/..\/images/g"
 }
 
 function createArchives()
