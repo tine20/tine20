@@ -119,7 +119,10 @@ class Sales_Setup_Update_Release2 extends Setup_Update_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
             
             // insert values into products table
-            $productsBackend = new Tinebase_Backend_Sql('Sales_Model_Product', 'sales_products');
+            $productsBackend = new Tinebase_Backend_Sql(array(
+                'modelName' => 'Sales_Model_Product', 
+                'tableName' => 'sales_products',
+            ));
             foreach ($queryResult as $row) {
                 $products = new Sales_Model_Product(array(
                     'id'    => $row['id'],

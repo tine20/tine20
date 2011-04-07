@@ -5,9 +5,8 @@
  * @package     Sales
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -27,7 +26,10 @@ class Sales_Controller_Product extends Tinebase_Controller_Record_Abstract
     private function __construct() {        
         $this->_applicationName         = 'Sales';
         $this->_modelName               = 'Sales_Model_Product';
-        $this->_backend                 = new Tinebase_Backend_Sql($this->_modelName, 'sales_products');
+        $this->_backend                 = new Tinebase_Backend_Sql(array(
+            'modelName' => $this->_modelName, 
+            'tableName' => 'sales_products',
+        ));
         $this->_currentAccount          = Tinebase_Core::getUser();
         $this->_doContainerACLChecks    = FALSE;
     }    

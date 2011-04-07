@@ -145,7 +145,10 @@ class Timetracker_Setup_Update_Release0 extends Setup_Update_Abstract
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r($queryResult, TRUE));
             
             // insert values into customfield table
-            $cfValueBackend = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Value', 'customfield');
+            $cfValueBackend = new Tinebase_Backend_Sql(array(
+                'modelName' => 'Tinebase_Model_CustomField_Value', 
+                'tableName' => 'customfield',
+            ));
             foreach ($queryResult as $row) {
                 if (! isset($customfield) || $customfield->name != $row['name']) {
                     $customfield = $customfields->filter('name', $row['name'])->getFirstRecord();

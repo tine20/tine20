@@ -37,7 +37,11 @@ class Tinebase_ImportExportDefinition extends Tinebase_Controller_Record_Abstrac
         $this->_doContainerACLChecks = FALSE;
 
         // set backend with activated modlog
-        $this->_backend = new Tinebase_Backend_Sql($this->_modelName, 'importexport_definition', NULL, NULL, TRUE);
+        $this->_backend = new Tinebase_Backend_Sql(array(
+            'modelName'     => $this->_modelName, 
+            'tableName'     => 'importexport_definition',
+            'modlogActive'  => TRUE,
+        ));
         $this->_currentAccount = Tinebase_Core::getUser();   
     }    
     

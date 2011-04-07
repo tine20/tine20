@@ -307,7 +307,8 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         $userPhone = $this->_json->getMyPhone($this->_objects['phone']->getId());
         
         $this->assertEquals('user phone', $userPhone['description'], 'no description');
-        $this->assertEquals('English', $userPhone['web_language'], 'no web_language');
+        $this->assertTrue(array_key_exists('web_language', $userPhone), 'missing web_language:' . print_r($userPhone, TRUE));
+        $this->assertEquals('English', $userPhone['web_language'], 'wrong web_language');
         $this->assertGreaterThan(0, count($userPhone['lines']), 'no lines attached');
 
         // update phone

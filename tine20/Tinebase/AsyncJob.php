@@ -5,9 +5,8 @@
  * @package     Tinebase
  * @subpackage  AsyncJob
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Preference.php 7161 2009-03-04 14:27:07Z p.schuele@metaways.de $
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -43,7 +42,10 @@ class Tinebase_AsyncJob
      */
     private function __construct()
     {
-        $this->_backend = new Tinebase_Backend_Sql('Tinebase_Model_AsyncJob', 'async_job');
+        $this->_backend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_AsyncJob', 
+            'tableName' => 'async_job',
+        ));
     }
     
     /**

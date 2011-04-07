@@ -10,7 +10,6 @@
  * 
  */
 
-
 /**
  * backend for leads
  *
@@ -20,21 +19,26 @@
 class Crm_Backend_Lead extends Tinebase_Backend_Sql_Abstract
 {
     /**
-     * the constructor
+     * Table name without prefix
      *
-     * @param Zend_Db_Adapter_Abstract $_db optional
-     * @param string $_modelName
-     * @param string $_tableName
-     * @param string $_tablePrefix
-     *
+     * @var string
      */
-    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL)
-    {
-        parent::__construct($_dbAdapter, 'Crm_Model_Lead', 'metacrm_lead', $_tablePrefix);
-        
-        $this->_modlogActive = TRUE;
-    }
+    protected $_tableName = 'metacrm_lead';
+    
+    /**
+     * Model name
+     *
+     * @var string
+     */
+    protected $_modelName = 'Crm_Model_Lead';
 
+    /**
+     * if modlog is active, we add 'is_deleted = 0' to select object in _getSelect()
+     *
+     * @var boolean
+     */
+    protected $_modlogActive = TRUE;
+        
     /**
      * getGroupCountForField
      * 

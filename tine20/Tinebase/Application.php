@@ -450,7 +450,10 @@ class Tinebase_Application
      */
     public function updateApplication(Tinebase_Model_Application $_application)
     {
-        $backend = new Tinebase_Backend_Sql('Tinebase_Model_Application', 'applications', $this->_db, SQL_TABLE_PREFIX);
+        $backend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Application', 
+            'tableName' => 'applications',
+        ));
         return $backend->update($_application);
     }
     

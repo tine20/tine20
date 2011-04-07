@@ -119,22 +119,26 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
     
     /**
      * the constructor
-     *
+     * 
+     * allowed options:
+     *  - modelName
+     *  - tableName
+     *  - tablePrefix
+     *  - modlogActive
+     *  - useSubselectForCount
+     *  
      * @param Zend_Db_Adapter_Abstract $_db (optional)
-     * @param string $_modelName (optional)
-     * @param string $_tableName (optional)
-     * @param string $_tablePrefix (optional)
-     * @param boolean $_modlogActive (optional)
-     * @param boolean $_useSubselectForCount (optional)
+     * @param array $_options (optional)
      */
-    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL, $_modlogActive = NULL, $_useSubselectForCount = NULL)
+    public function __construct($_dbAdapter = NULL, $_options = array())
     {
         $this->_db = ($_dbAdapter instanceof Zend_Db_Adapter_Abstract) ? $_dbAdapter : Tinebase_Core::getDb();
-        $this->_modelName = $_modelName ? $_modelName : $this->_modelName;
-        $this->_tableName = $_tableName ? $_tableName : $this->_tableName;
-        $this->_tablePrefix = $_tablePrefix ? $_tablePrefix : $this->_db->table_prefix;
-        $this->_modlogActive = ($_modlogActive !== NULL) ? $_modlogActive : $this->_modlogActive;
-        $this->_useSubselectForCount = ($_useSubselectForCount !== NULL) ? $_useSubselectForCount : $this->_useSubselectForCount;
+        
+        $this->_modelName            = array_key_exists('modelName', $_options)            ? $_options['modelName']    : $this->_modelName;
+        $this->_tableName            = array_key_exists('tableName', $_options)            ? $_options['tableName']    : $this->_tableName;
+        $this->_tablePrefix          = array_key_exists('tablePrefix', $_options)          ? $_options['tablePrefix']  : $this->_db->table_prefix;
+        $this->_modlogActive         = array_key_exists('modlogActive', $_options)         ? $_options['modlogActive'] : $this->_modlogActive;
+        $this->_useSubselectForCount = array_key_exists('useSubselectForCount', $_options) ? $_options['useSubselectForCount'] : $this->_useSubselectForCount;
         
         if (! ($this->_tableName && $this->_modelName)) {
             throw new Tinebase_Exception_Backend('modelName and tableName must be configured or given.');
