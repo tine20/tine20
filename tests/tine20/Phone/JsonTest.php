@@ -129,7 +129,9 @@ class Phone_JsonTest extends PHPUnit_Framework_TestCase
         ));
         
         // create phone, location, template, rights
-        $phoneBackend               = new Voipmanager_Backend_Snom_Phone();
+        $phoneBackend               = new Voipmanager_Backend_Snom_Phone(array(
+            'modelName' => 'Phone_Model_MyPhone'
+        ));
         $snomLocationBackend        = new Voipmanager_Backend_Snom_Location();
         $snomSettingBackend         = new Voipmanager_Backend_Snom_Setting();
         $snomPhoneSettingBackend    = new Voipmanager_Backend_Snom_PhoneSettings();
