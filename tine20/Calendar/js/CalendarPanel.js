@@ -244,6 +244,8 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                         case 'edit':
                         default:
                             this.view.getSelectionModel().select(event);
+                            // mark event as not dirty to allow edit dlg
+                            event.dirty = false;
                             this.view.fireEvent('dblclick', this.view, event);
                             this.conflictConfirmWin.close();
                             break;
