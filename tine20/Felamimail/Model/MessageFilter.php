@@ -106,12 +106,16 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         
         $db = $_backend->getAdapter();
         
-        $correlationName = Tinebase_Record_Abstract::generateUID() . 'folder';
-        $what = array($correlationName => SQL_TABLE_PREFIX . 'felamimail_folder');
-        $on = $db->quoteIdentifier("$correlationName.id")      . " = felamimail_cache_message.folder_id";
-        $_select->joinLeft($what, $on, array());
-        
-        $_select->where($db->quoteInto($db->quoteIdentifier("$correlationName.account_id") . ' IN (?)', $accountIds));
+        if (empty($accountIds)) {
+            // no accounts found
+            $_select->where('1=0');
+        } else {
+            $correlationName = Tinebase_Record_Abstract::generateUID() . 'folder';
+            $what = array($correlationName => SQL_TABLE_PREFIX . 'felamimail_folder');
+            $on = $db->quoteIdentifier("$correlationName.id")      . " = felamimail_cache_message.folder_id";
+            $_select->joinLeft($what, $on, array());
+            $_select->where($db->quoteInto($db->quoteIdentifier("$correlationName.account_id") . ' IN (?)', $accountIds));
+        }
     }
     
     /**
