@@ -1119,11 +1119,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $attendee->cal_event_id = $_event->getId();
         
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} ");
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " About to save attendee for event {$_event->id} " .  print_r($attendee->toArray(), true));
         
         $currentEvent = $this->get($_event->getId());
         $currentAttendee = $currentEvent->attendee;
-        //$currentAttendee = $this->_backend->getEventAttendee($_event);
         
         $diff = $currentAttendee->getMigration($attendee->getArrayOfIds());
         $this->_backend->deleteAttendee($diff['toDeleteIds']);
@@ -1132,10 +1130,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         foreach ($attendee as $attender) {
             $attenderId = $attender->getId();
+            $idx = ($attenderId) ? $currentAttendee->getIndexById($attenderId) : FALSE;
             
-            if ($attenderId) {
-                $currentAttender = $currentAttendee[$currentAttendee->getIndexById($attenderId)];
-                
+            if ($idx) {
+                $currentAttender = $currentAttendee[$idx];
                 $this->_updateAttender($attender, $currentAttender, $calendar);
                 
             } else {
