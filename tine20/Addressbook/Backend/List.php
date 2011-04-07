@@ -49,7 +49,8 @@ class Addressbook_Backend_List extends Tinebase_Backend_Sql_Abstract
         'members'    => array(
         	'table'  => 'addressbook_list_members',
             'field'  => 'contact_id',
-    		'joinOn' => 'list_id'
+    		'joinOn' => 'list_id',
+            'preserve' => TRUE,
         ),
         'group_id'    => array(
         	'table'        => 'groups',

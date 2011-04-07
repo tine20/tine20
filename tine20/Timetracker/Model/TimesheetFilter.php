@@ -47,11 +47,17 @@ class Timetracker_Model_TimesheetFilter extends Tinebase_Model_Filter_FilterGrou
         'start_date'     => array('filter' => 'Tinebase_Model_Filter_Date'),
         'is_billable_combined'  => array(
             'filter' => 'Tinebase_Model_Filter_Bool', 
-            'options' => array('leftOperand' => '(timetracker_timesheet.is_billable*timetracker_timeaccount.is_billable)'),
+            'options' => array(
+                'leftOperand'   => '(timetracker_timesheet.is_billable*timetracker_timeaccount.is_billable)',
+                'requiredCols'  => array('is_billable_combined')
+            ),
         ),
         'is_cleared_combined'   => array(
             'filter' => 'Tinebase_Model_Filter_Bool', 
-            'options' => array('leftOperand' => "(timetracker_timesheet.is_cleared|(IF(STRCMP(timetracker_timeaccount.status, 'billed'),0,1)))"),
+            'options' => array(
+                'leftOperand' => "(timetracker_timesheet.is_cleared|(IF(STRCMP(timetracker_timeaccount.status, 'billed'),0,1)))",
+                'requiredCols'  => array('is_cleared_combined'),
+            ),
         ),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag',          'options' => array('idProperty' => 'timetracker_timesheet.id')),
         'customfield'    => array('filter' => 'Tinebase_Model_Filter_CustomField',  'options' => array('idProperty' => 'timetracker_timesheet.id')),

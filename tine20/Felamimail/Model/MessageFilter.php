@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  * @todo        replace 'custom' filters with normal filter classes
  * @todo        should implement acl filter
@@ -107,12 +106,16 @@ class Felamimail_Model_MessageFilter extends Tinebase_Model_Filter_FilterGroup
         
         $db = $_backend->getAdapter();
         
-        $correlationName = Tinebase_Record_Abstract::generateUID() . 'folder';
-        $what = array($correlationName => SQL_TABLE_PREFIX . 'felamimail_folder');
-        $on = $db->quoteIdentifier("$correlationName.id")      . " = felamimail_cache_message.folder_id";
-        $_select->joinLeft($what, $on, array());
-        
-        $_select->where($db->quoteInto($db->quoteIdentifier("$correlationName.account_id") . ' IN (?)', $accountIds));
+        if (empty($accountIds)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' No email accounts found');
+            $_select->where('1=0');
+        } else {
+            $correlationName = Tinebase_Record_Abstract::generateUID() . 'folder';
+            $what = array($correlationName => SQL_TABLE_PREFIX . 'felamimail_folder');
+            $on = $db->quoteIdentifier("$correlationName.id")      . " = felamimail_cache_message.folder_id";
+            $_select->joinLeft($what, $on, array());
+            $_select->where($db->quoteInto($db->quoteIdentifier("$correlationName.account_id") . ' IN (?)', $accountIds));
+        }
     }
     
     /**

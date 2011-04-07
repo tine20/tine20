@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @version     $Id$
  * 
  * @todo        add test for contract <-> timeaccount relations
  */
@@ -162,18 +161,22 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
      */
     public function testAddTimesheetWithCustomFields()
     {
-        $value = 'abcd';
+        $value1 = 'abcd';
+        $value2 = 'efgh';
         $cf = $this->_getCustomField();
                 
         // create two timesheets with customfields
-        $this->_addTsWithCf($cf, $value);
-        $this->_addTsWithCf($cf, 'efgh');
+        $this->_addTsWithCf($cf, $value1);
+        $this->_addTsWithCf($cf, $value2);
         
         // search custom field values and check totalcount
         $tinebaseJson = new Tinebase_Frontend_Json();
         $cfValues = $tinebaseJson->searchCustomFieldValues(Zend_Json::encode($this->_getCfValueFilter($cf->getId())), '');
-        $this->assertEquals($value, $cfValues['results'][0]['value'], 'value mismatch');
         $this->assertEquals(2, $cfValues['totalcount'], 'wrong totalcount');
+        
+        $cfValueArray = array($cfValues['results'][0]['value'], $cfValues['results'][1]['value']);
+        $this->assertTrue(in_array($value1, $cfValueArray));
+        $this->assertTrue(in_array($value2, $cfValueArray));
     }
 
     /**
@@ -484,6 +487,14 @@ class Timetracker_JsonTest extends Timetracker_AbstractTest
             'operator' => 'equals', 
             'value' => FALSE,
         )), $this->_getPaging('is_billable_combined'));
+        $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
+
+        // search again with is_billable filter and no sorting
+        $search = $this->_json->searchTimesheets($this->_getTimesheetFilter(array(
+            'field' => 'is_billable_combined', 
+            'operator' => 'equals', 
+            'value' => FALSE,
+        )), $this->_getPaging());
         $this->assertEquals(0, $search['results'][0]['is_billable_combined'], 'is_billable_combined mismatch');
     }
 

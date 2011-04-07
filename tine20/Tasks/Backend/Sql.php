@@ -6,15 +6,14 @@
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * SQL Backend for Tasks 2.0
  * 
  * The Tasks 2.0 Sql backend consists of various tables. Properties with single
- * appearance are stored in the egw_tasks table. Properties which could appear
+ * appearance are stored in the tasks table. Properties which could appear
  * more than one time are stored in corresponding tables.
  * 
  * @package     Tasks
@@ -69,6 +68,20 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected $_tables = array();
     
     /**
+     * foreign tables (key => tablename)
+     *
+     * @var array
+     */
+    protected $_foreignTables = array(
+        'status'    => array(
+            'table'         => 'tasks_status',
+            'joinOn'        => 'id',
+            'joinId'        => 'status_id',
+            'singleValue'   => TRUE,
+        ),
+    );
+    
+    /**
      * Creates new entry
      *
      * @param   Tinebase_Record_Interface $_record
@@ -82,8 +95,8 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         parent::create($_record);
         
-        $taskParts = $this->seperateTaskData($_record);
-        $this->insertDependentRows($taskParts);
+        $taskParts = $this->_seperateTaskData($_record);
+        $this->_insertDependentRows($taskParts);
         
         return $this->get($_record->getId());
     }
@@ -99,9 +112,9 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     {
         parent::update($_record);
         
-        $taskParts = $this->seperateTaskData($_record);
-        $this->deleteDependentRows($_record->getId());
-        $this->insertDependentRows($taskParts);
+        $taskParts = $this->_seperateTaskData($_record);
+        $this->_deleteDependentRows($_record->getId());
+        $this->_insertDependentRows($taskParts);
         
         return $this->get($_record->getId(), TRUE);
     }
@@ -111,12 +124,12 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      *
      * @param array $_taskparts
      */
-    protected function insertDependentRows($_taskParts)
+    protected function _insertDependentRows($_taskParts)
     {
         foreach (array('contact') as $table) {
             if (!empty($_taskParts[$table])) {
                 $items = explode(',', $_taskParts[$table]);
-                $TableObject = $this->getTableInstance($table);
+                $TableObject = $this->_getTableInstance($table);
                 foreach ($items as $itemId) {
                     $TableObject->insert(array(
                         'task_id'    => $taskId,
@@ -133,11 +146,11 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param string $_parentTaskId
      * @return int number of deleted rows
      */
-    protected function deleteDependentRows($_parentTaskId)
+    protected function _deleteDependentRows($_parentTaskId)
     {
         $deletedRows = 0;
         foreach (array('contact') as $table) {
-            $TableObject = $this->getTableInstance($table);
+            $TableObject = $this->_getTableInstance($table);
             $deletedRows += $TableObject->delete(
                 $this->_db->quoteInto('task_id = ?', $_parentTaskId)
             );
@@ -151,11 +164,11 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param Tasks_Model_Task $_task
      * @return array array of arrays
      */
-    protected function seperateTaskData($_task)
+    protected function _seperateTaskData($_task)
     {
     	$_task->convertDates = true;
         $taskArray = $_task->toArray();
-        $TableDescr = $this->getTableInstance('tasks')->info();
+        $TableDescr = $this->_getTableInstance('tasks')->info();
         $taskparts['tasks'] = array_intersect_key($taskArray, array_flip($TableDescr['cols']));
         
         foreach (array('contact') as $table) {
@@ -174,40 +187,11 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * @param string $_tablename
      * @return Tinebase_Db_Table
      */
-    protected function getTableInstance($_tablename)
+    protected function _getTableInstance($_tablename)
     {
         if (!isset($this->_tables[$_tablename])) {
             $this->_tables[$_tablename] = new Tinebase_Db_Table(array('name' => $this->_tablePrefix . $this->_tableNames[$_tablename]));
         }
         return $this->_tables[$_tablename];
     }
-    
-    /********************************** protected funcs **********************************/
-    
-    /**
-     * Returns a common select Object
-     * 
-     * @return Zend_Db_Select
-     */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {
-        $cols = (array)$_cols;
-        
-        if (array_key_exists('count', $cols)) {
-            $cols['count'] = "COUNT({$this->_db->quoteIdentifier('tasks.id')})";
-        } else {
-            $cols['is_due'] = "LENGTH({$this->_db->quoteIdentifier('tasks.due')})";
-        }
-        
-        $select = $this->_db->select()
-            ->from(array('tasks' => $this->_tablePrefix . $this->_tableNames['tasks']), $cols)
-            ->joinLeft(array('status'  => $this->_tablePrefix . $this->_tableNames['status']), 'tasks.status_id = status.id', array());
-            
-        if ($_getDeleted !== TRUE) {
-            $select->where($this->_db->quoteIdentifier('tasks.is_deleted') . ' = FALSE');
-        }
-        
-        return $select;
-    }
-   
 }

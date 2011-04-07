@@ -190,4 +190,84 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Tinebase', '4.5');
     }
+
+    /**
+     * update to 4.6
+     * - add unique id column to relations table
+     */
+    public function update_5()
+    {
+        $this->_backend->dropIndex('relations', 'PRIMARY');
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>rel_id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->alterCol('relations', $declaration, 'id');
+
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>id</name>
+                <type>text</type>
+                <length>40</length>
+                <notnull>true</notnull>
+            </field>
+        ');
+        $this->_backend->addCol('relations', $declaration, 0);
+        
+        // add unique ids to all existing relations
+        $tablePrefix = SQL_TABLE_PREFIX;
+        $relations = $this->_db->query("
+            SELECT * 
+            FROM `{$tablePrefix}relations`
+        ")->fetchAll(Zend_Db::FETCH_ASSOC);
+        foreach ($relations as $relation) {
+            $relation['id'] = Tinebase_Record_Abstract::generateUID();
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('rel_id') .       ' = ?', $relation['rel_id']),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('own_model') .    ' = ?', $relation['own_model']),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('own_backend') .  ' = ?', $relation['own_backend']),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('own_id') .       ' = ?', $relation['own_id']),
+            );
+            $this->_db->update($tablePrefix . 'relations', $relation, $where);
+        }
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+            ');
+        $this->_backend->addIndex('relations', $declaration);
+        
+        $declaration = new Setup_Backend_Schema_Index_Xml('
+                <index>
+                    <name>rel_id-own_model-own_backend-own_id</name>
+                    <unique>true</unique>
+                    <field>
+                        <name>rel_id</name>
+                    </field>
+                    <field>
+                        <name>own_model</name>
+                    </field>
+                    <field>
+                        <name>own_backend</name>
+                    </field>
+                    <field>
+                        <name>own_id</name>
+                    </field>
+                </index>
+            ');
+        $this->_backend->addIndex('relations', $declaration);
+        
+        $this->setTableVersion('relations', '5');
+        $this->setApplicationVersion('Tinebase', '4.6');
+    }
 }

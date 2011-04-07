@@ -80,6 +80,11 @@ class Tinebase_Auth
     const FAILURE_BLOCKED               = -102;
         
     /**
+     * database connection failure
+     */
+    const FAILURE_DATABASE_CONNECTION   = -103;
+        
+    /**
      * Authentication success.
      */
     const SUCCESS                        =  Zend_Auth_Result::SUCCESS;

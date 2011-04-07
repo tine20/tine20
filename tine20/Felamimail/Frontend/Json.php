@@ -177,9 +177,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $partId    = null;
         }
         
-        $controller = Felamimail_Controller_Message::getInstance();
-        
-        $message = $controller->getCompleteMessage($messageId, $partId, false);
+        $message = Felamimail_Controller_Message::getInstance()->getCompleteMessage($messageId, $partId, false);
         $message->id = $id;
         
         return $this->_recordToJson($message);
@@ -199,7 +197,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         $filter = new Felamimail_Model_MessageFilter(array());
         $filter->setFromArrayInUsersTimezone($filterData);
-        $updatedFolders = Felamimail_Controller_Message::getInstance()->moveMessages($filter, $targetFolderId);
+        $updatedFolders = Felamimail_Controller_Message_Move::getInstance()->moveMessages($filter, $targetFolderId);
         
         $result = $this->_multipleRecordsToJson($updatedFolders);
         
@@ -223,7 +221,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . print_r(Zend_Json::decode($recordData), TRUE));
         
         try {
-            $result = Felamimail_Controller_Message::getInstance()->sendMessage($message);
+            $result = Felamimail_Controller_Message_Send::getInstance()->sendMessage($message);
             $result = $this->_recordToJson($result);
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not send message: ' . $zmpe->getMessage());
@@ -245,7 +243,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $message = new Felamimail_Model_Message();
         $message->setFromJsonInUsersTimezone($recordData);
         
-        $result = Felamimail_Controller_Message::getInstance()->saveMessageInFolder($folderName, $message);
+        $result = Felamimail_Controller_Message_Send::getInstance()->saveMessageInFolder($folderName, $message);
         $result = $this->_recordToJson($result);
         
         return $result;
@@ -273,7 +271,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             $filter = $filterData;
         }
         
-        $affectedFolders = Felamimail_Controller_Message::getInstance()->addFlags($filter, (array) $flags);
+        $affectedFolders = Felamimail_Controller_Message_Flags::getInstance()->addFlags($filter, (array) $flags);
         
         return array(
             'status'    => 'success',
@@ -300,7 +298,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } else {
             $filter = $filterData;
         }
-        $affectedFolders = Felamimail_Controller_Message::getInstance()->clearFlags($filter, (array) $flags);
+        $affectedFolders = Felamimail_Controller_Message_Flags::getInstance()->clearFlags($filter, (array) $flags);
         
         return array(
             'status' => 'success'
@@ -535,7 +533,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             );
         }
         
-        $supportedFlags = Felamimail_Controller_Message::getInstance()->getSupportedFlags();
+        $supportedFlags = Felamimail_Controller_Message_Flags::getInstance()->getSupportedFlags();
         
         $result = array(
             'accounts'              => $accounts,

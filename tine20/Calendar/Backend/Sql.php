@@ -3,10 +3,10 @@
  * Sql Calendar 
  * 
  * @package     Calendar
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -17,6 +17,7 @@
  * 
  * 
  * @package Calendar 
+ * @subpackage  Backend
  */
 class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
@@ -156,7 +157,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         // we use a an extra select to reduce data amount where grants etc. have to be computed for.
         // the exdate is already appended here, to reduce virtual row numbers later
-        $subselect = parent::_getSelect('id', $_getDeleted);
+        $subselect = $this->_getSelectSimple('id', $_getDeleted);
         
         $subselect->joinLeft(
             /* table  */ array('exdate' => $this->_tablePrefix . 'cal_exdate'),
@@ -197,7 +198,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             $exdates[$row['id']] = $row['exdate'];
         }
 
-        $select = parent::_getSelect('*', $_getDeleted);
+        $select = $this->_getSelectSimple('*', $_getDeleted);
         $select->where($this->_db->quoteInto("{$this->_db->quoteIdentifier('cal_events.id')} IN (?)", !empty($ids) ? $ids : ' ' ));
         
         // append grants filters : only take limited set of attendee into account for grants computation
@@ -242,6 +243,43 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * get the basic select object to fetch records from the database
+     *  
+     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
+     * @param boolean $_getDeleted get deleted records (if modlog is active)
+     * @return Zend_Db_Select
+     */
+    protected function _getSelectSimple($_cols = '*', $_getDeleted = FALSE)
+    {        
+        $select = $this->_db->select();
+
+        $select->from(array($this->_tableName => $this->_tablePrefix . $this->_tableName), $_cols);
+        
+        if (!$_getDeleted && $this->_modlogActive) {
+            // don't fetch deleted objects
+            $select->where($this->_db->quoteIdentifier($this->_tableName . '.is_deleted') . ' = 0');                        
+        }
+        
+        return $select;
+    }
+    
+    /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter)
+    {   
+        $select = $this->_getSelect(array('count' => 'COUNT(*)'));
+        $this->_addFilter($select, $_filter);
+
+        $result = $this->_db->fetchOne($select);
+        
+        return $result;        
+    }    
+    
+    /**
      * Updates existing entry
      *
      * @param Tinebase_Record_Interface $_record
@@ -272,8 +310,8 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
     {
-        $select = parent::_getSelect($_cols, $_getDeleted);
-        
+        $select = $this->_getSelectSimple();
+
         $this->_appendEffectiveGrantCalculationSql($select);
         
         $select->joinLeft(
@@ -304,9 +342,12 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         //       taken into account for grants calculation 
         $attendeeWhere = FALSE;
         if ($_attenderFilter instanceof Calendar_Model_AttenderFilter) {
-            $attedeeSelect = $this->_db->select();
-            $_attenderFilter->appendFilterSql($attedeeSelect, $this);
-            $attendeeWhere = ' AND ' . array_value(0, $attedeeSelect->getPart(Zend_Db_Select::SQL_WHERE));
+            $attendeeSelect = $this->_db->select();
+            $_attenderFilter->appendFilterSql($attendeeSelect, $this);
+            $whereArray = $attendeeSelect->getPart(Zend_Db_Select::SQL_WHERE);
+            if (! empty($whereArray)) {
+                $attendeeWhere = ' AND ' . array_value(0, $whereArray);
+            }
         }
         
         $_select->joinLeft(

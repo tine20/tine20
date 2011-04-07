@@ -2,18 +2,19 @@
 /**
  * Tine 2.0
  *
- * @package     Voipmanager Management
+ * @package     Voipmanager
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
 /**
  * Asterisk peer sql backend
  *
- * @package  Voipmanager
+ * @package     Voipmanager
+ * @subpackage  Backend
  */
 class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
 {
@@ -30,6 +31,15 @@ class Voipmanager_Backend_Asterisk_SipPeer extends Tinebase_Backend_Sql_Abstract
      * @var string
      */
     protected $_modelName = 'Voipmanager_Model_Asterisk_SipPeer';
+    
+    /**
+     * use subselect in searchCount fn
+     * -> can't use subselect because of the regseconds 
+     *    (Zend_Db_Statement_Exception: SQLSTATE[42S21]: Column already exists: 1060 Duplicate column name 'regseconds')
+     *
+     * @var boolean
+     */
+    protected $_useSubselectForCount = FALSE;
     
     /**
      * get the basic select object to fetch records from the database

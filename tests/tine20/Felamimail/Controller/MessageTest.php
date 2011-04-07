@@ -23,7 +23,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     /**
      * @var Felamimail_Controller_Message
      */
-    protected $_controller = array();
+    protected $_controller = NULL;
     
     /**
      * @var Felamimail_Model_Account
@@ -86,7 +86,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_account    = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
-        $this->_controller = Felamimail_Controller_Message::getInstance();  
+        $this->_controller = Felamimail_Controller_Message::getInstance();
         $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
         
         $this->_folder     = $this->_getFolder($this->_testFolderName);
@@ -104,7 +104,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         try {
-            $this->_controller->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+            Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // do nothing
         }
@@ -778,7 +778,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         ));
         $sentFolder = $this->_getFolder('Sent');
 
-        $this->_controller->sendMessage($forwardMessage);
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($forwardMessage);
         
         $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $this->_getFolder('INBOX'));
         $forwardedMessageInSent = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $sentFolder);
@@ -890,7 +890,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         
-        $this->_controller->moveMessages($cachedMessage, $folder);
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($cachedMessage, $folder);
         $message = $this->_searchMessage('multipart/mixed', $folder);
         
         $folder = $this->_cache->updateCache($folder, 30);
@@ -927,7 +927,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $cachedMessage1 = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed', $trashFolderMainAccount);
         $cachedMessage2 = $this->messageTestHelper('complete.eml', 'text/service', $trashFolderClonedAccount);
         
-        $this->_controller->addFlags(array($cachedMessage1->getId(), $cachedMessage2->getId()), array(Zend_Mail_Storage::FLAG_DELETED));
+        Felamimail_Controller_Message_Flags::getInstance()->addFlags(array($cachedMessage1->getId(), $cachedMessage2->getId()), array(Zend_Mail_Storage::FLAG_DELETED));
         
         $result1 = $this->_searchOnImap('multipart/mixed', $trashFolderMainAccount);
         $this->assertEquals(0, count($result1), $trashFolderMainAccount->globalname . ' still contains multipart/mixed messages:' . print_r($result1, TRUE));
@@ -982,6 +982,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $message = $this->_searchMessage($_testHeaderValue, $folder);
         
         $cachedMessage = $this->_cache->addMessage($message, $folder);
+        if ($cachedMessage === FALSE) {
+            // try to add message again (it had a duplicate)
+            $this->_cache->clear($folder);
+            $cachedMessage = $this->_cache->addMessage($message, $folder);
+        }
+        
         $this->_createdMessages->addRecord($cachedMessage);
         
         return $cachedMessage;

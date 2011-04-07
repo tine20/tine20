@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>4.5</version>
+	<version>4.6</version>
 	<tables>
 		<table>
 			<name>applications</name>
@@ -905,10 +905,16 @@
 
 		<table>
 			<name>relations</name>
-			<version>4</version>
+			<version>5</version>
 			<declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
 				<field>
-					<name>id</name>
+					<name>rel_id</name>
 					<type>text</type>
 					<length>40</length>
 					<notnull>true</notnull>
@@ -1006,11 +1012,18 @@
 					<type>datetime</type>
 					<notnull>false</notnull>
 				</field>
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
 				<index>
-					<name>id-own_model-own_backend-own_id</name>
-					<primary>true</primary>
+					<name>rel_id-own_model-own_backend-own_id</name>
+                    <unique>true</unique>
 					<field>
-						<name>id</name>
+						<name>rel_id</name>
 					</field>
 					<field>
 						<name>own_model</name>

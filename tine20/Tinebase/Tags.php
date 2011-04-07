@@ -576,9 +576,14 @@ class Tinebase_Tags
     {
         $tagId = $_tag instanceof Tinebase_Model_Tag ? $_tag->getId() : $_tag;
         
-        $this->_db->update(SQL_TABLE_PREFIX . 'tags', array(
-            'occurrence' => new Zend_Db_Expr('occurrence+' . (int)$_toAdd)
-        ), $this->_db->quoteInto('id = ?', $tagId));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " inc/decreasing tag occurrence of $tagId by $_toAdd");
+       
+        $quotedIdentifier = $this->_db->quoteIdentifier('occurrence');
+        $data = array(
+            'occurrence' => new Zend_Db_Expr('IF((' . $quotedIdentifier . ' + ' . (int)$_toAdd . ') >= 0,' . $quotedIdentifier . ' + ' . (int)$_toAdd . ', 0)')
+        );
+        
+        $this->_db->update(SQL_TABLE_PREFIX . 'tags', $data, $this->_db->quoteInto('id = ?', $tagId));
     }
     
     /**

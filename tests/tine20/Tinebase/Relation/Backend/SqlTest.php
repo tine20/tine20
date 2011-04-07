@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * 
  * @todo        add test for existing relations that have to be deleted first
  */
@@ -16,11 +15,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(dirname(__FILE__)))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-// Call Tinebase_Relation_Backend_SqlTest::main() if this source file is executed directly.
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Relation_Backend_SqlTest::main');
-}
 
 /**
  * Test class for Tinebase_Relation_Backend_Sql.
@@ -118,13 +112,13 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
 
         foreach ($this->relations as $relation) {
              $db->delete(array(
-                 $db->getAdapter()->quoteInto('id = ?',$relation->getId())
+                 $db->getAdapter()->quoteInto('rel_id = ?',$relation->getId())
             ));
         }
     }
 
     /**
-     * testGetInstance().
+     * testGetInstance
      */
     public function testInstance()
     {
@@ -142,6 +136,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
             }
         }
     }
+
     /**
      * test if swaped relations got created
      */
@@ -154,6 +149,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($relation['related_id'], $swap->own_id);
         }
     }
+
     /**
      * testUpdateRelationForward
      */
@@ -178,6 +174,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $updatedSwap = $this->object->getRelation($rel->getId(), $rel->related_model, $rel->related_backend, $rel->related_id);
         $this->assertEquals('UPDATE', $updatedSwap->type);
     }
+
     /**
      * testBreakRelation in forward direktion.
      */
@@ -188,6 +185,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('Tinebase_Exception_Record_NotDefined');
         $this->object->getRelation($rel->getId(), $rel->own_model, $rel->own_backend, $rel->own_id);
     }
+
     /**
      * testBreakRelation in swaped direction.
      */
@@ -199,8 +197,9 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
         $this->object->getRelation($rel->getId(), $rel->related_model, $rel->related_backend, $rel->related_id);
     }
     
-    
-    
+    /**
+     * testBreakRelationExcludeSet
+     */
     public function testBreakRelationExcludeSet()
     {    
         $rel = $this->relations[0];
@@ -215,7 +214,7 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testBreakAllRelations().
+     * testBreakAllRelations
      */
     public function testBreakAllRelations() {
         $rel = $this->relations[0];
@@ -230,9 +229,3 @@ class Tinebase_Relation_Backend_SqlTest extends PHPUnit_Framework_TestCase
         
     }
 }
-
-// Call Tinebase_Relation_Backend_SqlTest::main() if this source file is executed directly.
-if (PHPUnit_MAIN_METHOD == 'Tinebase_Relation_Backend_SqlTest::main') {
-    Tinebase_Relation_Backend_SqlTest::main();
-}
-?>
