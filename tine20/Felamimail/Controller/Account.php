@@ -600,6 +600,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * check system folders and create the if not found
+     * 
+     * @param $_account
+     */
+    public function checkSystemFolders($_account)
+    {
+        $systemFoldersToCheck = array(Felamimail_Model_Folder::FOLDER_TRASH, Felamimail_Model_Folder::FOLDER_SENT);
+        foreach($systemFoldersToCheck as $folder) {
+            $this->getSystemFolder($_account);
+        }
+    }
+    
+    /**
      * get system folder for account
      * 
      * @param $_account

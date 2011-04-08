@@ -140,6 +140,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             (! empty($result) && isset($result[0]['delimiter']) && ! empty($result[0]['delimiter'])) ? $result[0]['delimiter'] : NULL
         );
         
+        Felamimail_Controller_Account::getInstance()->checkSystemFolders($_account);
+        
         return $result;
     }
     
