@@ -81,15 +81,16 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param  mixed   $_accountId
      * @param  string  $_folderName global name
      * @param  boolean $_recursive 
+     * @param  boolean $_checkAccount check capabilities and system folders
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
-    public function update($_accountId, $_folderName = '', $_recursive = FALSE)
+    public function update($_accountId, $_folderName = '', $_recursive = FALSE, $_checkAccount = TRUE)
     {
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
         if (empty($_folderName)) {
-            $folders = $this->_getRootFoldersAndCheckAccount($account);
+            $folders = $this->_getRootFoldersAndCheckAccount($account, $_checkAccount);
         } else {
             $folders = $this->_getSubfolders($account, $_folderName);
         }
@@ -97,7 +98,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $result = $this->_getOrCreateFolders($folders, $account, $_folderName);
         
         if (! empty($_folderName)) {
-            $this->_updateHasChildren($_accountId, $_folderName, $folders);
+            $hasChildren = (empty($folders) || count($folders) > 0 && count($result) == 0) ? 0 : 1;
+            $this->_updateHasChildren($_accountId, $_folderName, $hasChildren);
         }
         
         if ($_recursive) {
@@ -118,9 +120,10 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * get root folders and check account capabilities and system folders
      * 
      * @param Felamimail_Model_Account $_account
+     * @param  boolean $_checkAccount check capabilities and system folders
      * @return array of folders
      */
-    protected function _getRootFoldersAndCheckAccount(Felamimail_Model_Account $_account)
+    protected function _getRootFoldersAndCheckAccount(Felamimail_Model_Account $_account, $_checkAccount = TRUE)
     {
         try {
             $imap = Felamimail_Backend_ImapFactory::factory($_account);
@@ -133,15 +136,16 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             . ' Get subfolders of root for account ' . $_account->getId());
         $result = $imap->getFolders('', '%');
         
-        // get imap server capabilities and save delimiter / personal namespace in account
-        // @ŧodo remove that?
-        Felamimail_Controller_Account::getInstance()->updateCapabilities(
-            $_account, 
-            $imap, 
-            (! empty($result) && isset($result[0]['delimiter']) && ! empty($result[0]['delimiter'])) ? $result[0]['delimiter'] : NULL
-        );
-        
-        Felamimail_Controller_Account::getInstance()->checkSystemFolders($_account);
+        if ($_checkAccount) {
+            // get imap server capabilities and save delimiter / personal namespace in account
+            // @ŧodo remove that?
+            Felamimail_Controller_Account::getInstance()->updateCapabilities(
+                $_account, 
+                $imap, 
+                (! empty($result) && isset($result[0]['delimiter']) && ! empty($result[0]['delimiter'])) ? $result[0]['delimiter'] : NULL
+            );
+            Felamimail_Controller_Account::getInstance()->checkSystemFolders($_account);
+        }
         
         return $result;
     }
@@ -183,16 +187,15 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * 
      * @param string|Felamimail_Model_Account $_accountId
      * @param string $_folderName
-     * @param array $_folders
+     * @param boolean $_hasChildren
      */
-    protected function _updateHasChildren($_accountId, $_folderName, $_folders)
+    protected function _updateHasChildren($_accountId, $_folderName, $_hasChildren)
     {
         $parentFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_accountId, $_folderName);
-        $hasChildren = (empty($_folders) || count($_folders) > 0 && count($result) == 0) ? 0 : 1;
-        if ($hasChildren != $parentFolder->has_children) {
+        if ($_hasChildren != $parentFolder->has_children) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Update has_children = ' . $hasChildren . ' for folder ' . $parentFolder->globalname);
-            $parentFolder->has_children = $hasChildren;
+                . ' Update has_children = ' . $_hasChildren . ' for folder ' . $parentFolder->globalname);
+            $parentFolder->has_children = $_hasChildren;
             $this->_backend->update($parentFolder);
         }
     }
