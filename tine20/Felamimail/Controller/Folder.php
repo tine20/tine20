@@ -515,7 +515,13 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             return NULL;
         }
 
-        $folder = $this->getByBackendAndGlobalName($_accountId, $_globalname);
+        try {
+            $folder = $this->getByBackendAndGlobalName($_accountId, $_globalname);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' .
+                $tenf->getMessage());
+            return NULL;
+        }
         if ($_value === NULL) {
             // check if folder has children by searching in db
             $subfolders = $this->getSubfolders($account, $_globalname);
