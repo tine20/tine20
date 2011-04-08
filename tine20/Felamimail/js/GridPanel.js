@@ -650,11 +650,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var msgs = sm.getSelectionsCollection();
             
             if (sm.getCount() == 1 && this.getStore().getCount() > 1) {
-                // select next message (or previous if it was the last)
-                lastIdx = this.getStore().indexOf(msgs.last());
-                nextRecord = this.getStore().getAt(lastIdx + 1);
+                // select next message (or previous if it was the last or BACKSPACE)
+                var lastIdx = this.getStore().indexOf(msgs.last()),
+                    direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
+                
+                nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
                 if (! nextRecord) {
-                    nextRecord = this.getStore().getAt(lastIdx - 1);
+                    nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
                 }
             }
         }
@@ -873,7 +875,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         var record = this.grid.getSelectionModel().getSelected(),
             folder = this.app.getFolderStore().getById(record.get('folder_id')),
-            account = this.app.getAccountStore().getById(folder.get('account_id'));
+            account = this.app.getAccountStore().getById(folder.get('account_id')),
             action = (folder.get('globalname') == account.get('drafts_folder')) ? 'senddraft' :
                      folder.get('globalname') == account.get('templates_folder') ? 'sendtemplate' : null;
         
@@ -904,7 +906,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {} msgData
      */
     onRemoveInDisplayDialog: function (msgData) {
-        var msg = this.getStore().getById(Ext.decode(msgData).id);
+        var msg = this.getStore().getById(Ext.decode(msgData).id),
             folderId = msg ? msg.get('folder_id') : null,
             folder = folderId ? this.app.getFolderStore().getById(folderId) : null,
             accountId = folder ? folder.get('account_id') : null,
