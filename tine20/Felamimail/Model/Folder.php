@@ -3,10 +3,10 @@
  * class to hold Folder data
  * 
  * @package     Felamimail
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * 
  * @todo        rename unreadcount -> unseen
  */
@@ -14,10 +14,12 @@
 /**
  * class to hold Folder data
  * 
+ * @package     Felamimail
+ * @subpackage  Model
+ *
  * @property  string  account_id
  * @property  string  localname
  * @property  string  globalname
- * @package     Felamimail
  */
 class Felamimail_Model_Folder extends Tinebase_Record_Abstract
 {  
@@ -67,6 +69,21 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
      * meta folder trash constant
      */
     const FOLDER_TRASH = '_trash_';
+    
+    /**
+     * meta folder sent constant
+     */
+    const FOLDER_SENT = '_sent_';
+    
+    /**
+     * meta folder drafts constant
+     */
+    const FOLDER_DRAFTS = '_drafts_';
+    
+    /**
+     * meta folder templates constant
+     */
+    const FOLDER_TEMPLATES = '_templates_';
     
     /**
      * key in $_validators/$_properties array for the field which 
