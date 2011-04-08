@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
  
@@ -22,7 +21,6 @@ Ext.namespace('Tine.Felamimail');
  * 
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @version     $Id$
  * 
  * @param       {Object} config
  * 
@@ -95,7 +93,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
             
             this.showActiveVacation();
-            this.checkAccounts.defer(10000, this);
         }
     },
     
@@ -112,24 +109,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }, this);
     },
 
-    /**
-     * checks accounts
-     * 
-     * TODO perhaps we could set the account status to disconnect if checkAccounts fails
-     */
-    checkAccounts: function () {
-        // only checks system accounts atm
-        var systemAccounts = this.getAccountStore().query('type', 'system'),
-            ids = [];
-        systemAccounts.each(function(item) {
-            ids.push(item.id);
-        }, this);
-        
-        if (ids.length > 0) {
-            Tine.Felamimail.accountBackend.checkAccounts(ids);
-        }
-    },
-    
     /**
      * check mails
      * 

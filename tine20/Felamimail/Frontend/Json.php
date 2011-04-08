@@ -412,40 +412,6 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return array('status' => ($result) ? 'success' : 'failure');
     }
     
-    /**
-     * check account
-     *  - the existance of sent/trash folders
-     *  
-     * @param $id
-     * 
-     * @todo check capabilities here too 
-     */
-    public function checkAccounts($ids)
-    {
-        // close session to allow other requests
-        Zend_Session::writeClose(true);
-        
-        $result = TRUE;
-
-        $accounts = Felamimail_Controller_Account::getInstance()->getMultiple($ids);
-        foreach ($accounts as $account) {
-            if ($account->type === Felamimail_Model_Account::TYPE_SYSTEM) {
-                // check existance of sent/trash folder only for system accounts atm
-                try {
-                    $result = Felamimail_Controller_Account::getInstance()->checkSentTrash($account->getId());
-                } catch (Exception $e) {
-                    Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not check account: ' . $e->getMessage());
-                    $result = FALSE;
-                }
-                if (! $result) {
-                    break;
-                }
-            }
-        }
-        
-        return array('status' => ($result) ? 'success' : 'failure');
-    }
-    
     /***************************** sieve funcs *******************************/
     
     /**

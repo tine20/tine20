@@ -554,52 +554,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * check if sent/trash folders exists and create them if not
-     * 
-     * @param string|Felamimail_Model_Account $_account account record or id
-     * @return boolean
-     * 
-     * @todo remove that
-     */
-    public function checkSentTrash($_account)
-    {
-        $account = ($_account instanceof Felamimail_Model_Account) ? $_account : $this->get($_account);
-        $imapBackend = $this->_getIMAPBackend($account);
-        if (! $imapBackend) {
-            return FALSE;
-        }
-        
-        $changed = $this->_addFolderDefaults($account);
-        if ($changed) {
-            // need to use backend update because we prohibit the change of some fields in _inspectBeforeUpdate()
-            $account = $this->_backend->update($account);
-        }
-        
-        // make sure that we have the root level of folders in the cache first
-        Felamimail_Controller_Folder::getInstance()->search(new Felamimail_Model_FolderFilter(array(
-            array('field' => 'account_id', 'operator' => 'equals', 'value' => $account->getId())
-        )));
-        
-        $foldersToCheck = array($account->sent_folder, $account->trash_folder);
-        foreach ($foldersToCheck as $folderName) {
-            if ($imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
-                Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $folderName . '. Trying to add it.');
-                
-                // get localname + parentfolder
-                $globalNameParts = explode($account->delimiter, $folderName);
-                $localname = array_pop($globalNameParts);
-                $parent = (count($globalNameParts) > 0) ? implode($account->delimiter, $globalNameParts) : '';
-                
-                Felamimail_Controller_Folder::getInstance()->create($account, $localname, $parent);
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Folder ' . $folderName . ' exists.');
-            }
-        }
-        
-        return TRUE;
-    }
-    
-    /**
      * check system folders and create the if not found
      * 
      * @param $_account

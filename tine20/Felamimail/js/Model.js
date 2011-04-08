@@ -447,28 +447,7 @@ Tine.Felamimail.Model.Account.getDefaultData = function() {
 Tine.Felamimail.accountBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Felamimail',
     modelName: 'Account',
-    recordClass: Tine.Felamimail.Model.Account,
-    
-    /**
-     * check accounts
-     * 
-     * @param   {String} ids
-     * @param   {Object} options
-     * @return  {Number} Ext.Ajax transaction id
-     */
-    checkAccounts: function(ids, options) {
-        options = options || {};
-        options.params = options.params || {};
-        
-        var p = options.params;
-        
-        p.method = this.appName + '.checkAccounts';
-        p.ids = ids;
-        
-        //options.timeout = executionTime * 5000;
-                
-        return this.doXHTTPRequest(options);
-    }
+    recordClass: Tine.Felamimail.Model.Account
 });
 
 /**
