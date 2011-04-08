@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * 
  * @todo        make it possible to switch back to smtp creds = imap creds even if extra smtp creds have been created
  */
@@ -560,7 +559,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param string|Felamimail_Model_Account $_account account record or id
      * @return boolean
      * 
-     * @todo we should make this configurable
+     * @todo remove that
      */
     public function checkSentTrash($_account)
     {
@@ -601,16 +600,69 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * get trash folder for account
+     * get system folder for account
      * 
      * @param $_account
+     * @param $_systemFolder
      * @return Felamimail_Model_Folder
+     * @throws Tinebase_Exception_InvalidArgument
      */
-    public function getTrashFolder($_account)
+    public function getSystemFolder($_account, $_systemFolder = Felamimail_Model_Folder::FOLDER_TRASH)
     {
         $account = ($_account instanceof Felamimail_Model_Account) ? $_account : $this->get($_account);
-        $trashFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $account->trash_folder);
-        return $trashFolder;
+        $imapBackend = $this->_getIMAPBackend($account);
+        
+        switch ($_systemFolder) {
+            case Felamimail_Model_Folder::FOLDER_TRASH:
+                $folderName = $account->trash_folder;
+                break;
+            case Felamimail_Model_Folder::FOLDER_SENT:
+                $folderName = $account->sent_folder;
+                break;
+            case Felamimail_Model_Folder::FOLDER_TEMPLATES:
+                $folderName = $account->templates_folder;
+                break;
+            case Felamimail_Model_Folder::FOLDER_DRAFTS:
+                $folderName = $account->drafts_folder;
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('No system folder: ' . $_systemFolder);
+        }
+        
+        // check if folder exists on imap server
+        if ($imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
+            $systemFolder = $this->_createSystemFolder($folderName);
+        } else {
+            try {
+                $systemFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $folderName);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getMessage());
+                // update folder cache
+                Felamimail_Controller_Cache_Folder::getInstance()->update($account, '', TRUE);
+                $systemFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $folderName);
+            }
+        }
+        
+        return $systemFolder;
+    }
+    
+    /**
+     * create new system folder
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_systemFolder
+     * @return Felamimail_Model_Folder
+     */
+    protected function _createSystemFolder(Felamimail_Model_Account $_account, $_systemFolder)
+    {
+        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Folder not found: ' . $_systemFolder . '. Trying to add it.');
+        
+        // get localname + parentfolder
+        $globalNameParts = explode($_account->delimiter, $_systemFolder);
+        $localname = array_pop($globalNameParts);
+        $parent = (count($globalNameParts) > 0) ? implode($_account->delimiter, $globalNameParts) : '';
+        
+        return Felamimail_Controller_Folder::getInstance()->create($_account, $localname, $parent);
     }
     
     /**
