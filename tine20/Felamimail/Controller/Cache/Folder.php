@@ -129,7 +129,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
             return array();
         }
         
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Get subfolders of root for account ' . $account->getId());
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Get subfolders of root for account ' . $_account->getId());
         $result = $imap->getFolders('', '%');
         
         // get imap server capabilities and save delimiter / personal namespace in account
@@ -157,8 +158,10 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $result = array();
         
         try {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' trying to get subfolders of ' . $_folderName . $this->_delimiter);
+
             $imap = Felamimail_Backend_ImapFactory::factory($_account);
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' trying to get subfolders of ' . $_folderName . $this->_delimiter);
             $result = $imap->getFolders(Felamimail_Model_Folder::encodeFolderName($_folderName) . $this->_delimiter, '%');
             
             // remove folder if self
@@ -168,7 +171,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zmpe->getMessage());
         } catch (Zend_Mail_Storage_Exception $zmse) {
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No subfolders of ' . $_folderName . ' found.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' No subfolders of ' . $_folderName . ' found.');
         }
         
         return $result;
@@ -186,7 +190,8 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         $parentFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_accountId, $_folderName);
         $hasChildren = (empty($_folders) || count($_folders) > 0 && count($result) == 0) ? 0 : 1;
         if ($hasChildren != $parentFolder->has_children) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update has_children = ' . $hasChildren . ' for folder ' . $parentFolder->globalname);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Update has_children = ' . $hasChildren . ' for folder ' . $parentFolder->globalname);
             $parentFolder->has_children = $hasChildren;
             $this->_backend->update($parentFolder);
         }
