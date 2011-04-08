@@ -81,7 +81,10 @@ class Felamimail_Controller_Message_Move extends Felamimail_Controller_Message
             if ($_targetFolder === Felamimail_Model_Folder::FOLDER_TRASH) {
                 // messages should be moved to trash -> need to determine the trash folder for the account of the folder that contains the messages
                 try {
-                    $targetFolder = Felamimail_Controller_Account::getInstance()->getTrashFolder($messagesInFolder->getFirstRecord()->account_id);
+                    $targetFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder(
+                        $messagesInFolder->getFirstRecord()->account_id,
+                        Felamimail_Model_Folder::FOLDER_TRASH
+                    );
                     $this->_moveMessagesInFolderOnSameAccount($messagesInFolder, $targetFolder);
                 } catch (Tinebase_Exception_NotFound $tenf) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' No trash folder found - skipping messages in this folder.');
