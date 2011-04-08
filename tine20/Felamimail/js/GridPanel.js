@@ -650,11 +650,13 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var msgs = sm.getSelectionsCollection();
             
             if (sm.getCount() == 1 && this.getStore().getCount() > 1) {
-                // select next message (or previous if it was the last)
-                var lastIdx = this.getStore().indexOf(msgs.last());
-                nextRecord = this.getStore().getAt(lastIdx + 1);
+                // select next message (or previous if it was the last or BACKSPACE)
+                var lastIdx = this.getStore().indexOf(msgs.last()),
+                    direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
+                
+                nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
                 if (! nextRecord) {
-                    nextRecord = this.getStore().getAt(lastIdx - 1);
+                    nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
                 }
             }
         }
