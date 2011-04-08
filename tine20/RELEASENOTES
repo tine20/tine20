@@ -4,13 +4,13 @@
                     TINE 2.0 RELEASENOTES
                     
 Release:    no codename yet (2011/05)
-Date:       $LastChangedDate$
 
 
 Contents
 --
 
 1. VCard import in addressbook
+2. API change Tinebase_Backend_Sql / Tinebase_Backend_Sql_Abstract
 
 
 -----------------
@@ -19,4 +19,18 @@ Contents
 
 - It is now possible to import vcards into the addressbook and the plugin is usable in the import framework (js client + CLI)
 - We use the vcardphp class by Frank Hellwig (http://vcardphp.sourceforge.net) to parse the file 
-and the import plugin by Yann Le Moigne <segfaultmaker@gmail.com> 
+and the import plugin by Yann Le Moigne <segfaultmaker@gmail.com>
+
+
+2. API change Tinebase_Backend_Sql / Tinebase_Backend_Sql_Abstract
+-----------------
+
+- The constructor API has changed: all options have moved to one options param
+    public function __construct($_dbAdapter = NULL, $_options = array())
+- you can use the following options:
+     *  - modelName
+     *  - tableName
+     *  - tablePrefix
+     *  - modlogActive
+     *  - useSubselectForCount
+     
