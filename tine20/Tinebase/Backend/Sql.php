@@ -5,9 +5,8 @@
  * @package     Tinebase
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -21,16 +20,20 @@ class Tinebase_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 {
     /**
      * the constructor
+     * 
+     * allowed options:
+     *  - modelName
+     *  - tableName
+     *  - tablePrefix
+     *  - modlogActive
+     *  - useSubselectForCount
      *
-     * @param string $_modelName record model name of this backend
-     * @param string $_tableName table name of this backend
+     * @param array $_options (optional)
      * @param Zend_Db_Adapter_Abstract $_db (optional) the db adapter
-     * @param string $_tablePrefix (optional) table prefix
-     * @param boolean $_modlogActive (optional) is modlog activated
-     * @param boolean $_useSubselectForCount (optional) use subselect when counting
+     * @see Tinebase_Backend_Sql_Abstract::__construct()
      */
-    public function __construct ($_modelName, $_tableName, $_dbAdapter = NULL, $_tablePrefix = NULL, $_modlogActive = NULL, $_useSubselectForCount = NULL)
+    public function __construct($_options = array(), $_dbAdapter = NULL)
     {
-        parent::__construct($_dbAdapter, $_modelName, $_tableName, $_tablePrefix, $_modlogActive, $_useSubselectForCount);
+        parent::__construct($_dbAdapter, $_options);
     }
 }

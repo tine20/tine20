@@ -27,7 +27,9 @@ class Phone_Controller_MyPhone extends Voipmanager_Controller_Snom_Phone
     private function __construct() 
     {
         $this->_modelName   = 'Phone_Model_MyPhone';
-        $this->_backend     = new Voipmanager_Backend_Snom_Phone(NULL, $this->_modelName);
+        $this->_backend     = new Voipmanager_Backend_Snom_Phone(NULL, array(
+            'modelName' => $this->_modelName
+        ));
     }
     
     /**

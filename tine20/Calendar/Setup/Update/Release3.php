@@ -370,7 +370,10 @@ class Calendar_Setup_Update_Release3 extends Setup_Update_Abstract
         $this->setApplicationVersion('Calendar', '3.9');
         
         // give existing resources a container
-        $rb = new Tinebase_Backend_Sql('Calendar_Model_Resource', 'cal_resources');
+        $rb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Calendar_Model_Resource', 
+            'tableName' => 'cal_resources'
+        ));
         $resources = $rb->getAll();
         
         foreach($resources as $resource) {

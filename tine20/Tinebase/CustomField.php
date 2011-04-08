@@ -5,9 +5,8 @@
  * @package     Tinebase
  * @subpackage  CustomField
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @todo        add join to cf config to value backend to get name
  * @todo        use recordset instead of array to store cfs of record
@@ -67,8 +66,14 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     private function __construct() 
     {
         $this->_backendConfig = new Tinebase_CustomField_Config();
-        $this->_backendValue = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Value', 'customfield', NULL, NULL, NULL, TRUE);
-        $this->_backendACL = new Tinebase_Backend_Sql('Tinebase_Model_CustomField_Grant', 'customfield_acl');
+        $this->_backendValue = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_CustomField_Value', 
+            'tableName' => 'customfield',
+        ));
+        $this->_backendACL = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_CustomField_Grant', 
+            'tableName' => 'customfield_acl',
+        ));
     }
 
     /**

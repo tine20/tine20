@@ -4,9 +4,8 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */ 
 
 /**
@@ -38,7 +37,10 @@ class Tinebase_AccessLog extends Tinebase_Controller_Record_Abstract
         $this->_omitModLog = TRUE;
         $this->_doContainerACLChecks = FALSE;
         
-        $this->_backend = new Tinebase_Backend_Sql($this->_modelName, 'access_log');
+        $this->_backend = new Tinebase_Backend_Sql(array(
+            'modelName' => $this->_modelName, 
+            'tableName' => 'access_log',
+        ));
     }
     
     /**

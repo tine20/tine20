@@ -7,10 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  * 
  * @todo        write more tests for functions
- * @todo        add phpdoc
  */
 
 /**
@@ -21,8 +19,13 @@
  * 
  * @package     Tinebase
  * @subpackage  User
+ * 
  * @property    string  accountId
+ * @property    string  contact_id
  * @property	string  accountEmailAddress  email address of user
+ * @property    string  accountDisplayName
+ * @property    string  accountLastName
+ * @property    string  accountFirstName
  */
 class Tinebase_Model_User extends Tinebase_Record_Abstract
 {
@@ -262,6 +265,13 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         return $result;
     }
     
+    /**
+     * get shared containers
+     * 
+     * @param string|Tinebase_Model_Application $_application
+     * @param array|string $_grant
+     * @return Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     */
     public function getSharedContainer($_application, $_grant)
     {
         $container = Tinebase_Container::getInstance();
@@ -271,6 +281,13 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         return $result;
     }
     
+    /**
+     * get containers of other users
+     * 
+     * @param string|Tinebase_Model_Application $_application
+     * @param array|string $_grant
+     * @return  Tinebase_Record_RecordSet set of Tinebase_Model_Container
+     */
     public function getOtherUsersContainer($_application, $_grant)
     {
         $container = Tinebase_Container::getInstance();
@@ -321,6 +338,11 @@ class Tinebase_Model_User extends Tinebase_Record_Abstract
         return $accountId;
     }
     
+    /**
+     * sanitizes account primary group and returns primary group id
+     * 
+     * @return string
+     */
     public function sanitizeAccountPrimaryGroup()
     {  
         try {

@@ -7,9 +7,8 @@
  * @package     Crm
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Controller.php 5029 2008-10-21 16:28:16Z p.schuele@metaways.de $
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -26,23 +25,17 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
      *
      * don't use the constructor. use the singleton 
      */
-    private function __construct() {
-        $this->_applicationName = 'Crm';
-        $this->_modelName = 'Crm_Model_Lead';
-        $this->_backend = new Crm_Backend_Lead();
-        $this->_currentAccount = Tinebase_Core::getUser();
+    private function __construct()
+    {
+        $this->_applicationName         = 'Crm';
+        $this->_modelName               = 'Crm_Model_Lead';
+        $this->_relatedObjectsToDelete  = array('Tasks_Model_Task');
+        $this->_sendNotifications       = TRUE;
+        $this->_purgeRecords            = FALSE;
+        $this->_doRightChecks           = TRUE;
         
-        // send notifications
-        $this->_sendNotifications = TRUE;
-        
-        // delete related tasks
-        $this->_relatedObjectsToDelete = array('Tasks_Model_Task');
-        
-        // don't delete records
-        $this->_purgeRecords = FALSE;
-        
-        // do rights checks
-        $this->_doRightChecks = TRUE;
+        $this->_backend                 = new Crm_Backend_Lead();
+        $this->_currentAccount          = Tinebase_Core::getUser();
     }
     
     /**

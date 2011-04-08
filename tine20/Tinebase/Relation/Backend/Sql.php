@@ -293,7 +293,10 @@ class Tinebase_Relation_Backend_Sql
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)    
     {
-        $backend = new Tinebase_Backend_Sql('Tinebase_Model_Relation', 'relations');
+        $backend = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Relation', 
+            'tableName' => 'relations',
+        ));
         
         $_filter->addFilter(new Tinebase_Model_Filter_Bool('is_deleted', 'equals', FALSE));
         

@@ -16,7 +16,7 @@
  * which are as always handles by their controllers/backends
  * 
  * 
- * @package Calendar 
+ * @package     Calendar 
  * @subpackage  Backend
  */
 class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
@@ -66,14 +66,11 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      * the constructor
      *
      * @param Zend_Db_Adapter_Abstract $_db optional
-     * @param string $_modelName
-     * @param string $_tableName
-     * @param string $_tablePrefix
-     *
+     * @param array $_options (optional)
      */
-    public function __construct ($_dbAdapter = NULL, $_modelName = NULL, $_tableName = NULL, $_tablePrefix = NULL)
+    public function __construct ($_dbAdapter = NULL, $_options = array())
     {
-        parent::__construct($_dbAdapter, $_modelName, $_tableName, $_tablePrefix);
+        parent::__construct($_dbAdapter, $_options);
         
         $this->_attendeeBackend = new Calendar_Backend_Sql_Attendee($_dbAdapter);
     }

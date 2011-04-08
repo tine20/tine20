@@ -190,6 +190,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             
             $name = (strlen($tag) > 20) ? substr($tag, 0, 20) : $tag;
             
+            $id = NULL;
             try {
                 $existing = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
                 $id = $existing->getId();
@@ -220,7 +221,10 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     $id = $newTag->getId();
                 }
             }
-            $result[] = $id;
+            
+            if ($id !== NULL) {
+                $result[] = $id;
+            }
         }
         
         return $result;
