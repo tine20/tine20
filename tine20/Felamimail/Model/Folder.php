@@ -201,4 +201,22 @@ class Felamimail_Model_Folder extends Tinebase_Record_Abstract
         
         return $result;
     }
+    
+    /**
+     * extract localname and parent globalname
+     * 
+     * @param string $_folderName
+     * @return array
+     */
+    public static function extractLocalnameAndParent($_folderName, $_delimiter)
+    {
+        $globalNameParts = explode($_delimiter, $_folderName);
+        $localname = array_pop($globalNameParts);
+        $parent = (count($globalNameParts) > 0) ? implode($_delimiter, $globalNameParts) : '';
+        
+        return array(
+            'localname' => $localname,
+            'parent'    => $parent,
+        );
+    }
 }
