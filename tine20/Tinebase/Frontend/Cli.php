@@ -2,10 +2,10 @@
 /**
  * Tine 2.0
  * @package     Tinebase
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 
 /**
@@ -14,6 +14,7 @@
  * This class handles all requests from cli scripts
  *
  * @package     Tinebase
+ * @subpackage  Frontend
  */
 class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
 {
@@ -167,6 +168,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @param Zend_Console_Getopt $_opts
      * @return boolean success
+     * 
+     * @todo use _getCronuserFromConfigOrCreateOnTheFly
      */
     public function processQueue($_opts)
     {
