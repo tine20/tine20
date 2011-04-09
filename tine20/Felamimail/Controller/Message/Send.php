@@ -240,23 +240,23 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         try {
             $mailAsString = $_transport->getRawMessage();
-            $sentFolder = ($_account->sent_folder && ! empty($_account->sent_folder)) ? $_account->sent_folder : 'Sent';
+            $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
             
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder (' . $sentFolder . ') ...');
-            Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder (' . $sentFolder->globalname . ') ...');
+            Felamimail_Backend_ImapFactory::factory($_account)->appendMessage($mailAsString, $sentFolder->globalname);
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Saved sent message in "' . $sentFolder . '".'
+                . ' Saved sent message in "' . $sentFolder->globalname . '".'
             );
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                . ' Could not save sent message in "' . $sentFolder . '".'
+                . ' Could not save sent message in "' . $sentFolder->globalname . '".'
                 . ' Please check if a folder with this name exists.'
                 . '(' . $zmpe->getMessage() . ')'
             );
         } catch (Zend_Mail_Storage_Exception $zmse) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
-                . ' Could not save sent message in "' . $sentFolder . '".'
+                . ' Could not save sent message in "' . $sentFolder->globalname . '".'
                 . ' Please check if a folder with this name exists.'
                 . '(' . $zmse->getMessage() . ')'
             );
