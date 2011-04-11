@@ -4,8 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -212,7 +211,6 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             this.grantsStore =  new Ext.data.JsonStore({
                 root: 'results',
                 totalProperty: 'totalcount',
-                //id: 'id',
                 // use account_id here because that simplifies the adding of new records with the search comboboxes
                 id: 'account_id',
                 fields: Tine.Timetracker.Model.TimeaccountGrant
@@ -221,26 +219,26 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             var columns = [
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Book Own'),
-                    dataIndex: 'book_own',
+                    dataIndex: 'bookOwngrant',
                     tooltip: _('The grant to add Timesheets to this Timeaccount'),
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('View All'),
                     tooltip: _('The grant to view Timesheets of other users'),
-                    dataIndex: 'view_all',
+                    dataIndex: 'viewAllGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Book All'),
                     tooltip: _('The grant to add Timesheets for other users'),
-                    dataIndex: 'book_all',
+                    dataIndex: 'bookAllGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
                     header:this.app.i18n. _('Manage Clearing'),
                     tooltip: _('The grant to manage clearing of Timesheets'),
-                    dataIndex: 'manage_billable',
+                    dataIndex: 'manageBillableGrant',
                     width: 55
                 }),
                 new Ext.ux.grid.CheckColumn({
@@ -252,7 +250,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Manage All'),
                     tooltip: _('Includes all other grants'),
-                    dataIndex: 'manage_all',
+                    dataIndex: 'adminGrant',
                     width: 55
                 })
             ];

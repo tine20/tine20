@@ -4,8 +4,7 @@
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -67,7 +66,7 @@ Tine.Timetracker.Model.Timesheet.getDefaultData = function() {
         duration:   '00:30',
         start_date: new Date(),
         is_billable: true,
-        timeaccount_id: {account_grants: {editGrant: true}}
+        timeaccount_id: {account_grants: {bookOwngrant: true}}
     };
 };
 
@@ -146,10 +145,10 @@ Tine.Timetracker.Model.TimeaccountGrant = Ext.data.Record.create([
     {name: 'account_id'},
     {name: 'account_type'},
     {name: 'account_name'},
-    {name: 'book_own',        type: 'boolean'},
-    {name: 'view_all',        type: 'boolean'},
-    {name: 'book_all',        type: 'boolean'},
-    {name: 'manage_billable', type: 'boolean'},
-    {name: 'exportGrant',     type: 'boolean'},
-    {name: 'manage_all',      type: 'boolean'}
+    {name: 'bookOwngrant',        type: 'boolean'},
+    {name: 'viewAllGrant',        type: 'boolean'},
+    {name: 'bookAllGrant',        type: 'boolean'},
+    {name: 'manageBillableGrant', type: 'boolean'},
+    {name: 'exportGrant',         type: 'boolean'},
+    {name: 'adminGrant',          type: 'boolean'}
 ]);

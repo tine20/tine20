@@ -91,13 +91,14 @@ abstract class Timetracker_AbstractTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                'account_id' => 0,
-                'account_type' => 'anyone',
-                'book_own' => TRUE,
-                'view_all' => TRUE,
-                'book_all' => TRUE,
-                'manage_billable' => TRUE,
-                'manage_all' => TRUE
+                'account_id'    => 0,
+                'account_type'  => 'anyone',
+                Timetracker_Model_TimeaccountGrants::BOOK_OWN           => TRUE,
+                Timetracker_Model_TimeaccountGrants::VIEW_ALL           => TRUE,
+                Timetracker_Model_TimeaccountGrants::BOOK_ALL           => TRUE,
+                Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE    => TRUE,
+                Tinebase_Model_Grants::GRANT_EXPORT                     => TRUE,
+                Tinebase_Model_Grants::GRANT_ADMIN                      => TRUE,
             )
         );        
     }

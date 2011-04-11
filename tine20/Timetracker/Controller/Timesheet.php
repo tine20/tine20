@@ -46,8 +46,8 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
      */
     protected $_fieldGrants = array(
         'is_billable' => array('default' => 1,  'requiredGrant' => Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE),
-        'billed_in'   => array('default' => '', 'requiredGrant' => Timetracker_Model_TimeaccountGrants::MANAGE_ALL),
-        'is_cleared'  => array('default' => 0,  'requiredGrant' => Timetracker_Model_TimeaccountGrants::MANAGE_ALL),
+        'billed_in'   => array('default' => '', 'requiredGrant' => Tinebase_Model_Grants::GRANT_ADMIN),
+        'is_cleared'  => array('default' => 0,  'requiredGrant' => Tinebase_Model_Grants::GRANT_ADMIN),
     );
     
     /**
@@ -128,7 +128,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                 if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deadline exceeded: ' . $startDate . ' < ' . $date);
                 
                 if ($this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
-                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL)) {
+                     || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                         . ' User with admin / manage all rights is allowed to save Timesheet even if it exceeds the deadline.'
                     );
@@ -184,7 +184,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
     {
         // users with MANAGE_TIMEACCOUNTS have all grants here
         if ( $this->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)
-             || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Timetracker_Model_TimeaccountGrants::MANAGE_ALL)) {
+             || Timetracker_Model_TimeaccountGrants::hasGrant($_record->timeaccount_id, Tinebase_Model_Grants::GRANT_ADMIN)) {
             return TRUE;
         }
         
@@ -198,7 +198,7 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
             // check if timeaccount->is_billable is false => set default in fieldGrants to 0 and allow only managers to change it
             if (!$timeaccount->is_billable) {
                 $this->_fieldGrants['is_billable']['default'] = 0;
-                $this->_fieldGrants['is_billable']['requiredGrant'] = Timetracker_Model_TimeaccountGrants::MANAGE_ALL;
+                $this->_fieldGrants['is_billable']['requiredGrant'] = Tinebase_Model_Grants::GRANT_ADMIN;
             }
         }
         
@@ -273,20 +273,20 @@ class Timetracker_Controller_Timesheet extends Tinebase_Controller_Record_Abstra
                     Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
                     Timetracker_Model_TimeaccountGrants::VIEW_ALL,
-                    Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
+                    Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
                 break;
             case 'update':
                 $_filter->setRequiredGrants(array(
                     Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
-                    Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
+                    Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
                 break;
             case 'export':
                 $_filter->setRequiredGrants(array(
-                    Timetracker_Model_TimeaccountGrants::EXPORT,
-                    Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
+                    Tinebase_Model_Grants::GRANT_EXPORT,
+                    Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
                 break;
             default:

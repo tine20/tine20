@@ -3,9 +3,8 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -50,10 +49,10 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
 
         var grants = timeaccount ? timeaccount.get('account_grants') : (this.record.get('timeaccount_id') ? this.record.get('timeaccount_id').account_grants : {});
         if (grants) {
-            this.getForm().findField('account_id').setDisabled(! (grants.book_all || grants.manage_all || manageRight));
-            notBillable = ! (grants.manage_billable || grants.manage_all || manageRight);
-            notClearable = ! (/*grants.manage_billable ||*/ grants.manage_all || manageRight);
-            this.getForm().findField('billed_in').setDisabled(! (grants.manage_all || manageRight));
+            this.getForm().findField('account_id').setDisabled(! (grants.bookAllGrant || grants.adminGrant || manageRight));
+            notBillable = ! (grants.manageBillableGrant || grants.adminGrant || manageRight);
+            notClearable = ! (grants.adminGrant || manageRight);
+            this.getForm().findField('billed_in').setDisabled(! (grants.adminGrant || manageRight));
         }
 
         if (timeaccount) {

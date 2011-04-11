@@ -119,12 +119,12 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'view_all'      => TRUE,
+            Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
         )));
         
-        $this->assertEquals($grants->view_all, array(TRUE));
-        $this->assertEquals($grants->book_own, array(FALSE));
-        $this->assertEquals($grants->book_all, array(FALSE));
+        $this->assertEquals($grants->{Timetracker_Model_TimeaccountGrants::VIEW_ALL}, array(TRUE));
+        $this->assertEquals($grants->{Timetracker_Model_TimeaccountGrants::BOOK_OWN}, array(FALSE));
+        $this->assertEquals($grants->{Timetracker_Model_TimeaccountGrants::BOOK_ALL}, array(FALSE));
     }
 
     /**
@@ -136,8 +136,8 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'view_all'      => TRUE,
-            'manage_billable'      => TRUE,
+            Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
+            Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE      => TRUE,
         )));
         
         $this->_grantTestHelper($grants, 'create', 'Exception');
@@ -152,7 +152,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'book_own'      => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,
         )));        
         
         $this->_grantTestHelper($grants);        
@@ -167,7 +167,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'book_all'      => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_ALL      => TRUE,
         )));        
         
         $this->_grantTestHelper($grants);
@@ -182,9 +182,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'      => Tinebase_Core::getUser()->getId(),
             'account_type'    => 'user',
-            //'manage_all'    => TRUE,
-            'book_all'        => TRUE,
-            'manage_billable' => TRUE,
+            //Tinebase_Model_Grants::GRANT_ADMIN    => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_ALL        => TRUE,
+            Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE => TRUE,
         )));        
         
         $ts = clone $this->_objects['timesheet'];
@@ -202,9 +202,9 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'      => Tinebase_Core::getUser()->getId(),
             'account_type'    => 'user',
-            //'manage_all'    => TRUE,
-            'book_all'        => TRUE,
-            'manage_billable' => FALSE,
+            //Tinebase_Model_Grants::GRANT_ADMIN    => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_ALL        => TRUE,
+            Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE => FALSE,
         )));        
         
         $ts = clone $this->_objects['timesheet'];
@@ -222,7 +222,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'manage_all'    => TRUE,
+            Tinebase_Model_Grants::GRANT_ADMIN    => TRUE,
         )));        
         
         $this->_grantTestHelper($grants);
@@ -237,7 +237,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'view_all'      => TRUE,
+            Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
         )));        
         
         $this->_grantTestHelper($grants, 'searchTA', 1);
@@ -266,7 +266,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'book_own'      => TRUE,            
+            Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,            
         )));        
         
         $this->_grantTestHelper($grants, 'search_bookable', 1);
@@ -281,8 +281,8 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'book_own'      => TRUE,
-            'view_all'      => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,
+            Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
         )));        
         
         $this->_grantTestHelper($grants, 'searchTS', 1);
@@ -299,7 +299,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            Timetracker_Model_TimeaccountGrants::EXPORT   => TRUE,
+            Tinebase_Model_Grants::GRANT_EXPORT   => TRUE,
         )));        
         
         $this->_grantTestHelper($grants, 'searchTSExport', 1, $ts);
@@ -314,7 +314,7 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'book_own'      => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,
         )));        
         
         $this->_grantTestHelper($grants, 'create_deadline');
@@ -390,12 +390,12 @@ class Timetracker_ControllerTest extends PHPUnit_Framework_TestCase
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => Tinebase_Core::getUser()->getId(),
             'account_type'  => 'user',
-            'manage_billable'  => TRUE,
-            'manage_all'      => TRUE,
-            'book_all'      => TRUE,
-            'book_own'      => TRUE,
-            'view_all'      => TRUE,
-            Timetracker_Model_TimeaccountGrants::EXPORT  => TRUE,
+            Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE  => TRUE,
+            Tinebase_Model_Grants::GRANT_ADMIN      => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_ALL      => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_OWN      => TRUE,
+            Timetracker_Model_TimeaccountGrants::VIEW_ALL      => TRUE,
+            Tinebase_Model_Grants::GRANT_EXPORT  => TRUE,
         )));    
         Timetracker_Model_TimeaccountGrants::setTimeaccountGrants(
             $this->_objects['timeaccount'],

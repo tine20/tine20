@@ -7,10 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @version     $Id$
- *
- * @todo        extend Tinebase_Model_Grants?
- * @todo        mapping is obsolete, as container class supports strings now!
  */
 
 /**
@@ -19,60 +15,34 @@
  * @package     Timetracker
  * @subpackage  Record
  *  */
-class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
+class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
 {
     /**
-     * constant for book own TS grant (GRANT_READ)
+     * constant for book own TS grant
      *
      */
-    const BOOK_OWN = Tinebase_Model_Grants::GRANT_READ;
+    const BOOK_OWN = 'bookOwnGrant';
 
     /**
-     * constant for view all TS (GRANT_ADD)
+     * constant for view all TS 
      *
      */
-    const VIEW_ALL = Tinebase_Model_Grants::GRANT_ADD;
+    const VIEW_ALL = 'viewAllGrant';
 
     /**
-     * constant for book TS for all users (GRANT_EDIT)
+     * constant for book TS for all users
      *
      */
-    const BOOK_ALL = Tinebase_Model_Grants::GRANT_EDIT;
+    const BOOK_ALL = 'bookAllGrant';
 
     /**
-     * constant for manage billable in all bookable TS (GRANT_DELETE)
+     * constant for manage billable in all bookable TS
      *
      */
-    const MANAGE_BILLABLE = Tinebase_Model_Grants::GRANT_DELETE;
+    const MANAGE_BILLABLE = 'manageBillableGrant';
 
-    /**
-     * constant for export grant (GRANT_EXPORT)
-     *
-     */
-    const EXPORT = Tinebase_Model_Grants::GRANT_EXPORT;
-    
-    /**
-     * constant for manage all / admin grant (GRANT_ADMIN)
-     *
-     */
-    const MANAGE_ALL = Tinebase_Model_Grants::GRANT_ADMIN;
-
-    /**
-     * mapping container_grants => timeaccount_grants
-     *
-     * @var array
-     */
-    protected static $_mapping = array(
-        Tinebase_Model_Grants::GRANT_READ     => 'book_own',
-        Tinebase_Model_Grants::GRANT_ADD      => 'view_all',
-        Tinebase_Model_Grants::GRANT_EDIT     => 'book_all',
-        Tinebase_Model_Grants::GRANT_DELETE   => 'manage_billable',
-        Tinebase_Model_Grants::GRANT_EXPORT   => 'export',
-        Tinebase_Model_Grants::GRANT_ADMIN    => 'manage_all'
-    );
-    
 	/**
-     * key in $_validators/$_properties array for the filed which 
+     * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
      * @var string
@@ -87,68 +57,22 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     protected $_application = 'Timetracker';
     
     /**
-     * list of zend validator
-     * 
-     * this validators get used when validating user generated content with Zend_Filter_Input
+     * get all possible grants
      *
-     * @var array
+     * @return  array   all container grants
      */
-    protected $_validators = array();
-    
-    /**
-     * overwrite constructor
-     *
-     * @param mixed $_data
-     * @param bool $_bypassFilters
-     * @param mixed $_convertDates
-     * @return void
-     *
-     */
-    public function __construct($_data = NULL, $_bypassFilters = FALSE, $_convertDates = NULL)
+    public static function getAllGrants()
     {
-        $this->_validators = array(
-            'id'          => array('Alnum', 'allowEmpty' => TRUE),
-            'account_id'   => array('presence' => 'required', 'allowEmpty' => TRUE, 'default' => '0'),
-            'account_type' => array('presence' => 'required', 'InArray' => array(Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE,Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP)),
-        
-            'book_own'   => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => TRUE
-            ),
-            'view_all'    => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => TRUE
-            ),
-            'book_all'   => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => TRUE
-            ),
-            'manage_billable' => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => TRUE
-            ),
-            self::EXPORT => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => TRUE
-            ),
-            'manage_all'  => array(
-                new Zend_Validate_InArray(array(TRUE, FALSE), TRUE), 
-                'default' => FALSE,
-                'presence' => 'required',
-                'allowEmpty' => TRUE
-            )
+        $allGrants = array(
+            self::BOOK_OWN,
+            self::VIEW_ALL,
+            self::BOOK_ALL,
+            self::MANAGE_BILLABLE,
+            Tinebase_Model_Grants::GRANT_EXPORT,
+            Tinebase_Model_Grants::GRANT_ADMIN,
         );
-        return parent::__construct($_data, $_bypassFilters, $_convertDates);
+    
+        return $allGrants;
     }
     
     /**
@@ -179,20 +103,11 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
      */
     public static function getGrantsOfRecords(Tinebase_Record_RecordSet $_timeaccounts, $_accountId)
     {
-        //$timeaccounts = new Tinebase_Record_RecordSet('Timetracker_Model_Timeaccount', $_records->$_timeaccountProperty);
         Tinebase_Container::getInstance()->getGrantsOfRecords($_timeaccounts, $_accountId);
         
         foreach ($_timeaccounts as $timeaccount) {
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($timeaccount->toArray(), true));
-            
             if (isset($timeaccount->container_id['account_grants']) && is_array($timeaccount->container_id['account_grants'])) {
                 $containerGrantsArray = $timeaccount->container_id['account_grants'];
-                // mapping
-                foreach ($containerGrantsArray as $grantName => $grantValue) {
-                    if (array_key_exists($grantName, self::$_mapping)) {
-                        $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
-                    }
-                }
                 
                 $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
                 $timeaccount->account_grants = $account_grants->toArray();
@@ -201,11 +116,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
                 $containerId['account_grants'] = $timeaccount->account_grants;
                 $timeaccount->container_id = $containerId;
             } 
-            //$timeaccount->container_id = $timeaccount->container_id['id'];
-            
-            //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_timeaccounts->toArray(), true));
         }
-        
     }
     
     /**
@@ -229,12 +140,6 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
                 Timetracker_Controller_Timeaccount::getInstance()->get($_timeaccountId);
                 
             $containerGrantsArray = Tinebase_Container::getInstance()->getGrantsOfAccount($_accountId, $timeaccount->container_id, $_ignoreAcl)->toArray();
-            // mapping
-            foreach ($containerGrantsArray as $grantName => $grantValue) {
-                if (array_key_exists($grantName, self::$_mapping)) {
-                    $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
-                }
-            }
             
             $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
             $result = $account_grants->toArray();
@@ -304,7 +209,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     {
         if (! $_ignoreACL) {
             if (! Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)) {
-                if (! self::hasGrant($_timeaccount, self::MANAGE_ALL)) {
+                if (! self::hasGrant($_timeaccount, Tinebase_Model_Grants::GRANT_ADMIN)) {
                     throw new Tinebase_Exception_AccessDenied("You nor have the RIGHT either the GRANT to get see all grants for this timeaccount");
                 }
             }
@@ -320,14 +225,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
             $allTimeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants');
             
             foreach ($allContainerGrants as $index => $containerGrants) {
-                // mapping
-                $containerGrantsArray = $containerGrants->toArray();
-                foreach ($containerGrantsArray as $grantName => $grantValue) {
-                    if (array_key_exists($grantName, self::$_mapping)) {
-                        $containerGrantsArray[self::$_mapping[$grantName]] = $grantValue;
-                    }
-                }
-                $timeaccountGrants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
+                $timeaccountGrants = new Timetracker_Model_TimeaccountGrants($containerGrants->toArray());
                 $allTimeaccountGrants->addRecord($timeaccountGrants);
             }
 
@@ -350,39 +248,12 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Record_Abstract
     {
         if (! $_ignoreACL) {
             if (! Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE)) {
-                if (! self::hasGrant($_timeaccount, self::MANAGE_ALL)) {
+                if (! self::hasGrant($_timeaccount, Tinebase_Model_Grants::GRANT_ADMIN)) {
                     throw new Tinebase_Exception_AccessDenied("You nor have the RIGHT either the GRANT to get see all grants for this timeaccount");
                 }
             }
         }
         
-        // map Timetracker_Model_TimeaccountGrants to Tinebase_Model_Grants
-        $grants = self::doMapping($_grants);
-        
-        Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $grants, TRUE, FALSE);
-    }
-    
-    /**
-     * map to Tinenbase_Model_Grants
-     *
-     * @param Tinebase_Record_RecordSet $_grants
-     * @return Tinebase_Record_RecordSet
-     */
-    public static function doMapping(Tinebase_Record_RecordSet $_grants)
-    {
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
-        foreach ($_grants as $grant) {
-            $result->addRecord(new Tinebase_Model_Grants(array(
-                'account_id'    => $grant->account_id,
-                'account_type'  => $grant->account_type,
-                Tinebase_Model_Grants::GRANT_READ     => $grant->book_own,
-                Tinebase_Model_Grants::GRANT_ADD      => $grant->view_all,
-                Tinebase_Model_Grants::GRANT_EDIT     => $grant->book_all,
-                Tinebase_Model_Grants::GRANT_DELETE   => $grant->manage_billable,
-                Tinebase_Model_Grants::GRANT_EXPORT   => $grant->{self::EXPORT},
-                Tinebase_Model_Grants::GRANT_ADMIN    => $grant->manage_all
-            )));
-        }
-        return $result;
+        Tinebase_Container::getInstance()->setGrants($_timeaccount->container_id, $_grants, TRUE, FALSE);
     }
 }

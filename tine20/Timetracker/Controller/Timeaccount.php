@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
 
@@ -82,18 +81,18 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
         $grants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', array(array(
             'account_id'    => $this->_currentAccount->getId(),
             'account_type'  => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
-            'book_own'      => TRUE,
-            'view_all'      => TRUE,
-            'book_all'      => TRUE,
-            'manage_billable' => TRUE,
-            Timetracker_Model_TimeaccountGrants::EXPORT        => TRUE,
-            'manage_all'    => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_OWN           => TRUE,
+            Timetracker_Model_TimeaccountGrants::VIEW_ALL           => TRUE,
+            Timetracker_Model_TimeaccountGrants::BOOK_ALL           => TRUE,
+            Timetracker_Model_TimeaccountGrants::MANAGE_BILLABLE    => TRUE,
+            Tinebase_Model_Grants::GRANT_EXPORT                     => TRUE,
+            Tinebase_Model_Grants::GRANT_ADMIN                      => TRUE,
         )));
         
         // add container with grants (all grants for creator) and ignore ACL here
         $container = Tinebase_Container::getInstance()->addContainer(
             $newContainer, 
-            Timetracker_Model_TimeaccountGrants::doMapping($grants), 
+            $grants, 
             TRUE
         );
 
@@ -209,7 +208,7 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
             return TRUE;
         }
         
-        $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Timetracker_Model_TimeaccountGrants::MANAGE_ALL);
+        $hasGrant = Timetracker_Model_TimeaccountGrants::hasGrant($_record->getId(), Tinebase_Model_Grants::GRANT_ADMIN);
         
         switch ($_action) {
             case 'get':
@@ -252,18 +251,18 @@ class Timetracker_Controller_Timeaccount extends Tinebase_Controller_Record_Abst
                     Timetracker_Model_TimeaccountGrants::BOOK_OWN,
                     Timetracker_Model_TimeaccountGrants::BOOK_ALL,
                     Timetracker_Model_TimeaccountGrants::VIEW_ALL,
-                    Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
+                    Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
                 break;
             case 'update':
                 $_filter->setRequiredGrants(array(
-                    Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
+                    Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
                 break;
             case 'export':
                 $_filter->setRequiredGrants(array(
-                    Timetracker_Model_TimeaccountGrants::EXPORT,
-                    Timetracker_Model_TimeaccountGrants::MANAGE_ALL,
+                    Tinebase_Model_Grants::GRANT_EXPORT,
+                    Tinebase_Model_Grants::GRANT_ADMIN,
                 ));
                 break;                
             default:
