@@ -148,35 +148,32 @@ class Tinebase_Application
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty / has to be string.');
         }
         
-        if (isset($this->_applicationCache[$_applicationName])) {
-            return $this->_applicationCache[$_applicationName];
-        } 
-        
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        $cacheId = 'getApplicationByName' . $_applicationName;
-        $result = $cache->load($cacheId);
-        
-        if (!$result) {
-
-            $select = $this->_db->select();
-            $select->from($this->_tableName)
-                   ->where($this->_db->quoteIdentifier('name') . ' = ?', $_applicationName);
-    
-            $stmt = $this->_db->query($select);
-            $queryResult = $stmt->fetch();
-            $stmt->closeCursor();
-            
-            if (!$queryResult) {
-                throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
-            }
-            $result = new Tinebase_Model_Application($queryResult, TRUE);
-            
-            if (isset($cache)) {
-                $cache->save($result, $cacheId, array('applications'));
+        if ($cache instanceof Zend_Cache) {
+            $cacheId = 'getApplicationByName' . $_applicationName;
+            if ($cache->test($cacheId)) {
+                $result = $cache->load($cacheId);
+                
+                return $result;
             }
         }
         
-        $this->_applicationCache[$_applicationName] = $result;
+        $select = $this->_db->select();
+        $select->from($this->_tableName)
+               ->where($this->_db->quoteIdentifier('name') . ' = ?', $_applicationName);
+
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetch();
+        $stmt->closeCursor();
+        
+        if (!$queryResult) {
+            throw new Tinebase_Exception_NotFound("Application $_applicationName not found.");
+        }
+        $result = new Tinebase_Model_Application($queryResult, TRUE);
+        
+        if ($cache instanceof Zend_Cache) {
+            $cache->save($result, $cacheId, array('applications'));
+        }
         
         return $result;
     }
