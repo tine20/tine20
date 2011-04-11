@@ -468,11 +468,10 @@ class Tinebase_Core
     public static function setupCache($_enabled = true)
     {
         $config = self::getConfig();
-
+        
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
             $frontendOptions = array(
-                'cache_id_prefix' => SQL_TABLE_PREFIX . 'CACHE_',
                 'lifetime' => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
                 'automatic_serialization' => true, // turn that off for more speed
                 'caching' => true
@@ -501,8 +500,9 @@ class Tinebase_Core
                         
                     case 'Redis':
                         $backendOptions = array(
-                            'rediska' => new Rediska(array(
-                            	'name'      => 'session', 
+                    		'rediska' => new Rediska(array(
+                            	'name'      => 'cache',
+                                'namespace' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_ZENDCACHE_',
                                 'servers'   => array(
                                     array(
                                         'host'  => ($config->caching->host) ? $config->caching->host : 'localhost',
@@ -701,10 +701,10 @@ class Tinebase_Core
                 
             case 'Redis':
                 $options = array(
-                    'keyPrefix' => SQL_TABLE_PREFIX . 'SESSIONS_',
                     'lifetime'  => $maxLifeTime,
                     'rediska' => new Rediska(array(
-                        'name'      => 'session', 
+                        'name'      => 'session',
+                        'namespace' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_',
                         'servers'   => array(
                             array(
                                 'host'  => ($config->session->host) ? $config->session->host : 'localhost',
