@@ -66,7 +66,7 @@ Tine.Timetracker.Model.Timesheet.getDefaultData = function() {
         duration:   '00:30',
         start_date: new Date(),
         is_billable: true,
-        timeaccount_id: {account_grants: {bookOwngrant: true}}
+        timeaccount_id: {account_grants: {bookOwnGrant: true}}
     };
 };
 
@@ -145,7 +145,7 @@ Tine.Timetracker.Model.TimeaccountGrant = Ext.data.Record.create([
     {name: 'account_id'},
     {name: 'account_type'},
     {name: 'account_name'},
-    {name: 'bookOwngrant',        type: 'boolean'},
+    {name: 'bookOwnGrant',        type: 'boolean'},
     {name: 'viewAllGrant',        type: 'boolean'},
     {name: 'bookAllGrant',        type: 'boolean'},
     {name: 'manageBillableGrant', type: 'boolean'},

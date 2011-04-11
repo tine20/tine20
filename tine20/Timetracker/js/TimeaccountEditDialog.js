@@ -219,7 +219,7 @@ Tine.Timetracker.TimeaccountEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             var columns = [
                 new Ext.ux.grid.CheckColumn({
                     header: this.app.i18n._('Book Own'),
-                    dataIndex: 'bookOwngrant',
+                    dataIndex: 'bookOwnGrant',
                     tooltip: _('The grant to add Timesheets to this Timeaccount'),
                     width: 55
                 }),
