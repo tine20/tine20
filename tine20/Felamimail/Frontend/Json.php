@@ -9,7 +9,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
 class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
@@ -306,7 +305,7 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * returns task prepared for json transport
+     * returns message prepared for json transport
      * - overwriten to convert recipients to array
      *
      * @param Tinebase_Record_Interface $_record
