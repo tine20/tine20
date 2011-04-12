@@ -93,7 +93,7 @@ function getDevelopmentRevision()
                 $objPath .= '/' . array_shift($hashes);
                 $objFile = "$objPath/" . implode('', $hashes);
                 if (@file_exists($objFile)) {
-                    $date = date_create('@' . filemtime($objFile))->format(Tinebase_Record_Abstract::ISO8601LONG);
+                    $date = date_create('@' . filemtime($objFile))->format('Y-m-d H:i:s');
                     break;
                 }
             }
