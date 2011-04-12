@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Asterisk.php 4159 2008-09-02 14:15:05Z p.schuele@metaways.de $
  *
  */
 

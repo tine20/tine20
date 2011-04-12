@@ -14,7 +14,6 @@ Ext.ns('Tine.Tinebase.container');
  * 
  * @namespace   Tine.Tinebase.container
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Tinebase.container = {
     /**

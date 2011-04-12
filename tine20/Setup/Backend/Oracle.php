@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Mysql.php 2335 2008-05-07 14:07:23Z metagreiling $
  *
  */
 

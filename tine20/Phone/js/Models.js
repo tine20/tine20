@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
  

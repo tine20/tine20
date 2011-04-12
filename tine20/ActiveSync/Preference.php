@@ -9,7 +9,6 @@
  *              United States of America is excluded from the scope of this license.
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
  */
 
 /**

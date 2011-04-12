@@ -10,7 +10,6 @@
  *              United States of America is excluded from the scope of this license.
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @version     $Id: Exception.php 6991 2009-02-25 12:35:19Z p.schuele@metaways.de $
  *
  * @todo        add methods/attributes? application name for example?
  */

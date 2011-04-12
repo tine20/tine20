@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id:Models.js 7169 2009-03-05 10:37:38Z p.schuele@metaways.de $
  *
  */
  

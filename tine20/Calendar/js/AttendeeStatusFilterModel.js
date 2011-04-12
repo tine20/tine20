@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Ext.ns('Tine.Calendar');
 
@@ -14,7 +13,6 @@ Ext.ns('Tine.Calendar');
  * @extends     Tine.widgets.grid.FilterModel
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Calendar.AttendeeStatusFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
@@ -71,7 +69,6 @@ Tine.widgets.grid.FilterToolbar.FILTERS['calendar.attendeestatus'] = Tine.Calend
  * @extends     Ext.ux.form.LayerCombo
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Calendar.AttendeeStatusFilterModelValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,

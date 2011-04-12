@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
  
@@ -18,7 +17,6 @@ Ext.ns('Tine.Felamimail.sieve');
  * Rules Grid Panel <br>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
  */
 Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**

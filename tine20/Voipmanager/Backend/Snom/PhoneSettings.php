@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: PhoneSettings.php 4616 2008-09-27 04:43:39Z l.kneschke@metaways.de $
  *
  */
  

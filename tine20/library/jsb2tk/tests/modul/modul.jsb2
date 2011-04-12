@@ -1,0 +1,26 @@
+{
+	"projectName": "Modul",
+    "deployDir": "deploy",
+    "licenseText": "BSD New License",
+    "pkgs": [{
+        "name": "Modul JS",
+        "file": "pkgs/modul.js",
+        "isDebug": true,
+        "fileIncludes": [{
+            "text": "model.js",
+            "path": "src/"
+        }, {
+            "text": "SomeComponent.js",
+            "path": "src/"
+        }]
+    }, {
+        "name": "Modul CSS",
+        "file": "resources/css/modul.css",
+        "isDebug": true,
+        "fileIncludes": [{
+            "text": "main.css",
+            "path": "resources/css/"
+       }]
+    }],
+    "resources" : []
+}

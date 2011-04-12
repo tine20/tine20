@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * 
  * @todo        add flags as consts here?
  * @todo        add more CONTENT_TYPE_ constants

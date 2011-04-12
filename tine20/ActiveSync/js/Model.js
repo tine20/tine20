@@ -7,7 +7,6 @@
  *              United States of America is excluded from the scope of this license.
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Ext.ns('Tine.ActiveSync.Model');
 
@@ -18,7 +17,6 @@ Ext.ns('Tine.ActiveSync.Model');
  * @extends     Tine.Tinebase.data.Record
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * Device record definition
  */
 Tine.ActiveSync.Model.Device = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
@@ -65,7 +63,6 @@ Tine.ActiveSync.Model.Device = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mo
  * @extends     Tine.Tinebase.data.Record
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * 
  * get content type of app
  * 
@@ -89,7 +86,6 @@ Tine.ActiveSync.Model.getContentClass = function(appName) {
  * @extends     Tine.Tinebase.data.RecordProxy
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * JSON backend for devices
  */
 Tine.ActiveSync.Model.DeviceJsonBackend = Ext.extend(Tine.Tinebase.data.RecordProxy, {

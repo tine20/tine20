@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Ext.ns('Tine.widgets.mainscreen');
 
@@ -14,7 +13,6 @@ Ext.ns('Tine.widgets.mainscreen');
  * @extends     Ext.ux.Portal
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * 
  * @todo make save button working again -> move to here
  * 

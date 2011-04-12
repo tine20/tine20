@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Http.php 5090 2008-10-24 10:30:05Z p.schuele@metaways.de $
  */
 
 /**

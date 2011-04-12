@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
  
@@ -20,7 +19,6 @@ Ext.namespace('Tine.Crm');
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * @constructor
  * Constructs mainscreen of the crm application
  */
@@ -37,7 +35,6 @@ Tine.Crm.MainScreen = Tine.widgets.MainScreen;
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Tine.Crm.TreePanel = function(config) {
     Ext.apply(this, config);
@@ -59,7 +56,6 @@ Ext.extend(Tine.Crm.TreePanel , Tine.widgets.container.TreePanel);
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Tine.Crm.FilterPanel = function(config) {
     Ext.apply(this, config);

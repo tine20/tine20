@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * 
  * @todo        catch error (and show alert) if postfix email already exists
  * @todo        extend Tinebase_Controller_Record_Abstract

@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id: SqlTest.php 1350 2008-03-25 21:09:20Z lkneschke $
  * 
  * @todo        write test class for each of the account models?
  * @todo        implement other tests for the model functions

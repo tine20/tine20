@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
  
 Ext.ns('Tine.Filemanager');
@@ -16,7 +15,6 @@ Ext.ns('Tine.Filemanager');
  * @extends     Tine.Tinebase.Application
  * 
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @version     $Id$
  */
 Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
     

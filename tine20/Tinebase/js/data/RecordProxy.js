@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
  
@@ -15,7 +14,6 @@ Ext.ns('Tine.Tinebase.data');
  * @class       Tine.Tinebase.data.RecordProxy
  * @extends     Ext.data.DataProxy
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * 
  * Generic record proxy for an model/datatype of an application
  * 

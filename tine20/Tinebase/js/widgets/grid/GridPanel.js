@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Ext.ns('Tine.widgets.grid');
 
@@ -23,7 +22,6 @@ Ext.ns('Tine.widgets.grid');
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor
@@ -1135,7 +1133,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         
         var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
-            config = 
+            config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
                 record: record,

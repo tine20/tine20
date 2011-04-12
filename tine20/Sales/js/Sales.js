@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
  
@@ -21,7 +20,6 @@ Ext.namespace('Tine.Sales');
  * </pre>
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
  * 
  * @constructor
  * Constructs mainscreen of the Sales application

@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id: Release0.php 9867 2009-08-11 13:37:53Z p.schuele@metaways.de $
  */
 
 class Timetracker_Setup_Update_Release2 extends Setup_Update_Abstract

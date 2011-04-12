@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  * @todo        make this a real controller + singleton (create extra sql backend)
  * @todo        add getAllprefsForApp (similar to config) to get all prefs for the registry in one request

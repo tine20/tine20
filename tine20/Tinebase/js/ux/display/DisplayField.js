@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
  
 Ext.ns('Ext.ux.display');
@@ -15,7 +14,6 @@ Ext.ns('Ext.ux.display');
  * @extends     Ext.form.DisplayField
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * 
  * <b>Field for displaying information in a displaypanel</b>
  */
@@ -51,7 +49,6 @@ Ext.reg('ux.displayfield', Ext.ux.display.DisplayField);
  * @namespace Ext.ux.display
  * @extends Ext.form.TextArea
  * @author Cornelius Weiss <c.weiss@metaways.de>
- * @version $Id$
  * 
  * <b>Textarea for displaying a text in a displaypanel</b>
  */

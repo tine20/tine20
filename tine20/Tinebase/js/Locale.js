@@ -1,7 +1,6 @@
 /**
  * @license     http://creativecommons.org/licenses/publicdomain Public Domain
  * @author      Koji Horaguchi <horaguchi@horaguchi.net>
- * @version     $Id$
  */
 if (typeof Locale == 'undefined') {
   var Locale = function (category, locale) {

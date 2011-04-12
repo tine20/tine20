@@ -1,0 +1,52 @@
+{
+  "projectName": "Tine 2.0 - Sales",
+  "deployDir": "Sales",
+  "licenseText": "Tine 2.0 - Sales \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Sales FAT Client",
+      "file": "js/Sales-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
+          "text": "Sales.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContractEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "ProductGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ProductEditDialog.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Sales FAT Client",
+      "file": "css/Sales-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Sales.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

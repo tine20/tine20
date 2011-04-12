@@ -1,0 +1,96 @@
+{
+  "projectName": "Tine 2.0 - Admin",
+  "deployDir": "Admin",
+  "licenseText": "Tine 2.0 - Admin \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Admin FAT Client",
+      "file": "js/Admin-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Admin.js",
+          "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
+          "text": "Applications.js",
+          "path": "js/"
+        },
+        {
+          "text": "Users.js",
+          "path": "js/user/"
+        },
+        {
+          "text": "GridPanel.js",
+          "path": "js/user/"
+        },
+        {
+          "text": "EditDialog.js",
+          "path": "js/user/"
+        },
+        {
+          "text": "Groups.js",
+          "path": "js/"
+        },
+        {
+          "text": "GroupEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AccessLog.js",
+          "path": "js/"
+        },
+        {
+          "text": "SambaMachineModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "SambaMachineGrid.js",
+          "path": "js/"
+        },
+        {
+          "text": "SambaMachineEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "Tags.js",
+          "path": "js/"
+        },
+        {
+          "text": "TagEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "Roles.js",
+          "path": "js/"
+        },
+        {
+          "text": "RoleEditDialog.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Admin FAT Client",
+      "file": "css/Admin-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Admin.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

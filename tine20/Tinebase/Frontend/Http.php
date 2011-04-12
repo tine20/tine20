@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -457,10 +456,28 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function _renderMainScreen()
     {
         $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
+        $baseDir = dirname(dirname(dirname(__FILE__)));
+        $view->setScriptPath("$baseDir/Tinebase/views");
+        
+        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
+        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
+        
+        require_once 'jsb2tk/jsb2tk.php';
+        $view->jsb2tk = new jsb2tk(array(
+            'deploymode'    => jsb2tk::DEPLOYMODE_STATIC,
+            'includemode'   => jsb2tk::INCLUDEMODE_INDIVIDUAL,
+            'appendctime'   => TRUE,
+            'htmlindention' => "    ",
+        ));
+        
+        
+        foreach($orderedApplications as $appName) {
+            $view->jsb2tk->register("$baseDir/$appName/$appName.jsb2", $appName);
+        }
         
         $view->registryData = array();
-
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('jsclient.php');
         
@@ -752,9 +769,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         foreach ($orderedApplications as $application) {
             if ($_fileType == 'css') {
-                $filesToWatch[] = $application . '/css/all' . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.css';
+                $filesToWatch[] = "{$application}/css/{$application}-FAT.css.inc";
             } else {
-                $filesToWatch[] = $application . '/js/all'  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                $filesToWatch[] = "{$application}/js/{$application}-FAT"  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js.inc';
             }
         }
         

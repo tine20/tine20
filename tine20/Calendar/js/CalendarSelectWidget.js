@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: AttendeeGridPanel.js 8754 2009-06-18 08:50:02Z c.weiss@metaways.de $
  *
  */
  
@@ -17,7 +16,6 @@ Ext.ns('Tine.Calendar');
  * @extends     Ext.util.Observable
  * Calendar Selector Widget
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id: DaysView.js 9771 2009-08-05 17:50:15Z c.weiss@metaways.de $
  * @constructor
  * @param {Tine.Calendar.EventEditDialog} EventEditDialog
  */

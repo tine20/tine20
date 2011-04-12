@@ -9,7 +9,6 @@
  *              United States of America is excluded from the scope of this license.
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * 
  * @todo        fix this for build script: 
  *              Notice: Use of undefined constant SQL_TABLE_PREFIX - assumed 'SQL_TABLE_PREFIX' 

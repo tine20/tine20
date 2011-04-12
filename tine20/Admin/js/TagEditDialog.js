@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philip Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: TagEditDialog.js 16711 2010-10-18 17:45:49Z airmike23@gmail.com $
  *
  * TODO         refactor this (don't use Ext.getCmp, etc.)
  */

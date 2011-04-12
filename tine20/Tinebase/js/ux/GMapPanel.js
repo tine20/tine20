@@ -6,7 +6,6 @@
  * @license     BSD
  * @author      Shea Frederick
  * @copyright   Copyright (c) 2008 Shea Frederick
- * @version     $Id$
  *
  * based on public domain code from Shea Frederick
  * "Free as a bird. Use it anywhere or any way you like."

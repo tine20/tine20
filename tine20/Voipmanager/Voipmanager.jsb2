@@ -1,0 +1,124 @@
+{
+  "projectName": "Tine 2.0 - Voipmanager",
+  "deployDir": "Voipmanager",
+  "licenseText": "Tine 2.0 - Voipmanager \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Voipmanager FAT Client",
+      "file": "js/Voipmanager-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
+          "text": "widgets.js",
+          "path": "js/"
+        },
+        {
+          "text": "Voipmanager.js",
+          "path": "js/"
+        },
+        {
+          "text": "CallForwardPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "LineGridPanel.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "SoftwareGridPanel.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "SoftwareEditDialog.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "TemplateGridPanel.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "TemplateEditDialog.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "PhoneGridPanel.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "PhoneEditDialog.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "LocationGridPanel.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "LocationEditDialog.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "SettingGridPanel.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "SettingEditDialog.js",
+          "path": "js/Snom/"
+        },
+        {
+          "text": "SipPeerGridPanel.js",
+          "path": "js/Asterisk/"
+        },
+        {
+          "text": "SipPeerEditDialog.js",
+          "path": "js/Asterisk/"
+        },
+        {
+          "text": "ContextGridPanel.js",
+          "path": "js/Asterisk/"
+        },
+        {
+          "text": "ContextEditDialog.js",
+          "path": "js/Asterisk/"
+        },
+        {
+          "text": "VoicemailGridPanel.js",
+          "path": "js/Asterisk/"
+        },
+        {
+          "text": "VoicemailEditDialog.js",
+          "path": "js/Asterisk/"
+        },
+        {
+          "text": "MeetmeGridPanel.js",
+          "path": "js/Asterisk/"
+        },
+        {
+          "text": "MeetmeEditDialog.js",
+          "path": "js/Asterisk/"
+        },
+        {
+          "text": "MainScreen.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Voipmanager FAT Client",
+      "file": "css/Voipmanager-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Voipmanager.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}
