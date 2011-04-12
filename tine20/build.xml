@@ -137,6 +137,7 @@
         <delete>
             <fileset dir=".">
                 <include name="*/*/*-FAT*" />
+                <include name="${project.basedir}/${localedir}/build/*" />
             </fileset>
         </delete>
     </target>

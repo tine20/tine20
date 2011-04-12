@@ -40,14 +40,18 @@
         $locale = Zend_Registry::get('locale');
         switch(TINE20_BUILDTYPE) {
             case 'RELEASE':
-                echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/all.css' />";
-                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/all.js'></script>";
+                echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/Tinebase-FAT.css' />";
+                echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/Setup-FAT.css' />";
+                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-FAT.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-FAT.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Locale/build/" . (string)$locale . "-all.js'></script>";
                 break;
                 
             case 'DEBUG':
-                echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/all-debug.css' />";
-                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/all-debug.js'></script>";
+                echo "\n    <link rel='stylesheet' type='text/css' href='Tinebase/css/Tinebase-FAT-debug.css' />";
+                echo "\n    <link rel='stylesheet' type='text/css' href='Setup/css/Setup-FAT-debug.css' />";
+                echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Tinebase-FAT-debug.js'></script>";
+                echo "\n    <script type='text/javascript' language='javascript' src='Setup/js/Setup-FAT-debug.js'></script>";
                 echo "\n    <script type='text/javascript' language='javascript' src='Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js'></script>";
                 break;
                 
