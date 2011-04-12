@@ -436,8 +436,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                         continue;
                     }
                     
-                    // get contents from uploaded files
-                    $part = new Zend_Mime_Part(file_get_contents($attachment['path']));
+                    // get contents from uploaded file
+                    $stream = fopen($attachment['path'], 'r');
+                    $part = new Zend_Mime_Part($stream);
                     
                     // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
                     $part->encoding = ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
