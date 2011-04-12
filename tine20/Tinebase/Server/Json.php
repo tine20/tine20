@@ -223,11 +223,32 @@ class Tinebase_Server_Json implements Tinebase_Server_Interface
         if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) {
             $traceString = $_exception->getTraceAsString();
             $traceString = $this->_replaceBasePath($traceString);
-            // remove login pws
-            $traceString = preg_replace("/->login\('([^']*)', '[^']*'/", "->login('$1', '********'", $traceString);
+            $traceString = $this->_removeCredentials($traceString);
              
             Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $traceString);
         }
+    }
+    
+    /**
+     * remove credentials/passwords from trace 
+     * 
+     * @param string $_traceString
+     * @return string
+     */
+    protected function _removeCredentials($_traceString)
+    {
+        $passwordPatterns = array(
+            "/->login\('([^']*)', '[^']*'/",
+            "/->validate\('[^']*', '[^']*'/",
+            "/->authenticate\('[^']*', '[^']*'/",
+        );
+        $replacements = array(
+            "->login('$1', '********'",
+            "->validate('$1', '********'",
+            "->authenticate('$1', '********'",
+        );
+        
+        return preg_replace($passwordPatterns, $replacements, $_traceString);
     }
     
     /**
