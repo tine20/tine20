@@ -82,7 +82,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             $originalMessage = NULL;
         }
 
-        $mail = $this->_createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
+        $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
         $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients, $originalMessage);
         
         // reset max execution time to old value
@@ -104,7 +104,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $folder = ($_folder instanceof Felamimail_Model_Folder) ? $_folder : Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($_message->account_id, $_folder);
         $targetAccount = ($_message->account_id == $folder->account_id) ? $sourceAccount : Felamimail_Controller_Account::getInstance()->get($folder->account_id);
         
-        $mailToAppend = $this->_createMailForSending($_message, $sourceAccount);
+        $mailToAppend = $this->createMailForSending($_message, $sourceAccount);
         
         $transport = new Felamimail_Transport();
         $mailAsString = $transport->getRawMessage($mailToAppend);
