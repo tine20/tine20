@@ -770,9 +770,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         foreach ($orderedApplications as $application) {
             if ($_fileType == 'css') {
-                $filesToWatch[] = $application . '/css/all' . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.css';
+                $filesToWatch[] = "{$application}/css/{$application}-FAT.css.inc";
             } else {
-                $filesToWatch[] = $application . '/js/all'  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                $filesToWatch[] = "{$application}/js/{$application}-FAT"  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js.inc';
             }
         }
         

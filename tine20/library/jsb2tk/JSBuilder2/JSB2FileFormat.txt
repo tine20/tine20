@@ -1,0 +1,43 @@
+JSB2 File Format is a JSON encoded configuration file for managing JS & CSS 
+project builds.
+
+The top-level keys are:
+- projectName:  String describing the project
+- deployDir:    String specifying directory to create within the homeDir 
+                specified on the commandline
+- licenseText:  String specifying the header of all .js and .css, use \n for
+                newlines.
+- pkgs:         An array of package descriptors
+- resources:    An array of resource descriptors
+
+Package Descriptors:
+- name:         String describing the package 
+- file:         String specifying the file to create
+- isDebug:      Boolean describing whether to generate debug builds
+                This configuration is currently UNUSED. Debug and compressed
+                versions will ALWAYS be generated.
+- fileIncludes: An array of files descriptors which need to be included in this
+                package.
+- pkgDeps:      An array of the package descriptor file strings that this 
+                package depends on. The behavior of this configuration relies 
+                on the includeDeps configuration.
+- includeDeps:  Boolean describing whether or not to include dependencies in the
+                outputted file.  Defaults to false.
+
+File Descriptors:
+- text:         String describing the file to be included
+- path:         String describing the directory of file to be included
+
+
+Resource Descriptors:
+- src:          String describing the folder to move resources from
+- dest:         String describing the folder to move resources to
+- filters:      String to create a RegEx which specifies how to filter the 
+                files which are copied from src to dest. All .svn and hidden 
+                files will automatically be excluded. Note that all \'s must
+                be encoded \\.
+
+Filter Examples:
+- ".*"                 A filter to copy all files
+- ".*[\\.js|\\.css]"   A filter to copy all js and css files.
+

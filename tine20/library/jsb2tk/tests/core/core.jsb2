@@ -1,0 +1,30 @@
+{
+	"projectName": "Core Stuff",
+    "deployDir": "deploy",
+    "licenseText": "BSD New License",
+    "pkgs": [{
+        "name": "Applikation Framework",
+        "file": "pkgs/framework.js",
+        "isDebug": true,
+        "fileIncludes": [{
+            "text": "main.js",
+            "path": "src/"
+        }, {
+            "text": "ModulSel.js",
+            "path": "src/"
+        }]
+    }, {
+        "name": "Application Framework CSS",
+        "file": "resources/css/core.css",
+        "isDebug": true,
+        "fileIncludes": [{
+            "text": "main.css",
+            "path": "resources/css/"
+       }]
+    }],
+    "resources" : [{
+        "src": "resources/",
+        "dest": "resources/",
+        "filters": ".*"
+    }]
+}
