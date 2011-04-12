@@ -10,7 +10,7 @@
  */
 
 /**
- * message flags controller for Felamimail
+ * send message controller for Felamimail
  *
  * @package     Felamimail
  * @subpackage  Controller
@@ -126,7 +126,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Message $_originalMessage
      * @return Tinebase_Mail
      */
-    protected function _createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
+    public function createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
     {
         // create new mail to send
         $mail = new Tinebase_Mail('UTF-8');
@@ -134,7 +134,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         
         $this->_setMailBody($mail, $_message);
         $this->_setMailFrom($mail, $_account, $_message);
-        $this->_setMailRecipients($mail, $_message, $_nonPrivateRecipients);
+        $_nonPrivateRecipients = $this->_setMailRecipients($mail, $_message);
         $this->_setMailHeaders($mail, $_account, $_message, $_originalMessage);
         
         $this->_addAttachments($mail, $_message, $_originalMessage);
@@ -337,29 +337,37 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * 
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
-     * @param array $_nonPrivateRecipients
-     * 
-     *  @todo add name for to/cc/bcc
+     * @return array
      */
-    protected function _setMailRecipients(Tinebase_Mail $_mail, Felamimail_Model_Message $_message,  &$_nonPrivateRecipients = array())
+    protected function _setMailRecipients(Tinebase_Mail $_mail, Felamimail_Model_Message $_message)
     {
-        if (isset($_message->to)) {
-            foreach ($_message->to as $to) {
-                $_mail->addTo($to);
-                $_nonPrivateRecipients[] = $to;
+        $nonPrivateRecipients = array();
+        $punycodeConverter = $this->getPunycodeConverter();
+        
+        foreach (array('to', 'cc', 'bcc') as $type) {
+            if (isset($_message->{$type})) {
+                foreach((array) $_message->{$type} as $address) {
+                    
+                    $address = $punycodeConverter->encode($address);
+                    
+                    switch($type) {
+                        case 'to':
+                            $_mail->addTo($address);
+                            $nonPrivateRecipients[] = $address;
+                            break;
+                        case 'cc':
+                            $_mail->addCc($address);
+                            $nonPrivateRecipients[] = $address;
+                            break;
+                        case 'bcc':
+                            $_mail->addBcc($address);
+                            break;
+                    }
+                }
             }
         }
-        if (isset($_message->cc)) {
-            foreach ($_message->cc as $cc) {
-                $_mail->addCc($cc);
-                $_nonPrivateRecipients[] = $cc;
-            }
-        }
-        if (isset($_message->bcc)) {
-            foreach ($_message->bcc as $bcc) {
-                $_mail->addBcc($bcc);
-            }
-        }
+        
+        return $nonPrivateRecipients;
     }
     
     /**
@@ -404,8 +412,6 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Message $_originalMessage
-     * 
-     * @todo use getMessagePart() for attachments too?
      */
     protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
     {
