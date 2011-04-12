@@ -935,6 +935,29 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($result2), $trashFolderClonedAccount->globalname . ' still contains text/service messages:' . print_r($result2, TRUE));
     }
     
+    /**
+     * test converting from punycode
+     * 
+     * @todo implement
+     */
+    public function testPunycodedFromHeader()
+    {
+        $cachedMessage = $this->messageTestHelper('punycode_from.eml', 'punycode');
+        
+        //print_r($cachedMessage->toArray());
+        //xn--stermnn-9wa0n.org / östermänn.org
+    }
+
+    /**
+     * test converting to punycode
+     * 
+     * @todo implement
+     */
+    public function testEncodeToPunycode()
+    {
+        //xn--stermnn-9wa0n.org / östermänn.org
+    }
+    
     /********************************* protected helper funcs *************************************/
     
     /**
