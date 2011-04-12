@@ -232,7 +232,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                 }
             
                 if (isset($field['separator'])) {
-                    $data[$field['destination']] = explode($field['separator'], $_data_indexed[$field['source']]);
+                    $data[$field['destination']] = preg_split('/\s*' . $field['separator'] . '\s*/', $_data_indexed[$field['source']]);
                 } else if (isset($field['fixed'])) {
                     $data[$field['destination']] = $field['fixed'];
                 } else if (isset($field['append'])) {
