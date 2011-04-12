@@ -8,7 +8,6 @@ Ext.ns('Ext.ux');
  *       
  * @namespace   Ext.ux.log
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Ext.ux.log = Ext.isIE ? {} : console;
 

@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Ext.ns('Tine.ExampleApplication');
 
@@ -15,7 +14,6 @@ Ext.ns('Tine.ExampleApplication');
  * @extends     Tine.Tinebase.Application
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.ExampleApplication.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
@@ -34,7 +32,6 @@ Tine.ExampleApplication.Application = Ext.extend(Tine.Tinebase.Application, {
  * @extends     Tine.widgets.MainScreen
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.ExampleApplication.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
@@ -48,7 +45,6 @@ Tine.ExampleApplication.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
  * @extends     Tine.widgets.container.TreePanel
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     id: 'ExampleApplication_Tree',

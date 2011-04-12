@@ -2,7 +2,6 @@
  * Ext.ux
  * 
  * @package     Ext.ux
- * @version     $Id$
  */
 
 Ext.ns('Ext.ux'); 

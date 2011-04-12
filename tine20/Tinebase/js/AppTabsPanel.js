@@ -19,7 +19,6 @@ Ext.ns('Tine.Tinebase');
  * @class       Tine.Tinebase.AppTabsPanel
  * @extends     Ext.TabPanel
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Tinebase.AppTabsPanel = function(config) {
     Ext.apply(this, config);

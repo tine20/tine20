@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Matthias Greiling <m.greiling@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Tables.php 1063 2008-03-14 16:28:12Z lkneschke $
  *
  * @todo rework ext check classes!
  */

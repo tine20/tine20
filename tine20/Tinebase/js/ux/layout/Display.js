@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
  
 Ext.ns('Ext.ux.layout');
@@ -14,7 +13,6 @@ Ext.ns('Ext.ux.layout');
  * @class       Ext.ux.layout.DisplayLayout
  * @extends     Ext.layout.FormLayout
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * 
  * <b>Layout for displaying information in a displaypanel</b>
  */

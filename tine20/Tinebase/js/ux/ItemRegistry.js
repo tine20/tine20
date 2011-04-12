@@ -7,7 +7,6 @@ Ext.ns('Ext.ux');
  * @class       Ext.ux.ItemRegistry
  * @autor       Cornelius Weiss <c.weiss@metaways.de>
  * @license     BSD, MIT and GPL
- * @verstion    $Id$
  *
  * @example
 // register 'additional item' for myDialog

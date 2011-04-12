@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Ext.ns('Tine.Tasks.status');
 
@@ -14,7 +13,6 @@ Ext.ns('Tine.Tasks.status');
  * @extends     Tine.widgets.grid.FilterModel
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Tasks.status.StatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
@@ -71,7 +69,6 @@ Tine.widgets.grid.FilterToolbar.FILTERS['tasks.status'] = Tine.Tasks.status.Stat
  * @extends     Ext.ux.form.LayerCombo
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,
@@ -150,7 +147,6 @@ Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
  * @extends     Ext.form.ComboBox
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Tasks.status.ComboBox = Ext.extend(Ext.form.ComboBox, {
 	/**

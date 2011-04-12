@@ -4,7 +4,6 @@
  * @license     MIT, BSD, and GPL
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 
 Ext.ns('Ext.ux.direct');

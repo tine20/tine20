@@ -14,7 +14,6 @@ Ext.ns('Tine.Tinebase');
  * @class       Tine.Tinebase.AppPile
  * @extends     Ext.Panel
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
     /**

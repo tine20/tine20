@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
 Ext.ns('Tine.Tinebase.widgets', 'Tine.widgets.grid');
@@ -23,7 +22,6 @@ Ext.ns('Tine.Tinebase.widgets', 'Tine.widgets.grid');
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * 
  * @param       {Object} config
  * @constructor

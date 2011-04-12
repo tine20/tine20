@@ -9,7 +9,6 @@
  *              United States of America is excluded from the scope of this license.
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 
 class ActiveSync_Setup_Update_Release3 extends Setup_Update_Abstract

@@ -3,7 +3,6 @@
  * 
  * @license     New BSD License
  * @author      loeppky - based on the work done by MaximGB in Ext.ux.UploadDialog (http://extjs.com/forum/showthread.php?t=21558)
- * @version     $Id$
  *
  */
 Ext.ns('Ext.ux.file');

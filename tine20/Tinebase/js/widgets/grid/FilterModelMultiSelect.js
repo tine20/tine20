@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Ext.ns('Tine.widgets.grid');
 
@@ -14,7 +13,6 @@ Ext.ns('Tine.widgets.grid');
  * @extends     Tine.widgets.grid.FilterModel
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
  */
 Tine.widgets.grid.FilterModelMultiSelect = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
@@ -101,7 +99,6 @@ Tine.widgets.grid.FilterToolbar.FILTERS['tinebase.multiselect'] = Tine.widgets.g
  * @extends     Ext.ux.form.LayerCombo
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
  */
 Tine.widgets.grid.FilterModelMultiSelectValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,

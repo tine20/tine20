@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
  
 Ext.ns('Tine.Timetracker');
@@ -18,7 +17,6 @@ Ext.ns('Tine.Timetracker');
  * MainScreen of the Timetracker Application <br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * 
  * @constructor
  */
@@ -33,7 +31,6 @@ Tine.Timetracker.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
  * @extends     Tine.widgets.persistentfilter.PickerPanel
  * 
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @version     $Id$
  * 
  * @constructor
  * @xtype       tine.timetracker.treepanel

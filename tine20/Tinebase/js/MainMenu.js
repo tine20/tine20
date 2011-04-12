@@ -14,7 +14,6 @@ Ext.ns('Tine.Tinebase');
  * @class       Tine.Tinebase.MainMenu
  * @extends     Ext.Toolbar
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
     /**
