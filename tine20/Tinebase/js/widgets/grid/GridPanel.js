@@ -1135,7 +1135,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         }
         
         var editDialogClass = this.editDialogClass || Tine[this.app.appName][this.recordClass.getMeta('modelName') + 'EditDialog'],
-            config = 
+            config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
                 record: record,
