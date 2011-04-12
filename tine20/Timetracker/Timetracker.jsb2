@@ -1,0 +1,60 @@
+{
+  "projectName": "Tine 2.0 - Timetracker",
+  "deployDir": "Timetracker",
+  "licenseText": "Tine 2.0 - Timetracker \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Timetracker FAT Client",
+      "file": "js/Timetracker-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "DurationSpinner.js",
+          "path": "js/"
+        },
+        {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
+          "text": "Timetracker.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimeaccountSelect.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimeaccountGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimeaccountEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimesheetGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "TimesheetEditDialog.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Timetracker FAT Client",
+      "file": "css/Timetracker-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Timetracker.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "projectName": "Tine 2.0 - Filemanager",
+  "deployDir": "Filemanager",
+  "licenseText": "Tine 2.0 - Filemanager \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Filemanager FAT Client",
+      "file": "js/Filemanager-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Application.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Filemanager FAT Client",
+      "file": "css/Filemanager-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Filemanager.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

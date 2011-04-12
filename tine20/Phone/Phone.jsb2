@@ -1,0 +1,36 @@
+{
+  "projectName": "Tine 2.0 - Phone",
+  "deployDir": "Phone",
+  "licenseText": "Tine 2.0 - Phone \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Phone FAT Client",
+      "file": "js/Phone-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
+          "text": "Phone.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Phone FAT Client",
+      "file": "css/Phone-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Phone.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

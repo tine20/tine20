@@ -1,0 +1,92 @@
+{
+  "projectName": "Tine 2.0 - Crm",
+  "deployDir": "Crm",
+  "licenseText": "Tine 2.0 - Crm \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Crm FAT Client",
+      "file": "js/Crm-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "Crm.js",
+          "path": "js/"
+        },
+        {
+          "text": "LinkGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "LeadGridContactFilter.js",
+          "path": "js/"
+        },
+        {
+          "text": "LeadGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "LeadGridDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "LeadEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "LeadState.js",
+          "path": "js/"
+        },
+        {
+          "text": "LeadStateFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "LeadSource.js",
+          "path": "js/"
+        },
+        {
+          "text": "LeadType.js",
+          "path": "js/"
+        },
+        {
+          "text": "SearchCombo.js",
+          "path": "../Addressbook/js/"
+        },
+        {
+          "text": "Contact.js",
+          "path": "js/"
+        },
+        {
+          "text": "Product.js",
+          "path": "js/"
+        },
+        {
+          "text": "Task.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Crm FAT Client",
+      "file": "css/Crm-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Crm.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

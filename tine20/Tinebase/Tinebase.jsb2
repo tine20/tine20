@@ -1,0 +1,712 @@
+{
+  "projectName": "Tine 2.0 - Tinebase",
+  "deployDir": "Tinebase",
+  "licenseText": "Tine 2.0 - Tinebase \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Tinebase FAT Client",
+      "file": "js/Tinebase-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "extFixes.js",
+          "path": "js/"
+        },
+        {
+          "text": "Portal.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "PortalColumn.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "Portlet.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "extInit.js",
+          "path": "js/"
+        },
+        {
+          "text": "Locale.js",
+          "path": "js/"
+        },
+        {
+          "text": "Gettext.js",
+          "path": "js/Locale/"
+        },
+        {
+          "text": "OpenLayers.js",
+          "path": "../library/OpenLayers/"
+        },
+        {
+          "text": "GeoExt.js",
+          "path": "../library/GeoExt/script/"
+        },
+        {
+          "text": "MapPanel.js",
+          "path": "js/widgets/"
+        },
+        {
+          "text": "FieldLabeler.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "Array.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "Log.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "ConnectionStatus.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "JsonRpcProvider.js",
+          "path": "js/ux/Direct/"
+        },
+        {
+          "text": "DatePickerWeekPlugin.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "ButtonLockedToggle.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "Percentage.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "PopupWindow.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "PopupWindowManager.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "Notification.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "WindowFactory.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "SliderTip.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "Wizard.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "SearchField.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "BrowseButton.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "CheckColumn.js",
+          "path": "js/ux/grid/"
+        },
+        {
+          "text": "QuickaddGridPanel.js",
+          "path": "js/ux/grid/"
+        },
+        {
+          "text": "RowExpander.js",
+          "path": "js/ux/grid/"
+        },
+        {
+          "text": "PagingToolbar.js",
+          "path": "js/ux/grid/"
+        },
+        {
+          "text": "GridViewMenuPlugin.js",
+          "path": "js/ux/grid/"
+        },
+        {
+          "text": "Uploader.js",
+          "path": "js/ux/file/"
+        },
+        {
+          "text": "BrowsePlugin.js",
+          "path": "js/ux/file/"
+        },
+        {
+          "text": "Download.js",
+          "path": "js/ux/file/"
+        },
+        {
+          "text": "ColorField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "IconTextField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "MirrorTextField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "ColumnFormPanel.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "LayerCombo.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "ClearableComboBox.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "ClearableTextField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "RecordsComboBox.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "DateTimeField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "ClearableDateField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "ImageField.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "ImageCropper.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "Spinner.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "SpinnerStrategy.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "LockCombo.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "LockTextfield.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "HtmlEditor.js",
+          "path": "js/ux/form/"
+        },
+        {
+          "text": "HorizontalFitLayout.js",
+          "path": "js/ux/layout/"
+        },
+        {
+          "text": "CenterLayout.js",
+          "path": "js/ux/layout/"
+        },
+        {
+          "text": "RowLayout.js",
+          "path": "js/ux/layout/"
+        },
+        {
+          "text": "GMapPanel.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "DatepickerRange.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "CheckboxSelectionModel.js",
+          "path": "js/ux/tree/"
+        },
+        {
+          "text": "DisplayPanel.js",
+          "path": "js/ux/display/"
+        },
+        {
+          "text": "DisplayField.js",
+          "path": "js/ux/display/"
+        },
+        {
+          "text": "Display.js",
+          "path": "js/ux/layout/"
+        },
+        {
+          "text": "MessageBox.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "TabPanelSortPlugin.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "ItemRegistry.js",
+          "path": "js/ux/"
+        },
+        {
+          "text": "Printer.js",
+          "path": "js/ux/Printer/"
+        },
+        {
+          "text": "Base.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
+          "text": "GridPanel.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
+          "text": "ColumnTree.js",
+          "path": "js/ux/Printer/renderers/"
+        },
+        {
+          "text": "Record.js",
+          "path": "js/data/"
+        },
+        {
+          "text": "RecordStore.js",
+          "path": "js/data/"
+        },
+        {
+          "text": "RecordProxy.js",
+          "path": "js/data/"
+        },
+        {
+          "text": "AbstractBackend.js",
+          "path": "js/data/"
+        },
+        {
+          "text": "StateProvider.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExceptionHandler.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExceptionDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "Container.js",
+          "path": "js/"
+        },
+        {
+          "text": "Models.js",
+          "path": "js/"
+        },
+        {
+          "text": "Application.js",
+          "path": "js/"
+        },
+        {
+          "text": "common.js",
+          "path": "js/"
+        },
+        {
+          "text": "LangChooser.js",
+          "path": "js/widgets/"
+        },
+        {
+          "text": "ActionUpdater.js",
+          "path": "js/widgets/"
+        },
+        {
+          "text": "EditRecord.js",
+          "path": "js/widgets/"
+        },
+        {
+          "text": "Priority.js",
+          "path": "js/widgets/"
+        },
+        {
+          "text": "VersionCheck.js",
+          "path": "js/widgets/"
+        },
+        {
+          "text": "AlarmPanel.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "EditDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "CredentialsDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "PreferencesDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "PreferencesTreePanel.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "PreferencesPanel.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "ImportDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "ExportDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "LinkPanel.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "MultiOptionsDialog.js",
+          "path": "js/widgets/dialog/"
+        },
+        {
+          "text": "CustomfieldSearchCombo.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "CustomfieldsPanel.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "CustomfieldsCombo.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "DetailsPanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FilterModel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FilterPlugin.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FilterButton.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "ExportButton.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FilterToolbar.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FilterModelMultiSelect.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FilterToolbarQuickFilterPlugin.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FilterSelectionModel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "ForeignRecordFilter.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "QuickaddGridPanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "FileUploadGrid.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "PickerGridPanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "GridPanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
+          "text": "Loader.js",
+          "path": "js/widgets/tree/"
+        },
+        {
+          "text": "ContextMenu.js",
+          "path": "js/widgets/tree/"
+        },
+        {
+          "text": "FilterPlugin.js",
+          "path": "js/widgets/tree/"
+        },
+        {
+          "text": "PickerGridPanel.js",
+          "path": "js/widgets/account/"
+        },
+        {
+          "text": "ContainerSelect.js",
+          "path": "js/widgets/container/"
+        },
+        {
+          "text": "GrantsDialog.js",
+          "path": "js/widgets/container/"
+        },
+        {
+          "text": "ContainerTree.js",
+          "path": "js/widgets/container/"
+        },
+        {
+          "text": "FilterModel.js",
+          "path": "js/widgets/container/"
+        },
+        {
+          "text": "TagsPanel.js",
+          "path": "js/widgets/tags/"
+        },
+        {
+          "text": "TagCombo.js",
+          "path": "js/widgets/tags/"
+        },
+        {
+          "text": "TagFilter.js",
+          "path": "js/widgets/tags/"
+        },
+        {
+          "text": "TagsMassAttachAction.js",
+          "path": "js/widgets/tags/"
+        },
+        {
+          "text": "WestPanel.js",
+          "path": "js/widgets/mainscreen/"
+        },
+        {
+          "text": "MainScreen.js",
+          "path": "js/widgets/"
+        },
+        {
+          "text": "CountryCombo.js",
+          "path": "js/widgets/"
+        },
+        {
+          "text": "ActivitiesPanel.js",
+          "path": "js/widgets/"
+        },
+        {
+          "text": "RecordPickerComboBox.js",
+          "path": "js/widgets/form/"
+        },
+        {
+          "text": "ConfigPanel.js",
+          "path": "js/widgets/form/"
+        },
+        {
+          "text": "Model.js",
+          "path": "js/widgets/persistentfilter/"
+        },
+        {
+          "text": "Store.js",
+          "path": "js/widgets/persistentfilter/"
+        },
+        {
+          "text": "PickerPanel.js",
+          "path": "js/widgets/persistentfilter/"
+        },
+        {
+          "text": "PasswordChangeDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AboutDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AppManager.js",
+          "path": "js/"
+        },
+        {
+          "text": "AppPile.js",
+          "path": "js/"
+        },
+        {
+          "text": "AppTabsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "MainMenu.js",
+          "path": "js/"
+        },
+        {
+          "text": "MainScreen.js",
+          "path": "js/"
+        },
+        {
+          "text": "LoginPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "UserProfilePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "prototypeTranslations.js",
+          "path": "js/"
+        },
+        {
+          "text": "tineInit.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Tinebase FAT Client",
+      "file": "css/Tinebase-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "ExtFixes.css",
+          "path": "css/"
+        },
+        {
+          "text": "Tinebase.css",
+          "path": "css/"
+        },
+        {
+          "text": "SmallForms.css",
+          "path": "css/"
+        },
+        {
+          "text": "ArrowCollapse.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "ConnectionStatus.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "Wizard.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "Percentage.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "DatePickerWeekPlugin.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "QuickaddGridPanel.css",
+          "path": "css/ux/grid/"
+        },
+        {
+          "text": "IconTextField.css",
+          "path": "css/ux/grid/"
+        },
+        {
+          "text": "PagingToolbar.css",
+          "path": "css/ux/grid/"
+        },
+        {
+          "text": "GridViewMenuPlugin.css",
+          "path": "css/ux/grid/"
+        },
+        {
+          "text": "ExpandFieldSet.css",
+          "path": "css/ux/form/"
+        },
+        {
+          "text": "ImageField.css",
+          "path": "css/ux/form/"
+        },
+        {
+          "text": "Spinner.css",
+          "path": "css/ux/form/"
+        },
+        {
+          "text": "HtmlEditor.css",
+          "path": "css/ux/form/"
+        },
+        {
+          "text": "LayerCombo.css",
+          "path": "css/ux/form/"
+        },
+        {
+          "text": "DisplayPanel.css",
+          "path": "css/ux/display/"
+        },
+        {
+          "text": "LockCombo.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "Menu.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "MessageBox.css",
+          "path": "css/ux/"
+        },
+        {
+          "text": "EditRecord.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "TagsPanel.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "FilterToolbar.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "AccountPicker.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "PreviewPanel.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "PreferencesPanel.css",
+          "path": "css/widgets/"
+        },
+        {
+          "text": "geoext-all.css",
+          "path": "../library/GeoExt/resources/css/"
+        }
+      ]
+    }
+  ]
+}

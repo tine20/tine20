@@ -1,0 +1,4 @@
+/**
+ * SomeComponent.js
+ */
+ 

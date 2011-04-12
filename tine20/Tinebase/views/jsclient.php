@@ -40,11 +40,7 @@
     <script type="text/javascript" src="library/ExtJS/adapter/ext/ext-base<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
     <script type="text/javascript" src="library/ExtJS/ext-all<?php echo TINE20_BUILDTYPE != 'RELEASE' ? '-debug' : '' ?>.js"></script>
     
-    <!--  not yet
-        <link rel="stylesheet" type="text/css"  media="print" href="Tinebase/css/print.css" />
-    -->
-          
-   <?php require 'Tinebase/views/includeJsAndCss.php'; ?>
+    <?php require 'Tinebase/views/includeJsAndCss.php'; ?>
         
 </head>
 <body>
