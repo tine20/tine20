@@ -946,12 +946,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
 
     /**
      * test converting to punycode
-     * 
-     * @todo implement
      */
     public function testEncodeToPunycode()
     {
-        //xn--stermnn-9wa0n.org / östermänn.org
+        $message = new Felamimail_Model_Message(array(
+            'to'        => array('albert@östermänn.org'),
+            'subject'   => 'punycode test',
+        ));
+        $mail = Felamimail_Controller_Message_Send::getInstance()->createMailForSending($message, $this->_account);
+        
+        $recipients = $mail->getRecipients();
+        $this->assertEquals('albert@xn--stermnn-9wa0n.org', $recipients[0]);
     }
     
     /********************************* protected helper funcs *************************************/
