@@ -114,8 +114,14 @@ class Tinebase_Application
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
-        if (isset($this->_applicationCache[$applicationId])) {
-            return $this->_applicationCache[$applicationId];
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        if ($cache instanceof Zend_Cache_Core) {
+            $cacheId = 'getApplicationById_' . $_applicationId;
+            if ($cache->test($cacheId)) {
+                $result = $cache->load($cacheId);
+                
+                return $result;
+            }
         }
         
         $where = $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?' , $applicationId);
@@ -128,8 +134,11 @@ class Tinebase_Application
         
         $result = new Tinebase_Model_Application($rows[0], TRUE);
         
-        $this->_applicationCache[$applicationId] = $result;
-        
+        if ($cache instanceof Zend_Cache_Core) {
+            $cache->save($result, $cacheId, array('applications'));
+            $cache->save($result, 'getApplicationByName_' . $result->name, array('applications'));
+        }
+                
         return $result;
     }
 
@@ -149,8 +158,9 @@ class Tinebase_Application
         }
         
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
-        if ($cache instanceof Zend_Cache) {
-            $cacheId = 'getApplicationByName' . $_applicationName;
+        
+        if ($cache instanceof Zend_Cache_Core) {
+            $cacheId = 'getApplicationByName_' . $_applicationName;
             if ($cache->test($cacheId)) {
                 $result = $cache->load($cacheId);
                 
@@ -171,8 +181,9 @@ class Tinebase_Application
         }
         $result = new Tinebase_Model_Application($queryResult, TRUE);
         
-        if ($cache instanceof Zend_Cache) {
+        if ($cache instanceof Zend_Cache_Core) {
             $cache->save($result, $cacheId, array('applications'));
+            $cache->save($result, 'getApplicationById_' . $result->getId(), array('applications'));
         }
         
         return $result;
