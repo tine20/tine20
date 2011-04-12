@@ -49,6 +49,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected $_backend = NULL;
     
     /**
+     * punycode converter
+     *
+     * @var idna_convert
+     */
+    protected $_punycodeConverter = NULL;
+    
+    /**
      * fallback charset constant
      * 
      * @var string
@@ -640,5 +647,20 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         return Felamimail_Controller_Folder::getInstance()->getMultiple(array_keys($_folderCounter));
+    }
+    
+    /**
+     * get punycode converter
+     * 
+     * @return NULL|idna_convert
+     */
+    public function getPunycodeConverter()
+    {
+        if ($this->_punycodeConverter === NULL) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating idna convert class for punycode conversion.');
+            $this->_punycodeConverter = new idna_convert();
+        }
+        
+        return $this->_punycodeConverter;
     }
 }
