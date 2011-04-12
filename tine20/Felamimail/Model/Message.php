@@ -176,9 +176,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->sent = Felamimail_Message::convertDate($_headers['resent-date']);
         }
         
+        $punycodeConverter = Felamimail_Controller_Message::getInstance()->getPunycodeConverter();
+        
         foreach (array('to', 'cc', 'bcc', 'from', 'sender') as $field) {
             if (isset($_headers[$field])) {
-                $value = Felamimail_Message::convertAddresses($_headers[$field]);
+                $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
                 
                 switch($field) {
                     case 'from':

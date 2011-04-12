@@ -144,17 +144,21 @@ class Felamimail_Message extends Zend_Mail_Message
      * convert addresses into array with name/address
      *
      * @param string $_addresses
+     * @param idna_convert $_punycodeConverter
      * @return array
      */
-    public static function convertAddresses($_addresses)
+    public static function convertAddresses($_addresses, $_punycodeConverter = NULL)
     {
         $result = array();
         if (!empty($_addresses)) {
             $addresses = self::parseAdresslist($_addresses);
             if (is_array($addresses)) {
                 foreach($addresses as $address) {
+                    // convert from punycode (@todo add check if email is in punycode? /^xn--/)
+                    $email = ($_punycodeConverter !== NULL) ? $_punycodeConverter->decode($address['address']) : $address['address'];
+                    
                     $result[] = array(
-                        'email' => $address['address'], 
+                        'email' => $email, 
                         'name' =>  $address['name']
                     );
                 }

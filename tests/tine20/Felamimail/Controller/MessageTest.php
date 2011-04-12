@@ -936,16 +936,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test converting from punycode
-     * 
-     * @todo implement
+     * test converting from punycode (xn--stermnn-9wa0n.org -> östermänn.org)
      */
     public function testPunycodedFromHeader()
     {
         $cachedMessage = $this->messageTestHelper('punycode_from.eml', 'punycode');
-        
-        //print_r($cachedMessage->toArray());
-        //xn--stermnn-9wa0n.org / östermänn.org
+        $this->assertEquals('albert@östermänn.org', $cachedMessage->from_email);
     }
 
     /**
