@@ -562,7 +562,8 @@ class Tinebase_Core
 
         // some important caches
         Zend_Locale::setCache($cache);
-
+        Zend_Translate::setCache($cache);
+        
         self::set(self::CACHE, $cache);
     }
 
