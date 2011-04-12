@@ -1,0 +1,56 @@
+{
+  "projectName": "Tine 2.0 - Addressbook",
+  "deployDir": "Addressbook",
+  "licenseText": "Tine 2.0 - Addressbook \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Addressbook FAT Client",
+      "file": "js/Addressbook-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "Addressbook.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContactGridDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContactGrid.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContactFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContactEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "SearchCombo.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Addressbook FAT Client",
+      "file": "css/Addressbook-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Addressbook.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

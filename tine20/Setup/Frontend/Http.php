@@ -26,46 +26,6 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected $_applicationName = 'Setup';
     
     /**
-     * Returns all CSS files which must be inclued for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getCssFilesToInclude()
-    {
-        $tinebase = new Tinebase_Frontend_Http();
-        
-        $tinebaseCssFiles = $tinebase->getCssFilesToInclude();
-        $setupCssFiles    = parent::getCssFilesToInclude();
-        
-        return array_merge($tinebaseCssFiles, $setupCssFiles);
-    }
-    
-    /**
-     * Returns all JS files which must be included for Setup
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        $tinebase = new Tinebase_Frontend_Http();
-        
-        $tinebaseJsFiles = $tinebase->getJsFilesToInclude();
-        $setupJsFiles    = array(
-            'Setup/js/init.js',
-            'Setup/js/Setup.js',
-            'Setup/js/MainScreen.js',
-            'Setup/js/TermsPanel.js',
-            'Setup/js/ApplicationGridPanel.js',
-            'Setup/js/EnvCheckGridPanel.js',
-            'Setup/js/ConfigManagerPanel.js',
-            'Setup/js/AuthenticationPanel.js',
-            'Setup/js/EmailPanel.js',
-        );
-        
-        return array_merge($tinebaseJsFiles, $setupJsFiles);
-    }
-    
-    /**
      * get json-api service map
      * 
      * @return string
@@ -96,27 +56,27 @@ class Setup_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         //$this->checkAuth();
         
         $view = new Zend_View();
-        $view->setScriptPath('Setup/views');
+        $baseDir = dirname(dirname(dirname(__FILE__)));
+        $view->setScriptPath("$baseDir/Setup/views");
+        
+        $appNames = array('Tinebase', 'Setup');
+        
+        require_once 'jsb2tk/jsb2tk.php';
+        $view->jsb2tk = new jsb2tk(array(
+            'deploymode'    => jsb2tk::DEPLOYMODE_STATIC,
+            'includemode'   => jsb2tk::INCLUDEMODE_INDIVIDUAL,
+            'appendctime'   => TRUE,
+            'htmlindention' => "    ",
+        ));
+        
+        foreach($appNames as $appName) {
+            $view->jsb2tk->register("$baseDir/$appName/$appName.jsb2", $appName);
+        }
         
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('jsclient.php');
     }
     
-    
-    /**
-     * returns an array with all css and js files which needs to be included
-     * 
-     * @return array 
-     */
-    public static function getAllIncludeFiles() 
-    {
-        $setup = new Setup_Frontend_Http();
-        
-        return array(
-            'js'  => $setup->getJsFilesToInclude(),
-            'css' => $setup->getCssFilesToInclude()
-        );
-    }
     /**
      * authentication
      *

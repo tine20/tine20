@@ -53,20 +53,8 @@
                 
             case 'DEVELOPMENT':
             default:
-                $includeFiles = Setup_Frontend_Http::getAllIncludeFiles();
-                
-                // js files
-                foreach ($includeFiles['css'] as $name) {
-                    echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'" />';
-                }
-                
-                //css files
-                foreach ($includeFiles['js'] as $name) {
-                    echo "\n    ". '<script type="text/javascript" language="javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
-                }
-                
-                // laguage file
-                echo "\n    ". '<script type="text/javascript" language="javascript" src="setup.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
+                echo $this->jsb2tk->getHTML();
+                echo '    <script type="text/javascript" language="javascript" src="setup.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
                 break;
         }?>
 </head>

@@ -1,0 +1,66 @@
+{
+  "projectName": "Tine 2.0 - Setup",
+  "deployDir": "Setup",
+  "licenseText": "Tine 2.0 - Setup \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Setup FAT Client",
+      "file": "js/Setup-FAT.js",
+      "pkgDeps": ["Tinebase/js/Tinebase.js"],
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "init.js",
+          "path": "js/"
+        },
+        {
+          "text": "Setup.js",
+          "path": "js/"
+        },
+        {
+          "text": "MainScreen.js",
+          "path": "js/"
+        },
+        {
+          "text": "TermsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ApplicationGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "EnvCheckGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ConfigManagerPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "AuthenticationPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "EmailPanel.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Setup FAT Client",
+      "file": "css/Setup-FAT.css",
+      "isDebug": true,
+      "pkgDeps": ["Tinebase/css/Tinebase.css"],
+      "fileIncludes": [
+        {
+          "text": "Setup.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}
