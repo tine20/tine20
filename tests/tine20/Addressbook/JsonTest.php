@@ -311,10 +311,19 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
                 'value'    =>  Tinebase_Core::getUser()->accountDisplayName
             )
         ));
-        $tagName = Tinebase_Record_Abstract::generateUID();
+        $sharedTagName = Tinebase_Record_Abstract::generateUID();
         $tag = new Tinebase_Model_Tag(array(
             'type'  => Tinebase_Model_Tag::TYPE_SHARED,
-            'name'  => $tagName,
+            'name'  => $sharedTagName,
+            'description' => 'testImport',
+            'color' => '#009B31',
+        ));
+        Tinebase_Tags::getInstance()->attachTagToMultipleRecords($filter, $tag);
+        
+        $personalTagName = Tinebase_Record_Abstract::generateUID();
+        $tag = new Tinebase_Model_Tag(array(
+            'type'  => Tinebase_Model_Tag::TYPE_PERSONAL,
+            'name'  => $personalTagName,
             'description' => 'testImport',
             'color' => '#009B31',
         ));
@@ -326,7 +335,8 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $exporter = new Addressbook_Export_Csv($filter, Addressbook_Controller_Contact::getInstance());
         $filename = $exporter->generate();
         $export = file_get_contents($filename);
-        $this->assertContains(',"' . $tagName, $export, 'tag was not found in export:' . $export);
+        $this->assertContains($sharedTagName, $export, 'shared tag was not found in export:' . $export);
+        $this->assertContains($personalTagName, $export, 'personal tag was not found in export:' . $export);
         
         // then import
         $files = array(
@@ -342,11 +352,15 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $result['totalcount'], 'Didn\'t import anything.');
         $this->assertEquals(0, $result['failcount'], 'Import failed for one or more records.');
         $this->assertEquals(Tinebase_Core::getUser()->accountDisplayName, $result['results'][0]['n_fileas'], 'file as not found');
-        $this->assertContains($tagName, $result['results'][0]['tags'], 'Did not get tag');
+        $this->assertTrue(in_array($sharedTagName, $result['results'][0]['tags']),
+            'Did not get shared tag: ' . $sharedTagName . ' / ' . print_r($result['results'][0]['tags'], TRUE));
+        $this->assertTrue(in_array($personalTagName, $result['results'][0]['tags']), 
+            'Did not get personal tag: ' . $personalTagName . ' / ' . print_r($result['results'][0]['tags'], TRUE));
         
         // cleanup
         unset($filename);
-        $tagToDelete = Tinebase_Tags::getInstance()->getTagByName($tagName);
-        Tinebase_Tags::getInstance()->deleteTags($tagToDelete->getId());
+        $sharedTagToDelete = Tinebase_Tags::getInstance()->getTagByName($sharedTagName);
+        $personalTagToDelete = Tinebase_Tags::getInstance()->getTagByName($personalTagName);
+        Tinebase_Tags::getInstance()->deleteTags(array($sharedTagToDelete->getId(), $personalTagToDelete->getId()));
     }    
 }		
