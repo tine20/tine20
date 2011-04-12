@@ -81,7 +81,7 @@
         },
         {
           "text": "SearchCombo.js",
-          "path": "Addressbook/js/"
+          "path": "../Addressbook/js/"
         },
         {
           "text": "ContactSearchCombo.js",
@@ -101,7 +101,7 @@
         },
         {
           "text": "ContactGrid.js",
-          "path": "Addressbook/js/"
+          "path": "../Addressbook/js/"
         },
         {
           "text": "ContactGrid.js",
