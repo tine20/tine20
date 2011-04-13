@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @version     $Id$
  * 
  */
 
@@ -933,6 +932,30 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(0, count($result1), $trashFolderMainAccount->globalname . ' still contains multipart/mixed messages:' . print_r($result1, TRUE));
         $result2 = $this->_searchOnImap('text/service', $trashFolderClonedAccount);
         $this->assertEquals(0, count($result2), $trashFolderClonedAccount->globalname . ' still contains text/service messages:' . print_r($result2, TRUE));
+    }
+    
+    /**
+     * test converting from punycode (xn--stermnn-9wa0n.org -> östermänn.org)
+     */
+    public function testPunycodedFromHeader()
+    {
+        $cachedMessage = $this->messageTestHelper('punycode_from.eml', 'punycode');
+        $this->assertEquals('albert@östermänn.org', $cachedMessage->from_email);
+    }
+
+    /**
+     * test converting to punycode
+     */
+    public function testEncodeToPunycode()
+    {
+        $message = new Felamimail_Model_Message(array(
+            'to'        => array('albert@östermänn.org'),
+            'subject'   => 'punycode test',
+        ));
+        $mail = Felamimail_Controller_Message_Send::getInstance()->createMailForSending($message, $this->_account);
+        
+        $recipients = $mail->getRecipients();
+        $this->assertEquals('albert@xn--stermnn-9wa0n.org', $recipients[0]);
     }
     
     /********************************* protected helper funcs *************************************/

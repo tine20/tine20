@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -32,6 +31,7 @@ class Tinebase_Frontend_AllTests
         $suite->addTestSuite('Tinebase_Frontend_Json_PersistentFilterTest');
         $suite->addTestSuite('Tinebase_Frontend_JsonTest');
         $suite->addTestSuite('Tinebase_Frontend_CliTest');
+        $suite->addTestSuite('Tinebase_Frontend_HttpTest');
         
         return $suite;
     }

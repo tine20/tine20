@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Ext.ns('Tine.widgets.dialog');
 
@@ -16,7 +15,6 @@ Ext.ns('Tine.widgets.dialog');
  * @class       Tine.widgets.dialog.EditDialog
  * @extends     Ext.FormPanel
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * @constructor
  * @param {Object} config The configuration options.
  */

@@ -8,7 +8,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
 class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
@@ -20,42 +19,6 @@ class Felamimail_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     protected $_applicationName = 'Felamimail';
     
-    /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-            'Felamimail/js/Model.js',
-            'Felamimail/js/FolderStore.js',
-            'Felamimail/js/FolderSelect.js',
-            'Felamimail/js/FolderSelectPanel.js',
-            'Felamimail/js/sieve/VacationEditDialog.js',
-            'Felamimail/js/sieve/RuleEditDialog.js',
-            'Felamimail/js/sieve/RulesGridPanel.js',
-            'Felamimail/js/sieve/RulesDialog.js',
-            'Felamimail/js/sieve/RuleConditionsPanel.js',
-            'Felamimail/js/TreeContextMenu.js',
-            'Felamimail/js/TreeLoader.js',
-            'Felamimail/js/TreePanel.js',
-            'Felamimail/js/GridDetailsPanel.js',
-            'Felamimail/js/GridPanel.js',
-            'Felamimail/js/MessageDisplayDialog.js',
-            'Felamimail/js/MessageEditDialog.js',
-            'Felamimail/js/AccountEditDialog.js',
-            'Addressbook/js/SearchCombo.js',
-            'Felamimail/js/ContactSearchCombo.js',
-            'Felamimail/js/RecipientGrid.js',
-            'Felamimail/js/Felamimail.js',
-            'Felamimail/js/ComposeEditor.js',
-            'Addressbook/js/ContactGrid.js',
-            'Felamimail/js/ContactGrid.js',
-            'Felamimail/js/RecipientPickerDialog.js',
-            'Felamimail/js/FolderFilterModel.js',
-        );
-    }
 
     /**
      * download email attachment

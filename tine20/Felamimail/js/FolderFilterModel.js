@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * 
  */
 Ext.ns('Tine.Felamimail');
@@ -15,7 +14,6 @@ Ext.ns('Tine.Felamimail');
  * @extends     Tine.widgets.grid.FilterModel
  * 
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @version     $Id$
  */
 Tine.Felamimail.FolderFilterModel = Ext.extend(Tine.widgets.grid.FilterModelMultiSelect, {
 

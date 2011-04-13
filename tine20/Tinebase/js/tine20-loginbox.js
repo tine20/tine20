@@ -1,4 +1,3 @@
-/* $Id$ */
 
 /*
 Example html code to include Tine 2.0 login box on an external webpage
@@ -28,7 +27,6 @@ Ext.ns('Tine20.login');
  * @namespace   Tine20
  * @class       Tine20.login
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * 
  * Simple login form for remote Tine 2.0 logins
  */
@@ -303,7 +301,6 @@ Ext.ns('Ext.ux.data');
  * @class       Ext.ux.data.windowNameConnection
  * @extends     Ext.util.Observable
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  * 
  * @param {Object} config
  * 

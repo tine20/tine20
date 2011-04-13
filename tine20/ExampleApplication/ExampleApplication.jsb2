@@ -1,0 +1,44 @@
+{
+  "projectName": "Tine 2.0 - ExampleApplication",
+  "deployDir": "ExampleApplication",
+  "licenseText": "Tine 2.0 - ExampleApplication \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "ExampleApplication FAT Client",
+      "file": "js/ExampleApplication-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExampleApplication.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExampleRecordGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "ExampleRecordEditDialog.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "ExampleApplication FAT Client",
+      "file": "css/ExampleApplication-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "ExampleApplication.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

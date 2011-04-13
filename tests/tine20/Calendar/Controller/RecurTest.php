@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
- * @version     $Id: RecurTest.php 14014 2010-04-26 08:43:54Z g.ciyiltepe@metaways.de $
  */
 
 /**

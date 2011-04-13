@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 
 Ext.ns('Tine.Addressbook');
@@ -16,7 +15,6 @@ Ext.ns('Tine.Addressbook');
  * Addressbook Application Object <br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
     
@@ -37,7 +35,6 @@ Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
  * MainScreen of the Addressbook Application <br>
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Addressbook.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     activeContentType: 'Contact'

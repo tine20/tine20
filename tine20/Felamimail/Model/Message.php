@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  * 
  * @todo        add flags as consts here?
  * @todo        add more CONTENT_TYPE_ constants
@@ -176,9 +175,11 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             $this->sent = Felamimail_Message::convertDate($_headers['resent-date']);
         }
         
+        $punycodeConverter = Felamimail_Controller_Message::getInstance()->getPunycodeConverter();
+        
         foreach (array('to', 'cc', 'bcc', 'from', 'sender') as $field) {
             if (isset($_headers[$field])) {
-                $value = Felamimail_Message::convertAddresses($_headers[$field]);
+                $value = Felamimail_Message::convertAddresses($_headers[$field], $punycodeConverter);
                 
                 switch($field) {
                     case 'from':

@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
  
 Ext.ns('Tine.Calendar');
@@ -14,7 +13,6 @@ Ext.ns('Tine.Calendar');
  * @namespace Tine.Calendar
  * @extends Tine.widgets.grid.DetailsPanel
  * @author Cornelius Weiss <c.weiss@metaways.de>
- * @version $Id$
  */
 Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
     border: false,

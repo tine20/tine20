@@ -1,0 +1,132 @@
+{
+  "projectName": "Tine 2.0 - Felamimail",
+  "deployDir": "Felamimail",
+  "licenseText": "Tine 2.0 - Felamimail \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Felamimail FAT Client",
+      "file": "js/Felamimail-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "FolderStore.js",
+          "path": "js/"
+        },
+        {
+          "text": "FolderSelect.js",
+          "path": "js/"
+        },
+        {
+          "text": "FolderSelectPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "VacationEditDialog.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "RuleEditDialog.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "RulesGridPanel.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "RulesDialog.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "RuleConditionsPanel.js",
+          "path": "js/sieve/"
+        },
+        {
+          "text": "TreeContextMenu.js",
+          "path": "js/"
+        },
+        {
+          "text": "TreeLoader.js",
+          "path": "js/"
+        },
+        {
+          "text": "TreePanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "GridDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "GridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "MessageDisplayDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "MessageEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AccountEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "SearchCombo.js",
+          "path": "../Addressbook/js/"
+        },
+        {
+          "text": "ContactSearchCombo.js",
+          "path": "js/"
+        },
+        {
+          "text": "RecipientGrid.js",
+          "path": "js/"
+        },
+        {
+          "text": "Felamimail.js",
+          "path": "js/"
+        },
+        {
+          "text": "ComposeEditor.js",
+          "path": "js/"
+        },
+        {
+          "text": "ContactGrid.js",
+          "path": "../Addressbook/js/"
+        },
+        {
+          "text": "ContactGrid.js",
+          "path": "js/"
+        },
+        {
+          "text": "RecipientPickerDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "FolderFilterModel.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Felamimail FAT Client",
+      "file": "css/Felamimail-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Felamimail.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

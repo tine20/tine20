@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Http.php 5090 2008-10-24 10:30:05Z p.schuele@metaways.de $
  */
 
 /**
@@ -24,40 +23,6 @@ class Crm_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @var string
      */
     protected $_applicationName = 'Crm';
-    
-    /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     * 
-     * @todo    make js include order depend on app depencies and remove redundant js files from other apps
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-            'Crm/js/Model.js',
-            'Crm/js/Crm.js',
-            'Crm/js/LinkGridPanel.js',
-            'Crm/js/LeadGridContactFilter.js',
-            'Crm/js/LeadGridPanel.js',
-            'Crm/js/LeadGridDetailsPanel.js',
-            'Crm/js/LeadEditDialog.js',
-        // admin settings panel
-            'Crm/js/AdminPanel.js',
-        // lead state/source/type
-            'Crm/js/LeadState.js',
-            'Crm/js/LeadStateFilterModel.js',
-            'Crm/js/LeadSource.js',
-            'Crm/js/LeadType.js',
-        // contact grid
-            'Addressbook/js/SearchCombo.js',
-            'Crm/js/Contact.js',
-        // product grid
-            'Crm/js/Product.js',
-        // task grid
-            'Crm/js/Task.js',
-        );
-    }
     
    	/**
      * export lead

@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
- * @version     $Id: SchedulerTest.php 4754 2008-09-30 13:34:35Z g.ciyiltepe@metaways.de $
  */
 
 /**

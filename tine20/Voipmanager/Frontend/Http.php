@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Http.php 5090 2008-10-24 10:30:05Z p.schuele@metaways.de $
  * 
  */
 
@@ -20,41 +19,6 @@
 class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     protected $_applicationName = 'Voipmanager';
-    
-    /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-        	'Voipmanager/js/Models.js',
-            'Voipmanager/js/widgets.js',
-            'Voipmanager/js/Voipmanager.js',
-            'Voipmanager/js/CallForwardPanel.js',
-            'Voipmanager/js/Snom/LineGridPanel.js',
-            'Voipmanager/js/Snom/SoftwareGridPanel.js',
-            'Voipmanager/js/Snom/SoftwareEditDialog.js',
-        	'Voipmanager/js/Snom/TemplateGridPanel.js',
-            'Voipmanager/js/Snom/TemplateEditDialog.js',
-        	'Voipmanager/js/Snom/PhoneGridPanel.js',
-            'Voipmanager/js/Snom/PhoneEditDialog.js',
-			'Voipmanager/js/Snom/LocationGridPanel.js',
-            'Voipmanager/js/Snom/LocationEditDialog.js',        
-        	'Voipmanager/js/Snom/SettingGridPanel.js',
-            'Voipmanager/js/Snom/SettingEditDialog.js',
-        	'Voipmanager/js/Asterisk/SipPeerGridPanel.js',
-            'Voipmanager/js/Asterisk/SipPeerEditDialog.js',
-            'Voipmanager/js/Asterisk/ContextGridPanel.js',
-            'Voipmanager/js/Asterisk/ContextEditDialog.js',
-        	'Voipmanager/js/Asterisk/VoicemailGridPanel.js',
-            'Voipmanager/js/Asterisk/VoicemailEditDialog.js',
-        	'Voipmanager/js/Asterisk/MeetmeGridPanel.js',
-            'Voipmanager/js/Asterisk/MeetmeEditDialog.js',
-        	'Voipmanager/js/MainScreen.js'
-        );
-    }
     
     /**
      * create edit phone dialog

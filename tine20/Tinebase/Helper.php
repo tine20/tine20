@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 
 
@@ -93,7 +92,7 @@ function getDevelopmentRevision()
                 $objPath .= '/' . array_shift($hashes);
                 $objFile = "$objPath/" . implode('', $hashes);
                 if (@file_exists($objFile)) {
-                    $date = date_create('@' . filemtime($objFile))->format(Tinebase_Record_Abstract::ISO8601LONG);
+                    $date = date_create('@' . filemtime($objFile))->format('Y-m-d H:i:s');
                     break;
                 }
             }

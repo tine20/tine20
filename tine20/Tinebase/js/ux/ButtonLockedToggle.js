@@ -3,7 +3,6 @@
  * 
  * @license     New BSD License
  * @author      www.steinarmyhre.com
- * @version     $Id$
  *
  */
  

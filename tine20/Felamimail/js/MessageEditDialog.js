@@ -383,12 +383,12 @@ Ext.namespace('Tine.Felamimail');
                 this.to = this.to.concat(this.replyTo.get('to'));
                 this.cc = this.replyTo.get('cc');
                 
-                // remove own email and all non-email strings from to/cc
+                // remove own email and all non-email strings/objects from to/cc
                 var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
                     ownEmailRegexp = new RegExp(account.get('email'));
                 Ext.each(['to', 'cc'], function(field) {
                     for (var i=0; i < this[field].length; i++) {
-                        if (ownEmailRegexp.test(this[field][i]) || ! this[field][i].match(/@/)) {
+                        if (! Ext.isString(this[field][i]) || ! this[field][i].match(/@/) || ownEmailRegexp.test(this[field][i])) {
                             this[field].splice(i, 1);
                         }
                     }

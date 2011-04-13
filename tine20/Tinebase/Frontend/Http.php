@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -177,231 +176,6 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     }
     
     /**
-     * Returns all JS files which must be included for Tinebase
-     *
-     * @todo refactor js stuff so that all js files could be included
-     * before registry gets included!
-     * 
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        //'extjs/build/locale/ext-lang-'.$locale->getLanguage().'.js';
-        return array(
-        // base framework fixes
-            'Tinebase/js/extFixes.js',
-        // official ux (but backported)
-            'Tinebase/js/ux/Portal.js',
-            'Tinebase/js/ux/PortalColumn.js',
-            'Tinebase/js/ux/Portlet.js',
-        // gears
-        //    'Tinebase/js/gears_init.js',
-        // generic init to be included before parsing of the tine code
-            'Tinebase/js/extInit.js',
-        // Locale support
-            'Tinebase/js/Locale.js',
-            'Tinebase/js/Locale/Gettext.js',
-        // mappanel / geoext
-            'library/OpenLayers/OpenLayers.js', 
-            'library/GeoExt/script/GeoExt.js', 
-            'Tinebase/js/widgets/MapPanel.js',
-        // Ext user extensions
-            'Tinebase/js/ux/FieldLabeler.js',
-            'Tinebase/js/ux/Array.js',
-            'Tinebase/js/ux/Log.js',
-            'Tinebase/js/ux/ConnectionStatus.js',
-            'Tinebase/js/ux/Direct/JsonRpcProvider.js',
-            'Tinebase/js/ux/DatePickerWeekPlugin.js',
-            'Tinebase/js/ux/ButtonLockedToggle.js',
-            'Tinebase/js/ux/Percentage.js',
-            'Tinebase/js/ux/PopupWindow.js',
-            'Tinebase/js/ux/PopupWindowManager.js',
-            'Tinebase/js/ux/Notification.js',
-            'Tinebase/js/ux/WindowFactory.js',
-            'Tinebase/js/ux/SliderTip.js',
-            'Tinebase/js/ux/Wizard.js',
-            'Tinebase/js/ux/SearchField.js',
-            'Tinebase/js/ux/BrowseButton.js',
-            'Tinebase/js/ux/grid/CheckColumn.js',
-            'Tinebase/js/ux/grid/QuickaddGridPanel.js',
-            'Tinebase/js/ux/grid/RowExpander.js',
-            'Tinebase/js/ux/grid/PagingToolbar.js',
-            'Tinebase/js/ux/grid/GridViewMenuPlugin.js',
-            'Tinebase/js/ux/file/Uploader.js',
-            'Tinebase/js/ux/file/BrowsePlugin.js',
-            'Tinebase/js/ux/file/Download.js',
-            'Tinebase/js/ux/form/ColorField.js',
-            'Tinebase/js/ux/form/IconTextField.js',
-            'Tinebase/js/ux/form/MirrorTextField.js',
-            'Tinebase/js/ux/form/ColumnFormPanel.js',
-            'Tinebase/js/ux/form/LayerCombo.js',
-            'Tinebase/js/ux/form/ClearableComboBox.js',
-            'Tinebase/js/ux/form/ClearableTextField.js',
-            'Tinebase/js/ux/form/RecordsComboBox.js',
-            'Tinebase/js/ux/form/DateTimeField.js',
-            'Tinebase/js/ux/form/ClearableDateField.js',
-            'Tinebase/js/ux/form/ImageField.js',
-            'Tinebase/js/ux/form/ImageCropper.js',
-            'Tinebase/js/ux/form/Spinner.js',
-            'Tinebase/js/ux/form/SpinnerStrategy.js',
-            'Tinebase/js/ux/form/LockCombo.js',
-            'Tinebase/js/ux/form/LockTextfield.js',
-            'Tinebase/js/ux/form/HtmlEditor.js',
-            'Tinebase/js/ux/layout/HorizontalFitLayout.js',
-            'Tinebase/js/ux/layout/CenterLayout.js',
-            'Tinebase/js/ux/layout/RowLayout.js',
-            'Tinebase/js/ux/GMapPanel.js',
-            'Tinebase/js/ux/DatepickerRange.js',
-            'Tinebase/js/ux/tree/CheckboxSelectionModel.js',
-            'Tinebase/js/ux/display/DisplayPanel.js',
-            'Tinebase/js/ux/display/DisplayField.js',
-            'Tinebase/js/ux/layout/Display.js',
-            'Tinebase/js/ux/MessageBox.js',
-            'Tinebase/js/ux/TabPanelSortPlugin.js',
-            'Tinebase/js/ux/ItemRegistry.js',
-            'Tinebase/js/ux/Printer/Printer.js',
-            'Tinebase/js/ux/Printer/renderers/Base.js',
-            'Tinebase/js/ux/Printer/renderers/GridPanel.js',
-            'Tinebase/js/ux/Printer/renderers/ColumnTree.js',
-        // Tinebase core stuff
-            // NOTE: All the data stuff is going to and extra worker build
-            //'Tinebase/js/data/sync/Ping.js',
-            //'Tinebase/js/data/schemaProc/sqlGenerator.js',
-            //'Tinebase/js/data/schemaProc/xmlReader.js',
-            'Tinebase/js/data/Record.js',
-            'Tinebase/js/data/RecordStore.js',
-            'Tinebase/js/data/RecordProxy.js',
-            'Tinebase/js/data/AbstractBackend.js',
-        //'Tinebase/js/data/MemoryBackend.js',
-            'Tinebase/js/StateProvider.js',
-            'Tinebase/js/ExceptionHandler.js',
-            'Tinebase/js/ExceptionDialog.js',
-            'Tinebase/js/Container.js',
-            'Tinebase/js/Models.js',
-            'Tinebase/js/Application.js',
-            'Tinebase/js/common.js',
-        // Tine 2.0 specific widgets
-            'Tinebase/js/widgets/LangChooser.js',
-            'Tinebase/js/widgets/ActionUpdater.js',
-            'Tinebase/js/widgets/EditRecord.js',
-            'Tinebase/js/widgets/Priority.js',
-            'Tinebase/js/widgets/VersionCheck.js',
-            'Tinebase/js/widgets/dialog/AlarmPanel.js',
-            'Tinebase/js/widgets/dialog/EditDialog.js',
-            'Tinebase/js/widgets/dialog/AdminPanel.js',
-            'Tinebase/js/widgets/dialog/CredentialsDialog.js',
-            'Tinebase/js/widgets/dialog/PreferencesDialog.js',
-            'Tinebase/js/widgets/dialog/PreferencesTreePanel.js',
-            'Tinebase/js/widgets/dialog/PreferencesPanel.js',
-            'Tinebase/js/widgets/dialog/ImportDialog.js',
-            'Tinebase/js/widgets/dialog/ExportDialog.js',
-            'Tinebase/js/widgets/dialog/LinkPanel.js',
-            'Tinebase/js/widgets/dialog/MultiOptionsDialog.js',
-			'Tinebase/js/widgets/customfields/CustomfieldSearchCombo.js',
-            'Tinebase/js/widgets/customfields/CustomfieldsPanel.js',
-			'Tinebase/js/widgets/customfields/CustomfieldsCombo.js',
-            'Tinebase/js/widgets/grid/DetailsPanel.js',
-            'Tinebase/js/widgets/grid/FilterModel.js',
-            'Tinebase/js/widgets/grid/FilterPlugin.js',
-            'Tinebase/js/widgets/grid/FilterButton.js',
-            'Tinebase/js/widgets/grid/ExportButton.js',
-            'Tinebase/js/widgets/grid/FilterToolbar.js',
-            'Tinebase/js/widgets/grid/FilterModelMultiSelect.js',
-            'Tinebase/js/widgets/grid/FilterToolbarQuickFilterPlugin.js',
-            'Tinebase/js/widgets/grid/FilterSelectionModel.js',
-            'Tinebase/js/widgets/grid/ForeignRecordFilter.js',
-            'Tinebase/js/widgets/grid/QuickaddGridPanel.js',
-            'Tinebase/js/widgets/grid/FileUploadGrid.js',
-            'Tinebase/js/widgets/grid/PickerGridPanel.js',
-            'Tinebase/js/widgets/grid/GridPanel.js',
-            'Tinebase/js/widgets/tree/Loader.js',
-            'Tinebase/js/widgets/tree/ContextMenu.js',
-            'Tinebase/js/widgets/tree/FilterPlugin.js',
-            'Tinebase/js/widgets/account/PickerGridPanel.js',
-            'Tinebase/js/widgets/container/ContainerSelect.js',
-            'Tinebase/js/widgets/container/GrantsDialog.js',
-            'Tinebase/js/widgets/container/ContainerTree.js',
-            'Tinebase/js/widgets/container/FilterModel.js',
-            'Tinebase/js/widgets/tags/TagsPanel.js',
-            'Tinebase/js/widgets/tags/TagCombo.js',
-            'Tinebase/js/widgets/tags/TagFilter.js',
-            'Tinebase/js/widgets/tags/TagsMassAttachAction.js',
-            'Tinebase/js/widgets/mainscreen/WestPanel.js',
-            'Tinebase/js/widgets/MainScreen.js',
-            'Tinebase/js/widgets/CountryCombo.js',
-            'Tinebase/js/widgets/ActivitiesPanel.js',        
-            'Tinebase/js/widgets/form/RecordPickerComboBox.js',
-            'Tinebase/js/widgets/form/ConfigPanel.js',
-            'Tinebase/js/widgets/persistentfilter/Model.js',
-            'Tinebase/js/widgets/persistentfilter/Store.js',
-            'Tinebase/js/widgets/persistentfilter/PickerPanel.js',
-          // Tinebase app stuff
-            'Tinebase/js/PasswordChangeDialog.js',
-            'Tinebase/js/AboutDialog.js',
-            'Tinebase/js/AppManager.js',
-            'Tinebase/js/AppPile.js',
-            'Tinebase/js/AppTabsPanel.js',
-            'Tinebase/js/MainMenu.js',
-            'Tinebase/js/MainScreen.js',
-            'Tinebase/js/LoginPanel.js',
-            'Tinebase/js/AdminPanel.js',
-            'Tinebase/js/UserProfilePanel.js',
-        // translations for prototypes
-            'Tinebase/js/prototypeTranslations.js',
-        // yui stuff
-            //'../yui/build/dragdrop/dragdrop-min.js',
-            //'../yui/build/resize/resize-beta-min.js',
-            //'../yui/build/imagecropper/imagecropper-beta-min.js',
-        // Tinebase include time code
-            'Tinebase/js/tineInit.js',
-        );
-    }
-    
-	/**
-	 * returns the css include files for Tinebase 
-	 *
-	 * @return array Array of filenames
-	 *  
-	 */
-    public function getCssFilesToInclude()
-    {
-        return array(
-    	   'Tinebase/css/ExtFixes.css',
-    	   'Tinebase/css/Tinebase.css',
-    	   'Tinebase/css/SmallForms.css',
-    	   'Tinebase/css/ux/ArrowCollapse.css',
-    	   'Tinebase/css/ux/ConnectionStatus.css',
-    	   'Tinebase/css/ux/Wizard.css',
-    	   'Tinebase/css/ux/Percentage.css',
-    	   'Tinebase/css/ux/DatePickerWeekPlugin.css',
-    	   'Tinebase/css/ux/grid/QuickaddGridPanel.css',
-    	   'Tinebase/css/ux/grid/IconTextField.css',
-    	   'Tinebase/css/ux/grid/PagingToolbar.css',
-    	   'Tinebase/css/ux/grid/GridViewMenuPlugin.css',
-    	   'Tinebase/css/ux/form/ExpandFieldSet.css',
-    	   'Tinebase/css/ux/form/ImageField.css',
-    	   'Tinebase/css/ux/form/Spinner.css',
-    	   'Tinebase/css/ux/form/HtmlEditor.css',
-    	   'Tinebase/css/ux/form/LayerCombo.css',
-    	   'Tinebase/css/ux/display/DisplayPanel.css',
-    	   'Tinebase/css/ux/LockCombo.css',
-    	   'Tinebase/css/ux/Menu.css',
-    	   'Tinebase/css/ux/MessageBox.css',
-    	   'Tinebase/css/widgets/EditRecord.css',
-    	   'Tinebase/css/widgets/TagsPanel.css',
-    	   'Tinebase/css/widgets/FilterToolbar.css',
-    	   'Tinebase/css/widgets/AccountPicker.css',
-    	   'Tinebase/css/widgets/PreviewPanel.css',
-           'Tinebase/css/widgets/PreferencesPanel.css',
-        // geoext
-            'library/GeoExt/resources/css/geoext-all.css',
-    	// yui stuff
-    	   //'../yui/build/assets/skins/sam/resize.css',
-    	   //'../yui/build/assets/skins/sam/imagecropper.css',
-    	);
-    }
-    
-    /**
      * renders the login dialog
      *
      * @todo perhaps we could add a config option to display the update dialog if it is set
@@ -457,10 +231,28 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected function _renderMainScreen()
     {
         $view = new Zend_View();
-        $view->setScriptPath('Tinebase/views');
+        $baseDir = dirname(dirname(dirname(__FILE__)));
+        $view->setScriptPath("$baseDir/Tinebase/views");
+        
+        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
+        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
+        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
+        
+        require_once 'jsb2tk/jsb2tk.php';
+        $view->jsb2tk = new jsb2tk(array(
+            'deploymode'    => jsb2tk::DEPLOYMODE_STATIC,
+            'includemode'   => jsb2tk::INCLUDEMODE_INDIVIDUAL,
+            'appendctime'   => TRUE,
+            'htmlindention' => "    ",
+        ));
+        
+        
+        foreach($orderedApplications as $appName) {
+            $view->jsb2tk->register("$baseDir/$appName/$appName.jsb2", $appName);
+        }
         
         $view->registryData = array();
-
+        
         header('Content-Type: text/html; charset=utf-8');
         echo $view->render('jsclient.php');
         
@@ -752,9 +544,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         
         foreach ($orderedApplications as $application) {
             if ($_fileType == 'css') {
-                $filesToWatch[] = $application . '/css/all' . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.css';
+                $filesToWatch[] = "{$application}/css/{$application}-FAT.css.inc";
             } else {
-                $filesToWatch[] = $application . '/js/all'  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                $filesToWatch[] = "{$application}/js/{$application}-FAT"  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js.inc';
             }
         }
         
@@ -956,66 +748,4 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 	    
 	}
 	
-	/**
-	 * returns an array with all css and js files which needs to be included
-	 * all over Tine 2.0
-	 * 
-	 * NOTE: As the HTML servers have no singletons, we need to create a unique
-	 * instance here. This might get relaxed wiht php 5.3 with static functions
-	 * 
-	 * TODO directory read method is sistem dependant so order of inclusion may vary and
-	 * this can lead to error
-	 * 
-	 * @param  array apps to exclude
-	 * @return array 
-	 */
-	public static function getAllIncludeFiles(array $_exclude=array())
-	{
-	    $tine20path = dirname(dirname(dirname(__FILE__)));
-	    
-	    // Tinebase first
-	    $tinebaseHttp = new Tinebase_Frontend_Http();
-        $cssFiles = $tinebaseHttp->getCssFilesToInclude();
-        $jsFiles  = $tinebaseHttp->getJsFilesToInclude();
-		
-		// Admin second
-	    $adminHttp = new Admin_Frontend_Http();
-        $cssFiles = array_merge($cssFiles, $adminHttp->getCssFilesToInclude()); 
-        $jsFiles  = array_merge($jsFiles, $adminHttp->getJsFilesToInclude());
-		
-		// Addressbook third
-	    $addressbookHttp = new Addressbook_Frontend_Http();
-        $cssFiles = array_merge($cssFiles, $addressbookHttp->getCssFilesToInclude());
-        $jsFiles  = array_merge($jsFiles, $addressbookHttp->getJsFilesToInclude());
-        
-        $_exclude[]  = '.';
-        $_exclude[]  = 'Tinebase';
-		$_exclude[]  = 'Admin';
-		$_exclude[]  = 'Addressbook';
-        $_exclude[]  = 'Setup';
-                	    
-        $d = dir($tine20path);
-	    while (false !== ($appName = $d->read())) {
-            if ($appName{0} != '.' && is_dir("$tine20path/$appName") && !in_array($appName, $_exclude)) {
-				if (file_exists("$tine20path/$appName/Frontend/Http.php")) {
-                    
-                    $httpClass = $appName . "_Frontend_Http";
-                    $instance = new $httpClass();
-                    if (method_exists($instance, 'getCssFilesToInclude')) {
-                        $cssFiles = array_merge($cssFiles, call_user_func(array($instance, 'getCssFilesToInclude')));
-                    }
-                    if (method_exists($instance, 'getJsFilesToInclude')) {
-                        $jsFiles = array_merge($jsFiles, call_user_func(array($instance, 'getJsFilesToInclude')));
-                    }
-                }
-            }
-           
-        }
-        $d->close();
-        
-        return array(
-            'js'  => array_unique($jsFiles),
-            'css' => $cssFiles
-        );
-	}
 }

@@ -15,7 +15,6 @@ Ext.ns('Tine.Tinebase');
  * @extends     Ext.util.Observable
  * @consturctor
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @version     $Id$
  */
 Tine.Tinebase.AppManager = function() {
     /**

@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id: Release0.php 9082 2009-07-04 18:26:46Z l.kneschke@metaways.de $
  */
 
 class Tasks_Setup_Update_Release0 extends Setup_Update_Abstract

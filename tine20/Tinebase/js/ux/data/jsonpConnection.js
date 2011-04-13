@@ -7,7 +7,6 @@ Ext.ns('Ext.ux.data');
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
  * @license     MIT, BSD, and GPL
- * @version     $Id$
  * 
  * @param {Object} config
  * 

@@ -9,7 +9,6 @@
  *              United States of America is excluded from the scope of this license.
  * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -26,20 +25,6 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @var string
      */
     protected $_applicationName = 'ActiveSync';
-    
-    /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-            'ActiveSync/js/Application.js',
-            'ActiveSync/js/Model.js',
-            'ActiveSync/js/DeviceStore.js',
-        );
-    }
     
     /**
      * authenticate user

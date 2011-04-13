@@ -5,7 +5,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
  
@@ -21,7 +20,6 @@ Ext.ns('Tine.Crm.Contact');
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Tine.Crm.Contact.Combo = Ext.extend(Tine.Addressbook.SearchCombo, {
 
@@ -75,7 +73,6 @@ Tine.Crm.Contact.Combo = Ext.extend(Tine.Addressbook.SearchCombo, {
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     /**
@@ -320,7 +317,6 @@ Tine.Crm.Contact.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Tine.Crm.Contact.TypeComboBox = Ext.extend(Ext.form.ComboBox, { 
     /**

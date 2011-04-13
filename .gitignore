@@ -6,9 +6,7 @@
 nbproject
 tine20/config.inc.php
 tests/tine20/phpunitconfig.inc.php
-tine20/*/js/all.js
-tine20/*/js/all-debug.js
-tine20/*/css/all.css
-tine20/*/css/all-debug.css
+tine20/*/*/*FAT*
 tine20/Tinebase/js/Locale/build/*.js
 scripts/packaging/tine20build/
+tine20/build

@@ -7,12 +7,11 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  * @todo        check if build script puts the translation files in build dir $tineBuildPath
  */
 
-echo "\n<!-- Tine 2.0 static files -->";
+echo "<!-- Tine 2.0 static files -->\n";
 
 // this variable gets replaced by the buildscript
 $tineBuildPath = '';
@@ -21,26 +20,8 @@ $locale = (Tinebase_Core::isRegistered(Tinebase_Core::LOCALE)) ? Tinebase_Core::
 
 switch(TINE20_BUILDTYPE) {
     case 'DEVELOPMENT':
-        $requiredApplications = array('Tinebase', 'Admin', 'Addressbook');
-        $enabledApplications = Tinebase_Application::getInstance()->getApplicationsByState(Tinebase_Application::ENABLED)->name;
-        $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
-        
-        foreach ($orderedApplications as $application) {
-            $className = $application . '_Frontend_Http';
-            $httpFrontend = new $className;
-            
-            // css files
-            foreach ($httpFrontend->getCssFilesToInclude() as $name) {
-                echo "\n    ". '<link rel="stylesheet" type="text/css" href="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'" />';
-            }
-            
-            // js files
-            foreach ($httpFrontend->getJsFilesToInclude() as $name) {
-                echo "\n    ". '<script type="text/javascript" src="'. Tinebase_Frontend_Http_Abstract::_appendFileTime($name) .'"></script>';
-            }
-        }
-        // laguage file
-        echo "\n    ". '<script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
+        echo $this->jsb2tk->getHTML();
+        echo '    <script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
         break;
 
     case 'DEBUG':

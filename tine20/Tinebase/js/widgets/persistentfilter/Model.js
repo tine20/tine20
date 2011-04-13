@@ -4,7 +4,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  */
 Ext.ns('Tine.widgets.persistentfilter.model');
 
@@ -18,7 +17,6 @@ Ext.ns('Tine.widgets.persistentfilter.model');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @version     $Id$
  * 
  * @param       {Object} data
  * @constructor
@@ -85,7 +83,6 @@ Tine.widgets.persistentfilter.model.PersistentFilter.getDefaultFavorite = functi
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @version     $Id$
  */
 Tine.widgets.persistentfilter.model.persistentFilterProxy = new Tine.Tinebase.data.RecordProxy({
     appName: 'Tinebase_PersistentFilter',

@@ -7,7 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Matthias Greiling <m.greiling@metaways.de>
- * @version     $Id: ContainerTest.php 1014 2008-03-11 21:47:58Z nelius_weiss $
  */
 
 /**

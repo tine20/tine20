@@ -1,7 +1,6 @@
 /**
  * @license     http://creativecommons.org/licenses/publicdomain Public Domain
  * @author      Koji Horaguchi <horaguchi@horaguchi.net>
- * @version     $Id$
  */
  
 /* We don't support dynamic inclusion of po files any longer!

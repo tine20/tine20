@@ -6,7 +6,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id$
  *
  */
 
@@ -19,19 +18,6 @@
 class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     protected $_applicationName = 'Phone';
-    
-    /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-            'Phone/js/Models.js',
-            'Phone/js/Phone.js',
-        );
-    }
     
     /**
      * create edit MyPhone dialog
