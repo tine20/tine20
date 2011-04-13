@@ -31,6 +31,7 @@ class Tinebase_Frontend_AllTests
         $suite->addTestSuite('Tinebase_Frontend_Json_PersistentFilterTest');
         $suite->addTestSuite('Tinebase_Frontend_JsonTest');
         $suite->addTestSuite('Tinebase_Frontend_CliTest');
+        $suite->addTestSuite('Tinebase_Frontend_HttpTest');
         
         return $suite;
     }
