@@ -11,12 +11,10 @@
       "file": "js/Tinebase-FAT.js",
       "isDebug": true,
       "fileIncludes": [
-    // base framework fixes
         {
           "text": "extFixes.js",
           "path": "js/"
         },
-    // official ux (but backported)
         {
           "text": "Portal.js",
           "path": "js/ux/"
@@ -29,7 +27,6 @@
           "text": "Portlet.js",
           "path": "js/ux/"
         },
-    // generic init to be included before parsing of the tine code
         {
           "text": "extInit.js",
           "path": "js/"
@@ -38,12 +35,10 @@
           "text": "Locale.js",
           "path": "js/"
         },
-    // Locale support
         {
           "text": "Gettext.js",
           "path": "js/Locale/"
         },
-    // mappanel / geoext
         {
           "text": "OpenLayers.js",
           "path": "../library/OpenLayers/"
@@ -56,7 +51,6 @@
           "text": "MapPanel.js",
           "path": "js/widgets/"
         },
-    // Ext user extensions
         {
           "text": "FieldLabeler.js",
           "path": "js/ux/"
@@ -285,7 +279,6 @@
           "text": "ColumnTree.js",
           "path": "js/ux/Printer/renderers/"
         },
-    // Tinebase core stuff
         {
           "text": "Record.js",
           "path": "js/data/"
@@ -330,7 +323,6 @@
           "text": "common.js",
           "path": "js/"
         },
-    // Tine 2.0 specific widgets
         {
           "text": "LangChooser.js",
           "path": "js/widgets/"
@@ -547,7 +539,6 @@
           "text": "PickerPanel.js",
           "path": "js/widgets/persistentfilter/"
         },
-    // Tinebase app stuff
         {
           "text": "PasswordChangeDialog.js",
           "path": "js/"
@@ -588,12 +579,10 @@
           "text": "UserProfilePanel.js",
           "path": "js/"
         },
-    // translations for prototypes
         {
           "text": "prototypeTranslations.js",
           "path": "js/"
         },
-    // Tinebase include time code
         {
           "text": "tineInit.js",
           "path": "js/"
