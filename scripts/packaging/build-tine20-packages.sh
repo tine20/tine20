@@ -33,8 +33,9 @@ function checkout()
     git remote add -t $2 -f origin $1
     git checkout $2
     
+    REVISION=$2-$(git log --abbrev-commit --pretty=oneline -1 | cut -d " " -f 1)
     if [ "$RELEASE" == "" ]; then
-        RELEASE=$2-$(git log --abbrev-commit --pretty=oneline -1 | cut -d " " -f 1)
+        RELEASE=${REVISION}
     fi
     
     cd - > /dev/null
@@ -115,6 +116,7 @@ function activateReleaseMode()
     sed -i -e "s/'TINE20_RELEASETIME',   'none'/'TINE20_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s/'TINE20SETUP_RELEASETIME', 'none'/'TINE20SETUP_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Setup/Core.php
     
+    sed -i -e "s/Tine.clientVersion.buildRevision[^;]*/Tine.clientVersion.codeName = '$REVISION'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
     sed -i -e "s/Tine.clientVersion.codeName[^;]*/Tine.clientVersion.codeName = '$CODENAME'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
     sed -i -e "s/Tine.clientVersion.packageString[^;]*/Tine.clientVersion.packageString = '$RELEASE'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
     sed -i -e "s/Tine.clientVersion.releaseTime[^;]*/Tine.clientVersion.releaseTime = '$DATETIME'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
@@ -124,16 +126,17 @@ function buildClient()
 {
     echo -n "building javascript clients ... "
     phing -f $TEMPDIR/tine20/build.xml build
-    
-    #sed -i -e "s/trim(\`whoami\`)/'$RELEASE'/" $TEMPDIR/tine20/release.php
-    #php -d include_path=".:$TEMPDIR/tine20:$TEMPDIR/tine20/library"  -f $TEMPDIR/tine20/release.php -- -y $BASEDIR/yuicompressor/build/yuicompressor.jar -a
     echo "done"
 }
 
 function createArchives()
 {
     echo "building Tine 2.0 single archives... "
+    CLIENTBUILDFILTER="FAT"
+    
     for FILE in `ls $TEMPDIR/tine20`; do
+        UCFILE=`echo ${FILE} | tr '[A-Z]' '[a-z]'`
+        
         if [ -d "$TEMPDIR/tine20/$FILE/translations" ]; then
             case $FILE in
                 Addressbook)
@@ -146,28 +149,28 @@ function createArchives()
                 Calendar)      
                     echo " $FILE"
                     echo -n "  cleanup "
-                    (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v all.js  | grep -v all-debug.js))
-                    (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v all.css | grep -v all-debug.css | grep -v print.css))
+                    (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
                     echo "building "
-                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.tar.bz2 $FILE)
-                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.zip     $FILE)
+                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILE)
+                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILE)
                     ;;
 
                 Tinebase)
                     echo " $FILE"
                     echo -n "  cleanup "
-                    (cd $TEMPDIR/tine20/Addressbook/js;  rm -rf $(ls | grep -v all.js  | grep -v all-debug.js))
-                    (cd $TEMPDIR/tine20/Addressbook/css; rm -rf $(ls | grep -v all.css | grep -v all-debug.css))
-                    (cd $TEMPDIR/tine20/Admin/js;        rm -rf $(ls | grep -v all.js  | grep -v all-debug.js))
-                    (cd $TEMPDIR/tine20/Admin/css;       rm -rf $(ls | grep -v all.css | grep -v all-debug.css))
-                    (cd $TEMPDIR/tine20/Setup/js;        rm -rf $(ls | grep -v all.js  | grep -v all-debug.js))
-                    (cd $TEMPDIR/tine20/Setup/css;       rm -rf $(ls | grep -v all.css | grep -v all-debug.css))
+                    (cd $TEMPDIR/tine20/Addressbook/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/Addressbook/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/Admin/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/Admin/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/Setup/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/Setup/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
                     
                     # Tinebase/js/ux/Printer/print.css
                     (cd $TEMPDIR/tine20/Tinebase/js/ux/Printer; rm -rf $(ls | grep -v print.css))
                     (cd $TEMPDIR/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer))
-                    (cd $TEMPDIR/tine20/Tinebase/js;     rm -rf $(ls | grep -v all.js  | grep -v all-debug.js | grep -v Locale | grep -v ux))
-                    (cd $TEMPDIR/tine20/Tinebase/css;    rm -rf $(ls | grep -v all.css | grep -v all-debug.css))
+                    (cd $TEMPDIR/tine20/Tinebase/js;     rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v Locale | grep -v ux))
+                    (cd $TEMPDIR/tine20/Tinebase/css;    rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
                     
                     # cleanup ExtJS
                     (cd $TEMPDIR/tine20/library/ExtJS/adapter; rm -rf $(ls | grep -v ext))
@@ -184,9 +187,9 @@ function createArchives()
                     (cd $TEMPDIR/tine20/library/PHPExcel/PHPExcel/Shared;  rm -rf PDF)
                     
                     echo -n "building "
-                    local FILES="Addressbook Admin Setup Tinebase Zend images library styles config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES release.php setup.php tine20.php"
-                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.tar.bz2 $FILES)
-                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.zip     $FILES)
+                    local FILES="Addressbook Admin Setup Tinebase Zend images library styles config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES setup.php tine20.php"
+                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)
+                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILES)
                     
                     echo ""
                     ;;
@@ -194,11 +197,11 @@ function createArchives()
                 *)
                     echo " $FILE"
                     echo -n "  cleanup "
-                    (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v all.js  | grep -v all-debug.js))
-                    (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v all.css | grep -v all-debug.css))
+                    (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
                     echo "building "
-                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.tar.bz2 $FILE)
-                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${FILE,,}_$RELEASE.zip     $FILE)
+                    (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILE)
+                    (cd $TEMPDIR/tine20; zip -qr ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.zip     $FILE)
                     ;;
             esac
             
@@ -271,3 +274,4 @@ createArchives
 createSpecialArchives
 packageTranslations
 buildChecksum
+
