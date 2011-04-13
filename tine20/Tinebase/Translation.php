@@ -229,30 +229,33 @@ class Tinebase_Translation
     {
         $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get('locale');
         
-        // check if translation exists
-        if (isset(self::$_translations[(string)$locale][$_applicationName])) {
-
-            // use saved translation
-            $translate = self::$_translations[(string)$locale][$_applicationName];
-            
-        } else {
-            
-            // create new translation
-            $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
-            $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
-
-            try {
-                $translate->setLocale($locale);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)$locale);
-                
-            } catch (Zend_Translate_Exception $e) {
-                // the locale of the user is not available
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)$locale);
-            }
-            
-            self::$_translations[(string)$locale][$_applicationName] = $translate;
-        }
+        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
         
+        $cacheId = 'getTranslation_' . (string)$locale . $_applicationName;
+        
+        // get translation from cache?
+        if ($cache->test($cacheId)) {
+            $translate = $cache->load($cacheId);
+            
+            return $translate;
+        }
+            
+        // create new translation
+        $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
+        $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+
+        try {
+            $translate->setLocale($locale);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)$locale);
+            
+        } catch (Zend_Translate_Exception $e) {
+            // the locale of the user is not available
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale not found: ' . (string)$locale);
+        }
+            
+        // store translation in cache
+        $cache->save($translate, $cacheId, array('Zend_Translate'));
+            
         return $translate;
     }
     
