@@ -310,7 +310,9 @@ Tine.Tinebase.common = {
      * @return {String}
      */
     accountSortType: function(user_id) {
-        if (user_id && user_id.n_fileas) {
+        if (user_id && user_id.accountDisplayName) {
+            return user_id.accountDisplayName;
+        } else if (user_id && user_id.n_fileas) {
             return user_id.n_fileas;
         } else if (user_id && user_id.name) {
             return user_id.name;
