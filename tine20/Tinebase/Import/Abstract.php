@@ -187,12 +187,15 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                 continue; 
             }
             
-            $name = (strlen($tag) > 20) ? substr($tag, 0, 20) : $tag;
+            $name = (strlen($tag) > 40) ? substr($tag, 0, 40) : $tag;
             
             $id = NULL;
             try {
                 $existing = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
                 $id = $existing->getId();
+                
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . 
+                    ' Added existing tag ' . $name . ' to record.');
             } catch (Tinebase_Exception_NotFound $tenf) {
                 if (isset($this->_options['shared_tags']) && $this->_options['shared_tags'] == 'create') {
                     // create shared tag
@@ -218,6 +221,9 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
                     
                     $id = $newTag->getId();
+
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                        ' Created new shared tag ' . $name);
                 }
             }
             

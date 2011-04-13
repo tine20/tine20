@@ -68,6 +68,18 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
         
         qCal_Loader::loadClass($name);
     }
+
+    /**
+     * idna_convert library loader
+     *
+     * @param $name
+     * @throws Zend_Exception
+     */
+    public static function idna_convert($name)
+    {
+        $idnaConvertPath = dirname(dirname(__FILE__)) . '/library/idnaconvert';
+        require_once "$idnaConvertPath/idna_convert.class.php";
+    }
     
     /**
      * initialize Tine 2.0 autoloader for different prefixes
@@ -78,5 +90,6 @@ class Tinebase_Autoloader implements Zend_Loader_Autoloader_Interface
     {
         $_autoloader->unshiftAutoloader(new self(), array('Rediska', 'HTMLPurifier'));
         $_autoloader->pushAutoloader(array('Tinebase_Autoloader', 'qCal'), 'qCal');
+        $_autoloader->pushAutoloader(array('Tinebase_Autoloader', 'idna_convert'), 'idna_convert');
     }
 }

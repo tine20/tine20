@@ -143,17 +143,26 @@ class Felamimail_Message extends Zend_Mail_Message
      * convert addresses into array with name/address
      *
      * @param string $_addresses
+     * @param idna_convert $_punycodeConverter
      * @return array
      */
-    public static function convertAddresses($_addresses)
+    public static function convertAddresses($_addresses, $_punycodeConverter = NULL)
     {
         $result = array();
         if (!empty($_addresses)) {
             $addresses = self::parseAdresslist($_addresses);
             if (is_array($addresses)) {
                 foreach($addresses as $address) {
+                    if ($_punycodeConverter !== NULL && preg_match('/@xn--/', $address['address'])) {
+                        $email = $_punycodeConverter->decode($address['address']);
+                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                            ' Converted email from punycode ' . $address['address'] . ' to ' . $email);
+                    } else {
+                        $email = $address['address'];
+                    }
+                    
                     $result[] = array(
-                        'email' => $address['address'], 
+                        'email' => $email, 
                         'name' =>  $address['name']
                     );
                 }
