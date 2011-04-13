@@ -92,21 +92,6 @@ function getOptions()
     done
 }
 
-function prepareYUICompressor()
-{
-    local YUICOMPRELEASE="2.4.2"
-    local YUICOMPURL="http://yuilibrary.com/downloads/yuicompressor/yuicompressor-$YUICOMPRELEASE.zip"
-    
-    if [ ! -d $BASEDIR/yuicompressor ]; then
-        test -e $MISCPACKAGESDIR/yuicompressor-$YUICOMPRELEASE.zip || wget -P $MISCPACKAGESDIR $YUICOMPURL
-        echo -n "extracting YUI compressor $YUICOMPRELEASE... "
-            test -d $BASEDIR/yuicompressor-$YUICOMPRELEASE || unzip $MISCPACKAGESDIR/yuicompressor-$YUICOMPRELEASE.zip -d $BASEDIR 2>&1 > /dev/null
-            mv $BASEDIR/yuicompressor-$YUICOMPRELEASE $BASEDIR/yuicompressor
-            mv $BASEDIR/yuicompressor/build/yuicompressor-$YUICOMPRELEASE.jar $BASEDIR/yuicompressor/build/yuicompressor.jar
-        echo "done"
-    fi
-}
-
 function activateReleaseMode()
 {
     local DATETIME=`date "+%F %X%:z"`
@@ -130,23 +115,19 @@ function activateReleaseMode()
     sed -i -e "s/'TINE20_RELEASETIME',   'none'/'TINE20_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Tinebase/Core.php
     sed -i -e "s/'TINE20SETUP_RELEASETIME', 'none'/'TINE20SETUP_RELEASETIME',   '$DATETIME'/" $TEMPDIR/tine20/Setup/Core.php
     
-    sed -i -e "s/Tine.clientVersion.buildType = 'DEBUG';/Tine.clientVersion.buildType = '$BUILDTYPE';/" $TEMPDIR/tine20/release.php
-    sed -i -e "s#Tine.clientVersion.codeName = '\$revisionInfo';#Tine.clientVersion.codeName = '$CODENAME';#" $TEMPDIR/tine20/release.php
-    sed -i -e "s/Tine.clientVersion.packageString = 'none'/Tine.clientVersion.packageString = '$RELEASE'/" $TEMPDIR/tine20/release.php
+    sed -i -e "s/Tine.clientVersion.codeName[^;]*/Tine.clientVersion.codeName = '$CODENAME'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
+    sed -i -e "s/Tine.clientVersion.packageString[^;]*/Tine.clientVersion.packageString = '$RELEASE'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
+    sed -i -e "s/Tine.clientVersion.releaseTime[^;]*/Tine.clientVersion.releaseTime = '$DATETIME'/" $TEMPDIR/tine20/Tinebase/js/tineInit.js
 }
 
-function compressFiles()
+function buildClient()
 {
-    echo -n "building compressed Javascript and CSS files ... "
-    sed -i -e "s/trim(\`whoami\`)/'$RELEASE'/" $TEMPDIR/tine20/release.php
-    php -d include_path=".:$TEMPDIR/tine20:$TEMPDIR/tine20/library"  -f $TEMPDIR/tine20/release.php -- -y $BASEDIR/yuicompressor/build/yuicompressor.jar -a
+    echo -n "building javascript clients ... "
+    phing -f $TEMPDIR/tine20/build.xml build
+    
+    #sed -i -e "s/trim(\`whoami\`)/'$RELEASE'/" $TEMPDIR/tine20/release.php
+    #php -d include_path=".:$TEMPDIR/tine20:$TEMPDIR/tine20/library"  -f $TEMPDIR/tine20/release.php -- -y $BASEDIR/yuicompressor/build/yuicompressor.jar -a
     echo "done"
-}
-
-function fixImagesPath()
-{
-    echo "Fixing image path ../../images => ../images"
-    find $TEMPDIR/tine20 \( -path $TEMPDIR/tine20/Setup -prune -a -name "all-debug.js" -o -name "all.js" -o -name "all-debug.css" -o -name "all.css" \) -print0 | xargs -0 -n 1 sed -i -e "s/\.\.\/\.\.\/images/..\/images/g"
 }
 
 function createArchives()
@@ -282,12 +263,10 @@ function buildChecksum()
 getOptions $*
                  
 createDirectories
-prepareYUICompressor
 checkout $GITURL $GITBRANCH
 setupPackageDir
 activateReleaseMode
-compressFiles
-#fixImagesPath
+buildClient
 createArchives
 createSpecialArchives
 packageTranslations

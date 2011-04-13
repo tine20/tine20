@@ -27,22 +27,23 @@ Ext.ux.Printer.BaseRenderer.prototype.stylesheetPath = 'Tinebase/js/ux/Printer/p
 Ext.namespace('Tine', 'Tine.Tinebase', 'Tine.Calendar');
 
 /**
- * version of Tine 2.0 javascript client version, gets set a build time <br>
+ * version of Tine 2.0 javascript client version, gets set a build / release time <br>
  * <b>Supported Properties:</b>
  * <table>
+ *   <tr><td><b>buildType</b></td><td> type of build</td></tr>
+ *   <tr><td><b>buildDate</b></td><td> date of build</td></tr>
+ *   <tr><td><b>buildRevision</b></td><td> revision of build</td></tr>
  *   <tr><td><b>codeName</b></td><td> codename of release</td></tr>
- *   <tr><td><b>buildType</b></td><td> buildType? of release</td></tr>
- *   <tr><td><b>buildDate</b></td><td> buildDate of release</td></tr>
  *   <tr><td><b>packageString</b></td><td> packageString of release</td></tr>
  *   <tr><td><b>releaseTime</b></td><td> releaseTime of release</td></tr>
- *   <tr><td><b>title</b></td><td> title of release</td></tr>
  * </table>
  * @type {Object}
  */
 Tine.clientVersion = {};
-Tine.clientVersion.codeName         = '$HeadURL$';
 Tine.clientVersion.buildType        = 'none';
 Tine.clientVersion.buildDate        = 'none';
+Tine.clientVersion.buildRevision    = 'none';
+Tine.clientVersion.codeName         = 'none';
 Tine.clientVersion.packageString    = 'none';
 Tine.clientVersion.releaseTime      = 'none';
 
