@@ -312,15 +312,15 @@
           "path": "js/"
         },
         {
+          "text": "common.js",
+          "path": "js/"
+        },
+        {
           "text": "Models.js",
           "path": "js/"
         },
         {
           "text": "Application.js",
-          "path": "js/"
-        },
-        {
-          "text": "common.js",
           "path": "js/"
         },
         {
