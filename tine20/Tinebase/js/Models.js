@@ -23,20 +23,6 @@ Tine.Tinebase.Model.genericFields = [
 ];
     
 /**
- * Model of the tine (simple) user account
- * 
- * @deprecated remove this?
- */
-/*Tine.Tinebase.Model.User = Ext.data.Record.create([
-    { name: 'accountId' },
-    { name: 'accountDisplayName' },
-    { name: 'accountLastName' },
-    { name: 'accountFirstName' },
-    { name: 'accountFullName' },
-    { name: 'contact_id' }
-]);*/
-
-/**
  * Model of a language
  */
 Tine.Tinebase.Model.Language = Ext.data.Record.create([
@@ -52,33 +38,6 @@ Tine.Tinebase.Model.Timezone = Ext.data.Record.create([
     { name: 'timezone' },
     { name: 'timezoneTranslation' }
 ]);
-
-/**
- * @namespace Tine.Tinebase.Model
- * @class     Tine.Tinebase.Model.Group
- * @extends   Tine.Tinebase.data.Record
- * 
- * Model of a user group
- * 
- * @deprecated remove this?
- */
-/*Tine.Tinebase.Model.Group = Tine.Tinebase.data.Record.create([
-    {name: 'id'},
-    {name: 'name'},
-    {name: 'description'},
-    {name: 'container_id'},
-    {name: 'visibility'}
-    //{name: 'groupMembers'}
-], {
-    appName: 'Tinebase',
-    modelName: 'Group',
-    idProperty: 'id',
-    titleProperty: 'name',
-    // ngettext('Group', 'Groups', n); gettext('Groups');
-    recordName: 'Group',
-    recordsName: 'Groups',
-    containerProperty: null
-});*/
 
 /**
  * Model of a role
