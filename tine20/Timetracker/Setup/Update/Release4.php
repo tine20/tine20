@@ -8,7 +8,6 @@
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-
 class Timetracker_Setup_Update_Release4 extends Setup_Update_Abstract
 {
     /**
@@ -47,5 +46,43 @@ class Timetracker_Setup_Update_Release4 extends Setup_Update_Abstract
         }
         
         $this->setApplicationVersion('Timetracker', '4.1');
+    }
+
+    /**
+     * update timesheet favorites as is_billable / is_cleared filters have changed
+     * 
+     * @return void
+     */
+    public function update_1()
+    {
+        $timetracker = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
+        
+        $select = new Zend_Db_Select($this->_db);
+        $select->from(SQL_TABLE_PREFIX . 'filter', array('id', 'filters'))
+            ->where($this->_db->quoteInto($this->_db->quoteIdentifier('application_id') . ' = ?', $timetracker->getId()))
+            ->where($this->_db->quoteIdentifier('filters') . " LIKE '%\"is_billable\"%' OR " . $this->_db->quoteIdentifier('filters') . " LIKE '%\"is_cleared\"%'");
+        $result = $this->_db->fetchAssoc($select);
+        
+        foreach ($result as $id => $data) {
+            $patterns = array(
+                '/"is_billable"/',
+                '/"is_cleared"/',
+            );
+            $replacements = array(
+                '"is_billable_combined"',
+                '"is_cleared_combined"',
+            );
+            
+            $filters = preg_replace($patterns, $replacements, $data['filters']);
+            $bind = array(
+                'filters' => $filters
+            );
+            $where = array(
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $id),
+            );
+            $this->_db->update(SQL_TABLE_PREFIX . 'filter', $bind, $where);
+        }
+        
+        $this->setApplicationVersion('Timetracker', '4.2');
     }
 }
