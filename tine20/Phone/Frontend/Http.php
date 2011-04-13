@@ -20,19 +20,6 @@ class Phone_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected $_applicationName = 'Phone';
     
     /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-            'Phone/js/Models.js',
-            'Phone/js/Phone.js',
-        );
-    }
-    
-    /**
      * create edit MyPhone dialog
      *
      * @param int $phoneId

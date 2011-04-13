@@ -19,18 +19,4 @@ class ExampleApplication_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     protected $_applicationName = 'ExampleApplication';
     
-    /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-            'ExampleApplication/js/Model.js',
-            'ExampleApplication/js/ExampleApplication.js',
-            'ExampleApplication/js/ExampleRecordGridPanel.js',
-            'ExampleApplication/js/ExampleRecordEditDialog.js',
-        );
-    }
 }

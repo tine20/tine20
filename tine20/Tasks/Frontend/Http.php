@@ -19,18 +19,4 @@ class Tasks_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     protected $_applicationName = 'Tasks';
     
-    /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-            'Tasks/js/Tasks.js',
-            'Tasks/js/Status.js',
-            'Tasks/js/GridPanel.js',
-            'Tasks/js/TaskEditDialog.js',
-        );
-    }
 }

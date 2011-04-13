@@ -22,31 +22,5 @@ class Admin_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * @var string
      */
     protected $_applicationName = 'Admin';
-    
-    /**
-     * overwrite getJsFilesToInclude from abstract class to add groups js file
-     *
-     * @return array with js filenames
-     */
-    public function getJsFilesToInclude() {
-        return array(
-            'Admin/js/Admin.js',
-            'Admin/js/AdminPanel.js',
-            'Admin/js/Models.js',
-            'Admin/js/Applications.js',
-            'Admin/js/user/Users.js',
-            'Admin/js/user/GridPanel.js',
-            'Admin/js/user/EditDialog.js',
-            'Admin/js/Groups.js',
-            'Admin/js/GroupEditDialog.js',
-            'Admin/js/AccessLog.js',
-            'Admin/js/SambaMachineModel.js',
-			'Admin/js/SambaMachineGrid.js',
-			'Admin/js/SambaMachineEditDialog.js',
-			'Admin/js/Tags.js',
-			'Admin/js/TagEditDialog.js',
-            'Admin/js/Roles.js',
-            'Admin/js/RoleEditDialog.js',
-        );
-    }
+
 }

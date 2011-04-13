@@ -19,18 +19,4 @@ class Courses_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 {
     protected $_applicationName = 'Courses';
     
-    /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-            'Courses/js/Models.js',
-            'Courses/js/Courses.js',
-            'Courses/js/CourseGridPanel.js',
-            'Courses/js/CourseEditDialog.js',
-        );
-    }
 }

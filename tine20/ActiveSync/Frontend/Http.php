@@ -27,20 +27,6 @@ class ActiveSync_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected $_applicationName = 'ActiveSync';
     
     /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-            'ActiveSync/js/Application.js',
-            'ActiveSync/js/Model.js',
-            'ActiveSync/js/DeviceStore.js',
-        );
-    }
-    
-    /**
      * authenticate user
      *
      * @param string $_username

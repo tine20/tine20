@@ -42,22 +42,4 @@ class Addressbook_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $filter = new Addressbook_Model_ContactFilter($decodedFilter);
         parent::_export($filter, Zend_Json::decode($options), Addressbook_Controller_Contact::getInstance());
     }
-    
-    /**
-     * Returns all JS files which must be included for Addressbook
-     * 
-     * @return array array of filenames
-     */
-    public function getJsFilesToInclude ()
-    {
-        return array(
-            'Addressbook/js/Model.js',
-            'Addressbook/js/Addressbook.js',
-            'Addressbook/js/ContactGridDetailsPanel.js',
-            'Addressbook/js/ContactGrid.js',
-            'Addressbook/js/ContactFilterModel.js',
-            'Addressbook/js/ContactEditDialog.js',
-            'Addressbook/js/SearchCombo.js',
-        );
-    }
 }

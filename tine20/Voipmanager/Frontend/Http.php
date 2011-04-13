@@ -21,41 +21,6 @@ class Voipmanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     protected $_applicationName = 'Voipmanager';
     
     /**
-     * Returns all JS files which must be included for this app
-     *
-     * @return array Array of filenames
-     */
-    public function getJsFilesToInclude()
-    {
-        return array(
-        	'Voipmanager/js/Models.js',
-            'Voipmanager/js/widgets.js',
-            'Voipmanager/js/Voipmanager.js',
-            'Voipmanager/js/CallForwardPanel.js',
-            'Voipmanager/js/Snom/LineGridPanel.js',
-            'Voipmanager/js/Snom/SoftwareGridPanel.js',
-            'Voipmanager/js/Snom/SoftwareEditDialog.js',
-        	'Voipmanager/js/Snom/TemplateGridPanel.js',
-            'Voipmanager/js/Snom/TemplateEditDialog.js',
-        	'Voipmanager/js/Snom/PhoneGridPanel.js',
-            'Voipmanager/js/Snom/PhoneEditDialog.js',
-			'Voipmanager/js/Snom/LocationGridPanel.js',
-            'Voipmanager/js/Snom/LocationEditDialog.js',        
-        	'Voipmanager/js/Snom/SettingGridPanel.js',
-            'Voipmanager/js/Snom/SettingEditDialog.js',
-        	'Voipmanager/js/Asterisk/SipPeerGridPanel.js',
-            'Voipmanager/js/Asterisk/SipPeerEditDialog.js',
-            'Voipmanager/js/Asterisk/ContextGridPanel.js',
-            'Voipmanager/js/Asterisk/ContextEditDialog.js',
-        	'Voipmanager/js/Asterisk/VoicemailGridPanel.js',
-            'Voipmanager/js/Asterisk/VoicemailEditDialog.js',
-        	'Voipmanager/js/Asterisk/MeetmeGridPanel.js',
-            'Voipmanager/js/Asterisk/MeetmeEditDialog.js',
-        	'Voipmanager/js/MainScreen.js'
-        );
-    }
-    
-    /**
      * create edit phone dialog
      *
      * @param int $phoneId
