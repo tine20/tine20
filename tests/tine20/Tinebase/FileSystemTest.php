@@ -4,7 +4,7 @@
  * 
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_FileSystemTest::main');
-}
 
 /**
  * Test class for Tinebase_FileSystem
@@ -170,13 +166,19 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(7, $filesize);
     }
     
+    /**
+     * test get content type
+     */
     public function testGetContentType()
     {
         $this->testCreateFile();
         
         $contentType = $this->_controller->getContentType($this->_basePath . '/PHPUNIT/phpunit.txt');
         
-        $this->assertEquals('text/plain', $contentType);
+        // finfo_open() for content type detection is only available in php versions >= 5.3.0'
+        $expectedContentType = (version_compare(PHP_VERSION, '5.3.0', '>=')) ? 'text/plain' : 'application/octect-stream'; 
+        
+        $this->assertEquals($expectedContentType, $contentType);
     }
     
     public function testGetMTime()
@@ -212,9 +214,5 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         
         return $object;
     }
-}		
-	
-
-if (PHPUnit_MAIN_METHOD == 'Tinebase_FileSystemTest::main') {
-    Tinebase_FileSystemTest::main();
 }
+
