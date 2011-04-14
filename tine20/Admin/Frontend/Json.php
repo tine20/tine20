@@ -3,9 +3,10 @@
  * Tine 2.0
  *
  * @package     Admin
+ * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        use functions from Tinebase_Frontend_Json_Abstract
  */
@@ -16,6 +17,7 @@
  * This class handles all Json requests for the admin application
  *
  * @package     Admin
+ * @subpackage  Frontend
  */
 class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 {
@@ -1007,6 +1009,24 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
+    
+    /****************************** Container ******************************/
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param array $filter 
+     * @param array $paging 
+     * @return array
+     */
+    public function searchContainers($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Admin_Controller_Container::getInstance(), 'Tinebase_Model_ContainerFilter');
+        
+        return $result;
+    }
+    
+    /****************************** common ******************************/
     
     /**
      * returns multiple records prepared for json transport

@@ -16,6 +16,7 @@
  * Group Controller for Admin application
  *
  * @package     Admin
+ * @subpackage  Controller
  */
 class Admin_Controller_Group extends Tinebase_Controller_Abstract
 {

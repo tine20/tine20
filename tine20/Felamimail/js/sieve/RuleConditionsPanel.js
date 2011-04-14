@@ -36,7 +36,7 @@ Ext.namespace('Tine.Felamimail.sieve');
 Tine.Felamimail.sieve.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterToolbar, {
     
     defaultFilter: 'from',
-    allowSaving: false,
+    neverAllowSaving: true,
     showSearchButton: false,
     filterFieldWidth: 160,
     

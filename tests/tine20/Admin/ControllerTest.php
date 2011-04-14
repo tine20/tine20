@@ -4,20 +4,14 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * 
- * @todo        add more tests!
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Admin_ControllerTest::main');
-}
 
 /**
  * Test class for Tinebase_Admin
@@ -145,6 +139,15 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
         $accounts = Admin_Controller_User::getInstance()->searchFullUsers($this->objects['initialAccount']['accountLoginName']);
 
         $this->assertEquals(0, count($accounts));
+    }
+
+    /**
+     * try to delete self
+     */
+    public function testDeleteSelf()
+    {
+        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
+        Admin_Controller_User::getInstance()->delete(Tinebase_Core::getUser()->getId());
     }
 
     /**

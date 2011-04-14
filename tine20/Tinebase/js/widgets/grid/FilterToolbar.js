@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets.grid');
 
@@ -60,6 +60,11 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
      * @cfg {Bool} allowSaving (defaults to false)
      */
     allowSaving: false,
+    
+    /**
+     * @cfg {Bool} neverAllowSaving (defaults to false)
+     */
+    neverAllowSaving: false,
 
     /**
      * @cfg {Bool} showSearchButton (defaults to true)
@@ -175,8 +180,8 @@ Ext.extend(Tine.widgets.grid.FilterToolbar, Ext.Panel, {
             this.app = Tine.Tinebase.appMgr.get(this.store.proxy.recordClass.getMeta('appName'));
         }
         
-        // automaticly enable saving
-        if (this.app && this.app.getMainScreen() && typeof this.app.getMainScreen().getWestPanel == 'function' && this.app.getMainScreen().getWestPanel().hasFavoritesPanel) {
+        // automatically enable saving
+        if (! this.neverAllowSaving && this.app && this.app.getMainScreen() && typeof this.app.getMainScreen().getWestPanel == 'function' && this.app.getMainScreen().getWestPanel().hasFavoritesPanel) {
             this.allowSaving = true;
         }
         

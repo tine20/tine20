@@ -304,6 +304,24 @@ Tine.Tinebase.common = {
     },
     
     /**
+     * sorts account/user objects
+     * 
+     * @param {Object|String} user_id
+     * @return {String}
+     */
+    accountSortType: function(user_id) {
+        if (user_id && user_id.accountDisplayName) {
+            return user_id.accountDisplayName;
+        } else if (user_id && user_id.n_fileas) {
+            return user_id.n_fileas;
+        } else if (user_id && user_id.name) {
+            return user_id.name;
+        } else {
+            return user_id;
+        }
+    },
+    
+    /**
      * check whether given value can be interpreted as true
      * 
      * @param {String|Integer|Boolean} value

@@ -305,15 +305,7 @@ if (Tine.Tinebase.widgets) {
 Tine.Calendar.Model.Attender = Tine.Tinebase.data.Record.create([
     {name: 'id'},
     {name: 'cal_event_id'},
-    {name: 'user_id', sortType:  function(user_id) {
-        if (user_id && user_id.n_fileas) {
-            return user_id.n_fileas;
-        } else if (user_id && user_id.name) {
-            return user_id.name;
-        } else {
-            return user_id;
-        }
-    }},
+    {name: 'user_id', sortType: Tine.Tinebase.common.accountSortType },
     {name: 'user_type'},
     {name: 'role'},
     {name: 'quantity'},
