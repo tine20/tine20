@@ -71,7 +71,6 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
             'accountId=' . Tinebase_Core::getUser()->getId(), 
             'grants=privateGrant'
         ));
-        $this->assertContains("Added grants to container", $out);        
         
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
         $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
@@ -88,8 +87,6 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
             'grants=privateGrant,adminGrant',
             'overwrite=1'
         ));
-        
-        $this->assertContains("Set grants for container", $out);        
         
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
         $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
@@ -110,6 +107,8 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
         ob_start();
         $this->_cli->setContainerGrants($opts);
         $out = ob_get_clean();
+        
+        $this->assertContains("Updated 1 container(s)", $out, 'Text not found in: ' . $out);
         
         return $out;
     }
