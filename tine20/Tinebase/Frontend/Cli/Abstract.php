@@ -103,6 +103,8 @@ class Tinebase_Frontend_Cli_Abstract
                 (array_key_exists('accountType', $data)) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
                 (array_key_exists('overwrite', $data) && $data['overwrite'] == '1')
             );
+            
+            echo "Updated " . count($containers) . " containers.\n";
         }
         
         return TRUE;
@@ -150,11 +152,14 @@ class Tinebase_Frontend_Cli_Abstract
     {
         $accountType = ($_accountId === '0') ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE : $_accountType;
         $accountIds = (array) $_accountId;
+        $grantsArray = ($_overwrite) ? array() : (array) $_grants;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
             . ' Changing grants of containers: ' . print_r($_containers->name, TRUE));
         
-        $grantsArray = ($_overwrite) ? array() : (array) $_grants;
+        $timetrackerApp = (Tinebase_Application::getInstance()->isInstalled('Timetracker')) 
+            ? Tinebase_Application::getInstance()->getApplicationByName('Timetracker')
+            : NULL;
         
         foreach($_containers as $container) {
             foreach ($accountIds as $accountId) {
@@ -167,12 +172,6 @@ class Tinebase_Frontend_Cli_Abstract
                         );                        
                     }
                 } else {
-                    if ($this->_applicationName == 'Timetracker') {
-                        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                            . ' You can only set grants in the Timetracker with the "overwrite" parameter.');
-                        return;
-                    }
-                    
                     Tinebase_Container::getInstance()->addGrants($container->getId(), $accountType, $accountId, $grantsArray, TRUE);
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                         . ' Added grants to container "' . $container->name . '" for userid ' . $accountId . ' (' . $accountType . ').');
@@ -180,22 +179,19 @@ class Tinebase_Frontend_Cli_Abstract
             }
             
             if ($_overwrite) {
-                if ($this->_applicationName == 'Timetracker') {
-                    // @todo allow to define app CLI frontend to define this in its own fn
+                if ($timetrackerApp !== NULL && $container->application_id === $timetrackerApp->getId()) {
+                    // @todo allow to call app specific functions here
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                         . ' Set grants for timeaccount "' . $container->name . '".');
                     $timeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants', $grantsArray);
-                    // we can allow timeaccounts without admin grant because of the "manage timeaccounts" right
-                    $failSafe = FALSE;
                     
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                         . ' Set grants for container "' . $container->name . '".');
                     $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $grantsArray);
-                    $failSafe = TRUE;
                 }
                 
-                Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, $failSafe);
+                Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
             }
         }        
     }
