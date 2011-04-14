@@ -15,6 +15,7 @@
  * Application Controller for Admin application
  *
  * @package     Admin
+ * @subpackage  Controller
  */
 class Admin_Controller_Application extends Tinebase_Controller_Abstract
 {   

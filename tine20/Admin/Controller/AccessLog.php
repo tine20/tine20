@@ -13,6 +13,7 @@
  * Access Log Controller for Admin application
  *
  * @package     Admin
+ * @subpackage  Controller
  */
 class Admin_Controller_AccessLog extends Tinebase_Controller_Record_Abstract
 {

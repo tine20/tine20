@@ -15,6 +15,7 @@
  * Role Controller for Admin application
  *
  * @package     Admin
+ * @subpackage  Controller
  */
 class Admin_Controller_Role extends Tinebase_Controller_Abstract
 {

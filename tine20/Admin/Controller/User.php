@@ -16,6 +16,7 @@
  * User Controller for Admin application
  *
  * @package     Admin
+ * @subpackage  Controller
  */
 class Admin_Controller_User extends Tinebase_Controller_Abstract
 {
