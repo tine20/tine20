@@ -96,7 +96,13 @@ class Tinebase_Frontend_Cli_Abstract
         if (count($containers) == 0) {
             echo "No matching containers found.\n";
         } else {
-            $this->setGrants($containers, $data);
+            $this->setGrantsForContainers(
+                $containers, 
+                $data['grants'],
+                $data['accountId'], 
+                (array_key_exists('accountType', $data)) ? $data['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
+                (array_key_exists('overwrite', $data) && $data['overwrite'] == '1')
+            );
         }
         
         return TRUE;
@@ -133,30 +139,27 @@ class Tinebase_Frontend_Cli_Abstract
      * set container grants
      * 
      * @param Tinebase_Record_RecordSet $_containers
-     * @param array $_params
+     * @param array|string $_grants
+     * @param array|string $_accountId
+     * @param string $_accountType
+     * @param boolean $_overwrite
      * 
      * @todo need to invent a way to let applications (like the timetracker) hook into this fn + remove timetracker stuff afterwards
      */
-    public function setGrants($_containers, $_params)
+    public function setGrantsForContainers($_containers, $_grants, $_accountId, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $_overwrite = FALSE)
     {
-        if ($_params['accountId'] === '0') {
-            $accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE;
-        } else {
-            $accountType = (array_key_exists('accountType', $_params)) ? $_params['accountType'] : Tinebase_Acl_Rights::ACCOUNT_TYPE_USER;
-        }
-        
-        $accountIds = (array) $_params['accountId'];
+        $accountType = ($_accountId === '0') ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE : $_accountType;
+        $accountIds = (array) $_accountId;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Changing grants of containers: ' . print_r($_containers->name, TRUE));
         
-        $overwrite = (array_key_exists('overwrite', $_params) && $_params['overwrite'] == '1');
-        $grantsArray = ($overwrite) ? array() : (array) $_params['grants'];
+        $grantsArray = ($_overwrite) ? array() : (array) $_grants;
         
         foreach($_containers as $container) {
             foreach ($accountIds as $accountId) {
-                if ($overwrite) {
-                    foreach((array) $_params['grants'] as $grant) {
+                if ($_overwrite) {
+                    foreach((array) $_grants as $grant) {
                         $grantsArray[] = array(
                             'account_id'    => $accountId,
                             'account_type'  => $accountType,
@@ -176,7 +179,7 @@ class Tinebase_Frontend_Cli_Abstract
                 }
             }
             
-            if ($overwrite) {
+            if ($_overwrite) {
                 if ($this->_applicationName == 'Timetracker') {
                     // @todo allow to define app CLI frontend to define this in its own fn
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
