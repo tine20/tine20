@@ -146,8 +146,8 @@ class Admin_ControllerTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteSelf()
     {
-        Admin_Controller_User::getInstance()->delete(Tinebase_Core::getUser()->getId());
         $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
+        Admin_Controller_User::getInstance()->delete(Tinebase_Core::getUser()->getId());
     }
 
     /**
