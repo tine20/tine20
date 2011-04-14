@@ -6,12 +6,12 @@
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
 /**
- *  container filter class
+ * container filter class
  * 
  * @package     Tinebase
  * @subpackage  Filter 
@@ -43,5 +43,6 @@ class Tinebase_Model_ContainerFilter extends Tinebase_Model_Filter_FilterGroup
         'application_id'    => array('filter' => 'Tinebase_Model_Filter_Id'),
         'name'              => array('filter' => 'Tinebase_Model_Filter_Text'),
         'type'              => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'query'             => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name'))),
     );
 }
