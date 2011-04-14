@@ -5,8 +5,8 @@
  * @package     Admin
  * @subpackage  Acl
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -57,10 +57,16 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const MANAGE_ROLES = 'manage_roles';
     
     /**
-     * the right to manage roles
+     * the right to manage computers
      * @staticvar string
      */
     const MANAGE_COMPUTERS = 'manage_computers';
+    
+    /**
+     * the right to manage computers
+     * @staticvar string
+     */
+    const MANAGE_CONTAINERS = 'manage_containers';
     
     /**
      * the right to view roles
@@ -87,10 +93,16 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
     const VIEW_ROLES = 'view_roles';
     
     /**
-     * the right to manage roles
+     * the right to manage computers
      * @staticvar string
      */
     const VIEW_COMPUTERS = 'view_computers';
+    
+    /**
+     * the right to manage containers
+     * @staticvar string
+     */
+    const VIEW_CONTAINERS = 'view_containers';
     
     /**
      * holds the instance of the singleton
@@ -106,7 +118,6 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     private function __clone() 
     {
-        
     }
     
     /**
@@ -115,7 +126,6 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
      */
     private function __construct()
     {
-        
     }    
     
     /**
@@ -148,11 +158,13 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::MANAGE_SHARED_TAGS,
             self::MANAGE_ROLES,
             self::MANAGE_COMPUTERS,
+            self::MANAGE_CONTAINERS,
             self::VIEW_ACCESS_LOG,
             self::VIEW_ACCOUNTS,
             self::VIEW_APPS, 
             self::VIEW_ROLES,
-            self::VIEW_COMPUTERS
+            self::VIEW_COMPUTERS,
+            self::VIEW_CONTAINERS,
         );
         $allRights = array_merge($allRights, $addRights);
         
@@ -193,6 +205,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
                 'text'          => $translate->_('manage computers'),
                 'description'   => $translate->_('add, delete and edit (samba) computers'),
             ),
+            self::MANAGE_CONTAINERS => array(
+                'text'          => $translate->_('manage containers'),
+                'description'   => $translate->_('add, delete and edit containers and manage container grants'),
+            ),
             self::VIEW_ACCESS_LOG   => array(
                 'text'          => $translate->_('view access log'),
                 'description'   => $translate->_('view access log list'),
@@ -212,6 +228,10 @@ class Admin_Acl_Rights extends Tinebase_Acl_Rights_Abstract
             self::VIEW_COMPUTERS  => array(
                 'text'          => $translate->_('view computers'),
                 'description'   => $translate->_('view computers list and details'),
+            ),
+            self::VIEW_CONTAINERS  => array(
+                'text'          => $translate->_('view containers'),
+                'description'   => $translate->_('view personal and shared containers'),
             ),
         );
         

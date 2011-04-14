@@ -76,6 +76,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     public function setGrantsForContainers($_containers, $_grants, $_accountId, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $_overwrite = FALSE)
     {
+        $this->checkRight('MANAGE_CONTAINERS');
+        
         $accountType = ($_accountId === '0') ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE : $_accountType;
         $accountIds = (array) $_accountId;
         $grantsArray = ($_overwrite) ? array() : (array) $_grants;
