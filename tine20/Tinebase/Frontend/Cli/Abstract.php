@@ -104,7 +104,7 @@ class Tinebase_Frontend_Cli_Abstract
                 (array_key_exists('overwrite', $data) && $data['overwrite'] == '1')
             );
             
-            echo "Updated " . count($containers) . " containers.\n";
+            echo "Updated " . count($containers) . " container(s).\n";
         }
         
         return TRUE;
