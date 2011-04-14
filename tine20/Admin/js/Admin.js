@@ -109,7 +109,19 @@ Tine.Admin = function () {
 	        expanded: true,
 	        dataPanelType: "sharedtags",
 	        viewRight: 'shared_tags'
-	    }];
+	    }, {
+            text: translation.gettext('Containers'),
+            cls: "treemain",
+            //iconCls: 'action_tag',
+            allowDrag: false,
+            allowDrop: true,
+            id: "containers",
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "containers",
+            viewRight: 'containers'
+        }];
 	};
 
 	/**
@@ -173,34 +185,30 @@ Tine.Admin = function () {
         	
         	var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-        	switch (node.attributes.dataPanelType) 
-        	{
+        	switch (node.attributes.dataPanelType) {
             case 'accesslog':
                 Tine.Admin.accessLog.show();
                 break;
-                
             case 'accounts':
                 Tine.Admin.user.show();
                 break;
-                
             case 'groups':
                 Tine.Admin.Groups.Main.show();
                 break;
-                
             case 'computers':
                 Tine.Admin.sambaMachine.show();
                 break;
-                
             case 'applications':
 				Tine.Admin.Applications.Main.show();
                 break;
-                
             case 'sharedtags':
 				Tine.Admin.Tags.Main.show();
                 break;
-
             case 'roles':
 				Tine.Admin.Roles.Main.show();
+                break;
+            case 'containers':
+                Tine.Admin.container.show();
                 break;
             }
         }, this);

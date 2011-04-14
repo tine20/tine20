@@ -78,6 +78,14 @@
         {
           "text": "RoleEditDialog.js",
           "path": "js/"
+        },
+        {
+          "text": "Container.js",
+          "path": "js/container/"
+        },
+        {
+          "text": "GridPanel.js",
+          "path": "js/container/"
         }
       ]
     },
