@@ -81,12 +81,20 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
      */
     public function testSetContainerGrantsWithFilterAndOverwrite()
     {
+        $nameFilter = 'Tine 2.0 Admin Account';
+        $filter = new Tinebase_Model_ContainerFilter(array(
+            array('field' => 'application_id', 'operator' => 'equals', 
+                'value' => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId()),
+            array('field' => 'name', 'operator' => 'contains', 'value' => $nameFilter),
+        ));
+        $count = Tinebase_Container::getInstance()->searchCount($filter);
+        
         $out = $this->_cliHelper(array(
-            'namefilter="Tine 2.0 Admin Account"', 
+            'namefilter="' . $nameFilter . '"', 
             'accountId=' . Tinebase_Core::getUser()->getId(), 
             'grants=privateGrant,adminGrant',
             'overwrite=1'
-        ));
+        ), $count);
         
         $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($this->_container);
         $this->assertTrue(($grants->getFirstRecord()->privateGrant == 1));
@@ -99,7 +107,7 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
      * @param array $_params
      * @return string
      */
-    protected function _cliHelper($_params)
+    protected function _cliHelper($_params, $_numberExpected = 1)
     {
         $opts = new Zend_Console_Getopt('abp:');
         $opts->setArguments($_params);
@@ -108,7 +116,7 @@ class Addressbook_CliTest extends PHPUnit_Framework_TestCase
         $this->_cli->setContainerGrants($opts);
         $out = ob_get_clean();
         
-        $this->assertContains("Updated 1 container(s)", $out, 'Text not found in: ' . $out);
+        $this->assertContains("Updated $_numberExpected container(s)", $out, 'Text not found in: ' . $out);
         
         return $out;
     }
