@@ -22,6 +22,7 @@ require_once 'Helper.php';
  * - has registry and config
  *
  * @package     Tinebase
+ * @subpackage  Server
  */
 class Tinebase_Core
 {
