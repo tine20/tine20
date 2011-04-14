@@ -24,9 +24,10 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     private function __construct() 
     {
-        $this->_currentAccount = Tinebase_Core::getUser();        
-        $this->_applicationName = 'Admin';
-		$this->_modelName = 'Tinebase_Model_Container';
+        $this->_currentAccount        = Tinebase_Core::getUser();        
+        $this->_applicationName       = 'Admin';
+		$this->_modelName             = 'Tinebase_Model_Container';
+		$this->_doContainerACLChecks  = FALSE;
         
         $this->_backend = new Tinebase_Backend_Sql(array(
             'tableName' => 'container',
