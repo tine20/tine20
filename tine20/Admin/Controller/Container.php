@@ -77,7 +77,7 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     public function setGrantsForContainers($_containers, $_grants, $_accountId, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $_overwrite = FALSE)
     {
-        $this->checkRight('MANAGE_CONTAINERS');
+        $this->_checkRight('update');
         
         $accountType = ($_accountId === '0') ? Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE : $_accountType;
         $accountIds = (array) $_accountId;
@@ -123,5 +123,28 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
                 Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
             }
         }        
-    }    
+    }
+    
+    /**
+     * check if user has the right to manage containers
+     * 
+     * @param string $_action {get|create|update|delete}
+     * @return void
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _checkRight($_action)
+    {
+        switch ($_action) {
+            case 'get':
+                $this->checkRight('VIEW_CONTAINERS');
+                break;
+            case 'create':
+            case 'update':
+            case 'delete':
+                $this->checkRight('MANAGE_CONTAINERS');
+                break;
+            default;
+               break;
+        }
+    }
 }
