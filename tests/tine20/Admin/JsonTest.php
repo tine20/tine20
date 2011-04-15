@@ -4,9 +4,8 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * 
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -14,12 +13,8 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Admin_JsonTest::main');
-}
-
 /**
- * Test class for Tinebase_Admin
+ * Test class for Tinebase_Admin json frontend
  */
 class Admin_JsonTest extends PHPUnit_Framework_TestCase
 {
@@ -547,7 +542,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * try to get roles
-     *
      */
     public function testGetRoles()
     {
@@ -558,8 +552,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to delete roles
-     *
-     *
      */
     public function testDeleteRoles()
     {
@@ -641,8 +633,30 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
             'color' => '#003300'
         );
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Admin_JsonTest::main') {
-    Admin_JsonTest::main();
+    
+    /**
+     * test searchContainers
+     */
+    public function testSearchContainers()
+    {
+        $addressbook = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
+        $filter = array(
+            array('field' => 'application_id', 'operator' => 'equals', 'value' => $addressbook->getId()),
+            array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_PERSONAL),
+            array('field' => 'name', 'operator' => 'contains', 'value' => Tinebase_Core::getUser()->accountFirstName),
+        );
+        
+        $result = $this->_json->searchContainers($filter, array());
+        
+        $this->assertGreaterThan(0, $result['totalcount']);
+        
+        $personalAdb = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+        $found = FALSE;
+        foreach ($result['results'] as $container) {
+            if ($container['id'] === $personalAdb->getId()) {
+                $found = TRUE;
+            }
+        }
+        $this->assertTrue($found);
+    }
 }
