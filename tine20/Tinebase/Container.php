@@ -92,9 +92,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      */
     public function addContainer(Tinebase_Model_Container $_container, $_grants = NULL, $_ignoreAcl = FALSE, $_accountId = NULL)
     {
-        if(!$_container->isValid()) {
-            throw new Tinebase_Exception_Record_Validation('Invalid container object supplied.');
-        }
+        $_container->isValid(TRUE);
         
         if ( $_accountId !== NULL ) {
             $accountId = $_accountId;

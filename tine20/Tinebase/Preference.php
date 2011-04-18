@@ -233,11 +233,16 @@ class Tinebase_Preference extends Tinebase_Preference_Abstract
                 $value = $this->{$name};
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using default (' . $value . ') for ' . $name);
             }
+            
+            $session = Tinebase_Core::get(Tinebase_Core::SESSION);
+            
             switch ($name) {
                 case Tinebase_Preference::LOCALE:
+                    unset($session->userLocale);
                     $_jsonFrontend->setLocale($value, FALSE, TRUE);
                     break;
                 case Tinebase_Preference::TIMEZONE:
+                    unset($session->timezone);
                     $_jsonFrontend->setTimezone($value, FALSE);
                     break;
             }

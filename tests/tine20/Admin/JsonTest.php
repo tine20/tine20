@@ -659,4 +659,40 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         }
         $this->assertTrue($found);
     }
+
+    /**
+     * test saveUpdateDeleteContainer
+     */
+    public function testSaveUpdateDeleteContainer()
+    {
+        $containerData = $this->_getContainerData();
+        
+        $container = $this->_json->saveContainer($containerData);
+        
+        $this->assertEquals($containerData['name'], $container['name']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $container['created_by']);
+        
+        // @todo update container
+        // @todo check grants
+        
+        $deleteResult = $this->_json->deleteContainers(array($container['id']));
+        $this->assertEquals('success', $deleteResult['status']);
+    }
+    
+    /**
+     * returns container data
+     * 
+     * @return array
+     * 
+     * @todo add account grants
+     */
+    protected function _getContainerData()
+    {
+        return array(
+            'name'              => 'testcontainer',
+            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'backend'           => 'Sql',
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
+        );
+    }
 }
