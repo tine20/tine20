@@ -113,6 +113,10 @@ class Tinebase_Application
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
         
+        if (isset($this->_applicationCache[$applicationId])) {
+            return $this->_applicationCache[$applicationId];
+        }
+        
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
         if ($cache instanceof Zend_Cache_Core) {
             $cacheId = 'getApplicationById_' . $_applicationId;
@@ -137,7 +141,10 @@ class Tinebase_Application
             $cache->save($result, $cacheId, array('applications'));
             $cache->save($result, 'getApplicationByName_' . $result->name, array('applications'));
         }
-                
+        
+        $this->_applicationCache[$result->getId()] = $result;
+        $this->_applicationCache[$result->name]    = $result;
+        
         return $result;
     }
 
@@ -155,6 +162,10 @@ class Tinebase_Application
         if(empty($_applicationName) || ! is_string($_applicationName)) {
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty / has to be string.');
         }
+
+        if (isset($this->_applicationCache[$_applicationName])) {
+            return $this->_applicationCache[$_applicationName];
+        }
         
         $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
         
@@ -165,7 +176,7 @@ class Tinebase_Application
                 
                 return $result;
             }
-        }
+        } 
         
         $select = $this->_db->select();
         $select->from($this->_tableName)
@@ -185,6 +196,9 @@ class Tinebase_Application
             $cache->save($result, 'getApplicationById_' . $result->getId(), array('applications'));
         }
         
+        $this->_applicationCache[$result->getId()] = $result;
+        $this->_applicationCache[$result->name]    = $result;
+
         return $result;
     }
     
@@ -518,6 +532,5 @@ class Tinebase_Application
     protected function _cleanCache()
     {
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
-        $this->_applicationCache = array();
     }
 }
