@@ -373,6 +373,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
             
             $name = (strlen($tag) > 20) ? substr($tag, 0, 20) : $tag;
             
+            $id = NULL;
             try {
                 $existing = Tinebase_Tags::getInstance()->getTagByName($name, NULL, 'Tinebase', TRUE);
                 $id = $existing->getId();
@@ -403,7 +404,9 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
                     $id = $newTag->getId();
                 }
             }
-            $result[] = $id;
+            if ($id !== NULL) {
+                $result[] = $id;
+            }
         }
         
         return $result;

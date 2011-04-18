@@ -1132,7 +1132,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $attenderId = $attender->getId();
             $idx = ($attenderId) ? $currentAttendee->getIndexById($attenderId) : FALSE;
             
-            if ($idx) {
+            if ($idx !== FALSE) {
                 $currentAttender = $currentAttendee[$idx];
                 $this->_updateAttender($attender, $currentAttender, $calendar);
                 
