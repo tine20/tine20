@@ -18,6 +18,13 @@
 class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
 {
     /**
+     * tinebase container controller/backend
+     * 
+     * @var Tinebase_Container
+     */
+    protected $_containerController = NULL;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -33,6 +40,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
             'tableName' => 'container',
             'modelName' => $this->_modelName,
         ));
+        
+        $this->_containerController = Tinebase_Container::getInstance();
     }
 
     /**
@@ -62,6 +71,85 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         }
         
         return self::$_instance;
+    }
+    
+    /**
+     * get by id
+     *
+     * @param string $_id
+     * @param int $_containerId
+     * @return Tinebase_Record_Interface
+     */
+    public function get($_id, $_containerId = NULL)
+    {
+        $this->_checkRight('get');
+        
+        $container = $this->_containerController->getContainerById($_id);
+        $container->account_grants = $this->_containerController->getGrantsOfContainer($_id, TRUE);
+        
+        return $container;
+    }
+    
+    /**
+     * add one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     */
+    public function create(Tinebase_Record_Interface $_record)
+    {
+        $this->_checkRight('create');
+        
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
+        
+        $grants = $_record->account_grants;
+        $container = $this->_containerController->addContainer($_record, $grants, TRUE);
+        $container->account_grants = $this->_containerController->getGrantsOfContainer($container, TRUE);
+        
+        return $container;
+    }
+    
+    /**
+     * update one record
+     *
+     * @param   Tinebase_Record_Interface $_record
+     * @return  Tinebase_Record_Interface
+     */
+    public function update(Tinebase_Record_Interface $_record)
+    {
+        $container = parent::update($_record);
+        
+        return $container;
+    }
+    
+    /**
+     * inspect update of one record (before update)
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     * 
+     * @todo if shared -> personal remove all admins except new owner
+     */
+    protected function _inspectBeforeUpdate($_record, $_oldRecord)
+    {
+        $this->_containerController->setGrants($_record, $_record->account_grants, TRUE, FALSE);
+    }
+    
+    /**
+     * Deletes a set of records.
+     * 
+     * If one of the records could not be deleted, no record is deleted
+     * 
+     * @param   array array of record identifiers
+     * @return  Tinebase_Record_RecordSet
+     */
+    public function delete($_ids)
+    {
+        $deletedRecords = parent::delete($_ids);
+        $cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('container'));
+        
+        return $deletedRecords;
     }
     
     /**
