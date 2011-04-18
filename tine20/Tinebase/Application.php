@@ -532,5 +532,6 @@ class Tinebase_Application
     protected function _cleanCache()
     {
         Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
+        $this->_applicationCache = array();
     }
 }
