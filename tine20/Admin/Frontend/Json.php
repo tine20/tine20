@@ -8,6 +8,7 @@
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
+ * @todo        try to split this into smaller parts (record proxy should support 'nested' json frontends first)
  * @todo        use functions from Tinebase_Frontend_Json_Abstract
  */
 
@@ -1021,11 +1022,42 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchContainers($filter, $paging)
     {
-        $result = $this->_search($filter, $paging, Admin_Controller_Container::getInstance(), 'Tinebase_Model_ContainerFilter');
-        
-        return $result;
+        return $this->_search($filter, $paging, Admin_Controller_Container::getInstance(), 'Tinebase_Model_ContainerFilter');
     }
     
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getContainer($id)
+    {
+        return $this->_get($id, Admin_Controller_Container::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveContainer($recordData)
+    {
+        return $this->_save($recordData, Admin_Controller_Container::getInstance(), 'Container');        
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array  $ids 
+     * @return string
+     */
+    public function deleteContainers($ids)
+    {
+        return $this->_delete($ids, Admin_Controller_Container::getInstance());
+    }    
+
     /****************************** common ******************************/
     
     /**
