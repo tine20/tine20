@@ -8,7 +8,23 @@
  *
  */
 
-Ext.namespace('Tine', 'Tine.Tasks');
+Ext.ns('Tine', 'Tine.Tasks');
+
+/**
+ * @namespace   Tine.Tasks
+ * @class       Tine.Tasks.Application
+ * @extends     Tine.Tinebase.Application
+ * Tasks Application Object <br>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ */
+Tine.Tasks.Application = Ext.extend(Tine.Tinebase.Application, {
+    
+    /**
+     * auto hook text _('New Task')
+     */
+    addButtonText: 'New Task'
+});
 
 // default mainscreen
 Tine.Tasks.MainScreen = Tine.widgets.MainScreen;

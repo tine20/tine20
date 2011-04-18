@@ -30,6 +30,11 @@ Ext.namespace('Tine.Felamimail');
 Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
+     * auto hook text _('New Mail')
+     */
+    addButtonText: 'New Mail',
+    
+    /**
      * @property checkMailsDelayedTask
      * @type Ext.util.DelayedTask
      */

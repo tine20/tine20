@@ -8,7 +8,23 @@
  *
  */
  
-Ext.namespace('Tine.Crm');
+Ext.ns('Tine.Crm');
+
+/**
+ * @namespace   Tine.Crm
+ * @class       Tine.Crm.Application
+ * @extends     Tine.Tinebase.Application
+ * Crm Application Object <br>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ */
+Tine.Crm.Application = Ext.extend(Tine.Tinebase.Application, {
+    
+    /**
+     * auto hook text _('New Lead')
+     */
+    addButtonText: 'New Lead'
+});
 
 /**
  * @namespace Tine.Crm
