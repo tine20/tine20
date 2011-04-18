@@ -21,7 +21,9 @@ myDialog = Ext.extend(Ext.Container, {
     }]
 })
  */
-Ext.ux.ItemRegistry = function () {};
+Ext.ux.ItemRegistry = function (config) {
+    Ext.apply(this, config);
+};
 
 /**
  * @static
