@@ -740,6 +740,14 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
+     * dummy function to measure speed of framework initialization
+     */
+    public function void()
+    {
+        return array();
+    }
+    
+    /**
      * gets the userProfile config
      * 
      * @return @array
