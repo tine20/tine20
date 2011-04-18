@@ -1043,23 +1043,43 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * print handler
      * 
+     * @todo move this to Ext.ux.Printer as iframe driver
      * @param {Tine.Felamimail.GridDetailsPanel} details panel [optional]
      */
     onPrint: function(detailsPanel) {
-        if (!Ext.get('felamimailPrintHelperIframe')) {
-            Ext.getBody().createChild({
-                id: 'felamimailPrintHelper',
-                tag:'div',
-                //style:'position:absolute;top:0px;width:100%;height:100%;',
-                children:[{
-                    tag:'iframe',
-                    id: 'felamimailPrintHelperIframe'
-                }]
-            });
-        }
-        var content = this.getDetailsPanelContentForPrinting(detailsPanel || this.detailsPanel);
-        Ext.get('felamimailPrintHelperIframe').dom.contentWindow.document.documentElement.innerHTML = content;
-        Ext.get('felamimailPrintHelperIframe').dom.contentWindow.print();
+        var id = Ext.id(),
+            doc = document,
+            frame = doc.createElement('iframe');
+            
+        Ext.fly(frame).set({
+            id: id,
+            name: id,
+            style: {
+                position: 'absolute',
+                width: '210mm',
+                height: '297mm',
+                top: '-10000px', 
+                left: '-10000px'
+            }
+        });
+        
+        doc.body.appendChild(frame);
+
+        Ext.fly(frame).set({
+           src : Ext.SSL_SECURE_URL
+        });
+
+        var doc = frame.contentWindow.document || frame.contentDocument || WINDOW.frames[id].document,
+            content = this.getDetailsPanelContentForPrinting(detailsPanel || this.detailsPanel);
+            
+        doc.open();
+        doc.write(content);
+        doc.close();
+        
+        frame.contentWindow.focus(); 
+        frame.contentWindow.print();
+        
+        setTimeout(function(){Ext.removeNode(frame);}, 100);
     },
     
     /**
