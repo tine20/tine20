@@ -26,6 +26,7 @@ Tine.Tinebase.Application = function(config) {
     this.i18n.textdomain(this.appName);
     
     this.init();
+    this.initAutoHooks();
 };
 
 Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
@@ -93,6 +94,25 @@ Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {
      * template function for subclasses to initialize application
      */
     init: Ext.emptyFn,
+
+    /**
+     * init some auto hooks
+     */
+    initAutoHooks: function() {
+        if (this.addButtonText) {
+            Ext.ux.ItemRegistry.registerItem('Tine.widgets.grid.GridPanel.addButton', {
+                text: this.i18n._hidden(this.addButtonText), 
+                iconCls: this.getIconCls(),
+                scope: this,
+                handler: function() {
+                    var ms = this.getMainScreen(),
+                        cp = ms.getCenterPanel();
+                        
+                    cp.onEditInNewWindow.call(cp, {});
+                }
+            });
+        }
+    },
     
     /**
      * template function for subclasses is called before app activation. Return false to cancel activation

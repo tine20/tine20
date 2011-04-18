@@ -829,11 +829,18 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     xtype: 'buttongroup',
                     columns: 3 + (Ext.isArray(additionalItems) ? additionalItems.length : 0),
                     items: [
-                        Ext.apply(new Ext.Button(this.action_addInNewWindow), {
+                        Ext.apply(new Ext.SplitButton(this.action_addInNewWindow), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign: 'top',
-                            arrowAlign:'right'
+                            arrowAlign:'right',
+                            menu: new Ext.menu.Menu({
+                                items: [],
+                                plugins: [{
+                                    ptype: 'ux.itemregistry',
+                                    key:   'Tine.widgets.grid.GridPanel.addButton'
+                                }]
+                            })
                         }),
                         Ext.apply(new Ext.Button(this.action_editInNewWindow), {
                             scale: 'medium',
