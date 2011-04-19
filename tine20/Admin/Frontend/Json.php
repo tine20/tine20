@@ -1061,6 +1061,23 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /****************************** common ******************************/
     
     /**
+     * returns record prepared for json transport
+     *
+     * @param Tinebase_Record_Interface $_record
+     * @return array record data
+     */
+    protected function _recordToJson($_record)
+    {
+        $result = parent::_recordToJson($_record);
+
+        if ($_record instanceof Tinebase_Model_Container) {
+            $result['account_grants'] = Tinebase_Frontend_Json_Container::resolveAccounts($result['account_grants']);
+        }
+        
+        return $result;
+    }
+    
+    /**
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
