@@ -61,6 +61,11 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     store: null,
     
     /**
+     * €cfg {Boolean} autoStartEditing
+     */
+    autoStartEditing: true,
+    
+    /**
      * @cfg {String} autoExpandColumn
      * auto expand column of grid
      */
@@ -343,7 +348,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     afterRender: function() {
         Tine.Felamimail.RecipientGrid.superclass.afterRender.call(this);
         
-        if (this.store.getCount() == 1) {
+        if (this.autoStartEditing && this.store.getCount() == 1) {
             this.startEditing.defer(200, this, [0, 1]);
         }
         
