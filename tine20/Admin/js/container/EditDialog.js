@@ -38,11 +38,88 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     /**
+     * after render
+     */
+//    afterRender: function() {
+//        Tine.Admin.ContainerEditDialog.superclass.afterRender.apply(this, arguments);
+//    },
+    
+    /**
+     * executed after record got updated from proxy
+     */
+    onRecordLoad: function() {
+        Tine.Admin.ContainerEditDialog.superclass.onRecordLoad.apply(this, arguments);
+        
+        this.initGrantsGrid();
+    },    
+    
+    /**
+     * create grants store + grid and insert grants grid into panel
+     */
+    initGrantsGrid: function() {
+        this.grantsStore = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            id: 'account_id',
+            fields: Tine.Tinebase.Model.Grant
+        });
+        
+        this.grantsStore.loadData({
+            results:    this.record.get('account_grants'),
+            totalcount: this.record.get('account_grants').length
+        });
+        
+        this.grantsGrid = new Tine.widgets.container.GrantsGrid({
+            store: this.grantsStore,
+            grantContainer: this.record,
+            height: 340
+        });
+        
+        this.grantsPanel.add(this.grantsGrid);
+        this.grantsGrid.show();
+    },
+    
+    /**
      * returns dialog
      */
     getFormItems: function() {
         return {
-            
+            layout: 'hfit',
+            border: false,
+            width: 600,
+            height: 350,
+            items: [{
+                xtype: 'columnform',
+                border: false,
+                autoHeight: true,
+                items: [[{
+                    columnWidth: 0.3,
+                    fieldLabel: this.app.i18n._('Name'), 
+                    name: 'name',
+                    allowBlank: false,
+                    maxLength: 40
+                }, {
+                    columnWidth: 0.6,
+                    name: 'description',
+                    fieldLabel: this.app.i18n._('Description'),
+                    anchor: '100%',
+                    maxLength: 50
+                }, {
+                    xtype: 'colorfield',
+                    columnWidth: 0.1,
+                    fieldLabel: this.app.i18n._('Color'),
+                    name: 'color'
+                }]]
+            }, {
+                xtype: 'panel',
+                ref: '../grantsPanel',
+                height: 340,
+                activeTab: 0,
+                deferredRender: false,
+                defaults: { autoScroll: true },
+                border: true,
+                plain: true
+            }]            
         };
     }
 });

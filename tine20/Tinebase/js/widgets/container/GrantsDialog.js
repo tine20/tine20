@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets', 'Tine.widgets.container');
 
@@ -13,8 +13,8 @@ Ext.ns('Tine.widgets', 'Tine.widgets.container');
  * @namespace   Tine.widgets.container
  * @class       Tine.widgets.container.GrantsDialog
  * @extends     Tine.widgets.dialog.EditDialog
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @constructor
  * @param {Object} config The configuration options.
  */
@@ -80,81 +80,9 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
      * returns dialog
      */
     getFormItems: function() {
-        
-        var columns = [
-            new Ext.ux.grid.CheckColumn({
-                header: _('Read'),
-                tooltip: _('The grant to read records of this container'),
-                dataIndex: 'readGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Add'),
-                tooltip: _('The grant to add records to this container'),
-                dataIndex: 'addGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Edit'),
-                tooltip: _('The grant to edit records in this container'),
-                dataIndex: 'editGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Delete'),
-                tooltip: _('The grant to delete records in this container'),
-                dataIndex: 'deleteGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Export'),
-                tooltip: _('The grant to export records from this container'),
-                dataIndex: 'exportGrant',
-                width: 55
-            }),
-            new Ext.ux.grid.CheckColumn({
-                header: _('Sync'),
-                tooltip: _('The grant to synchronise records with this container'),
-                dataIndex: 'syncGrant',
-                width: 55
-            })
-        ];
-        
-        // @todo move this to cal app when apps can cope with their own grant models
-        var calApp = Tine.Tinebase.appMgr.get('Calendar');
-        var calId = calApp ? calApp.id : 'none';
-        if (this.grantContainer.type == 'personal' && this.grantContainer.application_id === calId) {
-            columns.push(new Ext.ux.grid.CheckColumn({
-                header: _('Free Busy'),
-                tooltip: _('The grant to access free busy information of events in this calendar'),
-                dataIndex: 'freebusyGrant',
-                width: 55
-            }));
-        }
-        if (this.grantContainer.type == 'personal' && this.grantContainer.capabilites_private) {
-            columns.push(new Ext.ux.grid.CheckColumn({
-                header: _('Private'),
-                tooltip: _('The grant to access records marked as private in this container'),
-                dataIndex: 'privateGrant',
-                width: 55
-            }));
-        }
-        if (this.grantContainer.type == 'shared') {
-            columns.push(new Ext.ux.grid.CheckColumn({
-                header: _('Admin'),
-                tooltip: _('The grant to administrate this container'),
-                dataIndex: 'adminGrant',
-                width: 55
-            }));
-        }
-        
-        this.grantsGrid = new Tine.widgets.account.PickerGridPanel({
-            selectType: 'both',
-            selectTypeDefault: 'group',
+        this.grantsGrid = new Tine.widgets.container.GrantsGrid({
             store: this.grantsStore,
-            hasAccountPrefix: true,
-            configColumns: columns,
-            recordClass: Tine.Tinebase.Model.Grant
+            grantContainer: this.grantContainer
         }); 
         
         return this.grantsGrid;
