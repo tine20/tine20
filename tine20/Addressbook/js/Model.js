@@ -103,10 +103,18 @@ Tine.Addressbook.Model.Contact = Tine.Tinebase.data.Record.create(Tine.Addressbo
      * @return {Boolean}
      */
     hasEmail: function() {
-        return (
-                this.get('email') &&        this.get('email') != '' 
-            ||  this.get('email_home') &&   this.get('email_home') != ''
-        );
+        return this.get('email') || this.get('email_home');
+    },
+    
+    /**
+     * returns true prefered email if available
+     * @return {String}
+     */
+    getPreferedEmail: function(prefered) {
+        var prefered = prefered || 'email',
+            other = prefered == 'email' ? 'email_home' : 'email';
+            
+        return (this.get(prefered) || this.get(other));
     }
 });
 

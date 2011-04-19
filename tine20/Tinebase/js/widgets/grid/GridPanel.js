@@ -824,10 +824,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             var additionalItems = this.getActionToolbarItems();
             
             this.actionToolbar = new Ext.Toolbar({
-                //defaults: {height: 55},
                 items: [{
                     xtype: 'buttongroup',
-                    columns: 3 + (Ext.isArray(additionalItems) ? additionalItems.length : 0),
+//                    columns: 3 + (Ext.isArray(additionalItems) ? additionalItems.length : 0),
+                    plugins: [{
+                        ptype: 'ux.itemregistry',
+                        key:   this.app.appName + '-GridPanel-ActionToolbar-leftbtngrp'
+                    }],
                     items: [
                         Ext.apply(new Ext.SplitButton(this.action_addInNewWindow), {
                             scale: 'medium',
@@ -906,7 +909,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             // lookup additional items
             items = items.concat(this.getContextMenuItems());
             
-            this.contextMenu = new Ext.menu.Menu({items: items});
+            this.contextMenu = new Ext.menu.Menu({
+                items: items,
+                plugins: [{
+                    ptype: 'ux.itemregistry',
+                    key:   this.app.appName + '-GridPanel-ContextMenu'
+                }]
+            });
         }
         
         return this.contextMenu;
