@@ -35,14 +35,9 @@ Tine.Admin.container.show = function () {
 Ext.ns('Tine.Admin.Model');
 
 /**
- * Model of an account
+ * Model of a container
  */
-Tine.Admin.Model.ContainerArray = [
-    { name: 'id' },
-    { name: 'name' }
-];
-
-Tine.Admin.Model.Container = Tine.Tinebase.data.Record.create(Tine.Admin.Model.ContainerArray, {
+Tine.Admin.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Container.getFieldDefinitions(), {
     appName: 'Admin',
     modelName: 'Container',
     idProperty: 'id',

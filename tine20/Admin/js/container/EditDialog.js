@@ -33,7 +33,7 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.container.GrantsDialog,
      */
     windowNamePrefix: 'containerEditWindow_',
     appName: 'Admin',
-    recordClass: Tine.Tinebase.Model.Container,
+    recordClass: Tine.Admin.Model.Container,
     recordProxy: Tine.Admin.containerBackend,
     evalGrants: false
 });
