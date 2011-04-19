@@ -26,7 +26,7 @@ Tine.Tinebase.Application = function(config) {
     this.i18n.textdomain(this.appName);
     
     this.init();
-    this.initAutoHooks();
+//    this.initAutoHooks();
 };
 
 Ext.extend(Tine.Tinebase.Application, Ext.util.Observable , {

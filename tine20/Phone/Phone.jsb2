@@ -16,6 +16,10 @@
           "path": "js/"
         },
         {
+          "text": "AddressbookGridPanelHook.js",
+          "path": "js/"
+        },
+        {
           "text": "Phone.js",
           "path": "js/"
         }

@@ -4,7 +4,7 @@
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -21,7 +21,7 @@ Ext.ns('Tine.Addressbook');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -52,14 +52,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @cfg {Bool} hasDetailsPanel 
      */
     hasDetailsPanel: true,
-    
-    /**
-     * phoneMenu
-     * @type Ext.menu.Menu 
-     * 
-     * TODO try to disable 'activation' of toolbar button when ctx menu button is selected
-     */
-    phoneMenu: null,
     
     /**
      * inits this cmp
@@ -200,20 +192,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 ]
             }
         });
-        
-        this.phoneMenu = new Ext.menu.Menu({
-        });
-        this.actions_callContact = new Ext.Action({
-            requiredGrant: 'readGrant',
-            hidden: ! (Tine.Phone && Tine.Tinebase.common.hasRight('run', 'Phone')),
-            actionUpdater: this.updatePhoneActions,
-            text: this.app.i18n._('Call contact'),
-            disabled: true,
-            iconCls: 'PhoneIconCls',
-            menu: this.phoneMenu,
-            scope: this
-        });
-        
+
         this.actions_import = new Ext.Action({
             //requiredGrant: 'addGrant',
             text: this.app.i18n._('Import contacts'),
@@ -227,7 +206,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         // register actions in updater
         this.actionUpdater.addActions([
             this.actions_exportContact,
-            this.actions_callContact,
             this.actions_import
         ]);
         
@@ -241,12 +219,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     getActionToolbarItems: function() {
         return [
-            Ext.apply(new Ext.SplitButton(this.actions_callContact), {
-                scale: 'medium',
-                rowspan: 2,
-                iconAlign: 'top',
-                arrowAlign:'right'
-            }),
             {
                 xtype: 'buttongroup',
                 columns: 1,
@@ -268,100 +240,10 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var items = [
             '-',
             this.actions_exportContact,
-            '-',
-            this.actions_callContact
+            '-'
         ];
         
         return items;
-    },
-    
-    /**
-     * updates call menu
-     * 
-     * @param {Ext.Action} action
-     * @param {Object} grants grants sum of grants
-     * @param {Object} records
-     */
-    updatePhoneActions: function(action, grants, records) {
-        if (action.isHidden()) {
-            return;
-        }
-        
-        this.phoneMenu.removeAll();
-        this.actions_callContact.setDisabled(true);
-            
-        if (records.length == 1) {
-            var contact = records[0];
-            
-            if (! contact) {
-                return false;
-            }
-            
-            if(!Ext.isEmpty(contact.data.tel_work)) {
-                this.phoneMenu.add({
-                   text: this.app.i18n._('Work') + ' ' + contact.data.tel_work + '',
-                   scope: this,
-                   handler: this.onCallContact,
-                   field: 'tel_work'
-                });
-                action.setDisabled(false);
-            }
-            if(!Ext.isEmpty(contact.data.tel_home)) {
-                this.phoneMenu.add({
-                   text: this.app.i18n._('Home') + ' ' + contact.data.tel_home + '',
-                   scope: this,
-                   handler: this.onCallContact,
-                   field: 'tel_home'
-                });
-                action.setDisabled(false);
-            }
-            if(!Ext.isEmpty(contact.data.tel_cell)) {
-                this.phoneMenu.add({
-                   text: this.app.i18n._('Cell') + ' ' + contact.data.tel_cell + '',
-                   scope: this,
-                   handler: this.onCallContact,
-                   field: 'tel_cell'
-                });
-                action.setDisabled(false);
-            }
-            if(!Ext.isEmpty(contact.data.tel_cell_private)) {
-                this.phoneMenu.add({
-                   text: this.app.i18n._('Cell private') + ' ' + contact.data.tel_cell_private + '',
-                   scope: this,
-                   handler: this.onCallContact,
-                   field: 'tel_cell_private'
-                });
-                action.setDisabled(false);
-            }
-        }
-    },
-        
-    /**
-     * calls a contact
-     * @param {Button} btn 
-     */
-    onCallContact: function(btn) {
-        var number;
-
-        var contact = this.grid.getSelectionModel().getSelected();
-        
-        if (! contact) {
-            return;
-        }
-        
-        if (!Ext.isEmpty(contact.get(btn.field))) {
-            number = contact.get(btn.field);
-        } else if(!Ext.isEmpty(contact.data.tel_work)) {
-            number = contact.data.tel_work;
-        } else if (!Ext.isEmpty(contact.data.tel_cell)) {
-            number = contact.data.tel_cell;
-        } else if (!Ext.isEmpty(contact.data.tel_cell_private)) {
-            number = contact.data.tel_cell_private;
-        } else if (!Ext.isEmpty(contact.data.tel_home)) {
-            number = contact.data.tel_home;
-        }
-
-        Tine.Phone.dialPhoneNumber(number);
     },
     
     /**
