@@ -87,7 +87,9 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Container'),    field: 'query',       operators: ['contains']}
+                {label: this.app.i18n._('Container'),       field: 'query',    operators: ['contains']},
+                {label: this.app.i18n._('Type'),            field: 'type',     operators: ['contains']}
+                //{label: this.app.i18n._('Application'),    field: 'application_id',     operators: ['equals']}
             ],
             defaultFilter: 'query',
             filters: [],
