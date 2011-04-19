@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Container
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -159,7 +159,6 @@ class Tinebase_Frontend_Json_Container
      * 
      * @param   int     $containerId
      * @return  array
-     * @throws  Tinebase_Exception_InvalidArgument
      */
     public function getContainerGrants($containerId) 
     {
@@ -170,16 +169,30 @@ class Tinebase_Frontend_Json_Container
         
         $result['results'] = Tinebase_Container::getInstance()->getGrantsOfContainer($containerId)->toArray();
         $result['totalcount'] = count($result['results']);
+        $result['results'] = self::resolveAccounts($result['results']);
         
-        foreach($result['results'] as &$value) {
+        return $result;
+    }
+    
+    /**
+     * resolve accounts in grants
+     * 
+     * @param array $_grants
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     * 
+     * @todo think about resolving before converting to array
+     */
+    public static function resolveAccounts($_grants)
+    {
+        foreach($_grants as &$value) {
             switch($value['account_type']) {
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_USER:
-                	try {
-                		$account = Tinebase_User::getInstance()->getUserById($value['account_id']);
-                	}
-		            catch (Tinebase_Exception_NotFound $e) {
-		                $account = Tinebase_User::getInstance()->getNonExistentUser();
-		            }
+                    try {
+                        $account = Tinebase_User::getInstance()->getUserById($value['account_id']);
+                    } catch (Tinebase_Exception_NotFound $e) {
+                        $account = Tinebase_User::getInstance()->getNonExistentUser();
+                    }
                     $value['account_name'] = $account->toArray();
                     break;
                 case Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP:
@@ -194,7 +207,7 @@ class Tinebase_Frontend_Json_Container
             }            
         }
         
-        return $result;
+        return $_grants;
     }
     
     /**
