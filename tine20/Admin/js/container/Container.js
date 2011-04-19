@@ -30,46 +30,11 @@ Tine.Admin.container.show = function () {
     Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Admin.container.gridPanel.actionToolbar, true);
 };
 
-
-/************** models *****************/
-Ext.ns('Tine.Admin.Model');
-
-/**
- * Model of an account
- */
-Tine.Admin.Model.ContainerArray = [
-    { name: 'id' },
-    { name: 'name' }
-];
-
-Tine.Admin.Model.Container = Tine.Tinebase.data.Record.create(Tine.Admin.Model.ContainerArray, {
-    appName: 'Admin',
-    modelName: 'Container',
-    idProperty: 'id',
-    titleProperty: 'name',
-    // ngettext('Container', 'Containers', n);
-    recordName: 'Container',
-    recordsName: 'Containers'
-});
-
-/**
- * returns default account data
- * 
- * @namespace Tine.Admin.Model.Container
- * @static
- * @return {Object} default data
- */
-Tine.Admin.Model.Container.getDefaultData = function () {
-    return {
-    };
-};
-
 /************** backend *****************/
 
 Tine.Admin.containerBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'Container',
-    recordClass: Tine.Admin.Model.Container,
+    recordClass: Tine.Tinebase.Model.Container,
     idProperty: 'id'
 });
-
