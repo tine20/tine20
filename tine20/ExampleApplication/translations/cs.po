@@ -13,56 +13,61 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: Controller.php:97
+#: Controller.php:96
 #, python-format
 msgid "%s's personal example records"
 msgstr "Osobní ukázkové záznamy uživatele %s"
 
-#: js/Model.js:33
+#: js/ExampleApplication-FAT-debug.js:36 js/Model.js:31
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] "ukázkový záznam"
 msgstr[1] "ukázkové záznamy"
 msgstr[2] "ukázkových záznamů"
 
-#: js/Model.js:37
+#: js/ExampleApplication-FAT-debug.js:40 js/Model.js:35
 msgid "example record list"
 msgid_plural "example record lists"
 msgstr[0] "seznam ukázkových záznamů"
 msgstr[1] "seznamy ukázkových záznamů"
 msgstr[2] "seznamů ukázkových záznamů"
 
-#: js/ExampleRecordEditDialog.js:89
-msgid "ExampleRecord"
-msgstr "Ukázkový záznam"
-
-#: js/ExampleRecordEditDialog.js:106 js/ExampleRecordGridPanel.js:105
-msgid "Name"
-msgstr "Název"
-
-#: js/ExampleApplication.js:27
+#: js/ExampleApplication-FAT-debug.js:97 js/ExampleApplication-FAT.js:6
+#: js/ExampleApplication.js:25
 msgid "Example Application"
 msgstr "Ukázková aplikace"
 
-#: js/ExampleRecordGridPanel.js:77
+#: js/ExampleApplication-FAT-debug.js:201 js/ExampleApplication-FAT.js:6
+#: js/ExampleRecordGridPanel.js:75
 msgid "Quick search"
 msgstr "Rychlé hledání"
 
-#: js/ExampleRecordGridPanel.js:111
+#: js/ExampleApplication-FAT-debug.js:229
+#: js/ExampleApplication-FAT-debug.js:389 js/ExampleApplication-FAT.js:6
+#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:103
+msgid "Name"
+msgstr "Název"
+
+#: js/ExampleApplication-FAT-debug.js:235 js/ExampleRecordGridPanel.js:109
 msgid "Title"
 msgstr "Název"
 
-#: js/ExampleRecordGridPanel.js:117
+#: js/ExampleApplication-FAT-debug.js:241 js/ExampleRecordGridPanel.js:115
 msgid "Status"
 msgstr "Stav"
 
-#: js/ExampleRecordGridPanel.js:124
+#: js/ExampleApplication-FAT-debug.js:248 js/ExampleRecordGridPanel.js:122
 msgid "Budget"
 msgstr "Rozpočet"
 
-#: js/ExampleRecordGridPanel.js:148
+#: js/ExampleApplication-FAT-debug.js:272 js/ExampleRecordGridPanel.js:146
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
+
+#: js/ExampleApplication-FAT-debug.js:372 js/ExampleApplication-FAT.js:6
+#: js/ExampleRecordEditDialog.js:87
+msgid "ExampleRecord"
+msgstr "Ukázkový záznam"
 
 #: Setup/setup.xml:10
 msgid "ExampleApplication"

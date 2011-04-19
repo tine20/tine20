@@ -13,603 +13,636 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: js/ConfigManagerPanel.js:110
-msgid "File"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:112 js/AuthenticationPanel.js:186
-#: js/AuthenticationPanel.js:207 js/EmailPanel.js:145
-msgid "Backend"
-msgstr "Administració"
-
-#: js/ConfigManagerPanel.js:121
-msgid "Setup Authentication"
-msgstr "Estableix l'autenticació"
-
-#: js/ConfigManagerPanel.js:124 js/EmailPanel.js:181
-msgid "Username"
-msgstr "Nom d'usuari"
-
-#: js/ConfigManagerPanel.js:133 js/ConfigManagerPanel.js:163
-#: js/AuthenticationPanel.js:327 js/AuthenticationPanel.js:509
-#: js/EmailPanel.js:185
-msgid "Password"
-msgstr "Contrasenya"
-
-#: js/ConfigManagerPanel.js:138 js/ConfigManagerPanel.js:155
-msgid "Database"
-msgstr "Base de dades"
-
-#: js/ConfigManagerPanel.js:142
-msgid "Adapter"
-msgstr "Adaptador"
-
-#: js/ConfigManagerPanel.js:147 js/ConfigManagerPanel.js:257
-#: js/AuthenticationPanel.js:378 js/EmailPanel.js:177 js/EmailPanel.js:295
-#: js/EmailPanel.js:407
-msgid "Hostname"
-msgstr "Nom de l'amfitrió"
-
-#: js/ConfigManagerPanel.js:151 js/ConfigManagerPanel.js:261
-#: js/AuthenticationPanel.js:320 js/AuthenticationPanel.js:381
-#: js/EmailPanel.js:190 js/EmailPanel.js:299 js/EmailPanel.js:411
-msgid "Port"
-msgstr "Port"
-
-#: js/ConfigManagerPanel.js:159
-msgid "User"
-msgstr "Usuari"
-
-#: js/ConfigManagerPanel.js:167
-msgid "Prefix"
-msgstr "Prefix"
-
-#: js/ConfigManagerPanel.js:170
-msgid "Logging"
-msgstr "Registre d'esdeveniments"
-
-#: js/ConfigManagerPanel.js:176
-msgid "Filename"
-msgstr "Nom de fitxer"
-
-#: js/ConfigManagerPanel.js:188
-msgid "Priority"
-msgstr "Prioritat"
-
-#: js/ConfigManagerPanel.js:191
-msgid "Caching"
-msgstr "Emmagatzematge cau"
-
-#: js/ConfigManagerPanel.js:197 js/ConfigManagerPanel.js:244
-msgid "Path"
-msgstr "Camí"
-
-#: js/ConfigManagerPanel.js:200 js/ConfigManagerPanel.js:218
-msgid "Lifetime (seconds)"
-msgstr "temps de vida (segons)"
-
-#: js/ConfigManagerPanel.js:206
-msgid "Temporary files"
-msgstr "Fitxers temporals"
-
-#: js/ConfigManagerPanel.js:211
-msgid "Temporary Files Path"
-msgstr "Camí als fitxers temporals"
-
-#: js/ConfigManagerPanel.js:214
-msgid "Session"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:270
-msgid "Filestore directory"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:275
-msgid "Filestore Path"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:279
-msgid "Addressbook Map panel"
-msgstr "Tauler Mapa de llibreta d'adreces"
-
-#: js/ConfigManagerPanel.js:282
-msgid "Map panel"
-msgstr "Tauler Mapa"
-
-#: js/ConfigManagerPanel.js:292
-msgid "disabled"
-msgstr "inhabilitat"
-
-#: js/ConfigManagerPanel.js:292
-msgid "enabled"
-msgstr "habilitat"
-
-#: js/ConfigManagerPanel.js:303
-msgid "Config file is not writable"
-msgstr "El fitxer de configuració no es pot escriure"
-
-#: js/ConfigManagerPanel.js:305 js/AuthenticationPanel.js:678
-msgid "Save config"
-msgstr "Desa la configuració"
-
-#: js/ConfigManagerPanel.js:321
-msgid "Download config file"
-msgstr "Descarrega el fitxer de configuració"
-
-#: js/TermsPanel.js:31
-msgid "I have read the license agreement and accept it"
-msgstr "He llegit i acceptat l'acord de llicència"
-
-#: js/TermsPanel.js:38
-msgid "License Agreement"
-msgstr "Acord de llicència"
-
-#: js/TermsPanel.js:57
-msgid "I have read the privacy agreement and accept it"
-msgstr "He llegit i acceptat l'acord de privadesa"
-
-#: js/TermsPanel.js:64
-msgid "Privacy Agreement"
-msgstr "Acord de privadesa"
-
-#: js/TermsPanel.js:81
-msgid "Accept Terms and Conditions"
-msgstr "Accepta els termes i condicions"
-
-#: js/AuthenticationPanel.js:123
-msgid "Delete all existing users and groups"
-msgstr "Elimina tots els usuaris i grups existents"
-
-#: js/AuthenticationPanel.js:123
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
-msgstr "El canvi d'SQL a LDAP eliminarà tots els comptes d'usuari, els grups i els rols existents. Esteu segur que voleu canviar l'administració d'emmagatzematge de comptes a LDAP?"
-
-#: js/AuthenticationPanel.js:221
-msgid "Initial Admin User"
-msgstr ""
-
-#: js/AuthenticationPanel.js:234
-msgid "Initial admin login name"
-msgstr "Nom d'inici de sessió administratiu inicial"
-
-#: js/AuthenticationPanel.js:239
-msgid "Initial admin Password"
-msgstr "Contrasenya administrativa inicial"
-
-#: js/AuthenticationPanel.js:244
-msgid "Password confirmation"
-msgstr "Confirmació de la contrasenya"
-
-#: js/AuthenticationPanel.js:253
-msgid "Authentication provider"
-msgstr "Proveïdor d'autenticació"
-
-#: js/AuthenticationPanel.js:282 js/AuthenticationPanel.js:415
-msgid "Try to split username"
-msgstr ""
-
-#: js/AuthenticationPanel.js:294 js/AuthenticationPanel.js:359
-#: js/AuthenticationPanel.js:429
-msgid "Account canonical form"
-msgstr "Forma canònica del compte"
-
-#: js/AuthenticationPanel.js:298 js/AuthenticationPanel.js:363
-#: js/AuthenticationPanel.js:433
-msgid "Account domain name "
-msgstr "Nom de domini del compte"
-
-#: js/AuthenticationPanel.js:302 js/AuthenticationPanel.js:366
-#: js/AuthenticationPanel.js:438
-msgid "Account domain short name"
-msgstr "Nom curt de domini del compte"
-
-#: js/AuthenticationPanel.js:316 js/AuthenticationPanel.js:501
-msgid "Host"
-msgstr "Amfitrió"
-
-#: js/AuthenticationPanel.js:324 js/AuthenticationPanel.js:506
-msgid "Login name"
-msgstr "Nom d'inici de sessió"
-
-#: js/AuthenticationPanel.js:340 js/AuthenticationPanel.js:522
-msgid "Bind requires DN"
-msgstr "La vinculació requereix DN"
-
-#: js/AuthenticationPanel.js:344
-msgid "Base DN"
-msgstr "DN base"
-
-#: js/AuthenticationPanel.js:347
-msgid "Search filter"
-msgstr "Filtre de cerca"
-
-#: js/AuthenticationPanel.js:384 js/EmailPanel.js:193 js/EmailPanel.js:302
-#: js/EmailPanel.js:414
-msgid "Secure Connection"
-msgstr "Connexió segura"
-
-#: js/AuthenticationPanel.js:395 js/EmailPanel.js:204 js/EmailPanel.js:313
-#: js/EmailPanel.js:329 js/EmailPanel.js:425
-msgid "None"
-msgstr "Cap"
-
-#: js/AuthenticationPanel.js:396 js/EmailPanel.js:205 js/EmailPanel.js:314
-#: js/EmailPanel.js:426
-msgid "TLS"
-msgstr "TLS"
-
-#: js/AuthenticationPanel.js:397 js/EmailPanel.js:206 js/EmailPanel.js:315
-#: js/EmailPanel.js:427
-msgid "SSL"
-msgstr "SSL"
-
-#: js/AuthenticationPanel.js:401 js/EmailPanel.js:222
-msgid "Append domain to login name"
-msgstr "Afegeix el domini al nom d'inici de sessió"
-
-#: js/AuthenticationPanel.js:449
-msgid "Accounts storage"
-msgstr "Emmagatzematge de comptes"
-
-#: js/AuthenticationPanel.js:470 js/AuthenticationPanel.js:608
-msgid "Default user group name"
-msgstr "Nom de grup d'usuari per defecte"
-
-#: js/AuthenticationPanel.js:474 js/AuthenticationPanel.js:611
-msgid "Default admin group name"
-msgstr "Nom de grup d'administració per defecte"
-
-#: js/AuthenticationPanel.js:487
-msgid "User can change password"
-msgstr "L'usuari pot canviar la contrasenya"
-
-#: js/AuthenticationPanel.js:526
-msgid "User DN"
-msgstr "DN d'usuari"
-
-#: js/AuthenticationPanel.js:529
-msgid "User Filter"
-msgstr "Filtre d'usuari"
-
-#: js/AuthenticationPanel.js:541
-msgid "User Search Scope"
-msgstr "Abast de la cerca d'usuari"
-
-#: js/AuthenticationPanel.js:545
-msgid "Groups DN"
-msgstr "DN de grups"
-
-#: js/AuthenticationPanel.js:548
-msgid "Group Filter"
-msgstr "Filtre de grup"
-
-#: js/AuthenticationPanel.js:560
-msgid "Group Search Scope"
-msgstr "Abast de la cerca de grup"
-
-#: js/AuthenticationPanel.js:573
-msgid "Password encoding"
-msgstr "Codificació de la contrasenya"
-
-#: js/AuthenticationPanel.js:586
-msgid "Use Rfc 2307 bis"
-msgstr "Utilitza Rfc 2307 bis"
-
-#: js/AuthenticationPanel.js:590
-msgid "Min User Id"
-msgstr "Identificador d'usuari mínim"
-
-#: js/AuthenticationPanel.js:593
-msgid "Max User Id"
-msgstr "Identificador d'usuari màxim"
-
-#: js/AuthenticationPanel.js:596
-msgid "Min Group Id"
-msgstr "Identificador de grup mínim"
-
-#: js/AuthenticationPanel.js:599
-msgid "Max Group Id"
-msgstr "Identificador de grup màxim"
-
-#: js/AuthenticationPanel.js:602
-msgid "Group UUID Attribute name"
-msgstr "Nom d'atribut UUID de grup"
-
-#: js/AuthenticationPanel.js:605
-msgid "User UUID Attribute name"
-msgstr "Nom d'atribut UUID d'usuari"
-
-#: js/AuthenticationPanel.js:623
-msgid "Allow user to change her password?"
-msgstr "Permet que l'usuari canviï la seva contrasenya?"
-
-#: js/AuthenticationPanel.js:632
-msgid "Redirect Settings"
-msgstr "Configuració de redireccionament"
-
-#: js/AuthenticationPanel.js:640
-msgid "Redirect Url (redirect to login screen if empty)"
-msgstr "Url on redirigir (es redirigeix a la pantalla d'inici de sessió si ho deixeu buit)"
-
-#: js/AuthenticationPanel.js:652
-msgid "Redirect Always (if No, only redirect after logout)"
-msgstr "Sempre es redirigeix (si poseu No, només es redirigirà després d'un tancament de sessió)"
-
-#: js/AuthenticationPanel.js:663
-msgid "Redirect to referring site, if exists"
-msgstr "Si existeix, es redirigeix al lloc referent"
-
-#: js/AuthenticationPanel.js:676
-msgid "Save config and install"
-msgstr "Desa la configuració i instal·la"
-
-#: js/AuthenticationPanel.js:702
-msgid "Passwords don't match"
-msgstr "Les contrasenyes no coincideixen"
-
-#: js/AuthenticationPanel.js:715 js/AuthenticationPanel.js:722
-#: js/AuthenticationPanel.js:726 js/AuthenticationPanel.js:737
-#: js/AuthenticationPanel.js:747
-msgid "Should not be empty"
-msgstr "No pot ser buit"
-
-#: js/ApplicationGridPanel.js:67
+#: js/ApplicationGridPanel.js:65 js/Setup-FAT-debug.js:605 js/Setup-FAT.js:6
 msgid "Name"
 msgstr "Nom"
 
-#: js/ApplicationGridPanel.js:68
+#: js/ApplicationGridPanel.js:66 js/Setup-FAT-debug.js:606 js/Setup-FAT.js:6
 msgid "Enabled"
 msgstr "Habilitat"
 
-#: js/ApplicationGridPanel.js:69
+#: js/ApplicationGridPanel.js:67 js/Setup-FAT-debug.js:607 js/Setup-FAT.js:6
 msgid "Order"
 msgstr "Ordre"
 
-#: js/ApplicationGridPanel.js:70
+#: js/ApplicationGridPanel.js:68 js/Setup-FAT-debug.js:608 js/Setup-FAT.js:6
 msgid "Installed Version"
 msgstr "Versió instal·lada"
 
-#: js/ApplicationGridPanel.js:71
+#: js/ApplicationGridPanel.js:69 js/Setup-FAT-debug.js:609 js/Setup-FAT.js:6
 msgid "Available Version"
 msgstr "Versió disponible"
 
-#: js/ApplicationGridPanel.js:72
+#: js/ApplicationGridPanel.js:70 js/Setup-FAT-debug.js:610 js/Setup-FAT.js:6
 msgid "Status"
 msgstr "Estat"
 
-#: js/ApplicationGridPanel.js:73
+#: js/ApplicationGridPanel.js:71 js/Setup-FAT-debug.js:611 js/Setup-FAT.js:6
 msgid "Depends on"
 msgstr "Depèn de"
 
-#: js/ApplicationGridPanel.js:82 js/EnvCheckGridPanel.js:207
+#: js/ApplicationGridPanel.js:80 js/EnvCheckGridPanel.js:205
+#: js/Setup-FAT-debug.js:620 js/Setup-FAT-debug.js:1032 js/Setup-FAT.js:6
 msgid "Install application"
 msgstr "Instal·la aplicació"
 
-#: js/ApplicationGridPanel.js:91
+#: js/ApplicationGridPanel.js:89 js/Setup-FAT-debug.js:629 js/Setup-FAT.js:6
 msgid "Uninstall application"
 msgstr "Desinstal·la aplicació"
 
-#: js/ApplicationGridPanel.js:100
+#: js/ApplicationGridPanel.js:98 js/Setup-FAT-debug.js:638 js/Setup-FAT.js:6
 msgid "Update application"
 msgstr "Actualitza aplicació"
 
-#: js/ApplicationGridPanel.js:109
+#: js/ApplicationGridPanel.js:107 js/Setup-FAT-debug.js:647 js/Setup-FAT.js:6
 msgid "Go to {0} login"
 msgstr "Vés a l'inici de sessió de {0}"
 
-#: js/ApplicationGridPanel.js:172
+#: js/ApplicationGridPanel.js:170 js/Setup-FAT-debug.js:710 js/Setup-FAT.js:6
 msgid "uninstall"
 msgstr "desinstal·la"
 
-#: js/ApplicationGridPanel.js:172
+#: js/ApplicationGridPanel.js:170 js/Setup-FAT-debug.js:710 js/Setup-FAT.js:6
 msgid "Do you really want to uninstall the application(s)?"
 msgstr "Esteu segur que voleu deinstal·lar l'aplicació o aplicacions?"
 
-#: js/ApplicationGridPanel.js:232
+#: js/ApplicationGridPanel.js:230 js/Setup-FAT-debug.js:770 js/Setup-FAT.js:6
 msgid "This may take a while"
 msgstr "Això pot tardar una estona"
 
-#: js/ApplicationGridPanel.js:262
+#: js/ApplicationGridPanel.js:260 js/Setup-FAT-debug.js:800 js/Setup-FAT.js:6
 msgid "Dependency Violation"
 msgstr "S'ha produït una violació de dependències"
 
-#: js/Setup.js:55
+#: js/AuthenticationPanel.js:121 js/Setup-FAT-debug.js:1518 js/Setup-FAT.js:6
+msgid "Delete all existing users and groups"
+msgstr "Elimina tots els usuaris i grups existents"
+
+#: js/AuthenticationPanel.js:121 js/Setup-FAT-debug.js:1518 js/Setup-FAT.js:6
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "El canvi d'SQL a LDAP eliminarà tots els comptes d'usuari, els grups i els rols existents. Esteu segur que voleu canviar l'administració d'emmagatzematge de comptes a LDAP?"
+
+#: js/AuthenticationPanel.js:184 js/AuthenticationPanel.js:205
+#: js/ConfigManagerPanel.js:110 js/EmailPanel.js:143
+#: js/Setup-FAT-debug.js:1179 js/Setup-FAT-debug.js:1581
+#: js/Setup-FAT-debug.js:1602 js/Setup-FAT-debug.js:2292 js/Setup-FAT.js:6
+msgid "Backend"
+msgstr "Administració"
+
+#: js/AuthenticationPanel.js:219 js/Setup-FAT-debug.js:1616 js/Setup-FAT.js:6
+msgid "Initial Admin User"
+msgstr ""
+
+#: js/AuthenticationPanel.js:232 js/Setup-FAT-debug.js:1629 js/Setup-FAT.js:6
+msgid "Initial admin login name"
+msgstr "Nom d'inici de sessió administratiu inicial"
+
+#: js/AuthenticationPanel.js:237 js/Setup-FAT-debug.js:1634 js/Setup-FAT.js:6
+msgid "Initial admin Password"
+msgstr "Contrasenya administrativa inicial"
+
+#: js/AuthenticationPanel.js:242 js/Setup-FAT-debug.js:1639 js/Setup-FAT.js:6
+msgid "Password confirmation"
+msgstr "Confirmació de la contrasenya"
+
+#: js/AuthenticationPanel.js:251 js/Setup-FAT-debug.js:1648 js/Setup-FAT.js:6
+msgid "Authentication provider"
+msgstr "Proveïdor d'autenticació"
+
+#: js/AuthenticationPanel.js:280 js/AuthenticationPanel.js:413
+#: js/Setup-FAT-debug.js:1677 js/Setup-FAT-debug.js:1810 js/Setup-FAT.js:6
+msgid "Try to split username"
+msgstr ""
+
+#: js/AuthenticationPanel.js:292 js/AuthenticationPanel.js:357
+#: js/AuthenticationPanel.js:427 js/Setup-FAT-debug.js:1689
+#: js/Setup-FAT-debug.js:1754 js/Setup-FAT-debug.js:1824 js/Setup-FAT.js:6
+msgid "Account canonical form"
+msgstr "Forma canònica del compte"
+
+#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:361
+#: js/AuthenticationPanel.js:431 js/Setup-FAT-debug.js:1693
+#: js/Setup-FAT-debug.js:1758 js/Setup-FAT-debug.js:1828 js/Setup-FAT.js:6
+msgid "Account domain name "
+msgstr "Nom de domini del compte"
+
+#: js/AuthenticationPanel.js:300 js/AuthenticationPanel.js:364
+#: js/AuthenticationPanel.js:436 js/Setup-FAT-debug.js:1697
+#: js/Setup-FAT-debug.js:1761 js/Setup-FAT-debug.js:1833 js/Setup-FAT.js:6
+msgid "Account domain short name"
+msgstr "Nom curt de domini del compte"
+
+#: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:499
+#: js/Setup-FAT-debug.js:1711 js/Setup-FAT-debug.js:1896 js/Setup-FAT.js:6
+msgid "Host"
+msgstr "Amfitrió"
+
+#: js/AuthenticationPanel.js:318 js/AuthenticationPanel.js:379
+#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:259
+#: js/EmailPanel.js:188 js/EmailPanel.js:297 js/EmailPanel.js:409
+#: js/Setup-FAT-debug.js:1218 js/Setup-FAT-debug.js:1328
+#: js/Setup-FAT-debug.js:1715 js/Setup-FAT-debug.js:1776
+#: js/Setup-FAT-debug.js:2337 js/Setup-FAT-debug.js:2446
+#: js/Setup-FAT-debug.js:2558 js/Setup-FAT.js:6
+msgid "Port"
+msgstr "Port"
+
+#: js/AuthenticationPanel.js:322 js/AuthenticationPanel.js:504
+#: js/Setup-FAT-debug.js:1719 js/Setup-FAT-debug.js:1901 js/Setup-FAT.js:6
+msgid "Login name"
+msgstr "Nom d'inici de sessió"
+
+#: js/AuthenticationPanel.js:325 js/AuthenticationPanel.js:507
+#: js/ConfigManagerPanel.js:131 js/ConfigManagerPanel.js:161
+#: js/EmailPanel.js:183 js/Setup-FAT-debug.js:1200 js/Setup-FAT-debug.js:1230
+#: js/Setup-FAT-debug.js:1722 js/Setup-FAT-debug.js:1904
+#: js/Setup-FAT-debug.js:2332 js/Setup-FAT.js:6
+msgid "Password"
+msgstr "Contrasenya"
+
+#: js/AuthenticationPanel.js:338 js/AuthenticationPanel.js:520
+#: js/Setup-FAT-debug.js:1735 js/Setup-FAT-debug.js:1917 js/Setup-FAT.js:6
+msgid "Bind requires DN"
+msgstr "La vinculació requereix DN"
+
+#: js/AuthenticationPanel.js:342 js/Setup-FAT-debug.js:1739 js/Setup-FAT.js:6
+msgid "Base DN"
+msgstr "DN base"
+
+#: js/AuthenticationPanel.js:345 js/Setup-FAT-debug.js:1742 js/Setup-FAT.js:6
+msgid "Search filter"
+msgstr "Filtre de cerca"
+
+#: js/AuthenticationPanel.js:376 js/ConfigManagerPanel.js:145
+#: js/ConfigManagerPanel.js:255 js/EmailPanel.js:175 js/EmailPanel.js:293
+#: js/EmailPanel.js:405 js/Setup-FAT-debug.js:1214 js/Setup-FAT-debug.js:1324
+#: js/Setup-FAT-debug.js:1773 js/Setup-FAT-debug.js:2324
+#: js/Setup-FAT-debug.js:2442 js/Setup-FAT-debug.js:2554 js/Setup-FAT.js:6
+msgid "Hostname"
+msgstr "Nom de l'amfitrió"
+
+#: js/AuthenticationPanel.js:382 js/EmailPanel.js:191 js/EmailPanel.js:300
+#: js/EmailPanel.js:412 js/Setup-FAT-debug.js:1779 js/Setup-FAT-debug.js:2340
+#: js/Setup-FAT-debug.js:2449 js/Setup-FAT-debug.js:2561 js/Setup-FAT.js:6
+msgid "Secure Connection"
+msgstr "Connexió segura"
+
+#: js/AuthenticationPanel.js:393 js/EmailPanel.js:202 js/EmailPanel.js:311
+#: js/EmailPanel.js:327 js/EmailPanel.js:423 js/Setup-FAT-debug.js:1790
+#: js/Setup-FAT-debug.js:2351 js/Setup-FAT-debug.js:2460
+#: js/Setup-FAT-debug.js:2476 js/Setup-FAT-debug.js:2572 js/Setup-FAT.js:6
+msgid "None"
+msgstr "Cap"
+
+#: js/AuthenticationPanel.js:394 js/EmailPanel.js:203 js/EmailPanel.js:312
+#: js/EmailPanel.js:424 js/Setup-FAT-debug.js:1791 js/Setup-FAT-debug.js:2352
+#: js/Setup-FAT-debug.js:2461 js/Setup-FAT-debug.js:2573 js/Setup-FAT.js:6
+msgid "TLS"
+msgstr "TLS"
+
+#: js/AuthenticationPanel.js:395 js/EmailPanel.js:204 js/EmailPanel.js:313
+#: js/EmailPanel.js:425 js/Setup-FAT-debug.js:1792 js/Setup-FAT-debug.js:2353
+#: js/Setup-FAT-debug.js:2462 js/Setup-FAT-debug.js:2574 js/Setup-FAT.js:6
+msgid "SSL"
+msgstr "SSL"
+
+#: js/AuthenticationPanel.js:399 js/EmailPanel.js:220
+#: js/Setup-FAT-debug.js:1796 js/Setup-FAT-debug.js:2369 js/Setup-FAT.js:6
+msgid "Append domain to login name"
+msgstr "Afegeix el domini al nom d'inici de sessió"
+
+#: js/AuthenticationPanel.js:447 js/Setup-FAT-debug.js:1844 js/Setup-FAT.js:6
+msgid "Accounts storage"
+msgstr "Emmagatzematge de comptes"
+
+#: js/AuthenticationPanel.js:468 js/AuthenticationPanel.js:606
+#: js/Setup-FAT-debug.js:1865 js/Setup-FAT-debug.js:2003 js/Setup-FAT.js:6
+msgid "Default user group name"
+msgstr "Nom de grup d'usuari per defecte"
+
+#: js/AuthenticationPanel.js:472 js/AuthenticationPanel.js:609
+#: js/Setup-FAT-debug.js:1869 js/Setup-FAT-debug.js:2006 js/Setup-FAT.js:6
+msgid "Default admin group name"
+msgstr "Nom de grup d'administració per defecte"
+
+#: js/AuthenticationPanel.js:485 js/Setup-FAT-debug.js:1882 js/Setup-FAT.js:6
+msgid "User can change password"
+msgstr "L'usuari pot canviar la contrasenya"
+
+#: js/AuthenticationPanel.js:524 js/Setup-FAT-debug.js:1921 js/Setup-FAT.js:6
+msgid "User DN"
+msgstr "DN d'usuari"
+
+#: js/AuthenticationPanel.js:527 js/Setup-FAT-debug.js:1924 js/Setup-FAT.js:6
+msgid "User Filter"
+msgstr "Filtre d'usuari"
+
+#: js/AuthenticationPanel.js:539 js/Setup-FAT-debug.js:1936 js/Setup-FAT.js:6
+msgid "User Search Scope"
+msgstr "Abast de la cerca d'usuari"
+
+#: js/AuthenticationPanel.js:543 js/Setup-FAT-debug.js:1940 js/Setup-FAT.js:6
+msgid "Groups DN"
+msgstr "DN de grups"
+
+#: js/AuthenticationPanel.js:546 js/Setup-FAT-debug.js:1943 js/Setup-FAT.js:6
+msgid "Group Filter"
+msgstr "Filtre de grup"
+
+#: js/AuthenticationPanel.js:558 js/Setup-FAT-debug.js:1955 js/Setup-FAT.js:6
+msgid "Group Search Scope"
+msgstr "Abast de la cerca de grup"
+
+#: js/AuthenticationPanel.js:571 js/Setup-FAT-debug.js:1968 js/Setup-FAT.js:6
+msgid "Password encoding"
+msgstr "Codificació de la contrasenya"
+
+#: js/AuthenticationPanel.js:584 js/Setup-FAT-debug.js:1981 js/Setup-FAT.js:6
+msgid "Use Rfc 2307 bis"
+msgstr "Utilitza Rfc 2307 bis"
+
+#: js/AuthenticationPanel.js:588 js/Setup-FAT-debug.js:1985 js/Setup-FAT.js:6
+msgid "Min User Id"
+msgstr "Identificador d'usuari mínim"
+
+#: js/AuthenticationPanel.js:591 js/Setup-FAT-debug.js:1988 js/Setup-FAT.js:6
+msgid "Max User Id"
+msgstr "Identificador d'usuari màxim"
+
+#: js/AuthenticationPanel.js:594 js/Setup-FAT-debug.js:1991 js/Setup-FAT.js:6
+msgid "Min Group Id"
+msgstr "Identificador de grup mínim"
+
+#: js/AuthenticationPanel.js:597 js/Setup-FAT-debug.js:1994 js/Setup-FAT.js:6
+msgid "Max Group Id"
+msgstr "Identificador de grup màxim"
+
+#: js/AuthenticationPanel.js:600 js/Setup-FAT-debug.js:1997 js/Setup-FAT.js:6
+msgid "Group UUID Attribute name"
+msgstr "Nom d'atribut UUID de grup"
+
+#: js/AuthenticationPanel.js:603 js/Setup-FAT-debug.js:2000 js/Setup-FAT.js:6
+msgid "User UUID Attribute name"
+msgstr "Nom d'atribut UUID d'usuari"
+
+#: js/AuthenticationPanel.js:621 js/Setup-FAT-debug.js:2018 js/Setup-FAT.js:6
+msgid "Allow user to change her password?"
+msgstr "Permet que l'usuari canviï la seva contrasenya?"
+
+#: js/AuthenticationPanel.js:630 js/Setup-FAT-debug.js:2027 js/Setup-FAT.js:6
+msgid "Redirect Settings"
+msgstr "Configuració de redireccionament"
+
+#: js/AuthenticationPanel.js:638 js/Setup-FAT-debug.js:2035 js/Setup-FAT.js:6
+msgid "Redirect Url (redirect to login screen if empty)"
+msgstr "Url on redirigir (es redirigeix a la pantalla d'inici de sessió si ho deixeu buit)"
+
+#: js/AuthenticationPanel.js:650 js/Setup-FAT-debug.js:2047 js/Setup-FAT.js:6
+msgid "Redirect Always (if No, only redirect after logout)"
+msgstr "Sempre es redirigeix (si poseu No, només es redirigirà després d'un tancament de sessió)"
+
+#: js/AuthenticationPanel.js:661 js/Setup-FAT-debug.js:2058 js/Setup-FAT.js:6
+msgid "Redirect to referring site, if exists"
+msgstr "Si existeix, es redirigeix al lloc referent"
+
+#: js/AuthenticationPanel.js:674 js/Setup-FAT-debug.js:2071 js/Setup-FAT.js:6
+msgid "Save config and install"
+msgstr "Desa la configuració i instal·la"
+
+#: js/AuthenticationPanel.js:676 js/ConfigManagerPanel.js:303
+#: js/Setup-FAT-debug.js:1372 js/Setup-FAT-debug.js:2073 js/Setup-FAT.js:6
+msgid "Save config"
+msgstr "Desa la configuració"
+
+#: js/AuthenticationPanel.js:700 js/Setup-FAT-debug.js:2097 js/Setup-FAT.js:6
+msgid "Passwords don't match"
+msgstr "Les contrasenyes no coincideixen"
+
+#: js/AuthenticationPanel.js:713 js/AuthenticationPanel.js:720
+#: js/AuthenticationPanel.js:724 js/AuthenticationPanel.js:735
+#: js/AuthenticationPanel.js:745 js/Setup-FAT-debug.js:2110
+#: js/Setup-FAT-debug.js:2117 js/Setup-FAT-debug.js:2121
+#: js/Setup-FAT-debug.js:2132 js/Setup-FAT-debug.js:2142 js/Setup-FAT.js:6
+msgid "Should not be empty"
+msgstr "No pot ser buit"
+
+#: js/ConfigManagerPanel.js:108 js/Setup-FAT-debug.js:1177 js/Setup-FAT.js:6
+msgid "File"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:119 js/Setup-FAT-debug.js:1188 js/Setup-FAT.js:6
+msgid "Setup Authentication"
+msgstr "Estableix l'autenticació"
+
+#: js/ConfigManagerPanel.js:122 js/EmailPanel.js:179
+#: js/Setup-FAT-debug.js:1191 js/Setup-FAT-debug.js:2328 js/Setup-FAT.js:6
+msgid "Username"
+msgstr "Nom d'usuari"
+
+#: js/ConfigManagerPanel.js:136 js/ConfigManagerPanel.js:153
+#: js/Setup-FAT-debug.js:1205 js/Setup-FAT-debug.js:1222 js/Setup-FAT.js:6
+msgid "Database"
+msgstr "Base de dades"
+
+#: js/ConfigManagerPanel.js:140 js/Setup-FAT-debug.js:1209 js/Setup-FAT.js:6
+msgid "Adapter"
+msgstr "Adaptador"
+
+#: js/ConfigManagerPanel.js:157 js/Setup-FAT-debug.js:1226 js/Setup-FAT.js:6
+msgid "User"
+msgstr "Usuari"
+
+#: js/ConfigManagerPanel.js:165 js/Setup-FAT-debug.js:1234 js/Setup-FAT.js:6
+msgid "Prefix"
+msgstr "Prefix"
+
+#: js/ConfigManagerPanel.js:168 js/Setup-FAT-debug.js:1237 js/Setup-FAT.js:6
+msgid "Logging"
+msgstr "Registre d'esdeveniments"
+
+#: js/ConfigManagerPanel.js:174 js/Setup-FAT-debug.js:1243 js/Setup-FAT.js:6
+msgid "Filename"
+msgstr "Nom de fitxer"
+
+#: js/ConfigManagerPanel.js:186 js/Setup-FAT-debug.js:1255 js/Setup-FAT.js:6
+msgid "Priority"
+msgstr "Prioritat"
+
+#: js/ConfigManagerPanel.js:189 js/Setup-FAT-debug.js:1258 js/Setup-FAT.js:6
+msgid "Caching"
+msgstr "Emmagatzematge cau"
+
+#: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:242
+#: js/Setup-FAT-debug.js:1264 js/Setup-FAT-debug.js:1311 js/Setup-FAT.js:6
+msgid "Path"
+msgstr "Camí"
+
+#: js/ConfigManagerPanel.js:198 js/ConfigManagerPanel.js:216
+#: js/Setup-FAT-debug.js:1267 js/Setup-FAT-debug.js:1285 js/Setup-FAT.js:6
+msgid "Lifetime (seconds)"
+msgstr "temps de vida (segons)"
+
+#: js/ConfigManagerPanel.js:204 js/Setup-FAT-debug.js:1273 js/Setup-FAT.js:6
+msgid "Temporary files"
+msgstr "Fitxers temporals"
+
+#: js/ConfigManagerPanel.js:209 js/Setup-FAT-debug.js:1278 js/Setup-FAT.js:6
+msgid "Temporary Files Path"
+msgstr "Camí als fitxers temporals"
+
+#: js/ConfigManagerPanel.js:212 js/Setup-FAT-debug.js:1281 js/Setup-FAT.js:6
+msgid "Session"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:268 js/Setup-FAT-debug.js:1337 js/Setup-FAT.js:6
+msgid "Filestore directory"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:273 js/Setup-FAT-debug.js:1342 js/Setup-FAT.js:6
+msgid "Filestore Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:277 js/Setup-FAT-debug.js:1346 js/Setup-FAT.js:6
+msgid "Addressbook Map panel"
+msgstr "Tauler Mapa de llibreta d'adreces"
+
+#: js/ConfigManagerPanel.js:280 js/Setup-FAT-debug.js:1349 js/Setup-FAT.js:6
+msgid "Map panel"
+msgstr "Tauler Mapa"
+
+#: js/ConfigManagerPanel.js:290 js/Setup-FAT-debug.js:1359 js/Setup-FAT.js:6
+msgid "disabled"
+msgstr "inhabilitat"
+
+#: js/ConfigManagerPanel.js:290 js/Setup-FAT-debug.js:1359 js/Setup-FAT.js:6
+msgid "enabled"
+msgstr "habilitat"
+
+#: js/ConfigManagerPanel.js:301 js/Setup-FAT-debug.js:1370 js/Setup-FAT.js:6
+msgid "Config file is not writable"
+msgstr "El fitxer de configuració no es pot escriure"
+
+#: js/ConfigManagerPanel.js:319 js/Setup-FAT-debug.js:1388 js/Setup-FAT.js:6
+msgid "Download config file"
+msgstr "Descarrega el fitxer de configuració"
+
+#: js/EmailPanel.js:147 js/Setup-FAT-debug.js:2296 js/Setup-FAT.js:6
+msgid "Standard IMAP"
+msgstr "IMAP estàndard"
+
+#: js/EmailPanel.js:157 js/Setup-FAT-debug.js:2306 js/Setup-FAT.js:6
+msgid "Standard SMTP"
+msgstr "SMTP estàndard"
+
+#: js/EmailPanel.js:167 js/Setup-FAT-debug.js:2316 js/Setup-FAT.js:6
+msgid "Imap"
+msgstr "Imap"
+
+#: js/EmailPanel.js:215 js/Setup-FAT-debug.js:2364 js/Setup-FAT.js:6
+msgid "No"
+msgstr "No"
+
+#: js/EmailPanel.js:215 js/Setup-FAT-debug.js:2364 js/Setup-FAT.js:6
+msgid "Yes"
+msgstr "Sí"
+
+#: js/EmailPanel.js:217 js/Setup-FAT-debug.js:2366 js/Setup-FAT.js:6
+msgid "Use system account"
+msgstr "Utilitza el compte de sistema"
+
+#: js/EmailPanel.js:266 js/Setup-FAT-debug.js:2415 js/Setup-FAT.js:6
+msgid "Cyrus Admin"
+msgstr ""
+
+#: js/EmailPanel.js:269 js/Setup-FAT-debug.js:2418 js/Setup-FAT.js:6
+msgid "Cyrus Admin Password"
+msgstr ""
+
+#: js/EmailPanel.js:285 js/Setup-FAT-debug.js:2434 js/Setup-FAT.js:6
+msgid "Smtp"
+msgstr "Smtp"
+
+#: js/EmailPanel.js:316 js/Setup-FAT-debug.js:2465 js/Setup-FAT.js:6
+msgid "Authentication"
+msgstr "Autenticació"
+
+#: js/EmailPanel.js:328 js/Setup-FAT-debug.js:2477 js/Setup-FAT.js:6
+msgid "Login"
+msgstr "Inici de sessió"
+
+#: js/EmailPanel.js:329 js/Setup-FAT-debug.js:2478 js/Setup-FAT.js:6
+msgid "Plain"
+msgstr "Pla"
+
+#: js/EmailPanel.js:333 js/Setup-FAT-debug.js:2482 js/Setup-FAT.js:6
+msgid "Primary Domain"
+msgstr "Domini primari"
+
+#: js/EmailPanel.js:337 js/Setup-FAT-debug.js:2486 js/Setup-FAT.js:6
+msgid "Secondary Domains (comma separated)"
+msgstr "Dominis secundaris (separats per comes)"
+
+#: js/EmailPanel.js:341 js/Setup-FAT-debug.js:2490 js/Setup-FAT.js:6
+msgid "Notifications service address"
+msgstr "Adreça del servei de notificacions"
+
+#: js/EmailPanel.js:345 js/Setup-FAT-debug.js:2494 js/Setup-FAT.js:6
+msgid "Notification Username"
+msgstr "Nom d'usuari de notificació"
+
+#: js/EmailPanel.js:349 js/Setup-FAT-debug.js:2498 js/Setup-FAT.js:6
+msgid "Notification Password"
+msgstr "Contrasenya de notificació"
+
+#: js/EmailPanel.js:399 js/Setup-FAT-debug.js:2548 js/Setup-FAT.js:6
+msgid "SIEVE"
+msgstr ""
+
+#: js/EmailPanel.js:449 js/Setup-FAT-debug.js:2598 js/Setup-FAT.js:6
+msgid "MySql Hostname"
+msgstr "Nom de l'amfitrió MySql"
+
+#: js/EmailPanel.js:452 js/Setup-FAT-debug.js:2601 js/Setup-FAT.js:6
+msgid "MySql Database"
+msgstr "Base de dades MySql"
+
+#: js/EmailPanel.js:455 js/Setup-FAT-debug.js:2604 js/Setup-FAT.js:6
+msgid "MySql User"
+msgstr "Usuari MySql"
+
+#: js/EmailPanel.js:458 js/Setup-FAT-debug.js:2607 js/Setup-FAT.js:6
+msgid "MySql Password"
+msgstr "Contrasenya MySql"
+
+#: js/EmailPanel.js:462 js/Setup-FAT-debug.js:2611 js/Setup-FAT.js:6
+msgid "MySql Port"
+msgstr "Port MySql"
+
+#: js/EmailPanel.js:477 js/Setup-FAT-debug.js:2626 js/Setup-FAT.js:6
+msgid "User or UID"
+msgstr ""
+
+#: js/EmailPanel.js:480 js/Setup-FAT-debug.js:2629 js/Setup-FAT.js:6
+msgid "Group or GID"
+msgstr ""
+
+#: js/EmailPanel.js:483 js/Setup-FAT-debug.js:2632 js/Setup-FAT.js:6
+msgid "Home Template"
+msgstr ""
+
+#: js/EmailPanel.js:485 js/Setup-FAT-debug.js:2634 js/Setup-FAT.js:6
+msgid "Password Scheme"
+msgstr ""
+
+#: js/EmailPanel.js:496 js/Setup-FAT-debug.js:2645 js/Setup-FAT.js:6
+msgid "PLAIN-MD5"
+msgstr ""
+
+#: js/EmailPanel.js:497 js/Setup-FAT-debug.js:2646 js/Setup-FAT.js:6
+msgid "MD5-CRYPT"
+msgstr ""
+
+#: js/EmailPanel.js:498 js/Setup-FAT-debug.js:2647 js/Setup-FAT.js:6
+msgid "SHA1"
+msgstr ""
+
+#: js/EmailPanel.js:499 js/Setup-FAT-debug.js:2648 js/Setup-FAT.js:6
+msgid "SHA256"
+msgstr ""
+
+#: js/EmailPanel.js:500 js/Setup-FAT-debug.js:2649 js/Setup-FAT.js:6
+msgid "SSHA256"
+msgstr ""
+
+#: js/EmailPanel.js:501 js/Setup-FAT-debug.js:2650 js/Setup-FAT.js:6
+msgid "SHA512"
+msgstr ""
+
+#: js/EmailPanel.js:502 js/Setup-FAT-debug.js:2651 js/Setup-FAT.js:6
+msgid "SSHA512"
+msgstr ""
+
+#: js/EmailPanel.js:503 js/Setup-FAT-debug.js:2652 js/Setup-FAT.js:6
+msgid "PLAIN"
+msgstr ""
+
+#: js/EnvCheckGridPanel.js:90 js/Setup-FAT-debug.js:917 js/Setup-FAT.js:6
+msgid "Performing Environment Checks..."
+msgstr "Es realitzen comprovacions d'entorn..."
+
+#: js/EnvCheckGridPanel.js:131 js/Setup-FAT-debug.js:958
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "No s'ha trobat cap {0}. Proveu a canviar els criteris de cerca, les opcions de visualització o el {1} en què cerqueu."
+
+#: js/EnvCheckGridPanel.js:161 js/Setup-FAT-debug.js:988 js/Setup-FAT.js:6
+msgid "Check"
+msgstr "Comprova"
+
+#: js/EnvCheckGridPanel.js:162 js/Setup-FAT-debug.js:989 js/Setup-FAT.js:6
+msgid "Result"
+msgstr "Resultat"
+
+#: js/EnvCheckGridPanel.js:163 js/Setup-FAT-debug.js:990 js/Setup-FAT.js:6
+msgid "Error"
+msgstr "Error"
+
+#: js/EnvCheckGridPanel.js:181 js/Setup-FAT-debug.js:1008 js/Setup-FAT.js:6
+msgid "Run setup tests"
+msgstr "Executa proves de configuració"
+
+#: js/EnvCheckGridPanel.js:190 js/Setup-FAT-debug.js:1017 js/Setup-FAT.js:6
+msgid "Ignore setup tests"
+msgstr "Ignora les proves de configuració"
+
+#: js/Setup-FAT-debug.js:150 js/Setup-FAT.js:6 js/Setup.js:53
 msgid "Terms and Conditions"
 msgstr "Termes i condicions"
 
-#: js/Setup.js:60
+#: js/Setup-FAT-debug.js:155 js/Setup-FAT.js:6 js/Setup.js:58
 msgid "Setup Checks"
 msgstr "Proves de configuració"
 
-#: js/Setup.js:66
+#: js/Setup-FAT-debug.js:161 js/Setup-FAT.js:6 js/Setup.js:64
 msgid "Config Manager"
 msgstr "Gestor de configuracions"
 
-#: js/Setup.js:72
+#: js/Setup-FAT-debug.js:167 js/Setup-FAT.js:6 js/Setup.js:70
 msgid "Authentication/Accounts"
 msgstr "Autenticació/Comptes"
 
-#: js/Setup.js:78
+#: js/Setup-FAT-debug.js:173 js/Setup-FAT.js:6 js/Setup.js:76
 msgid "Email"
 msgstr "Correu electrònic"
 
-#: js/Setup.js:84
+#: js/Setup-FAT-debug.js:179 js/Setup-FAT.js:6 js/Setup.js:82
 msgid "Application Manager"
 msgstr "Gestor d'aplicacions"
 
-#: js/Setup.js:187
+#: js/Setup-FAT-debug.js:282 js/Setup.js:185
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Aplicació"
 msgstr[1] "Aplicacions"
 
-#: js/EnvCheckGridPanel.js:92
-msgid "Performing Environment Checks..."
-msgstr "Es realitzen comprovacions d'entorn..."
+#: js/Setup-FAT-debug.js:440 js/Setup-FAT.js:6 js/TermsPanel.js:30
+msgid "I have read the license agreement and accept it"
+msgstr "He llegit i acceptat l'acord de llicència"
 
-#: js/EnvCheckGridPanel.js:133
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "No s'ha trobat cap {0}. Proveu a canviar els criteris de cerca, les opcions de visualització o el {1} en què cerqueu."
+#: js/Setup-FAT-debug.js:447 js/Setup-FAT.js:6 js/TermsPanel.js:37
+msgid "License Agreement"
+msgstr "Acord de llicència"
 
-#: js/EnvCheckGridPanel.js:163
-msgid "Check"
-msgstr "Comprova"
+#: js/Setup-FAT-debug.js:466 js/Setup-FAT.js:6 js/TermsPanel.js:56
+msgid "I have read the privacy agreement and accept it"
+msgstr "He llegit i acceptat l'acord de privadesa"
 
-#: js/EnvCheckGridPanel.js:164
-msgid "Result"
-msgstr "Resultat"
+#: js/Setup-FAT-debug.js:473 js/Setup-FAT.js:6 js/TermsPanel.js:63
+msgid "Privacy Agreement"
+msgstr "Acord de privadesa"
 
-#: js/EnvCheckGridPanel.js:165
-msgid "Error"
-msgstr "Error"
-
-#: js/EnvCheckGridPanel.js:183
-msgid "Run setup tests"
-msgstr "Executa proves de configuració"
-
-#: js/EnvCheckGridPanel.js:192
-msgid "Ignore setup tests"
-msgstr "Ignora les proves de configuració"
-
-#: js/EmailPanel.js:149
-msgid "Standard IMAP"
-msgstr "IMAP estàndard"
-
-#: js/EmailPanel.js:159
-msgid "Standard SMTP"
-msgstr "SMTP estàndard"
-
-#: js/EmailPanel.js:169
-msgid "Imap"
-msgstr "Imap"
-
-#: js/EmailPanel.js:217
-msgid "No"
-msgstr "No"
-
-#: js/EmailPanel.js:217
-msgid "Yes"
-msgstr "Sí"
-
-#: js/EmailPanel.js:219
-msgid "Use system account"
-msgstr "Utilitza el compte de sistema"
-
-#: js/EmailPanel.js:268
-msgid "Cyrus Admin"
-msgstr ""
-
-#: js/EmailPanel.js:271
-msgid "Cyrus Admin Password"
-msgstr ""
-
-#: js/EmailPanel.js:287
-msgid "Smtp"
-msgstr "Smtp"
-
-#: js/EmailPanel.js:318
-msgid "Authentication"
-msgstr "Autenticació"
-
-#: js/EmailPanel.js:330
-msgid "Login"
-msgstr "Inici de sessió"
-
-#: js/EmailPanel.js:331
-msgid "Plain"
-msgstr "Pla"
-
-#: js/EmailPanel.js:335
-msgid "Primary Domain"
-msgstr "Domini primari"
-
-#: js/EmailPanel.js:339
-msgid "Secondary Domains (comma separated)"
-msgstr "Dominis secundaris (separats per comes)"
-
-#: js/EmailPanel.js:343
-msgid "Notifications service address"
-msgstr "Adreça del servei de notificacions"
-
-#: js/EmailPanel.js:347
-msgid "Notification Username"
-msgstr "Nom d'usuari de notificació"
-
-#: js/EmailPanel.js:351
-msgid "Notification Password"
-msgstr "Contrasenya de notificació"
-
-#: js/EmailPanel.js:401
-msgid "SIEVE"
-msgstr ""
-
-#: js/EmailPanel.js:451
-msgid "MySql Hostname"
-msgstr "Nom de l'amfitrió MySql"
-
-#: js/EmailPanel.js:454
-msgid "MySql Database"
-msgstr "Base de dades MySql"
-
-#: js/EmailPanel.js:457
-msgid "MySql User"
-msgstr "Usuari MySql"
-
-#: js/EmailPanel.js:460
-msgid "MySql Password"
-msgstr "Contrasenya MySql"
-
-#: js/EmailPanel.js:464
-msgid "MySql Port"
-msgstr "Port MySql"
-
-#: js/EmailPanel.js:479
-msgid "User or UID"
-msgstr ""
-
-#: js/EmailPanel.js:482
-msgid "Group or GID"
-msgstr ""
-
-#: js/EmailPanel.js:485
-msgid "Home Template"
-msgstr ""
-
-#: js/EmailPanel.js:487
-msgid "Password Scheme"
-msgstr ""
-
-#: js/EmailPanel.js:498
-msgid "PLAIN-MD5"
-msgstr ""
-
-#: js/EmailPanel.js:499
-msgid "MD5-CRYPT"
-msgstr ""
-
-#: js/EmailPanel.js:500
-msgid "SHA1"
-msgstr ""
-
-#: js/EmailPanel.js:501
-msgid "SHA256"
-msgstr ""
-
-#: js/EmailPanel.js:502
-msgid "SSHA256"
-msgstr ""
-
-#: js/EmailPanel.js:503
-msgid "SHA512"
-msgstr ""
-
-#: js/EmailPanel.js:504
-msgid "SSHA512"
-msgstr ""
-
-#: js/EmailPanel.js:505
-msgid "PLAIN"
-msgstr ""
+#: js/Setup-FAT-debug.js:490 js/Setup-FAT.js:6 js/TermsPanel.js:80
+msgid "Accept Terms and Conditions"
+msgstr "Accepta els termes i condicions"
 
 #~ msgid "Informations"
 #~ msgstr "Informacions"

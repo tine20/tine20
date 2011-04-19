@@ -13,110 +13,119 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: Acl/Rights.php:104
+#: Acl/Rights.php:103
 msgid "manage products"
 msgstr "spravovat produkty"
 
-#: Acl/Rights.php:105
+#: Acl/Rights.php:104
 msgid "add, edit and delete products"
 msgstr "vytvořit, editovat a mazat produkty"
 
-#: js/ContractEditDialog.js:97 js/ContractGridPanel.js:88
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:86
+#: js/Sales-FAT-debug.js:388 js/Sales-FAT-debug.js:495 js/Sales-FAT.js:6
 msgid "Title"
 msgstr "Název"
 
-#: js/ContractEditDialog.js:102 js/ProductGridPanel.js:128
-#: js/ProductEditDialog.js:125
+#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
+#: js/ProductGridPanel.js:126 js/Sales-FAT-debug.js:500
+#: js/Sales-FAT-debug.js:679 js/Sales-FAT-debug.js:817 js/Sales-FAT.js:6
 msgid "Description"
 msgstr "Popis"
 
-#: js/ContractEditDialog.js:103 js/ProductEditDialog.js:126
+#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
+#: js/Sales-FAT-debug.js:501 js/Sales-FAT-debug.js:818 js/Sales-FAT.js:6
 msgid "Enter description..."
 msgstr "Vložte popis..."
 
-#: js/ContractGridPanel.js:62 js/Models.js:79
+#: js/ContractGridPanel.js:60 js/Models.js:78 js/Sales-FAT-debug.js:83
+#: js/Sales-FAT-debug.js:362 js/Sales-FAT.js:6
 msgid "Quick search"
 msgstr "Rychlé hledání"
 
-#: js/ContractGridPanel.js:63
+#: js/ContractGridPanel.js:61 js/Sales-FAT-debug.js:363
 msgid "Summary"
 msgstr "Přehled"
 
-#: js/ContractGridPanel.js:82
+#: js/ContractGridPanel.js:80 js/Sales-FAT-debug.js:382 js/Sales-FAT.js:6
 msgid "Contract number"
 msgstr "Číslo kontraktu"
 
-#: js/ContractGridPanel.js:94
+#: js/ContractGridPanel.js:92 js/Sales-FAT-debug.js:394 js/Sales-FAT.js:6
 msgid "Status"
 msgstr "Stav"
 
-#: js/Sales.js:55
-msgid "Products"
-msgstr "Produkty"
-
-#: js/Sales.js:60
-msgid "All Products"
-msgstr "Všechny produkty"
-
-#: js/Sales.js:65
-msgid "Contracts"
-msgstr "Kontrakty"
-
-#: js/Sales.js:70 js/Sales.js:105
-msgid "All Contracts"
-msgstr "Všechny kontrakty"
-
-#: js/ProductGridPanel.js:124
-msgid "Tags"
-msgstr "Štítky"
-
-#: js/ProductGridPanel.js:125 js/ProductEditDialog.js:104
-msgid "Name"
-msgstr "Název"
-
-#: js/ProductGridPanel.js:126 js/ProductEditDialog.js:117
-msgid "Manufacturer"
-msgstr "Výrobce"
-
-#: js/ProductGridPanel.js:127 js/ProductEditDialog.js:121
-msgid "Category"
-msgstr "Kategorie"
-
-#: js/ProductGridPanel.js:129 js/ProductEditDialog.js:110
-msgid "Price"
-msgstr "Cena"
-
-#: js/Models.js:41
+#: js/Models.js:40 js/Sales-FAT-debug.js:45
 msgid "Product"
 msgid_plural "Products"
 msgstr[0] "Produkt"
 msgstr[1] "Produkty"
 msgstr[2] "Produktů"
 
-#: js/Models.js:45
+#: js/Models.js:44 js/Sales-FAT-debug.js:49
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "seznam záznamů"
 msgstr[1] "seznamy záznamů"
 msgstr[2] "seznamů záznamů"
 
-#: js/Models.js:80
+#: js/Models.js:79 js/Sales-FAT-debug.js:84 js/Sales-FAT.js:6
 msgid "Product name"
 msgstr "Název produktu"
 
-#: js/Models.js:113
+#: js/Models.js:112 js/Sales-FAT-debug.js:117
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Kontrakt"
 msgstr[1] "Kontrakty"
 msgstr[2] "Kontraktů"
 
-#: js/Models.js:117
+#: js/Models.js:116 js/Sales-FAT-debug.js:121
 msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "seznam kontraktů"
 msgstr[1] "seznamy kontraktů"
 msgstr[2] "seznamů kontraktů"
+
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:123
+#: js/Sales-FAT-debug.js:676 js/Sales-FAT-debug.js:796 js/Sales-FAT.js:6
+msgid "Name"
+msgstr "Název"
+
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:127
+#: js/Sales-FAT-debug.js:680 js/Sales-FAT-debug.js:802 js/Sales-FAT.js:6
+msgid "Price"
+msgstr "Cena"
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:124
+#: js/Sales-FAT-debug.js:677 js/Sales-FAT-debug.js:809 js/Sales-FAT.js:6
+msgid "Manufacturer"
+msgstr "Výrobce"
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:125
+#: js/Sales-FAT-debug.js:678 js/Sales-FAT-debug.js:813 js/Sales-FAT.js:6
+msgid "Category"
+msgstr "Kategorie"
+
+#: js/ProductGridPanel.js:122 js/Sales-FAT-debug.js:675 js/Sales-FAT.js:6
+msgid "Tags"
+msgstr "Štítky"
+
+#: js/Sales-FAT-debug.js:193 js/Sales-FAT.js:6 js/Sales.js:53
+msgid "Products"
+msgstr "Produkty"
+
+#: js/Sales-FAT-debug.js:198 js/Sales-FAT.js:6 js/Sales.js:58
+msgid "All Products"
+msgstr "Všechny produkty"
+
+#: js/Sales-FAT-debug.js:203 js/Sales-FAT.js:6 js/Sales.js:63
+msgid "Contracts"
+msgstr "Kontrakty"
+
+#: js/Sales-FAT-debug.js:208 js/Sales-FAT-debug.js:243 js/Sales-FAT.js:6
+#: js/Sales.js:68 js/Sales.js:103
+msgid "All Contracts"
+msgstr "Všechny kontrakty"
 
 #: Setup/setup.xml:243
 msgid "Shared Contracts"
