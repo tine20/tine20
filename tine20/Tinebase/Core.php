@@ -837,7 +837,7 @@ class Tinebase_Core
         self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
 
         // get locale object from session or ...
-        if ($session !== NULL && isset($session->userLocale) && ($session->userLocale->toString() === $_localeString || $_localeString == 'auto')) {
+        if ($session !== NULL && isset($session->userLocale) && is_object($session->userLocale) && ($session->userLocale->toString() === $_localeString || $_localeString == 'auto')) {
             $locale = $session->userLocale;
             self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value: " . (string)$locale);
             

@@ -20,7 +20,7 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     // TODO change this icon
     newRecordIcon: 'action_addContact',
-    recordClass: Tine.Tinebase.Model.Container,
+    recordClass: Tine.Admin.Model.Container,
     recordProxy: Tine.Admin.containerBackend,
     defaultSortInfo: {field: 'name', direction: 'ASC'},
     evalGrants: false,
@@ -59,14 +59,24 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * returns columns
      * @private
      * @return Array
-     * 
-     * TODO add more
      */
     getColumns: function(){
         return [
             { header: this.app.i18n._('ID'), id: 'id', dataIndex: 'id', width: 50},
-            { header: this.app.i18n._('Container Name'), id: 'name', dataIndex: 'name', hidden: false, width: 200}
+            { header: this.app.i18n._('Container Name'), id: 'name', dataIndex: 'name', hidden: false, width: 200},
+            { header: this.app.i18n._('Application'), id: 'application_id', dataIndex: 'application_id', hidden: false, width: 100, renderer: this.appRenderer},
+            { header: this.app.i18n._('Type'), id: 'type', dataIndex: 'type', hidden: false, width: 80}
         ];
+    },
+    
+    /**
+     * returns application name
+     * 
+     * @param {Object} value
+     * @return {String}
+     */
+    appRenderer: function(value) {
+        return value.name;
     },
     
     /**
@@ -77,7 +87,9 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
-                {label: this.app.i18n._('Container'),    field: 'query',       operators: ['contains']}
+                {label: this.app.i18n._('Container'),       field: 'query',    operators: ['contains']},
+                {label: this.app.i18n._('Type'),            field: 'type',     operators: ['contains']}
+                //{label: this.app.i18n._('Application'),    field: 'application_id',     operators: ['equals']}
             ],
             defaultFilter: 'query',
             filters: [],

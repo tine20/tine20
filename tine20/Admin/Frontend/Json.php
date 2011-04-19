@@ -1069,12 +1069,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
     {
-        if (count($_records) == 0) {
-            return array();
-        }
-        
         switch ($_records->getRecordClassName()) {
             case 'Tinebase_Model_AccessLog':
+                // TODO use _resolveUserFields and remove this
                 foreach ($_records as $record) {
                     if (! empty($record->account_id)) {
                         try {
@@ -1083,7 +1080,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                             $record->account_id = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
                         }
                     }
-                }                
+                }
+                break;
+            case 'Tinebase_Model_Container':
+                $applications = Tinebase_Application::getInstance()->getApplications();
+                foreach ($_records as $record) {
+                    $idx = $applications->getIndexById($record->application_id);
+                    if ($idx !== FALSE) {
+                        $record->application_id = $applications[$idx];
+                    }
+                }
                 break;
         }
         
