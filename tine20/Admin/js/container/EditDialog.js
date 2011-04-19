@@ -26,7 +26,7 @@ Ext.ns('Tine.Admin.container');
  * @constructor
  * Create a new Tine.Admin.ContainerEditDialog
  */
-Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.container.GrantsDialog, {
+Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * @private
@@ -35,7 +35,16 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.container.GrantsDialog,
     appName: 'Admin',
     recordClass: Tine.Admin.Model.Container,
     recordProxy: Tine.Admin.containerBackend,
-    evalGrants: false
+    evalGrants: false,
+    
+    /**
+     * returns dialog
+     */
+    getFormItems: function() {
+        return {
+            
+        };
+    }
 });
 
 /**
