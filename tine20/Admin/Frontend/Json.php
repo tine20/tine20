@@ -1080,11 +1080,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                             $record->account_id = Tinebase_User::getInstance()->getNonExistentUser('Tinebase_Model_FullUser')->toArray();
                         }
                     }
-                }                
+                }
                 break;
             case 'Tinebase_Model_Container':
-                // TODO resolve applications
-                //$applications = Tinebase_Application::getInstance()->getM
+                $applications = Tinebase_Application::getInstance()->getApplications();
+                foreach ($_records as $record) {
+                    $idx = $applications->getIndexById($record->application_id);
+                    if ($idx !== FALSE) {
+                        $record->application_id = $applications[$idx];
+                    }
+                }
                 break;
         }
         
