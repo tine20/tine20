@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Application
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -147,14 +147,14 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      *
      * @param   $_recordData
      * @param   Tinebase_Controller_Record_Interface $_controller the record controller
-     * @param   $_modelName for example: 'Task' for Tasks_Model_Task
+     * @param   $_modelName for example: 'Task' for Tasks_Model_Task or the full model name (like 'Tinebase_Model_Container')
      * @param   $_identifier of the record (default: id)
      * @param   array $_additionalArguments
      * @return  array created/updated record
      */
     protected function _save($_recordData, Tinebase_Controller_Record_Interface $_controller, $_modelName, $_identifier = 'id', $_additionalArguments = array())
     {
-        $modelClass = $this->_applicationName . "_Model_" . $_modelName;
+        $modelClass = (preg_match('/_Model_/', $_modelName)) ? $_modelName : $this->_applicationName . "_Model_" . $_modelName;
         $record = new $modelClass(array(), TRUE);
         $record->setFromJsonInUsersTimezone($_recordData);
         

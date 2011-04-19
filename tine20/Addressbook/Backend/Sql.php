@@ -56,6 +56,7 @@ class Addressbook_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             'joinOn'        => 'contact_id',
             'select'        => array('jpegphoto' => 'IF(ISNULL(addressbook_image.contact_id), 0, 1)'),
             'singleValue'   => TRUE,
+            'preserve'      => TRUE,
         ),
         'account_id'    => array(
             'table'         => 'accounts',

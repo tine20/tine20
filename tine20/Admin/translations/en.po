@@ -14,805 +14,899 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:174
+#: Acl/Rights.php:185
 msgid "manage access log"
 msgstr "manage access log"
 
-#: Acl/Rights.php:175
+#: Acl/Rights.php:186
 msgid "delete access log entries"
 msgstr "delete access log entries"
 
-#: Acl/Rights.php:178
+#: Acl/Rights.php:189
 msgid "manage accounts"
 msgstr "manage accounts"
 
-#: Acl/Rights.php:179
+#: Acl/Rights.php:190
 msgid "add and edit users and groups, add group members, change user passwords"
 msgstr "add and edit users and groups, add group members, change user passwords"
 
-#: Acl/Rights.php:182
+#: Acl/Rights.php:193
 msgid "manage applications"
 msgstr "manage applications"
 
-#: Acl/Rights.php:183
+#: Acl/Rights.php:194
 msgid "enable and disable applications, edit application settings"
 msgstr "enable and disable applications, edit application settings"
 
-#: Acl/Rights.php:186
+#: Acl/Rights.php:197
 msgid "manage roles"
 msgstr "manage roles"
 
-#: Acl/Rights.php:187
+#: Acl/Rights.php:198
 msgid "add and edit roles, add new members to roles, add application rights to roles"
 msgstr "add and edit roles, add new members to roles, add application rights to roles"
 
-#: Acl/Rights.php:190
+#: Acl/Rights.php:201
 msgid "manage shared tags"
 msgstr "manage shared tags"
 
-#: Acl/Rights.php:191
+#: Acl/Rights.php:202
 msgid "add, delete and edit shared tags"
 msgstr "add, delete and edit shared tags"
 
-#: Acl/Rights.php:194
+#: Acl/Rights.php:205
 msgid "manage computers"
 msgstr "manage computers"
 
-#: Acl/Rights.php:195
+#: Acl/Rights.php:206
 msgid "add, delete and edit (samba) computers"
 msgstr "add, delete and edit (samba) computers"
 
-#: Acl/Rights.php:198
+#: Acl/Rights.php:209
+msgid "manage containers"
+msgstr "manage containers"
+
+#: Acl/Rights.php:210
+msgid "add, delete and edit containers and manage container grants"
+msgstr "add, delete and edit containers and manage container grants"
+
+#: Acl/Rights.php:213
 msgid "view access log"
 msgstr "view access log"
 
-#: Acl/Rights.php:199
+#: Acl/Rights.php:214
 msgid "view access log list"
 msgstr "view access log list"
 
-#: Acl/Rights.php:202
+#: Acl/Rights.php:217
 msgid "view accounts"
 msgstr "view accounts"
 
-#: Acl/Rights.php:203
+#: Acl/Rights.php:218
 msgid "view accounts list and details"
 msgstr "view accounts list and details"
 
-#: Acl/Rights.php:206
+#: Acl/Rights.php:221
 msgid "view applications"
 msgstr "view applications"
 
-#: Acl/Rights.php:207
+#: Acl/Rights.php:222
 msgid "view applications list and details"
 msgstr "view applications list and details"
 
-#: Acl/Rights.php:210
+#: Acl/Rights.php:225
 msgid "view roles"
 msgstr "view roles"
 
-#: Acl/Rights.php:211
+#: Acl/Rights.php:226
 msgid "view roles list and details"
 msgstr "view roles list and details"
 
-#: Acl/Rights.php:214
+#: Acl/Rights.php:229
 msgid "view computers"
 msgstr "view computers"
 
-#: Acl/Rights.php:215
+#: Acl/Rights.php:230
 msgid "view computers list and details"
 msgstr "view computers list and details"
 
-#: js/SambaMachineGrid.js:68 js/SambaMachineEditDialog.js:43
-msgid "Computer Name"
-msgstr "Computer Name"
+#: Acl/Rights.php:233
+msgid "view containers"
+msgstr "view containers"
 
-#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/TagEditDialog.js:226
-#: js/Roles.js:240 js/Groups.js:239 js/Tags.js:227 js/GroupEditDialog.js:136
-#: js/user/GridPanel.js:101 js/RoleEditDialog.js:292
-msgid "Description"
-msgstr "Description"
+#: Acl/Rights.php:234
+msgid "view personal and shared containers"
+msgstr "view personal and shared containers"
 
-#: js/SambaMachineGrid.js:86 js/Roles.js:238 js/Groups.js:237
-#: js/user/GridPanel.js:159
-msgid "ID"
-msgstr "ID"
-
-#: js/SambaMachineGrid.js:93 js/Roles.js:239 js/Applications.js:286
-#: js/Groups.js:238 js/AccessLog.js:133 js/Tags.js:226
-#: js/user/EditDialog.js:270 js/user/EditDialog.js:306
-msgid "Name"
-msgstr "Name"
-
-#: js/TagEditDialog.js:38 js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Please wait"
-msgstr "Please wait"
-
-#: js/TagEditDialog.js:38
-msgid "Updating Tag"
-msgstr "Updating Tag"
-
-#: js/TagEditDialog.js:83 js/Roles.js:70 js/Groups.js:77
-#: js/GroupEditDialog.js:73 js/RoleEditDialog.js:107 js/RoleEditDialog.js:135
-msgid "Failed"
-msgstr "Failed"
-
-#: js/TagEditDialog.js:83
-msgid "Could not save tag."
-msgstr "Could not save tag."
-
-#: js/TagEditDialog.js:88 js/GroupEditDialog.js:78 js/RoleEditDialog.js:114
-msgid "Errors"
-msgstr "Errors"
-
-#: js/TagEditDialog.js:88 js/GroupEditDialog.js:78 js/RoleEditDialog.js:114
-msgid "Please fix the errors noted."
-msgstr "Please fix the errors noted."
-
-#: js/TagEditDialog.js:169
-msgid "Allowed Contexts"
-msgstr "Allowed Contexts"
-
-#: js/TagEditDialog.js:175
-msgid "Context"
-msgstr "Context"
-
-#: js/TagEditDialog.js:188
-msgid "Account Rights"
-msgstr "Account Rights"
-
-#: js/TagEditDialog.js:196
-msgid "View"
-msgstr "View"
-
-#: js/TagEditDialog.js:201
-msgid "Use"
-msgstr "Use"
-
-#: js/TagEditDialog.js:219
-msgid "Tag Name"
-msgstr "Tag Name"
-
-#: js/TagEditDialog.js:232 js/Tags.js:223
-msgid "Color"
-msgstr "Color"
-
-#: js/TagEditDialog.js:290 js/GroupEditDialog.js:216 js/RoleEditDialog.js:359
-msgid "Transferring {0}..."
-msgstr "Transferring {0}..."
-
-#: js/TagEditDialog.js:290
-msgid "Tag"
-msgstr "Tag"
-
-#: js/TagEditDialog.js:300
-msgid "Add New Tag"
-msgstr "Add New Tag"
-
-#: js/TagEditDialog.js:302
-msgid "Edit Tag \"{0}\""
-msgstr "Edit Tag \"{0}\""
-
-#: js/Roles.js:48 js/Groups.js:55 js/Tags.js:65
-msgid "Confirm"
-msgstr "Confirm"
-
-#: js/Roles.js:48
-msgid "Do you really want to delete the selected roles?"
-msgstr "Do you really want to delete the selected roles?"
-
-#: js/Roles.js:65
-msgid "Deleting role(s)..."
-msgstr "Deleting role(s)..."
-
-#: js/Roles.js:70 js/RoleEditDialog.js:135
-msgid "Some error occurred while trying to delete the role."
-msgstr "Some error occurred while trying to delete the role."
-
-#: js/Roles.js:103
-msgid "add role"
-msgstr "add role"
-
-#: js/Roles.js:111
-msgid "edit role"
-msgstr "edit role"
-
-#: js/Roles.js:119
-msgid "delete role"
-msgstr "delete role"
-
-#: js/Roles.js:177 js/Applications.js:191 js/Groups.js:179 js/Tags.js:170
-msgid "Search:"
-msgstr "Search:"
-
-#: js/Roles.js:227
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Displaying roles {0} - {1} of {2}"
-
-#: js/Roles.js:228 js/Roles.js:283
-msgid "No roles to display"
-msgstr "No roles to display"
-
-#: js/Applications.js:44
-msgid "{0} Settings"
-msgstr "{0} Settings"
-
-#: js/Applications.js:152
-msgid "enable application"
-msgstr "enable application"
-
-#: js/Applications.js:153
-msgid "disable application"
-msgstr "disable application"
-
-#: js/Applications.js:154
-msgid "settings"
-msgstr "settings"
-
-#: js/Applications.js:234 js/user/EditDialog.js:821
-msgid "disabled"
-msgstr "disabled"
-
-#: js/Applications.js:237 js/user/EditDialog.js:821
-msgid "enabled"
-msgstr "enabled"
-
-#: js/Applications.js:241
-msgid "unknown status ({0})"
-msgstr "unknown status ({0})"
-
-#: js/Applications.js:275
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Displaying application {0} - {1} of {2}"
-
-#: js/Applications.js:276
-msgid "No applications to display"
-msgstr "No applications to display"
-
-#: js/Applications.js:285
-msgid "Order"
-msgstr "Order"
-
-#: js/Applications.js:287 js/user/GridPanel.js:160 js/user/EditDialog.js:815
-msgid "Status"
-msgstr "Status"
-
-#: js/Applications.js:288
-msgid "Version"
-msgstr "Version"
-
-#: js/Groups.js:55
-msgid "Do you really want to delete the selected groups?"
-msgstr "Do you really want to delete the selected groups?"
-
-#: js/Groups.js:72
-msgid "Deleting group(s)..."
-msgstr "Deleting group(s)..."
-
-#: js/Groups.js:77
-msgid "Some error occurred while trying to delete the group."
-msgstr "Some error occurred while trying to delete the group."
-
-#: js/Groups.js:107
-msgid "add group"
-msgstr "add group"
-
-#: js/Groups.js:115
-msgid "edit group"
-msgstr "edit group"
-
-#: js/Groups.js:123
-msgid "delete group"
-msgstr "delete group"
-
-#: js/Groups.js:226
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Displaying groups {0} - {1} of {2}"
-
-#: js/Groups.js:227 js/Groups.js:282
-msgid "No groups to display"
-msgstr "No groups to display"
-
-#: js/SambaMachineModel.js:40
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Computer"
-msgstr[1] "Computers"
-
-#: js/AccessLog.js:107 js/Admin.js:88 js/Models.js:52
+#: js/AccessLog.js:106 js/Admin-FAT-debug.js:92 js/Admin-FAT-debug.js:381
+#: js/Admin-FAT-debug.js:2986 js/Admin-FAT.js:6 js/Admin.js:87 js/Models.js:51
 msgid "Access Log"
 msgid_plural "Access Logs"
 msgstr[0] "Access Log"
 msgstr[1] "Access Logs"
 
-#: js/AccessLog.js:108 js/AccessLog.js:134
+#: js/AccessLog.js:107 js/AccessLog.js:133 js/Admin-FAT-debug.js:2987
+#: js/Admin-FAT-debug.js:3013
 msgid "IP Address"
 msgstr "IP Address"
 
-#: js/AccessLog.js:109 js/Admin.js:24 js/user/GridPanel.js:100
-#: js/user/Users.js:73
+#: js/AccessLog.js:108 js/Admin-FAT-debug.js:28 js/Admin-FAT-debug.js:928
+#: js/Admin-FAT-debug.js:1135 js/Admin-FAT-debug.js:2988 js/Admin-FAT.js:6
+#: js/Admin.js:23 js/user/GridPanel.js:99 js/user/Users.js:72
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "User"
 msgstr[1] "Users"
 
-#: js/AccessLog.js:110 js/AccessLog.js:135
+#: js/AccessLog.js:109 js/AccessLog.js:134 js/Admin-FAT-debug.js:2989
+#: js/Admin-FAT-debug.js:3014
 msgid "Login Time"
 msgstr "Login Time"
 
-#: js/AccessLog.js:111 js/AccessLog.js:136
+#: js/AccessLog.js:110 js/AccessLog.js:135 js/Admin-FAT-debug.js:2990
+#: js/Admin-FAT-debug.js:3015
 msgid "Logout Time"
 msgstr "Logout Time"
 
-#: js/AccessLog.js:112 js/AccessLog.js:138
+#: js/AccessLog.js:111 js/AccessLog.js:137 js/Admin-FAT-debug.js:2991
+#: js/Admin-FAT-debug.js:3017
 msgid "Client Type"
 msgstr "Client Type"
 
-#: js/AccessLog.js:131
+#: js/AccessLog.js:130 js/Admin-FAT-debug.js:3010
 msgid "Session ID"
 msgstr "Session ID"
 
-#: js/AccessLog.js:132 js/user/EditDialog.js:750 js/user/EditDialog.js:793
+#: js/AccessLog.js:131 js/Admin-FAT-debug.js:2080 js/Admin-FAT-debug.js:2123
+#: js/Admin-FAT-debug.js:3011 js/user/EditDialog.js:748
+#: js/user/EditDialog.js:791
 msgid "Login Name"
 msgstr "Login Name"
 
-#: js/AccessLog.js:137
+#: js/AccessLog.js:132 js/Admin-FAT-debug.js:722 js/Admin-FAT-debug.js:1600
+#: js/Admin-FAT-debug.js:1636 js/Admin-FAT-debug.js:2517
+#: js/Admin-FAT-debug.js:3012 js/Admin-FAT-debug.js:3212
+#: js/Admin-FAT-debug.js:3511 js/Admin-FAT-debug.js:4180
+#: js/Applications.js:285 js/Groups.js:235 js/Roles.js:238
+#: js/SambaMachineGrid.js:92 js/Tags.js:225 js/user/EditDialog.js:268
+#: js/user/EditDialog.js:304
+msgid "Name"
+msgstr "Name"
+
+#: js/AccessLog.js:136 js/Admin-FAT-debug.js:3016
 msgid "Result"
 msgstr "Result"
 
-#: js/AccessLog.js:158
+#: js/AccessLog.js:157 js/Admin-FAT-debug.js:3037
 msgid "user blocked"
 msgstr "user blocked"
 
-#: js/AccessLog.js:162
+#: js/AccessLog.js:161 js/Admin-FAT-debug.js:3041
 msgid "password expired"
 msgstr "password expired"
 
-#: js/AccessLog.js:166
+#: js/AccessLog.js:165 js/Admin-FAT-debug.js:3045
 msgid "user disabled"
 msgstr "user disabled"
 
-#: js/AccessLog.js:170
+#: js/AccessLog.js:169 js/Admin-FAT-debug.js:3049
 msgid "invalid password"
 msgstr "invalid password"
 
-#: js/AccessLog.js:174
+#: js/AccessLog.js:173 js/Admin-FAT-debug.js:3053
 msgid "ambiguous username"
 msgstr "ambiguous username"
 
-#: js/AccessLog.js:178
+#: js/AccessLog.js:177 js/Admin-FAT-debug.js:3057
 msgid "user not found"
 msgstr "user not found"
 
-#: js/AccessLog.js:182
+#: js/AccessLog.js:181 js/Admin-FAT-debug.js:3061
 msgid "failure"
 msgstr "failure"
 
-#: js/AccessLog.js:186
+#: js/AccessLog.js:185 js/Admin-FAT-debug.js:3065
 msgid "success"
 msgstr "success"
 
-#: js/Tags.js:65
-msgid "Do you really want to delete the selected tags?"
-msgstr "Do you really want to delete the selected tags?"
+#: js/Admin-FAT-debug.js:41 js/Admin-FAT-debug.js:417 js/Admin-FAT.js:6
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Groups"
 
-#: js/Tags.js:83
-msgid "Deleting tag(s)..."
-msgstr "Deleting tag(s)..."
+#: js/Admin-FAT-debug.js:54 js/Admin-FAT.js:6 js/Admin.js:49
+msgid "Roles"
+msgstr "Roles"
 
-#: js/Tags.js:98
-msgid "add tag"
-msgstr "add tag"
+#: js/Admin-FAT-debug.js:66 js/Admin-FAT.js:6 js/Admin.js:61
+msgid "Computers"
+msgstr "Computers"
 
-#: js/Tags.js:106
-msgid "edit tag"
-msgstr "edit tag"
+#: js/Admin-FAT-debug.js:79 js/Admin-FAT.js:6 js/Admin.js:74
+msgid "Applications"
+msgstr "Applications"
 
-#: js/Tags.js:114
-msgid "delete tag"
-msgstr "delete tag"
+#: js/Admin-FAT-debug.js:105 js/Admin-FAT.js:6 js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Shared Tags"
 
-#: js/Tags.js:212
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Displaying tags {0} - {1} of {2}"
+#: js/Admin-FAT-debug.js:142 js/Admin-FAT.js:6 js/Admin.js:149
+msgid "Admin"
+msgstr "Admin"
 
-#: js/Tags.js:213 js/Tags.js:270
-msgid "No tags to display"
-msgstr "No tags to display"
+#: js/Admin-FAT-debug.js:296 js/Admin-FAT.js:6 js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr "Default Addressbook for new contacts and groups"
 
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "Updating Memberships"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Could not save group."
-
-#: js/GroupEditDialog.js:109
-msgid "Group Members"
-msgstr "Group Members"
-
-#: js/GroupEditDialog.js:128
-msgid "Group Name"
-msgstr "Group Name"
-
-#: js/GroupEditDialog.js:144 js/user/EditDialog.js:829
-msgid "Visibility"
-msgstr "Visibility"
-
-#: js/GroupEditDialog.js:150 js/user/EditDialog.js:835
-msgid "Display in addressbook"
-msgstr "Display in addressbook"
-
-#: js/GroupEditDialog.js:150 js/user/EditDialog.js:835
-msgid "Hide from addressbook"
-msgstr "Hide from addressbook"
-
-#: js/GroupEditDialog.js:161 js/user/EditDialog.js:849
-msgid "Saved in Addressbook"
-msgstr "Saved in Addressbook"
-
-#: js/GroupEditDialog.js:216 js/Models.js:88
+#: js/Admin-FAT-debug.js:417 js/Admin-FAT-debug.js:2837
+#: js/GroupEditDialog.js:215 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] "Group"
 msgstr[1] "Groups"
 
-#: js/GroupEditDialog.js:221 js/GroupEditDialog.js:232
-msgid "Add new group"
-msgstr "Add new group"
-
-#: js/GroupEditDialog.js:234
-msgid "Edit Group \"{0}\""
-msgstr "Edit Group \"{0}\""
-
-#: js/Admin.js:37 js/Models.js:88
-msgid "Groups"
-msgstr "Groups"
-
-#: js/Admin.js:50
-msgid "Roles"
-msgstr "Roles"
-
-#: js/Admin.js:62
-msgid "Computers"
-msgstr "Computers"
-
-#: js/Admin.js:75
-msgid "Applications"
-msgstr "Applications"
-
-#: js/Admin.js:101
-msgid "Shared Tags"
-msgstr "Shared Tags"
-
-#: js/Admin.js:138
-msgid "Admin"
-msgstr "Admin"
-
-#: js/AdminPanel.js:48
-msgid "Default Addressbook for new contacts and groups"
-msgstr "Default Addressbook for new contacts and groups"
-
-#: js/user/GridPanel.js:58
-msgid "enable account"
-msgstr "enable account"
-
-#: js/user/GridPanel.js:68
-msgid "disable account"
-msgstr "disable account"
-
-#: js/user/GridPanel.js:78
-msgid "reset password"
-msgstr "reset password"
-
-#: js/user/GridPanel.js:161
-msgid "Displayname"
-msgstr "Displayname"
-
-#: js/user/GridPanel.js:162
-msgid "Loginname"
-msgstr "Loginname"
-
-#: js/user/GridPanel.js:163
-msgid "Last name"
-msgstr "Last name"
-
-#: js/user/GridPanel.js:164
-msgid "First name"
-msgstr "First name"
-
-#: js/user/GridPanel.js:165
-msgid "Email"
-msgstr "Email"
-
-#: js/user/GridPanel.js:166 js/user/EditDialog.js:792
-msgid "OpenID"
-msgstr "OpenID"
-
-#: js/user/GridPanel.js:167 js/user/EditDialog.js:876
-msgid "Last login at"
-msgstr "Last login at"
-
-#: js/user/GridPanel.js:168 js/user/EditDialog.js:880
-msgid "Last login from"
-msgstr "Last login from"
-
-#: js/user/GridPanel.js:169
-msgid "Password changed"
-msgstr "Password changed"
-
-#: js/user/GridPanel.js:170 js/user/EditDialog.js:824
-msgid "Expires"
-msgstr "Expires"
-
-#: js/user/GridPanel.js:227
-msgid "Set new password"
-msgstr "Set new password"
-
-#: js/user/GridPanel.js:227
-msgid "Please enter the new password:"
-msgstr "Please enter the new password:"
-
-#: js/user/EditDialog.js:172
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr "Domain is not allowed. Check your SMTP domain configuration."
-
-#: js/user/EditDialog.js:219 js/user/EditDialog.js:222
-#: js/user/EditDialog.js:672
-msgid "Passwords do not match!"
-msgstr "Passwords do not match!"
-
-#: js/user/EditDialog.js:225
-msgid "Passwords match!"
-msgstr "Passwords match!"
-
-#: js/user/EditDialog.js:271 js/user/EditDialog.js:798
-msgid "Primary group"
-msgstr "Primary group"
-
-#: js/user/EditDialog.js:348
-msgid "Unix"
-msgstr "Unix"
-
-#: js/user/EditDialog.js:362
-msgid "Home Directory"
-msgstr "Home Directory"
-
-#: js/user/EditDialog.js:366
-msgid "Login Shell"
-msgstr "Login Shell"
-
-#: js/user/EditDialog.js:372
-msgid "Windows"
-msgstr "Windows"
-
-#: js/user/EditDialog.js:386
-msgid "Home Drive"
-msgstr "Home Drive"
-
-#: js/user/EditDialog.js:391
-msgid "Logon Time"
-msgstr "Logon Time"
-
-#: js/user/EditDialog.js:393 js/user/EditDialog.js:878
-#: js/user/EditDialog.js:882
-msgid "never logged in"
-msgstr "never logged in"
-
-#: js/user/EditDialog.js:396
-msgid "Home Path"
-msgstr "Home Path"
-
-#: js/user/EditDialog.js:401
-msgid "Logoff Time"
-msgstr "Logoff Time"
-
-#: js/user/EditDialog.js:403
-msgid "never logged off"
-msgstr "never logged off"
-
-#: js/user/EditDialog.js:406
-msgid "Profile Path"
-msgstr "Profile Path"
-
-#: js/user/EditDialog.js:411
-msgid "Password Last Set"
-msgstr "Password Last Set"
-
-#: js/user/EditDialog.js:413 js/user/EditDialog.js:826
-#: js/user/EditDialog.js:886
-msgid "never"
-msgstr "never"
-
-#: js/user/EditDialog.js:416
-msgid "Logon Script"
-msgstr "Logon Script"
-
-#: js/user/EditDialog.js:421
-msgid "Password Can Change"
-msgstr "Password Can Change"
-
-#: js/user/EditDialog.js:423 js/user/EditDialog.js:428
-#: js/user/EditDialog.js:433
-msgid "not set"
-msgstr "not set"
-
-#: js/user/EditDialog.js:426
-msgid "Password Must Change"
-msgstr "Password Must Change"
-
-#: js/user/EditDialog.js:431
-msgid "Kick Off Time"
-msgstr "Kick Off Time"
-
-#: js/user/EditDialog.js:451
-msgid "IMAP Quota (MB)"
-msgstr "IMAP Quota (MB)"
-
-#: js/user/EditDialog.js:470 js/user/EditDialog.js:508
-msgid "Quota"
-msgstr "Quota"
-
-#: js/user/EditDialog.js:471 js/user/EditDialog.js:509
-msgid "no quota set"
-msgstr "no quota set"
-
-#: js/user/EditDialog.js:481
-msgid "Current Mailbox size"
-msgstr "Current Mailbox size"
-
-#: js/user/EditDialog.js:489
-msgid "Sieve Quota (MB)"
-msgstr "Sieve Quota (MB)"
-
-#: js/user/EditDialog.js:519
-msgid "Current Sieve size"
-msgstr "Current Sieve size"
-
-#: js/user/EditDialog.js:528 js/user/EditDialog.js:861
-msgid "Information"
-msgstr "Information"
-
-#: js/user/EditDialog.js:542
-msgid "Last Login"
-msgstr "Last Login"
-
-#: js/user/EditDialog.js:579
-msgid "Email Alias"
-msgstr "Email Alias"
-
-#: js/user/EditDialog.js:585
-msgid "Add an alias address..."
-msgstr "Add an alias address..."
-
-#: js/user/EditDialog.js:598
-msgid "Email Forward"
-msgstr "Email Forward"
-
-#: js/user/EditDialog.js:604
-msgid "Add a forward address..."
-msgstr "Add a forward address..."
-
-#: js/user/EditDialog.js:616
-msgid "Forward Only"
-msgstr "Forward Only"
-
-#: js/user/EditDialog.js:639
-msgid "Password confirmation"
-msgstr "Password confirmation"
-
-#: js/user/EditDialog.js:656
-msgid "Repeat password"
-msgstr "Repeat password"
-
-#: js/user/EditDialog.js:675
-msgid "Cancel"
-msgstr "Cancel"
-
-#: js/user/EditDialog.js:683
-msgid "Ok"
-msgstr "Ok"
-
-#: js/user/EditDialog.js:720
-msgid "Account"
-msgstr "Account"
-
-#: js/user/EditDialog.js:735
-msgid "First Name"
-msgstr "First Name"
-
-#: js/user/EditDialog.js:745
-msgid "Last Name"
-msgstr "Last Name"
-
-#: js/user/EditDialog.js:755
-msgid "Password"
-msgstr "Password"
-
-#: js/user/EditDialog.js:759
-msgid "no password set"
-msgstr "no password set"
-
-#: js/user/EditDialog.js:786
-msgid "Emailaddress"
-msgstr "Emailaddress"
-
-#: js/user/EditDialog.js:821
-msgid "expired"
-msgstr "expired"
-
-#: js/user/EditDialog.js:821
-msgid "blocked"
-msgstr "blocked"
-
-#: js/user/EditDialog.js:878 js/user/EditDialog.js:882
-msgid "don't know"
-msgstr "don't know"
-
-#: js/user/EditDialog.js:884
-msgid "Password set"
-msgstr "Password set"
-
-#: js/user/EditDialog.js:891
-msgid "User groups"
-msgstr "User groups"
-
-#: js/user/EditDialog.js:897
-msgid "User roles"
-msgstr "User roles"
-
-#: js/user/EditDialog.js:903
-msgid "Fileserver"
-msgstr "Fileserver"
-
-#: js/user/EditDialog.js:909
-msgid "IMAP"
-msgstr "IMAP"
-
-#: js/user/EditDialog.js:918
-msgid "SMTP"
-msgstr "SMTP"
-
-#: js/user/Users.js:119
+#: js/Admin-FAT-debug.js:480 js/Applications.js:43
+msgid "{0} Settings"
+msgstr "{0} Settings"
+
+#: js/Admin-FAT-debug.js:588 js/Applications.js:151
+msgid "enable application"
+msgstr "enable application"
+
+#: js/Admin-FAT-debug.js:589 js/Applications.js:152
+msgid "disable application"
+msgstr "disable application"
+
+#: js/Admin-FAT-debug.js:590 js/Applications.js:153
+msgid "settings"
+msgstr "settings"
+
+#: js/Admin-FAT-debug.js:627 js/Admin-FAT-debug.js:2458
+#: js/Admin-FAT-debug.js:3455 js/Admin-FAT-debug.js:4118
+#: js/Applications.js:190 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr "Search:"
+
+#: js/Admin-FAT-debug.js:670 js/Admin-FAT-debug.js:2151 js/Applications.js:233
+#: js/user/EditDialog.js:819
+msgid "disabled"
+msgstr "disabled"
+
+#: js/Admin-FAT-debug.js:673 js/Admin-FAT-debug.js:2151 js/Applications.js:236
+#: js/user/EditDialog.js:819
+msgid "enabled"
+msgstr "enabled"
+
+#: js/Admin-FAT-debug.js:677 js/Applications.js:240
+msgid "unknown status ({0})"
+msgstr "unknown status ({0})"
+
+#: js/Admin-FAT-debug.js:711 js/Applications.js:274
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Displaying application {0} - {1} of {2}"
+
+#: js/Admin-FAT-debug.js:712 js/Applications.js:275
+msgid "No applications to display"
+msgstr "No applications to display"
+
+#: js/Admin-FAT-debug.js:721 js/Applications.js:284
+msgid "Order"
+msgstr "Order"
+
+#: js/Admin-FAT-debug.js:723 js/Admin-FAT-debug.js:1213
+#: js/Admin-FAT-debug.js:2145 js/Applications.js:286 js/user/EditDialog.js:813
+#: js/user/GridPanel.js:177
+msgid "Status"
+msgstr "Status"
+
+#: js/Admin-FAT-debug.js:724 js/Applications.js:287
+msgid "Version"
+msgstr "Version"
+
+#: js/Admin-FAT-debug.js:974 js/user/Users.js:118
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] "Samba User"
 msgstr[1] "Samba Users"
 
-#: js/user/Users.js:145
+#: js/Admin-FAT-debug.js:1000 js/user/Users.js:144
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Email User"
 msgstr[1] "Email Users"
 
-#: js/RoleEditDialog.js:107
+#: js/Admin-FAT-debug.js:1093 js/user/GridPanel.js:57
+msgid "enable account"
+msgstr "enable account"
+
+#: js/Admin-FAT-debug.js:1103 js/user/GridPanel.js:67
+msgid "disable account"
+msgstr "disable account"
+
+#: js/Admin-FAT-debug.js:1113 js/user/GridPanel.js:77
+msgid "reset password"
+msgstr "reset password"
+
+#: js/Admin-FAT-debug.js:1136 js/Admin-FAT-debug.js:2518
+#: js/Admin-FAT-debug.js:2757 js/Admin-FAT-debug.js:3188
+#: js/Admin-FAT-debug.js:3218 js/Admin-FAT-debug.js:3512
+#: js/Admin-FAT-debug.js:3845 js/Admin-FAT-debug.js:4181
+#: js/Admin-FAT-debug.js:4587 js/GroupEditDialog.js:135 js/Groups.js:236
+#: js/RoleEditDialog.js:291 js/Roles.js:239 js/SambaMachineGrid.js:68
+#: js/SambaMachineGrid.js:98 js/TagEditDialog.js:225 js/Tags.js:226
+#: js/user/GridPanel.js:100
+msgid "Description"
+msgstr "Description"
+
+#: js/Admin-FAT-debug.js:1212 js/Admin-FAT-debug.js:2516
+#: js/Admin-FAT-debug.js:3205 js/Admin-FAT-debug.js:4179
+#: js/container/GridPanel.js:67 js/Groups.js:234 js/Roles.js:237
+#: js/SambaMachineGrid.js:85 js/user/GridPanel.js:176
+msgid "ID"
+msgstr "ID"
+
+#: js/Admin-FAT-debug.js:1214 js/user/GridPanel.js:178
+msgid "Displayname"
+msgstr "Displayname"
+
+#: js/Admin-FAT-debug.js:1215 js/user/GridPanel.js:179
+msgid "Loginname"
+msgstr "Loginname"
+
+#: js/Admin-FAT-debug.js:1216 js/user/GridPanel.js:180
+msgid "Last name"
+msgstr "Last name"
+
+#: js/Admin-FAT-debug.js:1217 js/user/GridPanel.js:181
+msgid "First name"
+msgstr "First name"
+
+#: js/Admin-FAT-debug.js:1218 js/user/GridPanel.js:182
+msgid "Email"
+msgstr "Email"
+
+#: js/Admin-FAT-debug.js:1219 js/Admin-FAT-debug.js:2122
+#: js/user/EditDialog.js:790 js/user/GridPanel.js:183
+msgid "OpenID"
+msgstr "OpenID"
+
+#: js/Admin-FAT-debug.js:1220 js/Admin-FAT-debug.js:2206
+#: js/user/EditDialog.js:874 js/user/GridPanel.js:184
+msgid "Last login at"
+msgstr "Last login at"
+
+#: js/Admin-FAT-debug.js:1221 js/Admin-FAT-debug.js:2210
+#: js/user/EditDialog.js:878 js/user/GridPanel.js:185
+msgid "Last login from"
+msgstr "Last login from"
+
+#: js/Admin-FAT-debug.js:1222 js/user/GridPanel.js:186
+msgid "Password changed"
+msgstr "Password changed"
+
+#: js/Admin-FAT-debug.js:1223 js/Admin-FAT-debug.js:2154
+#: js/user/EditDialog.js:822 js/user/GridPanel.js:187
+msgid "Expires"
+msgstr "Expires"
+
+#: js/Admin-FAT-debug.js:1280 js/user/GridPanel.js:244
+msgid "Set new password"
+msgstr "Set new password"
+
+#: js/Admin-FAT-debug.js:1280 js/user/GridPanel.js:244
+msgid "Please enter the new password:"
+msgstr "Please enter the new password:"
+
+#: js/Admin-FAT-debug.js:1502 js/user/EditDialog.js:170
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr "Domain is not allowed. Check your SMTP domain configuration."
+
+#: js/Admin-FAT-debug.js:1549 js/Admin-FAT-debug.js:1552
+#: js/Admin-FAT-debug.js:2002 js/user/EditDialog.js:217
+#: js/user/EditDialog.js:220 js/user/EditDialog.js:670
+msgid "Passwords do not match!"
+msgstr "Passwords do not match!"
+
+#: js/Admin-FAT-debug.js:1555 js/user/EditDialog.js:223
+msgid "Passwords match!"
+msgstr "Passwords match!"
+
+#: js/Admin-FAT-debug.js:1601 js/Admin-FAT-debug.js:2128
+#: js/user/EditDialog.js:269 js/user/EditDialog.js:796
+msgid "Primary group"
+msgstr "Primary group"
+
+#: js/Admin-FAT-debug.js:1678 js/user/EditDialog.js:346
+msgid "Unix"
+msgstr "Unix"
+
+#: js/Admin-FAT-debug.js:1692 js/user/EditDialog.js:360
+msgid "Home Directory"
+msgstr "Home Directory"
+
+#: js/Admin-FAT-debug.js:1696 js/user/EditDialog.js:364
+msgid "Login Shell"
+msgstr "Login Shell"
+
+#: js/Admin-FAT-debug.js:1702 js/user/EditDialog.js:370
+msgid "Windows"
+msgstr "Windows"
+
+#: js/Admin-FAT-debug.js:1716 js/user/EditDialog.js:384
+msgid "Home Drive"
+msgstr "Home Drive"
+
+#: js/Admin-FAT-debug.js:1721 js/user/EditDialog.js:389
+msgid "Logon Time"
+msgstr "Logon Time"
+
+#: js/Admin-FAT-debug.js:1723 js/Admin-FAT-debug.js:2208
+#: js/Admin-FAT-debug.js:2212 js/user/EditDialog.js:391
+#: js/user/EditDialog.js:876 js/user/EditDialog.js:880
+msgid "never logged in"
+msgstr "never logged in"
+
+#: js/Admin-FAT-debug.js:1726 js/user/EditDialog.js:394
+msgid "Home Path"
+msgstr "Home Path"
+
+#: js/Admin-FAT-debug.js:1731 js/user/EditDialog.js:399
+msgid "Logoff Time"
+msgstr "Logoff Time"
+
+#: js/Admin-FAT-debug.js:1733 js/user/EditDialog.js:401
+msgid "never logged off"
+msgstr "never logged off"
+
+#: js/Admin-FAT-debug.js:1736 js/user/EditDialog.js:404
+msgid "Profile Path"
+msgstr "Profile Path"
+
+#: js/Admin-FAT-debug.js:1741 js/user/EditDialog.js:409
+msgid "Password Last Set"
+msgstr "Password Last Set"
+
+#: js/Admin-FAT-debug.js:1743 js/Admin-FAT-debug.js:2156
+#: js/Admin-FAT-debug.js:2216 js/user/EditDialog.js:411
+#: js/user/EditDialog.js:824 js/user/EditDialog.js:884
+msgid "never"
+msgstr "never"
+
+#: js/Admin-FAT-debug.js:1746 js/user/EditDialog.js:414
+msgid "Logon Script"
+msgstr "Logon Script"
+
+#: js/Admin-FAT-debug.js:1751 js/user/EditDialog.js:419
+msgid "Password Can Change"
+msgstr "Password Can Change"
+
+#: js/Admin-FAT-debug.js:1753 js/Admin-FAT-debug.js:1758
+#: js/Admin-FAT-debug.js:1763 js/user/EditDialog.js:421
+#: js/user/EditDialog.js:426 js/user/EditDialog.js:431
+msgid "not set"
+msgstr "not set"
+
+#: js/Admin-FAT-debug.js:1756 js/user/EditDialog.js:424
+msgid "Password Must Change"
+msgstr "Password Must Change"
+
+#: js/Admin-FAT-debug.js:1761 js/user/EditDialog.js:429
+msgid "Kick Off Time"
+msgstr "Kick Off Time"
+
+#: js/Admin-FAT-debug.js:1781 js/user/EditDialog.js:449
+msgid "IMAP Quota (MB)"
+msgstr "IMAP Quota (MB)"
+
+#: js/Admin-FAT-debug.js:1800 js/Admin-FAT-debug.js:1838
+#: js/user/EditDialog.js:468 js/user/EditDialog.js:506
+msgid "Quota"
+msgstr "Quota"
+
+#: js/Admin-FAT-debug.js:1801 js/Admin-FAT-debug.js:1839
+#: js/user/EditDialog.js:469 js/user/EditDialog.js:507
+msgid "no quota set"
+msgstr "no quota set"
+
+#: js/Admin-FAT-debug.js:1811 js/user/EditDialog.js:479
+msgid "Current Mailbox size"
+msgstr "Current Mailbox size"
+
+#: js/Admin-FAT-debug.js:1819 js/user/EditDialog.js:487
+msgid "Sieve Quota (MB)"
+msgstr "Sieve Quota (MB)"
+
+#: js/Admin-FAT-debug.js:1849 js/user/EditDialog.js:517
+msgid "Current Sieve size"
+msgstr "Current Sieve size"
+
+#: js/Admin-FAT-debug.js:1858 js/Admin-FAT-debug.js:2191
+#: js/user/EditDialog.js:526 js/user/EditDialog.js:859
+msgid "Information"
+msgstr "Information"
+
+#: js/Admin-FAT-debug.js:1872 js/user/EditDialog.js:540
+msgid "Last Login"
+msgstr "Last Login"
+
+#: js/Admin-FAT-debug.js:1909 js/user/EditDialog.js:577
+msgid "Email Alias"
+msgstr "Email Alias"
+
+#: js/Admin-FAT-debug.js:1915 js/user/EditDialog.js:583
+msgid "Add an alias address..."
+msgstr "Add an alias address..."
+
+#: js/Admin-FAT-debug.js:1928 js/user/EditDialog.js:596
+msgid "Email Forward"
+msgstr "Email Forward"
+
+#: js/Admin-FAT-debug.js:1934 js/user/EditDialog.js:602
+msgid "Add a forward address..."
+msgstr "Add a forward address..."
+
+#: js/Admin-FAT-debug.js:1946 js/user/EditDialog.js:614
+msgid "Forward Only"
+msgstr "Forward Only"
+
+#: js/Admin-FAT-debug.js:1969 js/user/EditDialog.js:637
+msgid "Password confirmation"
+msgstr "Password confirmation"
+
+#: js/Admin-FAT-debug.js:1986 js/user/EditDialog.js:654
+msgid "Repeat password"
+msgstr "Repeat password"
+
+#: js/Admin-FAT-debug.js:2005 js/user/EditDialog.js:673
+msgid "Cancel"
+msgstr "Cancel"
+
+#: js/Admin-FAT-debug.js:2013 js/user/EditDialog.js:681
+msgid "Ok"
+msgstr "Ok"
+
+#: js/Admin-FAT-debug.js:2050 js/user/EditDialog.js:718
+msgid "Account"
+msgstr "Account"
+
+#: js/Admin-FAT-debug.js:2065 js/user/EditDialog.js:733
+msgid "First Name"
+msgstr "First Name"
+
+#: js/Admin-FAT-debug.js:2075 js/user/EditDialog.js:743
+msgid "Last Name"
+msgstr "Last Name"
+
+#: js/Admin-FAT-debug.js:2085 js/user/EditDialog.js:753
+msgid "Password"
+msgstr "Password"
+
+#: js/Admin-FAT-debug.js:2089 js/user/EditDialog.js:757
+msgid "no password set"
+msgstr "no password set"
+
+#: js/Admin-FAT-debug.js:2116 js/user/EditDialog.js:784
+msgid "Emailaddress"
+msgstr "Emailaddress"
+
+#: js/Admin-FAT-debug.js:2151 js/user/EditDialog.js:819
+msgid "expired"
+msgstr "expired"
+
+#: js/Admin-FAT-debug.js:2151 js/user/EditDialog.js:819
+msgid "blocked"
+msgstr "blocked"
+
+#: js/Admin-FAT-debug.js:2159 js/Admin-FAT-debug.js:2765
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:827
+msgid "Visibility"
+msgstr "Visibility"
+
+#: js/Admin-FAT-debug.js:2165 js/Admin-FAT-debug.js:2771
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:833
+msgid "Display in addressbook"
+msgstr "Display in addressbook"
+
+#: js/Admin-FAT-debug.js:2165 js/Admin-FAT-debug.js:2771
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:833
+msgid "Hide from addressbook"
+msgstr "Hide from addressbook"
+
+#: js/Admin-FAT-debug.js:2179 js/Admin-FAT-debug.js:2782
+#: js/GroupEditDialog.js:160 js/user/EditDialog.js:847
+msgid "Saved in Addressbook"
+msgstr "Saved in Addressbook"
+
+#: js/Admin-FAT-debug.js:2208 js/Admin-FAT-debug.js:2212
+#: js/user/EditDialog.js:876 js/user/EditDialog.js:880
+msgid "don't know"
+msgstr "don't know"
+
+#: js/Admin-FAT-debug.js:2214 js/user/EditDialog.js:882
+msgid "Password set"
+msgstr "Password set"
+
+#: js/Admin-FAT-debug.js:2221 js/user/EditDialog.js:889
+msgid "User groups"
+msgstr "User groups"
+
+#: js/Admin-FAT-debug.js:2227 js/user/EditDialog.js:895
+msgid "User roles"
+msgstr "User roles"
+
+#: js/Admin-FAT-debug.js:2233 js/user/EditDialog.js:901
+msgid "Fileserver"
+msgstr "Fileserver"
+
+#: js/Admin-FAT-debug.js:2239 js/user/EditDialog.js:907
+msgid "IMAP"
+msgstr "IMAP"
+
+#: js/Admin-FAT-debug.js:2248 js/user/EditDialog.js:916
+msgid "SMTP"
+msgstr "SMTP"
+
+#: js/Admin-FAT-debug.js:2334 js/Admin-FAT-debug.js:3350
+#: js/Admin-FAT-debug.js:3989 js/Groups.js:52 js/Roles.js:47 js/Tags.js:64
+msgid "Confirm"
+msgstr "Confirm"
+
+#: js/Admin-FAT-debug.js:2334 js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Do you really want to delete the selected groups?"
+
+#: js/Admin-FAT-debug.js:2351 js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Deleting group(s)..."
+
+#: js/Admin-FAT-debug.js:2356 js/Admin-FAT-debug.js:2694
+#: js/Admin-FAT-debug.js:3702 js/Admin-FAT-debug.js:4011
+#: js/Admin-FAT-debug.js:4402 js/Admin-FAT-debug.js:4430
+#: js/GroupEditDialog.js:72 js/Groups.js:74 js/RoleEditDialog.js:106
+#: js/RoleEditDialog.js:134 js/Roles.js:69 js/TagEditDialog.js:82
+msgid "Failed"
+msgstr "Failed"
+
+#: js/Admin-FAT-debug.js:2356 js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "Some error occurred while trying to delete the group."
+
+#: js/Admin-FAT-debug.js:2386 js/Groups.js:104
+msgid "add group"
+msgstr "add group"
+
+#: js/Admin-FAT-debug.js:2394 js/Groups.js:112
+msgid "edit group"
+msgstr "edit group"
+
+#: js/Admin-FAT-debug.js:2402 js/Groups.js:120
+msgid "delete group"
+msgstr "delete group"
+
+#: js/Admin-FAT-debug.js:2505 js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Displaying groups {0} - {1} of {2}"
+
+#: js/Admin-FAT-debug.js:2506 js/Admin-FAT-debug.js:2561 js/Groups.js:224
+#: js/Groups.js:279
+msgid "No groups to display"
+msgstr "No groups to display"
+
+#: js/Admin-FAT-debug.js:2659 js/Admin-FAT-debug.js:3657
+#: js/Admin-FAT-debug.js:4365 js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
+#: js/TagEditDialog.js:37
+msgid "Please wait"
+msgstr "Please wait"
+
+#: js/Admin-FAT-debug.js:2659 js/Admin-FAT-debug.js:4365
+#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
+msgid "Updating Memberships"
+msgstr "Updating Memberships"
+
+#: js/Admin-FAT-debug.js:2694 js/GroupEditDialog.js:72
+msgid "Could not save group."
+msgstr "Could not save group."
+
+#: js/Admin-FAT-debug.js:2699 js/Admin-FAT-debug.js:3707
+#: js/Admin-FAT-debug.js:4409 js/GroupEditDialog.js:77
+#: js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Errors"
+msgstr "Errors"
+
+#: js/Admin-FAT-debug.js:2699 js/Admin-FAT-debug.js:3707
+#: js/Admin-FAT-debug.js:4409 js/GroupEditDialog.js:77
+#: js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Please fix the errors noted."
+msgstr "Please fix the errors noted."
+
+#: js/Admin-FAT-debug.js:2730 js/GroupEditDialog.js:108
+msgid "Group Members"
+msgstr "Group Members"
+
+#: js/Admin-FAT-debug.js:2749 js/GroupEditDialog.js:127
+msgid "Group Name"
+msgstr "Group Name"
+
+#: js/Admin-FAT-debug.js:2837 js/Admin-FAT-debug.js:3909
+#: js/Admin-FAT-debug.js:4654 js/GroupEditDialog.js:215
+#: js/RoleEditDialog.js:358 js/TagEditDialog.js:289
+msgid "Transferring {0}..."
+msgstr "Transferring {0}..."
+
+#: js/Admin-FAT-debug.js:2842 js/Admin-FAT-debug.js:2853
+#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
+msgid "Add new group"
+msgstr "Add new group"
+
+#: js/Admin-FAT-debug.js:2855 js/GroupEditDialog.js:233
+msgid "Edit Group \"{0}\""
+msgstr "Edit Group \"{0}\""
+
+#: js/Admin-FAT-debug.js:3110 js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Computer"
+msgstr[1] "Computers"
+
+#: js/Admin-FAT-debug.js:3187 js/Admin-FAT-debug.js:3266
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:67
+msgid "Computer Name"
+msgstr "Computer Name"
+
+#: js/Admin-FAT-debug.js:3350 js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Do you really want to delete the selected tags?"
+
+#: js/Admin-FAT-debug.js:3368 js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Deleting tag(s)..."
+
+#: js/Admin-FAT-debug.js:3383 js/Tags.js:97
+msgid "add tag"
+msgstr "add tag"
+
+#: js/Admin-FAT-debug.js:3391 js/Tags.js:105
+msgid "edit tag"
+msgstr "edit tag"
+
+#: js/Admin-FAT-debug.js:3399 js/Tags.js:113
+msgid "delete tag"
+msgstr "delete tag"
+
+#: js/Admin-FAT-debug.js:3497 js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Displaying tags {0} - {1} of {2}"
+
+#: js/Admin-FAT-debug.js:3498 js/Admin-FAT-debug.js:3555 js/Tags.js:212
+#: js/Tags.js:269
+msgid "No tags to display"
+msgstr "No tags to display"
+
+#: js/Admin-FAT-debug.js:3508 js/Admin-FAT-debug.js:3851
+#: js/TagEditDialog.js:231 js/Tags.js:222
+msgid "Color"
+msgstr "Color"
+
+#: js/Admin-FAT-debug.js:3657 js/TagEditDialog.js:37
+msgid "Updating Tag"
+msgstr "Updating Tag"
+
+#: js/Admin-FAT-debug.js:3702 js/TagEditDialog.js:82
+msgid "Could not save tag."
+msgstr "Could not save tag."
+
+#: js/Admin-FAT-debug.js:3788 js/TagEditDialog.js:168
+msgid "Allowed Contexts"
+msgstr "Allowed Contexts"
+
+#: js/Admin-FAT-debug.js:3794 js/TagEditDialog.js:174
+msgid "Context"
+msgstr "Context"
+
+#: js/Admin-FAT-debug.js:3807 js/TagEditDialog.js:187
+msgid "Account Rights"
+msgstr "Account Rights"
+
+#: js/Admin-FAT-debug.js:3815 js/TagEditDialog.js:195
+msgid "View"
+msgstr "View"
+
+#: js/Admin-FAT-debug.js:3820 js/TagEditDialog.js:200
+msgid "Use"
+msgstr "Use"
+
+#: js/Admin-FAT-debug.js:3838 js/TagEditDialog.js:218
+msgid "Tag Name"
+msgstr "Tag Name"
+
+#: js/Admin-FAT-debug.js:3909 js/TagEditDialog.js:289
+msgid "Tag"
+msgstr "Tag"
+
+#: js/Admin-FAT-debug.js:3919 js/TagEditDialog.js:299
+msgid "Add New Tag"
+msgstr "Add New Tag"
+
+#: js/Admin-FAT-debug.js:3921 js/TagEditDialog.js:301
+msgid "Edit Tag \"{0}\""
+msgstr "Edit Tag \"{0}\""
+
+#: js/Admin-FAT-debug.js:3989 js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Do you really want to delete the selected roles?"
+
+#: js/Admin-FAT-debug.js:4006 js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Deleting role(s)..."
+
+#: js/Admin-FAT-debug.js:4011 js/Admin-FAT-debug.js:4430
+#: js/RoleEditDialog.js:134 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "Some error occurred while trying to delete the role."
+
+#: js/Admin-FAT-debug.js:4044 js/Roles.js:102
+msgid "add role"
+msgstr "add role"
+
+#: js/Admin-FAT-debug.js:4052 js/Roles.js:110
+msgid "edit role"
+msgstr "edit role"
+
+#: js/Admin-FAT-debug.js:4060 js/Roles.js:118
+msgid "delete role"
+msgstr "delete role"
+
+#: js/Admin-FAT-debug.js:4168 js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Displaying roles {0} - {1} of {2}"
+
+#: js/Admin-FAT-debug.js:4169 js/Admin-FAT-debug.js:4224 js/Roles.js:227
+#: js/Roles.js:282
+msgid "No roles to display"
+msgstr "No roles to display"
+
+#: js/Admin-FAT-debug.js:4402 js/RoleEditDialog.js:106
 msgid "Could not save role."
 msgstr "Could not save role."
 
-#: js/RoleEditDialog.js:127
+#: js/Admin-FAT-debug.js:4422 js/RoleEditDialog.js:126
 msgid "Deleting role..."
 msgstr "Deleting role..."
 
-#: js/RoleEditDialog.js:159
+#: js/Admin-FAT-debug.js:4454 js/RoleEditDialog.js:158
 msgid "Rights"
 msgstr "Rights"
 
-#: js/RoleEditDialog.js:261
+#: js/Admin-FAT-debug.js:4556 js/RoleEditDialog.js:260
 msgid "Members"
 msgstr "Members"
 
-#: js/RoleEditDialog.js:284
+#: js/Admin-FAT-debug.js:4579 js/RoleEditDialog.js:283
 msgid "Role Name"
 msgstr "Role Name"
 
-#: js/RoleEditDialog.js:359
+#: js/Admin-FAT-debug.js:4654 js/RoleEditDialog.js:358
 msgid "Role"
 msgstr "Role"
 
-#: js/RoleEditDialog.js:369
+#: js/Admin-FAT-debug.js:4664 js/RoleEditDialog.js:368
 msgid "Add New Role"
 msgstr "Add New Role"
 
-#: js/RoleEditDialog.js:371
+#: js/Admin-FAT-debug.js:4666 js/RoleEditDialog.js:370
 msgid "Edit Role \"{0}\""
 msgstr "Edit Role \"{0}\""
+
+#: js/Admin.js:113
+msgid "Containers"
+msgstr "Containers"
+
+#: js/container/Container.js:50 js/container/GridPanel.js:80
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] "Container"
+msgstr[1] "Containers"
+
+#: js/container/GridPanel.js:68
+msgid "Container Name"
+msgstr "Container Name"

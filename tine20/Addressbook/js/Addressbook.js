@@ -19,6 +19,11 @@ Ext.ns('Tine.Addressbook');
 Tine.Addressbook.Application = Ext.extend(Tine.Tinebase.Application, {
     
     /**
+     * auto hook text _('New Contact')
+     */
+    addButtonText: 'New Contact',
+    
+    /**
      * Get translated application title of the calendar application
      * 
      * @return {String}

@@ -13,127 +13,131 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
-msgid "Edit phone settings"
-msgstr "Edytuj ustawienia telefonu"
-
-#: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
+#: js/Models.js:69 js/Phone-FAT-debug.js:74 js/Phone-FAT-debug.js:150
+#: js/Phone-FAT-debug.js:345 js/Phone-FAT.js:6 js/Phone.js:57 js/Phone.js:252
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "telefony"
 msgstr[2] "telefony"
 
-#: js/Phone.js:69
-msgid "Phones"
-msgstr "Telefony"
-
-#: js/Phone.js:276
-msgid "Line"
-msgstr "Łącze"
-
-#: js/Phone.js:285
-msgid "Number"
-msgstr "Numer"
-
-#: js/Phone.js:294
-msgid "Cancel"
-msgstr "Anuluj"
-
-#: js/Phone.js:304
-msgid "Dial"
-msgstr "Połącz"
-
-#: js/Phone.js:324
-msgid "Error"
-msgstr "Błąd"
-
-#: js/Phone.js:325
-msgid "Not possible to dial."
-msgstr "Nie można nawiązać połączenia."
-
-#: js/Phone.js:468
-msgid "Dial number"
-msgstr "Wybierz numer"
-
-#: js/Phone.js:469
-msgid "Initiate a new outgoing call"
-msgstr "Zestaw nowe połączenie wychodzące"
-
-#: js/Phone.js:530
-msgid "Incoming call"
-msgstr "Połączenie przychodzące"
-
-#: js/Phone.js:534
-msgid "Outgoing call"
-msgstr "Połączenie wychodzące"
-
-#: js/Phone.js:542
-msgid "unknown number"
-msgstr "nieznany numer"
-
-#: js/Phone.js:579
-msgid "Search:"
-msgstr "Znajdź:"
-
-#: js/Phone.js:664
-msgid "Source or Destination"
-msgstr "Źródło albo cel"
-
-#: js/Phone.js:680
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Wyświetlane połączenia {0} - {1} z {2}"
-
-#: js/Phone.js:681 js/Phone.js:725
-msgid "No calls to display"
-msgstr "Brak połączeń"
-
-#: js/Phone.js:691
-msgid "Direction"
-msgstr "Kierunkowy"
-
-#: js/Phone.js:692
-msgid "Source"
-msgstr "Źródło"
-
-#: js/Phone.js:693
-msgid "Caller Id"
-msgstr "Własny numer telefonu"
-
-#: js/Phone.js:694
-msgid "Destination"
-msgstr "Rozmówca"
-
-#: js/Phone.js:695
-msgid "Start"
-msgstr "Początek połączenia"
-
-#: js/Phone.js:696
-msgid "Connected"
-msgstr "Połączony"
-
-#: js/Phone.js:697
-msgid "Disconnected"
-msgstr "Rozłączony"
-
-#: js/Phone.js:698
-msgid "Duration"
-msgstr "Czas połączenia"
-
-#: js/Phone.js:699
-msgid "Ringing"
-msgstr "Dzwoni"
-
-#: js/Phone.js:700
-msgid "Call ID"
-msgstr "ID połączenia"
-
-#: js/Models.js:74
+#: js/Models.js:73 js/Phone-FAT-debug.js:78
 msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] "Lista nr telefonów"
 msgstr[1] "listy nr telefonów"
 msgstr[2] "listy nr telefonów"
+
+#: js/Phone-FAT-debug.js:120 js/Phone-FAT-debug.js:570
+#: js/Phone-FAT-debug.js:571 js/Phone-FAT.js:6 js/Phone.js:27 js/Phone.js:477
+#: js/Phone.js:478
+msgid "Edit phone settings"
+msgstr "Edytuj ustawienia telefonu"
+
+#: js/Phone-FAT-debug.js:161 js/Phone-FAT.js:6 js/Phone.js:68
+msgid "Phones"
+msgstr "Telefony"
+
+#: js/Phone-FAT-debug.js:368 js/Phone-FAT.js:6 js/Phone.js:275
+msgid "Line"
+msgstr "Łącze"
+
+#: js/Phone-FAT-debug.js:377 js/Phone-FAT.js:6 js/Phone.js:284
+msgid "Number"
+msgstr "Numer"
+
+#: js/Phone-FAT-debug.js:386 js/Phone-FAT.js:6 js/Phone.js:293
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: js/Phone-FAT-debug.js:396 js/Phone-FAT.js:6 js/Phone.js:303
+msgid "Dial"
+msgstr "Połącz"
+
+#: js/Phone-FAT-debug.js:416 js/Phone-FAT.js:6 js/Phone.js:323
+msgid "Error"
+msgstr "Błąd"
+
+#: js/Phone-FAT-debug.js:417 js/Phone-FAT.js:6 js/Phone.js:324
+msgid "Not possible to dial."
+msgstr "Nie można nawiązać połączenia."
+
+#: js/Phone-FAT-debug.js:560 js/Phone-FAT.js:6 js/Phone.js:467
+msgid "Dial number"
+msgstr "Wybierz numer"
+
+#: js/Phone-FAT-debug.js:561 js/Phone-FAT.js:6 js/Phone.js:468
+msgid "Initiate a new outgoing call"
+msgstr "Zestaw nowe połączenie wychodzące"
+
+#: js/Phone-FAT-debug.js:622 js/Phone-FAT.js:6 js/Phone.js:529
+msgid "Incoming call"
+msgstr "Połączenie przychodzące"
+
+#: js/Phone-FAT-debug.js:626 js/Phone-FAT.js:6 js/Phone.js:533
+msgid "Outgoing call"
+msgstr "Połączenie wychodzące"
+
+#: js/Phone-FAT-debug.js:634 js/Phone-FAT.js:6 js/Phone.js:541
+msgid "unknown number"
+msgstr "nieznany numer"
+
+#: js/Phone-FAT-debug.js:671 js/Phone-FAT.js:6 js/Phone.js:578
+msgid "Search:"
+msgstr "Znajdź:"
+
+#: js/Phone-FAT-debug.js:756 js/Phone.js:663
+msgid "Source or Destination"
+msgstr "Źródło albo cel"
+
+#: js/Phone-FAT-debug.js:772 js/Phone-FAT.js:6 js/Phone.js:679
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Wyświetlane połączenia {0} - {1} z {2}"
+
+#: js/Phone-FAT-debug.js:773 js/Phone-FAT-debug.js:817 js/Phone-FAT.js:6
+#: js/Phone.js:680 js/Phone.js:724
+msgid "No calls to display"
+msgstr "Brak połączeń"
+
+#: js/Phone-FAT-debug.js:783 js/Phone-FAT.js:6 js/Phone.js:690
+msgid "Direction"
+msgstr "Kierunkowy"
+
+#: js/Phone-FAT-debug.js:784 js/Phone-FAT.js:6 js/Phone.js:691
+msgid "Source"
+msgstr "Źródło"
+
+#: js/Phone-FAT-debug.js:785 js/Phone-FAT.js:6 js/Phone.js:692
+msgid "Caller Id"
+msgstr "Własny numer telefonu"
+
+#: js/Phone-FAT-debug.js:786 js/Phone-FAT.js:6 js/Phone.js:693
+msgid "Destination"
+msgstr "Rozmówca"
+
+#: js/Phone-FAT-debug.js:787 js/Phone-FAT.js:6 js/Phone.js:694
+msgid "Start"
+msgstr "Początek połączenia"
+
+#: js/Phone-FAT-debug.js:788 js/Phone-FAT.js:6 js/Phone.js:695
+msgid "Connected"
+msgstr "Połączony"
+
+#: js/Phone-FAT-debug.js:789 js/Phone-FAT.js:6 js/Phone.js:696
+msgid "Disconnected"
+msgstr "Rozłączony"
+
+#: js/Phone-FAT-debug.js:790 js/Phone-FAT.js:6 js/Phone.js:697
+msgid "Duration"
+msgstr "Czas połączenia"
+
+#: js/Phone-FAT-debug.js:791 js/Phone-FAT.js:6 js/Phone.js:698
+msgid "Ringing"
+msgstr "Dzwoni"
+
+#: js/Phone-FAT-debug.js:792 js/Phone-FAT.js:6 js/Phone.js:699
+msgid "Call ID"
+msgstr "ID połączenia"
 
 #~ msgid "Dial phone number"
 #~ msgstr "Wybierz numer telefonu"

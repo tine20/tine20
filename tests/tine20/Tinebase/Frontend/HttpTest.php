@@ -30,6 +30,9 @@ class Tinebase_Frontend_HttpTest extends PHPUnit_Framework_TestCase
     
     public function testMainScreen()
     {
+        if (version_compare(PHPUnit_Runner_Version::id(), '3.3.0', '<')) {
+            $this->markTestSkipped('phpunit version < 3.3.0 cant cope with headers');
+        }
         ob_start();
         $this->_uit->mainScreen();
         $html = ob_get_clean();

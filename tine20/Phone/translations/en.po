@@ -14,122 +14,126 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Phone.js:28 js/Phone.js:478 js/Phone.js:479
-msgid "Edit phone settings"
-msgstr "Edit phone settings"
-
-#: js/Phone.js:58 js/Phone.js:253 js/Models.js:70
+#: js/Models.js:69 js/Phone-FAT-debug.js:74 js/Phone-FAT-debug.js:150
+#: js/Phone-FAT-debug.js:345 js/Phone-FAT.js:6 js/Phone.js:57 js/Phone.js:252
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Phone"
 msgstr[1] "Phones"
 
-#: js/Phone.js:69
-msgid "Phones"
-msgstr "Phones"
-
-#: js/Phone.js:276
-msgid "Line"
-msgstr "Line"
-
-#: js/Phone.js:285
-msgid "Number"
-msgstr "Number"
-
-#: js/Phone.js:294
-msgid "Cancel"
-msgstr "Cancel"
-
-#: js/Phone.js:304
-msgid "Dial"
-msgstr "Dial"
-
-#: js/Phone.js:324
-msgid "Error"
-msgstr "Error"
-
-#: js/Phone.js:325
-msgid "Not possible to dial."
-msgstr "Not possible to dial."
-
-#: js/Phone.js:468
-msgid "Dial number"
-msgstr "Dial number"
-
-#: js/Phone.js:469
-msgid "Initiate a new outgoing call"
-msgstr "Initiate a new outgoing call"
-
-#: js/Phone.js:530
-msgid "Incoming call"
-msgstr "Incoming call"
-
-#: js/Phone.js:534
-msgid "Outgoing call"
-msgstr "Outgoing call"
-
-#: js/Phone.js:542
-msgid "unknown number"
-msgstr "unknown number"
-
-#: js/Phone.js:579
-msgid "Search:"
-msgstr "Search:"
-
-#: js/Phone.js:664
-msgid "Source or Destination"
-msgstr "Source or Destination"
-
-#: js/Phone.js:680
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Displaying calls {0} - {1} of {2}"
-
-#: js/Phone.js:681 js/Phone.js:725
-msgid "No calls to display"
-msgstr "No calls to display"
-
-#: js/Phone.js:691
-msgid "Direction"
-msgstr "Direction"
-
-#: js/Phone.js:692
-msgid "Source"
-msgstr "Source"
-
-#: js/Phone.js:693
-msgid "Caller Id"
-msgstr "Caller Id"
-
-#: js/Phone.js:694
-msgid "Destination"
-msgstr "Destination"
-
-#: js/Phone.js:695
-msgid "Start"
-msgstr "Start"
-
-#: js/Phone.js:696
-msgid "Connected"
-msgstr "Connected"
-
-#: js/Phone.js:697
-msgid "Disconnected"
-msgstr "Disconnected"
-
-#: js/Phone.js:698
-msgid "Duration"
-msgstr "Duration"
-
-#: js/Phone.js:699
-msgid "Ringing"
-msgstr "Ringing"
-
-#: js/Phone.js:700
-msgid "Call ID"
-msgstr "Call ID"
-
-#: js/Models.js:74
+#: js/Models.js:73 js/Phone-FAT-debug.js:78
 msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] "phones list"
 msgstr[1] "phones lists"
+
+#: js/Phone-FAT-debug.js:120 js/Phone-FAT-debug.js:570
+#: js/Phone-FAT-debug.js:571 js/Phone-FAT.js:6 js/Phone.js:27 js/Phone.js:477
+#: js/Phone.js:478
+msgid "Edit phone settings"
+msgstr "Edit phone settings"
+
+#: js/Phone-FAT-debug.js:161 js/Phone-FAT.js:6 js/Phone.js:68
+msgid "Phones"
+msgstr "Phones"
+
+#: js/Phone-FAT-debug.js:368 js/Phone-FAT.js:6 js/Phone.js:275
+msgid "Line"
+msgstr "Line"
+
+#: js/Phone-FAT-debug.js:377 js/Phone-FAT.js:6 js/Phone.js:284
+msgid "Number"
+msgstr "Number"
+
+#: js/Phone-FAT-debug.js:386 js/Phone-FAT.js:6 js/Phone.js:293
+msgid "Cancel"
+msgstr "Cancel"
+
+#: js/Phone-FAT-debug.js:396 js/Phone-FAT.js:6 js/Phone.js:303
+msgid "Dial"
+msgstr "Dial"
+
+#: js/Phone-FAT-debug.js:416 js/Phone-FAT.js:6 js/Phone.js:323
+msgid "Error"
+msgstr "Error"
+
+#: js/Phone-FAT-debug.js:417 js/Phone-FAT.js:6 js/Phone.js:324
+msgid "Not possible to dial."
+msgstr "Not possible to dial."
+
+#: js/Phone-FAT-debug.js:560 js/Phone-FAT.js:6 js/Phone.js:467
+msgid "Dial number"
+msgstr "Dial number"
+
+#: js/Phone-FAT-debug.js:561 js/Phone-FAT.js:6 js/Phone.js:468
+msgid "Initiate a new outgoing call"
+msgstr "Initiate a new outgoing call"
+
+#: js/Phone-FAT-debug.js:622 js/Phone-FAT.js:6 js/Phone.js:529
+msgid "Incoming call"
+msgstr "Incoming call"
+
+#: js/Phone-FAT-debug.js:626 js/Phone-FAT.js:6 js/Phone.js:533
+msgid "Outgoing call"
+msgstr "Outgoing call"
+
+#: js/Phone-FAT-debug.js:634 js/Phone-FAT.js:6 js/Phone.js:541
+msgid "unknown number"
+msgstr "unknown number"
+
+#: js/Phone-FAT-debug.js:671 js/Phone-FAT.js:6 js/Phone.js:578
+msgid "Search:"
+msgstr "Search:"
+
+#: js/Phone-FAT-debug.js:756 js/Phone.js:663
+msgid "Source or Destination"
+msgstr "Source or Destination"
+
+#: js/Phone-FAT-debug.js:772 js/Phone-FAT.js:6 js/Phone.js:679
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Displaying calls {0} - {1} of {2}"
+
+#: js/Phone-FAT-debug.js:773 js/Phone-FAT-debug.js:817 js/Phone-FAT.js:6
+#: js/Phone.js:680 js/Phone.js:724
+msgid "No calls to display"
+msgstr "No calls to display"
+
+#: js/Phone-FAT-debug.js:783 js/Phone-FAT.js:6 js/Phone.js:690
+msgid "Direction"
+msgstr "Direction"
+
+#: js/Phone-FAT-debug.js:784 js/Phone-FAT.js:6 js/Phone.js:691
+msgid "Source"
+msgstr "Source"
+
+#: js/Phone-FAT-debug.js:785 js/Phone-FAT.js:6 js/Phone.js:692
+msgid "Caller Id"
+msgstr "Caller Id"
+
+#: js/Phone-FAT-debug.js:786 js/Phone-FAT.js:6 js/Phone.js:693
+msgid "Destination"
+msgstr "Destination"
+
+#: js/Phone-FAT-debug.js:787 js/Phone-FAT.js:6 js/Phone.js:694
+msgid "Start"
+msgstr "Start"
+
+#: js/Phone-FAT-debug.js:788 js/Phone-FAT.js:6 js/Phone.js:695
+msgid "Connected"
+msgstr "Connected"
+
+#: js/Phone-FAT-debug.js:789 js/Phone-FAT.js:6 js/Phone.js:696
+msgid "Disconnected"
+msgstr "Disconnected"
+
+#: js/Phone-FAT-debug.js:790 js/Phone-FAT.js:6 js/Phone.js:697
+msgid "Duration"
+msgstr "Duration"
+
+#: js/Phone-FAT-debug.js:791 js/Phone-FAT.js:6 js/Phone.js:698
+msgid "Ringing"
+msgstr "Ringing"
+
+#: js/Phone-FAT-debug.js:792 js/Phone-FAT.js:6 js/Phone.js:699
+msgid "Call ID"
+msgstr "Call ID"

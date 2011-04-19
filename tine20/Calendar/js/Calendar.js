@@ -24,6 +24,12 @@ Ext.onReady(function(){
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
+    
+    /**
+     * auto hook text _('New Event')
+     */
+    addButtonText: 'New Event',
+    
     /**
      * Get translated application title of the calendar application
      * 
@@ -48,7 +54,7 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
             return 'CalendarIconCls';
             break;
         }
-    }
+    }    
 });
 
 /**

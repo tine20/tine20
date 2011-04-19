@@ -146,6 +146,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.app = Tine.Tinebase.appMgr.get(this.appName);
         }
         
+        Tine.log.debug('initComponent: appName: ', this.appName);
+        Tine.log.debug('initComponent: modelName: ', this.modelName);
+        Tine.log.debug('initComponent: app: ', this.app);
+        
         // init some translations
         if (this.app.i18n && this.recordClass !== null) {
             this.i18nRecordName = this.app.i18n.n_hidden(this.recordClass.getMeta('recordName'), this.recordClass.getMeta('recordsName'), 1);
@@ -153,6 +157,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         }
     
         if (! this.recordProxy && this.recordClass) {
+            Tine.log.debug('no record proxy given, creating a new one...');
             this.recordProxy = new Tine.Tinebase.data.RecordProxy({
                 recordClass: this.recordClass
             });
@@ -268,18 +273,21 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * init record to edit
      */
     initRecord: function() {
+        Tine.log.debug('init record with mode: ' + this.mode);
+        if (! this.record) {
+            Tine.log.debug('creating new default data record');
+            this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
+        }
+        
         if (this.mode !== 'local') {
             if (this.record && this.record.id) {
                 this.loadRemoteRecord();
             } else {
-                if (! this.record) {
-                    this.record = new this.recordClass(this.recordClass.getDefaultData(), 0);
-                }
                 this.onRecordLoad();
             }
         } else {
             // note: in local mode we expect a valid record
-            if (! typeof this.record.beginEdit != 'function') {
+            if (typeof this.record.beginEdit != 'function') {
                 this.record = this.recordProxy.recordReader({responseText: this.record});
             }
             this.onRecordLoad();
@@ -290,6 +298,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * load record via record proxy
      */
     loadRemoteRecord: function() {
+        Tine.log.info('initiating record load via proxy');
         this.loadRequest = this.recordProxy.loadRecord(this.record, {
             scope: this,
             success: function(record) {
@@ -322,12 +331,16 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.onRecordLoad.defer(250, this);
             return;
         }
-
+        
+        Tine.log.debug('loading of the following record completed:');
+        Tine.log.debug(this.record);
+        
         if (this.copyRecord) {
             this.doCopyRecord();
             this.window.setTitle(String.format(_('Copy {0}'), this.i18nRecordName));
         } else {
             if (! this.record.id) {
+                console.log(this);
                 this.window.setTitle(String.format(_('Add New {0}'), this.i18nRecordName));
             } else {
                 this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));

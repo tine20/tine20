@@ -14,1873 +14,1993 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Preference/Abstract.php:476
-msgid "default"
-msgstr "alapértelmezett"
-
-#: Export/Spreadsheet/Ods.php:278
-msgid "Data"
-msgstr "Adat"
-
-#: Export/Pdf.php:223 js/widgets/tags/TagsPanel.js:58
-msgid "Tags"
-msgstr "Címkék"
-
-#: Export/Pdf.php:444
-msgid "Created by"
-msgstr "Készítette"
-
-#: Export/Pdf.php:498
-msgid "Activities"
-msgstr "Tevékenységek"
-
-#: Acl/Rights.php:148
-msgid "Report bugs"
-msgstr "Hibák jelentése"
-
-#: Acl/Rights.php:149
-msgid "Report bugs to the software vendor directly when they occur."
-msgstr "Hibák jelentése a szoftver gyártójának közvetlenül előforduláskor."
-
-#: Acl/Rights.php:152
-msgid "Check version"
-msgstr "Verzió ellenőrzése"
-
-#: Acl/Rights.php:153
-msgid "Check for new versions of this software."
-msgstr "Szoftver új verziójának keresése."
-
-#: Acl/Rights.php:156
-msgid "Manage own profile"
-msgstr "Saját profil kezelése"
-
-#: Acl/Rights.php:157
-msgid "The right to manage the own profile (selected contact data)."
-msgstr "Saját profil kezelésének joga (kiválasztott kapcsolati adatok)."
-
-#: Acl/Rights.php:160
-msgid "Manage own client state"
-msgstr ""
-
-#: Acl/Rights.php:161
-msgid "The right to manage the own client state."
-msgstr ""
-
-#: Acl/Rights/Abstract.php:72
+#: Acl/Rights/Abstract.php:71
 msgid "admin"
 msgstr "admin"
 
-#: Acl/Rights/Abstract.php:73
+#: Acl/Rights/Abstract.php:72
 msgid "admin right description"
 msgstr "admin jogok leírása"
 
-#: Acl/Rights/Abstract.php:76
+#: Acl/Rights/Abstract.php:75
 msgid "run"
 msgstr "futtatás"
 
-#: Acl/Rights/Abstract.php:77
+#: Acl/Rights/Abstract.php:76
 msgid "run right description"
 msgstr "futtatási jogok leírása"
 
-#: views/update.php:24
-msgid "Tine 2.0 needs to be updated or is not installed yet."
-msgstr "Tine 2.0 frissítése szükséges vagy még nincs telepítve."
+#: Acl/Rights.php:147
+msgid "Report bugs"
+msgstr "Hibák jelentése"
 
-#: views/update.php:25
-msgid "Please wait or contact your administrator"
-msgstr "Kérlek várj vagy lépj kapcsolatba a rendszergazdával"
+#: Acl/Rights.php:148
+msgid "Report bugs to the software vendor directly when they occur."
+msgstr "Hibák jelentése a szoftver gyártójának közvetlenül előforduláskor."
 
-#: js/ux/ConnectionStatus.js:57
-msgid "online"
-msgstr "online"
+#: Acl/Rights.php:151
+msgid "Check version"
+msgstr "Verzió ellenőrzése"
 
-#: js/ux/ConnectionStatus.js:58
-msgid "offline"
-msgstr "offline"
+#: Acl/Rights.php:152
+msgid "Check for new versions of this software."
+msgstr "Szoftver új verziójának keresése."
 
-#: js/ux/ConnectionStatus.js:59 User/Abstract.php:284 User/Abstract.php:285
-#: User/Abstract.php:286 User/Abstract.php:287 User/Abstract.php:288
-msgid "unknown"
-msgstr "ismeretlen"
+#: Acl/Rights.php:155
+msgid "Manage own profile"
+msgstr "Saját profil kezelése"
 
-#: js/ux/grid/PagingToolbar.js:54
-msgid "{0} selected"
-msgstr "{0} választva"
+#: Acl/Rights.php:156
+msgid "The right to manage the own profile (selected contact data)."
+msgstr "Saját profil kezelésének joga (kiválasztott kapcsolati adatok)."
 
-#: js/ux/grid/PagingToolbar.js:55
-msgid "Unselect all"
-msgstr "Összes kiválasztás visszavonása"
+#: Acl/Rights.php:159
+msgid "Manage own client state"
+msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:56
-msgid "Select all visible ({0} records)"
-msgstr "Összes látható ({0} adat) kiválasztása"
+#: Acl/Rights.php:160
+msgid "The right to manage the own client state."
+msgstr ""
 
-#: js/ux/grid/PagingToolbar.js:57
-msgid "Select all pages ({0} records)"
-msgstr "Összes oldal ({0} adat) kiválasztása"
+#: Export/Pdf.php:222 js/Tinebase-FAT-debug.js:25504
+#: js/widgets/tags/TagsPanel.js:57
+msgid "Tags"
+msgstr "Címkék"
 
-#: js/ux/grid/PagingToolbar.js:58
-msgid "Toggle selection"
-msgstr "Kiválasztás átváltása"
+#: Export/Pdf.php:443
+msgid "Created by"
+msgstr "Készítette"
 
-#: js/ux/form/RecordsComboBox.js:27
-msgid "Software Version"
-msgstr "Szoftver verzió"
+#: Export/Pdf.php:497
+msgid "Activities"
+msgstr "Tevékenységek"
 
-#: js/ux/form/LayerCombo.js:188 js/PasswordChangeDialog.js:67
-#: js/widgets/EditRecord.js:158 js/widgets/tags/TagsMassAttachAction.js:97
-#: js/widgets/container/ContainerSelect.js:461
-#: js/widgets/ActivitiesPanel.js:312
-#: js/widgets/dialog/PreferencesDialog.js:110
-#: js/widgets/dialog/EditDialog.js:183
-#: js/widgets/dialog/MultiOptionsDialog.js:102
-msgid "Ok"
-msgstr "Rendben"
+#: Export/Spreadsheet/Ods.php:277
+msgid "Data"
+msgstr "Adat"
 
-#: js/ux/form/LayerCombo.js:195 js/PasswordChangeDialog.js:61
-#: js/ExceptionDialog.js:59 js/widgets/EditRecord.js:179
-#: js/widgets/tags/TagsMassAttachAction.js:91
-#: js/widgets/container/ContainerSelect.js:452
-#: js/widgets/ActivitiesPanel.js:304
-#: js/widgets/dialog/PreferencesDialog.js:118
-#: js/widgets/dialog/EditDialog.js:200
-#: js/widgets/dialog/MultiOptionsDialog.js:109
-msgid "Cancel"
-msgstr "Mégse"
-
-#: js/ux/form/ImageField.js:73
-msgid "Loading"
-msgstr "Betöltés"
-
-#: js/ux/form/ImageField.js:76
-msgid "Click to edit"
-msgstr "Kattints a szerkesztéshez"
-
-#: js/ux/form/ImageField.js:125
-msgid "Not An Image"
-msgstr "Ez nem egy kép"
-
-#: js/ux/form/ImageField.js:125
-msgid "Please select an image file (gif/png/jpeg)"
-msgstr "Kérem válasszon egy kép file-t (gif/png/jpeg)"
-
-#: js/ux/form/ImageField.js:159 js/widgets/grid/FileUploadGrid.js:92
-msgid "Upload Failed"
-msgstr "Hibás feltöltés"
-
-#: js/ux/form/ImageField.js:159
-msgid "Could not upload image. Please notify your Administrator"
-msgstr "A kép feltöltése sikertelen. Értesítse a rendszergazdáját"
-
-#: js/ux/form/ImageField.js:171
-msgid "Change Image"
-msgstr "Kép cseréje"
-
-#: js/ux/form/ImageField.js:180 js/ux/form/ImageField.js:198
-msgid "Crop Image"
-msgstr "Kép kivágása"
-
-#: js/ux/form/ImageField.js:204
-msgid "Delete Image"
-msgstr "Kép törlése"
-
-#: js/ux/form/ImageField.js:213
-msgid "Show Original Image"
-msgstr "Eredeti kép mutatása"
-
-#: js/ux/form/ImageField.js:275
-msgid "Image Failed"
-msgstr "Hibás kép"
-
-#: js/ux/form/ImageField.js:275
-msgid "Could not load image. Please notify your Administrator"
-msgstr "Kép betöltése sikertelen. Értesítse a redszergazdáját"
-
-#: js/ux/SearchField.js:45
-msgid "enter searchfilter"
-msgstr "keresőszűrő megadása"
-
-#: js/UserRegistration.js:38
-msgid "Registration Wizard"
-msgstr "Regisztrációs varázsló"
-
-#: js/UserRegistration.js:91
-msgid "Given name"
-msgstr "Keresztnév"
-
-#: js/UserRegistration.js:102
-msgid "Family name"
-msgstr "Családi név"
-
-#: js/UserRegistration.js:113
-msgid "Login name"
-msgstr "Bejelentkezési név"
-
-#: js/UserRegistration.js:126
-msgid "Emailaddress"
-msgstr "E-mail cím"
-
-#: js/UserRegistration.js:172
-msgid "Congratulations!"
-msgstr "Gratulálunk!"
-
-#: js/UserRegistration.js:172
-msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
-msgstr "Beírtál minden szükséges információt. Ha megnyomod a Befejezés gombot, elküldjük a regisztrációs e-mailt."
-
-#: js/prototypeTranslations.js:21 js/prototypeTranslations.js:22
-#, fuzzy
-msgid "Outdent Text"
-msgstr "Nem behúzott szöveg"
-
-#: js/prototypeTranslations.js:23 js/prototypeTranslations.js:24
-#, fuzzy
-msgid "Indent Text"
-msgstr "Behúzott szöveg"
-
-#: js/prototypeTranslations.js:25 js/prototypeTranslations.js:26
-msgid "Remove Formatting"
-msgstr "Formázás eltávolítása"
-
-#: js/ExceptionHandler.js:130 Frontend/Http.php:564
+#: Frontend/Http.php:358 js/ExceptionHandler.js:129
+#: js/Tinebase-FAT-debug.js:12706
 msgid "Authorisation Required"
 msgstr "Azonosítás szükséges"
 
-#: js/ExceptionHandler.js:131
-msgid "Your session timed out. You need to login again."
-msgstr "Időtúllépés. Újra be kell jelentkezned."
+#: Frontend/Http.php:359
+msgid "Your session is not valid. You need to login again."
+msgstr "Érvénytelen kapcsolódás. Újra be kell jelentkezned."
 
-#: js/ExceptionHandler.js:148
-msgid "Insufficient Rights"
-msgstr "Nincs elegendő jogod"
+#: Frontend/Http.php:385 js/ExceptionDialog.js:50
+#: js/Tinebase-FAT-debug.js:12888
+msgid "Abnormal End"
+msgstr "Nem normális befejezés"
 
-#: js/ExceptionHandler.js:149
-msgid "Sorry, you are not permitted to perform this action"
-msgstr "Bocsánat, de nem vagy jogosult erre a tevékenységre"
+#: Frontend/Http.php:386 js/ExceptionDialog.js:75
+#: js/Tinebase-FAT-debug.js:12913
+msgid "An error occurred, the program ended abnormal."
+msgstr "Hiba keletkezett, a program futása megszakadt."
 
-#: js/ExceptionHandler.js:158
-msgid "Not Found"
-msgstr "Nem található"
+#: js/AboutDialog.js:40 js/MainMenu.js:112 js/Tinebase-FAT-debug.js:28912
+#: js/Tinebase-FAT-debug.js:29842
+msgid "About {0}"
+msgstr "Erről: {0}"
 
-#: js/ExceptionHandler.js:159
-msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
-msgstr "Bocsánat, kérésed nem teljesíthető, mert a kért adat nem található. Legtöbb esetben ez azt jelenti, hogy valaki már törölte az adatot. Frissítsd az aktuális nézetedet."
+#: js/AboutDialog.js:59 js/PasswordChangeDialog.js:66
+#: js/Tinebase-FAT-debug.js:7417 js/Tinebase-FAT-debug.js:14733
+#: js/Tinebase-FAT-debug.js:15355 js/Tinebase-FAT-debug.js:16075
+#: js/Tinebase-FAT-debug.js:17465 js/Tinebase-FAT-debug.js:24166
+#: js/Tinebase-FAT-debug.js:26375 js/Tinebase-FAT-debug.js:27271
+#: js/Tinebase-FAT-debug.js:28815 js/Tinebase-FAT-debug.js:28931
+#: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:311
+#: js/widgets/container/ContainerSelect.js:459
+#: js/widgets/dialog/EditDialog.js:186
+#: js/widgets/dialog/MultiOptionsDialog.js:102
+#: js/widgets/dialog/PreferencesDialog.js:109 js/widgets/EditRecord.js:157
+#: js/widgets/tags/TagsMassAttachAction.js:96
+msgid "Ok"
+msgstr "Rendben"
 
-#: js/ExceptionHandler.js:168
-msgid "Concurrent Updates"
-msgstr "Megegyező frissítések"
-
-#: js/ExceptionHandler.js:169
-msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
-msgstr "Valaki más elmentette ezt a tételt miközben te szerkesztetted. Töltsd be újra és csináld újra a változtatásokat."
-
-#: js/ExceptionHandler.js:179
-msgid "Service Unavailable"
-msgstr "Szolgáltatás nem elérhető"
-
-#: js/ExceptionHandler.js:180
-msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
-msgstr "A szerver éppen nem tudja teljesíteni a kérést, átmenteti túlterhelés vagy karbantartás miatt. Próbáld újra vagy lépj kapcsolatba a rendszergazdával."
-
-#: js/ExceptionHandler.js:187
-msgid "Connection lost, please check your network!"
-msgstr "Kapcsolat elveszett, ellenőrizd a hálózatod!"
-
-#: js/ExceptionHandler.js:193
-msgid "Timeout"
-msgstr "Időtúllépés"
-
-#: js/ExceptionHandler.js:194
-msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
-msgstr "Bocsánat, időtúllépés történt a kérésed feldolgozása közben. Töltsd újra a böngésződet, próbáld újra vagy lépj kapcsolatba a rendszergazdával."
-
-#: js/ExceptionHandler.js:203
-msgid "No Response"
-msgstr "Nincs válasz"
-
-#: js/ExceptionHandler.js:204
-msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
-msgstr "Bocsánat, a szerver nem adott vissza adatot. Töltsd újra a böngésződet, próbáld újra vagy lépj kapcsolatba a rendszergazdával."
-
-#: js/ExceptionHandler.js:213
-msgid "Out of Resources"
-msgstr ""
-
-#: js/ExceptionHandler.js:214
-msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
-msgstr ""
-
-#: js/ExceptionHandler.js:223
-msgid "No Role Memberships"
-msgstr "Nincsenek Szerep tagságok"
-
-#: js/ExceptionHandler.js:224
-msgid "Your user account has no role memberships. Please contact your administrator."
-msgstr "A felhasználó nevedhez nem tartoznak szerep tagságok. Lépj kapcsolatba a rendszergazdával."
-
-#: js/data/Record.js:115
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Feladat"
-msgstr[1] "Feladatok"
-
-#: js/data/Record.js:119
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "tennivaló lista"
-msgstr[1] "tennivaló listák"
-
-#: js/Container.js:116
-msgid "All {0}"
-msgstr "Minden {0}"
-
-#: js/Container.js:117
-msgid "Shared {0}"
-msgstr "Megosztott {0}"
-
-#: js/Container.js:118
-msgid "Other Users {0}"
-msgstr "Többi felhasználó {0}"
-
-#: js/Container.js:122
-msgid "My {0}"
-msgstr "Saját {0}"
-
-#: js/PasswordChangeDialog.js:33
-msgid "Change Password For \"{0}\""
-msgstr " \"{0}\" jelszavának megváltoztatása"
-
-#: js/PasswordChangeDialog.js:49
-msgid "Old Password"
-msgstr "Régi jelszó"
-
-#: js/PasswordChangeDialog.js:53
-msgid "New Password"
-msgstr "Új jelszó"
-
-#: js/PasswordChangeDialog.js:57
-msgid "Repeat new Password"
-msgstr "Jelszó megismétlése"
-
-#: js/PasswordChangeDialog.js:76
-msgid "Please Wait!"
-msgstr "Kérem várjon!"
-
-#: js/PasswordChangeDialog.js:77
-msgid "changing password..."
-msgstr "jelszó megváltoztatása..."
-
-#: js/PasswordChangeDialog.js:88
-msgid "Success"
-msgstr "Sikerült"
-
-#: js/PasswordChangeDialog.js:89
-msgid "Your password has been changed."
-msgstr "Jelszavad megváltozott."
-
-#: js/PasswordChangeDialog.js:101 js/PasswordChangeDialog.js:111
-msgid "Failure"
-msgstr "Hiba"
-
-#: js/PasswordChangeDialog.js:112
-msgid "The new passwords mismatch, please correct them."
-msgstr "Az új jelszavak nem egyezznek, javítsd őket."
-
-#: js/tineInit.js:581
-msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
-msgstr "Végeztes hiba: A kliens önfrissítése hibás, lépj kapcsolatba a rendszergazdával és/vagy indítsd/töltsd újra a böngésződet."
-
-#: js/AdminPanel.js:77
+#: js/AdminPanel.js:75 js/Tinebase-FAT-debug.js:30791
 msgid "Profile Information"
 msgstr "Profil információk"
 
-#: js/AdminPanel.js:81 js/widgets/EditRecord.js:169
-#: js/widgets/dialog/EditDialog.js:192
+#: js/AdminPanel.js:79 js/Tinebase-FAT-debug.js:14744
+#: js/Tinebase-FAT-debug.js:15364 js/Tinebase-FAT-debug.js:30795
+#: js/widgets/dialog/EditDialog.js:195 js/widgets/EditRecord.js:168
 msgid "Apply"
 msgstr "Alkalmaz"
 
-#: js/AdminPanel.js:96 js/widgets/persistentfilter/PickerPanel.js:335
-#: js/widgets/TimezoneChooser.js:78 js/widgets/LangChooser.js:70
+#: js/AdminPanel.js:94 js/Tinebase-FAT-debug.js:14256
+#: js/Tinebase-FAT-debug.js:28616 js/Tinebase-FAT-debug.js:30810
+#: js/widgets/LangChooser.js:69 js/widgets/persistentfilter/PickerPanel.js:333
+#: js/widgets/TimezoneChooser.js:77
 msgid "Please Wait"
 msgstr "Kérlek várj"
 
-#: js/AdminPanel.js:158 js/widgets/container/GrantsDialog.js:88
+#: js/AdminPanel.js:156 js/Tinebase-FAT-debug.js:24348
+#: js/Tinebase-FAT-debug.js:30872 js/widgets/container/GrantsDialog.js:86
 msgid "Read"
 msgstr "Olvasás"
 
-#: js/AdminPanel.js:159
+#: js/AdminPanel.js:157 js/Tinebase-FAT-debug.js:30873
 msgid "The field is readable part of the profile"
 msgstr "A mező a profil olvasható része"
 
-#: js/AdminPanel.js:163 js/widgets/container/GrantsDialog.js:100
+#: js/AdminPanel.js:161 js/Tinebase-FAT-debug.js:24360
+#: js/Tinebase-FAT-debug.js:30877 js/widgets/container/GrantsDialog.js:98
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: js/AdminPanel.js:164
+#: js/AdminPanel.js:162 js/Tinebase-FAT-debug.js:30878
 msgid "The field is editable part of the profile"
 msgstr "A mező a profil szerkeszthető része"
 
-#: js/AdminPanel.js:177
+#: js/AdminPanel.js:175 js/Tinebase-FAT-debug.js:30891
 msgid "Field Name"
 msgstr "Mező név"
 
-#: js/common.js:173
+#: js/AppManager.js:180 js/Tinebase-FAT-debug.js:29120
+msgid "Missing Applications"
+msgstr "Hiányzó alkalmazás"
+
+#: js/AppManager.js:181 js/Tinebase-FAT-debug.js:29121
+msgid "There are no applications enabled for you. Please contact your administrator."
+msgstr "Nincs engedélyezett alkalmazásod. Kérlek keresd a rendszergazdádat."
+
+#: js/common.js:172 js/Tinebase-FAT-debug.js:13932
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} perc"
 msgstr[1] "{0} percek"
 
-#: js/common.js:174
+#: js/common.js:173 js/Tinebase-FAT-debug.js:13933
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} óra"
 msgstr[1] "{0} órák"
 
-#: js/common.js:175
+#: js/common.js:174 js/Tinebase-FAT-debug.js:13934
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} munkanap"
 msgstr[1] "{0} munkanapok"
 
-#: js/common.js:202
+#: js/common.js:201 js/Tinebase-FAT-debug.js:13961
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] "{0} másodperc"
 msgstr[1] "{0} másodperc"
 
-#: js/MainMenu.js:65
-msgid "User: {0}"
-msgstr "Felhasználó: {0}"
+#: js/Container.js:114 js/Tinebase-FAT-debug.js:13199
+msgid "All {0}"
+msgstr "Minden {0}"
 
-#: js/MainMenu.js:115 js/MainMenu.js:189
-msgid "About {0}"
-msgstr "Erről: {0}"
+#: js/Container.js:115 js/Tinebase-FAT-debug.js:13200
+msgid "Shared {0}"
+msgstr "Megosztott {0}"
 
-#: js/MainMenu.js:121
-msgid "Debug Console (Ctrl + F11)"
-msgstr "Debug konzol (Ctrl + F11)"
+#: js/Container.js:116 js/Tinebase-FAT-debug.js:13201
+msgid "Other Users {0}"
+msgstr "Többi felhasználó {0}"
 
-#: js/MainMenu.js:127 js/widgets/dialog/PreferencesPanel.js:37
-msgid "Preferences"
-msgstr "Tulajdonságok"
+#: js/Container.js:120 js/Tinebase-FAT-debug.js:13205
+msgid "My {0}"
+msgstr "Saját {0}"
 
-#: js/MainMenu.js:134
-msgid "Edit Profile"
-msgstr "Profil szerkesztése"
+#: js/data/Record.js:114 js/Tinebase-FAT-debug.js:11812
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Feladat"
+msgstr[1] "Feladatok"
 
-#: js/MainMenu.js:141
-msgid "Change password"
-msgstr "Jelszó megváltoztatása"
+#: js/data/Record.js:118 js/Tinebase-FAT-debug.js:11816
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "tennivaló lista"
+msgstr[1] "tennivaló listák"
 
-#: js/MainMenu.js:148
-msgid "Logout"
-msgstr "Kijelentkezés"
+#: js/ExceptionDialog.js:58 js/PasswordChangeDialog.js:60
+#: js/Tinebase-FAT-debug.js:7424 js/Tinebase-FAT-debug.js:12896
+#: js/Tinebase-FAT-debug.js:14754 js/Tinebase-FAT-debug.js:15372
+#: js/Tinebase-FAT-debug.js:16083 js/Tinebase-FAT-debug.js:17472
+#: js/Tinebase-FAT-debug.js:24157 js/Tinebase-FAT-debug.js:26369
+#: js/Tinebase-FAT-debug.js:27263 js/Tinebase-FAT-debug.js:28809
+#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
+#: js/widgets/container/ContainerSelect.js:450
+#: js/widgets/dialog/EditDialog.js:203
+#: js/widgets/dialog/MultiOptionsDialog.js:109
+#: js/widgets/dialog/PreferencesDialog.js:117 js/widgets/EditRecord.js:178
+#: js/widgets/tags/TagsMassAttachAction.js:90
+msgid "Cancel"
+msgstr "Mégse"
 
-#: js/MainMenu.js:149
-msgid "Logout from {0}"
-msgstr "Kijelentkezés ebből: {0}"
+#: js/ExceptionDialog.js:66 js/Tinebase-FAT-debug.js:12904
+msgid "Send Report"
+msgstr "Jelentés küldése"
 
-#: js/MainMenu.js:156
-msgid "Allow desktop notifications"
+#: js/ExceptionDialog.js:76 js/Tinebase-FAT-debug.js:12914
+msgid "The last action you made was potentially not performed correctly."
+msgstr "Az utolsó tevékenységed nem teljesült megfelelően."
+
+#: js/ExceptionDialog.js:77 js/Tinebase-FAT-debug.js:12915
+msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
+msgstr "Segíts tökéletesíteni ezt a szoftvert és értsesítsd a gyártót. Mellékelj egy leírást arról, hogy mit csináltál amikor a hiba keletkezett."
+
+#: js/ExceptionDialog.js:83 js/Tinebase-FAT-debug.js:12921
+#: js/Tinebase-FAT-debug.js:26046 js/widgets/tags/TagsPanel.js:599
+msgid "Description"
+msgstr "Leírás"
+
+#: js/ExceptionDialog.js:91 js/Tinebase-FAT-debug.js:12929
+msgid "Send Contact Information"
+msgstr "Kapcsolati információk küldése"
+
+#: js/ExceptionDialog.js:108 js/Tinebase-FAT-debug.js:12946
+msgid "Details:"
+msgstr "Részletek:"
+
+#: js/ExceptionDialog.js:136 js/Tinebase-FAT-debug.js:12974
+msgid "Sending report..."
+msgstr "Jelentés küldése..."
+
+#: js/ExceptionDialog.js:136 js/Tinebase-FAT-debug.js:12974
+msgid "Please wait a moment"
+msgstr "Várj egy pillanatot"
+
+#: js/ExceptionDialog.js:178 js/Tinebase-FAT-debug.js:13016
+msgid "Transmission Completed"
+msgstr "Átvitel befejezve"
+
+#: js/ExceptionDialog.js:179 js/Tinebase-FAT-debug.js:13017
+msgid "Your report has been sent. Thanks for your contribution"
+msgstr "Jelentésed elküldve. Köszönjük a részvételt"
+
+#: js/ExceptionDialog.js:179 js/Tinebase-FAT-debug.js:13017
+msgid "Please restart your browser now!"
+msgstr "Kérlek indítsd újra a böngésződet most!"
+
+#: js/ExceptionHandler.js:130 js/Tinebase-FAT-debug.js:12707
+msgid "Your session timed out. You need to login again."
+msgstr "Időtúllépés. Újra be kell jelentkezned."
+
+#: js/ExceptionHandler.js:147 js/Tinebase-FAT-debug.js:12724
+msgid "Insufficient Rights"
+msgstr "Nincs elegendő jogod"
+
+#: js/ExceptionHandler.js:148 js/Tinebase-FAT-debug.js:12725
+msgid "Sorry, you are not permitted to perform this action"
+msgstr "Bocsánat, de nem vagy jogosult erre a tevékenységre"
+
+#: js/ExceptionHandler.js:157 js/Tinebase-FAT-debug.js:12734
+msgid "Not Found"
+msgstr "Nem található"
+
+#: js/ExceptionHandler.js:158 js/Tinebase-FAT-debug.js:12735
+msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
+msgstr "Bocsánat, kérésed nem teljesíthető, mert a kért adat nem található. Legtöbb esetben ez azt jelenti, hogy valaki már törölte az adatot. Frissítsd az aktuális nézetedet."
+
+#: js/ExceptionHandler.js:167 js/Tinebase-FAT-debug.js:12744
+msgid "Concurrent Updates"
+msgstr "Megegyező frissítések"
+
+#: js/ExceptionHandler.js:168 js/Tinebase-FAT-debug.js:12745
+msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
+msgstr "Valaki más elmentette ezt a tételt miközben te szerkesztetted. Töltsd be újra és csináld újra a változtatásokat."
+
+#: js/ExceptionHandler.js:178 js/Tinebase-FAT-debug.js:12755
+msgid "Service Unavailable"
+msgstr "Szolgáltatás nem elérhető"
+
+#: js/ExceptionHandler.js:179 js/Tinebase-FAT-debug.js:12756
+msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
+msgstr "A szerver éppen nem tudja teljesíteni a kérést, átmenteti túlterhelés vagy karbantartás miatt. Próbáld újra vagy lépj kapcsolatba a rendszergazdával."
+
+#: js/ExceptionHandler.js:186 js/Tinebase-FAT-debug.js:12763
+msgid "Connection lost, please check your network!"
+msgstr "Kapcsolat elveszett, ellenőrizd a hálózatod!"
+
+#: js/ExceptionHandler.js:192 js/Tinebase-FAT-debug.js:12769
+msgid "Timeout"
+msgstr "Időtúllépés"
+
+#: js/ExceptionHandler.js:193 js/Tinebase-FAT-debug.js:12770
+msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
+msgstr "Bocsánat, időtúllépés történt a kérésed feldolgozása közben. Töltsd újra a böngésződet, próbáld újra vagy lépj kapcsolatba a rendszergazdával."
+
+#: js/ExceptionHandler.js:202 js/Tinebase-FAT-debug.js:12779
+msgid "No Response"
+msgstr "Nincs válasz"
+
+#: js/ExceptionHandler.js:203 js/Tinebase-FAT-debug.js:12780
+msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
+msgstr "Bocsánat, a szerver nem adott vissza adatot. Töltsd újra a böngésződet, próbáld újra vagy lépj kapcsolatba a rendszergazdával."
+
+#: js/ExceptionHandler.js:212 js/Tinebase-FAT-debug.js:12789
+msgid "Out of Resources"
 msgstr ""
 
-#: js/MainMenu.js:157
-msgid "Request permissions for webkit desktop notifications."
+#: js/ExceptionHandler.js:213 js/Tinebase-FAT-debug.js:12790
+msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
 msgstr ""
 
-#: js/MainMenu.js:167
-msgid "Install web app"
-msgstr ""
+#: js/ExceptionHandler.js:222 js/Tinebase-FAT-debug.js:12799
+msgid "No Role Memberships"
+msgstr "Nincsenek Szerep tagságok"
 
-#: js/MainMenu.js:168
-msgid "Install Tine 2.0 as web app in your browser."
-msgstr ""
+#: js/ExceptionHandler.js:223 js/Tinebase-FAT-debug.js:12800
+msgid "Your user account has no role memberships. Please contact your administrator."
+msgstr "A felhasználó nevedhez nem tartoznak szerep tagságok. Lépj kapcsolatba a rendszergazdával."
 
-#: js/MainMenu.js:233 js/widgets/persistentfilter/PickerPanel.js:276
-#: js/widgets/grid/GridPanel.js:1225 js/widgets/dialog/EditDialog.js:489
-#: js/widgets/tree/ContextMenu.js:85
-msgid "Confirm"
-msgstr "Confirm"
-
-#: js/MainMenu.js:233
-msgid "Are you sure you want to logout?"
-msgstr "Biztosan ki akarsz jelentkezni?"
-
-#: js/MainMenu.js:247
-msgid "Logging you out..."
-msgstr "Kijelentkezés..."
-
-#: js/MainMenu.js:247 js/LoginPanel.js:355
-msgid "Please wait!"
-msgstr "Kérlek várj!"
-
-#: js/LoginPanel.js:82 js/LoginPanel.js:120
+#: js/LoginPanel.js:80 js/LoginPanel.js:118 js/Tinebase-FAT-debug.js:30379
+#: js/Tinebase-FAT-debug.js:30417
 msgid "Login"
 msgstr "Bejelentkezés"
 
-#: js/LoginPanel.js:92 js/widgets/dialog/CredentialsDialog.js:61
+#: js/LoginPanel.js:90 js/Tinebase-FAT-debug.js:15880
+#: js/Tinebase-FAT-debug.js:30389 js/widgets/dialog/CredentialsDialog.js:60
 msgid "Username"
 msgstr "Felhasználónév"
 
-#: js/LoginPanel.js:109 js/widgets/dialog/CredentialsDialog.js:65
+#: js/LoginPanel.js:107 js/Tinebase-FAT-debug.js:15884
+#: js/Tinebase-FAT-debug.js:30406 js/widgets/dialog/CredentialsDialog.js:64
 msgid "Password"
 msgstr "Jelszó"
 
-#: js/LoginPanel.js:139
+#: js/LoginPanel.js:137 js/Tinebase-FAT-debug.js:30436
 msgid "Tine 2.0 is made for you"
 msgstr "Tine 2.0 Neked készült"
 
-#: js/LoginPanel.js:141
+#: js/LoginPanel.js:139 js/Tinebase-FAT-debug.js:30438
 msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
 msgstr "Tine 2.0 szeretné az üzleti együttműködést könnyebbé és élvezhetőbbé tenni - a szükségleteid szerint! Ezért melegen üdvözöljük a megbeszéléseket, az ötleteket és a segítség nyújtást."
 
-#: js/LoginPanel.js:147
+#: js/LoginPanel.js:145 js/Tinebase-FAT-debug.js:30444
 msgid "Tine 2.0 Homepage"
 msgstr "Tine 2.0 Honlap"
 
-#: js/LoginPanel.js:148
+#: js/LoginPanel.js:146 js/Tinebase-FAT-debug.js:30445
 msgid "Tine 2.0 Forum"
 msgstr "Tine 2.0 Fórum"
 
-#: js/LoginPanel.js:193
+#: js/LoginPanel.js:191 js/Tinebase-FAT-debug.js:30490
 msgid "about {0} minutes"
 msgstr "kb. {0} perc"
 
-#: js/LoginPanel.js:198 js/LoginPanel.js:414
+#: js/LoginPanel.js:196 js/LoginPanel.js:412 js/Tinebase-FAT-debug.js:30495
+#: js/Tinebase-FAT-debug.js:30711
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0-nek szüksége van a segítségedre"
 
-#: js/LoginPanel.js:200 js/LoginPanel.js:416
+#: js/LoginPanel.js:198 js/LoginPanel.js:414 js/Tinebase-FAT-debug.js:30497
+#: js/Tinebase-FAT-debug.js:30713
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "Rendszeresen szükségünk van a visszajelzésedre, hogy a Tine 2.0 következő kiadása az igényeidet minnél jobban kielégítse. Segíts nekünk és magadnak ezekben résztvéve:"
 
-#: js/LoginPanel.js:206
+#: js/LoginPanel.js:204 js/Tinebase-FAT-debug.js:30503
 msgid "participate!"
 msgstr "közreműködés!"
 
-#: js/LoginPanel.js:228
+#: js/LoginPanel.js:226 js/Tinebase-FAT-debug.js:30525
 msgid "Languages"
 msgstr "Nyelvek"
 
-#: js/LoginPanel.js:229
+#: js/LoginPanel.js:227 js/Tinebase-FAT-debug.js:30526
 msgid "Duration"
 msgstr "Időtartam"
 
-#: js/LoginPanel.js:269
+#: js/LoginPanel.js:267 js/Tinebase-FAT-debug.js:30566
 msgid "Browser incompatible"
 msgstr "Böngésző nem kompatibilis"
 
-#: js/LoginPanel.js:271
+#: js/LoginPanel.js:269 js/Tinebase-FAT-debug.js:30568
 msgid "Your browser is not supported by Tine 2.0."
 msgstr "A böngésződet nem támogatja a Tine 2.0."
 
-#: js/LoginPanel.js:276
+#: js/LoginPanel.js:274 js/Tinebase-FAT-debug.js:30573
 msgid "Browser incompatible?"
 msgstr "Böngésző nem kompatibilis?"
 
-#: js/LoginPanel.js:278
+#: js/LoginPanel.js:276 js/Tinebase-FAT-debug.js:30575
 msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
 msgstr "Ismeretlen böngészőt használsz. Ez ismeretlen viselkedést okozhat."
 
-#: js/LoginPanel.js:284
+#: js/LoginPanel.js:282 js/Tinebase-FAT-debug.js:30581
 msgid "You might try one of these browsers:"
 msgstr "Az alábbi böngészőket kell megpróbálnod:"
 
-#: js/LoginPanel.js:342
+#: js/LoginPanel.js:340 js/Tinebase-FAT-debug.js:30639
 msgid "Logging you in..."
 msgstr "Bejelentkezés..."
 
-#: js/LoginPanel.js:342 js/widgets/persistentfilter/PickerPanel.js:278
-#: js/widgets/persistentfilter/PickerPanel.js:300
-#: js/widgets/container/GrantsDialog.js:169 js/widgets/tree/ContextMenu.js:43
-#: js/widgets/tree/ContextMenu.js:87 js/widgets/tree/ContextMenu.js:144
+#: js/LoginPanel.js:340 js/Tinebase-FAT-debug.js:22956
+#: js/Tinebase-FAT-debug.js:23000 js/Tinebase-FAT-debug.js:23057
+#: js/Tinebase-FAT-debug.js:24429 js/Tinebase-FAT-debug.js:28559
+#: js/Tinebase-FAT-debug.js:28581 js/Tinebase-FAT-debug.js:30639
+#: js/widgets/container/GrantsDialog.js:167
+#: js/widgets/persistentfilter/PickerPanel.js:276
+#: js/widgets/persistentfilter/PickerPanel.js:298
+#: js/widgets/tree/ContextMenu.js:42 js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:143
 msgid "Please wait"
 msgstr "Kérlek várj"
 
-#: js/LoginPanel.js:355
+#: js/LoginPanel.js:353 js/Tinebase-FAT-debug.js:30652
 msgid "Login successful. Loading {0}..."
 msgstr "Bejelentkezés sikeres. {0} betöltése..."
 
-#: js/LoginPanel.js:360
+#: js/LoginPanel.js:353 js/MainMenu.js:227 js/Tinebase-FAT-debug.js:29957
+#: js/Tinebase-FAT-debug.js:30652
+msgid "Please wait!"
+msgstr "Kérlek várj!"
+
+#: js/LoginPanel.js:358 js/Tinebase-FAT-debug.js:30657
 msgid "Login failure"
 msgstr "Hibás bejelentkezés"
 
-#: js/LoginPanel.js:361
+#: js/LoginPanel.js:359 js/Tinebase-FAT-debug.js:30658
 msgid "Your username and/or your password are wrong!!!"
 msgstr "A felhasználóneved és/vagy a jelszavad hibás!!!"
 
-#: js/LoginPanel.js:372 js/widgets/dialog/PreferencesDialog.js:246
-#: js/widgets/dialog/PreferencesDialog.js:275
-#: js/widgets/dialog/CredentialsDialog.js:129
-#: js/widgets/dialog/ExportDialog.js:141 js/widgets/dialog/EditDialog.js:481
-#: js/widgets/dialog/ImportDialog.js:211
+#: js/LoginPanel.js:370 js/Tinebase-FAT-debug.js:15653
+#: js/Tinebase-FAT-debug.js:15948 js/Tinebase-FAT-debug.js:16211
+#: js/Tinebase-FAT-debug.js:16240 js/Tinebase-FAT-debug.js:17048
+#: js/Tinebase-FAT-debug.js:17206 js/Tinebase-FAT-debug.js:30669
+#: js/widgets/dialog/CredentialsDialog.js:128
+#: js/widgets/dialog/EditDialog.js:492 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/ImportDialog.js:210
+#: js/widgets/dialog/PreferencesDialog.js:245
+#: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
 msgstr "Hibák"
 
-#: js/LoginPanel.js:372 js/widgets/dialog/CredentialsDialog.js:129
-#: js/widgets/dialog/ExportDialog.js:141 js/widgets/dialog/EditDialog.js:481
-#: js/widgets/dialog/ImportDialog.js:211
+#: js/LoginPanel.js:370 js/Tinebase-FAT-debug.js:15653
+#: js/Tinebase-FAT-debug.js:15948 js/Tinebase-FAT-debug.js:17048
+#: js/Tinebase-FAT-debug.js:17206 js/Tinebase-FAT-debug.js:30669
+#: js/widgets/dialog/CredentialsDialog.js:128
+#: js/widgets/dialog/EditDialog.js:492 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/ImportDialog.js:210
 msgid "Please fix the errors noted."
 msgstr "Javítsd a jegyzett hibákat."
 
-#: js/LoginPanel.js:387
+#: js/LoginPanel.js:385 js/Tinebase-FAT-debug.js:30684
 msgid "Please enter your login data"
 msgstr "Írd be a bejelentkezési adataidat"
 
-#: js/MainScreen.js:189
+#: js/MainMenu.js:62 js/Tinebase-FAT-debug.js:29792
+msgid "User: {0}"
+msgstr "Felhasználó: {0}"
+
+#: js/MainMenu.js:118 js/Tinebase-FAT-debug.js:29848
+msgid "Debug Console (Ctrl + F11)"
+msgstr "Debug konzol (Ctrl + F11)"
+
+#: js/MainMenu.js:124 js/Tinebase-FAT-debug.js:16670
+#: js/Tinebase-FAT-debug.js:29854 js/widgets/dialog/PreferencesPanel.js:36
+msgid "Preferences"
+msgstr "Tulajdonságok"
+
+#: js/MainMenu.js:131 js/Tinebase-FAT-debug.js:29861
+msgid "Edit Profile"
+msgstr "Profil szerkesztése"
+
+#: js/MainMenu.js:138 js/Tinebase-FAT-debug.js:29868
+msgid "Change password"
+msgstr "Jelszó megváltoztatása"
+
+#: js/MainMenu.js:145 js/Tinebase-FAT-debug.js:29875
+msgid "Logout"
+msgstr "Kijelentkezés"
+
+#: js/MainMenu.js:146 js/Tinebase-FAT-debug.js:29876
+msgid "Logout from {0}"
+msgstr "Kijelentkezés ebből: {0}"
+
+#: js/MainMenu.js:153 js/Tinebase-FAT-debug.js:29883
+msgid "Allow desktop notifications"
+msgstr ""
+
+#: js/MainMenu.js:154 js/Tinebase-FAT-debug.js:29884
+msgid "Request permissions for webkit desktop notifications."
+msgstr ""
+
+#: js/MainMenu.js:164 js/Tinebase-FAT-debug.js:29894
+msgid "Install web app"
+msgstr ""
+
+#: js/MainMenu.js:165 js/Tinebase-FAT-debug.js:29895
+msgid "Install Tine 2.0 as web app in your browser."
+msgstr ""
+
+#: js/MainMenu.js:213 js/Tinebase-FAT-debug.js:15661
+#: js/Tinebase-FAT-debug.js:22739 js/Tinebase-FAT-debug.js:22998
+#: js/Tinebase-FAT-debug.js:28557 js/Tinebase-FAT-debug.js:29943
+#: js/widgets/dialog/EditDialog.js:500 js/widgets/grid/GridPanel.js:1230
+#: js/widgets/persistentfilter/PickerPanel.js:274
+#: js/widgets/tree/ContextMenu.js:84
+msgid "Confirm"
+msgstr "Confirm"
+
+#: js/MainMenu.js:213 js/Tinebase-FAT-debug.js:29943
+msgid "Are you sure you want to logout?"
+msgstr "Biztosan ki akarsz jelentkezni?"
+
+#: js/MainMenu.js:227 js/Tinebase-FAT-debug.js:29957
+msgid "Logging you out..."
+msgstr "Kijelentkezés..."
+
+#: js/MainScreen.js:187 js/Tinebase-FAT-debug.js:30190
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Lejárt a jelszód. Írj be egy új jelszót:"
 
-#: js/Models.js:78
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] "Csoport"
-msgstr[1] "Csoportok"
-
-#: js/Models.js:78
-msgid "Groups"
-msgstr "Csoportok"
-
-#: js/Models.js:288
+#: js/Models.js:246 js/Tinebase-FAT-debug.js:13511
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "Importálás"
 msgstr[1] "Importálások"
 
-#: js/Models.js:315 js/widgets/container/GrantsDialog.js:112
-#: js/widgets/dialog/ExportDialog.js:47
+#: js/Models.js:273 js/Tinebase-FAT-debug.js:13538
+#: js/Tinebase-FAT-debug.js:17112 js/Tinebase-FAT-debug.js:24372
+#: js/widgets/container/GrantsDialog.js:110
+#: js/widgets/dialog/ExportDialog.js:46
 msgid "Export"
 msgid_plural "Export"
 msgstr[0] "Exportálás"
 msgstr[1] "Exportálás"
 
-#: js/Models.js:350
+#: js/Models.js:308 js/Tinebase-FAT-debug.js:13573
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "Belépési adat"
 msgstr[1] "Belépési adatok"
 
-#: js/Models.js:377
+#: js/Models.js:335 js/Tinebase-FAT-debug.js:13600
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Kapcsolat"
 msgstr[1] "Kapcsolatok"
 
-#: js/Models.js:399
+#: js/Models.js:357 js/Tinebase-FAT-debug.js:13622
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] "Osztály"
 msgstr[1] "Osztályok"
 
-#: js/Models.js:407 js/widgets/account/PickerGridPanel.js:254
+#: js/Models.js:365 js/Tinebase-FAT-debug.js:13630
+#: js/Tinebase-FAT-debug.js:23638 js/widgets/account/PickerGridPanel.js:252
 msgid "Name"
 msgstr "Név"
 
-#: js/Models.js:426
+#: js/Models.js:384 js/Tinebase-FAT-debug.js:13649
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] "Beállítás"
 msgstr[1] "Beállítások"
 
-#: js/Models.js:426
+#: js/Models.js:384 js/Tinebase-FAT-debug.js:13649
 msgid "Configs"
 msgstr "Beállítások"
 
-#: js/ExceptionDialog.js:51 Frontend/Http.php:591
-msgid "Abnormal End"
-msgstr "Nem normális befejezés"
+#: js/PasswordChangeDialog.js:32 js/Tinebase-FAT-debug.js:28781
+msgid "Change Password For \"{0}\""
+msgstr " \"{0}\" jelszavának megváltoztatása"
 
-#: js/ExceptionDialog.js:67
-msgid "Send Report"
-msgstr "Jelentés küldése"
+#: js/PasswordChangeDialog.js:48 js/Tinebase-FAT-debug.js:28797
+msgid "Old Password"
+msgstr "Régi jelszó"
 
-#: js/ExceptionDialog.js:76 Frontend/Http.php:592
-msgid "An error occurred, the program ended abnormal."
-msgstr "Hiba keletkezett, a program futása megszakadt."
+#: js/PasswordChangeDialog.js:52 js/Tinebase-FAT-debug.js:28801
+msgid "New Password"
+msgstr "Új jelszó"
 
-#: js/ExceptionDialog.js:77
-msgid "The last action you made was potentially not performed correctly."
-msgstr "Az utolsó tevékenységed nem teljesült megfelelően."
+#: js/PasswordChangeDialog.js:56 js/Tinebase-FAT-debug.js:28805
+msgid "Repeat new Password"
+msgstr "Jelszó megismétlése"
 
-#: js/ExceptionDialog.js:78
-msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
-msgstr "Segíts tökéletesíteni ezt a szoftvert és értsesítsd a gyártót. Mellékelj egy leírást arról, hogy mit csináltál amikor a hiba keletkezett."
+#: js/PasswordChangeDialog.js:75 js/Tinebase-FAT-debug.js:28824
+msgid "Please Wait!"
+msgstr "Kérem várjon!"
 
-#: js/ExceptionDialog.js:84 js/widgets/tags/TagsPanel.js:600
-msgid "Description"
-msgstr "Leírás"
+#: js/PasswordChangeDialog.js:76 js/Tinebase-FAT-debug.js:28825
+msgid "changing password..."
+msgstr "jelszó megváltoztatása..."
 
-#: js/ExceptionDialog.js:92
-msgid "Send Contact Information"
-msgstr "Kapcsolati információk küldése"
+#: js/PasswordChangeDialog.js:87 js/Tinebase-FAT-debug.js:28836
+msgid "Success"
+msgstr "Sikerült"
 
-#: js/ExceptionDialog.js:109
-msgid "Details:"
-msgstr "Részletek:"
+#: js/PasswordChangeDialog.js:88 js/Tinebase-FAT-debug.js:28837
+msgid "Your password has been changed."
+msgstr "Jelszavad megváltozott."
 
-#: js/ExceptionDialog.js:137
-msgid "Sending report..."
-msgstr "Jelentés küldése..."
+#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
+#: js/Tinebase-FAT-debug.js:28849 js/Tinebase-FAT-debug.js:28859
+msgid "Failure"
+msgstr "Hiba"
 
-#: js/ExceptionDialog.js:137
-msgid "Please wait a moment"
-msgstr "Várj egy pillanatot"
+#: js/PasswordChangeDialog.js:111 js/Tinebase-FAT-debug.js:28860
+msgid "The new passwords mismatch, please correct them."
+msgstr "Az új jelszavak nem egyezznek, javítsd őket."
 
-#: js/ExceptionDialog.js:179
-msgid "Transmission Completed"
-msgstr "Átvitel befejezve"
+#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
+#: js/Tinebase-FAT-debug.js:30993 js/Tinebase-FAT-debug.js:30994
+#, fuzzy
+msgid "Outdent Text"
+msgstr "Nem behúzott szöveg"
 
-#: js/ExceptionDialog.js:180
-msgid "Your report has been sent. Thanks for your contribution"
-msgstr "Jelentésed elküldve. Köszönjük a részvételt"
+#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
+#: js/Tinebase-FAT-debug.js:30995 js/Tinebase-FAT-debug.js:30996
+#, fuzzy
+msgid "Indent Text"
+msgstr "Behúzott szöveg"
 
-#: js/ExceptionDialog.js:180
-msgid "Please restart your browser now!"
-msgstr "Kérlek indítsd újra a böngésződet most!"
+#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
+#: js/Tinebase-FAT-debug.js:30997 js/Tinebase-FAT-debug.js:30998
+msgid "Remove Formatting"
+msgstr "Formázás eltávolítása"
 
-#: js/widgets/persistentfilter/Model.js:40
-msgid "Favorite"
-msgid_plural "Favorites"
-msgstr[0] "Kedvenc"
-msgstr[1] "Kedvencek"
+#: js/Tinebase-FAT-debug.js:3765 js/Tinebase-FAT.js:34
+#: js/ux/ConnectionStatus.js:56
+msgid "online"
+msgstr "online"
 
-#: js/widgets/persistentfilter/Model.js:40
-msgid "Events"
-msgstr "Események"
+#: js/Tinebase-FAT-debug.js:3766 js/Tinebase-FAT.js:34
+#: js/ux/ConnectionStatus.js:57
+msgid "offline"
+msgstr "offline"
 
-#: js/widgets/persistentfilter/PickerPanel.js:68
-msgid "My favorites"
-msgstr "Kedvenceim"
+#: js/Tinebase-FAT-debug.js:3767 js/Tinebase-FAT.js:34
+#: js/ux/ConnectionStatus.js:58 User/Abstract.php:283 User/Abstract.php:284
+#: User/Abstract.php:285 User/Abstract.php:286 User/Abstract.php:287
+msgid "unknown"
+msgstr "ismeretlen"
 
-#: js/widgets/persistentfilter/PickerPanel.js:256
-msgid "Delete Favorite"
-msgstr "Kedvenc törlése"
+#: js/Tinebase-FAT-debug.js:5195 js/ux/SearchField.js:44
+msgid "enter searchfilter"
+msgstr "keresőszűrő megadása"
 
-#: js/widgets/persistentfilter/PickerPanel.js:261
-msgid "Rename Favorite"
-msgstr "Kedvenc átnevezése"
+#: js/Tinebase-FAT-debug.js:5787 js/ux/grid/PagingToolbar.js:53
+msgid "{0} selected"
+msgstr "{0} választva"
 
-#: js/widgets/persistentfilter/PickerPanel.js:276
-msgid "Do you really want to delete the favorite \"{0}\"?"
-msgstr "Biztosan szeretnéd törölni ezt a kedvencet: \"{0}\"?"
+#: js/Tinebase-FAT-debug.js:5788 js/ux/grid/PagingToolbar.js:54
+msgid "Unselect all"
+msgstr "Összes kiválasztás visszavonása"
 
-#: js/widgets/persistentfilter/PickerPanel.js:278
-msgid "Deleting Favorite \"{0}\""
-msgstr "Kedvenc törlése: \"{0}\""
+#: js/Tinebase-FAT-debug.js:5789 js/ux/grid/PagingToolbar.js:55
+msgid "Select all visible ({0} records)"
+msgstr "Összes látható ({0} adat) kiválasztása"
 
-#: js/widgets/persistentfilter/PickerPanel.js:298
-msgid "New Name"
-msgstr "Új név"
+#: js/Tinebase-FAT-debug.js:5790 js/ux/grid/PagingToolbar.js:56
+msgid "Select all pages ({0} records)"
+msgstr "Összes oldal ({0} adat) kiválasztása"
 
-#: js/widgets/persistentfilter/PickerPanel.js:298
-msgid "Please enter the new name for favorite \"{0}\"?"
-msgstr "Kérlek írd be az új nevét ennek a kedvencnek: \"{0}\"?"
+#: js/Tinebase-FAT-debug.js:5791 js/ux/grid/PagingToolbar.js:57
+msgid "Toggle selection"
+msgstr "Kiválasztás átváltása"
 
-#: js/widgets/persistentfilter/PickerPanel.js:300
-msgid "Renaming Favorite \"{0}\""
-msgstr "Kedvenc átnevezése: \"{0}\""
+#: js/Tinebase-FAT-debug.js:7833 js/ux/form/RecordsComboBox.js:26
+msgid "Software Version"
+msgstr "Szoftver verzió"
 
-#: js/widgets/persistentfilter/PickerPanel.js:321
-msgid "Could not save Favorite"
-msgstr "Nem lehet a kedvencet elmenteni"
+#: js/Tinebase-FAT-debug.js:8239 js/ux/form/ImageField.js:72
+msgid "Loading"
+msgstr "Betöltés"
 
-#: js/widgets/persistentfilter/PickerPanel.js:321
-msgid "Your current view does not support favorites"
-msgstr "A jelenlegi nézeted nem támogatja a kedvenceket"
+#: js/Tinebase-FAT-debug.js:8242 js/ux/form/ImageField.js:75
+msgid "Click to edit"
+msgstr "Kattints a szerkesztéshez"
 
-#: js/widgets/persistentfilter/PickerPanel.js:326
-msgid "save filter"
-msgstr "szűrő mentése"
+#: js/Tinebase-FAT-debug.js:8291 js/ux/form/ImageField.js:124
+msgid "Not An Image"
+msgstr "Ez nem egy kép"
 
-#: js/widgets/persistentfilter/PickerPanel.js:326
-msgid "Please enter a name for the favorite"
-msgstr "Kérlek írj be egy nevet a kedvencnek"
+#: js/Tinebase-FAT-debug.js:8291 js/ux/form/ImageField.js:124
+msgid "Please select an image file (gif/png/jpeg)"
+msgstr "Kérem válasszon egy kép file-t (gif/png/jpeg)"
 
-#: js/widgets/persistentfilter/PickerPanel.js:329
-#: js/widgets/persistentfilter/PickerPanel.js:332
-#: js/widgets/persistentfilter/PickerPanel.js:341
-msgid "Favorite not Saved"
-msgstr "Kedvenc nincs mentve"
+#: js/Tinebase-FAT-debug.js:8325 js/Tinebase-FAT-debug.js:21098
+#: js/ux/form/ImageField.js:158 js/widgets/grid/FileUploadGrid.js:95
+msgid "Upload Failed"
+msgstr "Hibás feltöltés"
 
-#: js/widgets/persistentfilter/PickerPanel.js:329
-msgid "You have to supply a name for the favorite!"
-msgstr "Biztosítanod kell egy nevet a kedvencnek!"
+#: js/Tinebase-FAT-debug.js:8325 js/ux/form/ImageField.js:158
+msgid "Could not upload image. Please notify your Administrator"
+msgstr "A kép feltöltése sikertelen. Értesítse a rendszergazdáját"
 
-#: js/widgets/persistentfilter/PickerPanel.js:332
-msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
-msgstr "Rövidebb nevet kell megadnod. A kedvencek nevének hossza 40 karakter hosszó lehet."
+#: js/Tinebase-FAT-debug.js:8337 js/ux/form/ImageField.js:170
+msgid "Change Image"
+msgstr "Kép cseréje"
 
-#: js/widgets/persistentfilter/PickerPanel.js:335
-msgid "Saving favorite"
-msgstr "Kedvenc mentése"
+#: js/Tinebase-FAT-debug.js:8346 js/Tinebase-FAT-debug.js:8364
+#: js/ux/form/ImageField.js:179 js/ux/form/ImageField.js:197
+msgid "Crop Image"
+msgstr "Kép kivágása"
 
-#: js/widgets/persistentfilter/PickerPanel.js:341
-msgid "Overwriting system favorites is not yet supported"
-msgstr "Rendszer kedvenceinek felülírása még nem támogatott"
+#: js/Tinebase-FAT-debug.js:8370 js/ux/form/ImageField.js:203
+msgid "Delete Image"
+msgstr "Kép törlése"
 
-#: js/widgets/account/PickerGridPanel.js:151
-msgid "Search User"
-msgstr "Felhasználó keresése"
+#: js/Tinebase-FAT-debug.js:8379 js/ux/form/ImageField.js:212
+msgid "Show Original Image"
+msgstr "Eredeti kép mutatása"
 
-#: js/widgets/account/PickerGridPanel.js:157
-msgid "Search Group"
-msgstr "Csoport keresése"
+#: js/Tinebase-FAT-debug.js:8441 js/ux/form/ImageField.js:274
+msgid "Image Failed"
+msgstr "Hibás kép"
 
-#: js/widgets/account/PickerGridPanel.js:163
-msgid "Add Anyone"
-msgstr "Bárki hozzáadása"
+#: js/Tinebase-FAT-debug.js:8441 js/ux/form/ImageField.js:274
+msgid "Could not load image. Please notify your Administrator"
+msgstr "Kép betöltése sikertelen. Értesítse a redszergazdáját"
 
-#: js/widgets/account/PickerGridPanel.js:171
-msgid "Anyone"
-msgstr "Bárki"
+#: js/Tinebase-FAT-debug.js:13301
+msgid "Group"
+msgid_plural "Groups"
+msgstr[0] "Csoport"
+msgstr[1] "Csoportok"
 
-#: js/widgets/account/PickerGridPanel.js:219
-msgid "Search for users ..."
-msgstr "Felhasználók keresése..."
+#: js/Tinebase-FAT-debug.js:13301
+msgid "Groups"
+msgstr "Csoportok"
 
-#: js/widgets/account/PickerGridPanel.js:238
-msgid "Search for groups ..."
-msgstr "Csoportok keresése..."
+#: js/Tinebase-FAT-debug.js:14223 js/widgets/LangChooser.js:36
+#: Preference.php:91
+msgid "Language"
+msgstr "Nyelv"
 
-#: js/widgets/EditRecord.js:132 js/widgets/dialog/EditDialog.js:249
-#: js/widgets/dialog/EditDialog.js:262
+#: js/Tinebase-FAT-debug.js:14256 js/widgets/LangChooser.js:69
+msgid "setting new language..."
+msgstr "új nyelv beállítása..."
+
+#: js/Tinebase-FAT-debug.js:14707 js/Tinebase-FAT-debug.js:15421
+#: js/Tinebase-FAT-debug.js:15434 js/widgets/dialog/EditDialog.js:252
+#: js/widgets/dialog/EditDialog.js:265 js/widgets/EditRecord.js:131
 msgid "Saved in"
 msgstr "Mentve ide:"
 
-#: js/widgets/EditRecord.js:189 js/widgets/dialog/EditDialog.js:209
+#: js/Tinebase-FAT-debug.js:14764 js/Tinebase-FAT-debug.js:15381
+#: js/widgets/dialog/EditDialog.js:212 js/widgets/EditRecord.js:188
 msgid "delete"
 msgstr "törlés"
 
-#: js/widgets/Priority.js:21
+#: js/Tinebase-FAT-debug.js:14881 js/widgets/Priority.js:20
 msgid "low"
 msgstr "alacsony"
 
-#: js/widgets/Priority.js:22
+#: js/Tinebase-FAT-debug.js:14882 js/widgets/Priority.js:21
 msgid "normal"
 msgstr "normális"
 
-#: js/widgets/Priority.js:23
+#: js/Tinebase-FAT-debug.js:14883 js/widgets/Priority.js:22
 msgid "high"
 msgstr "magas"
 
-#: js/widgets/Priority.js:24
+#: js/Tinebase-FAT-debug.js:14884 js/widgets/Priority.js:23
 msgid "urgent"
 msgstr "sürgős"
 
-#: js/widgets/grid/FilterToolbar.js:74 js/widgets/grid/FilterToolbar.js:438
-msgid "Show"
-msgstr "Mutat"
-
-#: js/widgets/grid/FilterToolbar.js:140
-msgid "add new filter"
-msgstr "új szűrő hozzáadása"
-
-#: js/widgets/grid/FilterToolbar.js:146
-msgid "reset all filters"
-msgstr "összes szűrő törlése"
-
-#: js/widgets/grid/FilterToolbar.js:152
-msgid "start search"
-msgstr "keresés indítása"
-
-#: js/widgets/grid/FilterToolbar.js:160
-msgid "save as favorite"
-msgstr "mentés kedvencként"
-
-#: js/widgets/grid/FilterToolbar.js:249
-msgid "select a field"
-msgstr "válassz egy mezőt"
-
-#: js/widgets/grid/FilterToolbar.js:274
-msgid "Delete this filter"
-msgstr "Töröld ezt a szűrőt"
-
-#: js/widgets/grid/FilterToolbar.js:305
-msgid "and"
-msgstr "és"
-
-#: js/widgets/grid/FilterModelMultiSelect.js:214
-#: js/widgets/container/FilterModel.js:240
-msgid "Selected  {0}"
-msgstr "Kiválasztott {0}"
-
-#: js/widgets/grid/FilterModel.js:165
-msgid "contains"
-msgstr "tartalmaz"
-
-#: js/widgets/grid/FilterModel.js:166 js/widgets/container/FilterModel.js:132
-#: js/widgets/container/FilterModel.js:136
-msgid "is equal to"
-msgstr "egyforma ezzel:"
-
-#: js/widgets/grid/FilterModel.js:167
-msgid "is greater than"
-msgstr "nagyobb, mint"
-
-#: js/widgets/grid/FilterModel.js:168
-msgid "is less than"
-msgstr "kisebb, mint"
-
-#: js/widgets/grid/FilterModel.js:169
-msgid "is not"
-msgstr "nem"
-
-#: js/widgets/grid/FilterModel.js:170
-msgid "one of"
-msgstr "egy a(z)"
-
-#: js/widgets/grid/FilterModel.js:171
-msgid "none of"
-msgstr "nem a(z)"
-
-#: js/widgets/grid/FilterModel.js:172
-msgid "is before"
-msgstr "előtt"
-
-#: js/widgets/grid/FilterModel.js:173
-msgid "is after"
-msgstr "után"
-
-#: js/widgets/grid/FilterModel.js:174
-msgid "is within"
-msgstr "között"
-
-#: js/widgets/grid/FilterModel.js:175
-msgid "is in week no."
-msgstr "ezen a héten:"
-
-#: js/widgets/grid/FilterModel.js:176
-msgid "starts with"
-msgstr "kezdődik ekkor:"
-
-#: js/widgets/grid/FilterModel.js:177
-msgid "ends with"
-msgstr "végződik ekkor:"
-
-#: js/widgets/grid/FilterModel.js:218
-msgid "select a operator"
-msgstr "válassz egy operátort"
-
-#: js/widgets/grid/FilterModel.js:335
-msgid "Search Account ..."
-msgstr "Felhasználó keresése..."
-
-#: js/widgets/grid/FilterModel.js:458
-msgid "today"
-msgstr "ma"
-
-#: js/widgets/grid/FilterModel.js:459
-msgid "yesterday"
-msgstr "tegnap"
-
-#: js/widgets/grid/FilterModel.js:460
-msgid "this week"
-msgstr "ez a hét"
-
-#: js/widgets/grid/FilterModel.js:461
-msgid "last week"
-msgstr "múlt hét"
-
-#: js/widgets/grid/FilterModel.js:462
-msgid "the week before last"
-msgstr "2 hete"
-
-#: js/widgets/grid/FilterModel.js:463
-msgid "this month"
-msgstr "ez a hónap"
-
-#: js/widgets/grid/FilterModel.js:464
-msgid "last month"
-msgstr "múlt hónap"
-
-#: js/widgets/grid/FilterModel.js:465
-msgid "this quarter"
-msgstr "ez a negyedév"
-
-#: js/widgets/grid/FilterModel.js:466
-msgid "last quarter"
-msgstr "múlt negyedév"
-
-#: js/widgets/grid/FilterModel.js:467
-msgid "this year"
-msgstr "idei év"
-
-#: js/widgets/grid/FilterModel.js:468
-msgid "last year"
-msgstr "múlt év"
-
-#: js/widgets/grid/FilterModel.js:472
-msgid "tomorrow"
-msgstr "holnap"
-
-#: js/widgets/grid/FilterModel.js:473
-msgid "next week"
-msgstr "jövő hét"
-
-#: js/widgets/grid/FilterModel.js:474
-msgid "next month"
-msgstr "jövő hónap"
-
-#: js/widgets/grid/FilterModel.js:475
-msgid "next quarter"
-msgstr "jövő negyedév"
-
-#: js/widgets/grid/FilterModel.js:476
-msgid "next year"
-msgstr "jövő év"
-
-#: js/widgets/grid/GridPanel.js:241
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "{0} nem található. Kérlek változtasd meg a szűrő-feltételeket, nézet-beállításokat vagy amiben keresel: {1}."
-
-#: js/widgets/grid/GridPanel.js:337
-msgid "Edit {0}"
-msgstr "{0} szerkesztése"
-
-#: js/widgets/grid/GridPanel.js:348 js/widgets/dialog/EditDialog.js:330
-msgid "Copy {0}"
-msgstr "{0} másolása"
-
-#: js/widgets/grid/GridPanel.js:359 js/widgets/tree/ContextMenu.js:243
-msgid "Add {0}"
-msgstr "{0} hozzáadása"
-
-#: js/widgets/grid/GridPanel.js:367
-msgid "Print Page"
-msgstr "Oldal nyomtatása"
-
-#: js/widgets/grid/GridPanel.js:406 js/widgets/grid/GridPanel.js:407
-#: js/widgets/grid/GridPanel.js:409
-msgid "Delete {0}"
-msgid_plural "Delete {0}"
-msgstr[0] "{0} törlése"
-msgstr[1] "{0} törlése"
-
-#: js/widgets/grid/GridPanel.js:708
-msgid "Displaying records {0} - {1} of {2}"
-msgstr "Adatok kijelzése {0} - {1} / {2}"
-
-#: js/widgets/grid/GridPanel.js:709
-msgid "No {0} to display"
-msgstr "Nincs kijelezhető {0}"
-
-#: js/widgets/grid/GridPanel.js:898
-msgid "Tagging"
-msgstr "Címkézés"
-
-#: js/widgets/grid/GridPanel.js:933
-msgid "Creation Time"
-msgstr "Készítés ideje"
-
-#: js/widgets/grid/GridPanel.js:934 js/widgets/ActivitiesPanel.js:465
-msgid "Created By"
-msgstr "Létrehozta"
-
-#: js/widgets/grid/GridPanel.js:935
-msgid "Last Modified Time"
-msgstr "Utolsó módosítás ideje"
-
-#: js/widgets/grid/GridPanel.js:936
-msgid "Last Modified By"
-msgstr "Utolsó módosító"
-
-#: js/widgets/grid/GridPanel.js:1205
-msgid "Not Allowed"
-msgstr "Nem megengedett"
-
-#: js/widgets/grid/GridPanel.js:1206
-msgid "You are not allowed to delete all pages at once"
-msgstr "Nincs engedélyed az összes lap egyszerre törléséhez"
-
-#: js/widgets/grid/GridPanel.js:1224
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Biztosan törlöd a kiválasztott adatot"
-msgstr[1] "Biztosan törlöd a kiválasztott adatokat"
-
-#: js/widgets/grid/GridPanel.js:1262 js/widgets/dialog/EditDialog.js:491
-msgid "Deleting {0}"
-msgstr "{0} törlése"
-
-#: js/widgets/grid/GridPanel.js:1262
-msgid " ... This may take a long time!"
-msgstr " ... Ez hosszabb időt vehet igénybe!"
-
-#: js/widgets/grid/GridPanel.js:1278 js/widgets/tags/TagsPanel.js:292
-#: js/widgets/tags/TagsPanel.js:402 js/widgets/tags/TagsPanel.js:435
-#: js/widgets/dialog/EditDialog.js:501
-msgid "Failed"
-msgstr "Sikertelen"
-
-#: js/widgets/grid/GridPanel.js:1278 js/widgets/dialog/EditDialog.js:501
-msgid "Could not delete {0}."
-msgstr "{0} nem törölhető."
-
-#: js/widgets/grid/FileUploadGrid.js:93
-msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
-msgstr "A file-t nem lehet feltölteni. Fileméret túl nagy lehet. Értesítsd a Rendszergazdádat. Max. feltöltési méret: "
-
-#: js/widgets/grid/FileUploadGrid.js:119
-msgid "Remove file"
-msgstr "File törlése"
-
-#: js/widgets/grid/FileUploadGrid.js:159
-msgid "Add file"
-msgstr "File hozzáadása"
-
-#: js/widgets/grid/FileUploadGrid.js:198
-msgid "name"
-msgstr "név"
-
-#: js/widgets/grid/FileUploadGrid.js:213
-msgid "size"
-msgstr "méret"
-
-#: js/widgets/grid/FileUploadGrid.js:220
-msgid "type"
-msgstr "típus"
-
-#: js/widgets/grid/QuickaddGridPanel.js:99
-msgid "Remove"
-msgstr "Törlés"
-
-#: js/widgets/grid/PickerGridPanel.js:117
-msgid "Remove record"
-msgstr "Adat törlése"
-
-#: js/widgets/grid/PickerGridPanel.js:185
-msgid "Search for records ..."
-msgstr "Adatok keresése ..."
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
-msgid "show details"
-msgstr "részletek mutatása"
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:183
-msgid "Always show advanced filters"
-msgstr "Részletes szűrők mindig láthatóak"
-
-#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:369
-msgid "Your view is limited by {0} criteria:"
-msgid_plural "Your view is limited by {0} criterias:"
-msgstr[0] "Nézetedet {0} feltétel limitálja:"
-msgstr[1] "Nézetedet {0} feltétel limitálja:"
-
-#: js/widgets/tags/TagFilter.js:34
-msgid "Tag"
-msgstr "Címke"
-
-#: js/widgets/tags/TagsMassAttachAction.js:19
-msgid "Add Tag"
-msgstr "Címke hozzáadása"
-
-#: js/widgets/tags/TagsMassAttachAction.js:74
-msgid "Attach the following tag to all selected items:"
-msgstr "Az alábbi címke csatolása az összes kiválasztott elemhez:"
-
-#: js/widgets/tags/TagsMassAttachAction.js:85
-msgid "Select Tag"
-msgstr "Címke kiválasztása"
-
-#: js/widgets/tags/TagsPanel.js:93 js/widgets/tags/TagsPanel.js:118
-msgid "Add a new personal tag"
-msgstr "Egy új személyes címke hozzáadása"
-
-#: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
-msgid "Add New Personal Tag"
-msgstr "Új személyes címke hozzáadása"
-
-#: js/widgets/tags/TagsPanel.js:97 js/widgets/tags/TagsPanel.js:122
-msgid "Please note: You create a personal tag. Only you can see it!"
-msgstr "Jegyezd meg: Személyes címkét csináltál. Csak te fogod látni!"
-
-#: js/widgets/tags/TagsPanel.js:97 js/widgets/tags/TagsPanel.js:122
-msgid "Enter tag name:"
-msgstr "Címke nevének megadása:"
-
-#: js/widgets/tags/TagsPanel.js:141 js/widgets/tags/TagsPanel.js:450
-#: js/widgets/tags/TagsPanel.js:454 js/widgets/tags/TagCombo.js:120
-#: js/widgets/tags/TagCombo.js:125
-msgid "personal"
-msgstr "személyes"
-
-#: js/widgets/tags/TagsPanel.js:163
-msgid "No Tags to display"
-msgstr "Nincs kijelezhető címke"
-
-#: js/widgets/tags/TagsPanel.js:186
-msgid "Detach tag"
-msgid_plural "Detach tags"
-msgstr[0] "Címke eltávolítása"
-msgstr[1] "Címkék eltávolítása"
-
-#: js/widgets/tags/TagsPanel.js:196
-msgid "Edit tag"
-msgstr "Címke szerkesztése"
-
-#: js/widgets/tags/TagsPanel.js:201 js/widgets/tags/TagsPanel.js:206
-msgid "Rename Tag"
-msgstr "Címke átnevezése"
-
-#: js/widgets/tags/TagsPanel.js:206
-msgid "Please enter a new name:"
-msgstr "Kérlek adj meg egy új nevet:"
-
-#: js/widgets/tags/TagsPanel.js:215
-msgid "Edit Description"
-msgstr "Leírás szerkesztése"
-
-#: js/widgets/tags/TagsPanel.js:220
-msgid "Description for tag"
-msgstr "Címke leírása"
-
-#: js/widgets/tags/TagsPanel.js:220
-msgid "Please enter new description:"
-msgstr "Kérlek adj meg egy új leírást:"
-
-#: js/widgets/tags/TagsPanel.js:229
-msgid "Change Color"
-msgstr "Szín megváltoztatása"
-
-#: js/widgets/tags/TagsPanel.js:258
-msgid "Delete Tag"
-msgid_plural "Delete Tags"
-msgstr[0] "Címke törlése"
-msgstr[1] "Címkék törlése"
-
-#: js/widgets/tags/TagsPanel.js:271
-msgid "Realy Delete Selected Tag?"
-msgid_plural "Realy Delete Selected Tags?"
-msgstr[0] "Biztosan törlöd a kiválasztott címkét?"
-msgstr[1] "Biztosan törlöd a kiválasztott címkéket?"
-
-#: js/widgets/tags/TagsPanel.js:272
-msgid "the selected tag will be deleted and disapear for all entries"
-msgid_plural "The selected tags will be removed and disapear for all entries"
-msgstr[0] "a kiválasztott címke törlődik és eltűnik az összes bejegyzésből"
-msgstr[1] "a kiválasztott címkék törlődnek és eltűnnek az összes bejegyzésből"
-
-#: js/widgets/tags/TagsPanel.js:276
-msgid "Please wait a moment..."
-msgstr "Kérlek várj egy pillanatot..."
-
-#: js/widgets/tags/TagsPanel.js:276
-msgid "Deleting Tag"
-msgid_plural "Deleting Tags"
-msgstr[0] "Címke törlése"
-msgstr[1] "Címkék törlése"
-
-#: js/widgets/tags/TagsPanel.js:292
-msgid "Could not delete Tag(s)."
-msgstr "Címke(k) nem törölhető(ek)."
-
-#: js/widgets/tags/TagsPanel.js:354 js/widgets/tags/TagsPanel.js:416
-msgid "Notice"
-msgstr "Bejelentés"
-
-#: js/widgets/tags/TagsPanel.js:355 js/widgets/tags/TagsPanel.js:417
-msgid "The minimum tag length is three."
-msgstr "A minimum címke hossz 3 karakter."
-
-#: js/widgets/tags/TagsPanel.js:402
-msgid "Could not create tag."
-msgstr "Címke nem hozható létre."
-
-#: js/widgets/tags/TagsPanel.js:435
-msgid "Could not update tag."
-msgstr "Címke nem frissíthető."
-
-#: js/widgets/tags/TagsPanel.js:469 js/widgets/tags/TagsPanel.js:527
-msgid "Enter tag name"
-msgstr "Címke nevének megadása"
-
-#: js/widgets/tags/TagsPanel.js:470 js/widgets/form/RecordPickerComboBox.js:65
-msgid "Searching..."
-msgstr "Keresés..."
-
-#: js/widgets/tags/TagsPanel.js:604
-msgid "Color"
-msgstr "Szín"
-
-#: js/widgets/tags/TagCombo.js:49
-msgid "tag name"
-msgstr "címke név"
-
-#: js/widgets/mainscreen/WestPanel.js:193
-msgid "containers"
-msgstr "konténerek"
-
-#: js/widgets/mainscreen/WestPanel.js:220
-msgid "Favorites"
-msgstr "Kedvencek"
-
-#: js/widgets/mainscreen/WestPanel.js:228
-msgid "Save current view as favorite"
-msgstr "Jelenlegi nézet mentése kedvencként"
-
-#: js/widgets/container/FilterModel.js:132
-msgid "is personal of"
-msgstr "személyes"
-
-#: js/widgets/container/GrantsDialog.js:54
-msgid "Folder"
-msgstr "Mappa"
-
-#: js/widgets/container/GrantsDialog.js:89
-msgid "The grant to read records of this container"
-msgstr "Ezen konténer adatolvásásának engedélyezése"
-
-#: js/widgets/container/GrantsDialog.js:94 js/widgets/ActivitiesPanel.js:163
-#: js/widgets/ActivitiesPanel.js:175
-msgid "Add"
-msgstr "Hozzáadás"
-
-#: js/widgets/container/GrantsDialog.js:95
-msgid "The grant to add records to this container"
-msgstr "Ezen konténer adathozzáadásának engedélyezése"
-
-#: js/widgets/container/GrantsDialog.js:101
-msgid "The grant to edit records in this container"
-msgstr "Ezen konténer adatszerkesztésének engedélyezése"
-
-#: js/widgets/container/GrantsDialog.js:106
-msgid "Delete"
-msgstr "Törlés"
-
-#: js/widgets/container/GrantsDialog.js:107
-msgid "The grant to delete records in this container"
-msgstr "Ezen konténer adattörlésének engedélyezése"
-
-#: js/widgets/container/GrantsDialog.js:113
-msgid "The grant to export records from this container"
-msgstr "Ezen konténer adatexportálásának engedélyezése"
-
-#: js/widgets/container/GrantsDialog.js:118
-msgid "Sync"
-msgstr "Szinkronizálás"
-
-#: js/widgets/container/GrantsDialog.js:119
-msgid "The grant to synchronise records with this container"
-msgstr "Ezen konténer adatszinkronizálásának engedélyezése"
-
-#: js/widgets/container/GrantsDialog.js:130
-msgid "Free Busy"
-msgstr "Szabad-Foglalt"
-
-#: js/widgets/container/GrantsDialog.js:131
-msgid "The grant to access free busy information of events in this calendar"
-msgstr "Ezen naptár szabad-foglalt információhoz való hozzáférés engedélyezése"
-
-#: js/widgets/container/GrantsDialog.js:138
-msgid "Private"
-msgstr "Személyes"
-
-#: js/widgets/container/GrantsDialog.js:139
-msgid "The grant to access records marked as private in this container"
-msgstr "Ezen konténer személyesként megjelölt adataihoz való hozzáférés engedélyezése"
-
-#: js/widgets/container/GrantsDialog.js:146
-msgid "Admin"
-msgstr "Admin"
-
-#: js/widgets/container/GrantsDialog.js:147
-msgid "The grant to administrate this container"
-msgstr "Ezen konténer adminisztrálásának engedélyezése"
-
-#: js/widgets/container/GrantsDialog.js:169
-msgid "Updating Grants"
-msgstr "Engedélyek frissítése"
-
-#: js/widgets/container/GrantsDialog.js:199
-msgid "Error"
-msgstr "Hiba"
-
-#: js/widgets/container/GrantsDialog.js:200
-msgid "You are not allowed to remove all admins for this container!"
-msgstr "Nem távolíthatod el az összed admint ebből a konténerből!"
-
-#: js/widgets/container/ContainerSelect.js:109
-msgid "choose other {0}..."
-msgstr "másik {0} választása..."
-
-#: js/widgets/container/ContainerSelect.js:112
-msgid "Select a {0}"
-msgstr "Válassz egy {0}"
-
-#: js/widgets/container/ContainerSelect.js:132
-msgid "Recently used {0}:"
-msgstr "Legtöbbet használt {0}:"
-
-#: js/widgets/container/ContainerSelect.js:449
-msgid "please select a {0}"
-msgstr "kérlek válassz egy {0}"
-
-#: js/widgets/container/ContainerTree.js:138
-msgid "container"
-msgid_plural "containers"
-msgstr[0] "konténer"
-msgstr[1] "konténerek"
-
-#: js/widgets/container/ContainerTree.js:488
-msgid "You are not allowed to select the {0} '{1}':"
-msgstr "Nem választhatod a {0} '{1}':"
-
-#: js/widgets/container/ContainerTree.js:489
-msgid "{0} grant is required for desired action"
-msgstr "{0} engedély szükséges a kívánt tevékenységhez"
-
-#: js/widgets/container/ContainerTree.js:490
-msgid "Insufficient Grants"
-msgstr "Elégtelen engedélyek"
-
-#: js/widgets/ActivitiesPanel.js:148
-msgid "Add a Note..."
-msgstr "Megjegyzés hozzáadása..."
-
-#: js/widgets/ActivitiesPanel.js:163 js/widgets/ActivitiesPanel.js:464
-msgid "Note"
-msgstr "Mejegyzés"
-
-#: js/widgets/ActivitiesPanel.js:176 js/widgets/ActivitiesPanel.js:386
-msgid "Add new note"
-msgstr "Új megjegyzés hozzáadása"
-
-#: js/widgets/ActivitiesPanel.js:207
-msgid "Notes"
-msgstr "Megjegyzések"
-
-#: js/widgets/ActivitiesPanel.js:283
-msgid "Enter new note:"
-msgstr "Új megjegyzés megadása:"
-
-#: js/widgets/ActivitiesPanel.js:320 js/widgets/ActivitiesPanel.js:385
-msgid "Add Note"
-msgstr "Megjegyzés hozzáadása"
-
-#: js/widgets/ActivitiesPanel.js:372
-msgid "Add a {0} Note"
-msgstr "{0} megjegyzés hozzáadása"
-
-#: js/widgets/ActivitiesPanel.js:462 js/widgets/ActivitiesPanel.js:600
-msgid "Type"
-msgstr "Típus"
-
-#: js/widgets/ActivitiesPanel.js:466
-msgid "Timestamp"
-msgstr "Időbélyeg"
-
-#: js/widgets/ActivitiesPanel.js:480
-msgid "Displaying history records {0} - {1} of {2}"
-msgstr "Előzmény adatok megjelenítése {0} - {1} / {2}"
-
-#: js/widgets/ActivitiesPanel.js:481
-msgid "No history to display"
-msgstr "Nincs megjeleníthető előzmény"
-
-#: js/widgets/ActivitiesPanel.js:582
-msgid "History"
-msgstr "Előzmények"
-
-#: js/widgets/ActivitiesPanel.js:594
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/widgets/ActivitiesPanel.js:595 js/widgets/ActivitiesPanel.js:596
-msgid "Time"
-msgstr "Idő"
-
-#: js/widgets/ActivitiesPanel.js:598
-msgid "User"
-msgstr "Felhasználó"
-
-#: js/widgets/form/ConfigPanel.js:108
-msgid "Invalid configuration"
-msgstr "Érvénytelen konfiguráció"
-
-#: js/widgets/form/ConfigPanel.js:108
-#: js/widgets/dialog/PreferencesDialog.js:246
-msgid "You need to correct the red marked fields before config could be saved"
-msgstr "A pirossal jelzett mezőket mentés előtt ki kell javítanod"
-
-#: js/widgets/form/ConfigPanel.js:133
-msgid "Transferring Configuration..."
-msgstr "Beállítások átvitele..."
-
-#: js/widgets/form/ConfigPanel.js:229
-msgid "Save config"
-msgstr "Konfiguráció mentése"
-
-#: js/widgets/form/ConfigPanel.js:239
-msgid "Reload config"
-msgstr "Konfigurácó újratöltése"
-
-#: js/widgets/TimezoneChooser.js:38 Preference.php:88
-msgid "Timezone"
-msgstr "Időzóna"
-
-#: js/widgets/TimezoneChooser.js:78
-msgid "setting new timezone..."
-msgstr "új időzóna beállítása..."
-
-#: js/widgets/customfields/CustomfieldsPanel.js:64
-msgid "Custom Fields"
-msgstr "Egyedi mezők"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:71
-#: js/widgets/customfields/CustomfieldsPanel.js:92
-msgid "General"
-msgstr "Általános"
-
-#: js/widgets/customfields/CustomfieldsPanel.js:114
-msgid "There are no custom fields yet"
-msgstr "Nincs még egyedi mező"
-
-#: js/widgets/dialog/PreferencesDialog.js:126
-msgid "Admin Mode"
-msgstr "Admin Mód"
-
-#: js/widgets/dialog/PreferencesDialog.js:161
-msgid "Applications"
-msgstr "Alkalmazások"
-
-#: js/widgets/dialog/PreferencesDialog.js:190
-msgid "Edit Preferences"
-msgstr "Tulajdonságok szerkesztése"
-
-#: js/widgets/dialog/PreferencesDialog.js:191
-msgid "Loading ..."
-msgstr "Betöltés..."
-
-#: js/widgets/dialog/PreferencesDialog.js:275
-msgid "Saving of preferences failed."
-msgstr "Tulajdonságok mentése sikertelen."
-
-#: js/widgets/dialog/LinkPanel.js:48
-msgid "Links"
-msgstr "Linkek"
-
-#: js/widgets/dialog/PreferencesTreePanel.js:68
-msgid "General Preferences"
-msgstr "Általános tulajdonságok"
-
-#: js/widgets/dialog/PreferencesTreePanel.js:88
-msgid "My Profile"
-msgstr "Saját profilom"
-
-#: js/widgets/dialog/CredentialsDialog.js:84
-msgid "Please enter your credentials"
-msgstr "Kérlek írd be az azonosítóidat"
-
-#: js/widgets/dialog/AlarmPanel.js:33
+#: js/Tinebase-FAT-debug.js:14994 js/Tinebase-FAT-debug.js:15003
+#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+msgid "New version of Tine 2.0 available"
+msgstr "Tine 2.0 új verziója elérhető"
+
+#: js/Tinebase-FAT-debug.js:14995 js/Tinebase-FAT-debug.js:15004
+#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+msgid "Version \"{0}\" of Tine 2.0 is available."
+msgstr "Tine 2.0 \"{0}\" verziója elérhető."
+
+#: js/Tinebase-FAT-debug.js:14996 js/widgets/VersionCheck.js:46
+msgid "It's a critical update and must be installed as soon as possible!"
+msgstr "Ez egy kritikus frissítés, amit minnél hamarabb telepíteni kell!"
+
+#: js/Tinebase-FAT-debug.js:15005 js/widgets/VersionCheck.js:55
+msgid "Please consider updating!"
+msgstr "Kérlek fontold meg a frissítést!"
+
+#: js/Tinebase-FAT-debug.js:15047 js/widgets/dialog/AlarmPanel.js:32
 msgid "Alarms"
 msgstr "Riasztások"
 
-#: js/widgets/dialog/AlarmPanel.js:42 js/widgets/dialog/AlarmPanel.js:69
+#: js/Tinebase-FAT-debug.js:15056 js/Tinebase-FAT-debug.js:15083
+#: js/widgets/dialog/AlarmPanel.js:41 js/widgets/dialog/AlarmPanel.js:68
 msgid "Custom Datetime"
 msgstr "Egyedi időpont"
 
-#: js/widgets/dialog/AlarmPanel.js:52
+#: js/Tinebase-FAT-debug.js:15066 js/widgets/dialog/AlarmPanel.js:51
 msgid "Send Alarm"
 msgstr "Riasztás küldése"
 
-#: js/widgets/dialog/AlarmPanel.js:62
+#: js/Tinebase-FAT-debug.js:15076 js/widgets/dialog/AlarmPanel.js:61
 msgid "None"
 msgstr "Nincs"
 
-#: js/widgets/dialog/AlarmPanel.js:63
+#: js/Tinebase-FAT-debug.js:15077 js/widgets/dialog/AlarmPanel.js:62
 msgid "0 minutes before"
 msgstr "0 perccel előtte"
 
-#: js/widgets/dialog/AlarmPanel.js:64
+#: js/Tinebase-FAT-debug.js:15078 js/widgets/dialog/AlarmPanel.js:63
 msgid "15 minutes before"
 msgstr "15 perccel előtte"
 
-#: js/widgets/dialog/AlarmPanel.js:65
+#: js/Tinebase-FAT-debug.js:15079 js/widgets/dialog/AlarmPanel.js:64
 msgid "30 minutes before"
 msgstr "30 perccel előtte"
 
-#: js/widgets/dialog/AlarmPanel.js:66
+#: js/Tinebase-FAT-debug.js:15080 js/widgets/dialog/AlarmPanel.js:65
 msgid "1 hour before"
 msgstr "1 órával előtte"
 
-#: js/widgets/dialog/AlarmPanel.js:67
+#: js/Tinebase-FAT-debug.js:15081 js/widgets/dialog/AlarmPanel.js:66
 msgid "2 hours before"
 msgstr "2 órával előtte"
 
-#: js/widgets/dialog/AlarmPanel.js:68
+#: js/Tinebase-FAT-debug.js:15082 js/widgets/dialog/AlarmPanel.js:67
 msgid "1 day before"
 msgstr "1 nappal előtte"
 
-#: js/widgets/dialog/AdminPanel.js:61
+#: js/Tinebase-FAT-debug.js:15502 js/Tinebase-FAT-debug.js:21862
+#: js/widgets/dialog/EditDialog.js:340 js/widgets/grid/GridPanel.js:346
+msgid "Copy {0}"
+msgstr "{0} másolása"
+
+#: js/Tinebase-FAT-debug.js:15505 js/widgets/dialog/EditDialog.js:344
+msgid "Add New {0}"
+msgstr "Új {0} hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:15507 js/widgets/dialog/EditDialog.js:346
+msgid "Edit {0} \"{1}\""
+msgstr "{0} \"{1}\" szerkesztése"
+
+#: js/Tinebase-FAT-debug.js:15549 js/widgets/dialog/EditDialog.js:388
+msgid "Transferring {0}..."
+msgstr "{0} átvitele..."
+
+#: js/Tinebase-FAT-debug.js:15661 js/widgets/dialog/EditDialog.js:500
+msgid "Do you really want to delete this {0}?"
+msgstr "Biztosan töröld ezt: {0}?"
+
+#: js/Tinebase-FAT-debug.js:15663 js/Tinebase-FAT-debug.js:22776
+#: js/widgets/dialog/EditDialog.js:502 js/widgets/grid/GridPanel.js:1267
+msgid "Deleting {0}"
+msgstr "{0} törlése"
+
+#: js/Tinebase-FAT-debug.js:15673 js/Tinebase-FAT-debug.js:22792
+#: js/Tinebase-FAT-debug.js:25738 js/Tinebase-FAT-debug.js:25848
+#: js/Tinebase-FAT-debug.js:25881 js/widgets/dialog/EditDialog.js:512
+#: js/widgets/grid/GridPanel.js:1283 js/widgets/tags/TagsPanel.js:291
+#: js/widgets/tags/TagsPanel.js:401 js/widgets/tags/TagsPanel.js:434
+msgid "Failed"
+msgstr "Sikertelen"
+
+#: js/Tinebase-FAT-debug.js:15673 js/Tinebase-FAT-debug.js:22792
+#: js/widgets/dialog/EditDialog.js:512 js/widgets/grid/GridPanel.js:1283
+msgid "Could not delete {0}."
+msgstr "{0} nem törölhető."
+
+#: js/Tinebase-FAT-debug.js:15748 js/widgets/dialog/AdminPanel.js:59
 msgid "Change settings for application {0}"
 msgstr "{0} alkalmazás beállításainak megváltoztatása"
 
-#: js/widgets/dialog/AdminPanel.js:109
+#: js/Tinebase-FAT-debug.js:15796 js/widgets/dialog/AdminPanel.js:107
 msgid "Defaults"
 msgstr "Alapértelmezések"
 
-#: js/widgets/dialog/ExportDialog.js:75
+#: js/Tinebase-FAT-debug.js:15903 js/widgets/dialog/CredentialsDialog.js:83
+msgid "Please enter your credentials"
+msgstr "Kérlek írd be az azonosítóidat"
+
+#: js/Tinebase-FAT-debug.js:16091 js/widgets/dialog/PreferencesDialog.js:125
+msgid "Admin Mode"
+msgstr "Admin Mód"
+
+#: js/Tinebase-FAT-debug.js:16126 js/widgets/dialog/PreferencesDialog.js:160
+msgid "Applications"
+msgstr "Alkalmazások"
+
+#: js/Tinebase-FAT-debug.js:16155 js/widgets/dialog/PreferencesDialog.js:189
+msgid "Edit Preferences"
+msgstr "Tulajdonságok szerkesztése"
+
+#: js/Tinebase-FAT-debug.js:16156 js/widgets/dialog/PreferencesDialog.js:190
+msgid "Loading ..."
+msgstr "Betöltés..."
+
+#: js/Tinebase-FAT-debug.js:16211 js/Tinebase-FAT-debug.js:27954
+#: js/widgets/dialog/PreferencesDialog.js:245
+#: js/widgets/form/ConfigPanel.js:106
+msgid "You need to correct the red marked fields before config could be saved"
+msgstr "A pirossal jelzett mezőket mentés előtt ki kell javítanod"
+
+#: js/Tinebase-FAT-debug.js:16240 js/widgets/dialog/PreferencesDialog.js:274
+msgid "Saving of preferences failed."
+msgstr "Tulajdonságok mentése sikertelen."
+
+#: js/Tinebase-FAT-debug.js:16546 js/widgets/dialog/PreferencesTreePanel.js:67
+msgid "General Preferences"
+msgstr "Általános tulajdonságok"
+
+#: js/Tinebase-FAT-debug.js:16566 js/widgets/dialog/PreferencesTreePanel.js:87
+msgid "My Profile"
+msgstr "Saját profilom"
+
+#: js/Tinebase-FAT-debug.js:16788 js/widgets/dialog/PreferencesPanel.js:154
+msgid "There are no preferences for this application."
+msgstr "Nincs tulajdonság ehhez az alkalmazáshoz."
+
+#: js/Tinebase-FAT-debug.js:16914 js/widgets/dialog/ImportDialog.js:76
+msgid "Files"
+msgstr "Fileok"
+
+#: js/Tinebase-FAT-debug.js:16934 js/widgets/dialog/ImportDialog.js:96
+msgid "Import definition"
+msgstr "Importálás meghatározása"
+
+#: js/Tinebase-FAT-debug.js:16952 js/widgets/dialog/ImportDialog.js:114
+msgid "Import description"
+msgstr ""
+
+#: js/Tinebase-FAT-debug.js:16963 js/widgets/dialog/ImportDialog.js:125
+msgid "Import into {0}"
+msgstr "Importálás ebbe a {0}be"
+
+#: js/Tinebase-FAT-debug.js:16974 js/widgets/dialog/ImportDialog.js:136
+msgid "Dry run"
+msgstr "Teszt futtatás"
+
+#: js/Tinebase-FAT-debug.js:16991 js/widgets/dialog/ImportDialog.js:153
+msgid "No files added"
+msgstr "File nem lett hozzáadva"
+
+#: js/Tinebase-FAT-debug.js:16991 js/widgets/dialog/ImportDialog.js:153
+msgid "You need to add files to import."
+msgstr "Importáláshoz hozzá kell adnod fileokat."
+
+#: js/Tinebase-FAT-debug.js:17021 js/widgets/dialog/ImportDialog.js:183
+msgid "Dry run results"
+msgstr "Teszt futtatás eredménye"
+
+#: js/Tinebase-FAT-debug.js:17022 js/widgets/dialog/ImportDialog.js:184
+msgid "Import test successful for {0} records, import test failed for {1} records."
+msgstr "Teszt importálás eredményes {0} adatnál, teszt importálás hibás {1} adatnál."
+
+#: js/Tinebase-FAT-debug.js:17026 js/widgets/dialog/ImportDialog.js:188
+msgid "Import results"
+msgstr "Importálás eredménye"
+
+#: js/Tinebase-FAT-debug.js:17027 js/widgets/dialog/ImportDialog.js:189
+msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
+msgstr "Importálás eredményes {0} adatnál / importálás hibás {1} adatnál / {2} duplázás található"
+
+#: js/Tinebase-FAT-debug.js:17140 js/widgets/dialog/ExportDialog.js:74
 #, fuzzy
 msgid "Export {0} {1}"
 msgstr "{0} {1} exportálása"
 
-#: js/widgets/dialog/ExportDialog.js:102
+#: js/Tinebase-FAT-debug.js:17167 js/widgets/dialog/ExportDialog.js:101
 msgid "Export definition"
 msgstr "Exportálás meghatározásai"
 
-#: js/widgets/dialog/ExportDialog.js:111
+#: js/Tinebase-FAT-debug.js:17176 js/widgets/dialog/ExportDialog.js:110
 msgid "Select Export Definition ..."
 msgstr "Exportálás meghatározásainak kiválasztása ..."
 
-#: js/widgets/dialog/EditDialog.js:333
-msgid "Add New {0}"
-msgstr "Új {0} hozzáadása"
+#: js/Tinebase-FAT-debug.js:17270 js/widgets/dialog/LinkPanel.js:46
+msgid "Links"
+msgstr "Linkek"
 
-#: js/widgets/dialog/EditDialog.js:335
-msgid "Edit {0} \"{1}\""
-msgstr "{0} \"{1}\" szerkesztése"
-
-#: js/widgets/dialog/EditDialog.js:377
-msgid "Transferring {0}..."
-msgstr "{0} átvitele..."
-
-#: js/widgets/dialog/EditDialog.js:489
-msgid "Do you really want to delete this {0}?"
-msgstr "Biztosan töröld ezt: {0}?"
-
+#: js/Tinebase-FAT-debug.js:17391 js/Tinebase-FAT-debug.js:17444
 #: js/widgets/dialog/MultiOptionsDialog.js:28
 #: js/widgets/dialog/MultiOptionsDialog.js:81
 msgid "What would you like to do?"
 msgstr "Mit szeretnél csinálni?"
 
+#: js/Tinebase-FAT-debug.js:17395 js/Tinebase-FAT-debug.js:17504
 #: js/widgets/dialog/MultiOptionsDialog.js:32
 #: js/widgets/dialog/MultiOptionsDialog.js:141
 msgid "You need to select an option!"
 msgstr "Egy opciót választanod kell!"
 
-#: js/widgets/dialog/ImportDialog.js:77
-msgid "Files"
-msgstr "Fileok"
+#: js/Tinebase-FAT-debug.js:17692
+#: js/widgets/customfields/CustomfieldsPanel.js:62
+msgid "Custom Fields"
+msgstr "Egyedi mezők"
 
-#: js/widgets/dialog/ImportDialog.js:97
-msgid "Import definition"
-msgstr "Importálás meghatározása"
+#: js/Tinebase-FAT-debug.js:17699 js/Tinebase-FAT-debug.js:17720
+#: js/widgets/customfields/CustomfieldsPanel.js:69
+#: js/widgets/customfields/CustomfieldsPanel.js:90
+msgid "General"
+msgstr "Általános"
 
-#: js/widgets/dialog/ImportDialog.js:115
-msgid "Import description"
-msgstr ""
+#: js/Tinebase-FAT-debug.js:17742
+#: js/widgets/customfields/CustomfieldsPanel.js:112
+msgid "There are no custom fields yet"
+msgstr "Nincs még egyedi mező"
 
-#: js/widgets/dialog/ImportDialog.js:126
-msgid "Import into {0}"
-msgstr "Importálás ebbe a {0}be"
+#: js/Tinebase-FAT-debug.js:18308 js/widgets/grid/FilterModel.js:166
+msgid "contains"
+msgstr "tartalmaz"
 
-#: js/widgets/dialog/ImportDialog.js:137
-msgid "Dry run"
-msgstr "Teszt futtatás"
+#: js/Tinebase-FAT-debug.js:18309 js/Tinebase-FAT-debug.js:25223
+#: js/Tinebase-FAT-debug.js:25227 js/widgets/container/FilterModel.js:130
+#: js/widgets/container/FilterModel.js:134 js/widgets/grid/FilterModel.js:167
+msgid "is equal to"
+msgstr "egyforma ezzel:"
 
-#: js/widgets/dialog/ImportDialog.js:154
-msgid "No files added"
-msgstr "File nem lett hozzáadva"
+#: js/Tinebase-FAT-debug.js:18310 js/widgets/grid/FilterModel.js:168
+msgid "is greater than"
+msgstr "nagyobb, mint"
 
-#: js/widgets/dialog/ImportDialog.js:154
-msgid "You need to add files to import."
-msgstr "Importáláshoz hozzá kell adnod fileokat."
+#: js/Tinebase-FAT-debug.js:18311 js/widgets/grid/FilterModel.js:169
+msgid "is less than"
+msgstr "kisebb, mint"
 
-#: js/widgets/dialog/ImportDialog.js:184
-msgid "Dry run results"
-msgstr "Teszt futtatás eredménye"
+#: js/Tinebase-FAT-debug.js:18312 js/widgets/grid/FilterModel.js:170
+msgid "is not"
+msgstr "nem"
 
-#: js/widgets/dialog/ImportDialog.js:185
-msgid "Import test successful for {0} records, import test failed for {1} records."
-msgstr "Teszt importálás eredményes {0} adatnál, teszt importálás hibás {1} adatnál."
+#: js/Tinebase-FAT-debug.js:18313 js/widgets/grid/FilterModel.js:171
+msgid "one of"
+msgstr "egy a(z)"
 
-#: js/widgets/dialog/ImportDialog.js:189
-msgid "Import results"
-msgstr "Importálás eredménye"
+#: js/Tinebase-FAT-debug.js:18314 js/widgets/grid/FilterModel.js:172
+msgid "none of"
+msgstr "nem a(z)"
 
-#: js/widgets/dialog/ImportDialog.js:190
-msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
-msgstr "Importálás eredményes {0} adatnál / importálás hibás {1} adatnál / {2} duplázás található"
+#: js/Tinebase-FAT-debug.js:18315 js/widgets/grid/FilterModel.js:173
+msgid "is before"
+msgstr "előtt"
 
-#: js/widgets/dialog/PreferencesPanel.js:155
-msgid "There are no preferences for this application."
-msgstr "Nincs tulajdonság ehhez az alkalmazáshoz."
+#: js/Tinebase-FAT-debug.js:18316 js/widgets/grid/FilterModel.js:174
+msgid "is after"
+msgstr "után"
 
-#: js/widgets/LangChooser.js:37 Preference.php:92
-msgid "Language"
-msgstr "Nyelv"
+#: js/Tinebase-FAT-debug.js:18317 js/widgets/grid/FilterModel.js:175
+msgid "is within"
+msgstr "között"
 
-#: js/widgets/LangChooser.js:70
-msgid "setting new language..."
-msgstr "új nyelv beállítása..."
+#: js/Tinebase-FAT-debug.js:18318 js/widgets/grid/FilterModel.js:176
+msgid "is in week no."
+msgstr "ezen a héten:"
 
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
-msgid "New version of Tine 2.0 available"
-msgstr "Tine 2.0 új verziója elérhető"
+#: js/Tinebase-FAT-debug.js:18319 js/widgets/grid/FilterModel.js:177
+msgid "starts with"
+msgstr "kezdődik ekkor:"
 
-#: js/widgets/VersionCheck.js:46 js/widgets/VersionCheck.js:55
-msgid "Version \"{0}\" of Tine 2.0 is available."
-msgstr "Tine 2.0 \"{0}\" verziója elérhető."
+#: js/Tinebase-FAT-debug.js:18320 js/widgets/grid/FilterModel.js:178
+msgid "ends with"
+msgstr "végződik ekkor:"
 
-#: js/widgets/VersionCheck.js:47
-msgid "It's a critical update and must be installed as soon as possible!"
-msgstr "Ez egy kritikus frissítés, amit minnél hamarabb telepíteni kell!"
+#: js/Tinebase-FAT-debug.js:18361 js/widgets/grid/FilterModel.js:219
+msgid "select a operator"
+msgstr "válassz egy operátort"
 
-#: js/widgets/VersionCheck.js:56
-msgid "Please consider updating!"
-msgstr "Kérlek fontold meg a frissítést!"
+#: js/Tinebase-FAT-debug.js:18476 js/widgets/grid/FilterModel.js:334
+msgid "Search Account ..."
+msgstr "Felhasználó keresése..."
 
-#: js/widgets/tree/ContextMenu.js:37
+#: js/Tinebase-FAT-debug.js:18586 js/widgets/grid/FilterModel.js:444
+msgid "today"
+msgstr "ma"
+
+#: js/Tinebase-FAT-debug.js:18587 js/widgets/grid/FilterModel.js:445
+msgid "yesterday"
+msgstr "tegnap"
+
+#: js/Tinebase-FAT-debug.js:18588 js/widgets/grid/FilterModel.js:446
+msgid "this week"
+msgstr "ez a hét"
+
+#: js/Tinebase-FAT-debug.js:18589 js/widgets/grid/FilterModel.js:447
+msgid "last week"
+msgstr "múlt hét"
+
+#: js/Tinebase-FAT-debug.js:18590 js/widgets/grid/FilterModel.js:448
+msgid "the week before last"
+msgstr "2 hete"
+
+#: js/Tinebase-FAT-debug.js:18591 js/widgets/grid/FilterModel.js:449
+msgid "this month"
+msgstr "ez a hónap"
+
+#: js/Tinebase-FAT-debug.js:18592 js/widgets/grid/FilterModel.js:450
+msgid "last month"
+msgstr "múlt hónap"
+
+#: js/Tinebase-FAT-debug.js:18593 js/widgets/grid/FilterModel.js:451
+msgid "this quarter"
+msgstr "ez a negyedév"
+
+#: js/Tinebase-FAT-debug.js:18594 js/widgets/grid/FilterModel.js:452
+msgid "last quarter"
+msgstr "múlt negyedév"
+
+#: js/Tinebase-FAT-debug.js:18595 js/widgets/grid/FilterModel.js:453
+msgid "this year"
+msgstr "idei év"
+
+#: js/Tinebase-FAT-debug.js:18596 js/widgets/grid/FilterModel.js:454
+msgid "last year"
+msgstr "múlt év"
+
+#: js/Tinebase-FAT-debug.js:18600 js/widgets/grid/FilterModel.js:458
+msgid "tomorrow"
+msgstr "holnap"
+
+#: js/Tinebase-FAT-debug.js:18601 js/widgets/grid/FilterModel.js:459
+msgid "next week"
+msgstr "jövő hét"
+
+#: js/Tinebase-FAT-debug.js:18602 js/widgets/grid/FilterModel.js:460
+msgid "next month"
+msgstr "jövő hónap"
+
+#: js/Tinebase-FAT-debug.js:18603 js/widgets/grid/FilterModel.js:461
+msgid "next quarter"
+msgstr "jövő negyedév"
+
+#: js/Tinebase-FAT-debug.js:18604 js/widgets/grid/FilterModel.js:462
+msgid "next year"
+msgstr "jövő év"
+
+#: js/Tinebase-FAT-debug.js:19080 js/Tinebase-FAT-debug.js:19444
+#: js/widgets/grid/FilterToolbar.js:78 js/widgets/grid/FilterToolbar.js:442
+msgid "Show"
+msgstr "Mutat"
+
+#: js/Tinebase-FAT-debug.js:19146 js/widgets/grid/FilterToolbar.js:144
+msgid "add new filter"
+msgstr "új szűrő hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:19152 js/widgets/grid/FilterToolbar.js:150
+msgid "reset all filters"
+msgstr "összes szűrő törlése"
+
+#: js/Tinebase-FAT-debug.js:19158 js/widgets/grid/FilterToolbar.js:156
+msgid "start search"
+msgstr "keresés indítása"
+
+#: js/Tinebase-FAT-debug.js:19166 js/widgets/grid/FilterToolbar.js:164
+msgid "save as favorite"
+msgstr "mentés kedvencként"
+
+#: js/Tinebase-FAT-debug.js:19255 js/widgets/grid/FilterToolbar.js:253
+msgid "select a field"
+msgstr "válassz egy mezőt"
+
+#: js/Tinebase-FAT-debug.js:19280 js/widgets/grid/FilterToolbar.js:278
+msgid "Delete this filter"
+msgstr "Töröld ezt a szűrőt"
+
+#: js/Tinebase-FAT-debug.js:19311 js/widgets/grid/FilterToolbar.js:309
+msgid "and"
+msgstr "és"
+
+#: js/Tinebase-FAT-debug.js:19958 js/Tinebase-FAT-debug.js:25330
+#: js/widgets/container/FilterModel.js:237
+#: js/widgets/grid/FilterModelMultiSelect.js:211
+msgid "Selected  {0}"
+msgstr "Kiválasztott {0}"
+
+#: js/Tinebase-FAT-debug.js:20281
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:181
+msgid "show details"
+msgstr "részletek mutatása"
+
+#: js/Tinebase-FAT-debug.js:20282
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:182
+msgid "Always show advanced filters"
+msgstr "Részletes szűrők mindig láthatóak"
+
+#: js/Tinebase-FAT-debug.js:20468
+#: js/widgets/grid/FilterToolbarQuickFilterPlugin.js:368
+msgid "Your view is limited by {0} criteria:"
+msgid_plural "Your view is limited by {0} criterias:"
+msgstr[0] "Nézetedet {0} feltétel limitálja:"
+msgstr[1] "Nézetedet {0} feltétel limitálja:"
+
+#: js/Tinebase-FAT-debug.js:20904 js/widgets/grid/QuickaddGridPanel.js:97
+msgid "Remove"
+msgstr "Törlés"
+
+#: js/Tinebase-FAT-debug.js:21099 js/widgets/grid/FileUploadGrid.js:96
+msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+msgstr "A file-t nem lehet feltölteni. Fileméret túl nagy lehet. Értesítsd a Rendszergazdádat. Max. feltöltési méret: "
+
+#: js/Tinebase-FAT-debug.js:21124 js/widgets/grid/FileUploadGrid.js:121
+msgid "Remove file"
+msgstr "File törlése"
+
+#: js/Tinebase-FAT-debug.js:21164 js/widgets/grid/FileUploadGrid.js:161
+msgid "Add file"
+msgstr "File hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:21202 js/widgets/grid/FileUploadGrid.js:199
+msgid "name"
+msgstr "név"
+
+#: js/Tinebase-FAT-debug.js:21217 js/widgets/grid/FileUploadGrid.js:214
+msgid "size"
+msgstr "méret"
+
+#: js/Tinebase-FAT-debug.js:21224 js/widgets/grid/FileUploadGrid.js:221
+msgid "type"
+msgstr "típus"
+
+#: js/Tinebase-FAT-debug.js:21389 js/widgets/grid/PickerGridPanel.js:116
+msgid "Remove record"
+msgstr "Adat törlése"
+
+#: js/Tinebase-FAT-debug.js:21457 js/widgets/grid/PickerGridPanel.js:184
+msgid "Search for records ..."
+msgstr "Adatok keresése ..."
+
+#: js/Tinebase-FAT-debug.js:21755 js/widgets/grid/GridPanel.js:239
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "{0} nem található. Kérlek változtasd meg a szűrő-feltételeket, nézet-beállításokat vagy amiben keresel: {1}."
+
+#: js/Tinebase-FAT-debug.js:21851 js/widgets/grid/GridPanel.js:335
+msgid "Edit {0}"
+msgstr "{0} szerkesztése"
+
+#: js/Tinebase-FAT-debug.js:21873 js/Tinebase-FAT-debug.js:23156
+#: js/widgets/grid/GridPanel.js:357 js/widgets/tree/ContextMenu.js:242
+msgid "Add {0}"
+msgstr "{0} hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:21881 js/widgets/grid/GridPanel.js:365
+msgid "Print Page"
+msgstr "Oldal nyomtatása"
+
+#: js/Tinebase-FAT-debug.js:21920 js/Tinebase-FAT-debug.js:21921
+#: js/Tinebase-FAT-debug.js:21923 js/widgets/grid/GridPanel.js:404
+#: js/widgets/grid/GridPanel.js:405 js/widgets/grid/GridPanel.js:407
+msgid "Delete {0}"
+msgid_plural "Delete {0}"
+msgstr[0] "{0} törlése"
+msgstr[1] "{0} törlése"
+
+#: js/Tinebase-FAT-debug.js:22222 js/widgets/grid/GridPanel.js:706
+msgid "Displaying records {0} - {1} of {2}"
+msgstr "Adatok kijelzése {0} - {1} / {2}"
+
+#: js/Tinebase-FAT-debug.js:22223 js/widgets/grid/GridPanel.js:707
+msgid "No {0} to display"
+msgstr "Nincs kijelezhető {0}"
+
+#: js/Tinebase-FAT-debug.js:22412 js/widgets/grid/GridPanel.js:903
+msgid "Tagging"
+msgstr "Címkézés"
+
+#: js/Tinebase-FAT-debug.js:22447 js/widgets/grid/GridPanel.js:938
+msgid "Creation Time"
+msgstr "Készítés ideje"
+
+#: js/Tinebase-FAT-debug.js:22448 js/Tinebase-FAT-debug.js:27424
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:939
+msgid "Created By"
+msgstr "Létrehozta"
+
+#: js/Tinebase-FAT-debug.js:22449 js/widgets/grid/GridPanel.js:940
+msgid "Last Modified Time"
+msgstr "Utolsó módosítás ideje"
+
+#: js/Tinebase-FAT-debug.js:22450 js/widgets/grid/GridPanel.js:941
+msgid "Last Modified By"
+msgstr "Utolsó módosító"
+
+#: js/Tinebase-FAT-debug.js:22719 js/widgets/grid/GridPanel.js:1210
+msgid "Not Allowed"
+msgstr "Nem megengedett"
+
+#: js/Tinebase-FAT-debug.js:22720 js/widgets/grid/GridPanel.js:1211
+msgid "You are not allowed to delete all pages at once"
+msgstr "Nincs engedélyed az összes lap egyszerre törléséhez"
+
+#: js/Tinebase-FAT-debug.js:22738 js/widgets/grid/GridPanel.js:1229
+msgid "Do you really want to delete the selected record"
+msgid_plural "Do you really want to delete the selected records"
+msgstr[0] "Biztosan törlöd a kiválasztott adatot"
+msgstr[1] "Biztosan törlöd a kiválasztott adatokat"
+
+#: js/Tinebase-FAT-debug.js:22776 js/widgets/grid/GridPanel.js:1267
+msgid " ... This may take a long time!"
+msgstr " ... Ez hosszabb időt vehet igénybe!"
+
+#: js/Tinebase-FAT-debug.js:22950 js/widgets/tree/ContextMenu.js:36
 msgid "New {0}"
 msgstr "Új {0}"
 
-#: js/widgets/tree/ContextMenu.js:37
+#: js/Tinebase-FAT-debug.js:22950 js/widgets/tree/ContextMenu.js:36
 msgid "Please enter the name of the new {0}:"
 msgstr "Kérem adja meg az új {0} nevét:"
 
-#: js/widgets/tree/ContextMenu.js:40
+#: js/Tinebase-FAT-debug.js:22953 js/widgets/tree/ContextMenu.js:39
 msgid "No {0} added"
 msgstr "{0} hozzáadása sikertelen"
 
-#: js/widgets/tree/ContextMenu.js:40 js/widgets/tree/ContextMenu.js:141
+#: js/Tinebase-FAT-debug.js:22953 js/Tinebase-FAT-debug.js:23054
+#: js/widgets/tree/ContextMenu.js:39 js/widgets/tree/ContextMenu.js:140
 msgid "You have to supply a {0} name!"
 msgstr "Neked kell adni egy {0} nevet!"
 
-#: js/widgets/tree/ContextMenu.js:43
+#: js/Tinebase-FAT-debug.js:22956 js/widgets/tree/ContextMenu.js:42
 msgid "Creating {0}..."
 msgstr "{0} készítése..."
 
-#: js/widgets/tree/ContextMenu.js:85
+#: js/Tinebase-FAT-debug.js:22998 js/widgets/tree/ContextMenu.js:84
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Biztosan törölni akarod a {0} \"{1}\"?"
 
-#: js/widgets/tree/ContextMenu.js:87
+#: js/Tinebase-FAT-debug.js:23000 js/widgets/tree/ContextMenu.js:86
 msgid "Deleting {0} \"{1}\""
 msgstr "{0} \"{1}\" törlése"
 
-#: js/widgets/tree/ContextMenu.js:135
+#: js/Tinebase-FAT-debug.js:23048 js/widgets/tree/ContextMenu.js:134
 msgid "Please enter the new name of the {0}:"
 msgstr "Kérem adja meg a(z) {0} új nevét:"
 
-#: js/widgets/tree/ContextMenu.js:141
+#: js/Tinebase-FAT-debug.js:23054 js/widgets/tree/ContextMenu.js:140
 msgid "Not renamed {0}"
 msgstr "Sikertelenül átnevezett {0}"
 
-#: js/widgets/tree/ContextMenu.js:144
+#: js/Tinebase-FAT-debug.js:23057 js/widgets/tree/ContextMenu.js:143
 msgid "Updating {0} \"{1}\""
 msgstr "{0} \"{1}\" frissítése"
 
-#: js/widgets/tree/ContextMenu.js:213
+#: js/Tinebase-FAT-debug.js:23126 js/widgets/tree/ContextMenu.js:212
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "{0} \"{1}\" jogosultságainak kezelése"
 
-#: js/widgets/tree/ContextMenu.js:261
+#: js/Tinebase-FAT-debug.js:23174 js/widgets/tree/ContextMenu.js:260
 msgid "Rename {0}"
 msgstr "{0} átnevezése"
 
-#: js/widgets/tree/ContextMenu.js:269
+#: js/Tinebase-FAT-debug.js:23182 js/widgets/tree/ContextMenu.js:268
 msgid "Set color for {0}"
 msgstr "{0} színének beállítása"
 
-#: js/widgets/tree/ContextMenu.js:282
+#: js/Tinebase-FAT-debug.js:23195 js/widgets/tree/ContextMenu.js:281
 msgid "Manage permissions"
 msgstr "Jogosultságok kezelése"
 
-#: js/widgets/tree/ContextMenu.js:290
+#: js/Tinebase-FAT-debug.js:23203 js/widgets/tree/ContextMenu.js:289
 msgid "Reload {0}"
 msgstr "{0} újratöltése"
 
-#: js/AppManager.js:182
-msgid "Missing Applications"
-msgstr "Hiányzó alkalmazás"
+#: js/Tinebase-FAT-debug.js:23535 js/widgets/account/PickerGridPanel.js:149
+msgid "Search User"
+msgstr "Felhasználó keresése"
 
-#: js/AppManager.js:183
-msgid "There are no applications enabled for you. Please contact your administrator."
-msgstr "Nincs engedélyezett alkalmazásod. Kérlek keresd a rendszergazdádat."
+#: js/Tinebase-FAT-debug.js:23541 js/widgets/account/PickerGridPanel.js:155
+msgid "Search Group"
+msgstr "Csoport keresése"
 
-#: Preference.php:89
-msgid "The timezone in which dates are shown in Tine 2.0."
-msgstr "A Tine 2.0 dátumainak időzónája."
+#: js/Tinebase-FAT-debug.js:23547 js/widgets/account/PickerGridPanel.js:161
+msgid "Add Anyone"
+msgstr "Bárki hozzáadása"
 
-#: Preference.php:93
-msgid "The language of the Tine 2.0 GUI."
-msgstr "Tine 2.0 felhasználói felületének nyelve."
+#: js/Tinebase-FAT-debug.js:23555 js/widgets/account/PickerGridPanel.js:169
+msgid "Anyone"
+msgstr "Bárki"
 
-#: Preference.php:96
-msgid "Default Application"
-msgstr "Default Application"
+#: js/Tinebase-FAT-debug.js:23603 js/widgets/account/PickerGridPanel.js:217
+msgid "Search for users ..."
+msgstr "Felhasználók keresése..."
 
-#: Preference.php:97
-msgid "The default application to show after login."
-msgstr "Bejelentkezés utáni alapértelmezett alkalmazás."
+#: js/Tinebase-FAT-debug.js:23622 js/widgets/account/PickerGridPanel.js:236
+msgid "Search for groups ..."
+msgstr "Csoportok keresése..."
 
-#: Preference.php:100
-msgid "Window Type"
-msgstr "Ablak típus"
+#: js/Tinebase-FAT-debug.js:23814 js/widgets/container/ContainerSelect.js:107
+msgid "choose other {0}..."
+msgstr "másik {0} választása..."
 
-#: Preference.php:101
-msgid "You can choose between ExtJs style windows or normal Browser popup windows."
-msgstr "Választhatsz az ExtJs stílus vagy a normál Böngésző felugró ablakai között."
+#: js/Tinebase-FAT-debug.js:23817 js/widgets/container/ContainerSelect.js:110
+msgid "Select a {0}"
+msgstr "Válassz egy {0}"
 
-#: Preference.php:104
-msgid "Confirm Logout"
-msgstr "Kijelentkezés megerősítése"
+#: js/Tinebase-FAT-debug.js:23837 js/widgets/container/ContainerSelect.js:130
+msgid "Recently used {0}:"
+msgstr "Legtöbbet használt {0}:"
 
-#: Preference.php:105
-msgid "Show confirmation dialog on logout."
-msgstr "Megerősítő ablak muitatása kijelentkezéskor."
+#: js/Tinebase-FAT-debug.js:24154 js/widgets/container/ContainerSelect.js:447
+msgid "please select a {0}"
+msgstr "kérlek válassz egy {0}"
 
-#: Notes.php:363
+#: js/Tinebase-FAT-debug.js:24314 js/widgets/container/GrantsDialog.js:52
+msgid "Folder"
+msgstr "Mappa"
+
+#: js/Tinebase-FAT-debug.js:24349 js/widgets/container/GrantsDialog.js:87
+msgid "The grant to read records of this container"
+msgstr "Ezen konténer adatolvásásának engedélyezése"
+
+#: js/Tinebase-FAT-debug.js:24354 js/Tinebase-FAT-debug.js:27122
+#: js/Tinebase-FAT-debug.js:27134 js/widgets/ActivitiesPanel.js:162
+#: js/widgets/ActivitiesPanel.js:174 js/widgets/container/GrantsDialog.js:92
+msgid "Add"
+msgstr "Hozzáadás"
+
+#: js/Tinebase-FAT-debug.js:24355 js/widgets/container/GrantsDialog.js:93
+msgid "The grant to add records to this container"
+msgstr "Ezen konténer adathozzáadásának engedélyezése"
+
+#: js/Tinebase-FAT-debug.js:24361 js/widgets/container/GrantsDialog.js:99
+msgid "The grant to edit records in this container"
+msgstr "Ezen konténer adatszerkesztésének engedélyezése"
+
+#: js/Tinebase-FAT-debug.js:24366 js/widgets/container/GrantsDialog.js:104
+msgid "Delete"
+msgstr "Törlés"
+
+#: js/Tinebase-FAT-debug.js:24367 js/widgets/container/GrantsDialog.js:105
+msgid "The grant to delete records in this container"
+msgstr "Ezen konténer adattörlésének engedélyezése"
+
+#: js/Tinebase-FAT-debug.js:24373 js/widgets/container/GrantsDialog.js:111
+msgid "The grant to export records from this container"
+msgstr "Ezen konténer adatexportálásának engedélyezése"
+
+#: js/Tinebase-FAT-debug.js:24378 js/widgets/container/GrantsDialog.js:116
+msgid "Sync"
+msgstr "Szinkronizálás"
+
+#: js/Tinebase-FAT-debug.js:24379 js/widgets/container/GrantsDialog.js:117
+msgid "The grant to synchronise records with this container"
+msgstr "Ezen konténer adatszinkronizálásának engedélyezése"
+
+#: js/Tinebase-FAT-debug.js:24390 js/widgets/container/GrantsDialog.js:128
+msgid "Free Busy"
+msgstr "Szabad-Foglalt"
+
+#: js/Tinebase-FAT-debug.js:24391 js/widgets/container/GrantsDialog.js:129
+msgid "The grant to access free busy information of events in this calendar"
+msgstr "Ezen naptár szabad-foglalt információhoz való hozzáférés engedélyezése"
+
+#: js/Tinebase-FAT-debug.js:24398 js/widgets/container/GrantsDialog.js:136
+msgid "Private"
+msgstr "Személyes"
+
+#: js/Tinebase-FAT-debug.js:24399 js/widgets/container/GrantsDialog.js:137
+msgid "The grant to access records marked as private in this container"
+msgstr "Ezen konténer személyesként megjelölt adataihoz való hozzáférés engedélyezése"
+
+#: js/Tinebase-FAT-debug.js:24406 js/widgets/container/GrantsDialog.js:144
+msgid "Admin"
+msgstr "Admin"
+
+#: js/Tinebase-FAT-debug.js:24407 js/widgets/container/GrantsDialog.js:145
+msgid "The grant to administrate this container"
+msgstr "Ezen konténer adminisztrálásának engedélyezése"
+
+#: js/Tinebase-FAT-debug.js:24429 js/widgets/container/GrantsDialog.js:167
+msgid "Updating Grants"
+msgstr "Engedélyek frissítése"
+
+#: js/Tinebase-FAT-debug.js:24459 js/widgets/container/GrantsDialog.js:197
+msgid "Error"
+msgstr "Hiba"
+
+#: js/Tinebase-FAT-debug.js:24460 js/widgets/container/GrantsDialog.js:198
+msgid "You are not allowed to remove all admins for this container!"
+msgstr "Nem távolíthatod el az összed admint ebből a konténerből!"
+
+#: js/Tinebase-FAT-debug.js:24624 js/widgets/container/ContainerTree.js:136
+msgid "container"
+msgid_plural "containers"
+msgstr[0] "konténer"
+msgstr[1] "konténerek"
+
+#: js/Tinebase-FAT-debug.js:24974 js/widgets/container/ContainerTree.js:486
+msgid "You are not allowed to select the {0} '{1}':"
+msgstr "Nem választhatod a {0} '{1}':"
+
+#: js/Tinebase-FAT-debug.js:24975 js/widgets/container/ContainerTree.js:487
+msgid "{0} grant is required for desired action"
+msgstr "{0} engedély szükséges a kívánt tevékenységhez"
+
+#: js/Tinebase-FAT-debug.js:24976 js/widgets/container/ContainerTree.js:488
+msgid "Insufficient Grants"
+msgstr "Elégtelen engedélyek"
+
+#: js/Tinebase-FAT-debug.js:25223 js/widgets/container/FilterModel.js:130
+msgid "is personal of"
+msgstr "személyes"
+
+#: js/Tinebase-FAT-debug.js:25539 js/Tinebase-FAT-debug.js:25564
+#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
+msgid "Add a new personal tag"
+msgstr "Egy új személyes címke hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:25542 js/Tinebase-FAT-debug.js:25567
+#: js/widgets/tags/TagsPanel.js:95 js/widgets/tags/TagsPanel.js:120
+msgid "Add New Personal Tag"
+msgstr "Új személyes címke hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:25543 js/Tinebase-FAT-debug.js:25568
+#: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
+msgid "Please note: You create a personal tag. Only you can see it!"
+msgstr "Jegyezd meg: Személyes címkét csináltál. Csak te fogod látni!"
+
+#: js/Tinebase-FAT-debug.js:25543 js/Tinebase-FAT-debug.js:25568
+#: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
+msgid "Enter tag name:"
+msgstr "Címke nevének megadása:"
+
+#: js/Tinebase-FAT-debug.js:25587 js/Tinebase-FAT-debug.js:25896
+#: js/Tinebase-FAT-debug.js:25900 js/Tinebase-FAT-debug.js:26196
+#: js/Tinebase-FAT-debug.js:26201 js/widgets/tags/TagCombo.js:119
+#: js/widgets/tags/TagCombo.js:124 js/widgets/tags/TagsPanel.js:140
+#: js/widgets/tags/TagsPanel.js:449 js/widgets/tags/TagsPanel.js:453
+msgid "personal"
+msgstr "személyes"
+
+#: js/Tinebase-FAT-debug.js:25609 js/widgets/tags/TagsPanel.js:162
+msgid "No Tags to display"
+msgstr "Nincs kijelezhető címke"
+
+#: js/Tinebase-FAT-debug.js:25632 js/widgets/tags/TagsPanel.js:185
+msgid "Detach tag"
+msgid_plural "Detach tags"
+msgstr[0] "Címke eltávolítása"
+msgstr[1] "Címkék eltávolítása"
+
+#: js/Tinebase-FAT-debug.js:25642 js/widgets/tags/TagsPanel.js:195
+msgid "Edit tag"
+msgstr "Címke szerkesztése"
+
+#: js/Tinebase-FAT-debug.js:25647 js/Tinebase-FAT-debug.js:25652
+#: js/widgets/tags/TagsPanel.js:200 js/widgets/tags/TagsPanel.js:205
+msgid "Rename Tag"
+msgstr "Címke átnevezése"
+
+#: js/Tinebase-FAT-debug.js:25652 js/widgets/tags/TagsPanel.js:205
+msgid "Please enter a new name:"
+msgstr "Kérlek adj meg egy új nevet:"
+
+#: js/Tinebase-FAT-debug.js:25661 js/widgets/tags/TagsPanel.js:214
+msgid "Edit Description"
+msgstr "Leírás szerkesztése"
+
+#: js/Tinebase-FAT-debug.js:25666 js/widgets/tags/TagsPanel.js:219
+msgid "Description for tag"
+msgstr "Címke leírása"
+
+#: js/Tinebase-FAT-debug.js:25666 js/widgets/tags/TagsPanel.js:219
+msgid "Please enter new description:"
+msgstr "Kérlek adj meg egy új leírást:"
+
+#: js/Tinebase-FAT-debug.js:25675 js/widgets/tags/TagsPanel.js:228
+msgid "Change Color"
+msgstr "Szín megváltoztatása"
+
+#: js/Tinebase-FAT-debug.js:25704 js/widgets/tags/TagsPanel.js:257
+msgid "Delete Tag"
+msgid_plural "Delete Tags"
+msgstr[0] "Címke törlése"
+msgstr[1] "Címkék törlése"
+
+#: js/Tinebase-FAT-debug.js:25717 js/widgets/tags/TagsPanel.js:270
+msgid "Realy Delete Selected Tag?"
+msgid_plural "Realy Delete Selected Tags?"
+msgstr[0] "Biztosan törlöd a kiválasztott címkét?"
+msgstr[1] "Biztosan törlöd a kiválasztott címkéket?"
+
+#: js/Tinebase-FAT-debug.js:25718 js/widgets/tags/TagsPanel.js:271
+msgid "the selected tag will be deleted and disapear for all entries"
+msgid_plural "The selected tags will be removed and disapear for all entries"
+msgstr[0] "a kiválasztott címke törlődik és eltűnik az összes bejegyzésből"
+msgstr[1] "a kiválasztott címkék törlődnek és eltűnnek az összes bejegyzésből"
+
+#: js/Tinebase-FAT-debug.js:25722 js/widgets/tags/TagsPanel.js:275
+msgid "Please wait a moment..."
+msgstr "Kérlek várj egy pillanatot..."
+
+#: js/Tinebase-FAT-debug.js:25722 js/widgets/tags/TagsPanel.js:275
+msgid "Deleting Tag"
+msgid_plural "Deleting Tags"
+msgstr[0] "Címke törlése"
+msgstr[1] "Címkék törlése"
+
+#: js/Tinebase-FAT-debug.js:25738 js/widgets/tags/TagsPanel.js:291
+msgid "Could not delete Tag(s)."
+msgstr "Címke(k) nem törölhető(ek)."
+
+#: js/Tinebase-FAT-debug.js:25800 js/Tinebase-FAT-debug.js:25862
+#: js/widgets/tags/TagsPanel.js:353 js/widgets/tags/TagsPanel.js:415
+msgid "Notice"
+msgstr "Bejelentés"
+
+#: js/Tinebase-FAT-debug.js:25801 js/Tinebase-FAT-debug.js:25863
+#: js/widgets/tags/TagsPanel.js:354 js/widgets/tags/TagsPanel.js:416
+msgid "The minimum tag length is three."
+msgstr "A minimum címke hossz 3 karakter."
+
+#: js/Tinebase-FAT-debug.js:25848 js/widgets/tags/TagsPanel.js:401
+msgid "Could not create tag."
+msgstr "Címke nem hozható létre."
+
+#: js/Tinebase-FAT-debug.js:25881 js/widgets/tags/TagsPanel.js:434
+msgid "Could not update tag."
+msgstr "Címke nem frissíthető."
+
+#: js/Tinebase-FAT-debug.js:25915 js/Tinebase-FAT-debug.js:25973
+#: js/widgets/tags/TagsPanel.js:468 js/widgets/tags/TagsPanel.js:526
+msgid "Enter tag name"
+msgstr "Címke nevének megadása"
+
+#: js/Tinebase-FAT-debug.js:25916 js/Tinebase-FAT-debug.js:27758
+#: js/widgets/form/RecordPickerComboBox.js:63 js/widgets/tags/TagsPanel.js:469
+msgid "Searching..."
+msgstr "Keresés..."
+
+#: js/Tinebase-FAT-debug.js:26050 js/widgets/tags/TagsPanel.js:603
+msgid "Color"
+msgstr "Szín"
+
+#: js/Tinebase-FAT-debug.js:26125 js/widgets/tags/TagCombo.js:48
+msgid "tag name"
+msgstr "címke név"
+
+#: js/Tinebase-FAT-debug.js:26249 js/widgets/tags/TagFilter.js:33
+msgid "Tag"
+msgstr "Címke"
+
+#: js/Tinebase-FAT-debug.js:26297 js/widgets/tags/TagsMassAttachAction.js:18
+msgid "Add Tag"
+msgstr "Címke hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:26352 js/widgets/tags/TagsMassAttachAction.js:73
+msgid "Attach the following tag to all selected items:"
+msgstr "Az alábbi címke csatolása az összes kiválasztott elemhez:"
+
+#: js/Tinebase-FAT-debug.js:26363 js/widgets/tags/TagsMassAttachAction.js:84
+msgid "Select Tag"
+msgstr "Címke kiválasztása"
+
+#: js/Tinebase-FAT-debug.js:26594 js/widgets/mainscreen/WestPanel.js:191
+msgid "containers"
+msgstr "konténerek"
+
+#: js/Tinebase-FAT-debug.js:26621 js/widgets/mainscreen/WestPanel.js:218
+msgid "Favorites"
+msgstr "Kedvencek"
+
+#: js/Tinebase-FAT-debug.js:26629 js/widgets/mainscreen/WestPanel.js:226
+msgid "Save current view as favorite"
+msgstr "Jelenlegi nézet mentése kedvencként"
+
+#: js/Tinebase-FAT-debug.js:26922 js/widgets/CountryCombo.js:34
+msgid "Select a country..."
+msgstr ""
+
+#: js/Tinebase-FAT-debug.js:27107 js/widgets/ActivitiesPanel.js:147
+msgid "Add a Note..."
+msgstr "Megjegyzés hozzáadása..."
+
+#: js/Tinebase-FAT-debug.js:27122 js/Tinebase-FAT-debug.js:27423
+#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
+msgid "Note"
+msgstr "Mejegyzés"
+
+#: js/Tinebase-FAT-debug.js:27135 js/Tinebase-FAT-debug.js:27345
+#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
+msgid "Add new note"
+msgstr "Új megjegyzés hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:27166 js/widgets/ActivitiesPanel.js:206
+msgid "Notes"
+msgstr "Megjegyzések"
+
+#: js/Tinebase-FAT-debug.js:27242 js/widgets/ActivitiesPanel.js:282
+msgid "Enter new note:"
+msgstr "Új megjegyzés megadása:"
+
+#: js/Tinebase-FAT-debug.js:27279 js/Tinebase-FAT-debug.js:27344
+#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
+msgid "Add Note"
+msgstr "Megjegyzés hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:27331 js/widgets/ActivitiesPanel.js:371
+msgid "Add a {0} Note"
+msgstr "{0} megjegyzés hozzáadása"
+
+#: js/Tinebase-FAT-debug.js:27421 js/Tinebase-FAT-debug.js:27559
+#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:599
+msgid "Type"
+msgstr "Típus"
+
+#: js/Tinebase-FAT-debug.js:27425 js/widgets/ActivitiesPanel.js:465
+msgid "Timestamp"
+msgstr "Időbélyeg"
+
+#: js/Tinebase-FAT-debug.js:27439 js/widgets/ActivitiesPanel.js:479
+msgid "Displaying history records {0} - {1} of {2}"
+msgstr "Előzmény adatok megjelenítése {0} - {1} / {2}"
+
+#: js/Tinebase-FAT-debug.js:27440 js/widgets/ActivitiesPanel.js:480
+msgid "No history to display"
+msgstr "Nincs megjeleníthető előzmény"
+
+#: js/Tinebase-FAT-debug.js:27541 js/widgets/ActivitiesPanel.js:581
+msgid "History"
+msgstr "Előzmények"
+
+#: js/Tinebase-FAT-debug.js:27553 js/widgets/ActivitiesPanel.js:593
+msgid "Quick search"
+msgstr "Gyors keresés"
+
+#: js/Tinebase-FAT-debug.js:27554 js/Tinebase-FAT-debug.js:27555
+#: js/widgets/ActivitiesPanel.js:594 js/widgets/ActivitiesPanel.js:595
+msgid "Time"
+msgstr "Idő"
+
+#: js/Tinebase-FAT-debug.js:27557 js/widgets/ActivitiesPanel.js:597
+msgid "User"
+msgstr "Felhasználó"
+
+#: js/Tinebase-FAT-debug.js:27954 js/widgets/form/ConfigPanel.js:106
+msgid "Invalid configuration"
+msgstr "Érvénytelen konfiguráció"
+
+#: js/Tinebase-FAT-debug.js:27979 js/widgets/form/ConfigPanel.js:131
+msgid "Transferring Configuration..."
+msgstr "Beállítások átvitele..."
+
+#: js/Tinebase-FAT-debug.js:28075 js/widgets/form/ConfigPanel.js:227
+msgid "Save config"
+msgstr "Konfiguráció mentése"
+
+#: js/Tinebase-FAT-debug.js:28085 js/widgets/form/ConfigPanel.js:237
+msgid "Reload config"
+msgstr "Konfigurácó újratöltése"
+
+#: js/Tinebase-FAT-debug.js:28169 js/widgets/persistentfilter/Model.js:38
+msgid "Favorite"
+msgid_plural "Favorites"
+msgstr[0] "Kedvenc"
+msgstr[1] "Kedvencek"
+
+#: js/Tinebase-FAT-debug.js:28169 js/widgets/persistentfilter/Model.js:38
+msgid "Events"
+msgstr "Események"
+
+#: js/Tinebase-FAT-debug.js:28349
+#: js/widgets/persistentfilter/PickerPanel.js:66
+msgid "My favorites"
+msgstr "Kedvenceim"
+
+#: js/Tinebase-FAT-debug.js:28537
+#: js/widgets/persistentfilter/PickerPanel.js:254
+msgid "Delete Favorite"
+msgstr "Kedvenc törlése"
+
+#: js/Tinebase-FAT-debug.js:28542
+#: js/widgets/persistentfilter/PickerPanel.js:259
+msgid "Rename Favorite"
+msgstr "Kedvenc átnevezése"
+
+#: js/Tinebase-FAT-debug.js:28557
+#: js/widgets/persistentfilter/PickerPanel.js:274
+msgid "Do you really want to delete the favorite \"{0}\"?"
+msgstr "Biztosan szeretnéd törölni ezt a kedvencet: \"{0}\"?"
+
+#: js/Tinebase-FAT-debug.js:28559
+#: js/widgets/persistentfilter/PickerPanel.js:276
+msgid "Deleting Favorite \"{0}\""
+msgstr "Kedvenc törlése: \"{0}\""
+
+#: js/Tinebase-FAT-debug.js:28579
+#: js/widgets/persistentfilter/PickerPanel.js:296
+msgid "New Name"
+msgstr "Új név"
+
+#: js/Tinebase-FAT-debug.js:28579
+#: js/widgets/persistentfilter/PickerPanel.js:296
+msgid "Please enter the new name for favorite \"{0}\"?"
+msgstr "Kérlek írd be az új nevét ennek a kedvencnek: \"{0}\"?"
+
+#: js/Tinebase-FAT-debug.js:28581
+#: js/widgets/persistentfilter/PickerPanel.js:298
+msgid "Renaming Favorite \"{0}\""
+msgstr "Kedvenc átnevezése: \"{0}\""
+
+#: js/Tinebase-FAT-debug.js:28602
+#: js/widgets/persistentfilter/PickerPanel.js:319
+msgid "Could not save Favorite"
+msgstr "Nem lehet a kedvencet elmenteni"
+
+#: js/Tinebase-FAT-debug.js:28602
+#: js/widgets/persistentfilter/PickerPanel.js:319
+msgid "Your current view does not support favorites"
+msgstr "A jelenlegi nézeted nem támogatja a kedvenceket"
+
+#: js/Tinebase-FAT-debug.js:28607
+#: js/widgets/persistentfilter/PickerPanel.js:324
+msgid "save filter"
+msgstr "szűrő mentése"
+
+#: js/Tinebase-FAT-debug.js:28607
+#: js/widgets/persistentfilter/PickerPanel.js:324
+msgid "Please enter a name for the favorite"
+msgstr "Kérlek írj be egy nevet a kedvencnek"
+
+#: js/Tinebase-FAT-debug.js:28610 js/Tinebase-FAT-debug.js:28613
+#: js/Tinebase-FAT-debug.js:28622
+#: js/widgets/persistentfilter/PickerPanel.js:327
+#: js/widgets/persistentfilter/PickerPanel.js:330
+#: js/widgets/persistentfilter/PickerPanel.js:339
+msgid "Favorite not Saved"
+msgstr "Kedvenc nincs mentve"
+
+#: js/Tinebase-FAT-debug.js:28610
+#: js/widgets/persistentfilter/PickerPanel.js:327
+msgid "You have to supply a name for the favorite!"
+msgstr "Biztosítanod kell egy nevet a kedvencnek!"
+
+#: js/Tinebase-FAT-debug.js:28613
+#: js/widgets/persistentfilter/PickerPanel.js:330
+msgid "You have to supply a shorter name! Names of favorite can only be up to 40 characters long."
+msgstr "Rövidebb nevet kell megadnod. A kedvencek nevének hossza 40 karakter hosszó lehet."
+
+#: js/Tinebase-FAT-debug.js:28616
+#: js/widgets/persistentfilter/PickerPanel.js:333
+msgid "Saving favorite"
+msgstr "Kedvenc mentése"
+
+#: js/Tinebase-FAT-debug.js:28622
+#: js/widgets/persistentfilter/PickerPanel.js:339
+msgid "Overwriting system favorites is not yet supported"
+msgstr "Rendszer kedvenceinek felülírása még nem támogatott"
+
+#: js/Tinebase-FAT-debug.js:31580 js/tineInit.js:581
+msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
+msgstr "Végeztes hiba: A kliens önfrissítése hibás, lépj kapcsolatba a rendszergazdával és/vagy indítsd/töltsd újra a böngésződet."
+
+#: js/UserRegistration.js:37
+msgid "Registration Wizard"
+msgstr "Regisztrációs varázsló"
+
+#: js/UserRegistration.js:90
+msgid "Given name"
+msgstr "Keresztnév"
+
+#: js/UserRegistration.js:101
+msgid "Family name"
+msgstr "Családi név"
+
+#: js/UserRegistration.js:112
+msgid "Login name"
+msgstr "Bejelentkezési név"
+
+#: js/UserRegistration.js:125
+msgid "Emailaddress"
+msgstr "E-mail cím"
+
+#: js/UserRegistration.js:171
+msgid "Congratulations!"
+msgstr "Gratulálunk!"
+
+#: js/UserRegistration.js:171
+msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
+msgstr "Beírtál minden szükséges információt. Ha megnyomod a Befejezés gombot, elküldjük a regisztrációs e-mailt."
+
+#: js/widgets/TimezoneChooser.js:37 Preference.php:87
+msgid "Timezone"
+msgstr "Időzóna"
+
+#: js/widgets/TimezoneChooser.js:77
+msgid "setting new timezone..."
+msgstr "új időzóna beállítása..."
+
+#: Notes.php:362
 msgid "by"
 msgstr "által"
 
-#: Notes.php:370
+#: Notes.php:369
 msgid "Changed fields:"
 msgstr "Változtatott mezők:"
 
-#: Frontend/Http.php:565
-msgid "Your session is not valid. You need to login again."
-msgstr "Érvénytelen kapcsolódás. Újra be kell jelentkezned."
+#: Preference/Abstract.php:475
+msgid "default"
+msgstr "alapértelmezett"
 
-#: Setup/setup.xml:3036
+#: Preference.php:88
+msgid "The timezone in which dates are shown in Tine 2.0."
+msgstr "A Tine 2.0 dátumainak időzónája."
+
+#: Preference.php:92
+msgid "The language of the Tine 2.0 GUI."
+msgstr "Tine 2.0 felhasználói felületének nyelve."
+
+#: Preference.php:95
+msgid "Default Application"
+msgstr "Default Application"
+
+#: Preference.php:96
+msgid "The default application to show after login."
+msgstr "Bejelentkezés utáni alapértelmezett alkalmazás."
+
+#: Preference.php:99
+msgid "Window Type"
+msgstr "Ablak típus"
+
+#: Preference.php:100
+msgid "You can choose between ExtJs style windows or normal Browser popup windows."
+msgstr "Választhatsz az ExtJs stílus vagy a normál Böngésző felugró ablakai között."
+
+#: Preference.php:103
+msgid "Confirm Logout"
+msgstr "Kijelentkezés megerősítése"
+
+#: Preference.php:104
+msgid "Show confirmation dialog on logout."
+msgstr "Megerősítő ablak muitatása kijelentkezéskor."
+
+#: Setup/setup.xml:3049
 msgid "note"
 msgstr "megjegyzés"
 
-#: Setup/setup.xml:3041
+#: Setup/setup.xml:3054
 msgid "default note type"
 msgstr "alapértelmezett megjegyzés típus"
 
-#: Setup/setup.xml:3067
+#: Setup/setup.xml:3080
 msgid "telephone"
 msgstr "telefon"
 
-#: Setup/setup.xml:3072
+#: Setup/setup.xml:3085
 msgid "telephone call"
 msgstr "telefon hívás"
 
-#: Setup/setup.xml:3098
+#: Setup/setup.xml:3111
 msgid "email"
 msgstr "email"
 
-#: Setup/setup.xml:3103
+#: Setup/setup.xml:3116
 msgid "email contact"
 msgstr "email kapcsolat"
 
-#: Setup/setup.xml:3129
+#: Setup/setup.xml:3142
 msgid "created"
 msgstr "készítette"
 
-#: Setup/setup.xml:3134
+#: Setup/setup.xml:3147
 msgid "record created"
 msgstr "adat készítve"
 
-#: Setup/setup.xml:3160
+#: Setup/setup.xml:3173
 msgid "changed"
 msgstr "változtatva"
 
-#: Setup/setup.xml:3165
+#: Setup/setup.xml:3178
 msgid "record changed"
 msgstr "adat változtatva"
+
+#: views/update.php:23
+msgid "Tine 2.0 needs to be updated or is not installed yet."
+msgstr "Tine 2.0 frissítése szükséges vagy még nincs telepítve."
+
+#: views/update.php:24
+msgid "Please wait or contact your administrator"
+msgstr "Kérlek várj vagy lépj kapcsolatba a rendszergazdával"
 
 #~ msgid "About Tine 2.0"
 #~ msgstr "Tine 2.0-ról"

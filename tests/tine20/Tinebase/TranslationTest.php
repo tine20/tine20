@@ -2,11 +2,10 @@
 /**
  * Tine 2.0
  * 
- * @package     Tasks
- * @subpackage  Tags
+ * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -15,16 +14,11 @@
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    Tinebase_TranslationTest::main();
-}
-
 /**
  * Test class for Tinebase_Group
  */
 class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
 {
-    
     /**
      * Runs the test methods of this class.
      */
@@ -86,6 +80,9 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
         $this->assertTrue((bool)preg_match("/Locale\.Gettext\.prototype\._msgs\['\.\/LC_MESSAGES\/Tinebase'\]/", $jsTranslations), 'tine translations are missing');
     }
     
+    /**
+     * test getCountryList
+     */
     public function testGetCountryList()
     {
         Tinebase_Core::setupUserLocale('de_DE');
@@ -118,6 +115,9 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
 
     }
     
+    /**
+     * test getCountryNameByRegionCode
+     */
     public function testGetCountryNameByRegionCode()
     {
         Tinebase_Core::setupUserLocale('de_DE');
@@ -130,6 +130,9 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('United States', Tinebase_Translation::getCountryNameByRegionCode('US'));
     }
     
+    /**
+     * test getRegionCodeByCountryName
+     */
     public function testGetRegionCodeByCountryName()
     {
         Tinebase_Core::setupUserLocale('de_DE');
@@ -141,6 +144,4 @@ class Tinebase_TranslationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('DE', Tinebase_Translation::getRegionCodeByCountryName('Germany'));
         $this->assertEquals('US', Tinebase_Translation::getRegionCodeByCountryName('United States'));
     }
-
 }
-

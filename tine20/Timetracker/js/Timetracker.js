@@ -9,6 +9,31 @@
  
 Ext.ns('Tine.Timetracker');
 
+/**
+ * @namespace   Tine.Timetracker
+ * @class       Tine.Timetracker.Application
+ * @extends     Tine.Tinebase.Application
+ * Timetracker Application Object <br>
+ * 
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ */
+Tine.Timetracker.Application = Ext.extend(Tine.Tinebase.Application, {
+    init: function() {
+        Tine.Timetracker.Application.superclass.init.apply(this, arguments);
+        
+        Ext.ux.ItemRegistry.registerItem('Tine.widgets.grid.GridPanel.addButton', {
+            text: this.i18n._('New Timesheet'), 
+            iconCls: 'TimetrackerTimesheet',
+            scope: this,
+            handler: function() {
+                var ms = this.getMainScreen(),
+                    cp = ms.getCenterPanel('Timesheet');
+                    
+                cp.onEditInNewWindow.call(cp, {});
+            }
+        });
+    }
+});
 
 /**
  * @namespace   Tine.Timetracker

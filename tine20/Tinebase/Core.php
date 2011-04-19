@@ -289,7 +289,7 @@ class Tinebase_Core
         //Cache must be setup before User Locale because otherwise Zend_Locale tries to setup 
         //its own cache handler which might result in a open_basedir restriction depending on the php.ini settings
         Tinebase_Core::setupCache();
-
+        
         Tinebase_Core::setupSession();
         
         // setup a temporary user locale/timezone. This will be overwritten later but we 
@@ -587,7 +587,7 @@ class Tinebase_Core
         self::startSession(array(
             'name'              => 'TINE20SESSID',
         ));
-
+        
         $config = self::getConfig();
         define('TINE20_BUILDTYPE',     strtoupper($config->get('buildtype', 'DEVELOPMENT')));
         define('TINE20_CODENAME',      getDevelopmentRevision());
@@ -623,7 +623,7 @@ class Tinebase_Core
     public static function startSession($_options = array(), $_namespace = 'tinebase')
     {
         self::setSessionOptionsAndBackend($_options);
-
+        
         try {
             Zend_Session::start();
         } catch (Zend_Session_Exception $zse) {
@@ -834,35 +834,39 @@ class Tinebase_Core
     {
         $session = self::get(self::SESSION);
 
-        self::getLogger()->info(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
-        $localeString = NULL;
-        if ($_localeString == 'auto') {
+        self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " given localeString '$_localeString'");
 
-            // check if cookie with language is available
-            if (isset($_COOKIE['TINE20LOCALE'])) {
-                $localeString = $_COOKIE['TINE20LOCALE'];
-            } else {
-
-                // if the session already has a locale, use this, otherwise use the preference
-                // NOTE: we always have the preference setting as fallback because it is created in the setup
-                if (isset($session->userLocale)) {
-                    $localeString = $session->userLocale;
-                    self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value '$localeString'");
-
+        // get locale object from session or ...
+        if ($session !== NULL && isset($session->userLocale) && ($session->userLocale->toString() === $_localeString || $_localeString == 'auto')) {
+            $locale = $session->userLocale;
+            self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " session value: " . (string)$locale);
+            
+        // ... create new locale object
+        } else {
+            $localeString = $_localeString;
+            
+            if ($_localeString == 'auto') {
+                // check if cookie with language is available
+                if (isset($_COOKIE['TINE20LOCALE'])) {
+                    $localeString = $_COOKIE['TINE20LOCALE'];
                 } elseif (isset($session->currentAccount)) {
                     $localeString = self::getPreference()->{Tinebase_Preference::LOCALE};
                     self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " preference '$localeString'");
                 }
             }
+            
+            $locale = Tinebase_Translation::getLocale($localeString);
+    
+            // save in session and registry
+            if ($session !== NULL) {
+                $session->userLocale = $locale;
+            }
         }
-        $locale = Tinebase_Translation::getLocale($localeString ? $localeString : $_localeString);
-
-        // save in session and registry
-        if ($session !== NULL) {
-            $session->userLocale = (string)$locale;
-        }
+        
+        self::getLogger()->info(__METHOD__ . '::' . __LINE__ . " user locale: " . (string)$locale);
+        
         self::set('locale', $locale);
-
+        
         // save locale as preference
         if ($_saveaspreference && Tinebase_Core::isRegistered(self::USER)) {
             self::getPreference()->{Tinebase_Preference::LOCALE} = (string)$locale;
@@ -891,8 +895,13 @@ class Tinebase_Core
         $session = self::get(self::SESSION);
 
         if ($_timezone === NULL) {
-            // get timezone from preferences
-            $timezone = self::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
+            if (isset($session->timezone)) {
+                $timezone = $session->timezone;
+            } else {
+                // get timezone from preferences
+                $timezone = self::getPreference()->getValue(Tinebase_Preference::TIMEZONE);
+                $session->timezone = $timezone;
+            }
 
         } else {
             $timezone = $_timezone;

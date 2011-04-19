@@ -30,7 +30,6 @@ Tine.Admin.container.show = function () {
     Tine.Tinebase.MainScreen.setActiveToolbar(Tine.Admin.container.gridPanel.actionToolbar, true);
 };
 
-
 /************** models *****************/
 Ext.ns('Tine.Admin.Model');
 
@@ -64,7 +63,6 @@ Tine.Admin.Model.Container.getDefaultData = function () {
 Tine.Admin.containerBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'Container',
-    recordClass: Tine.Admin.Model.Container,
+    recordClass: Tine.Tinebase.Model.Container,
     idProperty: 'id'
 });
-

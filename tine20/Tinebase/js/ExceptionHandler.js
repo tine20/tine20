@@ -38,6 +38,9 @@ Tine.Tinebase.ExceptionHandler = function() {
         
         var error = getNormalisedError.apply(this, arguments);
         
+        // chrome (tested with 10 + 12) shows the error if this returns true
+        var errorHandled = Ext.isChrome ? false : true;
+        
         var traceHtml = '<table>';
         for (p in error) {
             if (error.hasOwnProperty(p)) {
@@ -45,29 +48,30 @@ Tine.Tinebase.ExceptionHandler = function() {
             }
         }
         traceHtml += '</table>'
-        
-        // check for spechial cases we don't want to handle
+
+
+        // check for special cases we don't want to handle
         if (traceHtml.match(/versioncheck/)) {
-            return true;
+            return errorHandled;
         }
-        // we don't wanna know fancy FF3.5 crom bugs
+        // we don't wanna know fancy FF3.5 crome bugs
         if (traceHtml.match(/chrome/)) {
-            return true;
+            return errorHandled;
         }
         // don't show openlayers error (occurs if window with contact is closed too fast)
         // TODO better fix this error ...
         if (traceHtml.match(/OpenLayers\.js/) && traceHtml.match(/element is null/)) {
-            return true;
+            return errorHandled;
         }
         
         // really bad thing: fix exists only in close source version
         // http://www.extjs.com/forum/showthread.php?t=76860
         if (traceHtml.match(/swf\.setDataProvider/)) {
-            return true;
+            return errorHandled;
         }
         
         // let exception bubble to browser
-        return false;
+        return ! errorHandled;
     };
     
     /**

@@ -230,10 +230,26 @@ class Addressbook_Backend_SqlTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test search results
+     * 
+     */
+    public function testSearchContact()
+    {
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->objects['initialContact']['container_id'])
+        ));
+        
+        $contacts = $this->_backend->search($filter);
+        $this->assertTrue(count($contacts) >= 1, 'empty search');
+        $this->assertTrue(in_array($GLOBALS['Addressbook_ControllerTest']['contactId'], $contacts->getId()), 'contact not found');
+        
+        $contact = $contacts[$contacts->getIndexById($GLOBALS['Addressbook_ControllerTest']['contactId'])];
+        $this->assertTrue((bool) $contact->jpegphoto, 'contact image is not detected');
+    }
+    
+    /**
      * test if image is in contact
      * 
-     * API change 2009-04-26, image must now be queried separatly
-     *
      */
     public function testImage()
     {

@@ -14,314 +14,112 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: Acl/Rights.php:174
+#: Acl/Rights.php:185
 msgid "manage access log"
 msgstr "Управлять логом доступа"
 
-#: Acl/Rights.php:175
+#: Acl/Rights.php:186
 msgid "delete access log entries"
 msgstr "удалить элементы лога доступа"
 
-#: Acl/Rights.php:178
+#: Acl/Rights.php:189
 msgid "manage accounts"
 msgstr "управлять учётными записями"
 
-#: Acl/Rights.php:179
+#: Acl/Rights.php:190
 msgid "add and edit users and groups, add group members, change user passwords"
 msgstr "добавить и изменить пользователей и группы, добавить пользователей в группы, изменить пароли пользователей"
 
-#: Acl/Rights.php:182
+#: Acl/Rights.php:193
 msgid "manage applications"
 msgstr "Управлять приложениями"
 
-#: Acl/Rights.php:183
+#: Acl/Rights.php:194
 msgid "enable and disable applications, edit application settings"
 msgstr "разрешить и запретить приложения, изменить настройки приложений"
 
-#: Acl/Rights.php:186
+#: Acl/Rights.php:197
 msgid "manage roles"
 msgstr "управлять ролями"
 
-#: Acl/Rights.php:187
+#: Acl/Rights.php:198
 msgid "add and edit roles, add new members to roles, add application rights to roles"
 msgstr "добавить и изменить роли, добавить новых участников к ролям, добавить права приложений к ролям"
 
-#: Acl/Rights.php:190
+#: Acl/Rights.php:201
 msgid "manage shared tags"
 msgstr "управлять общими тэгами"
 
-#: Acl/Rights.php:191
+#: Acl/Rights.php:202
 msgid "add, delete and edit shared tags"
 msgstr "добавить, удалить и изменить общие тэги"
 
-#: Acl/Rights.php:194
+#: Acl/Rights.php:205
 msgid "manage computers"
 msgstr "управлять компьютерами"
 
-#: Acl/Rights.php:195
+#: Acl/Rights.php:206
 msgid "add, delete and edit (samba) computers"
 msgstr "добавлять, удалять и изменять (samba) компьютеры"
 
-#: Acl/Rights.php:198
+#: Acl/Rights.php:209
+msgid "manage containers"
+msgstr ""
+
+#: Acl/Rights.php:210
+msgid "add, delete and edit containers and manage container grants"
+msgstr ""
+
+#: Acl/Rights.php:213
 msgid "view access log"
 msgstr "посмотреть лог доступа"
 
-#: Acl/Rights.php:199
+#: Acl/Rights.php:214
 msgid "view access log list"
 msgstr "посмотреть список логов доступа"
 
-#: Acl/Rights.php:202
+#: Acl/Rights.php:217
 msgid "view accounts"
 msgstr "посмотреть учётные записи"
 
-#: Acl/Rights.php:203
+#: Acl/Rights.php:218
 msgid "view accounts list and details"
 msgstr "посмотреть список учётных записей и подробности"
 
-#: Acl/Rights.php:206
+#: Acl/Rights.php:221
 msgid "view applications"
 msgstr "посмотреть приложения"
 
-#: Acl/Rights.php:207
+#: Acl/Rights.php:222
 msgid "view applications list and details"
 msgstr "посмотреть список приложений и подробности"
 
-#: Acl/Rights.php:210
+#: Acl/Rights.php:225
 msgid "view roles"
 msgstr "посмотреть роли"
 
-#: Acl/Rights.php:211
+#: Acl/Rights.php:226
 msgid "view roles list and details"
 msgstr "посмотреть список ролей и подробности"
 
-#: Acl/Rights.php:214
+#: Acl/Rights.php:229
 msgid "view computers"
 msgstr "посмотреть компьютеры"
 
-#: Acl/Rights.php:215
+#: Acl/Rights.php:230
 msgid "view computers list and details"
 msgstr "посмотреть список компьютеров и подробности"
 
-#: js/SambaMachineGrid.js:68 js/SambaMachineEditDialog.js:43
-msgid "Computer Name"
-msgstr "Имя компьютера"
-
-#: js/SambaMachineGrid.js:69 js/SambaMachineGrid.js:99 js/TagEditDialog.js:226
-#: js/Roles.js:240 js/Groups.js:239 js/Tags.js:227 js/GroupEditDialog.js:136
-#: js/user/GridPanel.js:101 js/RoleEditDialog.js:292
-msgid "Description"
-msgstr "Описание"
-
-#: js/SambaMachineGrid.js:86 js/Roles.js:238 js/Groups.js:237
-#: js/user/GridPanel.js:159
-msgid "ID"
-msgstr "ID"
-
-#: js/SambaMachineGrid.js:93 js/Roles.js:239 js/Applications.js:286
-#: js/Groups.js:238 js/AccessLog.js:133 js/Tags.js:226
-#: js/user/EditDialog.js:270 js/user/EditDialog.js:306
-msgid "Name"
-msgstr "Имя"
-
-#: js/TagEditDialog.js:38 js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Please wait"
-msgstr "Пожалуйста, подождите"
-
-#: js/TagEditDialog.js:38
-#, fuzzy
-msgid "Updating Tag"
-msgstr "Загрузка тэга..."
-
-#: js/TagEditDialog.js:83 js/Roles.js:70 js/Groups.js:77
-#: js/GroupEditDialog.js:73 js/RoleEditDialog.js:107 js/RoleEditDialog.js:135
-msgid "Failed"
-msgstr "Неудача"
-
-#: js/TagEditDialog.js:83
-msgid "Could not save tag."
-msgstr "Не удалось сохранить тэг."
-
-#: js/TagEditDialog.js:88 js/GroupEditDialog.js:78 js/RoleEditDialog.js:114
-msgid "Errors"
-msgstr "Ошибки"
-
-#: js/TagEditDialog.js:88 js/GroupEditDialog.js:78 js/RoleEditDialog.js:114
-msgid "Please fix the errors noted."
-msgstr "Пожалуйста, устраните отмеченные ошибки."
-
-#: js/TagEditDialog.js:169
-msgid "Allowed Contexts"
-msgstr "Разрешённый контекст"
-
-#: js/TagEditDialog.js:175
-msgid "Context"
-msgstr "Контекст"
-
-#: js/TagEditDialog.js:188
-msgid "Account Rights"
-msgstr "Права учётной записи"
-
-#: js/TagEditDialog.js:196
-msgid "View"
-msgstr "Представление"
-
-#: js/TagEditDialog.js:201
-msgid "Use"
-msgstr "Использовать"
-
-#: js/TagEditDialog.js:219
-msgid "Tag Name"
-msgstr "Название тэга"
-
-#: js/TagEditDialog.js:232 js/Tags.js:223
-msgid "Color"
-msgstr "Цвет"
-
-#: js/TagEditDialog.js:290 js/GroupEditDialog.js:216 js/RoleEditDialog.js:359
-msgid "Transferring {0}..."
+#: Acl/Rights.php:233
+msgid "view containers"
 msgstr ""
 
-#: js/TagEditDialog.js:290
-msgid "Tag"
+#: Acl/Rights.php:234
+msgid "view personal and shared containers"
 msgstr ""
 
-#: js/TagEditDialog.js:300
-msgid "Add New Tag"
-msgstr "Добавить новый тэг"
-
-#: js/TagEditDialog.js:302
-msgid "Edit Tag \"{0}\""
-msgstr "Изменить тэг \"{0}\""
-
-#: js/Roles.js:48 js/Groups.js:55 js/Tags.js:65
-msgid "Confirm"
-msgstr "Подтвердить"
-
-#: js/Roles.js:48
-msgid "Do you really want to delete the selected roles?"
-msgstr "Вы действительно хотите удалить выбранные роли?"
-
-#: js/Roles.js:65
-msgid "Deleting role(s)..."
-msgstr "Удаление роли(ей)..."
-
-#: js/Roles.js:70 js/RoleEditDialog.js:135
-msgid "Some error occurred while trying to delete the role."
-msgstr "При удаление роли произошла ошибка."
-
-#: js/Roles.js:103
-msgid "add role"
-msgstr "добавить роль"
-
-#: js/Roles.js:111
-msgid "edit role"
-msgstr "изменить роль"
-
-#: js/Roles.js:119
-msgid "delete role"
-msgstr "удалить роль"
-
-#: js/Roles.js:177 js/Applications.js:191 js/Groups.js:179 js/Tags.js:170
-msgid "Search:"
-msgstr "Поиск:"
-
-#: js/Roles.js:227
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "Показаны роли {0} - {1} из {2}"
-
-#: js/Roles.js:228 js/Roles.js:283
-msgid "No roles to display"
-msgstr "Нет ролей"
-
-#: js/Applications.js:44
-#, fuzzy
-msgid "{0} Settings"
-msgstr "настройки"
-
-#: js/Applications.js:152
-msgid "enable application"
-msgstr "Активировать приложение"
-
-#: js/Applications.js:153
-msgid "disable application"
-msgstr "Деактивировать приложение"
-
-#: js/Applications.js:154
-msgid "settings"
-msgstr "настройки"
-
-#: js/Applications.js:234 js/user/EditDialog.js:821
-msgid "disabled"
-msgstr "отключено"
-
-#: js/Applications.js:237 js/user/EditDialog.js:821
-msgid "enabled"
-msgstr "включено"
-
-#: js/Applications.js:241
-msgid "unknown status ({0})"
-msgstr "неизвестный статус ({0})"
-
-#: js/Applications.js:275
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "Показаны приложения {0} - {1} из {2}"
-
-#: js/Applications.js:276
-msgid "No applications to display"
-msgstr "Нет приложений"
-
-#: js/Applications.js:285
-msgid "Order"
-msgstr "Порядок"
-
-#: js/Applications.js:287 js/user/GridPanel.js:160 js/user/EditDialog.js:815
-msgid "Status"
-msgstr "Статус"
-
-#: js/Applications.js:288
-msgid "Version"
-msgstr "Версия"
-
-#: js/Groups.js:55
-msgid "Do you really want to delete the selected groups?"
-msgstr "Вы уверены что хотите удалить выбранные группы?"
-
-#: js/Groups.js:72
-msgid "Deleting group(s)..."
-msgstr "Удаление групп(ы)..."
-
-#: js/Groups.js:77
-msgid "Some error occurred while trying to delete the group."
-msgstr "При удаление группы произошла ошибка."
-
-#: js/Groups.js:107
-msgid "add group"
-msgstr "добавить группу"
-
-#: js/Groups.js:115
-msgid "edit group"
-msgstr "изменить группу"
-
-#: js/Groups.js:123
-msgid "delete group"
-msgstr "удалить группу"
-
-#: js/Groups.js:226
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "Показаны группы {0} - {1} из {2}"
-
-#: js/Groups.js:227 js/Groups.js:282
-msgid "No groups to display"
-msgstr "Нет групп"
-
-#: js/SambaMachineModel.js:40
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] "Компьютер"
-msgstr[1] "Компьютера"
-msgstr[2] "Компьютеров"
-
-#: js/AccessLog.js:107 js/Admin.js:88 js/Models.js:52
+#: js/AccessLog.js:106 js/Admin-FAT-debug.js:92 js/Admin-FAT-debug.js:381
+#: js/Admin-FAT-debug.js:2986 js/Admin-FAT.js:6 js/Admin.js:87 js/Models.js:51
 #, fuzzy
 msgid "Access Log"
 msgid_plural "Access Logs"
@@ -329,472 +127,195 @@ msgstr[0] "Лог доступа"
 msgstr[1] "Лог доступа"
 msgstr[2] "Лог доступа"
 
-#: js/AccessLog.js:108 js/AccessLog.js:134
+#: js/AccessLog.js:107 js/AccessLog.js:133 js/Admin-FAT-debug.js:2987
+#: js/Admin-FAT-debug.js:3013
 msgid "IP Address"
 msgstr "IP адрес"
 
-#: js/AccessLog.js:109 js/Admin.js:24 js/user/GridPanel.js:100
-#: js/user/Users.js:73
+#: js/AccessLog.js:108 js/Admin-FAT-debug.js:28 js/Admin-FAT-debug.js:928
+#: js/Admin-FAT-debug.js:1135 js/Admin-FAT-debug.js:2988 js/Admin-FAT.js:6
+#: js/Admin.js:23 js/user/GridPanel.js:99 js/user/Users.js:72
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "Пользователь"
 msgstr[1] "Пользователя"
 msgstr[2] "Пользователей"
 
-#: js/AccessLog.js:110 js/AccessLog.js:135
+#: js/AccessLog.js:109 js/AccessLog.js:134 js/Admin-FAT-debug.js:2989
+#: js/Admin-FAT-debug.js:3014
 msgid "Login Time"
 msgstr "Время регистрации"
 
-#: js/AccessLog.js:111 js/AccessLog.js:136
+#: js/AccessLog.js:110 js/AccessLog.js:135 js/Admin-FAT-debug.js:2990
+#: js/Admin-FAT-debug.js:3015
 msgid "Logout Time"
 msgstr "Время выхода из системы"
 
-#: js/AccessLog.js:112 js/AccessLog.js:138
+#: js/AccessLog.js:111 js/AccessLog.js:137 js/Admin-FAT-debug.js:2991
+#: js/Admin-FAT-debug.js:3017
 msgid "Client Type"
 msgstr ""
 
-#: js/AccessLog.js:131
+#: js/AccessLog.js:130 js/Admin-FAT-debug.js:3010
 msgid "Session ID"
 msgstr "ID сессии"
 
-#: js/AccessLog.js:132 js/user/EditDialog.js:750 js/user/EditDialog.js:793
+#: js/AccessLog.js:131 js/Admin-FAT-debug.js:2080 js/Admin-FAT-debug.js:2123
+#: js/Admin-FAT-debug.js:3011 js/user/EditDialog.js:748
+#: js/user/EditDialog.js:791
 msgid "Login Name"
 msgstr "Имя для регистрации"
 
-#: js/AccessLog.js:137
+#: js/AccessLog.js:132 js/Admin-FAT-debug.js:722 js/Admin-FAT-debug.js:1600
+#: js/Admin-FAT-debug.js:1636 js/Admin-FAT-debug.js:2517
+#: js/Admin-FAT-debug.js:3012 js/Admin-FAT-debug.js:3212
+#: js/Admin-FAT-debug.js:3511 js/Admin-FAT-debug.js:4180
+#: js/Applications.js:285 js/Groups.js:235 js/Roles.js:238
+#: js/SambaMachineGrid.js:92 js/Tags.js:225 js/user/EditDialog.js:268
+#: js/user/EditDialog.js:304
+msgid "Name"
+msgstr "Имя"
+
+#: js/AccessLog.js:136 js/Admin-FAT-debug.js:3016
 msgid "Result"
 msgstr "Результат"
 
-#: js/AccessLog.js:158
+#: js/AccessLog.js:157 js/Admin-FAT-debug.js:3037
 msgid "user blocked"
 msgstr ""
 
-#: js/AccessLog.js:162
+#: js/AccessLog.js:161 js/Admin-FAT-debug.js:3041
 msgid "password expired"
 msgstr ""
 
-#: js/AccessLog.js:166
+#: js/AccessLog.js:165 js/Admin-FAT-debug.js:3045
 msgid "user disabled"
 msgstr ""
 
-#: js/AccessLog.js:170
+#: js/AccessLog.js:169 js/Admin-FAT-debug.js:3049
 msgid "invalid password"
 msgstr "неверный пароль"
 
-#: js/AccessLog.js:174
+#: js/AccessLog.js:173 js/Admin-FAT-debug.js:3053
 msgid "ambiguous username"
 msgstr "Имя пользователя многозначно"
 
-#: js/AccessLog.js:178
+#: js/AccessLog.js:177 js/Admin-FAT-debug.js:3057
 msgid "user not found"
 msgstr "пользователь не найден"
 
-#: js/AccessLog.js:182
+#: js/AccessLog.js:181 js/Admin-FAT-debug.js:3061
 msgid "failure"
 msgstr "неудачно"
 
-#: js/AccessLog.js:186
+#: js/AccessLog.js:185 js/Admin-FAT-debug.js:3065
 msgid "success"
 msgstr "успешно"
 
-#: js/Tags.js:65
-msgid "Do you really want to delete the selected tags?"
-msgstr "Вы действительно хотите удалить выбранные тэги?"
+#: js/Admin-FAT-debug.js:41 js/Admin-FAT-debug.js:417 js/Admin-FAT.js:6
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "Группы"
 
-#: js/Tags.js:83
-msgid "Deleting tag(s)..."
-msgstr "Удаление тэга(ов)..."
+#: js/Admin-FAT-debug.js:54 js/Admin-FAT.js:6 js/Admin.js:49
+msgid "Roles"
+msgstr "Роли"
 
-#: js/Tags.js:98
-msgid "add tag"
-msgstr "добавить тэг"
+#: js/Admin-FAT-debug.js:66 js/Admin-FAT.js:6 js/Admin.js:61
+msgid "Computers"
+msgstr "Компьютеры"
 
-#: js/Tags.js:106
-msgid "edit tag"
-msgstr "изменить тэг"
+#: js/Admin-FAT-debug.js:79 js/Admin-FAT.js:6 js/Admin.js:74
+msgid "Applications"
+msgstr "Приложения"
 
-#: js/Tags.js:114
-msgid "delete tag"
-msgstr "удалить тэг"
+#: js/Admin-FAT-debug.js:105 js/Admin-FAT.js:6 js/Admin.js:100
+msgid "Shared Tags"
+msgstr "Общие тэги"
 
-#: js/Tags.js:212
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "Показаны тэги {0} - {1} из {2}"
+#: js/Admin-FAT-debug.js:142 js/Admin-FAT.js:6 js/Admin.js:149
+msgid "Admin"
+msgstr "Администратор"
 
-#: js/Tags.js:213 js/Tags.js:270
-msgid "No tags to display"
-msgstr "Нет тэгов"
-
-#: js/GroupEditDialog.js:38 js/RoleEditDialog.js:70
-msgid "Updating Memberships"
-msgstr "Обновить членство"
-
-#: js/GroupEditDialog.js:73
-msgid "Could not save group."
-msgstr "Не удалось сохранить группу."
-
-#: js/GroupEditDialog.js:109
-msgid "Group Members"
-msgstr "Члены группы"
-
-#: js/GroupEditDialog.js:128
-msgid "Group Name"
-msgstr "Название группы"
-
-#: js/GroupEditDialog.js:144 js/user/EditDialog.js:829
-msgid "Visibility"
+#: js/Admin-FAT-debug.js:296 js/Admin-FAT.js:6 js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
 msgstr ""
 
-#: js/GroupEditDialog.js:150 js/user/EditDialog.js:835
-#, fuzzy
-msgid "Display in addressbook"
-msgstr "Экранное имя"
-
-#: js/GroupEditDialog.js:150 js/user/EditDialog.js:835
-msgid "Hide from addressbook"
-msgstr ""
-
-#: js/GroupEditDialog.js:161 js/user/EditDialog.js:849
-msgid "Saved in Addressbook"
-msgstr ""
-
-#: js/GroupEditDialog.js:216 js/Models.js:88
+#: js/Admin-FAT-debug.js:417 js/Admin-FAT-debug.js:2837
+#: js/GroupEditDialog.js:215 js/Models.js:87
 msgid "Group"
 msgid_plural "Groups"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: js/GroupEditDialog.js:221 js/GroupEditDialog.js:232
-msgid "Add new group"
-msgstr "Добавить новую группу"
-
-#: js/GroupEditDialog.js:234
-msgid "Edit Group \"{0}\""
-msgstr "Изменить группу \"{0}\""
-
-#: js/Admin.js:37 js/Models.js:88
-msgid "Groups"
-msgstr "Группы"
-
-#: js/Admin.js:50
-msgid "Roles"
-msgstr "Роли"
-
-#: js/Admin.js:62
-msgid "Computers"
-msgstr "Компьютеры"
-
-#: js/Admin.js:75
-msgid "Applications"
-msgstr "Приложения"
-
-#: js/Admin.js:101
-msgid "Shared Tags"
-msgstr "Общие тэги"
-
-#: js/Admin.js:138
-msgid "Admin"
-msgstr "Администратор"
-
-#: js/AdminPanel.js:48
-msgid "Default Addressbook for new contacts and groups"
-msgstr ""
-
-#: js/user/GridPanel.js:58
-msgid "enable account"
-msgstr "включить учётную запись"
-
-#: js/user/GridPanel.js:68
-msgid "disable account"
-msgstr "отключить учётную запись"
-
-#: js/user/GridPanel.js:78
-msgid "reset password"
-msgstr "сбросить пароль "
-
-#: js/user/GridPanel.js:161
-msgid "Displayname"
-msgstr "Экранное имя"
-
-#: js/user/GridPanel.js:162
-msgid "Loginname"
-msgstr "Имя для регистрации"
-
-#: js/user/GridPanel.js:163
-msgid "Last name"
-msgstr "Фамилия"
-
-#: js/user/GridPanel.js:164
-msgid "First name"
-msgstr "Имя"
-
-#: js/user/GridPanel.js:165
-msgid "Email"
-msgstr "Электронная почта"
-
-#: js/user/GridPanel.js:166 js/user/EditDialog.js:792
-msgid "OpenID"
-msgstr ""
-
-#: js/user/GridPanel.js:167 js/user/EditDialog.js:876
-msgid "Last login at"
-msgstr "Последний регистрировался в"
-
-#: js/user/GridPanel.js:168 js/user/EditDialog.js:880
-msgid "Last login from"
-msgstr "Последняя регистрация от"
-
-#: js/user/GridPanel.js:169
-msgid "Password changed"
-msgstr "Пароль изменен"
-
-#: js/user/GridPanel.js:170 js/user/EditDialog.js:824
-msgid "Expires"
-msgstr "Истекает"
-
-#: js/user/GridPanel.js:227
-msgid "Set new password"
-msgstr "Задать новый пароль"
-
-#: js/user/GridPanel.js:227
-msgid "Please enter the new password:"
-msgstr "Пожалуйста, введите новый пароль:"
-
-#: js/user/EditDialog.js:172
-msgid "Domain is not allowed. Check your SMTP domain configuration."
-msgstr ""
-
-#: js/user/EditDialog.js:219 js/user/EditDialog.js:222
-#: js/user/EditDialog.js:672
+#: js/Admin-FAT-debug.js:480 js/Applications.js:43
 #, fuzzy
-msgid "Passwords do not match!"
-msgstr "никакого пароля не выло установлено"
+msgid "{0} Settings"
+msgstr "настройки"
 
-#: js/user/EditDialog.js:225
-msgid "Passwords match!"
-msgstr ""
+#: js/Admin-FAT-debug.js:588 js/Applications.js:151
+msgid "enable application"
+msgstr "Активировать приложение"
 
-#: js/user/EditDialog.js:271 js/user/EditDialog.js:798
-msgid "Primary group"
-msgstr "Основная группа"
+#: js/Admin-FAT-debug.js:589 js/Applications.js:152
+msgid "disable application"
+msgstr "Деактивировать приложение"
 
-#: js/user/EditDialog.js:348
-msgid "Unix"
-msgstr ""
+#: js/Admin-FAT-debug.js:590 js/Applications.js:153
+msgid "settings"
+msgstr "настройки"
 
-#: js/user/EditDialog.js:362
-msgid "Home Directory"
-msgstr "Домашний каталог"
+#: js/Admin-FAT-debug.js:627 js/Admin-FAT-debug.js:2458
+#: js/Admin-FAT-debug.js:3455 js/Admin-FAT-debug.js:4118
+#: js/Applications.js:190 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr "Поиск:"
 
-#: js/user/EditDialog.js:366
-msgid "Login Shell"
-msgstr "Оболочка"
+#: js/Admin-FAT-debug.js:670 js/Admin-FAT-debug.js:2151 js/Applications.js:233
+#: js/user/EditDialog.js:819
+msgid "disabled"
+msgstr "отключено"
 
-#: js/user/EditDialog.js:372
-msgid "Windows"
-msgstr ""
+#: js/Admin-FAT-debug.js:673 js/Admin-FAT-debug.js:2151 js/Applications.js:236
+#: js/user/EditDialog.js:819
+msgid "enabled"
+msgstr "включено"
 
-#: js/user/EditDialog.js:386
-msgid "Home Drive"
-msgstr "Домашний диск"
+#: js/Admin-FAT-debug.js:677 js/Applications.js:240
+msgid "unknown status ({0})"
+msgstr "неизвестный статус ({0})"
 
-#: js/user/EditDialog.js:391
-msgid "Logon Time"
-msgstr "Время выхода"
+#: js/Admin-FAT-debug.js:711 js/Applications.js:274
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "Показаны приложения {0} - {1} из {2}"
 
-#: js/user/EditDialog.js:393 js/user/EditDialog.js:878
-#: js/user/EditDialog.js:882
-msgid "never logged in"
-msgstr "никогда не регистрировался"
+#: js/Admin-FAT-debug.js:712 js/Applications.js:275
+msgid "No applications to display"
+msgstr "Нет приложений"
 
-#: js/user/EditDialog.js:396
-msgid "Home Path"
-msgstr "Домашний путь"
+#: js/Admin-FAT-debug.js:721 js/Applications.js:284
+msgid "Order"
+msgstr "Порядок"
 
-#: js/user/EditDialog.js:401
-msgid "Logoff Time"
-msgstr "Время выхода из системы"
+#: js/Admin-FAT-debug.js:723 js/Admin-FAT-debug.js:1213
+#: js/Admin-FAT-debug.js:2145 js/Applications.js:286 js/user/EditDialog.js:813
+#: js/user/GridPanel.js:177
+msgid "Status"
+msgstr "Статус"
 
-#: js/user/EditDialog.js:403
-msgid "never logged off"
-msgstr "никогда не регистрировался"
+#: js/Admin-FAT-debug.js:724 js/Applications.js:287
+msgid "Version"
+msgstr "Версия"
 
-#: js/user/EditDialog.js:406
-msgid "Profile Path"
-msgstr "Путь профиля"
-
-#: js/user/EditDialog.js:411
-msgid "Password Last Set"
-msgstr "Последняя установка пароля"
-
-#: js/user/EditDialog.js:413 js/user/EditDialog.js:826
-#: js/user/EditDialog.js:886
-msgid "never"
-msgstr "никогда"
-
-#: js/user/EditDialog.js:416
-msgid "Logon Script"
-msgstr "Скрипт входа"
-
-#: js/user/EditDialog.js:421
-msgid "Password Can Change"
-msgstr "Пароль может быть изменен"
-
-#: js/user/EditDialog.js:423 js/user/EditDialog.js:428
-#: js/user/EditDialog.js:433
-msgid "not set"
-msgstr "не задан"
-
-#: js/user/EditDialog.js:426
-msgid "Password Must Change"
-msgstr "Пароль должен быть изменен"
-
-#: js/user/EditDialog.js:431
-#, fuzzy
-msgid "Kick Off Time"
-msgstr "Время начала"
-
-#: js/user/EditDialog.js:451
-msgid "IMAP Quota (MB)"
-msgstr ""
-
-#: js/user/EditDialog.js:470 js/user/EditDialog.js:508
-msgid "Quota"
-msgstr ""
-
-#: js/user/EditDialog.js:471 js/user/EditDialog.js:509
-msgid "no quota set"
-msgstr ""
-
-#: js/user/EditDialog.js:481
-msgid "Current Mailbox size"
-msgstr ""
-
-#: js/user/EditDialog.js:489
-msgid "Sieve Quota (MB)"
-msgstr ""
-
-#: js/user/EditDialog.js:519
-msgid "Current Sieve size"
-msgstr ""
-
-#: js/user/EditDialog.js:528 js/user/EditDialog.js:861
-msgid "Information"
-msgstr ""
-
-#: js/user/EditDialog.js:542
-#, fuzzy
-msgid "Last Login"
-msgstr "Последний регистрировался в"
-
-#: js/user/EditDialog.js:579
-msgid "Email Alias"
-msgstr ""
-
-#: js/user/EditDialog.js:585
-msgid "Add an alias address..."
-msgstr ""
-
-#: js/user/EditDialog.js:598
-msgid "Email Forward"
-msgstr ""
-
-#: js/user/EditDialog.js:604
-msgid "Add a forward address..."
-msgstr ""
-
-#: js/user/EditDialog.js:616
-msgid "Forward Only"
-msgstr ""
-
-#: js/user/EditDialog.js:639
-#, fuzzy
-msgid "Password confirmation"
-msgstr "Повторите пароль"
-
-#: js/user/EditDialog.js:656
-#, fuzzy
-msgid "Repeat password"
-msgstr "сбросить пароль "
-
-#: js/user/EditDialog.js:675
-msgid "Cancel"
-msgstr ""
-
-#: js/user/EditDialog.js:683
-msgid "Ok"
-msgstr ""
-
-#: js/user/EditDialog.js:720
-msgid "Account"
-msgstr "Учётная запись"
-
-#: js/user/EditDialog.js:735
-msgid "First Name"
-msgstr "Имя"
-
-#: js/user/EditDialog.js:745
-msgid "Last Name"
-msgstr "Фамилия"
-
-#: js/user/EditDialog.js:755
-msgid "Password"
-msgstr "Пароль"
-
-#: js/user/EditDialog.js:759
-msgid "no password set"
-msgstr "пароль не задан"
-
-#: js/user/EditDialog.js:786
-msgid "Emailaddress"
-msgstr "Адрес электронной почты"
-
-#: js/user/EditDialog.js:821
-#, fuzzy
-msgid "expired"
-msgstr "Истекает"
-
-#: js/user/EditDialog.js:821
-msgid "blocked"
-msgstr ""
-
-#: js/user/EditDialog.js:878 js/user/EditDialog.js:882
-msgid "don't know"
-msgstr "неизвестно"
-
-#: js/user/EditDialog.js:884
-msgid "Password set"
-msgstr "Пароль установлен"
-
-#: js/user/EditDialog.js:891
-msgid "User groups"
-msgstr ""
-
-#: js/user/EditDialog.js:897
-msgid "User roles"
-msgstr ""
-
-#: js/user/EditDialog.js:903
-msgid "Fileserver"
-msgstr "Файловый сервер"
-
-#: js/user/EditDialog.js:909
-msgid "IMAP"
-msgstr ""
-
-#: js/user/EditDialog.js:918
-msgid "SMTP"
-msgstr ""
-
-#: js/user/Users.js:119
+#: js/Admin-FAT-debug.js:974 js/user/Users.js:118
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] "Пользователь Samba"
 msgstr[1] "Пользователя Samba"
 msgstr[2] "Пользователей Samba"
 
-#: js/user/Users.js:145
+#: js/Admin-FAT-debug.js:1000 js/user/Users.js:144
 #, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"
@@ -802,37 +323,611 @@ msgstr[0] "Пользователь Samba"
 msgstr[1] "Пользователя Samba"
 msgstr[2] "Пользователей Samba"
 
-#: js/RoleEditDialog.js:107
+#: js/Admin-FAT-debug.js:1093 js/user/GridPanel.js:57
+msgid "enable account"
+msgstr "включить учётную запись"
+
+#: js/Admin-FAT-debug.js:1103 js/user/GridPanel.js:67
+msgid "disable account"
+msgstr "отключить учётную запись"
+
+#: js/Admin-FAT-debug.js:1113 js/user/GridPanel.js:77
+msgid "reset password"
+msgstr "сбросить пароль "
+
+#: js/Admin-FAT-debug.js:1136 js/Admin-FAT-debug.js:2518
+#: js/Admin-FAT-debug.js:2757 js/Admin-FAT-debug.js:3188
+#: js/Admin-FAT-debug.js:3218 js/Admin-FAT-debug.js:3512
+#: js/Admin-FAT-debug.js:3845 js/Admin-FAT-debug.js:4181
+#: js/Admin-FAT-debug.js:4587 js/GroupEditDialog.js:135 js/Groups.js:236
+#: js/RoleEditDialog.js:291 js/Roles.js:239 js/SambaMachineGrid.js:68
+#: js/SambaMachineGrid.js:98 js/TagEditDialog.js:225 js/Tags.js:226
+#: js/user/GridPanel.js:100
+msgid "Description"
+msgstr "Описание"
+
+#: js/Admin-FAT-debug.js:1212 js/Admin-FAT-debug.js:2516
+#: js/Admin-FAT-debug.js:3205 js/Admin-FAT-debug.js:4179
+#: js/container/GridPanel.js:67 js/Groups.js:234 js/Roles.js:237
+#: js/SambaMachineGrid.js:85 js/user/GridPanel.js:176
+msgid "ID"
+msgstr "ID"
+
+#: js/Admin-FAT-debug.js:1214 js/user/GridPanel.js:178
+msgid "Displayname"
+msgstr "Экранное имя"
+
+#: js/Admin-FAT-debug.js:1215 js/user/GridPanel.js:179
+msgid "Loginname"
+msgstr "Имя для регистрации"
+
+#: js/Admin-FAT-debug.js:1216 js/user/GridPanel.js:180
+msgid "Last name"
+msgstr "Фамилия"
+
+#: js/Admin-FAT-debug.js:1217 js/user/GridPanel.js:181
+msgid "First name"
+msgstr "Имя"
+
+#: js/Admin-FAT-debug.js:1218 js/user/GridPanel.js:182
+msgid "Email"
+msgstr "Электронная почта"
+
+#: js/Admin-FAT-debug.js:1219 js/Admin-FAT-debug.js:2122
+#: js/user/EditDialog.js:790 js/user/GridPanel.js:183
+msgid "OpenID"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1220 js/Admin-FAT-debug.js:2206
+#: js/user/EditDialog.js:874 js/user/GridPanel.js:184
+msgid "Last login at"
+msgstr "Последний регистрировался в"
+
+#: js/Admin-FAT-debug.js:1221 js/Admin-FAT-debug.js:2210
+#: js/user/EditDialog.js:878 js/user/GridPanel.js:185
+msgid "Last login from"
+msgstr "Последняя регистрация от"
+
+#: js/Admin-FAT-debug.js:1222 js/user/GridPanel.js:186
+msgid "Password changed"
+msgstr "Пароль изменен"
+
+#: js/Admin-FAT-debug.js:1223 js/Admin-FAT-debug.js:2154
+#: js/user/EditDialog.js:822 js/user/GridPanel.js:187
+msgid "Expires"
+msgstr "Истекает"
+
+#: js/Admin-FAT-debug.js:1280 js/user/GridPanel.js:244
+msgid "Set new password"
+msgstr "Задать новый пароль"
+
+#: js/Admin-FAT-debug.js:1280 js/user/GridPanel.js:244
+msgid "Please enter the new password:"
+msgstr "Пожалуйста, введите новый пароль:"
+
+#: js/Admin-FAT-debug.js:1502 js/user/EditDialog.js:170
+msgid "Domain is not allowed. Check your SMTP domain configuration."
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1549 js/Admin-FAT-debug.js:1552
+#: js/Admin-FAT-debug.js:2002 js/user/EditDialog.js:217
+#: js/user/EditDialog.js:220 js/user/EditDialog.js:670
+#, fuzzy
+msgid "Passwords do not match!"
+msgstr "никакого пароля не выло установлено"
+
+#: js/Admin-FAT-debug.js:1555 js/user/EditDialog.js:223
+msgid "Passwords match!"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1601 js/Admin-FAT-debug.js:2128
+#: js/user/EditDialog.js:269 js/user/EditDialog.js:796
+msgid "Primary group"
+msgstr "Основная группа"
+
+#: js/Admin-FAT-debug.js:1678 js/user/EditDialog.js:346
+msgid "Unix"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1692 js/user/EditDialog.js:360
+msgid "Home Directory"
+msgstr "Домашний каталог"
+
+#: js/Admin-FAT-debug.js:1696 js/user/EditDialog.js:364
+msgid "Login Shell"
+msgstr "Оболочка"
+
+#: js/Admin-FAT-debug.js:1702 js/user/EditDialog.js:370
+msgid "Windows"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1716 js/user/EditDialog.js:384
+msgid "Home Drive"
+msgstr "Домашний диск"
+
+#: js/Admin-FAT-debug.js:1721 js/user/EditDialog.js:389
+msgid "Logon Time"
+msgstr "Время выхода"
+
+#: js/Admin-FAT-debug.js:1723 js/Admin-FAT-debug.js:2208
+#: js/Admin-FAT-debug.js:2212 js/user/EditDialog.js:391
+#: js/user/EditDialog.js:876 js/user/EditDialog.js:880
+msgid "never logged in"
+msgstr "никогда не регистрировался"
+
+#: js/Admin-FAT-debug.js:1726 js/user/EditDialog.js:394
+msgid "Home Path"
+msgstr "Домашний путь"
+
+#: js/Admin-FAT-debug.js:1731 js/user/EditDialog.js:399
+msgid "Logoff Time"
+msgstr "Время выхода из системы"
+
+#: js/Admin-FAT-debug.js:1733 js/user/EditDialog.js:401
+msgid "never logged off"
+msgstr "никогда не регистрировался"
+
+#: js/Admin-FAT-debug.js:1736 js/user/EditDialog.js:404
+msgid "Profile Path"
+msgstr "Путь профиля"
+
+#: js/Admin-FAT-debug.js:1741 js/user/EditDialog.js:409
+msgid "Password Last Set"
+msgstr "Последняя установка пароля"
+
+#: js/Admin-FAT-debug.js:1743 js/Admin-FAT-debug.js:2156
+#: js/Admin-FAT-debug.js:2216 js/user/EditDialog.js:411
+#: js/user/EditDialog.js:824 js/user/EditDialog.js:884
+msgid "never"
+msgstr "никогда"
+
+#: js/Admin-FAT-debug.js:1746 js/user/EditDialog.js:414
+msgid "Logon Script"
+msgstr "Скрипт входа"
+
+#: js/Admin-FAT-debug.js:1751 js/user/EditDialog.js:419
+msgid "Password Can Change"
+msgstr "Пароль может быть изменен"
+
+#: js/Admin-FAT-debug.js:1753 js/Admin-FAT-debug.js:1758
+#: js/Admin-FAT-debug.js:1763 js/user/EditDialog.js:421
+#: js/user/EditDialog.js:426 js/user/EditDialog.js:431
+msgid "not set"
+msgstr "не задан"
+
+#: js/Admin-FAT-debug.js:1756 js/user/EditDialog.js:424
+msgid "Password Must Change"
+msgstr "Пароль должен быть изменен"
+
+#: js/Admin-FAT-debug.js:1761 js/user/EditDialog.js:429
+#, fuzzy
+msgid "Kick Off Time"
+msgstr "Время начала"
+
+#: js/Admin-FAT-debug.js:1781 js/user/EditDialog.js:449
+msgid "IMAP Quota (MB)"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1800 js/Admin-FAT-debug.js:1838
+#: js/user/EditDialog.js:468 js/user/EditDialog.js:506
+msgid "Quota"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1801 js/Admin-FAT-debug.js:1839
+#: js/user/EditDialog.js:469 js/user/EditDialog.js:507
+msgid "no quota set"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1811 js/user/EditDialog.js:479
+msgid "Current Mailbox size"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1819 js/user/EditDialog.js:487
+msgid "Sieve Quota (MB)"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1849 js/user/EditDialog.js:517
+msgid "Current Sieve size"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1858 js/Admin-FAT-debug.js:2191
+#: js/user/EditDialog.js:526 js/user/EditDialog.js:859
+msgid "Information"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1872 js/user/EditDialog.js:540
+#, fuzzy
+msgid "Last Login"
+msgstr "Последний регистрировался в"
+
+#: js/Admin-FAT-debug.js:1909 js/user/EditDialog.js:577
+msgid "Email Alias"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1915 js/user/EditDialog.js:583
+msgid "Add an alias address..."
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1928 js/user/EditDialog.js:596
+msgid "Email Forward"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1934 js/user/EditDialog.js:602
+msgid "Add a forward address..."
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1946 js/user/EditDialog.js:614
+msgid "Forward Only"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:1969 js/user/EditDialog.js:637
+#, fuzzy
+msgid "Password confirmation"
+msgstr "Повторите пароль"
+
+#: js/Admin-FAT-debug.js:1986 js/user/EditDialog.js:654
+#, fuzzy
+msgid "Repeat password"
+msgstr "сбросить пароль "
+
+#: js/Admin-FAT-debug.js:2005 js/user/EditDialog.js:673
+msgid "Cancel"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2013 js/user/EditDialog.js:681
+msgid "Ok"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2050 js/user/EditDialog.js:718
+msgid "Account"
+msgstr "Учётная запись"
+
+#: js/Admin-FAT-debug.js:2065 js/user/EditDialog.js:733
+msgid "First Name"
+msgstr "Имя"
+
+#: js/Admin-FAT-debug.js:2075 js/user/EditDialog.js:743
+msgid "Last Name"
+msgstr "Фамилия"
+
+#: js/Admin-FAT-debug.js:2085 js/user/EditDialog.js:753
+msgid "Password"
+msgstr "Пароль"
+
+#: js/Admin-FAT-debug.js:2089 js/user/EditDialog.js:757
+msgid "no password set"
+msgstr "пароль не задан"
+
+#: js/Admin-FAT-debug.js:2116 js/user/EditDialog.js:784
+msgid "Emailaddress"
+msgstr "Адрес электронной почты"
+
+#: js/Admin-FAT-debug.js:2151 js/user/EditDialog.js:819
+#, fuzzy
+msgid "expired"
+msgstr "Истекает"
+
+#: js/Admin-FAT-debug.js:2151 js/user/EditDialog.js:819
+msgid "blocked"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2159 js/Admin-FAT-debug.js:2765
+#: js/GroupEditDialog.js:143 js/user/EditDialog.js:827
+msgid "Visibility"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2165 js/Admin-FAT-debug.js:2771
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:833
+#, fuzzy
+msgid "Display in addressbook"
+msgstr "Экранное имя"
+
+#: js/Admin-FAT-debug.js:2165 js/Admin-FAT-debug.js:2771
+#: js/GroupEditDialog.js:149 js/user/EditDialog.js:833
+msgid "Hide from addressbook"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2179 js/Admin-FAT-debug.js:2782
+#: js/GroupEditDialog.js:160 js/user/EditDialog.js:847
+msgid "Saved in Addressbook"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2208 js/Admin-FAT-debug.js:2212
+#: js/user/EditDialog.js:876 js/user/EditDialog.js:880
+msgid "don't know"
+msgstr "неизвестно"
+
+#: js/Admin-FAT-debug.js:2214 js/user/EditDialog.js:882
+msgid "Password set"
+msgstr "Пароль установлен"
+
+#: js/Admin-FAT-debug.js:2221 js/user/EditDialog.js:889
+msgid "User groups"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2227 js/user/EditDialog.js:895
+msgid "User roles"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2233 js/user/EditDialog.js:901
+msgid "Fileserver"
+msgstr "Файловый сервер"
+
+#: js/Admin-FAT-debug.js:2239 js/user/EditDialog.js:907
+msgid "IMAP"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2248 js/user/EditDialog.js:916
+msgid "SMTP"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2334 js/Admin-FAT-debug.js:3350
+#: js/Admin-FAT-debug.js:3989 js/Groups.js:52 js/Roles.js:47 js/Tags.js:64
+msgid "Confirm"
+msgstr "Подтвердить"
+
+#: js/Admin-FAT-debug.js:2334 js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "Вы уверены что хотите удалить выбранные группы?"
+
+#: js/Admin-FAT-debug.js:2351 js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "Удаление групп(ы)..."
+
+#: js/Admin-FAT-debug.js:2356 js/Admin-FAT-debug.js:2694
+#: js/Admin-FAT-debug.js:3702 js/Admin-FAT-debug.js:4011
+#: js/Admin-FAT-debug.js:4402 js/Admin-FAT-debug.js:4430
+#: js/GroupEditDialog.js:72 js/Groups.js:74 js/RoleEditDialog.js:106
+#: js/RoleEditDialog.js:134 js/Roles.js:69 js/TagEditDialog.js:82
+msgid "Failed"
+msgstr "Неудача"
+
+#: js/Admin-FAT-debug.js:2356 js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "При удаление группы произошла ошибка."
+
+#: js/Admin-FAT-debug.js:2386 js/Groups.js:104
+msgid "add group"
+msgstr "добавить группу"
+
+#: js/Admin-FAT-debug.js:2394 js/Groups.js:112
+msgid "edit group"
+msgstr "изменить группу"
+
+#: js/Admin-FAT-debug.js:2402 js/Groups.js:120
+msgid "delete group"
+msgstr "удалить группу"
+
+#: js/Admin-FAT-debug.js:2505 js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "Показаны группы {0} - {1} из {2}"
+
+#: js/Admin-FAT-debug.js:2506 js/Admin-FAT-debug.js:2561 js/Groups.js:224
+#: js/Groups.js:279
+msgid "No groups to display"
+msgstr "Нет групп"
+
+#: js/Admin-FAT-debug.js:2659 js/Admin-FAT-debug.js:3657
+#: js/Admin-FAT-debug.js:4365 js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
+#: js/TagEditDialog.js:37
+msgid "Please wait"
+msgstr "Пожалуйста, подождите"
+
+#: js/Admin-FAT-debug.js:2659 js/Admin-FAT-debug.js:4365
+#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
+msgid "Updating Memberships"
+msgstr "Обновить членство"
+
+#: js/Admin-FAT-debug.js:2694 js/GroupEditDialog.js:72
+msgid "Could not save group."
+msgstr "Не удалось сохранить группу."
+
+#: js/Admin-FAT-debug.js:2699 js/Admin-FAT-debug.js:3707
+#: js/Admin-FAT-debug.js:4409 js/GroupEditDialog.js:77
+#: js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Errors"
+msgstr "Ошибки"
+
+#: js/Admin-FAT-debug.js:2699 js/Admin-FAT-debug.js:3707
+#: js/Admin-FAT-debug.js:4409 js/GroupEditDialog.js:77
+#: js/RoleEditDialog.js:113 js/TagEditDialog.js:87
+msgid "Please fix the errors noted."
+msgstr "Пожалуйста, устраните отмеченные ошибки."
+
+#: js/Admin-FAT-debug.js:2730 js/GroupEditDialog.js:108
+msgid "Group Members"
+msgstr "Члены группы"
+
+#: js/Admin-FAT-debug.js:2749 js/GroupEditDialog.js:127
+msgid "Group Name"
+msgstr "Название группы"
+
+#: js/Admin-FAT-debug.js:2837 js/Admin-FAT-debug.js:3909
+#: js/Admin-FAT-debug.js:4654 js/GroupEditDialog.js:215
+#: js/RoleEditDialog.js:358 js/TagEditDialog.js:289
+msgid "Transferring {0}..."
+msgstr ""
+
+#: js/Admin-FAT-debug.js:2842 js/Admin-FAT-debug.js:2853
+#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
+msgid "Add new group"
+msgstr "Добавить новую группу"
+
+#: js/Admin-FAT-debug.js:2855 js/GroupEditDialog.js:233
+msgid "Edit Group \"{0}\""
+msgstr "Изменить группу \"{0}\""
+
+#: js/Admin-FAT-debug.js:3110 js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] "Компьютер"
+msgstr[1] "Компьютера"
+msgstr[2] "Компьютеров"
+
+#: js/Admin-FAT-debug.js:3187 js/Admin-FAT-debug.js:3266
+#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:67
+msgid "Computer Name"
+msgstr "Имя компьютера"
+
+#: js/Admin-FAT-debug.js:3350 js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "Вы действительно хотите удалить выбранные тэги?"
+
+#: js/Admin-FAT-debug.js:3368 js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "Удаление тэга(ов)..."
+
+#: js/Admin-FAT-debug.js:3383 js/Tags.js:97
+msgid "add tag"
+msgstr "добавить тэг"
+
+#: js/Admin-FAT-debug.js:3391 js/Tags.js:105
+msgid "edit tag"
+msgstr "изменить тэг"
+
+#: js/Admin-FAT-debug.js:3399 js/Tags.js:113
+msgid "delete tag"
+msgstr "удалить тэг"
+
+#: js/Admin-FAT-debug.js:3497 js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "Показаны тэги {0} - {1} из {2}"
+
+#: js/Admin-FAT-debug.js:3498 js/Admin-FAT-debug.js:3555 js/Tags.js:212
+#: js/Tags.js:269
+msgid "No tags to display"
+msgstr "Нет тэгов"
+
+#: js/Admin-FAT-debug.js:3508 js/Admin-FAT-debug.js:3851
+#: js/TagEditDialog.js:231 js/Tags.js:222
+msgid "Color"
+msgstr "Цвет"
+
+#: js/Admin-FAT-debug.js:3657 js/TagEditDialog.js:37
+#, fuzzy
+msgid "Updating Tag"
+msgstr "Загрузка тэга..."
+
+#: js/Admin-FAT-debug.js:3702 js/TagEditDialog.js:82
+msgid "Could not save tag."
+msgstr "Не удалось сохранить тэг."
+
+#: js/Admin-FAT-debug.js:3788 js/TagEditDialog.js:168
+msgid "Allowed Contexts"
+msgstr "Разрешённый контекст"
+
+#: js/Admin-FAT-debug.js:3794 js/TagEditDialog.js:174
+msgid "Context"
+msgstr "Контекст"
+
+#: js/Admin-FAT-debug.js:3807 js/TagEditDialog.js:187
+msgid "Account Rights"
+msgstr "Права учётной записи"
+
+#: js/Admin-FAT-debug.js:3815 js/TagEditDialog.js:195
+msgid "View"
+msgstr "Представление"
+
+#: js/Admin-FAT-debug.js:3820 js/TagEditDialog.js:200
+msgid "Use"
+msgstr "Использовать"
+
+#: js/Admin-FAT-debug.js:3838 js/TagEditDialog.js:218
+msgid "Tag Name"
+msgstr "Название тэга"
+
+#: js/Admin-FAT-debug.js:3909 js/TagEditDialog.js:289
+msgid "Tag"
+msgstr ""
+
+#: js/Admin-FAT-debug.js:3919 js/TagEditDialog.js:299
+msgid "Add New Tag"
+msgstr "Добавить новый тэг"
+
+#: js/Admin-FAT-debug.js:3921 js/TagEditDialog.js:301
+msgid "Edit Tag \"{0}\""
+msgstr "Изменить тэг \"{0}\""
+
+#: js/Admin-FAT-debug.js:3989 js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "Вы действительно хотите удалить выбранные роли?"
+
+#: js/Admin-FAT-debug.js:4006 js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "Удаление роли(ей)..."
+
+#: js/Admin-FAT-debug.js:4011 js/Admin-FAT-debug.js:4430
+#: js/RoleEditDialog.js:134 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "При удаление роли произошла ошибка."
+
+#: js/Admin-FAT-debug.js:4044 js/Roles.js:102
+msgid "add role"
+msgstr "добавить роль"
+
+#: js/Admin-FAT-debug.js:4052 js/Roles.js:110
+msgid "edit role"
+msgstr "изменить роль"
+
+#: js/Admin-FAT-debug.js:4060 js/Roles.js:118
+msgid "delete role"
+msgstr "удалить роль"
+
+#: js/Admin-FAT-debug.js:4168 js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "Показаны роли {0} - {1} из {2}"
+
+#: js/Admin-FAT-debug.js:4169 js/Admin-FAT-debug.js:4224 js/Roles.js:227
+#: js/Roles.js:282
+msgid "No roles to display"
+msgstr "Нет ролей"
+
+#: js/Admin-FAT-debug.js:4402 js/RoleEditDialog.js:106
 msgid "Could not save role."
 msgstr "Не удалось сохранить роль."
 
-#: js/RoleEditDialog.js:127
+#: js/Admin-FAT-debug.js:4422 js/RoleEditDialog.js:126
 msgid "Deleting role..."
 msgstr "Удаление роли..."
 
-#: js/RoleEditDialog.js:159
+#: js/Admin-FAT-debug.js:4454 js/RoleEditDialog.js:158
 msgid "Rights"
 msgstr "Права"
 
-#: js/RoleEditDialog.js:261
+#: js/Admin-FAT-debug.js:4556 js/RoleEditDialog.js:260
 msgid "Members"
 msgstr "Участники"
 
-#: js/RoleEditDialog.js:284
+#: js/Admin-FAT-debug.js:4579 js/RoleEditDialog.js:283
 msgid "Role Name"
 msgstr "Название роли"
 
-#: js/RoleEditDialog.js:359
+#: js/Admin-FAT-debug.js:4654 js/RoleEditDialog.js:358
 msgid "Role"
 msgstr ""
 
-#: js/RoleEditDialog.js:369
+#: js/Admin-FAT-debug.js:4664 js/RoleEditDialog.js:368
 msgid "Add New Role"
 msgstr "Добавьте новую роль"
 
-#: js/RoleEditDialog.js:371
+#: js/Admin-FAT-debug.js:4666 js/RoleEditDialog.js:370
 msgid "Edit Role \"{0}\""
 msgstr "Изменить роль \"{0}\""
+
+#: js/Admin.js:113
+msgid "Containers"
+msgstr ""
+
+#: js/container/Container.js:50 js/container/GridPanel.js:80
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/container/GridPanel.js:68
+msgid "Container Name"
+msgstr ""
 
 #~ msgid "Loading Tag..."
 #~ msgstr "Загрузка тэга..."

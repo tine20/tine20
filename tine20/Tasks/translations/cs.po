@@ -16,192 +16,234 @@ msgstr ""
 "X-Poedit-KeywordsList: _\n"
 "X-Poedit-Basepath: ../../\n"
 
-#: Controller.php:97
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr "spravovat sdílené seznamy úkolů"
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr "Vytvořit nové sdílené seznamy úkolů"
+
+#: Acl/Rights.php:93
+msgid "manage shared tasks favorites"
+msgstr "spravovat sdílené oblíbené položky úkolů"
+
+#: Acl/Rights.php:94
+msgid "Create or update shared tasks favorites"
+msgstr "Vytvořit nebo aktualizovat sdílené oblíbené položky úkolů"
+
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr "Upozornění na úkol"
+
+#: Controller.php:96
 #, python-format
 msgid "%s's personal tasks"
 msgstr "osobní úkoly uživatele %s"
 
-#: Acl/Rights.php:90
-msgid "manage shared task lists"
-msgstr "spravovat sdílené seznamy úkolů"
-
-#: Acl/Rights.php:91
-msgid "Create new shared tasks lists"
-msgstr "Vytvořit nové sdílené seznamy úkolů"
-
-#: Acl/Rights.php:94
-msgid "manage shared tasks favorites"
-msgstr "spravovat sdílené oblíbené položky úkolů"
-
-#: Acl/Rights.php:95
-msgid "Create or update shared tasks favorites"
-msgstr "Vytvořit nebo aktualizovat sdílené oblíbené položky úkolů"
-
-#: Model/Task.php:183
-msgid "Due"
-msgstr "Do"
-
-#: Model/Task.php:184
-msgid "Organizer"
-msgstr "Organizátor"
-
-#: Model/Task.php:185
-msgid "Description"
-msgstr "Popis"
-
-#: Model/Task.php:186 js/TaskEditDialog.js:188 js/GridPanel.js:130
-msgid "Priority"
-msgstr "Priorita"
-
-#: Model/Task.php:187 js/TaskEditDialog.js:208 js/GridPanel.js:157
-#: js/Status.js:33
-msgid "Status"
-msgstr "Status"
-
-#: Model/Task.php:188 js/GridPanel.js:144
-msgid "Percent"
-msgstr "Procent"
-
-#: Model/Task.php:195 js/GridPanel.js:111
-msgid "Lead"
-msgstr "Lead"
-
-#: Model/Task.php:201
-msgid "Telephone"
-msgstr "Telefon"
-
-#: Model/Task.php:202
-msgid "Email"
-msgstr "E-mail"
-
-#: js/Tasks.js:92
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Úkol"
-msgstr[1] "Úkoly"
-msgstr[2] "Úkolů"
-
-#: js/Tasks.js:92
-msgid "Tasks"
-msgstr "Úkoly"
-
-#: js/Tasks.js:96
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "seznam úkolů"
-msgstr[1] "seznamy úkolů"
-msgstr[2] "seznamů úkolů"
-
-#: js/Tasks.js:96
-msgid "to do lists"
-msgstr "seznamy úkolů"
-
-#: js/Tasks.js:131
-msgid "Quick search"
-msgstr "Rychlé hledání"
-
-#: js/Tasks.js:133 js/TaskEditDialog.js:180 js/GridPanel.js:114
-msgid "Summary"
-msgstr "Přehled"
-
-#: js/Tasks.js:134 js/GridPanel.js:122
-msgid "Due Date"
-msgstr "Termín dokončení"
-
-#: js/Tasks.js:136 js/GridPanel.js:185
-msgid "Responsible"
-msgstr "Zodpovídá"
-
-#: js/Tasks.js:138
-msgid "Last modified"
-msgstr ""
-
-#: js/Tasks.js:139
-msgid "Last modifier"
-msgstr ""
-
-#: js/Tasks.js:140 js/GridPanel.js:171
-msgid "Creation Time"
-msgstr "Čas vytvoření"
-
-#: js/Tasks.js:141
-msgid "Creator"
-msgstr ""
-
-#: js/TaskEditDialog.js:141
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Musíte zadat termín dokončení, protože je nastaven alarm! "
-
-#: js/TaskEditDialog.js:185
-msgid "Due date"
-msgstr "Termín dokončení"
-
-#: js/TaskEditDialog.js:191
-msgid "Add Responsible ..."
-msgstr "Přidat zodpovědnou osobu ..."
-
-#: js/TaskEditDialog.js:198
-msgid "Notes"
-msgstr "Poznámky"
-
-#: js/TaskEditDialog.js:199
-msgid "Enter description..."
-msgstr "Zadejte popis..."
-
-#: js/TaskEditDialog.js:204
-msgid "Percentage"
-msgstr "Procenta"
-
-#: js/TaskEditDialog.js:212 js/GridPanel.js:178
-msgid "Completed"
-msgstr "Dokončený"
-
-#: js/GridPanel.js:55
+#: js/GridPanel.js:53 js/Tasks-FAT-debug.js:476
 msgid "Do you really want to delete the selected task?"
 msgid_plural "Do you really want to delete the selected tasks?"
 msgstr[0] "Opravdu chcete smazat vybraný úkol?"
 msgstr[1] "Opravdu chcete smazat vybrané úkoly?"
 msgstr[2] "Opravdu chcete smazat vybrané úkoly?"
 
-#: js/GridPanel.js:110
+#: js/GridPanel.js:108 js/Tasks-FAT-debug.js:531 js/Tasks-FAT.js:6
 msgid "Tags"
 msgstr "Štítky"
 
-#: js/GridPanel.js:118
+#: js/GridPanel.js:109 js/Tasks-FAT-debug.js:532 js/Tasks-FAT.js:6
+#: Model/Task.php:194
+msgid "Lead"
+msgstr "Lead"
+
+#: js/GridPanel.js:112 js/TaskEditDialog.js:178 js/Tasks-FAT-debug.js:137
+#: js/Tasks-FAT-debug.js:535 js/Tasks-FAT-debug.js:868 js/Tasks-FAT.js:6
+#: js/Tasks.js:148
+msgid "Summary"
+msgstr "Přehled"
+
+#: js/GridPanel.js:116 js/Tasks-FAT-debug.js:539 js/Tasks-FAT.js:6
 msgid "Add a task..."
 msgstr "Přidat úkol..."
 
-#: js/GridPanel.js:234
+#: js/GridPanel.js:120 js/Tasks-FAT-debug.js:138 js/Tasks-FAT-debug.js:543
+#: js/Tasks-FAT.js:6 js/Tasks.js:149
+msgid "Due Date"
+msgstr "Termín dokončení"
+
+#: js/GridPanel.js:128 js/TaskEditDialog.js:186 js/Tasks-FAT-debug.js:551
+#: js/Tasks-FAT-debug.js:876 js/Tasks-FAT.js:6 Model/Task.php:185
+msgid "Priority"
+msgstr "Priorita"
+
+#: js/GridPanel.js:142 js/Tasks-FAT-debug.js:565 js/Tasks-FAT.js:6
+#: Model/Task.php:187
+msgid "Percent"
+msgstr "Procent"
+
+#: js/GridPanel.js:155 js/Status.js:31 js/TaskEditDialog.js:206
+#: js/Tasks-FAT-debug.js:187 js/Tasks-FAT-debug.js:578
+#: js/Tasks-FAT-debug.js:896 js/Tasks-FAT.js:6 Model/Task.php:186
+msgid "Status"
+msgstr "Status"
+
+#: js/GridPanel.js:169 js/Tasks-FAT-debug.js:144 js/Tasks-FAT-debug.js:592
+#: js/Tasks-FAT.js:6 js/Tasks.js:155
+msgid "Creation Time"
+msgstr "Čas vytvoření"
+
+#: js/GridPanel.js:176 js/TaskEditDialog.js:210 js/Tasks-FAT-debug.js:599
+#: js/Tasks-FAT-debug.js:900 js/Tasks-FAT.js:6
+msgid "Completed"
+msgstr "Dokončený"
+
+#: js/GridPanel.js:183 js/Tasks-FAT-debug.js:140 js/Tasks-FAT-debug.js:606
+#: js/Tasks-FAT.js:6 js/Tasks.js:151
+msgid "Responsible"
+msgstr "Zodpovídá"
+
+#: js/GridPanel.js:232 js/Tasks-FAT-debug.js:655 js/Tasks-FAT.js:6
 msgid "Show closed"
 msgstr "Zobrazit uzavřené"
 
-#: Preference.php:29
+#: js/TaskEditDialog.js:139 js/Tasks-FAT-debug.js:829 js/Tasks-FAT.js:6
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Musíte zadat termín dokončení, protože je nastaven alarm! "
+
+#: js/TaskEditDialog.js:183 js/Tasks-FAT-debug.js:873 js/Tasks-FAT.js:6
+msgid "Due date"
+msgstr "Termín dokončení"
+
+#: js/TaskEditDialog.js:189 js/Tasks-FAT-debug.js:879 js/Tasks-FAT.js:6
+msgid "Add Responsible ..."
+msgstr "Přidat zodpovědnou osobu ..."
+
+#: js/TaskEditDialog.js:196 js/Tasks-FAT-debug.js:886 js/Tasks-FAT.js:6
+msgid "Notes"
+msgstr "Poznámky"
+
+#: js/TaskEditDialog.js:197 js/Tasks-FAT-debug.js:887 js/Tasks-FAT.js:6
+msgid "Enter description..."
+msgstr "Zadejte popis..."
+
+#: js/TaskEditDialog.js:202 js/Tasks-FAT-debug.js:892 js/Tasks-FAT.js:6
+msgid "Percentage"
+msgstr "Procenta"
+
+#: js/Tasks-FAT-debug.js:96 js/Tasks.js:107
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Úkol"
+msgstr[1] "Úkoly"
+msgstr[2] "Úkolů"
+
+#: js/Tasks-FAT-debug.js:96 js/Tasks.js:107
+msgid "Tasks"
+msgstr "Úkoly"
+
+#: js/Tasks-FAT-debug.js:100 js/Tasks.js:111
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "seznam úkolů"
+msgstr[1] "seznamy úkolů"
+msgstr[2] "seznamů úkolů"
+
+#: js/Tasks-FAT-debug.js:100 js/Tasks.js:111
+msgid "to do lists"
+msgstr "seznamy úkolů"
+
+#: js/Tasks-FAT-debug.js:135 js/Tasks-FAT.js:6 js/Tasks.js:146
+msgid "Quick search"
+msgstr "Rychlé hledání"
+
+#: js/Tasks-FAT-debug.js:142 js/Tasks-FAT.js:6 js/Tasks.js:153
+msgid "Last modified"
+msgstr ""
+
+#: js/Tasks-FAT-debug.js:143 js/Tasks-FAT.js:6 js/Tasks.js:154
+msgid "Last modifier"
+msgstr ""
+
+#: js/Tasks-FAT-debug.js:145 js/Tasks-FAT.js:6 js/Tasks.js:156
+msgid "Creator"
+msgstr ""
+
+#: js/Tasks.js:24
+msgid "New Task"
+msgstr ""
+
+#: Model/Task.php:182
+msgid "Due"
+msgstr "Do"
+
+#: Model/Task.php:183
+msgid "Organizer"
+msgstr "Organizátor"
+
+#: Model/Task.php:184
+msgid "Description"
+msgstr "Popis"
+
+#: Model/Task.php:200
+msgid "Telephone"
+msgstr "Telefon"
+
+#: Model/Task.php:201
+msgid "Email"
+msgstr "E-mail"
+
+#: Preference.php:28
 msgid "All my tasks"
 msgstr "Všechny mé úkoly"
 
-#: Preference.php:71
+#: Preference.php:70
 msgid "Default Favorite"
 msgstr "Výchozí oblíbené položky úkolů"
 
-#: Preference.php:72
+#: Preference.php:71
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění úkolů"
 
-#: Preference.php:75
+#: Preference.php:74
 msgid "Default Task List"
 msgstr ""
 
-#: Preference.php:76
+#: Preference.php:75
 msgid "The default task list to create new tasks in."
 msgstr ""
 
-#: Controller/Task.php:166
-msgid "Notification for Task "
-msgstr "Upozornění na úkol"
-
-#: Setup/Update/Release3.php:66 Setup/Initialize.php:37
+#: Setup/Initialize.php:36 Setup/Update/Release3.php:65
 msgid "All tasks of my taskslists"
 msgstr "Všechny úkoly z mých seznamů"
+
+#: Setup/Initialize.php:45
+msgid "My open tasks"
+msgstr ""
+
+#: Setup/Initialize.php:54
+msgid "My open tasks this week"
+msgstr ""
+
+#: Setup/Initialize.php:63
+msgid "All tasks for me"
+msgstr ""
+
+#: Setup/Initialize.php:64
+msgid "All tasks that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:71
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:72
+msgid "All tasks that I have last modified"
+msgstr ""
+
+#: Setup/Initialize.php:81
+msgid "Tasks without responsible"
+msgstr ""
 
 #: Setup/setup.xml:295
 msgid "NEEDS-ACTION"
@@ -218,34 +260,6 @@ msgstr "ROZPRACOVANÝ"
 #: Setup/setup.xml:361
 msgid "CANCELLED"
 msgstr "ZRUŠENÝ"
-
-#: Setup/Initialize.php:46
-msgid "My open tasks"
-msgstr ""
-
-#: Setup/Initialize.php:55
-msgid "My open tasks this week"
-msgstr ""
-
-#: Setup/Initialize.php:64
-msgid "All tasks for me"
-msgstr ""
-
-#: Setup/Initialize.php:65
-msgid "All tasks that I am responsible for"
-msgstr ""
-
-#: Setup/Initialize.php:72
-msgid "Last modified by me"
-msgstr ""
-
-#: Setup/Initialize.php:73
-msgid "All tasks that I have last modified"
-msgstr ""
-
-#: Setup/Initialize.php:82
-msgid "Tasks without responsible"
-msgstr ""
 
 #~ msgid "Failed"
 #~ msgstr "Nepodařilo se"

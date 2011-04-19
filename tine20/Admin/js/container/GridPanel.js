@@ -18,8 +18,9 @@ Ext.ns('Tine.Admin.container');
  */
 Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
+    // TODO change this icon
     newRecordIcon: 'action_addContact',
-    recordClass: Tine.Admin.Model.Container,
+    recordClass: Tine.Tinebase.Model.Container,
     recordProxy: Tine.Admin.containerBackend,
     defaultSortInfo: {field: 'name', direction: 'ASC'},
     evalGrants: false,
@@ -58,16 +59,20 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * returns columns
      * @private
      * @return Array
+     * 
+     * TODO add more
      */
     getColumns: function(){
         return [
             { header: this.app.i18n._('ID'), id: 'id', dataIndex: 'id', width: 50},
-            { header: this.app.i18n._('Container Name'), id: 'name', dataIndex: 'accountStatus', hidden: false, width: 200}
+            { header: this.app.i18n._('Container Name'), id: 'name', dataIndex: 'name', hidden: false, width: 200}
         ];
     },
     
     /**
      * initialises filter toolbar
+     * 
+     * TODO add more
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
