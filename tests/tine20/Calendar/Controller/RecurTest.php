@@ -52,10 +52,9 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         ));
         
         $persistentEvent = $this->_controller->create($event);
-        $persistentEventId = $persistentEvent->getId() . "\n";
         
         $persistentEvent->summary = 'Dinner';
-        $this->_controller->createRecurException($persistentEvent);
+        $this->_controller->createRecurException(clone $persistentEvent);
         
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
@@ -63,7 +62,79 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
         $this->assertEquals(2, count($weekviewEvents), 'there should only be 2 events in the set');
-        $this->assertFalse(in_array($persistentEventId, $weekviewEvents->getId()), 'baseEvent should not be in the set!');
+        $this->assertFalse(in_array($persistentEvent->getId(), $weekviewEvents->getId()), 'baseEvent should not be in the set!');
+    }
+    
+    public function testAttendeeSetStatusRecurException()
+    {
+        // note: 2009-03-29 Europe/Berlin switched to DST
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2009-03-25 18:00:00',
+            'dtend'         => '2009-03-25 18:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-03-31 17:30:00',
+            'exdate'        => '2009-03-27 18:00:00,2009-03-29 17:00:00',
+            'container_id'  => $this->_testCalendar->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        $event->attendee = $this->_getAttendee();
+        unset($event->attendee[1]);
+        
+        $persistentEvent = $this->_controller->create($event);
+        $attendee = $persistentEvent->attendee[0];
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $from = new Tinebase_DateTime('2009-03-26 00:00:00');
+        $until = new Tinebase_DateTime('2009-04-01 23:59:59');
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persistentEvent, $exceptions, $from, $until);
+        
+        $exception = $recurSet->getFirstRecord();
+        $attendee = $exception->attendee[0];
+        $attendee->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        
+        $this->_controller->attenderStatusCreateRecurException($exception, $attendee, $attendee->status_authkey);
+        
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
+            array('field' => 'uid', 'operator' => 'equals', 'value' => $persistentEvent->uid)
+        )));
+        $this->assertEquals(2, count($events));
+    }
+    
+    public function testFirstInstanceAttendeeSetStatusRecurException()
+    {
+        $from = new Tinebase_DateTime('2011-04-18 00:00:00');
+        $until = new Tinebase_DateTime('2011-04-24 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2011-04-20 14:00:00',
+            'dtend'         => '2011-04-20 15:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=WEEKLY;INTERVAL=3;WKST=SU;BYDAY=TU,TH',
+            'container_id'  => $this->_testCalendar->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        $event->attendee = $this->_getAttendee();
+        unset($event->attendee[1]);
+        
+        $persistentEvent = $this->_controller->create($event);
+        $attendee = $persistentEvent->attendee[0];
+        $attendee->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        
+        $this->_controller->attenderStatusCreateRecurException(clone $persistentEvent, $attendee, $attendee->status_authkey);
+        
+        $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        )));
+        
+        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
+        
+        $this->assertEquals(2, count($weekviewEvents), 'there should only be 2 events in the set');
+        $this->assertFalse(in_array($persistentEvent->getId(), $weekviewEvents->getId()), 'baseEvent should not be in the set!');
     }
     
     /**
@@ -160,7 +231,6 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         // make shure the 17.6. is not in the set
         $this->assertEquals(1, count($weekviewEvents), '17.6. is an exception date and must not be part of this weekview');
     }
-    
     
     /**
      * returns a simple recure event

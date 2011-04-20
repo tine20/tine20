@@ -504,7 +504,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $baseEvent = $this->getRecurBaseEvent($_recurInstance);
         
         // compute time diff
-        $instancesOriginalDtStart = new Tinebase_DateTime(substr($_recurInstance->recurid, -19));
+        $instancesOriginalDtStart = new Tinebase_DateTime(substr($_recurInstance->recurid, -19), 'UTC');
         
         $dtstartDiff = $instancesOriginalDtStart->diff($_recurInstance->dtstart);
         
@@ -693,7 +693,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $fakeEvent->dtend = clone $deletedInstanceDtStart;
                 $fakeEvent->dtend->add($eventLength);
                 $fakeEvent->is_deleted = TRUE;
-                $fakeEvent->recurid = $fakeEvent->uid . '-' . $deletedInstanceDtStart->format(Tinebase_Record_Abstract::ISO8601LONG);
+                $fakeEvent->setRecurId();
                 
                 $exceptions->addRecord($fakeEvent);
             }
@@ -808,7 +808,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                     $originalDtstart = new Tinebase_DateTime(substr($exception->recurid, -19));
                     Calendar_Model_Rrule::addUTCDateDstFix($originalDtstart, $diff, $_record->originator_tz);
                     
-                    $exception->recurid = $exception->uid . '-' . $originalDtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+                    $exception->setRecurId();
                     $this->_backend->update($exception);
                 }
             }
@@ -990,10 +990,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $baseEvent = $this->getRecurBaseEvent($_recurInstance);
             
-            // check authkey on series
-            $attender = $baseEvent->attendee->filter('status_authkey', $_authKey)->getFirstRecord();
-            if ($attender->user_type != $_attender->user_type || $attender->user_id != $_attender->user_id) {
-                throw new Tinebase_Exception_AccessDenied('Attender authkey mismatch');
+            if ($baseEvent->getId() == $_recurInstance->getId()) {
+                // exception to the first occurence
+                $_recurInstance->setRecurId();
             }
             
             // NOTE: recurid is computed by rrule recur computations and therefore is already part of the event.
@@ -1001,11 +1000,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 throw new Exception('recurid must be present to create exceptions!');
             }
             
+            // check authkey on series
+            $attender = $baseEvent->attendee->filter('status_authkey', $_authKey)->getFirstRecord();
+            if ($attender->user_type != $_attender->user_type || $attender->user_id != $_attender->user_id) {
+                throw new Tinebase_Exception_AccessDenied('Attender authkey mismatch');
+            }
+            
             // check if this intance takes place
-            // NOTE exdate/recurid have a design flaw: they are stored in originators time!
-            $originatorsOriginalDtstart = clone $_recurInstance->dtstart;
-            $originatorsOriginalDtstart = new Tinebase_DateTime($originatorsOriginalDtstart->setTimezone($_recurInstance->originator_tz)->format(Tinebase_Record_Abstract::ISO8601LONG), 'UTC');
-            if (in_array($originatorsOriginalDtstart, (array)$baseEvent->exdate)) {
+            if (in_array($_recurInstance->dtstart, (array)$baseEvent->exdate)) {
                 throw new Tinebase_Exception_AccessDenied('Event instance is deleted and may not be recreated via status setting!');
             }
             
@@ -1019,7 +1021,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 // NOTE: the user might have no edit grants, so let's be carefull
                 $diff = $baseEvent->dtstart->diff($baseEvent->dtend);
                 
-                $baseEvent->dtstart = new Tinebase_DateTime(substr($_recurInstance->recurid, -19));
+                $baseEvent->dtstart = new Tinebase_DateTime(substr($_recurInstance->recurid, -19), 'UTC');
                 $baseEvent->dtend   = clone $baseEvent->dtstart;
                 $baseEvent->dtend->add($diff);
                 

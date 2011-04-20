@@ -240,12 +240,8 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     $event->setId('fakeid' . $candidate->uid . $event->dtstart->getTimeStamp());
                 }
                 
-                // check if candidate/baseEvent has an exception itself
-                // in this case remove baseEvent from set
-                // NOTE exdate/recurid have a design flaw: they are stored in originators time!
-                $originatorsOriginalDtstart = clone $candidate->dtstart;
-                $originatorsOriginalDtstart = new Tinebase_DateTime($originatorsOriginalDtstart->setTimezone($candidate->originator_tz)->format(Tinebase_Record_Abstract::ISO8601LONG), 'UTC');
-                if (in_array($originatorsOriginalDtstart, $candidate->exdate)) {
+                // check if candidate/baseEvent has an exception itself -> in this case remove baseEvent from set
+                if (in_array($candidate->dtstart, $candidate->exdate)) {
                     $_events->removeRecord($candidate);
                 }
                 
@@ -367,7 +363,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     $baseEvent->dtend->add($eventLength);
                     
                     if ($baseEvent->dtstart->isLater($_event->dtstart) && $baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
-                        $baseEvent->recurid = $baseEvent->uid . '-' . $baseEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+                        $baseEvent->setRecurId();
                         if (! in_array($baseEvent->recurid, $exceptionRecurIds)) {
                             $recurSet->addRecord($baseEvent);
                         }
@@ -490,7 +486,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurEvent->dtend = clone $recurEvent->dtstart;  
             $recurEvent->dtend->add($eventLength);
             
-            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            $recurEvent->setRecurId();
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
                 $_recurSet->addRecord($recurEvent);
@@ -572,7 +568,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 continue;
             }
             
-            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            $recurEvent->setRecurId();
             
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
@@ -672,7 +668,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 continue;
             }
             
-            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            $recurEvent->setRecurId();
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
                 $_recurSet->addRecord($recurEvent);
