@@ -137,7 +137,9 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                     this.store.remove(event);
                     this.store.add(createdEvent);
                     this.setLoading(false);
-                    this.view.getSelectionModel().select(createdEvent);
+                    if (this.view && this.view.calPanel && this.view.rendered) {
+                        this.view.getSelectionModel().select(createdEvent);
+                    }
                 }
             },
             failure: this.onProxyFail.createDelegate(this, [event], true)
