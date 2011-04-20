@@ -35,12 +35,42 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->_controller = Calendar_Controller_Event::getInstance();
     }
     
+    public function testFirstInstanceExcepetion()
+    {
+        $from = new Tinebase_DateTime('2011-04-18 00:00:00');
+        $until = new Tinebase_DateTime('2011-04-24 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Abendessen',
+            'dtstart'       => '2011-04-20 14:00:00',
+            'dtend'         => '2011-04-20 15:30:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=WEEKLY;INTERVAL=3;WKST=SU;BYDAY=TU,TH',
+            'container_id'  => $this->_testCalendar->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        $persistentEventId = $persistentEvent->getId() . "\n";
+        
+        $persistentEvent->summary = 'Dinner';
+        $this->_controller->createRecurException($persistentEvent);
+        
+        $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        )));
+        
+        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
+        $this->assertEquals(2, count($weekviewEvents), 'there should only be 2 events in the set');
+        $this->assertFalse(in_array($persistentEventId, $weekviewEvents->getId()), 'baseEvent should not be in the set!');
+    }
+    
     /**
      * Conflict between an existing and recurring event when create the event
      */
     public function testCreateConflictBetweenRecurAndExistEvent()
     {
-        Tinebase_Core::getLogger()->debug(__METHOD__ . ' (' . __LINE__ . ') handle event of type ');
         $event = $this->_getEvent();
         $event->dtstart = '2010-05-20 06:00:00';
         $event->dtend = '2010-05-20 06:15:00';
@@ -131,7 +161,8 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(1, count($weekviewEvents), '17.6. is an exception date and must not be part of this weekview');
     }
     
-   /**
+    
+    /**
      * returns a simple recure event
      *
      * @return Calendar_Model_Event

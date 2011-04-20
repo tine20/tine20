@@ -541,13 +541,21 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     public function createRecurException($_event, $_deleteInstance = FALSE, $_allFollowing = FALSE, $_checkBusyConficts = FALSE)
     {
-        // NOTE: recurid is computed by rrule recur computations and therefore is already part of the event.
-        if (empty($_event->recurid)) {
-            throw new Exception('recurid must be present to create exceptions!');
+        $baseEvent = $this->getRecurBaseEvent($_event);
+        
+        if ($baseEvent->getId() == $_event->getId()) {
+            if ($_allFollowing) {
+                throw new Exception('please edit or delete complete series!');
+            }
+            // exception to the first occurence
+            $_event->setRecurId();
         }
         
+        if (empty($_event->recurid)) {
+            // NOTE: recurid is computed by rrule recur computations and therefore is already part of the event.
+            throw new Exception('recurid must be present to create exceptions!');
+        }
         $exdate = new Tinebase_DateTime(substr($_event->recurid, -19));
-        $baseEvent = $this->getRecurBaseEvent($_event);
         
         // just do attender status update if user has no edit grant
         if ($this->_doContainerACLChecks && !$baseEvent->{Tinebase_Model_Grants::GRANT_EDIT}) {
@@ -994,7 +1002,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             }
             
             // check if this intance takes place
-            if (in_array($_recurInstance->recurid, (array)$baseEvent->exdate)) {
+            // NOTE exdate/recurid have a design flaw: they are stored in originators time!
+            $originatorsOriginalDtstart = clone $_recurInstance->dtstart;
+            $originatorsOriginalDtstart = new Tinebase_DateTime($originatorsOriginalDtstart->setTimezone($_recurInstance->originator_tz)->format(Tinebase_Record_Abstract::ISO8601LONG), 'UTC');
+            if (in_array($originatorsOriginalDtstart, (array)$baseEvent->exdate)) {
                 throw new Tinebase_Exception_AccessDenied('Event instance is deleted and may not be recreated via status setting!');
             }
             

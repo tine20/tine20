@@ -303,7 +303,10 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             throw new Exception ('uid _and_ dtstart must be set to generate recurid');
         }
         
-        $this->recurid = $this->uid . '-' . $this->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        $originatorsOriginalDtstart = clone $this->dtstart;
+        $originatorsOriginalDtstart->setTimezone($this->originator_tz);
+        
+        $this->recurid = $this->uid . '-' . $originatorsOriginalDtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         return $this->recurid;
     }
