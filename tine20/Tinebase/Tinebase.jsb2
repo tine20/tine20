@@ -476,6 +476,10 @@
           "path": "js/widgets/container/"
         },
         {
+          "text": "GrantsGrid.js",
+          "path": "js/widgets/container/"
+        },
+        {
           "text": "GrantsDialog.js",
           "path": "js/widgets/container/"
         },

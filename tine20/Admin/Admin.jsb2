@@ -84,6 +84,10 @@
           "path": "js/container/"
         },
         {
+          "text": "EditDialog.js",
+          "path": "js/container/"
+        },
+        {
           "text": "GridPanel.js",
           "path": "js/container/"
         }

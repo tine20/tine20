@@ -22,6 +22,8 @@ Tine.Phone.getPanel = function(){
     var translation = new Locale.Gettext();
     translation.textdomain('Phone');
 
+    new Tine.Phone.AddressbookGridPanelHook({app: {i18n: translation}});
+    
     // @todo generalise this for panel & main
     var editPhoneSettingsAction = new Ext.Action({
         text: translation._('Edit phone settings'),

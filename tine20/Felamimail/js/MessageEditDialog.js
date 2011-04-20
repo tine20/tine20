@@ -406,6 +406,40 @@ Ext.namespace('Tine.Felamimail');
                 this.record.set(field, Ext.unique(this[field]));
             }
             delete this[field];
+            
+            // resolve filter
+            if (! Ext.isEmpty(this.record.get(field)) && Ext.isObject(this.record.get(field)[0]) &&  this.record.get(field)[0].operator) {
+                // found a filter
+                var filter = this.record.get(field);
+                this.record.set(field, []);
+                
+                this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Mail Addresses')});
+                this['AddressLoadMask'].show();
+                
+                Tine.Addressbook.searchContacts(filter, null, function(response) {
+                    var mailAddresses = Tine.Felamimail.AddressbookGridPanelHook.prototype.getMailAddresses(response.results);
+                    
+                    this.record.set(field, mailAddresses);
+                    this.recipientGrid.syncRecipientsToStore([field], this.record, true, false);
+                    this['AddressLoadMask'].hide();
+                    
+                }.createDelegate(this));
+                
+                
+            }
+            /*
+             if (sm.isFilterSelect) {
+                var loadMask = new Ext.LoadMask(this.getContactGridPanel().grid.getEl(), {
+                    msg: this.app.i18n._('Loading Addresses')
+                });
+                    
+                Tine.Addressbook.searchContacts(sm.getSelectionFilter(), null, function(response) {
+                    var mailAddresses = this.getMailAddresses(response.results);
+                    
+                    loadMask
+                }).createDelegate(this);
+                this.getContactGridPanel()
+            */
         }, this);
     },
     
@@ -754,7 +788,8 @@ Ext.namespace('Tine.Felamimail');
             record: this.record,
             i18n: this.app.i18n,
             hideLabel: true,
-            composeDlg: this
+            composeDlg: this,
+            autoStartEditing: !this.AddressLoadMask
         });
         
         this.southPanel = new Ext.Panel({

@@ -8,7 +8,7 @@
  *
  */
  
-Ext.namespace('Tine.Felamimail');
+Ext.ns('Tine.Felamimail');
 
 /**
  * @namespace   Tine.Felamimail
@@ -98,6 +98,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
             
             this.showActiveVacation();
+            new Tine.Felamimail.AddressbookGridPanelHook({app: this});
         }
     },
     
