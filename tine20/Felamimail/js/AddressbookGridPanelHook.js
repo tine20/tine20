@@ -122,8 +122,6 @@ Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
      * compose an email to selected contacts
      * 
      * @param {Button} btn 
-     * 
-     * TODO make this work for filter selections (not only the first page)
      */
     onComposeEmail: function(btn) {
         var sm = this.getContactGridPanel().grid.getSelectionModel(),

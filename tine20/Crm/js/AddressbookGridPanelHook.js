@@ -1,20 +1,20 @@
 /*
  * Tine 2.0
  * 
- * @package     Calendar
+ * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
-Ext.ns('Tine.Calendar');
+Ext.ns('Tine.Crm');
 
 /**
- * @namespace   Tine.Calendar
- * @class       Tine.Calendar.AddressbookGridPanelHook
+ * @namespace   Tine.Crm
+ * @class       Tine.Crm.AddressbookGridPanelHook
  * 
- * <p>Calendar Addressbook Hook</p>
+ * <p>Crm Addressbook Hook</p>
  * <p>
  * </p>
  * 
@@ -23,8 +23,8 @@ Ext.ns('Tine.Calendar');
  * 
  * @constructor
  */
-Tine.Calendar.AddressbookGridPanelHook = function(config) {
-    Tine.log.info('initialising calendar addressbook hooks');
+Tine.Crm.AddressbookGridPanelHook = function(config) {
+    Tine.log.info('initialising crm addressbook hooks');
     Ext.apply(this, config);
     
     // NOTE: due to the action updater this action is bound the the adb grid only!
@@ -32,10 +32,10 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
         actionType: 'add',
         requiredGrant: 'readGrant',
         allowMultiple: true,
-        text: this.app.i18n._('New Event'),
+        text: this.app.i18n._('New Lead'),
         iconCls: this.app.getIconCls(),
         scope: this,
-        handler: this.onAddEvent,
+        handler: this.onAddLead,
         listeners: {
             scope: this,
             render: this.onRender
@@ -46,11 +46,11 @@ Tine.Calendar.AddressbookGridPanelHook = function(config) {
     Ext.ux.ItemRegistry.registerItem('Addressbook-GridPanel-ContextMenu', this.addEventAction, 80);
 };
 
-Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
+Ext.apply(Tine.Crm.AddressbookGridPanelHook.prototype, {
     
     /**
      * @property app
-     * @type Tine.Calendar.Application
+     * @type Tine.Crm.Application
      * @private
      */
     app: null,
@@ -85,14 +85,22 @@ Ext.apply(Tine.Calendar.AddressbookGridPanelHook.prototype, {
      * 
      * @param {Button} btn 
      */
-    onAddEvent: function(btn) {
+    onAddLead: function(btn) {
         var contacts = this.getContactGridPanel().grid.getSelectionModel().getSelections(),
-            ms = this.app.getMainScreen(),
-            cp = ms.getCenterPanel();
+            leadData = Tine.Crm.Model.Lead.getDefaultData();
+        
+        leadData.relations = [].concat(leadData.relations);
+        Ext.each(contacts, function(contact) {
+            leadData.relations.push({
+                type: 'customer',
+                related_record: contact.data
+            });
+        }, this);
         
         
-        cp.onEditInNewWindow.call(cp, 'add', {attendee: contacts});
-        
+        Tine.Crm.LeadEditDialog.openWindow({
+            record: new Tine.Crm.Model.Lead(leadData, 0)
+        });
     },
 
     

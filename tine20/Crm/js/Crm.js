@@ -23,7 +23,13 @@ Tine.Crm.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
      * auto hook text _('New Lead')
      */
-    addButtonText: 'New Lead'
+    addButtonText: 'New Lead',
+    
+    init: function() {
+        Tine.Crm.Application.superclass.init.apply(this, arguments);
+        
+        new Tine.Crm.AddressbookGridPanelHook({app: this});
+    }
 });
 
 /**
