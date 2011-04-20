@@ -340,7 +340,6 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             this.window.setTitle(String.format(_('Copy {0}'), this.i18nRecordName));
         } else {
             if (! this.record.id) {
-                console.log(this);
                 this.window.setTitle(String.format(_('Add New {0}'), this.i18nRecordName));
             } else {
                 this.window.setTitle(String.format(_('Edit {0} "{1}"'), this.i18nRecordName, this.record.getTitle()));
