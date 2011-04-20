@@ -54,7 +54,13 @@ Tine.Calendar.Application = Ext.extend(Tine.Tinebase.Application, {
             return 'CalendarIconCls';
             break;
         }
-    }    
+    },
+    
+    init: function() {
+        Tine.Calendar.Application.superclass.init.apply(this.arguments);
+        
+        new Tine.Calendar.AddressbookGridPanelHook({app: this});
+    }
 });
 
 /**

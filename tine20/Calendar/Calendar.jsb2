@@ -12,6 +12,10 @@
       "isDebug": true,
       "fileIncludes": [
         {
+          "text": "AddressbookGridPanelHook.js",
+          "path": "js/"
+        },
+        {
           "text": "ParallelEventsRegistry.js",
           "path": "js/"
         },

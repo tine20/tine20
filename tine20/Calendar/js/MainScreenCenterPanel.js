@@ -312,7 +312,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
             addAction = {
                 text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(Tine.Tinebase.translation._hidden('Add {0}'), this.i18nRecordName),
-                handler: this.onEditInNewWindow.createDelegate(this, ["add", dtStart]),
+                handler: this.onEditInNewWindow.createDelegate(this, ["add", {dtStart: dtStart}]),
                 iconCls: 'action_add'
             };
             
@@ -500,7 +500,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     /**
      * @param {String} action add|edit
      */
-    onEditInNewWindow: function (action, dtStart) {
+    onEditInNewWindow: function (action, defaults) {
         var event = null;
         
         if (action === 'edit') {
@@ -516,9 +516,22 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         if (! event) {
             event = new Tine.Calendar.Model.Event(Tine.Calendar.Model.Event.getDefaultData(), 0);
-            if (Ext.isDate(dtStart)) {
+            if (Ext.isDate(defaults.dtStart)) {
                 event.set('dtstart', dtStart);
                 event.set('dtend', dtStart.add(Date.HOUR, 1));
+            }
+            
+            if (Ext.isArray(defaults.attendee)) {
+                var attendee = event.get('attendee') || [];
+                
+                // strip records
+                Ext.each(defaults.attendee, function(attender) {
+                    attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                        user_id: Ext.isFunction(attender.beginEdit) ? attender.data : attender
+                    }));
+                }, this);
+                
+                event.set('attendee', attendee);
             }
         }
         
