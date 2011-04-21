@@ -53,8 +53,11 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         
         $persistentEvent = $this->_controller->create($event);
         
-        $persistentEvent->summary = 'Dinner';
-        $this->_controller->createRecurException(clone $persistentEvent);
+        $eventException = clone $persistentEvent;
+        $eventException->summary = 'Dinner';
+        $eventException->dtstart->addHour(2);
+        $eventException->dtend->addHour(2);
+        $persistentEventException = $this->_controller->createRecurException($eventException);
         
         $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
             array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),

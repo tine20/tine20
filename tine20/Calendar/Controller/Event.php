@@ -548,7 +548,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($_allFollowing) {
                 throw new Exception('please edit or delete complete series!');
             }
-            $_event->setRecurId();
+            // NOTE: if the baseEvent gets a time change, we can't compute the recurdid w.o. knoing the original dtstart
+            $recurid = $baseEvent->setRecurId();
+            unset($baseEvent->recurid);
+            $_event->recurid = $recurid;
         }
         
         // just do attender status update if user has no edit grant
