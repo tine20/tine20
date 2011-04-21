@@ -218,6 +218,29 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * Removes containers where current user has no access to
+     * -> remove timetracker containers, too (those are managed within the timetracker)
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
+     */
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    {
+        if ($_action == 'get') {
+            $userApps = Tinebase_Core::getUser()->getApplications(TRUE);
+            $filterAppIds = array();
+            foreach ($userApps as $app) {
+                if ($app->name !== 'Timetracker') {
+                    $filterAppIds[] = $app->getId();
+                }
+            }
+            
+            $appFilter = $_filter->createFilter('application_id', 'in', $filterAppIds);
+            $_filter->addFilter($appFilter);
+        }
+    }
+    
+    /**
      * check if user has the right to manage containers
      * 
      * @param string $_action {get|create|update|delete}
