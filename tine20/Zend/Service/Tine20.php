@@ -91,7 +91,7 @@ class Zend_Service_Tine20 extends Zend_Json_Client
         ));
         
         if($response['success'] !== true) {
-            throw new Zend_Service_Exception($respose['errorMessage']);
+            throw new Zend_Service_Exception($response['errorMessage']);
         }
         
         $this->_jsonKey = $response['jsonKey'];
