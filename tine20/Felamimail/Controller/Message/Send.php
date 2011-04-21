@@ -283,9 +283,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         // get account
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
-        $this->_setMailFrom($mail, $account);
-        $this->_setMailHeaders($mail, $account);
-        $this->_sendMailViaTransport($mail, $account, $_saveInSent);
+        $this->_setMailFrom($_mail, $account);
+        $this->_setMailHeaders($_mail, $account);
+        $this->_sendMailViaTransport($_mail, $account, $_saveInSent);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
