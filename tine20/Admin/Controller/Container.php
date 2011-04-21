@@ -133,6 +133,9 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if (! $_record->account_grants instanceof Tinebase_Record_RecordSet && is_array($_record->account_grants)) {
+            $_record->account_grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $_record->account_grants);
+        }
         $this->_containerController->setGrants($_record, $_record->account_grants, TRUE, FALSE);
     }
     
