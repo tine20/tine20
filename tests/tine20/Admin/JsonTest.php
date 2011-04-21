@@ -639,6 +639,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchContainers()
     {
+        $personalAdb = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+        
         $addressbook = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $filter = array(
             array('field' => 'application_id', 'operator' => 'equals', 'value' => $addressbook->getId()),
@@ -650,7 +652,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, $result['totalcount']);
         
-        $personalAdb = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
         $found = FALSE;
         foreach ($result['results'] as $container) {
             if ($container['id'] === $personalAdb->getId()) {
