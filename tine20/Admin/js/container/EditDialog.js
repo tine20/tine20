@@ -38,13 +38,6 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     /**
-     * after render
-     */
-//    afterRender: function() {
-//        Tine.Admin.ContainerEditDialog.superclass.afterRender.apply(this, arguments);
-//    },
-    
-    /**
      * executed after record got updated from proxy
      */
     onRecordLoad: function () {

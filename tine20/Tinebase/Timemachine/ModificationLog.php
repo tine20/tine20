@@ -316,6 +316,7 @@ class Tinebase_Timemachine_ModificationLog
             'products',
             'jpegphoto',
             'grants',
+            'account_grants',
             'customfields',
             'exdate',
             'attendee',
