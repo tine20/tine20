@@ -114,6 +114,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         form.updateRecord(this.samRecord);
         if (this.samRecord.dirty) {
             // only update sam record if something changed
+            this.unsetLocalizedDateTimeFields(this.samRecord, ['logonTime', 'logoffTime', 'pwdLastSet']);
             this.record.set('sambaSAM', '');
             this.record.set('sambaSAM', this.samRecord.data);
         }
@@ -124,6 +125,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             this.emailRecord.set('emailAliases', this.aliasesGrid.getFromStoreAsArray());
             this.emailRecord.set('emailForwards', this.forwardsGrid.getFromStoreAsArray());
         }
+        this.unsetLocalizedDateTimeFields(this.emailRecord, ['emailLastLogin']);
         this.record.set('emailUser', '');
         this.record.set('emailUser', this.emailRecord.data);
         
@@ -145,11 +147,19 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         this.record.set('groups', newGroups);
         this.record.set('accountRoles', newRoles);
         
-        // unset localized datetime fields before saving
-        var dateTimeDisplayFields = ['accountLastLogin', 'accountLastPasswordChange', 'logonTime', 'logoffTime', 'pwdLastSet', 'kickoffTime'];
+        this.unsetLocalizedDateTimeFields(this.record, ['accountLastLogin', 'accountLastPasswordChange']);
+    },
+    
+    /**
+     * need to unset localized datetime fields before saving
+     * 
+     * @param {Object} record
+     * @param {Array} dateTimeDisplayFields
+     */
+    unsetLocalizedDateTimeFields: function(record, dateTimeDisplayFields) {
         Ext.each(dateTimeDisplayFields, function (dateTimeDisplayField) {
-        	this.record.set(dateTimeDisplayField, '');
-        }, this);
+            record.set(dateTimeDisplayField, '');
+        }, this);        
     },
 
     /**
