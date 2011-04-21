@@ -673,8 +673,21 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($containerData['name'], $container['name']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $container['created_by']);
         
-        // @todo update container
-        // @todo check grants
+        // update container
+        $container['name'] = 'testcontainerupdated';
+        $container['account_grants'] = array(array(
+            'account_id'     => Tinebase_Core::getUser()->getId(),
+            'account_type'   => 'user',
+            Tinebase_Model_Grants::GRANT_READ      => true,
+            Tinebase_Model_Grants::GRANT_ADD       => true,
+            Tinebase_Model_Grants::GRANT_EDIT      => true,
+            Tinebase_Model_Grants::GRANT_DELETE    => false,
+            Tinebase_Model_Grants::GRANT_ADMIN     => true
+        ));
+        
+        $containerUpdated = $this->_json->saveContainer($container);
+        $this->assertEquals('testcontainerupdated', $containerUpdated['name']);
+        $this->assertTrue($containerUpdated['account_grants'][0][Tinebase_Model_Grants::GRANT_ADMIN]);
         
         $deleteResult = $this->_json->deleteContainers(array($container['id']));
         $this->assertEquals('success', $deleteResult['status']);
