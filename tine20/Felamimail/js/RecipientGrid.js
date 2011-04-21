@@ -61,7 +61,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
     store: null,
     
     /**
-     * €cfg {Boolean} autoStartEditing
+     * @cfg {Boolean} autoStartEditing
      */
     autoStartEditing: true,
     
