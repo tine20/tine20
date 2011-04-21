@@ -295,23 +295,23 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $oldBaseEvent = $oldSeries->filter('recurid', "/^$/", TRUE)->getFirstRecord();
         $newBaseEvent = $newSeries->filter('recurid', "/^$/", TRUE)->getFirstRecord();
         
-        $this->assertEmpty(array_diff($oldBaseEvent->exdate, array(
+        $this->assertFalse(!!array_diff($oldBaseEvent->exdate, array(
             new Tinebase_DateTime('2011-04-23 10:00:00'),
             new Tinebase_DateTime('2011-04-24 10:00:00'),
         )), 'exdate of old series');
         
-        $this->assertEmpty(array_diff($newBaseEvent->exdate, array(
+        $this->assertFalse(!!array_diff($newBaseEvent->exdate, array(
             new Tinebase_DateTime('2011-04-26 14:00:00'),
             new Tinebase_DateTime('2011-04-27 14:00:00'),
         )), 'exdate of new series');
         
-        $this->assertEmpty(array_diff($oldSeries->dtstart, array(
+        $this->assertFalse(!!array_diff($oldSeries->dtstart, array(
             new Tinebase_DateTime('2011-04-21 10:00:00'),
             new Tinebase_DateTime('2011-04-22 10:00:00'),
             new Tinebase_DateTime('2011-04-24 10:00:00'),
         )), 'dtstart of old series');
         
-        $this->assertEmpty(array_diff($newSeries->dtstart, array(
+        $this->assertFalse(!!array_diff($newSeries->dtstart, array(
             new Tinebase_DateTime('2011-04-25 14:00:00'),
             new Tinebase_DateTime('2011-04-27 12:00:00'),
             new Tinebase_DateTime('2011-04-28 14:00:00'),
