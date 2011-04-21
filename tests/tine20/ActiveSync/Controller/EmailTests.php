@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'ActiveSync_Controller_EmailTests::main');
-}
-
 /**
  * Test class for ActiveSync_Controller_Email
  * 
@@ -36,6 +32,11 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     protected $_emailTestClass;
     
+    /**
+     * test controller name
+     * 
+     * @var string
+     */
     protected $_controllerName = 'ActiveSync_Controller_Email';
     
     /**
@@ -48,6 +49,11 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
      */
     protected $objects = array();
     
+    /**
+     * xml output
+     * 
+     * @var string
+     */
     protected $_testXMLOutput = '<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/"><Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Email="uri:Email"><Collections><Collection><Class>Email</Class><SyncKey>17</SyncKey><CollectionId>Inbox</CollectionId><Commands><Change><ClientId>1</ClientId><ApplicationData/></Change></Commands></Collection></Collections></Sync>';
     
     /**
@@ -62,7 +68,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
-    
+    /**
+     * set up test environment
+     */
     protected function setUp()
     {   	
         $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
@@ -117,6 +125,9 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertEquals(3716, strlen($this->_domDocument->getElementsByTagNameNS('uri:ItemOperations', 'Data')->item(0)->nodeValue), $this->_domDocument->saveXML());
     }
     
+    /**
+     * test invalid chars
+     */
     public function testInvalidBodyChars()
     {
         //invalid_body_chars.eml
@@ -170,18 +181,6 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->assertGreaterThanOrEqual(1, count($folders));
     }
         
-    /**
-     * append message (from given filename) to cache
-     *
-     * @param string $_filename
-     * @param string $_folder
-     */
-    protected function _appendMessage($_filename, $_folder)
-    {
-        $message = fopen(dirname(dirname(__FILE__)) . '/files/' . $_filename, 'r');
-        $this->_controller->appendMessage($_folder, $message);
-    }
-    
     /**
      * return active device
      * 
@@ -249,9 +248,4 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         
         return $dom;
     }
-    
-}
-    
-if (PHPUnit_MAIN_METHOD == 'ActiveSync_Controller_EmailTests::main') {
-    ActiveSync_Controller_EmailTests::main();
 }
