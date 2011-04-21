@@ -265,29 +265,17 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             this.loadMask.show();
         }
         
-        if (event.isRecurBase() && ! event.get('rrule').newrule) {
-            Ext.MessageBox.confirm(
-                this.app.i18n._('Confirm Update of Series'),
-                this.app.i18n._('Do you really want to update all events of this recurring event series?'),
-                function(btn) {
-                    if(btn == 'yes') {
-                        this.loadMask.show();
-                        this.onUpdateEventAction(event);
-                        this.store.load({refresh: true});
-                    } else {
-                        this.loadMask.show();
-                        this.store.load({refresh: true});
-                    }
-                }, this
-            );
-        } else if (event.isRecurInstance()) {
+        if (event.isRecurInstance() || (event.isRecurBase() && ! event.get('rrule').newrule)) {
             this.deleteMethodWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 title: this.app.i18n._('Update Event'),
+                height: 170,
                 scope: this,
                 options: [
-                    {text: this.app.i18n._('Update nothing'), name: 'cancel'},
+                    {text: this.app.i18n._('Update this event only'), name: 'this'},
+                    {text: this.app.i18n._('Update this and all future events'), name: (event.isRecurBase() && ! event.get('rrule').newrule) ? 'series' : 'future'},
                     {text: this.app.i18n._('Update whole series'), name: 'series'},
-                    {text: this.app.i18n._('Update this event only'), name: 'this'}
+                    {text: this.app.i18n._('Update nothing'), name: 'cancel'}
+                    
                 ],
                 handler: function(option) {
                     switch (option) {
@@ -306,20 +294,25 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                             break;
                             
                         case 'this':
+                        case 'future':
                             var options = {
                                 scope: this,
                                 success: function(updatedEvent) {
-                                    event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
-                        
-                                    this.store.remove(event);
-                                    this.store.add(updatedEvent);
-                                    this.setLoading(false);
-                                    this.view.getSelectionModel().select(updatedEvent);
+                                    if (option === 'this') {
+                                        event =  this.store.indexOf(event) != -1 ? event : this.store.getById(event.id);
+                            
+                                        this.store.remove(event);
+                                        this.store.add(updatedEvent);
+                                        this.setLoading(false);
+                                        this.view.getSelectionModel().select(updatedEvent);
+                                    } else {
+                                        this.store.load({refresh: true});
+                                    }
                                 },
                                 failure: this.onProxyFail.createDelegate(this, [event], true)
                             };
                             
-                            Tine.Calendar.backend.createRecurException(event, false, false, options);
+                            Tine.Calendar.backend.createRecurException(event, false, option == 'future', options);
                                 
                         default:
                             this.loadMask.show();
