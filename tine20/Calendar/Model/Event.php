@@ -189,7 +189,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function getOriginalDtStart()
     {
-        $origianlDtStart = clone $this->dtstart;
+        $origianlDtStart = $this->dtstart instanceof stdClass ? clone $this->dtstart : $this->dtstart;
         
         if ($this->isRecurException()) {
             if ($this->recurid instanceof DateTime) {
