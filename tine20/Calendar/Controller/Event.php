@@ -548,7 +548,10 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($_allFollowing) {
                 throw new Exception('please edit or delete complete series!');
             }
-            $_event->setRecurId();
+            // NOTE: if the baseEvent gets a time change, we can't compute the recurdid w.o. knoing the original dtstart
+            $recurid = $baseEvent->setRecurId();
+            unset($baseEvent->recurid);
+            $_event->recurid = $recurid;
         }
         
         // just do attender status update if user has no edit grant
@@ -579,14 +582,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         $exdates = is_array($baseEvent->exdate) ? $baseEvent->exdate : array();
         
-        if ($_allFollowing !== TRUE) {
+        if ($_allFollowing != TRUE) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " adding exdate for: '{$_event->recurid}'");
             
             array_push($exdates, $exdate);
             $baseEvent->exdate = $exdates;
             $updatedBaseEvent = $this->update($baseEvent, FALSE);
             
-            if ($_deleteInstance === FALSE) {
+            if ($_deleteInstance == FALSE) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " creating persistent exception for: '{$_event->recurid}'");
                 
                 $_event->setId(NULL);
@@ -627,7 +630,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             
             $updatedBaseEvent = $this->update($baseEvent, FALSE);
             
-            if ($_deleteInstance === TRUE) {
+            if ($_deleteInstance == TRUE) {
                 // delte all future persistent events
                 $this->delete($futurePersistentExceptionEvents->getId());
             } else {
@@ -677,8 +680,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         
         // restore original notification handling
         $this->sendNotifications($sendNotifications);
-        $notificationAction = $_deleteInstance === TRUE ? 'deleted' : 'created';
-        $notificationEvent = $notificationAction == 'created' ? $persistentExceptionEvent :  $updatedBaseEvent;
+        $notificationAction = $_deleteInstance ? 'deleted' : 'created';
+        $notificationEvent = $_deleteInstance ? $updatedBaseEvent : $persistentExceptionEvent;
         
         // send notifications
         if ($this->_sendNotifications) {
