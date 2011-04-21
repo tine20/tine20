@@ -53,6 +53,21 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },    
     
     /**
+     * executed when record gets updated from form
+     */
+    onRecordUpdate: function () {
+        Tine.Admin.ContainerEditDialog.superclass.onRecordUpdate.apply(this, arguments);
+        
+        // get grants from grants grid
+        this.record.set('account_grants', '');
+        var grants = [];
+        this.grantsStore.each(function(grant){
+            grants.push(grant.data);
+        });
+        this.record.set('account_grants', grants);
+    },
+    
+    /**
      * create grants store + grid
      * 
      * @return {Tine.widgets.container.GrantsGrid}
