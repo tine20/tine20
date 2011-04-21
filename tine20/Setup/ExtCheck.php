@@ -414,7 +414,7 @@ class Setup_ExtCheck
                     }
                     break;
                 case 'PHP':
-                    if (version_compare($value['attributes']['VERSION'], phpversion(), '<')) {
+                    if (version_compare($value['attributes']['VERSION'], phpversion(), '<=')) {
                         $data[] = array($value['attributes']['NAME'], 'SUCCESS');
                     } else {
                         Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
@@ -439,7 +439,7 @@ class Setup_ExtCheck
                     }
                     
                     $text = $value['attributes']['NAME'];
-                    if (version_compare($value['attributes']['VERSION'], $mysqlVersion, '<')) {
+                    if (version_compare($value['attributes']['VERSION'], $mysqlVersion, '<=')) {
                         $data[] = array($text, 'SUCCESS');
                     } else {
                         Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
