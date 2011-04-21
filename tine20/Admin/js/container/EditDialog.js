@@ -25,6 +25,8 @@ Ext.ns('Tine.Admin.container');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Admin.ContainerEditDialog
+ * 
+ * TODO add note for personal containers (note is sent to container owner)
  */
 Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
@@ -112,9 +114,10 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     allowBlank: false,
                     maxLength: 40
                 }, {
+                    // TODO this should be a combobox, only enabled for new records
                     columnWidth: 0.6,
-                    name: 'description',
-                    fieldLabel: this.app.i18n._('Description'),
+                    name: 'application_id',
+                    fieldLabel: this.app.i18n._('Application'),
                     anchor: '100%',
                     maxLength: 50
                 }, {
