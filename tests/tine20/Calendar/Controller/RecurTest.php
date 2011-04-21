@@ -232,6 +232,92 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertEquals(1, count($weekviewEvents), '17.6. is an exception date and must not be part of this weekview');
     }
     
+    public function testCreateRecurExceptionAllFollowing()
+    {
+        $from = new Tinebase_DateTime('2011-04-21 00:00:00');
+        $until = new Tinebase_DateTime('2011-04-28 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+            'uid'           => Tinebase_Record_Abstract::generateUID(),
+            'summary'       => 'Latte bei Schweinske',
+            'dtstart'       => '2011-04-21 10:00:00',
+            'dtend'         => '2011-04-21 12:00:00',
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2011-04-28 12:00:00',
+            'container_id'  => $this->_testCalendar->getId()
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        
+        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($event, $exceptions, $from, $until);
+        
+        // create exceptions
+        $recurSet->summary = 'Limo bei Schweinske';
+        $recurSet[5]->dtstart->addHour(2);
+        $recurSet[5]->dtend->addHour(2);
+        
+        $this->_controller->createRecurException($recurSet[1], TRUE);  // (23) delete instance
+        $this->_controller->createRecurException($recurSet[2], FALSE); // (24) move instance
+        $this->_controller->createRecurException($recurSet[4], TRUE);  // (26) delete instance
+        $this->_controller->createRecurException($recurSet[5], FALSE); // (27) move instance
+        
+        // now test update allfollowing
+        $recurSet[3]->summary = 'Spezi bei Schwinske';
+        $recurSet[3]->dtstart->addHour(4);
+        $recurSet[3]->dtend->addHour(4);
+        
+        $newBaseEvent = $this->_controller->createRecurException($recurSet[3], FALSE, TRUE);
+        
+        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until),
+        ))));
+        
+        Calendar_Model_Rrule::mergeRecuranceSet($events, $from, $until);
+        
+        $this->assertEquals(6, count($events), 'there should be exactly 6 events');
+        
+        $oldSeries = $events->filter('uid', $persistentEvent->uid);
+        $newSeries = $events->filter('uid', $newBaseEvent->uid);
+        $this->assertEquals(3, count($oldSeries), 'there should be exactly 3 events with old uid');
+        $this->assertEquals(3, count($newSeries), 'there should be exactly 3 events with new uid');
+        
+        $this->assertEquals(1, count($oldSeries->filter('recurid', "/^$/", TRUE)), 'there should be exactly one old base event');
+        $this->assertEquals(1, count($newSeries->filter('recurid', "/^$/", TRUE)), 'there should be exactly one new base event');
+        
+        $this->assertEquals(1, count($oldSeries->filter('recurid', "/^.+/", TRUE)->filter('rrule', '/^$/', TRUE)), 'there should be exactly one old persitent event exception');
+        $this->assertEquals(1, count($newSeries->filter('recurid', "/^.+/", TRUE)->filter('rrule', '/^$/', TRUE)), 'there should be exactly one new persitent event exception');
+        
+        $this->assertEquals(1, count($oldSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one old fake event');
+        $this->assertEquals(1, count($newSeries->filter('id', "/^fake.*/", TRUE)), 'there should be exactly one new fake event');
+        
+        $oldBaseEvent = $oldSeries->filter('recurid', "/^$/", TRUE)->getFirstRecord();
+        $newBaseEvent = $newSeries->filter('recurid', "/^$/", TRUE)->getFirstRecord();
+        
+        $this->assertEmpty(array_diff($oldBaseEvent->exdate, array(
+            new Tinebase_DateTime('2011-04-23 10:00:00'),
+            new Tinebase_DateTime('2011-04-24 10:00:00'),
+        )), 'exdate of old series');
+        
+        $this->assertEmpty(array_diff($newBaseEvent->exdate, array(
+            new Tinebase_DateTime('2011-04-26 14:00:00'),
+            new Tinebase_DateTime('2011-04-27 14:00:00'),
+        )), 'exdate of new series');
+        
+        $this->assertEmpty(array_diff($oldSeries->dtstart, array(
+            new Tinebase_DateTime('2011-04-21 10:00:00'),
+            new Tinebase_DateTime('2011-04-22 10:00:00'),
+            new Tinebase_DateTime('2011-04-24 10:00:00'),
+        )), 'dtstart of old series');
+        
+        $this->assertEmpty(array_diff($newSeries->dtstart, array(
+            new Tinebase_DateTime('2011-04-25 14:00:00'),
+            new Tinebase_DateTime('2011-04-27 12:00:00'),
+            new Tinebase_DateTime('2011-04-28 14:00:00'),
+        )), 'dtstart of new series');
+    }
+    
     /**
      * returns a simple recure event
      *
