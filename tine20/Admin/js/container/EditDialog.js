@@ -25,6 +25,8 @@ Ext.ns('Tine.Admin.container');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Admin.ContainerEditDialog
+ * 
+ * TODO add note for personal containers (note is sent to container owner)
  */
 Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
@@ -38,56 +40,69 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     evalGrants: false,
     
     /**
-     * after render
-     */
-//    afterRender: function() {
-//        Tine.Admin.ContainerEditDialog.superclass.afterRender.apply(this, arguments);
-//    },
-    
-    /**
      * executed after record got updated from proxy
      */
-    onRecordLoad: function() {
+    onRecordLoad: function () {
         Tine.Admin.ContainerEditDialog.superclass.onRecordLoad.apply(this, arguments);
         
-        this.initGrantsGrid();
+        // load grants store if editing record
+        if (this.record && this.record.id) {
+			this.grantsStore.loadData({
+	            results:    this.record.get('account_grants'),
+	            totalcount: this.record.get('account_grants').length
+	        });
+        }
     },    
     
     /**
-     * create grants store + grid and insert grants grid into panel
+     * executed when record gets updated from form
      */
-    initGrantsGrid: function() {
+    onRecordUpdate: function () {
+        Tine.Admin.ContainerEditDialog.superclass.onRecordUpdate.apply(this, arguments);
+        
+        // get grants from grants grid
+        this.record.set('account_grants', '');
+        var grants = [];
+        this.grantsStore.each(function(grant){
+            grants.push(grant.data);
+        });
+        this.record.set('account_grants', grants);
+    },
+    
+    /**
+     * create grants store + grid
+     * 
+     * @return {Tine.widgets.container.GrantsGrid}
+     */
+    initGrantsGrid: function () {
         this.grantsStore = new Ext.data.JsonStore({
             root: 'results',
             totalProperty: 'totalcount',
             id: 'account_id',
             fields: Tine.Tinebase.Model.Grant
         });
-        
-        this.grantsStore.loadData({
-            results:    this.record.get('account_grants'),
-            totalcount: this.record.get('account_grants').length
-        });
-        
+       
         this.grantsGrid = new Tine.widgets.container.GrantsGrid({
+			flex: 1,
             store: this.grantsStore,
-            grantContainer: this.record,
-            height: 340
+            grantContainer: this.record.data,
+            alwaysShowAdminGrant: true
         });
         
-        this.grantsPanel.add(this.grantsGrid);
-        this.grantsGrid.show();
+        return this.grantsGrid;
     },
     
     /**
      * returns dialog
      */
-    getFormItems: function() {
+    getFormItems: function () {
         return {
-            layout: 'hfit',
+            layout: 'vbox',
+            layoutConfig: {
+			    align: 'stretch',
+			    pack: 'start'
+			},
             border: false,
-            width: 600,
-            height: 350,
             items: [{
                 xtype: 'columnform',
                 border: false,
@@ -99,9 +114,10 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     allowBlank: false,
                     maxLength: 40
                 }, {
+                    // TODO this should be a combobox, only enabled for new records
                     columnWidth: 0.6,
-                    name: 'description',
-                    fieldLabel: this.app.i18n._('Description'),
+                    name: 'application_id',
+                    fieldLabel: this.app.i18n._('Application'),
                     anchor: '100%',
                     maxLength: 50
                 }, {
@@ -110,16 +126,9 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     fieldLabel: this.app.i18n._('Color'),
                     name: 'color'
                 }]]
-            }, {
-                xtype: 'panel',
-                ref: '../grantsPanel',
-                height: 340,
-                activeTab: 0,
-                deferredRender: false,
-                defaults: { autoScroll: true },
-                border: true,
-                plain: true
-            }]            
+            }, 
+            	this.initGrantsGrid()
+           	]            
         };
     }
 });
@@ -131,11 +140,10 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
  * @return  {Ext.ux.Window}
  */
 Tine.Admin.ContainerEditDialog.openWindow = function (config) {
-    var id = Ext.id();
     var window = Tine.WindowFactory.getWindow({
         width: 600,
         height: 400,
-        name: Tine.Admin.ContainerEditDialog.prototype.windowNamePrefix + id,
+        name: Tine.Admin.ContainerEditDialog.prototype.windowNamePrefix + Ext.id(),
         contentPanelConstructor: 'Tine.Admin.ContainerEditDialog',
         contentPanelConstructorConfig: config
     });

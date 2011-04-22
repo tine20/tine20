@@ -133,6 +133,9 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if (! $_record->account_grants instanceof Tinebase_Record_RecordSet && is_array($_record->account_grants)) {
+            $_record->account_grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $_record->account_grants);
+        }
         $this->_containerController->setGrants($_record, $_record->account_grants, TRUE, FALSE);
     }
     
@@ -212,6 +215,29 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
                 Tinebase_Container::getInstance()->setGrants($container->getId(), $grants, TRUE, FALSE);
             }
         }        
+    }
+    
+    /**
+     * Removes containers where current user has no access to
+     * -> remove timetracker containers, too (those are managed within the timetracker)
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_action get|update
+     */
+    public function checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    {
+        if ($_action == 'get') {
+            $userApps = Tinebase_Core::getUser()->getApplications(TRUE);
+            $filterAppIds = array();
+            foreach ($userApps as $app) {
+                if ($app->name !== 'Timetracker') {
+                    $filterAppIds[] = $app->getId();
+                }
+            }
+            
+            $appFilter = $_filter->createFilter('application_id', 'in', $filterAppIds);
+            $_filter->addFilter($appFilter);
+        }
     }
     
     /**

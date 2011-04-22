@@ -283,9 +283,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         // get account
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         
-        $this->_setMailFrom($mail, $account);
-        $this->_setMailHeaders($mail, $account);
-        $this->_sendMailViaTransport($mail, $account, $_saveInSent);
+        $this->_setMailFrom($_mail, $account);
+        $this->_setMailHeaders($_mail, $account);
+        $this->_sendMailViaTransport($_mail, $account, NULL, $_saveInSent);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -317,7 +317,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Account $_account
      * @param Felamimail_Model_Message $_message
      */
-    protected function _setMailFrom(Tinebase_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
+    protected function _setMailFrom(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
     {
         $_mail->clearFrom();
         
@@ -339,7 +339,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Message $_message
      * @return array
      */
-    protected function _setMailRecipients(Tinebase_Mail $_mail, Felamimail_Model_Message $_message)
+    protected function _setMailRecipients(Zend_Mail $_mail, Felamimail_Model_Message $_message)
     {
         $nonPrivateRecipients = array();
         $punycodeConverter = $this->getPunycodeConverter();
@@ -380,7 +380,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * 
      * @todo what has to be set in the 'In-Reply-To' header?
      */
-    protected function _setMailHeaders(Tinebase_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, Felamimail_Model_Message $_originalMessage = NULL)
+    protected function _setMailHeaders(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, Felamimail_Model_Message $_originalMessage = NULL)
     {
         // add user agent
         $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');

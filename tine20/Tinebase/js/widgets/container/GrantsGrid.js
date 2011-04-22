@@ -27,6 +27,12 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
     grantContainer: null,
     
     /**
+     * @cfg {Boolean}
+     * always show the admin grant (default: false)
+     */
+    alwaysShowAdminGrant: false,
+    
+    /**
      * Tine.widgets.account.PickerGridPanel config values
      */
     selectType: 'both',
@@ -84,9 +90,14 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
         ];
         
         // @todo move this to cal app when apps can cope with their own grant models
-        var calApp = Tine.Tinebase.appMgr.get('Calendar');
-        var calId = calApp ? calApp.id : 'none';
-        if (this.grantContainer.type == 'personal' && this.grantContainer.application_id === calId) {
+        if (this.grantContainer.application_id.name) {
+            var isCalendar = (this.grantContainer.application_id.name == 'Calendar');
+        } else {
+            var calApp = Tine.Tinebase.appMgr.get('Calendar'),
+                calId = calApp ? calApp.id : 'none',
+                isCalendar = this.grantContainer.application_id === calId;
+        }
+        if (this.grantContainer.type == 'personal' && isCalendar) {
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
                 header: _('Free Busy'),
                 tooltip: _('The grant to access free busy information of events in this calendar'),
@@ -94,6 +105,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
                 width: 55
             }));
         }
+        
         if (this.grantContainer.type == 'personal' && this.grantContainer.capabilites_private) {
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
                 header: _('Private'),
@@ -102,7 +114,8 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
                 width: 55
             }));
         }
-        if (this.grantContainer.type == 'shared') {
+        
+        if (this.grantContainer.type == 'shared' || this.alwaysShowAdminGrant) {
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
                 header: _('Admin'),
                 tooltip: _('The grant to administrate this container'),

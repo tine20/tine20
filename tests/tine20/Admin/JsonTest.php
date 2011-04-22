@@ -639,6 +639,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchContainers()
     {
+        $personalAdb = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
+        
         $addressbook = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $filter = array(
             array('field' => 'application_id', 'operator' => 'equals', 'value' => $addressbook->getId()),
@@ -650,7 +652,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThan(0, $result['totalcount']);
         
-        $personalAdb = Addressbook_Controller_Contact::getInstance()->getDefaultAddressbook();
         $found = FALSE;
         foreach ($result['results'] as $container) {
             if ($container['id'] === $personalAdb->getId()) {
@@ -672,8 +673,21 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($containerData['name'], $container['name']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $container['created_by']);
         
-        // @todo update container
-        // @todo check grants
+        // update container
+        $container['name'] = 'testcontainerupdated';
+        $container['account_grants'] = array(array(
+            'account_id'     => Tinebase_Core::getUser()->getId(),
+            'account_type'   => 'user',
+            Tinebase_Model_Grants::GRANT_READ      => true,
+            Tinebase_Model_Grants::GRANT_ADD       => true,
+            Tinebase_Model_Grants::GRANT_EDIT      => true,
+            Tinebase_Model_Grants::GRANT_DELETE    => false,
+            Tinebase_Model_Grants::GRANT_ADMIN     => true
+        ));
+        
+        $containerUpdated = $this->_json->saveContainer($container);
+        $this->assertEquals('testcontainerupdated', $containerUpdated['name']);
+        $this->assertTrue($containerUpdated['account_grants'][0][Tinebase_Model_Grants::GRANT_ADMIN]);
         
         $deleteResult = $this->_json->deleteContainers(array($container['id']));
         $this->assertEquals('success', $deleteResult['status']);

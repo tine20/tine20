@@ -351,7 +351,7 @@ class Calendar_Controller_MSEventFacade implements Tinebase_Controller_Record_In
     }
     
     /**
-     * prepares an exception instance for persitece
+     * prepares an exception instance for persitence
      * 
      * @param  Calendar_Model_Event $_baseEvent
      * @param  Calendar_Model_Event $_exception

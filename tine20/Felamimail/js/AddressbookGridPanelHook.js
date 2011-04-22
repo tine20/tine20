@@ -4,7 +4,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -122,8 +122,6 @@ Ext.apply(Tine.Felamimail.AddressbookGridPanelHook.prototype, {
      * compose an email to selected contacts
      * 
      * @param {Button} btn 
-     * 
-     * TODO make this work for filter selections (not only the first page)
      */
     onComposeEmail: function(btn) {
         var sm = this.getContactGridPanel().grid.getSelectionModel(),

@@ -239,6 +239,12 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     $_events->addRecord($event);
                     $event->setId('fakeid' . $candidate->uid . $event->dtstart->getTimeStamp());
                 }
+                
+                // check if candidate/baseEvent has an exception itself -> in this case remove baseEvent from set
+                if (in_array($candidate->dtstart, $candidate->exdate)) {
+                    $_events->removeRecord($candidate);
+                }
+                
             } catch (Exception $e) {
                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " could not compute recurSet of event: {$candidate->getId()} ");
                continue;
@@ -329,14 +335,13 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
         $rrule = new Calendar_Model_Rrule(NULL, TRUE);
         $rrule->setFromString($_event->rrule);
         
-        $_exceptionRecurIds = self::getExceptionsRecurIds($_event, $_exceptions);
+        $exceptionRecurIds = self::getExceptionsRecurIds($_event, $_exceptions);
         $recurSet = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        
         
         switch ($rrule->freq) {
             case self::FREQ_DAILY:
                 
-                self::_computeRecurDaily($_event, $rrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                self::_computeRecurDaily($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 break;
                 
             case self::FREQ_WEEKLY:
@@ -358,21 +363,21 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     $baseEvent->dtend->add($eventLength);
                     
                     if ($baseEvent->dtstart->isLater($_event->dtstart) && $baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
-                        $baseEvent->recurid = $baseEvent->uid . '-' . $baseEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
-                        if (! in_array($baseEvent->recurid, $_exceptionRecurIds)) {
+                        $baseEvent->setRecurId();
+                        if (! in_array($baseEvent->recurid, $exceptionRecurIds)) {
                             $recurSet->addRecord($baseEvent);
                         }
                     }
                     
-                    self::_computeRecurDaily($baseEvent, $dailyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                    self::_computeRecurDaily($baseEvent, $dailyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 }
                 break;
                 
             case self::FREQ_MONTHLY:
                 if ($rrule->bymonthday) {
-                    self::_computeRecurMonthlyByMonthDay($_event, $rrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                    self::_computeRecurMonthlyByMonthDay($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 } else if ($rrule->byday) {
-                    self::_computeRecurMonthlyByDay($_event, $rrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                    self::_computeRecurMonthlyByDay($_event, $rrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                     
                 } else {
                     throw new Exception('mal formated rrule');
@@ -385,9 +390,9 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $yearlyrrule->interval = 12;
                 
                 if ($rrule->byday) {
-                    self::_computeRecurMonthlyByDay($_event, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                    self::_computeRecurMonthlyByDay($_event, $yearlyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 } else {
-                    self::_computeRecurMonthlyByMonthDay($_event, $yearlyrrule, $_exceptionRecurIds, $_from, $_until, $recurSet);
+                    self::_computeRecurMonthlyByMonthDay($_event, $yearlyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 }
 
                 break;
@@ -481,7 +486,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
             $recurEvent->dtend = clone $recurEvent->dtstart;  
             $recurEvent->dtend->add($eventLength);
             
-            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            $recurEvent->setRecurId();
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
                 $_recurSet->addRecord($recurEvent);
@@ -563,7 +568,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 continue;
             }
             
-            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            $recurEvent->setRecurId();
             
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
@@ -663,7 +668,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 continue;
             }
             
-            $recurEvent->recurid = $recurEvent->uid . '-' . $recurEvent->dtstart->toString(Tinebase_Record_Abstract::ISO8601LONG);
+            $recurEvent->setRecurId();
             
             if (! in_array($recurEvent->recurid, $_exceptionRecurIds)) {
                 $_recurSet->addRecord($recurEvent);

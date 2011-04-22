@@ -189,7 +189,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
      */
     public function getOriginalDtStart()
     {
-        $origianlDtStart = $this->dtstart;
+        $origianlDtStart = $this->dtstart instanceof stdClass ? clone $this->dtstart : $this->dtstart;
         
         if ($this->isRecurException()) {
             if ($this->recurid instanceof DateTime) {
@@ -200,7 +200,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
                     throw new Tinebase_Exception_InvalidArgument('recurid does not contain a valid original start date');
                 }
                 
-                $origianlDtStart = new Tinebase_DateTime($origianlDtStartString);
+                $origianlDtStart = new Tinebase_DateTime($origianlDtStartString, 'UTC');
             }
         }
         
@@ -303,7 +303,11 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
             throw new Exception ('uid _and_ dtstart must be set to generate recurid');
         }
         
-        $this->recurid = $this->uid . '-' . $this->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
+        // make sure we store recurid in utc
+        $dtstart = $this->getOriginalDtStart();
+        $dtstart->setTimezone('UTC');
+        
+        $this->recurid = $this->uid . '-' . $dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
         
         return $this->recurid;
     }

@@ -483,44 +483,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertTrue(empty($attender->displaycontainer_id), 'displaycontainer_id must not be set for contacts');
     }
     
-    public function testAttendeeSetStatusRecurException()
-    {
-        // note: 2009-03-29 Europe/Berlin switched to DST
-        $event = new Calendar_Model_Event(array(
-            'uid'           => Tinebase_Record_Abstract::generateUID(),
-            'summary'       => 'Abendessen',
-            'dtstart'       => '2009-03-25 18:00:00',
-            'dtend'         => '2009-03-25 18:30:00',
-            'originator_tz' => 'Europe/Berlin',
-            'rrule'         => 'FREQ=DAILY;INTERVAL=1;UNTIL=2009-03-31 17:30:00',
-            'exdate'        => '2009-03-27 18:00:00,2009-03-29 17:00:00',
-            'container_id'  => $this->_testCalendar->getId(),
-            Tinebase_Model_Grants::GRANT_EDIT     => true,
-        ));
-        $event->attendee = $this->_getAttendee();
-        unset($event->attendee[1]);
-        
-        $persistentEvent = $this->_controller->create($event);
-        $attendee = $persistentEvent->attendee[0];
-        
-        $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
-        $from = new Tinebase_DateTime('2009-03-26 00:00:00');
-        $until = new Tinebase_DateTime('2009-04-01 23:59:59');
-        $recurSet = Calendar_Model_Rrule::computeRecuranceSet($persistentEvent, $exceptions, $from, $until);
-        
-        $exception = $recurSet->getFirstRecord();
-        $attendee = $exception->attendee[0];
-        $attendee->status = Calendar_Model_Attender::STATUS_ACCEPTED;
-        
-        $this->_controller->attenderStatusCreateRecurException($exception, $attendee, $attendee->status_authkey);
-        
-        $events = $this->_controller->search(new Calendar_Model_EventFilter(array(
-            array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
-            array('field' => 'uid', 'operator' => 'equals', 'value' => $persistentEvent->uid)
-        )));
-        $this->assertEquals(2, count($events));
-    }
-    
     public function testAttendeeGroupMembers()
     {
         $defaultUserGroup = Tinebase_Group::getInstance()->getDefaultGroup();
@@ -654,12 +616,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $event->exdate = array(new Tinebase_DateTime('2009-04-07 13:00:00'));
         $persistentEvent = $this->_controller->create($event);
         
-        
         $exception = clone $persistentEvent;
         $exception->dtstart->addDay(2);
         $exception->dtend->addDay(2);
-        
-        
         
         $exception->setId(NULL);
         unset($exception->rrule);
@@ -667,21 +626,15 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $exception->recurid = $exception->uid . '-' . $exception->dtstart->get(Tinebase_Record_Abstract::ISO8601LONG);
         $persitentException = $this->_controller->create($exception);
         
-        
-        
         $persistentEvent->dtstart->addHour(5);
         $persistentEvent->dtend->addHour(5);
         
-        
         $updatedEvent = $this->_controller->update($persistentEvent);
-        
         
         $updatedException = $this->_controller->get($persitentException->getId());
         
-        //print_r($updatedEvent);
-        
         $this->assertEquals('2009-04-07 18:00:00', $updatedEvent->exdate[0]->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update exdate');
-        $this->assertEquals('2009-04-08 18:00:00', substr($updatedException->recurid, -19), 'failed to update persistent exception');
+        $this->assertEquals('2009-04-08 13:00:00', substr($updatedException->recurid, -19), 'failed to update persistent exception');
         $this->assertEquals('2009-04-30 18:30:00', Calendar_Model_Rrule::getRruleFromString($updatedEvent->rrule)->until->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update until in rrule');
         $this->assertEquals('2009-04-30 18:30:00', $updatedEvent->rrule_until->get(Tinebase_Record_Abstract::ISO8601LONG), 'failed to update rrule_until');
         

@@ -312,7 +312,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             }
             addAction = {
                 text: this.i18nAddActionText ? this.app.i18n._hidden(this.i18nAddActionText) : String.format(Tine.Tinebase.translation._hidden('Add {0}'), this.i18nRecordName),
-                handler: this.onEditInNewWindow.createDelegate(this, ["add", dtStart]),
+                handler: this.onEditInNewWindow.createDelegate(this, ["add", {dtStart: dtStart}]),
                 iconCls: 'action_add'
             };
             
@@ -385,74 +385,55 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         }
         
         if (selection.length === 1 && (containsRecurBase || containsRecurInstance)) {
-            if (containsRecurBase) {
-                Ext.MessageBox.confirm(
-                    this.app.i18n._('Confirm Deletion of Series'),
-                    this.app.i18n._('Do you really want to delete all events of this recurring event series?'),
-                    function (btn) {
-                        if (btn === 'yes') {
+
+            this.deleteMethodWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
+                title: this.app.i18n._('Delete Event'),
+                scope: this,
+                height: 170,
+                options: [
+                    {text: this.app.i18n._('Delete this event only'), name: 'this'},
+                    {text: this.app.i18n._('Delete this and all future events'), name: containsRecurBase ? 'all' : 'future'},
+                    {text: this.app.i18n._('Delete whole series'), name: 'all'},
+                    {text: this.app.i18n._('Delete nothing'), name: 'nothing'}
+                ],
+                handler: function (option) {
+                    switch (option) 
+                    {
+                    case 'all':
+                    case 'this':
+                    case 'future':
+                        panel.getTopToolbar().beforeLoad();
+                        if (option !== 'this') {
                             panel.loadMask.show();
-                            this.onDeleteRecordsConfirmNonRecur(panel, selection);
-                            this.refresh(true);
-                        } else {
-                            this.onDeleteRecordsConfirmFail(panel, selection);
                         }
-                    }, this
-                );
-            } else {
-                this.deleteMethodWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
-                    title: this.app.i18n._('Delete Event'),
-                    scope: this,
-                    height: 170,
-                    options: [
-                        {text: this.app.i18n._('Delete whole series'), name: 'all'},
-                        {text: this.app.i18n._('Delete this and all future events'), name: 'future'},
-                        {text: this.app.i18n._('Delete this event only'), name: 'this'},
-                        {text: this.app.i18n._('Delete nothing'), name: 'nothing'}
-                    ],
-                    handler: function (option) {
-                        switch (option) 
-                        {
-                        case 'all':
-                        case 'this':
-                        case 'future':
-                            panel.getTopToolbar().beforeLoad();
-                            if (option !== 'this') {
-                                panel.loadMask.show();
-                            }
-                            
-                            var options = {
-                                scope: this,
-                                success: function () {
-                                    if (option === 'this') {
-                                        Ext.each(selection, function (event) {
-                                            panel.getStore().remove(event);
-                                        });
-                                        panel.getTopToolbar().onLoad();
-                                    } else {
-                                        this.refresh(true);
-                                    }
-                                    
-                                },
-                                failure: function () {
+                        
+                        var options = {
+                            scope: this,
+                            success: function () {
+                                if (option === 'this') {
+                                    Ext.each(selection, function (event) {
+                                        panel.getStore().remove(event);
+                                    });
                                     panel.getTopToolbar().onLoad();
-                                    Ext.MessageBox.alert(Tine.Tinebase.translation._hidden('Failed'), String.format(this.app.i18n.n_('Failed not delete event', 'Failed to delete the {0} events', selection.length), selection.length)); 
+                                } else {
+                                    this.refresh(true);
                                 }
-                            };
-                            
-                            if (option === 'all') {
-                                Tine.Calendar.backend.deleteRecurSeries(selection[0], options);
-                            } else {
-                                Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', options);
+                                
                             }
-                            break;
-                        default:
-                            this.onDeleteRecordsConfirmFail(panel, selection);
-                            break;
+                        };
+                        
+                        if (option === 'all') {
+                            Tine.Calendar.backend.deleteRecurSeries(selection[0], options);
+                        } else {
+                            Tine.Calendar.backend.createRecurException(selection[0], true, option === 'future', options);
                         }
+                        break;
+                    default:
+                        this.onDeleteRecordsConfirmFail(panel, selection);
+                        break;
                     }
-                });
-            }
+                }
+            });
             return;
         }
         
@@ -500,7 +481,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
     /**
      * @param {String} action add|edit
      */
-    onEditInNewWindow: function (action, dtStart) {
+    onEditInNewWindow: function (action, defaults) {
         var event = null;
         
         if (action === 'edit') {
@@ -516,9 +497,22 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         if (! event) {
             event = new Tine.Calendar.Model.Event(Tine.Calendar.Model.Event.getDefaultData(), 0);
-            if (Ext.isDate(dtStart)) {
-                event.set('dtstart', dtStart);
-                event.set('dtend', dtStart.add(Date.HOUR, 1));
+            if (Ext.isDate(defaults.dtStart)) {
+                event.set('dtstart', defaults.dtStart);
+                event.set('dtend', defaults.dtStart.add(Date.HOUR, 1));
+            }
+            
+            if (Ext.isArray(defaults.attendee)) {
+                var attendee = event.get('attendee') || [];
+                
+                // strip records
+                Ext.each(defaults.attendee, function(attender) {
+                    attendee.push(Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
+                        user_id: Ext.isFunction(attender.beginEdit) ? attender.data : attender
+                    }));
+                }, this);
+                
+                event.set('attendee', attendee);
             }
         }
         
