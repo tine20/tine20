@@ -1053,7 +1053,9 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function saveContainer($recordData)
     {
-        return $this->_save($recordData, Admin_Controller_Container::getInstance(), 'Tinebase_Model_Container');        
+        $additionalArguments = (array_key_exists('note', $recordData)) ? array('note' => $recordData['note']) : array();
+        
+        return $this->_save($recordData, Admin_Controller_Container::getInstance(), 'Tinebase_Model_Container', 'id', $additionalArguments);
     }
     
     /**
