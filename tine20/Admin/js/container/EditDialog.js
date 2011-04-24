@@ -127,11 +127,19 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     xtype: 'combo',
                     readOnly: this.record.id != 0,
                     store: this.appStore,
-                    columnWidth: 0.6,
+                    columnWidth: 0.3,
                     name: 'application_id',
                     displayField: 'name',
                     valueField: 'id',
                     fieldLabel: this.app.i18n._('Application'),
+                    mode: 'local',
+                    anchor: '100%'
+                }, {
+                    xtype: 'combo',
+                    columnWidth: 0.3,
+                    name: 'type',
+                    fieldLabel: this.app.i18n._('Type'),
+                    store: [['personal', this.app.i18n._('personal')], ['shared', this.app.i18n._('shared')]],
                     mode: 'local',
                     anchor: '100%'
                 }, {
