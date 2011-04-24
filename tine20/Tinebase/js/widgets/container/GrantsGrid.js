@@ -100,7 +100,7 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
 
         if (this.grantContainer) {
             // @todo move this to cal app when apps can cope with their own grant models
-            if (this.grantContainer.application_id.name) {
+            if (this.grantContainer.application_id && this.grantContainer.application_id.name) {
                 var isCalendar = (this.grantContainer.application_id.name == 'Calendar');
             } else {
                 var calApp = Tine.Tinebase.appMgr.get('Calendar'),
