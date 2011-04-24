@@ -106,7 +106,9 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {filtertype: 'admin.application', app: this.app}
             ],
             defaultFilter: 'query',
-            filters: [],
+            filters: [
+                {field: 'type', operator: 'equals', value: 'shared'}
+            ],
             plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]
