@@ -36,7 +36,9 @@ Ext.ns('Tine.Admin.Model');
 /**
  * Model of a container
  */
-Tine.Admin.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Container.getFieldDefinitions(), {
+Tine.Admin.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Container.getFieldDefinitions().concat([
+    {name: 'note'}
+]), {
     appName: 'Admin',
     modelName: 'Container',
     idProperty: 'id',

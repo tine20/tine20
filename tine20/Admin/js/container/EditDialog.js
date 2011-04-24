@@ -140,6 +140,12 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'type',
                     fieldLabel: this.app.i18n._('Type'),
                     store: [['personal', this.app.i18n._('personal')], ['shared', this.app.i18n._('shared')]],
+                    listeners: {
+                        scope: this,
+                        select: function (combo, record) {
+                            this.getForm().findField('note').setDisabled(record.data.field1 === 'shared');
+                        }
+                    },
                     mode: 'local',
                     anchor: '100%'
                 }, {
@@ -149,7 +155,14 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'color'
                 }]]
             }, 
-            	this.initGrantsGrid()
+            	this.initGrantsGrid(), {
+                    emptyText: this.app.i18n._('Note for Owner'),
+                    disabled: this.record.get('type') == 'shared',
+                    xtype: 'textarea',
+                    border: false,
+                    autoHeight: true,
+                    name: 'note'
+                }
            	]            
         };
     }
