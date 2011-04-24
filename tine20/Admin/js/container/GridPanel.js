@@ -18,8 +18,10 @@ Ext.ns('Tine.Admin.container');
  */
 Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
-    // TODO change this icon
-    newRecordIcon: 'action_addContact',
+    /**
+     * @cfg
+     */
+    newRecordIcon: 'admin-action-add-container',
     recordClass: Tine.Admin.Model.Container,
     recordProxy: Tine.Admin.containerBackend,
     defaultSortInfo: {field: 'name', direction: 'ASC'},
@@ -29,6 +31,9 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         autoExpandColumn: 'name'
     },
     
+    /**
+     * initComponent
+     */
     initComponent: function() {
         this.gridConfig.cm = this.getColumnModel();
         this.initFilterToolbar();
@@ -38,6 +43,7 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Admin.container.GridPanel.superclass.initComponent.call(this);
     },
+    
     /**
      * returns column model
      * 
@@ -91,8 +97,6 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * initialises filter toolbar
-     * 
-     * TODO add more
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
