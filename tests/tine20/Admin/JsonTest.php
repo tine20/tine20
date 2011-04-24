@@ -676,6 +676,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         // update container
         $container['name'] = 'testcontainerupdated';
+        $container['type'] = Tinebase_Model_Container::TYPE_PERSONAL;
+        $container['note'] = 'changed to personal';
         $container['account_grants'] = array(array(
             'account_id'     => Tinebase_Core::getUser()->getId(),
             'account_type'   => 'user',
@@ -698,8 +700,6 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      * returns container data
      * 
      * @return array
-     * 
-     * @todo add account grants
      */
     protected function _getContainerData()
     {
