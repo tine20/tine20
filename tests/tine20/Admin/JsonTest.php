@@ -643,14 +643,15 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         $addressbook = Tinebase_Application::getInstance()->getApplicationByName('Addressbook');
         $filter = array(
-            array('field' => 'application_id', 'operator' => 'equals', 'value' => $addressbook->getId()),
-            array('field' => 'type', 'operator' => 'equals', 'value' => Tinebase_Model_Container::TYPE_PERSONAL),
-            array('field' => 'name', 'operator' => 'contains', 'value' => Tinebase_Core::getUser()->accountFirstName),
+            array('field' => 'application_id',  'operator' => 'equals',     'value' => $addressbook->getId()),
+            array('field' => 'type',            'operator' => 'equals',     'value' => Tinebase_Model_Container::TYPE_PERSONAL),
+            array('field' => 'name',            'operator' => 'contains',   'value' => Tinebase_Core::getUser()->accountFirstName),
         );
         
         $result = $this->_json->searchContainers($filter, array());
         
         $this->assertGreaterThan(0, $result['totalcount']);
+        $this->assertEquals(3, count($result['filter']));
         
         $found = FALSE;
         foreach ($result['results'] as $container) {
