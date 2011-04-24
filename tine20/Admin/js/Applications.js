@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         refactor this
  * TODO         translate strings (enable/disable/settings)
@@ -111,14 +111,7 @@ Tine.Admin.Applications.Main = function() {
             root: 'results',
             totalProperty: 'totalcount',
             id: 'id',
-            fields: [
-                {name: 'id'},
-                {name: 'name'},
-                {name: 'status'},
-                {name: 'order'},
-                {name: 'app_tables'},
-                {name: 'version'}
-            ],
+            fields: Tine.Admin.Model.Application,
             // turn on remote sorting
             remoteSort: true
         });
