@@ -113,12 +113,16 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      * update one record
      *
      * @param   Tinebase_Record_Interface $_record
+     * @param   array $_additionalArguments
      * @return  Tinebase_Record_Interface
      */
-    public function update(Tinebase_Record_Interface $_record)
+    public function update(Tinebase_Record_Interface $_record, $_additionalArguments = array())
     {
         $container = parent::update($_record);
-        
+
+        if ($container->type === Tinebase_Model_Container::TYPE_PERSONAL) {
+            $this->_sendNotification($container, (array_key_exists('note', $_additionalArguments)) ? $_additionalArguments['note'] : '');
+        }    
         return $container;
     }
     
@@ -137,6 +141,25 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
             $_record->account_grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $_record->account_grants);
         }
         $this->_containerController->setGrants($_record, $_record->account_grants, TRUE, FALSE);
+    }
+    
+    /**
+     * send notification to owner
+     * 
+     * @param $_container
+     * @param $_note
+     * 
+     * @todo implement
+     */
+    protected function _sendNotification($_container, $_note)
+    {
+        // @todo get owner
+        $owner = 'unknown';
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Sending notification for container ' . $_container->name . ' to ' . $owner);
+        
+        // @ŧodo send notification
     }
     
     /**
