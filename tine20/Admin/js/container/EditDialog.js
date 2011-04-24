@@ -96,6 +96,16 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      */
     getFormItems: function () {
+        this.appStore = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            fields: Tine.Admin.Model.Application
+        });
+        this.appStore.loadData({
+            results:    Tine.Tinebase.registry.get('userApplications'),
+            totalcount: Tine.Tinebase.registry.get('userApplications').length
+        });
+        
         return {
             layout: 'vbox',
             layoutConfig: {
@@ -114,12 +124,16 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     allowBlank: false,
                     maxLength: 40
                 }, {
-                    // TODO this should be a combobox, only enabled for new records
+                    xtype: 'combo',
+                    readOnly: this.record.id != 0,
+                    store: this.appStore,
                     columnWidth: 0.6,
                     name: 'application_id',
+                    displayField: 'name',
+                    valueField: 'id',
                     fieldLabel: this.app.i18n._('Application'),
-                    anchor: '100%',
-                    maxLength: 50
+                    mode: 'local',
+                    anchor: '100%'
                 }, {
                     xtype: 'colorfield',
                     columnWidth: 0.1,
