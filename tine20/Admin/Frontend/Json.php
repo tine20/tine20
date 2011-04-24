@@ -1022,7 +1022,16 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchContainers($filter, $paging)
     {
-        return $this->_search($filter, $paging, Admin_Controller_Container::getInstance(), 'Tinebase_Model_ContainerFilter');
+        $result = $this->_search($filter, $paging, Admin_Controller_Container::getInstance(), 'Tinebase_Model_ContainerFilter');
+        
+        // remove acl (app) filter
+        foreach ($result['filter'] as $id => $filter) {
+            if ($filter['field'] === 'application_id' && $filter['operator'] === 'in') {
+                unset($result['filter'][$id]);
+            }
+        }
+        
+        return $result;
     }
     
     /**
