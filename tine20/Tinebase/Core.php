@@ -464,6 +464,8 @@ class Tinebase_Core
      * setup the cache and add it to zend registry
      *
      * @param bool $_enabled disabled cache regardless what's configured in config.inc.php
+     * 
+     * @todo use the same config keys as Zend_Cache (backend + frontend) to simplify this
      */
     public static function setupCache($_enabled = true)
     {
@@ -472,9 +474,10 @@ class Tinebase_Core
         // create zend cache
         if ($_enabled === true && $config->caching && $config->caching->active) {
             $frontendOptions = array(
-                'lifetime' => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
-                'automatic_serialization' => true, // turn that off for more speed
-                'caching' => true
+                'lifetime'                  => ($config->caching->lifetime) ? $config->caching->lifetime : 7200,
+                'automatic_serialization'   => true, // turn that off for more speed
+                'caching'                   => true,
+                'automatic_cleaning_factor' => 0, // no garbage collection as this is done by a scheduler task
             );
 
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
