@@ -156,6 +156,17 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     updateDetailsPanelOnCtxMenu: true,
     
     /**
+     * @cfg {Number} autoRefreshInterval (seconds)
+     */
+    autoRefreshInterval: 300,
+    
+    /**
+     * @property autoRefreshTask
+     * @type Ext.util.DelayedTask
+     */
+    autoRefreshTask: null,
+    
+    /**
      * @type Bool
      * @property updateOnSelectionChange
      */
@@ -438,6 +449,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 recordClass: this.recordClass
             });
         }
+        
+        // init autoRefresh
+        this.autoRefreshTask = new Ext.util.DelayedTask(this.loadGridData, this, [{
+            removeStrategy: 'keepBuffered'
+        }]);
     },
     
     /**
@@ -592,7 +608,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.grid.getView().scroller.dom.scrollTop = options.preserveScroller;
         }
         
-        // @todo reset autoLoad (and introduce autoload ;-))
+        // reset autoRefresh
+        if (window.isMainWindow && this.autoRefreshInterval) {
+            this.autoRefreshTask.delay(this.autoRefreshInterval * 1000);
+        }
     },
     
     /**
