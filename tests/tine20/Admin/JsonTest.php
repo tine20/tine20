@@ -671,12 +671,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveUpdateDeleteContainer()
     {
-        $containerData = $this->_getContainerData();
-        
-        $container = $this->_json->saveContainer($containerData);
-        $this->objects['container'] = $container['id'];
-        
-        $this->assertEquals($containerData['name'], $container['name']);
+        $container = $this->_saveContainer();
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $container['created_by']);
         
         // update container
@@ -697,6 +692,8 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('testcontainerupdated', $containerUpdated['name']);
         $this->assertTrue($containerUpdated['account_grants'][0][Tinebase_Model_Grants::GRANT_ADMIN]);
         
+        // @todo check notification
+        
         $deleteResult = $this->_json->deleteContainers(array($container['id']));
         $this->assertEquals('success', $deleteResult['status']);
     }
@@ -706,9 +703,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testChangeContainerApp()
     {
-        $containerData = $this->_getContainerData();
-        $container = $this->_json->saveContainer($containerData);
-        $this->objects['container'] = $container['id'];
+        $container = $this->_saveContainer();
         
         $container['application_id'] = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
         $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
@@ -716,17 +711,24 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * returns container data
+     * saves and returns container
      * 
      * @return array
      */
-    protected function _getContainerData()
+    protected function _saveContainer()
     {
-        return array(
+        $data = array(
             'name'              => 'testcontainer',
             'type'              => Tinebase_Model_Container::TYPE_SHARED,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         );
+        
+        $container = $this->_json->saveContainer($data);
+        $this->objects['container'] = $container['id'];
+        
+        $this->assertEquals($data['name'], $container['name']);
+        
+        return $container;
     }
 }
