@@ -132,11 +132,16 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
+     * @throws Tinebase_Exception_Record_NotAllowed
      * 
      * @todo if shared -> personal remove all admins except new owner
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if ($_oldRecord->application_id !== $_record->application_id) {
+            throw new Tinebase_Exception_Record_NotAllowed('It is not allowed to change the application of a container.');
+        }
+        
         if (! $_record->account_grants instanceof Tinebase_Record_RecordSet && is_array($_record->account_grants)) {
             $_record->account_grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $_record->account_grants);
         }

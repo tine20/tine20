@@ -700,6 +700,20 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $deleteResult = $this->_json->deleteContainers(array($container['id']));
         $this->assertEquals('success', $deleteResult['status']);
     }
+
+    /**
+     * try to change container app
+     */
+    public function testChangeContainerApp()
+    {
+        $containerData = $this->_getContainerData();
+        $container = $this->_json->saveContainer($containerData);
+        $this->objects['container'] = $container['id'];
+        
+        $container['application_id'] = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
+        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
+        $containerUpdated = $this->_json->saveContainer($container);
+    }
     
     /**
      * returns container data
