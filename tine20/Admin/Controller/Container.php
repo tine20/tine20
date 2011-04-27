@@ -100,6 +100,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
         
+        Tinebase_Container::getInstance()->checkContainerOwner($_record);
+
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
         
         $grants = $_record->account_grants;
@@ -145,6 +147,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
         if (! $_record->account_grants instanceof Tinebase_Record_RecordSet && is_array($_record->account_grants)) {
             $_record->account_grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $_record->account_grants);
         }
+        
+        Tinebase_Container::getInstance()->checkContainerOwner($_record);
         $this->_containerController->setGrants($_record, $_record->account_grants, TRUE, FALSE);
     }
     

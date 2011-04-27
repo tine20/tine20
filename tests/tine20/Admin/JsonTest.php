@@ -741,15 +741,34 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testContainerCheckOwner
+     */
+    public function testContainerCheckOwner()
+    {
+        $container = $this->_saveContainer(Tinebase_Model_Container::TYPE_PERSONAL);
+        
+        $personas = Zend_Registry::get('personas');
+        $container['account_grants'] = $this->_getContainerGrants();
+        $container['account_grants'][] = array(
+            'account_id'     => $personas['jsmith']->getId(),
+            'account_type'   => 'user',
+            Tinebase_Model_Grants::GRANT_ADMIN     => true
+        );
+        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
+        $containerUpdated = $this->_json->saveContainer($container);
+    }
+    
+    /**
      * saves and returns container
      * 
+     * @param string $_type
      * @return array
      */
-    protected function _saveContainer()
+    protected function _saveContainer($_type = Tinebase_Model_Container::TYPE_SHARED)
     {
         $data = array(
             'name'              => 'testcontainer',
-            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'type'              => $_type,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         );
