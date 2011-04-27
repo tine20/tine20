@@ -106,18 +106,23 @@ class Calendar_Model_AttenderFilter extends Tinebase_Model_Filter_Abstract
             } else if ($attenderValue['user_type'] == self::USERTYPE_MEMBEROF) {
                 // resolve group members
                 $group = Tinebase_Group::getInstance()->getGroupById($attenderValue['user_id']);
-                $members = Addressbook_Controller_List::getInstance()->get($group->list_id)->members;
-
+                
                 $attendee = array();
-                foreach($members as $member) {
-                    $attendee[] = array(
-                        'user_type' => Calendar_Model_Attender::USERTYPE_USER,
-                        'user_id'   => $member
-                    );
-                    $attendee[] = array(
-                        'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
-                        'user_id'   => $member
-                    );
+                
+                // fetch list only if list_id is not NULL, otherwise we get back an empty list object
+                if (!empty($group->list_id)) {
+                    $contactList = Addressbook_Controller_List::getInstance()->get($group->list_id);
+                    
+                    foreach($contactList->members as $member) {
+                        $attendee[] = array(
+                            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+                            'user_id'   => $member
+                        );
+                        $attendee[] = array(
+                            'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                            'user_id'   => $member
+                        );
+                    }
                 }
             } else {
                 $attendee = array($attenderValue);
