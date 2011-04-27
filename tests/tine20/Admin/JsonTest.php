@@ -678,15 +678,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $container['name'] = 'testcontainerupdated';
         $container['type'] = Tinebase_Model_Container::TYPE_PERSONAL;
         $container['note'] = 'changed to personal';
-        $container['account_grants'] = array(array(
-            'account_id'     => Tinebase_Core::getUser()->getId(),
-            'account_type'   => 'user',
-            Tinebase_Model_Grants::GRANT_READ      => true,
-            Tinebase_Model_Grants::GRANT_ADD       => true,
-            Tinebase_Model_Grants::GRANT_EDIT      => true,
-            Tinebase_Model_Grants::GRANT_DELETE    => false,
-            Tinebase_Model_Grants::GRANT_ADMIN     => true
-        ));
+        $container['account_grants'] = $this->_getContainerGrants();
         
         $containerUpdated = $this->_json->saveContainer($container);
         $this->assertEquals('testcontainerupdated', $containerUpdated['name']);
@@ -697,7 +689,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $deleteResult = $this->_json->deleteContainers(array($container['id']));
         $this->assertEquals('success', $deleteResult['status']);
     }
-
+    
     /**
      * try to change container app
      */
@@ -731,4 +723,23 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         return $container;
     }
+    
+    /**
+     * get container grants
+     * 
+     * @return array
+     */
+    protected function _getContainerGrants()
+    {
+        return array(array(
+            'account_id'     => Tinebase_Core::getUser()->getId(),
+            'account_type'   => 'user',
+            Tinebase_Model_Grants::GRANT_READ      => true,
+            Tinebase_Model_Grants::GRANT_ADD       => true,
+            Tinebase_Model_Grants::GRANT_EDIT      => true,
+            Tinebase_Model_Grants::GRANT_DELETE    => false,
+            Tinebase_Model_Grants::GRANT_ADMIN     => true
+        ));
+    }
+    
 }
