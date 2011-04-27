@@ -1096,7 +1096,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if (count($adminGrants) > 1) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Multiple admin grants detected in container "' . $_container->name . '"');
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($adminGrants->toArray(), TRUE));
-            throw new Tinebase_Exception_Record_NotAllowed('Personal containers can have only one owner!');
+            throw new Tinebase_Exception_Record_NotAllowed('Personal containers can have only one owner!', 403);
         }
     }
     
