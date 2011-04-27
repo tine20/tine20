@@ -66,6 +66,6 @@ Tine.Admin.Model.Container.getDefaultData = function () {
 Tine.Admin.containerBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'Container',
-    recordClass: Tine.Tinebase.Model.Container,
+    recordClass: Tine.Admin.Model.Container,
     idProperty: 'id'
 });
