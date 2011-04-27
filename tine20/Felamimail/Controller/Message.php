@@ -218,7 +218,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $this->get($_id);
         }
         
-        $partStructure  = $message->getPartStructure($_partId, FALSE);
+        $partStructure  = $message->getPartStructure($_partId);
         
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
@@ -229,6 +229,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         rewind($stream);
         
         unset($rawBody);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partStructure, TRUE));
         
         $part = new Zend_Mime_Part($stream);
         $part->type        = $partStructure['contentType'];
@@ -248,8 +250,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (empty($part->filename) && array_key_exists('parameters', $partStructure) && array_key_exists('name', $partStructure['parameters'])) {
             $part->filename = $partStructure['parameters']['name'];
         }
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' part structure: ' . print_r($partStructure, TRUE));
         
         return $part;
     }
@@ -558,6 +558,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $_messageId;
         }
         
+        // @todo get complete structure because we need the size/name/... for rfc/822 messages?
+        //$structure = $message->getPartStructure($_partId, FALSE);
         $structure = $message->getPartStructure($_partId);
 
         $attachments = array();
