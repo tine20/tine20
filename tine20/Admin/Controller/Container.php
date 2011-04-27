@@ -153,18 +153,27 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      * 
      * @param $_container
      * @param $_note
-     * 
-     * @todo implement
      */
     protected function _sendNotification($_container, $_note)
     {
-        // @todo get owner
-        $owner = 'unknown';
+        $ownerId = Tinebase_Container::getInstance()->getContainerOwner($_container);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Sending notification for container ' . $_container->name . ' to ' . $owner);
-        
-        // @ŧodo send notification
+        if ($ownerId !== FALSE) {
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($ownerId);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Sending notification for container ' . $_container->name . ' to ' . $contact->n_fn);
+            
+            $translate = Tinebase_Translation::getTranslation('Admin');
+            $messageSubject = $translate->_('Your container has been changed');
+            $messageBody = sprintf($translate->_('Your container has been changed by %1$s %2$sNote: %3$s'), $this->_currentAccount->accountDisplayName, "\n\n", $_note);
+            
+            try {
+                Tinebase_Notification::getInstance()->send($this->_currentAccount, array($contact), $messageSubject, $messageBody);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Could not send notification :' . $e);
+            }
+        }
     }
     
     /**

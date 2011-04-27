@@ -676,15 +676,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         
         // update container
         $container['name'] = 'testcontainerupdated';
-        $container['type'] = Tinebase_Model_Container::TYPE_PERSONAL;
-        $container['note'] = 'changed to personal';
         $container['account_grants'] = $this->_getContainerGrants();
         
         $containerUpdated = $this->_json->saveContainer($container);
         $this->assertEquals('testcontainerupdated', $containerUpdated['name']);
         $this->assertTrue($containerUpdated['account_grants'][0][Tinebase_Model_Grants::GRANT_ADMIN]);
-        
-        // @todo check notification
         
         $deleteResult = $this->_json->deleteContainers(array($container['id']));
         $this->assertEquals('success', $deleteResult['status']);
@@ -700,6 +696,48 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $container['application_id'] = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
         $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
         $containerUpdated = $this->_json->saveContainer($container);
+    }
+    
+    
+    /**
+     * testContainerNotification
+     */
+    public function testContainerNotification()
+    {
+        // prepare smtp transport
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        if (empty($smtpConfig)) {
+             $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
+        }
+        $mailer = Tinebase_Smtp::getDefaultTransport();
+        // make sure all messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(100);
+        }
+        $mailer->flush();
+        
+        // create and update container
+        $container = $this->_saveContainer();
+        $container['type'] = Tinebase_Model_Container::TYPE_PERSONAL;
+        $container['note'] = 'changed to personal';
+        $container['account_grants'] = $this->_getContainerGrants();
+        $containerUpdated = $this->_json->saveContainer($container);
+        
+        // make sure messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue();
+        }
+
+        // check notification message
+        $messages = $mailer->getMessages();
+        $this->assertGreaterThan(0, count($messages));
+        $notification = $messages[0];
+        
+        $translate = Tinebase_Translation::getTranslation('Admin');
+        $body = quoted_printable_decode($notification->getBodyText(TRUE));
+        $this->assertContains($container['note'],  $body, $body);
+        $this->assertEquals($translate->_('Your container has been changed'), $notification->getSubject());
+        $this->assertTrue(in_array(Tinebase_Core::getUser()->accountEmailAddress, $notification->getRecipients()));
     }
     
     /**
