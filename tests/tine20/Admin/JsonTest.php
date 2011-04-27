@@ -117,7 +117,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             // do nothing
         }
-                     
+        
+        // remove container
+        if (array_key_exists('container', $this->objects)) {
+            Admin_Controller_Container::getInstance()->delete($this->objects['container']);
+        }        
     }
     
     /**
@@ -670,6 +674,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $containerData = $this->_getContainerData();
         
         $container = $this->_json->saveContainer($containerData);
+        $this->objects['container'] = $container['id'];
         
         $this->assertEquals($containerData['name'], $container['name']);
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $container['created_by']);
