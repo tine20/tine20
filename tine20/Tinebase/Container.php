@@ -1079,6 +1079,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * 
      * @param $_container
      * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_UnexpectedValue
      */
     public function checkContainerOwner(Tinebase_Model_Container $_container)
     {
@@ -1087,7 +1088,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         if (! $_container->account_grants instanceof Tinebase_Record_RecordSet) {
-            throw new Timetracker_Exception_UnexpectedValue('RecordSet of grants expected.');
+            throw new Tinebase_Exception_UnexpectedValue('RecordSet of grants expected.');
         }
 
         $_container->account_grants->addIndices(array(Tinebase_Model_Grants::GRANT_ADMIN));
