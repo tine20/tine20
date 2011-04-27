@@ -16,7 +16,6 @@
  * @subpackage  Group
  * @property    string  id
  * @property    string  name
- * @property    string  name
  * @property    array   members
  * @property	string  visibility
  */
