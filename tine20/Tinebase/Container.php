@@ -1052,6 +1052,30 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
     }
     
     /**
+     * get owner (account_id) of container
+     * 
+     * @param Tinebase_Model_Container $_container
+     * @return string|boolean
+     */
+    public function getContainerOwner(Tinebase_Model_Container $_container)
+    {
+        if ($_container->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
+            // only personal containers have an owner
+            return FALSE;
+        }
+        
+        // return first admin user
+        foreach ($_container->account_grants as $grant) {
+            if ($grant->{Tinebase_Model_Grants::GRANT_ADMIN} && $grant->account_type == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                return $grant->account_id;
+            }
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Container ' . $_container->name . ' has no owner.');
+        return FALSE;
+    }
+    
+    /**
      * remove all container related entries from cache
      */
     protected function _clearCache() 
