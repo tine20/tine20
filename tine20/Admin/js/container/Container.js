@@ -36,7 +36,9 @@ Ext.ns('Tine.Admin.Model');
 /**
  * Model of a container
  */
-Tine.Admin.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Container.getFieldDefinitions(), {
+Tine.Admin.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.Container.getFieldDefinitions().concat([
+    {name: 'note'}
+]), {
     appName: 'Admin',
     modelName: 'Container',
     idProperty: 'id',
@@ -55,6 +57,7 @@ Tine.Admin.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
  */
 Tine.Admin.Model.Container.getDefaultData = function () {
     return {
+        type: 'shared'
     };
 };
 
@@ -63,6 +66,6 @@ Tine.Admin.Model.Container.getDefaultData = function () {
 Tine.Admin.containerBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Admin',
     modelName: 'Container',
-    recordClass: Tine.Tinebase.Model.Container,
+    recordClass: Tine.Admin.Model.Container,
     idProperty: 'id'
 });

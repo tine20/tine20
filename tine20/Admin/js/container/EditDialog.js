@@ -96,6 +96,16 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * returns dialog
      */
     getFormItems: function () {
+        this.appStore = new Ext.data.JsonStore({
+            root: 'results',
+            totalProperty: 'totalcount',
+            fields: Tine.Admin.Model.Application
+        });
+        this.appStore.loadData({
+            results:    Tine.Tinebase.registry.get('userApplications'),
+            totalcount: Tine.Tinebase.registry.get('userApplications').length
+        });
+        
         return {
             layout: 'vbox',
             layoutConfig: {
@@ -114,12 +124,30 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     allowBlank: false,
                     maxLength: 40
                 }, {
-                    // TODO this should be a combobox, only enabled for new records
-                    columnWidth: 0.6,
+                    xtype: 'combo',
+                    readOnly: this.record.id != 0,
+                    store: this.appStore,
+                    columnWidth: 0.3,
                     name: 'application_id',
+                    displayField: 'name',
+                    valueField: 'id',
                     fieldLabel: this.app.i18n._('Application'),
-                    anchor: '100%',
-                    maxLength: 50
+                    mode: 'local',
+                    anchor: '100%'
+                }, {
+                    xtype: 'combo',
+                    columnWidth: 0.3,
+                    name: 'type',
+                    fieldLabel: this.app.i18n._('Type'),
+                    store: [['personal', this.app.i18n._('personal')], ['shared', this.app.i18n._('shared')]],
+                    listeners: {
+                        scope: this,
+                        select: function (combo, record) {
+                            this.getForm().findField('note').setDisabled(record.data.field1 === 'shared');
+                        }
+                    },
+                    mode: 'local',
+                    anchor: '100%'
                 }, {
                     xtype: 'colorfield',
                     columnWidth: 0.1,
@@ -127,7 +155,14 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     name: 'color'
                 }]]
             }, 
-            	this.initGrantsGrid()
+            	this.initGrantsGrid(), {
+                    emptyText: this.app.i18n._('Note for Owner'),
+                    disabled: this.record.get('type') == 'shared',
+                    xtype: 'textarea',
+                    border: false,
+                    autoHeight: true,
+                    name: 'note'
+                }
            	]            
         };
     }

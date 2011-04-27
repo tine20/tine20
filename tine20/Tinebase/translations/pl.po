@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-03-28 19:09+0100\n"
+"PO-Revision-Date: 2011-04-23 16:16+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -64,7 +64,8 @@ msgstr "Zarządzaj statusem swojego klienta"
 msgid "The right to manage the own client state."
 msgstr "Uprawnienia do zarządzania statusem swojego klienta."
 
-#: Export/Pdf.php:222 js/Tinebase-FAT-debug.js:25504
+#: Export/Pdf.php:222
+#: js/Tinebase-FAT-debug.js:25504
 #: js/widgets/tags/TagsPanel.js:57
 msgid "Tags"
 msgstr "Znaczniki"
@@ -81,7 +82,8 @@ msgstr "Aktywności"
 msgid "Data"
 msgstr "Data"
 
-#: Frontend/Http.php:358 js/ExceptionHandler.js:129
+#: Frontend/Http.php:358
+#: js/ExceptionHandler.js:129
 #: js/Tinebase-FAT-debug.js:12706
 msgid "Authorisation Required"
 msgstr "Konieczne uwierzytelnienie"
@@ -90,483 +92,625 @@ msgstr "Konieczne uwierzytelnienie"
 msgid "Your session is not valid. You need to login again."
 msgstr "Twoja sesja wygasła. Musisz się ponownie zalogować."
 
-#: Frontend/Http.php:385 js/ExceptionDialog.js:50
+#: Frontend/Http.php:385
+#: js/ExceptionDialog.js:50
 #: js/Tinebase-FAT-debug.js:12888
 msgid "Abnormal End"
 msgstr "Zakończenie awaryjne"
 
-#: Frontend/Http.php:386 js/ExceptionDialog.js:75
+#: Frontend/Http.php:386
+#: js/ExceptionDialog.js:75
 #: js/Tinebase-FAT-debug.js:12913
 msgid "An error occurred, the program ended abnormal."
 msgstr "Wystąpił błąd. Praca programu została zakończona awaryjnie."
 
-#: js/AboutDialog.js:40 js/MainMenu.js:112 js/Tinebase-FAT-debug.js:28912
+#: js/AboutDialog.js:40
+#: js/MainMenu.js:112
+#: js/Tinebase-FAT-debug.js:28912
 #: js/Tinebase-FAT-debug.js:29842
 msgid "About {0}"
 msgstr "O {0}"
 
-#: js/AboutDialog.js:59 js/PasswordChangeDialog.js:66
-#: js/Tinebase-FAT-debug.js:7417 js/Tinebase-FAT-debug.js:14733
-#: js/Tinebase-FAT-debug.js:15355 js/Tinebase-FAT-debug.js:16075
-#: js/Tinebase-FAT-debug.js:17465 js/Tinebase-FAT-debug.js:24166
-#: js/Tinebase-FAT-debug.js:26375 js/Tinebase-FAT-debug.js:27271
-#: js/Tinebase-FAT-debug.js:28815 js/Tinebase-FAT-debug.js:28931
-#: js/ux/form/LayerCombo.js:186 js/widgets/ActivitiesPanel.js:311
+#: js/AboutDialog.js:59
+#: js/PasswordChangeDialog.js:66
+#: js/Tinebase-FAT-debug.js:7417
+#: js/Tinebase-FAT-debug.js:14733
+#: js/Tinebase-FAT-debug.js:15355
+#: js/Tinebase-FAT-debug.js:16075
+#: js/Tinebase-FAT-debug.js:17465
+#: js/Tinebase-FAT-debug.js:24166
+#: js/Tinebase-FAT-debug.js:26375
+#: js/Tinebase-FAT-debug.js:27271
+#: js/Tinebase-FAT-debug.js:28815
+#: js/Tinebase-FAT-debug.js:28931
+#: js/ux/form/LayerCombo.js:186
+#: js/widgets/ActivitiesPanel.js:311
 #: js/widgets/container/ContainerSelect.js:459
 #: js/widgets/dialog/EditDialog.js:186
 #: js/widgets/dialog/MultiOptionsDialog.js:102
-#: js/widgets/dialog/PreferencesDialog.js:109 js/widgets/EditRecord.js:157
+#: js/widgets/dialog/PreferencesDialog.js:109
+#: js/widgets/EditRecord.js:157
 #: js/widgets/tags/TagsMassAttachAction.js:96
 msgid "Ok"
 msgstr "OK"
 
-#: js/AdminPanel.js:75 js/Tinebase-FAT-debug.js:30791
+#: js/AdminPanel.js:75
+#: js/Tinebase-FAT-debug.js:30791
 msgid "Profile Information"
 msgstr "Informacja o profilu"
 
-#: js/AdminPanel.js:79 js/Tinebase-FAT-debug.js:14744
-#: js/Tinebase-FAT-debug.js:15364 js/Tinebase-FAT-debug.js:30795
-#: js/widgets/dialog/EditDialog.js:195 js/widgets/EditRecord.js:168
+#: js/AdminPanel.js:79
+#: js/Tinebase-FAT-debug.js:14744
+#: js/Tinebase-FAT-debug.js:15364
+#: js/Tinebase-FAT-debug.js:30795
+#: js/widgets/dialog/EditDialog.js:195
+#: js/widgets/EditRecord.js:168
 msgid "Apply"
 msgstr "Akceptuj"
 
-#: js/AdminPanel.js:94 js/Tinebase-FAT-debug.js:14256
-#: js/Tinebase-FAT-debug.js:28616 js/Tinebase-FAT-debug.js:30810
-#: js/widgets/LangChooser.js:69 js/widgets/persistentfilter/PickerPanel.js:333
+#: js/AdminPanel.js:94
+#: js/Tinebase-FAT-debug.js:14256
+#: js/Tinebase-FAT-debug.js:28616
+#: js/Tinebase-FAT-debug.js:30810
+#: js/widgets/LangChooser.js:69
+#: js/widgets/persistentfilter/PickerPanel.js:333
 #: js/widgets/TimezoneChooser.js:77
 msgid "Please Wait"
 msgstr "Proszę czekać"
 
-#: js/AdminPanel.js:156 js/Tinebase-FAT-debug.js:24348
-#: js/Tinebase-FAT-debug.js:30872 js/widgets/container/GrantsDialog.js:86
+#: js/AdminPanel.js:156
+#: js/Tinebase-FAT-debug.js:24348
+#: js/Tinebase-FAT-debug.js:30872
+#: js/widgets/container/GrantsDialog.js:86
 msgid "Read"
 msgstr "Odczyt"
 
-#: js/AdminPanel.js:157 js/Tinebase-FAT-debug.js:30873
+#: js/AdminPanel.js:157
+#: js/Tinebase-FAT-debug.js:30873
 msgid "The field is readable part of the profile"
 msgstr "To pole jest częścią profilu do odczytu"
 
-#: js/AdminPanel.js:161 js/Tinebase-FAT-debug.js:24360
-#: js/Tinebase-FAT-debug.js:30877 js/widgets/container/GrantsDialog.js:98
+#: js/AdminPanel.js:161
+#: js/Tinebase-FAT-debug.js:24360
+#: js/Tinebase-FAT-debug.js:30877
+#: js/widgets/container/GrantsDialog.js:98
 msgid "Edit"
 msgstr "Edytuj"
 
-#: js/AdminPanel.js:162 js/Tinebase-FAT-debug.js:30878
+#: js/AdminPanel.js:162
+#: js/Tinebase-FAT-debug.js:30878
 msgid "The field is editable part of the profile"
 msgstr "To pole jest częścią profilu do edycji"
 
-#: js/AdminPanel.js:175 js/Tinebase-FAT-debug.js:30891
+#: js/AdminPanel.js:175
+#: js/Tinebase-FAT-debug.js:30891
 msgid "Field Name"
 msgstr "Nazwa pola"
 
-#: js/AppManager.js:180 js/Tinebase-FAT-debug.js:29120
+#: js/AppManager.js:180
+#: js/Tinebase-FAT-debug.js:29120
 msgid "Missing Applications"
 msgstr "Brakujące aplikacje"
 
-#: js/AppManager.js:181 js/Tinebase-FAT-debug.js:29121
+#: js/AppManager.js:181
+#: js/Tinebase-FAT-debug.js:29121
 msgid "There are no applications enabled for you. Please contact your administrator."
 msgstr "Nie masz włączonych aplikacji. Proszę się skontaktować ze swoim administratorem."
 
-#: js/common.js:172 js/Tinebase-FAT-debug.js:13932
+#: js/common.js:172
+#: js/Tinebase-FAT-debug.js:13932
 msgid "{0} minute"
 msgid_plural "{0} minutes"
 msgstr[0] "{0} minuta"
 msgstr[1] "{0} minuty"
 msgstr[2] "{0} minut"
 
-#: js/common.js:173 js/Tinebase-FAT-debug.js:13933
+#: js/common.js:173
+#: js/Tinebase-FAT-debug.js:13933
 msgid "{0} hour"
 msgid_plural "{0} hours"
 msgstr[0] "{0} godzina"
 msgstr[1] "{0} godziny"
 msgstr[2] "{0} godzin"
 
-#: js/common.js:174 js/Tinebase-FAT-debug.js:13934
+#: js/common.js:174
+#: js/Tinebase-FAT-debug.js:13934
 msgid "{0} workday"
 msgid_plural "{0} workdays"
 msgstr[0] "{0} dzień roboczy"
 msgstr[1] "{0} dni robocze"
 msgstr[2] "{0} dni roboczych"
 
-#: js/common.js:201 js/Tinebase-FAT-debug.js:13961
+#: js/common.js:201
+#: js/Tinebase-FAT-debug.js:13961
 msgid "{0} second"
 msgid_plural "{0} seconds"
 msgstr[0] "{0} sekund"
 msgstr[1] "{0} sekundy"
 msgstr[2] "{0} sekund"
 
-#: js/Container.js:114 js/Tinebase-FAT-debug.js:13199
+#: js/Container.js:114
+#: js/Tinebase-FAT-debug.js:13199
 msgid "All {0}"
 msgstr "Wszystkie {0}"
 
-#: js/Container.js:115 js/Tinebase-FAT-debug.js:13200
+#: js/Container.js:115
+#: js/Tinebase-FAT-debug.js:13200
 msgid "Shared {0}"
 msgstr "Wspólne {0}"
 
-#: js/Container.js:116 js/Tinebase-FAT-debug.js:13201
+#: js/Container.js:116
+#: js/Tinebase-FAT-debug.js:13201
 msgid "Other Users {0}"
 msgstr "{0} innych użytkowników"
 
-#: js/Container.js:120 js/Tinebase-FAT-debug.js:13205
+#: js/Container.js:120
+#: js/Tinebase-FAT-debug.js:13205
 msgid "My {0}"
 msgstr "Moje {0}"
 
-#: js/data/Record.js:114 js/Tinebase-FAT-debug.js:11812
+#: js/data/Record.js:114
+#: js/Tinebase-FAT-debug.js:11812
 msgid "Task"
 msgid_plural "Tasks"
 msgstr[0] "Zadanie"
 msgstr[1] "zadania"
 msgstr[2] "zadania"
 
-#: js/data/Record.js:118 js/Tinebase-FAT-debug.js:11816
+#: js/data/Record.js:118
+#: js/Tinebase-FAT-debug.js:11816
 msgid "to do list"
 msgid_plural "to do lists"
 msgstr[0] "Lista zadań"
 msgstr[1] "listy zadań"
 msgstr[2] "listy zadań"
 
-#: js/ExceptionDialog.js:58 js/PasswordChangeDialog.js:60
-#: js/Tinebase-FAT-debug.js:7424 js/Tinebase-FAT-debug.js:12896
-#: js/Tinebase-FAT-debug.js:14754 js/Tinebase-FAT-debug.js:15372
-#: js/Tinebase-FAT-debug.js:16083 js/Tinebase-FAT-debug.js:17472
-#: js/Tinebase-FAT-debug.js:24157 js/Tinebase-FAT-debug.js:26369
-#: js/Tinebase-FAT-debug.js:27263 js/Tinebase-FAT-debug.js:28809
-#: js/ux/form/LayerCombo.js:193 js/widgets/ActivitiesPanel.js:303
+#: js/ExceptionDialog.js:58
+#: js/PasswordChangeDialog.js:60
+#: js/Tinebase-FAT-debug.js:7424
+#: js/Tinebase-FAT-debug.js:12896
+#: js/Tinebase-FAT-debug.js:14754
+#: js/Tinebase-FAT-debug.js:15372
+#: js/Tinebase-FAT-debug.js:16083
+#: js/Tinebase-FAT-debug.js:17472
+#: js/Tinebase-FAT-debug.js:24157
+#: js/Tinebase-FAT-debug.js:26369
+#: js/Tinebase-FAT-debug.js:27263
+#: js/Tinebase-FAT-debug.js:28809
+#: js/ux/form/LayerCombo.js:193
+#: js/widgets/ActivitiesPanel.js:303
 #: js/widgets/container/ContainerSelect.js:450
 #: js/widgets/dialog/EditDialog.js:203
 #: js/widgets/dialog/MultiOptionsDialog.js:109
-#: js/widgets/dialog/PreferencesDialog.js:117 js/widgets/EditRecord.js:178
+#: js/widgets/dialog/PreferencesDialog.js:117
+#: js/widgets/EditRecord.js:178
 #: js/widgets/tags/TagsMassAttachAction.js:90
 msgid "Cancel"
 msgstr "Anuluj"
 
-#: js/ExceptionDialog.js:66 js/Tinebase-FAT-debug.js:12904
+#: js/ExceptionDialog.js:66
+#: js/Tinebase-FAT-debug.js:12904
 msgid "Send Report"
 msgstr "Wyślij raport"
 
-#: js/ExceptionDialog.js:76 js/Tinebase-FAT-debug.js:12914
+#: js/ExceptionDialog.js:76
+#: js/Tinebase-FAT-debug.js:12914
 msgid "The last action you made was potentially not performed correctly."
 msgstr "Prawdopodobnie ostatnia akcja nie została wykonana poprawnie."
 
-#: js/ExceptionDialog.js:77 js/Tinebase-FAT-debug.js:12915
+#: js/ExceptionDialog.js:77
+#: js/Tinebase-FAT-debug.js:12915
 msgid "Please help improving this software and notify the vendor. Include a brief description of what you where doing when the error occurred."
 msgstr "Prosimy o pomoc w ulepszaniu niniejszego oprogramowania i załączenie krótkiego opisu czynności wykonywanych zanim wystąpił błąd."
 
-#: js/ExceptionDialog.js:83 js/Tinebase-FAT-debug.js:12921
-#: js/Tinebase-FAT-debug.js:26046 js/widgets/tags/TagsPanel.js:599
+#: js/ExceptionDialog.js:83
+#: js/Tinebase-FAT-debug.js:12921
+#: js/Tinebase-FAT-debug.js:26046
+#: js/widgets/tags/TagsPanel.js:599
 msgid "Description"
 msgstr "Opis"
 
-#: js/ExceptionDialog.js:91 js/Tinebase-FAT-debug.js:12929
+#: js/ExceptionDialog.js:91
+#: js/Tinebase-FAT-debug.js:12929
 msgid "Send Contact Information"
 msgstr "Wyślij informację o kontakcie"
 
-#: js/ExceptionDialog.js:108 js/Tinebase-FAT-debug.js:12946
+#: js/ExceptionDialog.js:108
+#: js/Tinebase-FAT-debug.js:12946
 msgid "Details:"
 msgstr "Szczegóły:"
 
-#: js/ExceptionDialog.js:136 js/Tinebase-FAT-debug.js:12974
+#: js/ExceptionDialog.js:136
+#: js/Tinebase-FAT-debug.js:12974
 msgid "Sending report..."
 msgstr "Wysyłanie raportu …"
 
-#: js/ExceptionDialog.js:136 js/Tinebase-FAT-debug.js:12974
+#: js/ExceptionDialog.js:136
+#: js/Tinebase-FAT-debug.js:12974
 msgid "Please wait a moment"
 msgstr "Proszę chwilę poczekać"
 
-#: js/ExceptionDialog.js:178 js/Tinebase-FAT-debug.js:13016
+#: js/ExceptionDialog.js:178
+#: js/Tinebase-FAT-debug.js:13016
 msgid "Transmission Completed"
 msgstr "Transmisja zakończona"
 
-#: js/ExceptionDialog.js:179 js/Tinebase-FAT-debug.js:13017
+#: js/ExceptionDialog.js:179
+#: js/Tinebase-FAT-debug.js:13017
 msgid "Your report has been sent. Thanks for your contribution"
 msgstr "Twój raport został wysłany. Dziękujemy za pomoc w ulepszaniu oprogramowania."
 
-#: js/ExceptionDialog.js:179 js/Tinebase-FAT-debug.js:13017
+#: js/ExceptionDialog.js:179
+#: js/Tinebase-FAT-debug.js:13017
 msgid "Please restart your browser now!"
 msgstr "Proszę ponownie uruchomić przeglądarkę!"
 
-#: js/ExceptionHandler.js:130 js/Tinebase-FAT-debug.js:12707
+#: js/ExceptionHandler.js:130
+#: js/Tinebase-FAT-debug.js:12707
 msgid "Your session timed out. You need to login again."
 msgstr "Twoja sesja wygasła. Musisz się ponownie zalogować."
 
-#: js/ExceptionHandler.js:147 js/Tinebase-FAT-debug.js:12724
+#: js/ExceptionHandler.js:147
+#: js/Tinebase-FAT-debug.js:12724
 msgid "Insufficient Rights"
 msgstr "Niewystarczające uprawnienia"
 
-#: js/ExceptionHandler.js:148 js/Tinebase-FAT-debug.js:12725
+#: js/ExceptionHandler.js:148
+#: js/Tinebase-FAT-debug.js:12725
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "Niestety nie masz uprawnień do wykonania tej akcji"
 
-#: js/ExceptionHandler.js:157 js/Tinebase-FAT-debug.js:12734
+#: js/ExceptionHandler.js:157
+#: js/Tinebase-FAT-debug.js:12734
 msgid "Not Found"
 msgstr "Nie znaleziono"
 
-#: js/ExceptionHandler.js:158 js/Tinebase-FAT-debug.js:12735
+#: js/ExceptionHandler.js:158
+#: js/Tinebase-FAT-debug.js:12735
 msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
 msgstr "Niestety Twoje zapytanie nie zostało wykonane, ponieważ nie zostały znalezione wymagane dane. W większości przypadków oznacza to, że ktoś te dane usunął. Proszę odświeżyć obecny widok."
 
-#: js/ExceptionHandler.js:167 js/Tinebase-FAT-debug.js:12744
+#: js/ExceptionHandler.js:167
+#: js/Tinebase-FAT-debug.js:12744
 msgid "Concurrent Updates"
 msgstr "Bieżące aktualizacje"
 
-#: js/ExceptionHandler.js:168 js/Tinebase-FAT-debug.js:12745
+#: js/ExceptionHandler.js:168
+#: js/Tinebase-FAT-debug.js:12745
 msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
 msgstr "Podczas edycji danych ktoś inny zapisał ten wiersz. Przeładuj stonę i ponownie wprowadź zmiany."
 
-#: js/ExceptionHandler.js:178 js/Tinebase-FAT-debug.js:12755
+#: js/ExceptionHandler.js:178
+#: js/Tinebase-FAT-debug.js:12755
 msgid "Service Unavailable"
 msgstr "Usługa niedostępna"
 
-#: js/ExceptionHandler.js:179 js/Tinebase-FAT-debug.js:12756
+#: js/ExceptionHandler.js:179
+#: js/Tinebase-FAT-debug.js:12756
 msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
 msgstr "Serwer nie może teraz zrealizować zapytania z powodu chwilowego przeciążenia albo prac konserwacyjnych. Proszę spróbować ponownie lub powiadomić swojego administratora."
 
-#: js/ExceptionHandler.js:186 js/Tinebase-FAT-debug.js:12763
+#: js/ExceptionHandler.js:186
+#: js/Tinebase-FAT-debug.js:12763
 msgid "Connection lost, please check your network!"
 msgstr "Połączenie zostało przerwane, proszę sprawdzić sieć!"
 
-#: js/ExceptionHandler.js:192 js/Tinebase-FAT-debug.js:12769
+#: js/ExceptionHandler.js:192
+#: js/Tinebase-FAT-debug.js:12769
 msgid "Timeout"
 msgstr "Limit czasu"
 
-#: js/ExceptionHandler.js:193 js/Tinebase-FAT-debug.js:12770
+#: js/ExceptionHandler.js:193
+#: js/Tinebase-FAT-debug.js:12770
 msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 msgstr "Niestety, dozwolony czas przetwarzania Twojego zapytania został przekroczony. Proszę przeładuj przeglądarkę."
 
-#: js/ExceptionHandler.js:202 js/Tinebase-FAT-debug.js:12779
+#: js/ExceptionHandler.js:202
+#: js/Tinebase-FAT-debug.js:12779
 msgid "No Response"
 msgstr "Brak odpowiedzi"
 
-#: js/ExceptionHandler.js:203 js/Tinebase-FAT-debug.js:12780
+#: js/ExceptionHandler.js:203
+#: js/Tinebase-FAT-debug.js:12780
 msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 msgstr "Niestety serwer nie przesłał żadnych danych. Proszę przeładować przeglądarkę WWW, ponowić próbę albo skontaktować się ze swoim administratorem"
 
-#: js/ExceptionHandler.js:212 js/Tinebase-FAT-debug.js:12789
+#: js/ExceptionHandler.js:212
+#: js/Tinebase-FAT-debug.js:12789
 msgid "Out of Resources"
 msgstr "Brak zasobów"
 
-#: js/ExceptionHandler.js:213 js/Tinebase-FAT-debug.js:12790
+#: js/ExceptionHandler.js:213
+#: js/Tinebase-FAT-debug.js:12790
 msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
 msgstr "Niestety serwer \"wyczerpał dostępną pamięć\". Proszę się skontaktować ze swoim administratorem."
 
-#: js/ExceptionHandler.js:222 js/Tinebase-FAT-debug.js:12799
+#: js/ExceptionHandler.js:222
+#: js/Tinebase-FAT-debug.js:12799
 msgid "No Role Memberships"
 msgstr "Brak przypisania do funkcji"
 
-#: js/ExceptionHandler.js:223 js/Tinebase-FAT-debug.js:12800
+#: js/ExceptionHandler.js:223
+#: js/Tinebase-FAT-debug.js:12800
 msgid "Your user account has no role memberships. Please contact your administrator."
 msgstr "Twoje konto nie jest przypisane do funkcji. Proszę się skontaktować ze swoim administratorem."
 
-#: js/LoginPanel.js:80 js/LoginPanel.js:118 js/Tinebase-FAT-debug.js:30379
+#: js/LoginPanel.js:80
+#: js/LoginPanel.js:118
+#: js/Tinebase-FAT-debug.js:30379
 #: js/Tinebase-FAT-debug.js:30417
 msgid "Login"
 msgstr "Zaloguj się"
 
-#: js/LoginPanel.js:90 js/Tinebase-FAT-debug.js:15880
-#: js/Tinebase-FAT-debug.js:30389 js/widgets/dialog/CredentialsDialog.js:60
+#: js/LoginPanel.js:90
+#: js/Tinebase-FAT-debug.js:15880
+#: js/Tinebase-FAT-debug.js:30389
+#: js/widgets/dialog/CredentialsDialog.js:60
 msgid "Username"
 msgstr "Użytkownik"
 
-#: js/LoginPanel.js:107 js/Tinebase-FAT-debug.js:15884
-#: js/Tinebase-FAT-debug.js:30406 js/widgets/dialog/CredentialsDialog.js:64
+#: js/LoginPanel.js:107
+#: js/Tinebase-FAT-debug.js:15884
+#: js/Tinebase-FAT-debug.js:30406
+#: js/widgets/dialog/CredentialsDialog.js:64
 msgid "Password"
 msgstr "Hasło"
 
-#: js/LoginPanel.js:137 js/Tinebase-FAT-debug.js:30436
+#: js/LoginPanel.js:137
+#: js/Tinebase-FAT-debug.js:30436
 msgid "Tine 2.0 is made for you"
 msgstr "To dla Ciebie rozwijamy Tine 2.0"
 
-#: js/LoginPanel.js:139 js/Tinebase-FAT-debug.js:30438
+#: js/LoginPanel.js:139
+#: js/Tinebase-FAT-debug.js:30438
 msgid "Tine 2.0 wants to make business collaboration easier and more enjoyable - for your needs! So you are warmly welcome to discuss with us, bring in ideas and get help."
 msgstr "Tine 2.0 ma ułatwić prowadzenie biznesu i przybliżyć realizację procesów biznesowych do Twoich potrzeb. Dlatego uprzejmie zapraszamy do dyskusji z nami, prezentacji własnych sugestii i w razie potrzeby oferujemy pomoc."
 
-#: js/LoginPanel.js:145 js/Tinebase-FAT-debug.js:30444
+#: js/LoginPanel.js:145
+#: js/Tinebase-FAT-debug.js:30444
 msgid "Tine 2.0 Homepage"
 msgstr "Strona domowa Tine 2.0"
 
-#: js/LoginPanel.js:146 js/Tinebase-FAT-debug.js:30445
+#: js/LoginPanel.js:146
+#: js/Tinebase-FAT-debug.js:30445
 msgid "Tine 2.0 Forum"
 msgstr "Forum Tine 2.0"
 
-#: js/LoginPanel.js:191 js/Tinebase-FAT-debug.js:30490
+#: js/LoginPanel.js:191
+#: js/Tinebase-FAT-debug.js:30490
 msgid "about {0} minutes"
 msgstr "około {0} minut"
 
-#: js/LoginPanel.js:196 js/LoginPanel.js:412 js/Tinebase-FAT-debug.js:30495
+#: js/LoginPanel.js:196
+#: js/LoginPanel.js:412
+#: js/Tinebase-FAT-debug.js:30495
 #: js/Tinebase-FAT-debug.js:30711
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0 liczy na Twoją pomoc"
 
-#: js/LoginPanel.js:198 js/LoginPanel.js:414 js/Tinebase-FAT-debug.js:30497
+#: js/LoginPanel.js:198
+#: js/LoginPanel.js:414
+#: js/Tinebase-FAT-debug.js:30497
 #: js/Tinebase-FAT-debug.js:30713
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "Aby następne wydania Tine 2.0 coraz lepiej spełniały Twoje oczekiwania, nieprzerwanie potrzebujemy odzewu na nasz produkt. Współpracując, pomóż nam i sobie."
 
-#: js/LoginPanel.js:204 js/Tinebase-FAT-debug.js:30503
+#: js/LoginPanel.js:204
+#: js/Tinebase-FAT-debug.js:30503
 msgid "participate!"
 msgstr "współpracuj"
 
-#: js/LoginPanel.js:226 js/Tinebase-FAT-debug.js:30525
+#: js/LoginPanel.js:226
+#: js/Tinebase-FAT-debug.js:30525
 msgid "Languages"
 msgstr "Języki"
 
-#: js/LoginPanel.js:227 js/Tinebase-FAT-debug.js:30526
+#: js/LoginPanel.js:227
+#: js/Tinebase-FAT-debug.js:30526
 msgid "Duration"
 msgstr "Czas wypełniania ankiety"
 
-#: js/LoginPanel.js:267 js/Tinebase-FAT-debug.js:30566
+#: js/LoginPanel.js:267
+#: js/Tinebase-FAT-debug.js:30566
 msgid "Browser incompatible"
 msgstr "Nieobsługiwana przeglądarka WWW"
 
-#: js/LoginPanel.js:269 js/Tinebase-FAT-debug.js:30568
+#: js/LoginPanel.js:269
+#: js/Tinebase-FAT-debug.js:30568
 msgid "Your browser is not supported by Tine 2.0."
 msgstr "Tine 2.0 nie obsługuje przeglądarki WWW, której używasz."
 
-#: js/LoginPanel.js:274 js/Tinebase-FAT-debug.js:30573
+#: js/LoginPanel.js:274
+#: js/Tinebase-FAT-debug.js:30573
 msgid "Browser incompatible?"
 msgstr "Nieobsługiwana przeglądarka WWW?"
 
-#: js/LoginPanel.js:276 js/Tinebase-FAT-debug.js:30575
+#: js/LoginPanel.js:276
+#: js/Tinebase-FAT-debug.js:30575
 msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
 msgstr "Używasz nieobsługiwanej przeglądarki WWW. Może się ona zachować w niespodziewany sposób."
 
-#: js/LoginPanel.js:282 js/Tinebase-FAT-debug.js:30581
+#: js/LoginPanel.js:282
+#: js/Tinebase-FAT-debug.js:30581
 msgid "You might try one of these browsers:"
 msgstr "Spróbuj skorzystać z następujących przeglądarek WWW:"
 
-#: js/LoginPanel.js:340 js/Tinebase-FAT-debug.js:30639
+#: js/LoginPanel.js:340
+#: js/Tinebase-FAT-debug.js:30639
 msgid "Logging you in..."
 msgstr "Trwa logowanie …"
 
-#: js/LoginPanel.js:340 js/Tinebase-FAT-debug.js:22956
-#: js/Tinebase-FAT-debug.js:23000 js/Tinebase-FAT-debug.js:23057
-#: js/Tinebase-FAT-debug.js:24429 js/Tinebase-FAT-debug.js:28559
-#: js/Tinebase-FAT-debug.js:28581 js/Tinebase-FAT-debug.js:30639
+#: js/LoginPanel.js:340
+#: js/Tinebase-FAT-debug.js:22956
+#: js/Tinebase-FAT-debug.js:23000
+#: js/Tinebase-FAT-debug.js:23057
+#: js/Tinebase-FAT-debug.js:24429
+#: js/Tinebase-FAT-debug.js:28559
+#: js/Tinebase-FAT-debug.js:28581
+#: js/Tinebase-FAT-debug.js:30639
 #: js/widgets/container/GrantsDialog.js:167
 #: js/widgets/persistentfilter/PickerPanel.js:276
 #: js/widgets/persistentfilter/PickerPanel.js:298
-#: js/widgets/tree/ContextMenu.js:42 js/widgets/tree/ContextMenu.js:86
+#: js/widgets/tree/ContextMenu.js:42
+#: js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:143
 msgid "Please wait"
 msgstr "Proszę czekać"
 
-#: js/LoginPanel.js:353 js/Tinebase-FAT-debug.js:30652
+#: js/LoginPanel.js:353
+#: js/Tinebase-FAT-debug.js:30652
 msgid "Login successful. Loading {0}..."
 msgstr "Logowanie udane. Trwa ładowanie Tine 2.0 …"
 
-#: js/LoginPanel.js:353 js/MainMenu.js:227 js/Tinebase-FAT-debug.js:29957
+#: js/LoginPanel.js:353
+#: js/MainMenu.js:227
+#: js/Tinebase-FAT-debug.js:29957
 #: js/Tinebase-FAT-debug.js:30652
 msgid "Please wait!"
 msgstr "Proszę czekać!"
 
-#: js/LoginPanel.js:358 js/Tinebase-FAT-debug.js:30657
+#: js/LoginPanel.js:358
+#: js/Tinebase-FAT-debug.js:30657
 msgid "Login failure"
 msgstr "Błąd logowania"
 
-#: js/LoginPanel.js:359 js/Tinebase-FAT-debug.js:30658
+#: js/LoginPanel.js:359
+#: js/Tinebase-FAT-debug.js:30658
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Twój login oraz / lub hasło są nieprawidłowe!!!"
 
-#: js/LoginPanel.js:370 js/Tinebase-FAT-debug.js:15653
-#: js/Tinebase-FAT-debug.js:15948 js/Tinebase-FAT-debug.js:16211
-#: js/Tinebase-FAT-debug.js:16240 js/Tinebase-FAT-debug.js:17048
-#: js/Tinebase-FAT-debug.js:17206 js/Tinebase-FAT-debug.js:30669
+#: js/LoginPanel.js:370
+#: js/Tinebase-FAT-debug.js:15653
+#: js/Tinebase-FAT-debug.js:15948
+#: js/Tinebase-FAT-debug.js:16211
+#: js/Tinebase-FAT-debug.js:16240
+#: js/Tinebase-FAT-debug.js:17048
+#: js/Tinebase-FAT-debug.js:17206
+#: js/Tinebase-FAT-debug.js:30669
 #: js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:492 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/EditDialog.js:492
+#: js/widgets/dialog/ExportDialog.js:140
 #: js/widgets/dialog/ImportDialog.js:210
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Errors"
 msgstr "Błędy"
 
-#: js/LoginPanel.js:370 js/Tinebase-FAT-debug.js:15653
-#: js/Tinebase-FAT-debug.js:15948 js/Tinebase-FAT-debug.js:17048
-#: js/Tinebase-FAT-debug.js:17206 js/Tinebase-FAT-debug.js:30669
+#: js/LoginPanel.js:370
+#: js/Tinebase-FAT-debug.js:15653
+#: js/Tinebase-FAT-debug.js:15948
+#: js/Tinebase-FAT-debug.js:17048
+#: js/Tinebase-FAT-debug.js:17206
+#: js/Tinebase-FAT-debug.js:30669
 #: js/widgets/dialog/CredentialsDialog.js:128
-#: js/widgets/dialog/EditDialog.js:492 js/widgets/dialog/ExportDialog.js:140
+#: js/widgets/dialog/EditDialog.js:492
+#: js/widgets/dialog/ExportDialog.js:140
 #: js/widgets/dialog/ImportDialog.js:210
 msgid "Please fix the errors noted."
 msgstr "Proszę poprawić wskazane błędy."
 
-#: js/LoginPanel.js:385 js/Tinebase-FAT-debug.js:30684
+#: js/LoginPanel.js:385
+#: js/Tinebase-FAT-debug.js:30684
 msgid "Please enter your login data"
 msgstr "Proszę wprowadzić dane logowania"
 
-#: js/MainMenu.js:62 js/Tinebase-FAT-debug.js:29792
+#: js/MainMenu.js:62
+#: js/Tinebase-FAT-debug.js:29792
 msgid "User: {0}"
 msgstr "Użytkownik: {0}"
 
-#: js/MainMenu.js:118 js/Tinebase-FAT-debug.js:29848
+#: js/MainMenu.js:118
+#: js/Tinebase-FAT-debug.js:29848
 msgid "Debug Console (Ctrl + F11)"
 msgstr "Konsola debuggera (Ctrl + F11)"
 
-#: js/MainMenu.js:124 js/Tinebase-FAT-debug.js:16670
-#: js/Tinebase-FAT-debug.js:29854 js/widgets/dialog/PreferencesPanel.js:36
+#: js/MainMenu.js:124
+#: js/Tinebase-FAT-debug.js:16670
+#: js/Tinebase-FAT-debug.js:29854
+#: js/widgets/dialog/PreferencesPanel.js:36
 msgid "Preferences"
 msgstr "Ustawienia"
 
-#: js/MainMenu.js:131 js/Tinebase-FAT-debug.js:29861
+#: js/MainMenu.js:131
+#: js/Tinebase-FAT-debug.js:29861
 msgid "Edit Profile"
 msgstr "Edytuj profil"
 
-#: js/MainMenu.js:138 js/Tinebase-FAT-debug.js:29868
+#: js/MainMenu.js:138
+#: js/Tinebase-FAT-debug.js:29868
 msgid "Change password"
 msgstr "Zmień hasło"
 
-#: js/MainMenu.js:145 js/Tinebase-FAT-debug.js:29875
+#: js/MainMenu.js:145
+#: js/Tinebase-FAT-debug.js:29875
 msgid "Logout"
 msgstr "Wyloguj"
 
-#: js/MainMenu.js:146 js/Tinebase-FAT-debug.js:29876
+#: js/MainMenu.js:146
+#: js/Tinebase-FAT-debug.js:29876
 msgid "Logout from {0}"
 msgstr "Wyloguj z {0}"
 
-#: js/MainMenu.js:153 js/Tinebase-FAT-debug.js:29883
+#: js/MainMenu.js:153
+#: js/Tinebase-FAT-debug.js:29883
 msgid "Allow desktop notifications"
 msgstr "Wyświetlaj powiadomienia"
 
-#: js/MainMenu.js:154 js/Tinebase-FAT-debug.js:29884
+#: js/MainMenu.js:154
+#: js/Tinebase-FAT-debug.js:29884
 msgid "Request permissions for webkit desktop notifications."
 msgstr "Zezwól przeglądarce na wyświetlanie powiadomień."
 
-#: js/MainMenu.js:164 js/Tinebase-FAT-debug.js:29894
+#: js/MainMenu.js:164
+#: js/Tinebase-FAT-debug.js:29894
 msgid "Install web app"
 msgstr "Zainstaluj aplikację WWW"
 
-#: js/MainMenu.js:165 js/Tinebase-FAT-debug.js:29895
+#: js/MainMenu.js:165
+#: js/Tinebase-FAT-debug.js:29895
 msgid "Install Tine 2.0 as web app in your browser."
 msgstr "Zainstaluj Tine 2.0 w swojej przeglądarce jako aplikację WWW"
 
-#: js/MainMenu.js:213 js/Tinebase-FAT-debug.js:15661
-#: js/Tinebase-FAT-debug.js:22739 js/Tinebase-FAT-debug.js:22998
-#: js/Tinebase-FAT-debug.js:28557 js/Tinebase-FAT-debug.js:29943
-#: js/widgets/dialog/EditDialog.js:500 js/widgets/grid/GridPanel.js:1230
+#: js/MainMenu.js:213
+#: js/Tinebase-FAT-debug.js:15661
+#: js/Tinebase-FAT-debug.js:22739
+#: js/Tinebase-FAT-debug.js:22998
+#: js/Tinebase-FAT-debug.js:28557
+#: js/Tinebase-FAT-debug.js:29943
+#: js/widgets/dialog/EditDialog.js:500
+#: js/widgets/grid/GridPanel.js:1230
 #: js/widgets/persistentfilter/PickerPanel.js:274
 #: js/widgets/tree/ContextMenu.js:84
 msgid "Confirm"
 msgstr "Proszę o odpowiedź"
 
-#: js/MainMenu.js:213 js/Tinebase-FAT-debug.js:29943
+#: js/MainMenu.js:213
+#: js/Tinebase-FAT-debug.js:29943
 msgid "Are you sure you want to logout?"
 msgstr "Czy na pewno chcesz się wylogować?"
 
-#: js/MainMenu.js:227 js/Tinebase-FAT-debug.js:29957
+#: js/MainMenu.js:227
+#: js/Tinebase-FAT-debug.js:29957
 msgid "Logging you out..."
 msgstr "Wylogowanie..."
 
-#: js/MainScreen.js:187 js/Tinebase-FAT-debug.js:30190
+#: js/MainScreen.js:187
+#: js/Tinebase-FAT-debug.js:30190
 msgid "Your password expired. Please enter a new user password:"
 msgstr "Twoje hasło wygasło. Proszę wprowadzić nowe hasło użytkownika:"
 
-#: js/Models.js:246 js/Tinebase-FAT-debug.js:13511
+#: js/Models.js:246
+#: js/Tinebase-FAT-debug.js:13511
 msgid "Import"
 msgid_plural "Imports"
 msgstr[0] "Import"
 msgstr[1] "Importy"
 msgstr[2] "Importy"
 
-#: js/Models.js:273 js/Tinebase-FAT-debug.js:13538
-#: js/Tinebase-FAT-debug.js:17112 js/Tinebase-FAT-debug.js:24372
+#: js/Models.js:273
+#: js/Tinebase-FAT-debug.js:13538
+#: js/Tinebase-FAT-debug.js:17112
+#: js/Tinebase-FAT-debug.js:24372
 #: js/widgets/container/GrantsDialog.js:110
 #: js/widgets/dialog/ExportDialog.js:46
 msgid "Export"
@@ -575,190 +719,242 @@ msgstr[0] "Eksport"
 msgstr[1] "eksport"
 msgstr[2] "eksport"
 
-#: js/Models.js:308 js/Tinebase-FAT-debug.js:13573
+#: js/Models.js:308
+#: js/Tinebase-FAT-debug.js:13573
 msgid "Credentials"
 msgid_plural "Credentials"
 msgstr[0] "Dane uwierzytelniające"
 msgstr[1] "dane uwierzytelniające"
 msgstr[2] "dane uwierzytelniające"
 
-#: js/Models.js:335 js/Tinebase-FAT-debug.js:13600
+#: js/Models.js:335
+#: js/Tinebase-FAT-debug.js:13600
 msgid "Relation"
 msgid_plural "Relations"
 msgstr[0] "Relacja"
 msgstr[1] "Relacje"
 msgstr[2] "Relacje"
 
-#: js/Models.js:357 js/Tinebase-FAT-debug.js:13622
+#: js/Models.js:357
+#: js/Tinebase-FAT-debug.js:13622
 msgid "Department"
 msgid_plural "Departments"
 msgstr[0] "Dział"
 msgstr[1] "działy"
 msgstr[2] "działy"
 
-#: js/Models.js:365 js/Tinebase-FAT-debug.js:13630
-#: js/Tinebase-FAT-debug.js:23638 js/widgets/account/PickerGridPanel.js:252
+#: js/Models.js:365
+#: js/Tinebase-FAT-debug.js:13630
+#: js/Tinebase-FAT-debug.js:23638
+#: js/widgets/account/PickerGridPanel.js:252
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/Models.js:384 js/Tinebase-FAT-debug.js:13649
+#: js/Models.js:384
+#: js/Tinebase-FAT-debug.js:13649
 msgid "Config"
 msgid_plural "Configs"
 msgstr[0] "Plik konfiguracyjny"
 msgstr[1] "pliki konfiguracyjne"
 msgstr[2] "pliki konfiguracyjne"
 
-#: js/Models.js:384 js/Tinebase-FAT-debug.js:13649
+#: js/Models.js:384
+#: js/Tinebase-FAT-debug.js:13649
 msgid "Configs"
 msgstr "Pliki konfiguracyjne"
 
-#: js/PasswordChangeDialog.js:32 js/Tinebase-FAT-debug.js:28781
+#: js/PasswordChangeDialog.js:32
+#: js/Tinebase-FAT-debug.js:28781
 msgid "Change Password For \"{0}\""
 msgstr "Zmień hasło dla \"{0}\""
 
-#: js/PasswordChangeDialog.js:48 js/Tinebase-FAT-debug.js:28797
+#: js/PasswordChangeDialog.js:48
+#: js/Tinebase-FAT-debug.js:28797
 msgid "Old Password"
 msgstr "Stare hasło"
 
-#: js/PasswordChangeDialog.js:52 js/Tinebase-FAT-debug.js:28801
+#: js/PasswordChangeDialog.js:52
+#: js/Tinebase-FAT-debug.js:28801
 msgid "New Password"
 msgstr "Nowe hasło"
 
-#: js/PasswordChangeDialog.js:56 js/Tinebase-FAT-debug.js:28805
+#: js/PasswordChangeDialog.js:56
+#: js/Tinebase-FAT-debug.js:28805
 msgid "Repeat new Password"
 msgstr "Powtórz nowe hasło"
 
-#: js/PasswordChangeDialog.js:75 js/Tinebase-FAT-debug.js:28824
+#: js/PasswordChangeDialog.js:75
+#: js/Tinebase-FAT-debug.js:28824
 msgid "Please Wait!"
 msgstr "Proszę czekać!"
 
-#: js/PasswordChangeDialog.js:76 js/Tinebase-FAT-debug.js:28825
+#: js/PasswordChangeDialog.js:76
+#: js/Tinebase-FAT-debug.js:28825
 msgid "changing password..."
 msgstr "zmiana hasła…"
 
-#: js/PasswordChangeDialog.js:87 js/Tinebase-FAT-debug.js:28836
+#: js/PasswordChangeDialog.js:87
+#: js/Tinebase-FAT-debug.js:28836
 msgid "Success"
 msgstr "Zakończone sukcesem"
 
-#: js/PasswordChangeDialog.js:88 js/Tinebase-FAT-debug.js:28837
+#: js/PasswordChangeDialog.js:88
+#: js/Tinebase-FAT-debug.js:28837
 msgid "Your password has been changed."
 msgstr "Twoje hasło zostało zmienione."
 
-#: js/PasswordChangeDialog.js:100 js/PasswordChangeDialog.js:110
-#: js/Tinebase-FAT-debug.js:28849 js/Tinebase-FAT-debug.js:28859
+#: js/PasswordChangeDialog.js:100
+#: js/PasswordChangeDialog.js:110
+#: js/Tinebase-FAT-debug.js:28849
+#: js/Tinebase-FAT-debug.js:28859
 msgid "Failure"
 msgstr "Próba nieudana"
 
-#: js/PasswordChangeDialog.js:111 js/Tinebase-FAT-debug.js:28860
+#: js/PasswordChangeDialog.js:111
+#: js/Tinebase-FAT-debug.js:28860
 msgid "The new passwords mismatch, please correct them."
 msgstr "Nowe hasła nie są takie same, proszę je poprawić."
 
-#: js/prototypeTranslations.js:20 js/prototypeTranslations.js:21
-#: js/Tinebase-FAT-debug.js:30993 js/Tinebase-FAT-debug.js:30994
+#: js/prototypeTranslations.js:20
+#: js/prototypeTranslations.js:21
+#: js/Tinebase-FAT-debug.js:30993
+#: js/Tinebase-FAT-debug.js:30994
 msgid "Outdent Text"
 msgstr "Tekst bez wcięć"
 
-#: js/prototypeTranslations.js:22 js/prototypeTranslations.js:23
-#: js/Tinebase-FAT-debug.js:30995 js/Tinebase-FAT-debug.js:30996
+#: js/prototypeTranslations.js:22
+#: js/prototypeTranslations.js:23
+#: js/Tinebase-FAT-debug.js:30995
+#: js/Tinebase-FAT-debug.js:30996
 msgid "Indent Text"
 msgstr "Tekst z wcięciami"
 
-#: js/prototypeTranslations.js:24 js/prototypeTranslations.js:25
-#: js/Tinebase-FAT-debug.js:30997 js/Tinebase-FAT-debug.js:30998
+#: js/prototypeTranslations.js:24
+#: js/prototypeTranslations.js:25
+#: js/Tinebase-FAT-debug.js:30997
+#: js/Tinebase-FAT-debug.js:30998
 msgid "Remove Formatting"
 msgstr "Usuń formatowanie"
 
-#: js/Tinebase-FAT-debug.js:3765 js/Tinebase-FAT.js:34
+#: js/Tinebase-FAT-debug.js:3765
+#: js/Tinebase-FAT.js:34
 #: js/ux/ConnectionStatus.js:56
 msgid "online"
 msgstr "online"
 
-#: js/Tinebase-FAT-debug.js:3766 js/Tinebase-FAT.js:34
+#: js/Tinebase-FAT-debug.js:3766
+#: js/Tinebase-FAT.js:34
 #: js/ux/ConnectionStatus.js:57
 msgid "offline"
 msgstr "offline"
 
-#: js/Tinebase-FAT-debug.js:3767 js/Tinebase-FAT.js:34
-#: js/ux/ConnectionStatus.js:58 User/Abstract.php:283 User/Abstract.php:284
-#: User/Abstract.php:285 User/Abstract.php:286 User/Abstract.php:287
+#: js/Tinebase-FAT-debug.js:3767
+#: js/Tinebase-FAT.js:34
+#: js/ux/ConnectionStatus.js:58
+#: User/Abstract.php:283
+#: User/Abstract.php:284
+#: User/Abstract.php:285
+#: User/Abstract.php:286
+#: User/Abstract.php:287
 msgid "unknown"
 msgstr "nieznany"
 
-#: js/Tinebase-FAT-debug.js:5195 js/ux/SearchField.js:44
+#: js/Tinebase-FAT-debug.js:5195
+#: js/ux/SearchField.js:44
 msgid "enter searchfilter"
 msgstr "wpisz szukaną frazę"
 
-#: js/Tinebase-FAT-debug.js:5787 js/ux/grid/PagingToolbar.js:53
+#: js/Tinebase-FAT-debug.js:5787
+#: js/ux/grid/PagingToolbar.js:53
 msgid "{0} selected"
 msgstr "zaznaczonych {0}"
 
-#: js/Tinebase-FAT-debug.js:5788 js/ux/grid/PagingToolbar.js:54
+#: js/Tinebase-FAT-debug.js:5788
+#: js/ux/grid/PagingToolbar.js:54
 msgid "Unselect all"
 msgstr "Odznacz wszystko"
 
-#: js/Tinebase-FAT-debug.js:5789 js/ux/grid/PagingToolbar.js:55
+#: js/Tinebase-FAT-debug.js:5789
+#: js/ux/grid/PagingToolbar.js:55
 msgid "Select all visible ({0} records)"
 msgstr "Zaznacz wszystkie widoczne ({0} wiersze /-y)"
 
-#: js/Tinebase-FAT-debug.js:5790 js/ux/grid/PagingToolbar.js:56
+#: js/Tinebase-FAT-debug.js:5790
+#: js/ux/grid/PagingToolbar.js:56
 msgid "Select all pages ({0} records)"
 msgstr "Zaznacz wszystkie strony ({0} wiersze /-y)"
 
-#: js/Tinebase-FAT-debug.js:5791 js/ux/grid/PagingToolbar.js:57
+#: js/Tinebase-FAT-debug.js:5791
+#: js/ux/grid/PagingToolbar.js:57
 msgid "Toggle selection"
 msgstr "Odwróć zaznaczenie"
 
-#: js/Tinebase-FAT-debug.js:7833 js/ux/form/RecordsComboBox.js:26
+#: js/Tinebase-FAT-debug.js:7833
+#: js/ux/form/RecordsComboBox.js:26
 msgid "Software Version"
 msgstr "Wersja oprogramowania"
 
-#: js/Tinebase-FAT-debug.js:8239 js/ux/form/ImageField.js:72
+#: js/Tinebase-FAT-debug.js:8239
+#: js/ux/form/ImageField.js:72
 msgid "Loading"
 msgstr "Ładowanie"
 
-#: js/Tinebase-FAT-debug.js:8242 js/ux/form/ImageField.js:75
+#: js/Tinebase-FAT-debug.js:8242
+#: js/ux/form/ImageField.js:75
 msgid "Click to edit"
 msgstr "Kliknij, aby edytować"
 
-#: js/Tinebase-FAT-debug.js:8291 js/ux/form/ImageField.js:124
+#: js/Tinebase-FAT-debug.js:8291
+#: js/ux/form/ImageField.js:124
 msgid "Not An Image"
 msgstr "To nie jest plik graficzny"
 
-#: js/Tinebase-FAT-debug.js:8291 js/ux/form/ImageField.js:124
+#: js/Tinebase-FAT-debug.js:8291
+#: js/ux/form/ImageField.js:124
 msgid "Please select an image file (gif/png/jpeg)"
 msgstr "Proszę wybrać plik graficzny (gif/png/jpeg)"
 
-#: js/Tinebase-FAT-debug.js:8325 js/Tinebase-FAT-debug.js:21098
-#: js/ux/form/ImageField.js:158 js/widgets/grid/FileUploadGrid.js:95
+#: js/Tinebase-FAT-debug.js:8325
+#: js/Tinebase-FAT-debug.js:21098
+#: js/ux/form/ImageField.js:158
+#: js/widgets/grid/FileUploadGrid.js:95
 msgid "Upload Failed"
 msgstr "Wysyłanie zakończone niepowodzeniem"
 
-#: js/Tinebase-FAT-debug.js:8325 js/ux/form/ImageField.js:158
+#: js/Tinebase-FAT-debug.js:8325
+#: js/ux/form/ImageField.js:158
 msgid "Could not upload image. Please notify your Administrator"
 msgstr "Wysłanie grafiki było niemożliwe. Proszę powiadomić swojego administratora"
 
-#: js/Tinebase-FAT-debug.js:8337 js/ux/form/ImageField.js:170
+#: js/Tinebase-FAT-debug.js:8337
+#: js/ux/form/ImageField.js:170
 msgid "Change Image"
 msgstr "Zmień grafikę"
 
-#: js/Tinebase-FAT-debug.js:8346 js/Tinebase-FAT-debug.js:8364
-#: js/ux/form/ImageField.js:179 js/ux/form/ImageField.js:197
+#: js/Tinebase-FAT-debug.js:8346
+#: js/Tinebase-FAT-debug.js:8364
+#: js/ux/form/ImageField.js:179
+#: js/ux/form/ImageField.js:197
 msgid "Crop Image"
 msgstr "Dopasuj rozmiar grafiki"
 
-#: js/Tinebase-FAT-debug.js:8370 js/ux/form/ImageField.js:203
+#: js/Tinebase-FAT-debug.js:8370
+#: js/ux/form/ImageField.js:203
 msgid "Delete Image"
 msgstr "Usuń grafikę"
 
-#: js/Tinebase-FAT-debug.js:8379 js/ux/form/ImageField.js:212
+#: js/Tinebase-FAT-debug.js:8379
+#: js/ux/form/ImageField.js:212
 msgid "Show Original Image"
 msgstr "Pokaż oryginalną grafikę"
 
-#: js/Tinebase-FAT-debug.js:8441 js/ux/form/ImageField.js:274
+#: js/Tinebase-FAT-debug.js:8441
+#: js/ux/form/ImageField.js:274
 msgid "Image Failed"
 msgstr "Przetwarzanie grafiki zakończone niepowodzeniem"
 
-#: js/Tinebase-FAT-debug.js:8441 js/ux/form/ImageField.js:274
+#: js/Tinebase-FAT-debug.js:8441
+#: js/ux/form/ImageField.js:274
 msgid "Could not load image. Please notify your Administrator"
 msgstr "Załadowanie grafiki było niemożliwe. Proszę powiadomić swojego administratora"
 
@@ -773,257 +969,329 @@ msgstr[2] "grup"
 msgid "Groups"
 msgstr "Grupy"
 
-#: js/Tinebase-FAT-debug.js:14223 js/widgets/LangChooser.js:36
+#: js/Tinebase-FAT-debug.js:14223
+#: js/widgets/LangChooser.js:36
 #: Preference.php:91
 msgid "Language"
 msgstr "Język"
 
-#: js/Tinebase-FAT-debug.js:14256 js/widgets/LangChooser.js:69
+#: js/Tinebase-FAT-debug.js:14256
+#: js/widgets/LangChooser.js:69
 msgid "setting new language..."
 msgstr "ustawianie nowego języka..."
 
-#: js/Tinebase-FAT-debug.js:14707 js/Tinebase-FAT-debug.js:15421
-#: js/Tinebase-FAT-debug.js:15434 js/widgets/dialog/EditDialog.js:252
-#: js/widgets/dialog/EditDialog.js:265 js/widgets/EditRecord.js:131
+#: js/Tinebase-FAT-debug.js:14707
+#: js/Tinebase-FAT-debug.js:15421
+#: js/Tinebase-FAT-debug.js:15434
+#: js/widgets/dialog/EditDialog.js:252
+#: js/widgets/dialog/EditDialog.js:265
+#: js/widgets/EditRecord.js:131
 msgid "Saved in"
 msgstr "Zapisz w"
 
-#: js/Tinebase-FAT-debug.js:14764 js/Tinebase-FAT-debug.js:15381
-#: js/widgets/dialog/EditDialog.js:212 js/widgets/EditRecord.js:188
+#: js/Tinebase-FAT-debug.js:14764
+#: js/Tinebase-FAT-debug.js:15381
+#: js/widgets/dialog/EditDialog.js:212
+#: js/widgets/EditRecord.js:188
 msgid "delete"
 msgstr "usuń"
 
-#: js/Tinebase-FAT-debug.js:14881 js/widgets/Priority.js:20
+#: js/Tinebase-FAT-debug.js:14881
+#: js/widgets/Priority.js:20
 msgid "low"
 msgstr "niski"
 
-#: js/Tinebase-FAT-debug.js:14882 js/widgets/Priority.js:21
+#: js/Tinebase-FAT-debug.js:14882
+#: js/widgets/Priority.js:21
 msgid "normal"
 msgstr "normalny"
 
-#: js/Tinebase-FAT-debug.js:14883 js/widgets/Priority.js:22
+#: js/Tinebase-FAT-debug.js:14883
+#: js/widgets/Priority.js:22
 msgid "high"
 msgstr "wysoki"
 
-#: js/Tinebase-FAT-debug.js:14884 js/widgets/Priority.js:23
+#: js/Tinebase-FAT-debug.js:14884
+#: js/widgets/Priority.js:23
 msgid "urgent"
 msgstr "pilny"
 
-#: js/Tinebase-FAT-debug.js:14994 js/Tinebase-FAT-debug.js:15003
-#: js/widgets/VersionCheck.js:44 js/widgets/VersionCheck.js:53
+#: js/Tinebase-FAT-debug.js:14994
+#: js/Tinebase-FAT-debug.js:15003
+#: js/widgets/VersionCheck.js:44
+#: js/widgets/VersionCheck.js:53
 msgid "New version of Tine 2.0 available"
 msgstr "Dostępna jest nowa wersja Tine 2.0"
 
-#: js/Tinebase-FAT-debug.js:14995 js/Tinebase-FAT-debug.js:15004
-#: js/widgets/VersionCheck.js:45 js/widgets/VersionCheck.js:54
+#: js/Tinebase-FAT-debug.js:14995
+#: js/Tinebase-FAT-debug.js:15004
+#: js/widgets/VersionCheck.js:45
+#: js/widgets/VersionCheck.js:54
 msgid "Version \"{0}\" of Tine 2.0 is available."
 msgstr "Dostępna jest wersja \"{0}\" Tine 2.0."
 
-#: js/Tinebase-FAT-debug.js:14996 js/widgets/VersionCheck.js:46
+#: js/Tinebase-FAT-debug.js:14996
+#: js/widgets/VersionCheck.js:46
 msgid "It's a critical update and must be installed as soon as possible!"
 msgstr "To jest krytyczna aktualizacja i musi być zainstalowana jak najszybciej!"
 
-#: js/Tinebase-FAT-debug.js:15005 js/widgets/VersionCheck.js:55
+#: js/Tinebase-FAT-debug.js:15005
+#: js/widgets/VersionCheck.js:55
 msgid "Please consider updating!"
 msgstr "Proszę rozważyć aktualizację!"
 
-#: js/Tinebase-FAT-debug.js:15047 js/widgets/dialog/AlarmPanel.js:32
+#: js/Tinebase-FAT-debug.js:15047
+#: js/widgets/dialog/AlarmPanel.js:32
 msgid "Alarms"
 msgstr "Przypomnienia"
 
-#: js/Tinebase-FAT-debug.js:15056 js/Tinebase-FAT-debug.js:15083
-#: js/widgets/dialog/AlarmPanel.js:41 js/widgets/dialog/AlarmPanel.js:68
+#: js/Tinebase-FAT-debug.js:15056
+#: js/Tinebase-FAT-debug.js:15083
+#: js/widgets/dialog/AlarmPanel.js:41
+#: js/widgets/dialog/AlarmPanel.js:68
 msgid "Custom Datetime"
 msgstr "Data i czas użytkownika"
 
-#: js/Tinebase-FAT-debug.js:15066 js/widgets/dialog/AlarmPanel.js:51
+#: js/Tinebase-FAT-debug.js:15066
+#: js/widgets/dialog/AlarmPanel.js:51
 msgid "Send Alarm"
 msgstr "Wyślij przypomnienie"
 
-#: js/Tinebase-FAT-debug.js:15076 js/widgets/dialog/AlarmPanel.js:61
+#: js/Tinebase-FAT-debug.js:15076
+#: js/widgets/dialog/AlarmPanel.js:61
 msgid "None"
 msgstr "Brak"
 
-#: js/Tinebase-FAT-debug.js:15077 js/widgets/dialog/AlarmPanel.js:62
+#: js/Tinebase-FAT-debug.js:15077
+#: js/widgets/dialog/AlarmPanel.js:62
 msgid "0 minutes before"
 msgstr "0 minut wcześniej"
 
-#: js/Tinebase-FAT-debug.js:15078 js/widgets/dialog/AlarmPanel.js:63
+#: js/Tinebase-FAT-debug.js:15078
+#: js/widgets/dialog/AlarmPanel.js:63
 msgid "15 minutes before"
 msgstr "15 minut wcześniej"
 
-#: js/Tinebase-FAT-debug.js:15079 js/widgets/dialog/AlarmPanel.js:64
+#: js/Tinebase-FAT-debug.js:15079
+#: js/widgets/dialog/AlarmPanel.js:64
 msgid "30 minutes before"
 msgstr "30 minut wcześniej"
 
-#: js/Tinebase-FAT-debug.js:15080 js/widgets/dialog/AlarmPanel.js:65
+#: js/Tinebase-FAT-debug.js:15080
+#: js/widgets/dialog/AlarmPanel.js:65
 msgid "1 hour before"
 msgstr "1 godzinę wcześniej"
 
-#: js/Tinebase-FAT-debug.js:15081 js/widgets/dialog/AlarmPanel.js:66
+#: js/Tinebase-FAT-debug.js:15081
+#: js/widgets/dialog/AlarmPanel.js:66
 msgid "2 hours before"
 msgstr "2 godziny wcześniej"
 
-#: js/Tinebase-FAT-debug.js:15082 js/widgets/dialog/AlarmPanel.js:67
+#: js/Tinebase-FAT-debug.js:15082
+#: js/widgets/dialog/AlarmPanel.js:67
 msgid "1 day before"
 msgstr "1 dzień wcześniej"
 
-#: js/Tinebase-FAT-debug.js:15502 js/Tinebase-FAT-debug.js:21862
-#: js/widgets/dialog/EditDialog.js:340 js/widgets/grid/GridPanel.js:346
+#: js/Tinebase-FAT-debug.js:15502
+#: js/Tinebase-FAT-debug.js:21862
+#: js/widgets/dialog/EditDialog.js:340
+#: js/widgets/grid/GridPanel.js:346
 msgid "Copy {0}"
 msgstr "Kopiuj {0}"
 
-#: js/Tinebase-FAT-debug.js:15505 js/widgets/dialog/EditDialog.js:344
+#: js/Tinebase-FAT-debug.js:15505
+#: js/widgets/dialog/EditDialog.js:344
 msgid "Add New {0}"
 msgstr "Dodaj {0}"
 
-#: js/Tinebase-FAT-debug.js:15507 js/widgets/dialog/EditDialog.js:346
+#: js/Tinebase-FAT-debug.js:15507
+#: js/widgets/dialog/EditDialog.js:346
 msgid "Edit {0} \"{1}\""
 msgstr "Edytuj {0} \"{1}\""
 
-#: js/Tinebase-FAT-debug.js:15549 js/widgets/dialog/EditDialog.js:388
+#: js/Tinebase-FAT-debug.js:15549
+#: js/widgets/dialog/EditDialog.js:388
 msgid "Transferring {0}..."
 msgstr "Przesyłanie {0}..."
 
-#: js/Tinebase-FAT-debug.js:15661 js/widgets/dialog/EditDialog.js:500
+#: js/Tinebase-FAT-debug.js:15661
+#: js/widgets/dialog/EditDialog.js:500
 msgid "Do you really want to delete this {0}?"
 msgstr "Czy na pewno chcesz usunąć ten {0}?"
 
-#: js/Tinebase-FAT-debug.js:15663 js/Tinebase-FAT-debug.js:22776
-#: js/widgets/dialog/EditDialog.js:502 js/widgets/grid/GridPanel.js:1267
+#: js/Tinebase-FAT-debug.js:15663
+#: js/Tinebase-FAT-debug.js:22776
+#: js/widgets/dialog/EditDialog.js:502
+#: js/widgets/grid/GridPanel.js:1267
 msgid "Deleting {0}"
 msgstr "Usuwanie {0}"
 
-#: js/Tinebase-FAT-debug.js:15673 js/Tinebase-FAT-debug.js:22792
-#: js/Tinebase-FAT-debug.js:25738 js/Tinebase-FAT-debug.js:25848
-#: js/Tinebase-FAT-debug.js:25881 js/widgets/dialog/EditDialog.js:512
-#: js/widgets/grid/GridPanel.js:1283 js/widgets/tags/TagsPanel.js:291
-#: js/widgets/tags/TagsPanel.js:401 js/widgets/tags/TagsPanel.js:434
+#: js/Tinebase-FAT-debug.js:15673
+#: js/Tinebase-FAT-debug.js:22792
+#: js/Tinebase-FAT-debug.js:25738
+#: js/Tinebase-FAT-debug.js:25848
+#: js/Tinebase-FAT-debug.js:25881
+#: js/widgets/dialog/EditDialog.js:512
+#: js/widgets/grid/GridPanel.js:1283
+#: js/widgets/tags/TagsPanel.js:291
+#: js/widgets/tags/TagsPanel.js:401
+#: js/widgets/tags/TagsPanel.js:434
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/Tinebase-FAT-debug.js:15673 js/Tinebase-FAT-debug.js:22792
-#: js/widgets/dialog/EditDialog.js:512 js/widgets/grid/GridPanel.js:1283
+#: js/Tinebase-FAT-debug.js:15673
+#: js/Tinebase-FAT-debug.js:22792
+#: js/widgets/dialog/EditDialog.js:512
+#: js/widgets/grid/GridPanel.js:1283
 msgid "Could not delete {0}."
 msgstr "Usunięcie {0} było niemożliwe."
 
-#: js/Tinebase-FAT-debug.js:15748 js/widgets/dialog/AdminPanel.js:59
+#: js/Tinebase-FAT-debug.js:15748
+#: js/widgets/dialog/AdminPanel.js:59
 msgid "Change settings for application {0}"
 msgstr "Zmień ustawienia aplikacji {0}"
 
-#: js/Tinebase-FAT-debug.js:15796 js/widgets/dialog/AdminPanel.js:107
+#: js/Tinebase-FAT-debug.js:15796
+#: js/widgets/dialog/AdminPanel.js:107
 msgid "Defaults"
 msgstr "Ustawienia domyślne"
 
-#: js/Tinebase-FAT-debug.js:15903 js/widgets/dialog/CredentialsDialog.js:83
+#: js/Tinebase-FAT-debug.js:15903
+#: js/widgets/dialog/CredentialsDialog.js:83
 msgid "Please enter your credentials"
 msgstr "Proszę wpisać swoje dane dostępowe"
 
-#: js/Tinebase-FAT-debug.js:16091 js/widgets/dialog/PreferencesDialog.js:125
+#: js/Tinebase-FAT-debug.js:16091
+#: js/widgets/dialog/PreferencesDialog.js:125
 msgid "Admin Mode"
 msgstr "Tryb administratora"
 
-#: js/Tinebase-FAT-debug.js:16126 js/widgets/dialog/PreferencesDialog.js:160
+#: js/Tinebase-FAT-debug.js:16126
+#: js/widgets/dialog/PreferencesDialog.js:160
 msgid "Applications"
 msgstr "Aplikacje"
 
-#: js/Tinebase-FAT-debug.js:16155 js/widgets/dialog/PreferencesDialog.js:189
+#: js/Tinebase-FAT-debug.js:16155
+#: js/widgets/dialog/PreferencesDialog.js:189
 msgid "Edit Preferences"
 msgstr "Edytuj ustawienia"
 
-#: js/Tinebase-FAT-debug.js:16156 js/widgets/dialog/PreferencesDialog.js:190
+#: js/Tinebase-FAT-debug.js:16156
+#: js/widgets/dialog/PreferencesDialog.js:190
 msgid "Loading ..."
 msgstr "Ładowanie ..."
 
-#: js/Tinebase-FAT-debug.js:16211 js/Tinebase-FAT-debug.js:27954
+#: js/Tinebase-FAT-debug.js:16211
+#: js/Tinebase-FAT-debug.js:27954
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/form/ConfigPanel.js:106
 msgid "You need to correct the red marked fields before config could be saved"
 msgstr "Przed zapisaniem konfiguracji należy poprawić wskazane pola"
 
-#: js/Tinebase-FAT-debug.js:16240 js/widgets/dialog/PreferencesDialog.js:274
+#: js/Tinebase-FAT-debug.js:16240
+#: js/widgets/dialog/PreferencesDialog.js:274
 msgid "Saving of preferences failed."
 msgstr "Zapisywanie ustawień zakończone niepowodzeniem."
 
-#: js/Tinebase-FAT-debug.js:16546 js/widgets/dialog/PreferencesTreePanel.js:67
+#: js/Tinebase-FAT-debug.js:16546
+#: js/widgets/dialog/PreferencesTreePanel.js:67
 msgid "General Preferences"
 msgstr "Ogólne ustawienia"
 
-#: js/Tinebase-FAT-debug.js:16566 js/widgets/dialog/PreferencesTreePanel.js:87
+#: js/Tinebase-FAT-debug.js:16566
+#: js/widgets/dialog/PreferencesTreePanel.js:87
 msgid "My Profile"
 msgstr "Mój profil"
 
-#: js/Tinebase-FAT-debug.js:16788 js/widgets/dialog/PreferencesPanel.js:154
+#: js/Tinebase-FAT-debug.js:16788
+#: js/widgets/dialog/PreferencesPanel.js:154
 msgid "There are no preferences for this application."
 msgstr "Brak ustawień dla tej aplikacji."
 
-#: js/Tinebase-FAT-debug.js:16914 js/widgets/dialog/ImportDialog.js:76
+#: js/Tinebase-FAT-debug.js:16914
+#: js/widgets/dialog/ImportDialog.js:76
 msgid "Files"
 msgstr "Pliki"
 
-#: js/Tinebase-FAT-debug.js:16934 js/widgets/dialog/ImportDialog.js:96
+#: js/Tinebase-FAT-debug.js:16934
+#: js/widgets/dialog/ImportDialog.js:96
 msgid "Import definition"
 msgstr "Definicja importu"
 
-#: js/Tinebase-FAT-debug.js:16952 js/widgets/dialog/ImportDialog.js:114
+#: js/Tinebase-FAT-debug.js:16952
+#: js/widgets/dialog/ImportDialog.js:114
 msgid "Import description"
 msgstr "Importuj opis"
 
-#: js/Tinebase-FAT-debug.js:16963 js/widgets/dialog/ImportDialog.js:125
+#: js/Tinebase-FAT-debug.js:16963
+#: js/widgets/dialog/ImportDialog.js:125
 msgid "Import into {0}"
 msgstr "Importuj do: {0}"
 
-#: js/Tinebase-FAT-debug.js:16974 js/widgets/dialog/ImportDialog.js:136
+#: js/Tinebase-FAT-debug.js:16974
+#: js/widgets/dialog/ImportDialog.js:136
 msgid "Dry run"
 msgstr "Przetestuj"
 
-#: js/Tinebase-FAT-debug.js:16991 js/widgets/dialog/ImportDialog.js:153
+#: js/Tinebase-FAT-debug.js:16991
+#: js/widgets/dialog/ImportDialog.js:153
 msgid "No files added"
 msgstr "Nie dodano plików"
 
-#: js/Tinebase-FAT-debug.js:16991 js/widgets/dialog/ImportDialog.js:153
+#: js/Tinebase-FAT-debug.js:16991
+#: js/widgets/dialog/ImportDialog.js:153
 msgid "You need to add files to import."
 msgstr "Należy dodać plik(i) z danymi do zaimportowania"
 
-#: js/Tinebase-FAT-debug.js:17021 js/widgets/dialog/ImportDialog.js:183
+#: js/Tinebase-FAT-debug.js:17021
+#: js/widgets/dialog/ImportDialog.js:183
 msgid "Dry run results"
 msgstr "Wyniki testów"
 
-#: js/Tinebase-FAT-debug.js:17022 js/widgets/dialog/ImportDialog.js:184
+#: js/Tinebase-FAT-debug.js:17022
+#: js/widgets/dialog/ImportDialog.js:184
 msgid "Import test successful for {0} records, import test failed for {1} records."
 msgstr "Testy importu powiodły się dla {0} wierszy, testy importu nie powiodły się dla {1} wierszy."
 
-#: js/Tinebase-FAT-debug.js:17026 js/widgets/dialog/ImportDialog.js:188
+#: js/Tinebase-FAT-debug.js:17026
+#: js/widgets/dialog/ImportDialog.js:188
 msgid "Import results"
 msgstr "Wyniki importu"
 
-#: js/Tinebase-FAT-debug.js:17027 js/widgets/dialog/ImportDialog.js:189
+#: js/Tinebase-FAT-debug.js:17027
+#: js/widgets/dialog/ImportDialog.js:189
 msgid "Import successful for {0} records / import failed for {1} records / {2} duplicates found"
 msgstr "Import skuteczny dla {0} wierszy / import nieskuteczny dla {1} wierszy / znaleziono {2} powtórzenia"
 
-#: js/Tinebase-FAT-debug.js:17140 js/widgets/dialog/ExportDialog.js:74
+#: js/Tinebase-FAT-debug.js:17140
+#: js/widgets/dialog/ExportDialog.js:74
 msgid "Export {0} {1}"
 msgstr "Eksport {0} {1}"
 
-#: js/Tinebase-FAT-debug.js:17167 js/widgets/dialog/ExportDialog.js:101
+#: js/Tinebase-FAT-debug.js:17167
+#: js/widgets/dialog/ExportDialog.js:101
 msgid "Export definition"
 msgstr "Definicja eksportu"
 
-#: js/Tinebase-FAT-debug.js:17176 js/widgets/dialog/ExportDialog.js:110
+#: js/Tinebase-FAT-debug.js:17176
+#: js/widgets/dialog/ExportDialog.js:110
 msgid "Select Export Definition ..."
 msgstr "Wybierz definicję eksportu ..."
 
-#: js/Tinebase-FAT-debug.js:17270 js/widgets/dialog/LinkPanel.js:46
+#: js/Tinebase-FAT-debug.js:17270
+#: js/widgets/dialog/LinkPanel.js:46
 msgid "Links"
 msgstr "Linki"
 
-#: js/Tinebase-FAT-debug.js:17391 js/Tinebase-FAT-debug.js:17444
+#: js/Tinebase-FAT-debug.js:17391
+#: js/Tinebase-FAT-debug.js:17444
 #: js/widgets/dialog/MultiOptionsDialog.js:28
 #: js/widgets/dialog/MultiOptionsDialog.js:81
 msgid "What would you like to do?"
 msgstr "Proszę o podjęcie decyzji:"
 
-#: js/Tinebase-FAT-debug.js:17395 js/Tinebase-FAT-debug.js:17504
+#: js/Tinebase-FAT-debug.js:17395
+#: js/Tinebase-FAT-debug.js:17504
 #: js/widgets/dialog/MultiOptionsDialog.js:32
 #: js/widgets/dialog/MultiOptionsDialog.js:141
 msgid "You need to select an option!"
@@ -1034,7 +1302,8 @@ msgstr "Należy zaznaczyć opcję."
 msgid "Custom Fields"
 msgstr "Pola użytkownika"
 
-#: js/Tinebase-FAT-debug.js:17699 js/Tinebase-FAT-debug.js:17720
+#: js/Tinebase-FAT-debug.js:17699
+#: js/Tinebase-FAT-debug.js:17720
 #: js/widgets/customfields/CustomfieldsPanel.js:69
 #: js/widgets/customfields/CustomfieldsPanel.js:90
 msgid "General"
@@ -1045,166 +1314,209 @@ msgstr "Uwagi ogólne"
 msgid "There are no custom fields yet"
 msgstr "Brak pól użytkownika"
 
-#: js/Tinebase-FAT-debug.js:18308 js/widgets/grid/FilterModel.js:166
+#: js/Tinebase-FAT-debug.js:18308
+#: js/widgets/grid/FilterModel.js:166
 msgid "contains"
 msgstr "zawiera"
 
-#: js/Tinebase-FAT-debug.js:18309 js/Tinebase-FAT-debug.js:25223
-#: js/Tinebase-FAT-debug.js:25227 js/widgets/container/FilterModel.js:130
-#: js/widgets/container/FilterModel.js:134 js/widgets/grid/FilterModel.js:167
+#: js/Tinebase-FAT-debug.js:18309
+#: js/Tinebase-FAT-debug.js:25223
+#: js/Tinebase-FAT-debug.js:25227
+#: js/widgets/container/FilterModel.js:130
+#: js/widgets/container/FilterModel.js:134
+#: js/widgets/grid/FilterModel.js:167
 msgid "is equal to"
 msgstr "równa się"
 
-#: js/Tinebase-FAT-debug.js:18310 js/widgets/grid/FilterModel.js:168
+#: js/Tinebase-FAT-debug.js:18310
+#: js/widgets/grid/FilterModel.js:168
 msgid "is greater than"
 msgstr "większy od"
 
-#: js/Tinebase-FAT-debug.js:18311 js/widgets/grid/FilterModel.js:169
+#: js/Tinebase-FAT-debug.js:18311
+#: js/widgets/grid/FilterModel.js:169
 msgid "is less than"
 msgstr "mniejszy od"
 
-#: js/Tinebase-FAT-debug.js:18312 js/widgets/grid/FilterModel.js:170
+#: js/Tinebase-FAT-debug.js:18312
+#: js/widgets/grid/FilterModel.js:170
 msgid "is not"
 msgstr "nie jest"
 
-#: js/Tinebase-FAT-debug.js:18313 js/widgets/grid/FilterModel.js:171
+#: js/Tinebase-FAT-debug.js:18313
+#: js/widgets/grid/FilterModel.js:171
 msgid "one of"
 msgstr "jeden z"
 
-#: js/Tinebase-FAT-debug.js:18314 js/widgets/grid/FilterModel.js:172
+#: js/Tinebase-FAT-debug.js:18314
+#: js/widgets/grid/FilterModel.js:172
 msgid "none of"
 msgstr "żaden z"
 
-#: js/Tinebase-FAT-debug.js:18315 js/widgets/grid/FilterModel.js:173
+#: js/Tinebase-FAT-debug.js:18315
+#: js/widgets/grid/FilterModel.js:173
 msgid "is before"
 msgstr "przed"
 
-#: js/Tinebase-FAT-debug.js:18316 js/widgets/grid/FilterModel.js:174
+#: js/Tinebase-FAT-debug.js:18316
+#: js/widgets/grid/FilterModel.js:174
 msgid "is after"
 msgstr "następuje po"
 
-#: js/Tinebase-FAT-debug.js:18317 js/widgets/grid/FilterModel.js:175
+#: js/Tinebase-FAT-debug.js:18317
+#: js/widgets/grid/FilterModel.js:175
 msgid "is within"
 msgstr "przypada na"
 
-#: js/Tinebase-FAT-debug.js:18318 js/widgets/grid/FilterModel.js:176
+#: js/Tinebase-FAT-debug.js:18318
+#: js/widgets/grid/FilterModel.js:176
 msgid "is in week no."
 msgstr "jest w tygodniu"
 
-#: js/Tinebase-FAT-debug.js:18319 js/widgets/grid/FilterModel.js:177
+#: js/Tinebase-FAT-debug.js:18319
+#: js/widgets/grid/FilterModel.js:177
 msgid "starts with"
 msgstr "zaczyna się od"
 
-#: js/Tinebase-FAT-debug.js:18320 js/widgets/grid/FilterModel.js:178
+#: js/Tinebase-FAT-debug.js:18320
+#: js/widgets/grid/FilterModel.js:178
 msgid "ends with"
 msgstr "kończy się na"
 
-#: js/Tinebase-FAT-debug.js:18361 js/widgets/grid/FilterModel.js:219
+#: js/Tinebase-FAT-debug.js:18361
+#: js/widgets/grid/FilterModel.js:219
 msgid "select a operator"
 msgstr "wybierz operator"
 
-#: js/Tinebase-FAT-debug.js:18476 js/widgets/grid/FilterModel.js:334
+#: js/Tinebase-FAT-debug.js:18476
+#: js/widgets/grid/FilterModel.js:334
 msgid "Search Account ..."
 msgstr "Znajdź konto ..."
 
-#: js/Tinebase-FAT-debug.js:18586 js/widgets/grid/FilterModel.js:444
+#: js/Tinebase-FAT-debug.js:18586
+#: js/widgets/grid/FilterModel.js:444
 msgid "today"
 msgstr "dzisiaj"
 
-#: js/Tinebase-FAT-debug.js:18587 js/widgets/grid/FilterModel.js:445
+#: js/Tinebase-FAT-debug.js:18587
+#: js/widgets/grid/FilterModel.js:445
 msgid "yesterday"
 msgstr "wczoraj"
 
-#: js/Tinebase-FAT-debug.js:18588 js/widgets/grid/FilterModel.js:446
+#: js/Tinebase-FAT-debug.js:18588
+#: js/widgets/grid/FilterModel.js:446
 msgid "this week"
 msgstr "bieżący tydzień"
 
-#: js/Tinebase-FAT-debug.js:18589 js/widgets/grid/FilterModel.js:447
+#: js/Tinebase-FAT-debug.js:18589
+#: js/widgets/grid/FilterModel.js:447
 msgid "last week"
 msgstr "ubiegły tydzień"
 
-#: js/Tinebase-FAT-debug.js:18590 js/widgets/grid/FilterModel.js:448
+#: js/Tinebase-FAT-debug.js:18590
+#: js/widgets/grid/FilterModel.js:448
 msgid "the week before last"
 msgstr "przedostatni tydzień"
 
-#: js/Tinebase-FAT-debug.js:18591 js/widgets/grid/FilterModel.js:449
+#: js/Tinebase-FAT-debug.js:18591
+#: js/widgets/grid/FilterModel.js:449
 msgid "this month"
 msgstr "bieżący miesiąc"
 
-#: js/Tinebase-FAT-debug.js:18592 js/widgets/grid/FilterModel.js:450
+#: js/Tinebase-FAT-debug.js:18592
+#: js/widgets/grid/FilterModel.js:450
 msgid "last month"
 msgstr "ubiegły miesiąc"
 
-#: js/Tinebase-FAT-debug.js:18593 js/widgets/grid/FilterModel.js:451
+#: js/Tinebase-FAT-debug.js:18593
+#: js/widgets/grid/FilterModel.js:451
 msgid "this quarter"
 msgstr "bieżący kwartał"
 
-#: js/Tinebase-FAT-debug.js:18594 js/widgets/grid/FilterModel.js:452
+#: js/Tinebase-FAT-debug.js:18594
+#: js/widgets/grid/FilterModel.js:452
 msgid "last quarter"
 msgstr "ubiegły kwartał"
 
-#: js/Tinebase-FAT-debug.js:18595 js/widgets/grid/FilterModel.js:453
+#: js/Tinebase-FAT-debug.js:18595
+#: js/widgets/grid/FilterModel.js:453
 msgid "this year"
 msgstr "bieżący rok"
 
-#: js/Tinebase-FAT-debug.js:18596 js/widgets/grid/FilterModel.js:454
+#: js/Tinebase-FAT-debug.js:18596
+#: js/widgets/grid/FilterModel.js:454
 msgid "last year"
 msgstr "ubiegły rok"
 
-#: js/Tinebase-FAT-debug.js:18600 js/widgets/grid/FilterModel.js:458
+#: js/Tinebase-FAT-debug.js:18600
+#: js/widgets/grid/FilterModel.js:458
 msgid "tomorrow"
 msgstr "jutro"
 
-#: js/Tinebase-FAT-debug.js:18601 js/widgets/grid/FilterModel.js:459
+#: js/Tinebase-FAT-debug.js:18601
+#: js/widgets/grid/FilterModel.js:459
 msgid "next week"
 msgstr "przyszły tydzień"
 
-#: js/Tinebase-FAT-debug.js:18602 js/widgets/grid/FilterModel.js:460
+#: js/Tinebase-FAT-debug.js:18602
+#: js/widgets/grid/FilterModel.js:460
 msgid "next month"
 msgstr "przyszły miesiąc"
 
-#: js/Tinebase-FAT-debug.js:18603 js/widgets/grid/FilterModel.js:461
+#: js/Tinebase-FAT-debug.js:18603
+#: js/widgets/grid/FilterModel.js:461
 msgid "next quarter"
 msgstr "przyszły kwartał"
 
-#: js/Tinebase-FAT-debug.js:18604 js/widgets/grid/FilterModel.js:462
+#: js/Tinebase-FAT-debug.js:18604
+#: js/widgets/grid/FilterModel.js:462
 msgid "next year"
 msgstr "przyszły rok"
 
-#: js/Tinebase-FAT-debug.js:19080 js/Tinebase-FAT-debug.js:19444
-#: js/widgets/grid/FilterToolbar.js:78 js/widgets/grid/FilterToolbar.js:442
+#: js/Tinebase-FAT-debug.js:19080
+#: js/Tinebase-FAT-debug.js:19444
+#: js/widgets/grid/FilterToolbar.js:78
+#: js/widgets/grid/FilterToolbar.js:442
 msgid "Show"
 msgstr "Wyświetl"
 
-#: js/Tinebase-FAT-debug.js:19146 js/widgets/grid/FilterToolbar.js:144
+#: js/Tinebase-FAT-debug.js:19146
+#: js/widgets/grid/FilterToolbar.js:144
 msgid "add new filter"
 msgstr "dodaj nowy filtr"
 
-#: js/Tinebase-FAT-debug.js:19152 js/widgets/grid/FilterToolbar.js:150
+#: js/Tinebase-FAT-debug.js:19152
+#: js/widgets/grid/FilterToolbar.js:150
 msgid "reset all filters"
 msgstr "Resetuj filtry"
 
-#: js/Tinebase-FAT-debug.js:19158 js/widgets/grid/FilterToolbar.js:156
+#: js/Tinebase-FAT-debug.js:19158
+#: js/widgets/grid/FilterToolbar.js:156
 msgid "start search"
 msgstr "Znajdź"
 
-#: js/Tinebase-FAT-debug.js:19166 js/widgets/grid/FilterToolbar.js:164
+#: js/Tinebase-FAT-debug.js:19166
+#: js/widgets/grid/FilterToolbar.js:164
 msgid "save as favorite"
 msgstr "zapisz jako ulubione"
 
-#: js/Tinebase-FAT-debug.js:19255 js/widgets/grid/FilterToolbar.js:253
+#: js/Tinebase-FAT-debug.js:19255
+#: js/widgets/grid/FilterToolbar.js:253
 msgid "select a field"
 msgstr "zaznacz pole"
 
-#: js/Tinebase-FAT-debug.js:19280 js/widgets/grid/FilterToolbar.js:278
+#: js/Tinebase-FAT-debug.js:19280
+#: js/widgets/grid/FilterToolbar.js:278
 msgid "Delete this filter"
 msgstr "Usuń ten filtr"
 
-#: js/Tinebase-FAT-debug.js:19311 js/widgets/grid/FilterToolbar.js:309
+#: js/Tinebase-FAT-debug.js:19311
+#: js/widgets/grid/FilterToolbar.js:309
 msgid "and"
 msgstr "i"
 
-#: js/Tinebase-FAT-debug.js:19958 js/Tinebase-FAT-debug.js:25330
+#: js/Tinebase-FAT-debug.js:19958
+#: js/Tinebase-FAT-debug.js:25330
 #: js/widgets/container/FilterModel.js:237
 #: js/widgets/grid/FilterModelMultiSelect.js:211
 msgid "Selected  {0}"
@@ -1228,579 +1540,735 @@ msgstr[0] "Widok ograniczony filtrem:"
 msgstr[1] "Widoki ograniczone {0} filtrami:"
 msgstr[2] "Widoki ograniczone {0} filtrami:"
 
-#: js/Tinebase-FAT-debug.js:20904 js/widgets/grid/QuickaddGridPanel.js:97
+#: js/Tinebase-FAT-debug.js:20904
+#: js/widgets/grid/QuickaddGridPanel.js:97
 msgid "Remove"
 msgstr "Usuń"
 
-#: js/Tinebase-FAT-debug.js:21099 js/widgets/grid/FileUploadGrid.js:96
+#: js/Tinebase-FAT-debug.js:21099
+#: js/widgets/grid/FileUploadGrid.js:96
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Przesłanie pliku było niemożliwe. Możliwe, że rozmiar pliku jest za duży. Proszę powiadomić swojego administratora. Maksymalny rozmiar przesyłanego pliku:"
 
-#: js/Tinebase-FAT-debug.js:21124 js/widgets/grid/FileUploadGrid.js:121
+#: js/Tinebase-FAT-debug.js:21124
+#: js/widgets/grid/FileUploadGrid.js:121
 msgid "Remove file"
 msgstr "Usuń plik"
 
-#: js/Tinebase-FAT-debug.js:21164 js/widgets/grid/FileUploadGrid.js:161
+#: js/Tinebase-FAT-debug.js:21164
+#: js/widgets/grid/FileUploadGrid.js:161
 msgid "Add file"
 msgstr "Dodaj plik"
 
-#: js/Tinebase-FAT-debug.js:21202 js/widgets/grid/FileUploadGrid.js:199
+#: js/Tinebase-FAT-debug.js:21202
+#: js/widgets/grid/FileUploadGrid.js:199
 msgid "name"
 msgstr "nazwa"
 
-#: js/Tinebase-FAT-debug.js:21217 js/widgets/grid/FileUploadGrid.js:214
+#: js/Tinebase-FAT-debug.js:21217
+#: js/widgets/grid/FileUploadGrid.js:214
 msgid "size"
 msgstr "rozmiar"
 
-#: js/Tinebase-FAT-debug.js:21224 js/widgets/grid/FileUploadGrid.js:221
+#: js/Tinebase-FAT-debug.js:21224
+#: js/widgets/grid/FileUploadGrid.js:221
 msgid "type"
 msgstr "typ"
 
-#: js/Tinebase-FAT-debug.js:21389 js/widgets/grid/PickerGridPanel.js:116
+#: js/Tinebase-FAT-debug.js:21389
+#: js/widgets/grid/PickerGridPanel.js:116
 msgid "Remove record"
 msgstr "Usuń wiersz"
 
-#: js/Tinebase-FAT-debug.js:21457 js/widgets/grid/PickerGridPanel.js:184
+#: js/Tinebase-FAT-debug.js:21457
+#: js/widgets/grid/PickerGridPanel.js:184
 msgid "Search for records ..."
 msgstr "Znajdź wiersze ..."
 
-#: js/Tinebase-FAT-debug.js:21755 js/widgets/grid/GridPanel.js:239
+#: js/Tinebase-FAT-debug.js:21755
+#: js/widgets/grid/GridPanel.js:239
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "{0} nie zostały znalezione. Proszę spróbować zmienić kryteria wyszukiwania, opcje wyświetlania albo {1}, w których szukasz."
 
-#: js/Tinebase-FAT-debug.js:21851 js/widgets/grid/GridPanel.js:335
+#: js/Tinebase-FAT-debug.js:21851
+#: js/widgets/grid/GridPanel.js:335
 msgid "Edit {0}"
 msgstr "Edytuj {0}"
 
-#: js/Tinebase-FAT-debug.js:21873 js/Tinebase-FAT-debug.js:23156
-#: js/widgets/grid/GridPanel.js:357 js/widgets/tree/ContextMenu.js:242
+#: js/Tinebase-FAT-debug.js:21873
+#: js/Tinebase-FAT-debug.js:23156
+#: js/widgets/grid/GridPanel.js:357
+#: js/widgets/tree/ContextMenu.js:242
 msgid "Add {0}"
 msgstr "Dodaj {0}"
 
-#: js/Tinebase-FAT-debug.js:21881 js/widgets/grid/GridPanel.js:365
+#: js/Tinebase-FAT-debug.js:21881
+#: js/widgets/grid/GridPanel.js:365
 msgid "Print Page"
 msgstr "Drukuj stronę"
 
-#: js/Tinebase-FAT-debug.js:21920 js/Tinebase-FAT-debug.js:21921
-#: js/Tinebase-FAT-debug.js:21923 js/widgets/grid/GridPanel.js:404
-#: js/widgets/grid/GridPanel.js:405 js/widgets/grid/GridPanel.js:407
+#: js/Tinebase-FAT-debug.js:21920
+#: js/Tinebase-FAT-debug.js:21921
+#: js/Tinebase-FAT-debug.js:21923
+#: js/widgets/grid/GridPanel.js:404
+#: js/widgets/grid/GridPanel.js:405
+#: js/widgets/grid/GridPanel.js:407
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Usuń {0}"
 msgstr[1] "Usuń {0}"
 msgstr[2] "Usuń {0}"
 
-#: js/Tinebase-FAT-debug.js:22222 js/widgets/grid/GridPanel.js:706
+#: js/Tinebase-FAT-debug.js:22222
+#: js/widgets/grid/GridPanel.js:706
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Wyświetlane wiersze {0} - {1} z {2}"
 
-#: js/Tinebase-FAT-debug.js:22223 js/widgets/grid/GridPanel.js:707
+#: js/Tinebase-FAT-debug.js:22223
+#: js/widgets/grid/GridPanel.js:707
 msgid "No {0} to display"
 msgstr "{0} niezdefiniowane"
 
-#: js/Tinebase-FAT-debug.js:22412 js/widgets/grid/GridPanel.js:903
+#: js/Tinebase-FAT-debug.js:22412
+#: js/widgets/grid/GridPanel.js:903
 msgid "Tagging"
 msgstr "Przypisywanie znaczników"
 
-#: js/Tinebase-FAT-debug.js:22447 js/widgets/grid/GridPanel.js:938
+#: js/Tinebase-FAT-debug.js:22447
+#: js/widgets/grid/GridPanel.js:938
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/Tinebase-FAT-debug.js:22448 js/Tinebase-FAT-debug.js:27424
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:939
+#: js/Tinebase-FAT-debug.js:22448
+#: js/Tinebase-FAT-debug.js:27424
+#: js/widgets/ActivitiesPanel.js:464
+#: js/widgets/grid/GridPanel.js:939
 msgid "Created By"
 msgstr "Utworzona przez"
 
-#: js/Tinebase-FAT-debug.js:22449 js/widgets/grid/GridPanel.js:940
+#: js/Tinebase-FAT-debug.js:22449
+#: js/widgets/grid/GridPanel.js:940
 msgid "Last Modified Time"
 msgstr "Data ostatniej zmiany"
 
-#: js/Tinebase-FAT-debug.js:22450 js/widgets/grid/GridPanel.js:941
+#: js/Tinebase-FAT-debug.js:22450
+#: js/widgets/grid/GridPanel.js:941
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
-#: js/Tinebase-FAT-debug.js:22719 js/widgets/grid/GridPanel.js:1210
+#: js/Tinebase-FAT-debug.js:22719
+#: js/widgets/grid/GridPanel.js:1210
 msgid "Not Allowed"
 msgstr "Brak uprawnień"
 
-#: js/Tinebase-FAT-debug.js:22720 js/widgets/grid/GridPanel.js:1211
+#: js/Tinebase-FAT-debug.js:22720
+#: js/widgets/grid/GridPanel.js:1211
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nie masz uprawnień, aby usunąć wszystkie strony na raz"
 
-#: js/Tinebase-FAT-debug.js:22738 js/widgets/grid/GridPanel.js:1229
+#: js/Tinebase-FAT-debug.js:22738
+#: js/widgets/grid/GridPanel.js:1229
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
 msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 
-#: js/Tinebase-FAT-debug.js:22776 js/widgets/grid/GridPanel.js:1267
+#: js/Tinebase-FAT-debug.js:22776
+#: js/widgets/grid/GridPanel.js:1267
 msgid " ... This may take a long time!"
 msgstr "... To może długo potrwać!"
 
-#: js/Tinebase-FAT-debug.js:22950 js/widgets/tree/ContextMenu.js:36
+#: js/Tinebase-FAT-debug.js:22950
+#: js/widgets/tree/ContextMenu.js:36
 msgid "New {0}"
 msgstr "Nowy {0}"
 
-#: js/Tinebase-FAT-debug.js:22950 js/widgets/tree/ContextMenu.js:36
+#: js/Tinebase-FAT-debug.js:22950
+#: js/widgets/tree/ContextMenu.js:36
 msgid "Please enter the name of the new {0}:"
 msgstr "Proszę wprowadzić nazwę dla: {0}"
 
-#: js/Tinebase-FAT-debug.js:22953 js/widgets/tree/ContextMenu.js:39
+#: js/Tinebase-FAT-debug.js:22953
+#: js/widgets/tree/ContextMenu.js:39
 msgid "No {0} added"
 msgstr "{0} nie została dodana"
 
-#: js/Tinebase-FAT-debug.js:22953 js/Tinebase-FAT-debug.js:23054
-#: js/widgets/tree/ContextMenu.js:39 js/widgets/tree/ContextMenu.js:140
+#: js/Tinebase-FAT-debug.js:22953
+#: js/Tinebase-FAT-debug.js:23054
+#: js/widgets/tree/ContextMenu.js:39
+#: js/widgets/tree/ContextMenu.js:140
 msgid "You have to supply a {0} name!"
 msgstr "Musisz wprowadzić nazwę {0}!"
 
-#: js/Tinebase-FAT-debug.js:22956 js/widgets/tree/ContextMenu.js:42
+#: js/Tinebase-FAT-debug.js:22956
+#: js/widgets/tree/ContextMenu.js:42
 msgid "Creating {0}..."
 msgstr "Tworzenie {0}..."
 
-#: js/Tinebase-FAT-debug.js:22998 js/widgets/tree/ContextMenu.js:84
+#: js/Tinebase-FAT-debug.js:22998
+#: js/widgets/tree/ContextMenu.js:84
 msgid "Do you really want to delete the {0} \"{1}\"?"
 msgstr "Czy na pewno chcesz usunąć {0} \"{1}\"?"
 
-#: js/Tinebase-FAT-debug.js:23000 js/widgets/tree/ContextMenu.js:86
+#: js/Tinebase-FAT-debug.js:23000
+#: js/widgets/tree/ContextMenu.js:86
 msgid "Deleting {0} \"{1}\""
 msgstr "Usuwanie {0} \"{1}\""
 
-#: js/Tinebase-FAT-debug.js:23048 js/widgets/tree/ContextMenu.js:134
+#: js/Tinebase-FAT-debug.js:23048
+#: js/widgets/tree/ContextMenu.js:134
 msgid "Please enter the new name of the {0}:"
 msgstr "Proszę wprowadzić nową nazwę w kategorii: {0}:"
 
-#: js/Tinebase-FAT-debug.js:23054 js/widgets/tree/ContextMenu.js:140
+#: js/Tinebase-FAT-debug.js:23054
+#: js/widgets/tree/ContextMenu.js:140
 msgid "Not renamed {0}"
 msgstr "Nazwa {0} nie została zmieniona"
 
-#: js/Tinebase-FAT-debug.js:23057 js/widgets/tree/ContextMenu.js:143
+#: js/Tinebase-FAT-debug.js:23057
+#: js/widgets/tree/ContextMenu.js:143
 msgid "Updating {0} \"{1}\""
 msgstr "Aktualizacja {0} \"{1}\""
 
-#: js/Tinebase-FAT-debug.js:23126 js/widgets/tree/ContextMenu.js:212
+#: js/Tinebase-FAT-debug.js:23126
+#: js/widgets/tree/ContextMenu.js:212
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Edytuj uprawnienia dla {0} \"{1}\""
 
-#: js/Tinebase-FAT-debug.js:23174 js/widgets/tree/ContextMenu.js:260
+#: js/Tinebase-FAT-debug.js:23174
+#: js/widgets/tree/ContextMenu.js:260
 msgid "Rename {0}"
 msgstr "Zmień nazwę w: {0}"
 
-#: js/Tinebase-FAT-debug.js:23182 js/widgets/tree/ContextMenu.js:268
+#: js/Tinebase-FAT-debug.js:23182
+#: js/widgets/tree/ContextMenu.js:268
 msgid "Set color for {0}"
 msgstr "Ustaw kolor dla: {0}"
 
-#: js/Tinebase-FAT-debug.js:23195 js/widgets/tree/ContextMenu.js:281
+#: js/Tinebase-FAT-debug.js:23195
+#: js/widgets/tree/ContextMenu.js:281
 msgid "Manage permissions"
 msgstr "Edytu uprawnienia"
 
-#: js/Tinebase-FAT-debug.js:23203 js/widgets/tree/ContextMenu.js:289
+#: js/Tinebase-FAT-debug.js:23203
+#: js/widgets/tree/ContextMenu.js:289
 msgid "Reload {0}"
 msgstr "Przeładuj {0}"
 
-#: js/Tinebase-FAT-debug.js:23535 js/widgets/account/PickerGridPanel.js:149
+#: js/Tinebase-FAT-debug.js:23535
+#: js/widgets/account/PickerGridPanel.js:149
 msgid "Search User"
 msgstr "Znajdź użytkownika"
 
-#: js/Tinebase-FAT-debug.js:23541 js/widgets/account/PickerGridPanel.js:155
+#: js/Tinebase-FAT-debug.js:23541
+#: js/widgets/account/PickerGridPanel.js:155
 msgid "Search Group"
 msgstr "Znajdź grupę"
 
-#: js/Tinebase-FAT-debug.js:23547 js/widgets/account/PickerGridPanel.js:161
+#: js/Tinebase-FAT-debug.js:23547
+#: js/widgets/account/PickerGridPanel.js:161
 msgid "Add Anyone"
 msgstr "Dodaj kogokolwiek"
 
-#: js/Tinebase-FAT-debug.js:23555 js/widgets/account/PickerGridPanel.js:169
+#: js/Tinebase-FAT-debug.js:23555
+#: js/widgets/account/PickerGridPanel.js:169
 msgid "Anyone"
 msgstr "Ktokolwiek"
 
-#: js/Tinebase-FAT-debug.js:23603 js/widgets/account/PickerGridPanel.js:217
+#: js/Tinebase-FAT-debug.js:23603
+#: js/widgets/account/PickerGridPanel.js:217
 msgid "Search for users ..."
 msgstr "Znajdź użytkowników..."
 
-#: js/Tinebase-FAT-debug.js:23622 js/widgets/account/PickerGridPanel.js:236
+#: js/Tinebase-FAT-debug.js:23622
+#: js/widgets/account/PickerGridPanel.js:236
 msgid "Search for groups ..."
 msgstr "Znajdź grupy..."
 
-#: js/Tinebase-FAT-debug.js:23814 js/widgets/container/ContainerSelect.js:107
+#: js/Tinebase-FAT-debug.js:23814
+#: js/widgets/container/ContainerSelect.js:107
 msgid "choose other {0}..."
 msgstr "Wybierz z: {0}..."
 
-#: js/Tinebase-FAT-debug.js:23817 js/widgets/container/ContainerSelect.js:110
+#: js/Tinebase-FAT-debug.js:23817
+#: js/widgets/container/ContainerSelect.js:110
 msgid "Select a {0}"
 msgstr "Wybierz {0}"
 
-#: js/Tinebase-FAT-debug.js:23837 js/widgets/container/ContainerSelect.js:130
+#: js/Tinebase-FAT-debug.js:23837
+#: js/widgets/container/ContainerSelect.js:130
 msgid "Recently used {0}:"
 msgstr "Ostatnio używany {0}:"
 
-#: js/Tinebase-FAT-debug.js:24154 js/widgets/container/ContainerSelect.js:447
+#: js/Tinebase-FAT-debug.js:24154
+#: js/widgets/container/ContainerSelect.js:447
 msgid "please select a {0}"
 msgstr "Proszę wybrać {0}"
 
-#: js/Tinebase-FAT-debug.js:24314 js/widgets/container/GrantsDialog.js:52
+#: js/Tinebase-FAT-debug.js:24314
+#: js/widgets/container/GrantsDialog.js:52
 msgid "Folder"
 msgstr "Katalog"
 
-#: js/Tinebase-FAT-debug.js:24349 js/widgets/container/GrantsDialog.js:87
+#: js/Tinebase-FAT-debug.js:24349
+#: js/widgets/container/GrantsDialog.js:87
 msgid "The grant to read records of this container"
 msgstr "Uprawnienia do czytania wierszy w kontenerze"
 
-#: js/Tinebase-FAT-debug.js:24354 js/Tinebase-FAT-debug.js:27122
-#: js/Tinebase-FAT-debug.js:27134 js/widgets/ActivitiesPanel.js:162
-#: js/widgets/ActivitiesPanel.js:174 js/widgets/container/GrantsDialog.js:92
+#: js/Tinebase-FAT-debug.js:24354
+#: js/Tinebase-FAT-debug.js:27122
+#: js/Tinebase-FAT-debug.js:27134
+#: js/widgets/ActivitiesPanel.js:162
+#: js/widgets/ActivitiesPanel.js:174
+#: js/widgets/container/GrantsDialog.js:92
 msgid "Add"
 msgstr "Dodaj"
 
-#: js/Tinebase-FAT-debug.js:24355 js/widgets/container/GrantsDialog.js:93
+#: js/Tinebase-FAT-debug.js:24355
+#: js/widgets/container/GrantsDialog.js:93
 msgid "The grant to add records to this container"
 msgstr "Uprawnienia do dodawania wierszy do kontenera"
 
-#: js/Tinebase-FAT-debug.js:24361 js/widgets/container/GrantsDialog.js:99
+#: js/Tinebase-FAT-debug.js:24361
+#: js/widgets/container/GrantsDialog.js:99
 msgid "The grant to edit records in this container"
 msgstr "Uprawnienia do edytowania wierszy w kontenerze"
 
-#: js/Tinebase-FAT-debug.js:24366 js/widgets/container/GrantsDialog.js:104
+#: js/Tinebase-FAT-debug.js:24366
+#: js/widgets/container/GrantsDialog.js:104
 msgid "Delete"
 msgstr "Usuwanie"
 
-#: js/Tinebase-FAT-debug.js:24367 js/widgets/container/GrantsDialog.js:105
+#: js/Tinebase-FAT-debug.js:24367
+#: js/widgets/container/GrantsDialog.js:105
 msgid "The grant to delete records in this container"
 msgstr "Uprawnienia do usuwania wierszy z kontenera"
 
-#: js/Tinebase-FAT-debug.js:24373 js/widgets/container/GrantsDialog.js:111
+#: js/Tinebase-FAT-debug.js:24373
+#: js/widgets/container/GrantsDialog.js:111
 msgid "The grant to export records from this container"
 msgstr "Uprawnienia do eksportowania wierszy z kontenera"
 
-#: js/Tinebase-FAT-debug.js:24378 js/widgets/container/GrantsDialog.js:116
+#: js/Tinebase-FAT-debug.js:24378
+#: js/widgets/container/GrantsDialog.js:116
 msgid "Sync"
 msgstr "Synchronizuj"
 
-#: js/Tinebase-FAT-debug.js:24379 js/widgets/container/GrantsDialog.js:117
+#: js/Tinebase-FAT-debug.js:24379
+#: js/widgets/container/GrantsDialog.js:117
 msgid "The grant to synchronise records with this container"
 msgstr "Uprawnienia do synchronizacji wierszy z kontenera"
 
-#: js/Tinebase-FAT-debug.js:24390 js/widgets/container/GrantsDialog.js:128
+#: js/Tinebase-FAT-debug.js:24390
+#: js/widgets/container/GrantsDialog.js:128
 msgid "Free Busy"
 msgstr "Dostępny Zajęty"
 
-#: js/Tinebase-FAT-debug.js:24391 js/widgets/container/GrantsDialog.js:129
+#: js/Tinebase-FAT-debug.js:24391
+#: js/widgets/container/GrantsDialog.js:129
 msgid "The grant to access free busy information of events in this calendar"
 msgstr "Prawo dostępu do informacji o terminach w tym kalendarzu"
 
-#: js/Tinebase-FAT-debug.js:24398 js/widgets/container/GrantsDialog.js:136
+#: js/Tinebase-FAT-debug.js:24398
+#: js/widgets/container/GrantsDialog.js:136
 msgid "Private"
 msgstr "Osobiste"
 
-#: js/Tinebase-FAT-debug.js:24399 js/widgets/container/GrantsDialog.js:137
+#: js/Tinebase-FAT-debug.js:24399
+#: js/widgets/container/GrantsDialog.js:137
 msgid "The grant to access records marked as private in this container"
 msgstr "Uprawnienia dostępu do wierszy w kontenerze oznaczonych jako osobiste"
 
-#: js/Tinebase-FAT-debug.js:24406 js/widgets/container/GrantsDialog.js:144
+#: js/Tinebase-FAT-debug.js:24406
+#: js/widgets/container/GrantsDialog.js:144
 msgid "Admin"
 msgstr "Administrator"
 
-#: js/Tinebase-FAT-debug.js:24407 js/widgets/container/GrantsDialog.js:145
+#: js/Tinebase-FAT-debug.js:24407
+#: js/widgets/container/GrantsDialog.js:145
 msgid "The grant to administrate this container"
 msgstr "Uprawnienia administratora kontenera"
 
-#: js/Tinebase-FAT-debug.js:24429 js/widgets/container/GrantsDialog.js:167
+#: js/Tinebase-FAT-debug.js:24429
+#: js/widgets/container/GrantsDialog.js:167
 msgid "Updating Grants"
 msgstr "Aktualizacja uprawnień"
 
-#: js/Tinebase-FAT-debug.js:24459 js/widgets/container/GrantsDialog.js:197
+#: js/Tinebase-FAT-debug.js:24459
+#: js/widgets/container/GrantsDialog.js:197
 msgid "Error"
 msgstr "Błąd"
 
-#: js/Tinebase-FAT-debug.js:24460 js/widgets/container/GrantsDialog.js:198
+#: js/Tinebase-FAT-debug.js:24460
+#: js/widgets/container/GrantsDialog.js:198
 msgid "You are not allowed to remove all admins for this container!"
 msgstr "Nie masz uprawnień, aby usunąć wszystkich administratorów niniejszego kontenera."
 
-#: js/Tinebase-FAT-debug.js:24624 js/widgets/container/ContainerTree.js:136
+#: js/Tinebase-FAT-debug.js:24624
+#: js/widgets/container/ContainerTree.js:136
 msgid "container"
 msgid_plural "containers"
 msgstr[0] "kontener"
 msgstr[1] "kontenery"
 msgstr[2] "kontenery"
 
-#: js/Tinebase-FAT-debug.js:24974 js/widgets/container/ContainerTree.js:486
+#: js/Tinebase-FAT-debug.js:24974
+#: js/widgets/container/ContainerTree.js:486
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr "Nie masz uprawnień, aby wybrać {0} '{1}':"
 
-#: js/Tinebase-FAT-debug.js:24975 js/widgets/container/ContainerTree.js:487
+#: js/Tinebase-FAT-debug.js:24975
+#: js/widgets/container/ContainerTree.js:487
 msgid "{0} grant is required for desired action"
 msgstr "Dla tej akcji wymagane są uprawnienia {0}"
 
-#: js/Tinebase-FAT-debug.js:24976 js/widgets/container/ContainerTree.js:488
+#: js/Tinebase-FAT-debug.js:24976
+#: js/widgets/container/ContainerTree.js:488
 msgid "Insufficient Grants"
 msgstr "Niewystarczające uprawnienia"
 
-#: js/Tinebase-FAT-debug.js:25223 js/widgets/container/FilterModel.js:130
+#: js/Tinebase-FAT-debug.js:25223
+#: js/widgets/container/FilterModel.js:130
 msgid "is personal of"
 msgstr "należy do"
 
-#: js/Tinebase-FAT-debug.js:25539 js/Tinebase-FAT-debug.js:25564
-#: js/widgets/tags/TagsPanel.js:92 js/widgets/tags/TagsPanel.js:117
+#: js/Tinebase-FAT-debug.js:25539
+#: js/Tinebase-FAT-debug.js:25564
+#: js/widgets/tags/TagsPanel.js:92
+#: js/widgets/tags/TagsPanel.js:117
 msgid "Add a new personal tag"
 msgstr "Dodaj nowy, osobisty znacznik"
 
-#: js/Tinebase-FAT-debug.js:25542 js/Tinebase-FAT-debug.js:25567
-#: js/widgets/tags/TagsPanel.js:95 js/widgets/tags/TagsPanel.js:120
+#: js/Tinebase-FAT-debug.js:25542
+#: js/Tinebase-FAT-debug.js:25567
+#: js/widgets/tags/TagsPanel.js:95
+#: js/widgets/tags/TagsPanel.js:120
 msgid "Add New Personal Tag"
 msgstr "Dodaj nowy, osobisty znacznik"
 
-#: js/Tinebase-FAT-debug.js:25543 js/Tinebase-FAT-debug.js:25568
-#: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
+#: js/Tinebase-FAT-debug.js:25543
+#: js/Tinebase-FAT-debug.js:25568
+#: js/widgets/tags/TagsPanel.js:96
+#: js/widgets/tags/TagsPanel.js:121
 msgid "Please note: You create a personal tag. Only you can see it!"
 msgstr "Pamiętaj proszę, że tworzysz nowy, osobisty znacznik. Tylko Ty będziesz go widzieć!"
 
-#: js/Tinebase-FAT-debug.js:25543 js/Tinebase-FAT-debug.js:25568
-#: js/widgets/tags/TagsPanel.js:96 js/widgets/tags/TagsPanel.js:121
+#: js/Tinebase-FAT-debug.js:25543
+#: js/Tinebase-FAT-debug.js:25568
+#: js/widgets/tags/TagsPanel.js:96
+#: js/widgets/tags/TagsPanel.js:121
 msgid "Enter tag name:"
 msgstr "Wpisz nazwę znacznika:"
 
-#: js/Tinebase-FAT-debug.js:25587 js/Tinebase-FAT-debug.js:25896
-#: js/Tinebase-FAT-debug.js:25900 js/Tinebase-FAT-debug.js:26196
-#: js/Tinebase-FAT-debug.js:26201 js/widgets/tags/TagCombo.js:119
-#: js/widgets/tags/TagCombo.js:124 js/widgets/tags/TagsPanel.js:140
-#: js/widgets/tags/TagsPanel.js:449 js/widgets/tags/TagsPanel.js:453
+#: js/Tinebase-FAT-debug.js:25587
+#: js/Tinebase-FAT-debug.js:25896
+#: js/Tinebase-FAT-debug.js:25900
+#: js/Tinebase-FAT-debug.js:26196
+#: js/Tinebase-FAT-debug.js:26201
+#: js/widgets/tags/TagCombo.js:119
+#: js/widgets/tags/TagCombo.js:124
+#: js/widgets/tags/TagsPanel.js:140
+#: js/widgets/tags/TagsPanel.js:449
+#: js/widgets/tags/TagsPanel.js:453
 msgid "personal"
 msgstr "osobisty"
 
-#: js/Tinebase-FAT-debug.js:25609 js/widgets/tags/TagsPanel.js:162
+#: js/Tinebase-FAT-debug.js:25609
+#: js/widgets/tags/TagsPanel.js:162
 msgid "No Tags to display"
 msgstr "Brak znaczników"
 
-#: js/Tinebase-FAT-debug.js:25632 js/widgets/tags/TagsPanel.js:185
+#: js/Tinebase-FAT-debug.js:25632
+#: js/widgets/tags/TagsPanel.js:185
 msgid "Detach tag"
 msgid_plural "Detach tags"
 msgstr[0] "Odłącz znacznik"
 msgstr[1] "Odłącz znaczniki"
 msgstr[2] "Odłącz znaczniki"
 
-#: js/Tinebase-FAT-debug.js:25642 js/widgets/tags/TagsPanel.js:195
+#: js/Tinebase-FAT-debug.js:25642
+#: js/widgets/tags/TagsPanel.js:195
 msgid "Edit tag"
 msgstr "Edytuj znacznik"
 
-#: js/Tinebase-FAT-debug.js:25647 js/Tinebase-FAT-debug.js:25652
-#: js/widgets/tags/TagsPanel.js:200 js/widgets/tags/TagsPanel.js:205
+#: js/Tinebase-FAT-debug.js:25647
+#: js/Tinebase-FAT-debug.js:25652
+#: js/widgets/tags/TagsPanel.js:200
+#: js/widgets/tags/TagsPanel.js:205
 msgid "Rename Tag"
 msgstr "Zmień nazwę znacznika"
 
-#: js/Tinebase-FAT-debug.js:25652 js/widgets/tags/TagsPanel.js:205
+#: js/Tinebase-FAT-debug.js:25652
+#: js/widgets/tags/TagsPanel.js:205
 msgid "Please enter a new name:"
 msgstr "Proszę wprowadzić nową nazwę:"
 
-#: js/Tinebase-FAT-debug.js:25661 js/widgets/tags/TagsPanel.js:214
+#: js/Tinebase-FAT-debug.js:25661
+#: js/widgets/tags/TagsPanel.js:214
 msgid "Edit Description"
 msgstr "Edytuj opis"
 
-#: js/Tinebase-FAT-debug.js:25666 js/widgets/tags/TagsPanel.js:219
+#: js/Tinebase-FAT-debug.js:25666
+#: js/widgets/tags/TagsPanel.js:219
 msgid "Description for tag"
 msgstr "Opis znacznika"
 
-#: js/Tinebase-FAT-debug.js:25666 js/widgets/tags/TagsPanel.js:219
+#: js/Tinebase-FAT-debug.js:25666
+#: js/widgets/tags/TagsPanel.js:219
 msgid "Please enter new description:"
 msgstr "Proszę wprowadzić nowy opis:"
 
-#: js/Tinebase-FAT-debug.js:25675 js/widgets/tags/TagsPanel.js:228
+#: js/Tinebase-FAT-debug.js:25675
+#: js/widgets/tags/TagsPanel.js:228
 msgid "Change Color"
 msgstr "Zmień kolor"
 
-#: js/Tinebase-FAT-debug.js:25704 js/widgets/tags/TagsPanel.js:257
+#: js/Tinebase-FAT-debug.js:25704
+#: js/widgets/tags/TagsPanel.js:257
 msgid "Delete Tag"
 msgid_plural "Delete Tags"
 msgstr[0] "Usuń znacznik"
 msgstr[1] "Usuń znaczniki"
 msgstr[2] "Usuń znaczniki"
 
-#: js/Tinebase-FAT-debug.js:25717 js/widgets/tags/TagsPanel.js:270
+#: js/Tinebase-FAT-debug.js:25717
+#: js/widgets/tags/TagsPanel.js:270
 msgid "Realy Delete Selected Tag?"
 msgid_plural "Realy Delete Selected Tags?"
 msgstr[0] "Na pewno usunąć wybrany znacznik?"
 msgstr[1] "Na pewno usunąć wybrane znaczniki?"
 msgstr[2] "Na pewno usunąć wybrane znaczniki?"
 
-#: js/Tinebase-FAT-debug.js:25718 js/widgets/tags/TagsPanel.js:271
+#: js/Tinebase-FAT-debug.js:25718
+#: js/widgets/tags/TagsPanel.js:271
 msgid "the selected tag will be deleted and disapear for all entries"
 msgid_plural "The selected tags will be removed and disapear for all entries"
 msgstr[0] "Wybrany znacznik zostanie usunięty i zniknie dla wszystkich wpisów"
 msgstr[1] "Wybrane znaczniki zostaną usunięte i znikną dla wszystkich wpisów"
 msgstr[2] "Wybrane znaczniki zostaną usunięte i znikną dla wszystkich wpisów"
 
-#: js/Tinebase-FAT-debug.js:25722 js/widgets/tags/TagsPanel.js:275
+#: js/Tinebase-FAT-debug.js:25722
+#: js/widgets/tags/TagsPanel.js:275
 msgid "Please wait a moment..."
 msgstr "Proszę chwilę poczekać..."
 
-#: js/Tinebase-FAT-debug.js:25722 js/widgets/tags/TagsPanel.js:275
+#: js/Tinebase-FAT-debug.js:25722
+#: js/widgets/tags/TagsPanel.js:275
 msgid "Deleting Tag"
 msgid_plural "Deleting Tags"
 msgstr[0] "Usuwanie znacznika"
 msgstr[1] "Usuwanie znaczników"
 msgstr[2] "Usuwanie znaczników"
 
-#: js/Tinebase-FAT-debug.js:25738 js/widgets/tags/TagsPanel.js:291
+#: js/Tinebase-FAT-debug.js:25738
+#: js/widgets/tags/TagsPanel.js:291
 msgid "Could not delete Tag(s)."
 msgstr "Usunięcie znacznika/znaczników było niemożliwe."
 
-#: js/Tinebase-FAT-debug.js:25800 js/Tinebase-FAT-debug.js:25862
-#: js/widgets/tags/TagsPanel.js:353 js/widgets/tags/TagsPanel.js:415
+#: js/Tinebase-FAT-debug.js:25800
+#: js/Tinebase-FAT-debug.js:25862
+#: js/widgets/tags/TagsPanel.js:353
+#: js/widgets/tags/TagsPanel.js:415
 msgid "Notice"
 msgstr "Uwaga"
 
-#: js/Tinebase-FAT-debug.js:25801 js/Tinebase-FAT-debug.js:25863
-#: js/widgets/tags/TagsPanel.js:354 js/widgets/tags/TagsPanel.js:416
+#: js/Tinebase-FAT-debug.js:25801
+#: js/Tinebase-FAT-debug.js:25863
+#: js/widgets/tags/TagsPanel.js:354
+#: js/widgets/tags/TagsPanel.js:416
 msgid "The minimum tag length is three."
 msgstr "Minimalna długość znacznika wynosi trzy znaki."
 
-#: js/Tinebase-FAT-debug.js:25848 js/widgets/tags/TagsPanel.js:401
+#: js/Tinebase-FAT-debug.js:25848
+#: js/widgets/tags/TagsPanel.js:401
 msgid "Could not create tag."
 msgstr "Utworzenie znacznika było niemożliwe."
 
-#: js/Tinebase-FAT-debug.js:25881 js/widgets/tags/TagsPanel.js:434
+#: js/Tinebase-FAT-debug.js:25881
+#: js/widgets/tags/TagsPanel.js:434
 msgid "Could not update tag."
 msgstr "Aktualizacja znacznika była niemożliwa."
 
-#: js/Tinebase-FAT-debug.js:25915 js/Tinebase-FAT-debug.js:25973
-#: js/widgets/tags/TagsPanel.js:468 js/widgets/tags/TagsPanel.js:526
+#: js/Tinebase-FAT-debug.js:25915
+#: js/Tinebase-FAT-debug.js:25973
+#: js/widgets/tags/TagsPanel.js:468
+#: js/widgets/tags/TagsPanel.js:526
 msgid "Enter tag name"
 msgstr "Wpisz nazwę znacznika"
 
-#: js/Tinebase-FAT-debug.js:25916 js/Tinebase-FAT-debug.js:27758
-#: js/widgets/form/RecordPickerComboBox.js:63 js/widgets/tags/TagsPanel.js:469
+#: js/Tinebase-FAT-debug.js:25916
+#: js/Tinebase-FAT-debug.js:27758
+#: js/widgets/form/RecordPickerComboBox.js:63
+#: js/widgets/tags/TagsPanel.js:469
 msgid "Searching..."
 msgstr "Wyszukiwanie..."
 
-#: js/Tinebase-FAT-debug.js:26050 js/widgets/tags/TagsPanel.js:603
+#: js/Tinebase-FAT-debug.js:26050
+#: js/widgets/tags/TagsPanel.js:603
 msgid "Color"
 msgstr "Kolor"
 
-#: js/Tinebase-FAT-debug.js:26125 js/widgets/tags/TagCombo.js:48
+#: js/Tinebase-FAT-debug.js:26125
+#: js/widgets/tags/TagCombo.js:48
 msgid "tag name"
 msgstr "nazwa znacznika"
 
-#: js/Tinebase-FAT-debug.js:26249 js/widgets/tags/TagFilter.js:33
+#: js/Tinebase-FAT-debug.js:26249
+#: js/widgets/tags/TagFilter.js:33
 msgid "Tag"
 msgstr "Znacznik"
 
-#: js/Tinebase-FAT-debug.js:26297 js/widgets/tags/TagsMassAttachAction.js:18
+#: js/Tinebase-FAT-debug.js:26297
+#: js/widgets/tags/TagsMassAttachAction.js:18
 msgid "Add Tag"
 msgstr "Dodaj znacznik"
 
-#: js/Tinebase-FAT-debug.js:26352 js/widgets/tags/TagsMassAttachAction.js:73
+#: js/Tinebase-FAT-debug.js:26352
+#: js/widgets/tags/TagsMassAttachAction.js:73
 msgid "Attach the following tag to all selected items:"
 msgstr "Przypisz następujący znacznik do wszystkich zaznaczonych pozycji"
 
-#: js/Tinebase-FAT-debug.js:26363 js/widgets/tags/TagsMassAttachAction.js:84
+#: js/Tinebase-FAT-debug.js:26363
+#: js/widgets/tags/TagsMassAttachAction.js:84
 msgid "Select Tag"
 msgstr "Wybierz znacznik"
 
-#: js/Tinebase-FAT-debug.js:26594 js/widgets/mainscreen/WestPanel.js:191
+#: js/Tinebase-FAT-debug.js:26594
+#: js/widgets/mainscreen/WestPanel.js:191
 msgid "containers"
 msgstr "kontenery"
 
-#: js/Tinebase-FAT-debug.js:26621 js/widgets/mainscreen/WestPanel.js:218
+#: js/Tinebase-FAT-debug.js:26621
+#: js/widgets/mainscreen/WestPanel.js:218
 msgid "Favorites"
 msgstr "Ulubione"
 
-#: js/Tinebase-FAT-debug.js:26629 js/widgets/mainscreen/WestPanel.js:226
+#: js/Tinebase-FAT-debug.js:26629
+#: js/widgets/mainscreen/WestPanel.js:226
 msgid "Save current view as favorite"
 msgstr "Zapisz bieżący widok w ulubionych"
 
-#: js/Tinebase-FAT-debug.js:26922 js/widgets/CountryCombo.js:34
+#: js/Tinebase-FAT-debug.js:26922
+#: js/widgets/CountryCombo.js:34
 msgid "Select a country..."
-msgstr ""
+msgstr "Wybierz kraj..."
 
-#: js/Tinebase-FAT-debug.js:27107 js/widgets/ActivitiesPanel.js:147
+#: js/Tinebase-FAT-debug.js:27107
+#: js/widgets/ActivitiesPanel.js:147
 msgid "Add a Note..."
 msgstr "Dodaj notatkę..."
 
-#: js/Tinebase-FAT-debug.js:27122 js/Tinebase-FAT-debug.js:27423
-#: js/widgets/ActivitiesPanel.js:162 js/widgets/ActivitiesPanel.js:463
+#: js/Tinebase-FAT-debug.js:27122
+#: js/Tinebase-FAT-debug.js:27423
+#: js/widgets/ActivitiesPanel.js:162
+#: js/widgets/ActivitiesPanel.js:463
 msgid "Note"
 msgstr "Notatka"
 
-#: js/Tinebase-FAT-debug.js:27135 js/Tinebase-FAT-debug.js:27345
-#: js/widgets/ActivitiesPanel.js:175 js/widgets/ActivitiesPanel.js:385
+#: js/Tinebase-FAT-debug.js:27135
+#: js/Tinebase-FAT-debug.js:27345
+#: js/widgets/ActivitiesPanel.js:175
+#: js/widgets/ActivitiesPanel.js:385
 msgid "Add new note"
 msgstr "Dodaj nową notatkę"
 
-#: js/Tinebase-FAT-debug.js:27166 js/widgets/ActivitiesPanel.js:206
+#: js/Tinebase-FAT-debug.js:27166
+#: js/widgets/ActivitiesPanel.js:206
 msgid "Notes"
 msgstr "Notatki"
 
-#: js/Tinebase-FAT-debug.js:27242 js/widgets/ActivitiesPanel.js:282
+#: js/Tinebase-FAT-debug.js:27242
+#: js/widgets/ActivitiesPanel.js:282
 msgid "Enter new note:"
 msgstr "Napisz nową notatkę"
 
-#: js/Tinebase-FAT-debug.js:27279 js/Tinebase-FAT-debug.js:27344
-#: js/widgets/ActivitiesPanel.js:319 js/widgets/ActivitiesPanel.js:384
+#: js/Tinebase-FAT-debug.js:27279
+#: js/Tinebase-FAT-debug.js:27344
+#: js/widgets/ActivitiesPanel.js:319
+#: js/widgets/ActivitiesPanel.js:384
 msgid "Add Note"
 msgstr "Dodaj notatkę"
 
-#: js/Tinebase-FAT-debug.js:27331 js/widgets/ActivitiesPanel.js:371
+#: js/Tinebase-FAT-debug.js:27331
+#: js/widgets/ActivitiesPanel.js:371
 msgid "Add a {0} Note"
 msgstr "Dodaj notatkę ({0})"
 
-#: js/Tinebase-FAT-debug.js:27421 js/Tinebase-FAT-debug.js:27559
-#: js/widgets/ActivitiesPanel.js:461 js/widgets/ActivitiesPanel.js:599
+#: js/Tinebase-FAT-debug.js:27421
+#: js/Tinebase-FAT-debug.js:27559
+#: js/widgets/ActivitiesPanel.js:461
+#: js/widgets/ActivitiesPanel.js:599
 msgid "Type"
 msgstr "Ikona"
 
-#: js/Tinebase-FAT-debug.js:27425 js/widgets/ActivitiesPanel.js:465
+#: js/Tinebase-FAT-debug.js:27425
+#: js/widgets/ActivitiesPanel.js:465
 msgid "Timestamp"
 msgstr "Znacznik czasu"
 
-#: js/Tinebase-FAT-debug.js:27439 js/widgets/ActivitiesPanel.js:479
+#: js/Tinebase-FAT-debug.js:27439
+#: js/widgets/ActivitiesPanel.js:479
 msgid "Displaying history records {0} - {1} of {2}"
 msgstr "Wyświetlanie historii, wiersze {0} - {1} z {2}"
 
-#: js/Tinebase-FAT-debug.js:27440 js/widgets/ActivitiesPanel.js:480
+#: js/Tinebase-FAT-debug.js:27440
+#: js/widgets/ActivitiesPanel.js:480
 msgid "No history to display"
 msgstr "Brak historii"
 
-#: js/Tinebase-FAT-debug.js:27541 js/widgets/ActivitiesPanel.js:581
+#: js/Tinebase-FAT-debug.js:27541
+#: js/widgets/ActivitiesPanel.js:581
 msgid "History"
 msgstr "Historia"
 
-#: js/Tinebase-FAT-debug.js:27553 js/widgets/ActivitiesPanel.js:593
+#: js/Tinebase-FAT-debug.js:27553
+#: js/widgets/ActivitiesPanel.js:593
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/Tinebase-FAT-debug.js:27554 js/Tinebase-FAT-debug.js:27555
-#: js/widgets/ActivitiesPanel.js:594 js/widgets/ActivitiesPanel.js:595
+#: js/Tinebase-FAT-debug.js:27554
+#: js/Tinebase-FAT-debug.js:27555
+#: js/widgets/ActivitiesPanel.js:594
+#: js/widgets/ActivitiesPanel.js:595
 msgid "Time"
 msgstr "Czas"
 
-#: js/Tinebase-FAT-debug.js:27557 js/widgets/ActivitiesPanel.js:597
+#: js/Tinebase-FAT-debug.js:27557
+#: js/widgets/ActivitiesPanel.js:597
 msgid "User"
 msgstr "Użytkownik"
 
-#: js/Tinebase-FAT-debug.js:27954 js/widgets/form/ConfigPanel.js:106
+#: js/Tinebase-FAT-debug.js:27954
+#: js/widgets/form/ConfigPanel.js:106
 msgid "Invalid configuration"
 msgstr "Nieprawidłowa konfiguracja"
 
-#: js/Tinebase-FAT-debug.js:27979 js/widgets/form/ConfigPanel.js:131
+#: js/Tinebase-FAT-debug.js:27979
+#: js/widgets/form/ConfigPanel.js:131
 msgid "Transferring Configuration..."
 msgstr "Konfiguracja przesyłania..."
 
-#: js/Tinebase-FAT-debug.js:28075 js/widgets/form/ConfigPanel.js:227
+#: js/Tinebase-FAT-debug.js:28075
+#: js/widgets/form/ConfigPanel.js:227
 msgid "Save config"
 msgstr "Zapisz konfigurację"
 
-#: js/Tinebase-FAT-debug.js:28085 js/widgets/form/ConfigPanel.js:237
+#: js/Tinebase-FAT-debug.js:28085
+#: js/widgets/form/ConfigPanel.js:237
 msgid "Reload config"
 msgstr "Przeładuj plik konfiguracyjny"
 
-#: js/Tinebase-FAT-debug.js:28169 js/widgets/persistentfilter/Model.js:38
+#: js/Tinebase-FAT-debug.js:28169
+#: js/widgets/persistentfilter/Model.js:38
 msgid "Favorite"
 msgid_plural "Favorites"
 msgstr[0] "Ulubiony"
 msgstr[1] "ulubione"
 msgstr[2] "ulubione"
 
-#: js/Tinebase-FAT-debug.js:28169 js/widgets/persistentfilter/Model.js:38
+#: js/Tinebase-FAT-debug.js:28169
+#: js/widgets/persistentfilter/Model.js:38
 msgid "Events"
 msgstr "Terminy"
 
@@ -1864,7 +2332,8 @@ msgstr "Zapisz filtr"
 msgid "Please enter a name for the favorite"
 msgstr "Proszę dodać nazwę do ulubionych"
 
-#: js/Tinebase-FAT-debug.js:28610 js/Tinebase-FAT-debug.js:28613
+#: js/Tinebase-FAT-debug.js:28610
+#: js/Tinebase-FAT-debug.js:28613
 #: js/Tinebase-FAT-debug.js:28622
 #: js/widgets/persistentfilter/PickerPanel.js:327
 #: js/widgets/persistentfilter/PickerPanel.js:330
@@ -1892,7 +2361,8 @@ msgstr "Zapisywanie ulubionych"
 msgid "Overwriting system favorites is not yet supported"
 msgstr "Nadpisywanie systemowych ulubionych jeszcze nie jest obsługiwane"
 
-#: js/Tinebase-FAT-debug.js:31580 js/tineInit.js:581
+#: js/Tinebase-FAT-debug.js:31580
+#: js/tineInit.js:581
 msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 msgstr "Błąd krytyczny. Aktualizacja danych klienta nie powiodła się. Proszę się skontaktować ze swoim administratorem i / lub zrestartować / przeładować przeglądarkę."
 
@@ -1924,7 +2394,8 @@ msgstr "Gratulacje!"
 msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
 msgstr "Wszystkie wymagane informacje zostały wprowadzone. Jeśli naciśniesz przycisk Wyślij, prześlemy Tobie e-mail z potwierdzeniem rejestracji."
 
-#: js/widgets/TimezoneChooser.js:37 Preference.php:87
+#: js/widgets/TimezoneChooser.js:37
+#: Preference.php:87
 msgid "Timezone"
 msgstr "Strefa czasowa"
 

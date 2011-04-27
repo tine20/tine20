@@ -60,6 +60,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     evalGrants: false,
     filterSelectionDelete: true,
+    // autoRefresh is done via onFolderStoreUpdate
+    autoRefreshInterval: false,
     
     /**
      * @private grid cfg

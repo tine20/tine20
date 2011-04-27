@@ -80,6 +80,10 @@
           "path": "js/"
         },
         {
+          "text": "ApplicationFilter.js",
+          "path": "js/"
+        },
+        {
           "text": "Container.js",
           "path": "js/container/"
         },

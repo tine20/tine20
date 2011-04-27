@@ -89,39 +89,41 @@ Tine.widgets.container.GrantsGrid = Ext.extend(Tine.widgets.account.PickerGridPa
             })
         ];
         
-        // @todo move this to cal app when apps can cope with their own grant models
-        if (this.grantContainer.application_id.name) {
-            var isCalendar = (this.grantContainer.application_id.name == 'Calendar');
-        } else {
-            var calApp = Tine.Tinebase.appMgr.get('Calendar'),
-                calId = calApp ? calApp.id : 'none',
-                isCalendar = this.grantContainer.application_id === calId;
-        }
-        if (this.grantContainer.type == 'personal' && isCalendar) {
-            this.configColumns.push(new Ext.ux.grid.CheckColumn({
-                header: _('Free Busy'),
-                tooltip: _('The grant to access free busy information of events in this calendar'),
-                dataIndex: 'freebusyGrant',
-                width: 55
-            }));
-        }
-        
-        if (this.grantContainer.type == 'personal' && this.grantContainer.capabilites_private) {
-            this.configColumns.push(new Ext.ux.grid.CheckColumn({
-                header: _('Private'),
-                tooltip: _('The grant to access records marked as private in this container'),
-                dataIndex: 'privateGrant',
-                width: 55
-            }));
-        }
-        
-        if (this.grantContainer.type == 'shared' || this.alwaysShowAdminGrant) {
+        if (this.alwaysShowAdminGrant || (this.grantContainer && this.grantContainer.type == 'shared')) {
             this.configColumns.push(new Ext.ux.grid.CheckColumn({
                 header: _('Admin'),
                 tooltip: _('The grant to administrate this container'),
                 dataIndex: 'adminGrant',
                 width: 55
             }));
+        }
+
+        if (this.grantContainer) {
+            // @todo move this to cal app when apps can cope with their own grant models
+            if (this.grantContainer.application_id && this.grantContainer.application_id.name) {
+                var isCalendar = (this.grantContainer.application_id.name == 'Calendar');
+            } else {
+                var calApp = Tine.Tinebase.appMgr.get('Calendar'),
+                    calId = calApp ? calApp.id : 'none',
+                    isCalendar = this.grantContainer.application_id === calId;
+            }
+            if (this.grantContainer.type == 'personal' && isCalendar) {
+                this.configColumns.push(new Ext.ux.grid.CheckColumn({
+                    header: _('Free Busy'),
+                    tooltip: _('The grant to access free busy information of events in this calendar'),
+                    dataIndex: 'freebusyGrant',
+                    width: 55
+                }));
+            }
+            
+            if (this.grantContainer.type == 'personal' && this.grantContainer.capabilites_private) {
+                this.configColumns.push(new Ext.ux.grid.CheckColumn({
+                    header: _('Private'),
+                    tooltip: _('The grant to access records marked as private in this container'),
+                    dataIndex: 'privateGrant',
+                    width: 55
+                }));
+            }
         }
     }
 });

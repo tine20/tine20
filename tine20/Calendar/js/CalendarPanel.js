@@ -30,6 +30,18 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
      * @cfg {Ext.data.Store} store
      */
     store: null,
+    
+    /**
+     * @cfg {Number} autoRefreshInterval (seconds)
+     */
+    autoRefreshInterval: 300,
+    
+    /**
+     * @property autoRefreshTask
+     * @type Ext.util.DelayedTask
+     */
+    autoRefreshTask: null,
+    
     /**
      * @cfg {Bool} border
      */
@@ -87,6 +99,11 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         this.store.on('beforeload', this.onBeforeLoad, this);
         this.store.on('load', this.onLoad, this);
+        
+        // init autoRefresh
+        this.autoRefreshTask = new Ext.util.DelayedTask(this.store.load, this.store, [{
+            refresh: true
+        }]);
     },
     
     /**
@@ -167,6 +184,11 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
     onLoad: function() {
         if (this.rendered) {
             this.loadMask.hide();
+        }
+        
+        // reset autoRefresh
+        if (window.isMainWindow && this.autoRefreshInterval) {
+            this.autoRefreshTask.delay(this.autoRefreshInterval * 1000);
         }
     },
     

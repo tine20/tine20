@@ -97,7 +97,6 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         if ( $_accountId !== NULL ) {
             $accountId = $_accountId;
         } else {
-
             $accountId = Tinebase_Core::getUser()->getId();
         }
         
@@ -1049,6 +1048,56 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         return $this->getGrantsOfContainer($containerId, $_ignoreAcl);
+    }
+    
+    /**
+     * get owner (account_id) of container
+     * 
+     * @param Tinebase_Model_Container $_container
+     * @return string|boolean
+     */
+    public function getContainerOwner(Tinebase_Model_Container $_container)
+    {
+        if ($_container->type !== Tinebase_Model_Container::TYPE_PERSONAL) {
+            // only personal containers have an owner
+            return FALSE;
+        }
+        
+        // return first admin user
+        foreach ($_container->account_grants as $grant) {
+            if ($grant->{Tinebase_Model_Grants::GRANT_ADMIN} && $grant->account_type == Tinebase_Acl_Rights::ACCOUNT_TYPE_USER) {
+                return $grant->account_id;
+            }
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Container ' . $_container->name . ' has no owner.');
+        return FALSE;
+    }
+    
+    /**
+     * only one admin is allowed for personal containers
+     * 
+     * @param $_container
+     * @throws Tinebase_Exception_Record_NotAllowed
+     * @throws Tinebase_Exception_UnexpectedValue
+     */
+    public function checkContainerOwner(Tinebase_Model_Container $_container)
+    {
+        if ($_container->type !== Tinebase_Model_Container::TYPE_PERSONAL || empty($_container->account_grants)) {
+            return;
+        }
+        
+        if (! $_container->account_grants instanceof Tinebase_Record_RecordSet) {
+            throw new Tinebase_Exception_UnexpectedValue('RecordSet of grants expected.');
+        }
+
+        $_container->account_grants->addIndices(array(Tinebase_Model_Grants::GRANT_ADMIN));
+        $adminGrants = $_container->account_grants->filter(Tinebase_Model_Grants::GRANT_ADMIN, TRUE);
+        if (count($adminGrants) > 1) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Multiple admin grants detected in container "' . $_container->name . '"');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($adminGrants->toArray(), TRUE));
+            throw new Tinebase_Exception_Record_NotAllowed('Personal containers can have only one owner!', 403);
+        }
     }
     
     /**

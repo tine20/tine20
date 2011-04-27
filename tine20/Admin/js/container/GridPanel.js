@@ -18,8 +18,10 @@ Ext.ns('Tine.Admin.container');
  */
 Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
-    // TODO change this icon
-    newRecordIcon: 'action_addContact',
+    /**
+     * @cfg
+     */
+    newRecordIcon: 'admin-action-add-container',
     recordClass: Tine.Admin.Model.Container,
     recordProxy: Tine.Admin.containerBackend,
     defaultSortInfo: {field: 'name', direction: 'ASC'},
@@ -29,6 +31,9 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         autoExpandColumn: 'name'
     },
     
+    /**
+     * initComponent
+     */
     initComponent: function() {
         this.gridConfig.cm = this.getColumnModel();
         this.initFilterToolbar();
@@ -38,6 +43,7 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Admin.container.GridPanel.superclass.initComponent.call(this);
     },
+    
     /**
      * returns column model
      * 
@@ -64,8 +70,8 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         return [
             { header: this.app.i18n._('ID'), id: 'id', dataIndex: 'id', width: 50},
             { header: this.app.i18n._('Container Name'), id: 'name', dataIndex: 'name', hidden: false, width: 200},
-            { header: this.app.i18n._('Application'), id: 'application_id', dataIndex: 'application_id', hidden: false, width: 100, renderer: this.appRenderer},
-            { header: this.app.i18n._('Type'), id: 'type', dataIndex: 'type', hidden: false, width: 80}
+            { header: this.app.i18n._('Application'), id: 'application_id', dataIndex: 'application_id', hidden: false, width: 100, renderer: this.appRenderer, scope: this},
+            { header: this.app.i18n._('Type'), id: 'type', dataIndex: 'type', hidden: false, width: 80, renderer: this.typeRenderer, scope: this}
         ];
     },
     
@@ -76,23 +82,33 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     appRenderer: function(value) {
-        return value.name;
+        return this.app.i18n._(value.name);
+    },
+    
+    /**
+     * returns translated type
+     * 
+     * @param {Object} value
+     * @return {String}
+     */
+    typeRenderer: function(value) {
+        return this.app.i18n._(value);
     },
     
     /**
      * initialises filter toolbar
-     * 
-     * TODO add more
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
             filterModels: [
                 {label: this.app.i18n._('Container'),       field: 'query',    operators: ['contains']},
-                {label: this.app.i18n._('Type'),            field: 'type',     operators: ['contains']}
-                //{label: this.app.i18n._('Application'),    field: 'application_id',     operators: ['equals']}
+                {label: this.app.i18n._('Type'),            field: 'type',     operators: ['contains']},
+                {filtertype: 'admin.application', app: this.app}
             ],
             defaultFilter: 'query',
-            filters: [],
+            filters: [
+                {field: 'type', operator: 'equals', value: 'shared'}
+            ],
             plugins: [
                 new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
             ]

@@ -3,8 +3,8 @@
  * 
  * @package     Admin
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -105,3 +105,28 @@ Tine.Admin.Model.Group.getDefaultData = function () {
         container_id: internalAddressbook
     };
 };
+
+/**
+ * @namespace Tine.Admin.Model
+ * @class     Tine.Admin.Model.Application
+ * @extends   Tine.Admin.data.Record
+ * 
+ * Model of an application
+ */
+Tine.Admin.Model.Application = Tine.Tinebase.data.Record.create([
+    {name: 'id'},
+    {name: 'name'},
+    {name: 'status'},
+    {name: 'order'},
+    {name: 'app_tables'},
+    {name: 'version'}
+], {
+    appName: 'Admin',
+    modelName: 'Application',
+    idProperty: 'id',
+    titleProperty: 'name',
+    // ngettext('Application', 'Applications', n); gettext('Applications');
+    recordName: 'Application',
+    recordsName: 'Applications',
+    containerProperty: null
+});
