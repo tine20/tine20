@@ -103,7 +103,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         try {
-            Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+            //Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // do nothing
         }
@@ -717,6 +717,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         #$this->assertContains('\Seen', $message->flags);
         $this->assertContains('Bento Vilas Boas wrote', $message->body ,'string not found in body: ' . $message->body);
         $this->assertEquals('smime.p7s', $message->attachments[0]["filename"]);
+    }
+    
+    /**
+     * validate fetching a complete message / rfc822 with base64
+     */
+    public function testGetMessageRFC822_3()
+    {
+        $cachedMessage = $this->messageTestHelper('multipart_rfc2822-3.eml', 'multipart/rfc2822-3');
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
+        $this->assertContains('this is base64 encoded', $message->body ,'string not found in body: ' . $message->body);
     }
     
     /**
