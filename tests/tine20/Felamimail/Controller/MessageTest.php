@@ -103,7 +103,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         try {
-            //Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
+            Felamimail_Controller_Message_Flags::getInstance()->addFlags($this->_createdMessages, array(Zend_Mail_Storage::FLAG_DELETED));
         } catch (Zend_Mail_Storage_Exception $zmse) {
             // do nothing
         }
