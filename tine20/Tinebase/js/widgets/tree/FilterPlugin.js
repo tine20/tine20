@@ -2,9 +2,9 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- *
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
  */
 Ext.ns('Tine.widgets', 'Tine.widgets.tree');
 
@@ -81,14 +81,7 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
      * @param {Array} all filters
      */
     setValue: function(filters) {
-        // only set filters if gridFilter mode
-        if (this.treePanel.filterMode !== 'gridFilter') {
-            return null;
-        }
-        
         var sm = this.treePanel.getSelectionModel();
-        
-        // clear all selections
         sm.clearSelections(true);
         
         Ext.each(filters, function(filter) {
