@@ -218,19 +218,29 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $this->get($_id);
         }
         
-        $partStructure  = $message->getPartStructure($_partId);
+        $partStructure  = $message->getPartStructure($_partId, FALSE);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partStructure, TRUE));
         
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
-        $rawBody = $imapBackend->getRawContent($message->messageuid, $_partId, true);
+        $part = ($_partId === NULL) ? 'TEXT' : $_partId;
+        
+        // special handling for rfc822 messages
+        if ($_partId !== NULL && $partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+            $part .= '.TEXT';
+            if (array_key_exists('messageStructure', $partStructure)) {
+                $partStructure = $partStructure['messageStructure'];
+            }
+        }
+
+        $rawBody = $imapBackend->getRawContent($message->messageuid, $part, true);
         
         $stream = fopen("php://temp", 'r+');
         fputs($stream, $rawBody);
         rewind($stream);
         
         unset($rawBody);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partStructure, TRUE));
         
         $part = new Zend_Mime_Part($stream);
         $part->type        = $partStructure['contentType'];
@@ -350,7 +360,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             restore_error_handler();
             
         } catch (Felamimail_Exception $e) {
-			// trying to fix decoding problems
+            // trying to fix decoding problems
             restore_error_handler();
             $_bodyPart->resetStream();
             if (preg_match('/convert\.quoted-printable-decode/', $e->getMessage())) {
