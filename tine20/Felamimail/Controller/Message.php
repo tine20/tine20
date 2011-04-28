@@ -224,14 +224,14 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
-        $part = ($_partId === NULL) ? 'TEXT' : $_partId;
-        
         // special handling for rfc822 messages
         if ($_partId !== NULL && $partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
-            $part .= '.TEXT';
+            $part = $_partId . '.TEXT';
             if (array_key_exists('messageStructure', $partStructure)) {
                 $partStructure = $partStructure['messageStructure'];
             }
+        } else {
+            $part = $_partId;
         }
 
         $rawBody = $imapBackend->getRawContent($message->messageuid, $part, true);
