@@ -73,6 +73,25 @@ class Felamimail_Sieve_Rule
     }
     
     /**
+     * checks conditions for regex
+     * 
+     * @return boolean
+     */
+    public function hasRegexCondition()
+    {
+        $result = FALSE;
+        foreach ($this->_conditions as $cond) {
+            $condArray = $cond->toArray();
+            if ($condArray['comperator'] == Felamimail_Sieve_Rule_Condition::COMPERATOR_REGEX) {
+                $result = TRUE;
+                break;
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
      * set rule id
      * 
      * @param   integer     $id     the rule id

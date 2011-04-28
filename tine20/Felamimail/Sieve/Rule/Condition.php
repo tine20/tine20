@@ -21,6 +21,7 @@ class Felamimail_Sieve_Rule_Condition
     const COMPERATOR_CONTAINS   = 'contains';
     const COMPERATOR_OVER       = 'over';
     const COMPERATOR_UNDER      = 'under';
+    const COMPERATOR_REGEX      = 'regex';
     
     const TEST_ADDRESS  = 'address';
     const TEST_HEADER   = 'header';
