@@ -769,7 +769,23 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetRules()
     {
-        $ruleData = array(array(
+        $ruleData = $this->_getRuleData();
+        
+        $this->_sieveTestHelper($ruleData);
+        
+        // check getRules
+        $result = $this->_json->getRules($this->_account->getId());
+        $this->assertEquals($result['totalcount'], count($ruleData));
+    }
+    
+    /**
+     * get sieve rule data
+     * 
+     * @return array
+     */
+    protected function _getRuleData()
+    {
+        return array(array(
             'id'            => 1,
             'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
             'action_argument' => 'Junk',
@@ -803,15 +819,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             )),
             'enabled'       => 1,
         ));
-        
-        $this->_sieveTestHelper($ruleData);
-        
-        // check getRules
-        $result = $this->_json->getRules($this->_account->getId());
-        $this->assertEquals($result['totalcount'], count($ruleData));
     }
-    
-    /************************ protected functions ****************************/
     
     /**
      * get folder filter
