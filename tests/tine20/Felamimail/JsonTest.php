@@ -791,6 +791,17 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 'key'           => 'info@example.org',
             )),
             'enabled'       => 0,
+        ), array(
+            'id'            => 3,
+            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
+            'action_argument' => 'Junk',
+            'conditions'    => array(array(
+                'test'          => Felamimail_Sieve_Rule_Condition::TEST_HEADER,
+                'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_REGEX,
+                'header'        => 'subject',
+                'key'           => '[vV]iagra|cyalis',
+            )),
+            'enabled'       => 1,
         ));
         
         $this->_sieveTestHelper($ruleData);
