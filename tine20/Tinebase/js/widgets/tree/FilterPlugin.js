@@ -40,6 +40,12 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
     singleNodeOperator: 'equals',
     
     /**
+     * @cfg selectNodes
+     * @type Boolean
+     */
+    selectNodes: true,
+    
+    /**
      * get container filter object
      * 
      * @return {Object}
@@ -81,6 +87,10 @@ Tine.widgets.tree.FilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
      * @param {Array} all filters
      */
     setValue: function(filters) {
+        if (! this.selectNodes) {
+            return null;
+        }
+
         var sm = this.treePanel.getSelectionModel();
         sm.clearSelections(true);
         
