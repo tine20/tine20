@@ -375,34 +375,7 @@ Ext.namespace('Tine.Felamimail');
      */
     initRecipients: function() {
         if (this.replyTo) {
-            var replyTo = this.replyTo.get('headers')['reply-to'];
-            
-            if (replyTo) {
-                this.to = replyTo;
-            } else {
-                var toemail = '<' + this.replyTo.get('from_email') + '>';
-                if (this.replyTo.get('from_name') && this.replyTo.get('from_name') != this.replyTo.get('from_email')) {
-                    this.to = this.replyTo.get('from_name') + ' ' + toemail;
-                } else {
-                    this.to = toemail;
-                }
-            }
-            
-            if (this.replyToAll) {
-                this.to = this.to.concat(this.replyTo.get('to'));
-                this.cc = this.replyTo.get('cc');
-                
-                // remove own email and all non-email strings/objects from to/cc
-                var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
-                    ownEmailRegexp = new RegExp(account.get('email'));
-                Ext.each(['to', 'cc'], function(field) {
-                    for (var i=0; i < this[field].length; i++) {
-                        if (! Ext.isString(this[field][i]) || ! this[field][i].match(/@/) || ownEmailRegexp.test(this[field][i])) {
-                            this[field].splice(i, 1);
-                        }
-                    }
-                }, this);
-            }
+            this.initReplyRecipients;
         }
         
         Ext.each(['to', 'cc', 'bcc'], function(field) {
@@ -416,40 +389,66 @@ Ext.namespace('Tine.Felamimail');
             }
             delete this[field];
             
-            // resolve filter
-            if (! Ext.isEmpty(this.record.get(field)) && Ext.isObject(this.record.get(field)[0]) &&  this.record.get(field)[0].operator) {
-                // found a filter
-                var filter = this.record.get(field);
-                this.record.set(field, []);
-                
-                this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Mail Addresses')});
-                this['AddressLoadMask'].show();
-                
-                Tine.Addressbook.searchContacts(filter, null, function(response) {
-                    var mailAddresses = Tine.Felamimail.AddressbookGridPanelHook.prototype.getMailAddresses(response.results);
-                    
-                    this.record.set(field, mailAddresses);
-                    this.recipientGrid.syncRecipientsToStore([field], this.record, true, false);
-                    this['AddressLoadMask'].hide();
-                    
-                }.createDelegate(this));
-                
-                
-            }
-            /*
-             if (sm.isFilterSelect) {
-                var loadMask = new Ext.LoadMask(this.getContactGridPanel().grid.getEl(), {
-                    msg: this.app.i18n._('Loading Addresses')
-                });
-                    
-                Tine.Addressbook.searchContacts(sm.getSelectionFilter(), null, function(response) {
-                    var mailAddresses = this.getMailAddresses(response.results);
-                    
-                    loadMask
-                }).createDelegate(this);
-                this.getContactGridPanel()
-            */
+            this.resolveRecipientFilter();
+            
         }, this);
+    },
+    
+    /**
+     * init recipients from reply/replyToAll information
+     */
+    initReplyRecipients: function() {
+        var replyTo = this.replyTo.get('headers')['reply-to'];
+        
+        if (replyTo) {
+            this.to = replyTo;
+        } else {
+            var toemail = '<' + this.replyTo.get('from_email') + '>';
+            if (this.replyTo.get('from_name') && this.replyTo.get('from_name') != this.replyTo.get('from_email')) {
+                this.to = this.replyTo.get('from_name') + ' ' + toemail;
+            } else {
+                this.to = toemail;
+            }
+        }
+        
+        if (this.replyToAll) {
+            this.to = this.to.concat(this.replyTo.get('to'));
+            this.cc = this.replyTo.get('cc');
+            
+            // remove own email and all non-email strings/objects from to/cc
+            var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id')),
+                ownEmailRegexp = new RegExp(account.get('email'));
+            Ext.each(['to', 'cc'], function(field) {
+                for (var i=0; i < this[field].length; i++) {
+                    if (! Ext.isString(this[field][i]) || ! this[field][i].match(/@/) || ownEmailRegexp.test(this[field][i])) {
+                        this[field].splice(i, 1);
+                    }
+                }
+            }, this);
+        }
+    },
+    
+    /**
+     * resolve recipient filter / queries addressbook
+     */
+    resolveRecipientFilter: function() {
+        if (! Ext.isEmpty(this.record.get(field)) && Ext.isObject(this.record.get(field)[0]) &&  this.record.get(field)[0].operator) {
+            // found a filter
+            var filter = this.record.get(field);
+            this.record.set(field, []);
+            
+            this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Mail Addresses')});
+            this['AddressLoadMask'].show();
+            
+            Tine.Addressbook.searchContacts(filter, null, function(response) {
+                var mailAddresses = Tine.Felamimail.AddressbookGridPanelHook.prototype.getMailAddresses(response.results);
+                
+                this.record.set(field, mailAddresses);
+                this.recipientGrid.syncRecipientsToStore([field], this.record, true, false);
+                this['AddressLoadMask'].hide();
+                
+            }.createDelegate(this));
+        }
     },
     
     /**
