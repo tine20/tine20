@@ -112,6 +112,10 @@
           "path": "js/"
         },
         {
+          "text": "RecipientPickerFavoritePanel.js",
+          "path": "js/"
+        },
+        {
           "text": "RecipientPickerDialog.js",
           "path": "js/"
         },
