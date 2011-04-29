@@ -51,7 +51,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @private
      */
     initComponent: function() {
-        this.store = Tine.widgets.persistentfilter.store.getPersistentFilterStore();
+        this.store = this.store || Tine.widgets.persistentfilter.store.getPersistentFilterStore();
         
         this.store.on('update', this.onStoreUpdate, this);
         this.store.on('remove', this.onStoreRemove, this);
@@ -62,7 +62,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             store: this.store
         });
         
-        this.filterNode = new Ext.tree.AsyncTreeNode({
+        this.filterNode = this.filterNode || new Ext.tree.AsyncTreeNode({
             text: _('My favorites'),
             id: '_persistentFilters',
             leaf: false,
