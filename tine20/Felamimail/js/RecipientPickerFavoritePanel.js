@@ -54,8 +54,7 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
                     break;
             }
             this.store.add([new Tine.widgets.persistentfilter.model.PersistentFilter({
-                //filters: field,
-                filters: [],
+                filters: field,
                 name: label,
                 model: 'Addressbook_Model_Contact',
                 application_id: this.app.id,
@@ -71,5 +70,28 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
         });
         
         Tine.Felamimail.RecipientPickerFavoritePanel.superclass.initComponent.call(this);
+    },
+    
+    /**
+     * load grid from saved filter
+     * 
+     * -> overwritten to allow to dynamically update email filter
+     * 
+     *  @param {Tine.widgets.persistentfilter.model.PersistentFilter} persistentFilter
+     */
+    onFilterSelect: function(persistentFilter) {
+        // need to 
+        var emailRecipients = [];
+        switch (persistentFilter.get('filters')) {
+            case 'all':
+                persistentFilter.set('filters', []);
+                break;
+            default:
+                break;
+        }
+        persistentFilter.set('filters', [{field: 'email', operator: 'in', value: emailRecipients}]);
+        //console.log(persistentFilter);
+
+        Tine.Felamimail.RecipientPickerFavoritePanel.superclass.onFilterSelect.call(this, persistentFilter);
     }
 });
