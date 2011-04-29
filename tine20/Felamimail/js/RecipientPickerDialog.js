@@ -95,6 +95,20 @@ Ext.namespace('Tine.Felamimail');
             plugins: [this.treePanel.getFilterPlugin()]
         });
         
+        this.westPanel = new Tine.widgets.mainscreen.WestPanel({
+            app: adbApp,
+            containerTreePanel: this.treePanel,
+            favoritesPanel: new Tine.widgets.persistentfilter.PickerPanel({
+                filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ContactFilter'}],
+                app: adbApp,
+                grid: this.contactGrid,
+                additionalItems: [ new Tine.Felamimail.RecipientPickerFavoritePanel({
+                    app: this.app,
+                    grid: this.contactGrid
+                })]
+            })
+        });
+        
         return {
             border: false,
             layout: 'border',
@@ -114,16 +128,7 @@ Ext.namespace('Tine.Felamimail');
                 items: [{
                     border: false,
                     region: 'center',
-                    items: [{
-                        xtype: 'tine.widgets.mainscreen.westpanel',
-                        app: adbApp,
-                        containerTreePanel: this.treePanel,
-                        favoritesPanel: new Tine.widgets.persistentfilter.PickerPanel({
-                            filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ContactFilter'}],
-                            app: adbApp,
-                            grid: this.contactGrid
-                        })
-                    }]
+                    items: [ this.westPanel ]
                 }]
             }, this.contactGrid]
         };
