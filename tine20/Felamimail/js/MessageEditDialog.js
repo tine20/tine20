@@ -377,7 +377,16 @@ Ext.namespace('Tine.Felamimail');
         if (this.replyTo) {
             var replyTo = this.replyTo.get('headers')['reply-to'];
             
-            this.to = [replyTo ? replyTo : this.replyTo.get('from_name') + ' <' + this.replyTo.get('from_email') + '>'];
+            if (replyTo) {
+                this.to = replyTo;
+            } else {
+                var toemail = '<' + this.replyTo.get('from_email') + '>';
+                if (this.replyTo.get('from_name') && this.replyTo.get('from_name') != this.replyTo.get('from_email')) {
+                    this.to = this.replyTo.get('from_name') + ' ' + toemail;
+                } else {
+                    this.to = toemail;
+                }
+            }
             
             if (this.replyToAll) {
                 this.to = this.to.concat(this.replyTo.get('to'));
