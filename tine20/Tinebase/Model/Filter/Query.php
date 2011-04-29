@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -19,7 +19,7 @@
  * one of the defined fields
  * 
  * The fields to query in _must_ be defined in the options key 'fields'
- * The value string is space exploded into multibple filterstrings
+ * The value string is space-exploded into multiple filterstrings
  */
 class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
 {
@@ -71,7 +71,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
                  $whereClause = implode(' OR ', $whereParts);
              }                        
              if (!empty($whereClause)) {
-                 $_select->where($db->quoteInto($whereClause, '%' . trim($query) . '%'));
+                 $_select->orwhere($db->quoteInto($whereClause, '%' . trim($query) . '%'));
              }
          }
      }
