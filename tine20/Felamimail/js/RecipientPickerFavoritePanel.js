@@ -29,7 +29,13 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
     titleCollapse:true,
     draggable : true,
     autoScroll: false,
-                        
+    
+    /**
+     * no context menu
+     * @type Function
+     */
+    onContextMenu: Ext.emptyFn,
+    
     /**
      * @private
      */
@@ -76,21 +82,40 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
      * -> overwritten to allow to dynamically update email filter
      * 
      *  @param {Tine.widgets.persistentfilter.model.PersistentFilter} persistentFilter
-     *  
-     *  TODO get emails from recipient picker dialog store
      */
     onFilterSelect: function(persistentFilter) {
-        var emailRecipients = ['email@test.org', 'unittest@tine20.org'];
+        var emailRecipients = [];
+
         switch (persistentFilter.get('filters')) {
             case 'all':
-                persistentFilter.set('filters', []);
+                Ext.each(['to', 'cc', 'bcc'], function(field) {
+                    emailRecipients = emailRecipients.concat(this.grid.messageRecord.data[field]);
+                }, this);
                 break;
             default:
+                emailRecipients = this.grid.messageRecord.data[persistentFilter.get('filters')];
                 break;
         }
-        persistentFilter.set('filters', [{field: 'email_query', operator: 'in', value: emailRecipients.join(' ')}]);
-        //console.log(persistentFilter);
+        
+        var filterValue = [], emailRegExp = /<([^>]*)/, filter = [{field: 'container_id', operator: 'in', value: []}];
+        Ext.each(emailRecipients, function(email) {
+            emailRegExp.exec(email);
+            if (RegExp.$1 != '') {
+                filterValue.push(RegExp.$1)
+            }
+        }, this);
+        if (filterValue.length > 0) {
+            filter = [{field: 'email_query', operator: 'contains', value: filterValue.join(' ')}];
+        }
 
-        Tine.Felamimail.RecipientPickerFavoritePanel.superclass.onFilterSelect.call(this, persistentFilter);
+        var updatedPersistentFilter = new Tine.widgets.persistentfilter.model.PersistentFilter({
+            filters: filter,
+            name: persistentFilter.get('name'),
+            model: 'Addressbook_Model_Contact',
+            application_id: this.app.id,
+            id: Ext.id()
+        });
+
+        Tine.Felamimail.RecipientPickerFavoritePanel.superclass.onFilterSelect.call(this, updatedPersistentFilter);
     }
 });
