@@ -20,8 +20,6 @@ Ext.ns('Tine.Felamimail');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Felamimail.RecipientPickerFavoritePanel
- * 
- * TODO create filter on click dynamically (add emails from recipient picker dialog store)
  */
 Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
     
@@ -78,10 +76,11 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
      * -> overwritten to allow to dynamically update email filter
      * 
      *  @param {Tine.widgets.persistentfilter.model.PersistentFilter} persistentFilter
+     *  
+     *  TODO get emails from recipient picker dialog store
      */
     onFilterSelect: function(persistentFilter) {
-        // need to 
-        var emailRecipients = [];
+        var emailRecipients = ['email@test.org', 'unittest@tine20.org'];
         switch (persistentFilter.get('filters')) {
             case 'all':
                 persistentFilter.set('filters', []);
@@ -89,7 +88,7 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
             default:
                 break;
         }
-        persistentFilter.set('filters', [{field: 'email', operator: 'in', value: emailRecipients}]);
+        persistentFilter.set('filters', [{field: 'email_query', operator: 'in', value: emailRecipients.join(' ')}]);
         //console.log(persistentFilter);
 
         Tine.Felamimail.RecipientPickerFavoritePanel.superclass.onFilterSelect.call(this, persistentFilter);
