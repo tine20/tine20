@@ -20,16 +20,52 @@ Ext.ns('Tine.Felamimail');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Felamimail.RecipientPickerFavoritePanel
+ * 
+ * TODO create filter on click dynamically (add emails from recipient picker dialog store)
  */
 Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persistentfilter.PickerPanel, {
+    
+    collapsible: true,
+    baseCls: 'ux-arrowcollapse',
+    animCollapse: true,
+    titleCollapse:true,
+    draggable : true,
+    autoScroll: false,
+                        
     /**
      * @private
      */
     initComponent: function() {
-        this.store = Tine.widgets.persistentfilter.store.getPersistentFilterStore();
+        this.title = this.app.i18n._('Recipient filter');
+        
+        this.store = new Ext.data.ArrayStore({
+            fields: Tine.widgets.persistentfilter.model.PersistentFilter.getFieldDefinitions(),
+            sortInfo: {field: 'name', direction: 'ASC'}
+        });
+        
+        var label = '';
+        Ext.each(['all', 'to', 'cc', 'bcc'], function(field) {
+            switch (field) {
+                case 'all':
+                    label = this.app.i18n._('All recipients');
+                    break;
+                default:
+                    label = String.format(this.app.i18n._('"{0}" recipients'), field);
+                    break;
+            }
+            this.store.add([new Tine.widgets.persistentfilter.model.PersistentFilter({
+                //filters: field,
+                filters: [],
+                name: label,
+                model: 'Addressbook_Model_Contact',
+                application_id: this.app.id,
+                id: Ext.id()
+            })]);        
+        }, this);
+
+        
         this.filterNode = new Ext.tree.AsyncTreeNode({
-            text: this.app.i18n._('Recipients'),
-            id: '_recipientFilters',
+            id: '_recipientFilter',
             leaf: false,
             expanded: true
         });
