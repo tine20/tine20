@@ -101,12 +101,12 @@ Ext.namespace('Tine.Felamimail');
             favoritesPanel: new Tine.widgets.persistentfilter.PickerPanel({
                 filter: [{field: 'model', operator: 'equals', value: 'Addressbook_Model_ContactFilter'}],
                 app: adbApp,
-                grid: this.contactGrid,
-                additionalItems: [ new Tine.Felamimail.RecipientPickerFavoritePanel({
-                    app: this.app,
-                    grid: this.contactGrid
-                })]
-            })
+                grid: this.contactGrid
+            }),
+            additionalItems: [ new Tine.Felamimail.RecipientPickerFavoritePanel({
+                app: this.app,
+                grid: this.contactGrid
+            })]
         });
         
         return {
