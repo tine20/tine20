@@ -40,6 +40,7 @@ class Felamimail_Transport extends Zend_Mail_Transport_Smtp
     /**
      * get mail headers as string
      *
+     * @param array $_additionalHeaders
      * @return string
      */
     public function getHeaders($_additionalHeaders = array())
