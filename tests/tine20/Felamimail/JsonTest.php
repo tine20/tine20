@@ -389,6 +389,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // send email
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
         $messageToSend['note'] = 1;
+        $messageToSend['bcc']  = array('unittest@' . $this->_mailDomain);
         //print_r($messageToSend);
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
@@ -399,6 +400,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($message['from_email'], $messageToSend['from_email']);
         $this->assertTrue(isset($message['to'][0]));
         $this->assertEquals($message['to'][0],      $messageToSend['to'][0], 'recipient not found');
+        $this->assertEquals($message['bcc'][0],     $messageToSend['bcc'][0], 'bcc recipient not found');
         $this->assertEquals($message['subject'],    $messageToSend['subject']);
         
         // check if email note has been added to contact(s)
