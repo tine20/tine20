@@ -3,9 +3,10 @@
  * Tine 2.0
  *
  * @package     Felamimail
+ * @subpackage  Transport
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -14,6 +15,7 @@
  * - extended Zend_Mail_Transport_Smtp, added getBody/getHeaders and use these for appendMessage / sendMessage
  *
  * @package     Felamimail
+ * @subpackage  Transport
  */
 class Felamimail_Transport extends Zend_Mail_Transport_Smtp 
 {
@@ -40,11 +42,21 @@ class Felamimail_Transport extends Zend_Mail_Transport_Smtp
      *
      * @return string
      */
-    public function getHeaders()
+    public function getHeaders($_additionalHeaders = array())
     {
         if (! isset($this->header)) {
-            // we could add the creation of headers here
-            throw new Felamimail_Exception('Header not found');
+            $this->_prepareHeaders($this->_headers);
+        }
+        
+        $result = $this->header;
+        foreach($_additionalHeaders as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $single) {
+                    $this->header .= $key . ': ' . $single . $this->EOL;    
+                }
+            } else {
+                $this->header .= $key . ': ' . $value . $this->EOL;
+            }
         }
         
         return $this->header;
@@ -54,9 +66,10 @@ class Felamimail_Transport extends Zend_Mail_Transport_Smtp
      * get raw message as string
      * 
      * @param Zend_Mail $mail
+     * @param array $_additionalHeaders
      * @return string
      */
-    public function getRawMessage(Zend_Mail $mail = NULL)
+    public function getRawMessage(Zend_Mail $mail = NULL, $_additionalHeaders = array())
     {
         if ($mail !== NULL) {
             // this part is from Zend_Mail_Transport_Abstract::send()
@@ -101,10 +114,10 @@ class Felamimail_Transport extends Zend_Mail_Transport_Smtp
             $this->body = $message->generateMessage($this->EOL);
         }
         
-        $mailAsString = $this->getHeaders() . $this->EOL. $this->getBody();
+        $mailAsString = $this->getHeaders($_additionalHeaders) . $this->EOL. $this->getBody();
         // convert \n to \r\n
         $mailAsString = preg_replace("/(?<!\\r)\\n(?!\\r)/", "\r\n", $mailAsString);
-        
+
         return $mailAsString;
     }
 }
