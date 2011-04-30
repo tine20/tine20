@@ -33,7 +33,6 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
 
     hasDetailsPanel: false,
     hasFavoritesPanel: false,
-    disableSelectAllPages: true,
     hasQuickSearchFilterToolbarPlugin: false,
     stateId: 'FelamimailContactGrid',
     
@@ -333,8 +332,26 @@ Tine.Felamimail.ContactGridPanel = Ext.extend(Tine.Addressbook.ContactGridPanel,
      * @param {String} type
      */
     onAddContact: function(type) {
-        var selectedRows = this.grid.getSelectionModel().getSelections();
+        var sm = this.grid.getSelectionModel(),
+            selectedRows = sm.getSelections();
+            
         this.setTypeRadio(selectedRows, type);
+
+        // search contacts if all pages are selected (filter select)
+        if (sm.isFilterSelect) {
+            this['AddressLoadMask'] = new Ext.LoadMask(Ext.getBody(), {msg: this.app.i18n._('Loading Mail Addresses')});
+            this['AddressLoadMask'].show();
+            
+            var contact = null;
+            Tine.Addressbook.searchContacts(sm.getSelectionFilter(), null, function(response) {
+                Ext.each(response.results, function(contactData) {
+                    contact = new Tine.Addressbook.Model.Contact(contactData);
+                    this.updateRecipients(contact, type);
+                }, this);
+                
+                this['AddressLoadMask'].hide();
+            }.createDelegate(this));            
+        }
     },
     
     /**
