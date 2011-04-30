@@ -720,6 +720,17 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * validate fetching a complete message / rfc822 with base64
+     */
+    public function testGetMessageRFC822_3()
+    {
+        $cachedMessage = $this->messageTestHelper('multipart_rfc2822-3.eml', 'multipart/rfc2822-3');
+        
+        $message = $this->_controller->getCompleteMessage($cachedMessage, 2);
+        $this->assertContains('this is base64 encoded', $message->body ,'string not found in body: ' . $message->body);
+    }
+    
+    /**
      * test adding message with duplicate to: header
      */
     public function testAddMessageToCacheDuplicateTo()
@@ -753,8 +764,6 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * test forward with attachment
-     * 
-     * @todo add encoding check / i.e. by comparing original and rfc822 msg
      */
     public function testForwardMessageWithAttachment()
     {

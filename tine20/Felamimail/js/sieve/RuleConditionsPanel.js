@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -24,10 +24,6 @@ Ext.namespace('Tine.Felamimail.sieve');
  * </p>
  * <p>
  * </p>
- * 
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * 
  * @param       {Object} config
  * @constructor
@@ -70,11 +66,13 @@ Tine.Felamimail.sieve.RuleConditionsPanel = Ext.extend(Tine.widgets.grid.FilterT
  */
 Tine.Felamimail.sieve.RuleConditionsPanel.getFilterModel = function(app) {
     return [
-        {label: app.i18n._('From'),     field: 'from',     operators: ['contains'], emptyText: 'test@example.org'},
-        {label: app.i18n._('To'),       field: 'to',       operators: ['contains'], emptyText: 'test@example.org'},
-        {label: app.i18n._('Subject'),  field: 'subject',  operators: ['contains'], emptyText: app.i18n._('Subject')},
+        {label: app.i18n._('From'),     field: 'from',     operators: ['contains', 'regex'], emptyText: 'test@example.org'},
+        {label: app.i18n._('To'),       field: 'to',       operators: ['contains', 'regex'], emptyText: 'test@example.org'},
+        {label: app.i18n._('Subject'),  field: 'subject',  operators: ['contains', 'regex'], emptyText: app.i18n._('Subject')},
         {label: app.i18n._('Size'),     field: 'size',     operators: ['greater', 'less'], valueType: 'number', defaultOperator: 'greater'},
         {label: app.i18n._('Header contains'),   field: 'header',   operators: ['freeform'], defaultOperator: 'freeform', 
+            emptyTextOperator: app.i18n._('Header name'), emptyText: app.i18n._('Header value')},
+        {label: app.i18n._('Header regex'),   field: 'headerregex',   operators: ['freeform'], defaultOperator: 'freeform',
             emptyTextOperator: app.i18n._('Header name'), emptyText: app.i18n._('Header value')}
     ];
 };

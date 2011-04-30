@@ -164,6 +164,7 @@ Ext.extend(Tine.widgets.grid.FilterModel, Ext.Component, {
             fields: ['operator', 'label'],
             data: [
                 {operator: 'contains',   label: _('contains')},
+                {operator: 'regex',      label: _('reg. exp.')},
                 {operator: 'equals',     label: _('is equal to')},
                 {operator: 'greater',    label: _('is greater than')},
                 {operator: 'less',       label: _('is less than')},
