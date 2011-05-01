@@ -115,9 +115,10 @@ class Addressbook_Import_CsvTest extends PHPUnit_Framework_TestCase
         
         $result = $this->_doImport(array('dryrun' => TRUE), 'adb_google_import_csv');
         
-        $this->assertEquals(1, $result['totalcount']);
-        // 6 records fail because they have no org_name / names
-        $this->assertEquals(6, $result['failcount']);
+        $this->assertEquals(5, $result['totalcount']);
+        $this->assertEquals('Niedersachsen Ring 22', $result['results'][4]->adr_one_street);
+        $this->assertEquals('abc@here.de', $result['results'][3]->email);
+        $this->assertEquals('+49227913452', $result['results'][0]->tel_work);
     }
     
     /**
