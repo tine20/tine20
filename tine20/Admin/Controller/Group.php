@@ -401,8 +401,21 @@ class Admin_Controller_Group extends Tinebase_Controller_Abstract
         }
         
         try {
-            if (empty($_group->list_id)) { // jump to catch block
-                throw new Tinebase_Exception_NotFound('list_id is empty');
+            if (empty($_group->list_id)) {
+
+                $filter = new Addressbook_Model_ListFilter(array(
+                    array('field' => 'name', 'operator' => 'equals', 'value' => $_group->name),
+                    array('field' => 'type', 'operator' => 'equals', 'value' => Addressbook_Model_List::LISTTYPE_GROUP)
+                ));
+                
+                $existingLists = $listsBackend->search($filter);
+                
+                if (count($existingLists) == 0) {
+                    // jump to catch block => no list_id provided and no existing list for group found
+                    throw new Tinebase_Exception_NotFound('list_id is empty');
+                }
+                
+                $_group->list_id = $existingLists[0]->id;
             }
             
             $list = $listsBackend->get($_group->list_id);

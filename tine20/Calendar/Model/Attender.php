@@ -368,17 +368,20 @@ class Calendar_Model_Attender extends Tinebase_Record_Abstract
             #$allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
         
             $group = Tinebase_Group::getInstance()->getGroupById($groupAttender->user_id);
-            $groupAttenderContactIds = Addressbook_Controller_List::getInstance()->get($group->list_id)->members;
-            $allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
             
-            $toAdd = array_diff($groupAttenderContactIds, $allCurrGroupMembersContactIds);
-            
-            foreach($toAdd as $userId) {
-                $_attendee->addRecord(new Calendar_Model_Attender(array(
-                    'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
-                    'user_id'   => $userId,
-                    'role'      => $groupAttender->role
-                )));
+            if (!empty($group->list_id)) {
+                $groupAttenderContactIds = Addressbook_Controller_List::getInstance()->get($group->list_id)->members;
+                $allGroupMembersContactIds = array_merge($allGroupMembersContactIds, $groupAttenderContactIds);
+                
+                $toAdd = array_diff($groupAttenderContactIds, $allCurrGroupMembersContactIds);
+                
+                foreach($toAdd as $userId) {
+                    $_attendee->addRecord(new Calendar_Model_Attender(array(
+                        'user_type' => Calendar_Model_Attender::USERTYPE_GROUPMEMBER,
+                        'user_id'   => $userId,
+                        'role'      => $groupAttender->role
+                    )));
+                }
             }
         }
         
