@@ -389,7 +389,7 @@ Ext.namespace('Tine.Felamimail');
             }
             delete this[field];
             
-            this.resolveRecipientFilter();
+            this.resolveRecipientFilter(field);
             
         }, this);
     },
@@ -430,8 +430,10 @@ Ext.namespace('Tine.Felamimail');
     
     /**
      * resolve recipient filter / queries addressbook
+     * 
+     * @param {String} field to/cc/bcc
      */
-    resolveRecipientFilter: function() {
+    resolveRecipientFilter: function(field) {
         if (! Ext.isEmpty(this.record.get(field)) && Ext.isObject(this.record.get(field)[0]) &&  this.record.get(field)[0].operator) {
             // found a filter
             var filter = this.record.get(field);
