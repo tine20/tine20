@@ -505,9 +505,9 @@ class Tinebase_Core
                     case 'Redis':
                         $backendOptions = array(
                             'servers' => array(
-                                'host' => ($config->caching->host) ? $config->caching->host : 'localhost',
-                                'port' => ($config->caching->port) ? $config->caching->port : 6379,
-                                'persistent' => TRUE
+                                'host'   => ($config->caching->host) ? $config->caching->host : 'localhost',
+                                'port'   => ($config->caching->port) ? $config->caching->port : 6379,
+                                'prefix' =>  Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_CACHE_'
                         ));
                         break;
                         
@@ -683,7 +683,9 @@ class Tinebase_Core
                     self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " config.inc.php key 'gc_maxlifetime' should be renamed to 'lifetime' and moved to 'session' group.");
                     $maxLifeTime = $config->get('gc_maxlifetime', 86400);
                 }
-                ini_set('session.gc_maxlifetime', $maxLifeTime);
+                Zend_Session::setOptions(array(
+                	'gc_maxlifetime'     => $maxLifeTime
+                ));
                 
                 $sessionSavepath = self::getSessionDir();
                 if (ini_set('session.save_path', $sessionSavepath) !== false) {
@@ -694,21 +696,15 @@ class Tinebase_Core
                 break;
                 
             case 'Redis':
-                $options = array(
-                    'lifetime'  => $maxLifeTime,
-                    'rediska' => new Rediska(array(
-                        'name'      => 'session',
-                        'namespace' => Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_',
-                        'servers'   => array(
-                            array(
-                                'host'  => ($config->session->host) ? $config->session->host : 'localhost',
-                                'port'  => ($config->session->port) ? $config->session->port : 6379
-                            )
-                        )
-                    ))
-                );
-                $saveHandler = new Rediska_Zend_Session_SaveHandler_Redis($options);
-                Zend_Session::setSaveHandler($saveHandler);
+                $host   = ($config->session->host) ? $config->session->host : 'localhost';
+                $port   = ($config->session->port) ? $config->session->port : 6379;
+                $prefix = Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId() . '_SESSION_';
+                
+                Zend_Session::setOptions(array(
+                	'gc_maxlifetime' => $maxLifeTime,
+                    'save_handler'   => 'redis',
+                    'save_path'      => "tcp://$host:$port?prefix=$prefix"
+                ));
                 break;
                 
             default:
