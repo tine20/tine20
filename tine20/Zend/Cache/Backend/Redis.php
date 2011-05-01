@@ -219,7 +219,7 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
         }
         $transaction->delete($id);
         
-        return $result = $transaction->exec();
+        return $transaction->exec();
     }
 
     /**
@@ -262,7 +262,7 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
                     foreach ($ids as $id) {
                         $transaction->delete($id);
 
-                        $allTags = array_merge($tags, $values[$i][3]);
+                        $allTags = array_unique(array_merge($tags, $values[$i][3]));
                         foreach($allTags as $tag) {
                             $transaction->sRem(self::TAG_PREFIX . $tag, $id);
                         }
@@ -287,7 +287,7 @@ class Zend_Cache_Backend_Redis extends Zend_Cache_Backend implements Zend_Cache_
                     foreach ($ids as $id) {
                         $transaction->delete($id);
 
-                        $allTags = array_merge($tags, $values[$i][3]);
+                        $allTags = array_unique(array_merge($tags, $values[$i][3]));
                         foreach($allTags as $tag) {
                             $transaction->sRem(self::TAG_PREFIX . $tag, $id);
                         }
