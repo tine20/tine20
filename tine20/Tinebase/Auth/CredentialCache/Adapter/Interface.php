@@ -20,9 +20,9 @@ interface Tinebase_Auth_CredentialCache_Adapter_Interface
     /**
      * setCache() - persists cache
      *
-     * @param  Tinebase_Model_CredentialCache $_cache
+     * @param Tinebase_Model_CredentialCache $_cache
      */
-    public function setCache($_id);
+    public function setCache($_cache);
     
     /**
      * getCache() - get the credential cache
