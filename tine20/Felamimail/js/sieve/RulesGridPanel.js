@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -313,7 +313,8 @@ Tine.Felamimail.sieve.RulesGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             if (found === true) {
                 result = header + ' ' + comperator + ' "' + condition.key + '"';
             } else {
-                result = String.format(this.app.i18n._('Header "{0}" contains "{1}"'), condition.header, condition.key);
+                result = (condition.comperator == 'contains') ? this.app.i18n._('Header "{0}" contains "{1}"') : this.app.i18n._('Header "{0}" matches "{1}"');
+                result = String.format(result, condition.header, condition.key);
             }
         }
         

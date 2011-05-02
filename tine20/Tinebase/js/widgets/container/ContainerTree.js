@@ -340,9 +340,6 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     afterRender: function() {
         Tine.widgets.container.TreePanel.superclass.afterRender.call(this);
-        // NOTE: selecting fires selectionChange... this breaks ftb if not rendered.
-        //       As all searches return used filters, we don't need this anyway
-        //this.selectContainerPath(this.getDefaultContainerPath());
         
         if (this.filterMode == 'filterToolbar' && this.filterPlugin) {
             this.filterPlugin.getGridPanel().filterToolbar.on('change', this.onFilterChange, this);

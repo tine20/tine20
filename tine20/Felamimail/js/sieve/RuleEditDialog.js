@@ -3,8 +3,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -147,6 +147,10 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     header = conditions[i].operator;
                     comperator = 'contains';
                     break;
+                case 'headerregex':
+                    header = conditions[i].operator;
+                    comperator = 'regex';
+                    break;
             }
             condition = {
                 test: test,
@@ -185,7 +189,7 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     break;
                 default:
                     operator = field;
-                    field = 'header';
+                    field = (conditions[i].comperator == 'contains') ? 'header' : 'headerregex';
             }
             filter = {
                 field: field,

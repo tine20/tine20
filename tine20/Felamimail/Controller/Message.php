@@ -220,9 +220,21 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $partStructure  = $message->getPartStructure($_partId, FALSE);
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partStructure, TRUE));
+        
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
-        $rawBody = $imapBackend->getRawContent($message->messageuid, $_partId, true);
+        // special handling for rfc822 messages
+        if ($_partId !== NULL && $partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+            $part = $_partId . '.TEXT';
+            if (array_key_exists('messageStructure', $partStructure)) {
+                $partStructure = $partStructure['messageStructure'];
+            }
+        } else {
+            $part = $_partId;
+        }
+
+        $rawBody = $imapBackend->getRawContent($message->messageuid, $part, true);
         
         $stream = fopen("php://temp", 'r+');
         fputs($stream, $rawBody);
@@ -248,8 +260,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (empty($part->filename) && array_key_exists('parameters', $partStructure) && array_key_exists('name', $partStructure['parameters'])) {
             $part->filename = $partStructure['parameters']['name'];
         }
-        
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' part structure: ' . print_r($partStructure, TRUE));
         
         return $part;
     }
@@ -350,7 +360,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             restore_error_handler();
             
         } catch (Felamimail_Exception $e) {
-			// trying to fix decoding problems
+            // trying to fix decoding problems
             restore_error_handler();
             $_bodyPart->resetStream();
             if (preg_match('/convert\.quoted-printable-decode/', $e->getMessage())) {
@@ -558,6 +568,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $_messageId;
         }
         
+        // @todo get complete structure because we need the size/name/... for rfc/822 messages?
+        //$structure = $message->getPartStructure($_partId, FALSE);
         $structure = $message->getPartStructure($_partId);
 
         $attachments = array();

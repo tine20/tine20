@@ -67,7 +67,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Sending message with subject ' . $_message->subject . ' to ' . print_r($_message->to, TRUE));
-
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_message->toArray(), TRUE));
+        
         // increase execution time (sending message with attachments can take a long time)
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
@@ -165,7 +166,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             
             // append mail to sent folder
             if ($_saveInSent) {
-                $this->_saveInSent($transport, $_account);
+                $this->_saveInSent($transport, $_account, ($_message !== NULL) ? array('Bcc' => $_message->bcc) : array());
             }
             
             if ($_message !== NULL) {
@@ -234,12 +235,13 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * 
      * @param Felamimail_Transport $_transport
      * @param Felamimail_Model_Account $_account
+     * @param array $_additionalHeaders
      * @return void
      */
-    protected function _saveInSent(Felamimail_Transport $_transport, Felamimail_Model_Account $_account)
+    protected function _saveInSent(Felamimail_Transport $_transport, Felamimail_Model_Account $_account, $_additionalHeaders = array())
     {
         try {
-            $mailAsString = $_transport->getRawMessage();
+            $mailAsString = $_transport->getRawMessage(NULL, $_additionalHeaders);
             $sentFolder = Felamimail_Controller_Account::getInstance()->getSystemFolder($_account, Felamimail_Model_Folder::FOLDER_SENT);
             
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' About to save message in sent folder (' . $sentFolder->globalname . ') ...');

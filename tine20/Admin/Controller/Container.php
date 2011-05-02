@@ -100,6 +100,8 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
     {
         $this->_checkRight('create');
         
+        Tinebase_Container::getInstance()->checkContainerOwner($_record);
+
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_record, 'create');
         
         $grants = $_record->account_grants;
@@ -132,14 +134,21 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
+     * @throws Tinebase_Exception_Record_NotAllowed
      * 
      * @todo if shared -> personal remove all admins except new owner
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
+        if ($_oldRecord->application_id !== $_record->application_id) {
+            throw new Tinebase_Exception_Record_NotAllowed('It is not allowed to change the application of a container.');
+        }
+        
         if (! $_record->account_grants instanceof Tinebase_Record_RecordSet && is_array($_record->account_grants)) {
             $_record->account_grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', $_record->account_grants);
         }
+        
+        Tinebase_Container::getInstance()->checkContainerOwner($_record);
         $this->_containerController->setGrants($_record, $_record->account_grants, TRUE, FALSE);
     }
     
@@ -148,18 +157,27 @@ class Admin_Controller_Container extends Tinebase_Controller_Record_Abstract
      * 
      * @param $_container
      * @param $_note
-     * 
-     * @todo implement
      */
     protected function _sendNotification($_container, $_note)
     {
-        // @todo get owner
-        $owner = 'unknown';
+        $ownerId = Tinebase_Container::getInstance()->getContainerOwner($_container);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Sending notification for container ' . $_container->name . ' to ' . $owner);
-        
-        // @ŧodo send notification
+        if ($ownerId !== FALSE) {
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($ownerId);
+
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Sending notification for container ' . $_container->name . ' to ' . $contact->n_fn);
+            
+            $translate = Tinebase_Translation::getTranslation('Admin');
+            $messageSubject = $translate->_('Your container has been changed');
+            $messageBody = sprintf($translate->_('Your container has been changed by %1$s %2$sNote: %3$s'), $this->_currentAccount->accountDisplayName, "\n\n", $_note);
+            
+            try {
+                Tinebase_Notification::getInstance()->send($this->_currentAccount, array($contact), $messageSubject, $messageBody);
+            } catch (Exception $e) {
+                Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . ' Could not send notification :' . $e);
+            }
+        }
     }
     
     /**

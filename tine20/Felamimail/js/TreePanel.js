@@ -299,7 +299,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
                 treePanel: this,
                 field: 'path',
                 nodeAttributeField: 'path',
-                singleNodeOperator: 'in'
+                singleNodeOperator: 'in',
+                selectNodes: false
             });
         }
         

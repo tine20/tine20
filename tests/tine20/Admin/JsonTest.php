@@ -117,7 +117,11 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         } catch (Exception $e) {
             // do nothing
         }
-                     
+        
+        // remove container
+        if (array_key_exists('container', $this->objects)) {
+            Admin_Controller_Container::getInstance()->delete($this->objects['container']);
+        }        
     }
     
     /**
@@ -667,26 +671,12 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSaveUpdateDeleteContainer()
     {
-        $containerData = $this->_getContainerData();
-        
-        $container = $this->_json->saveContainer($containerData);
-        
-        $this->assertEquals($containerData['name'], $container['name']);
+        $container = $this->_saveContainer();
         $this->assertEquals(Tinebase_Core::getUser()->getId(), $container['created_by']);
         
         // update container
         $container['name'] = 'testcontainerupdated';
-        $container['type'] = Tinebase_Model_Container::TYPE_PERSONAL;
-        $container['note'] = 'changed to personal';
-        $container['account_grants'] = array(array(
-            'account_id'     => Tinebase_Core::getUser()->getId(),
-            'account_type'   => 'user',
-            Tinebase_Model_Grants::GRANT_READ      => true,
-            Tinebase_Model_Grants::GRANT_ADD       => true,
-            Tinebase_Model_Grants::GRANT_EDIT      => true,
-            Tinebase_Model_Grants::GRANT_DELETE    => false,
-            Tinebase_Model_Grants::GRANT_ADMIN     => true
-        ));
+        $container['account_grants'] = $this->_getContainerGrants();
         
         $containerUpdated = $this->_json->saveContainer($container);
         $this->assertEquals('testcontainerupdated', $containerUpdated['name']);
@@ -697,17 +687,116 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * returns container data
+     * try to change container app
+     */
+    public function testChangeContainerApp()
+    {
+        $container = $this->_saveContainer();
+        
+        $container['application_id'] = Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId();
+        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
+        $containerUpdated = $this->_json->saveContainer($container);
+    }
+    
+    
+    /**
+     * testContainerNotification
+     */
+    public function testContainerNotification()
+    {
+        // prepare smtp transport
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        if (empty($smtpConfig)) {
+             $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
+        }
+        $mailer = Tinebase_Smtp::getDefaultTransport();
+        // make sure all messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(100);
+        }
+        $mailer->flush();
+        
+        // create and update container
+        $container = $this->_saveContainer();
+        $container['type'] = Tinebase_Model_Container::TYPE_PERSONAL;
+        $container['note'] = 'changed to personal';
+        $container['account_grants'] = $this->_getContainerGrants();
+        $containerUpdated = $this->_json->saveContainer($container);
+        
+        // make sure messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue();
+        }
+
+        // check notification message
+        $messages = $mailer->getMessages();
+        $this->assertGreaterThan(0, count($messages));
+        $notification = $messages[0];
+        
+        $translate = Tinebase_Translation::getTranslation('Admin');
+        $body = quoted_printable_decode($notification->getBodyText(TRUE));
+        $this->assertContains($container['note'],  $body, $body);
+        $this->assertEquals($translate->_('Your container has been changed'), $notification->getSubject());
+        $this->assertTrue(in_array(Tinebase_Core::getUser()->accountEmailAddress, $notification->getRecipients()));
+    }
+    
+    /**
+     * testContainerCheckOwner
+     */
+    public function testContainerCheckOwner()
+    {
+        $container = $this->_saveContainer(Tinebase_Model_Container::TYPE_PERSONAL);
+        
+        $personas = Zend_Registry::get('personas');
+        $container['account_grants'] = $this->_getContainerGrants();
+        $container['account_grants'][] = array(
+            'account_id'     => $personas['jsmith']->getId(),
+            'account_type'   => 'user',
+            Tinebase_Model_Grants::GRANT_ADMIN     => true
+        );
+        $this->setExpectedException('Tinebase_Exception_Record_NotAllowed');
+        $containerUpdated = $this->_json->saveContainer($container);
+    }
+    
+    /**
+     * saves and returns container
      * 
+     * @param string $_type
      * @return array
      */
-    protected function _getContainerData()
+    protected function _saveContainer($_type = Tinebase_Model_Container::TYPE_SHARED)
     {
-        return array(
+        $data = array(
             'name'              => 'testcontainer',
-            'type'              => Tinebase_Model_Container::TYPE_SHARED,
+            'type'              => $_type,
             'backend'           => 'Sql',
             'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Addressbook')->getId(),
         );
+        
+        $container = $this->_json->saveContainer($data);
+        $this->objects['container'] = $container['id'];
+        
+        $this->assertEquals($data['name'], $container['name']);
+        
+        return $container;
     }
+    
+    /**
+     * get container grants
+     * 
+     * @return array
+     */
+    protected function _getContainerGrants()
+    {
+        return array(array(
+            'account_id'     => Tinebase_Core::getUser()->getId(),
+            'account_type'   => 'user',
+            Tinebase_Model_Grants::GRANT_READ      => true,
+            Tinebase_Model_Grants::GRANT_ADD       => true,
+            Tinebase_Model_Grants::GRANT_EDIT      => true,
+            Tinebase_Model_Grants::GRANT_DELETE    => false,
+            Tinebase_Model_Grants::GRANT_ADMIN     => true
+        ));
+    }
+    
 }

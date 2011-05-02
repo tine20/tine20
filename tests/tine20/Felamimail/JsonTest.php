@@ -389,6 +389,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         // send email
         $messageToSend = $this->_getMessageData('unittestalias@' . $this->_mailDomain);
         $messageToSend['note'] = 1;
+        $messageToSend['bcc']  = array('unittest@' . $this->_mailDomain);
         //print_r($messageToSend);
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder);
@@ -399,6 +400,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($message['from_email'], $messageToSend['from_email']);
         $this->assertTrue(isset($message['to'][0]));
         $this->assertEquals($message['to'][0],      $messageToSend['to'][0], 'recipient not found');
+        $this->assertEquals($message['bcc'][0],     $messageToSend['bcc'][0], 'bcc recipient not found');
         $this->assertEquals($message['subject'],    $messageToSend['subject']);
         
         // check if email note has been added to contact(s)
@@ -769,10 +771,33 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testGetSetRules()
     {
-        $ruleData = array(array(
+        $ruleData = $this->_getRuleData();
+        
+        $this->_sieveTestHelper($ruleData);
+        
+        // check getRules
+        $result = $this->_json->getRules($this->_account->getId());
+        $this->assertEquals($result['totalcount'], count($ruleData));
+        
+        // check by sending mail
+        $messageData = $this->_getMessageData('', 'viagra');
+        $returned = $this->_json->saveMessage($messageData);
+        $this->_foldersToClear = array('INBOX', $this->_testFolderName);
+        // check if message is in test folder
+        $message = $this->_searchForMessageBySubject($messageData['subject'], $this->_testFolderName);        
+    }
+    
+    /**
+     * get sieve rule data
+     * 
+     * @return array
+     */
+    protected function _getRuleData()
+    {
+        return array(array(
             'id'            => 1,
             'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
-            'action_argument' => 'Junk',
+            'action_argument' => $this->_testFolderName,
             'conditions'    => array(array(
                 'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
                 'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
@@ -783,7 +808,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         ), array(
             'id'            => 2,
             'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
-            'action_argument' => 'Junk',
+            'action_argument' => $this->_testFolderName,
             'conditions'    => array(array(
                 'test'          => Felamimail_Sieve_Rule_Condition::TEST_ADDRESS,
                 'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_CONTAINS,
@@ -791,16 +816,19 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
                 'key'           => 'info@example.org',
             )),
             'enabled'       => 0,
+        ), array(
+            'id'            => 3,
+            'action_type'   => Felamimail_Sieve_Rule_Action::FILEINTO, 
+            'action_argument' => $this->_testFolderName,
+            'conditions'    => array(array(
+                'test'          => Felamimail_Sieve_Rule_Condition::TEST_HEADER,
+                'comperator'    => Felamimail_Sieve_Rule_Condition::COMPERATOR_REGEX,
+                'header'        => 'subject',
+                'key'           => '[vV]iagra|cyalis',
+            )),
+            'enabled'       => 1,
         ));
-        
-        $this->_sieveTestHelper($ruleData);
-        
-        // check getRules
-        $result = $this->_json->getRules($this->_account->getId());
-        $this->assertEquals($result['totalcount'], count($ruleData));
     }
-    
-    /************************ protected functions ****************************/
     
     /**
      * get folder filter
@@ -852,11 +880,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _getMessageData($_emailFrom = '')
+    protected function _getMessageData($_emailFrom = '', $_subject = 'test')
     {
         return array(
             'account_id'    => $this->_account->getId(),
-            'subject'       => 'test',
+            'subject'       => $_subject,
             'to'            => array('unittest@' . $this->_mailDomain),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),

@@ -326,12 +326,12 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         // $data['assistent'] = $properties = $card->getProperties('AGENT'); // NESTED VCARD NOT SUPPORTED BY vcardphp
         
         if ($card->getProperty('ORG')) {
-        $components = $card->getProperty('ORG')->getComponents();
-        $data['org_name'] = $components[0];
-        $data['org_unit'] = '';
-        for($i=1 ; i<count($components) ; $i++){
-        	$data['org_unit'] .= $components[$i].";";
-        }
+            $components = $card->getProperty('ORG')->getComponents();
+            $data['org_name'] = $components[0];
+            $data['org_unit'] = '';
+            for($i=1; $i < count($components); $i++){
+            	$data['org_unit'] .= $components[$i].";";
+            }
         }
         
 		// $properties = $card->getProperties('CATEGORIES'); // NOT_IMPLEMENTED

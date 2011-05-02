@@ -31,6 +31,13 @@ class Tinebase_Config
     private static $_instance = NULL;
     
     /**
+     * Tine 2.0 cache instance
+     * 
+     * @var Zend_Cache_Core
+     */
+    protected $_cache;
+    
+    /**
      * the constructor
      *
      * don't use the constructor. use the singleton 
@@ -41,6 +48,8 @@ class Tinebase_Config
             'modelName' => 'Tinebase_Model_Config', 
             'tableName' => 'config',
         ));
+        
+        $this->_cache = Tinebase_Core::getCache();
     }
 
     /**
@@ -83,6 +92,14 @@ class Tinebase_Config
             ? Tinebase_Model_Application::convertApplicationIdToInt($_applicationId) 
             : Tinebase_Application::getInstance()->getApplicationByName('Tinebase')->getId();
             
+        $cacheId = 'getConfig_' . sha1($applicationId . $_name);
+        
+        if ($this->_cache->test($cacheId)) {
+            $result = $this->_cache->load($cacheId);
+            
+            return $result;
+        }
+            
         $filter = new Tinebase_Model_ConfigFilter(array(
             array(
                 'field'     => 'application_id', 
@@ -121,6 +138,7 @@ class Tinebase_Config
             throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found and no default value given!");
         }
         
+        $this->_cache->save($result, $cacheId, array('config'));
         //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . print_r($value, TRUE));
         
         return $result;
@@ -139,6 +157,7 @@ class Tinebase_Config
         $config = $this->getConfig($_name, Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId(), $_default);
         
         $result = (is_array($config->value)) ? $config->value : Zend_Json::decode($config->value);
+        
         return $result;
     }
     
@@ -151,7 +170,15 @@ class Tinebase_Config
     public function getConfigForApplication($_applicationId)
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+        
+        $cacheId = 'getConfigForApplication_' . $applicationId;
+        
+        if ($this->_cache->test($cacheId)) {
+            $result = $this->_cache->load($cacheId);
             
+            return $result;
+        }
+        
         $filter = new Tinebase_Model_ConfigFilter(array(
             array(
                 'field'     => 'application_id', 
@@ -166,7 +193,9 @@ class Tinebase_Config
         foreach ($records as $config) {
             $result[$config->name] = $config->value;
         }
-
+        
+        $this->_cache->save($result, $cacheId, array('config'));
+        
         return $result;
     }
     
@@ -179,7 +208,7 @@ class Tinebase_Config
     public function setConfig(Tinebase_Model_Config $_config)
     {
         Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . $_config->name);
-        
+                
         try {
             $config = $this->getConfig($_config->name, $_config->application_id, NULL, FALSE);
 
@@ -191,6 +220,8 @@ class Tinebase_Config
             // create new
             $result = $this->_backend->create($_config);
         }
+        
+        $this->_cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('config'));
         
         return $result;
     }
@@ -225,6 +256,8 @@ class Tinebase_Config
     public function deleteConfig(Tinebase_Model_Config $_config)
     {
         $this->_backend->delete($_config->getId());
+        
+        $this->_cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('config'));
     }
     
     /**
@@ -252,6 +285,8 @@ class Tinebase_Config
      */
     public function deleteConfigByApplicationId($_applicationId)
     {
+        $this->_cache->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('config'));
+        
         return $this->_backend->deleteByProperty($_applicationId, 'application_id');
     }
     
@@ -272,6 +307,7 @@ class Tinebase_Config
         $option = $settings->getOptionById($_record->{$idField}, $_label . 's');
         
         $result = (isset($option[$_label])) ? $option[$_label] : '';
+        
         return $result;
     }    
 }
