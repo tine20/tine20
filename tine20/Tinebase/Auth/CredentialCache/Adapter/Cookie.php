@@ -30,11 +30,19 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
     /**
      * getCache() - get the credential cache
      *
-     * @return Tinebase_Model_CredentialCache 
+     * @return NULL|Tinebase_Model_CredentialCache 
      */
     public function getCache()
     {
+        $result = NULL;
+        if (isset($_COOKIE['usercredentialcache']) && ! empty($_COOKIE['usercredentialcache'])) {
+            $cacheId = Zend_Json::decode(base64_decode($_COOKIE['usercredentialcache']));
+            if (is_array($cacheId)) {
+                $result = new Tinebase_Model_CredentialCache($cacheId);
+            }
+        }
         
+        return $result;
     }
 
     /**
