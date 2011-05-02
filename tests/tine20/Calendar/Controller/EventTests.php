@@ -549,6 +549,28 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
             ->filter('user_id', $this->_personasContacts['pwulf']->getId());
         $this->assertEquals(0, count($pwulf), 'pwulf is attender of event, but not should be');
+        
+        // Test the same with update
+        $group = Admin_Controller_Group::getInstance()->get($defaultAdminGroup->getId());
+        $group->members = array_merge(Admin_Controller_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId()), array(array_value('pwulf', Zend_Registry::get('personas'))->getId()));
+        Admin_Controller_Group::getInstance()->update($group);
+        
+        // assert pwulf is in
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
+        $pwulf = $loadedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+        $this->assertEquals(1, count($pwulf), 'pwulf is not attender of event, but should be (via update)');
+        
+        $group->members = array_diff(Admin_Controller_Group::getInstance()->getGroupMembers($defaultAdminGroup->getId()), array(array_value('pwulf', Zend_Registry::get('personas'))->getId()));
+        Admin_Controller_Group::getInstance()->update($group);
+        
+        // assert pwulf is missing
+        $loadedEvent = $this->_controller->get($persistentEvent->getId());
+        $pwulf = $loadedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_GROUPMEMBER)
+            ->filter('user_id', $this->_personasContacts['pwulf']->getId());
+        $this->assertEquals(0, count($pwulf), 'pwulf is attender of event, but not should be');
     }
     
     public function testAttendeeGroupMembersAddUser()
