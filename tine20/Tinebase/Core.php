@@ -143,7 +143,7 @@ class Tinebase_Core
         ini_set('display_errors', 1);
 
         ini_set('log_errors', 1);
-        set_error_handler('Tinebase_Core::errorHandler', E_ALL);
+        set_error_handler('Tinebase_Core::errorHandler', E_ALL | E_STRICT);
 
         // set default internal encoding
         ini_set('iconv.internal_encoding', 'utf-8');
