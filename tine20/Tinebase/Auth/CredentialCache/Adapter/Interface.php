@@ -20,21 +20,19 @@ interface Tinebase_Auth_CredentialCache_Adapter_Interface
     /**
      * setCache() - persists cache
      *
-     * @param  string $value
+     * @param  Tinebase_Model_CredentialCache $_cache
      */
     public function setCache($_id);
     
     /**
      * getCache() - get the credential cache
      *
-     * @return Tinebase_Model_CredentialCache 
+     * @return NULL|Tinebase_Model_CredentialCache
      */
     public function getCache();
 
     /**
      * resetCache() - resets the cache
-     *
-     * @return Tinebase_Auth_CredentialCache_Adapter_Interface Provides a fluent interface
      */
     public function resetCache();
 }

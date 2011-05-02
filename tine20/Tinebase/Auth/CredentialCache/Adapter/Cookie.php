@@ -27,7 +27,7 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
     /**
      * setCache() - persists cache
      *
-     * @param  string $value
+     * @param  Tinebase_Model_CredentialCache $_cache
      */
     public function setCache(Tinebase_Model_CredentialCache $_cache)
     {
