@@ -5,13 +5,11 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * class for caching credentials
- * 
- * @todo automatic garbage collection via cron
  */
 class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
 {
@@ -37,6 +35,13 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     protected static $_credentialcacheid = NULL;
     
     /**
+     * credential cache adapter
+     * 
+     * @var Tinebase_Auth_CredentialCache_Adapter_Interface
+     */
+    protected $_adapter = NULL;
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Tinebase_Auth_CredentialCache
@@ -50,6 +55,16 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     private function __clone() {}
     
     /**
+     * the constructor
+     *
+     */
+    private function __construct() 
+    {
+        // set default adapter
+        $this->setAdapter();
+    }
+    
+    /**
      * the singleton pattern
      *
      * @return Tinebase_Auth_CredentialCache
@@ -61,6 +76,17 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
         }
         
         return self::$_instance;
+    }
+    
+    /**
+     * set cache adapter
+     * 
+     * @param string $_adapter
+     */
+    public function setAdapter($_adapter = 'Cookie')
+    {
+        $adapterClass = 'Tinebase_Auth_CredentialCache_Adapter_' . $_adapter;
+        $this->_adapter = new $adapterClass();
     }
     
     /**
