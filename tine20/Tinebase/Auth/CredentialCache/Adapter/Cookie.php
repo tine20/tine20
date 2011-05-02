@@ -18,13 +18,21 @@
 class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_CredentialCache_Adapter_Interface
 {
     /**
+     * cookie key const
+     * 
+     * @var string
+     */
+    const COOKIE_KEY = 'usercredentialcache';
+    
+    /**
      * setCache() - persists cache
      *
      * @param  string $value
      */
-    public function setCache($_id)
+    public function setCache(Tinebase_Model_CredentialCache $_cache)
     {
-        
+        $cacheId = $_cache->getCacheId();
+        setcookie(self::COOKIE_KEY, base64_encode(Zend_Json::encode($cacheId)));
     }
     
     /**
@@ -35,8 +43,8 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
     public function getCache()
     {
         $result = NULL;
-        if (isset($_COOKIE['usercredentialcache']) && ! empty($_COOKIE['usercredentialcache'])) {
-            $cacheId = Zend_Json::decode(base64_decode($_COOKIE['usercredentialcache']));
+        if (isset($_COOKIE[self::COOKIE_KEY]) && ! empty($_COOKIE[self::COOKIE_KEY])) {
+            $cacheId = Zend_Json::decode(base64_decode($_COOKIE[self::COOKIE_KEY]));
             if (is_array($cacheId)) {
                 $result = new Tinebase_Model_CredentialCache($cacheId);
             }
@@ -47,11 +55,9 @@ class Tinebase_Auth_CredentialCache_Adapter_Cookie implements Tinebase_Auth_Cred
 
     /**
      * resetCache() - resets the cache
-     *
-     * @return Tinebase_Auth_CredentialCache_Adapter_Interface Provides a fluent interface
      */
     public function resetCache()
     {
-        
+        setcookie(self::COOKIE_KEY, '', time() - 3600);
     }
 }
