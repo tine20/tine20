@@ -56,10 +56,14 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     
     /**
      * the constructor
-     *
+     * 
+     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param array $_options (optional)
      */
-    private function __construct() 
+    public function __construct($_dbAdapter = NULL, $_options = array()) 
     {
+        parent::__construct($_dbAdapter, $_options);
+        
         // set default adapter
         $this->setCacheAdapter();
     }
