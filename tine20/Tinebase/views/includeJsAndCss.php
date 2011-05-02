@@ -25,15 +25,10 @@ switch(TINE20_BUILDTYPE) {
         break;
 
     case 'DEBUG':
-        echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles' />";
-        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles\"></script>";
-        echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all-debug.js\"></script>";
-        break;
-        
     case 'RELEASE':
         echo "\n    <link rel='stylesheet' type='text/css' href='index.php?method=Tinebase.getCssFiles' />";
         echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsFiles\"></script>";
-        echo "\n    <script type=\"text/javascript\" src=\"Tinebase/js/Locale/build/" . (string)$locale . "-all.js\"></script>";
+        echo "\n    <script type=\"text/javascript\" src=\"index.php?method=Tinebase.getJsTranslations\"></script>";
         break;
 }
 

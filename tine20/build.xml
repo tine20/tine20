@@ -38,32 +38,13 @@
             <fileset dir=".">
                 <type type="dir" />
                 <include name="*/*" />
+                <exclude name="build/*" />
+                <exclude name="images/*" />
+                <exclude name="styles/*" />
+                <exclude name="library/*" />
+                <exclude name="Zend/*" />
             </fileset>
         </foreach>
-        
-        <!-- TODO make this work on app basis -->
-        <echo msg="Building all translations" />
-        <translation-build />
-        <jsMin targetDir="${builddir}/${localedir}/build" failOnError="false">
-            <fileset dir="${builddir}/${localedir}/build">
-                <include name="*-debug.js"/>
-            </fileset>
-        </jsMin>
-        
-        <copy toDir="${project.basedir}/${localedir}/build">
-            <fileset dir="${builddir}/${localedir}/build">
-                <include name="*-debug.js" />
-            </fileset>
-        </copy>
-        
-        <copy toDir="${project.basedir}/${localedir}/build">
-            <fileset dir="${builddir}/${localedir}/build">
-                <include name="*-debug-min.js" />
-            </fileset>
-            
-            <mapper type="regexp" from="^(.*)-debug-min.js" to="\1.js"/>
-        </copy>
-        
     </target>
     
     <!-- ============================================  -->
@@ -128,6 +109,29 @@
             </fileset>
             
         </copy>
+        
+        <!-- translations -->
+        <translation-build appName="${name}" />
+        <jsMin targetDir="${builddir}/${name}/js" failOnError="false">
+            <fileset dir="${builddir}/${name}/js">
+                <include name="*-lang-*-debug.js"/>
+            </fileset>
+        </jsMin>
+        
+        <copy toDir="${project.basedir}/${name}/js">
+            <fileset dir="${builddir}/${name}/js">
+                <include name="*-lang-*-debug.js" />
+            </fileset>
+        </copy>
+        
+        <copy toDir="${project.basedir}/${name}/js">
+            <fileset dir="${builddir}/${name}/js">
+                <include name="*-lang-*-debug-min.js" />
+            </fileset>
+            
+            <mapper type="regexp" from="^(.*)-debug-min.js" to="\1.js"/>
+        </copy>
+        
     </target>
     
     <!-- ============================================  -->
@@ -138,6 +142,7 @@
         <delete>
             <fileset dir=".">
                 <include name="*/*/*-FAT*" />
+                <include name="*/js/*-lang-*" />
                 <include name="${project.basedir}/${localedir}/build/*" />
             </fileset>
         </delete>
@@ -200,14 +205,15 @@
             }
             
             function main() {
+                if (! file_exists('${builddir}/' . "{$this->appName}/js")) return;
                 $availableTranslations = Tinebase_Translation::getAvailableTranslations();
     
                 foreach ($availableTranslations as $translation) {
                     $localeString = $translation['locale'];
                     $locale = new Zend_Locale($localeString);
                     
-                    $jsTranslation = Tinebase_Translation::getJsTranslations($locale);
-                    file_put_contents('${builddir}/${localedir}/build/' . "{$locale}-all-debug.js", $jsTranslation);
+                    $jsTranslation = Tinebase_Translation::getJsTranslations($locale, $this->appName);
+                    file_put_contents('${builddir}/' . "{$this->appName}/js/{$this->appName}-lang-{$locale}-debug.js", $jsTranslation);
                 }         
             }
         }

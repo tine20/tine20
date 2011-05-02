@@ -405,10 +405,16 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      */
     public function getJsTranslations()
     {
-        $locale = Tinebase_Core::get('locale');
-        $translations = Tinebase_Translation::getJsTranslations($locale);
-        header('Content-Type: application/javascript');
-        die($translations);
+        if (! in_array(TINE20_BUILDTYPE, array('DEBUG', 'RELEASE'))) {
+            $locale = Tinebase_Core::get('locale');
+            $translations = Tinebase_Translation::getJsTranslations($locale);
+            header('Content-Type: application/javascript');
+            die($translations);
+        }
+        
+        $this->_deliverChangedFiles('lang');
+        
+        die();
     }
     
     /**
@@ -543,10 +549,19 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         $orderedApplications = array_merge($requiredApplications, array_diff($enabledApplications, $requiredApplications));
         
         foreach ($orderedApplications as $application) {
-            if ($_fileType == 'css') {
-                $filesToWatch[] = "{$application}/css/{$application}-FAT.css.inc";
-            } else {
-                $filesToWatch[] = "{$application}/js/{$application}-FAT"  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js.inc';
+            switch($_fileType) {
+                case 'css':
+                    $filesToWatch[] = "{$application}/css/{$application}-FAT.css.inc";
+                    break;
+                case 'js':
+                    $filesToWatch[] = "{$application}/js/{$application}-FAT"  . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js.inc';
+                    break;
+                case 'lang':
+                    $filesToWatch[] = "{$application}/js/{$application}-lang-" . 'de' . (TINE20_BUILDTYPE == 'DEBUG' ? '-debug' : null) . '.js';
+                    break;
+                default:
+                    throw new Exception('no such fileType');
+                    break;
             }
         }
         

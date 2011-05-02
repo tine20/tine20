@@ -270,7 +270,7 @@ class Tinebase_Translation
      * @param  Zend_Locale $_locale
      * @return string      javascript
      */
-    public static function getJsTranslations($_locale)
+    public static function getJsTranslations($_locale, $_appName = 'all')
     {
         $baseDir = dirname(__FILE__) . "/..";
         $localeString = (string) $_locale;
@@ -283,7 +283,7 @@ class Tinebase_Translation
         
         $jsTranslations = NULL;
         
-        if (Tinebase_Core::get(Tinebase_Core::CACHE)) {
+        if (Tinebase_Core::get(Tinebase_Core::CACHE) && $_appName == 'all') {
             // setup cache (saves about 20% @2010/01/28)
             $cache = new Zend_Cache_Frontend_File(array(
                 'master_files' => $allTranslationFiles
@@ -296,18 +296,23 @@ class Tinebase_Translation
         }
         
         if (! $jsTranslations) {
-            $jsTranslations  = "/************************** generic translations **************************/ \n";
-            $jsTranslations .= file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
+            $jsTranslations  = "";
             
-            $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
-            if (file_exists("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js")) {
-                $jsTranslations  .= file_get_contents("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js");
-            } else {
-                $jsTranslations  .= "console.error('Translation Error: extjs changed their lang file name again ;-(');";
+            if (in_array($_appName, array('Tinebase', 'all'))) {
+                $jsTranslations .= "/************************** generic translations **************************/ \n";
+                $jsTranslations .= file_get_contents("$baseDir/Tinebase/js/Locale/static/generic-$localeString.js");
+                
+                $jsTranslations  .= "/*************************** extjs translations ***************************/ \n";
+                if (file_exists("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js")) {
+                    $jsTranslations  .= file_get_contents("$baseDir/library/ExtJS/src/locale/ext-lang-$localeString.js");
+                } else {
+                    $jsTranslations  .= "console.error('Translation Error: extjs changed their lang file name again ;-(');";
+                }
             }
             
             $poFiles = self::getPoTranslationFiles($_locale);
             foreach ($poFiles as $appName => $poPath) {
+                if ($_appName !='all' && $_appName != $appName) continue;
                 $poObject = self::po2jsObject($poPath);
                 $jsTranslations  .= "/********************** tine translations of $appName**********************/ \n";
                 $jsTranslations .= "Locale.Gettext.prototype._msgs['./LC_MESSAGES/$appName'] = new Locale.Gettext.PO($poObject); \n";
