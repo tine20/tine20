@@ -403,7 +403,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = TRUE;
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-            Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->setCache(Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE))
+            Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->setCache(Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE));
         } else {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
             $success = FALSE;
