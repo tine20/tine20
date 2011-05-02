@@ -18,7 +18,11 @@
 
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
     <link rel="chrome-application-definition" href="chrome_web_app.json">
-
+</head>
+<body>
+    <!-- Loading Indicator -->
+    <div class="tine-viewport-waitcycle" style="position: absolute; top: 50%; left: 50%; background-image: url(library/ExtJS/resources/images/default/grid/loading.gif); width: 16px; height: 16px">&#160;</div><div class="tine-viewport-poweredby" style="position: absolute; bottom: 10px; right: 10px; font:normal 12px arial, helvetica,tahoma,sans-serif;">Powered by: <a target="_blank" href="http://www.tine20.org/">Tine 2.0</a></div>
+    
     <!-- EXT JS -->
      <?php
         if(isset(Tinebase_Core::getConfig()->themes->default)) {
@@ -41,8 +45,6 @@
     
     <?php require 'Tinebase/views/includeJsAndCss.php'; ?>
         
-</head>
-<body>
     <noscript><p>You need to enable javascript to use <a href="http://www.tine20.org/" title="online open source groupware and crm">Tine 2.0</a></p></noscript>
 </body>
 </html>
