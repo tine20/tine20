@@ -382,8 +382,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
 
         if (! $success) {
-            // reset credentials cache
-            setcookie('usercredentialcache', '', time() - 3600);
+            Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
             
             $response = array(
 				'success'      => FALSE,
@@ -404,8 +403,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $result = TRUE;
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-            $cacheId = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE)->getCacheId();
-            setcookie('usercredentialcache', base64_encode(Zend_Json::encode($cacheId)));
+            Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->setCache(Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE))
         } else {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
             $success = FALSE;
@@ -451,7 +449,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
         
-        setcookie('usercredentialcache', '', time() - 3600);
+        Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->resetCache();
                 
         $result = array(
 			'success'=> true,
