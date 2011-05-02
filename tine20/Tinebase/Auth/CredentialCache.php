@@ -39,7 +39,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
      * 
      * @var Tinebase_Auth_CredentialCache_Adapter_Interface
      */
-    protected $_adapter = NULL;
+    protected $_cacheAdapter = NULL;
     
     /**
      * holds the instance of the singleton
@@ -61,7 +61,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     private function __construct() 
     {
         // set default adapter
-        $this->setAdapter();
+        $this->setCacheAdapter();
     }
     
     /**
@@ -83,10 +83,20 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
      * 
      * @param string $_adapter
      */
-    public function setAdapter($_adapter = 'Cookie')
+    public function setCacheAdapter($_adapter = 'Cookie')
     {
         $adapterClass = 'Tinebase_Auth_CredentialCache_Adapter_' . $_adapter;
-        $this->_adapter = new $adapterClass();
+        $this->_cacheAdapter = new $adapterClass();
+    }
+    
+    /**
+     * get cache adapter
+     * 
+     * @return Tinebase_Auth_CredentialCache_Adapter_Interface
+     */
+    public function getCacheAdapter()
+    {
+        return $this->_cacheAdapter;
     }
     
     /**
