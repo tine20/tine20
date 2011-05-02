@@ -5,13 +5,11 @@
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * class for caching credentials
- * 
- * @todo automatic garbage collection via cron
  */
 class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
 {
@@ -37,6 +35,13 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     protected static $_credentialcacheid = NULL;
     
     /**
+     * credential cache adapter
+     * 
+     * @var Tinebase_Auth_CredentialCache_Adapter_Interface
+     */
+    protected $_cacheAdapter = NULL;
+    
+    /**
      * holds the instance of the singleton
      *
      * @var Tinebase_Auth_CredentialCache
@@ -50,6 +55,20 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     private function __clone() {}
     
     /**
+     * the constructor
+     * 
+     * @param Zend_Db_Adapter_Abstract $_db (optional)
+     * @param array $_options (optional)
+     */
+    public function __construct($_dbAdapter = NULL, $_options = array()) 
+    {
+        parent::__construct($_dbAdapter, $_options);
+        
+        // set default adapter
+        $this->setCacheAdapter();
+    }
+    
+    /**
      * the singleton pattern
      *
      * @return Tinebase_Auth_CredentialCache
@@ -61,6 +80,27 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
         }
         
         return self::$_instance;
+    }
+    
+    /**
+     * set cache adapter
+     * 
+     * @param string $_adapter
+     */
+    public function setCacheAdapter($_adapter = 'Cookie')
+    {
+        $adapterClass = 'Tinebase_Auth_CredentialCache_Adapter_' . $_adapter;
+        $this->_cacheAdapter = new $adapterClass();
+    }
+    
+    /**
+     * get cache adapter
+     * 
+     * @return Tinebase_Auth_CredentialCache_Adapter_Interface
+     */
+    public function getCacheAdapter()
+    {
+        return $this->_cacheAdapter;
     }
     
     /**

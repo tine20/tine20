@@ -6,7 +6,7 @@
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -96,7 +96,6 @@ class Tinebase_Config
         
         if ($this->_cache->test($cacheId)) {
             $result = $this->_cache->load($cacheId);
-            
             return $result;
         }
             
@@ -138,8 +137,9 @@ class Tinebase_Config
             throw new Tinebase_Exception_NotFound("Application config setting with name $_name not found and no default value given!");
         }
         
-        $this->_cache->save($result, $cacheId, array('config'));
-        //Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . print_r($value, TRUE));
+        if ($result->getId()) {
+            $this->_cache->save($result, $cacheId, array('config'));
+        }
         
         return $result;
     }

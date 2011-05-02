@@ -293,14 +293,13 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         }
         
         if ($success === TRUE) {
+            $ccAdapter = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter();
             if (Tinebase_Core::isRegistered(Tinebase_Core::USERCREDENTIALCACHE)) {
-                $cacheId = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE)->getCacheId();
-                setcookie('usercredentialcache', base64_encode(Zend_Json::encode($cacheId)));
+                $ccAdapter->setCache(Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE));
             } else {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / no CC registered.');
                 $success = FALSE;
-                // reset credentials cache
-                setcookie('usercredentialcache', '', time() - 3600);
+                $ccAdapter->resetCache();
             }
         
         }
