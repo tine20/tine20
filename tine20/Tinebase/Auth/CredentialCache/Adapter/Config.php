@@ -43,11 +43,14 @@ class Tinebase_Auth_CredentialCache_Adapter_Config implements Tinebase_Auth_Cred
         
         $config = Tinebase_Core::getConfig();
         if ($config->{self::CONFIG_KEY}) {
-            $cacheId = array(
-                'key'   => $config->{self::CONFIG_KEY},
-                'id'    => $this->getDefaultId(),
-            );
-            $result = new Tinebase_Model_CredentialCache($cacheId);
+            $id = $this->getDefaultId();
+            if ($id !== NULL) {
+                $cacheId = array(
+                    'key'   => $config->{self::CONFIG_KEY},
+                    'id'    => $id,
+                );
+                $result = new Tinebase_Model_CredentialCache($cacheId);
+            }
         } else {
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No credential cache key found in config.');
         }
@@ -89,6 +92,12 @@ class Tinebase_Auth_CredentialCache_Adapter_Config implements Tinebase_Auth_Cred
      */
     public function getDefaultId()
     {
-        return Tinebase_Core::getUser()->getId();
+        $result = NULL;
+        
+        if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
+            $result = Tinebase_Core::getUser()->getId();
+        }
+        
+        return $result;
     }
 }
