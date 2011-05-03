@@ -531,6 +531,11 @@ class Tinebase_Application
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . $countMessage);
     }            
     
+    /**
+     * add TMA to "in class" cache and to Zend Cache
+     * 
+     * @param  Tinebase_Model_Application  $_application
+     */
     protected function _addToClassCache(Tinebase_Model_Application $_application)
     {
         if (!isset($this->_applicationCache[$_application->getId()])) {
@@ -544,7 +549,10 @@ class Tinebase_Application
     }
     
     /**
-     * clean cache
+     * remove TMA from "in class" cache and Zend Cache
+     * 
+     * remove cache entry for given class only, when application id AND name are known
+     * otherwise forget all cached TMA
      * 
      * @return void
      */
