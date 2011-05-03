@@ -113,13 +113,13 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
      */
     public function cacheCredentials($_username, $_password, $_key = NULL)
     {
-        $key = ($_key !== NULL) ? $_key : Tinebase_Record_Abstract::generateUID();
+        $key = ($_key !== NULL) ? $_key : $this->_cacheAdapter->getDefaultKey();
         
         $cache = new Tinebase_Model_CredentialCache(array(
-            'id'        => Tinebase_Record_Abstract::generateUID(),
-            'key'       => substr($key, 0, 24),
-            'username'  => $_username,
-            'password'  => $_password,
+            'id'            => $this->_cacheAdapter->getDefaultId(),
+            'key'           => substr($key, 0, 24),
+            'username'      => $_username,
+            'password'      => $_password,
             'creation_time' => Tinebase_DateTime::now(),
             'valid_until'   => Tinebase_DateTime::now()->addMonth(1)
         ), true, false);
