@@ -113,20 +113,26 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
      */
     public function cacheCredentials($_username, $_password, $_key = NULL)
     {
-        $key = ($_key !== NULL) ? $_key : Tinebase_Record_Abstract::generateUID();
+        $key = ($_key !== NULL) ? $_key : $this->_cacheAdapter->getDefaultKey();
         
         $cache = new Tinebase_Model_CredentialCache(array(
-            'id'        => Tinebase_Record_Abstract::generateUID(),
-            'key'       => substr($key, 0, 24),
-            'username'  => $_username,
-            'password'  => $_password,
+            'id'            => $this->_cacheAdapter->getDefaultId(),
+            'key'           => substr($key, 0, 24),
+            'username'      => $_username,
+            'password'      => $_password,
             'creation_time' => Tinebase_DateTime::now(),
             'valid_until'   => Tinebase_DateTime::now()->addMonth(1)
         ), true, false);
         $cache->convertDates = true;
         
         $this->_encrypt($cache);
-        $this->create($cache);
+        
+        // need to check if entry exists (some adapters can have static ids)
+        try {
+            $this->create($cache);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            $this->update($cache);
+        }
         
         return $cache;
     }
@@ -163,9 +169,6 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
         $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
         mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 16));
         
-        #$td = mcrypt_module_open(MCRYPT_TRIPLEDES, '', 'cbc', '');
-        #mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 8));
-        
         $data = array_merge($_cache->toArray(), array(
             'username' => $_cache->username,
             'password' => $_cache->password,
@@ -188,9 +191,6 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
         
         $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
         mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 16));
-        
-        #$td = mcrypt_module_open(MCRYPT_TRIPLEDES, '', 'cbc', '');
-        #mcrypt_generic_init($td, $_cache->key, substr($_cache->getId(), 0, 8));
         
         $cacheData = Zend_Json::decode(trim(mdecrypt_generic($td, $encryptedData)));
         
