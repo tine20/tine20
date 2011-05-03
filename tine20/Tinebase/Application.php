@@ -538,14 +538,8 @@ class Tinebase_Application
      */
     protected function _addToClassCache(Tinebase_Model_Application $_application)
     {
-        if (!isset($this->_applicationCache[$_application->getId()])) {
-            $this->_applicationCache[$_application->getId()] = $_application;
-        }
-        
-        if (!isset($this->_applicationCache[$_application->name])) {
-            $this->_applicationCache[$_application->name]    = $_application;
-        }
-        
+        $this->_applicationCache[$_application->getId()] = $_application;
+        $this->_applicationCache[$_application->name]    = $_application;
     }
     
     /**
