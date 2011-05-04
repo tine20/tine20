@@ -163,7 +163,7 @@ class Tinebase_Application
         if(empty($_applicationName) || ! is_string($_applicationName)) {
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty / has to be string.');
         }
-
+        
         if (isset($this->_applicationCache[$_applicationName])) {
             return $this->_applicationCache[$_applicationName];
         }
@@ -563,12 +563,13 @@ class Tinebase_Application
         } elseif (isset($this->_applicationCache[$_applicationId])) {
             $application = $this->_applicationCache[$_applicationId];
         }
-        
+
+        /*
+         *  we always reset the "in class" cache. Otherwise we rum into problems when we 
+         *  try to uninstall and install all applications again
+         *  hint: Tinebase can't be uninstalled because the app tables got droped before 
+         */
         if (isset($application)) {
-            // remove from class cache
-            unset($this->_applicationCache[$application->getId()]);
-            unset($this->_applicationCache[$application->name]);
-            
             // remove from Zend Cache
             $cacheId = 'getApplicationById_' . $application->getId();
             Tinebase_Core::get(Tinebase_Core::CACHE)->remove($cacheId);
@@ -577,7 +578,9 @@ class Tinebase_Application
             Tinebase_Core::get(Tinebase_Core::CACHE)->remove($cacheId);
         } else {
             Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
-            $this->_applicationCache = array();
+            
         }
+        
+        $this->_applicationCache = array();
     }
 }
