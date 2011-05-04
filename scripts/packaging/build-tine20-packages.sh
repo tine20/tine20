@@ -140,16 +140,19 @@ function createArchives()
         if [ -d "$TEMPDIR/tine20/$FILE/translations" ]; then
             case $FILE in
                 Addressbook)
+                    # handled in Tinebase
                     ;;
                 Admin)
+                    # handled in Tinebase
                     ;;
                 Setup)
+                    # handled in Tinebase
                     ;;
 
                 Calendar)      
                     echo " $FILE"
                     echo -n "  cleanup "
-                    (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
                     (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v print.css))
                     echo "building "
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILE)
@@ -159,17 +162,17 @@ function createArchives()
                 Tinebase)
                     echo " $FILE"
                     echo -n "  cleanup "
-                    (cd $TEMPDIR/tine20/Addressbook/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/Addressbook/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
                     (cd $TEMPDIR/tine20/Addressbook/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
-                    (cd $TEMPDIR/tine20/Admin/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/Admin/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
                     (cd $TEMPDIR/tine20/Admin/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
-                    (cd $TEMPDIR/tine20/Setup/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/Setup/js;        rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
                     (cd $TEMPDIR/tine20/Setup/css;       rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
                     
                     # Tinebase/js/ux/Printer/print.css
                     (cd $TEMPDIR/tine20/Tinebase/js/ux/Printer; rm -rf $(ls | grep -v print.css))
                     (cd $TEMPDIR/tine20/Tinebase/js/ux;  rm -rf $(ls | grep -v Printer))
-                    (cd $TEMPDIR/tine20/Tinebase/js;     rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v Locale | grep -v ux))
+                    (cd $TEMPDIR/tine20/Tinebase/js;     rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v Locale | grep -v ux | grep -v "\-lang\-"))
                     (cd $TEMPDIR/tine20/Tinebase/css;    rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
                     
                     # cleanup ExtJS
@@ -197,7 +200,7 @@ function createArchives()
                 *)
                     echo " $FILE"
                     echo -n "  cleanup "
-                    (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
+                    (cd $TEMPDIR/tine20/$FILE/js;  rm -rf $(ls | grep -v ${CLIENTBUILDFILTER} | grep -v "\-lang\-"))
                     (cd $TEMPDIR/tine20/$FILE/css; rm -rf $(ls | grep -v ${CLIENTBUILDFILTER}))
                     echo "building "
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILE)
