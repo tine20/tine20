@@ -65,7 +65,9 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
         parent::__construct($_dbAdapter, $_options);
         
         // set default adapter
-        $this->setCacheAdapter();
+        $config = Tinebase_Core::getConfig();
+        $adapter = ($config->{Tinebase_Auth_CredentialCache_Adapter_Config::CONFIG_KEY}) ? 'Config' : 'Cookie';
+        $this->setCacheAdapter($adapter);
     }
     
     /**
@@ -90,6 +92,8 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     public function setCacheAdapter($_adapter = 'Cookie')
     {
         $adapterClass = 'Tinebase_Auth_CredentialCache_Adapter_' . $_adapter;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Using credential cache apapter: ' . $adapterClass);
         $this->_cacheAdapter = new $adapterClass();
     }
     
