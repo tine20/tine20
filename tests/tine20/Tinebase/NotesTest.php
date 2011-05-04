@@ -130,10 +130,15 @@ class Tinebase_NotesTest extends PHPUnit_Framework_TestCase
         )));
         $notes = $this->_instance->searchNotes($filter, new Tinebase_Model_Pagination());
         
-        //print_r($notes->toArray());
-        
         $this->assertGreaterThan(0, count($notes));
-        $this->assertEquals($translatedNoteString . ' ' . Zend_Registry::get('currentAccount')->accountDisplayName, $notes[0]->note); 
+        $found = FALSE;
+        foreach ($notes as $note) {
+            if ($translatedNoteString . ' ' . Zend_Registry::get('currentAccount')->accountDisplayName == $note->note) {
+                $found = TRUE;
+                break;
+            }
+        }
+        $this->assertTrue($found); 
     }
     
     /**
