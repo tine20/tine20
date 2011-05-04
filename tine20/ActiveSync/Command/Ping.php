@@ -63,7 +63,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
     {
         $controller = ActiveSync_Controller::getInstance();
         
-        $intervalStart = mktime();
+        $intervalStart = time();
         $status = self::STATUS_NO_CHANGES_FOUND;
 
         // the client does not send a wbxml document, if the Ping parameters did not change compared with the last request
@@ -154,7 +154,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
                 }
                 
                 sleep(self::PING_TIMEOUT);
-                $secondsLeft = $intervalEnd - mktime();
+                $secondsLeft = $intervalEnd - time();
                 //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " DeviceId: " . $this->_device->deviceid . " seconds left: " . $secondsLeft);
             } while($secondsLeft > 0);
         }
