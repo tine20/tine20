@@ -870,9 +870,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param   string|Tinebase_Model_User          $_accountId
      * @param   int|Tinebase_Model_Container        $_containerId
+     * @param   string                              $_grantModel
      * @return Tinebase_Model_Grants
      */
-    public function getGrantsOfAccount($_accountId, $_containerId) 
+    public function getGrantsOfAccount($_accountId, $_containerId, $_grantModel = 'Tinebase_Model_Grants') 
     {
         $accountId          = Tinebase_Model_User::convertUserIdToInt($_accountId);
         $containerId        = Tinebase_Model_Container::convertContainerIdToInt($_containerId);
@@ -894,7 +895,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             
             $stmt = $this->_db->query($select);
             $rows = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
-	        $grants = $this->_getGrantsFromArray($rows, $accountId);
+	        $grants = $this->_getGrantsFromArray($rows, $accountId, $_grantModel);
             
             $cache->save($grants, $cacheKey, array('container'));
         }
@@ -907,9 +908,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param   Tinebase_Record_RecordSet   $_records records to get the grants for
      * @param   string|Tinebase_Model_User  $_accountId the account to get the grants for
      * @param   string                      $_containerProperty container property
+     * @param   string                      $_grantModel
      * @throws  Tinebase_Exception_NotFound
      */
-    public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id')
+    public function getGrantsOfRecords(Tinebase_Record_RecordSet $_records, $_accountId, $_containerProperty = 'container_id', $_grantModel = 'Tinebase_Model_Grants')
     {
         // get container ids
         $containers = array();
@@ -951,8 +953,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
             // NOTE id is non-ambiguous
             $row['id'] = $row['container_id'];
             $grantsArray = array_unique(explode(',', $row['account_grants']));
-            $row['account_grants'] = $this->_getGrantsFromArray($grantsArray, $accountId)->toArray();
-            $containers[$row['id']] = new Tinebase_Model_Container($row, TRUE);
+            $row['account_grants'] = $this->_getGrantsFromArray($grantsArray, $accountId, $_grantModel)->toArray();
+            $containers[$row['id']] = new $_grantModel($row, TRUE);
         }
         
         // add container & grants to records
@@ -1135,11 +1137,10 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param array $_grantsArray
      * @param int $_accountId
-     * @return Tinebase_Model_Grants
-     * 
-     * @todo add $_grantModel param
+     * @param string $_grantModel
+     * @return Tinebase_Model_Grants (or child class)
      */
-    protected function _getGrantsFromArray(array $_grantsArray, $_accountId)
+    protected function _getGrantsFromArray(array $_grantsArray, $_accountId, $_grantModel = 'Tinebase_Model_Grants')
     {
         $grants = array();
         foreach($_grantsArray as $key => $value) {
@@ -1152,7 +1153,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         );
         $grantsFields = array_merge($grantsFields, $grants);
         
-        $grants = new Tinebase_Model_Grants($grantsFields, TRUE);
+        $grants = new $_grantModel($grantsFields, TRUE);
 
         return $grants;
     }

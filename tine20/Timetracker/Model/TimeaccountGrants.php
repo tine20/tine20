@@ -103,7 +103,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
      */
     public static function getGrantsOfRecords(Tinebase_Record_RecordSet $_timeaccounts, $_accountId)
     {
-        Tinebase_Container::getInstance()->getGrantsOfRecords($_timeaccounts, $_accountId);
+        Tinebase_Container::getInstance()->getGrantsOfRecords($_timeaccounts, $_accountId, 'Timetracker_Model_TimeaccountGrants');
         
         foreach ($_timeaccounts as $timeaccount) {
             if (isset($timeaccount->container_id['account_grants']) && is_array($timeaccount->container_id['account_grants'])) {
@@ -139,7 +139,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
             $timeaccount = $_timeaccountId instanceof Timetracker_Model_Timeaccount ? $_timeaccountId : 
                 Timetracker_Controller_Timeaccount::getInstance()->get($_timeaccountId);
                 
-            $containerGrantsArray = Tinebase_Container::getInstance()->getGrantsOfAccount($_accountId, $timeaccount->container_id, $_ignoreAcl)->toArray();
+            $containerGrantsArray = Tinebase_Container::getInstance()->getGrantsOfAccount($_accountId, $timeaccount->container_id, 'Timetracker_Model_TimeaccountGrants')->toArray();
             
             $account_grants = new Timetracker_Model_TimeaccountGrants($containerGrantsArray);
             $result = $account_grants->toArray();
