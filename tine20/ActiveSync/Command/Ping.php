@@ -172,13 +172,14 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
             }
         }                
     }    
-    
+
     /**
-     * this function generates the response for the client
+     * (non-PHPdoc)
+     * @see ActiveSync_Command_Wbxml::getResponse()
      */
-    public function getResponse()
+    public function getResponse($_keepSession = false)
     {
-        parent::getResponse();
+        parent::getResponse($_keepSession);
     }
     
     /**
