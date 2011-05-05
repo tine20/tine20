@@ -221,7 +221,7 @@ class Timetracker_Model_TimeaccountGrants extends Tinebase_Model_Grants
         
         if ($result === FALSE) {
                 
-            $allContainerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_timeaccount->container_id, true);
+            $allContainerGrants = Tinebase_Container::getInstance()->getGrantsOfContainer($_timeaccount->container_id, true, 'Timetracker_Model_TimeaccountGrants');
             $allTimeaccountGrants = new Tinebase_Record_RecordSet('Timetracker_Model_TimeaccountGrants');
             
             foreach ($allContainerGrants as $index => $containerGrants) {
