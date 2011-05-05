@@ -79,6 +79,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      * copy record
      */
     copyRecord: false,
+    
+    /**
+     * required grant for apply/save
+     * @type String
+     */
+    editGrant: 'editGrant',
 
     /**
      * @property window {Ext.Window|Ext.ux.PopupWindow|Ext.Air.Window}
@@ -182,7 +188,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
      */
     initActions: function() {
         this.action_saveAndClose = new Ext.Action({
-            requiredGrant: 'editGrant',
+            requiredGrant: this.editGrant,
             text: (this.saveAndCloseButtonText != '') ? this.app.i18n._(this.saveAndCloseButtonText) : _('Ok'),
             minWidth: 70,
             scope: this,
@@ -191,7 +197,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
         });
     
         this.action_applyChanges = new Ext.Action({
-            requiredGrant: 'editGrant',
+            requiredGrant: this.editGrant,
             text: _('Apply'),
             minWidth: 70,
             scope: this,
