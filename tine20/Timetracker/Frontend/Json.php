@@ -189,11 +189,6 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
              // also move the grants into the container_id property, as the clients expects records to 
              // be contained in some kind of container where it searches the grants in
              
-             // obsolete code
-             //$containerId = $timeaccount->container_id;
-             //$containerId['account_grants'] = $timeaccountGrantsArray;
-             //$timeaccount->container_id = $containerId;
-             
              $timeaccount->container_id = array(
                 'account_grants' => $timeaccountGrantsArray
              );
