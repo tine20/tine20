@@ -820,10 +820,11 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      *
      * @param   int|Tinebase_Model_Container $_containerId
      * @param   bool                         $_ignoreAcl
+     * @param   string                       $_grantModel
      * @return  Tinebase_Record_RecordSet subtype Tinebase_Model_Grants
      * @throws  Tinebase_Exception_AccessDenied
      */
-    public function getGrantsOfContainer($_containerId, $_ignoreAcl = FALSE) 
+    public function getGrantsOfContainer($_containerId, $_ignoreAcl = FALSE, $_grantModel = 'Tinebase_Model_Grants') 
     {
         $grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants');
         
@@ -851,7 +852,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
                 $grantData[$grant] = TRUE;
             }
         	
-            $containerGrant = new Tinebase_Model_Grants($grantData, TRUE);
+            $containerGrant = new $_grantModel($grantData, TRUE);
 
             $grants->addRecord($containerGrant);
         }
@@ -1135,6 +1136,8 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @param array $_grantsArray
      * @param int $_accountId
      * @return Tinebase_Model_Grants
+     * 
+     * @todo add $_grantModel param
      */
     protected function _getGrantsFromArray(array $_grantsArray, $_accountId)
     {
