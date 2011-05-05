@@ -4,8 +4,8 @@
  * @package     Timetracker
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -50,8 +50,6 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param Tinebase_Record_Interface $_record
      * @return array record data
-     * 
-     * @todo move that to Tinebase_Record_Abstract
      */
     protected function _recordToJson($_record)
     {
@@ -100,8 +98,6 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      *
      * @param Tinebase_Record_RecordSet $_leads Crm_Model_Lead
      * @return array data
-     * 
-     * @todo move that to Tinebase_Record_RecordSet
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter=NULL)
     {
@@ -158,7 +154,8 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $manageAllRight = Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
         $currentUserId = Tinebase_Core::getUser()->getId();
         
-        $modifyGrant = $manageAllRight || ($timeaccountGrantsArray['book_own'] && $timesheetOwnerId == $currentUserId) || $timeaccountGrantsArray['book_all'];
+        $modifyGrant = $manageAllRight || ($timeaccountGrantsArray[Timetracker_Model_TimeaccountGrants::BOOK_OWN] 
+            && $timesheetOwnerId == $currentUserId) || $timeaccountGrantsArray[Timetracker_Model_TimeaccountGrants::BOOK_ALL];
             
         $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_READ]   = true;
         $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_EDIT]   = $modifyGrant;
@@ -171,15 +168,13 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * calculate effective ta grants so the client doesn't need to calculate them
      *
      * @param  array  $_timesaccounts
-     * 
-     * @todo remove obsolete code
      */
     protected function _resolveTimeaccountGrants(Tinebase_Record_RecordSet $_timesaccounts)
     {
          $manageAllRight = Timetracker_Controller_Timeaccount::getInstance()->checkRight(Timetracker_Acl_Rights::MANAGE_TIMEACCOUNTS, FALSE);
          foreach ($_timesaccounts as $timeaccount) {
              $timeaccountGrantsArray = $timeaccount->account_grants;
-             $modifyGrant = $manageAllRight || $timeaccountGrantsArray['manage_all'];
+             $modifyGrant = $manageAllRight || $timeaccountGrantsArray[Timetracker_Model_TimeaccountGrants::GRANT_ADMIN];
              
              $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_READ]   = true;
              $timeaccountGrantsArray[Tinebase_Model_Grants::GRANT_EDIT]   = $modifyGrant;
@@ -188,7 +183,6 @@ class Timetracker_Frontend_Json extends Tinebase_Frontend_Json_Abstract
              
              // also move the grants into the container_id property, as the clients expects records to 
              // be contained in some kind of container where it searches the grants in
-             
              $timeaccount->container_id = array(
                 'account_grants' => $timeaccountGrantsArray
              );
