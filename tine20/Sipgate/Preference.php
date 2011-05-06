@@ -6,7 +6,7 @@
  * @subpackage	Preference
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Alexander Stintzing <alex@stintzing.net>
- * @copyright   Copyright (c) 2011 Alexander Stintzing (http://www.stintzing.net)
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Preference.php 11 2011-04-29 05:23:26Z alex $
  *
  */

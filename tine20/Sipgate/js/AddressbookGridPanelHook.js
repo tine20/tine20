@@ -4,7 +4,7 @@
  * @package     Sipgate
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Alexander Stintzing <alex@stintzing.net>
- * @copyright   Copyright (c) 2011 Alexander Stintzing (http://www.stintzing.net)
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: AddressbookGridPanelHook.js 22 2011-05-01 21:00:08Z alex $
  *
  */

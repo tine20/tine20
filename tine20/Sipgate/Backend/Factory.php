@@ -5,7 +5,7 @@
  * @package     Sipgate
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Alexander Stintzing <alex@stintzing.net>
- * @copyright   Copyright (c) 2011 Alexander Stintzing (http://www.stintzing.net)
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @version     $Id: Factory.php 2 2011-04-26 17:27:39Z alex $
  *
  */

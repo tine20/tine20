@@ -1,7 +1,7 @@
 {
   "projectName": "Tine 2.0 - Sipgate",
   "deployDir": "Sipgate",
-  "licenseText": "Tine 2.0 - Sipgate \nCopyright (c) 2011 Alexander Stintzing (http://www.stintzing.net)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "licenseText": "Tine 2.0 - Sipgate \nCopyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
   "resources": [
     
   ],
