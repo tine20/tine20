@@ -42,7 +42,7 @@ class Sipgate_Backend_Factory
 			$password   = $sipgateConfig->api_password;
 			$url 		= $sipgateConfig->api_url;
 		} else {
-			throw new Sipgate_Exception_NotFound('No settings found for sipgate backend in config file!');
+			throw new Sipgate_Exception_Backend('No settings found for sipgate backend in config file!');
 		}
 
 		$instance = Sipgate_Backend_Api::getInstance($username, $password, $url);
