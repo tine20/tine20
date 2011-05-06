@@ -212,7 +212,12 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
             $recipients[] = Addressbook_Controller_Contact::getInstance()->getContactByUserId($this->_currentAccount->getId(), TRUE)->getId();
         }
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . $plain);
-        Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, array($attachment));
+        
+        try {
+            Tinebase_Notification::getInstance()->send($this->_currentAccount, $recipients, $subject, $plain, $html, array($attachment));
+        } catch (Tinebase_Exception $te) {
+            Tinebase_Core::getLogger()->warn(__CLASS__ . '::' . __METHOD__ . '::' . __LINE__ . ' ' . $te->getMessage());
+        }
     }
     
     /*********************** helper functions ************************/
