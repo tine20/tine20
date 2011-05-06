@@ -159,7 +159,7 @@ class Wbxml_Encoder extends Wbxml_Abstract
         xml_set_character_data_handler($parser, '_handleCharacters');
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         
-        $xmlString = preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null,  $_dom->saveXML());
+        $xmlString = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null,  $_dom->saveXML());
         if (!xml_parse($parser, $xmlString)) {
             #file_put_contents(tempnam(sys_get_temp_dir(), "xmlerrors"), $_dom->saveXML());
             throw new Exception(sprintf('XML error: %s at line %d',

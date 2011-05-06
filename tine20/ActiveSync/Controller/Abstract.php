@@ -472,6 +472,6 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      */
     public function removeControlChars($_dirty)
     {
-        return preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null, $_dirty);
+        return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $_dirty);
     }
 }
