@@ -300,7 +300,8 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         $structure = ($_structure !== NULL) ? $_structure : $this->structure;
         
         if (! is_array($structure)) {
-            throw new Felamimail_Exception('Structure should be an array (' . $structure . ')');
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Structure should be an array (' . $structure . ')');
+            return $bodyParts;
         }
         
         if (array_key_exists('parts', $structure)) {
