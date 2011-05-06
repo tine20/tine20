@@ -38,7 +38,7 @@ class Setup_Controller
      *
      * @var Setup_Backend_Interface
      */
-    protected $_backend;
+    protected $_backend = NULL;
     
     /**
      * the directory where applications are located
@@ -1071,9 +1071,14 @@ class Setup_Controller
      * @param  SimpleXMLElement $_xml
      * @param  array | optional $_options
      * @return void
+     * @throws Setup_Exception
      */
     protected function _installApplication($_xml, $_options = null)
     {
+        if ($this->_backend === NULL) {
+            throw new Setup_Exception('Need configured backend for install.');
+        }
+        
         $createdTables = array();
         if (isset($_xml->tables)) {
             foreach ($_xml->tables[0] as $tableXML) {
