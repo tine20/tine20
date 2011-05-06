@@ -138,7 +138,8 @@ Ext.extend(Ext.ux.data.windowNameConnection, Ext.util.Observable, {
             }
         });
         
-        var frame = doc.createElement(Ext.isIE ? "<iframe name='" + requestData + "' onload='Ext.ux.data.windowNameConnection[\"" + transactionId + "\"]()'>" : 'iframe');
+        var iEVersion = parseInt([].concat(navigator.userAgent.toLowerCase().match(/msie (\d+)/))[1], 10);
+        var frame = doc.createElement(Ext.isIE && iEVersion < 9 ? "<iframe name='" + requestData + "' onload='Ext.ux.data.windowNameConnection[\"" + transactionId + "\"]()'>" : 'iframe');
         
         var transaction = {
             id         : transactionId,
