@@ -123,17 +123,27 @@ class Sipgate_Preference extends Tinebase_Preference_Abstract
 	public function getApplicationPreferenceDefaults($_preferenceName, $_accountId = NULL, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)	{
 		switch($_preferenceName) {
 			case self::PHONEID:
-				$_phones = Sipgate_Controller::getInstance()->getPhoneDevices();
-				foreach($_phones as $phone) {
-					$dev[] = $phone['SipUri'];
-				}
+			    $dev = array();
+			    try {
+                    $_phones = Sipgate_Controller::getInstance()->getPhoneDevices();
+                    foreach($_phones as $phone) {
+                        $dev[] = $phone['SipUri'];
+                    }
+			    } catch (Sipgate_Exception_Backend $seb) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not get Sipgate phone devices: ' . $seb->getMessage());
+			    }
 				$pref = $this->getOptions($_preferenceName, $dev);
 				break;
 			case self::FAXID:
-				$_faxes = Sipgate_Controller::getInstance()->getFaxDevices();
-				foreach($_faxes as $fax) {
-					$dev[] = $fax['SipUri'];
-				}
+			    $dev = array();
+                try {
+    			    $_faxes = Sipgate_Controller::getInstance()->getFaxDevices();
+    				foreach($_faxes as $fax) {
+    					$dev[] = $fax['SipUri'];
+    				}
+                } catch (Sipgate_Exception_Backend $seb) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not get Sipgate fax devices: ' . $seb->getMessage());
+                }
 				$pref = $this->getOptions($_preferenceName, $dev);
 				break;
 			case self::MOBILENUMBER:

@@ -157,13 +157,17 @@ class Sipgate_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	 *
 	 * @return mixed array 'variable name' => 'data'
 	 */
-	public function getRegistryData() {
-
-		$phoneId = Tinebase_Core::getPreference($this->_applicationName)->getValue(Sipgate_Preference::PHONEID);
-		$faxId = Tinebase_Core::getPreference($this->_applicationName)->getValue(Sipgate_Preference::FAXID);
-		$mobileNumber = Tinebase_Core::getPreference($this->_applicationName)->getValue(Sipgate_Preference::MOBILENUMBER);
-
-		$devices = Sipgate_Controller::getInstance()->getAllDevices();
+	public function getRegistryData() 
+	{
+        try {
+    		$phoneId = Tinebase_Core::getPreference($this->_applicationName)->getValue(Sipgate_Preference::PHONEID);
+    		$faxId = Tinebase_Core::getPreference($this->_applicationName)->getValue(Sipgate_Preference::FAXID);
+    		$mobileNumber = Tinebase_Core::getPreference($this->_applicationName)->getValue(Sipgate_Preference::MOBILENUMBER);
+    		$devices = Sipgate_Controller::getInstance()->getAllDevices();
+        } catch (Sipgate_Exception_Backend $seb) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not get Sipgate registry data: ' . $seb->getMessage());
+            return array();
+        }
 
 		return array(
 			'phoneId' => $phoneId,
