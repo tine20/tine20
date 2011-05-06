@@ -267,7 +267,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                 // strip off any non printable control characters
                 if (!ctype_print($nodeContent)) {
-                    $nodeContent = preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null, $nodeContent);
+                    $nodeContent = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $nodeContent);
                 }
                 
                 // ... and now add the content (DomText takes care of special chars)
