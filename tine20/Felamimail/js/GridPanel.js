@@ -367,10 +367,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     xtype: 'buttongroup',
                     columns: 8,
                     items: [
-                        Ext.apply(new Ext.Button(this.action_write), {
+                        Ext.apply(new Ext.SplitButton(this.action_write), {
                             scale: 'medium',
                             rowspan: 2,
-                            iconAlign: 'top'
+                            iconAlign: 'top',
+                            arrowAlign:'right',
+                            menu: new Ext.menu.Menu({
+                                items: [],
+                                plugins: [{
+                                    ptype: 'ux.itemregistry',
+                                    key:   'Tine.widgets.grid.GridPanel.addButton'
+                                }]
+                            })
                         }),
                         Ext.apply(new Ext.Button(this.action_deleteRecord), {
                             scale: 'medium',
