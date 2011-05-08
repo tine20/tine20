@@ -35,10 +35,10 @@ class Addressbook_Model_ListMemberFilter extends Tinebase_Model_Filter_Abstract
     {
         $db = $_backend->getAdapter();
         $_select->joinLeft(
-            /* table  */ array('member' => $db->table_prefix . 'addressbook_list_members'), 
-            /* on     */ $db->quoteIdentifier('member.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
+            /* table  */ array('members' => $db->table_prefix . 'addressbook_list_members'), 
+            /* on     */ $db->quoteIdentifier('members.contact_id') . ' = ' . $db->quoteIdentifier('addressbook.id'),
             /* select */ array()
         );
-        $_select->where($db->quoteInto($db->quoteIdentifier('member.contact_id') . ' IN (?)', (array) $this->_value));
+        $_select->where($db->quoteIdentifier('members.list_id') . ' IN (?)', (array) $this->_value);
     }
 }
