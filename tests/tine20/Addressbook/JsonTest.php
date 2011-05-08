@@ -4,7 +4,7 @@
  * 
  * @package     Addressbook
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  * 
  * @todo        add testSetImage (NOTE: we can't test the upload yet, so we needd to simulate the upload)
@@ -14,10 +14,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Addressbook_JsonTest::main');
-}
 
 /**
  * Test class for Tinebase_Group
@@ -107,7 +103,6 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * try to get all contacts
-     *
      */
     public function testGetAllContacts()
     {
@@ -121,6 +116,31 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertGreaterThan(0, $contacts['totalcount']);
     }    
 
+    /**
+     * test search contacts by list
+     */
+    public function testSearchContactsByList()
+    {
+        $paging = $this->objects['paging'];
+        
+        $adminListId = Tinebase_Group::getInstance()->getDefaultAdminGroup()->list_id;
+        $filter = array(
+            array('field' => 'list', 'operator' => 'equals',   'value' => $adminListId),
+        );
+        $contacts = $this->_instance->searchContacts($filter, $paging);
+        
+        $this->assertGreaterThan(0, $contacts['totalcount']);
+        // check if user in admin list
+        $found = FALSE;
+        foreach ($contacts['results'] as $contact) {
+            if ($contact['account_id'] == Tinebase_Core::getUser()->getId()) {
+                $found = TRUE;
+                break;
+            }
+        }
+        $this->assertTrue($found);
+    }    
+    
     /**
      * try to get contacts by missing container
      *
