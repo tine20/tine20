@@ -270,4 +270,15 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         $this->setTableVersion('relations', '5');
         $this->setApplicationVersion('Tinebase', '4.6');
     }
+    
+    /**
+     * update to 4.7
+     * - add credential cache cleanup task to scheduler
+     */
+    public function update_6()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '4.7');
+    }    
 }
