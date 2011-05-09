@@ -127,7 +127,29 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         $_scheduler->addTask('Tinebase_CacheCleanup', $task);
         $_scheduler->saveTask();
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Saved task Tinebase_ActionQueue::processQueue in scheduler.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Saved task Tinebase_Controller::cleanupCache in scheduler.');
+    }
+    
+    /**
+     * add credential cache cleanup task to scheduler
+     * 
+     * @param Zend_Scheduler $_scheduler
+     */
+    public static function addCredentialCacheCleanupTask(Zend_Scheduler $_scheduler)
+    {
+        $request = new Zend_Controller_Request_Simple(); 
+        $request->setControllerName('Tinebase_Auth_CredentialCache');
+        $request->setActionName('clearCacheTable');
+        
+        $task = self::getPreparedTask(self::TASK_TYPE_DAILY);
+        $task->setRequest($request);
+        
+        $_scheduler->addTask('Tinebase_CredentialCacheCleanup', $task);
+        $_scheduler->saveTask();
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+            . ' Saved task Tinebase_Auth_CredentialCache::clearCacheTable in scheduler.');
     }
     
     /**
