@@ -208,12 +208,14 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
     /**
      * remove all credential cache records before $_date
      * 
-     * @param $_date
+     * @param Tinebase_DateTime|string $_date
      */
     public function clearCacheTable($_date = NULL)
     {
-        $dateString = ($_date instanceof Tinebase_DateTime) ? $_date->format( Tinebase_Record_Abstract::ISO8601LONG) : $_date;
-        $dateWhere = ($dateString !== NULL) ? $this->_db->quoteInto('creation_time < ?', $dateString) : '';
+        // yesterday is default
+        $date = ($_date === NULL) ? Tinebase_DateTime::now()->subDay(1) : $_date;
+        $dateString = ($date instanceof Tinebase_DateTime) ? $date->format(Tinebase_Record_Abstract::ISO8601LONG) : $date;
+        $dateWhere =$this->_db->quoteInto('creation_time < ?', $dateString);
         
         if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
             // delete only records that are not related to email accounts
