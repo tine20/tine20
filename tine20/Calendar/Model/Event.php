@@ -324,10 +324,17 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         $this->_properties = array_intersect_key($this->_properties, array_flip(array(
             'id', 
             'dtstart', 
-            'dtend', 
+            'dtend',
+            'is_all_day_event',
+            'transp',
+            'seq',
+            'uid',
             'is_all_day_event',
             'rrule',
             'rrule_until',
+            'recurid',
+            'exdate',
+            'originator_tz',
             'attendee', // if we remove this, we need to adopt attendee resolveing
             'container_id',
             'created_by',
