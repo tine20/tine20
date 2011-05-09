@@ -42,6 +42,7 @@ class Addressbook_Model_ContactFilter extends Tinebase_Model_Filter_FilterGroup
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array('fields' => array('n_family', 'n_given', 'org_name', 'org_unit', 'email', 'email_home', 'adr_one_locality'))
         ),
+        'list'                 => array('filter' => 'Addressbook_Model_ListMemberFilter'),
         'telephone'            => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
             'options' => array('fields' => array(

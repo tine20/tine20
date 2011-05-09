@@ -123,6 +123,8 @@ class Tinebase_Application
             if ($cache->test($cacheId)) {
                 $result = $cache->load($cacheId);
                 
+                $this->_addToClassCache($result);
+                
                 return $result;
             }
         }
@@ -142,8 +144,7 @@ class Tinebase_Application
             $cache->save($result, 'getApplicationByName_' . $result->name, array('applications'));
         }
         
-        $this->_applicationCache[$result->getId()] = $result;
-        $this->_applicationCache[$result->name]    = $result;
+        $this->_addToClassCache($result);
         
         return $result;
     }
@@ -162,7 +163,7 @@ class Tinebase_Application
         if(empty($_applicationName) || ! is_string($_applicationName)) {
             throw new Tinebase_Exception_InvalidArgument('$_applicationName can not be empty / has to be string.');
         }
-
+        
         if (isset($this->_applicationCache[$_applicationName])) {
             return $this->_applicationCache[$_applicationName];
         }
@@ -173,6 +174,8 @@ class Tinebase_Application
             $cacheId = 'getApplicationByName_' . $_applicationName;
             if ($cache->test($cacheId)) {
                 $result = $cache->load($cacheId);
+                
+                $this->_addToClassCache($result);
                 
                 return $result;
             }
@@ -196,8 +199,7 @@ class Tinebase_Application
             $cache->save($result, 'getApplicationById_' . $result->getId(), array('applications'));
         }
         
-        $this->_applicationCache[$result->getId()] = $result;
-        $this->_applicationCache[$result->name]    = $result;
+        $this->_addToClassCache($result);
 
         return $result;
     }
@@ -267,7 +269,7 @@ class Tinebase_Application
     /**
      * return if application is installed
      *
-     * @param  $_applicationName  the application name
+     * @param  string  $_applicationName  the application name
      * 
      * @return bool
      */
@@ -325,7 +327,7 @@ class Tinebase_Application
         unset($data['tables']);
         
         $this->_applicationTable->insert($data);
-
+        
         $result = $this->getApplicationById($_application->id);
         
         return $result;
@@ -439,7 +441,7 @@ class Tinebase_Application
         
         $this->_db->delete(SQL_TABLE_PREFIX . 'applications', $where);
         
-        $this->_cleanCache();
+        $this->_cleanCache($applicationId);
     }
     
     /**
@@ -475,7 +477,12 @@ class Tinebase_Application
             'modelName' => 'Tinebase_Model_Application', 
             'tableName' => 'applications',
         ));
-        return $backend->update($_application);
+        
+        $result = $backend->update($_application);
+        
+        $this->_cleanCache($result);
+        
+        return $result;
     }
     
     
@@ -525,13 +532,49 @@ class Tinebase_Application
     }            
     
     /**
-     * clean cache
+     * add TMA to "in class" cache and to Zend Cache
+     * 
+     * @param  Tinebase_Model_Application  $_application
+     */
+    protected function _addToClassCache(Tinebase_Model_Application $_application)
+    {
+        $this->_applicationCache[$_application->getId()] = $_application;
+        $this->_applicationCache[$_application->name]    = $_application;
+    }
+    
+    /**
+     * remove TMA from "in class" cache and Zend Cache
+     * 
+     * remove cache entry for given class only, when application id AND name are known
+     * otherwise forget all cached TMA
      * 
      * @return void
      */
-    protected function _cleanCache()
+    protected function _cleanCache($_applicationId = null)
     {
-        Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
+        if ($_applicationId instanceof Tinebase_Model_Application) {
+            $application = $_applicationId;
+        } elseif (isset($this->_applicationCache[$_applicationId])) {
+            $application = $this->_applicationCache[$_applicationId];
+        }
+
+        /*
+         *  we always reset the "in class" cache. Otherwise we rum into problems when we 
+         *  try to uninstall and install all applications again
+         *  hint: Tinebase can't be uninstalled because the app tables got droped before 
+         */
+        if (isset($application)) {
+            // remove from Zend Cache
+            $cacheId = 'getApplicationById_' . $application->getId();
+            Tinebase_Core::get(Tinebase_Core::CACHE)->remove($cacheId);
+            
+            $cacheId = 'getApplicationByName_' . $application->name;
+            Tinebase_Core::get(Tinebase_Core::CACHE)->remove($cacheId);
+        } else {
+            Tinebase_Core::get(Tinebase_Core::CACHE)->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('applications'));
+            
+        }
+        
         $this->_applicationCache = array();
     }
 }

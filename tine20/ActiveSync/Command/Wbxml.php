@@ -99,8 +99,14 @@ abstract class ActiveSync_Command_Wbxml
         $this->_syncTimeStamp = Tinebase_DateTime::now();
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " sync timestamp: " . $this->_syncTimeStamp->get(Tinebase_Record_Abstract::ISO8601LONG));
         
-        $dtd = DOMImplementation::createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
-        $this->_outputDom = DOMImplementation::createDocument($this->_defaultNameSpace, $this->_documentElement, $dtd);
+        // Creates an instance of the DOMImplementation class
+        $imp = new DOMImplementation();
+        
+        // Creates a DOMDocumentType instance
+        $dtd = $imp->createDocumentType('AirSync', "-//AIRSYNC//DTD AirSync//EN", "http://www.microsoft.com/");
+
+        // Creates a DOMDocument instance
+        $this->_outputDom = $imp->createDocument($this->_defaultNameSpace, $this->_documentElement, $dtd);
         $this->_outputDom->formatOutput = false;
         $this->_outputDom->encoding     = 'utf-8';
         

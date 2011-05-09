@@ -143,7 +143,7 @@ class ActiveSync_Controller_EmailTests extends PHPUnit_Framework_TestCase
         $this->_domDocument->formatOutput = true;
         $xml = $this->_domDocument->saveXML();
         
-        $this->assertEquals($xml, preg_replace('/[\x00-\x08,\x0B,\x0C,\x0E-\x1F]/', null, $xml));
+        $this->assertEquals(preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $xml), $xml);
     }
     /**
      * validate fetching email by filereference(hashid-partid)

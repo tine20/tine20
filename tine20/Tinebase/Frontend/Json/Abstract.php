@@ -228,17 +228,22 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
     }
     
     /**
-     * import contacts
+     * import records
      * 
      * @param array $_files to import
      * @param string $_importDefinitionId
      * @param array $_options additional import options
      * @return array
+     * @throws Tinebase_Exception_NotFound
      */
     protected function _import($_files, $_importDefinitionId, $_options = array())
     {
         $definition = Tinebase_ImportExportDefinition::getInstance()->get($_importDefinitionId);
         $importer = call_user_func($definition->plugin . '::createFromDefinition', $definition, $_options);
+        
+        if (! is_object($importer)) {
+            throw new Tinebase_Exception_NotFound('No importer found for ' . $definition->name);
+        }
         
         // extend execution time to 30 minutes
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(1800);

@@ -69,7 +69,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
        
     /**
      * test uninstall application and cache clearing
-     *
+     * 
      */
     public function testUninstallApplications()
     {
@@ -292,6 +292,7 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     
     /**
      * testLoginWithWrongUsernameAndPassword
+     * 
      */
     public function testLoginWithWrongUsernameAndPassword()
     {

@@ -558,15 +558,13 @@ class Tinebase_Core
     }
 
     /**
-     * places user credential cache id from cockie (if present) into registry
+     * places user credential cache id from cache adapter (if present) into registry
      */
     public static function setupUserCredentialCache()
     {
         $cache = Tinebase_Auth_CredentialCache::getInstance()->getCacheAdapter()->getCache();
         if ($cache !== NULL) {
             self::set(self::USERCREDENTIALCACHE, $cache);
-        } else {
-            self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Something went wrong with the CredentialCache / could not set CC.');
         }
     }
 

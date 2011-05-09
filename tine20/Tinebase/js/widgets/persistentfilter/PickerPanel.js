@@ -378,6 +378,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {model.PersistentFilter} persistentFilter
      */
     selectFilter: function(persistentFilter) {
+        if (! persistentFilter) {
+            return;
+        }
         this.getFilterToolbar().fireEvent('change', this.getFilterToolbar());
         var node = this.getNodeById(persistentFilter.id);
         if (node) {

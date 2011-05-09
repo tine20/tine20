@@ -35,4 +35,18 @@ interface Tinebase_Auth_CredentialCache_Adapter_Interface
      * resetCache() - resets the cache
      */
     public function resetCache();
+
+    /**
+     * getDefaultKey() - get default cache key
+     * 
+     * @return string
+     */
+    public function getDefaultKey();
+    
+    /**
+     * getDefaultId() - get default cache id
+     * 
+     * @return string
+     */
+    public function getDefaultId();
 }

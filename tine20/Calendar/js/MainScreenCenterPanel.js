@@ -497,12 +497,12 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
         
         if (! event) {
             event = new Tine.Calendar.Model.Event(Tine.Calendar.Model.Event.getDefaultData(), 0);
-            if (Ext.isDate(defaults.dtStart)) {
+            if (defaults && Ext.isDate(defaults.dtStart)) {
                 event.set('dtstart', defaults.dtStart);
                 event.set('dtend', defaults.dtStart.add(Date.HOUR, 1));
             }
             
-            if (Ext.isArray(defaults.attendee)) {
+            if (defaults && Ext.isArray(defaults.attendee)) {
                 var attendee = event.get('attendee') || [];
                 
                 // strip records

@@ -12,6 +12,10 @@
       "isDebug": true,
       "fileIncludes": [
         {
+          "text": "ListMemberFilterModel.js",
+          "path": "js/"
+        },
+        {
           "text": "Model.js",
           "path": "js/"
         },

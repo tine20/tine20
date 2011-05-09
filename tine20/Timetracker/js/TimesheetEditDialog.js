@@ -25,6 +25,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
     recordProxy: Tine.Timetracker.timesheetBackend,
     loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
+    evalGrants: false,
     
     /**
      * overwrite update toolbars function (we don't have record grants yet)
@@ -48,6 +49,8 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
         var notClearable = false;
 
         var grants = timeaccount ? timeaccount.get('account_grants') : (this.record.get('timeaccount_id') ? this.record.get('timeaccount_id').account_grants : {});
+        Tine.log.debug(grants);
+        
         if (grants) {
             this.getForm().findField('account_id').setDisabled(! (grants.bookAllGrant || grants.adminGrant || manageRight));
             notBillable = ! (grants.manageBillableGrant || grants.adminGrant || manageRight);

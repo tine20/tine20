@@ -241,7 +241,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 }
                 
                 // check if candidate/baseEvent has an exception itself -> in this case remove baseEvent from set
-                if (in_array($candidate->dtstart, $candidate->exdate)) {
+                if (is_array($candidate->exdate) && in_array($candidate->dtstart, $candidate->exdate)) {
                     $_events->removeRecord($candidate);
                 }
                 

@@ -375,7 +375,7 @@ Ext.namespace('Tine.Felamimail');
      */
     initRecipients: function() {
         if (this.replyTo) {
-            this.initReplyRecipients;
+            this.initReplyRecipients();
         }
         
         Ext.each(['to', 'cc', 'bcc'], function(field) {
@@ -412,6 +412,9 @@ Ext.namespace('Tine.Felamimail');
         }
         
         if (this.replyToAll) {
+            if (! Ext.isArray(this.to)) {
+                this.to = [this.to];
+            }
             this.to = this.to.concat(this.replyTo.get('to'));
             this.cc = this.replyTo.get('cc');
             
