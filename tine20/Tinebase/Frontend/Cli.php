@@ -163,7 +163,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
-     * process queue tasks (simple queue processing, intendet to be executed from system cron job)
+     * process queue tasks (simple queue processing, intended to be executed from system cron job)
      *  optional --numtasks param
      *
      * @param Zend_Console_Getopt $_opts
