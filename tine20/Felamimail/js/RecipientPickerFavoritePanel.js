@@ -105,7 +105,7 @@ Tine.Felamimail.RecipientPickerFavoritePanel = Ext.extend(Tine.widgets.persisten
             }
         }, this);
         if (filterValue.length > 0) {
-            filter = [{field: 'email_query', operator: 'contains', value: filterValue.join(' ')}];
+            filter = [{field: 'email_query', operator: 'in', value: filterValue}];
         }
 
         var updatedPersistentFilter = new Tine.widgets.persistentfilter.model.PersistentFilter({
