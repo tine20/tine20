@@ -168,8 +168,6 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      *
      * @param Zend_Console_Getopt $_opts
      * @return boolean success
-     * 
-     * @todo use _getCronuserFromConfigOrCreateOnTheFly
      */
     public function processQueue($_opts)
     {
@@ -178,11 +176,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            // get user for cronjob from config / set default admin group
-            $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::CRONUSERID)->value;
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting user with id ' . $cronuserId . ' (cronuser) as user.');
-            $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
+            $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
