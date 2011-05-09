@@ -63,6 +63,7 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
                 break;
             case self::TASK_TYPE_DAILY:
                 $task->setHours("0");
+                $task->setMinutes("0");
                 break;
         }
         
