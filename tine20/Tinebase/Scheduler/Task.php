@@ -42,15 +42,26 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
      * static task getter
      * 
      * @param  string $_type
-     * @param  array $_options
+     * @param  array $_requestOptions
+     * @param  array $_taskOptions
      * @return Tinebase_Scheduler_Task
      */
-    public static function getPreparedTask($_type = self::TASK_TYPE_MINUTELY, array $_options = array())
+    public static function getPreparedTask($_type, array $_requestOptions, array $_taskOptions = array())
     {
-        $task = new Tinebase_Scheduler_Task($_options);
+        $request = new Zend_Controller_Request_Simple(); 
+        $request->setControllerName($_requestOptions['controller']);
+        $request->setActionName($_requestOptions['action']);
+        if (array_key_exists('params', $_requestOptions)) {
+            foreach ($_requestOptions['params'] as $key => $value) {
+                $request->setParam($key, $value);
+            }
+        }
+        
+        $task = new Tinebase_Scheduler_Task($_taskOptions);
         $task->setMonths("Jan-Dec");
         $task->setWeekdays("Sun-Sat");
         $task->setDays("1-31");
+        $task->setRequest($request);
         
         switch ($_type) {
             case self::TASK_TYPE_MINUTELY:
@@ -77,14 +88,13 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
      */
     public static function addAlarmTask(Zend_Scheduler $_scheduler)
     {
-        $request = new Zend_Controller_Request_Simple(); 
-        $request->setControllerName('Tinebase_Alarm');
-        $request->setActionName('sendPendingAlarms');
-        $request->setParam('eventName', 'Tinebase_Event_Async_Minutely');
-        
-        $task = self::getPreparedTask();
-        $task->setRequest($request);
-        
+        $task = self::getPreparedTask(self::TASK_TYPE_MINUTELY, array(
+            'controller'    => 'Tinebase_Alarm',
+            'action'        => 'sendPendingAlarms',
+            'params'        => array(
+                'eventName' => 'Tinebase_Event_Async_Minutely'
+            ),
+        ));
         $_scheduler->addTask('Tinebase_Alarm', $task);
         $_scheduler->saveTask();
         
@@ -98,12 +108,10 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
      */
     public static function addQueueTask(Zend_Scheduler $_scheduler)
     {
-        $request = new Zend_Controller_Request_Simple(); 
-        $request->setControllerName('Tinebase_ActionQueue');
-        $request->setActionName('processQueue');
-        
-        $task = self::getPreparedTask();
-        $task->setRequest($request);
+        $task = self::getPreparedTask(self::TASK_TYPE_MINUTELY, array(
+            'controller'    => 'Tinebase_ActionQueue',
+            'action'        => 'processQueue',
+        ));
         
         $_scheduler->addTask('Tinebase_ActionQueue', $task);
         $_scheduler->saveTask();
@@ -118,12 +126,10 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
      */
     public static function addCacheCleanupTask(Zend_Scheduler $_scheduler)
     {
-        $request = new Zend_Controller_Request_Simple(); 
-        $request->setControllerName('Tinebase_Controller');
-        $request->setActionName('cleanupCache');
-        
-        $task = self::getPreparedTask(self::TASK_TYPE_HOURLY);
-        $task->setRequest($request);
+        $task = self::getPreparedTask(self::TASK_TYPE_HOURLY, array(
+            'controller'    => 'Tinebase_Controller',
+            'action'        => 'cleanupCache',
+        ));
         
         $_scheduler->addTask('Tinebase_CacheCleanup', $task);
         $_scheduler->saveTask();
@@ -139,12 +145,10 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
      */
     public static function addCredentialCacheCleanupTask(Zend_Scheduler $_scheduler)
     {
-        $request = new Zend_Controller_Request_Simple(); 
-        $request->setControllerName('Tinebase_Auth_CredentialCache');
-        $request->setActionName('clearCacheTable');
-        
-        $task = self::getPreparedTask(self::TASK_TYPE_DAILY);
-        $task->setRequest($request);
+        $task = self::getPreparedTask(self::TASK_TYPE_DAILY, array(
+            'controller'    => 'Tinebase_Auth_CredentialCache',
+            'action'        => 'clearCacheTable',
+        ));
         
         $_scheduler->addTask('Tinebase_CredentialCacheCleanup', $task);
         $_scheduler->saveTask();
