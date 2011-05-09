@@ -232,17 +232,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         " WHERE status='success'");
                     break;
                 case 'credential_cache':
-                    if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
-                        // delete only records that are not related to email accounts
-                        $db->query(
-                            'delete ' . SQL_TABLE_PREFIX . 'credential_cache FROM `' . SQL_TABLE_PREFIX . 'credential_cache`' .
-                            ' LEFT JOIN ' . SQL_TABLE_PREFIX . 'felamimail_account ON ' . SQL_TABLE_PREFIX . 'credential_cache.id = ' . 
-                                SQL_TABLE_PREFIX . 'felamimail_account.credentials_id' .
-                            ' WHERE ' . SQL_TABLE_PREFIX . 'felamimail_account.credentials_id IS NULL');
-                        break;
-                    } else {
-                        // fallthrough
-                    }                    
+                    Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable(array_key_exists('date', $args) ? $args['date'] : NULL);
+                    break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
             }

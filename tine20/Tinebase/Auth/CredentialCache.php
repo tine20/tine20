@@ -204,4 +204,30 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
         mcrypt_generic_deinit($td);
         mcrypt_module_close($td);
     }
+    
+    /**
+     * remove all credential cache records before $_date
+     * 
+     * @param $_date
+     */
+    public function clearCacheTable($_date = NULL)
+    {
+        $dateString = ($_date instanceof Tinebase_DateTime) ? $_date->format( Tinebase_Record_Abstract::ISO8601LONG) : $_date;
+        $dateWhere = ($dateString !== NULL) ? $this->_db->quoteInto('creation_time < ?', $dateString) : '';
+        
+        if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
+            // delete only records that are not related to email accounts
+            $where = SQL_TABLE_PREFIX . 'felamimail_account.credentials_id IS NULL';
+            if ($dateWhere) {
+                $where .= ' AND ' . $dateWhere;
+            }
+            $this->_db->query(
+                'delete ' . $this->_tablePrefix . $this->_tableName . ' FROM `' . $this->_tablePrefix .  $this->_tableName . '`' .
+                ' LEFT JOIN ' . $this->_tablePrefix . 'felamimail_account ON ' . $this->_tablePrefix . $this->_tableName . '.id = ' . 
+                    $this->_tablePrefix . 'felamimail_account.credentials_id' .
+                ' WHERE ' . $where);
+        } else {
+            $this->_db->delete($this->_tablePrefix . $this->_tableName, $dateWhere);            
+        }
+    }
 }
