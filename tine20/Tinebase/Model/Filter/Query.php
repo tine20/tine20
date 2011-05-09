@@ -19,6 +19,8 @@
  * filters for all of the given filterstrings if it is contained in at least 
  * one of the defined fileds
  * 
+ * -> allow search for all Müllers who live in Munich but not all Müllers and all people who live in Munich
+ * 
  * The fields to query in _must_ be defined in the options key 'fields'
  * The value string is space-exploded into multiple filterstrings
  */
@@ -70,9 +72,10 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
              $whereClause = '';
              if (!empty($whereParts)) {
                  $whereClause = implode(' OR ', $whereParts);
-             }                        
+             }
+              
              if (!empty($whereClause)) {
-                 $_select->orwhere($db->quoteInto($whereClause, '%' . trim($query) . '%'));
+                 $_select->where($db->quoteInto($whereClause, '%' . trim($query) . '%'));
              }
          }
      }
