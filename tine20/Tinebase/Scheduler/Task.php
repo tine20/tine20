@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe g.ciyiltepe@metaways.de>
  */
 
@@ -25,11 +25,18 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
     const TASK_TYPE_MINUTELY = 'minutely';
     
     /**
-     * minutely task (default)
+     * hourly task
      * 
      * @var string
      */
     const TASK_TYPE_HOURLY = 'hourly';
+
+    /**
+     * daily task
+     * 
+     * @var string
+     */
+    const TASK_TYPE_DAILY = 'daily';
     
     /**
      * static task getter
@@ -44,14 +51,18 @@ class Tinebase_Scheduler_Task extends Zend_Scheduler_Task
         $task->setMonths("Jan-Dec");
         $task->setWeekdays("Sun-Sat");
         $task->setDays("1-31");
-        $task->setHours("0-23");
         
         switch ($_type) {
             case self::TASK_TYPE_MINUTELY:
+                $task->setHours("0-23");
                 $task->setMinutes("0/1");
                 break;
             case self::TASK_TYPE_HOURLY:
+                $task->setHours("0-23");
                 $task->setMinutes("0");
+                break;
+            case self::TASK_TYPE_DAILY:
+                $task->setHours("0");
                 break;
         }
         
