@@ -782,7 +782,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'attachments'   => array(new Tinebase_Model_TempFile(array(
                 'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
                 'name'  => $cachedMessage->subject,
-            ))),
+            ), TRUE)),
         ));
         $sentFolder = $this->_getFolder('Sent');
 
