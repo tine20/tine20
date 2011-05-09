@@ -673,7 +673,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'attachments'   => array(new Tinebase_Model_TempFile(array(
                 'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
                 'name'  => $subject,
-            ))),
+            ), TRUE)),
             'flags'         => Zend_Mail_Storage::FLAG_PASSED,
         );
         
