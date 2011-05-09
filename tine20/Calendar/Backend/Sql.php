@@ -319,8 +319,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
             
         $_select->joinLeft(
             /* table  */ array('attendeeaccounts' => $this->_tablePrefix . 'accounts'), 
-            /* on     */ $this->_db->quoteIdentifier('attendeeaccounts.contact_id') . ' = ' . $this->_db->quoteIdentifier('attendee.user_id') . 
-                            ' AND ' . $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . '= ?', Calendar_Model_Attender::USERTYPE_USER),
+            /* on     */ $this->_db->quoteIdentifier('attendeeaccounts.contact_id') . ' = ' . $this->_db->quoteIdentifier('attendee.user_id') . ' AND (' . 
+                            $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . '= ?', Calendar_Model_Attender::USERTYPE_USER) . ' OR ' .
+                            $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . '= ?', Calendar_Model_Attender::USERTYPE_GROUPMEMBER) . 
+                        ')',
             /* select */ array());
         
         $_select->joinLeft(
@@ -413,8 +415,10 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         
         // attendee get read, sync, export and private grants implicitly
         if (in_array($_requiredGrant, array(Tinebase_Model_Grants::GRANT_READ, Tinebase_Model_Grants::GRANT_SYNC, Tinebase_Model_Grants::GRANT_EXPORT, Tinebase_Model_Grants::GRANT_PRIVATE))) {
-            $readCond = $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . 
-                   ' AND ' .  $this->_db->quoteIdentifier('attendeeaccounts.id') . ' = ' . $this->_db->quote($accountId);
+            $readCond = $this->_db->quoteIdentifier('attendeeaccounts.id') . ' = ' . $this->_db->quote($accountId) . ' AND (' .
+                $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_USER) . ' OR ' .
+                $this->_db->quoteInto($this->_db->quoteIdentifier('attendee.user_type') . ' = ?', Calendar_Model_Attender::USERTYPE_GROUPMEMBER) .
+            ')';
             
             $sql = "($sql) OR ($readCond)";
         }
