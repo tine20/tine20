@@ -320,12 +320,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.items.push({
                 region: 'north',
                 border: false,
+                autoScroll: true,
+//                split: true,
                 items: this.filterToolbar,
                 listeners: {
                     scope: this,
                     afterlayout: function(ct) {
                     	ct.suspendEvents();
-                        ct.setHeight(this.filterToolbar.getHeight());
+                        ct.setHeight(Math.min(120, this.filterToolbar.getHeight()));
+                        ct.getEl().child('div[class^="x-panel-body"]', true).scrollTop = 1000000;
                         ct.ownerCt.layout.layout();
                         ct.resumeEvents();
                     }
