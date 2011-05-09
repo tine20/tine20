@@ -670,10 +670,10 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => 'jsontest'),
             'original_id'   => $message['id'],
-            'attachments'   => array(array(
+            'attachments'   => array(new Tinebase_Model_TempFile(array(
                 'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
                 'name'  => $subject,
-            )),
+            ))),
             'flags'         => Zend_Mail_Storage::FLAG_PASSED,
         );
         
