@@ -3,6 +3,7 @@
  * Tine 2.0
  *
  * @package     Tinebase
+ * @subpackage  File
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -15,8 +16,7 @@
  * To access a tempFile, the session of the client must match
  * 
  * @package     Tinebase
- * 
- * @todo automatic garbage collection via cron
+ * @subpackage  File
  */
 class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
 {
@@ -142,5 +142,20 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
         $this->create($tempFile);
         
         return $tempFile;
+    }
+    
+    /**
+     * remove all temp file records before $_date
+     * 
+     * @param Tinebase_DateTime|string $_date
+     * @return integer number of deleted records
+     */
+    public function clearTable($_date = NULL)
+    {
+        $date = ($_date === NULL) ? Tinebase_DateTime::now()->subDay(1) : $_date;
+        $dateString = ($date instanceof Tinebase_DateTime) ? $date->format(Tinebase_Record_Abstract::ISO8601LONG) : $date;
+        $dateWhere = $this->_db->quoteInto('time < ?', $dateString);
+        
+        $result = $this->_db->delete($this->getTableName(), $dateWhere);            
     }
 }
