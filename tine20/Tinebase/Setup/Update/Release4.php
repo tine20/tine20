@@ -281,4 +281,15 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
         $this->setApplicationVersion('Tinebase', '4.7');
     }    
+
+    /**
+     * update to 4.8
+     * - add temp file cleanup task to scheduler
+     */
+    public function update_7()
+    {
+        $scheduler = Tinebase_Core::getScheduler();
+        Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
+        $this->setApplicationVersion('Tinebase', '4.8');
+    }    
 }
