@@ -643,8 +643,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     	    // close session to allow other requests
             Zend_Session::writeClose(true);
         
-    	    $tempfileBackend = new Tinebase_TempFile();
-    	    $tempFile = $tempfileBackend->uploadTempFile();
+    	    $tempFile = Tinebase_TempFile::getInstance()->uploadTempFile();
     	    
     	    die(Zend_Json::encode(array(
     	       'status'   => 'success',
@@ -692,8 +691,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
 	    
 	    if ($application == 'Tinebase' && $location == 'tempFile') {
 	        
-	        $tempfileBackend = new Tinebase_TempFile();
-	        $tempFile = $tempfileBackend->getTempFile($id);
+	        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($id);
 
             $imgInfo = Tinebase_ImageHelper::getImageInfoFromBlob(file_get_contents($tempFile->path));
             $image = new Tinebase_Model_Image($imgInfo + array(

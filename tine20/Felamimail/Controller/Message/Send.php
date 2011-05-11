@@ -419,7 +419,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         if (isset($_message->attachments)) {
             $size = 0;
-            $tempFileBackend = new Tinebase_TempFile();
+            $tempFileBackend = Tinebase_TempFile::getInstance();
             foreach ($_message->attachments as $attachment) {
                 
                 $tempFile = ($attachment instanceof Tinebase_Model_TempFile) ? $attachment : $tempFileBackend->get($attachment['tempFile']['id']);
