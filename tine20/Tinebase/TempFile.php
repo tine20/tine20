@@ -35,6 +35,33 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
     protected $_modelName = 'Tinebase_Model_TempFile';
     
     /**
+     * holds the instance of the singleton
+     *
+     * @var Tinebase_TempFile
+     */
+    private static $_instance = NULL;
+    
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() {}
+    
+    /**
+     * the singleton pattern
+     *
+     * @return Tinebase_TempFile
+     */
+    public static function getInstance() 
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Tinebase_TempFile();
+        }
+        
+        return self::$_instance;
+    }
+    
+    /**
      * get temp file description from db
      *
      * @param string $_fileId
