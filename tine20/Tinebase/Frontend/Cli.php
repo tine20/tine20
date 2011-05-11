@@ -206,16 +206,16 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         }
         
         $args = $this->_parseArgs($_opts, array('tables'), 'tables');
-        $dateString =  
+        $dateString = array_key_exists('date', $args) ? $args['date'] : NULL;
 
         $db = Tinebase_Core::getDb();
         foreach ($args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
-                    if (array_key_exists('date', $args)) {
-                        echo "\nRemoving all access log entries before {$args['date']} ...";
+                    if ($dateString) {
+                        echo "\nRemoving all access log entries before {$dateString} ...";
                         $where = array(
-                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $args['date'])
+                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $dateString)
                         );
                         $db->delete(SQL_TABLE_PREFIX . $table, $where);
                     } else {
@@ -228,11 +228,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         " WHERE status='success'");
                     break;
                 case 'credential_cache':
-                    Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable(array_key_exists('date', $args) ? $args['date'] : NULL);
+                    Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable($dateString);
                     break;
                 case 'temp_files':
                     $tempFileBackend = new Tinebase_TempFile();
-                    $tempFileBackend->clearTable(array_key_exists('date', $args) ? $args['date'] : NULL);
+                    $tempFileBackend->clearTable($dateString);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
