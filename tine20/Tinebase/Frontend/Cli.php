@@ -192,6 +192,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - credential_cache
      * - access_log
      * - async_job
+     * - temp_files
      * 
      * if param date is given (date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * 
@@ -204,7 +205,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
         
-        $args = $this->_parseArgs($_opts, array('tables'), 'tables'); 
+        $args = $this->_parseArgs($_opts, array('tables'), 'tables');
+        $dateString =  
 
         $db = Tinebase_Core::getDb();
         foreach ($args['tables'] as $table) {
@@ -227,6 +229,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                     break;
                 case 'credential_cache':
                     Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable(array_key_exists('date', $args) ? $args['date'] : NULL);
+                    break;
+                case 'temp_files':
+                    $tempFileBackend = new Tinebase_TempFile();
+                    $tempFileBackend->clearTable(array_key_exists('date', $args) ? $args['date'] : NULL);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
