@@ -118,8 +118,7 @@ class Tinebase_ImageHelper
      */
     public static function getImageData($imageParams)
     {
-        $tempfileBackend = new Tinebase_TempFile();
-        $tempFile = $tempfileBackend->getTempFile($imageParams['id']);
+        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($imageParams['id']);
         
         if (! Tinebase_ImageHelper::isImageFile($tempFile->path)) {
             throw new Tinebase_Exception_UnexpectedValue('Given file is not an image.');

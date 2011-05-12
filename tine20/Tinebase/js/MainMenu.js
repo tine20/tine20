@@ -236,7 +236,7 @@ Tine.Tinebase.MainMenu = Ext.extend(Ext.Toolbar, {
                 if (redirect && redirect != '') {
                     window.location = Tine.Tinebase.registry.get('redirectUrl');
                 } else {
-                    window.location = window.location.href.replace(/#+.*/, '');
+                    window.location.reload();
                 }
             }
         });        

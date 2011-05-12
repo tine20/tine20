@@ -5,18 +5,16 @@
  * @package     Tinebase
  * @subpackage  Auth
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Jonas Fischer <j.fischer@metaways.de>
+ * 
+ * @todo        split this
  */
 
 /**
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_AuthTest::main');
-}
 
 /**
  * Test class for Tinebase_Auth_Abstract
@@ -193,5 +191,28 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
         if ($testConfig->email) {
             $this->assertEquals(array('Invalid credentials for user ' . $testConfig->email, ''), $authResult->getMessages());
         }
+    }
+    
+    /**
+     * test credential cache cleanup
+     */
+    public function testClearCredentialCacheTable()
+    {
+        // add dummy record to credential cache
+        $id = Tinebase_Record_Abstract::generateUID();
+        $oneMinuteAgo = Tinebase_DateTime::now()->subMinute(1)->format(Tinebase_Record_Abstract::ISO8601LONG);
+        $data = array(
+            'id'            => $id,
+            'cache'         => Tinebase_Record_Abstract::generateUID(),
+            'creation_time' => $oneMinuteAgo,
+            'valid_until'   => $oneMinuteAgo,
+        );
+        $table = SQL_TABLE_PREFIX . 'credential_cache';
+        Tinebase_Core::getDb()->insert($table, $data);
+        
+        Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable();
+        
+        $result = Tinebase_Core::getDb()->fetchAll('SELECT * FROM ' . $table . ' WHERE valid_until < ?', Tinebase_DateTime::now()->format(Tinebase_Record_Abstract::ISO8601LONG));
+        $this->assertTrue(count($result) == 0);
     }
 }

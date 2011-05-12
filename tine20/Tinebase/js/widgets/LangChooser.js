@@ -83,7 +83,7 @@ Tine.widgets.LangChooser = Ext.extend(Ext.form.ComboBox, {
                             google.gears.localServer.removeStore('tine20-package-store');
                         }
                     }
-                    window.location = window.location.href.replace(/#+.*/, '');
+                    window.location.reload(true);
                 }
             });
         }

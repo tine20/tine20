@@ -163,13 +163,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
     }
     
     /**
-     * process queue tasks (simple queue processing, intendet to be executed from system cron job)
+     * process queue tasks (simple queue processing, intended to be executed from system cron job)
      *  optional --numtasks param
      *
      * @param Zend_Console_Getopt $_opts
      * @return boolean success
-     * 
-     * @todo use _getCronuserFromConfigOrCreateOnTheFly
      */
     public function processQueue($_opts)
     {
@@ -178,11 +176,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         try {
             $cronuser = Tinebase_User::getInstance()->getFullUserByLoginName($_opts->username);
         } catch (Tinebase_Exception_NotFound $tenf) {
-            // get user for cronjob from config / set default admin group
-            $cronuserId = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::CRONUSERID)->value;
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' Setting user with id ' . $cronuserId . ' (cronuser) as user.');
-            $cronuser = Tinebase_User::getInstance()->getFullUserById($cronuserId);
+            $cronuser = $this->_getCronuserFromConfigOrCreateOnTheFly();
         }
         Tinebase_Core::set(Tinebase_Core::USER, $cronuser);
         
@@ -198,6 +192,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - credential_cache
      * - access_log
      * - async_job
+     * - temp_files
      * 
      * if param date is given (date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * 
@@ -210,16 +205,17 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
         
-        $args = $this->_parseArgs($_opts, array('tables'), 'tables'); 
+        $args = $this->_parseArgs($_opts, array('tables'), 'tables');
+        $dateString = array_key_exists('date', $args) ? $args['date'] : NULL;
 
         $db = Tinebase_Core::getDb();
         foreach ($args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
-                    if (array_key_exists('date', $args)) {
-                        echo "\nRemoving all access log entries before {$args['date']} ...";
+                    if ($dateString) {
+                        echo "\nRemoving all access log entries before {$dateString} ...";
                         $where = array(
-                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $args['date'])
+                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $dateString)
                         );
                         $db->delete(SQL_TABLE_PREFIX . $table, $where);
                     } else {
@@ -232,17 +228,11 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         " WHERE status='success'");
                     break;
                 case 'credential_cache':
-                    if (Setup_Controller::getInstance()->isInstalled('Felamimail')) {
-                        // delete only records that are not related to email accounts
-                        $db->query(
-                            'delete ' . SQL_TABLE_PREFIX . 'credential_cache FROM `' . SQL_TABLE_PREFIX . 'credential_cache`' .
-                            ' LEFT JOIN ' . SQL_TABLE_PREFIX . 'felamimail_account ON ' . SQL_TABLE_PREFIX . 'credential_cache.id = ' . 
-                                SQL_TABLE_PREFIX . 'felamimail_account.credentials_id' .
-                            ' WHERE ' . SQL_TABLE_PREFIX . 'felamimail_account.credentials_id IS NULL');
-                        break;
-                    } else {
-                        // fallthrough
-                    }                    
+                    Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable($dateString);
+                    break;
+                case 'temp_files':
+                    Tinebase_TempFile::getInstance()->clearTable($dateString);
+                    break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";
             }

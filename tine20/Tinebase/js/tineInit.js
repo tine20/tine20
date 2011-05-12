@@ -520,7 +520,7 @@ Tine.Tinebase.tineInit = {
                     }
                 }
                 // reload mainscreen
-                window.location = window.location.href.replace(/#+.*/, '');
+                window.location.reload(key == 'locale');
                 break;
         }
     },
@@ -554,7 +554,7 @@ Tine.Tinebase.tineInit = {
             if (cp.get('clientreload', '0') === '0') {
                 
                 cp.set('clientreload', '1');
-                window.location = window.location.href.replace(/#+.*/, '');
+                window.location.reload(true);
                 return;
                 
             } else {

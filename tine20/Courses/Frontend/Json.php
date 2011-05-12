@@ -306,8 +306,7 @@ class Courses_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function importMembers($tempFileId, $groupId, $courseId)
     {
-        $tempFileBackend = new Tinebase_TempFile();
-        $tempFile = $tempFileBackend->getTempFile($tempFileId);
+        $tempFile = Tinebase_TempFile::getInstance()->getTempFile($tempFileId);
         
         $course = $this->_controller->get($courseId);
         $schoolName = strtolower(Tinebase_Department::getInstance()->get($course->type)->name); 

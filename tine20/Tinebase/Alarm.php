@@ -95,7 +95,7 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                     array(
                         'field'     => 'alarm_time', 
                         'operator'  => 'before', 
-                        'value'     => Tinebase_DateTime::now()->get(Tinebase_Record_Abstract::ISO8601LONG)
+                        'value'     => Tinebase_DateTime::now()->subMinute(1)->get(Tinebase_Record_Abstract::ISO8601LONG)
                     ),
                     array(
                         'field'     => 'sent_status', 

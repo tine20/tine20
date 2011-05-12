@@ -18,6 +18,8 @@
  * filters for all of the given filterstrings if it is contained in at least 
  * one of the defined fields
  * 
+ * -> allow search for all Müllers who live in Munich but not all Müllers and all people who live in Munich
+ * 
  * The fields to query in _must_ be defined in the options key 'fields'
  * The value string is space-exploded into multiple filterstrings
  */
@@ -28,6 +30,7 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
      */
     protected $_operators = array(
         0 => 'contains',
+        1 => 'in',
     );
     
     /**
@@ -60,19 +63,37 @@ class Tinebase_Model_Filter_Query extends Tinebase_Model_Filter_Abstract
         
          $db = Tinebase_Core::getDb();
          
-         $queries = explode(' ', $this->_value);
-         foreach ($queries as $query) {
-             $whereParts = array();
-             foreach ($this->_options['fields'] as $qField) {
-                 $whereParts[] = $db->quoteIdentifier($_backend->getTableName() . '.' . $qField) . ' LIKE ?';
-             }                        
-             $whereClause = '';
-             if (!empty($whereParts)) {
-                 $whereClause = implode(' OR ', $whereParts);
-             }                        
-             if (!empty($whereClause)) {
-                 $_select->orwhere($db->quoteInto($whereClause, '%' . trim($query) . '%'));
-             }
+         switch ($this->_operator) {
+             case 'contains':
+                 $queries = explode(' ', $this->_value);
+                 foreach ($queries as $query) {
+                     $whereParts = array();
+                     foreach ($this->_options['fields'] as $qField) {
+                         $whereParts[] = $db->quoteIdentifier($_backend->getTableName() . '.' . $qField) . ' LIKE ?';
+                     }                        
+                     $whereClause = '';
+                     if (!empty($whereParts)) {
+                         $whereClause = implode(' OR ', $whereParts);
+                     }
+                      
+                     if (!empty($whereClause)) {
+                         $_select->where($db->quoteInto($whereClause, '%' . trim($query) . '%'));
+                     }
+                 }
+                 break;
+             case 'in':
+                 foreach ($this->_options['fields'] as $qField) {
+                     $whereParts[] = $db->quoteInto($db->quoteIdentifier($_backend->getTableName() . '.' . $qField) . ' IN (?)', (array) $this->_value);
+                 }
+                 if (! empty($whereParts)) {
+                     $whereClause = implode(' OR ', $whereParts);
+                 }
+                 if (! empty($whereClause)) {
+                     $_select->where($whereClause);
+                 }
+                 break;
+             default:
+                 throw new Tinebase_Exception_InvalidArgument('Operator not defined: ' . $this->_operator);
          }
      }
 }

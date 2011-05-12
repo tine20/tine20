@@ -779,10 +779,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822),
             'original_id'   => $cachedMessage->getId(),
-            'attachments'   => array(array(
+            'attachments'   => array(new Tinebase_Model_TempFile(array(
                 'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
                 'name'  => $cachedMessage->subject,
-            )),
+            ), TRUE)),
         ));
         $sentFolder = $this->_getFolder('Sent');
 

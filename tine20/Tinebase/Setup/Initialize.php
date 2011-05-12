@@ -121,5 +121,7 @@ class Tinebase_Setup_Initialize extends Setup_Initialize
         $scheduler = Tinebase_Core::getScheduler();
         Tinebase_Scheduler_Task::addAlarmTask($scheduler);
         Tinebase_Scheduler_Task::addCacheCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addCredentialCacheCleanupTask($scheduler);
+        Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
     }
 }

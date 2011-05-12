@@ -647,6 +647,8 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * set unread class of folder node and parents
      * 
      * @param {Tine.Felamimail.Model.Folder} folder
+     * 
+     * TODO make it work correctly for parents (use events) and activate again
      */
     setUnreadClass: function(folderId) {
         var folder              = this.app.getFolderStore().getById(folderId),
@@ -660,19 +662,19 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
         }
         
         // get parent, update and call recursivly
-        var parentFolder = this.app.getFolderStore().getParent(folder);
-        if (parentFolder) {
-            // need to create a copy of the array here (and make sure it is unique)
-            var unreadChildren = Ext.unique(parentFolder.get('unread_children'));
-                
-            if (isUnread || hasUnreadChildren) {
-                unreadChildren.push(folderId);
-            } else {
-                unreadChildren.remove(folderId);
-            }
-            parentFolder.set('unread_children', unreadChildren);
-            this.setUnreadClass(parentFolder.id);
-        }
+//        var parentFolder = this.app.getFolderStore().getParent(folder);
+//        if (parentFolder) {
+//            // need to create a copy of the array here (and make sure it is unique)
+//            var unreadChildren = Ext.unique(parentFolder.get('unread_children'));
+//                
+//            if (isUnread || hasUnreadChildren) {
+//                unreadChildren.push(folderId);
+//            } else {
+//                unreadChildren.remove(folderId);
+//            }
+//            parentFolder.set('unread_children', unreadChildren);
+//            this.setUnreadClass(parentFolder.id);
+//        }
     },
     
     /**

@@ -419,36 +419,42 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         if (isset($_message->attachments)) {
             $size = 0;
+            $tempFileBackend = Tinebase_TempFile::getInstance();
             foreach ($_message->attachments as $attachment) {
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
+                $tempFile = ($attachment instanceof Tinebase_Model_TempFile) ? $attachment : $tempFileBackend->get($attachment['tempFile']['id']);
+                if ($tempFile === NULL) {
+                    continue;
+                }
                 
-                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_originalMessage !== NULL) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($tempFile->toArray(), TRUE));
+                
+                if ($tempFile->type == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_originalMessage !== NULL) {
                     $part = $this->getMessagePart($_originalMessage);
                     $part->decodeContent();
                     
-                    if (! array_key_exists('size', $attachment) || empty($attachment['size']) ) {
-                        $attachment['size'] = $_originalMessage->size;
+                    if (! $tempFile->size) {
+                        $tempFile->size = $_originalMessage->size;
                     }
-                    $attachment['name'] .= '.eml';
+                    $tempFile->name .= '.eml';
                     
                 } else {
-                    if (! array_key_exists('path', $attachment)) {
+                    if (! $tempFile->path) {
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find attachment.');
                         continue;
                     }
                     
                     // get contents from uploaded file
-                    $stream = fopen($attachment['path'], 'r');
+                    $stream = fopen($tempFile->path, 'r');
                     $part = new Zend_Mime_Part($stream);
                     
                     // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
-                    $part->encoding = ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
+                    $part->encoding = ($tempFile->type == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
                 }
                 
                 $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-                $part->filename = $attachment['name'];
-                $part->type = $attachment['type'] . '; name="' . $attachment['name'] . '"';
+                $part->filename = $tempFile->name;
+                $part->type = $tempFile->type . '; name="' . $tempFile->name . '"';
                 
                 $_mail->addAttachment($part);
             }
