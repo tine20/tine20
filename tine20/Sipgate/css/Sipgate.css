@@ -13,20 +13,20 @@
 .x-btn-medium .SipgateIconCls {background-image:url(../../images/oxygen/22x22/apps/kcall.png) !important;}
 .x-btn-large .SipgateIconCls {background-image:url(../../images/oxygen/32x32/apps/kcall.png) !important;}
 
-.SipgateTreeNode_fax {background-image:url(/Sipgate/res/16x16/kfax.png) !important;}
+.SipgateTreeNode_fax {background-image:url(../res/16x16/kfax.png) !important;}
 .SipgateTreeNode_phone {background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;}
 
-.SipgateCallStatePhone {background-image:url(/Sipgate/res/phone-connecting.png) !important;margin:13px}
-.SipgateCallStatePhone.established  {background-image:url(/Sipgate/res/phone-connected.png) !important}
-.SipgateCallStatePhone.error  {background-image:url(/Sipgate/res/phone-error.png) !important}
+.SipgateCallStatePhone {background-image:url(../res/phone-connecting.png) !important;margin:13px}
+.SipgateCallStatePhone.established  {background-image:url(../res/phone-connected.png) !important}
+.SipgateCallStatePhone.error  {background-image:url(../res/phone-error.png) !important}
 
 .SipgateSendSms {height:100%;width:100%;background-repeat:no-repeat;background-position:right bottom;}
-.SipgateSendSms.ok {background-image:url(/Sipgate/res/phone-connected.png) !important}
-.SipgateSendSms.error {background-image:url(/Sipgate/res/phone-error.png) !important}
+.SipgateSendSms.ok {background-image:url(../res/phone-connected.png) !important}
+.SipgateSendSms.error {background-image:url(../res/phone-error.png) !important}
 
-/* .SipgateCallStateLine {background: transparent url(/Sipgate/res/line-normal.png) bottom left no-repeat !important;}
-.connecting .SipgateCallStateLine {background: transparent url(/Sipgate/res/line-connecting.gif) bottom left no-repeat !important;}
-.connected .SipgateCallStateLine {background: transparent url(/Sipgate/res/line-connected.png) bottom left no-repeat  !important;}
+/* .SipgateCallStateLine {background: transparent url(../res/line-normal.png) bottom left no-repeat !important;}
+.connecting .SipgateCallStateLine {background: transparent url(../res/line-connecting.gif) bottom left no-repeat !important;}
+.connected .SipgateCallStateLine {background: transparent url(../res/line-connected.png) bottom left no-repeat  !important;}
  */
 #csw-my-phone, #csw-line {float:left}
 #csw-other-phone {float:right;}
@@ -45,11 +45,11 @@
 }
 
 .SmsIconCls, .action_ComposeSms {
-    background-image:url(/Sipgate/res/16x16/send-sms.png) !important;
+    background-image:url(../res/16x16/send-sms.png) !important;
 }
 .x-btn-medium .SmsIconCls, .x-btn-medium .action_ComposeSms {
-    background-image:url(/Sipgate/res/22x22/send-sms.png) !important;
+    background-image:url(../res/22x22/send-sms.png) !important;
 }
 .x-btn-large .SmsIconCls, .x-btn-large .action_ComposeSms {
-    background-image:url(/Sipgate/res/32x32/send-sms.png) !important;
+    background-image:url(../res/32x32/send-sms.png) !important;
 }
