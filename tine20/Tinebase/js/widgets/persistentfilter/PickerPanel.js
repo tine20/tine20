@@ -323,6 +323,11 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      * @param {Ext.tree.TreeNode} node
      */
     onOverwritePersistentFilter: function(node) {
+        Ext.MessageBox.confirm(_('Overwrite?'), String.format(_('Do you want to overwrite the favorite "{0}"?'), node.text), function(_btn){
+            if ( _btn == 'ok') {
+                //Ext.MessageBox.wait(_('Please wait'), String.format(_('Overwriting Favorite "{0}"'), node.text));
+            }
+        }, this, false, node.text);
     },
         
     /**
