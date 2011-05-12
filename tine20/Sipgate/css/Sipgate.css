@@ -13,16 +13,16 @@
 .x-btn-medium .SipgateIconCls {background-image:url(../../images/oxygen/22x22/apps/kcall.png) !important;}
 .x-btn-large .SipgateIconCls {background-image:url(../../images/oxygen/32x32/apps/kcall.png) !important;}
 
-.SipgateTreeNode_fax {background-image:url(../res/16x16/kfax.png) !important;}
+.SipgateTreeNode_fax {background-image:url(/Sipgate/res/16x16/kfax.png) !important;}
 .SipgateTreeNode_phone {background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;}
 
-.SipgateCallStatePhone {background-image:url(../res/phone-connecting.png) !important;margin:13px}
-.SipgateCallStatePhone.established  {background-image:url(../res/phone-connected.png) !important}
-.SipgateCallStatePhone.error  {background-image:url(../res/phone-error.png) !important}
+.SipgateCallStatePhone {background-image:url(/Sipgate/res/phone-connecting.png) !important;margin:13px}
+.SipgateCallStatePhone.established  {background-image:url(/Sipgate/res/phone-connected.png) !important}
+.SipgateCallStatePhone.error  {background-image:url(/Sipgate/res/phone-error.png) !important}
 
 .SipgateSendSms {height:100%;width:100%;background-repeat:no-repeat;background-position:right bottom;}
-.SipgateSendSms.ok {background-image:url(../res/phone-connected.png) !important}
-.SipgateSendSms.error {background-image:url(../res/phone-error.png) !important}
+.SipgateSendSms.ok {background-image:url(/Sipgate/res/phone-connected.png) !important}
+.SipgateSendSms.error {background-image:url(/Sipgate/res/phone-error.png) !important}
 
 /* .SipgateCallStateLine {background: transparent url(../res/line-normal.png) bottom left no-repeat !important;}
 .connecting .SipgateCallStateLine {background: transparent url(../res/line-connecting.gif) bottom left no-repeat !important;}
