@@ -247,19 +247,25 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             return;
         }
         
-        var record = this.store.getById(node.id);
+        var record = this.store.getById(node.id),
+            isHidden = record.isShared();
         
         var menu = new Ext.menu.Menu({
             items: [{
                 text: _('Delete Favorite'),
                 iconCls: 'action_delete',
-                hidden: record.isShared(),
+                hidden: isHidden,
                 handler: this.onDeletePersistentFilter.createDelegate(this, [node, e])
             }, {
                 text: _('Rename Favorite'),
                 iconCls: 'action_edit',
-                hidden: record.isShared(),
+                hidden: isHidden,
                 handler: this.onRenamePersistentFilter.createDelegate(this, [node, e])
+            }, {
+                text: _('Overwrite Favorite'),
+                iconCls: 'action_overwrite',
+                hidden: isHidden,
+                handler: this.onOverwritePersistentFilter.createDelegate(this, [node, e])
             }].concat(this.getAdditionalCtxItems(record))
         });
         menu.showAt(e.getXY());
@@ -310,7 +316,18 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
             }
         }, this, false, node.text);
     },
-    
+
+    /**
+     * handler to overwrite filter
+     * 
+     * @param {Ext.tree.TreeNode} node
+     */
+    onOverwritePersistentFilter: function(node) {
+    },
+        
+    /**
+     * save persistent filter
+     */
     saveFilter: function() {
         var ftb = this.getFilterToolbar();
         
