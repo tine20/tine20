@@ -263,7 +263,7 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 handler: this.onRenamePersistentFilter.createDelegate(this, [node, e])
             }, {
                 text: _('Overwrite Favorite'),
-                iconCls: 'action_overwrite',
+                iconCls: 'action_saveFilter',
                 hidden: isHidden,
                 handler: this.onOverwritePersistentFilter.createDelegate(this, [node, e])
             }].concat(this.getAdditionalCtxItems(record))
@@ -324,8 +324,9 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
      */
     onOverwritePersistentFilter: function(node) {
         Ext.MessageBox.confirm(_('Overwrite?'), String.format(_('Do you want to overwrite the favorite "{0}"?'), node.text), function(_btn){
-            if ( _btn == 'ok') {
-                //Ext.MessageBox.wait(_('Please wait'), String.format(_('Overwriting Favorite "{0}"'), node.text));
+            if ( _btn == 'yes') {
+                Ext.MessageBox.wait(_('Please wait'), String.format(_('Overwriting Favorite "{0}"'), node.text));
+                this.createOrUpdateFavorite(node.text);
             }
         }, this, false, node.text);
     },
@@ -353,35 +354,50 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                     return;
                 }
                 Ext.Msg.wait(_('Please Wait'), _('Saving favorite'));
-                
-                var model = this.filterModel;
-                if (! model) {
-                    var recordClass = this.recordClass || this.treePanel ? this.treePanel.recordClass : ftb.store.reader.recordType;
-                    model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName') + 'Filter';
-                }
-                
-                var record = new Tine.widgets.persistentfilter.model.PersistentFilter({
-                    id:             existingRecord ? existingRecord.id : 0,
-                    application_id: this.app.id,
-                    account_id:     Tine.Tinebase.registry.get('currentAccount').accountId,
-                    model:          model,
-                    filters:        ftb.getAllFilterData(),
-                    name:           value,
-                    description:    ''
-                });
-                
-                Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
-                    scope: this,
-                    success: function(savedRecord){
-                        this.store.addSorted(savedRecord);
-                        Ext.Msg.hide();
-                        
-                        // reload this filter?
-                        this.selectFilter(savedRecord);
-                    }
-                });
+                this.createOrUpdateFavorite(value, ftb);
             }
         }, this, false, name);
+    },
+    
+    /**
+     * create or update a favorite
+     * @param {String} name
+     * @param {FilterToolbar} ftb
+     */
+    createOrUpdateFavorite: function(name, ftb) {
+        if (! ftb) {
+            ftb = this.getFilterToolbar();
+        }
+        
+        var model = this.filterModel;
+        if (! model) {
+            var recordClass = this.recordClass || this.treePanel ? this.treePanel.recordClass : ftb.store.reader.recordType;
+            model = recordClass.getMeta('appName') + '_Model_' + recordClass.getMeta('modelName') + 'Filter';
+        }
+        
+        var record = new Tine.widgets.persistentfilter.model.PersistentFilter({
+            application_id: this.app.id,
+            account_id:     Tine.Tinebase.registry.get('currentAccount').accountId,
+            model:          model,
+            filters:        ftb.getAllFilterData(),
+            name:           name
+        });
+        
+        Tine.widgets.persistentfilter.model.persistentFilterProxy.saveRecord(record, {
+            scope: this,
+            success: function(savedRecord){
+                var existing = this.store.getById(savedRecord.id); 
+                if (existing) {
+                    this.store.remove(existing);
+                }
+                
+                this.store.addSorted(savedRecord);
+                Ext.Msg.hide();
+                
+                // reload this filter?
+                this.selectFilter(savedRecord);
+            }
+        });
     },
     
     /**
