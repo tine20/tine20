@@ -321,10 +321,14 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      * @param  array &$_data
      * @throws Tinebase_Exception_UnexpectedValue
      */
-    public static function transformLegacyData(array &$_data, $_containerProperty='container_id')
+    public static function transformLegacyData(array &$_data, $_containerProperty = 'container_id')
     {
         $legacyData = array();
         foreach ($_data as $key => $filterData) {
+            if (! is_array($filterData)) {
+                $filterData = Tinebase_Model_Filter_FilterGroup::sanitizeFilterData($key, $filterData);
+            }
+            
             if (array_key_exists('field', $filterData) && in_array($filterData['field'], array('containerType', 'container', 'owner'))) {
                 $legacyData[$filterData['field']] = $filterData['value'];
                 unset($_data[$key]);
