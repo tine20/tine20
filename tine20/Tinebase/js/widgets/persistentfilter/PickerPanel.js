@@ -354,16 +354,6 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
                 }
                 Ext.Msg.wait(_('Please Wait'), _('Saving favorite'));
                 
-                var existingRecordIdx = this.store.find('name', new RegExp('^' + value + '$', 'i'));
-                var existingRecord = existingRecordIdx ? this.store.getAt(existingRecordIdx) : null;
-                if (existingRecord) {
-                    if (existingRecord.isShared()) {
-                        Ext.Msg.alert(_('Favorite not Saved'), _('Overwriting system favorites is not yet supported'));
-                        return;
-                    }
-                    this.store.remove(existingRecord);
-                }
-                
                 var model = this.filterModel;
                 if (! model) {
                     var recordClass = this.recordClass || this.treePanel ? this.treePanel.recordClass : ftb.store.reader.recordType;
