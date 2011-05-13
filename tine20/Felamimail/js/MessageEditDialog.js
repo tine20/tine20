@@ -260,8 +260,9 @@ Ext.namespace('Tine.Felamimail');
                     }
                     
                     if (this.replyTo) {
+                        var date = (this.replyTo.get('received')) ? this.replyTo.get('received') : new Date();
                         this.msgBody = String.format(this.app.i18n._('On {0}, {1} wrote'), 
-                            Tine.Tinebase.common.dateTimeRenderer(new Date()), 
+                            Tine.Tinebase.common.dateTimeRenderer(date), 
                             Ext.util.Format.htmlEncode(this.replyTo.get('from_name'))
                         ) + ':<br/>'
                           + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
