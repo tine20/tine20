@@ -3,15 +3,17 @@
  * Tine 2.0
  * 
  * @package     Calendar
+ * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * Calendar Resources Controller
  * 
  * @package Calendar
+ * @subpackage  Controller
  */
 class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 {
