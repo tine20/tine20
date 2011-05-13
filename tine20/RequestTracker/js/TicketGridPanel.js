@@ -4,7 +4,7 @@
  * @package     RequestTracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
  
  Ext.ns('Tine.RequestTracker');
@@ -16,7 +16,6 @@
     defaultSortInfo: {field: 'LastUpdated', direction: 'DESC'},
     evalGrants: false,
     gridConfig: {
-        loadMask: true,
         autoExpandColumn: 'Subject'
     },
     

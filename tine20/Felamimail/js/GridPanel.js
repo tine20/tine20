@@ -68,7 +68,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     defaultSortInfo: {field: 'received', direction: 'DESC'},
     gridConfig: {
-        //loadMask: true,
         autoExpandColumn: 'subject',
         // drag n dropfrom
         enableDragDrop: true,

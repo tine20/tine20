@@ -27,7 +27,6 @@ Tine.Admin.container.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     defaultSortInfo: {field: 'name', direction: 'ASC'},
     evalGrants: false,
     gridConfig: {
-        loadMask: true,
         autoExpandColumn: 'name'
     },
     

@@ -4,7 +4,7 @@
  * @package     Setup
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -20,7 +20,6 @@ Ext.ns('Tine', 'Tine.Setup');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -37,7 +36,6 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     evalGrants: false,
     defaultSortInfo: {field: 'name', dir: 'ASC'},
     gridConfig: {
-        loadMask: true,
         autoExpandColumn: 'name'
     },
     

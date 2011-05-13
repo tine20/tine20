@@ -492,7 +492,6 @@ Tine.widgets.activities.ActivitiesTabPanel = Ext.extend(Ext.Panel, {
             //autoExpandColumn: 'note',
             //enableColLock:false,
             //autoHeight: true,
-            //loadMask: true,            
             viewConfig: {
                 autoFill: true,
                 forceFit: true,

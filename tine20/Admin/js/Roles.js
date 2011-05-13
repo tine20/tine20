@@ -2,10 +2,10 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philip Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philip Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
- * @todo        refactor this (don't use Ext.getCmp, etc.)
+ * TODO         refactor this (don't use Ext.getCmp, etc.)
  */
  
 Ext.ns('Tine.Admin.Roles');
@@ -272,7 +272,6 @@ Tine.Admin.Roles.Main = {
             autoSizeColumns: false,
             selModel: rowSelectionModel,
             enableColLock:false,
-            loadMask: true,
             autoExpandColumn: 'n_family',
             border: false,
             view: new Ext.grid.GridView({

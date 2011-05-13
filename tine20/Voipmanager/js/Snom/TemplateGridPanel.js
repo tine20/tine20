@@ -4,7 +4,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -21,7 +21,6 @@ Tine.Voipmanager.SnomTemplateGridPanel = Ext.extend(Tine.widgets.grid.GridPanel,
     // grid specific
     defaultSortInfo: {field: 'description', direction: 'ASC'},
     gridConfig: {
-        loadMask: true,
         autoExpandColumn: 'description'
     },
     

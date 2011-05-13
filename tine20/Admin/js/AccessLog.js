@@ -4,8 +4,8 @@
  * @package     Admin
  * @subpackage  AccessLog
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philip Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philip Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -46,7 +46,6 @@ Tine.Admin.accessLog.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     evalGrants: false,
     gridConfig: {
         id: 'gridAdminAccessLogs',
-        loadMask: true,
         autoExpandColumn: 'login_name'
     },
     
