@@ -133,8 +133,14 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
      */    
     public function update_3()
     {
-        $this->_backend->dropCol('felamimail_folder', 'imap_uidnext');
-        $this->_backend->dropCol('felamimail_folder', 'cache_uidnext');
+        $colsToDrop = array('imap_uidnext', 'cache_uidnext');
+        foreach ($colsToDrop as $col) {
+            try {
+                $this->_backend->dropCol('felamimail_folder', $col);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // do nothing
+            }
+        }
         
         $this->setTableVersion('felamimail_folder', '7');
         $this->setApplicationVersion('Felamimail', '4.4');
