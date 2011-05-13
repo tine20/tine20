@@ -224,7 +224,7 @@ class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
             if ($dateWhere) {
                 $where .= ' AND ' . $dateWhere;
             }
-            $this->_db->query('DELETE FROM `' . $tableName . '`' .
+            $this->_db->query('DELETE ' . $tableName . ' FROM ' . $tableName .
                 ' LEFT JOIN ' . $this->getTablePrefix() . 'felamimail_account ON ' . $tableName . '.id = ' . 
                     $this->getTablePrefix() . 'felamimail_account.credentials_id' .
                 ' WHERE ' . $where);
