@@ -1187,7 +1187,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {String|Tine.Tinebase.data.Record} record
      */
     onUpdateRecord: function(record) {
-        if (Ext.isString(record)) {
+        if (Ext.isString(record) && this.recordProxy) {
             record = this.recordProxy.recordReader({responseText: record});
         } else if (record && Ext.isFunction(record.copy)) {
             record = record.copy();
