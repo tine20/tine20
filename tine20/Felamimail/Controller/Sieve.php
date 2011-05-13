@@ -259,7 +259,7 @@ class Felamimail_Controller_Sieve extends Tinebase_Controller_Abstract
         if (preg_match('/dbmail/i', $this->_backend->getImplementation())) {
             // dbmail seems to have problems with different subjects and sends vacation responses to the same recipients again and again
             $translate = Tinebase_Translation::getTranslation('Felamimail');
-            $_vacation->subject = sprintf($translate->_('Out of Office reply from %1$s'), $this->_currentAccount->accountDisplayName);
+            $_vacation->subject = sprintf($translate->_('Out of Office reply from %1$s'), $this->_currentAccount->accountFullName);
         }
     }
         
