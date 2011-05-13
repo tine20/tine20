@@ -13,635 +13,602 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/ApplicationGridPanel.js:65 js/Setup-FAT-debug.js:605 js/Setup-FAT.js:6
-msgid "Name"
-msgstr "Název"
-
-#: js/ApplicationGridPanel.js:66 js/Setup-FAT-debug.js:606 js/Setup-FAT.js:6
-msgid "Enabled"
-msgstr "Povoleno"
-
-#: js/ApplicationGridPanel.js:67 js/Setup-FAT-debug.js:607 js/Setup-FAT.js:6
-msgid "Order"
-msgstr "Pořadí"
-
-#: js/ApplicationGridPanel.js:68 js/Setup-FAT-debug.js:608 js/Setup-FAT.js:6
-msgid "Installed Version"
-msgstr "Nainstalovaná verze"
-
-#: js/ApplicationGridPanel.js:69 js/Setup-FAT-debug.js:609 js/Setup-FAT.js:6
-msgid "Available Version"
-msgstr "Dostupná verze"
-
-#: js/ApplicationGridPanel.js:70 js/Setup-FAT-debug.js:610 js/Setup-FAT.js:6
-msgid "Status"
-msgstr "Stav"
-
-#: js/ApplicationGridPanel.js:71 js/Setup-FAT-debug.js:611 js/Setup-FAT.js:6
-msgid "Depends on"
-msgstr "Závisí na"
-
-#: js/ApplicationGridPanel.js:80 js/EnvCheckGridPanel.js:205
-#: js/Setup-FAT-debug.js:620 js/Setup-FAT-debug.js:1032 js/Setup-FAT.js:6
-msgid "Install application"
-msgstr "Instalovat aplikaci"
-
-#: js/ApplicationGridPanel.js:89 js/Setup-FAT-debug.js:629 js/Setup-FAT.js:6
-msgid "Uninstall application"
-msgstr "Odinstalovat aplikaci"
-
-#: js/ApplicationGridPanel.js:98 js/Setup-FAT-debug.js:638 js/Setup-FAT.js:6
-msgid "Update application"
-msgstr "Aktualizovat aplikaci"
-
-#: js/ApplicationGridPanel.js:107 js/Setup-FAT-debug.js:647 js/Setup-FAT.js:6
-msgid "Go to {0} login"
-msgstr "Jít na příhlášení do {0}"
-
-#: js/ApplicationGridPanel.js:170 js/Setup-FAT-debug.js:710 js/Setup-FAT.js:6
-msgid "uninstall"
-msgstr "odinstalovat"
-
-#: js/ApplicationGridPanel.js:170 js/Setup-FAT-debug.js:710 js/Setup-FAT.js:6
-msgid "Do you really want to uninstall the application(s)?"
-msgstr "Opravdu chcete aplikaci/e odinstalovat?"
-
-#: js/ApplicationGridPanel.js:230 js/Setup-FAT-debug.js:770 js/Setup-FAT.js:6
-msgid "This may take a while"
-msgstr "Tato operace může chvíli trvat"
-
-#: js/ApplicationGridPanel.js:260 js/Setup-FAT-debug.js:800 js/Setup-FAT.js:6
-msgid "Dependency Violation"
-msgstr "Porušení závislosti"
-
-#: js/AuthenticationPanel.js:121 js/Setup-FAT-debug.js:1518 js/Setup-FAT.js:6
-msgid "Delete all existing users and groups"
-msgstr "Smazat všechny stávající uživatele a skupiny"
-
-#: js/AuthenticationPanel.js:121 js/Setup-FAT-debug.js:1518 js/Setup-FAT.js:6
-msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
-msgstr "Přechod z SQL na LDAP smaže všechny stávající uživatelské účty, skupiny a role. Opravdu chcete změnit backend pro uložení účtů na LDAP?"
-
-#: js/AuthenticationPanel.js:184 js/AuthenticationPanel.js:205
-#: js/ConfigManagerPanel.js:110 js/EmailPanel.js:143
-#: js/Setup-FAT-debug.js:1179 js/Setup-FAT-debug.js:1581
-#: js/Setup-FAT-debug.js:1602 js/Setup-FAT-debug.js:2292 js/Setup-FAT.js:6
-msgid "Backend"
-msgstr "Backend"
-
-#: js/AuthenticationPanel.js:219 js/Setup-FAT-debug.js:1616 js/Setup-FAT.js:6
-msgid "Initial Admin User"
-msgstr ""
-
-#: js/AuthenticationPanel.js:232 js/Setup-FAT-debug.js:1629 js/Setup-FAT.js:6
-msgid "Initial admin login name"
-msgstr "Počáteční přihlašovací jméno administrátora"
-
-#: js/AuthenticationPanel.js:237 js/Setup-FAT-debug.js:1634 js/Setup-FAT.js:6
-msgid "Initial admin Password"
-msgstr "Počáteční heslo administrátora"
-
-#: js/AuthenticationPanel.js:242 js/Setup-FAT-debug.js:1639 js/Setup-FAT.js:6
-msgid "Password confirmation"
-msgstr "Potvrzení hesla"
-
-#: js/AuthenticationPanel.js:251 js/Setup-FAT-debug.js:1648 js/Setup-FAT.js:6
-msgid "Authentication provider"
-msgstr "Poskytovatel autentikace"
-
-#: js/AuthenticationPanel.js:280 js/AuthenticationPanel.js:413
-#: js/Setup-FAT-debug.js:1677 js/Setup-FAT-debug.js:1810 js/Setup-FAT.js:6
-msgid "Try to split username"
-msgstr "Zkusit rozdělit uživatelské jméno"
-
-#: js/AuthenticationPanel.js:292 js/AuthenticationPanel.js:357
-#: js/AuthenticationPanel.js:427 js/Setup-FAT-debug.js:1689
-#: js/Setup-FAT-debug.js:1754 js/Setup-FAT-debug.js:1824 js/Setup-FAT.js:6
-msgid "Account canonical form"
-msgstr "Kanonická forma účtu"
-
-#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:361
-#: js/AuthenticationPanel.js:431 js/Setup-FAT-debug.js:1693
-#: js/Setup-FAT-debug.js:1758 js/Setup-FAT-debug.js:1828 js/Setup-FAT.js:6
-msgid "Account domain name "
-msgstr "Název domény"
-
-#: js/AuthenticationPanel.js:300 js/AuthenticationPanel.js:364
-#: js/AuthenticationPanel.js:436 js/Setup-FAT-debug.js:1697
-#: js/Setup-FAT-debug.js:1761 js/Setup-FAT-debug.js:1833 js/Setup-FAT.js:6
-msgid "Account domain short name"
-msgstr "Krátký název domény"
-
-#: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:499
-#: js/Setup-FAT-debug.js:1711 js/Setup-FAT-debug.js:1896 js/Setup-FAT.js:6
-msgid "Host"
-msgstr "Server"
-
-#: js/AuthenticationPanel.js:318 js/AuthenticationPanel.js:379
-#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:259
-#: js/EmailPanel.js:188 js/EmailPanel.js:297 js/EmailPanel.js:409
-#: js/Setup-FAT-debug.js:1218 js/Setup-FAT-debug.js:1328
-#: js/Setup-FAT-debug.js:1715 js/Setup-FAT-debug.js:1776
-#: js/Setup-FAT-debug.js:2337 js/Setup-FAT-debug.js:2446
-#: js/Setup-FAT-debug.js:2558 js/Setup-FAT.js:6
-msgid "Port"
-msgstr "Port"
-
-#: js/AuthenticationPanel.js:322 js/AuthenticationPanel.js:504
-#: js/Setup-FAT-debug.js:1719 js/Setup-FAT-debug.js:1901 js/Setup-FAT.js:6
-msgid "Login name"
-msgstr "Přihlašovací jméno"
-
-#: js/AuthenticationPanel.js:325 js/AuthenticationPanel.js:507
-#: js/ConfigManagerPanel.js:131 js/ConfigManagerPanel.js:161
-#: js/EmailPanel.js:183 js/Setup-FAT-debug.js:1200 js/Setup-FAT-debug.js:1230
-#: js/Setup-FAT-debug.js:1722 js/Setup-FAT-debug.js:1904
-#: js/Setup-FAT-debug.js:2332 js/Setup-FAT.js:6
-msgid "Password"
-msgstr "Heslo"
-
-#: js/AuthenticationPanel.js:338 js/AuthenticationPanel.js:520
-#: js/Setup-FAT-debug.js:1735 js/Setup-FAT-debug.js:1917 js/Setup-FAT.js:6
-msgid "Bind requires DN"
-msgstr "Připojení vyžaduje DN"
-
-#: js/AuthenticationPanel.js:342 js/Setup-FAT-debug.js:1739 js/Setup-FAT.js:6
-msgid "Base DN"
-msgstr "Základní DN"
-
-#: js/AuthenticationPanel.js:345 js/Setup-FAT-debug.js:1742 js/Setup-FAT.js:6
-msgid "Search filter"
-msgstr "Vyhledávací filtr"
-
-#: js/AuthenticationPanel.js:376 js/ConfigManagerPanel.js:145
-#: js/ConfigManagerPanel.js:255 js/EmailPanel.js:175 js/EmailPanel.js:293
-#: js/EmailPanel.js:405 js/Setup-FAT-debug.js:1214 js/Setup-FAT-debug.js:1324
-#: js/Setup-FAT-debug.js:1773 js/Setup-FAT-debug.js:2324
-#: js/Setup-FAT-debug.js:2442 js/Setup-FAT-debug.js:2554 js/Setup-FAT.js:6
-msgid "Hostname"
-msgstr "Název nebo adresa počítače"
-
-#: js/AuthenticationPanel.js:382 js/EmailPanel.js:191 js/EmailPanel.js:300
-#: js/EmailPanel.js:412 js/Setup-FAT-debug.js:1779 js/Setup-FAT-debug.js:2340
-#: js/Setup-FAT-debug.js:2449 js/Setup-FAT-debug.js:2561 js/Setup-FAT.js:6
-msgid "Secure Connection"
-msgstr "Zabezpečení připojení"
-
-#: js/AuthenticationPanel.js:393 js/EmailPanel.js:202 js/EmailPanel.js:311
-#: js/EmailPanel.js:327 js/EmailPanel.js:423 js/Setup-FAT-debug.js:1790
-#: js/Setup-FAT-debug.js:2351 js/Setup-FAT-debug.js:2460
-#: js/Setup-FAT-debug.js:2476 js/Setup-FAT-debug.js:2572 js/Setup-FAT.js:6
-msgid "None"
-msgstr "Žádné"
-
-#: js/AuthenticationPanel.js:394 js/EmailPanel.js:203 js/EmailPanel.js:312
-#: js/EmailPanel.js:424 js/Setup-FAT-debug.js:1791 js/Setup-FAT-debug.js:2352
-#: js/Setup-FAT-debug.js:2461 js/Setup-FAT-debug.js:2573 js/Setup-FAT.js:6
-msgid "TLS"
-msgstr "TLS"
-
-#: js/AuthenticationPanel.js:395 js/EmailPanel.js:204 js/EmailPanel.js:313
-#: js/EmailPanel.js:425 js/Setup-FAT-debug.js:1792 js/Setup-FAT-debug.js:2353
-#: js/Setup-FAT-debug.js:2462 js/Setup-FAT-debug.js:2574 js/Setup-FAT.js:6
-msgid "SSL"
-msgstr "SSL"
-
-#: js/AuthenticationPanel.js:399 js/EmailPanel.js:220
-#: js/Setup-FAT-debug.js:1796 js/Setup-FAT-debug.js:2369 js/Setup-FAT.js:6
-msgid "Append domain to login name"
-msgstr "Připojit doménu k přihlašovacímu jménu"
-
-#: js/AuthenticationPanel.js:447 js/Setup-FAT-debug.js:1844 js/Setup-FAT.js:6
-msgid "Accounts storage"
-msgstr "Uložení účtů"
-
-#: js/AuthenticationPanel.js:468 js/AuthenticationPanel.js:606
-#: js/Setup-FAT-debug.js:1865 js/Setup-FAT-debug.js:2003 js/Setup-FAT.js:6
-msgid "Default user group name"
-msgstr "Jméno výchozí skupiny pro uživatele"
-
-#: js/AuthenticationPanel.js:472 js/AuthenticationPanel.js:609
-#: js/Setup-FAT-debug.js:1869 js/Setup-FAT-debug.js:2006 js/Setup-FAT.js:6
-msgid "Default admin group name"
-msgstr "Jméno výchozí skupiny pro administrátory"
-
-#: js/AuthenticationPanel.js:485 js/Setup-FAT-debug.js:1882 js/Setup-FAT.js:6
-msgid "User can change password"
-msgstr "Uživatel si může měnit heslo"
-
-#: js/AuthenticationPanel.js:524 js/Setup-FAT-debug.js:1921 js/Setup-FAT.js:6
-msgid "User DN"
-msgstr "DN uživatele"
-
-#: js/AuthenticationPanel.js:527 js/Setup-FAT-debug.js:1924 js/Setup-FAT.js:6
-msgid "User Filter"
-msgstr "Filtr uživatelů"
-
-#: js/AuthenticationPanel.js:539 js/Setup-FAT-debug.js:1936 js/Setup-FAT.js:6
-msgid "User Search Scope"
-msgstr "Oblast hledání uživatelů"
-
-#: js/AuthenticationPanel.js:543 js/Setup-FAT-debug.js:1940 js/Setup-FAT.js:6
-msgid "Groups DN"
-msgstr "DN pro skupiny"
-
-#: js/AuthenticationPanel.js:546 js/Setup-FAT-debug.js:1943 js/Setup-FAT.js:6
-msgid "Group Filter"
-msgstr "Filtr skupin"
-
-#: js/AuthenticationPanel.js:558 js/Setup-FAT-debug.js:1955 js/Setup-FAT.js:6
-msgid "Group Search Scope"
-msgstr "Oblast hledání skupin"
-
-#: js/AuthenticationPanel.js:571 js/Setup-FAT-debug.js:1968 js/Setup-FAT.js:6
-msgid "Password encoding"
-msgstr "Kódování hesla"
-
-#: js/AuthenticationPanel.js:584 js/Setup-FAT-debug.js:1981 js/Setup-FAT.js:6
-msgid "Use Rfc 2307 bis"
-msgstr "Používat Rfc 2307 bis"
-
-#: js/AuthenticationPanel.js:588 js/Setup-FAT-debug.js:1985 js/Setup-FAT.js:6
-msgid "Min User Id"
-msgstr "Minimální Id uživatele"
-
-#: js/AuthenticationPanel.js:591 js/Setup-FAT-debug.js:1988 js/Setup-FAT.js:6
-msgid "Max User Id"
-msgstr "Maximální Id uživatele"
-
-#: js/AuthenticationPanel.js:594 js/Setup-FAT-debug.js:1991 js/Setup-FAT.js:6
-msgid "Min Group Id"
-msgstr "Minimální Id skupiny"
-
-#: js/AuthenticationPanel.js:597 js/Setup-FAT-debug.js:1994 js/Setup-FAT.js:6
-msgid "Max Group Id"
-msgstr "Maximální Id skupiny"
-
-#: js/AuthenticationPanel.js:600 js/Setup-FAT-debug.js:1997 js/Setup-FAT.js:6
-msgid "Group UUID Attribute name"
-msgstr "Název atributu pro UUID skupiny"
-
-#: js/AuthenticationPanel.js:603 js/Setup-FAT-debug.js:2000 js/Setup-FAT.js:6
-msgid "User UUID Attribute name"
-msgstr "Název atributu pro UUID uživatele"
-
-#: js/AuthenticationPanel.js:621 js/Setup-FAT-debug.js:2018 js/Setup-FAT.js:6
-msgid "Allow user to change her password?"
-msgstr "Povolit uživateli změnu jeho hesla?"
-
-#: js/AuthenticationPanel.js:630 js/Setup-FAT-debug.js:2027 js/Setup-FAT.js:6
-msgid "Redirect Settings"
-msgstr "Nastavení přesměrování"
-
-#: js/AuthenticationPanel.js:638 js/Setup-FAT-debug.js:2035 js/Setup-FAT.js:6
-msgid "Redirect Url (redirect to login screen if empty)"
-msgstr "URL pro přesměrování (ponecháte-li prázdné, přesměrovat na přihlašovací obrazovku)"
-
-#: js/AuthenticationPanel.js:650 js/Setup-FAT-debug.js:2047 js/Setup-FAT.js:6
-msgid "Redirect Always (if No, only redirect after logout)"
-msgstr "Vždy přesměrovat (pokud Ne, přesměrovat jen při odhlášení)"
-
-#: js/AuthenticationPanel.js:661 js/Setup-FAT-debug.js:2058 js/Setup-FAT.js:6
-msgid "Redirect to referring site, if exists"
-msgstr "Přesměrovat na odkazovaný web, pokud existuje"
-
-#: js/AuthenticationPanel.js:674 js/Setup-FAT-debug.js:2071 js/Setup-FAT.js:6
-msgid "Save config and install"
-msgstr "Uložit konfiguraci a instalovat"
-
-#: js/AuthenticationPanel.js:676 js/ConfigManagerPanel.js:303
-#: js/Setup-FAT-debug.js:1372 js/Setup-FAT-debug.js:2073 js/Setup-FAT.js:6
-msgid "Save config"
-msgstr "Uložit konfiguraci"
-
-#: js/AuthenticationPanel.js:700 js/Setup-FAT-debug.js:2097 js/Setup-FAT.js:6
-msgid "Passwords don't match"
-msgstr "Hesla se neshodují"
-
-#: js/AuthenticationPanel.js:713 js/AuthenticationPanel.js:720
-#: js/AuthenticationPanel.js:724 js/AuthenticationPanel.js:735
-#: js/AuthenticationPanel.js:745 js/Setup-FAT-debug.js:2110
-#: js/Setup-FAT-debug.js:2117 js/Setup-FAT-debug.js:2121
-#: js/Setup-FAT-debug.js:2132 js/Setup-FAT-debug.js:2142 js/Setup-FAT.js:6
-msgid "Should not be empty"
-msgstr "Nemělo by být prázdné"
-
-#: js/ConfigManagerPanel.js:108 js/Setup-FAT-debug.js:1177 js/Setup-FAT.js:6
-msgid "File"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:119 js/Setup-FAT-debug.js:1188 js/Setup-FAT.js:6
-msgid "Setup Authentication"
-msgstr "Přihlášení do instalačního programu"
-
-#: js/ConfigManagerPanel.js:122 js/EmailPanel.js:179
-#: js/Setup-FAT-debug.js:1191 js/Setup-FAT-debug.js:2328 js/Setup-FAT.js:6
-msgid "Username"
-msgstr "Uživatelské jméno"
-
-#: js/ConfigManagerPanel.js:136 js/ConfigManagerPanel.js:153
-#: js/Setup-FAT-debug.js:1205 js/Setup-FAT-debug.js:1222 js/Setup-FAT.js:6
-msgid "Database"
-msgstr "Databáze"
-
-#: js/ConfigManagerPanel.js:140 js/Setup-FAT-debug.js:1209 js/Setup-FAT.js:6
-msgid "Adapter"
-msgstr "Adaptér"
-
-#: js/ConfigManagerPanel.js:157 js/Setup-FAT-debug.js:1226 js/Setup-FAT.js:6
-msgid "User"
-msgstr "Uživatel"
-
-#: js/ConfigManagerPanel.js:165 js/Setup-FAT-debug.js:1234 js/Setup-FAT.js:6
-msgid "Prefix"
-msgstr "Prefix"
-
-#: js/ConfigManagerPanel.js:168 js/Setup-FAT-debug.js:1237 js/Setup-FAT.js:6
-msgid "Logging"
-msgstr "Logování"
-
-#: js/ConfigManagerPanel.js:174 js/Setup-FAT-debug.js:1243 js/Setup-FAT.js:6
-msgid "Filename"
-msgstr "Název souboru"
-
-#: js/ConfigManagerPanel.js:186 js/Setup-FAT-debug.js:1255 js/Setup-FAT.js:6
-msgid "Priority"
-msgstr "Priorita"
-
-#: js/ConfigManagerPanel.js:189 js/Setup-FAT-debug.js:1258 js/Setup-FAT.js:6
-msgid "Caching"
-msgstr "Kešování"
-
-#: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:242
-#: js/Setup-FAT-debug.js:1264 js/Setup-FAT-debug.js:1311 js/Setup-FAT.js:6
-msgid "Path"
-msgstr "Cesta"
-
-#: js/ConfigManagerPanel.js:198 js/ConfigManagerPanel.js:216
-#: js/Setup-FAT-debug.js:1267 js/Setup-FAT-debug.js:1285 js/Setup-FAT.js:6
-msgid "Lifetime (seconds)"
-msgstr "Životnost (v sekundách)"
-
-#: js/ConfigManagerPanel.js:204 js/Setup-FAT-debug.js:1273 js/Setup-FAT.js:6
-msgid "Temporary files"
-msgstr "Dočasné soubory"
-
-#: js/ConfigManagerPanel.js:209 js/Setup-FAT-debug.js:1278 js/Setup-FAT.js:6
-msgid "Temporary Files Path"
-msgstr "Cesta pro dočasné soubory"
-
-#: js/ConfigManagerPanel.js:212 js/Setup-FAT-debug.js:1281 js/Setup-FAT.js:6
-msgid "Session"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:268 js/Setup-FAT-debug.js:1337 js/Setup-FAT.js:6
-msgid "Filestore directory"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:273 js/Setup-FAT-debug.js:1342 js/Setup-FAT.js:6
-msgid "Filestore Path"
-msgstr ""
-
-#: js/ConfigManagerPanel.js:277 js/Setup-FAT-debug.js:1346 js/Setup-FAT.js:6
-msgid "Addressbook Map panel"
-msgstr "Mapový panel v Adresáři"
-
-#: js/ConfigManagerPanel.js:280 js/Setup-FAT-debug.js:1349 js/Setup-FAT.js:6
-msgid "Map panel"
-msgstr "Mapový panel"
-
-#: js/ConfigManagerPanel.js:290 js/Setup-FAT-debug.js:1359 js/Setup-FAT.js:6
-msgid "disabled"
-msgstr "zakázáno"
-
-#: js/ConfigManagerPanel.js:290 js/Setup-FAT-debug.js:1359 js/Setup-FAT.js:6
-msgid "enabled"
-msgstr "povoleno"
-
-#: js/ConfigManagerPanel.js:301 js/Setup-FAT-debug.js:1370 js/Setup-FAT.js:6
-msgid "Config file is not writable"
-msgstr "Do konfiguračního souboru nelze zapisovat"
-
-#: js/ConfigManagerPanel.js:319 js/Setup-FAT-debug.js:1388 js/Setup-FAT.js:6
-msgid "Download config file"
-msgstr "Stáhnout konfigurační soubor"
-
-#: js/EmailPanel.js:147 js/Setup-FAT-debug.js:2296 js/Setup-FAT.js:6
-msgid "Standard IMAP"
-msgstr "Standardní IMAP"
-
-#: js/EmailPanel.js:157 js/Setup-FAT-debug.js:2306 js/Setup-FAT.js:6
-msgid "Standard SMTP"
-msgstr "Standardní SMTP"
-
-#: js/EmailPanel.js:167 js/Setup-FAT-debug.js:2316 js/Setup-FAT.js:6
-msgid "Imap"
-msgstr "IMAP"
-
-#: js/EmailPanel.js:215 js/Setup-FAT-debug.js:2364 js/Setup-FAT.js:6
-msgid "No"
-msgstr "Ne"
-
-#: js/EmailPanel.js:215 js/Setup-FAT-debug.js:2364 js/Setup-FAT.js:6
-msgid "Yes"
-msgstr "Ano"
-
-#: js/EmailPanel.js:217 js/Setup-FAT-debug.js:2366 js/Setup-FAT.js:6
-msgid "Use system account"
-msgstr "Použít systémový účet"
-
-#: js/EmailPanel.js:266 js/Setup-FAT-debug.js:2415 js/Setup-FAT.js:6
-msgid "Cyrus Admin"
-msgstr ""
-
-#: js/EmailPanel.js:269 js/Setup-FAT-debug.js:2418 js/Setup-FAT.js:6
-msgid "Cyrus Admin Password"
-msgstr ""
-
-#: js/EmailPanel.js:285 js/Setup-FAT-debug.js:2434 js/Setup-FAT.js:6
-msgid "Smtp"
-msgstr "SMTP"
-
-#: js/EmailPanel.js:316 js/Setup-FAT-debug.js:2465 js/Setup-FAT.js:6
-msgid "Authentication"
-msgstr "Autentikace"
-
-#: js/EmailPanel.js:328 js/Setup-FAT-debug.js:2477 js/Setup-FAT.js:6
-msgid "Login"
-msgstr "Přihlášení"
-
-#: js/EmailPanel.js:329 js/Setup-FAT-debug.js:2478 js/Setup-FAT.js:6
-msgid "Plain"
-msgstr "Prosté"
-
-#: js/EmailPanel.js:333 js/Setup-FAT-debug.js:2482 js/Setup-FAT.js:6
-msgid "Primary Domain"
-msgstr "Primární doména"
-
-#: js/EmailPanel.js:337 js/Setup-FAT-debug.js:2486 js/Setup-FAT.js:6
-msgid "Secondary Domains (comma separated)"
-msgstr "Sekundární domény (oddělené čárkou)"
-
-#: js/EmailPanel.js:341 js/Setup-FAT-debug.js:2490 js/Setup-FAT.js:6
-msgid "Notifications service address"
-msgstr "Adresa služby pro zasílání upozornění"
-
-#: js/EmailPanel.js:345 js/Setup-FAT-debug.js:2494 js/Setup-FAT.js:6
-msgid "Notification Username"
-msgstr "Uživatelské jméno pro upozornění"
-
-#: js/EmailPanel.js:349 js/Setup-FAT-debug.js:2498 js/Setup-FAT.js:6
-msgid "Notification Password"
-msgstr "Heslo pro upozornění"
-
-#: js/EmailPanel.js:399 js/Setup-FAT-debug.js:2548 js/Setup-FAT.js:6
-msgid "SIEVE"
-msgstr ""
-
-#: js/EmailPanel.js:449 js/Setup-FAT-debug.js:2598 js/Setup-FAT.js:6
-msgid "MySql Hostname"
-msgstr "Adresa MySQL serveru"
-
-#: js/EmailPanel.js:452 js/Setup-FAT-debug.js:2601 js/Setup-FAT.js:6
-msgid "MySql Database"
-msgstr "Název MySQL databáze"
-
-#: js/EmailPanel.js:455 js/Setup-FAT-debug.js:2604 js/Setup-FAT.js:6
-msgid "MySql User"
-msgstr "Uživatel MySQL"
-
-#: js/EmailPanel.js:458 js/Setup-FAT-debug.js:2607 js/Setup-FAT.js:6
-msgid "MySql Password"
-msgstr "Heslo k MySQL databázi"
-
-#: js/EmailPanel.js:462 js/Setup-FAT-debug.js:2611 js/Setup-FAT.js:6
-msgid "MySql Port"
-msgstr "Port MySQL"
-
-#: js/EmailPanel.js:477 js/Setup-FAT-debug.js:2626 js/Setup-FAT.js:6
-msgid "User or UID"
-msgstr ""
-
-#: js/EmailPanel.js:480 js/Setup-FAT-debug.js:2629 js/Setup-FAT.js:6
-msgid "Group or GID"
-msgstr ""
-
-#: js/EmailPanel.js:483 js/Setup-FAT-debug.js:2632 js/Setup-FAT.js:6
-msgid "Home Template"
-msgstr ""
-
-#: js/EmailPanel.js:485 js/Setup-FAT-debug.js:2634 js/Setup-FAT.js:6
-msgid "Password Scheme"
-msgstr ""
-
-#: js/EmailPanel.js:496 js/Setup-FAT-debug.js:2645 js/Setup-FAT.js:6
-msgid "PLAIN-MD5"
-msgstr ""
-
-#: js/EmailPanel.js:497 js/Setup-FAT-debug.js:2646 js/Setup-FAT.js:6
-msgid "MD5-CRYPT"
-msgstr ""
-
-#: js/EmailPanel.js:498 js/Setup-FAT-debug.js:2647 js/Setup-FAT.js:6
-msgid "SHA1"
-msgstr ""
-
-#: js/EmailPanel.js:499 js/Setup-FAT-debug.js:2648 js/Setup-FAT.js:6
-msgid "SHA256"
-msgstr ""
-
-#: js/EmailPanel.js:500 js/Setup-FAT-debug.js:2649 js/Setup-FAT.js:6
-msgid "SSHA256"
-msgstr ""
-
-#: js/EmailPanel.js:501 js/Setup-FAT-debug.js:2650 js/Setup-FAT.js:6
-msgid "SHA512"
-msgstr ""
-
-#: js/EmailPanel.js:502 js/Setup-FAT-debug.js:2651 js/Setup-FAT.js:6
-msgid "SSHA512"
-msgstr ""
-
-#: js/EmailPanel.js:503 js/Setup-FAT-debug.js:2652 js/Setup-FAT.js:6
-msgid "PLAIN"
-msgstr ""
-
-#: js/EnvCheckGridPanel.js:90 js/Setup-FAT-debug.js:917 js/Setup-FAT.js:6
-msgid "Performing Environment Checks..."
-msgstr "Provádím test prostředí"
-
-#: js/EnvCheckGridPanel.js:131 js/Setup-FAT-debug.js:958
-msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
-msgstr "Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo {1} ve kterém hledáte."
-
-#: js/EnvCheckGridPanel.js:161 js/Setup-FAT-debug.js:988 js/Setup-FAT.js:6
-msgid "Check"
-msgstr "Kontrola"
-
-#: js/EnvCheckGridPanel.js:162 js/Setup-FAT-debug.js:989 js/Setup-FAT.js:6
-msgid "Result"
-msgstr "Výsledek"
-
-#: js/EnvCheckGridPanel.js:163 js/Setup-FAT-debug.js:990 js/Setup-FAT.js:6
-msgid "Error"
-msgstr "Chyba"
-
-#: js/EnvCheckGridPanel.js:181 js/Setup-FAT-debug.js:1008 js/Setup-FAT.js:6
-msgid "Run setup tests"
-msgstr "Spustit instalační testy"
-
-#: js/EnvCheckGridPanel.js:190 js/Setup-FAT-debug.js:1017 js/Setup-FAT.js:6
-msgid "Ignore setup tests"
-msgstr "Ignorovat instalační testy"
-
-#: js/Setup-FAT-debug.js:150 js/Setup-FAT.js:6 js/Setup.js:53
+#: js/Setup.js:53
 msgid "Terms and Conditions"
 msgstr "Podmínky a ujednání"
 
-#: js/Setup-FAT-debug.js:155 js/Setup-FAT.js:6 js/Setup.js:58
+#: js/Setup.js:58
 msgid "Setup Checks"
 msgstr "Instalační kontroly"
 
-#: js/Setup-FAT-debug.js:161 js/Setup-FAT.js:6 js/Setup.js:64
+#: js/Setup.js:64
 msgid "Config Manager"
 msgstr "Správce konfigurace"
 
-#: js/Setup-FAT-debug.js:167 js/Setup-FAT.js:6 js/Setup.js:70
+#: js/Setup.js:70
 msgid "Authentication/Accounts"
 msgstr "Autentikace/Účty"
 
-#: js/Setup-FAT-debug.js:173 js/Setup-FAT.js:6 js/Setup.js:76
+#: js/Setup.js:76
 msgid "Email"
 msgstr "Email"
 
-#: js/Setup-FAT-debug.js:179 js/Setup-FAT.js:6 js/Setup.js:82
+#: js/Setup.js:82
 msgid "Application Manager"
 msgstr "Správce aplikací"
 
-#: js/Setup-FAT-debug.js:282 js/Setup.js:185
+#: js/Setup.js:185
 msgid "Application"
 msgid_plural "Applications"
 msgstr[0] "Aplikace"
 msgstr[1] "Aplikace"
 msgstr[2] "Aplikací"
 
-#: js/Setup-FAT-debug.js:440 js/Setup-FAT.js:6 js/TermsPanel.js:30
+#: js/ConfigManagerPanel.js:108
+msgid "File"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:110 js/EmailPanel.js:143
+#: js/AuthenticationPanel.js:184 js/AuthenticationPanel.js:205
+msgid "Backend"
+msgstr "Backend"
+
+#: js/ConfigManagerPanel.js:119
+msgid "Setup Authentication"
+msgstr "Přihlášení do instalačního programu"
+
+#: js/ConfigManagerPanel.js:122 js/EmailPanel.js:179
+msgid "Username"
+msgstr "Uživatelské jméno"
+
+#: js/ConfigManagerPanel.js:131 js/ConfigManagerPanel.js:161
+#: js/EmailPanel.js:183 js/AuthenticationPanel.js:325
+#: js/AuthenticationPanel.js:507
+msgid "Password"
+msgstr "Heslo"
+
+#: js/ConfigManagerPanel.js:136 js/ConfigManagerPanel.js:153
+msgid "Database"
+msgstr "Databáze"
+
+#: js/ConfigManagerPanel.js:140
+msgid "Adapter"
+msgstr "Adaptér"
+
+#: js/ConfigManagerPanel.js:145 js/ConfigManagerPanel.js:255
+#: js/EmailPanel.js:175 js/EmailPanel.js:293 js/EmailPanel.js:405
+#: js/AuthenticationPanel.js:376
+msgid "Hostname"
+msgstr "Název nebo adresa počítače"
+
+#: js/ConfigManagerPanel.js:149 js/ConfigManagerPanel.js:259
+#: js/EmailPanel.js:188 js/EmailPanel.js:297 js/EmailPanel.js:409
+#: js/AuthenticationPanel.js:318 js/AuthenticationPanel.js:379
+msgid "Port"
+msgstr "Port"
+
+#: js/ConfigManagerPanel.js:157
+msgid "User"
+msgstr "Uživatel"
+
+#: js/ConfigManagerPanel.js:165
+msgid "Prefix"
+msgstr "Prefix"
+
+#: js/ConfigManagerPanel.js:168
+msgid "Logging"
+msgstr "Logování"
+
+#: js/ConfigManagerPanel.js:174
+msgid "Filename"
+msgstr "Název souboru"
+
+#: js/ConfigManagerPanel.js:186
+msgid "Priority"
+msgstr "Priorita"
+
+#: js/ConfigManagerPanel.js:189
+msgid "Caching"
+msgstr "Kešování"
+
+#: js/ConfigManagerPanel.js:195 js/ConfigManagerPanel.js:242
+msgid "Path"
+msgstr "Cesta"
+
+#: js/ConfigManagerPanel.js:198 js/ConfigManagerPanel.js:216
+msgid "Lifetime (seconds)"
+msgstr "Životnost (v sekundách)"
+
+#: js/ConfigManagerPanel.js:204
+msgid "Temporary files"
+msgstr "Dočasné soubory"
+
+#: js/ConfigManagerPanel.js:209
+msgid "Temporary Files Path"
+msgstr "Cesta pro dočasné soubory"
+
+#: js/ConfigManagerPanel.js:212
+msgid "Session"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:268
+msgid "Filestore directory"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:273
+msgid "Filestore Path"
+msgstr ""
+
+#: js/ConfigManagerPanel.js:277
+msgid "Addressbook Map panel"
+msgstr "Mapový panel v Adresáři"
+
+#: js/ConfigManagerPanel.js:280
+msgid "Map panel"
+msgstr "Mapový panel"
+
+#: js/ConfigManagerPanel.js:290
+msgid "disabled"
+msgstr "zakázáno"
+
+#: js/ConfigManagerPanel.js:290
+msgid "enabled"
+msgstr "povoleno"
+
+#: js/ConfigManagerPanel.js:301
+msgid "Config file is not writable"
+msgstr "Do konfiguračního souboru nelze zapisovat"
+
+#: js/ConfigManagerPanel.js:303 js/AuthenticationPanel.js:676
+msgid "Save config"
+msgstr "Uložit konfiguraci"
+
+#: js/ConfigManagerPanel.js:319
+msgid "Download config file"
+msgstr "Stáhnout konfigurační soubor"
+
+#: js/EmailPanel.js:147
+msgid "Standard IMAP"
+msgstr "Standardní IMAP"
+
+#: js/EmailPanel.js:157
+msgid "Standard SMTP"
+msgstr "Standardní SMTP"
+
+#: js/EmailPanel.js:167
+msgid "Imap"
+msgstr "IMAP"
+
+#: js/EmailPanel.js:191 js/EmailPanel.js:300 js/EmailPanel.js:412
+#: js/AuthenticationPanel.js:382
+msgid "Secure Connection"
+msgstr "Zabezpečení připojení"
+
+#: js/EmailPanel.js:202 js/EmailPanel.js:311 js/EmailPanel.js:327
+#: js/EmailPanel.js:423 js/AuthenticationPanel.js:393
+msgid "None"
+msgstr "Žádné"
+
+#: js/EmailPanel.js:203 js/EmailPanel.js:312 js/EmailPanel.js:424
+#: js/AuthenticationPanel.js:394
+msgid "TLS"
+msgstr "TLS"
+
+#: js/EmailPanel.js:204 js/EmailPanel.js:313 js/EmailPanel.js:425
+#: js/AuthenticationPanel.js:395
+msgid "SSL"
+msgstr "SSL"
+
+#: js/EmailPanel.js:215
+msgid "No"
+msgstr "Ne"
+
+#: js/EmailPanel.js:215
+msgid "Yes"
+msgstr "Ano"
+
+#: js/EmailPanel.js:217
+msgid "Use system account"
+msgstr "Použít systémový účet"
+
+#: js/EmailPanel.js:220 js/AuthenticationPanel.js:399
+msgid "Append domain to login name"
+msgstr "Připojit doménu k přihlašovacímu jménu"
+
+#: js/EmailPanel.js:266
+msgid "Cyrus Admin"
+msgstr ""
+
+#: js/EmailPanel.js:269
+msgid "Cyrus Admin Password"
+msgstr ""
+
+#: js/EmailPanel.js:285
+msgid "Smtp"
+msgstr "SMTP"
+
+#: js/EmailPanel.js:316
+msgid "Authentication"
+msgstr "Autentikace"
+
+#: js/EmailPanel.js:328
+msgid "Login"
+msgstr "Přihlášení"
+
+#: js/EmailPanel.js:329
+msgid "Plain"
+msgstr "Prosté"
+
+#: js/EmailPanel.js:333
+msgid "Primary Domain"
+msgstr "Primární doména"
+
+#: js/EmailPanel.js:337
+msgid "Secondary Domains (comma separated)"
+msgstr "Sekundární domény (oddělené čárkou)"
+
+#: js/EmailPanel.js:341
+msgid "Notifications service address"
+msgstr "Adresa služby pro zasílání upozornění"
+
+#: js/EmailPanel.js:345
+msgid "Notification Username"
+msgstr "Uživatelské jméno pro upozornění"
+
+#: js/EmailPanel.js:349
+msgid "Notification Password"
+msgstr "Heslo pro upozornění"
+
+#: js/EmailPanel.js:399
+msgid "SIEVE"
+msgstr ""
+
+#: js/EmailPanel.js:449
+msgid "MySql Hostname"
+msgstr "Adresa MySQL serveru"
+
+#: js/EmailPanel.js:452
+msgid "MySql Database"
+msgstr "Název MySQL databáze"
+
+#: js/EmailPanel.js:455
+msgid "MySql User"
+msgstr "Uživatel MySQL"
+
+#: js/EmailPanel.js:458
+msgid "MySql Password"
+msgstr "Heslo k MySQL databázi"
+
+#: js/EmailPanel.js:462
+msgid "MySql Port"
+msgstr "Port MySQL"
+
+#: js/EmailPanel.js:477
+msgid "User or UID"
+msgstr ""
+
+#: js/EmailPanel.js:480
+msgid "Group or GID"
+msgstr ""
+
+#: js/EmailPanel.js:483
+msgid "Home Template"
+msgstr ""
+
+#: js/EmailPanel.js:485
+msgid "Password Scheme"
+msgstr ""
+
+#: js/EmailPanel.js:496
+msgid "PLAIN-MD5"
+msgstr ""
+
+#: js/EmailPanel.js:497
+msgid "MD5-CRYPT"
+msgstr ""
+
+#: js/EmailPanel.js:498
+msgid "SHA1"
+msgstr ""
+
+#: js/EmailPanel.js:499
+msgid "SHA256"
+msgstr ""
+
+#: js/EmailPanel.js:500
+msgid "SSHA256"
+msgstr ""
+
+#: js/EmailPanel.js:501
+msgid "SHA512"
+msgstr ""
+
+#: js/EmailPanel.js:502
+msgid "SSHA512"
+msgstr ""
+
+#: js/EmailPanel.js:503
+msgid "PLAIN"
+msgstr ""
+
+#: js/ApplicationGridPanel.js:63
+msgid "Name"
+msgstr "Název"
+
+#: js/ApplicationGridPanel.js:64
+msgid "Enabled"
+msgstr "Povoleno"
+
+#: js/ApplicationGridPanel.js:65
+msgid "Order"
+msgstr "Pořadí"
+
+#: js/ApplicationGridPanel.js:66
+msgid "Installed Version"
+msgstr "Nainstalovaná verze"
+
+#: js/ApplicationGridPanel.js:67
+msgid "Available Version"
+msgstr "Dostupná verze"
+
+#: js/ApplicationGridPanel.js:68
+msgid "Status"
+msgstr "Stav"
+
+#: js/ApplicationGridPanel.js:69
+msgid "Depends on"
+msgstr "Závisí na"
+
+#: js/ApplicationGridPanel.js:78 js/EnvCheckGridPanel.js:204
+msgid "Install application"
+msgstr "Instalovat aplikaci"
+
+#: js/ApplicationGridPanel.js:87
+msgid "Uninstall application"
+msgstr "Odinstalovat aplikaci"
+
+#: js/ApplicationGridPanel.js:96
+msgid "Update application"
+msgstr "Aktualizovat aplikaci"
+
+#: js/ApplicationGridPanel.js:105
+msgid "Go to {0} login"
+msgstr "Jít na příhlášení do {0}"
+
+#: js/ApplicationGridPanel.js:168
+msgid "uninstall"
+msgstr "odinstalovat"
+
+#: js/ApplicationGridPanel.js:168
+msgid "Do you really want to uninstall the application(s)?"
+msgstr "Opravdu chcete aplikaci/e odinstalovat?"
+
+#: js/ApplicationGridPanel.js:228
+msgid "This may take a while"
+msgstr "Tato operace může chvíli trvat"
+
+#: js/ApplicationGridPanel.js:258
+msgid "Dependency Violation"
+msgstr "Porušení závislosti"
+
+#: js/AuthenticationPanel.js:121
+msgid "Delete all existing users and groups"
+msgstr "Smazat všechny stávající uživatele a skupiny"
+
+#: js/AuthenticationPanel.js:121
+msgid "Switching from SQL to LDAP will delete all existing User Accounts, Groups and Roles. Do you really want to switch the accounts storage backend to LDAP ?"
+msgstr "Přechod z SQL na LDAP smaže všechny stávající uživatelské účty, skupiny a role. Opravdu chcete změnit backend pro uložení účtů na LDAP?"
+
+#: js/AuthenticationPanel.js:219
+msgid "Initial Admin User"
+msgstr ""
+
+#: js/AuthenticationPanel.js:232
+msgid "Initial admin login name"
+msgstr "Počáteční přihlašovací jméno administrátora"
+
+#: js/AuthenticationPanel.js:237
+msgid "Initial admin Password"
+msgstr "Počáteční heslo administrátora"
+
+#: js/AuthenticationPanel.js:242
+msgid "Password confirmation"
+msgstr "Potvrzení hesla"
+
+#: js/AuthenticationPanel.js:251
+msgid "Authentication provider"
+msgstr "Poskytovatel autentikace"
+
+#: js/AuthenticationPanel.js:280 js/AuthenticationPanel.js:413
+msgid "Try to split username"
+msgstr "Zkusit rozdělit uživatelské jméno"
+
+#: js/AuthenticationPanel.js:292 js/AuthenticationPanel.js:357
+#: js/AuthenticationPanel.js:427
+msgid "Account canonical form"
+msgstr "Kanonická forma účtu"
+
+#: js/AuthenticationPanel.js:296 js/AuthenticationPanel.js:361
+#: js/AuthenticationPanel.js:431
+msgid "Account domain name "
+msgstr "Název domény"
+
+#: js/AuthenticationPanel.js:300 js/AuthenticationPanel.js:364
+#: js/AuthenticationPanel.js:436
+msgid "Account domain short name"
+msgstr "Krátký název domény"
+
+#: js/AuthenticationPanel.js:314 js/AuthenticationPanel.js:499
+msgid "Host"
+msgstr "Server"
+
+#: js/AuthenticationPanel.js:322 js/AuthenticationPanel.js:504
+msgid "Login name"
+msgstr "Přihlašovací jméno"
+
+#: js/AuthenticationPanel.js:338 js/AuthenticationPanel.js:520
+msgid "Bind requires DN"
+msgstr "Připojení vyžaduje DN"
+
+#: js/AuthenticationPanel.js:342
+msgid "Base DN"
+msgstr "Základní DN"
+
+#: js/AuthenticationPanel.js:345
+msgid "Search filter"
+msgstr "Vyhledávací filtr"
+
+#: js/AuthenticationPanel.js:447
+msgid "Accounts storage"
+msgstr "Uložení účtů"
+
+#: js/AuthenticationPanel.js:468 js/AuthenticationPanel.js:606
+msgid "Default user group name"
+msgstr "Jméno výchozí skupiny pro uživatele"
+
+#: js/AuthenticationPanel.js:472 js/AuthenticationPanel.js:609
+msgid "Default admin group name"
+msgstr "Jméno výchozí skupiny pro administrátory"
+
+#: js/AuthenticationPanel.js:485
+msgid "User can change password"
+msgstr "Uživatel si může měnit heslo"
+
+#: js/AuthenticationPanel.js:524
+msgid "User DN"
+msgstr "DN uživatele"
+
+#: js/AuthenticationPanel.js:527
+msgid "User Filter"
+msgstr "Filtr uživatelů"
+
+#: js/AuthenticationPanel.js:539
+msgid "User Search Scope"
+msgstr "Oblast hledání uživatelů"
+
+#: js/AuthenticationPanel.js:543
+msgid "Groups DN"
+msgstr "DN pro skupiny"
+
+#: js/AuthenticationPanel.js:546
+msgid "Group Filter"
+msgstr "Filtr skupin"
+
+#: js/AuthenticationPanel.js:558
+msgid "Group Search Scope"
+msgstr "Oblast hledání skupin"
+
+#: js/AuthenticationPanel.js:571
+msgid "Password encoding"
+msgstr "Kódování hesla"
+
+#: js/AuthenticationPanel.js:584
+msgid "Use Rfc 2307 bis"
+msgstr "Používat Rfc 2307 bis"
+
+#: js/AuthenticationPanel.js:588
+msgid "Min User Id"
+msgstr "Minimální Id uživatele"
+
+#: js/AuthenticationPanel.js:591
+msgid "Max User Id"
+msgstr "Maximální Id uživatele"
+
+#: js/AuthenticationPanel.js:594
+msgid "Min Group Id"
+msgstr "Minimální Id skupiny"
+
+#: js/AuthenticationPanel.js:597
+msgid "Max Group Id"
+msgstr "Maximální Id skupiny"
+
+#: js/AuthenticationPanel.js:600
+msgid "Group UUID Attribute name"
+msgstr "Název atributu pro UUID skupiny"
+
+#: js/AuthenticationPanel.js:603
+msgid "User UUID Attribute name"
+msgstr "Název atributu pro UUID uživatele"
+
+#: js/AuthenticationPanel.js:621
+msgid "Allow user to change her password?"
+msgstr "Povolit uživateli změnu jeho hesla?"
+
+#: js/AuthenticationPanel.js:630
+msgid "Redirect Settings"
+msgstr "Nastavení přesměrování"
+
+#: js/AuthenticationPanel.js:638
+msgid "Redirect Url (redirect to login screen if empty)"
+msgstr "URL pro přesměrování (ponecháte-li prázdné, přesměrovat na přihlašovací obrazovku)"
+
+#: js/AuthenticationPanel.js:650
+msgid "Redirect Always (if No, only redirect after logout)"
+msgstr "Vždy přesměrovat (pokud Ne, přesměrovat jen při odhlášení)"
+
+#: js/AuthenticationPanel.js:661
+msgid "Redirect to referring site, if exists"
+msgstr "Přesměrovat na odkazovaný web, pokud existuje"
+
+#: js/AuthenticationPanel.js:674
+msgid "Save config and install"
+msgstr "Uložit konfiguraci a instalovat"
+
+#: js/AuthenticationPanel.js:700
+msgid "Passwords don't match"
+msgstr "Hesla se neshodují"
+
+#: js/AuthenticationPanel.js:713 js/AuthenticationPanel.js:720
+#: js/AuthenticationPanel.js:724 js/AuthenticationPanel.js:735
+#: js/AuthenticationPanel.js:745
+msgid "Should not be empty"
+msgstr "Nemělo by být prázdné"
+
+#: js/EnvCheckGridPanel.js:89
+msgid "Performing Environment Checks..."
+msgstr "Provádím test prostředí"
+
+#: js/EnvCheckGridPanel.js:130
+msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
+msgstr "Nenalezeno {0}. Zkuste prosím změnit kritéria filtru, volby zobrazení nebo {1} ve kterém hledáte."
+
+#: js/EnvCheckGridPanel.js:160
+msgid "Check"
+msgstr "Kontrola"
+
+#: js/EnvCheckGridPanel.js:161
+msgid "Result"
+msgstr "Výsledek"
+
+#: js/EnvCheckGridPanel.js:162
+msgid "Error"
+msgstr "Chyba"
+
+#: js/EnvCheckGridPanel.js:180
+msgid "Run setup tests"
+msgstr "Spustit instalační testy"
+
+#: js/EnvCheckGridPanel.js:189
+msgid "Ignore setup tests"
+msgstr "Ignorovat instalační testy"
+
+#: js/TermsPanel.js:30
 msgid "I have read the license agreement and accept it"
 msgstr "Přečetl(a) jsem si licenční ujednání a souhlasím"
 
-#: js/Setup-FAT-debug.js:447 js/Setup-FAT.js:6 js/TermsPanel.js:37
+#: js/TermsPanel.js:37
 msgid "License Agreement"
 msgstr "Licenční ujednání"
 
-#: js/Setup-FAT-debug.js:466 js/Setup-FAT.js:6 js/TermsPanel.js:56
+#: js/TermsPanel.js:56
 msgid "I have read the privacy agreement and accept it"
 msgstr "Přečetl(a) jsem si ujednání o ochraně soukromí a souhlasím"
 
-#: js/Setup-FAT-debug.js:473 js/Setup-FAT.js:6 js/TermsPanel.js:63
+#: js/TermsPanel.js:63
 msgid "Privacy Agreement"
 msgstr "Ujednání o ochraně soukromí"
 
-#: js/Setup-FAT-debug.js:490 js/Setup-FAT.js:6 js/TermsPanel.js:80
+#: js/TermsPanel.js:80
 msgid "Accept Terms and Conditions"
 msgstr "Přijmout podmínky"
 

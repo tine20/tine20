@@ -14,153 +14,20 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-# There is no word "leads" in the polish language. I think we can replace "leads" with "zapytania" or "zapytania ofertowe". I mean samething, that can start some process in the feature.
-# Es gibt kein Wort "leads" im Polnischen. Ich denke, wir koennen es durch "zapytania" oder "zapytania ofertowe" ersetzen. Ich meine etwas, womit einen weiteren Prozess anfangen kann.
-#: Acl/Rights.php:106
-msgid "manage leads"
-msgstr "edytowanie zapytań"
-
-#: Acl/Rights.php:107
-msgid "add, edit and delete leads"
-msgstr "dodaj, edytuj i usuń zapytania"
-
-#: Acl/Rights.php:110
-msgid "manage shared lead folders"
-msgstr "edytowanie wspólnych katalogów zapytań"
-
-#: Acl/Rights.php:111
-msgid "Create new shared lead folders"
-msgstr "Utwórz nowe, wspólne katalogi zapytań"
-
-#: Acl/Rights.php:114
-msgid "manage shared leads favorites"
-msgstr "zarządzanie ulubionymi, wspólnymi zapytaniami"
-
-#: Acl/Rights.php:115
-msgid "Create or update shared leads favorites"
-msgstr "Utwórz albo uaktualnij ulubione, wspólne zapytania"
-
-#: Controller/Lead.php:177
-msgid "State"
-msgstr "Kraj"
-
-#: Controller/Lead.php:178
-#: js/Contact.js:257
-#: js/Crm-FAT-debug.js:3354
-msgid "Role"
-msgstr "Funkcja"
-
-#: Controller/Lead.php:179
-msgid "Source"
-msgstr "Źródło"
-
-#: Controller/Lead.php:180
-#: Export/Pdf.php:93
-#: js/Crm-FAT-debug.js:1306
-#: js/Crm-FAT-debug.js:1828
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:406
-#: js/LeadGridDetailsPanel.js:469
-msgid "Start"
-msgstr "Początek"
-
-#: Controller/Lead.php:181
-msgid "Scheduled end"
-msgstr "Planowane zakończenie"
-
-#: Controller/Lead.php:182
-#: Export/Pdf.php:96
-#: js/Crm-FAT-debug.js:1663
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:241
-msgid "End"
-msgstr "Koniec"
-
-#: Controller/Lead.php:183
-#: Export/Pdf.php:87
-#: js/Crm-FAT-debug.js:685
-#: js/Crm-FAT-debug.js:735
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:122
-#: js/LeadGridPanel.js:172
-msgid "Turnover"
-msgstr "Obroty"
-
-#: Controller/Lead.php:184
-#: Export/Pdf.php:90
-#: js/Crm-FAT-debug.js:684
-#: js/Crm-FAT-debug.js:734
-#: js/Crm-FAT-debug.js:1656
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:234
-#: js/LeadGridPanel.js:121
-#: js/LeadGridPanel.js:171
-msgid "Probability"
-msgstr "Prawdopodobieństwo"
-
-#: Controller/Lead.php:185
-msgid "Folder"
-msgstr "Katalog"
-
-#: Controller/Lead.php:186
-msgid "Updated by"
-msgstr "Zaktualizowane przez"
-
-#: Controller/Lead.php:187
-msgid "Updated Fields:"
-msgstr "Zaktualizowane pola:"
-
-#: Controller/Lead.php:188
-#, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s zmieniony z %s na %s."
-
-#: Controller/Lead.php:194
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "Zapytanie %s zostało zmienione"
-
-#: Controller/Lead.php:196
-#, python-format
-msgid "Lead %s has been creaded"
-msgstr "Zapytanie %s zostało utworzone"
-
 #: Controller.php:112
 #, python-format
 msgid "%s's personal leads"
 msgstr "%s zapytania osobiste"
 
-#: Controller.php:152
-#: js/Contact.js:166
-#: js/Contact.js:353
-#: js/Contact.js:393
-#: js/Crm-FAT-debug.js:732
-#: js/Crm-FAT-debug.js:882
-#: js/Crm-FAT-debug.js:1349
-#: js/Crm-FAT-debug.js:3263
-#: js/Crm-FAT-debug.js:3450
-#: js/Crm-FAT-debug.js:3490
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:512
-#: js/LeadGridPanel.js:169
+#: Controller.php:152 js/Contact.js:166 js/Contact.js:353 js/Contact.js:393
+#: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:512
+#: js/LeadGridPanel.js:168
 msgid "Customer"
 msgstr "Klient"
 
-#: Controller.php:153
-#: js/Contact.js:186
-#: js/Contact.js:354
-#: js/Contact.js:397
-#: js/Crm-FAT-debug.js:731
-#: js/Crm-FAT-debug.js:882
-#: js/Crm-FAT-debug.js:1332
-#: js/Crm-FAT-debug.js:3283
-#: js/Crm-FAT-debug.js:3451
-#: js/Crm-FAT-debug.js:3494
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:45
-#: js/LeadGridDetailsPanel.js:495
-#: js/LeadGridPanel.js:168
+#: Controller.php:153 js/Contact.js:186 js/Contact.js:354 js/Contact.js:397
+#: js/LeadGridDetailsPanel.js:45 js/LeadGridDetailsPanel.js:495
+#: js/LeadGridPanel.js:167
 msgid "Partner"
 msgstr "Wspólnik"
 
@@ -196,13 +63,11 @@ msgstr "stracone"
 msgid "Market"
 msgstr "Sklep"
 
-#: Controller.php:166
-#: Export/Pdf.php:214
+#: Controller.php:166 Export/Pdf.php:214
 msgid "Email"
 msgstr "E-mail"
 
-#: Controller.php:167
-#: Export/Pdf.php:213
+#: Controller.php:167 Export/Pdf.php:213
 msgid "Telephone"
 msgstr "Telefon"
 
@@ -210,537 +75,29 @@ msgstr "Telefon"
 msgid "Website"
 msgstr "Strona WWW"
 
-#: Export/Pdf.php:75
-msgid "Lead Data"
-msgstr "Dane dot. zapytania"
-
-#: Export/Pdf.php:78
-#: js/AdminPanel.js:157
-#: js/Crm-FAT-debug.js:733
-#: js/Crm-FAT-debug.js:1770
-#: js/Crm-FAT-debug.js:2079
-#: js/Crm-FAT-debug.js:2384
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:348
-#: js/LeadGridPanel.js:170
-#: js/LeadStateFilterModel.js:32
-msgid "Leadstate"
-msgstr "Status zapytania"
-
-#: Export/Pdf.php:81
-#: js/AdminPanel.js:171
-#: js/Crm-FAT-debug.js:1316
-#: js/Crm-FAT-debug.js:1789
-#: js/Crm-FAT-debug.js:2093
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:367
-#: js/LeadGridDetailsPanel.js:479
-msgid "Leadtype"
-msgstr "Typ zapytania"
-
-#: Export/Pdf.php:84
-#: js/AdminPanel.js:164
-#: js/Crm-FAT-debug.js:1321
-#: js/Crm-FAT-debug.js:1796
-#: js/Crm-FAT-debug.js:2086
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:374
-#: js/LeadGridDetailsPanel.js:484
-msgid "Leadsource"
-msgstr "Źródło zapytania"
-
-#: Export/Pdf.php:99
-msgid "End Scheduled"
-msgstr "Planowany koniec"
-
-#: Export/Pdf.php:179
-msgid "Contacts"
-msgstr "Kontakty"
-
-#: Export/Pdf.php:206
-#: js/Contact.js:236
-#: js/Crm-FAT-debug.js:3333
-msgid "Address"
-msgstr "Adres"
-
-#: Export/Pdf.php:227
-#: js/Crm-FAT-debug.js:1679
-#: js/Crm-FAT-debug.js:3831
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:257
-#: js/Task.js:85
-msgid "Tasks"
-msgstr "Zadania"
-
-#: Export/Pdf.php:247
-#: js/Crm-FAT-debug.js:3924
-#: js/Task.js:178
-msgid "Due Date"
-msgstr "Termin"
-
-#: Export/Pdf.php:254
-#: js/Crm-FAT-debug.js:3937
-#: js/Task.js:191
-msgid "Priority"
-msgstr "Priorytet"
-
-#: Export/Pdf.php:269
-#: js/Crm-FAT-debug.js:1690
-#: js/Crm-FAT-debug.js:3586
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:268
-#: js/Product.js:85
-msgid "Products"
-msgstr "Produkty"
-
-#: Export/Pdf.php:310
-msgid "low"
-msgstr "niski"
-
-#: Export/Pdf.php:311
-msgid "normal"
-msgstr "normalny"
-
-#: Export/Pdf.php:312
-msgid "high"
-msgstr "wysoki"
-
-#: Export/Pdf.php:313
-msgid "urgent"
-msgstr "pilny"
-
-#: js/AdminPanel.js:122
-#: js/Crm-FAT-debug.js:1055
-#: js/Crm-FAT-debug.js:1088
-#: js/Crm-FAT-debug.js:2044
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:218
-#: js/LeadGridDetailsPanel.js:251
-msgid "Leadstates"
-msgstr "Statusy zapytania"
-
-#: js/AdminPanel.js:126
-#: js/Crm-FAT-debug.js:1077
-#: js/Crm-FAT-debug.js:2048
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:240
-msgid "Leadtypes"
-msgstr "Typy zapytania"
-
-#: js/AdminPanel.js:130
-#: js/Crm-FAT-debug.js:1066
-#: js/Crm-FAT-debug.js:2052
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:229
-msgid "Leadsources"
-msgstr "Źródło zapytania"
-
-#: js/AdminPanel.js:138
-#: js/Crm-FAT-debug.js:2060
-#: js/Crm-FAT.js:6
-msgid "Defaults"
-msgstr "Ustawienia domyślne"
-
-#: js/Contact.js:167
-#: js/Crm-FAT-debug.js:3264
-msgid "Change type to Customer"
-msgstr "Zmień typ na wartość: Klient"
-
-#: js/Contact.js:176
-#: js/Contact.js:352
-#: js/Contact.js:389
-#: js/Crm-FAT-debug.js:3273
-#: js/Crm-FAT-debug.js:3449
-#: js/Crm-FAT-debug.js:3486
-msgid "Responsible"
-msgstr "Osoba odpowiedzialna"
-
-#: js/Contact.js:177
-#: js/Crm-FAT-debug.js:3274
-msgid "Change type to Responsible"
-msgstr "Zmień typ na wartość: Osoba odpowiedzialna"
-
-#: js/Contact.js:187
-#: js/Crm-FAT-debug.js:3284
-msgid "Change type to Partner"
-msgstr "Zmień typ na wartość: Wspólnik"
-
-#: js/Contact.js:198
-#: js/Crm-FAT-debug.js:3295
-msgid "Change contact type"
-msgstr "Zmień typ kontaktu"
-
-#: js/Contact.js:210
-#: js/Crm-FAT-debug.js:3307
-msgid "Search for Contacts to add ..."
-msgstr "Znajdź kontakty do dodania ..."
-
-#: js/Contact.js:227
-#: js/Crm-FAT-debug.js:3324
-msgid "Name"
-msgstr "Nazwa"
-
-#: js/Contact.js:247
-#: js/Crm-FAT-debug.js:3344
-msgid "Data"
-msgstr "Dane dot. zapytania"
-
-#: js/Contact.js:250
-#: js/Crm-FAT-debug.js:885
-#: js/Crm-FAT-debug.js:3347
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:48
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/Contact.js:251
-#: js/Crm-FAT-debug.js:3348
-msgid "Cellphone"
-msgstr "Komórka"
-
-#: js/Crm-FAT-debug.js:53
-#: js/Crm-FAT-debug.js:1702
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:280
-#: js/Model.js:48
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "zapytanie"
-msgstr[1] "zapytania"
-msgstr[2] "zapytania"
-
-#: js/Crm-FAT-debug.js:57
-#: js/Model.js:52
-msgid "lead list"
-msgid_plural "lead lists"
-msgstr[0] "Lista zapytań"
-msgstr[1] "listy zapytań"
-msgstr[2] "listy zapytań"
-
-#: js/Crm-FAT-debug.js:57
-#: js/Model.js:52
-msgid "lead lists"
-msgstr "listy zapytań"
-
-#: js/Crm-FAT-debug.js:120
-#: js/Model.js:115
-msgid "Settings"
-msgid_plural "Settings"
-msgstr[0] "Ustawienia"
-msgstr[1] "ustawienia"
-msgstr[2] "ustawienia"
-
-#: js/Crm-FAT-debug.js:124
-#: js/Model.js:119
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "Lista wierszy"
-msgstr[1] "listy wierszy"
-msgstr[2] "listy wierszy"
-
-#: js/Crm-FAT-debug.js:270
-#: js/Crm-FAT-debug.js:271
-#: js/Crm-FAT.js:6
-#: js/LinkGridPanel.js:36
-#: js/LinkGridPanel.js:37
-msgid "Add new {0}"
-msgstr "Dodaj {0}"
-
-#: js/Crm-FAT-debug.js:289
-#: js/Crm-FAT-debug.js:3686
-#: js/Crm-FAT.js:6
-#: js/LinkGridPanel.js:55
-#: js/Product.js:185
-msgid "Unlink {0}"
-msgstr "Usuń {0}"
-
-#: js/Crm-FAT-debug.js:290
-#: js/Crm-FAT-debug.js:3687
-#: js/Crm-FAT.js:6
-#: js/LinkGridPanel.js:56
-#: js/Product.js:186
-msgid "Unlink selected {0}"
-msgstr "Usuń zaznaczony {0}"
-
-#: js/Crm-FAT-debug.js:305
-#: js/Crm-FAT.js:6
-#: js/LinkGridPanel.js:71
-msgid "Edit {0}"
-msgstr "Edytuj \"{0}\""
-
-#: js/Crm-FAT-debug.js:306
-#: js/Crm-FAT.js:6
-#: js/LinkGridPanel.js:72
-msgid "Edit selected {0}"
-msgstr "Edytuj zaznaczone {0}"
-
-#: js/Crm-FAT-debug.js:494
-#: js/Crm-FAT.js:6
-#: js/LeadGridContactFilter.js:44
-msgid "Contact"
-msgstr "Kontakt"
-
-#: js/Crm-FAT-debug.js:502
-#: js/Crm-FAT.js:6
-#: js/LeadGridContactFilter.js:52
-msgid "CRM Role"
-msgstr "CRM"
-
-#: js/Crm-FAT-debug.js:680
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:117
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/Crm-FAT-debug.js:682
-#: js/Crm-FAT-debug.js:730
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:119
-#: js/LeadGridPanel.js:167
-msgid "Lead name"
-msgstr "Nazwa zapytania"
-
-#: js/Crm-FAT-debug.js:687
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:124
-msgid "Last modified"
-msgstr "Ostatnio zmieniono"
-
-#: js/Crm-FAT-debug.js:688
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:125
-msgid "Last modifier"
-msgstr "Ostatnio zmienił/-a"
-
-#: js/Crm-FAT-debug.js:689
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:126
-msgid "Creation Time"
-msgstr "Utworzono"
-
-#: js/Crm-FAT-debug.js:690
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:127
-msgid "Creator"
-msgstr "Utworzył/-a"
-
-#: js/Crm-FAT-debug.js:728
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:165
-msgid "Lead id"
-msgstr "ID zapytania"
-
-#: js/Crm-FAT-debug.js:729
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:166
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/Crm-FAT-debug.js:736
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:173
-msgid "Probable Turnover"
-msgstr "Prawdopodobny zwrot"
-
-#: js/Crm-FAT-debug.js:766
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:203
-msgid "Export Lead"
-msgstr "Eksportuj zapytanie"
-
-#: js/Crm-FAT-debug.js:775
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:212
-msgid "Export as PDF"
-msgstr "Eksportuj jako PDF"
-
-#: js/Crm-FAT-debug.js:782
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:219
-msgid "Export as CSV"
-msgstr "Eksportuj jako CSV"
-
-#: js/Crm-FAT-debug.js:789
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:226
-msgid "Export as ODS"
-msgstr "Eksportuj jako ODS"
-
-#: js/Crm-FAT-debug.js:796
-#: js/Crm-FAT.js:6
-#: js/LeadGridPanel.js:233
-msgid "Export as XLS"
-msgstr "Exportuj jako XLS"
-
-#: js/Crm-FAT-debug.js:888
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:51
-msgid "Mobile"
-msgstr "Komórka"
-
-#: js/Crm-FAT-debug.js:891
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:54
-msgid "Fax"
-msgstr "Faks"
-
-#: js/Crm-FAT-debug.js:894
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:57
-msgid "E-Mail"
-msgstr "E-mail"
-
-#: js/Crm-FAT-debug.js:897
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:60
-msgid "Web"
-msgstr "WWW"
-
-#: js/Crm-FAT-debug.js:1301
-#: js/Crm-FAT-debug.js:3964
-#: js/Crm-FAT.js:6
-#: js/LeadGridDetailsPanel.js:464
-#: js/Task.js:218
-msgid "Status"
-msgstr "Status"
-
-#: js/Crm-FAT-debug.js:1311
-#: js/Crm-FAT-debug.js:1834
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:412
-#: js/LeadGridDetailsPanel.js:474
-msgid "Estimated end"
-msgstr "Szacowane zakończenie"
-
-#: js/Crm-FAT-debug.js:1680
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:258
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr "Brak uprawnień do uruchomienia aplikacji Zadania albo jest ona nieaktywna"
-
-#: js/Crm-FAT-debug.js:1691
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:269
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr "Brak uprawnień do uruchomienia aplikacji Sprzedaż albo jest ona nieaktywna"
-
-#: js/Crm-FAT-debug.js:1729
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:307
-msgid "Enter short name"
-msgstr "wpisz skróconą nazwę"
-
-#: js/Crm-FAT-debug.js:1812
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:390
-msgid "Expected turnover"
-msgstr "Oczekiwany obrót"
-
-#: js/Crm-FAT-debug.js:1866
-#: js/Crm-FAT-debug.js:3640
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:444
-#: js/Product.js:139
-msgid "Description"
-msgstr "Opis"
-
-#: js/Crm-FAT-debug.js:1880
-#: js/Crm-FAT.js:6
-#: js/LeadEditDialog.js:458
-msgid "Enter description"
-msgstr "Wprowadź opis"
-
-#: js/Crm-FAT-debug.js:2188
-#: js/LeadState.js:32
-msgid "Lead State"
-msgid_plural "Lead States"
-msgstr[0] "Stan zapytania"
-msgstr[1] "stany zapytania"
-msgstr[2] "stany zapytania"
-
-#: js/Crm-FAT-debug.js:2322
-#: js/LeadState.js:166
-msgid "Add a Leadstate..."
-msgstr "Dodaj status zapytania…"
-
-#: js/Crm-FAT-debug.js:2389
-#: js/LeadStateFilterModel.js:37
-msgid "Show closed"
-msgstr "Pokaż zrealizowane zapytania"
-
-#: js/Crm-FAT-debug.js:2534
-#: js/LeadSource.js:29
-msgid "Lead Source"
-msgid_plural "Lead Sources"
-msgstr[0] "Źródło zapytania"
-msgstr[1] "źródła zapytania"
-msgstr[2] "źródła zapytania"
-
-#: js/Crm-FAT-debug.js:2641
-#: js/LeadSource.js:136
-msgid "Add a Leadsource..."
-msgstr "Źródło zapytania..."
-
-#: js/Crm-FAT-debug.js:2674
-#: js/LeadType.js:29
-msgid "Lead Type"
-msgid_plural "Lead Types"
-msgstr[0] "Typ zapytania"
-msgstr[1] "typy zapytania"
-msgstr[2] "typy zapytania"
-
-#: js/Crm-FAT-debug.js:2779
-#: js/LeadType.js:134
-msgid "Add a Leadtype..."
-msgstr "Dodaj typ zapytania..."
-
-#: js/Crm-FAT-debug.js:2878
-msgid "Searching..."
-msgstr "Wyszukiwanie..."
-
-#: js/Crm-FAT-debug.js:3635
-#: js/Product.js:134
-msgid "Product"
-msgstr "Produkt"
-
-#: js/Crm-FAT-debug.js:3647
-#: js/Product.js:146
-msgid "Price"
-msgstr "Cena"
-
-#: js/Crm-FAT-debug.js:3659
-#: js/Product.js:158
-msgid "Quantity"
-msgstr "Ilość"
-
-#: js/Crm-FAT-debug.js:3717
-#: js/Product.js:216
-msgid "Search for Products to add ..."
-msgstr "Znajdź produkty do dodania ..."
-
-#: js/Crm-FAT-debug.js:3857
-#: js/Task.js:111
-msgid "No Tasks to display"
-msgstr "Brak zadań"
-
-#: js/Crm-FAT-debug.js:3916
-#: js/Task.js:170
-msgid "Summary"
-msgstr "Streszczenie"
-
-#: js/Crm-FAT-debug.js:3920
-#: js/Task.js:174
-msgid "Add a task..."
-msgstr "Dodaj zadanie…"
-
-#: js/Crm-FAT-debug.js:3951
-#: js/Task.js:205
-msgid "Percent"
-msgstr "W procentach"
-
-#: js/Crm.js:24
-msgid "New Lead"
-msgstr "Nowe zapytanie"
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:55
+msgid "All leads I have read grants for"
+msgstr "Wszystkie zapytania, które mam prawo czytać"
+
+#: Setup/Initialize.php:62
+msgid "Last modified by me"
+msgstr "Ostatnio zmienione przeze mnie"
+
+#: Setup/Initialize.php:63
+msgid "All leads that I have last modified"
+msgstr "Wszystkie zapytania, które ostatnio zmieniłem/-am"
+
+#: Setup/Initialize.php:72
+msgid "My leads"
+msgstr "Moje zapytania"
+
+#: Setup/Initialize.php:73
+msgid "All leads that I am responsible for"
+msgstr "Wszystkie zapytania, za które odpowiadam"
+
+#: Setup/Initialize.php:86
+msgid "Leads with overdue tasks"
+msgstr "Zapytania z zaległymi zadaniami"
 
 #: Preference.php:35
 msgid "All leads"
@@ -770,30 +127,456 @@ msgstr "Domyślne ulubione"
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Domyślne ulubione zapytanie ładowane przy uruchamianiu Crm"
 
-#: Setup/Initialize.php:55
-#: Setup/Update/Release3.php:37
-msgid "All leads I have read grants for"
-msgstr "Wszystkie zapytania, które mam prawo czytać"
+# There is no word "leads" in the polish language. I think we can replace "leads" with "zapytania" or "zapytania ofertowe". I mean samething, that can start some process in the feature.
+# Es gibt kein Wort "leads" im Polnischen. Ich denke, wir koennen es durch "zapytania" oder "zapytania ofertowe" ersetzen. Ich meine etwas, womit einen weiteren Prozess anfangen kann.
+#: Acl/Rights.php:106
+msgid "manage leads"
+msgstr "edytowanie zapytań"
 
-#: Setup/Initialize.php:62
-msgid "Last modified by me"
-msgstr "Ostatnio zmienione przeze mnie"
+#: Acl/Rights.php:107
+msgid "add, edit and delete leads"
+msgstr "dodaj, edytuj i usuń zapytania"
 
-#: Setup/Initialize.php:63
-msgid "All leads that I have last modified"
-msgstr "Wszystkie zapytania, które ostatnio zmieniłem/-am"
+#: Acl/Rights.php:110
+msgid "manage shared lead folders"
+msgstr "edytowanie wspólnych katalogów zapytań"
 
-#: Setup/Initialize.php:72
-msgid "My leads"
-msgstr "Moje zapytania"
+#: Acl/Rights.php:111
+msgid "Create new shared lead folders"
+msgstr "Utwórz nowe, wspólne katalogi zapytań"
 
-#: Setup/Initialize.php:73
-msgid "All leads that I am responsible for"
-msgstr "Wszystkie zapytania, za które odpowiadam"
+#: Acl/Rights.php:114
+msgid "manage shared leads favorites"
+msgstr "zarządzanie ulubionymi, wspólnymi zapytaniami"
 
-#: Setup/Initialize.php:86
-msgid "Leads with overdue tasks"
-msgstr "Zapytania z zaległymi zadaniami"
+#: Acl/Rights.php:115
+msgid "Create or update shared leads favorites"
+msgstr "Utwórz albo uaktualnij ulubione, wspólne zapytania"
+
+#: js/Product.js:84 js/LeadEditDialog.js:268 Export/Pdf.php:269
+msgid "Products"
+msgstr "Produkty"
+
+#: js/Product.js:133
+msgid "Product"
+msgstr "Produkt"
+
+#: js/Product.js:138 js/LeadEditDialog.js:444
+msgid "Description"
+msgstr "Opis"
+
+#: js/Product.js:145
+msgid "Price"
+msgstr "Cena"
+
+#: js/Product.js:157
+msgid "Quantity"
+msgstr "Ilość"
+
+#: js/Product.js:184 js/LinkGridPanel.js:55
+msgid "Unlink {0}"
+msgstr "Usuń {0}"
+
+#: js/Product.js:185 js/LinkGridPanel.js:56
+msgid "Unlink selected {0}"
+msgstr "Usuń zaznaczony {0}"
+
+#: js/Product.js:215
+msgid "Search for Products to add ..."
+msgstr "Znajdź produkty do dodania ..."
+
+#: js/Contact.js:167
+msgid "Change type to Customer"
+msgstr "Zmień typ na wartość: Klient"
+
+#: js/Contact.js:176 js/Contact.js:352 js/Contact.js:389
+msgid "Responsible"
+msgstr "Osoba odpowiedzialna"
+
+#: js/Contact.js:177
+msgid "Change type to Responsible"
+msgstr "Zmień typ na wartość: Osoba odpowiedzialna"
+
+#: js/Contact.js:187
+msgid "Change type to Partner"
+msgstr "Zmień typ na wartość: Wspólnik"
+
+#: js/Contact.js:198
+msgid "Change contact type"
+msgstr "Zmień typ kontaktu"
+
+#: js/Contact.js:210
+msgid "Search for Contacts to add ..."
+msgstr "Znajdź kontakty do dodania ..."
+
+#: js/Contact.js:227
+msgid "Name"
+msgstr "Nazwa"
+
+#: js/Contact.js:236 Export/Pdf.php:206
+msgid "Address"
+msgstr "Adres"
+
+#: js/Contact.js:247
+msgid "Data"
+msgstr "Dane dot. zapytania"
+
+#: js/Contact.js:250 js/LeadGridDetailsPanel.js:48
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/Contact.js:251
+msgid "Cellphone"
+msgstr "Komórka"
+
+#: js/Contact.js:257 Controller/Lead.php:178
+msgid "Role"
+msgstr "Funkcja"
+
+#: js/LeadSource.js:29
+msgid "Lead Source"
+msgid_plural "Lead Sources"
+msgstr[0] "Źródło zapytania"
+msgstr[1] "źródła zapytania"
+msgstr[2] "źródła zapytania"
+
+#: js/LeadSource.js:136
+msgid "Add a Leadsource..."
+msgstr "Źródło zapytania..."
+
+#: js/LinkGridPanel.js:36 js/LinkGridPanel.js:37
+msgid "Add new {0}"
+msgstr "Dodaj {0}"
+
+#: js/LinkGridPanel.js:71
+msgid "Edit {0}"
+msgstr "Edytuj \"{0}\""
+
+#: js/LinkGridPanel.js:72
+msgid "Edit selected {0}"
+msgstr "Edytuj zaznaczone {0}"
+
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:218
+#: js/LeadGridDetailsPanel.js:251
+msgid "Leadstates"
+msgstr "Statusy zapytania"
+
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:240
+msgid "Leadtypes"
+msgstr "Typy zapytania"
+
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:229
+msgid "Leadsources"
+msgstr "Źródło zapytania"
+
+#: js/AdminPanel.js:138
+msgid "Defaults"
+msgstr "Ustawienia domyślne"
+
+#: js/AdminPanel.js:157 js/LeadGridPanel.js:169 js/LeadStateFilterModel.js:32
+#: js/LeadEditDialog.js:348 Export/Pdf.php:78
+msgid "Leadstate"
+msgstr "Status zapytania"
+
+#: js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:484
+#: js/LeadEditDialog.js:374 Export/Pdf.php:84
+msgid "Leadsource"
+msgstr "Źródło zapytania"
+
+#: js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:479
+#: js/LeadEditDialog.js:367 Export/Pdf.php:81
+msgid "Leadtype"
+msgstr "Typ zapytania"
+
+#: js/LeadGridContactFilter.js:44
+msgid "Contact"
+msgstr "Kontakt"
+
+#: js/LeadGridContactFilter.js:52
+msgid "CRM Role"
+msgstr "CRM"
+
+#: js/LeadGridDetailsPanel.js:51
+msgid "Mobile"
+msgstr "Komórka"
+
+#: js/LeadGridDetailsPanel.js:54
+msgid "Fax"
+msgstr "Faks"
+
+#: js/LeadGridDetailsPanel.js:57
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: js/LeadGridDetailsPanel.js:60
+msgid "Web"
+msgstr "WWW"
+
+#: js/LeadGridDetailsPanel.js:464 js/Task.js:217
+msgid "Status"
+msgstr "Status"
+
+#: js/LeadGridDetailsPanel.js:469 js/LeadEditDialog.js:406
+#: Controller/Lead.php:180 Export/Pdf.php:93
+msgid "Start"
+msgstr "Początek"
+
+#: js/LeadGridDetailsPanel.js:474 js/LeadEditDialog.js:412
+msgid "Estimated end"
+msgstr "Szacowane zakończenie"
+
+#: js/LeadType.js:29
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] "Typ zapytania"
+msgstr[1] "typy zapytania"
+msgstr[2] "typy zapytania"
+
+#: js/LeadType.js:134
+msgid "Add a Leadtype..."
+msgstr "Dodaj typ zapytania..."
+
+#: js/LeadState.js:32
+msgid "Lead State"
+msgid_plural "Lead States"
+msgstr[0] "Stan zapytania"
+msgstr[1] "stany zapytania"
+msgstr[2] "stany zapytania"
+
+#: js/LeadState.js:166
+msgid "Add a Leadstate..."
+msgstr "Dodaj status zapytania…"
+
+#: js/Crm.js:24 js/AddressbookGridPanelHook.js:35
+msgid "New Lead"
+msgstr "Nowe zapytanie"
+
+#: js/LeadGridPanel.js:116
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/LeadGridPanel.js:118 js/LeadGridPanel.js:166
+msgid "Lead name"
+msgstr "Nazwa zapytania"
+
+#: js/LeadGridPanel.js:120 js/LeadGridPanel.js:170 js/LeadEditDialog.js:234
+#: Controller/Lead.php:184 Export/Pdf.php:90
+msgid "Probability"
+msgstr "Prawdopodobieństwo"
+
+#: js/LeadGridPanel.js:121 js/LeadGridPanel.js:171 Controller/Lead.php:183
+#: Export/Pdf.php:87
+msgid "Turnover"
+msgstr "Obroty"
+
+#: js/LeadGridPanel.js:123
+msgid "Last modified"
+msgstr "Ostatnio zmieniono"
+
+#: js/LeadGridPanel.js:124
+msgid "Last modifier"
+msgstr "Ostatnio zmienił/-a"
+
+#: js/LeadGridPanel.js:125
+msgid "Creation Time"
+msgstr "Utworzono"
+
+#: js/LeadGridPanel.js:126
+msgid "Creator"
+msgstr "Utworzył/-a"
+
+#: js/LeadGridPanel.js:164
+msgid "Lead id"
+msgstr "ID zapytania"
+
+#: js/LeadGridPanel.js:165
+msgid "Tags"
+msgstr "Znaczniki"
+
+#: js/LeadGridPanel.js:172
+msgid "Probable Turnover"
+msgstr "Prawdopodobny zwrot"
+
+#: js/LeadGridPanel.js:202
+msgid "Export Lead"
+msgstr "Eksportuj zapytanie"
+
+#: js/LeadGridPanel.js:211
+msgid "Export as PDF"
+msgstr "Eksportuj jako PDF"
+
+#: js/LeadGridPanel.js:218
+msgid "Export as CSV"
+msgstr "Eksportuj jako CSV"
+
+#: js/LeadGridPanel.js:225
+msgid "Export as ODS"
+msgstr "Eksportuj jako ODS"
+
+#: js/LeadGridPanel.js:232
+msgid "Export as XLS"
+msgstr "Exportuj jako XLS"
+
+#: js/LeadStateFilterModel.js:37
+msgid "Show closed"
+msgstr "Pokaż zrealizowane zapytania"
+
+#: js/LeadEditDialog.js:241 Controller/Lead.php:182 Export/Pdf.php:96
+msgid "End"
+msgstr "Koniec"
+
+#: js/LeadEditDialog.js:257 js/Task.js:84 Export/Pdf.php:227
+msgid "Tasks"
+msgstr "Zadania"
+
+#: js/LeadEditDialog.js:258
+msgid "You do not have the run right for the Tasks application or it is not activated."
+msgstr "Brak uprawnień do uruchomienia aplikacji Zadania albo jest ona nieaktywna"
+
+#: js/LeadEditDialog.js:269
+msgid "You do not have the run right for the Sales application or it is not activated."
+msgstr "Brak uprawnień do uruchomienia aplikacji Sprzedaż albo jest ona nieaktywna"
+
+#: js/LeadEditDialog.js:280 js/Model.js:48
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "zapytanie"
+msgstr[1] "zapytania"
+msgstr[2] "zapytania"
+
+#: js/LeadEditDialog.js:307
+msgid "Enter short name"
+msgstr "wpisz skróconą nazwę"
+
+#: js/LeadEditDialog.js:390
+msgid "Expected turnover"
+msgstr "Oczekiwany obrót"
+
+#: js/LeadEditDialog.js:458
+msgid "Enter description"
+msgstr "Wprowadź opis"
+
+#: js/Model.js:52
+msgid "lead list"
+msgid_plural "lead lists"
+msgstr[0] "Lista zapytań"
+msgstr[1] "listy zapytań"
+msgstr[2] "listy zapytań"
+
+#: js/Model.js:52
+msgid "lead lists"
+msgstr "listy zapytań"
+
+#: js/Model.js:115
+msgid "Settings"
+msgid_plural "Settings"
+msgstr[0] "Ustawienia"
+msgstr[1] "ustawienia"
+msgstr[2] "ustawienia"
+
+#: js/Model.js:119
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "Lista wierszy"
+msgstr[1] "listy wierszy"
+msgstr[2] "listy wierszy"
+
+#: js/Task.js:110
+msgid "No Tasks to display"
+msgstr "Brak zadań"
+
+#: js/Task.js:169
+msgid "Summary"
+msgstr "Streszczenie"
+
+#: js/Task.js:173
+msgid "Add a task..."
+msgstr "Dodaj zadanie…"
+
+#: js/Task.js:177 Export/Pdf.php:247
+msgid "Due Date"
+msgstr "Termin"
+
+#: js/Task.js:190 Export/Pdf.php:254
+msgid "Priority"
+msgstr "Priorytet"
+
+#: js/Task.js:204
+msgid "Percent"
+msgstr "W procentach"
+
+#: Controller/Lead.php:177
+msgid "State"
+msgstr "Kraj"
+
+#: Controller/Lead.php:179
+msgid "Source"
+msgstr "Źródło"
+
+#: Controller/Lead.php:181
+msgid "Scheduled end"
+msgstr "Planowane zakończenie"
+
+#: Controller/Lead.php:185
+msgid "Folder"
+msgstr "Katalog"
+
+#: Controller/Lead.php:186
+msgid "Updated by"
+msgstr "Zaktualizowane przez"
+
+#: Controller/Lead.php:187
+msgid "Updated Fields:"
+msgstr "Zaktualizowane pola:"
+
+#: Controller/Lead.php:188
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr "%s zmieniony z %s na %s."
+
+#: Controller/Lead.php:194
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "Zapytanie %s zostało zmienione"
+
+#: Controller/Lead.php:196
+#, python-format
+msgid "Lead %s has been created"
+msgstr ""
+
+#: Export/Pdf.php:75
+msgid "Lead Data"
+msgstr "Dane dot. zapytania"
+
+#: Export/Pdf.php:99
+msgid "End Scheduled"
+msgstr "Planowany koniec"
+
+#: Export/Pdf.php:179
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: Export/Pdf.php:310
+msgid "low"
+msgstr "niski"
+
+#: Export/Pdf.php:311
+msgid "normal"
+msgstr "normalny"
+
+#: Export/Pdf.php:312
+msgid "high"
+msgstr "wysoki"
+
+#: Export/Pdf.php:313
+msgid "urgent"
+msgstr "pilny"
+
+#~ msgid "Lead %s has been creaded"
+#~ msgstr "Zapytanie %s zostało utworzone"
+
+#~ msgid "Searching..."
+#~ msgstr "Wyszukiwanie..."
 
 #~ msgid "Last Modified Time"
 #~ msgstr "Czas ostatniej zmiany"
@@ -841,92 +624,136 @@ msgstr "Zapytania z zaległymi zadaniami"
 # Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
 #~ msgid "Failed"
 #~ msgstr "Próba nieudana"
+
 #~ msgid "Could not save lead."
 #~ msgstr "Zapisanie zapytania było niemożliwe."
+
 #~ msgid "Please fix the errors noted."
 #~ msgstr "Proszę poprawić wskazane błędy."
+
 #~ msgid "Contactdata"
 #~ msgstr "Kontakty"
+
 #~ msgid "Add new contact"
 #~ msgstr "Dodaj nowy kontakt"
+
 #~ msgid "Add new customer contact"
 #~ msgstr "Dodaj nowego klienta"
+
 #~ msgid "Edit contact"
 #~ msgstr "Edytuj kontakt"
+
 #~ msgid "Edit selected contact"
 #~ msgstr "Edytuj zaznaczony kontakt"
+
 #~ msgid "Unlink contact"
 #~ msgstr "Usuń kontakt"
+
 #~ msgid "Add new task"
 #~ msgstr "Dodaj nowe zadanie"
+
 #~ msgid "Edit task"
 #~ msgstr "Edytuj zadanie"
+
 #~ msgid "Edit selected task"
 #~ msgstr "Edytuj zaznaczone zadanie"
+
 #~ msgid "Add existing task to lead"
 #~ msgstr "Dodaj istniejące zadanie do zapytania"
+
 #~ msgid "Remove selected tasks"
 #~ msgstr "Usuń zaznaczone zadania"
+
 #~ msgid "Remove selected products"
 #~ msgstr "Usuń wybrane produkty"
+
 #~ msgid "Leads"
 #~ msgstr "zapytania wstępne"
+
 #~ msgid "Loading Lead..."
 #~ msgstr "Ładowanie wstępnego zapytania..."
+
 #~ msgid "Please Wait"
 #~ msgstr "Proszę czekać"
+
 #~ msgid "Add New Lead"
 #~ msgstr "Dodaj nowe zapytanie"
+
 #~ msgid "Overview"
 #~ msgstr "Przegląd"
+
 #~ msgid "folder"
 #~ msgstr "katalog"
+
 #~ msgid "Enter searchfilter"
 #~ msgstr "wpisz szukaną frazę"
+
 #~ msgid "Search Contacts"
 #~ msgstr "Znajdź kontakty"
+
 #~ msgid "Add existing contact"
 #~ msgstr "Utwórz istniejący kontakt"
+
 #~ msgid "Add existing contact to lead"
 #~ msgstr "Dodaj istniejący kontakt do zapytania"
+
 #~ msgid "Organisation"
 #~ msgstr "Organizacja"
+
 #~ msgid "Lead updated"
 #~ msgstr "Zapytanie zaktualizowane"
+
 #~ msgid "Lead added"
 #~ msgstr "Zapytanie dodane"
+
 #~ msgid "Add responsible"
 #~ msgstr "Dodaj osobę odpowiedzialną"
+
 #~ msgid "Add new responsible contact"
 #~ msgstr "Dodaj nowy kontakt jako osobę odpowiedzialną"
+
 #~ msgid "Add customer"
 #~ msgstr "Dodaj klienta"
+
 #~ msgid "Add partner"
 #~ msgstr "Dodaj wspólnika"
+
 #~ msgid "Add new partner contact"
 #~ msgstr "Dodaj nowy kontakt jako wspólnika"
+
 #~ msgid "Show closed leads"
 #~ msgstr "Pokaż zrealizowane zapytania"
+
 #~ msgid "Add new lead"
 #~ msgstr "Dodaj nowe zapytanie"
+
 #~ msgid "Edit selected lead"
 #~ msgstr "Edytuj zaznaczone zapytanie"
+
 #~ msgid "Unlink selected contacts"
 #~ msgstr "Usuń zaznaczone kontakty"
+
 #~ msgid "Edit Lead \"{0}\""
 #~ msgstr "Edytuj zapytanie \"{0}\""
+
 #~ msgid "Add a product..."
 #~ msgstr "Dodaj produkt"
+
 #~ msgid "website"
 #~ msgstr "strona WWW"
+
 #~ msgid "reseller"
 #~ msgstr "dystrybutor"
+
 #~ msgid "Remove products"
 #~ msgstr "Usuń produkty"
+
 #~ msgid "Remove Option"
 #~ msgstr "Usuń opcję"
+
 #~ msgid "Type"
 #~ msgstr "Ikona"
+
 #, fuzzy
 #~ msgid "Select lead"
 #~ msgstr "Usuń zapytanie"

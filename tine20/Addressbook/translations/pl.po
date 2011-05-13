@@ -14,6 +14,77 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: Controller.php:95
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s's osobista książka adresowa"
+
+#: Setup/setup.xml:690
+msgid "Internal Contacts"
+msgstr "Kontakty wewnętrzne"
+
+#: Setup/setup.xml:716
+msgid "Mr"
+msgstr "Pan"
+
+#: Setup/setup.xml:738
+msgid "Ms"
+msgstr "Pani"
+
+#: Setup/setup.xml:760 js/ContactEditDialog.js:135 js/ContactEditDialog.js:423
+#: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:109 js/Model.js:27
+#: js/Model.js:139
+msgid "Company"
+msgstr "Firma"
+
+#: Setup/Update/Release3.php:37 Setup/Initialize.php:112
+msgid "All contacts I have read grants for"
+msgstr "Wszystkie kontakty, które wolno mi czytać"
+
+#: Setup/Initialize.php:117
+msgid "My company"
+msgstr "Moja firma"
+
+#: Setup/Initialize.php:118
+msgid "All coworkers in my company"
+msgstr "Wszyscy współpracownicy z mojej firmy"
+
+#: Setup/Initialize.php:131
+msgid "My contacts"
+msgstr "Moje kontakty"
+
+#: Setup/Initialize.php:132
+msgid "All contacts in my Addressbooks"
+msgstr "Wszystkie kontakty w mojej książce adresowej"
+
+#: Setup/Initialize.php:144
+msgid "Last modified by me"
+msgstr "Ostatnio zmienione przeze mnie"
+
+#: Setup/Initialize.php:145
+msgid "All contacts that I have last modified"
+msgstr "Wszystkie kontakty ostatnio zmienione przeze mnie"
+
+#: Preference.php:33
+msgid "All contacts"
+msgstr "Wszystkie kontakty"
+
+#: Preference.php:70
+msgid "Default Addressbook"
+msgstr "Domyślna książka adresowa"
+
+#: Preference.php:71
+msgid "The default addressbook for new contacts"
+msgstr "Domyślna książka adresowa dla nowych kontaktów"
+
+#: Preference.php:74
+msgid "Default Favorite"
+msgstr "Domyślne ulubione"
+
+#: Preference.php:75
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "Domyślny ulubiony adres ładowany podczas otwierania skrzynki adresowej"
+
 # If the translated text is too long we can just write over the whole sentence without the word 'shared' like: "Zarządzaj książkami adresowymi".
 # Wenn der uebersetzte Text zu lang ist, wir koennen den gesamten Satz einfach ohne das Wort 'shared' ueberschreiben: "Zarządzaj książkami adresowymi".
 #: Acl/Rights.php:98
@@ -34,10 +105,416 @@ msgstr "zarządzanie ulubionymi ze wspólnej książki adresowej"
 msgid "Create or update shared addressbook favorites"
 msgstr "Utwórz albo uaktualnij ulubione ze wspólnej książki adresowej"
 
-#: Controller.php:95
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s's osobista książka adresowa"
+#: js/SearchCombo.js:95
+msgid "Searching..."
+msgstr "Wyszukiwanie..."
+
+#: js/ContactEditDialog.js:35 js/ContactEditDialog.js:42
+msgid "Map"
+msgstr "Mapowanie"
+
+#: js/ContactEditDialog.js:65
+msgid "Personal Information"
+msgstr "Informacje osobiste"
+
+#: js/ContactEditDialog.js:86 js/Model.js:29
+msgid "Salutation"
+msgstr "Forma grzecznościowa"
+
+#: js/ContactEditDialog.js:108 js/Model.js:22
+msgid "Title"
+msgstr "Tytuł"
+
+#: js/ContactEditDialog.js:116 js/ContactGrid.js:106 js/Model.js:20
+#: js/Model.js:137
+msgid "First Name"
+msgstr "Imię"
+
+#: js/ContactEditDialog.js:121 js/Model.js:21
+msgid "Middle Name"
+msgstr "Drugie imię"
+
+#: js/ContactEditDialog.js:126 js/ContactEditDialog.js:423
+#: js/ContactGrid.js:105 js/Model.js:19 js/Model.js:138
+msgid "Last Name"
+msgstr "Nazwisko"
+
+#: js/ContactEditDialog.js:140 js/ContactGrid.js:110 js/Model.js:28
+#: js/Model.js:140
+msgid "Unit"
+msgstr "Jednostka"
+
+#: js/ContactEditDialog.js:149 js/ContactGrid.js:108 js/Model.js:24
+msgid "Display Name"
+msgstr "Wyświetlana nazwa"
+
+#: js/ContactEditDialog.js:154 js/ContactGrid.js:111 js/Model.js:30
+#: js/Model.js:142 Export/Pdf.php:117
+msgid "Job Title"
+msgstr "Stanowisko"
+
+#: js/ContactEditDialog.js:160 js/ContactGrid.js:139 js/Model.js:26
+#: js/Model.js:147 Export/Pdf.php:114
+msgid "Birthday"
+msgstr "Urodziny"
+
+#: js/ContactEditDialog.js:164 js/Model.js:23
+msgid "Suffix"
+msgstr "Dopełnienie nazwiska (sufiks)"
+
+#: js/ContactEditDialog.js:168 js/ContactGrid.js:112 js/Model.js:31
+#: js/Model.js:143
+msgid "Job Role"
+msgstr "Pełniona funkcja"
+
+#: js/ContactEditDialog.js:172 js/ContactGrid.js:113 js/Model.js:33
+#: Export/Pdf.php:76
+msgid "Room"
+msgstr "Pokój"
+
+# I think, it would be better, if we use the plural form "Informacje" instead of "Informacja".
+# Ich denke, es waere besser, wenn wir die Pluralform "Informacje" anstatt von "Informacja" verwenden.
+#: js/ContactEditDialog.js:179
+msgid "Contact Information"
+msgstr "Informacje kontaktowe"
+
+#: js/ContactEditDialog.js:184 js/ContactGridDetailsPanel.js:139
+#: js/ContactGridDetailsPanel.js:163 js/ContactGrid.js:125 js/Model.js:47
+#: js/Model.js:141
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/ContactEditDialog.js:189 js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164 js/ContactGrid.js:126 js/Model.js:48
+msgid "Mobile"
+msgstr "Komórka"
+
+#: js/ContactEditDialog.js:194 js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165 js/ContactGrid.js:127 js/Model.js:49
+msgid "Fax"
+msgstr "Faks"
+
+#: js/ContactEditDialog.js:199 js/ContactGrid.js:130 js/Model.js:53
+msgid "Phone (private)"
+msgstr "Telefon (prywatny)"
+
+#: js/ContactEditDialog.js:204 js/ContactGrid.js:132 js/Model.js:55
+msgid "Mobile (private)"
+msgstr "Komórka (prywatna)"
+
+#: js/ContactEditDialog.js:209 js/ContactGrid.js:131 js/Model.js:54
+msgid "Fax (private)"
+msgstr "Faks (prywatny)"
+
+#: js/ContactEditDialog.js:214 js/ContactGridDetailsPanel.js:142
+#: js/ContactGridDetailsPanel.js:166 js/Model.js:58 js/Model.js:145
+msgid "E-Mail"
+msgstr "E-mail"
+
+#: js/ContactEditDialog.js:220 js/Model.js:59
+msgid "E-Mail (private)"
+msgstr "E-mail (prywatny)"
+
+#: js/ContactEditDialog.js:227 js/ContactGridDetailsPanel.js:144
+#: js/ContactGridDetailsPanel.js:168 js/ContactGrid.js:134 js/Model.js:60
+msgid "Web"
+msgstr "WWW"
+
+#: js/ContactEditDialog.js:261 js/Model.js:148 js/Model.js:149 js/Model.js:150
+#: js/Model.js:151
+msgid "Company Address"
+msgstr "Adres firmy"
+
+#: js/ContactEditDialog.js:264 js/ContactEditDialog.js:293
+#: js/ContactGrid.js:114 js/Model.js:148 js/Model.js:152
+msgid "Street"
+msgstr "Ulica"
+
+#: js/ContactEditDialog.js:268 js/ContactEditDialog.js:297
+msgid "Street 2"
+msgstr "Ulica 2"
+
+#: js/ContactEditDialog.js:272 js/ContactEditDialog.js:301
+#: js/ContactGrid.js:116
+msgid "Region"
+msgstr "Województwo"
+
+#: js/ContactEditDialog.js:276 js/ContactEditDialog.js:305 js/Model.js:149
+#: js/Model.js:153
+msgid "Postal Code"
+msgstr "Kod pocztowy"
+
+#: js/ContactEditDialog.js:280 js/ContactEditDialog.js:309
+#: js/ContactGrid.js:115 js/Model.js:150 js/Model.js:154
+msgid "City"
+msgstr "Miasto"
+
+#: js/ContactEditDialog.js:285 js/ContactEditDialog.js:314
+#: js/ContactGrid.js:118 js/Model.js:151 js/Model.js:155
+msgid "Country"
+msgstr "Kraj"
+
+#: js/ContactEditDialog.js:290 js/Model.js:152 js/Model.js:153 js/Model.js:154
+#: js/Model.js:155 Export/Pdf.php:88
+msgid "Private Address"
+msgstr "Adres prywatny"
+
+#: js/ContactEditDialog.js:335 js/Model.js:64
+msgid "Description"
+msgstr "Opis"
+
+#: js/ContactEditDialog.js:349
+msgid "Enter description"
+msgstr "Wprowadź opis"
+
+#: js/ContactEditDialog.js:398
+msgid "Export as pdf"
+msgstr "Eksportuj jako PDF"
+
+#: js/ContactEditDialog.js:423
+msgid "Either {0} or {1} must be given"
+msgstr "Należy wprowadzić {0} albo {1}"
+
+#: js/ContactGridDetailsPanel.js:62 js/Model.js:92
+msgid "Contacts"
+msgstr "Kontakty"
+
+#: js/ContactGridDetailsPanel.js:65
+msgid "Select contact"
+msgstr "Zaznacz kontakt"
+
+#: js/ContactGridDetailsPanel.js:155
+msgid "Private"
+msgstr "Prywatnie"
+
+#: js/ContactGridDetailsPanel.js:178
+msgid "Info"
+msgstr "Informacja"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Insecure link"
+msgstr "Niebezpieczny link"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Please review this link in edit dialog."
+msgstr "Proszę sprawdzić link w oknie dialogowym"
+
+#: js/ContactGrid.js:103 js/Model.js:156
+msgid "Type"
+msgstr "Ikona"
+
+#: js/ContactGrid.js:104
+msgid "Tags"
+msgstr "Znaczniki"
+
+#: js/ContactGrid.js:107
+msgid "Full Name"
+msgstr "Imię i nazwisko"
+
+#: js/ContactGrid.js:117
+msgid "Postalcode"
+msgstr "Kod pocztowy"
+
+#: js/ContactGrid.js:119
+msgid "Street (private)"
+msgstr "Ulica (adres prywatny)"
+
+#: js/ContactGrid.js:120
+msgid "City (private)"
+msgstr "Miasto (adres prywatny)"
+
+#: js/ContactGrid.js:121
+msgid "Region (private)"
+msgstr "Województwo (adres prywatny)"
+
+#: js/ContactGrid.js:122
+msgid "Postalcode (private)"
+msgstr "Kod pocztowy (adres prywatny)"
+
+#: js/ContactGrid.js:123
+msgid "Country (private)"
+msgstr "Kraj (adres prywatny)"
+
+#: js/ContactGrid.js:124 Export/Pdf.php:52
+msgid "Email"
+msgstr "E-mail"
+
+#: js/ContactGrid.js:128
+msgid "Car phone"
+msgstr "Telefon (samochód)"
+
+#: js/ContactGrid.js:129
+msgid "Pager"
+msgstr "Pager"
+
+#: js/ContactGrid.js:133
+msgid "Email (private)"
+msgstr "E-mail (prywatny)"
+
+#: js/ContactGrid.js:135
+msgid "URL (private)"
+msgstr "URL (prywatny)"
+
+#: js/ContactGrid.js:136 js/Model.js:144
+msgid "Note"
+msgstr "Notatka"
+
+#: js/ContactGrid.js:137
+msgid "Timezone"
+msgstr "Strefa czasowa"
+
+#: js/ContactGrid.js:138
+msgid "Geo"
+msgstr "Położenie geograficzne"
+
+#: js/ContactGrid.js:149
+msgid "Export Contact"
+msgstr "Eksportuj kontakt"
+
+# I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
+# Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
+#: js/ContactGrid.js:157
+msgid "Export as PDF"
+msgstr "Eksportuj jako PDF"
+
+# I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
+# Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht benutzen. Dies waere nicht richtig im Polnischen.
+#: js/ContactGrid.js:164
+msgid "Export as CSV"
+msgstr "Eksportuj jako CSV"
+
+#: js/ContactGrid.js:171
+msgid "Export as ODS"
+msgstr "Eksportuj jako ODS"
+
+#: js/ContactGrid.js:178
+msgid "Export as XLS"
+msgstr "Eksportuj jako XLS"
+
+#: js/ContactGrid.js:185
+msgid "Export as ..."
+msgstr "Eksportuj jako ..."
+
+#: js/ContactGrid.js:197
+msgid "Import contacts"
+msgstr "Importuj kontakty"
+
+#: js/ContactGrid.js:289
+msgid "Internal Contact"
+msgstr "Kontakty wewnętrzne"
+
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr ""
+
+#: js/Addressbook.js:22
+msgid "New Contact"
+msgstr "Nowy kontakt"
+
+#: js/Addressbook.js:32 js/Model.js:96 js/Model.js:211
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Książka adresowa"
+msgstr[1] "książki adresowe"
+msgstr[2] "książki adresowe"
+
+#: js/ContactFilterModel.js:35 js/Model.js:92 js/Model.js:131
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "kontakt"
+msgstr[1] "kontakty"
+msgstr[2] "kontakty"
+
+#: js/Model.js:34
+msgid "Street (Company Address)"
+msgstr "Ulica (adres firmy)"
+
+#: js/Model.js:35
+msgid "Street 2 (Company Address)"
+msgstr "Ulica 2 (adres firmy)"
+
+#: js/Model.js:36
+msgid "City (Company Address)"
+msgstr "Miasto (adres firmy)"
+
+#: js/Model.js:37
+msgid "Region (Company Address)"
+msgstr "Region (adres firmy)"
+
+#: js/Model.js:38
+msgid "Postal Code (Company Address)"
+msgstr "Kod pocztowy (adres firmy)"
+
+#: js/Model.js:39
+msgid "Country (Company Address)"
+msgstr "Państwo (adres firmy)"
+
+#: js/Model.js:41
+msgid "Street (Private Address)"
+msgstr "Ulica (adres prywatny)"
+
+#: js/Model.js:42
+msgid "Street 2 (Private Address)"
+msgstr "Ulica 2 (adres prywatny)"
+
+#: js/Model.js:43
+msgid "City (Private Address)"
+msgstr "Miasto (adres prywatny)"
+
+#: js/Model.js:44
+msgid "Region (Private Address)"
+msgstr "Region (adres prywatny)"
+
+#: js/Model.js:45
+msgid "Postal Code (Private Address)"
+msgstr "Kod pocztowy (adres prywatny)"
+
+#: js/Model.js:46
+msgid "Country (Private Address)"
+msgstr "Państwo (adres prywatny)"
+
+#: js/Model.js:61
+msgid "Web (private)"
+msgstr "WWW (prywatne)"
+
+#: js/Model.js:96 js/Model.js:211
+msgid "Addressbooks"
+msgstr "książki adresowe"
+
+#: js/Model.js:131
+msgid "User Account"
+msgstr "Konto użytkownika"
+
+#: js/Model.js:134
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/Model.js:157
+msgid "Last modified"
+msgstr "Ostatnio zmieniono"
+
+#: js/Model.js:158
+msgid "Last modifier"
+msgstr "Ostatnio zmienione przez"
+
+#: js/Model.js:159
+msgid "Creation Time"
+msgstr "Utworzono"
+
+#: js/Model.js:160
+msgid "Creator"
+msgstr "Utworzył(a)"
+
+#: js/Model.js:207
+msgid "List"
+msgid_plural "Lists"
+msgstr[0] "Lista"
+msgstr[1] "listy"
+msgstr[2] "listy"
+
+#: js/Model.js:207
+msgid "Lists"
+msgstr "Listy"
 
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
@@ -50,13 +527,6 @@ msgstr "Organizacja / Jednostka"
 #: Export/Pdf.php:44
 msgid "Business Address"
 msgstr "Adres firmowy"
-
-#: Export/Pdf.php:52
-#: js/Addressbook-FAT-debug.js:734
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:133
-msgid "Email"
-msgstr "E-mail"
 
 #: Export/Pdf.php:55
 msgid "Telephone Work"
@@ -90,17 +560,6 @@ msgstr "URL"
 msgid "Role"
 msgstr "Funkcja"
 
-#: Export/Pdf.php:76
-#: js/Addressbook-FAT-debug.js:38
-#: js/Addressbook-FAT-debug.js:723
-#: js/Addressbook-FAT-debug.js:1324
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:172
-#: js/ContactGrid.js:122
-#: js/Model.js:33
-msgid "Room"
-msgstr "Pokój"
-
 #: Export/Pdf.php:79
 msgid "Assistant"
 msgstr "Sekretarka"
@@ -112,21 +571,6 @@ msgstr "Telefon sekretarki"
 #: Export/Pdf.php:86
 msgid "Private Contact Data"
 msgstr "Prywatne dane kontaktowe"
-
-#: Export/Pdf.php:88
-#: js/Addressbook-FAT-debug.js:148
-#: js/Addressbook-FAT-debug.js:149
-#: js/Addressbook-FAT-debug.js:150
-#: js/Addressbook-FAT-debug.js:151
-#: js/Addressbook-FAT-debug.js:1442
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:290
-#: js/Model.js:143
-#: js/Model.js:144
-#: js/Model.js:145
-#: js/Model.js:146
-msgid "Private Address"
-msgstr "Adres prywatny"
 
 #: Export/Pdf.php:96
 msgid "Email Home"
@@ -152,829 +596,25 @@ msgstr "Prywatny URL"
 msgid "Other Data"
 msgstr "Inne dane"
 
-#: Export/Pdf.php:114
-#: js/Addressbook-FAT-debug.js:31
-#: js/Addressbook-FAT-debug.js:143
-#: js/Addressbook-FAT-debug.js:749
-#: js/Addressbook-FAT-debug.js:1312
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:160
-#: js/ContactGrid.js:148
-#: js/Model.js:26
-#: js/Model.js:138
-msgid "Birthday"
-msgstr "Urodziny"
-
-#: Export/Pdf.php:117
-#: js/Addressbook-FAT-debug.js:35
-#: js/Addressbook-FAT-debug.js:138
-#: js/Addressbook-FAT-debug.js:721
-#: js/Addressbook-FAT-debug.js:1306
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:154
-#: js/ContactGrid.js:120
-#: js/Model.js:30
-#: js/Model.js:133
-msgid "Job Title"
-msgstr "Stanowisko"
-
-#: js/Addressbook-FAT-debug.js:24
-#: js/Addressbook-FAT-debug.js:134
-#: js/Addressbook-FAT-debug.js:715
-#: js/Addressbook-FAT-debug.js:1278
-#: js/Addressbook-FAT-debug.js:1575
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:126
-#: js/ContactEditDialog.js:423
-#: js/ContactGrid.js:114
-#: js/Model.js:19
-#: js/Model.js:129
-msgid "Last Name"
-msgstr "Nazwisko"
-
-#: js/Addressbook-FAT-debug.js:25
-#: js/Addressbook-FAT-debug.js:133
-#: js/Addressbook-FAT-debug.js:716
-#: js/Addressbook-FAT-debug.js:1268
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:116
-#: js/ContactGrid.js:115
-#: js/Model.js:20
-#: js/Model.js:128
-msgid "First Name"
-msgstr "Imię"
-
-#: js/Addressbook-FAT-debug.js:26
-#: js/Addressbook-FAT-debug.js:1273
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:121
-#: js/Model.js:21
-msgid "Middle Name"
-msgstr "Drugie imię"
-
-#: js/Addressbook-FAT-debug.js:27
-#: js/Addressbook-FAT-debug.js:1260
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:108
-#: js/Model.js:22
-msgid "Title"
-msgstr "Tytuł"
-
-#: js/Addressbook-FAT-debug.js:28
-#: js/Addressbook-FAT-debug.js:1316
-#: js/ContactEditDialog.js:164
-#: js/Model.js:23
-msgid "Suffix"
-msgstr "Dopełnienie nazwiska (sufiks)"
-
-#: js/Addressbook-FAT-debug.js:29
-#: js/Addressbook-FAT-debug.js:718
-#: js/Addressbook-FAT-debug.js:1301
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:149
-#: js/ContactGrid.js:117
-#: js/Model.js:24
-msgid "Display Name"
-msgstr "Wyświetlana nazwa"
-
-#: js/Addressbook-FAT-debug.js:32
-#: js/Addressbook-FAT-debug.js:135
-#: js/Addressbook-FAT-debug.js:436
-#: js/Addressbook-FAT-debug.js:719
-#: js/Addressbook-FAT-debug.js:1287
-#: js/Addressbook-FAT-debug.js:1575
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:135
-#: js/ContactEditDialog.js:423
-#: js/ContactGrid.js:118
-#: js/ContactGridDetailsPanel.js:131
-#: js/Model.js:27
-#: js/Model.js:130
-#: Setup/setup.xml:760
-msgid "Company"
-msgstr "Firma"
-
-#: js/Addressbook-FAT-debug.js:33
-#: js/Addressbook-FAT-debug.js:136
-#: js/Addressbook-FAT-debug.js:720
-#: js/Addressbook-FAT-debug.js:1292
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:140
-#: js/ContactGrid.js:119
-#: js/Model.js:28
-#: js/Model.js:131
-msgid "Unit"
-msgstr "Jednostka"
-
-#: js/Addressbook-FAT-debug.js:34
-#: js/Addressbook-FAT-debug.js:1238
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:86
-#: js/Model.js:29
-msgid "Salutation"
-msgstr "Forma grzecznościowa"
-
-#: js/Addressbook-FAT-debug.js:36
-#: js/Addressbook-FAT-debug.js:139
-#: js/Addressbook-FAT-debug.js:722
-#: js/Addressbook-FAT-debug.js:1320
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:168
-#: js/ContactGrid.js:121
-#: js/Model.js:31
-#: js/Model.js:134
-msgid "Job Role"
-msgstr "Pełniona funkcja"
-
-#: js/Addressbook-FAT-debug.js:39
-#: js/Model.js:34
-msgid "Street (Company Address)"
-msgstr "Ulica (adres firmy)"
-
-#: js/Addressbook-FAT-debug.js:40
-#: js/Model.js:35
-msgid "Street 2 (Company Address)"
-msgstr "Ulica 2 (adres firmy)"
-
-#: js/Addressbook-FAT-debug.js:41
-#: js/Model.js:36
-msgid "City (Company Address)"
-msgstr "Miasto (adres firmy)"
-
-#: js/Addressbook-FAT-debug.js:42
-#: js/Model.js:37
-msgid "Region (Company Address)"
-msgstr "Region (adres firmy)"
-
-#: js/Addressbook-FAT-debug.js:43
-#: js/Model.js:38
-msgid "Postal Code (Company Address)"
-msgstr "Kod pocztowy (adres firmy)"
-
-#: js/Addressbook-FAT-debug.js:44
-#: js/Model.js:39
-msgid "Country (Company Address)"
-msgstr "Państwo (adres firmy)"
-
-#: js/Addressbook-FAT-debug.js:46
-#: js/Model.js:41
-msgid "Street (Private Address)"
-msgstr "Ulica (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:47
-#: js/Model.js:42
-msgid "Street 2 (Private Address)"
-msgstr "Ulica 2 (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:48
-#: js/Model.js:43
-msgid "City (Private Address)"
-msgstr "Miasto (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:49
-#: js/Model.js:44
-msgid "Region (Private Address)"
-msgstr "Region (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:50
-#: js/Model.js:45
-msgid "Postal Code (Private Address)"
-msgstr "Kod pocztowy (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:51
-#: js/Model.js:46
-msgid "Country (Private Address)"
-msgstr "Państwo (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:52
-#: js/Addressbook-FAT-debug.js:137
-#: js/Addressbook-FAT-debug.js:444
-#: js/Addressbook-FAT-debug.js:468
-#: js/Addressbook-FAT-debug.js:735
-#: js/Addressbook-FAT-debug.js:1336
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:184
-#: js/ContactGrid.js:134
-#: js/ContactGridDetailsPanel.js:139
-#: js/ContactGridDetailsPanel.js:163
-#: js/Model.js:47
-#: js/Model.js:132
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/Addressbook-FAT-debug.js:53
-#: js/Addressbook-FAT-debug.js:445
-#: js/Addressbook-FAT-debug.js:469
-#: js/Addressbook-FAT-debug.js:736
-#: js/Addressbook-FAT-debug.js:1341
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:189
-#: js/ContactGrid.js:135
-#: js/ContactGridDetailsPanel.js:140
-#: js/ContactGridDetailsPanel.js:164
-#: js/Model.js:48
-msgid "Mobile"
-msgstr "Komórka"
-
-#: js/Addressbook-FAT-debug.js:54
-#: js/Addressbook-FAT-debug.js:446
-#: js/Addressbook-FAT-debug.js:470
-#: js/Addressbook-FAT-debug.js:737
-#: js/Addressbook-FAT-debug.js:1346
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:194
-#: js/ContactGrid.js:136
-#: js/ContactGridDetailsPanel.js:141
-#: js/ContactGridDetailsPanel.js:165
-#: js/Model.js:49
-msgid "Fax"
-msgstr "Faks"
-
-#: js/Addressbook-FAT-debug.js:58
-#: js/Addressbook-FAT-debug.js:740
-#: js/Addressbook-FAT-debug.js:1351
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:199
-#: js/ContactGrid.js:139
-#: js/Model.js:53
-msgid "Phone (private)"
-msgstr "Telefon (prywatny)"
-
-#: js/Addressbook-FAT-debug.js:59
-#: js/Addressbook-FAT-debug.js:741
-#: js/Addressbook-FAT-debug.js:1361
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:209
-#: js/ContactGrid.js:140
-#: js/Model.js:54
-msgid "Fax (private)"
-msgstr "Faks (prywatny)"
-
-#: js/Addressbook-FAT-debug.js:60
-#: js/Addressbook-FAT-debug.js:742
-#: js/Addressbook-FAT-debug.js:1356
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:204
-#: js/ContactGrid.js:141
-#: js/Model.js:55
-msgid "Mobile (private)"
-msgstr "Komórka (prywatna)"
-
-#: js/Addressbook-FAT-debug.js:63
-#: js/Addressbook-FAT-debug.js:141
-#: js/Addressbook-FAT-debug.js:447
-#: js/Addressbook-FAT-debug.js:471
-#: js/Addressbook-FAT-debug.js:1366
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:214
-#: js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166
-#: js/Model.js:58
-#: js/Model.js:136
-msgid "E-Mail"
-msgstr "E-mail"
-
-#: js/Addressbook-FAT-debug.js:64
-#: js/Addressbook-FAT-debug.js:1372
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:220
-#: js/Model.js:59
-msgid "E-Mail (private)"
-msgstr "E-mail (prywatny)"
-
-#: js/Addressbook-FAT-debug.js:65
-#: js/Addressbook-FAT-debug.js:449
-#: js/Addressbook-FAT-debug.js:473
-#: js/Addressbook-FAT-debug.js:744
-#: js/Addressbook-FAT-debug.js:1379
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:227
-#: js/ContactGrid.js:143
-#: js/ContactGridDetailsPanel.js:144
-#: js/ContactGridDetailsPanel.js:168
-#: js/Model.js:60
-msgid "Web"
-msgstr "WWW"
-
-#: js/Addressbook-FAT-debug.js:66
-#: js/Model.js:61
-msgid "Web (private)"
-msgstr "WWW (prywatne)"
-
-#: js/Addressbook-FAT-debug.js:69
-#: js/Addressbook-FAT-debug.js:1487
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:335
-#: js/Model.js:64
-msgid "Description"
-msgstr "Opis"
-
-#: js/Addressbook-FAT-debug.js:97
-#: js/Addressbook-FAT-debug.js:128
-#: js/Addressbook-FAT-debug.js:1109
-#: js/Addressbook-FAT.js:6
-#: js/ContactFilterModel.js:35
-#: js/Model.js:92
-#: js/Model.js:123
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "kontakt"
-msgstr[1] "kontakty"
-msgstr[2] "kontakty"
-
-#: js/Addressbook-FAT-debug.js:97
-#: js/Addressbook-FAT-debug.js:367
-#: js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:62
-#: js/Model.js:92
-msgid "Contacts"
-msgstr "Kontakty"
-
-#: js/Addressbook-FAT-debug.js:101
-#: js/Addressbook-FAT-debug.js:207
-#: js/Addressbook-FAT-debug.js:269
-#: js/Addressbook-FAT.js:6
-#: js/Addressbook.js:32
-#: js/Model.js:96
-#: js/Model.js:202
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Książka adresowa"
-msgstr[1] "książki adresowe"
-msgstr[2] "książki adresowe"
-
-#: js/Addressbook-FAT-debug.js:101
-#: js/Addressbook-FAT-debug.js:207
-#: js/Model.js:96
-#: js/Model.js:202
-msgid "Addressbooks"
-msgstr "książki adresowe"
-
-#: js/Addressbook-FAT-debug.js:128
-#: js/Addressbook-FAT.js:6
-#: js/Model.js:123
-msgid "User Account"
-msgstr "Konto użytkownika"
-
-#: js/Addressbook-FAT-debug.js:131
-#: js/Addressbook-FAT.js:6
-#: js/Model.js:126
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/Addressbook-FAT-debug.js:140
-#: js/Addressbook-FAT-debug.js:746
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:145
-#: js/Model.js:135
-msgid "Note"
-msgstr "Notatka"
-
-#: js/Addressbook-FAT-debug.js:144
-#: js/Addressbook-FAT-debug.js:148
-#: js/Addressbook-FAT-debug.js:724
-#: js/Addressbook-FAT-debug.js:1416
-#: js/Addressbook-FAT-debug.js:1445
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:264
-#: js/ContactEditDialog.js:293
-#: js/ContactGrid.js:123
-#: js/Model.js:139
-#: js/Model.js:143
-msgid "Street"
-msgstr "Ulica"
-
-#: js/Addressbook-FAT-debug.js:144
-#: js/Addressbook-FAT-debug.js:145
-#: js/Addressbook-FAT-debug.js:146
-#: js/Addressbook-FAT-debug.js:147
-#: js/Addressbook-FAT-debug.js:1413
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:261
-#: js/Model.js:139
-#: js/Model.js:140
-#: js/Model.js:141
-#: js/Model.js:142
-msgid "Company Address"
-msgstr "Adres firmy"
-
-#: js/Addressbook-FAT-debug.js:145
-#: js/Addressbook-FAT-debug.js:149
-#: js/Addressbook-FAT-debug.js:1428
-#: js/Addressbook-FAT-debug.js:1457
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:276
-#: js/ContactEditDialog.js:305
-#: js/Model.js:140
-#: js/Model.js:144
-msgid "Postal Code"
-msgstr "Kod pocztowy"
-
-#: js/Addressbook-FAT-debug.js:146
-#: js/Addressbook-FAT-debug.js:150
-#: js/Addressbook-FAT-debug.js:725
-#: js/Addressbook-FAT-debug.js:1432
-#: js/Addressbook-FAT-debug.js:1461
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:280
-#: js/ContactEditDialog.js:309
-#: js/ContactGrid.js:124
-#: js/Model.js:141
-#: js/Model.js:145
-msgid "City"
-msgstr "Miasto"
-
-#: js/Addressbook-FAT-debug.js:147
-#: js/Addressbook-FAT-debug.js:151
-#: js/Addressbook-FAT-debug.js:728
-#: js/Addressbook-FAT-debug.js:1437
-#: js/Addressbook-FAT-debug.js:1466
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:285
-#: js/ContactEditDialog.js:314
-#: js/ContactGrid.js:127
-#: js/Model.js:142
-#: js/Model.js:146
-msgid "Country"
-msgstr "Kraj"
-
-#: js/Addressbook-FAT-debug.js:152
-#: js/Addressbook-FAT-debug.js:713
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:112
-#: js/Model.js:147
-msgid "Type"
-msgstr "Ikona"
-
-#: js/Addressbook-FAT-debug.js:153
-#: js/Addressbook-FAT.js:6
-#: js/Model.js:148
-msgid "Last modified"
-msgstr "Ostatnio zmieniono"
-
-#: js/Addressbook-FAT-debug.js:154
-#: js/Addressbook-FAT.js:6
-#: js/Model.js:149
-msgid "Last modifier"
-msgstr "Ostatnio zmienione przez"
-
-#: js/Addressbook-FAT-debug.js:155
-#: js/Addressbook-FAT.js:6
-#: js/Model.js:150
-msgid "Creation Time"
-msgstr "Utworzono"
-
-#: js/Addressbook-FAT-debug.js:156
-#: js/Addressbook-FAT.js:6
-#: js/Model.js:151
-msgid "Creator"
-msgstr "Utworzył(a)"
-
-#: js/Addressbook-FAT-debug.js:203
-#: js/Model.js:198
-msgid "List"
-msgid_plural "Lists"
-msgstr[0] "Lista"
-msgstr[1] "listy"
-msgstr[2] "listy"
-
-#: js/Addressbook-FAT-debug.js:203
-#: js/Model.js:198
-msgid "Lists"
-msgstr "Listy"
-
-#: js/Addressbook-FAT-debug.js:370
-#: js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:65
-msgid "Select contact"
-msgstr "Zaznacz kontakt"
-
-#: js/Addressbook-FAT-debug.js:460
-#: js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:155
-msgid "Private"
-msgstr "Prywatnie"
-
-#: js/Addressbook-FAT-debug.js:483
-#: js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:178
-msgid "Info"
-msgstr "Informacja"
-
-#: js/Addressbook-FAT-debug.js:519
-#: js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:214
-msgid "Insecure link"
-msgstr "Niebezpieczny link"
-
-#: js/Addressbook-FAT-debug.js:519
-#: js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:214
-msgid "Please review this link in edit dialog."
-msgstr "Proszę sprawdzić link w oknie dialogowym"
-
-#: js/Addressbook-FAT-debug.js:714
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:113
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/Addressbook-FAT-debug.js:717
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:116
-msgid "Full Name"
-msgstr "Imię i nazwisko"
-
-#: js/Addressbook-FAT-debug.js:726
-#: js/Addressbook-FAT-debug.js:1424
-#: js/Addressbook-FAT-debug.js:1453
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:272
-#: js/ContactEditDialog.js:301
-#: js/ContactGrid.js:125
-msgid "Region"
-msgstr "Województwo"
-
-#: js/Addressbook-FAT-debug.js:727
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:126
-msgid "Postalcode"
-msgstr "Kod pocztowy"
-
-#: js/Addressbook-FAT-debug.js:729
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:128
-msgid "Street (private)"
-msgstr "Ulica (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:730
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:129
-msgid "City (private)"
-msgstr "Miasto (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:731
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:130
-msgid "Region (private)"
-msgstr "Województwo (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:732
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:131
-msgid "Postalcode (private)"
-msgstr "Kod pocztowy (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:733
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:132
-msgid "Country (private)"
-msgstr "Kraj (adres prywatny)"
-
-#: js/Addressbook-FAT-debug.js:738
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:137
-msgid "Car phone"
-msgstr "Telefon (samochód)"
-
-#: js/Addressbook-FAT-debug.js:739
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:138
-msgid "Pager"
-msgstr "Pager"
-
-#: js/Addressbook-FAT-debug.js:743
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:142
-msgid "Email (private)"
-msgstr "E-mail (prywatny)"
-
-#: js/Addressbook-FAT-debug.js:745
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:144
-msgid "URL (private)"
-msgstr "URL (prywatny)"
-
-#: js/Addressbook-FAT-debug.js:747
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:146
-msgid "Timezone"
-msgstr "Strefa czasowa"
-
-#: js/Addressbook-FAT-debug.js:748
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:147
-msgid "Geo"
-msgstr "Położenie geograficzne"
-
-#: js/Addressbook-FAT-debug.js:759
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:158
-msgid "Export Contact"
-msgstr "Eksportuj kontakt"
-
-# I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
-# Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht verwenden. Dies waere nicht richtig im Polnischen.
-#: js/Addressbook-FAT-debug.js:767
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:166
-msgid "Export as PDF"
-msgstr "Eksportuj jako PDF"
-
-# I think, we don't need to translate 1:1 in this case Instead of that, we should use the imperative form "Eksportuj". Moreover we cannot use the letter 'x'. It couldn't be correct in Polish.
-# Ich denke, in diesem Fall brauchen wir keine 1:1 Uebersetzung. Anstatt dessen sollen wir eine Imperativform "Eksportuj" verwenden. Darueber hinaus sollen wir den Buchstaben 'x' nicht benutzen. Dies waere nicht richtig im Polnischen.
-#: js/Addressbook-FAT-debug.js:774
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:173
-msgid "Export as CSV"
-msgstr "Eksportuj jako CSV"
-
-#: js/Addressbook-FAT-debug.js:781
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:180
-msgid "Export as ODS"
-msgstr "Eksportuj jako ODS"
-
-#: js/Addressbook-FAT-debug.js:788
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:187
-msgid "Export as XLS"
-msgstr "Eksportuj jako XLS"
-
-#: js/Addressbook-FAT-debug.js:795
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:194
-msgid "Export as ..."
-msgstr "Eksportuj jako ..."
-
-#: js/Addressbook-FAT-debug.js:811
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:210
-msgid "Call contact"
-msgstr "Wywołaj kontakt"
-
-#: js/Addressbook-FAT-debug.js:821
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:220
-msgid "Compose email"
-msgstr "Nowa wiadomość"
-
-#: js/Addressbook-FAT-debug.js:831
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:230
-msgid "Import contacts"
-msgstr "Importuj kontakty"
+#~ msgid "Call contact"
+#~ msgstr "Wywołaj kontakt"
+
+#~ msgid "Compose email"
+#~ msgstr "Nowa wiadomość"
 
 # The other possibility could be: "Służbowo", see the german translation.
 # Die andere moeglichkeit waere: "Służbowo", siehe die deutsche Uebersetzung.
-#: js/Addressbook-FAT-debug.js:920
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:319
-msgid "Work"
-msgstr "Praca"
+#~ msgid "Work"
+#~ msgstr "Praca"
 
-#: js/Addressbook-FAT-debug.js:929
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:328
-msgid "Home"
-msgstr "Prywatnie"
+#~ msgid "Home"
+#~ msgstr "Prywatnie"
 
-#: js/Addressbook-FAT-debug.js:938
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:337
-msgid "Cell"
-msgstr "Komórka"
+#~ msgid "Cell"
+#~ msgstr "Komórka"
 
-#: js/Addressbook-FAT-debug.js:947
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:346
-msgid "Cell private"
-msgstr "Komórka prywatna"
-
-#: js/Addressbook-FAT-debug.js:1055
-#: js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:454
-msgid "Internal Contact"
-msgstr "Kontakty wewnętrzne"
-
-#: js/Addressbook-FAT-debug.js:1187
-#: js/Addressbook-FAT-debug.js:1194
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:35
-#: js/ContactEditDialog.js:42
-msgid "Map"
-msgstr "Mapowanie"
-
-#: js/Addressbook-FAT-debug.js:1217
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:65
-msgid "Personal Information"
-msgstr "Informacje osobiste"
-
-# I think, it would be better, if we use the plural form "Informacje" instead of "Informacja".
-# Ich denke, es waere besser, wenn wir die Pluralform "Informacje" anstatt von "Informacja" verwenden.
-#: js/Addressbook-FAT-debug.js:1331
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:179
-msgid "Contact Information"
-msgstr "Informacje kontaktowe"
-
-#: js/Addressbook-FAT-debug.js:1420
-#: js/Addressbook-FAT-debug.js:1449
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:268
-#: js/ContactEditDialog.js:297
-msgid "Street 2"
-msgstr "Ulica 2"
-
-#: js/Addressbook-FAT-debug.js:1501
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:349
-msgid "Enter description"
-msgstr "Wprowadź opis"
-
-#: js/Addressbook-FAT-debug.js:1550
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:398
-msgid "Export as pdf"
-msgstr "Eksportuj jako PDF"
-
-#: js/Addressbook-FAT-debug.js:1575
-#: js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:423
-msgid "Either {0} or {1} must be given"
-msgstr "Należy wprowadzić {0} albo {1}"
-
-#: js/Addressbook-FAT-debug.js:1750
-#: js/Addressbook-FAT.js:6
-#: js/SearchCombo.js:95
-msgid "Searching..."
-msgstr "Wyszukiwanie..."
-
-#: js/Addressbook.js:22
-msgid "New Contact"
-msgstr "Nowy kontakt"
-
-#: Preference.php:33
-msgid "All contacts"
-msgstr "Wszystkie kontakty"
-
-#: Preference.php:70
-msgid "Default Addressbook"
-msgstr "Domyślna książka adresowa"
-
-#: Preference.php:71
-msgid "The default addressbook for new contacts"
-msgstr "Domyślna książka adresowa dla nowych kontaktów"
-
-#: Preference.php:74
-msgid "Default Favorite"
-msgstr "Domyślne ulubione"
-
-#: Preference.php:75
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Domyślny ulubiony adres ładowany podczas otwierania skrzynki adresowej"
-
-#: Setup/Initialize.php:112
-#: Setup/Update/Release3.php:37
-msgid "All contacts I have read grants for"
-msgstr "Wszystkie kontakty, które wolno mi czytać"
-
-#: Setup/Initialize.php:117
-msgid "My company"
-msgstr "Moja firma"
-
-#: Setup/Initialize.php:118
-msgid "All coworkers in my company"
-msgstr "Wszyscy współpracownicy z mojej firmy"
-
-#: Setup/Initialize.php:131
-msgid "My contacts"
-msgstr "Moje kontakty"
-
-#: Setup/Initialize.php:132
-msgid "All contacts in my Addressbooks"
-msgstr "Wszystkie kontakty w mojej książce adresowej"
-
-#: Setup/Initialize.php:144
-msgid "Last modified by me"
-msgstr "Ostatnio zmienione przeze mnie"
-
-#: Setup/Initialize.php:145
-msgid "All contacts that I have last modified"
-msgstr "Wszystkie kontakty ostatnio zmienione przeze mnie"
-
-#: Setup/setup.xml:690
-msgid "Internal Contacts"
-msgstr "Kontakty wewnętrzne"
-
-#: Setup/setup.xml:716
-msgid "Mr"
-msgstr "Pan"
-
-#: Setup/setup.xml:738
-msgid "Ms"
-msgstr "Pani"
+#~ msgid "Cell private"
+#~ msgstr "Komórka prywatna"
 
 #~ msgid "Created By"
 #~ msgstr "Utworzony przez"
@@ -986,7 +626,6 @@ msgstr "Pani"
 #~ msgstr "Ostatnio zmieniony przez"
 
 #~ msgid "addressbook"
-
 #~ msgid_plural "addressbooks"
 #~ msgstr[0] "Książka adresowa"
 #~ msgstr[1] "książki adresowe"

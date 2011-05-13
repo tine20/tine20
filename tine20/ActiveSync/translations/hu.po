@@ -14,48 +14,13 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/ActiveSync-FAT-debug.js:35 js/ActiveSync-FAT.js:6 js/Application.js:30
-msgid "Active Sync"
-msgstr "Active Sync"
+#: Setup/setup.xml:473
+msgid "Default Policy"
+msgstr "Alapértelmezett szabály"
 
-#: js/ActiveSync-FAT-debug.js:51 js/ActiveSync-FAT.js:6 js/Application.js:46
-msgid "Select a Device"
-msgstr "Válassz egy eszközt"
-
-#: js/ActiveSync-FAT-debug.js:65 js/ActiveSync-FAT.js:6 js/Application.js:60
-msgid "No ActiveSync Device registered"
-msgstr "Nincs regisztrált ActiveSync eszköz"
-
-#: js/ActiveSync-FAT-debug.js:73 js/ActiveSync-FAT.js:6 js/Application.js:68
-msgid "Set as {0} Filter"
-msgstr "Beállítás {0} szűrőként"
-
-#: js/ActiveSync-FAT-debug.js:98 js/ActiveSync-FAT.js:6 js/Application.js:93
-msgid "Resetted Sync Filter"
-msgstr "Újraállított Sync szűrő"
-
-#: js/ActiveSync-FAT-debug.js:99 js/ActiveSync-FAT-debug.js:111
-#: js/ActiveSync-FAT.js:6 js/Application.js:94 js/Application.js:106
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "\"{1}\" eszköz {0} szűrője most \"{2}\""
-
-#: js/ActiveSync-FAT-debug.js:102 js/ActiveSync-FAT.js:6 js/Application.js:97
-msgid "resetted"
-msgstr "újraállított"
-
-#: js/ActiveSync-FAT-debug.js:110 js/ActiveSync-FAT.js:6 js/Application.js:105
-msgid "Set Sync Filter"
-msgstr "Sync szűrő beállítása"
-
-#: js/ActiveSync-FAT-debug.js:164 js/Model.js:45
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Eszköz"
-msgstr[1] "Eszközök"
-
-#: js/ActiveSync-FAT-debug.js:164 js/Model.js:45
-msgid "Devices"
-msgstr "Eszközök"
+#: Setup/setup.xml:478
+msgid "Default Policy installed during setup"
+msgstr "Alapértelmezett szabály beállításra került a telepítés közben"
 
 #: Preference.php:74
 msgid "Default Addressbook"
@@ -81,10 +46,44 @@ msgstr "Alapértelmezett Feladat Lista"
 msgid "The default task list to create new tasks in."
 msgstr "Alapértelmezett Feladat Lista új feladatok létrehozására."
 
-#: Setup/setup.xml:473
-msgid "Default Policy"
-msgstr "Alapértelmezett szabály"
+#: js/Model.js:45
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Eszköz"
+msgstr[1] "Eszközök"
 
-#: Setup/setup.xml:478
-msgid "Default Policy installed during setup"
-msgstr "Alapértelmezett szabály beállításra került a telepítés közben"
+#: js/Model.js:45
+msgid "Devices"
+msgstr "Eszközök"
+
+#: js/Application.js:30
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:46
+msgid "Select a Device"
+msgstr "Válassz egy eszközt"
+
+#: js/Application.js:60
+msgid "No ActiveSync Device registered"
+msgstr "Nincs regisztrált ActiveSync eszköz"
+
+#: js/Application.js:68
+msgid "Set as {0} Filter"
+msgstr "Beállítás {0} szűrőként"
+
+#: js/Application.js:93
+msgid "Resetted Sync Filter"
+msgstr "Újraállított Sync szűrő"
+
+#: js/Application.js:94 js/Application.js:106
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "\"{1}\" eszköz {0} szűrője most \"{2}\""
+
+#: js/Application.js:97
+msgid "resetted"
+msgstr "újraállított"
+
+#: js/Application.js:105
+msgid "Set Sync Filter"
+msgstr "Sync szűrő beállítása"

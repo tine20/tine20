@@ -19,59 +19,54 @@ msgstr ""
 msgid "%s's personal example records"
 msgstr ""
 
-#: js/ExampleApplication-FAT-debug.js:36 js/Model.js:31
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr "AplicaciónDeEjemplo"
 
-#: js/ExampleApplication-FAT-debug.js:40 js/Model.js:35
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/ExampleApplication-FAT-debug.js:97 js/ExampleApplication-FAT.js:6
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr ""
-
-#: js/ExampleApplication-FAT-debug.js:201 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordGridPanel.js:75
+#: js/ExampleRecordGridPanel.js:74
 msgid "Quick search"
 msgstr "Búsqueda Rápida"
 
-#: js/ExampleApplication-FAT-debug.js:229
-#: js/ExampleApplication-FAT-debug.js:389 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:103
+#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
 msgid "Name"
 msgstr "Nombre"
 
-#: js/ExampleApplication-FAT-debug.js:235 js/ExampleRecordGridPanel.js:109
+#: js/ExampleRecordGridPanel.js:108
 msgid "Title"
 msgstr "Título"
 
-#: js/ExampleApplication-FAT-debug.js:241 js/ExampleRecordGridPanel.js:115
+#: js/ExampleRecordGridPanel.js:114
 msgid "Status"
 msgstr "Estado"
 
-#: js/ExampleApplication-FAT-debug.js:248 js/ExampleRecordGridPanel.js:122
+#: js/ExampleRecordGridPanel.js:121
 msgid "Budget"
 msgstr "Presupuesto"
 
-#: js/ExampleApplication-FAT-debug.js:272 js/ExampleRecordGridPanel.js:146
+#: js/ExampleRecordGridPanel.js:145
 msgid "Show closed"
 msgstr "Función Cerrada"
 
-#: js/ExampleApplication-FAT-debug.js:372 js/ExampleApplication-FAT.js:6
 #: js/ExampleRecordEditDialog.js:87
 #, fuzzy
 msgid "ExampleRecord"
 msgstr "RegistroDeEjemplo"
 
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
-msgstr "AplicaciónDeEjemplo"
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr ""
+
+#: js/Model.js:31
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:35
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] ""
+msgstr[1] ""
 
 #~ msgid "ExampleRecords"
 #~ msgstr "RegistrosDeEjemplo"

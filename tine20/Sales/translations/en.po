@@ -14,6 +14,10 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Setup/setup.xml:243
+msgid "Shared Contracts"
+msgstr "Shared Contracts"
+
 #: Acl/Rights.php:103
 msgid "manage products"
 msgstr "manage products"
@@ -22,108 +26,95 @@ msgstr "manage products"
 msgid "add, edit and delete products"
 msgstr "add, edit and delete products"
 
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:86
-#: js/Sales-FAT-debug.js:388 js/Sales-FAT-debug.js:495 js/Sales-FAT.js:6
-msgid "Title"
-msgstr "Title"
+#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
+msgid "Name"
+msgstr "Name"
 
-#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
-#: js/ProductGridPanel.js:126 js/Sales-FAT-debug.js:500
-#: js/Sales-FAT-debug.js:679 js/Sales-FAT-debug.js:817 js/Sales-FAT.js:6
+#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:124
+msgid "Price"
+msgstr "Price"
+
+#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:121
+msgid "Manufacturer"
+msgstr "Manufacturer"
+
+#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:122
+msgid "Category"
+msgstr "Category"
+
+#: js/ProductEditDialog.js:123 js/ContractEditDialog.js:100
+#: js/ProductGridPanel.js:123
 msgid "Description"
 msgstr "Description"
 
-#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
-#: js/Sales-FAT-debug.js:501 js/Sales-FAT-debug.js:818 js/Sales-FAT.js:6
+#: js/ProductEditDialog.js:124 js/ContractEditDialog.js:101
 msgid "Enter description..."
 msgstr "Enter description..."
 
-#: js/ContractGridPanel.js:60 js/Models.js:78 js/Sales-FAT-debug.js:83
-#: js/Sales-FAT-debug.js:362 js/Sales-FAT.js:6
-msgid "Quick search"
-msgstr "Quick search"
-
-#: js/ContractGridPanel.js:61 js/Sales-FAT-debug.js:363
-msgid "Summary"
-msgstr "Summary"
-
-#: js/ContractGridPanel.js:80 js/Sales-FAT-debug.js:382 js/Sales-FAT.js:6
-msgid "Contract number"
-msgstr "Contract number"
-
-#: js/ContractGridPanel.js:92 js/Sales-FAT-debug.js:394 js/Sales-FAT.js:6
-msgid "Status"
-msgstr "Status"
-
-#: js/Models.js:40 js/Sales-FAT-debug.js:45
+#: js/Models.js:40
 msgid "Product"
 msgid_plural "Products"
 msgstr[0] "Product"
 msgstr[1] "Products"
 
-#: js/Models.js:44 js/Sales-FAT-debug.js:49
+#: js/Models.js:44
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "record list"
 msgstr[1] "record lists"
 
-#: js/Models.js:79 js/Sales-FAT-debug.js:84 js/Sales-FAT.js:6
+#: js/Models.js:78 js/ContractGridPanel.js:59
+msgid "Quick search"
+msgstr "Quick search"
+
+#: js/Models.js:79
 msgid "Product name"
 msgstr "Product name"
 
-#: js/Models.js:112 js/Sales-FAT-debug.js:117
+#: js/Models.js:112
 msgid "Contract"
 msgid_plural "Contracts"
 msgstr[0] "Contract"
 msgstr[1] "Contracts"
 
-#: js/Models.js:116 js/Sales-FAT-debug.js:121
+#: js/Models.js:116
 msgid "contracts list"
 msgid_plural "contracts lists"
 msgstr[0] "contracts list"
 msgstr[1] "contracts lists"
 
-#: js/ProductEditDialog.js:102 js/ProductGridPanel.js:123
-#: js/Sales-FAT-debug.js:676 js/Sales-FAT-debug.js:796 js/Sales-FAT.js:6
-msgid "Name"
-msgstr "Name"
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
+msgid "Title"
+msgstr "Title"
 
-#: js/ProductEditDialog.js:108 js/ProductGridPanel.js:127
-#: js/Sales-FAT-debug.js:680 js/Sales-FAT-debug.js:802 js/Sales-FAT.js:6
-msgid "Price"
-msgstr "Price"
+#: js/ContractGridPanel.js:60
+msgid "Summary"
+msgstr "Summary"
 
-#: js/ProductEditDialog.js:115 js/ProductGridPanel.js:124
-#: js/Sales-FAT-debug.js:677 js/Sales-FAT-debug.js:809 js/Sales-FAT.js:6
-msgid "Manufacturer"
-msgstr "Manufacturer"
+#: js/ContractGridPanel.js:79
+msgid "Contract number"
+msgstr "Contract number"
 
-#: js/ProductEditDialog.js:119 js/ProductGridPanel.js:125
-#: js/Sales-FAT-debug.js:678 js/Sales-FAT-debug.js:813 js/Sales-FAT.js:6
-msgid "Category"
-msgstr "Category"
+#: js/ContractGridPanel.js:91
+msgid "Status"
+msgstr "Status"
 
-#: js/ProductGridPanel.js:122 js/Sales-FAT-debug.js:675 js/Sales-FAT.js:6
-msgid "Tags"
-msgstr "Tags"
-
-#: js/Sales-FAT-debug.js:193 js/Sales-FAT.js:6 js/Sales.js:53
+#: js/Sales.js:53
 msgid "Products"
 msgstr "Products"
 
-#: js/Sales-FAT-debug.js:198 js/Sales-FAT.js:6 js/Sales.js:58
+#: js/Sales.js:58
 msgid "All Products"
 msgstr "All Products"
 
-#: js/Sales-FAT-debug.js:203 js/Sales-FAT.js:6 js/Sales.js:63
+#: js/Sales.js:63
 msgid "Contracts"
 msgstr "Contracts"
 
-#: js/Sales-FAT-debug.js:208 js/Sales-FAT-debug.js:243 js/Sales-FAT.js:6
 #: js/Sales.js:68 js/Sales.js:103
 msgid "All Contracts"
 msgstr "All Contracts"
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Shared Contracts"
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr "Tags"
