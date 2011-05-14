@@ -428,7 +428,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             isValid = false;
         }
         
-        return isValid && Tine.Calendar.EventEditDialog.superclass.isValid.apply(this, arguments);
+        return isValid && Tine.Addressbook.ContactEditDialog.superclass.isValid.apply(this, arguments);
     },
     
     /**
