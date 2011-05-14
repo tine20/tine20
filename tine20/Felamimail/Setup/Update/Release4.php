@@ -152,7 +152,11 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
      */    
     public function update_4()
     {
-        $this->_backend->dropCol('felamimail_folder', 'user_id');
+        try {
+            $this->_backend->dropCol('felamimail_folder', 'user_id');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // do nothing
+        }
         
         $this->setTableVersion('felamimail_folder', '8');
         $this->setApplicationVersion('Felamimail', '4.5');
