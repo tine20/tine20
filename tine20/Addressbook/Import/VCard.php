@@ -378,10 +378,14 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
      * @param VCard $_card
      * @param array $_data
      * @return array
+     * 
+     * @todo make this work / need to add base64 decode 
      */
     function _getPhoto(VCard $_card, $_data)
     {
-        // TODO $properties = $card->getProperties('PHOTO'); // VCard and Tine support picture, now, the how to do...
+        if ($_card->getProperty('PHOTO')) {
+            // not implemented
+        }
         
         return $_data;
     }
