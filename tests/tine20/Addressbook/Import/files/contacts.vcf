@@ -8,6 +8,7 @@ TEL;TYPE=HOME:+49732121258035
 TEL;TYPE=CELL:+4913232153769
 NOTE:mitbewohner
 item1.ADR;type=WORK;type=pref:;;Eisenhüttenstraße 723;Eisenhüttenstadt;;23139;
+item2.URL;type=pref:http\://www.vcard.de
 END:VCARD
 BEGIN:VCARD
 VERSION:3.0
