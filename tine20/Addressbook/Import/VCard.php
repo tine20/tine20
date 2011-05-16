@@ -196,29 +196,19 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
     /**
      * do the mapping and replacements
      *
-     * @param array $_data
+     * @param VCard $card
      * @param array $_headline [optional]
      * @return array
+     * 
+     * @todo split this into smaller parts
      */
     protected function _doMapping($card)
     {
         $data = array();
 
-        $data['n_fn'] = $card->getProperty('FN')->value;
-        //$data['n_fileas'] = ''; //default: Family name, Given name // not sure what is this field
-        
-        $components = $card->getProperty('N')->getComponents();
-	    $data['n_family'] = $components[0];
-        $data['n_given'] = $components[1];
-        $data['n_middle'] = $components[2];
-        $data['n_prefix'] = $components[3];
-        $data['n_suffix'] = $components[4];
-        
-        // Tine20 don't support nickname, but it's a common feature, so this allow mapping to customField
-        if(strlen($this->_options['mapNicknameToField'])>0){
-        	if ($card->getProperty('NICKNAME')) $data[$this->_options['mapNicknameToField']] = $card->getProperty('NICKNAME')->value;
-        }
-        // TODO $properties = $card->getProperties('PHOTO'); // VCard and Tine support picture, now, the how to do...
+        $data = $this->_getName($card, $data);
+        $data = $this->_getPhoto($card, $data);
+        $data = $this->_getUrl($card, $data);
         
         // TODO check sample format support
         // BDAY:1996-04-15
@@ -226,89 +216,89 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
 		// BDAY:1987-09-27T08:30:00-06:00
         if ($card->getProperty('BDAY')) $data['bday'] = $card->getProperty('BDAY')->value;
         
-        if ($card->getProperty('ADR')) { 
-        $properties = $card->getProperties('ADR');
-        foreach($properties as $property){
-        	// types available from RFC : 'dom', 'intl', 'postal', 'parcel', 'home', 'work', 'pref'
-        	$types = $property->params['TYPE'];
-        	
-        	//post office box; the extended address; the street
-   			//address; the locality (e.g., city); the region (e.g., state or
-			//province); the postal code; the country name
-			$components = $property->getComponents();
-        	if($types && in_array_case($types, 'home')){
-	            //post office box : $components[0];
-        		$data['adr_two_street2'] = $components[1];
-        		$data['adr_two_street'] = $components[2];
-	            $data['adr_two_locality'] = $components[3];
-	            $data['adr_two_region'] = $components[4];
-	            $data['adr_two_postalcode'] = $components[5];
-	            $data['adr_two_countryname'] = $components[6];
-        	}else{
-        		$data['adr_one_street2'] = $components[1];
-        		$data['adr_one_street'] = $components[2];
-	            $data['adr_one_locality'] = $components[3];
-	            $data['adr_one_region'] = $components[4];
-	            $data['adr_one_postalcode'] = $components[5];
-	            $data['adr_one_countryname'] = $components[6];
-        	}
-        }
+        $addressProperty = ($card->getProperty('ADR')) ? 'ADR' : (($card->getProperty('ITEM1.ADR')) ? 'ITEM1.ADR' : '');
+        if ($addressProperty) { 
+            $properties = $card->getProperties($addressProperty);
+            foreach ($properties as $property){
+            	// types available from RFC : 'dom', 'intl', 'postal', 'parcel', 'home', 'work', 'pref'
+            	$types = $property->params['TYPE'];
+            	
+            	//post office box; the extended address; the street
+       			//address; the locality (e.g., city); the region (e.g., state or
+    			//province); the postal code; the country name
+    			$components = $property->getComponents();
+            	if($types && in_array_case($types, 'home')){
+    	            //post office box : $components[0];
+            		$data['adr_two_street2'] = $components[1];
+            		$data['adr_two_street'] = $components[2];
+    	            $data['adr_two_locality'] = $components[3];
+    	            $data['adr_two_region'] = $components[4];
+    	            $data['adr_two_postalcode'] = $components[5];
+    	            $data['adr_two_countryname'] = $components[6];
+            	}else{
+            		$data['adr_one_street2'] = $components[1];
+            		$data['adr_one_street'] = $components[2];
+    	            $data['adr_one_locality'] = $components[3];
+    	            $data['adr_one_region'] = $components[4];
+    	            $data['adr_one_postalcode'] = $components[5];
+    	            $data['adr_one_countryname'] = $components[6];
+            	}
+            }
         }
         
         // $properties = $card->getProperties('LABEL'); //NOT_IMPLEMENTED
         if ($card->getProperty('TEL')) {
-        $properties = $card->getProperties('TEL');
-        foreach($properties as $property){
-        	// types available from RFC : "home", "msg", "work", "pref", "voice", "fax", "cell", "video", "pager", "bbs", "modem", "car", "isdn", "pcs"
-        	$types = $property->params['TYPE'];
-        	
-        	$key = 'tel_work';
-        	if($types){ 
-        		if(in_array_case($types, 'home') && !in_array_case($types, 'cell') && !in_array_case($types, 'fax')){
-        			$key = 'tel_home';	
-        		}else if(in_array_case($types, 'home') && in_array_case($types, 'cell')){        			
-        			$key = 'tel_cell_private';
-        		}else if(in_array_case($types, 'home') && in_array_case($types, 'fax')){
-        			$key = 'tel_fax_home';
-        		}else if(in_array_case($types, 'work') && !in_array_case($types, 'cell') && !in_array_case($types, 'fax')){
-        			$key = 'tel_work';
-        		}else if(in_array_case($types, 'work') && in_array_case($types, 'cell')){
-					$key = 'tel_cell';
-        		}else if(in_array_case($types, 'work') && !in_array_case($types, 'fax')){
-        			$key = 'tel_fax';
-        		}else if(in_array_case($types, 'car')){
-        			$key = 'tel_car';
-        		}else if(in_array_case($types, 'pager')){
-        			$key = 'tel_pager';
-        		}else if(in_array_case($types, 'fax')){
-        			$key = 'tel_fax';
-        		}else if(in_array_case($types, 'cell')){
-        			$key = 'tel_cell';
-        		}
-        	}
-        	$data[$key] = $property->value;
-        	
-        	//$data['tel_assistent'] = ''; //RFC has *a lot* of type, but not this one ^^
-        }
+            $properties = $card->getProperties('TEL');
+            foreach($properties as $property){
+            	// types available from RFC : "home", "msg", "work", "pref", "voice", "fax", "cell", "video", "pager", "bbs", "modem", "car", "isdn", "pcs"
+            	$types = $property->params['TYPE'];
+            	
+            	$key = 'tel_work';
+            	if($types){ 
+            		if(in_array_case($types, 'home') && !in_array_case($types, 'cell') && !in_array_case($types, 'fax')){
+            			$key = 'tel_home';	
+            		}else if(in_array_case($types, 'home') && in_array_case($types, 'cell')){        			
+            			$key = 'tel_cell_private';
+            		}else if(in_array_case($types, 'home') && in_array_case($types, 'fax')){
+            			$key = 'tel_fax_home';
+            		}else if(in_array_case($types, 'work') && !in_array_case($types, 'cell') && !in_array_case($types, 'fax')){
+            			$key = 'tel_work';
+            		}else if(in_array_case($types, 'work') && in_array_case($types, 'cell')){
+    					$key = 'tel_cell';
+            		}else if(in_array_case($types, 'work') && !in_array_case($types, 'fax')){
+            			$key = 'tel_fax';
+            		}else if(in_array_case($types, 'car')){
+            			$key = 'tel_car';
+            		}else if(in_array_case($types, 'pager')){
+            			$key = 'tel_pager';
+            		}else if(in_array_case($types, 'fax')){
+            			$key = 'tel_fax';
+            		}else if(in_array_case($types, 'cell')){
+            			$key = 'tel_cell';
+            		}
+            	}
+            	$data[$key] = $property->value;
+            	
+            	//$data['tel_assistent'] = ''; //RFC has *a lot* of type, but not this one ^^
+            }
         }
         
         if ($card->getProperty('EMAIL')) {
-        $properties = $card->getProperties('EMAIL');
-        foreach($properties as $property){
-        	// types available from RFC (custom allowed): "internet", "x400", "pref"
-        	// home and work are commons, so we manage them
-        	$types = $property->params['TYPE'];
-        	
-        	$key = 'email';
-        	if($types){ 
-        		if(in_array_case($types, 'home')){
-        			$key = 'email_home';	
-        		}
-        	}
-			$data[$key] = $property->value;
+            $properties = $card->getProperties('EMAIL');
+            foreach($properties as $property){
+            	// types available from RFC (custom allowed): "internet", "x400", "pref"
+            	// home and work are commons, so we manage them
+            	$types = $property->params['TYPE'];
+            	
+            	$key = 'email';
+            	if($types){ 
+            		if(in_array_case($types, 'home')){
+            			$key = 'email_home';	
+            		}
+            	}
+    			$data[$key] = $property->value;
+            }
         }
-        }
-        
         
         // $properties = $card->getProperties('MAILER'); //NOT_IMPLEMENTED
         
@@ -345,15 +335,75 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
 		// $properties = $card->getProperties('CLASS'); // NOT_IMPLEMENTED
 		// TODO $data['pubkey'] = $properties = $card->getProperties('KEY'); // NOT_IMPLEMENTED // missing binary uncode
 		
-		if($card->getProperty('URL')){
-		$key = 'url';
-		if($this->_options['urlIsHome']){
-			$key = 'url_home';
-		}
-		$data[$key] = $card->getProperty('URL')->value;
-		}
-		
         return $data;
+    }
+    
+    /**
+     * get name from vcard
+     * 
+     * @param VCard $_card
+     * @param array $_data
+     * @return array
+     */
+    function _getName(VCard $_card, $_data)
+    {
+        $_data['n_fn'] = $_card->getProperty('FN')->value;
+        
+        $components = $_card->getProperty('N')->getComponents();
+        $_data['n_family'] = $components[0];
+        $_data['n_given']  = $components[1];
+        $_data['n_middle'] = $components[2];
+        $_data['n_prefix'] = $components[3];
+        $_data['n_suffix'] = $components[4];
+        
+        // Tine20 don't support nickname, but it's a common feature, so this allow mapping to customField
+        if (strlen($this->_options['mapNicknameToField'])>0) {
+            if ($_card->getProperty('NICKNAME')) $_data[$this->_options['mapNicknameToField']] = $_card->getProperty('NICKNAME')->value;
+        }
+        
+        return $_data;
+    }
+
+    /**
+     * get photo from vcard
+     * 
+     * @param VCard $_card
+     * @param array $_data
+     * @return array
+     * 
+     * @todo make this work / need to add base64 decode 
+     */
+    function _getPhoto(VCard $_card, $_data)
+    {
+        if ($_card->getProperty('PHOTO')) {
+            // not implemented
+        }
+        
+        return $_data;
+    }
+
+    /**
+     * get url from vcard
+     * 
+     * @param VCard $_card
+     * @param array $_data
+     * @return array
+     */
+    function _getUrl(VCard $_card, $_data)
+    {
+        $urlProperty = ($_card->getProperty('URL')) ? 'URL' : (($_card->getProperty('ITEM2.URL')) ? 'ITEM2.URL' : '');
+        if (empty($urlProperty)) { 
+            return $_data;
+        }
+        
+        $key = 'url';
+        if ($this->_options['urlIsHome']) {
+            $key = 'url_home';
+        }
+        $_data[$key] = $_card->getProperty($urlProperty)->value;
+        $_data[$key] = preg_replace('/\\\\/', '', $_data[$key]);
+        
+        return $_data;
     }
 }
 
