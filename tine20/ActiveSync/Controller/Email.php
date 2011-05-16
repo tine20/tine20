@@ -235,7 +235,7 @@ class ActiveSync_Controller_Email extends ActiveSync_Controller_Abstract
                     $tagAttachment = $tagAttachments->appendChild(new DOMElement('Attachment', null, 'uri:AirSyncBase'));
                     
                     $tagAttachment->appendChild(new DOMElement('DisplayName', $this->removeControlChars($attachment['filename']), 'uri:AirSyncBase'));
-                    $tagAttachment->appendChild(new DOMElement('FileReference', $_serverId . '-' . $attachment['partId'], 'uri:AirSyncBase'));
+                    $tagAttachment->appendChild(new DOMElement('FileReference', $data->getId() . '-' . $attachment['partId'], 'uri:AirSyncBase'));
                     $tagAttachment->appendChild(new DOMElement('Method', 1, 'uri:AirSyncBase'));
                     $tagAttachment->appendChild(new DOMElement('EstimatedDataSize', $this->removeControlChars($attachment['size']), 'uri:AirSyncBase'));
                 }
