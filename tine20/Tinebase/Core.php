@@ -659,6 +659,9 @@ class Tinebase_Core
                 $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
             }
             
+            // fix for windows server with backslash directory separator
+            $baseUri = str_replace(DIRECTORY_SEPARATOR, '/', $baseUri);
+            
             Zend_Session::setOptions(array(
                 'cookie_path'     => $baseUri
             ));
