@@ -611,7 +611,8 @@ class Tinebase_Core
      */
     public static function startSession($_options = array(), $_namespace = 'tinebase')
     {
-        self::setSessionOptionsAndBackend($_options);
+        self::setSessionOptions($_options);
+        self::setSessionBackend();
         
         try {
             Zend_Session::start();
@@ -630,13 +631,12 @@ class Tinebase_Core
 
         self::set(self::SESSION, $session);
     }
-
     /**
-     * set session options helper function
+     * set session options
      * 
      * @param array $_options
      */
-    public static function setSessionOptionsAndBackend($_options = array())
+    public static function setSessionOptions($_options = array())
     {
         Zend_Session::setOptions(array_merge($_options, array(
             'cookie_httponly'   => true,
@@ -669,7 +669,13 @@ class Tinebase_Core
                 'cookie_secure'     => true
             ));
         }
+    }
         
+    /**
+     * set session backend
+     */
+    public static function setSessionBackend()
+    {
         $config = self::getConfig();
         $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : 'File';
         $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400; // one day is default
