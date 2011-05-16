@@ -39,7 +39,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
     
     protected $_changesDetected = false;
     
-    const PING_TIMEOUT = 10;
+    const PING_TIMEOUT = 60;
     
     /**
      * Enter description here...
