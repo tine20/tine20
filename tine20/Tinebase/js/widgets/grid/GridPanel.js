@@ -21,7 +21,6 @@ Ext.ns('Tine.widgets.grid');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -1096,7 +1095,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         e.preventDefault();
                     }
                     break;
-                
+                case e.F:
+                    if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
+                        e.preventDefault();
+                        this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
+                    }
+                    break;
             }
         } else {
             if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
