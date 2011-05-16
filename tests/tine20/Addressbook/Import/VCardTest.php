@@ -75,5 +75,6 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('spass, alex', $result['results']->getFirstRecord()->n_fileas, 'file as not found');
         $this->assertEquals('+49732121258035', $result['results']->getFirstRecord()->tel_home, 'n_fileas not found');
         $this->assertEquals('mitbewohner', $result['results']->getFirstRecord()->note, 'note not found');
+        $this->assertEquals('Eisenhüttenstraße 723', $result['results']->getFirstRecord()->adr_one_street, 'street not found');
     }
 }		
