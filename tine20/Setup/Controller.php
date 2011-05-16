@@ -650,13 +650,19 @@ class Setup_Controller
             $config = new Zend_Config($_data);
         }
         
-        $doLogin = (! Setup_Core::configFileExists());
+        if (Setup_Core::configFileExists()) {
+            $doLogin = FALSE;
+            $filename = Setup_Core::getConfigFilePath();
+        } else {
+            $doLogin = TRUE;
+            $filename = dirname(__FILE__) . '/../config.inc.php';
+        }
         
         // write to file
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating config.inc.php');
         $writer = new Zend_Config_Writer_Array(array(
             'config'   => $config,
-            'filename' => dirname(__FILE__) . '/../config.inc.php'
+            'filename' => $filename,
         ));
         $writer->write();
         
