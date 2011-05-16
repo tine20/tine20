@@ -205,7 +205,6 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
         $data = array();
 
         $data['n_fn'] = $card->getProperty('FN')->value;
-        //$data['n_fileas'] = ''; //default: Family name, Given name // not sure what is this field
         
         $components = $card->getProperty('N')->getComponents();
 	    $data['n_family'] = $components[0];
@@ -226,33 +225,34 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
 		// BDAY:1987-09-27T08:30:00-06:00
         if ($card->getProperty('BDAY')) $data['bday'] = $card->getProperty('BDAY')->value;
         
-        if ($card->getProperty('ADR')) { 
-        $properties = $card->getProperties('ADR');
-        foreach($properties as $property){
-        	// types available from RFC : 'dom', 'intl', 'postal', 'parcel', 'home', 'work', 'pref'
-        	$types = $property->params['TYPE'];
-        	
-        	//post office box; the extended address; the street
-   			//address; the locality (e.g., city); the region (e.g., state or
-			//province); the postal code; the country name
-			$components = $property->getComponents();
-        	if($types && in_array_case($types, 'home')){
-	            //post office box : $components[0];
-        		$data['adr_two_street2'] = $components[1];
-        		$data['adr_two_street'] = $components[2];
-	            $data['adr_two_locality'] = $components[3];
-	            $data['adr_two_region'] = $components[4];
-	            $data['adr_two_postalcode'] = $components[5];
-	            $data['adr_two_countryname'] = $components[6];
-        	}else{
-        		$data['adr_one_street2'] = $components[1];
-        		$data['adr_one_street'] = $components[2];
-	            $data['adr_one_locality'] = $components[3];
-	            $data['adr_one_region'] = $components[4];
-	            $data['adr_one_postalcode'] = $components[5];
-	            $data['adr_one_countryname'] = $components[6];
-        	}
-        }
+        $addressProperty = ($card->getProperty('ADR')) ? 'ADR' : (($card->getProperty('ITEM1.ADR')) ? 'ITEM1.ADR' : '');
+        if ($addressProperty) { 
+            $properties = $card->getProperties($addressProperty);
+            foreach ($properties as $property){
+            	// types available from RFC : 'dom', 'intl', 'postal', 'parcel', 'home', 'work', 'pref'
+            	$types = $property->params['TYPE'];
+            	
+            	//post office box; the extended address; the street
+       			//address; the locality (e.g., city); the region (e.g., state or
+    			//province); the postal code; the country name
+    			$components = $property->getComponents();
+            	if($types && in_array_case($types, 'home')){
+    	            //post office box : $components[0];
+            		$data['adr_two_street2'] = $components[1];
+            		$data['adr_two_street'] = $components[2];
+    	            $data['adr_two_locality'] = $components[3];
+    	            $data['adr_two_region'] = $components[4];
+    	            $data['adr_two_postalcode'] = $components[5];
+    	            $data['adr_two_countryname'] = $components[6];
+            	}else{
+            		$data['adr_one_street2'] = $components[1];
+            		$data['adr_one_street'] = $components[2];
+    	            $data['adr_one_locality'] = $components[3];
+    	            $data['adr_one_region'] = $components[4];
+    	            $data['adr_one_postalcode'] = $components[5];
+    	            $data['adr_one_countryname'] = $components[6];
+            	}
+            }
         }
         
         // $properties = $card->getProperties('LABEL'); //NOT_IMPLEMENTED
