@@ -196,29 +196,19 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
     /**
      * do the mapping and replacements
      *
-     * @param array $_data
+     * @param VCard $card
      * @param array $_headline [optional]
      * @return array
+     * 
+     * @todo split this into smaller parts
      */
     protected function _doMapping($card)
     {
         $data = array();
 
-        $data['n_fn'] = $card->getProperty('FN')->value;
-        
-        $components = $card->getProperty('N')->getComponents();
-	    $data['n_family'] = $components[0];
-        $data['n_given'] = $components[1];
-        $data['n_middle'] = $components[2];
-        $data['n_prefix'] = $components[3];
-        $data['n_suffix'] = $components[4];
-        
-        // Tine20 don't support nickname, but it's a common feature, so this allow mapping to customField
-        if(strlen($this->_options['mapNicknameToField'])>0){
-        	if ($card->getProperty('NICKNAME')) $data[$this->_options['mapNicknameToField']] = $card->getProperty('NICKNAME')->value;
-        }
-        // TODO $properties = $card->getProperties('PHOTO'); // VCard and Tine support picture, now, the how to do...
-        
+        $data = $this->_getName($card, $data);
+        $data = $this->_getPhoto($card, $data);
+
         // TODO check sample format support
         // BDAY:1996-04-15
 		// BDAY:1953-10-15T23:10:00Z
@@ -354,6 +344,46 @@ class Addressbook_Import_VCard extends Tinebase_Import_Abstract
 		}
 		
         return $data;
+    }
+    
+    /**
+     * get name from vcard
+     * 
+     * @param VCard $_card
+     * @param array $_data
+     * @return array
+     */
+    function _getName(VCard $_card, $_data)
+    {
+        $_data['n_fn'] = $_card->getProperty('FN')->value;
+        
+        $components = $_card->getProperty('N')->getComponents();
+        $_data['n_family'] = $components[0];
+        $_data['n_given']  = $components[1];
+        $_data['n_middle'] = $components[2];
+        $_data['n_prefix'] = $components[3];
+        $_data['n_suffix'] = $components[4];
+        
+        // Tine20 don't support nickname, but it's a common feature, so this allow mapping to customField
+        if (strlen($this->_options['mapNicknameToField'])>0) {
+            if ($_card->getProperty('NICKNAME')) $_data[$this->_options['mapNicknameToField']] = $_card->getProperty('NICKNAME')->value;
+        }
+        
+        return $_data;
+    }
+
+    /**
+     * get photo from vcard
+     * 
+     * @param VCard $_card
+     * @param array $_data
+     * @return array
+     */
+    function _getPhoto(VCard $_card, $_data)
+    {
+        // TODO $properties = $card->getProperties('PHOTO'); // VCard and Tine support picture, now, the how to do...
+        
+        return $_data;
     }
 }
 
