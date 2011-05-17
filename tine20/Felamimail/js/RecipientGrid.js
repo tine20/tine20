@@ -130,7 +130,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {Event} e
      */
     onCtxMenu: function(grid, row, e) {
-        var activeRow = row || this.activeEditor.row;
+        var activeRow = (row === null) ? ((this.activeEditor) ? this.activeEditor.row : 0) : row;
         
         e.stopEvent();
         var selModel = grid.getSelectionModel();
