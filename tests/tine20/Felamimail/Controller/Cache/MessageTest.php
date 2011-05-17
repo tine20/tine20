@@ -194,23 +194,24 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $updatedFolder = $this->_controller->updateCache($this->_folder, 10, 1);
         $loopCount = 1;
         do {
-            $updatedFolder = $this->_controller->updateCache($this->_folder, 10);
+            $updatedFolder = $this->_controller->updateCache($this->_folder, 10, 1);
             $loopCount++;
         } while ($updatedFolder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $loopCount < 10);
         
         $this->assertGreaterThan(0, $updatedFolder->cache_totalcount);
         $this->assertNotEquals(10, $loopCount, 'should complete cache update with < 10 iterations.');
         
-        // now lets delete one message from folder and add another one
         $result = $this->_imap->search(array(
             $this->_headerValueToDelete
         ));
         
         if ($_mode == 'oldest') {
+            // now lets delete one message from folder and add another one
             $this->_imap->removeMessage($result[0]);
             $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
             $expected = $updatedFolder->cache_totalcount;
         } else {
+            // just delete the newest message
             $this->_imap->removeMessage($result[count($result) - 1]);
             $expected = $updatedFolder->cache_totalcount - 1;
         }
