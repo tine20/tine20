@@ -191,7 +191,8 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
         
         // update message cache
-        $loopCount = 0;
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 10, 1);
+        $loopCount = 1;
         do {
             $updatedFolder = $this->_controller->updateCache($this->_folder, 10);
             $loopCount++;
