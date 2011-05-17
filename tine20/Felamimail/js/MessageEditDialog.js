@@ -637,6 +637,9 @@ Ext.namespace('Tine.Felamimail');
 
         this.record.set('account_id', account.get('original_id'));
         
+        // need to sync once again to make sure we have the correct recipients
+        this.recipientGrid.syncRecipientsToRecord();
+        
         /*
         if (this.record.data.note) {
             // show message box with note editing textfield
