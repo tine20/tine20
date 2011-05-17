@@ -619,7 +619,7 @@ Tine.Felamimail.getEmailStringFromContact = function(contact) {
  * @param {Tine.Exception} exception
  */
 Tine.Felamimail.handleRequestException = function(exception) {
-    Tine.log.warn('request exception :');
+    Tine.log.warn('Request exception :');
     Tine.log.warn(exception);
     
     var app = Tine.Tinebase.appMgr.get('Felamimail');
@@ -658,11 +658,23 @@ Tine.Felamimail.handleRequestException = function(exception) {
             });
             break;
             
-        case 404: 
         case 914: // Felamimail_Exception_IMAPMessageNotFound
-            // do nothing, this exception is handled by Tine.Tinebase.ExceptionHandler.handleRequestException
-            exception.code = 404;
-            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            Tine.log.notice('Message was deleted by another client.');
+            
+            // remove message from store and select next message
+            var requestParams = Ext.util.JSON.decode(exception.request).params,
+                centerPanel = app.getMainScreen().getCenterPanel(),
+                msg = centerPanel.getStore().getById(requestParams.id);
+                
+            if (msg) {
+                var sm = centerPanel.getGrid().getSelectionModel(),
+                    nextMessage = centerPanel.getNextMessage(sm);
+                    
+                centerPanel.getStore().remove(msg);
+                if (nextMessage) {
+                    sm.selectRecords([nextMessage]);
+                }
+            }
             break;
             
         case 920: // Felamimail_Exception_SMTP
