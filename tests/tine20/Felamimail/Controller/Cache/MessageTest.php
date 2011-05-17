@@ -145,7 +145,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     public function testUpdateCache()
     {
         // update message cache
-        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
         
         // check folder status after update
         if ($updatedFolder->cache_status == Felamimail_Model_Folder::CACHE_STATUS_COMPLETE) {
@@ -214,7 +214,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
             $expected = $updatedFolder->cache_totalcount - 1;
         }
         
-        $updatedFolderAgain = $this->_controller->updateCache($this->_folder, 30);
+        $updatedFolderAgain = $this->_controller->updateCache($this->_folder, 30, 1);
         $this->assertEquals($expected, $updatedFolderAgain->cache_totalcount);
     }
 
@@ -224,7 +224,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
     public function testUpdateCountersOnly()
     {
         // update message cache
-        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
         
         $this->_appendMessage('multipart_alternative.eml', $this->_testFolderName);
         $this->_headerValueToDelete = 'HEADER X-Tine20TestMessage multipart/alternative';
@@ -243,24 +243,24 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testFolderCounterSanitizing()
     {
-        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
         $unreadcount = $updatedFolder->cache_unreadcount;
         
         // change unreadcount of folder
         Felamimail_Controller_Folder::getInstance()->updateFolderCounter($updatedFolder, array('cache_unreadcount' => '+1'));
-        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
         $this->assertEquals($unreadcount, $updatedFolder->cache_unreadcount, 'unreadcount should have been sanitized');
         
         // add new unread message
         $message = $this->_emailTestClass->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
         $this->_imap->clearFlags($message->messageuid, array(Zend_Mail_Storage::FLAG_SEEN));
-        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
         $this->assertEquals($unreadcount+1, $updatedFolder->cache_unreadcount, 'unreadcount should have been increased by 1');
         
         // mark message as seen twice
         Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
         Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, array(Zend_Mail_Storage::FLAG_SEEN));
-        $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+        $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
         $this->assertEquals($unreadcount, $updatedFolder->cache_unreadcount, 'unreadcount should be the same as before');
     }    
     
@@ -312,7 +312,7 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         Felamimail_Controller_Message_Flags::getInstance()->addFlags($message, Zend_Mail_Storage::FLAG_ANSWERED);
         
         while (! isset($updatedFolder) || $updatedFolder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
-            $updatedFolder = $this->_controller->updateCache($this->_folder, 30);
+            $updatedFolder = $this->_controller->updateCache($this->_folder, 30, 1);
         }
         
         // clear/add flag on imap
