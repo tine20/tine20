@@ -117,10 +117,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param string $_folder
      * @param integer $_time in seconds
+     * @param integer $_updateFlagFactor 1 = update flags every time, x = update flags roughly each xth run (10 by default)
      * @return Felamimail_Model_Folder folder status (in cache)
      * @throws Felamimail_Exception
      */
-    public function updateCache($_folder, $_time = 10)
+    public function updateCache($_folder, $_time = 10, $_updateFlagFactor = 10)
     {
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
@@ -142,8 +143,10 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_addMessagesToCache($folder, $imap);
         $this->_checkForMissingMessages($folder, $imap);
         $this->_updateFolderStatus($folder);
-        // @todo perhaps we should do this only every 10th (?) time
-        $folder = $this->updateFlags($folder);
+        
+        if (rand(1, $_updateFlagFactor) == 1) {
+            $folder = $this->updateFlags($folder);
+        }
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
