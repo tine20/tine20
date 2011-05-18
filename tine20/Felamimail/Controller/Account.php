@@ -459,31 +459,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
         
-        if (isset($capabilities['namespace'])) {
-            // update delimiter
-            $delimiter = (! empty($capabilities['namespace']['personal']) && strlen($capabilities['namespace']['personal']['delimiter']) === 1) 
-                ? $capabilities['namespace']['personal']['delimiter'] : '';
-            if ($delimiter && $delimiter != $_account->delimiter) {
-                $_account->delimiter = $delimiter;
-            }
-        
-            // update namespaces
-            $_account->ns_personal   = (! empty($capabilities['namespace']['personal'])) ? $capabilities['namespace']['personal']['name']: '';
-            $_account->ns_other      = (! empty($capabilities['namespace']['other']))    ? $capabilities['namespace']['other']['name']   : '';
-            $_account->ns_shared     = (! empty($capabilities['namespace']['shared']))   ? $capabilities['namespace']['shared']['name']  : '';
-
-            if ($_account->ns_personal !== 'NIL') {
-                // update sent/trash folders
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
-                if (! empty($_account->ns_personal) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->sent_folder) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->trash_folder)) {
-                    $_account->sent_folder = $_account->ns_personal . $_account->sent_folder;
-                    $_account->trash_folder = $_account->ns_personal . $_account->trash_folder;
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated sent/trash folder names: ' . $_account->sent_folder .' / ' . $_account->trash_folder);
-                }
-            } else {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
-            }
-        }
+        $this->_updateNamespacesAndDelimiter($_account, $capabilities);
 
         // check if server has 'CHILDREN' support
         $_account->has_children_support = (in_array('CHILDREN', $capabilities['capabilities'])) ? 1 : 0;
@@ -496,6 +472,43 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $_SESSION['Felamimail'][$_account->getId()] = $capabilities;
         
         return $capabilities;
+    }
+    
+    /**
+     * update account namespaces from capabilities
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param array $_capabilities
+     */
+    protected function _updateNamespacesAndDelimiter(Felamimail_Model_Account $_account, $_capabilities)
+    {
+        if (! isset($_capabilities['namespace'])) {
+            return;
+        }
+        
+        // update delimiter
+        $delimiter = (! empty($_capabilities['namespace']['personal']) && strlen($_capabilities['namespace']['personal']['delimiter']) === 1) 
+            ? $_capabilities['namespace']['personal']['delimiter'] : '';
+        if ($delimiter && $delimiter != $_account->delimiter) {
+            $_account->delimiter = $delimiter;
+        }
+    
+        // update namespaces
+        $_account->ns_personal   = (! empty($_capabilities['namespace']['personal'])) ? $_capabilities['namespace']['personal']['name']: '';
+        $_account->ns_other      = (! empty($_capabilities['namespace']['other']))    ? $_capabilities['namespace']['other']['name']   : '';
+        $_account->ns_shared     = (! empty($_capabilities['namespace']['shared']))   ? $_capabilities['namespace']['shared']['name']  : '';
+
+        if ($_account->ns_personal !== 'NIL') {
+            // update sent/trash folders
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
+            if (! empty($_account->ns_personal) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->sent_folder) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->trash_folder)) {
+                $_account->sent_folder = $_account->ns_personal . $_account->sent_folder;
+                $_account->trash_folder = $_account->ns_personal . $_account->trash_folder;
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated sent/trash folder names: ' . $_account->sent_folder .' / ' . $_account->trash_folder);
+            }
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
+        }
     }
     
     /**
