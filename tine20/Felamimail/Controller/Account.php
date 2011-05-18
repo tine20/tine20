@@ -445,17 +445,19 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param Felamimail_Model_Account $_account
      * @return array capabilities
      */
-    public function updateCapabilities(Felamimail_Model_Account $_account, Felamimail_Backend_ImapProxy $_imapBackend)
+    public function updateCapabilities(Felamimail_Model_Account $_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
         if (isset($_SESSION['Felamimail']) && array_key_exists($_account->getId(), $_SESSION['Felamimail'])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
             return $_SESSION['Felamimail'][$_account->getId()];
         }
         
+        $imapBackend = ($_imapBackend !== NULL) ? $_imapBackend : $this->_getIMAPBackend($_account, TRUE);
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name);
         
         // get imap server capabilities and save delimiter / personal namespace in account
-        $capabilities = $_imapBackend->getCapabilityAndNamespace();
+        $capabilities = $imapBackend->getCapabilityAndNamespace();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
         
