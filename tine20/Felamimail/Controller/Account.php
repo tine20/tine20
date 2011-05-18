@@ -171,34 +171,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * add one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     */
-    public function create(Tinebase_Record_Interface $_record)
-    {
-        $result = parent::create($_record);
-        
-        // update account capabilities
-        return $this->updateCapabilities($result);
-    }
-    
-    /**
-     * update one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     */
-    public function update(Tinebase_Record_Interface $_record)
-    {
-        $result = parent::update($_record);
-        
-        // update account capabilities
-        return $this->updateCapabilities($result);
-    }
-    
-    /**
      * Deletes a set of records.
      * 
      * @param   array array of record identifiers
@@ -290,6 +262,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
+     * 
+     * @todo split this into separate functions
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
@@ -372,6 +346,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
             }
         }
+        
+        // @todo reset capabilities if imap host / port changed
     }
 
     /**
@@ -467,23 +443,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * get imap server capabilities and save delimiter / personal namespace in account
      *
      * @param Felamimail_Model_Account $_account
-     * @param Felamimail_Backend_ImapProxy $_imapBackend
-     * @param string $_delimiter
-     * @return Felamimail_Model_Account
-     * 
-	 * @todo only get all capabilities once (the first time this account connects) / only update namespaces and delimiter later
-     * @todo remove imapBackend (+ exception handling at the top) and delimiter (get delimiter from INBOX folder) params (later, when capabilities are fetched only once)
+     * @return array capabilities
      */
-    public function updateCapabilities($_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL, $_delimiter = NULL)
+    public function updateCapabilities(Felamimail_Model_Account $_account, Felamimail_Backend_ImapProxy $_imapBackend)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->getId(), TRUE));
-        
-        if ($_imapBackend === NULL) {
-            $_imapBackend = $this->_getIMAPBackend($_account);
-            if (! $_imapBackend) {
-                return $_account;
-            }
+        if (isset($_SESSION['Felamimail']) && array_key_exists($_account->getId(), $_SESSION['Felamimail'])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
+            return $_SESSION['Felamimail'][$_account->getId()];
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name);
         
         // get imap server capabilities and save delimiter / personal namespace in account
         $capabilities = $_imapBackend->getCapabilityAndNamespace();
@@ -492,41 +461,46 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         if (isset($capabilities['namespace'])) {
             $_account->delimiter     = $capabilities['namespace']['personal']['delimiter'];
+            if ($_account->delimiter) {
+                $_account->delimiter = substr($_account->delimiter, 0, 1);
+            }
+        
             $_account->ns_personal   = (! empty($capabilities['namespace']['personal'])) ? $capabilities['namespace']['personal']['name']: '';
             $_account->ns_other      = (! empty($capabilities['namespace']['other']))    ? $capabilities['namespace']['other']['name']   : '';
             $_account->ns_shared     = (! empty($capabilities['namespace']['shared']))   ? $capabilities['namespace']['shared']['name']  : '';
-            
-            if ($_account->ns_personal == 'NIL') {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
+
+            if ($_account->ns_personal !== 'NIL') {
                 // update sent/trash folders
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
                 if (! empty($_account->ns_personal) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->sent_folder) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->trash_folder)) {
                     $_account->sent_folder = $_account->ns_personal . $_account->sent_folder;
                     $_account->trash_folder = $_account->ns_personal . $_account->trash_folder;
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated sent/trash folder names: ' . $_account->sent_folder .' / ' . $_account->trash_folder);
                 }
-            }
-            
-        } else if ($_delimiter !== NULL) {
-            // get delimiter from params
-            if ($_delimiter != $_account->delimiter) {
-                $_account->delimiter = $_delimiter;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting new delimiter: ' . $_delimiter);
-            }
+            } else {
+                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
+            }            
         }
+
+//         else if ($_delimiter !== NULL) {
+//            // get delimiter from params
+//            if ($_delimiter != $_account->delimiter) {
+//                $_account->delimiter = $_delimiter;
+//                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting new delimiter: ' . $_delimiter);
+//            }
+//        }
         
         // check if server has 'CHILDREN' support
         $_account->has_children_support = (in_array('CHILDREN', $capabilities['capabilities'])) ? 1 : 0;
         
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating capabilities for account: ' . $_account->name);
         
-        if ($_account->delimiter) {
-            $_account->delimiter = substr($_account->delimiter, 0, 1);
-        }
-        
         $result = $this->_backend->update($_account);
-        return $this->get($result->getId());
+        
+        // save capabilities in SESSION
+        $_SESSION['Felamimail'][$_account->getId()] = $capabilities;
+        
+        return $capabilities;
     }
     
     /**
@@ -672,9 +646,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating sieve_vacation_active = ' . $_vacationEnabled . ' for account: ' . $account->name);
             
             $account->sieve_vacation_active = (bool) $_vacationEnabled;
-            // @todo we should use $this->update($account) / but we don't want to updateCapabilities
-            //$result = $this->update($account);
-            $account = $this->_backend->update($account);
+            $account = $this->update($account);
         }
         
         return $account;
@@ -708,7 +680,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), TRUE));
             
             $systemAccount = $this->_backend->create($systemAccount);
-            $systemAccount = $this->updateCapabilities($systemAccount);
             $_accounts->addRecord($systemAccount);
             $this->_addedDefaultAccount = TRUE;
             
