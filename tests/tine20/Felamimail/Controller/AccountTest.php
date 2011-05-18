@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -156,7 +156,8 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $account->ns_personal, $accountToString);
         $this->assertEquals(1, preg_match('@/|\.@', $account->delimiter), $accountToString);
         
-        // @todo check capabilities array
+        $this->assertTrue(in_array('QUOTA', $capabilities['capabilities']));
+        $this->assertTrue(in_array('IMAP4', $capabilities['capabilities']));
         
         // @todo need to check first, which email server we have
         //$this->assertEquals('#Users', $account->ns_other, $accountToString);
