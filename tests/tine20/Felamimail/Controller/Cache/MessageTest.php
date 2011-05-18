@@ -344,4 +344,17 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
         // cached message should not have been updated again
         $this->assertEquals($cachedMessage->timestamp->__toString(), $cachedMessageAgain->timestamp->__toString());
     }
+
+    /**
+     * test update folder quota
+     * 
+     * @todo finish implementation
+     */
+    public function testUpdateFolderQuota() 
+    {
+        $folderToTest = $this->_getFolder('INBOX');
+        $folderToTest = $this->_controller->updateCache($folderToTest);
+        
+        //print_r($folderToTest->toArray());
+    }
 }
