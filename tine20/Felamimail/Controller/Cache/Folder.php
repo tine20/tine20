@@ -344,6 +344,12 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'delimiter'         => $delimiter,
                     ));
                     
+                    // update delimiter setting of account
+                    if ($folder->delimiter && $folder->delimiter !== $_account->delimiter && $folder->localname === 'INBOX') {
+                        $_account->delimiter = $folder->delimiter;
+                        $_account = Felamimail_Controller_Account::getInstance()->update($_account);
+                    }
+                    
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new folder ' . $folderData['globalName'] . ' to cache.');
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . print_r($folder->toArray(), true));
                     

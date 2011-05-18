@@ -460,11 +460,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
         
         if (isset($capabilities['namespace'])) {
-            $_account->delimiter     = $capabilities['namespace']['personal']['delimiter'];
-            if ($_account->delimiter) {
-                $_account->delimiter = substr($_account->delimiter, 0, 1);
+            // update delimiter
+            $delimiter = (! empty($capabilities['namespace']['personal']) && strlen($capabilities['namespace']['personal']['delimiter']) === 1) 
+                ? $capabilities['namespace']['personal']['delimiter'] : '';
+            if ($delimiter && $delimiter != $_account->delimiter) {
+                $_account->delimiter = $delimiter;
             }
         
+            // update namespaces
             $_account->ns_personal   = (! empty($capabilities['namespace']['personal'])) ? $capabilities['namespace']['personal']['name']: '';
             $_account->ns_other      = (! empty($capabilities['namespace']['other']))    ? $capabilities['namespace']['other']['name']   : '';
             $_account->ns_shared     = (! empty($capabilities['namespace']['shared']))   ? $capabilities['namespace']['shared']['name']  : '';
@@ -479,17 +482,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                 }
             } else {
                 Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
-            }            
+            }
         }
 
-//         else if ($_delimiter !== NULL) {
-//            // get delimiter from params
-//            if ($_delimiter != $_account->delimiter) {
-//                $_account->delimiter = $_delimiter;
-//                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting new delimiter: ' . $_delimiter);
-//            }
-//        }
-        
         // check if server has 'CHILDREN' support
         $_account->has_children_support = (in_array('CHILDREN', $capabilities['capabilities'])) ? 1 : 0;
         
