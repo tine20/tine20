@@ -899,5 +899,15 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      */
     protected function _updateFolderQuota(Felamimail_Model_Folder $_folder)
     {
+        // only do it for INBOX
+        if ($_folder->localname !== 'INBOX') {
+            return;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Getting quota for INBOX ' . $_folder->getId());
+            
+        // @todo check imap (folder?) capabilities
+        // @todo get quota and save in folder
     }
 }
