@@ -46,8 +46,8 @@ class Felamimail_Backend_ImapFactory
             
             try {
                 self::$_backends[$accountId] = new Felamimail_Backend_ImapProxy($imapConfig);
+                Felamimail_Controller_Account::getInstance()->updateCapabilities($account, self::$_backends[$accountId]);
                 
-                // @todo update capabilities here -> check if already in session
             } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
                 // add account and username to Felamimail_Exception_IMAPInvalidCredentials
                 $feiic->setAccount($account)
