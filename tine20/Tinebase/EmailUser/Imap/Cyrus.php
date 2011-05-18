@@ -5,8 +5,8 @@
  * @package     Tinebase
  * @subpackage  User
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 
 /**
@@ -205,12 +205,16 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
      * get imap connection
      * 
      * @return Zend_Mail_Protocol_Imap
+     * @throws Tinebase_Exception_AccessDenied
      */
     protected function _getImapConnection()
     {
         if (! $this->_imap instanceof Zend_Mail_Protocol_Imap) {
             $this->_imap = new Zend_Mail_Protocol_Imap($this->_config['host'], $this->_config['port'], $this->_config['ssl']);
-            $this->_imap->login($this->_config['admin'], $this->_config['password']);
+            $loginResult = $this->_imap->login($this->_config['admin'], $this->_config['password']);
+            if (! $loginResult) {
+                throw new Tinebase_Exception_AccessDenied('Could not login to cyrus server ' . $this->_config['host'] . ' with user ' . $this->_config['admin']);
+            }
         }
 
         return $this->_imap;
