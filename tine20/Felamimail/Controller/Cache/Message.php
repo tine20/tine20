@@ -148,6 +148,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             $folder = $this->updateFlags($folder);
         }
         
+        $this->_updateFolderQuota($folder);
+        
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
         
@@ -886,5 +888,16 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' flags.');
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);        
+    }
+    
+    /**
+     * update folder quota (check if server supports QUOTA first)
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * 
+     * @todo implement
+     */
+    protected function _updateFolderQuota(Felamimail_Model_Folder $_folder)
+    {
     }
 }
