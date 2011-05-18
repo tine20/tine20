@@ -180,13 +180,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     {
         $result = parent::create($_record);
         
-        // set as default account if it is the only account
-        $accountCount = $this->searchCount(new Felamimail_Model_AccountFilter(array()));
-        if ($accountCount == 1) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $result->name . ' as new default email account.');
-            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $result->getId();
-        }
-        
         // update account capabilities
         return $this->updateCapabilities($result);
     }
@@ -273,6 +266,23 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
     }
 
+    /**
+     * inspect creation of one record (after create)
+     * 
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        // set as default account if it is the only account
+        $accountCount = $this->searchCount(new Felamimail_Model_AccountFilter(array()));
+        if ($accountCount == 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $_createdRecord->name . ' as new default email account.');
+            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $_createdRecord->getId();
+        }
+    }
+    
     /**
      * inspect update of one record
      * - update credentials here / only allow to update certain fields of system accounts
