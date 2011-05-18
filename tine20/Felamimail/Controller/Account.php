@@ -608,7 +608,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                     . $tenf->getMessage());
                 
                 $splitFolderName = Felamimail_Model_Folder::extractLocalnameAndParent($_systemFolder, $_account->delimiter);
-                Felamimail_Controller_Cache_Folder::getInstance()->update($account, $splitFolderName['parent'], TRUE, FALSE);
+                Felamimail_Controller_Cache_Folder::getInstance()->update($account, $splitFolderName['parent'], TRUE);
                 $systemFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $folderName);
             }
         }
