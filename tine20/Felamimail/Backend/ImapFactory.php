@@ -4,8 +4,8 @@
  * 
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-20210 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -46,6 +46,8 @@ class Felamimail_Backend_ImapFactory
             
             try {
                 self::$_backends[$accountId] = new Felamimail_Backend_ImapProxy($imapConfig);
+                
+                // @todo update capabilities here -> check if already in session
             } catch (Felamimail_Exception_IMAPInvalidCredentials $feiic) {
                 // add account and username to Felamimail_Exception_IMAPInvalidCredentials
                 $feiic->setAccount($account)
