@@ -155,7 +155,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      *
      * @param string $_id
      * @param int $_containerId
-     * @return Tinebase_Record_Interface
+     * @return Felamimail_Model_Account
      */
     public function get($_id, $_containerId = NULL)
     {
