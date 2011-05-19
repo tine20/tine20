@@ -148,7 +148,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             $folder = $this->updateFlags($folder);
         }
         
-        $this->_updateFolderQuota($folder);
+        $this->_updateFolderQuota($folder, $imap);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -894,20 +894,36 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * update folder quota (check if server supports QUOTA first)
      * 
      * @param Felamimail_Model_Folder $_folder
-     * 
-     * @todo implement
+     * @param Felamimail_Backend_ImapProxy $_imap
      */
-    protected function _updateFolderQuota(Felamimail_Model_Folder $_folder)
+    protected function _updateFolderQuota(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
     {
         // only do it for INBOX
         if ($_folder->localname !== 'INBOX') {
             return;
         }
         
+        $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
+        if (! $account->hasCapability('QUOTA')) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Account ' . $account->name . ' has no QUOTA capability'); 
+            return;
+        }
+        
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Getting quota for INBOX ' . $_folder->getId());
             
-        // @todo check imap (folder?) capabilities
-        // @todo get quota and save in folder
+        // get quota and save in folder
+        $quota = $_imap->getQuota($_folder->localname);
+        
+        if (! empty($quota) && isset($quota['STORAGE'])) {
+            $_folder->quota_usage = $quota['STORAGE']['usage'];
+            $_folder->quota_limit = $quota['STORAGE']['limit'];
+        } else {
+            $_folder->quota_usage = 0;
+            $_folder->quota_limit = 0;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($quota, TRUE)); 
     }
 }

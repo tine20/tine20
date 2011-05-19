@@ -347,14 +347,20 @@ class Felamimail_Controller_Cache_MessageTest extends PHPUnit_Framework_TestCase
 
     /**
      * test update folder quota
-     * 
-     * @todo finish implementation
      */
     public function testUpdateFolderQuota() 
     {
         $folderToTest = $this->_getFolder('INBOX');
         $folderToTest = $this->_controller->updateCache($folderToTest);
         
-        //print_r($folderToTest->toArray());
+        $quota = $this->_imap->getQuota('INBOX');
+        
+        if (empty($quota)) {
+            $this->assertEquals(0, $folderToTest->quota_usage);
+            $this->assertEquals(0, $folderToTest->quota_limit);
+        } else {
+            $this->assertEquals($quota['STORAGE']['usage'], $folderToTest->quota_usage);
+            $this->assertEquals($quota['STORAGE']['limit'], $folderToTest->quota_limit);
+        }
     }
 }
