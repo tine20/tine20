@@ -257,99 +257,133 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     
     /**
      * inspect update of one record
-     * - update credentials here / only allow to update certain fields of system accounts
      * 
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
      * @return  void
-     * 
-     * @todo split this into separate functions
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         if ($_record->type == Felamimail_Model_Account::TYPE_SYSTEM) {
-            // only allow to update some values for system accounts
-            $allowedFields = array(
-                'name',
-                'signature',
-                'has_children_support',
-                'delimiter',
-                'ns_personal',
-                'ns_other',
-                'ns_shared',
-                'last_modified_time',
-                'last_modified_by',
-            );
-            $diff = $_record->diff($_oldRecord);
-            foreach ($diff as $key => $value) {
-                if (! in_array($key, $allowedFields)) {
-                    // setting old value
-                    $_record->$key = $_oldRecord->$key;
-                }
-            } 
+            $this->_beforeUpdateSystemAccount($_record, $_oldRecord);
         } else {
-            // get old credentials
-            $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
-            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-            
-            if ($userCredentialCache !== NULL) {
-                    $credentialsBackend->getCachedCredentials($userCredentialCache);
-            } else {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
-                    . ' Something went wrong with the CredentialsCache / use given username/password instead.'
-                );
-                return;
-            }
-            
-            if ($_oldRecord->credentials_id) {
-                $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
-                $credentials->key = substr($userCredentialCache->password, 0, 24);
-                $credentialsBackend->getCachedCredentials($credentials);
-            } else {
-                $credentials = new Tinebase_Model_CredentialCache(array(
-                    'username'  => '',
-                    'password'  => ''
-                ));
-            }
-            
-            // check if something changed
-            if (
-                ! $_oldRecord->credentials_id
-                ||  (! empty($_record->user) && $_record->user !== $credentials->username)
-                ||  (! empty($_record->password) && $_record->password !== $credentials->password)
-            ) {
-                $newPassword = ($_record->password) ? $_record->password : $credentials->password;
-                $newUsername = ($_record->user) ? $_record->user : $credentials->username;
+            $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
+        }
+    }
     
-                $_record->credentials_id = $this->_createCredentials($newUsername, $newPassword);
-                $imapCredentialsChanged = TRUE;
-            } else {
-                $imapCredentialsChanged = FALSE;
+    /**
+     * inspect update of system account
+     * - only allow to update certain fields of system accounts
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _beforeUpdateSystemAccount($_record, $_oldRecord)
+    {
+        // only allow to update some values for system accounts
+        $allowedFields = array(
+            'name',
+            'signature',
+            'has_children_support',
+            'delimiter',
+            'ns_personal',
+            'ns_other',
+            'ns_shared',
+            'last_modified_time',
+            'last_modified_by',
+        );
+        $diff = $_record->diff($_oldRecord);
+        foreach ($diff as $key => $value) {
+            if (! in_array($key, $allowedFields)) {
+                // setting old value
+                $_record->$key = $_oldRecord->$key;
             }
-            
-            if ($_record->smtp_user && $_record->smtp_password) {
-                // create extra smtp credentials
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
-                $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
-                
-            } else if (
-                $imapCredentialsChanged 
-                && (! $_record->smtp_credentials_id || $_record->smtp_credentials_id == $_oldRecord->credentials_id)
-            ) {
-                // use imap credentials for smtp auth as well
-                $_record->smtp_credentials_id = $_record->credentials_id;
-            }
-            
-            $diff = $_record->diff($_oldRecord);
-            if (array_key_exists('display_format', $diff)) {
-                // delete message body cache because display format has changed
-                Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
-            }
+        } 
+    }
+    
+    /**
+     * inspect update of normal user account
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _beforeUpdateStandardAccount($_record, $_oldRecord)
+    {
+        $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
+        
+        $diff = $_record->diff($_oldRecord);
+        if (array_key_exists('display_format', $diff)) {
+            // delete message body cache because display format has changed
+            Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
         }
         
         // @todo reset capabilities if imap host / port changed
     }
 
+    /**
+     * update user account credentials
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _beforeUpdateStandardAccountCredentials($_record, $_oldRecord)
+    {
+        // get old credentials
+        $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
+        $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        
+        if ($userCredentialCache !== NULL) {
+                $credentialsBackend->getCachedCredentials($userCredentialCache);
+        } else {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
+                . ' Something went wrong with the CredentialsCache / use given username/password instead.'
+            );
+            return;
+        }
+        
+        if ($_oldRecord->credentials_id) {
+            $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
+            $credentials->key = substr($userCredentialCache->password, 0, 24);
+            $credentialsBackend->getCachedCredentials($credentials);
+        } else {
+            $credentials = new Tinebase_Model_CredentialCache(array(
+                'username'  => '',
+                'password'  => ''
+            ));
+        }
+        
+        // check if something changed
+        if (
+            ! $_oldRecord->credentials_id
+            ||  (! empty($_record->user) && $_record->user !== $credentials->username)
+            ||  (! empty($_record->password) && $_record->password !== $credentials->password)
+        ) {
+            $newPassword = ($_record->password) ? $_record->password : $credentials->password;
+            $newUsername = ($_record->user) ? $_record->user : $credentials->username;
+
+            $_record->credentials_id = $this->_createCredentials($newUsername, $newPassword);
+            $imapCredentialsChanged = TRUE;
+        } else {
+            $imapCredentialsChanged = FALSE;
+        }
+        
+        if ($_record->smtp_user && $_record->smtp_password) {
+            // create extra smtp credentials
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
+            $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
+            
+        } else if (
+            $imapCredentialsChanged 
+            && (! $_record->smtp_credentials_id || $_record->smtp_credentials_id == $_oldRecord->credentials_id)
+        ) {
+            // use imap credentials for smtp auth as well
+            $_record->smtp_credentials_id = $_record->credentials_id;
+        }
+    }
+    
     /**
      * check if user has the right to manage accounts
      * 
