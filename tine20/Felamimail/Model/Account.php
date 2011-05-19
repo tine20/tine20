@@ -459,7 +459,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      */
     public function hasCapability($_capability)
     {
-        $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($_account);
+        $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($this);
         
         return (in_array($_capability, $capabilities['capabilities']));
     }
