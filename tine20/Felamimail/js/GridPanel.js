@@ -1097,7 +1097,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 return folder.isInbox() && (folder.get('account_id') == accountId);
             }, this).first();
         }        
-        if (accountInbox && accountInbox.get('quota_limit')) {
+        if (accountInbox && accountInbox.get('quota_limit') && accountId == accountInbox.get('account_id')) {
             var usage = accountInbox.get('quota_usage') / accountInbox.get('quota_limit');
             this.quotaBar.updateProgress(usage, this.app.i18n._('Quota usage'));
         }
