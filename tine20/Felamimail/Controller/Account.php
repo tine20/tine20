@@ -7,8 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        make it possible to switch back to smtp creds = imap creds even if extra smtp creds have been created
  */
 
 /**
@@ -181,11 +179,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         parent::delete($_ids);
         
         // check if default account got deleted and set new default account
-        if (in_array(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, (array) $_ids)) {
+        if (in_array(Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT}, (array) $_ids)) {
             $accounts = $this->search();
             $defaultAccountId = (count($accounts) > 0) ? $accounts->getFirstRecord()->getId() : '';
             
-            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccountId;
+            Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccountId;
         }
     }
     
@@ -251,7 +249,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $accountCount = $this->searchCount(new Felamimail_Model_AccountFilter(array()));
         if ($accountCount == 1) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $_createdRecord->name . ' as new default email account.');
-            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $_createdRecord->getId();
+            Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $_createdRecord->getId();
         }
     }
     
@@ -314,12 +312,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
         
         $diff = $_record->diff($_oldRecord);
+        
+        // delete message body cache because display format has changed
         if (array_key_exists('display_format', $diff)) {
-            // delete message body cache because display format has changed
             Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
         }
         
-        // @todo reset capabilities if imap host / port changed
+        // reset capabilities if imap host / port changed
+        if (isset($_SESSION[$this->_applicationName]) && (array_key_exists('host', $diff) || array_key_exists('port', $diff))) {
+            unset($_SESSION[$this->_applicationName][$_record->getId()]);
+        }
     }
 
     /**
@@ -399,13 +401,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         switch ($_action) {
             case 'create':
-                if (! Tinebase_Core::getUser()->hasRight('Felamimail', Felamimail_Acl_Rights::ADD_ACCOUNTS)) {
+                if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::ADD_ACCOUNTS)) {
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to add accounts!");
                 }
                 break;                
             case 'update':
             case 'delete':
-                if (! Tinebase_Core::getUser()->hasRight('Felamimail', Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {
+                if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage accounts!");
                 }
                 break;
@@ -481,9 +483,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      */
     public function updateCapabilities(Felamimail_Model_Account $_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
-        if (isset($_SESSION['Felamimail']) && array_key_exists($_account->getId(), $_SESSION['Felamimail'])) {
+        if (isset($_SESSION[$this->_applicationName]) && array_key_exists($_account->getId(), $_SESSION[$this->_applicationName])) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
-            return $_SESSION['Felamimail'][$_account->getId()];
+            return $_SESSION[$this->_applicationName][$_account->getId()];
         }
         
         $imapBackend = ($_imapBackend !== NULL) ? $_imapBackend : $this->_getIMAPBackend($_account, TRUE);
@@ -505,7 +507,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $result = $this->_backend->update($_account);
         
         // save capabilities in SESSION
-        $_SESSION['Felamimail'][$_account->getId()] = $capabilities;
+        $_SESSION[$this->_applicationName][$_account->getId()] = $capabilities;
         
         return $capabilities;
     }
@@ -714,7 +716,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             $this->_addedDefaultAccount = TRUE;
             
             // set as default account preference
-            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $systemAccount->getId();
+            Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $systemAccount->getId();
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new system account "' . $systemAccount->name . '".');
             
