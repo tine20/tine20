@@ -160,9 +160,11 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
             'no IMAP4(rev1) capability found in ' . print_r($capabilities['capabilities'], TRUE));
         $this->assertTrue(in_array('QUOTA', $capabilities['capabilities']), 'no QUOTA capability found in ' . print_r($capabilities['capabilities'], TRUE));
         
+        $this->assertEquals($capabilities, $_SESSION['Felamimail'][$this->_account->getId()]); 
+        
         // @todo need to check first, which email server we have
         //$this->assertEquals('#Users', $account->ns_other, $accountToString);
-        //$this->assertEquals('#Public', $account->ns_shared, $accountToString);
+        //$this->assertEquals('#Publi34c', $account->ns_shared, $accountToString);
     }
     
     /**
