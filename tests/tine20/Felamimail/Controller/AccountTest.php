@@ -161,10 +161,21 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         $this->assertTrue(in_array('QUOTA', $capabilities['capabilities']), 'no QUOTA capability found in ' . print_r($capabilities['capabilities'], TRUE));
         
         $this->assertEquals($capabilities, $_SESSION['Felamimail'][$this->_account->getId()]); 
+    }
+
+    /**
+     * test reset account capabilities
+     */
+    public function testResetAccountCapabilities()
+    {
+        $capabilities = $this->_controller->updateCapabilities($this->_account);
         
-        // @todo need to check first, which email server we have
-        //$this->assertEquals('#Users', $account->ns_other, $accountToString);
-        //$this->assertEquals('#Publi34c', $account->ns_shared, $accountToString);
+        $account = clone($this->_account);
+        $account->host = 'unittest.org';
+        $account->type = Felamimail_Model_Account::TYPE_USER;
+        $this->_controller->update($account);
+        
+        $this->assertFalse(array_key_exists($this->_account->getId(), $_SESSION['Felamimail']), print_r($_SESSION['Felamimail'], TRUE));
     }
     
     /**
