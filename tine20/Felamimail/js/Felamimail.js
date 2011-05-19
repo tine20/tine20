@@ -393,30 +393,41 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {String} operation
      */
     onUpdateFolder: function(store, record, operation) {
-        if (operation === Ext.data.Record.EDIT && record.isModified('cache_status')) {
-            Tine.log.info('Folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
-            
-            // as soon as we get a folder with status != complete we need to trigger checkmail soon!
-            if (['complete', 'pending'].indexOf(record.get('cache_status')) === -1) {
-                this.checkMailsDelayedTask.delay(1000);
+        if (operation === Ext.data.Record.EDIT) {
+            if (record.isModified('cache_status')) {
+                Tine.log.info('Folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
+                
+                // as soon as we get a folder with status != complete we need to trigger checkmail soon!
+                if (['complete', 'pending'].indexOf(record.get('cache_status')) === -1) {
+                    this.checkMailsDelayedTask.delay(1000);
+                }
+                
+                // only show notifications for inbox if unreadcount changed
+                if (record.isModified('cache_unreadcount')) {
+                    var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount),
+                        account = this.getAccountStore().getById(record.get('account_id'));
+                    if (recents > 0 && record.isInbox()) {
+                        Tine.log.info('show notification: ' + recents + ' new mails.');
+                        var title = this.i18n._('New mails'),
+                            message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} ({2}).'), recents, record.get('localname'), account.get('name')); 
+                        
+                        if (record.isCurrentSelection()) {
+                            // need to defer the notification because the new messages are not shown yet 
+                            // -> improve this with a callback fn or something like that / unread count should be updated when the messages become visible, too
+                            Ext.ux.Notification.show.defer(3500, this, [title, message]);
+                        } else {
+                            Ext.ux.Notification.show(title, message);
+                        }
+                    }
+                }
             }
             
-            // only show notifications for inbox if unreadcount changed
-            if (record.isModified('cache_unreadcount')) {
-                var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount),
-                    account = this.getAccountStore().getById(record.get('account_id'));
-                if (recents > 0 && record.isInbox()) {
-                    Tine.log.info('show notification: ' + recents + ' new mails.');
-                    var title = this.i18n._('New mails'),
-                        message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} ({2}).'), recents, record.get('localname'), account.get('name')); 
-                    
-                    if (record.isCurrentSelection()) {
-                        // need to defer the notification because the new messages are not shown yet 
-                        // -> improve this with a callback fn or something like that / unread count should be updated when the messages become visible, too
-                        Ext.ux.Notification.show.defer(3500, this, [title, message]);
-                    } else {
-                        Ext.ux.Notification.show(title, message);
-                    }
+            if (record.isInbox() && record.isModified('quota_usage') || record.isModified('quota_limit')) {
+                if (record.get('quota_usage')) {
+                    Tine.log.info('Folder "' + record.get('localname') + '" updated with quota values: ' 
+                        + record.get('quota_usage') + ' / ' + record.get('quota_limit'));
+
+                    this.getMainScreen().getCenterPanel().updateQuotaBar(null, record);
                 }
             }
         }
