@@ -450,4 +450,17 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         
         return TRUE;
     }
+
+    /**
+     * returns TRUE if account has capability (i.e. QUOTA, CONDSTORE, ...)
+     * 
+     * @param $_capability
+     * @return boolean
+     */
+    public function hasCapability($_capability)
+    {
+        $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($_account);
+        
+        return (in_array($_capability, $capabilities['capabilities']));
+    }
 }
