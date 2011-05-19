@@ -125,6 +125,20 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
+        
+        this.initPagingToolbar();
+    },
+    
+    /**
+     * add quota bar to paging toolbar
+     */
+    initPagingToolbar: function() {
+        this.quotaBar = new Ext.ProgressBar({
+            width: 100,
+            text: this.app.i18n._('Quota usage')
+        });
+        this.pagingToolbar.addSeparator();
+        this.pagingToolbar.add(this.quotaBar);
     },
     
     /**
@@ -358,6 +372,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
     },
     
+    /**
+     * get action toolbar
+     * 
+     * @return {Ext.Toolbar}
+     */
     getActionToolbar: function() {
         if (! this.actionToolbar) {
             this.actionToolbar = new Ext.Toolbar({
@@ -1029,6 +1048,58 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         if (! Ext.isEmpty(this.deleteQueue)) {
             options.params.filter.push({field: 'id', operator: 'notin', value: this.deleteQueue});
+        }
+    },
+    
+    /**
+     *  called after a new set of Records has been loaded
+     *  
+     * @param  {Ext.data.Store} this.store
+     * @param  {Array}          loaded records
+     * @param  {Array}          load options
+     * @return {Void}
+     */
+    onStoreLoad: function(store, records, options) {
+        this.supr().onStoreLoad.apply(this, arguments);
+        
+        this.updateQuotaBar(options.params.filter);
+    },
+    
+    /**
+     * update quotaBar / only do it if we have a path filter with a single account id
+     * 
+     * @param {Array} filter
+     */
+    updateQuotaBar: function(filter, accountInbox) {
+        if (! filter) {
+            filter = this.filterToolbar.getValue();
+        }
+        
+        var accountId = null, 
+            filterAccountId = null;
+            
+        for (var i = 0; i < filter.length; i++) {
+            if (filter[i].field == 'path' && filter[i].operator == 'in') {
+                for (var j = 0; j < filter[i].value.length; j++) {
+                    filterAccountId = filter[i].value[j].match(/^\/([a-z0-9]*)/i)[1];
+                    if (accountId && accountId != filterAccountId) {
+                        // reset quota bar
+                        this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+                        return;
+                    } else {
+                        accountId = filterAccountId;
+                    }
+                }
+            }
+        }
+        if (! accountInbox) {
+            var accountInbox = this.app.getFolderStore().queryBy(function(folder) {
+                return folder.isInbox() && (folder.get('account_id') == accountId);
+            }, this).first();
+        }        
+        if (accountInbox && accountInbox.get('quota_limit')) {
+            var usage = accountInbox.get('quota_usage') / accountInbox.get('quota_limit');
+            this.quotaBar.updateProgress(usage, this.app.i18n._('Quota usage'));
         }
     },
     
