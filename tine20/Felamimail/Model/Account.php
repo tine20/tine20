@@ -270,7 +270,7 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      * @param string $_username
      * @return string
      */
-    protected function getUsername($_username = NULL)
+    public function getUsername($_username = NULL)
     {
         $result = ($_username !== NULL) ? $_username : $this->user;
         
