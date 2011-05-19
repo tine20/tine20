@@ -320,6 +320,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         // reset capabilities if imap host / port changed
         if (isset($_SESSION[$this->_applicationName]) && (array_key_exists('host', $diff) || array_key_exists('port', $diff))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Resetting capabilities for account ' . $_record->name);
             unset($_SESSION[$this->_applicationName][$_record->getId()]);
         }
     }
