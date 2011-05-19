@@ -668,7 +668,8 @@ Tine.Felamimail.handleRequestException = function(exception) {
                 
             if (msg) {
                 var sm = centerPanel.getGrid().getSelectionModel(),
-                    nextMessage = centerPanel.getNextMessage(sm);
+                    selectedMsgs = sm.getSelectionsCollection(),
+                    nextMessage = centerPanel.getNextMessage(selectedMsgs);
                     
                 centerPanel.getStore().remove(msg);
                 if (nextMessage) {

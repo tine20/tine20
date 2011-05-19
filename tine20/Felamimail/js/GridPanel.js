@@ -656,7 +656,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var msgs = this.getStore(),
                 nextRecord = null;
         } else {
-            var nextRecord = this.getNextMessage(sm);
+            var msgs = sm.getSelectionsCollection(),
+                nextRecord = this.getNextMessage(msgs);
         }
         
         var increaseUnreadCountInTargetFolder = 0;
@@ -705,13 +706,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * get next message in grid
      * 
-     * @param {SelectionModel} sm
+     * @param {Ext.util.MixedCollection} msgs
      * @return Tine.Felamimail.Model.Message
      */
-    getNextMessage: function(sm) {
-        var msgs = sm.getSelectionsCollection();
-        
-        if (sm.getCount() == 1 && this.getStore().getCount() > 1) {
+    getNextMessage: function(msgs) {
+        if (msgs.getCount() == 1 && this.getStore().getCount() > 1) {
             // select next message (or previous if it was the last or BACKSPACE)
             var lastIdx = this.getStore().indexOf(msgs.last()),
                 direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
