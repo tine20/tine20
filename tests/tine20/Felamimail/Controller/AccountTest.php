@@ -156,7 +156,6 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('', $account->ns_personal, $accountToString);
         $this->assertEquals(1, preg_match('@/|\.@', $account->delimiter), $accountToString);
         
-        $this->assertTrue(in_array('QUOTA', $capabilities['capabilities']));
         $this->assertTrue(in_array('IMAP4', $capabilities['capabilities']));
         
         // @todo need to check first, which email server we have
