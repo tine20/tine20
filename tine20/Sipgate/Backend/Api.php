@@ -59,7 +59,7 @@ class Sipgate_Backend_Api {
 	 */
 	private function __construct($_username, $_password, $_url)	{
 
-		$this->_url = 'https://samurai.sipgate.net/RPC2';
+		$this->_url = (empty($_url)) ? 'https://samurai.sipgate.net/RPC2' : $_url;
 		$this->_username = $_username;
 		$this->_password = $_password;
 
