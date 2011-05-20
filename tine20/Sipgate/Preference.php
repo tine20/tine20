@@ -140,9 +140,11 @@ class Sipgate_Preference extends Tinebase_Preference_Abstract
 			    $dev = array();
                 try {
     			    $_faxes = Sipgate_Controller::getInstance()->getFaxDevices();
-    				foreach($_faxes as $fax) {
-    					$dev[] = $fax['SipUri'];
-    				}
+    			    if (is_array($_faxes)) {
+        				foreach($_faxes as $fax) {
+        					$dev[] = $fax['SipUri'];
+        				}
+    			    }
                 } catch (Sipgate_Exception_Backend $seb) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not get Sipgate fax devices: ' . $seb->getMessage());
                 } catch (Zend_Exception $ze) {
