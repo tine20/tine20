@@ -78,13 +78,18 @@ class Sipgate_Controller extends Tinebase_Controller_Abstract
 	 * dial number
 	 *
 	 * @param   int $_callee
-	 * @throws  Sipgate_Exception_NotFound
+	 * @return  mixed
 	 */
 	public function dialNumber($_callee)
 	{
-		$_caller = $this->_pref->getValue('phoneId');
+		$caller = $this->_pref->{'phoneId'};
+          
 		$backend = Sipgate_Backend_Factory::factory();
-		return $backend->dialNumber($_caller, $_callee);
+		
+		if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+		  . ' Dialing number ' . $_callee . ' with phone id ' . $caller);
+		  
+		return $backend->dialNumber($caller, $_callee);
 	}
 
 	/**
@@ -117,12 +122,21 @@ class Sipgate_Controller extends Tinebase_Controller_Abstract
 	}
 
 	/**
-	 *
 	 * Gets the Phones
+	 * 
+	 * @return array
 	 */
 	public function getPhoneDevices() {
 		$backend = Sipgate_Backend_Factory::factory();
-		return $backend->getPhoneDevices();
+		
+		if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+          . ' Getting sipgate phones.');
+          
+		$result = $backend->getPhoneDevices();
+		
+		if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($result, TRUE));
+		
+		return $result;
 	}
 
 	/**
