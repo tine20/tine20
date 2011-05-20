@@ -107,7 +107,9 @@ class Sipgate_Preference extends Tinebase_Preference_Abstract
 
 		}
 
-		$preference->value = '';
+		// save first option in pref value
+		$preference->value = (isset($_options[0])) ? $_options[0] : '';
+		
 		$preference->options = $doc->saveXML();
 		return $preference;
 	}
