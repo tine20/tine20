@@ -133,6 +133,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * add quota bar to paging toolbar
      */
     initPagingToolbar: function() {
+        Ext.QuickTips.init();
+        
         this.quotaBar = new Ext.ProgressBar({
             width: 100,
             height: 17,
@@ -1106,6 +1108,17 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 left = accountInbox.get('quota_limit') - accountInbox.get('quota_usage'),
                 text = String.format(this.app.i18n._('{0} left'), Ext.util.Format.fileSize(left * 1024));
             this.quotaBar.updateProgress(usage, text);
+            
+            Ext.QuickTips.register({
+                target:  this.quotaBar,
+                dismissDelay: 30000,
+                title: this.app.i18n._('Your quota'),
+                text: String.format(this.app.i18n._('Current usage: {0} of {1}'), 
+                    Ext.util.Format.fileSize(accountInbox.get('quota_usage')* 1024),
+                    Ext.util.Format.fileSize(accountInbox.get('quota_limit')* 1024)
+                ),
+                width: 200
+            });
         }
     },
     
