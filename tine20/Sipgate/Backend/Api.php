@@ -115,9 +115,6 @@ class Sipgate_Backend_Api {
 	 */
 	public function dialNumber($_caller,$_callee)
 	{
-
-
-
 		$structAr['LocalUri'] = new Zend_XmlRpc_Value_String($_caller);
 		$structAr['RemoteUri'] = new Zend_XmlRpc_Value_String($_callee);
 		$structAr['TOS'] = new Zend_XmlRpc_Value_String('voice');
@@ -125,7 +122,6 @@ class Sipgate_Backend_Api {
 		$struct = new Zend_XmlRpc_Value_Struct($structAr);
 
 		return $this->_rpc->call('samurai.SessionInitiate',array(0 => $struct));
-
 	}
 
 	/**
