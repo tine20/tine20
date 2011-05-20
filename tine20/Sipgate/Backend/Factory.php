@@ -3,17 +3,18 @@
  * Tine 2.0
  * 
  * @package     Sipgate
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
  * @author      Alexander Stintzing <alex@stintzing.net>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @version     $Id: Factory.php 2 2011-04-26 17:27:39Z alex $
  *
  */
 
 /**
- * phone backend factory class
+ * sipgate backend factory class
  *
  * @package     Sipgate
+ * @subpackage  Backend
  */
 class Sipgate_Backend_Factory
 {
@@ -23,7 +24,6 @@ class Sipgate_Backend_Factory
 	 * @var Addressbook_Backend_Factory
 	 */
 	private static $_instance = NULL;
-
 
 	/**
 	 * factory function to return a selected phone backend class
@@ -35,8 +35,7 @@ class Sipgate_Backend_Factory
 	 */
 	static public function factory()
 	{
-
-		if(isset(Tinebase_Core::getConfig()->sipgate)) {
+		if (isset(Tinebase_Core::getConfig()->sipgate)) {
 			$sipgateConfig = Tinebase_Core::getConfig()->sipgate;
 			$username   = $sipgateConfig->api_username;
 			$password   = $sipgateConfig->api_password;
