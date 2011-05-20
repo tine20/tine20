@@ -735,6 +735,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return Tine.Felamimail.Model.Message
      */
     getNextMessage: function(msgs) {
+        
+        var nextRecord = null;
+        
         if (msgs.getCount() == 1 && this.getStore().getCount() > 1) {
             // select next message (or previous if it was the last or BACKSPACE)
             var lastIdx = this.getStore().indexOf(msgs.last()),
