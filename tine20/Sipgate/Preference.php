@@ -131,7 +131,9 @@ class Sipgate_Preference extends Tinebase_Preference_Abstract
                     }
 			    } catch (Sipgate_Exception_Backend $seb) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not get Sipgate phone devices: ' . $seb->getMessage());
-			    }
+			    } catch (Zend_Exception $ze) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not connect to sipgate: ' . $ze->getMessage());
+                }
 				$pref = $this->getOptions($_preferenceName, $dev);
 				break;
 			case self::FAXID:
@@ -143,11 +145,18 @@ class Sipgate_Preference extends Tinebase_Preference_Abstract
     				}
                 } catch (Sipgate_Exception_Backend $seb) {
                     Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not get Sipgate fax devices: ' . $seb->getMessage());
+                } catch (Zend_Exception $ze) {
+                    Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not connect to sipgate: ' . $ze->getMessage());
                 }
 				$pref = $this->getOptions($_preferenceName, $dev);
 				break;
 			case self::MOBILENUMBER:
-				$pref = $this->getOptions($_preferenceName,Tinebase_Core::getConfig()->sipgate->numbers->mobile);
+			    $config = Tinebase_Core::getConfig()->sipgate;
+			    if ($config && $config->numbers && $config->numbers->mobile) {
+				    $pref = $this->getOptions($_preferenceName, $config->numbers->mobile);
+			    } else {
+			        $pref = $this->_getDefaultBasePreference($_preferenceName);
+			    }
 				break;
 			default:
 				throw new Tinebase_Exception_NotFound('Default preference with name ' . $_preferenceName . ' not found.');

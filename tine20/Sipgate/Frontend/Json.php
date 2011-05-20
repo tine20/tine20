@@ -167,6 +167,9 @@ class Sipgate_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         } catch (Sipgate_Exception_Backend $seb) {
             Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not get Sipgate registry data: ' . $seb->getMessage());
             return array();
+        } catch (Zend_Exception $ze) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . ' (' . __LINE__ . ') Could not connect to sipgate: ' . $ze->getMessage());
+            return array();
         }
 
 		return array(
