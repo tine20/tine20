@@ -135,10 +135,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initPagingToolbar: function() {
         this.quotaBar = new Ext.ProgressBar({
             width: 100,
+            height: 17,
+            style: {
+                marginTop: '1px'
+            },
             text: this.app.i18n._('Quota usage')
         });
-        this.pagingToolbar.addSeparator();
-        this.pagingToolbar.add(this.quotaBar);
+        this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
+        this.pagingToolbar.insert(12, this.quotaBar);
     },
     
     /**
@@ -1098,8 +1102,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }, this).first();
         }        
         if (accountInbox && accountInbox.get('quota_limit') && accountId == accountInbox.get('account_id')) {
-            var usage = accountInbox.get('quota_usage') / accountInbox.get('quota_limit');
-            this.quotaBar.updateProgress(usage, this.app.i18n._('Quota usage'));
+            var usage = accountInbox.get('quota_usage') / accountInbox.get('quota_limit'),
+                left = accountInbox.get('quota_limit') - accountInbox.get('quota_usage'),
+                text = String.format(this.app.i18n._('{0} left'), Ext.util.Format.fileSize(left * 1024));
+            this.quotaBar.updateProgress(usage, text);
         }
     },
     
