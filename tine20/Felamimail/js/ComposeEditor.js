@@ -65,7 +65,8 @@ Tine.Felamimail.ComposeEditor = Ext.extend(Ext.form.HtmlEditor, {
         this.plugins = [
             new Ext.ux.form.HtmlEditor.IndentOutdent(),  
             new Ext.ux.form.HtmlEditor.RemoveFormat(),
-            new Ext.ux.form.HtmlEditor.EndBlockquote()
+            new Ext.ux.form.HtmlEditor.EndBlockquote(),
+            new Ext.ux.form.HtmlEditor.SpecialKeys()
         ];
         
         Tine.Felamimail.ComposeEditor.superclass.initComponent.call(this);
@@ -126,9 +127,6 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
                     r.insertNode(br);
                 }
                 this.cmp.deferFocus();
-            } else if (e.ctrlKey) {
-                // TODO try to move this to cmp or another plugin as we need this only to submit parent dialog with ctrl-enter
-                this.cmp.fireEvent('keydown', e);
             }
         }
     },
@@ -151,5 +149,41 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
         }
         
         return result;
+    }
+});
+
+/**
+ * @class Ext.ux.form.HtmlEditor.SpecialKeys
+ * @extends Ext.util.Observable
+ * 
+ * plugin for htmleditor that fires events for special keys (like CTRL-ENTER and SHIFT-TAB)
+ * 
+ * TODO move this to ux dir
+ */
+Ext.ux.form.HtmlEditor.SpecialKeys = Ext.extend(Ext.util.Observable , {
+    // private
+    init: function(cmp){
+        this.cmp = cmp;
+        this.cmp.on('initialize', this.onInit, this);
+    },
+    // private
+    onInit: function(){
+        Ext.EventManager.on(this.cmp.getDoc(), {
+            'keydown': this.onKeydown,
+            scope: this
+        });
+    },
+
+    /**
+     * on keydown 
+     * 
+     * @param {Event} e
+     * 
+     * TODO try to prevent TAB key event from inserting a TAB in the editor 
+     */
+    onKeydown: function(e) {
+        if (e.getKey() == e.TAB && e.shiftKey || e.getKey() == e.ENTER && e.ctrlKey) {
+            this.cmp.fireEvent('keydown', e);
+        }
     }
 });
