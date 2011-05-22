@@ -476,8 +476,9 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         
         var currentTitle = document.title,
             unreadString = (this.unreadcountInDefaultInbox != 0) ? '(' + this.unreadcountInDefaultInbox + ') ' : '';
+            
         if (currentTitle.match(/^\([0-9]+\) /)) {
-            document.title.replace(/^\([0-9]+\) /, unreadString);
+            document.title = document.title.replace(/^\([0-9]+\) /, unreadString);
         } else {
             document.title = unreadString + currentTitle;
         }
