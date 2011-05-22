@@ -69,6 +69,12 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     updateMessageCacheTransactionId: null,
     
     /**
+     * unreadcount in default account inbox
+     * @type Number
+     */
+    unreadcountInDefaultInbox: 0,
+    
+    /**
      * returns title (Email)
      * 
      * @return {String}
@@ -401,17 +407,30 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 if (['complete', 'pending'].indexOf(record.get('cache_status')) === -1) {
                     this.checkMailsDelayedTask.delay(1000);
                 }
-                
-                // only show notifications for inbox if unreadcount changed
+            }
+
+            if (record.isInbox()) {
                 if (record.isModified('cache_unreadcount')) {
                     this.onUpdateFolderUnreadcount(record);
+                } else if (record.get('cache_unreadcount') > this.unreadcountInDefaultInbox && this.isDefaultAccountId(record.get('account_id'))) {
+                    this.setTitleWithUnreadcount(record.get('cache_unreadcount'));
+                }
+                
+                if (record.isModified('quota_usage') || record.isModified('quota_limit')) {
+                    this.onUpdateFolderQuota(record);
                 }
             }
-            
-            if (record.isInbox() && record.isModified('quota_usage') || record.isModified('quota_limit')) {
-                this.onUpdateFolderQuota(record);
-            }
         }
+    },
+    
+    /**
+     * checks default account id
+     * 
+     * @param {String} accountId
+     * @return {Boolean}
+     */
+    isDefaultAccountId: function(accountId) {
+        return accountId == Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
     },
     
     /**
@@ -423,8 +442,8 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount),
             account = this.getAccountStore().getById(record.get('account_id'));
             
-        if (recents > 0 && record.isInbox()) {
-            Tine.log.info('show notification: ' + recents + ' new mails.');
+        if (recents > 0 ) {
+            Tine.log.info('Show notification: ' + recents + ' new mails.');
             var title = this.i18n._('New mails'),
                 message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} ({2}).'), recents, record.get('localname'), account.get('name')); 
             
@@ -435,6 +454,32 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             } else {
                 Ext.ux.Notification.show(title, message);
             }
+        }
+        
+        if (this.isDefaultAccountId(record.get('account_id'))) {
+            this.setTitleWithUnreadcount(recents);
+        }
+    },
+    
+    /**
+     * write number of unread messages in all accounts into title
+     * 
+     * @param Number change
+     */
+    setTitleWithUnreadcount: function(change) {
+        if (! change || ! window.isMainWindow) {
+            return;
+        }
+
+        this.unreadcountInDefaultInbox += change;
+        Tine.log.info('Updating title with new unreadcount: ' + this.unreadcountInDefaultInbox);
+        
+        var currentTitle = document.title,
+            unreadString = (this.unreadcountInDefaultInbox != 0) ? '(' + this.unreadcountInDefaultInbox + ') ' : '';
+        if (currentTitle.match(/^\([0-9]+\) /)) {
+            document.title.replace(/^\([0-9]+\) /, unreadString);
+        } else {
+            document.title = unreadString + currentTitle;
         }
     },
     
