@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        parse mail body and add <a> to telephone numbers?
- * @todo        check html purifier config (allow some tags/attributes?)
  */
 
 /**
@@ -488,6 +487,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string|Felamimail_Model_Message $_messageId
      * @param boolean $_readOnly
      * @return array
+     * @throws Felamimail_Exception_IMAPMessageNotFound
      */
     public function getMessageHeaders($_messageId, $_partId = null, $_readOnly = false)
     {
@@ -503,10 +503,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return $cache->load($cacheId);
         }
         
-        $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
+        try {
+            $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getTraceAsString());
+            throw new Felamimail_Exception_IMAPMessageNotFound('Folder not found');
+        }
         
         if ($imapBackend === null) {
-            throw new Felamimail_Exception('failed to get imap backend');
+            throw new Felamimail_Exception('Failed to get imap backend');
         }
         
         $section = ($_partId === null) ?  'HEADER' : $_partId . '.HEADER';
@@ -568,8 +574,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $_messageId;
         }
         
-        // @todo get complete structure because we need the size/name/... for rfc/822 messages?
-        //$structure = $message->getPartStructure($_partId, FALSE);
         $structure = $message->getPartStructure($_partId);
 
         $attachments = array();
