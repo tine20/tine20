@@ -57,7 +57,8 @@ Tine.Admin.Model.Container = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mode
  */
 Tine.Admin.Model.Container.getDefaultData = function () {
     return {
-        type: 'shared'
+        type: 'shared',
+        backend: 'Sql'
     };
 };
 

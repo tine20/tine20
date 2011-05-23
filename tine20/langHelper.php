@@ -234,11 +234,12 @@ function potmerge($_verbose)
                     list ($language, $region) = explode('_', $langCode);
                 } else {
                     $language = $langCode;
+                    $region = '';
                 }
     
                 $locale = new Zend_Locale('en');
                 $languageName = $locale->getTranslation($language, 'language');
-                $regionName = $locale->getTranslation($region, 'country');
+                $regionName = ($region) ? $locale->getTranslation($region, 'country') : '';
                 $pluralForm = getPluralForm($languageName);
                 
                 generateNewTranslationFile($languageName, $regionName, $appName, $pluralForm, $poFile, $_verbose);

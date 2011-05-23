@@ -935,4 +935,15 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         
         return $result;
     }
+    
+    /**
+     * get quota for mailbox
+     * 
+     * @param string $_mailbox
+     * @return array quota info
+     */
+    public function getQuota($_mailbox)
+    {
+        return $this->_protocol->getQuotaRoot($_mailbox);
+    }
 }

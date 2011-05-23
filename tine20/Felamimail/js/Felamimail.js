@@ -69,6 +69,12 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     updateMessageCacheTransactionId: null,
     
     /**
+     * unreadcount in default account inbox
+     * @type Number
+     */
+    unreadcountInDefaultInbox: 0,
+    
+    /**
      * returns title (Email)
      * 
      * @return {String}
@@ -393,32 +399,104 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {String} operation
      */
     onUpdateFolder: function(store, record, operation) {
-        if (operation === Ext.data.Record.EDIT && record.isModified('cache_status')) {
-            Tine.log.info('Folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
-            
-            // as soon as we get a folder with status != complete we need to trigger checkmail soon!
-            if (['complete', 'pending'].indexOf(record.get('cache_status')) === -1) {
-                this.checkMailsDelayedTask.delay(1000);
-            }
-            
-            // only show notifications for inbox if unreadcount changed
-            if (record.isModified('cache_unreadcount')) {
-                var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount),
-                    account = this.getAccountStore().getById(record.get('account_id'));
-                if (recents > 0 && record.isInbox()) {
-                    Tine.log.info('show notification: ' + recents + ' new mails.');
-                    var title = this.i18n._('New mails'),
-                        message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} ({2}).'), recents, record.get('localname'), account.get('name')); 
-                    
-                    if (record.isCurrentSelection()) {
-                        // need to defer the notification because the new messages are not shown yet 
-                        // -> improve this with a callback fn or something like that / unread count should be updated when the messages become visible, too
-                        Ext.ux.Notification.show.defer(3500, this, [title, message]);
-                    } else {
-                        Ext.ux.Notification.show(title, message);
-                    }
+        if (operation === Ext.data.Record.EDIT) {
+            if (record.isModified('cache_status')) {
+                Tine.log.info('Folder "' + record.get('localname') + '" updated with cache_status: ' + record.get('cache_status'));
+                
+                // as soon as we get a folder with status != complete we need to trigger checkmail soon!
+                if (['complete', 'pending'].indexOf(record.get('cache_status')) === -1) {
+                    this.checkMailsDelayedTask.delay(1000);
+                }
+                
+                if (record.isInbox() && record.isModified('cache_unreadcount')) {
+                    this.showNewMessageNotification(record);
                 }
             }
+
+            if (record.isInbox()) {
+                if (this.isDefaultAccountId(record.get('account_id'))) {
+                    if (record.isModified('cache_unreadcount')) {
+                        this.setTitleWithUnreadcount(record.get('cache_unreadcount') - record.modified.cache_unreadcount);
+                    } else if (record.get('cache_unreadcount') > this.unreadcountInDefaultInbox) {
+                        this.setTitleWithUnreadcount(record.get('cache_unreadcount'));
+                    }
+                }
+                
+                if (record.isModified('quota_usage') || record.isModified('quota_limit')) {
+                    this.onUpdateFolderQuota(record);
+                }
+            }
+        }
+    },
+    
+    /**
+     * checks default account id
+     * 
+     * @param {String} accountId
+     * @return {Boolean}
+     */
+    isDefaultAccountId: function(accountId) {
+        return accountId == Tine.Felamimail.registry.get('preferences').get('defaultEmailAccount');
+    },
+    
+    /**
+     * show notification for new messages
+     * 
+     * @param {Tine.Felamimail.Model.Folder} record
+     */
+    showNewMessageNotification: function(record) {
+        var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount),
+            account = this.getAccountStore().getById(record.get('account_id'));
+            
+        if (recents > 0 ) {
+            Tine.log.info('Show notification: ' + recents + ' new mails.');
+            var title = this.i18n._('New mails'),
+                message = String.format(this.i18n._('You got {0} new mail(s) in folder {1} ({2}).'), recents, record.get('localname'), account.get('name')); 
+            
+            if (record.isCurrentSelection()) {
+                // need to defer the notification because the new messages are not shown yet 
+                // -> improve this with a callback fn or something like that / unread count should be updated when the messages become visible, too
+                Ext.ux.Notification.show.defer(3500, this, [title, message]);
+            } else {
+                Ext.ux.Notification.show(title, message);
+            }
+        }
+    },
+    
+    /**
+     * write number of unread messages in all accounts into title
+     * 
+     * @param Number change
+     */
+    setTitleWithUnreadcount: function(change) {
+        if (! change || ! window.isMainWindow) {
+            return;
+        }
+
+        this.unreadcountInDefaultInbox += change;
+        Tine.log.info('Updating title with new unreadcount: ' + this.unreadcountInDefaultInbox);
+        
+        var currentTitle = document.title,
+            unreadString = (this.unreadcountInDefaultInbox != 0) ? '(' + this.unreadcountInDefaultInbox + ') ' : '';
+            
+        if (currentTitle.match(/^\([0-9]+\) /)) {
+            document.title = document.title.replace(/^\([0-9]+\) /, unreadString);
+        } else {
+            document.title = unreadString + currentTitle;
+        }
+    },
+    
+    /**
+     * folder quota is updated
+     * 
+     * @param {Tine.Felamimail.Model.Folder} record
+     */
+    onUpdateFolderQuota: function(record) {
+        if (record.get('quota_usage')) {
+            Tine.log.info('Folder "' + record.get('localname') + '" updated with quota values: ' 
+                + record.get('quota_usage') + ' / ' + record.get('quota_limit'));
+
+            this.getMainScreen().getCenterPanel().updateQuotaBar(null, record);
         }
     },
     
@@ -619,7 +697,7 @@ Tine.Felamimail.getEmailStringFromContact = function(contact) {
  * @param {Tine.Exception} exception
  */
 Tine.Felamimail.handleRequestException = function(exception) {
-    Tine.log.warn('request exception :');
+    Tine.log.warn('Request exception :');
     Tine.log.warn(exception);
     
     var app = Tine.Tinebase.appMgr.get('Felamimail');
@@ -658,11 +736,24 @@ Tine.Felamimail.handleRequestException = function(exception) {
             });
             break;
             
-        case 404: 
         case 914: // Felamimail_Exception_IMAPMessageNotFound
-            // do nothing, this exception is handled by Tine.Tinebase.ExceptionHandler.handleRequestException
-            exception.code = 404;
-            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            Tine.log.notice('Message was deleted by another client.');
+            
+            // remove message from store and select next message
+            var requestParams = Ext.util.JSON.decode(exception.request).params,
+                centerPanel = app.getMainScreen().getCenterPanel(),
+                msg = centerPanel.getStore().getById(requestParams.id);
+                
+            if (msg) {
+                var sm = centerPanel.getGrid().getSelectionModel(),
+                    selectedMsgs = sm.getSelectionsCollection(),
+                    nextMessage = centerPanel.getNextMessage(selectedMsgs);
+                    
+                centerPanel.getStore().remove(msg);
+                if (nextMessage) {
+                    sm.selectRecords([nextMessage]);
+                }
+            }
             break;
             
         case 920: // Felamimail_Exception_SMTP

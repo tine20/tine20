@@ -40,7 +40,6 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */ 
     defaultSortInfo: {field: 'n_fileas', direction: 'ASC'},
     gridConfig: {
-        loadMask: true,
         autoExpandColumn: 'n_fileas',
         enableDragDrop: true,
         ddGroup: 'containerDDGroup'

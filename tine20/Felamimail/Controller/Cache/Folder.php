@@ -81,16 +81,15 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * @param  mixed   $_accountId
      * @param  string  $_folderName global name
      * @param  boolean $_recursive 
-     * @param  boolean $_checkAccount check capabilities and system folders
      * @return Tinebase_Record_RecordSet of Felamimail_Model_Folder
      */
-    public function update($_accountId, $_folderName = '', $_recursive = FALSE, $_checkAccount = TRUE)
+    public function update($_accountId, $_folderName = '', $_recursive = FALSE)
     {
         $account = ($_accountId instanceof Felamimail_Model_Account) ? $_accountId : Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
         if (empty($_folderName)) {
-            $folders = $this->_getRootFoldersAndCheckAccount($account, $_checkAccount);
+            $folders = $this->_getRootFolders($account);
         } else {
             $folders = $this->_getSubfolders($account, $_folderName);
         }
@@ -120,10 +119,9 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
      * get root folders and check account capabilities and system folders
      * 
      * @param Felamimail_Model_Account $_account
-     * @param  boolean $_checkAccount check capabilities and system folders
      * @return array of folders
      */
-    protected function _getRootFoldersAndCheckAccount(Felamimail_Model_Account $_account, $_checkAccount = TRUE)
+    protected function _getRootFolders(Felamimail_Model_Account $_account)
     {
         try {
             $imap = Felamimail_Backend_ImapFactory::factory($_account);
@@ -135,17 +133,6 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
             . ' Get subfolders of root for account ' . $_account->getId());
         $result = $imap->getFolders('', '%');
-        
-        if ($_checkAccount) {
-            // get imap server capabilities and save delimiter / personal namespace in account
-            // @ŧodo remove that?
-            Felamimail_Controller_Account::getInstance()->updateCapabilities(
-                $_account, 
-                $imap, 
-                (! empty($result) && isset($result[0]['delimiter']) && ! empty($result[0]['delimiter'])) ? $result[0]['delimiter'] : NULL
-            );
-            Felamimail_Controller_Account::getInstance()->checkSystemFolders($_account);
-        }
         
         return $result;
     }
@@ -356,6 +343,12 @@ class Felamimail_Controller_Cache_Folder extends Tinebase_Controller_Abstract
                         'system_folder'     => in_array(strtolower($folderData['localName']), $systemFolders),
                         'delimiter'         => $delimiter,
                     ));
+                    
+                    // update delimiter setting of account
+                    if ($folder->delimiter && $folder->delimiter !== $_account->delimiter && $folder->localname === 'INBOX') {
+                        $_account->delimiter = $folder->delimiter;
+                        $_account = Felamimail_Controller_Account::getInstance()->update($_account);
+                    }
                     
                     if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Adding new folder ' . $folderData['globalName'] . ' to cache.');
                     if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . print_r($folder->toArray(), true));

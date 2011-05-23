@@ -21,7 +21,6 @@ Ext.ns('Tine.widgets.grid');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -1099,7 +1098,12 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         e.preventDefault();
                     }
                     break;
-                
+                case e.F:
+                    if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
+                        e.preventDefault();
+                        this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
+                    }
+                    break;
             }
         } else {
             if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
@@ -1190,7 +1194,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {String|Tine.Tinebase.data.Record} record
      */
     onUpdateRecord: function(record) {
-        if (Ext.isString(record)) {
+        if (Ext.isString(record) && this.recordProxy) {
             record = this.recordProxy.recordReader({responseText: record});
         } else if (record && Ext.isFunction(record.copy)) {
             record = record.copy();

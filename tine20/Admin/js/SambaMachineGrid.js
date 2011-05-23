@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Admin.sambaMachine');
 
@@ -16,8 +16,7 @@ Tine.Admin.sambaMachine.show = function() {
         Tine.Admin.sambaMachine.gridPanel = new Tine.Admin.SambaMachineGridPanel({
             app: app
         });
-    }
-    else {
+    } else {
     	setTimeout ("Ext.getCmp('gridAdminComputers').getStore().load({ params: { start:0, limit:50 } })", 100);
     }
     
@@ -40,7 +39,6 @@ Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     evalGrants: false,
     gridConfig: {
     	id: 'gridAdminComputers',
-        loadMask: true,
         autoExpandColumn: 'accountDisplayName'
     },
     
@@ -52,10 +50,6 @@ Tine.Admin.SambaMachineGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.plugins.push(this.filterToolbar);
         
         Tine.Admin.SambaMachineGridPanel.superclass.initComponent.call(this);
-        
-        //this.action_addInNewWindow.setDisabled(! Tine.Tinebase.common.hasRight('manage', 'Admin', 'sambaMachines'));
-        //this.action_editInNewWindow.requiredGrant = 'editGrant';
-        
     },
     
     /**

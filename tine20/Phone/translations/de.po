@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Phone\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-05-31 21:53+0100\n"
-"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"PO-Revision-Date: 2011-05-13 21:13+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -13,129 +13,150 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Models.js:69 js/Phone-FAT-debug.js:74 js/Phone-FAT-debug.js:150
-#: js/Phone-FAT-debug.js:345 js/Phone-FAT.js:6 js/Phone.js:57 js/Phone.js:252
+#: js/Phone.js:29
+#: js/Phone.js:479
+#: js/Phone.js:480
+msgid "Edit phone settings"
+msgstr "Telefoneinstellungen bearbeiten"
+
+#: js/Phone.js:59
+#: js/Phone.js:254
+#: js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
 msgstr[1] "Telefone"
 
-#: js/Models.js:73 js/Phone-FAT-debug.js:78
+#: js/Phone.js:70
+msgid "Phones"
+msgstr "Telefone"
+
+#: js/Phone.js:277
+msgid "Line"
+msgstr "Leitung"
+
+#: js/Phone.js:286
+msgid "Number"
+msgstr "Nummer"
+
+#: js/Phone.js:295
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: js/Phone.js:305
+msgid "Dial"
+msgstr "Wählen"
+
+#: js/Phone.js:325
+msgid "Error"
+msgstr "Fehler"
+
+#: js/Phone.js:326
+msgid "Not possible to dial."
+msgstr "Wählen nicht möglich."
+
+#: js/Phone.js:469
+msgid "Dial number"
+msgstr "Nummer wählen"
+
+#: js/Phone.js:470
+msgid "Initiate a new outgoing call"
+msgstr "Neuer ausgehender Anruf"
+
+#: js/Phone.js:531
+msgid "Incoming call"
+msgstr "Eingehender Anruf"
+
+#: js/Phone.js:535
+msgid "Outgoing call"
+msgstr "Ausgehender Anruf"
+
+#: js/Phone.js:543
+msgid "unknown number"
+msgstr "Unbekannte Rufnummer"
+
+#: js/Phone.js:580
+msgid "Search:"
+msgstr "Suche:"
+
+#: js/Phone.js:665
+msgid "Source or Destination"
+msgstr "Quelle oder Ziel"
+
+#: js/Phone.js:681
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Anrufe  {0} - {1} of {2} anzeigen"
+
+#: js/Phone.js:682
+#: js/Phone.js:725
+msgid "No calls to display"
+msgstr "Keine Anrufe"
+
+#: js/Phone.js:692
+msgid "Direction"
+msgstr "Richtung"
+
+#: js/Phone.js:693
+msgid "Source"
+msgstr "Quelle"
+
+#: js/Phone.js:694
+msgid "Caller Id"
+msgstr "Eigene Rufnummer"
+
+#: js/Phone.js:695
+msgid "Destination"
+msgstr "Gesprächspartner"
+
+#: js/Phone.js:696
+msgid "Start"
+msgstr "Start"
+
+#: js/Phone.js:697
+msgid "Connected"
+msgstr "Verbunden"
+
+#: js/Phone.js:698
+msgid "Disconnected"
+msgstr "Getrennt"
+
+#: js/Phone.js:699
+msgid "Duration"
+msgstr "Dauer"
+
+#: js/Phone.js:700
+msgid "Ringing"
+msgstr "Klingeln"
+
+#: js/Phone.js:701
+msgid "Call ID"
+msgstr "Anruf-ID"
+
+#: js/Models.js:73
 msgid "phones list"
 msgid_plural "phones lists"
 msgstr[0] "Telefonliste"
 msgstr[1] "Telefonlisten"
 
-#: js/Phone-FAT-debug.js:120 js/Phone-FAT-debug.js:570
-#: js/Phone-FAT-debug.js:571 js/Phone-FAT.js:6 js/Phone.js:27 js/Phone.js:477
-#: js/Phone.js:478
-msgid "Edit phone settings"
-msgstr "Telefoneinstellungen bearbeiten"
+#: js/AddressbookGridPanelHook.js:35
+msgid "Call contact"
+msgstr "Kontakt anrufen"
 
-#: js/Phone-FAT-debug.js:161 js/Phone-FAT.js:6 js/Phone.js:68
-msgid "Phones"
-msgstr "Telefone"
+#: js/AddressbookGridPanelHook.js:172
+msgid "Work"
+msgstr "Geschäftlich"
 
-#: js/Phone-FAT-debug.js:368 js/Phone-FAT.js:6 js/Phone.js:275
-msgid "Line"
-msgstr "Leitung"
+#: js/AddressbookGridPanelHook.js:181
+msgid "Home"
+msgstr "Privat"
 
-#: js/Phone-FAT-debug.js:377 js/Phone-FAT.js:6 js/Phone.js:284
-msgid "Number"
-msgstr "Nummer"
+#: js/AddressbookGridPanelHook.js:190
+msgid "Cell"
+msgstr "Handy"
 
-#: js/Phone-FAT-debug.js:386 js/Phone-FAT.js:6 js/Phone.js:293
-msgid "Cancel"
-msgstr "Abbrechen"
-
-#: js/Phone-FAT-debug.js:396 js/Phone-FAT.js:6 js/Phone.js:303
-msgid "Dial"
-msgstr "Wählen"
-
-#: js/Phone-FAT-debug.js:416 js/Phone-FAT.js:6 js/Phone.js:323
-msgid "Error"
-msgstr "Fehler"
-
-#: js/Phone-FAT-debug.js:417 js/Phone-FAT.js:6 js/Phone.js:324
-msgid "Not possible to dial."
-msgstr "Wählen nicht möglich."
-
-#: js/Phone-FAT-debug.js:560 js/Phone-FAT.js:6 js/Phone.js:467
-msgid "Dial number"
-msgstr "Nummer wählen"
-
-#: js/Phone-FAT-debug.js:561 js/Phone-FAT.js:6 js/Phone.js:468
-msgid "Initiate a new outgoing call"
-msgstr "Neuer ausgehender Anruf"
-
-#: js/Phone-FAT-debug.js:622 js/Phone-FAT.js:6 js/Phone.js:529
-msgid "Incoming call"
-msgstr "Eingehender Anruf"
-
-#: js/Phone-FAT-debug.js:626 js/Phone-FAT.js:6 js/Phone.js:533
-msgid "Outgoing call"
-msgstr "Ausgehender Anruf"
-
-#: js/Phone-FAT-debug.js:634 js/Phone-FAT.js:6 js/Phone.js:541
-msgid "unknown number"
-msgstr "Unbekannte Rufnummer"
-
-#: js/Phone-FAT-debug.js:671 js/Phone-FAT.js:6 js/Phone.js:578
-msgid "Search:"
-msgstr "Suche:"
-
-#: js/Phone-FAT-debug.js:756 js/Phone.js:663
-msgid "Source or Destination"
-msgstr "Quelle oder Ziel"
-
-#: js/Phone-FAT-debug.js:772 js/Phone-FAT.js:6 js/Phone.js:679
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Anrufe  {0} - {1} of {2} anzeigen"
-
-#: js/Phone-FAT-debug.js:773 js/Phone-FAT-debug.js:817 js/Phone-FAT.js:6
-#: js/Phone.js:680 js/Phone.js:724
-msgid "No calls to display"
-msgstr "Keine Anrufe"
-
-#: js/Phone-FAT-debug.js:783 js/Phone-FAT.js:6 js/Phone.js:690
-msgid "Direction"
-msgstr "Richtung"
-
-#: js/Phone-FAT-debug.js:784 js/Phone-FAT.js:6 js/Phone.js:691
-msgid "Source"
-msgstr "Quelle"
-
-#: js/Phone-FAT-debug.js:785 js/Phone-FAT.js:6 js/Phone.js:692
-msgid "Caller Id"
-msgstr "Eigene Rufnummer"
-
-#: js/Phone-FAT-debug.js:786 js/Phone-FAT.js:6 js/Phone.js:693
-msgid "Destination"
-msgstr "Gesprächspartner"
-
-#: js/Phone-FAT-debug.js:787 js/Phone-FAT.js:6 js/Phone.js:694
-msgid "Start"
-msgstr "Start"
-
-#: js/Phone-FAT-debug.js:788 js/Phone-FAT.js:6 js/Phone.js:695
-msgid "Connected"
-msgstr "Verbunden"
-
-#: js/Phone-FAT-debug.js:789 js/Phone-FAT.js:6 js/Phone.js:696
-msgid "Disconnected"
-msgstr "Getrennt"
-
-#: js/Phone-FAT-debug.js:790 js/Phone-FAT.js:6 js/Phone.js:697
-msgid "Duration"
-msgstr "Dauer"
-
-#: js/Phone-FAT-debug.js:791 js/Phone-FAT.js:6 js/Phone.js:698
-msgid "Ringing"
-msgstr "Klingeln"
-
-#: js/Phone-FAT-debug.js:792 js/Phone-FAT.js:6 js/Phone.js:699
-msgid "Call ID"
-msgstr "Anruf-ID"
+#: js/AddressbookGridPanelHook.js:199
+msgid "Cell private"
+msgstr "Handy privat"
 
 #~ msgid "Dial phone number"
 #~ msgstr "Telefonnummer wählen"

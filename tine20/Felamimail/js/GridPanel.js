@@ -68,7 +68,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     defaultSortInfo: {field: 'received', direction: 'DESC'},
     gridConfig: {
-        //loadMask: true,
         autoExpandColumn: 'subject',
         // drag n dropfrom
         enableDragDrop: true,
@@ -126,6 +125,26 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
+        
+        this.initPagingToolbar();
+    },
+    
+    /**
+     * add quota bar to paging toolbar
+     */
+    initPagingToolbar: function() {
+        Ext.QuickTips.init();
+        
+        this.quotaBar = new Ext.ProgressBar({
+            width: 100,
+            height: 17,
+            style: {
+                marginTop: '1px'
+            },
+            text: this.app.i18n._('Quota usage')
+        });
+        this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
+        this.pagingToolbar.insert(12, this.quotaBar);
     },
     
     /**
@@ -359,6 +378,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
     },
     
+    /**
+     * get action toolbar
+     * 
+     * @return {Ext.Toolbar}
+     */
     getActionToolbar: function() {
         if (! this.actionToolbar) {
             this.actionToolbar = new Ext.Toolbar({
@@ -657,18 +681,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var msgs = this.getStore(),
                 nextRecord = null;
         } else {
-            var msgs = sm.getSelectionsCollection();
-            
-            if (sm.getCount() == 1 && this.getStore().getCount() > 1) {
-                // select next message (or previous if it was the last or BACKSPACE)
-                var lastIdx = this.getStore().indexOf(msgs.last()),
-                    direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
-                
-                nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
-                if (! nextRecord) {
-                    nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
-                }
-            }
+            var msgs = sm.getSelectionsCollection(),
+                nextRecord = this.getNextMessage(msgs);
         }
         
         var increaseUnreadCountInTargetFolder = 0;
@@ -712,6 +726,30 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 callback: this.onAfterDelete.createDelegate(this, [msgsIds])
             });
         }
+    },
+
+    /**
+     * get next message in grid
+     * 
+     * @param {Ext.util.MixedCollection} msgs
+     * @return Tine.Felamimail.Model.Message
+     */
+    getNextMessage: function(msgs) {
+        
+        var nextRecord = null;
+        
+        if (msgs.getCount() == 1 && this.getStore().getCount() > 1) {
+            // select next message (or previous if it was the last or BACKSPACE)
+            var lastIdx = this.getStore().indexOf(msgs.last()),
+                direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
+            
+            nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
+            if (! nextRecord) {
+                nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
+            }
+        }
+        
+        return nextRecord;
     },
     
     /**
@@ -1019,6 +1057,71 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         if (! Ext.isEmpty(this.deleteQueue)) {
             options.params.filter.push({field: 'id', operator: 'notin', value: this.deleteQueue});
+        }
+    },
+    
+    /**
+     *  called after a new set of Records has been loaded
+     *  
+     * @param  {Ext.data.Store} this.store
+     * @param  {Array}          loaded records
+     * @param  {Array}          load options
+     * @return {Void}
+     */
+    onStoreLoad: function(store, records, options) {
+        this.supr().onStoreLoad.apply(this, arguments);
+        
+        this.updateQuotaBar(options.params.filter);
+    },
+    
+    /**
+     * update quotaBar / only do it if we have a path filter with a single account id
+     * 
+     * @param {Array} filter
+     */
+    updateQuotaBar: function(filter, accountInbox) {
+        if (! filter) {
+            filter = this.filterToolbar.getValue();
+        }
+        
+        var accountId = null, 
+            filterAccountId = null;
+            
+        for (var i = 0; i < filter.length; i++) {
+            if (filter[i].field == 'path' && filter[i].operator == 'in') {
+                for (var j = 0; j < filter[i].value.length; j++) {
+                    filterAccountId = filter[i].value[j].match(/^\/([a-z0-9]*)/i)[1];
+                    if (accountId && accountId != filterAccountId) {
+                        // reset quota bar
+                        this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+                        return;
+                    } else {
+                        accountId = filterAccountId;
+                    }
+                }
+            }
+        }
+        if (! accountInbox) {
+            var accountInbox = this.app.getFolderStore().queryBy(function(folder) {
+                return folder.isInbox() && (folder.get('account_id') == accountId);
+            }, this).first();
+        }        
+        if (accountInbox && accountInbox.get('quota_limit') && accountId == accountInbox.get('account_id')) {
+            var usage = accountInbox.get('quota_usage') / accountInbox.get('quota_limit'),
+                left = accountInbox.get('quota_limit') - accountInbox.get('quota_usage'),
+                text = String.format(this.app.i18n._('{0} left'), Ext.util.Format.fileSize(left * 1024));
+            this.quotaBar.updateProgress(usage, text);
+            
+            Ext.QuickTips.register({
+                target:  this.quotaBar,
+                dismissDelay: 30000,
+                title: this.app.i18n._('Your quota'),
+                text: String.format(this.app.i18n._('Current usage: {0} of {1}'), 
+                    Ext.util.Format.fileSize(accountInbox.get('quota_usage')* 1024),
+                    Ext.util.Format.fileSize(accountInbox.get('quota_limit')* 1024)
+                ),
+                width: 200
+            });
         }
     },
     

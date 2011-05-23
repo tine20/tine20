@@ -260,8 +260,9 @@ Ext.namespace('Tine.Felamimail');
                     }
                     
                     if (this.replyTo) {
+                        var date = (this.replyTo.get('received')) ? this.replyTo.get('received') : new Date();
                         this.msgBody = String.format(this.app.i18n._('On {0}, {1} wrote'), 
-                            Tine.Tinebase.common.dateTimeRenderer(new Date()), 
+                            Tine.Tinebase.common.dateTimeRenderer(date), 
                             Ext.util.Format.htmlEncode(this.replyTo.get('from_name'))
                         ) + ':<br/>'
                           + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
@@ -332,6 +333,8 @@ Ext.namespace('Tine.Felamimail');
         this.htmlEditor.on('keydown', function(e) {
             if (e.getKey() == e.ENTER && e.ctrlKey) {
                 this.onSaveAndClose();
+            } else if (e.getKey() == e.TAB && e.shiftKey) {
+                this.subjectField.focus.defer(50, this.subjectField);
             }
         }, this);
     },
@@ -635,6 +638,9 @@ Ext.namespace('Tine.Felamimail');
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
 
         this.record.set('account_id', account.get('original_id'));
+        
+        // need to sync once again to make sure we have the correct recipients
+        this.recipientGrid.syncRecipientsToRecord();
         
         /*
         if (this.record.data.note) {

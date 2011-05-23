@@ -114,7 +114,8 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' ' . print_r($responses, TRUE));
         
-        echo "\nTine 2.0 scheduler run (" . implode(',', array_keys($responses)) . ') complete.';
+        $responseString = ($responses) ? implode(',', array_keys($responses)) : 'NULL';
+        echo "\nTine 2.0 scheduler run (" . $responseString . ') complete.';
         
         return TRUE;
     }
@@ -192,6 +193,7 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
      * - credential_cache
      * - access_log
      * - async_job
+     * - temp_files
      * 
      * if param date is given (date=2010-09-17), all records before this date are deleted (if the table has a date field)
      * 
@@ -204,16 +206,17 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
             return FALSE;
         }
         
-        $args = $this->_parseArgs($_opts, array('tables'), 'tables'); 
+        $args = $this->_parseArgs($_opts, array('tables'), 'tables');
+        $dateString = array_key_exists('date', $args) ? $args['date'] : NULL;
 
         $db = Tinebase_Core::getDb();
         foreach ($args['tables'] as $table) {
             switch ($table) {
                 case 'access_log':
-                    if (array_key_exists('date', $args)) {
-                        echo "\nRemoving all access log entries before {$args['date']} ...";
+                    if ($dateString) {
+                        echo "\nRemoving all access log entries before {$dateString} ...";
                         $where = array(
-                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $args['date'])
+                            $db->quoteInto($db->quoteIdentifier('li') . ' < ?', $dateString)
                         );
                         $db->delete(SQL_TABLE_PREFIX . $table, $where);
                     } else {
@@ -226,7 +229,10 @@ class Tinebase_Frontend_Cli extends Tinebase_Frontend_Cli_Abstract
                         " WHERE status='success'");
                     break;
                 case 'credential_cache':
-                    Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable(array_key_exists('date', $args) ? $args['date'] : NULL);
+                    Tinebase_Auth_CredentialCache::getInstance()->clearCacheTable($dateString);
+                    break;
+                case 'temp_files':
+                    Tinebase_TempFile::getInstance()->clearTable($dateString);
                     break;
                 default:
                     echo 'Table ' . $table . " not supported or argument missing.\n";

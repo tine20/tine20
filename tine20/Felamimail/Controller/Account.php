@@ -7,8 +7,6 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * 
- * @todo        make it possible to switch back to smtp creds = imap creds even if extra smtp creds have been created
  */
 
 /**
@@ -157,7 +155,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      *
      * @param string $_id
      * @param int $_containerId
-     * @return Tinebase_Record_Interface
+     * @return Felamimail_Model_Account
      */
     public function get($_id, $_containerId = NULL)
     {
@@ -171,41 +169,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * add one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     */
-    public function create(Tinebase_Record_Interface $_record)
-    {
-        $result = parent::create($_record);
-        
-        // set as default account if it is the only account
-        $accountCount = $this->searchCount(new Felamimail_Model_AccountFilter(array()));
-        if ($accountCount == 1) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $result->name . ' as new default email account.');
-            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $result->getId();
-        }
-        
-        // update account capabilities
-        return $this->updateCapabilities($result);
-    }
-    
-    /**
-     * update one record
-     *
-     * @param   Tinebase_Record_Interface $_record
-     * @return  Tinebase_Record_Interface
-     */
-    public function update(Tinebase_Record_Interface $_record)
-    {
-        $result = parent::update($_record);
-        
-        // update account capabilities
-        return $this->updateCapabilities($result);
-    }
-    
-    /**
      * Deletes a set of records.
      * 
      * @param   array array of record identifiers
@@ -216,11 +179,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         parent::delete($_ids);
         
         // check if default account got deleted and set new default account
-        if (in_array(Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, (array) $_ids)) {
+        if (in_array(Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT}, (array) $_ids)) {
             $accounts = $this->search();
             $defaultAccountId = (count($accounts) > 0) ? $accounts->getFirstRecord()->getId() : '';
             
-            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccountId;
+            Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $defaultAccountId;
         }
     }
     
@@ -274,8 +237,24 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
 
     /**
+     * inspect creation of one record (after create)
+     * 
+     * @param   Tinebase_Record_Interface $_createdRecord
+     * @param   Tinebase_Record_Interface $_record
+     * @return  void
+     */
+    protected function _inspectAfterCreate($_createdRecord, Tinebase_Record_Interface $_record)
+    {
+        // set as default account if it is the only account
+        $accountCount = $this->searchCount(new Felamimail_Model_AccountFilter(array()));
+        if ($accountCount == 1) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Set account ' . $_createdRecord->name . ' as new default email account.');
+            Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $_createdRecord->getId();
+        }
+    }
+    
+    /**
      * inspect update of one record
-     * - update credentials here / only allow to update certain fields of system accounts
      * 
      * @param   Tinebase_Record_Interface $_record      the update record
      * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
@@ -284,86 +263,131 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         if ($_record->type == Felamimail_Model_Account::TYPE_SYSTEM) {
-            // only allow to update some values for system accounts
-            $allowedFields = array(
-                'name',
-                'signature',
-                'has_children_support',
-                'delimiter',
-                'ns_personal',
-                'ns_other',
-                'ns_shared',
-                'last_modified_time',
-                'last_modified_by',
-            );
-            $diff = $_record->diff($_oldRecord);
-            foreach ($diff as $key => $value) {
-                if (! in_array($key, $allowedFields)) {
-                    // setting old value
-                    $_record->$key = $_oldRecord->$key;
-                }
-            } 
+            $this->_beforeUpdateSystemAccount($_record, $_oldRecord);
         } else {
-            // get old credentials
-            $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
-            $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
-            
-            if ($userCredentialCache !== NULL) {
-                    $credentialsBackend->getCachedCredentials($userCredentialCache);
-            } else {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
-                    . ' Something went wrong with the CredentialsCache / use given username/password instead.'
-                );
-                return;
-            }
-            
-            if ($_oldRecord->credentials_id) {
-                $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
-                $credentials->key = substr($userCredentialCache->password, 0, 24);
-                $credentialsBackend->getCachedCredentials($credentials);
-            } else {
-                $credentials = new Tinebase_Model_CredentialCache(array(
-                    'username'  => '',
-                    'password'  => ''
-                ));
-            }
-            
-            // check if something changed
-            if (
-                ! $_oldRecord->credentials_id
-                ||  (! empty($_record->user) && $_record->user !== $credentials->username)
-                ||  (! empty($_record->password) && $_record->password !== $credentials->password)
-            ) {
-                $newPassword = ($_record->password) ? $_record->password : $credentials->password;
-                $newUsername = ($_record->user) ? $_record->user : $credentials->username;
+            $this->_beforeUpdateStandardAccount($_record, $_oldRecord);
+        }
+    }
     
-                $_record->credentials_id = $this->_createCredentials($newUsername, $newPassword);
-                $imapCredentialsChanged = TRUE;
-            } else {
-                $imapCredentialsChanged = FALSE;
+    /**
+     * inspect update of system account
+     * - only allow to update certain fields of system accounts
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _beforeUpdateSystemAccount($_record, $_oldRecord)
+    {
+        // only allow to update some values for system accounts
+        $allowedFields = array(
+            'name',
+            'signature',
+            'has_children_support',
+            'delimiter',
+            'ns_personal',
+            'ns_other',
+            'ns_shared',
+            'last_modified_time',
+            'last_modified_by',
+        );
+        $diff = $_record->diff($_oldRecord);
+        foreach ($diff as $key => $value) {
+            if (! in_array($key, $allowedFields)) {
+                // setting old value
+                $_record->$key = $_oldRecord->$key;
             }
-            
-            if ($_record->smtp_user && $_record->smtp_password) {
-                // create extra smtp credentials
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
-                $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
-                
-            } else if (
-                $imapCredentialsChanged 
-                && (! $_record->smtp_credentials_id || $_record->smtp_credentials_id == $_oldRecord->credentials_id)
-            ) {
-                // use imap credentials for smtp auth as well
-                $_record->smtp_credentials_id = $_record->credentials_id;
-            }
-            
-            $diff = $_record->diff($_oldRecord);
-            if (array_key_exists('display_format', $diff)) {
-                // delete message body cache because display format has changed
-                Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
-            }
+        } 
+    }
+    
+    /**
+     * inspect update of normal user account
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _beforeUpdateStandardAccount($_record, $_oldRecord)
+    {
+        $this->_beforeUpdateStandardAccountCredentials($_record, $_oldRecord);
+        
+        $diff = $_record->diff($_oldRecord);
+        
+        // delete message body cache because display format has changed
+        if (array_key_exists('display_format', $diff)) {
+            Tinebase_Core::getCache()->clean(Zend_Cache::CLEANING_MODE_MATCHING_TAG, array('getMessageBody'));
+        }
+        
+        // reset capabilities if imap host / port changed
+        if (isset($_SESSION[$this->_applicationName]) && (array_key_exists('host', $diff) || array_key_exists('port', $diff))) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Resetting capabilities for account ' . $_record->name);
+            unset($_SESSION[$this->_applicationName][$_record->getId()]);
         }
     }
 
+    /**
+     * update user account credentials
+     * 
+     * @param   Tinebase_Record_Interface $_record      the update record
+     * @param   Tinebase_Record_Interface $_oldRecord   the current persistent record
+     * @return  void
+     */
+    protected function _beforeUpdateStandardAccountCredentials($_record, $_oldRecord)
+    {
+        // get old credentials
+        $credentialsBackend = Tinebase_Auth_CredentialCache::getInstance();
+        $userCredentialCache = Tinebase_Core::get(Tinebase_Core::USERCREDENTIALCACHE);
+        
+        if ($userCredentialCache !== NULL) {
+                $credentialsBackend->getCachedCredentials($userCredentialCache);
+        } else {
+            Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ 
+                . ' Something went wrong with the CredentialsCache / use given username/password instead.'
+            );
+            return;
+        }
+        
+        if ($_oldRecord->credentials_id) {
+            $credentials = $credentialsBackend->get($_oldRecord->credentials_id);
+            $credentials->key = substr($userCredentialCache->password, 0, 24);
+            $credentialsBackend->getCachedCredentials($credentials);
+        } else {
+            $credentials = new Tinebase_Model_CredentialCache(array(
+                'username'  => '',
+                'password'  => ''
+            ));
+        }
+        
+        // check if something changed
+        if (
+            ! $_oldRecord->credentials_id
+            ||  (! empty($_record->user) && $_record->user !== $credentials->username)
+            ||  (! empty($_record->password) && $_record->password !== $credentials->password)
+        ) {
+            $newPassword = ($_record->password) ? $_record->password : $credentials->password;
+            $newUsername = ($_record->user) ? $_record->user : $credentials->username;
+
+            $_record->credentials_id = $this->_createCredentials($newUsername, $newPassword);
+            $imapCredentialsChanged = TRUE;
+        } else {
+            $imapCredentialsChanged = FALSE;
+        }
+        
+        if ($_record->smtp_user && $_record->smtp_password) {
+            // create extra smtp credentials
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Update/create SMTP credentials.');
+            $_record->smtp_credentials_id = $this->_createCredentials($_record->smtp_user, $_record->smtp_password);
+            
+        } else if (
+            $imapCredentialsChanged 
+            && (! $_record->smtp_credentials_id || $_record->smtp_credentials_id == $_oldRecord->credentials_id)
+        ) {
+            // use imap credentials for smtp auth as well
+            $_record->smtp_credentials_id = $_record->credentials_id;
+        }
+    }
+    
     /**
      * check if user has the right to manage accounts
      * 
@@ -379,13 +403,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         switch ($_action) {
             case 'create':
-                if (! Tinebase_Core::getUser()->hasRight('Felamimail', Felamimail_Acl_Rights::ADD_ACCOUNTS)) {
+                if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::ADD_ACCOUNTS)) {
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to add accounts!");
                 }
                 break;                
             case 'update':
             case 'delete':
-                if (! Tinebase_Core::getUser()->hasRight('Felamimail', Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {
+                if (! Tinebase_Core::getUser()->hasRight($this->_applicationName, Felamimail_Acl_Rights::MANAGE_ACCOUNTS)) {
                     throw new Tinebase_Exception_AccessDenied("You don't have the right to manage accounts!");
                 }
                 break;
@@ -457,66 +481,78 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * get imap server capabilities and save delimiter / personal namespace in account
      *
      * @param Felamimail_Model_Account $_account
-     * @param Felamimail_Backend_ImapProxy $_imapBackend
-     * @param string $_delimiter
-     * @return Felamimail_Model_Account
-     * 
-	 * @todo only get all capabilities once (the first time this account connects) / only update namespaces and delimiter later
-     * @todo remove imapBackend (+ exception handling at the top) and delimiter (get delimiter from INBOX folder) params (later, when capabilities are fetched only once)
+     * @return array capabilities
      */
-    public function updateCapabilities($_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL, $_delimiter = NULL)
+    public function updateCapabilities(Felamimail_Model_Account $_account, Felamimail_Backend_ImapProxy $_imapBackend = NULL)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_account->getId(), TRUE));
-        
-        if ($_imapBackend === NULL) {
-            $_imapBackend = $this->_getIMAPBackend($_account);
-            if (! $_imapBackend) {
-                return $_account;
-            }
+        if (isset($_SESSION[$this->_applicationName]) && array_key_exists($_account->getId(), $_SESSION[$this->_applicationName])) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name . ' from SESSION.');
+            return $_SESSION[$this->_applicationName][$_account->getId()];
         }
         
+        $imapBackend = ($_imapBackend !== NULL) ? $_imapBackend : $this->_getIMAPBackend($_account, TRUE);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting capabilities of account ' . $_account->name);
+        
         // get imap server capabilities and save delimiter / personal namespace in account
-        $capabilities = $_imapBackend->getCapabilityAndNamespace();
+        $capabilities = $imapBackend->getCapabilityAndNamespace();
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($capabilities, TRUE));
         
-        if (isset($capabilities['namespace'])) {
-            $_account->delimiter     = $capabilities['namespace']['personal']['delimiter'];
-            $_account->ns_personal   = (! empty($capabilities['namespace']['personal'])) ? $capabilities['namespace']['personal']['name']: '';
-            $_account->ns_other      = (! empty($capabilities['namespace']['other']))    ? $capabilities['namespace']['other']['name']   : '';
-            $_account->ns_shared     = (! empty($capabilities['namespace']['shared']))   ? $capabilities['namespace']['shared']['name']  : '';
-            
-            if ($_account->ns_personal == 'NIL') {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
-            } else {
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
-                // update sent/trash folders
-                if (! empty($_account->ns_personal) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->sent_folder) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->trash_folder)) {
-                    $_account->sent_folder = $_account->ns_personal . $_account->sent_folder;
-                    $_account->trash_folder = $_account->ns_personal . $_account->trash_folder;
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated sent/trash folder names: ' . $_account->sent_folder .' / ' . $_account->trash_folder);
-                }
-            }
-            
-        } else if ($_delimiter !== NULL) {
-            // get delimiter from params
-            if ($_delimiter != $_account->delimiter) {
-                $_account->delimiter = $_delimiter;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting new delimiter: ' . $_delimiter);
-            }
-        }
-        
+        $this->_updateNamespacesAndDelimiter($_account, $capabilities);
+
         // check if server has 'CHILDREN' support
         $_account->has_children_support = (in_array('CHILDREN', $capabilities['capabilities'])) ? 1 : 0;
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating capabilities for account: ' . $_account->name);
-        
-        if ($_account->delimiter) {
-            $_account->delimiter = substr($_account->delimiter, 0, 1);
+        try {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating capabilities for account: ' . $_account->name);
+            $this->_backend->update($_account);
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Could not update account: ' . $zdse->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getTraceAsString());
         }
         
-        $result = $this->_backend->update($_account);
-        return $this->get($result->getId());
+        // save capabilities in SESSION
+        $_SESSION[$this->_applicationName][$_account->getId()] = $capabilities;
+        
+        return $capabilities;
+    }
+    
+    /**
+     * update account namespaces from capabilities
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param array $_capabilities
+     */
+    protected function _updateNamespacesAndDelimiter(Felamimail_Model_Account $_account, $_capabilities)
+    {
+        if (! isset($_capabilities['namespace'])) {
+            return;
+        }
+        
+        // update delimiter
+        $delimiter = (! empty($_capabilities['namespace']['personal']) && strlen($_capabilities['namespace']['personal']['delimiter']) === 1) 
+            ? $_capabilities['namespace']['personal']['delimiter'] : '';
+        if ($delimiter && $delimiter != $_account->delimiter) {
+            $_account->delimiter = $delimiter;
+        }
+    
+        // update namespaces
+        $_account->ns_personal   = (! empty($_capabilities['namespace']['personal'])) ? $_capabilities['namespace']['personal']['name']: '';
+        $_account->ns_other      = (! empty($_capabilities['namespace']['other']))    ? $_capabilities['namespace']['other']['name']   : '';
+        $_account->ns_shared     = (! empty($_capabilities['namespace']['shared']))   ? $_capabilities['namespace']['shared']['name']  : '';
+
+        if ($_account->ns_personal !== 'NIL') {
+            // update sent/trash folders
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
+            if (! empty($_account->ns_personal) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->sent_folder) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->trash_folder)) {
+                $_account->sent_folder = $_account->ns_personal . $_account->sent_folder;
+                $_account->trash_folder = $_account->ns_personal . $_account->trash_folder;
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated sent/trash folder names: ' . $_account->sent_folder .' / ' . $_account->trash_folder);
+            }
+        } else {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
+        }
     }
     
     /**
@@ -551,21 +587,6 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         return $result;
-    }
-    
-    /**
-     * check system folders and create them if not found
-     * 
-     * @param $_account
-     * 
-     * @todo add more?
-     */
-    public function checkSystemFolders($_account)
-    {
-        $systemFoldersToCheck = array(Felamimail_Model_Folder::FOLDER_TRASH, Felamimail_Model_Folder::FOLDER_SENT);
-        foreach($systemFoldersToCheck as $folder) {
-            $this->getSystemFolder($_account, $folder);
-        }
     }
     
     /**
@@ -624,7 +645,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
                     . $tenf->getMessage());
                 
                 $splitFolderName = Felamimail_Model_Folder::extractLocalnameAndParent($_systemFolder, $_account->delimiter);
-                Felamimail_Controller_Cache_Folder::getInstance()->update($account, $splitFolderName['parent'], TRUE, FALSE);
+                Felamimail_Controller_Cache_Folder::getInstance()->update($account, $splitFolderName['parent'], TRUE);
                 $systemFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $folderName);
             }
         }
@@ -662,8 +683,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updating sieve_vacation_active = ' . $_vacationEnabled . ' for account: ' . $account->name);
             
             $account->sieve_vacation_active = (bool) $_vacationEnabled;
-            // @todo we should use $this->update($account) / but we don't want to updateCapabilities
-            //$result = $this->update($account);
+            // skip all special update handling
             $account = $this->_backend->update($account);
         }
         
@@ -698,12 +718,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($systemAccount->toArray(), TRUE));
             
             $systemAccount = $this->_backend->create($systemAccount);
-            $systemAccount = $this->updateCapabilities($systemAccount);
             $_accounts->addRecord($systemAccount);
             $this->_addedDefaultAccount = TRUE;
             
             // set as default account preference
-            Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT} = $systemAccount->getId();
+            Tinebase_Core::getPreference($this->_applicationName)->{Felamimail_Preference::DEFAULTACCOUNT} = $systemAccount->getId();
             
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Created new system account "' . $systemAccount->name . '".');
             

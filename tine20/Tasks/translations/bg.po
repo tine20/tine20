@@ -14,204 +14,28 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Acl/Rights.php:89
-msgid "manage shared task lists"
-msgstr "организира списък на задачи"
-
-#: Acl/Rights.php:90
-msgid "Create new shared tasks lists"
-msgstr "Състави нов списък на споделени задачи"
-
-#: Acl/Rights.php:93
-msgid "manage shared tasks favorites"
-msgstr ""
-
-#: Acl/Rights.php:94
-msgid "Create or update shared tasks favorites"
-msgstr ""
-
-#: Controller/Task.php:165
-msgid "Notification for Task "
-msgstr ""
-
 #: Controller.php:96
 #, python-format
 msgid "%s's personal tasks"
 msgstr "%s's лични задачи"
 
-#: js/GridPanel.js:53 js/Tasks-FAT-debug.js:476
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
-msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "НЕОБХОДИМА Е НАМЕСА"
 
-#: js/GridPanel.js:108 js/Tasks-FAT-debug.js:531 js/Tasks-FAT.js:6
-#, fuzzy
-msgid "Tags"
-msgstr "Задачa"
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "ЗАВЪРШЕНИ"
 
-#: js/GridPanel.js:109 js/Tasks-FAT-debug.js:532 js/Tasks-FAT.js:6
-#: Model/Task.php:194
-msgid "Lead"
-msgstr ""
+#: Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "В ПРОЦЕС"
 
-#: js/GridPanel.js:112 js/TaskEditDialog.js:178 js/Tasks-FAT-debug.js:137
-#: js/Tasks-FAT-debug.js:535 js/Tasks-FAT-debug.js:868 js/Tasks-FAT.js:6
-#: js/Tasks.js:148
-msgid "Summary"
-msgstr "Общо"
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "ПРЕКЪСНАТИ"
 
-#: js/GridPanel.js:116 js/Tasks-FAT-debug.js:539 js/Tasks-FAT.js:6
-msgid "Add a task..."
-msgstr "Добави задача"
-
-#: js/GridPanel.js:120 js/Tasks-FAT-debug.js:138 js/Tasks-FAT-debug.js:543
-#: js/Tasks-FAT.js:6 js/Tasks.js:149
-msgid "Due Date"
-msgstr "Краен срок"
-
-#: js/GridPanel.js:128 js/TaskEditDialog.js:186 js/Tasks-FAT-debug.js:551
-#: js/Tasks-FAT-debug.js:876 js/Tasks-FAT.js:6 Model/Task.php:185
-msgid "Priority"
-msgstr "Приоритет"
-
-#: js/GridPanel.js:142 js/Tasks-FAT-debug.js:565 js/Tasks-FAT.js:6
-#: Model/Task.php:187
-msgid "Percent"
-msgstr "Процент"
-
-#: js/GridPanel.js:155 js/Status.js:31 js/TaskEditDialog.js:206
-#: js/Tasks-FAT-debug.js:187 js/Tasks-FAT-debug.js:578
-#: js/Tasks-FAT-debug.js:896 js/Tasks-FAT.js:6 Model/Task.php:186
-msgid "Status"
-msgstr "Статус"
-
-#: js/GridPanel.js:169 js/Tasks-FAT-debug.js:144 js/Tasks-FAT-debug.js:592
-#: js/Tasks-FAT.js:6 js/Tasks.js:155
-msgid "Creation Time"
-msgstr "Създаден на"
-
-#: js/GridPanel.js:176 js/TaskEditDialog.js:210 js/Tasks-FAT-debug.js:599
-#: js/Tasks-FAT-debug.js:900 js/Tasks-FAT.js:6
-msgid "Completed"
-msgstr "Завършен"
-
-#: js/GridPanel.js:183 js/Tasks-FAT-debug.js:140 js/Tasks-FAT-debug.js:606
-#: js/Tasks-FAT.js:6 js/Tasks.js:151
-msgid "Responsible"
-msgstr "Отговорник"
-
-#: js/GridPanel.js:232 js/Tasks-FAT-debug.js:655 js/Tasks-FAT.js:6
-msgid "Show closed"
-msgstr "Покажи приключени задачи"
-
-#: js/TaskEditDialog.js:139 js/Tasks-FAT-debug.js:829 js/Tasks-FAT.js:6
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr ""
-
-#: js/TaskEditDialog.js:183 js/Tasks-FAT-debug.js:873 js/Tasks-FAT.js:6
-msgid "Due date"
-msgstr "Краен срок"
-
-#: js/TaskEditDialog.js:189 js/Tasks-FAT-debug.js:879 js/Tasks-FAT.js:6
-#, fuzzy
-msgid "Add Responsible ..."
-msgstr "Отговорник"
-
-#: js/TaskEditDialog.js:196 js/Tasks-FAT-debug.js:886 js/Tasks-FAT.js:6
-msgid "Notes"
-msgstr "Бележки"
-
-#: js/TaskEditDialog.js:197 js/Tasks-FAT-debug.js:887 js/Tasks-FAT.js:6
-msgid "Enter description..."
-msgstr "Напиши описание"
-
-#: js/TaskEditDialog.js:202 js/Tasks-FAT-debug.js:892 js/Tasks-FAT.js:6
-msgid "Percentage"
-msgstr "Процент"
-
-#: js/Tasks-FAT-debug.js:96 js/Tasks.js:107
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Задачa"
-msgstr[1] "Задачи"
-
-#: js/Tasks-FAT-debug.js:96 js/Tasks.js:107
-msgid "Tasks"
-msgstr "Задачи"
-
-#: js/Tasks-FAT-debug.js:100 js/Tasks.js:111
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "списък със задачи"
-msgstr[1] "списъка със задачи"
-
-#: js/Tasks-FAT-debug.js:100 js/Tasks.js:111
-msgid "to do lists"
-msgstr "списъци със задачи"
-
-#: js/Tasks-FAT-debug.js:135 js/Tasks-FAT.js:6 js/Tasks.js:146
-msgid "Quick search"
-msgstr ""
-
-#: js/Tasks-FAT-debug.js:142 js/Tasks-FAT.js:6 js/Tasks.js:153
-msgid "Last modified"
-msgstr ""
-
-#: js/Tasks-FAT-debug.js:143 js/Tasks-FAT.js:6 js/Tasks.js:154
-msgid "Last modifier"
-msgstr ""
-
-#: js/Tasks-FAT-debug.js:145 js/Tasks-FAT.js:6 js/Tasks.js:156
-msgid "Creator"
-msgstr ""
-
-#: js/Tasks.js:24
-msgid "New Task"
-msgstr ""
-
-#: Model/Task.php:182
-msgid "Due"
-msgstr ""
-
-#: Model/Task.php:183
-msgid "Organizer"
-msgstr ""
-
-#: Model/Task.php:184
-#, fuzzy
-msgid "Description"
-msgstr "Напиши описание"
-
-#: Model/Task.php:200
-msgid "Telephone"
-msgstr ""
-
-#: Model/Task.php:201
-msgid "Email"
-msgstr ""
-
-#: Preference.php:28
-msgid "All my tasks"
-msgstr ""
-
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:71
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr ""
-
-#: Preference.php:74
-msgid "Default Task List"
-msgstr ""
-
-#: Preference.php:75
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: Setup/Initialize.php:36 Setup/Update/Release3.php:65
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:36
 msgid "All tasks of my taskslists"
 msgstr ""
 
@@ -243,21 +67,187 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "НЕОБХОДИМА Е НАМЕСА"
+#: Preference.php:28
+msgid "All my tasks"
+msgstr ""
 
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "ЗАВЪРШЕНИ"
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr ""
 
-#: Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "В ПРОЦЕС"
+#: Preference.php:71
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr ""
 
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "ПРЕКЪСНАТИ"
+#: Preference.php:74
+msgid "Default Task List"
+msgstr ""
+
+#: Preference.php:75
+msgid "The default task list to create new tasks in."
+msgstr ""
+
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr "организира списък на задачи"
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr "Състави нов списък на споделени задачи"
+
+#: Acl/Rights.php:93
+msgid "manage shared tasks favorites"
+msgstr ""
+
+#: Acl/Rights.php:94
+msgid "Create or update shared tasks favorites"
+msgstr ""
+
+#: js/Status.js:31 js/GridPanel.js:155 js/TaskEditDialog.js:206
+#: Model/Task.php:186
+msgid "Status"
+msgstr "Статус"
+
+#: js/GridPanel.js:53
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Наистина ли желаете да изтриете селектираната задача?"
+msgstr[1] "Наистина ли желаете да изтриете селектираните задачи?"
+
+#: js/GridPanel.js:108
+#, fuzzy
+msgid "Tags"
+msgstr "Задачa"
+
+#: js/GridPanel.js:109 Model/Task.php:194
+msgid "Lead"
+msgstr ""
+
+#: js/GridPanel.js:112 js/TaskEditDialog.js:178 js/Tasks.js:148
+msgid "Summary"
+msgstr "Общо"
+
+#: js/GridPanel.js:116
+msgid "Add a task..."
+msgstr "Добави задача"
+
+#: js/GridPanel.js:120 js/Tasks.js:149
+msgid "Due Date"
+msgstr "Краен срок"
+
+#: js/GridPanel.js:128 js/TaskEditDialog.js:186 Model/Task.php:185
+msgid "Priority"
+msgstr "Приоритет"
+
+#: js/GridPanel.js:142 Model/Task.php:187
+msgid "Percent"
+msgstr "Процент"
+
+#: js/GridPanel.js:169 js/Tasks.js:155
+msgid "Creation Time"
+msgstr "Създаден на"
+
+#: js/GridPanel.js:176 js/TaskEditDialog.js:210
+msgid "Completed"
+msgstr "Завършен"
+
+#: js/GridPanel.js:183 js/Tasks.js:151
+msgid "Responsible"
+msgstr "Отговорник"
+
+#: js/GridPanel.js:232
+msgid "Show closed"
+msgstr "Покажи приключени задачи"
+
+#: js/TaskEditDialog.js:139
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr ""
+
+#: js/TaskEditDialog.js:183
+msgid "Due date"
+msgstr "Краен срок"
+
+#: js/TaskEditDialog.js:189
+#, fuzzy
+msgid "Add Responsible ..."
+msgstr "Отговорник"
+
+#: js/TaskEditDialog.js:196
+msgid "Notes"
+msgstr "Бележки"
+
+#: js/TaskEditDialog.js:197
+msgid "Enter description..."
+msgstr "Напиши описание"
+
+#: js/TaskEditDialog.js:202
+msgid "Percentage"
+msgstr "Процент"
+
+#: js/Tasks.js:24
+msgid "New Task"
+msgstr ""
+
+#: js/Tasks.js:107
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Задачa"
+msgstr[1] "Задачи"
+
+#: js/Tasks.js:107
+msgid "Tasks"
+msgstr "Задачи"
+
+#: js/Tasks.js:111
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "списък със задачи"
+msgstr[1] "списъка със задачи"
+
+#: js/Tasks.js:111
+msgid "to do lists"
+msgstr "списъци със задачи"
+
+#: js/Tasks.js:146
+msgid "Quick search"
+msgstr ""
+
+#: js/Tasks.js:153
+msgid "Last modified"
+msgstr ""
+
+#: js/Tasks.js:154
+msgid "Last modifier"
+msgstr ""
+
+#: js/Tasks.js:156
+msgid "Creator"
+msgstr ""
+
+#: Model/Task.php:182
+msgid "Due"
+msgstr ""
+
+#: Model/Task.php:183
+msgid "Organizer"
+msgstr ""
+
+#: Model/Task.php:184
+#, fuzzy
+msgid "Description"
+msgstr "Напиши описание"
+
+#: Model/Task.php:200
+msgid "Telephone"
+msgstr ""
+
+#: Model/Task.php:201
+msgid "Email"
+msgstr ""
+
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr ""
 
 #~ msgid "Failed"
 #~ msgstr "Неуспех"

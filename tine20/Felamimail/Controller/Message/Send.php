@@ -419,26 +419,27 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
     {
         if (isset($_message->attachments)) {
             $size = 0;
-            $tempFileBackend = new Tinebase_TempFile();
+            $tempFileBackend = Tinebase_TempFile::getInstance();
             foreach ($_message->attachments as $attachment) {
                 
-                $tempFile = ($attachment instanceof Tinebase_Model_TempFile) ? $attachment : $tempFileBackend->get($attachment['tempFile']['id']);
-                if ($tempFile === NULL) {
-                    continue;
-                }
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($tempFile->toArray(), TRUE));
-                
-                if ($tempFile->type == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_originalMessage !== NULL) {
+                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_originalMessage !== NULL) {
                     $part = $this->getMessagePart($_originalMessage);
                     $part->decodeContent();
                     
-                    if (! $tempFile->size) {
-                        $tempFile->size = $_originalMessage->size;
-                    }
-                    $tempFile->name .= '.eml';
+                    $name = $attachment['name'] . '.eml';
+                    $type = $attachment['type'];
                     
                 } else {
+                    $tempFile = ($attachment instanceof Tinebase_Model_TempFile) 
+                        ? $attachment 
+                        : ((array_key_exists('tempFile', $attachment)) ? $tempFileBackend->get($attachment['tempFile']['id']) : NULL);
+                    
+                    if ($tempFile === NULL) {
+                        continue;
+                    }
+                    
                     if (! $tempFile->path) {
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find attachment.');
                         continue;
@@ -450,11 +451,14 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                     
                     // RFC822 attachments are not encoded, set all others to ENCODING_BASE64
                     $part->encoding = ($tempFile->type == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) ? null : Zend_Mime::ENCODING_BASE64;
+                    
+                    $name = $tempFile->name;
+                    $type = $tempFile->type;
                 }
                 
                 $part->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
-                $part->filename = $tempFile->name;
-                $part->type = $tempFile->type . '; name="' . $tempFile->name . '"';
+                $part->filename = $name;
+                $part->type = $type . '; name="' . $name . '"';
                 
                 $_mail->addAttachment($part);
             }

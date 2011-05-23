@@ -21,7 +21,6 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     // grid specific
     defaultSortInfo: {field: 'name', direction: 'ASC'},
     gridConfig: {
-        loadMask: true,
         autoExpandColumn: 'name'
     },
     

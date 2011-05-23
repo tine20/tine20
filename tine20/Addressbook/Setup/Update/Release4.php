@@ -30,15 +30,25 @@ class Addressbook_Setup_Update_Release4 extends Setup_Update_Abstract
 
     /**
      * update to 4.2
-     * - add new google import definition
+     * - do nothing / just increase version number / import definitions are updated in update_2
      * 
      * @return void
      */
     public function update_1()
     {
-        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
-        
         $this->setApplicationVersion('Addressbook', '4.2');
     }
         
+    /**
+     * update to 4.3
+     * - add new outlook / exchange import definition
+     * 
+     * @return void
+     */
+    public function update_2()
+    {
+        Setup_Controller::getInstance()->createImportExportDefinitions(Tinebase_Application::getInstance()->getApplicationByName('Addressbook'));
+        
+        $this->setApplicationVersion('Addressbook', '4.3');
+    }
 }

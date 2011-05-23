@@ -1,3 +1,113 @@
+#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:137
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Setup/setup.xml:4 js/Courses.js:32
+msgid "Courses"
+msgstr ""
+
+#: js/CourseGridPanel.js:49
+msgid "Quick search"
+msgstr ""
+
+#: js/CourseGridPanel.js:71
+msgid "Name"
+msgstr ""
+
+#: js/CourseGridPanel.js:77
+msgid "Type"
+msgstr ""
+
+#: js/CourseGridPanel.js:84 js/CourseEditDialog.js:178
+msgid "Internet Access"
+msgstr ""
+
+#: js/CourseGridPanel.js:92 js/CourseEditDialog.js:184
+msgid "Fileserver Access"
+msgstr ""
+
+#: js/CourseGridPanel.js:118
+msgid "Internet Access On"
+msgstr ""
+
+#: js/CourseGridPanel.js:129
+msgid "Internet Access Off"
+msgstr ""
+
+#: js/CourseGridPanel.js:140
+msgid "Fileserver Access On"
+msgstr ""
+
+#: js/CourseGridPanel.js:151
+msgid "Fileserver Access Off"
+msgstr ""
+
+#: js/CourseGridPanel.js:214
+msgid "Failed"
+msgstr ""
+
+#: js/CourseGridPanel.js:215
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr ""
+
+#: js/CourseEditDialog.js:31
+msgid "Import course members"
+msgstr ""
+
+#: js/CourseEditDialog.js:153
+msgid "Course Name"
+msgstr ""
+
+#: js/CourseEditDialog.js:160
+msgid "Course / School Type"
+msgstr ""
+
+#: js/CourseEditDialog.js:171
+msgid "Description"
+msgstr ""
+
+#: js/CourseEditDialog.js:215
+msgid "Members"
+msgstr ""
+
+#: js/CourseEditDialog.js:241
+msgid "Login"
+msgstr ""
+
+#: js/CourseEditDialog.js:245
+msgid "unknown"
+msgstr ""
+
+#: js/CourseEditDialog.js:250
+msgid "Reset Password"
+msgstr ""
+
+#: js/CourseEditDialog.js:268
+msgid "Set new password"
+msgstr ""
+
+#: js/CourseEditDialog.js:268
+msgid "Please enter the new password:"
+msgstr ""
+
 #: Controller/Course.php:107
 msgid "teacher"
 msgstr ""
@@ -8,118 +118,4 @@ msgstr ""
 
 #: Controller/Course.php:116
 msgid "Teacher Account"
-msgstr ""
-
-#: Frontend/Json.php:254 js/CourseEditDialog.js:137 js/Courses-FAT-debug.js:46
-#: js/Courses-FAT-debug.js:590 js/Courses-FAT.js:6 js/Models.js:41
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/CourseEditDialog.js:31 js/Courses-FAT-debug.js:484 js/Courses-FAT.js:6
-msgid "Import course members"
-msgstr ""
-
-#: js/CourseEditDialog.js:153 js/Courses-FAT-debug.js:606 js/Courses-FAT.js:6
-msgid "Course Name"
-msgstr ""
-
-#: js/CourseEditDialog.js:160 js/Courses-FAT-debug.js:613 js/Courses-FAT.js:6
-msgid "Course / School Type"
-msgstr ""
-
-#: js/CourseEditDialog.js:171 js/Courses-FAT-debug.js:624 js/Courses-FAT.js:6
-msgid "Description"
-msgstr ""
-
-#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:85
-#: js/Courses-FAT-debug.js:316 js/Courses-FAT-debug.js:631 js/Courses-FAT.js:6
-msgid "Internet Access"
-msgstr ""
-
-#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:93
-#: js/Courses-FAT-debug.js:324 js/Courses-FAT-debug.js:637 js/Courses-FAT.js:6
-msgid "Fileserver Access"
-msgstr ""
-
-#: js/CourseEditDialog.js:215 js/Courses-FAT-debug.js:668 js/Courses-FAT.js:6
-msgid "Members"
-msgstr ""
-
-#: js/CourseEditDialog.js:241 js/Courses-FAT-debug.js:694 js/Courses-FAT.js:6
-msgid "Login"
-msgstr ""
-
-#: js/CourseEditDialog.js:245 js/Courses-FAT-debug.js:698 js/Courses-FAT.js:6
-msgid "unknown"
-msgstr ""
-
-#: js/CourseEditDialog.js:250 js/Courses-FAT-debug.js:703 js/Courses-FAT.js:6
-msgid "Reset Password"
-msgstr ""
-
-#: js/CourseEditDialog.js:268 js/Courses-FAT-debug.js:721
-msgid "Set new password"
-msgstr ""
-
-#: js/CourseEditDialog.js:268 js/Courses-FAT-debug.js:721
-msgid "Please enter the new password:"
-msgstr ""
-
-#: js/CourseGridPanel.js:50 js/Courses-FAT-debug.js:281 js/Courses-FAT.js:6
-msgid "Quick search"
-msgstr ""
-
-#: js/CourseGridPanel.js:72 js/Courses-FAT-debug.js:303 js/Courses-FAT.js:6
-msgid "Name"
-msgstr ""
-
-#: js/CourseGridPanel.js:78 js/Courses-FAT-debug.js:309 js/Courses-FAT.js:6
-msgid "Type"
-msgstr ""
-
-#: js/CourseGridPanel.js:119 js/Courses-FAT-debug.js:350 js/Courses-FAT.js:6
-msgid "Internet Access On"
-msgstr ""
-
-#: js/CourseGridPanel.js:130 js/Courses-FAT-debug.js:361 js/Courses-FAT.js:6
-msgid "Internet Access Off"
-msgstr ""
-
-#: js/CourseGridPanel.js:141 js/Courses-FAT-debug.js:372 js/Courses-FAT.js:6
-msgid "Fileserver Access On"
-msgstr ""
-
-#: js/CourseGridPanel.js:152 js/Courses-FAT-debug.js:383 js/Courses-FAT.js:6
-msgid "Fileserver Access Off"
-msgstr ""
-
-#: js/CourseGridPanel.js:215 js/Courses-FAT-debug.js:446 js/Courses-FAT.js:6
-msgid "Failed"
-msgstr ""
-
-#: js/CourseGridPanel.js:216 js/Courses-FAT-debug.js:447 js/Courses-FAT.js:6
-msgid "Some error occured while trying to update the courses."
-msgstr ""
-
-#: js/Courses-FAT-debug.js:50 js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Courses-FAT-debug.js:79 js/Models.js:74
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Courses-FAT-debug.js:114 js/Courses-FAT.js:6 js/Courses.js:32
-#: Setup/setup.xml:4
-msgid "Courses"
-msgstr ""
-
-#: js/Courses-FAT-debug.js:119 js/Courses-FAT.js:6 js/Courses.js:37
-msgid "All Courses"
 msgstr ""

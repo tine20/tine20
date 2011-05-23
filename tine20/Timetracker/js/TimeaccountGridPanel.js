@@ -3,8 +3,8 @@
  * 
  * @package     Timetracker
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -37,7 +37,6 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
     // grid specific
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
     gridConfig: {
-        loadMask: true,
         autoExpandColumn: 'title'
     },
     copyEditAction: true,

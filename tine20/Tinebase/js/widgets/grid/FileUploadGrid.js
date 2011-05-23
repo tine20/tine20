@@ -55,7 +55,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     header: false,
     border: false,
     deferredRender: false,
-    loadMask: true,
     autoExpandColumn: 'name',
     
     /**

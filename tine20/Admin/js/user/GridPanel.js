@@ -30,7 +30,6 @@ Tine.Admin.user.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     evalGrants: false,
     gridConfig: {
     	id: 'gridAdminUsers',
-        loadMask: true,
         autoExpandColumn: 'accountDisplayName'
     },
     

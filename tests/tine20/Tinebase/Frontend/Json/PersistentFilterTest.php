@@ -202,6 +202,17 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
     }
     
     /**
+     * test overwriting existing filter
+     */
+    public function testOverwriteExistingFilter()
+    {
+        $filter1 = $this->testSaveFilter();
+        $filter2 = $this->testSaveFilter();
+        
+        $this->assertEquals($filter1['id'], $filter2['id']);
+    }
+    
+    /**
      * assert saved filer matches expections for $this->_testFilterData
      * 
      * @param array $savedFilter

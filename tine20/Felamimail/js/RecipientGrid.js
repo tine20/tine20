@@ -22,7 +22,6 @@ Ext.namespace('Tine.Felamimail');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -134,7 +133,7 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {Event} e
      */
     onCtxMenu: function(grid, row, e) {
-        var activeRow = row || this.activeEditor.row;
+        var activeRow = (row === null) ? ((this.activeEditor) ? this.activeEditor.row : 0) : row;
         
         e.stopEvent();
         var selModel = grid.getSelectionModel();
@@ -500,10 +499,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         }
     },    
     
-    onBeforeEdit: function(o) {
-        Ext.fly(this.getView().getCell(o.row, o.column)).addClass('x-grid3-td-address-editing');
-    },
-    
     /**
      * delete handler
      */
@@ -520,9 +515,23 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
         this.setFixedHeight(true);
     },
     
-     onValidateEdit: function(o) {
+    /**
+     * on before edit
+     * 
+     * @param {} o
+     */
+    onBeforeEdit: function(o) {
+        Ext.fly(this.getView().getCell(o.row, o.column)).addClass('x-grid3-td-address-editing');
+    },
+    
+    /**
+     * on validate edit
+     * 
+     * @param {} o
+     */
+    onValidateEdit: function(o) {
         Ext.fly(this.getView().getCell(o.row, o.column)).removeClass('x-grid3-td-address-editing');
-     },
+    },
      
     /**
      * add recipients to grid store
@@ -530,8 +539,6 @@ Tine.Felamimail.RecipientGrid = Ext.extend(Ext.grid.EditorGridPanel, {
      * @param {Array} recipients
      * @param {String} type
      * @private
-     * 
-     * TODO get own email address and don't add it to store
      */
     _addRecipients: function(recipients, type) {
         if (recipients) {

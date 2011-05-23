@@ -13,201 +13,28 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Acl/Rights.php:89
-msgid "manage shared task lists"
-msgstr "gestiona les llistes de tasques compartides"
-
-#: Acl/Rights.php:90
-msgid "Create new shared tasks lists"
-msgstr "Crea noves llistes de tasques compartides"
-
-#: Acl/Rights.php:93
-msgid "manage shared tasks favorites"
-msgstr "gestiona els preferits de les tasques compartides"
-
-#: Acl/Rights.php:94
-msgid "Create or update shared tasks favorites"
-msgstr "Crea o actualitza preferits de tasques compartides"
-
-#: Controller/Task.php:165
-msgid "Notification for Task "
-msgstr "Notificació de tasca"
-
 #: Controller.php:96
 #, python-format
 msgid "%s's personal tasks"
 msgstr "tasques personals de %s"
 
-#: js/GridPanel.js:53 js/Tasks-FAT-debug.js:476
-msgid "Do you really want to delete the selected task?"
-msgid_plural "Do you really want to delete the selected tasks?"
-msgstr[0] "Esteu segur que voleu eliminar la tasca seleccionada?"
-msgstr[1] "Esteu segur que voleu eliminar les tasques seleccionades?"
+#: Setup/setup.xml:295
+msgid "NEEDS-ACTION"
+msgstr "REQUEREIX-ACCIÓ"
 
-#: js/GridPanel.js:108 js/Tasks-FAT-debug.js:531 js/Tasks-FAT.js:6
-msgid "Tags"
-msgstr "Etiquetes"
+#: Setup/setup.xml:317
+msgid "COMPLETED"
+msgstr "COMPLETADA"
 
-#: js/GridPanel.js:109 js/Tasks-FAT-debug.js:532 js/Tasks-FAT.js:6
-#: Model/Task.php:194
-msgid "Lead"
-msgstr "Client potencial"
+#: Setup/setup.xml:339
+msgid "IN-PROCESS"
+msgstr "EN-PROCÉS"
 
-#: js/GridPanel.js:112 js/TaskEditDialog.js:178 js/Tasks-FAT-debug.js:137
-#: js/Tasks-FAT-debug.js:535 js/Tasks-FAT-debug.js:868 js/Tasks-FAT.js:6
-#: js/Tasks.js:148
-msgid "Summary"
-msgstr "Resum"
+#: Setup/setup.xml:361
+msgid "CANCELLED"
+msgstr "CANCEL·LADA"
 
-#: js/GridPanel.js:116 js/Tasks-FAT-debug.js:539 js/Tasks-FAT.js:6
-msgid "Add a task..."
-msgstr "Afegeix una tasca..."
-
-#: js/GridPanel.js:120 js/Tasks-FAT-debug.js:138 js/Tasks-FAT-debug.js:543
-#: js/Tasks-FAT.js:6 js/Tasks.js:149
-msgid "Due Date"
-msgstr "Data de venciment"
-
-#: js/GridPanel.js:128 js/TaskEditDialog.js:186 js/Tasks-FAT-debug.js:551
-#: js/Tasks-FAT-debug.js:876 js/Tasks-FAT.js:6 Model/Task.php:185
-msgid "Priority"
-msgstr "Prioritat"
-
-#: js/GridPanel.js:142 js/Tasks-FAT-debug.js:565 js/Tasks-FAT.js:6
-#: Model/Task.php:187
-msgid "Percent"
-msgstr "Percentatge"
-
-#: js/GridPanel.js:155 js/Status.js:31 js/TaskEditDialog.js:206
-#: js/Tasks-FAT-debug.js:187 js/Tasks-FAT-debug.js:578
-#: js/Tasks-FAT-debug.js:896 js/Tasks-FAT.js:6 Model/Task.php:186
-msgid "Status"
-msgstr "Estat"
-
-#: js/GridPanel.js:169 js/Tasks-FAT-debug.js:144 js/Tasks-FAT-debug.js:592
-#: js/Tasks-FAT.js:6 js/Tasks.js:155
-msgid "Creation Time"
-msgstr "Data de creació"
-
-#: js/GridPanel.js:176 js/TaskEditDialog.js:210 js/Tasks-FAT-debug.js:599
-#: js/Tasks-FAT-debug.js:900 js/Tasks-FAT.js:6
-msgid "Completed"
-msgstr "Completada"
-
-#: js/GridPanel.js:183 js/Tasks-FAT-debug.js:140 js/Tasks-FAT-debug.js:606
-#: js/Tasks-FAT.js:6 js/Tasks.js:151
-msgid "Responsible"
-msgstr "Responsable"
-
-#: js/GridPanel.js:232 js/Tasks-FAT-debug.js:655 js/Tasks-FAT.js:6
-msgid "Show closed"
-msgstr "Mostra les tancades"
-
-#: js/TaskEditDialog.js:139 js/Tasks-FAT-debug.js:829 js/Tasks-FAT.js:6
-msgid "You have to supply a due date, because an alarm ist set!"
-msgstr "Heu de proporcionar una data de venciment, perquè s'estableix una alarma!"
-
-#: js/TaskEditDialog.js:183 js/Tasks-FAT-debug.js:873 js/Tasks-FAT.js:6
-msgid "Due date"
-msgstr "Data de venciment"
-
-#: js/TaskEditDialog.js:189 js/Tasks-FAT-debug.js:879 js/Tasks-FAT.js:6
-msgid "Add Responsible ..."
-msgstr "Afegeix un responsable ..."
-
-#: js/TaskEditDialog.js:196 js/Tasks-FAT-debug.js:886 js/Tasks-FAT.js:6
-msgid "Notes"
-msgstr "Notes"
-
-#: js/TaskEditDialog.js:197 js/Tasks-FAT-debug.js:887 js/Tasks-FAT.js:6
-msgid "Enter description..."
-msgstr "Introduïu una descripció"
-
-#: js/TaskEditDialog.js:202 js/Tasks-FAT-debug.js:892 js/Tasks-FAT.js:6
-msgid "Percentage"
-msgstr "Percentatge"
-
-#: js/Tasks-FAT-debug.js:96 js/Tasks.js:107
-msgid "Task"
-msgid_plural "Tasks"
-msgstr[0] "Tasca"
-msgstr[1] "Tasques"
-
-#: js/Tasks-FAT-debug.js:96 js/Tasks.js:107
-msgid "Tasks"
-msgstr "Tasques"
-
-#: js/Tasks-FAT-debug.js:100 js/Tasks.js:111
-msgid "to do list"
-msgid_plural "to do lists"
-msgstr[0] "llista de coses a fer"
-msgstr[1] "llistes de coses a fer"
-
-#: js/Tasks-FAT-debug.js:100 js/Tasks.js:111
-msgid "to do lists"
-msgstr "llistes de coses a fer"
-
-#: js/Tasks-FAT-debug.js:135 js/Tasks-FAT.js:6 js/Tasks.js:146
-msgid "Quick search"
-msgstr "Cerca ràpida"
-
-#: js/Tasks-FAT-debug.js:142 js/Tasks-FAT.js:6 js/Tasks.js:153
-msgid "Last modified"
-msgstr ""
-
-#: js/Tasks-FAT-debug.js:143 js/Tasks-FAT.js:6 js/Tasks.js:154
-msgid "Last modifier"
-msgstr ""
-
-#: js/Tasks-FAT-debug.js:145 js/Tasks-FAT.js:6 js/Tasks.js:156
-msgid "Creator"
-msgstr ""
-
-#: js/Tasks.js:24
-msgid "New Task"
-msgstr ""
-
-#: Model/Task.php:182
-msgid "Due"
-msgstr "Venciment"
-
-#: Model/Task.php:183
-msgid "Organizer"
-msgstr "Organitzador"
-
-#: Model/Task.php:184
-msgid "Description"
-msgstr "Descripció"
-
-#: Model/Task.php:200
-msgid "Telephone"
-msgstr "Telèfon"
-
-#: Model/Task.php:201
-msgid "Email"
-msgstr "Correu electrònic"
-
-#: Preference.php:28
-msgid "All my tasks"
-msgstr "Totes les meves tasques"
-
-#: Preference.php:70
-msgid "Default Favorite"
-msgstr "Preferit per defecte"
-
-#: Preference.php:71
-msgid "The default favorite which is loaded on Tasks startup"
-msgstr "El preferit per defecte que es carrega a l'inici de Tasques"
-
-#: Preference.php:74
-msgid "Default Task List"
-msgstr ""
-
-#: Preference.php:75
-msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: Setup/Initialize.php:36 Setup/Update/Release3.php:65
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:36
 msgid "All tasks of my taskslists"
 msgstr "Totes les tasques de les meves llistes de tasques"
 
@@ -239,21 +66,184 @@ msgstr ""
 msgid "Tasks without responsible"
 msgstr ""
 
-#: Setup/setup.xml:295
-msgid "NEEDS-ACTION"
-msgstr "REQUEREIX-ACCIÓ"
+#: Preference.php:28
+msgid "All my tasks"
+msgstr "Totes les meves tasques"
 
-#: Setup/setup.xml:317
-msgid "COMPLETED"
-msgstr "COMPLETADA"
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "Preferit per defecte"
 
-#: Setup/setup.xml:339
-msgid "IN-PROCESS"
-msgstr "EN-PROCÉS"
+#: Preference.php:71
+msgid "The default favorite which is loaded on Tasks startup"
+msgstr "El preferit per defecte que es carrega a l'inici de Tasques"
 
-#: Setup/setup.xml:361
-msgid "CANCELLED"
-msgstr "CANCEL·LADA"
+#: Preference.php:74
+msgid "Default Task List"
+msgstr ""
+
+#: Preference.php:75
+msgid "The default task list to create new tasks in."
+msgstr ""
+
+#: Acl/Rights.php:89
+msgid "manage shared task lists"
+msgstr "gestiona les llistes de tasques compartides"
+
+#: Acl/Rights.php:90
+msgid "Create new shared tasks lists"
+msgstr "Crea noves llistes de tasques compartides"
+
+#: Acl/Rights.php:93
+msgid "manage shared tasks favorites"
+msgstr "gestiona els preferits de les tasques compartides"
+
+#: Acl/Rights.php:94
+msgid "Create or update shared tasks favorites"
+msgstr "Crea o actualitza preferits de tasques compartides"
+
+#: js/Status.js:31 js/GridPanel.js:155 js/TaskEditDialog.js:206
+#: Model/Task.php:186
+msgid "Status"
+msgstr "Estat"
+
+#: js/GridPanel.js:53
+msgid "Do you really want to delete the selected task?"
+msgid_plural "Do you really want to delete the selected tasks?"
+msgstr[0] "Esteu segur que voleu eliminar la tasca seleccionada?"
+msgstr[1] "Esteu segur que voleu eliminar les tasques seleccionades?"
+
+#: js/GridPanel.js:108
+msgid "Tags"
+msgstr "Etiquetes"
+
+#: js/GridPanel.js:109 Model/Task.php:194
+msgid "Lead"
+msgstr "Client potencial"
+
+#: js/GridPanel.js:112 js/TaskEditDialog.js:178 js/Tasks.js:148
+msgid "Summary"
+msgstr "Resum"
+
+#: js/GridPanel.js:116
+msgid "Add a task..."
+msgstr "Afegeix una tasca..."
+
+#: js/GridPanel.js:120 js/Tasks.js:149
+msgid "Due Date"
+msgstr "Data de venciment"
+
+#: js/GridPanel.js:128 js/TaskEditDialog.js:186 Model/Task.php:185
+msgid "Priority"
+msgstr "Prioritat"
+
+#: js/GridPanel.js:142 Model/Task.php:187
+msgid "Percent"
+msgstr "Percentatge"
+
+#: js/GridPanel.js:169 js/Tasks.js:155
+msgid "Creation Time"
+msgstr "Data de creació"
+
+#: js/GridPanel.js:176 js/TaskEditDialog.js:210
+msgid "Completed"
+msgstr "Completada"
+
+#: js/GridPanel.js:183 js/Tasks.js:151
+msgid "Responsible"
+msgstr "Responsable"
+
+#: js/GridPanel.js:232
+msgid "Show closed"
+msgstr "Mostra les tancades"
+
+#: js/TaskEditDialog.js:139
+msgid "You have to supply a due date, because an alarm ist set!"
+msgstr "Heu de proporcionar una data de venciment, perquè s'estableix una alarma!"
+
+#: js/TaskEditDialog.js:183
+msgid "Due date"
+msgstr "Data de venciment"
+
+#: js/TaskEditDialog.js:189
+msgid "Add Responsible ..."
+msgstr "Afegeix un responsable ..."
+
+#: js/TaskEditDialog.js:196
+msgid "Notes"
+msgstr "Notes"
+
+#: js/TaskEditDialog.js:197
+msgid "Enter description..."
+msgstr "Introduïu una descripció"
+
+#: js/TaskEditDialog.js:202
+msgid "Percentage"
+msgstr "Percentatge"
+
+#: js/Tasks.js:24
+msgid "New Task"
+msgstr ""
+
+#: js/Tasks.js:107
+msgid "Task"
+msgid_plural "Tasks"
+msgstr[0] "Tasca"
+msgstr[1] "Tasques"
+
+#: js/Tasks.js:107
+msgid "Tasks"
+msgstr "Tasques"
+
+#: js/Tasks.js:111
+msgid "to do list"
+msgid_plural "to do lists"
+msgstr[0] "llista de coses a fer"
+msgstr[1] "llistes de coses a fer"
+
+#: js/Tasks.js:111
+msgid "to do lists"
+msgstr "llistes de coses a fer"
+
+#: js/Tasks.js:146
+msgid "Quick search"
+msgstr "Cerca ràpida"
+
+#: js/Tasks.js:153
+msgid "Last modified"
+msgstr ""
+
+#: js/Tasks.js:154
+msgid "Last modifier"
+msgstr ""
+
+#: js/Tasks.js:156
+msgid "Creator"
+msgstr ""
+
+#: Model/Task.php:182
+msgid "Due"
+msgstr "Venciment"
+
+#: Model/Task.php:183
+msgid "Organizer"
+msgstr "Organitzador"
+
+#: Model/Task.php:184
+msgid "Description"
+msgstr "Descripció"
+
+#: Model/Task.php:200
+msgid "Telephone"
+msgstr "Telèfon"
+
+#: Model/Task.php:201
+msgid "Email"
+msgstr "Correu electrònic"
+
+#: Controller/Task.php:165
+msgid "Notification for Task "
+msgstr "Notificació de tasca"
 
 #~ msgid "Failed"
 #~ msgstr "Ha fallat"

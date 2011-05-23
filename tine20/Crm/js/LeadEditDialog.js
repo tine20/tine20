@@ -3,8 +3,8 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -24,8 +24,6 @@ Ext.namespace('Tine.Crm');
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -57,17 +55,8 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordClass: Tine.Crm.Model.Lead,
     recordProxy: Tine.Crm.leadBackend,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
-    evalGrants: false,
     showContainerSelector: true,
 
-    /**
-     * overwrite update toolbars function (we don't have record grants yet)
-     * @private
-     */
-    updateToolbars: function() {
-
-    },
-    
     /**
      * executed after record got updated from proxy
      * 
@@ -82,7 +71,6 @@ Tine.Crm.LeadEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             && (! this.productsGrid.store || this.productsGrid.store.getCount() == 0)) {
                     
             var relations = this.splitRelations();
-            //console.log(relations);
             
             this.contactGrid.store.loadData(relations.contacts, true);
             

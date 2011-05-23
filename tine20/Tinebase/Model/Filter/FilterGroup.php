@@ -55,6 +55,16 @@
  * );
  * 
  * $filterGroup = new myFilterGroup($filterData);
+ * 
+ * // it is now possible to use the short form for the filterData like this:
+ * $filterData = array(
+ *      'created_by'  => 2,
+ *      'modified_by' => 2,
+ * );
+ * // this is equivalent to:
+ * $filterData = array(
+ *      array('field' => 'created_by',  'operator' => 'equals', 'value' => 2),
+ *      array('field' => 'modified_by', 'operator' => 'equals', 'value' => 2),
  * </code>
  */
 class Tinebase_Model_Filter_FilterGroup implements Iterator
@@ -138,6 +148,9 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      * sets this filter group from filter data in array representation
      *
      * @param array $_data
+     * @throws Tinebase_Exception_UnexpectedValue
+     * 
+     * @todo remove legacy handling
      */
     public function setFromArray($_data)
     {
@@ -146,7 +159,10 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
         // legacy container handling
         Tinebase_Model_Filter_Container::transformLegacyData($_data);
         
-        foreach ($_data as $filterData) {
+        foreach ($_data as $key => $filterData) {
+            if (! is_array($filterData)) {
+                $filterData = self::sanitizeFilterData($key, $filterData);
+            }
             
             // if a condition is given, we create a new filtergroup from this class
             if (isset($filterData['condition'])) {
@@ -173,6 +189,22 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                 }
             }
         }
+    }
+    
+    /**
+     * return sanitized filter data
+     * 
+     * @param string $_field
+     * @param mixed $_value
+     * @return array
+     */
+    public static function sanitizeFilterData($_field, $_value)
+    {
+        return array(
+            'field'     => $_field,
+            'operator'  => 'equals',
+            'value'     => $_value,
+        );
     }
     
     /**

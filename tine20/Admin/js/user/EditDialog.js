@@ -194,7 +194,7 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO use this for smtp aliases, too
      */
     checkEmailDomain: function(email) {
-        if (! Tine.Admin.registry.get('smtpConfig').primarydomain) {
+        if (! Tine.Admin.registry.get('smtpConfig').primarydomain || ! email) {
             return true;
         }
         

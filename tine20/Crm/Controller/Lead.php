@@ -193,7 +193,7 @@ class Crm_Controller_Lead extends Tinebase_Controller_Record_Abstract
         if($_action == 'changed') {
             $subject = sprintf($translate->_('Lead %s has been changed'), $_lead->lead_name);
         } else {
-            $subject = sprintf($translate->_('Lead %s has been creaded'), $_lead->lead_name);
+            $subject = sprintf($translate->_('Lead %s has been created'), $_lead->lead_name);
         }
 
         // create pdf

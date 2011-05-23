@@ -60,6 +60,10 @@ class Tinebase_Server_Http implements Tinebase_Server_Interface
 
             $server->handle($_REQUEST);
         } catch (Exception $exception) {
+            if (! is_object(Tinebase_Core::getLogger())) {
+                // no logger -> exception happened very early, just rethrow it
+                throw $exception;
+            }
             Tinebase_Core::getLogger()->INFO($exception);
             
             $server = new Tinebase_Http_Server();
