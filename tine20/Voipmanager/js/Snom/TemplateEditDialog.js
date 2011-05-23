@@ -4,7 +4,7 @@
  * @package     Voipmanager
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Thomas Wadewitz <t.wadewitz@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -60,7 +60,8 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                         reader: Tine.Voipmanager.SnomSoftwareBackend.getReader(),
                         remoteSort: true,
                         sortInfo: {field: 'name', dir: 'ASC'}                        
-                    })
+                    }),
+                    allowBlank: false
                 }, {
                     xtype:'reccombo',
                     name: 'setting_id',
@@ -72,7 +73,8 @@ Tine.Voipmanager.SnomTemplateEditDialog = Ext.extend(Tine.widgets.dialog.EditDia
                         reader: Tine.Voipmanager.SnomSettingBackend.getReader(),
                         remoteSort: true,
                         sortInfo: {field: 'name', dir: 'ASC'}                        
-                    })
+                    }),
+                    allowBlank: false
                 }, {
                     xtype: 'combo',
                     fieldLabel: this.app.i18n._('Keylayout'),
