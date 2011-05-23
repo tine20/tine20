@@ -499,6 +499,7 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                          * process added entries
                          */
                         // fetch estimated entries in one batch
+                        // @todo move getMultiple to $dataController, remove getContentController, resolve tags in getMultiple of $dataController (#4286)
                         $serverEntries = $dataController->getContentController()->getMultiple(array_slice($serverAdds, 0, abs($collectionData['windowSize'] - $this->_totalCount), TRUE));
                         
                         foreach($serverAdds as $id => $serverId) {
