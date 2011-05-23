@@ -130,7 +130,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
     onRecordLoad: function(record) {
         this.record = record;
         
-        if (! this.record.get('editGrant')) {
+        if (! this.record.get('editGrant') || this.record.isRecurException()) {
             this.items.each(function(item) {
                 item.setDisabled(true);
             }, this);
@@ -169,6 +169,15 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
         this.ruleCards.activeItem = this.activeRuleCard;
         
         this.activeRuleCard.setRule(this.rrule);
+        
+        if (this.record.isRecurException()) {
+            this.activeRuleCard = this.NONEcard;
+            this.items.each(function(item) {
+                item.setDisabled(true);
+            }, this);
+            
+            this.NONEcard.html = this.app.i18n._("Exceptions of Recuring events can't have recurrences themselfs.");
+        }
     },
     
     onRecordUpdate: function(record) {
