@@ -485,21 +485,21 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
                         
                         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " found (added/changed/deleted) " . count($serverAdds) . '/' . count($serverChanges) . '/' . count($serverDeletes)  . ' entries for sync from server to client');
     
-                        if((count($serverAdds) + count($serverChanges) + count($serverDeletes)) > $collectionData['windowSize'] ) {
+                        if ((count($serverAdds) + count($serverChanges) + count($serverDeletes)) > $collectionData['windowSize'] ) {
                             $this->_moreAvailable = true;
                             $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'MoreAvailable'));
                         }
                         
-                        if(count($serverAdds) > 0 || count($serverChanges) > 0 || count($serverDeletes) > 0) {
+                        if (count($serverAdds) > 0 || count($serverChanges) > 0 || count($serverDeletes) > 0) {
                             $commands = $collection->appendChild($this->_outputDom->createElementNS('uri:AirSync', 'Commands'));
                         }
-                        
                         
                         /**
                          * process added entries
                          */
                         // fetch estimated entries in one batch
-                        $serverEntries = $dataController->getContentController()->getMultiple(array_slice($serverAdds, 0, abs($collectionData['windowSize'] - $this->_totalCount), TRUE));
+                        $ids = array_slice($serverAdds, 0, abs($collectionData['windowSize'] - $this->_totalCount), TRUE);
+                        $serverEntries = $dataController->getMultipleAndResolveTags($ids);
                         
                         foreach($serverAdds as $id => $serverId) {
                             if($this->_totalCount === $collectionData['windowSize']) {
