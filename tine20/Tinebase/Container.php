@@ -134,7 +134,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         
-        if($_grants === NULL) {
+        if($_grants === NULL || count($_grants) == 0) {
             $creatorGrants = array(
                 'account_id'     => $accountId,
                 'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
