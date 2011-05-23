@@ -165,13 +165,16 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     abstract public function getSupportedFolders();
     
     /**
-     * returns content controller of this backend
+     * returns multiple records
      * 
-     * @return Tinebase_Controller_Record_Abstract
+     * @param  array $_ids array of record identifiers
+     * @return Tinebase_Record_RecordSet
      */
-    public function getContentController()
+    public function getMultiple($_ids)
     {
-        return $this->_contentController;
+        $records = $this->_contentController->getMultiple($_ids, TRUE);
+        
+        return $records;
     }
     
     /**
