@@ -407,13 +407,19 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 if (['complete', 'pending'].indexOf(record.get('cache_status')) === -1) {
                     this.checkMailsDelayedTask.delay(1000);
                 }
+                
+                if (record.isInbox() && record.isModified('cache_unreadcount')) {
+                    this.showNewMessageNotification(record);
+                }
             }
 
             if (record.isInbox()) {
-                if (record.isModified('cache_unreadcount')) {
-                    this.onUpdateFolderUnreadcount(record);
-                } else if (record.get('cache_unreadcount') > this.unreadcountInDefaultInbox && this.isDefaultAccountId(record.get('account_id'))) {
-                    this.setTitleWithUnreadcount(record.get('cache_unreadcount'));
+                if (this.isDefaultAccountId(record.get('account_id'))) {
+                    if (record.isModified('cache_unreadcount')) {
+                        this.setTitleWithUnreadcount(record.get('cache_unreadcount') - record.modified.cache_unreadcount);
+                    } else if (record.get('cache_unreadcount') > this.unreadcountInDefaultInbox) {
+                        this.setTitleWithUnreadcount(record.get('cache_unreadcount'));
+                    }
                 }
                 
                 if (record.isModified('quota_usage') || record.isModified('quota_limit')) {
@@ -434,11 +440,11 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     },
     
     /**
-     * folder unread count is updated
+     * show notification for new messages
      * 
      * @param {Tine.Felamimail.Model.Folder} record
      */
-    onUpdateFolderUnreadcount: function(record) {
+    showNewMessageNotification: function(record) {
         var recents = (record.get('cache_unreadcount') - record.modified.cache_unreadcount),
             account = this.getAccountStore().getById(record.get('account_id'));
             
@@ -454,10 +460,6 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             } else {
                 Ext.ux.Notification.show(title, message);
             }
-        }
-        
-        if (this.isDefaultAccountId(record.get('account_id'))) {
-            this.setTitleWithUnreadcount(recents);
         }
     },
     
