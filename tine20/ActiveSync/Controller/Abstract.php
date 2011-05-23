@@ -45,7 +45,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     /**
      * instance of the content specific controller
      *
-     * @var unknown_type
+     * @var Tinebase_Controller_Record_Abstract
      */
     protected $_contentController;
     
