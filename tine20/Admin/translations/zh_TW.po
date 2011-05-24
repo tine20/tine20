@@ -880,11 +880,11 @@ msgstr ""
 msgid "No roles to display"
 msgstr "無此角色"
 
-#: Controller/Container.php:172
+#: Controller/Container.php:185
 msgid "Your container has been changed"
 msgstr ""
 
-#: Controller/Container.php:173
+#: Controller/Container.php:186
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr ""
 

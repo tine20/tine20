@@ -13,15 +13,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/Phone.js:29
-#: js/Phone.js:479
-#: js/Phone.js:480
+#: js/Phone.js:29 js/Phone.js:479 js/Phone.js:480
 msgid "Edit phone settings"
 msgstr "Edytuj ustawienia telefonu"
 
-#: js/Phone.js:59
-#: js/Phone.js:254
-#: js/Models.js:69
+#: js/Phone.js:59 js/Phone.js:254 js/Models.js:69
 msgid "Phone"
 msgid_plural "Phones"
 msgstr[0] "Telefon"
@@ -88,8 +84,7 @@ msgstr "Źródło albo cel"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Wyświetlane połączenia {0} - {1} z {2}"
 
-#: js/Phone.js:682
-#: js/Phone.js:725
+#: js/Phone.js:682 js/Phone.js:725
 msgid "No calls to display"
 msgstr "Brak połączeń"
 
@@ -251,32 +246,45 @@ msgstr "Prywatna komórka"
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetuzng an.
 #~ msgid "visual"
 #~ msgstr "wybieranie"
+
 # Before you'll make any changes here, please see the german translation.
 # Bevor Du hier eine Aenderung machst, sieh Dir bitte die deutsche Uebersetuzng an.
 #~ msgid "ringer"
 #~ msgstr "łączenie"
+
 #~ msgid "off"
 #~ msgstr "wył."
+
 #~ msgid "mwi_notification"
 #~ msgstr "Powiadomienie MWI"
+
 #~ msgid "silent"
 #~ msgstr "bezgłośnie"
+
 #~ msgid "beep"
 #~ msgstr "sygnał dźwiękowy"
+
 #~ msgid "reminder"
 #~ msgstr "przypomnienie"
+
 #~ msgid "mwi_dialtone"
 #~ msgstr "Sygnał MWI"
+
 #~ msgid "normal"
 #~ msgstr "normalny"
+
 #~ msgid "stutter"
 #~ msgstr "przerywany"
+
 #~ msgid "headset_device"
 #~ msgstr "Zestaw słuchawkowy"
+
 #~ msgid "headset_rj"
 #~ msgstr "Zestaw słuchawkowy RJ"
+
 #~ msgid "message_led_other"
 #~ msgstr "Inne LED"
+
 #, fuzzy
 #~ msgid "global_missed_counter"
 #~ msgstr "brakujący licznik"

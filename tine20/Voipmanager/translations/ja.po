@@ -174,7 +174,7 @@ msgstr "電話"
 msgid "Templates"
 msgstr "テンプレート"
 
-#: js/Voipmanager.js:135 js/Snom/TemplateEditDialog.js:78
+#: js/Voipmanager.js:135 js/Snom/TemplateEditDialog.js:80
 msgid "Keylayout"
 msgstr "キーレイアウト"
 
@@ -219,7 +219,7 @@ msgid "Settings Loaded at"
 msgstr "設定読込　"
 
 #: js/Snom/PhoneEditDialog.js:386 js/Snom/SettingEditDialog.js:91
-#: js/Snom/TemplateEditDialog.js:67
+#: js/Snom/TemplateEditDialog.js:68
 msgid "Settings"
 msgstr "設定"
 

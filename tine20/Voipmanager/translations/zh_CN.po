@@ -175,7 +175,7 @@ msgstr "电话"
 msgid "Templates"
 msgstr "模板"
 
-#: js/Voipmanager.js:135 js/Snom/TemplateEditDialog.js:78
+#: js/Voipmanager.js:135 js/Snom/TemplateEditDialog.js:80
 msgid "Keylayout"
 msgstr "键布局"
 
@@ -220,7 +220,7 @@ msgid "Settings Loaded at"
 msgstr ""
 
 #: js/Snom/PhoneEditDialog.js:386 js/Snom/SettingEditDialog.js:91
-#: js/Snom/TemplateEditDialog.js:67
+#: js/Snom/TemplateEditDialog.js:68
 msgid "Settings"
 msgstr "设置"
 

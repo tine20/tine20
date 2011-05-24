@@ -240,8 +240,8 @@ msgid "Install Tine 2.0 as web app in your browser."
 msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/persistentfilter/PickerPanel.js:280
-#: js/widgets/dialog/EditDialog.js:505 js/widgets/tree/ContextMenu.js:84
-#: js/widgets/grid/GridPanel.js:1258
+#: js/widgets/dialog/EditDialog.js:514 js/widgets/tree/ContextMenu.js:84
+#: js/widgets/grid/GridPanel.js:1265
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -419,7 +419,7 @@ msgstr "Agregar una {0} Nota"
 msgid "Type"
 msgstr "Tipo"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:967
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:969
 msgid "Created By"
 msgstr "Creada Por"
 
@@ -568,7 +568,7 @@ msgstr "borrar"
 msgid "Saved in"
 msgstr "Guardado en"
 
-#: js/widgets/dialog/EditDialog.js:346 js/widgets/grid/GridPanel.js:357
+#: js/widgets/dialog/EditDialog.js:346 js/widgets/grid/GridPanel.js:359
 msgid "Copy {0}"
 msgstr ""
 
@@ -593,28 +593,28 @@ msgstr ""
 msgid "Errors"
 msgstr "Errores"
 
-#: js/widgets/dialog/EditDialog.js:497
+#: js/widgets/dialog/EditDialog.js:507
 #: js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/ImportDialog.js:210 js/widgets/dialog/ExportDialog.js:140
 #: js/LoginPanel.js:370
 msgid "Please fix the errors noted."
 msgstr "Por favor arregle los errores señalados."
 
-#: js/widgets/dialog/EditDialog.js:505
+#: js/widgets/dialog/EditDialog.js:514
 msgid "Do you really want to delete this {0}?"
 msgstr "¿Realmente desea eliminar esto {0}?"
 
-#: js/widgets/dialog/EditDialog.js:507 js/widgets/grid/GridPanel.js:1295
+#: js/widgets/dialog/EditDialog.js:516 js/widgets/grid/GridPanel.js:1302
 msgid "Deleting {0}"
 msgstr "Eliminando {0}"
 
-#: js/widgets/dialog/EditDialog.js:517 js/widgets/grid/GridPanel.js:1311
+#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1318
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:401
 #: js/widgets/tags/TagsPanel.js:434
 msgid "Failed"
 msgstr "Fallido"
 
-#: js/widgets/dialog/EditDialog.js:517 js/widgets/grid/GridPanel.js:1311
+#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1318
 msgid "Could not delete {0}."
 msgstr "No se pudo eliminar {0}."
 
@@ -847,7 +847,7 @@ msgstr "Actualizando {0} \"{1}\""
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Manejar los Permisos para {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:242 js/widgets/grid/GridPanel.js:368
+#: js/widgets/tree/ContextMenu.js:242 js/widgets/grid/GridPanel.js:370
 msgid "Add {0}"
 msgstr "Agregar {0}"
 
@@ -879,64 +879,64 @@ msgstr ""
 msgid "Save current view as favorite"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:250
+#: js/widgets/grid/GridPanel.js:249
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "No {0} se encontró. Por favor intente cambiar sus términos de filtro, opciones de vista o el criterio {1} que estaba buscando."
 
-#: js/widgets/grid/GridPanel.js:346
+#: js/widgets/grid/GridPanel.js:348
 msgid "Edit {0}"
 msgstr "Editar {0}"
 
-#: js/widgets/grid/GridPanel.js:376
+#: js/widgets/grid/GridPanel.js:378
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:415 js/widgets/grid/GridPanel.js:416
-#: js/widgets/grid/GridPanel.js:418
+#: js/widgets/grid/GridPanel.js:417 js/widgets/grid/GridPanel.js:418
+#: js/widgets/grid/GridPanel.js:420
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Borrar {0}"
 msgstr[1] "Borrar {0}"
 
-#: js/widgets/grid/GridPanel.js:725
+#: js/widgets/grid/GridPanel.js:727
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Mostrando registros {0} - {1} de {2}"
 
-#: js/widgets/grid/GridPanel.js:726
+#: js/widgets/grid/GridPanel.js:728
 msgid "No {0} to display"
 msgstr "No hay {0} para mostrar"
 
-#: js/widgets/grid/GridPanel.js:925
+#: js/widgets/grid/GridPanel.js:927
 msgid "Tagging"
 msgstr "Etiquetado"
 
-#: js/widgets/grid/GridPanel.js:966
+#: js/widgets/grid/GridPanel.js:968
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:968
+#: js/widgets/grid/GridPanel.js:970
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:969
+#: js/widgets/grid/GridPanel.js:971
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1238
+#: js/widgets/grid/GridPanel.js:1245
 msgid "Not Allowed"
 msgstr "No permitido"
 
-#: js/widgets/grid/GridPanel.js:1239
+#: js/widgets/grid/GridPanel.js:1246
 msgid "You are not allowed to delete all pages at once"
 msgstr "Ud. no tiene autorización para eliminar todas las páginas de una sola vez"
 
-#: js/widgets/grid/GridPanel.js:1257
+#: js/widgets/grid/GridPanel.js:1264
 msgid "Do you really want to delete the selected record"
 msgid_plural "Do you really want to delete the selected records"
 msgstr[0] "¿Está seguro que desea eliminar el registro seleccionado?"
 msgstr[1] "¿Está seguro que desea eliminar los registros seleccionados?"
 
-#: js/widgets/grid/GridPanel.js:1295
+#: js/widgets/grid/GridPanel.js:1302
 msgid " ... This may take a long time!"
 msgstr " ... Esto podría tomar un tiempo largo"
 
@@ -1801,7 +1801,7 @@ msgstr "¡Felicitaciones!"
 msgid "You have entered all needed information. If you press the Finish button we will send you the registration email."
 msgstr "Ha escrito toda la información necesaria. Si presiona el boton finalizar le enviaremos un correo de registro."
 
-#: js/MainScreen.js:187
+#: js/MainScreen.js:192
 msgid "Your password expired. Please enter a new user password:"
 msgstr ""
 
