@@ -519,7 +519,7 @@ msgid "Yearly"
 msgstr "Co rok"
 
 #: js/RrulePanel.js:179
-msgid "Exceptions of Recuring events can't have recurrences themselfs."
+msgid "Exceptions of reccuring events can't have recurrences themselves."
 msgstr ""
 
 #: js/RrulePanel.js:237
