@@ -176,7 +176,7 @@ Tine.Calendar.RrulePanel = Ext.extend(Ext.Panel, {
                 item.setDisabled(true);
             }, this);
             
-            this.NONEcard.html = this.app.i18n._("Exceptions of Recuring events can't have recurrences themselfs.");
+            this.NONEcard.html = this.app.i18n._("Exceptions of reccuring events can't have recurrences themselves.");
         }
     },
     
@@ -205,7 +205,7 @@ Tine.Calendar.RrulePanel.AbstractCard = Ext.extend(Ext.Panel, {
         
         
         if (Ext.isDate(until)) {
-            // make sure, last recurance is included
+            // make sure, last reccurance is included
             until = until.clearTime(true).add(Date.HOUR, 24).add(Date.SECOND, -1).format(Date.patterns.ISO8601Long);
         }
         
