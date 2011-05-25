@@ -178,6 +178,26 @@ class Calendar_JsonTests extends Calendar_TestCase
     }
 
     /**
+     * testSearchEvents with period filter
+     */
+    public function testSearchEventsWithPeriodFilter()
+    {
+        $eventData = $this->testCreateEvent();
+        
+        $filter = array(
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => '2009-03-25 00:00:00',
+                'until' => '2009-03-25 23:59:59',
+            )),
+        );
+        
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $resultEventData = $searchResultData['results'][0];
+        
+        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
+    }
+
+    /**
      * search event with alarm
      *
      */
