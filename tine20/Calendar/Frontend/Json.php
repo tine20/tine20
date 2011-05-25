@@ -287,6 +287,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        if ($period) {
 		        Calendar_Model_Rrule::mergeRecuranceSet($_records, $period->getFrom(), $period->getUntil());
 	        }
+	        
+	        // @todo cleanup
+	        // @todo sort
     	}
           
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));

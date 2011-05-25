@@ -369,6 +369,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     protected function _cleanupSearchResults(Tinebase_Record_RecordSet $_events, $_action, Tinebase_Model_Filter_FilterGroup $_filter = NULL)
     {
         foreach ($_events as $event) {
+            // @todo move this to event / do it in json frontend
             if ($_filter !== NULL) {
                 $match = $this->_checkFilterMatch($event, $_filter);
                 if (! $match) {
@@ -391,11 +392,13 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return boolean
      * 
+     * @todo move this to event / do it in json frontend
      * @todo implement + write test
      */
     protected function _checkFilterMatch(Calendar_Model_Event $_event, Tinebase_Model_Filter_FilterGroup $_filter)
     {
-        // if ($event['container_id']['id'] != $_containerId || $event['dtstart'] < $_period['from']) {
+        // if ($event['dtstart'] < $_period['from'] && $event['dtend'] > $_period['until']) {
+        // -> remove
         
         return TRUE;
     }
