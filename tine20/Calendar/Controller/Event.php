@@ -364,16 +364,40 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      * 
      * @param Tinebase_Record_RecordSet $_events
      * @param string $_action
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      */
-    protected function _cleanupSearchResults($_events, $_action)
+    protected function _cleanupSearchResults(Tinebase_Record_RecordSet $_events, $_action, Tinebase_Model_Filter_FilterGroup $_filter = NULL)
     {
-        // freebusy cleanup
         foreach ($_events as $event) {
+            if ($_filter !== NULL) {
+                $match = $this->_checkFilterMatch($event, $_filter);
+                if (! $match) {
+                    $_events->removeRecord($event);
+                    continue;
+                }
+            }
+            
             $doFreeBusyCleanup = $event->doFreeBusyCleanup();
             if ($doFreeBusyCleanup && $_action !== 'get') {
                 $_events->removeRecord($event);
             }
         }
+    }
+    
+    /**
+     * check if event matches filter
+     * 
+     * @param Calendar_Model_Event $_event
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return boolean
+     * 
+     * @todo implement + write test
+     */
+    protected function _checkFilterMatch(Calendar_Model_Event $_event, Tinebase_Model_Filter_FilterGroup $_filter)
+    {
+        // if ($event['container_id']['id'] != $_containerId || $event['dtstart'] < $_period['from']) {
+        
+        return TRUE;
     }
     
     /**
