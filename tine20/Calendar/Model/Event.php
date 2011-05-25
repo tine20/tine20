@@ -411,7 +411,7 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
     {
         $result = TRUE;
         
-        if ($this->dtend < $_period->getFrom() || $this->dtstart > $_period->getUntil()) {
+        if ($this->dtend->compare($_period->getFrom()) == -1 || $this->dtstart->compare($_period->getUntil()) == 1) {
             $result = FALSE;
         }
         
