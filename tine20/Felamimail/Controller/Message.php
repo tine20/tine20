@@ -471,9 +471,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $config->set('CSS.ForbiddenProperties', array('background-image'));
         
         // add target="_blank" to anchors
-        $def = $config->getHTMLDefinition(true);
-        $a = $def->addBlankElement('a');
-        $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
+        if ($def = $config->maybeGetRawHTMLDefinition()) {
+            $a = $def->addBlankElement('a');
+            $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
+        }
         
         $purifier = new HTMLPurifier($config);
         $content = $purifier->purify($_content);
