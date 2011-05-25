@@ -261,7 +261,7 @@ Ext.namespace('Tine.Felamimail');
                     
                     var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
             
-                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('content_type') == 'text/plain')) {
+                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('body_content_type') == 'text/plain')) {
                         this.msgBody = Ext.util.Format.nl2br(this.msgBody);
                     }
                     
