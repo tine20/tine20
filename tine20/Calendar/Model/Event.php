@@ -400,4 +400,21 @@ class Calendar_Model_Event extends Tinebase_Record_Abstract
         
         parent::setFromArray($_data);
     }
+    
+    /**
+     * checks if event matches period filter
+     * 
+     * @param Calendar_Model_PeriodFilter $_period
+     * @return boolean
+     */
+    public function isInPeriod(Calendar_Model_PeriodFilter $_period)
+    {
+        $result = TRUE;
+        
+        if ($this->dtstart < $_period->getFrom() && $this->dtend > $_period->getUntil()) {
+            $result = FALSE;
+        }
+        
+        return $result;
+    }
 }

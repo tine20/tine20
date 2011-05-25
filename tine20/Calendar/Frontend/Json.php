@@ -282,16 +282,19 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        
             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
 	        
-	        // merge recurset
+	        // merge recurset and remove not matching records
 	        $period = $_filter->getFilter('period');
 	        if ($period) {
 		        Calendar_Model_Rrule::mergeRecuranceSet($_records, $period->getFrom(), $period->getUntil());
+		        
+		        foreach ($_records as $event) {
+                    if (! $event->isInPeriod($period)) {
+                        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . ' (' . __LINE__ 
+                            . ') Removing not matching event ' . $event->summary);
+                        $_records->removeRecord($event);
+                    }
+		        }
 	        }
-	        
-	        // @todo cleanup
-            // @todo move this to event / do it in json frontend
-            // @todo implement + write test
-	        // if ($event['dtstart'] < $_period['from'] && $event['dtend'] > $_period['until']) {
 	        
 	        // @todo sort (record set)
     	}
