@@ -179,16 +179,20 @@ class Calendar_JsonTests extends Calendar_TestCase
 
     /**
      * testSearchEvents with period filter
+     * 
+     * @todo add an event that is in result set of Calendar_Controller_Event::search() 
+     *       but should be removed in Calendar_Frontend_Json::_multipleRecordsToJson()
      */
     public function testSearchEventsWithPeriodFilter()
     {
-        $eventData = $this->testCreateEvent();
+        $eventData = $this->testCreateRecurEvent();
         
         $filter = array(
             array('field' => 'period', 'operator' => 'within', 'value' => array(
                 'from'  => '2009-03-25 00:00:00',
                 'until' => '2009-03-25 23:59:59',
             )),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
         );
         
         $searchResultData = $this->_uit->searchEvents($filter, array());
