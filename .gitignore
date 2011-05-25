@@ -13,4 +13,4 @@ scripts/packaging/tine20build/
 tine20/build
 scripts/weeklyevents
 tine20/SimpleFAQ
-Felamimail/files/other/
+tests/tine20/Felamimail/files/other/
