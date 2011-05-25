@@ -140,8 +140,6 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         // deleting original account and check if user account is new default account
         $this->_controller->delete($this->_account->getId());
         $this->assertEquals($userAccount->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT});
-        
-        $userAccount = $this->_controller->create($this->_account);
     }
     
     /**
