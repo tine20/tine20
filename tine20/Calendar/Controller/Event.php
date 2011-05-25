@@ -353,54 +353,26 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
         if (! $_onlyIds) {
-            $events = $this->_cleanupSearchResults($events, $_action);
+            $this->_freeBusyCleanup($events, $_action);
         }
         
         return $events;
     }
     
     /**
-     * cleanup search results (freebusy and remove non-matching records)
+     * cleanup search results (freebusy)
      * 
      * @param Tinebase_Record_RecordSet $_events
      * @param string $_action
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
      */
-    protected function _cleanupSearchResults(Tinebase_Record_RecordSet $_events, $_action, Tinebase_Model_Filter_FilterGroup $_filter = NULL)
+    protected function _freeBusyCleanup(Tinebase_Record_RecordSet $_events, $_action)
     {
         foreach ($_events as $event) {
-            // @todo move this to event / do it in json frontend
-            if ($_filter !== NULL) {
-                $match = $this->_checkFilterMatch($event, $_filter);
-                if (! $match) {
-                    $_events->removeRecord($event);
-                    continue;
-                }
-            }
-            
             $doFreeBusyCleanup = $event->doFreeBusyCleanup();
             if ($doFreeBusyCleanup && $_action !== 'get') {
                 $_events->removeRecord($event);
             }
         }
-    }
-    
-    /**
-     * check if event matches filter
-     * 
-     * @param Calendar_Model_Event $_event
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return boolean
-     * 
-     * @todo move this to event / do it in json frontend
-     * @todo implement + write test
-     */
-    protected function _checkFilterMatch(Calendar_Model_Event $_event, Tinebase_Model_Filter_FilterGroup $_filter)
-    {
-        // if ($event['dtstart'] < $_period['from'] && $event['dtend'] > $_period['until']) {
-        // -> remove
-        
-        return TRUE;
     }
     
     /**

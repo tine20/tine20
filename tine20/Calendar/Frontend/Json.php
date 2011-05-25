@@ -289,7 +289,11 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        }
 	        
 	        // @todo cleanup
-	        // @todo sort
+            // @todo move this to event / do it in json frontend
+            // @todo implement + write test
+	        // if ($event['dtstart'] < $_period['from'] && $event['dtend'] > $_period['until']) {
+	        
+	        // @todo sort (record set)
     	}
           
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
