@@ -165,7 +165,9 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         dtstart = new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
         // if dtstart is out of current period, take start of current period
         mainPanel = app.getMainScreen().getCenterPanel(),
-        period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod();
+        period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod(),
+        container = app.getMainScreen().getWestPanel().getContainerTreePanel().getAddCalendar(),
+        attender = Tine.Tinebase.registry.get('currentAccount');
         
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {
         dtstart = period.from.clearTime(true).add(Date.HOUR, 9);
@@ -175,14 +177,14 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         summary: '',
         dtstart: dtstart,
         dtend: dtstart.add(Date.HOUR, 1),
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getAddCalendar(),
+        container_id: container,
         transp: 'OPAQUE',
         editGrant: true,
         organizer: Tine.Tinebase.registry.get('userContact'),
         attendee: [
             Ext.apply(Tine.Calendar.Model.Attender.getDefaultData(), {
                 user_type: 'user',
-                user_id: Tine.Tinebase.registry.get('currentAccount'),
+                user_id: attender,
                 status: 'ACCEPTED'
             })
         ]
