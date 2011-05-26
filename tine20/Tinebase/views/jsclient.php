@@ -6,7 +6,7 @@
  * @subpackage  Views
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -14,10 +14,10 @@
 <head>
     <title>Tine 2.0</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=8; IE=7" >
+    <meta http-equiv="X-UA-Compatible" content="IE=8; IE=7" />
 
     <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
-    <link rel="chrome-application-definition" href="chrome_web_app.json">
+    <link rel="chrome-application-definition" href="chrome_web_app.json" />
 </head>
 <body>
     <!-- Loading Indicator -->
