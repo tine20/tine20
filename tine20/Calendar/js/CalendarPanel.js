@@ -105,8 +105,6 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         this.autoRefreshTask = new Ext.util.DelayedTask(this.store.load, this.store, [{
             refresh: true,
             autoRefresh: true
-//            failure: Ext.emptyFn
-            // grr no failure method defined! -> look at generic grid stuff also!
         }]);
     },
     
