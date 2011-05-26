@@ -194,6 +194,14 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         }
     },
     
+    /**
+     * on store load exception
+     * 
+     * @param {Tine.Tinebase.data.RecordProxy} proxy
+     * @param {String} type
+     * @param {Object} error
+     * @param {Object} options
+     */
     onLoadException: function(proxy, type, error, options) {
         
         // reset autoRefresh
