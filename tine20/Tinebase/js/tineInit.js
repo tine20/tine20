@@ -99,9 +99,10 @@ Tine.Tinebase.tineInit = {
             if (e.ctrlKey && e.getKey() === e.A) {
                 // disable the native 'select all'
                 e.preventDefault();
-            } else if (e.getKey() === e.BACKSPACE) {
-                // disable the native 'history back'
-                e.preventDefault();
+                // TODO only disable BACKSPACE if no input field is focussed / no other components handle this event
+//            } else if (e.getKey() === e.BACKSPACE) {
+//                // disable the native 'history back'
+//                e.preventDefault();
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
                 // disable the native 'new tab' if in popup window
                 e.preventDefault();
