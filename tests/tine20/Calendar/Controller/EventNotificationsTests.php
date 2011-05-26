@@ -268,8 +268,8 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             }
         }
         
-        $this->assertFalse($foundNonAccountMessage);
-        $this->assertTrue($foundPWulfMessage);
+        $this->assertFalse($foundNonAccountMessage, 'notification has been sent to non-account');
+        $this->assertTrue($foundPWulfMessage, 'notfication for pwulf not found');
     }
     
     /**
