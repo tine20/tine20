@@ -258,14 +258,18 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         // check mailer messages
         $foundNonAccountMessage = FALSE;
+        $foundPWulfMessage = FALSE;
         foreach($this->_mailer->getMessages() as $message) {
             if (in_array($nonAccountEmail, $message->getRecipients())) {
                 $foundNonAccountMessage = TRUE;
-                break;
+            }
+            if (in_array($this->_personas['pwulf']->accountEmailAddress, $message->getRecipients())) {
+                $foundPWulfMessage = TRUE;
             }
         }
         
         $this->assertFalse($foundNonAccountMessage);
+        $this->assertTrue($foundPWulfMessage);
     }
     
     /**
