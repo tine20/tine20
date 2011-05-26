@@ -161,13 +161,12 @@ Tine.Calendar.Model.Event = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model
  * @static
  */ 
 Tine.Calendar.Model.Event.getDefaultData = function() {
-    var app = Tine.Tinebase.appMgr.get('Calendar');
-    
-    var dtstart = new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1));
-    
-    // if dtstart is out of current period, take start of current period
-    var mainPanel = app.getMainScreen().getCenterPanel();
-    var period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod();
+    var app = Tine.Tinebase.appMgr.get('Calendar'),
+        dtstart = new Date().clearTime().add(Date.HOUR, (new Date().getHours() + 1)),
+        // if dtstart is out of current period, take start of current period
+        mainPanel = app.getMainScreen().getCenterPanel(),
+        period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod();
+        
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {
         dtstart = period.from.clearTime(true).add(Date.HOUR, 9);
     }
