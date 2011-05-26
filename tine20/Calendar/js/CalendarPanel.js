@@ -99,10 +99,14 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         this.store.on('beforeload', this.onBeforeLoad, this);
         this.store.on('load', this.onLoad, this);
+        this.store.on('loadexception', this.onLoadException, this);
         
         // init autoRefresh
         this.autoRefreshTask = new Ext.util.DelayedTask(this.store.load, this.store, [{
-            refresh: true
+            refresh: true,
+            autoRefresh: true
+//            failure: Ext.emptyFn
+            // grr no failure method defined! -> look at generic grid stuff also!
         }]);
     },
     
@@ -192,8 +196,24 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         }
     },
     
+    onLoadException: function(proxy, type, error, options) {
+        
+        // reset autoRefresh
+        if (window.isMainWindow && this.autoRefreshInterval) {
+            this.autoRefreshTask.delay(this.autoRefreshInterval * 5000);
+        }
+        
+        this.setLoading(false);
+        this.loadMask.hide();
+        
+        if (! options.autoRefresh) {
+            this.onProxyFail(error);
+        }
+    },
+    
     onProxyFail: function(error, event) {
         this.setLoading(false);
+        this.loadMask.hide();
         
         if (error.code == 901) {
             
