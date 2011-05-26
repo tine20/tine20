@@ -256,6 +256,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         $updatedEvent = $this->_eventController->update($persistentEvent);
         
+        // make sure messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue();
+        }
+        
         // check mailer messages
         $foundNonAccountMessage = FALSE;
         $foundPWulfMessage = FALSE;
