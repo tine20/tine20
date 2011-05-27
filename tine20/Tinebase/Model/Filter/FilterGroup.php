@@ -180,7 +180,7 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
                     $this->addFilter($this->createFilter($filterData['field'], $filterData['operator'], $filterData['value']));
                 
                 } elseif (array_key_exists('custom', $fieldModel) && $fieldModel['custom'] == true) {
-                    // silently skip data, as they will be evaluated by the concreate filtergroup
+                    // silently skip data, as they will be evaluated by the concrete filtergroup
                     $this->_customData[] = $filterData;
                 
                 } else {
