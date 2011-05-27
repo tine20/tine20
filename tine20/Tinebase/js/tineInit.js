@@ -99,6 +99,9 @@ Tine.Tinebase.tineInit = {
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A) {
                 e.preventDefault();
+            } else if (e.getKey() === e.BACKSPACE && !e.getTarget('input')) {
+                // disable the native 'history back'
+                e.preventDefault();
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
                 e.preventDefault();
             }
