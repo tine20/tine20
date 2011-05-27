@@ -95,11 +95,15 @@ Tine.Tinebase.tineInit = {
     },
     
     initWindow: function () {
-        // disable the native 'select all'
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A) {
+                // disable the native 'select all'^M
+                e.preventDefault();
+            } else if (e.getKey() === e.BACKSPACE && !e.getTarget('input')) {
+                // disable the native 'history back'
                 e.preventDefault();
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
+                // disable the native 'new tab' if in popup window^M
                 e.preventDefault();
             }
         });
