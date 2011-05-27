@@ -196,7 +196,7 @@ msgstr "Telèfons"
 msgid "Templates"
 msgstr "Plantilles"
 
-#: js/Voipmanager.js:135 js/Snom/TemplateEditDialog.js:78
+#: js/Voipmanager.js:135 js/Snom/TemplateEditDialog.js:80
 msgid "Keylayout"
 msgstr ""
 
@@ -241,7 +241,7 @@ msgid "Settings Loaded at"
 msgstr "La configuració s'ha carregat el"
 
 #: js/Snom/PhoneEditDialog.js:386 js/Snom/SettingEditDialog.js:91
-#: js/Snom/TemplateEditDialog.js:67
+#: js/Snom/TemplateEditDialog.js:68
 msgid "Settings"
 msgstr "Configuració"
 

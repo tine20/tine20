@@ -189,6 +189,9 @@ function createArchives()
                     # cleanup PHPExcel
                     (cd $TEMPDIR/tine20/library/PHPExcel/PHPExcel/Shared;  rm -rf PDF)
                     
+                    # cleanup qCal
+                    (cd $TEMPDIR/tine20/library/qCal;  rm -rf docs tests)
+                    
                     echo -n "building "
                     local FILES="Addressbook Admin Setup Tinebase Zend images library styles config.inc.php.dist index.php langHelper.php LICENSE PRIVACY README RELEASENOTES setup.php tine20.php"
                     (cd $TEMPDIR/tine20; tar cjf ../../packages/tine20/$RELEASE/tine20-${UCFILE}_$RELEASE.tar.bz2 $FILES)

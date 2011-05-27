@@ -151,7 +151,7 @@ msgstr ""
 msgid "Create or update shared leads favorites"
 msgstr ""
 
-#: js/Product.js:84 js/LeadEditDialog.js:268 Export/Pdf.php:269
+#: js/Product.js:84 js/LeadEditDialog.js:256 Export/Pdf.php:269
 msgid "Products"
 msgstr ""
 
@@ -159,7 +159,7 @@ msgstr ""
 msgid "Product"
 msgstr ""
 
-#: js/Product.js:138 js/LeadEditDialog.js:444
+#: js/Product.js:138 js/LeadEditDialog.js:432
 msgid "Description"
 msgstr ""
 
@@ -271,17 +271,17 @@ msgid "Defaults"
 msgstr ""
 
 #: js/AdminPanel.js:157 js/LeadGridPanel.js:169 js/LeadStateFilterModel.js:32
-#: js/LeadEditDialog.js:348 Export/Pdf.php:78
+#: js/LeadEditDialog.js:336 Export/Pdf.php:78
 msgid "Leadstate"
 msgstr ""
 
 #: js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:484
-#: js/LeadEditDialog.js:374 Export/Pdf.php:84
+#: js/LeadEditDialog.js:362 Export/Pdf.php:84
 msgid "Leadsource"
 msgstr ""
 
 #: js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:479
-#: js/LeadEditDialog.js:367 Export/Pdf.php:81
+#: js/LeadEditDialog.js:355 Export/Pdf.php:81
 msgid "Leadtype"
 msgstr ""
 
@@ -313,12 +313,12 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: js/LeadGridDetailsPanel.js:469 js/LeadEditDialog.js:406
+#: js/LeadGridDetailsPanel.js:469 js/LeadEditDialog.js:394
 #: Controller/Lead.php:180 Export/Pdf.php:93
 msgid "Start"
 msgstr ""
 
-#: js/LeadGridDetailsPanel.js:474 js/LeadEditDialog.js:412
+#: js/LeadGridDetailsPanel.js:474 js/LeadEditDialog.js:400
 msgid "Estimated end"
 msgstr ""
 
@@ -354,7 +354,7 @@ msgstr ""
 msgid "Lead name"
 msgstr ""
 
-#: js/LeadGridPanel.js:120 js/LeadGridPanel.js:170 js/LeadEditDialog.js:234
+#: js/LeadGridPanel.js:120 js/LeadGridPanel.js:170 js/LeadEditDialog.js:222
 #: Controller/Lead.php:184 Export/Pdf.php:90
 msgid "Probability"
 msgstr ""
@@ -416,37 +416,37 @@ msgstr ""
 msgid "Show closed"
 msgstr ""
 
-#: js/LeadEditDialog.js:241 Controller/Lead.php:182 Export/Pdf.php:96
+#: js/LeadEditDialog.js:229 Controller/Lead.php:182 Export/Pdf.php:96
 msgid "End"
 msgstr ""
 
-#: js/LeadEditDialog.js:257 js/Task.js:84 Export/Pdf.php:227
+#: js/LeadEditDialog.js:245 js/Task.js:84 Export/Pdf.php:227
 msgid "Tasks"
 msgstr ""
 
-#: js/LeadEditDialog.js:258
+#: js/LeadEditDialog.js:246
 msgid "You do not have the run right for the Tasks application or it is not activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:269
+#: js/LeadEditDialog.js:257
 msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr ""
 
-#: js/LeadEditDialog.js:280 js/Model.js:48
+#: js/LeadEditDialog.js:268 js/Model.js:48
 msgid "Lead"
 msgid_plural "Leads"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/LeadEditDialog.js:307
+#: js/LeadEditDialog.js:295
 msgid "Enter short name"
 msgstr ""
 
-#: js/LeadEditDialog.js:390
+#: js/LeadEditDialog.js:378
 msgid "Expected turnover"
 msgstr ""
 
-#: js/LeadEditDialog.js:458
+#: js/LeadEditDialog.js:446
 msgid "Enter description"
 msgstr ""
 

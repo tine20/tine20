@@ -684,7 +684,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         if (isset($_SERVER['If_None_Match'])) {
             $clientETag     = trim($_SERVER['If_None_Match'], '"');
             $ifModifiedSince = trim($_SERVER['If_Modified_Since'], '"');
-        } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+        } elseif (isset($_SERVER['HTTP_IF_NONE_MATCH']) && isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
             $clientETag     = trim($_SERVER['HTTP_IF_NONE_MATCH'], '"');
             $ifModifiedSince = trim($_SERVER['HTTP_IF_MODIFIED_SINCE'], '"'); 
         }

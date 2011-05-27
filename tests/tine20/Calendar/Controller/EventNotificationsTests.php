@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Controller_EventNotificationsTests::main');
-}
 
 /**
  * Test class for Calendar_Controller_EventNotifications
@@ -74,12 +70,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
         
         $this->_flushMailer();
-        $persitentEvent = $this->_eventController->create($event);
+        $persistentEvent = $this->_eventController->create($event);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'invit');
         
         $this->_flushMailer();
-        $persitentEvent = $this->_eventController->delete($persitentEvent);
+        $persistentEvent = $this->_eventController->delete($persistentEvent);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
     }
@@ -104,11 +100,11 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
-        $persitentEvent = $this->_eventController->create($event);
+        $persistentEvent = $this->_eventController->create($event);
         
         // no updates
         $this->_flushMailer();
-        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf, sclever, jmcblack, rwright', NULL);
     }
     
@@ -119,19 +115,19 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('pwulf, jmcblack, rwright');
-        $persitentEvent = $this->_eventController->create($event);
+        $persistentEvent = $this->_eventController->create($event);
         
-        $persitentEvent->attendee->merge($this->_getPersonaAttendee('jsmith, sclever'));
-        $persitentEvent->attendee->removeRecord(
-            $persitentEvent->attendee->find('user_id', $this->_personasContacts['pwulf']->getId())
+        $persistentEvent->attendee->merge($this->_getPersonaAttendee('jsmith, sclever'));
+        $persistentEvent->attendee->removeRecord(
+            $persistentEvent->attendee->find('user_id', $this->_personasContacts['pwulf']->getId())
         );
-        $persitentEvent->attendee->find('user_id', $this->_personasContacts['rwright']->getId())->status =
+        $persistentEvent->attendee->find('user_id', $this->_personasContacts['rwright']->getId())->status =
             Calendar_Model_Attender::STATUS_ACCEPTED;
-        $persitentEvent->attendee->find('user_id', $this->_personasContacts['jmcblack']->getId())->status =
+        $persistentEvent->attendee->find('user_id', $this->_personasContacts['jmcblack']->getId())->status =
             Calendar_Model_Attender::STATUS_DECLINED;
             
         $this->_flushMailer();
-        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, jmcblack', NULL);
         $this->_assertMail('sclever', 'invit');
         $this->_assertMail('pwulf', 'cancel');
@@ -145,14 +141,14 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
-        $persitentEvent = $this->_eventController->create($event);
+        $persistentEvent = $this->_eventController->create($event);
         
-        $persitentEvent->summary = 'reschedule notification has precedence over normal update';
-        $persitentEvent->dtstart->addHour(1);
-        $persitentEvent->dtend->addHour(1);
+        $persistentEvent->summary = 'reschedule notification has precedence over normal update';
+        $persistentEvent->dtstart->addHour(1);
+        $persistentEvent->dtend->addHour(1);
         
         $this->_flushMailer();
-        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf', NULL);
         $this->_assertMail('sclever, jmcblack, rwright', 'reschedul');
     }
@@ -164,14 +160,14 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
-        $persitentEvent = $this->_eventController->create($event);
+        $persistentEvent = $this->_eventController->create($event);
         
-        $persitentEvent->summary = 'detail update notification has precedence over attendee update';
-        $persitentEvent->url = 'http://somedetail.com';
-        $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
+        $persistentEvent->summary = 'detail update notification has precedence over attendee update';
+        $persistentEvent->url = 'http://somedetail.com';
+        $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_ACCEPTED;
         
         $this->_flushMailer();
-        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf, sclever', NULL);
         $this->_assertMail('jmcblack, rwright', 'update');
     }
@@ -183,12 +179,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
-        $persitentEvent = $this->_eventController->create($event);
+        $persistentEvent = $this->_eventController->create($event);
         
-        $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
         $this->_flushMailer();
-        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf, sclever, jmcblack', NULL);
         $this->_assertMail('rwright', 'decline');
     }
@@ -201,12 +197,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf');
         $event->organizer = $this->_personasContacts['jsmith']->getId();
-        $persitentEvent = $this->_eventController->create($event);
+        $persistentEvent = $this->_eventController->create($event);
         
-        $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
         $this->_flushMailer();
-        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith, pwulf', NULL);
     }
     
@@ -218,14 +214,67 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $event = $this->_getEvent();
         $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf');
         $event->organizer = $this->_personasContacts['pwulf']->getId();
-        $persitentEvent = $this->_eventController->create($event);
+        $persistentEvent = $this->_eventController->create($event);
         
-        $persitentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
         
         $this->_flushMailer();
-        $updatedEvent = $this->_eventController->update($persitentEvent);
+        $updatedEvent = $this->_eventController->update($persistentEvent);
         $this->_assertMail('jsmith', NULL);
         $this->_assertMail('pwulf', 'decline');
+    }
+    
+    /**
+     * testNotificationToNonAccounts
+     */
+    public function testNotificationToNonAccounts()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('pwulf');
+        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        
+        // add nonaccount attender
+        $nonAccountEmail = 'externer@example.org';
+        $nonAccountAttender = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'  => 'externer',
+            'email'     => $nonAccountEmail,
+        )));
+        $event->attendee->addRecord($this->_createAttender($nonAccountAttender->getId()));
+        
+        $persistentEvent = $this->_eventController->create($event);
+        
+        // add alarm
+        $persistentEvent->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        
+        $this->_flushMailer();
+
+        $persistentEvent->attendee[1]->status = Calendar_Model_Attender::STATUS_DECLINED;
+        $updatedEvent = $this->_eventController->update($persistentEvent);
+        
+        // make sure messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue();
+        }
+        
+        // check mailer messages
+        $foundNonAccountMessage = FALSE;
+        $foundPWulfMessage = FALSE;
+        foreach($this->_mailer->getMessages() as $message) {
+            if (in_array($nonAccountEmail, $message->getRecipients())) {
+                $foundNonAccountMessage = TRUE;
+            }
+            if (in_array($this->_personas['pwulf']->accountEmailAddress, $message->getRecipients())) {
+                $foundPWulfMessage = TRUE;
+            }
+        }
+        
+        $this->assertFalse($foundNonAccountMessage, 'notification has been sent to non-account');
+        $this->assertTrue($foundPWulfMessage, 'notfication for pwulf not found');
     }
     
     /**
@@ -272,15 +321,26 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         $attendee = new Tinebase_Record_RecordSet('Calendar_Model_Attender');
         foreach (explode(',', $_personas) as $personaName) {
-            $attendee->addRecord(new Calendar_Model_Attender(array(
-                'user_id'        => $this->_personasContacts[trim($personaName)]->getId(),
-                'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
-                'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
-                'status_authkey' => Tinebase_Record_Abstract::generateUID(),
-            )));
+            $attendee->addRecord($this->_createAttender($this->_personasContacts[trim($personaName)]->getId()));
         }
         
         return $attendee;
+    }
+    
+    /**
+     * create new attender
+     * 
+     * @param string $_userId
+     * @return Calendar_Model_Attender
+     */
+    protected function _createAttender($_userId)
+    {
+        return new Calendar_Model_Attender(array(
+            'user_id'        => $_userId,
+            'user_type'      => Calendar_Model_Attender::USERTYPE_USER,
+            'role'           => Calendar_Model_Attender::ROLE_REQUIRED,
+            'status_authkey' => Tinebase_Record_Abstract::generateUID(),
+        ));
     }
     
     /**
@@ -330,8 +390,4 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
             $preferences->setValueForUser(Tinebase_Preference::LOCALE, 'en', $account->getId(), TRUE);
         }
     }
-}
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Controller_EventNotificationsTests::main') {
-    Calendar_Controller_EventNotificationsTests::main();
 }

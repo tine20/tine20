@@ -93,6 +93,12 @@ Ext.namespace('Tine.Felamimail');
     sending: false,
     
     /**
+     * validation error message
+     * @type String
+     */
+     validationErrorMessage: '',
+    
+    /**
      * @private
      */
     windowNamePrefix: 'MessageEditWindow_',
@@ -255,7 +261,7 @@ Ext.namespace('Tine.Felamimail');
                     
                     var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
             
-                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('content_type') == 'text/plain')) {
+                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('body_content_type') == 'text/plain')) {
                         this.msgBody = Ext.util.Format.nl2br(this.msgBody);
                     }
                     
@@ -872,14 +878,52 @@ Ext.namespace('Tine.Felamimail');
     },
 
     /**
-     * is form valid (checks if attachments are still uploading)
+     * is form valid (checks if attachments are still uploading / recipients set)
      * 
      * @return {Boolean}
      */
     isValid: function() {
-        var result = (! this.attachmentGrid.isUploading());
+        this.validationErrorMessage = Tine.Felamimail.MessageEditDialog.superclass.getValidationErrorMessage.call(this);
+        
+        var result = true;
+        
+        if (this.attachmentGrid.isUploading()) {
+            result = false;
+            this.validationErrorMessage = this.app.i18n._('Files are still uploading.');
+        }
+        
+        if (result) {
+            result = this.validateRecipients();
+        }
+        
+        
         return (result && Tine.Felamimail.MessageEditDialog.superclass.isValid.call(this));
-    }
+    },
+    
+    /**
+     * checks recipients
+     * 
+     * @return {Boolean}
+     */
+    validateRecipients: function() {
+        var result = true;
+        
+        if (this.record.get('to').length == 0 && this.record.get('cc').length == 0 && this.record.get('bcc').length == 0) {
+            this.validationErrorMessage = this.app.i18n._('No recipients set.');
+            result = false;
+        }
+        
+        return result;
+    },
+    
+    /**
+     * get validation error message
+     * 
+     * @return {String}
+     */
+    getValidationErrorMessage: function() {
+        return this.validationErrorMessage;
+    }    
 });
 
 /**

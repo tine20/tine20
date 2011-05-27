@@ -66,6 +66,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $this->_modelName = 'Felamimail_Model_Account';
         $this->_doContainerACLChecks = FALSE;
         $this->_doRightChecks = TRUE;
+        $this->_purgeRecords = FALSE;
+        
         $this->_backend = new Felamimail_Backend_Account();
         
         $this->_currentAccount = Tinebase_Core::getUser();

@@ -405,14 +405,14 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
 Tine.Calendar.MonthViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
     onSelectedChange: function(state){
         Tine.Calendar.MonthViewEventUI.superclass.onSelectedChange.call(this, state);
-        if(state){
+        if (state){
             this.addClass('cal-monthview-active');
             this.setStyle({
                 'background-color': this.color,
-                'color':            this.colorSet.text
+                'color':            (this.colorSet) ? this.colorSet.text : '#000000'
             });
             
-        }else{
+        } else {
             this.removeClass('cal-monthview-active');
             this.setStyle({
                 'background-color': this.is_all_day_event ? this.bgColor : '',

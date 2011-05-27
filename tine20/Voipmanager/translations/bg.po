@@ -197,7 +197,7 @@ msgstr "Phones"
 msgid "Templates"
 msgstr "Темплейтс"
 
-#: js/Voipmanager.js:135 js/Snom/TemplateEditDialog.js:78
+#: js/Voipmanager.js:135 js/Snom/TemplateEditDialog.js:80
 msgid "Keylayout"
 msgstr "Клавиатурен изглед (легенда)"
 
@@ -242,7 +242,7 @@ msgid "Settings Loaded at"
 msgstr "Настройките са заредени на:"
 
 #: js/Snom/PhoneEditDialog.js:386 js/Snom/SettingEditDialog.js:91
-#: js/Snom/TemplateEditDialog.js:67
+#: js/Snom/TemplateEditDialog.js:68
 msgid "Settings"
 msgstr "Настройки"
 

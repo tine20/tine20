@@ -5,7 +5,7 @@
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
@@ -352,18 +352,27 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $events = parent::search($_filter, $_pagination, $_getRelations, $_onlyIds, $_action);
-        
-        // freebusy cleanup
         if (! $_onlyIds) {
-            foreach($events as $event) {
-                $doFreeBusyCleanup = $event->doFreeBusyCleanup();
-                if ($doFreeBusyCleanup && $_action !== 'get') {
-                    $events->removeRecord($event);
-                }
-            }
+            $this->_freeBusyCleanup($events, $_action);
         }
         
         return $events;
+    }
+    
+    /**
+     * cleanup search results (freebusy)
+     * 
+     * @param Tinebase_Record_RecordSet $_events
+     * @param string $_action
+     */
+    protected function _freeBusyCleanup(Tinebase_Record_RecordSet $_events, $_action)
+    {
+        foreach ($_events as $event) {
+            $doFreeBusyCleanup = $event->doFreeBusyCleanup();
+            if ($doFreeBusyCleanup && $_action !== 'get') {
+                $_events->removeRecord($event);
+            }
+        }
     }
     
     /**

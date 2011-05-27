@@ -4,7 +4,7 @@
  * 
  * @package     Calendar
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_JsonTests::main');
-}
 
 /**
  * Test class for Json Frontend
@@ -31,12 +27,19 @@ class Calendar_JsonTests extends Calendar_TestCase
      */
     protected $_uit = null;
     
+    /**
+     * (non-PHPdoc)
+     * @see Calendar/Calendar_TestCase::setUp()
+     */
     public function setUp()
     {
         parent::setUp();
         $this->_uit = new Calendar_Frontend_Json();
     }
     
+    /**
+     * testGetRegistryData
+     */
     public function testGetRegistryData()
     {
         $registryData = $this->_uit->getRegistryData();
@@ -44,6 +47,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertTrue(is_array($registryData['defaultCalendar']['account_grants']));
     }
     
+    /**
+     * testCreateEvent
+     */
     public function testCreateEvent()
     {
         $eventData = $this->_getEvent()->toArray();
@@ -96,6 +102,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals(Tinebase_Model_Alarm::STATUS_SUCCESS, $loadedEventData['alarms'][0]['sent_status']);
     }
     
+    /**
+     * createTask
+     */
     public function createTask()
     {
         $request = new Zend_Controller_Request_Http(); 
@@ -113,6 +122,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         return $task;
     }
     
+    /**
+     * testUpdateEvent
+     */
     public function testUpdateEvent()
     {
         $event = new Calendar_Model_Event($this->testCreateEvent(), true);
@@ -135,6 +147,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         return $updatedEventData;
     }
     
+    /**
+     * testDeleteEvent
+     */
     public function testDeleteEvent() {
         $eventData = $this->testCreateEvent();
         
@@ -144,6 +159,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_uit->getEvent($eventData['id']);
     }
     
+    /**
+     * testSearchEvents
+     */
     public function testSearchEvents()
     {
         $eventData = $this->testCreateEvent();
@@ -157,6 +175,30 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
         return $searchResultData;
+    }
+
+    /**
+     * testSearchEvents with period filter
+     * 
+     * @todo add an event that is in result set of Calendar_Controller_Event::search() 
+     *       but should be removed in Calendar_Frontend_Json::_multipleRecordsToJson()
+     */
+    public function testSearchEventsWithPeriodFilter()
+    {
+        $eventData = $this->testCreateRecurEvent();
+        
+        $filter = array(
+            array('field' => 'period', 'operator' => 'within', 'value' => array(
+                'from'  => '2009-03-25 00:00:00',
+                'until' => '2009-03-25 23:59:59',
+            )),
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        );
+        
+        $searchResultData = $this->_uit->searchEvents($filter, array());
+        $resultEventData = $searchResultData['results'][0];
+        
+        $this->_assertJsonEvent($eventData, $resultEventData, 'failed to search event');
     }
 
     /**
@@ -178,7 +220,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->_assertJsonEvent($persistentEventData, $resultEventData, 'failed to search event with alarm');
     }
     
-    
+    /**
+     * testSetAttenderStatus
+     */
     public function testSetAttenderStatus()
     {
         $eventData = $this->testCreateEvent();
@@ -204,6 +248,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals(Calendar_Model_Attender::STATUS_ACCEPTED, $loadedPwulf['status']);
     }
     
+    /**
+     * testCreateRecurEvent
+     */
     public function testCreateRecurEvent()
     {
         $eventData = $this->testCreateEvent();
@@ -219,6 +266,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         return $updatedEventData;
     }
     
+    /**
+     * testSearchRecuringIncludes
+     */
     public function testSearchRecuringIncludes()
     {
         $recurEvent = $this->testCreateRecurEvent();
@@ -240,6 +290,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         return $searchResultData;
     }
     
+    /**
+     * testCreateRecurException
+     */
     public function testCreateRecurException()
     {
         $recurSet = array_value('results', $this->testSearchRecuringIncludes());
@@ -279,6 +332,9 @@ class Calendar_JsonTests extends Calendar_TestCase
         $this->assertEquals($persistentException['summary'], $summaryMap['2009-04-01 06:00:00']);
     }
     
+    /**
+     * testUpdateRecurSeries
+     */
     public function testUpdateRecurSeries()
     {
         $recurSet = array_value('results', $this->testSearchRecuringIncludes());
@@ -328,6 +384,11 @@ class Calendar_JsonTests extends Calendar_TestCase
         }
     }
     
+    /**
+     * testUpdateRecurExceptionsFromSeriesOverDstMove
+     * 
+     * @todo implement
+     */
     public function testUpdateRecurExceptionsFromSeriesOverDstMove()
     {
         /*
@@ -338,6 +399,9 @@ class Calendar_JsonTests extends Calendar_TestCase
          */
     }
     
+    /**
+     * testDeleteRecurSeries
+     */
     public function testDeleteRecurSeries()
     {
         $recurSet = array_value('results', $this->testSearchRecuringIncludes());
@@ -362,12 +426,14 @@ class Calendar_JsonTests extends Calendar_TestCase
             array('field' => 'period',       'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
         );
         
-        
         $searchResultData = $this->_uit->searchEvents($filter, array());
         
         $this->assertEquals(0, count($searchResultData['results']));
     }
     
+    /**
+     * testMeAsAttenderFilter
+     */
     public function testMeAsAttenderFilter()
     {
         $eventData = $this->testCreateEvent();
@@ -419,6 +485,13 @@ class Calendar_JsonTests extends Calendar_TestCase
         }
     }
     
+    /**
+     * find attender 
+     *
+     * @param array $attendeeData
+     * @param string $name
+     * @return array
+     */
     protected function _findAttender($attendeeData, $name) {
         $attenderData = false;
         $searchedId = $this->_personasContacts[$name]->getId();
@@ -435,9 +508,4 @@ class Calendar_JsonTests extends Calendar_TestCase
         
         return $attenderData;
     }
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_JsonTests::main') {
-    Calendar_JsonTests::main();
 }

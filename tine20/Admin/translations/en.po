@@ -872,10 +872,10 @@ msgstr "Displaying roles {0} - {1} of {2}"
 msgid "No roles to display"
 msgstr "No roles to display"
 
-#: Controller/Container.php:172
+#: Controller/Container.php:185
 msgid "Your container has been changed"
 msgstr "Your container has been changed"
 
-#: Controller/Container.php:173
+#: Controller/Container.php:186
 msgid "Your container has been changed by %1$s %2$sNote: %3$s"
 msgstr "Your container has been changed by %1$s %2$sNote: %3$s"

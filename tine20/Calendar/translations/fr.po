@@ -291,36 +291,36 @@ msgstr "Supprimer le participant"
 msgid "Click here to invite another attender..."
 msgstr "Cliquez ici pour ajouter un participant..."
 
-#: js/AttendeeGridPanel.js:438 js/AttendeeGridPanel.js:456
-#: js/AttendeeGridPanel.js:473 js/AttendeeGridPanel.js:485 js/Model.js:336
+#: js/AttendeeGridPanel.js:439 js/AttendeeGridPanel.js:457
+#: js/AttendeeGridPanel.js:474 js/AttendeeGridPanel.js:486 js/Model.js:336
 msgid "No Information"
 msgstr "Pas d'information"
 
-#: js/AttendeeGridPanel.js:443
+#: js/AttendeeGridPanel.js:444
 msgid "(as a group member)"
 msgstr "(comme membre du groupe)"
 
-#: js/AttendeeGridPanel.js:497
+#: js/AttendeeGridPanel.js:498
 msgid "Required"
 msgstr "Requis"
 
-#: js/AttendeeGridPanel.js:500
+#: js/AttendeeGridPanel.js:501
 msgid "Optional"
 msgstr "Facultatif"
 
-#: js/AttendeeGridPanel.js:522 js/Model.js:464 Model/Attender.php:45
+#: js/AttendeeGridPanel.js:523 js/Model.js:464 Model/Attender.php:45
 msgid "No response"
 msgstr "Pas de réponse"
 
-#: js/AttendeeGridPanel.js:525 js/Model.js:465 Model/Attender.php:46
+#: js/AttendeeGridPanel.js:526 js/Model.js:465 Model/Attender.php:46
 msgid "Accepted"
 msgstr "Accepté"
 
-#: js/AttendeeGridPanel.js:528 js/Model.js:466 Model/Attender.php:47
+#: js/AttendeeGridPanel.js:529 js/Model.js:466 Model/Attender.php:47
 msgid "Declined"
 msgstr "Refusé"
 
-#: js/AttendeeGridPanel.js:531 js/Model.js:467 Model/Attender.php:48
+#: js/AttendeeGridPanel.js:532 js/Model.js:467 Model/Attender.php:48
 msgid "Tentative"
 msgstr "Tentative"
 
@@ -513,68 +513,72 @@ msgstr "Mensuel"
 msgid "Yearly"
 msgstr "Annuel"
 
-#: js/RrulePanel.js:228
+#: js/RrulePanel.js:179
+msgid "Exceptions of reccuring events can't have recurrences themselves."
+msgstr ""
+
+#: js/RrulePanel.js:237
 msgid "forever"
 msgstr "toujours"
 
-#: js/RrulePanel.js:246
+#: js/RrulePanel.js:255
 msgid "Forever"
 msgstr "Toujours"
 
-#: js/RrulePanel.js:247
+#: js/RrulePanel.js:256
 msgid "at"
 msgstr "à"
 
-#: js/RrulePanel.js:287
+#: js/RrulePanel.js:296
 msgid "Until"
 msgstr "Jusqu'au"
 
-#: js/RrulePanel.js:299
+#: js/RrulePanel.js:308
 msgid "Until has to be after event start"
 msgstr "La date de fin doit être postérieure à la date de début"
 
-#: js/RrulePanel.js:321
+#: js/RrulePanel.js:330
 msgid "Every {0}. Day"
 msgstr "Tous les {0}. Jour"
 
-#: js/RrulePanel.js:351
+#: js/RrulePanel.js:360
 msgid "Every {0}. Week at"
 msgstr "Tous les {0}. Semaine à"
 
-#: js/RrulePanel.js:420
+#: js/RrulePanel.js:429
 msgid "Every {0}. Month"
 msgstr "Tous les {0}. Mois"
 
-#: js/RrulePanel.js:426 js/RrulePanel.js:475 js/RrulePanel.js:606
-#: js/RrulePanel.js:656
+#: js/RrulePanel.js:435 js/RrulePanel.js:484 js/RrulePanel.js:615
+#: js/RrulePanel.js:665
 msgid "at the"
 msgstr "au"
 
-#: js/RrulePanel.js:445 js/RrulePanel.js:625
+#: js/RrulePanel.js:454 js/RrulePanel.js:634
 msgid "first"
 msgstr "premier"
 
-#: js/RrulePanel.js:446 js/RrulePanel.js:626
+#: js/RrulePanel.js:455 js/RrulePanel.js:635
 msgid "second"
 msgstr "deuxième"
 
-#: js/RrulePanel.js:447 js/RrulePanel.js:627
+#: js/RrulePanel.js:456 js/RrulePanel.js:636
 msgid "third"
 msgstr "troisième"
 
-#: js/RrulePanel.js:448 js/RrulePanel.js:628
+#: js/RrulePanel.js:457 js/RrulePanel.js:637
 msgid "fourth"
 msgstr "quatrième"
 
-#: js/RrulePanel.js:449 js/RrulePanel.js:629
+#: js/RrulePanel.js:458 js/RrulePanel.js:638
 msgid "last"
 msgstr "dernier"
 
-#: js/RrulePanel.js:599
+#: js/RrulePanel.js:608
 msgid "Every {0}. Year"
 msgstr "Tous les {0}. Année"
 
-#: js/RrulePanel.js:696 js/RrulePanel.js:708
+#: js/RrulePanel.js:705 js/RrulePanel.js:717
 msgid "of"
 msgstr "de"
 

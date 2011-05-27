@@ -207,14 +207,17 @@
      */
     public function sendNotificationToAttender($_attender, $_event, $_updater, $_action, $_notificationLevel, $_updates=NULL)
     {
-        if (! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
-            // 2010-05-05 disable for the moment
-            //  - for contacts prefs of organizer is taken, this leads to unpredictable results if notificaiton is send or not!
-            //  - users can not yet configure which user/contact should get notificaitons or not    
+        if (
+            // 2011-05-26 only send notifications to user accounts!
+            $_attender->getUserAccountId() === NULL
+            
+            // old code + comments follow:
+            //! in_array($_attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))
+            //  - for contacts prefs of organizer is taken, this leads to unpredictable results if notification is send or not!
+            //  - users can not yet configure which user/contact should get notification or not    
             //|| ! $_attender->getResolvedUser() instanceof Addressbook_Model_Contact
+            
         ) {
-            // don't send notifications to non persons
-            //   OR non resolvable attendee
             return;
         }
         

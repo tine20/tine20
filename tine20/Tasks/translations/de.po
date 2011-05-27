@@ -35,8 +35,7 @@ msgstr "IN BEARBEITUNG"
 msgid "CANCELLED"
 msgstr "ZURÜCKGESTELLT"
 
-#: Setup/Update/Release3.php:65
-#: Setup/Initialize.php:36
+#: Setup/Update/Release3.php:65 Setup/Initialize.php:36
 msgid "All tasks of my taskslists"
 msgstr "Alle Aufgaben auf meinen Aufgabenlisten"
 
@@ -104,9 +103,7 @@ msgstr "Gemeinsame Aufgaben Favoriten verwalten"
 msgid "Create or update shared tasks favorites"
 msgstr "Gemeinsame Aufgaben Favoriten erstellen oder bearbeiten"
 
-#: js/Status.js:31
-#: js/GridPanel.js:155
-#: js/TaskEditDialog.js:206
+#: js/Status.js:31 js/GridPanel.js:155 js/TaskEditDialog.js:206
 #: Model/Task.php:186
 msgid "Status"
 msgstr "Status"
@@ -121,14 +118,11 @@ msgstr[1] "Wollen Sie die ausgewählten Aufgaben wirklich löschen?"
 msgid "Tags"
 msgstr "Tags"
 
-#: js/GridPanel.js:109
-#: Model/Task.php:194
+#: js/GridPanel.js:109 Model/Task.php:194
 msgid "Lead"
 msgstr "Lead"
 
-#: js/GridPanel.js:112
-#: js/TaskEditDialog.js:178
-#: js/Tasks.js:148
+#: js/GridPanel.js:112 js/TaskEditDialog.js:178 js/Tasks.js:148
 msgid "Summary"
 msgstr "Beschreibung"
 
@@ -136,34 +130,27 @@ msgstr "Beschreibung"
 msgid "Add a task..."
 msgstr "Aufgabe hinzufügen..."
 
-#: js/GridPanel.js:120
-#: js/Tasks.js:149
+#: js/GridPanel.js:120 js/Tasks.js:149
 msgid "Due Date"
 msgstr "Fällig am"
 
-#: js/GridPanel.js:128
-#: js/TaskEditDialog.js:186
-#: Model/Task.php:185
+#: js/GridPanel.js:128 js/TaskEditDialog.js:186 Model/Task.php:185
 msgid "Priority"
 msgstr "Priorität"
 
-#: js/GridPanel.js:142
-#: Model/Task.php:187
+#: js/GridPanel.js:142 Model/Task.php:187
 msgid "Percent"
 msgstr "Prozent"
 
-#: js/GridPanel.js:169
-#: js/Tasks.js:155
+#: js/GridPanel.js:169 js/Tasks.js:155
 msgid "Creation Time"
 msgstr "Angelegt am"
 
-#: js/GridPanel.js:176
-#: js/TaskEditDialog.js:210
+#: js/GridPanel.js:176 js/TaskEditDialog.js:210
 msgid "Completed"
 msgstr "Abgeschlossen"
 
-#: js/GridPanel.js:183
-#: js/Tasks.js:151
+#: js/GridPanel.js:183 js/Tasks.js:151
 msgid "Responsible"
 msgstr "Verantwortlich"
 
