@@ -550,7 +550,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         try {
             $imapBackend = ($_imapBackend === NULL) ? Felamimail_Backend_ImapFactory::factory($_folder->account_id) : $_imapBackend;
-            if ($_select && $imapBackend->getCurrentFolder() != $_folder->globalname) {
+            if ($_select) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                    . ' Select folder ' . $_folder->globalname);
                 $backendFolderValues = $imapBackend->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folder->globalname));
             }
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
