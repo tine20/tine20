@@ -583,18 +583,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test reply mail
-     * 
      */
     public function testReplyMessage()
     {
         $message = $this->_sendMessage();
         
-        $replyMessage               = $this->_getMessageData();
-        $replyMessage['flags']      = '\\Answered';
-        $replyMessage['subject']    = 'Re: ' . $message['subject'];
-        $replyMessage['original_id']= $message['id'];
-        $replyMessage['headers']    = array('X-Tine20TestMessage' => 'jsontest');
-        $returned                   = $this->_json->saveMessage($replyMessage);
+        $replyMessage = $this->_getReply($message);
+        $returned = $this->_json->saveMessage($replyMessage);
         
         $result = $this->_getMessages();
         //print_r($result);
@@ -614,6 +609,36 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // check answered flag
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_ANSWERED, $originalMessage['flags'], 'could not find flag'));
+    }
+    
+    /**
+     * get reply message data
+     * 
+     * @param array $_original
+     * @return array
+     */
+    protected function _getReply($_original)
+    {
+        $replyMessage               = $this->_getMessageData();
+        $replyMessage['subject']    = 'Re: ' . $_original['subject'];
+        $replyMessage['original_id']= $_original['id'];
+        $replyMessage['flags']      = Zend_Mail_Storage::FLAG_ANSWERED;
+        
+        return $replyMessage;
+    }
+
+    /**
+     * test reply mail in sent folder
+     */
+    public function testReplyMessageInSentFolder()
+    {
+        $messageInSent = $this->_sendMessage($this->_account->sent_folder);
+        $replyMessage = $this->_getReply($messageInSent);
+        $returned = $this->_json->saveMessage($replyMessage);
+        
+        $result = $this->_getMessages();
+        $sentMessage = $this->_getMessageFromSearchResult($result, $replyMessage['subject']);
+        $this->assertTrue(! empty($sentMessage));
     }
     
     /**
@@ -897,14 +922,14 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _sendMessage()
+    protected function _sendMessage($_folderName = 'INBOX')
     {
         $messageToSend = $this->_getMessageData();
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder); 
         
         //sleep(10);
-        $result = $this->_getMessages();
+        $result = $this->_getMessages($_folderName);
         $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
         
         $this->assertTrue(! empty($message), 'Sent message not found.');
