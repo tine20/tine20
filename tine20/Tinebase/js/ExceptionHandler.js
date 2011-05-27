@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
- 
+
 Ext.ns('Tine', 'Tine.Tinebase');
 
 /**
@@ -185,9 +185,16 @@ Tine.Tinebase.ExceptionHandler = function() {
                     icon: Ext.MessageBox.WARNING
                 });
                 break;
-            // if communication is lost, we can't create a nice ext window.
+            // server communication loss
             case 510:
-                alert(_('Connection lost, please check your network!'));
+                // NOTE: when communication is lost, we can't create a nice ext window.
+                // NOTE: - reloads/redirects cancle all open xhr requests from the browser side
+                //       - we need some way to distinguish server/client connection losses
+                //       - the extjs xhr abstraction has no such feature
+                //       - so we defer the alert. In case of reload/redirect the deferd fn dosn't get executed
+                //         if the new contet/html arrives before the defer time is over.
+                //       - this might not always be the case due to network, service or session problems
+                (function() {alert(_('Connection lost, please check your network!'))}).defer(1000);
                 break;
                 
             // transaction aborted / timeout
