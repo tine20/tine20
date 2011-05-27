@@ -474,6 +474,10 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
         }
 
         this.unreadcountInDefaultInbox += change;
+        if (this.unreadcountInDefaultInbox < 0) {
+            this.unreadcountInDefaultInbox = 0;
+        }
+        
         Tine.log.info('Updating title with new unreadcount: ' + this.unreadcountInDefaultInbox);
         
         var currentTitle = document.title,
