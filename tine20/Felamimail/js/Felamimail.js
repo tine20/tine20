@@ -467,7 +467,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
      * @param {Number} unreadcount
      */
     setTitleWithUnreadcount: function(unreadcount) {
-        if (! unreadcount || ! window.isMainWindow) {
+        if (! window.isMainWindow) {
             return;
         }
 
