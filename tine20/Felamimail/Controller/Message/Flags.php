@@ -187,7 +187,7 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
-            . ' Writing flags on IMAP server for ' . count($_imapMessageUids) . ' messages:' . print_r($flagsToChange, TRUE));
+            . ' ' . $_mode .'ing flags on IMAP server for ' . print_r($_imapMessageUids, TRUE) . ' messages:' . print_r($flagsToChange, TRUE));
         
         try {
             if ($_mode === 'add') {
