@@ -412,6 +412,7 @@ Tine.Tinebase.tineInit = {
                 });
             }
             
+            // NOTE: Tine.data.RecordProxy is implicitRPC atm.
             if (options.isImplicitJsonRpc) {
                 var jsonrpc = Ext.decode(response.responseText);
                 

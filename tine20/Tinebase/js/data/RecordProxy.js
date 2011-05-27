@@ -258,8 +258,6 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
     
     /**
      * required method for Ext.data.Proxy, used by store
-     * @todo read the specs and implement success/fail handling
-     * @todo move request to searchRecord
      */
     load : function(params, reader, callback, scope, arg){
         if(this.fireEvent("beforeload", this, params) !== false){
@@ -276,6 +274,11 @@ Ext.extend(Tine.Tinebase.data.RecordProxy, Ext.data.DataProxy, {
                 scope: this,
                 success: function(records) {
                     callback.call(scope||this, records, arg, true);
+                },
+                failure: function(exception) {
+                    //@todo compute traditional options/request/response here -> dont' waste time ondepricated stuff
+                    //this.fireEvent('exception', this, 'remote', 'read', options, response, arg);
+                    this.fireEvent('loadexception', this, 'remote',  exception, arg);
                 }
             });
             

@@ -443,7 +443,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     'update': this.onStoreUpdate,
                     'beforeload': this.onStoreBeforeload,
                     'load': this.onStoreLoad,
-                    'beforeloadrecords': this.onStoreBeforeLoadRecords
+                    'beforeloadrecords': this.onStoreBeforeLoadRecords,
+                    'loadexception': this.onStoreLoadException
                 }
             });
         } else {
@@ -454,7 +455,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         // init autoRefresh
         this.autoRefreshTask = new Ext.util.DelayedTask(this.loadGridData, this, [{
-            removeStrategy: 'keepBuffered'
+            removeStrategy: 'keepBuffered',
+            autoRefresh: true
         }]);
     },
     
@@ -613,6 +615,30 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // reset autoRefresh
         if (window.isMainWindow && this.autoRefreshInterval) {
             this.autoRefreshTask.delay(this.autoRefreshInterval * 1000);
+        }
+    },
+    
+    /**
+     * on store load exception
+     * 
+     * @param {Tine.Tinebase.data.RecordProxy} proxy
+     * @param {String} type
+     * @param {Object} error
+     * @param {Object} options
+     */
+    onStoreLoadException: function(proxy, type, error, options) {
+        
+        // reset autoRefresh
+        if (window.isMainWindow && this.autoRefreshInterval) {
+            this.autoRefreshTask.delay(this.autoRefreshInterval * 5000);
+        }
+        
+        if (this.usePagingToolbar && this.pagingToolbar.refresh) {
+            this.pagingToolbar.refresh.enable();
+        }
+        
+        if (! options.autoRefresh) {
+            proxy.handleRequestException(error);
         }
     },
     
