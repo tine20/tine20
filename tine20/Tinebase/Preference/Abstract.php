@@ -31,6 +31,11 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     const YES_NO_OPTIONS = 'yesnoopt';
 
     /**
+     * default persistent filter
+     */
+    const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
+    
+    /**
      * default container options
      *
      * @staticvar string
@@ -127,7 +132,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      * @param  Tinebase_Model_Filter_FilterGroup    $_filter
      * @param  Tinebase_Model_Pagination            $_pagination
      * @param  boolean                              $_onlyIds
-     * @return Tinebase_Record_RecordSet of preferences
+     * @return Tinebase_Record_RecordSet|array of preferences / pref ids
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL, $_onlyIds = FALSE)
     {
@@ -155,12 +160,17 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             'sort'      => array('name')
         ));
         $allPrefs = parent::search($_filter, $_pagination, $_onlyIds);
-        $this->_addDefaultAndRemoveUndefinedPrefs($allPrefs, $_filter);
         
-        // get single matching preferences for each different pref
-        $records = $this->getMatchingPreferences($allPrefs);        
+        if (! $_onlyIds) {
+            $this->_addDefaultAndRemoveUndefinedPrefs($allPrefs, $_filter);
+            
+            // get single matching preferences for each different pref
+            $result = $this->getMatchingPreferences($allPrefs);
+        } else {
+            $result = $allPrefs;
+        }
         
-        return $records;
+        return $result;
     }
     
     /**
