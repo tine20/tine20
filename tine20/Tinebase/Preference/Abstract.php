@@ -260,21 +260,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
      */
     public function getValueForUser($_preferenceName, $_accountId, $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
     {
-        $select = $this->_getSelect('*');
-
-        // build query: ... WHERE (user OR group OR anyone) AND name AND application_id
-        $filter = new Tinebase_Model_PreferenceFilter(array(
-        array('field'     => 'account',         'operator'  => 'equals', 'value'     => array(
-                'accountId' => $_accountId, 'accountType' => $_accountType)
-        ),
-        array('field'     => 'name',            'operator'  => 'equals', 'value'     => $_preferenceName),
-        ));
-        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $filter, $this);
-
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $select->__toString());
-
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetchAll();
+        $queryResult = $this->_getPrefs($_preferenceName, $_accountId, $_accountType);
 
         if (!$queryResult) {
             $pref = $this->getApplicationPreferenceDefaults($_preferenceName, $_accountId, $_accountType);
@@ -290,6 +276,34 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     }
 
     /**
+     * get preferences
+     * 
+     * @param string $_preferenceName
+     * @param string $_accountId
+     * @param string $_accountType
+     * @return array result
+     */
+    protected function _getPrefs($_preferenceName, $_accountId = '0', $_accountType = Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
+    {
+        $select = $this->_getSelect();
+        
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId();
+        $filter = new Tinebase_Model_PreferenceFilter(array(
+            array('field'     => 'account',         'operator'  => 'equals', 'value'     => array(
+                    'accountId' => $_accountId, 'accountType' => $_accountType)
+            ),
+            array('field'     => 'name',            'operator'  => 'equals', 'value'     => $_preferenceName),
+            array('field'     => 'application_id',  'operator'  => 'equals', 'value'     => $appId),
+        ));
+        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $filter, $this);
+        
+        $stmt = $this->_db->query($select);
+        $queryResult = $stmt->fetchAll();
+        
+        return $queryResult;
+    }
+    
+    /**
      * get all users who have the preference $_preferenceName = $_value
      *
      * @param string $_preferenceName
@@ -301,17 +315,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
     {
         $result = array();
 
-        // check if value is default or forced setting
-        $select = $this->_getSelect();
-        $filter = new Tinebase_Model_PreferenceFilter(array(
-        array('field'     => 'account',         'operator'  => 'equals', 'value'     => array(
-                'accountId' => '0', 'accountType' => Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE)
-        ),
-        array('field'     => 'name',            'operator'  => 'equals', 'value'     => $_preferenceName),
-        ));
-        Tinebase_Backend_Sql_Filter_FilterGroup::appendFilters($select, $filter, $this);
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetchAll();
+        $queryResult = $this->_getPrefs($_preferenceName);
 
         if (empty($queryResult)) {
             $pref = $this->getApplicationPreferenceDefaults($_preferenceName);
@@ -394,17 +398,9 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
         }
         // check if already there -> update
-        $select = $this->_getSelect('*');
-        $select
-        ->where($this->_db->quoteIdentifier($this->_tableName . '.account_id')      . ' = ?', $_accountId)
-        ->where($this->_db->quoteIdentifier($this->_tableName . '.account_type')    . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER)
-        ->where($this->_db->quoteIdentifier($this->_tableName . '.name')            . ' = ?', $_preferenceName);
+        $queryResult = $this->_getPrefs($_preferenceName, $_accountId, Tinebase_Acl_Rights::ACCOUNT_TYPE_USER);
 
-        $stmt = $this->_db->query($select);
-        $queryResult = $stmt->fetch();
-        $stmt->closeCursor();
-
-        if (!$queryResult) {
+        if (empty($queryResult)) {
             if ($_value !== Tinebase_Model_Preference::DEFAULT_VALUE) {
                 // no preference yet -> create
                 $preference = new Tinebase_Model_Preference(array(
@@ -422,7 +418,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             }
 
         } else {
-            $preference = $this->_rawDataToRecord($queryResult);
+            $preference = $this->_rawDataToRecord($queryResult[0]);
             if ($_value === Tinebase_Model_Preference::DEFAULT_VALUE) {
                 // delete if new value = use default
                 $this->delete($preference->getId());
@@ -704,28 +700,6 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
             'id'                => 'default' . Tinebase_Record_Abstract::generateUID(33),
             'value'             => Tinebase_Model_Preference::DEFAULT_VALUE,
         ), TRUE);
-    }
-
-    /**
-     * get the basic select object to fetch records from the database
-     * - overwritten to add application id
-     *
-     * @param array|string|Zend_Db_Expr $_cols columns to get, * per default
-     * @param boolean $_getDeleted get deleted records (if modlog is active)
-     * @return Zend_Db_Select
-     */
-    protected function _getSelect($_cols = '*', $_getDeleted = FALSE)
-    {
-        if (empty($this->_application)) {
-            throw new Tinebase_Exception_UnexpectedValue('No application name set in preference class.');
-        }
-
-        $select = parent::_getSelect($_cols, $_getDeleted);
-
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_application)->getId();
-        $select->where($this->_db->quoteIdentifier($this->_tableName . '.application_id') . ' = ?', $appId);
-
-        return $select;
     }
 
     /**
