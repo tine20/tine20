@@ -221,12 +221,10 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
         Tinebase_Core::getPreference('Tasks')->{Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER} = $filter['id'];
         
         $this->_uit->deletePersistentFilters(array($filter['id']));
-        //@todo make it work
-//        $this->assertNotEquals(Tinebase_Core::getPreference('Tasks')->{Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER}, $filter['id']);
+        $this->assertNotEquals(Tinebase_Core::getPreference('Tasks')->{Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER}, $filter['id']);
         
-        // @todo add this
-//        $this->setExpectedException('Tinebase_Exception_NotFound');
-//        Tinebase_PersistentFilter::getInstance()->get($filter['id']);
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        Tinebase_PersistentFilter::getInstance()->get($filter['id']);
     }
     
     /**

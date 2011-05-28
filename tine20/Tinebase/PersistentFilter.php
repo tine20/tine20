@@ -210,9 +210,7 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
             'name'        => Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER,
             array('field' => 'value', 'operator' => 'in', 'value' => (array) $_ids),
         ));
-        //print_r($prefFilter->toArray());
         $prefIds = Tinebase_Core::getPreference()->search($prefFilter, NULL, TRUE);
-        //print_r($prefIds);
         Tinebase_Core::getPreference()->delete($prefIds);
         
         return $_ids;
