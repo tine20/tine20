@@ -9,7 +9,7 @@
  */
 
 /**
- * event class for newly created group
+ * event class for removed group member
  *
  * @package     Admin
  */
