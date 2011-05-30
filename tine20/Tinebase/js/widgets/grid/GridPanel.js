@@ -1283,9 +1283,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             // don't show confirmation question for record deletion
             this.deleteRecords(sm, records);
         } else {
+            var recordNames = records[0].get(this.recordClass.getMeta('titleProperty'));
+            if (records.length > 1) {
+                recordNames += ', ...';
+            }
+            
             var i18nQuestion = this.i18nDeleteQuestion ?
                 this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
-                Tine.Tinebase.translation.ngettext('Do you really want to delete the selected record', 'Do you really want to delete the selected records', records.length);
+                String.format(Tine.Tinebase.translation.ngettext('Do you really want to delete the selected record ({0})?',
+                    'Do you really want to delete the selected records ({0})?', records.length), recordNames);
             Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
                 if(btn == 'yes') {
                     this.deleteRecords(sm, records);
