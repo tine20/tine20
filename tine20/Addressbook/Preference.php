@@ -24,11 +24,6 @@ class Addressbook_Preference extends Tinebase_Preference_Abstract
     const DEFAULTADDRESSBOOK = 'defaultAddressbook';
 
     /**
-     * default persistent filter
-     */
-    const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
-    
-    /**
      * have name of default favorite an a central palce
      * _("All contacts")
      */

@@ -27,11 +27,6 @@ class Calendar_Preference extends Tinebase_Preference_Abstract
     const DEFAULTCALENDAR = 'defaultCalendar';
     
     /**
-     * default calendar filter
-     */
-    const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
-    
-    /**
      * have name of default favorite an a central palce
      * _("All my events")
      */

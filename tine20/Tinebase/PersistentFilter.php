@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-
 /**
  * persistent filter controller
  * 
@@ -195,5 +194,25 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
             && ! Tinebase_Core::getUser()->hasRight($_record->application_id, Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES)) {
             $_record->account_id = $this->_currentAccount->getId();
         }
+    }
+    
+    /**
+     * inspects delete action
+     *
+     * @param array $_ids
+     * @return array of ids to actually delete
+     * 
+     * @todo finish
+     */
+    protected function _inspectDelete(array $_ids) {
+        // delete all persistenfilter prefs with this ids
+        $prefFilter = new Tinebase_Model_PreferenceFilter(array(
+            'name'        => Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER,
+            array('field' => 'value', 'operator' => 'in', 'value' => (array) $_ids),
+        ));
+        $prefIds = Tinebase_Core::getPreference()->search($prefFilter, NULL, TRUE);
+        Tinebase_Core::getPreference()->delete($prefIds);
+        
+        return $_ids;
     }
 }

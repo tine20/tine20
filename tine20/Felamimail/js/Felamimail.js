@@ -415,9 +415,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
 
             if (record.isInbox()) {
                 if (this.isDefaultAccountId(record.get('account_id'))) {
-                    if (record.isModified('cache_unreadcount')) {
-                        this.setTitleWithUnreadcount(record.get('cache_unreadcount') - record.modified.cache_unreadcount);
-                    } else if (record.get('cache_unreadcount') > this.unreadcountInDefaultInbox) {
+                    if (record.isModified('cache_unreadcount') || record.get('cache_unreadcount') != this.unreadcountInDefaultInbox) {
                         this.setTitleWithUnreadcount(record.get('cache_unreadcount'));
                     }
                 }
@@ -466,14 +464,18 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
     /**
      * write number of unread messages in all accounts into title
      * 
-     * @param Number change
+     * @param {Number} unreadcount
      */
-    setTitleWithUnreadcount: function(change) {
-        if (! change || ! window.isMainWindow) {
+    setTitleWithUnreadcount: function(unreadcount) {
+        if (! window.isMainWindow) {
             return;
         }
 
-        this.unreadcountInDefaultInbox += change;
+        this.unreadcountInDefaultInbox = unreadcount;
+        if (this.unreadcountInDefaultInbox < 0) {
+            this.unreadcountInDefaultInbox = 0;
+        }
+        
         Tine.log.info('Updating title with new unreadcount: ' + this.unreadcountInDefaultInbox);
         
         var currentTitle = document.title,

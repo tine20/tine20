@@ -269,10 +269,9 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * test updating of a contact
-     *
+     * test updating of a contact (including geodata)
      */
-    public function testUpdateContact()
+    public function testUpdateContactWithGeodata()
     {
         $contact = $this->_addContact();
         
@@ -281,16 +280,26 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
         $contact['adr_one_street'] = 'Pickhuben 2';
         $updatedContact = $this->_instance->saveContact($contact);
         
-        //print_r($updatedContact);
-        
         $this->assertEquals($contact['id'], $updatedContact['id'], 'updated produced a new contact');
         $this->assertEquals('PHPUNIT UPDATE', $updatedContact['n_family'], 'updating data failed');
         
         if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value) {
-            // check geo data (@todo this has to be updated when the housenumber is working correctly)
-            // should be: 9.998689 / 53.543991 (see http://openrouteservice.org with search string: Hamburg Pickhuben 2)
-            //$this->assertEquals('9.99489818142748', $updatedContact['lon'], 'wrong geodata (lon)');
-            //$this->assertEquals('53.5444309689663', $updatedContact['lat'], 'wrong geodata (lat)');
+            // check geo data 
+            $this->assertEquals('9.99489818142748', $updatedContact['lon'], 'wrong geodata (lon)');
+            $this->assertEquals('53.5444309689663', $updatedContact['lat'], 'wrong geodata (lat)');
+            
+            // try another address
+            $updatedContact['adr_one_locality']    = 'Wien';
+            $updatedContact['adr_one_street']      = 'Blindengasse 52';
+            $updatedContact['adr_one_postalcode']  = '1080';
+            $updatedContact['adr_one_countryname'] = '';
+            $updatedContact = $this->_instance->saveContact($updatedContact);
+            
+            // check geo data 
+            $this->assertEquals('16.3419589',   $updatedContact['lon'], 'wrong geodata (lon)');
+            $this->assertEquals('48.2147964',   $updatedContact['lat'], 'wrong geodata (lat)');
+            $this->assertEquals('AT',           $updatedContact['adr_one_countryname'], 'wrong country');
+            $this->assertEquals('1095',         $updatedContact['adr_one_postalcode'], 'wrong postalcode');
         }
     }
     

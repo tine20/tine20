@@ -26,11 +26,6 @@ class Crm_Preference extends Tinebase_Preference_Abstract
     const NOTIFICATION_LEVEL = 'notificationLevel';
 
     /**
-     * default persistent filter
-     */
-    const DEFAULTPERSISTENTFILTER = 'defaultpersistentfilter';
-    
-    /**
      * have name of default favorite an a central palce
      * _("All leads")
      */
