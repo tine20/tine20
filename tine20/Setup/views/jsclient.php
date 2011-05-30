@@ -61,7 +61,7 @@
             case 'DEVELOPMENT':
             default:
                 echo $this->jsb2tk->getHTML();
-                echo '    <script type="text/javascript" language="javascript" src="setup.php?method=Tinebase.getJsTranslations?' . time() . '"></script>';
+                echo '    <script type="text/javascript" language="javascript" src="setup.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
                 break;
         }?>
 </head>
