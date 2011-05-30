@@ -16,7 +16,6 @@ Ext.ns('Tine.widgets.grid');
  * 
  * <p>Application Grid Panel</p>
  * <p>
- * TODO         remove the (delete) loadmask on error
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
@@ -175,7 +174,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @type Bool
      * @property copyEditAction
      * 
-     * TODO activate this per default
+     * TODO activate this by default
      */
     copyEditAction: false,
 
@@ -320,7 +319,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 region: 'north',
                 border: false,
                 autoScroll: true,
-//                split: true,
                 items: this.filterToolbar,
                 listeners: {
                     scope: this,
@@ -432,7 +430,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initStore: function() {
         if (this.recordProxy) {
             this.store = new Ext.data.Store({
-                //autoLoad: true,
                 fields: this.recordClass,
                 proxy: this.recordProxy,
                 reader: this.recordProxy.getReader(),
@@ -593,9 +590,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onStoreLoad: function(store, records, options) {
         // we always focus the first row so that keynav starts in the grid
-        if (this.store.getCount() > 0) {
+        // this resets scroller ;-( -> need a better solution
+//        if (this.store.getCount() > 0) {
 //            this.grid.getView().focusRow(0);
-        }
+//        }
         
         // restore selection
         if (Ext.isArray(options.preserveSelection)) {
