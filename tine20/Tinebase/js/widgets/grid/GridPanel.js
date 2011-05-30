@@ -1307,15 +1307,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Array} records
      */
     deleteRecords: function(sm, records) {
-        // directly remove records from the store
-        if (Ext.isArray(records)) {
-        	// we need to suspend events before removing records from store because remove event will fire which will put isFilterSelect
-        	// and then we can't use deleteByFilter
-        	this.store.suspendEvents();
+        // directly remove records from the store (only for non-filter-selection)
+        if (Ext.isArray(records) && ! (sm.isFilterSelect && this.filterSelectionDelete)) {
             Ext.each(records, function(record) {
                 this.store.remove(record);
             });
-            this.store.resumeEvents();
         }
         
         if (this.recordProxy) {
@@ -1345,6 +1341,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 },
                 failure: function () {
                     this.refreshAfterDelete(recordIds);
+                    this.loadGridData();                    
                     Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
                 }
             };
