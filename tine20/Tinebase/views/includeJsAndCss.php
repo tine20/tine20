@@ -21,7 +21,7 @@ $locale = (Tinebase_Core::isRegistered(Tinebase_Core::LOCALE)) ? Tinebase_Core::
 switch(TINE20_BUILDTYPE) {
     case 'DEVELOPMENT':
         echo $this->jsb2tk->getHTML();
-        echo '    <script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations&' . time() . '"></script>';
+        echo '    <script type="text/javascript" src="index.php?method=Tinebase.getJsTranslations?' . time() . '"></script>';
         break;
 
     case 'DEBUG':
