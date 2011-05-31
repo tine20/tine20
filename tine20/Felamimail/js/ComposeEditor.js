@@ -86,6 +86,9 @@ Ext.namespace('Ext.ux.form.HtmlEditor');
  * @extends Ext.util.Observable
  * 
  * plugin for htmleditor that ends blockquotes on ENTER
+ * tested with chrome, sarari, FF4+
+ * fallsback for old (non IE) browser which works for easy structures
+ * does not work with IE yet
  * 
  * TODO move this to ux dir
  */
@@ -93,11 +96,14 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
 
     // private
     init: function(cmp){
-        this.cmp = cmp;
-        this.cmp.on('initialize', this.onInit, this);
+        if (! Ext.isIE) {
+            this.cmp = cmp;
+            this.cmp.on('initialize', this.onInit, this);
+        }
     },
+    
     // private
-    onInit: function(){
+    onInit: function() {
         Ext.EventManager.on(this.cmp.getDoc(), {
             'keyup': this.onKeyup,
             'keydown': this.onKeydown,
@@ -151,8 +157,7 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
      * @param {Event} e
      */
     onKeydown: function(e) {
-        // FF3 in easy cases, but IE does not work at all -> remove this old approach?
-        if (e.getKey() == e.ENTER && !Ext.isFunction(this.cmp.win.getSelection().modify)) {
+        if (e.getKey() == e.ENTER && !Ext.isFunction(s.modify)) {
             var s = this.cmp.win.getSelection(),
                 r = s.getRangeAt(0),
                 doc = this.cmp.getDoc(),
