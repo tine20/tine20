@@ -241,7 +241,10 @@ class Tinebase_Translation
             
         // create new translation
         $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
-        $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+        $translate = new Zend_Translate('gettext', $path, null, array(
+            'scan' => Zend_Translate::LOCALE_FILENAME,
+            'disableNotices' => TRUE,
+        ));
 
         try {
             $translate->setLocale($locale);
