@@ -280,7 +280,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 options: [
                     {text: this.app.i18n._('Ignore Conflict'), name: 'ignore', checked: true},
                     {text: this.app.i18n._('Edit Event'), name: 'edit'},
-                    {text: this.app.i18n._('Cancle this action'), name: 'cancle'}
+                    {text: this.app.i18n._('Cancel this action'), name: 'cancel'}
                 ],
                 scope: this,
                 handler: function(option) {
@@ -298,7 +298,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                             this.conflictConfirmWin.close();
                             break;
                             
-                        case 'cancle':
+                        case 'cancel':
                         default:
                             this.conflictConfirmWin.close();
                             this.loadMask.show();
