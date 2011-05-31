@@ -106,7 +106,8 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         return array(
-            'defaultCalendar' => $defaultCalendarArray
+            // registry setting is called defaultContainer to be compatible to the other apps
+            'defaultContainer' => $defaultCalendarArray
         );
     }
     
