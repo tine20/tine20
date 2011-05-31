@@ -188,6 +188,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * returns a fullUser
      *
      * @param string $id
+     * @return array
      */
     public function getUser($id)
     {
@@ -207,11 +208,18 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             // add primary group to account for the group selection combo box
             $group = Tinebase_Group::getInstance()->getGroupById($user->accountPrimaryGroup);
             
-            // add user groups
             $userGroups = Tinebase_Group::getInstance()->getMultiple(Tinebase_Group::getInstance()->getGroupMemberships($user->accountId))->toArray();
             
-            // add user roles
-            $userRoles = Tinebase_Acl_Roles::getInstance()->getMultiple(Tinebase_Acl_Roles::getInstance()->getRoleMemberships($user->accountId))->toArray();
+            try {
+                $roleMemberships = Tinebase_Acl_Roles::getInstance()->getRoleMemberships($user->accountId);
+                $userRoles = Tinebase_Acl_Roles::getInstance()->getMultiple($roleMemberships)->toArray();
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 
+                    ' Failed to fetch role memberships for user ' . $user->accountFullName . ': ' . $tenf->getMessage()
+                );
+                $userRoles = array();
+            }
+            
             
         } else {
             $userArray = array('accountStatus' => 'enabled', 'visibility' => 'displayed');
