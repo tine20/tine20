@@ -69,6 +69,12 @@ class Felamimail_Message extends Zend_Mail_Message
             $addresses = fgetcsv($stream);
         }
         
+        if (! is_array($addresses)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                ' Could not parse addresses: ' . var_export($addresses, TRUE));
+            return array();
+        }
+        
         foreach ($addresses as $key => $address) {
             if (preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
                 $name = trim(trim($matches[1]), '"');
