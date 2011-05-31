@@ -93,9 +93,50 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
     // private
     onInit: function(){
         Ext.EventManager.on(this.cmp.getDoc(), {
+            'keyup': this.onKeyup,
             'keydown': this.onKeydown,
             scope: this
         });
+    },
+
+    /**
+     * on keyup 
+     * 
+     * @param {Event} e
+     */
+    onKeyup: function(e) {
+        // Chrome, Safari, FF4+
+        if (e.getKey() == e.ENTER && Ext.isFunction(this.cmp.win.getSelection().modify)) {
+            
+            var s = this.cmp.win.getSelection(),
+                r = s.getRangeAt(0),
+                doc = this.cmp.getDoc(),
+                level = this.getBlockquoteLevel(s),
+                scrollTop = doc.body.scrollTop;
+                
+            if (level > 0) {
+                // cut from cursor to end of the document
+                if (s.anchorNode.nodeName == '#text') {
+                    r.setStartBefore(s.anchorNode.parentNode);
+                }
+                s.modify("move", "backward", "character");
+                r.setEndAfter(doc.body.lastChild);
+                var fragmet = r.extractContents();
+                
+                // insert paragraph for new text and move cursor in
+                // NOTE: we need at least one character in the newText to move cursor in
+                var newText = doc.createElement('p');
+                newText.innerHTML = '&nbsp;';
+                doc.body.appendChild(newText);
+                s.modify("move", "forward", "character");
+                
+                // paste rest of document 
+                doc.body.appendChild(fragmet);
+                
+                // reset scroller
+                doc.body.scrollTop = scrollTop;
+            }
+        }
     },
 
     /**
@@ -104,7 +145,8 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
      * @param {Event} e
      */
     onKeydown: function(e) {
-        if (e.getKey() == e.ENTER) {
+        // FF3 in easy cases, but IE does not work at all -> remove this old approach?
+        if (e.getKey() == e.ENTER && !Ext.isFunction(this.cmp.win.getSelection().modify)) {
             var s = this.cmp.win.getSelection(),
                 r = s.getRangeAt(0),
                 doc = this.cmp.getDoc(),
@@ -112,14 +154,16 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
             
             if (level > 0) {
                 e.stopEvent();
+                e.preventDefault();
+                
                 this.cmp.win.focus();
                 if (level == 1) {
-                    this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote"><br />');
+                    this.cmp.insertAtCursor('<br /><blockquote class="felamimail-body-blockquote"><br />');
                     this.cmp.execCmd('outdent');
                     this.cmp.execCmd('outdent');
                 } else if (level > 1) {
                     for (var i=0; i < level; i++) {
-                        this.cmp.execCmd('InsertHTML','<br /><blockquote class="felamimail-body-blockquote">');
+                        this.cmp.insertAtCursor('<br /><blockquote class="felamimail-body-blockquote">');
                         this.cmp.execCmd('outdent');
                         this.cmp.execCmd('outdent');
                     }
@@ -145,7 +189,7 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
             if (node.tagName && node.tagName.toLowerCase() == 'blockquote') {
                 result++;
             }
-            node = node.parentElement;
+            node = node.parentNode;
         }
         
         return result;
