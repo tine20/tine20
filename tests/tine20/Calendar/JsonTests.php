@@ -44,7 +44,7 @@ class Calendar_JsonTests extends Calendar_TestCase
     {
         $registryData = $this->_uit->getRegistryData();
         
-        $this->assertTrue(is_array($registryData['defaultCalendar']['account_grants']));
+        $this->assertTrue(is_array($registryData['defaultContainer']['account_grants']));
     }
     
     /**

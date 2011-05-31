@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 Ext.ns('Tine.Calendar', 'Tine.Calendar.Model');
@@ -166,7 +166,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         // if dtstart is out of current period, take start of current period
         mainPanel = app.getMainScreen().getCenterPanel(),
         period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod(),
-        container = app.getMainScreen().getWestPanel().getContainerTreePanel().getAddCalendar(),
+        container = app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainerForNewRecords(),
         attender = Tine.Tinebase.registry.get('currentAccount');
         
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {
