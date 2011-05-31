@@ -399,44 +399,52 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         try {
             $groupDn = $this->_getDn($_groupId);
-            
-            try {
-                $accountMetaData = $this->_getAccountMetaData($_accountId);
-            } catch (Tinebase_Exception_NotFound $tenf) {
-                if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $_accountId);
-                return;
-            }
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " account meta data: " . print_r($accountMetaData, true));
-            
-            $memberUidNumbers = $this->getGroupMembers($_groupId);
-            
-            $ldapData = array(
-                'memberuid' => $accountMetaData['uid']
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 
+                " Failed to remove groupmember $_accountId from group $_groupId: " . $tenf->getMessage()
             );
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getTraceAsString());
+            return;
+        }            
             
-            if (isset($this->_options['useRfc2307bis']) && $this->_options['useRfc2307bis']) {
-                
-                if (count($memberUidNumbers) === 1) {
-                    // we need to add the group dn, as the member attribute is not allowed to be empty
-                    $dataAdd = array(
-                        'member' => $groupDn
-                    ); 
-                    $this->_ldap->insertProperty($groupDn, $dataAdd);
-                } else {
-                    $ldapData['member'] = $accountMetaData['dn'];
-                }
-            }
-                
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $groupDn);
-            if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        try {
+            $accountMetaData = $this->_getAccountMetaData($_accountId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' user not found in sync backend: ' . $_accountId);
+            return;
+        }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . " account meta data: " . print_r($accountMetaData, true));
+        
+        $memberUidNumbers = $this->getGroupMembers($_groupId);
+        
+        $ldapData = array(
+            'memberuid' => $accountMetaData['uid']
+        );
+        
+        if (isset($this->_options['useRfc2307bis']) && $this->_options['useRfc2307bis']) {
+            
+            if (count($memberUidNumbers) === 1) {
+                // we need to add the group dn, as the member attribute is not allowed to be empty
+                $dataAdd = array(
+                    'member' => $groupDn
+                ); 
+                $this->_ldap->insertProperty($groupDn, $dataAdd);
+            } else {
+                $ldapData['member'] = $accountMetaData['dn'];
+            }
+        }
+            
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . '  $dn: ' . $groupDn);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . '  $ldapData: ' . print_r($ldapData, true));
+        
+        try {
             $this->_ldap->deleteProperty($groupDn, $ldapData);
-
         } catch (Zend_Ldap_Exception $zle) {
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 
-                "failed to remove groupmember {$accountMetaData['dn']} from group $groupDn: " . $zle->getMessage()
+                " Failed to remove groupmember {$accountMetaData['dn']} from group $groupDn: " . $zle->getMessage()
             );
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zle->getTraceAsString());
         }
     }
         
@@ -560,6 +568,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      *
      * @param  string $_groupId
      * @return array
+     * @throws Tinebase_Exception_NotFound
      * 
      * @todo remove obsolete code
      */
@@ -579,7 +588,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         );
         
         if (count($result) !== 1) {
-            throw new Exception("group with id $_groupId not found");
+            throw new Tinebase_Exception_NotFound("Group with id $_groupId not found.");
         }
         
         return $result->getFirst();        
