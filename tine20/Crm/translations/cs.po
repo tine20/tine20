@@ -101,31 +101,31 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#: Preference.php:35
+#: Preference.php:30
 msgid "All leads"
 msgstr "Všechny leady"
 
-#: Preference.php:79
+#: Preference.php:74
 msgid "Get Notification Emails"
 msgstr "Dostávat e-maily s upozorněním"
 
-#: Preference.php:80
+#: Preference.php:75
 msgid "The level of actions you want to be notified about."
 msgstr "Úroveň činností o kterých chcete být informováni."
 
-#: Preference.php:84
+#: Preference.php:79
 msgid "Send Notifications Emails for own actions"
 msgstr "Odesílat e-maily s upozorněním pro vlastní činnosti."
 
-#: Preference.php:85
+#: Preference.php:80
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Dostávat e-maily s upozorněním pro činnosti, které jste udělal(a)."
 
-#: Preference.php:88
+#: Preference.php:83
 msgid "Default Favorite"
 msgstr "Výchozí oblíbené položky CRM"
 
-#: Preference.php:89
+#: Preference.php:84
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Výchozí oblíbené položky, které jsou načteny při spuštění CRM."
 

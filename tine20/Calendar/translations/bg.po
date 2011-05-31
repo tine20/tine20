@@ -52,67 +52,67 @@ msgstr ""
 msgid "Events I'm the organizer of"
 msgstr ""
 
-#: Preference.php:36
+#: Preference.php:31
 msgid "All my events"
 msgstr ""
 
-#: Preference.php:84 js/EventDetailsPanel.js:213 js/EventEditDialog.js:99
+#: Preference.php:79 js/EventDetailsPanel.js:213 js/EventEditDialog.js:99
 msgid "Start Time"
 msgstr "Време на стартиране"
 
-#: Preference.php:85
+#: Preference.php:80
 msgid "Position on the left time axis, day and week view should start with"
 msgstr ""
 
-#: Preference.php:88
+#: Preference.php:83
 msgid "Default Calendar"
 msgstr "Календар по настройки"
 
-#: Preference.php:89
+#: Preference.php:84
 msgid "The default calendar for invitations and new events"
 msgstr ""
 
-#: Preference.php:92
+#: Preference.php:87
 msgid "Default Favorite"
 msgstr ""
 
-#: Preference.php:93
+#: Preference.php:88
 msgid "The default favorite which is loaded on calendar startup"
 msgstr ""
 
-#: Preference.php:96
+#: Preference.php:91
 msgid "Get Notification Emails"
 msgstr ""
 
-#: Preference.php:97
+#: Preference.php:92
 msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 msgstr ""
 
-#: Preference.php:100
+#: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
 msgstr ""
 
-#: Preference.php:101
+#: Preference.php:96
 msgid "Get notifications emails for actions you did yourself"
 msgstr ""
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "Never"
 msgstr ""
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On invitation and cancellation only"
 msgstr ""
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On time changes"
 msgstr ""
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On all updates but attendee responses"
 msgstr ""
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On attendee responses too"
 msgstr ""
 
@@ -165,12 +165,12 @@ msgstr ""
 msgid "Location"
 msgstr "Местонахождение"
 
-#: js/EventDetailsPanel.js:232 js/Model.js:203 Model/Event.php:230
+#: js/EventDetailsPanel.js:232 js/Model.js:204 Model/Event.php:230
 msgid "Organizer"
 msgstr ""
 
 #: js/EventDetailsPanel.js:249 js/AttendeeGridPanel.js:81
-#: js/AttendeeFilterModel.js:35 js/Model.js:320
+#: js/AttendeeFilterModel.js:35 js/Model.js:321
 msgid "Attendee"
 msgstr "Бележки за напомняне"
 
@@ -269,7 +269,7 @@ msgstr ""
 msgid "Group"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:494
+#: js/AttendeeGridPanel.js:170 js/Model.js:495
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] ""
@@ -292,7 +292,7 @@ msgid "Click here to invite another attender..."
 msgstr "Кликнете тук за да включите още една бележка за напомняне"
 
 #: js/AttendeeGridPanel.js:439 js/AttendeeGridPanel.js:457
-#: js/AttendeeGridPanel.js:474 js/AttendeeGridPanel.js:486 js/Model.js:336
+#: js/AttendeeGridPanel.js:474 js/AttendeeGridPanel.js:486 js/Model.js:337
 msgid "No Information"
 msgstr "Няма информация"
 
@@ -308,19 +308,19 @@ msgstr "Запитани"
 msgid "Optional"
 msgstr "ро избор"
 
-#: js/AttendeeGridPanel.js:523 js/Model.js:464 Model/Attender.php:45
+#: js/AttendeeGridPanel.js:523 js/Model.js:465 Model/Attender.php:45
 msgid "No response"
 msgstr "Няма отговор"
 
-#: js/AttendeeGridPanel.js:526 js/Model.js:465 Model/Attender.php:46
+#: js/AttendeeGridPanel.js:526 js/Model.js:466 Model/Attender.php:46
 msgid "Accepted"
 msgstr "Прието"
 
-#: js/AttendeeGridPanel.js:529 js/Model.js:466 Model/Attender.php:47
+#: js/AttendeeGridPanel.js:529 js/Model.js:467 Model/Attender.php:47
 msgid "Declined"
 msgstr ""
 
-#: js/AttendeeGridPanel.js:532 js/Model.js:467 Model/Attender.php:48
+#: js/AttendeeGridPanel.js:532 js/Model.js:468 Model/Attender.php:48
 msgid "Tentative"
 msgstr ""
 
@@ -413,49 +413,53 @@ msgstr ""
 msgid "Loading events, please wait..."
 msgstr "Зарежда събития, моля почакайте..."
 
-#: js/CalendarPanel.js:249
+#: js/CalendarPanel.js:275
 msgid "Scheduling Conflict"
 msgstr ""
 
-#: js/CalendarPanel.js:251
+#: js/CalendarPanel.js:277
 msgid "The following attendee are busy at the requested time:"
 msgstr ""
 
-#: js/CalendarPanel.js:255
+#: js/CalendarPanel.js:281
 msgid "Ignore Conflict"
 msgstr ""
 
-#: js/CalendarPanel.js:256
+#: js/CalendarPanel.js:282
 msgid "Edit Event"
 msgstr ""
 
-#: js/CalendarPanel.js:292
+#: js/CalendarPanel.js:283
+msgid "Cancel this action"
+msgstr ""
+
+#: js/CalendarPanel.js:325
 msgid "Update Event"
 msgstr "Актуализирай събитие"
 
-#: js/CalendarPanel.js:296
+#: js/CalendarPanel.js:329
 msgid "Update this event only"
 msgstr "Актуализирай само това събитие"
 
-#: js/CalendarPanel.js:297
+#: js/CalendarPanel.js:330
 msgid "Update this and all future events"
 msgstr ""
 
-#: js/CalendarPanel.js:298
+#: js/CalendarPanel.js:331
 msgid "Update whole series"
 msgstr "Актуализирай цялата серия"
 
-#: js/CalendarPanel.js:299
+#: js/CalendarPanel.js:332
 msgid "Update nothing"
 msgstr "Не актуализирай нищо"
 
-#: js/Model.js:63 js/Model.js:324
+#: js/Model.js:63 js/Model.js:325
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Събитие"
 msgstr[1] "Събитие"
 
-#: js/Model.js:63 js/Model.js:324
+#: js/Model.js:63 js/Model.js:325
 msgid "Events"
 msgstr "Събития"
 
@@ -463,17 +467,17 @@ msgstr "Събития"
 msgid "Calendars"
 msgstr "Календари"
 
-#: js/Model.js:199
+#: js/Model.js:200
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:320
+#: js/Model.js:321
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Бележка за напомняне"
 msgstr[1] "Бележка за напомняне"
 
-#: js/Model.js:494
+#: js/Model.js:495
 msgid "Resources"
 msgstr ""
 
@@ -634,43 +638,43 @@ msgstr "Този контакт бе добавен автоматично от 
 msgid "unknown)"
 msgstr ""
 
-#: Controller/EventNotifications.php:260
+#: Controller/EventNotifications.php:263
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:263
+#: Controller/EventNotifications.php:266
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:266
+#: Controller/EventNotifications.php:269
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr ""
 
-#: Controller/EventNotifications.php:271
+#: Controller/EventNotifications.php:274
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr ""
 
-#: Controller/EventNotifications.php:275
+#: Controller/EventNotifications.php:278
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr ""
 
-#: Controller/EventNotifications.php:285
+#: Controller/EventNotifications.php:288
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:292
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:293
+#: Controller/EventNotifications.php:296
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:297
+#: Controller/EventNotifications.php:300
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr ""
 
-#: Controller/EventNotifications.php:301
+#: Controller/EventNotifications.php:304
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr ""
 

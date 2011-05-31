@@ -99,31 +99,31 @@ msgstr "Wszystkie zapytania, za które odpowiadam"
 msgid "Leads with overdue tasks"
 msgstr "Zapytania z zaległymi zadaniami"
 
-#: Preference.php:35
+#: Preference.php:30
 msgid "All leads"
 msgstr "Wszystkie zapytania"
 
-#: Preference.php:79
+#: Preference.php:74
 msgid "Get Notification Emails"
 msgstr "Otrzymuj potwierdzenie mailem"
 
-#: Preference.php:80
+#: Preference.php:75
 msgid "The level of actions you want to be notified about."
 msgstr "Poziom, na którym ma nastąpić powiadomienie o wykonaniu akcji"
 
-#: Preference.php:84
+#: Preference.php:79
 msgid "Send Notifications Emails for own actions"
 msgstr "Wysyłaj pocztowe powiadomienie o własnych akcjach"
 
-#: Preference.php:85
+#: Preference.php:80
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Otrzymuj maile potwierdzające akcje wykonane przez siebie"
 
-#: Preference.php:88
+#: Preference.php:83
 msgid "Default Favorite"
 msgstr "Domyślne ulubione"
 
-#: Preference.php:89
+#: Preference.php:84
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Domyślne ulubione zapytanie ładowane przy uruchamianiu Crm"
 

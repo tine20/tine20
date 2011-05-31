@@ -53,67 +53,67 @@ msgstr "I'm organizer"
 msgid "Events I'm the organizer of"
 msgstr "Events I'm the organizer of"
 
-#: Preference.php:36
+#: Preference.php:31
 msgid "All my events"
 msgstr "All my events"
 
-#: Preference.php:84 js/EventDetailsPanel.js:213 js/EventEditDialog.js:99
+#: Preference.php:79 js/EventDetailsPanel.js:213 js/EventEditDialog.js:99
 msgid "Start Time"
 msgstr "Start Time"
 
-#: Preference.php:85
+#: Preference.php:80
 msgid "Position on the left time axis, day and week view should start with"
 msgstr "Position on the left time axis, day and week view should start with"
 
-#: Preference.php:88
+#: Preference.php:83
 msgid "Default Calendar"
 msgstr "Default Calendar"
 
-#: Preference.php:89
+#: Preference.php:84
 msgid "The default calendar for invitations and new events"
 msgstr "The default calendar for invitations and new events"
 
-#: Preference.php:92
+#: Preference.php:87
 msgid "Default Favorite"
 msgstr "Default Favorite"
 
-#: Preference.php:93
+#: Preference.php:88
 msgid "The default favorite which is loaded on calendar startup"
 msgstr "The default favorite which is loaded on calendar startup"
 
-#: Preference.php:96
+#: Preference.php:91
 msgid "Get Notification Emails"
 msgstr "Get Notification Emails"
 
-#: Preference.php:97
+#: Preference.php:92
 msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 msgstr "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 
-#: Preference.php:100
+#: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
 msgstr "Send Notifications Emails of own Actions"
 
-#: Preference.php:101
+#: Preference.php:96
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Get notifications emails for actions you did yourself"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "Never"
 msgstr "Never"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On invitation and cancellation only"
 msgstr "On invitation and cancellation only"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On time changes"
 msgstr "On time changes"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On all updates but attendee responses"
 msgstr "On all updates but attendee responses"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On attendee responses too"
 msgstr "On attendee responses too"
 
@@ -166,12 +166,12 @@ msgstr "Blocking"
 msgid "Location"
 msgstr "Location"
 
-#: js/EventDetailsPanel.js:232 js/Model.js:203 Model/Event.php:230
+#: js/EventDetailsPanel.js:232 js/Model.js:204 Model/Event.php:230
 msgid "Organizer"
 msgstr "Organizer"
 
 #: js/EventDetailsPanel.js:249 js/AttendeeGridPanel.js:81
-#: js/AttendeeFilterModel.js:35 js/Model.js:320
+#: js/AttendeeFilterModel.js:35 js/Model.js:321
 msgid "Attendee"
 msgstr "Attendee"
 
@@ -270,7 +270,7 @@ msgstr "User"
 msgid "Group"
 msgstr "Group"
 
-#: js/AttendeeGridPanel.js:170 js/Model.js:494
+#: js/AttendeeGridPanel.js:170 js/Model.js:495
 msgid "Resource"
 msgid_plural "Resources"
 msgstr[0] "Resource"
@@ -293,7 +293,7 @@ msgid "Click here to invite another attender..."
 msgstr "Click here to invite another attender..."
 
 #: js/AttendeeGridPanel.js:439 js/AttendeeGridPanel.js:457
-#: js/AttendeeGridPanel.js:474 js/AttendeeGridPanel.js:486 js/Model.js:336
+#: js/AttendeeGridPanel.js:474 js/AttendeeGridPanel.js:486 js/Model.js:337
 msgid "No Information"
 msgstr "No Information"
 
@@ -309,19 +309,19 @@ msgstr "Required"
 msgid "Optional"
 msgstr "Optional"
 
-#: js/AttendeeGridPanel.js:523 js/Model.js:464 Model/Attender.php:45
+#: js/AttendeeGridPanel.js:523 js/Model.js:465 Model/Attender.php:45
 msgid "No response"
 msgstr "No response"
 
-#: js/AttendeeGridPanel.js:526 js/Model.js:465 Model/Attender.php:46
+#: js/AttendeeGridPanel.js:526 js/Model.js:466 Model/Attender.php:46
 msgid "Accepted"
 msgstr "Accepted"
 
-#: js/AttendeeGridPanel.js:529 js/Model.js:466 Model/Attender.php:47
+#: js/AttendeeGridPanel.js:529 js/Model.js:467 Model/Attender.php:47
 msgid "Declined"
 msgstr "Declined"
 
-#: js/AttendeeGridPanel.js:532 js/Model.js:467 Model/Attender.php:48
+#: js/AttendeeGridPanel.js:532 js/Model.js:468 Model/Attender.php:48
 msgid "Tentative"
 msgstr "Tentative"
 
@@ -414,49 +414,53 @@ msgstr "Attendee Status"
 msgid "Loading events, please wait..."
 msgstr "Loading events, please wait..."
 
-#: js/CalendarPanel.js:249
+#: js/CalendarPanel.js:275
 msgid "Scheduling Conflict"
 msgstr "Scheduling Conflict"
 
-#: js/CalendarPanel.js:251
+#: js/CalendarPanel.js:277
 msgid "The following attendee are busy at the requested time:"
 msgstr "The following attendee are busy at the requested time:"
 
-#: js/CalendarPanel.js:255
+#: js/CalendarPanel.js:281
 msgid "Ignore Conflict"
 msgstr "Ignore Conflict"
 
-#: js/CalendarPanel.js:256
+#: js/CalendarPanel.js:282
 msgid "Edit Event"
 msgstr "Edit Event"
 
-#: js/CalendarPanel.js:292
+#: js/CalendarPanel.js:283
+msgid "Cancel this action"
+msgstr "Cancel this action"
+
+#: js/CalendarPanel.js:325
 msgid "Update Event"
 msgstr "Update Event"
 
-#: js/CalendarPanel.js:296
+#: js/CalendarPanel.js:329
 msgid "Update this event only"
 msgstr "Update this event only"
 
-#: js/CalendarPanel.js:297
+#: js/CalendarPanel.js:330
 msgid "Update this and all future events"
 msgstr "Update this and all future events"
 
-#: js/CalendarPanel.js:298
+#: js/CalendarPanel.js:331
 msgid "Update whole series"
 msgstr "Update whole series"
 
-#: js/CalendarPanel.js:299
+#: js/CalendarPanel.js:332
 msgid "Update nothing"
 msgstr "Update nothing"
 
-#: js/Model.js:63 js/Model.js:324
+#: js/Model.js:63 js/Model.js:325
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Event"
 msgstr[1] "Events"
 
-#: js/Model.js:63 js/Model.js:324
+#: js/Model.js:63 js/Model.js:325
 msgid "Events"
 msgstr "Events"
 
@@ -464,17 +468,17 @@ msgstr "Events"
 msgid "Calendars"
 msgstr "Calendars"
 
-#: js/Model.js:199
+#: js/Model.js:200
 msgid "Quick search"
 msgstr "Quick search"
 
-#: js/Model.js:320
+#: js/Model.js:321
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Attender"
 msgstr[1] "Attendee"
 
-#: js/Model.js:494
+#: js/Model.js:495
 msgid "Resources"
 msgstr "Resources"
 
@@ -635,43 +639,43 @@ msgstr "This contact has been automatically added by the system as an event atte
 msgid "unknown)"
 msgstr "unknown)"
 
-#: Controller/EventNotifications.php:260
+#: Controller/EventNotifications.php:263
 msgid "Alarm for event \"%1$s\" at %2$s"
 msgstr "Alarm for event \"%1$s\" at %2$s"
 
-#: Controller/EventNotifications.php:263
+#: Controller/EventNotifications.php:266
 msgid "Event invitation \"%1$s\" at %2$s"
 msgstr "Event invitation \"%1$s\" at %2$s"
 
-#: Controller/EventNotifications.php:266
+#: Controller/EventNotifications.php:269
 msgid "Event \"%1$s\" at %2$s has been canceled"
 msgstr "Event \"%1$s\" at %2$s has been canceled"
 
-#: Controller/EventNotifications.php:271
+#: Controller/EventNotifications.php:274
 msgid "Event \"%1$s\" at %2$s has been rescheduled"
 msgstr "Event \"%1$s\" at %2$s has been rescheduled"
 
-#: Controller/EventNotifications.php:275
+#: Controller/EventNotifications.php:278
 msgid "Event \"%1$s\" at %2$s has been updated"
 msgstr "Event \"%1$s\" at %2$s has been updated"
 
-#: Controller/EventNotifications.php:285
+#: Controller/EventNotifications.php:288
 msgid "%1$s accepted event \"%2$s\" at %3$s"
 msgstr "%1$s accepted event \"%2$s\" at %3$s"
 
-#: Controller/EventNotifications.php:289
+#: Controller/EventNotifications.php:292
 msgid "%1$s declined event \"%2$s\" at %3$s"
 msgstr "%1$s declined event \"%2$s\" at %3$s"
 
-#: Controller/EventNotifications.php:293
+#: Controller/EventNotifications.php:296
 msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
 msgstr "Tentative response from %1$s for event \"%2$s\" at %3$s"
 
-#: Controller/EventNotifications.php:297
+#: Controller/EventNotifications.php:300
 msgid "No response from %1$s for event \"%2$s\" at %3$s"
 msgstr "No response from %1$s for event \"%2$s\" at %3$s"
 
-#: Controller/EventNotifications.php:301
+#: Controller/EventNotifications.php:304
 msgid "Attendee changes for event \"%1$s\" at %2$s"
 msgstr "Attendee changes for event \"%1$s\" at %2$s"
 

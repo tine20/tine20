@@ -99,31 +99,31 @@ msgstr ""
 msgid "Leads with overdue tasks"
 msgstr ""
 
-#: Preference.php:35
+#: Preference.php:30
 msgid "All leads"
 msgstr "Tous les prospects"
 
-#: Preference.php:79
+#: Preference.php:74
 msgid "Get Notification Emails"
 msgstr "Notifier par courriel"
 
-#: Preference.php:80
+#: Preference.php:75
 msgid "The level of actions you want to be notified about."
 msgstr "Le niveau des actions qui vous seront notifiées."
 
-#: Preference.php:84
+#: Preference.php:79
 msgid "Send Notifications Emails for own actions"
 msgstr "Être notifié par courriel de vos propres actions"
 
-#: Preference.php:85
+#: Preference.php:80
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Être notifié par courriel des actions faites par vous-même."
 
-#: Preference.php:88
+#: Preference.php:83
 msgid "Default Favorite"
 msgstr "Favoris par défaut"
 
-#: Preference.php:89
+#: Preference.php:84
 msgid "The default favorite which is loaded on crm startup"
 msgstr "Le favoris par défaut qui est charge au lancement du GRC"
 

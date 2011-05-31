@@ -64,24 +64,24 @@ msgstr ""
 msgid "All contacts that I have last modified"
 msgstr ""
 
-#: Preference.php:33
+#: Preference.php:28
 msgid "All contacts"
 msgstr "Tots els contactes"
 
-#: Preference.php:70
+#: Preference.php:65
 msgid "Default Addressbook"
 msgstr "Llibreta d'adreces per defecte"
 
-#: Preference.php:71
+#: Preference.php:66
 msgid "The default addressbook for new contacts"
 msgstr "La llibreta d'adreces per defecte per a nous contactes"
 
-#: Preference.php:74
+#: Preference.php:69
 #, fuzzy
 msgid "Default Favorite"
 msgstr "Preferit per defecte"
 
-#: Preference.php:75
+#: Preference.php:70
 #, fuzzy
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr "El preferit per defecte que es carrega a l'inici de la llibreta d'adreces"

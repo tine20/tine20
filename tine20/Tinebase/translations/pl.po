@@ -35,7 +35,7 @@ msgstr "Zakończenie awaryjne"
 msgid "An error occurred, the program ended abnormal."
 msgstr "Wystąpił błąd. Praca programu została zakończona awaryjnie."
 
-#: Preference/Abstract.php:475
+#: Preference/Abstract.php:481
 msgid "default"
 msgstr "domyślnie"
 
@@ -247,7 +247,7 @@ msgstr "Zainstaluj Tine 2.0 w swojej przeglądarce jako aplikację WWW"
 
 #: js/MainMenu.js:213 js/widgets/persistentfilter/PickerPanel.js:280
 #: js/widgets/dialog/EditDialog.js:514 js/widgets/tree/ContextMenu.js:84
-#: js/widgets/grid/GridPanel.js:1265
+#: js/widgets/grid/GridPanel.js:1295
 msgid "Confirm"
 msgstr "Proszę o odpowiedź"
 
@@ -425,7 +425,7 @@ msgstr "Dodaj notatkę ({0})"
 msgid "Type"
 msgstr "Ikona"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:969
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:993
 msgid "Created By"
 msgstr "Utworzona przez"
 
@@ -575,7 +575,7 @@ msgstr "usuń"
 msgid "Saved in"
 msgstr "Zapisz w"
 
-#: js/widgets/dialog/EditDialog.js:346 js/widgets/grid/GridPanel.js:359
+#: js/widgets/dialog/EditDialog.js:346 js/widgets/grid/GridPanel.js:357
 msgid "Copy {0}"
 msgstr "Kopiuj {0}"
 
@@ -611,17 +611,17 @@ msgstr "Proszę poprawić wskazane błędy."
 msgid "Do you really want to delete this {0}?"
 msgstr "Czy na pewno chcesz usunąć ten {0}?"
 
-#: js/widgets/dialog/EditDialog.js:516 js/widgets/grid/GridPanel.js:1302
+#: js/widgets/dialog/EditDialog.js:516 js/widgets/grid/GridPanel.js:1328
 msgid "Deleting {0}"
 msgstr "Usuwanie {0}"
 
-#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1318
+#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1345
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:401
 #: js/widgets/tags/TagsPanel.js:434
 msgid "Failed"
 msgstr "Próba nieudana"
 
-#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1318
+#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1345
 msgid "Could not delete {0}."
 msgstr "Usunięcie {0} było niemożliwe."
 
@@ -855,7 +855,7 @@ msgstr "Aktualizacja {0} \"{1}\""
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Edytuj uprawnienia dla {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:242 js/widgets/grid/GridPanel.js:370
+#: js/widgets/tree/ContextMenu.js:242 js/widgets/grid/GridPanel.js:368
 msgid "Add {0}"
 msgstr "Dodaj {0}"
 
@@ -887,66 +887,66 @@ msgstr "Ulubione"
 msgid "Save current view as favorite"
 msgstr "Zapisz bieżący widok w ulubionych"
 
-#: js/widgets/grid/GridPanel.js:249
+#: js/widgets/grid/GridPanel.js:248
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr "{0} nie zostały znalezione. Proszę spróbować zmienić kryteria wyszukiwania, opcje wyświetlania albo {1}, w których szukasz."
 
-#: js/widgets/grid/GridPanel.js:348
+#: js/widgets/grid/GridPanel.js:346
 msgid "Edit {0}"
 msgstr "Edytuj {0}"
 
-#: js/widgets/grid/GridPanel.js:378
+#: js/widgets/grid/GridPanel.js:376
 msgid "Print Page"
 msgstr "Drukuj stronę"
 
-#: js/widgets/grid/GridPanel.js:417 js/widgets/grid/GridPanel.js:418
-#: js/widgets/grid/GridPanel.js:420
+#: js/widgets/grid/GridPanel.js:415 js/widgets/grid/GridPanel.js:416
+#: js/widgets/grid/GridPanel.js:418
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "Usuń {0}"
 msgstr[1] "Usuń {0}"
 msgstr[2] "Usuń {0}"
 
-#: js/widgets/grid/GridPanel.js:727
+#: js/widgets/grid/GridPanel.js:751
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Wyświetlane wiersze {0} - {1} z {2}"
 
-#: js/widgets/grid/GridPanel.js:728
+#: js/widgets/grid/GridPanel.js:752
 msgid "No {0} to display"
 msgstr "{0} niezdefiniowane"
 
-#: js/widgets/grid/GridPanel.js:927
+#: js/widgets/grid/GridPanel.js:951
 msgid "Tagging"
 msgstr "Przypisywanie znaczników"
 
-#: js/widgets/grid/GridPanel.js:968
+#: js/widgets/grid/GridPanel.js:992
 msgid "Creation Time"
 msgstr "Czas utworzenia"
 
-#: js/widgets/grid/GridPanel.js:970
+#: js/widgets/grid/GridPanel.js:994
 msgid "Last Modified Time"
 msgstr "Data ostatniej zmiany"
 
-#: js/widgets/grid/GridPanel.js:971
+#: js/widgets/grid/GridPanel.js:995
 msgid "Last Modified By"
 msgstr "Ostatnio zmienione przez"
 
-#: js/widgets/grid/GridPanel.js:1245
+#: js/widgets/grid/GridPanel.js:1269
 msgid "Not Allowed"
 msgstr "Brak uprawnień"
 
-#: js/widgets/grid/GridPanel.js:1246
+#: js/widgets/grid/GridPanel.js:1270
 msgid "You are not allowed to delete all pages at once"
 msgstr "Nie masz uprawnień, aby usunąć wszystkie strony na raz"
 
-#: js/widgets/grid/GridPanel.js:1264
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
-msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
-msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
+#: js/widgets/grid/GridPanel.js:1293
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
-#: js/widgets/grid/GridPanel.js:1302
+#: js/widgets/grid/GridPanel.js:1328
 msgid " ... This may take a long time!"
 msgstr "... To może długo potrwać!"
 
@@ -1270,15 +1270,15 @@ msgstr[0] "kontener"
 msgstr[1] "kontenery"
 msgstr[2] "kontenery"
 
-#: js/widgets/container/ContainerTree.js:483
+#: js/widgets/container/ContainerTree.js:484
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr "Nie masz uprawnień, aby wybrać {0} '{1}':"
 
-#: js/widgets/container/ContainerTree.js:484
+#: js/widgets/container/ContainerTree.js:485
 msgid "{0} grant is required for desired action"
 msgstr "Dla tej akcji wymagane są uprawnienia {0}"
 
-#: js/widgets/container/ContainerTree.js:485
+#: js/widgets/container/ContainerTree.js:486
 msgid "Insufficient Grants"
 msgstr "Niewystarczające uprawnienia"
 
@@ -1759,39 +1759,39 @@ msgstr "Usługa niedostępna"
 msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
 msgstr "Serwer nie może teraz zrealizować zapytania z powodu chwilowego przeciążenia albo prac konserwacyjnych. Proszę spróbować ponownie lub powiadomić swojego administratora."
 
-#: js/ExceptionHandler.js:190
+#: js/ExceptionHandler.js:197
 msgid "Connection lost, please check your network!"
 msgstr "Połączenie zostało przerwane, proszę sprawdzić sieć!"
 
-#: js/ExceptionHandler.js:196
+#: js/ExceptionHandler.js:203
 msgid "Timeout"
 msgstr "Limit czasu"
 
-#: js/ExceptionHandler.js:197
+#: js/ExceptionHandler.js:204
 msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 msgstr "Niestety, dozwolony czas przetwarzania Twojego zapytania został przekroczony. Proszę przeładuj przeglądarkę."
 
-#: js/ExceptionHandler.js:206
+#: js/ExceptionHandler.js:213
 msgid "No Response"
 msgstr "Brak odpowiedzi"
 
-#: js/ExceptionHandler.js:207
+#: js/ExceptionHandler.js:214
 msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 msgstr "Niestety serwer nie przesłał żadnych danych. Proszę przeładować przeglądarkę WWW, ponowić próbę albo skontaktować się ze swoim administratorem"
 
-#: js/ExceptionHandler.js:216
+#: js/ExceptionHandler.js:223
 msgid "Out of Resources"
 msgstr "Brak zasobów"
 
-#: js/ExceptionHandler.js:217
+#: js/ExceptionHandler.js:224
 msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
 msgstr "Niestety serwer \"wyczerpał dostępną pamięć\". Proszę się skontaktować ze swoim administratorem."
 
-#: js/ExceptionHandler.js:226
+#: js/ExceptionHandler.js:233
 msgid "No Role Memberships"
 msgstr "Brak przypisania do funkcji"
 
-#: js/ExceptionHandler.js:227
+#: js/ExceptionHandler.js:234
 msgid "Your user account has no role memberships. Please contact your administrator."
 msgstr "Twoje konto nie jest przypisane do funkcji. Proszę się skontaktować ze swoim administratorem."
 
@@ -1867,7 +1867,7 @@ msgstr "Twój raport został wysłany. Dziękujemy za pomoc w ulepszaniu oprogra
 msgid "Please restart your browser now!"
 msgstr "Proszę ponownie uruchomić przeglądarkę!"
 
-#: js/tineInit.js:563
+#: js/tineInit.js:568
 msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 msgstr "Błąd krytyczny. Aktualizacja danych klienta nie powiodła się. Proszę się skontaktować ze swoim administratorem i / lub zrestartować / przeładować przeglądarkę."
 
@@ -1912,6 +1912,12 @@ msgstr "przez"
 #: Notes.php:369
 msgid "Changed fields:"
 msgstr "Zmienione pola:"
+
+#~ msgid "Do you really want to delete the selected record"
+#~ msgid_plural "Do you really want to delete the selected records"
+#~ msgstr[0] "Czy na pewno chcesz usunąć zaznaczony wiersz?"
+#~ msgstr[1] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
+#~ msgstr[2] "Czy na pewno chcesz usunąć zaznaczone wiersze?"
 
 #~ msgid "Group"
 #~ msgid_plural "Groups"

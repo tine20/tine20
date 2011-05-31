@@ -170,7 +170,7 @@ msgstr "Flags"
 msgid "Subject"
 msgstr "Subject"
 
-#: js/GridPanel.js:483 js/Model.js:140
+#: js/GridPanel.js:483 js/sieve/RuleConditionsPanel.js:69 js/Model.js:140
 msgid "From (Email)"
 msgstr "From (Email)"
 
@@ -182,7 +182,7 @@ msgstr "From (Name)"
 msgid "Sender"
 msgstr "Sender"
 
-#: js/GridPanel.js:502 js/sieve/RuleConditionsPanel.js:70 js/Model.js:142
+#: js/GridPanel.js:502 js/Model.js:142
 msgid "To"
 msgstr "To"
 
@@ -262,8 +262,7 @@ msgstr "All recipients"
 msgid "\"{0}\" recipients"
 msgstr "\"{0}\" recipients"
 
-#: js/GridDetailsPanel.js:136 js/sieve/RuleConditionsPanel.js:69
-#: js/MessageEditDialog.js:764
+#: js/GridDetailsPanel.js:136 js/MessageEditDialog.js:764
 msgid "From"
 msgstr "From"
 
@@ -450,55 +449,55 @@ msgstr "Active Vacation Message"
 msgid "Email account \"{0}\" has an active vacation message."
 msgstr "Email account \"{0}\" has an active vacation message."
 
-#: js/Felamimail.js:453
+#: js/Felamimail.js:451
 msgid "New mails"
 msgstr "New mails"
 
-#: js/Felamimail.js:454
+#: js/Felamimail.js:452
 msgid "You got {0} new mail(s) in folder {1} ({2})."
 msgstr "You got {0} new mail(s) in folder {1} ({2})."
 
-#: js/Felamimail.js:560
+#: js/Felamimail.js:562
 msgid "IMAP Credentials for {0}"
 msgstr "IMAP Credentials for {0}"
 
-#: js/Felamimail.js:563
+#: js/Felamimail.js:565
 msgid "Credentials"
 msgstr "Credentials"
 
-#: js/Felamimail.js:709 js/Felamimail.js:732
+#: js/Felamimail.js:711 js/Felamimail.js:734
 msgid "IMAP Error"
 msgstr "IMAP Error"
 
-#: js/Felamimail.js:710
+#: js/Felamimail.js:712
 msgid "No connection to IMAP server."
 msgstr "No connection to IMAP server."
 
-#: js/Felamimail.js:733
+#: js/Felamimail.js:735
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr "One of your folders was deleted from an other client, please reload you browser"
 
-#: js/Felamimail.js:761
+#: js/Felamimail.js:763
 msgid "SMTP Error"
 msgstr "SMTP Error"
 
-#: js/Felamimail.js:762
+#: js/Felamimail.js:764
 msgid "No connection to SMTP server."
 msgstr "No connection to SMTP server."
 
-#: js/Felamimail.js:770
+#: js/Felamimail.js:772
 msgid "Sieve Error"
 msgstr "Sieve Error"
 
-#: js/Felamimail.js:771
+#: js/Felamimail.js:773
 msgid "No connection to Sieve server."
 msgstr "No connection to Sieve server."
 
-#: js/Felamimail.js:779
+#: js/Felamimail.js:781
 msgid "Save Sieve Script Error"
 msgstr "Save Sieve Script Error"
 
-#: js/Felamimail.js:780
+#: js/Felamimail.js:782
 msgid "Could not save script on Sieve server."
 msgstr "Could not save script on Sieve server."
 
@@ -545,6 +544,10 @@ msgstr "Header \"{0}\" contains \"{1}\""
 #: js/sieve/RulesGridPanel.js:316
 msgid "Header \"{0}\" matches \"{1}\""
 msgstr "Header \"{0}\" matches \"{1}\""
+
+#: js/sieve/RuleConditionsPanel.js:70
+msgid "To (Email)"
+msgstr "To (Email)"
 
 #: js/sieve/RuleConditionsPanel.js:73
 msgid "Header contains"

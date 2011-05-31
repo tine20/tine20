@@ -65,23 +65,23 @@ msgstr "Zuletzt von mir bearbeitet"
 msgid "All contacts that I have last modified"
 msgstr "Alle Kontakte, die ich zuletzt bearbeitet habe"
 
-#: Preference.php:33
+#: Preference.php:28
 msgid "All contacts"
 msgstr "Alle Kontakte"
 
-#: Preference.php:70
+#: Preference.php:65
 msgid "Default Addressbook"
 msgstr "Standard Adressbuch"
 
-#: Preference.php:71
+#: Preference.php:66
 msgid "The default addressbook for new contacts"
 msgstr "Standard-Adressbuch für neue Kontakte"
 
-#: Preference.php:74
+#: Preference.php:69
 msgid "Default Favorite"
 msgstr "Standard Favorit"
 
-#: Preference.php:75
+#: Preference.php:70
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr "Der Standard Favorit der beim öffnen des Adressbuches geladen wird"
 

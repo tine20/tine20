@@ -67,23 +67,23 @@ msgstr "Alle Aufgaben, die ich zuletzt bearbeitet habe"
 msgid "Tasks without responsible"
 msgstr "Aufgaben ohne Verantwortlichen"
 
-#: Preference.php:28
+#: Preference.php:23
 msgid "All my tasks"
 msgstr "Alle meine Aufgaben"
 
-#: Preference.php:70
+#: Preference.php:65
 msgid "Default Favorite"
 msgstr "Standard Favorit"
 
-#: Preference.php:71
+#: Preference.php:66
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr "Der Standart Favorit der beim öffnen der Aufgabenlisten geladen wird"
 
-#: Preference.php:74
+#: Preference.php:69
 msgid "Default Task List"
 msgstr "Standard-Aufgabenliste"
 
-#: Preference.php:75
+#: Preference.php:70
 msgid "The default task list to create new tasks in."
 msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
 

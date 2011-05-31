@@ -34,7 +34,7 @@ msgstr "以上終了"
 msgid "An error occurred, the program ended abnormal."
 msgstr "エラーが発生し、プログラムが異常終了しました"
 
-#: Preference/Abstract.php:475
+#: Preference/Abstract.php:481
 msgid "default"
 msgstr ""
 
@@ -238,7 +238,7 @@ msgstr ""
 
 #: js/MainMenu.js:213 js/widgets/persistentfilter/PickerPanel.js:280
 #: js/widgets/dialog/EditDialog.js:514 js/widgets/tree/ContextMenu.js:84
-#: js/widgets/grid/GridPanel.js:1265
+#: js/widgets/grid/GridPanel.js:1295
 msgid "Confirm"
 msgstr "確認"
 
@@ -422,7 +422,7 @@ msgstr " {0} ノートの追加"
 msgid "Type"
 msgstr "タイプ"
 
-#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:969
+#: js/widgets/ActivitiesPanel.js:464 js/widgets/grid/GridPanel.js:993
 msgid "Created By"
 msgstr "作成者"
 
@@ -570,7 +570,7 @@ msgstr "削除"
 msgid "Saved in"
 msgstr "保存する"
 
-#: js/widgets/dialog/EditDialog.js:346 js/widgets/grid/GridPanel.js:359
+#: js/widgets/dialog/EditDialog.js:346 js/widgets/grid/GridPanel.js:357
 msgid "Copy {0}"
 msgstr ""
 
@@ -606,17 +606,17 @@ msgstr "表示されているエラー項目を修正してくだささい。"
 msgid "Do you really want to delete this {0}?"
 msgstr "本当に削除しますか？ {0}?"
 
-#: js/widgets/dialog/EditDialog.js:516 js/widgets/grid/GridPanel.js:1302
+#: js/widgets/dialog/EditDialog.js:516 js/widgets/grid/GridPanel.js:1328
 msgid "Deleting {0}"
 msgstr "{0}　を削除しています"
 
-#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1318
+#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1345
 #: js/widgets/tags/TagsPanel.js:291 js/widgets/tags/TagsPanel.js:401
 #: js/widgets/tags/TagsPanel.js:434
 msgid "Failed"
 msgstr "失敗"
 
-#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1318
+#: js/widgets/dialog/EditDialog.js:526 js/widgets/grid/GridPanel.js:1345
 msgid "Could not delete {0}."
 msgstr " {0}を削除できません"
 
@@ -856,7 +856,7 @@ msgstr "更新しています{0} \"{1}\""
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "権限を変更します {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:242 js/widgets/grid/GridPanel.js:370
+#: js/widgets/tree/ContextMenu.js:242 js/widgets/grid/GridPanel.js:368
 msgid "Add {0}"
 msgstr "追加 {0}"
 
@@ -889,63 +889,63 @@ msgstr ""
 msgid "Save current view as favorite"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:249
+#: js/widgets/grid/GridPanel.js:248
 msgid "No {0} where found. Please try to change your filter-criteria, view-options or the {1} you search in."
 msgstr " {0} が見つかりません。フィルターの変更、表示オプションの変更か {1} 再検索をしてください"
 
-#: js/widgets/grid/GridPanel.js:348
+#: js/widgets/grid/GridPanel.js:346
 msgid "Edit {0}"
 msgstr "編集 {0}"
 
-#: js/widgets/grid/GridPanel.js:378
+#: js/widgets/grid/GridPanel.js:376
 msgid "Print Page"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:417 js/widgets/grid/GridPanel.js:418
-#: js/widgets/grid/GridPanel.js:420
+#: js/widgets/grid/GridPanel.js:415 js/widgets/grid/GridPanel.js:416
+#: js/widgets/grid/GridPanel.js:418
 msgid "Delete {0}"
 msgid_plural "Delete {0}"
 msgstr[0] "削除"
 
-#: js/widgets/grid/GridPanel.js:727
+#: js/widgets/grid/GridPanel.js:751
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "レコードの表示{0} - {1}　件中 {2}"
 
-#: js/widgets/grid/GridPanel.js:728
+#: js/widgets/grid/GridPanel.js:752
 msgid "No {0} to display"
 msgstr "表示する {0} がありません"
 
-#: js/widgets/grid/GridPanel.js:927
+#: js/widgets/grid/GridPanel.js:951
 #, fuzzy
 msgid "Tagging"
 msgstr "タグ"
 
-#: js/widgets/grid/GridPanel.js:968
+#: js/widgets/grid/GridPanel.js:992
 msgid "Creation Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:970
+#: js/widgets/grid/GridPanel.js:994
 msgid "Last Modified Time"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:971
+#: js/widgets/grid/GridPanel.js:995
 msgid "Last Modified By"
 msgstr ""
 
-#: js/widgets/grid/GridPanel.js:1245
+#: js/widgets/grid/GridPanel.js:1269
 msgid "Not Allowed"
 msgstr "許可されていません"
 
-#: js/widgets/grid/GridPanel.js:1246
+#: js/widgets/grid/GridPanel.js:1270
 msgid "You are not allowed to delete all pages at once"
 msgstr "全てのページを一度に削除する権限がありません。"
 
-#: js/widgets/grid/GridPanel.js:1264
-msgid "Do you really want to delete the selected record"
-msgid_plural "Do you really want to delete the selected records"
-msgstr[0] "選択したレコードを本当に削除しますか？"
+#: js/widgets/grid/GridPanel.js:1293
+msgid "Do you really want to delete the selected record ({0})?"
+msgid_plural "Do you really want to delete the selected records ({0})?"
+msgstr[0] ""
 
-#: js/widgets/grid/GridPanel.js:1302
+#: js/widgets/grid/GridPanel.js:1328
 msgid " ... This may take a long time!"
 msgstr ""
 
@@ -1268,15 +1268,15 @@ msgid "container"
 msgid_plural "containers"
 msgstr[0] ""
 
-#: js/widgets/container/ContainerTree.js:483
+#: js/widgets/container/ContainerTree.js:484
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:484
+#: js/widgets/container/ContainerTree.js:485
 msgid "{0} grant is required for desired action"
 msgstr ""
 
-#: js/widgets/container/ContainerTree.js:485
+#: js/widgets/container/ContainerTree.js:486
 msgid "Insufficient Grants"
 msgstr ""
 
@@ -1743,39 +1743,39 @@ msgstr ""
 msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:190
+#: js/ExceptionHandler.js:197
 msgid "Connection lost, please check your network!"
 msgstr "コネクションに失敗しました。ネットワーク接続を確認してください。"
 
-#: js/ExceptionHandler.js:196
+#: js/ExceptionHandler.js:203
 msgid "Timeout"
 msgstr ""
 
-#: js/ExceptionHandler.js:197
+#: js/ExceptionHandler.js:204
 msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:206
+#: js/ExceptionHandler.js:213
 msgid "No Response"
 msgstr ""
 
-#: js/ExceptionHandler.js:207
+#: js/ExceptionHandler.js:214
 msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:216
+#: js/ExceptionHandler.js:223
 msgid "Out of Resources"
 msgstr ""
 
-#: js/ExceptionHandler.js:217
+#: js/ExceptionHandler.js:224
 msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:226
+#: js/ExceptionHandler.js:233
 msgid "No Role Memberships"
 msgstr ""
 
-#: js/ExceptionHandler.js:227
+#: js/ExceptionHandler.js:234
 msgid "Your user account has no role memberships. Please contact your administrator."
 msgstr ""
 
@@ -1853,7 +1853,7 @@ msgstr "レポートは送信されました。ご協力ありがとうござい
 msgid "Please restart your browser now!"
 msgstr "ログイン情報を入力してください。"
 
-#: js/tineInit.js:563
+#: js/tineInit.js:568
 msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 msgstr ""
 
@@ -1894,6 +1894,10 @@ msgstr "の"
 #: Notes.php:369
 msgid "Changed fields:"
 msgstr "変更されたフィールド:"
+
+#~ msgid "Do you really want to delete the selected record"
+#~ msgid_plural "Do you really want to delete the selected records"
+#~ msgstr[0] "選択したレコードを本当に削除しますか？"
 
 #, fuzzy
 #~ msgid "Transfering Configuration..."

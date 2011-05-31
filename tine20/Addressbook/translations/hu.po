@@ -65,23 +65,23 @@ msgstr "Utoljára módosítottam"
 msgid "All contacts that I have last modified"
 msgstr "Minden kapcsolat amit utoljára én módosítottam"
 
-#: Preference.php:33
+#: Preference.php:28
 msgid "All contacts"
 msgstr "Összes kapcsolat"
 
-#: Preference.php:70
+#: Preference.php:65
 msgid "Default Addressbook"
 msgstr "Alapértelmezett címjegyzék"
 
-#: Preference.php:71
+#: Preference.php:66
 msgid "The default addressbook for new contacts"
 msgstr "Alapértelmezett címjegyzék az új kapcsolatoknak"
 
-#: Preference.php:74
+#: Preference.php:69
 msgid "Default Favorite"
 msgstr "Alapértelmezett kedvenc"
 
-#: Preference.php:75
+#: Preference.php:70
 msgid "The default favorite which is loaded on addressbook startup"
 msgstr "Alapértelmezett kedvenc ami a címjegyzék indításakor betöltődik"
 
