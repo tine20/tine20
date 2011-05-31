@@ -90,19 +90,29 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
 
     // private
     init: function(cmp){
-        if (! Ext.isIE) {
             this.cmp = cmp;
             this.cmp.on('initialize', this.onInit, this);
-        }
     },
     
     // private
     onInit: function() {
-        Ext.EventManager.on(this.cmp.getDoc(), {
-            'keyup': this.onKeyup,
-            'keydown': this.onKeydown,
-            scope: this
-        });
+        if (Ext.isIE) {
+            Ext.EventManager.on(this.cmp.getDoc(), {
+                'keydown': this.endBlockquoteIE,
+                scope: this
+            });
+        } else if (Ext.isFunction(this.cmp.win.getSelection().modify)) {
+            Ext.EventManager.on(this.cmp.getDoc(), {
+                'keyup': this.endBlockquoteHTML5,
+                scope: this
+            });
+        } else {
+            Ext.EventManager.on(this.cmp.getDoc(), {
+                'keydown': this.endBlockquoteHTML4,
+                scope: this
+            });
+        }
+        
     },
 
     /**
@@ -110,14 +120,65 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
      * 
      * @param {Event} e
      */
-    onKeyup: function(e) {
-        // Chrome, Safari, FF4+
-        if (e.getKey() == e.ENTER && Ext.isFunction(this.cmp.win.getSelection().modify)) {
+    endBlockquoteIE: function(e) {
+        if (e.getKey() == e.ENTER) {
             
+            e.stopEvent();
+            e.preventDefault();
+            
+            var s = this.cmp.win.document.selection,
+                r = s.createRange(),
+                doc = this.cmp.getDoc(),
+                anchor = r.parentElement(),
+                level = this.getBlockquoteLevel(anchor),
+                scrollTop = doc.body.scrollTop;
+                
+            if (level > 0) {
+                r.moveStart('word', -1);
+                r.moveEnd('textedit');
+                var fragment = r.htmlText;
+                r.execCommand('Delete');
+                
+                var newText = doc.createElement('p'),
+                    newTextMark = '###newTextHere###' + Ext.id(),
+                    fragmentMark = '###fragmentHere###' + Ext.id();
+                newText.innerHTML = newTextMark + fragmentMark;
+                doc.body.appendChild(newText);
+                
+                r.expand('textedit');
+                r.findText(fragmentMark);
+                r.select();
+                r.pasteHTML(fragment);
+
+                r.expand('textedit');
+                r.findText(newTextMark);
+                r.select();
+                r.execCommand('Delete');
+                
+                // reset scroller
+                doc.body.scrollTop = scrollTop;
+                
+                this.cmp.syncValue();
+                this.cmp.deferFocus();
+            }
+            
+        }
+        
+        return;
+    },
+    
+    /**
+     * on keyup 
+     * 
+     * @param {Event} e
+     */
+    endBlockquoteHTML5: function(e) {
+        // Chrome, Safari, FF4+
+        if (e.getKey() == e.ENTER) {
             var s = this.cmp.win.getSelection(),
                 r = s.getRangeAt(0),
                 doc = this.cmp.getDoc(),
-                level = this.getBlockquoteLevel(s),
+                level = this.getBlockquoteLevel(s.anchorNode),
                 scrollTop = doc.body.scrollTop;
                 
             if (level > 0) {
@@ -150,12 +211,12 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
      * 
      * @param {Event} e
      */
-    onKeydown: function(e) {
-        if (e.getKey() == e.ENTER && !Ext.isFunction(s.modify)) {
+    endBlockquoteHTML4: function(e) {
+        if (e.getKey() == e.ENTER) {
             var s = this.cmp.win.getSelection(),
                 r = s.getRangeAt(0),
                 doc = this.cmp.getDoc(),
-                level = this.getBlockquoteLevel(s);
+                level = this.getBlockquoteLevel(s.anchorNode);
             
             if (level > 0) {
                 e.stopEvent();
@@ -183,18 +244,17 @@ Ext.ux.form.HtmlEditor.EndBlockquote = Ext.extend(Ext.util.Observable , {
     /**
      * get blockquote level helper
      * 
-     * @param {Selection} s
+     * @param {DOMNode} node
      * @return {Integer}
      */
-    getBlockquoteLevel: function(s) {
-        var result = 0,
-            node = s.anchorNode;
-            
+    getBlockquoteLevel: function(node) {
+        var result = 0;
+        
         while (node.nodeName == '#text' || node.tagName.toLowerCase() != 'body') {
             if (node.tagName && node.tagName.toLowerCase() == 'blockquote') {
                 result++;
             }
-            node = node.parentNode;
+            node = node.parentNode ? node.parentNode : node.parentElement;
         }
         
         return result;
