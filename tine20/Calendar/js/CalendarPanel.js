@@ -231,7 +231,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                                busyAttendeeHTML,
                 options: [
                     {text: this.app.i18n._('Ignore Conflict'), name: 'ignore'},
-                    {text: this.app.i18n._('Edit Event'), name: 'edit'}
+                    {text: this.app.i18n._('Edit Event'), name: 'edit'},
                     {text: this.app.i18n._('Cancel this action'), name: 'cancel'}
                 ],
                 scope: this,
