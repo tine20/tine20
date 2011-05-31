@@ -223,7 +223,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 modal: true,
                 allowCancel: false,
-                height: 150 + 15*error.freebusyinfo.length,
+                height: 180 + 15*error.freebusyinfo.length,
                 title: this.app.i18n._('Scheduling Conflict'),
                 questionText: '<div class = "cal-conflict-heading">' +
                                    this.app.i18n._('The following attendee are busy at the requested time:') + 
@@ -232,6 +232,7 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                 options: [
                     {text: this.app.i18n._('Ignore Conflict'), name: 'ignore'},
                     {text: this.app.i18n._('Edit Event'), name: 'edit'}
+                    {text: this.app.i18n._('Cancel this action'), name: 'cancel'}
                 ],
                 scope: this,
                 handler: function(option) {
@@ -242,12 +243,18 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                             break;
                         
                         case 'edit':
-                        default:
                             this.view.getSelectionModel().select(event);
                             // mark event as not dirty to allow edit dlg
                             event.dirty = false;
                             this.view.fireEvent('dblclick', this.view, event);
                             this.conflictConfirmWin.close();
+                            break;
+                            
+                        case 'cancel':
+                        default:
+                            this.conflictConfirmWin.close();
+                            this.loadMask.show();
+                            this.store.load({refresh: true});
                             break;
                     }
                 }
