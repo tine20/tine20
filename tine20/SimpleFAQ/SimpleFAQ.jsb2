@@ -1,0 +1,68 @@
+{
+  "projectName": "Tine 2.0 - SimpleFAQ",
+  "deployDir": "SimpleFAQ",
+  "licenseText": "Tine 2.0 - SimpleFAQ \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "SimpleFAQ FAT Client",
+      "file": "js/SimpleFAQ-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "SimpleFAQ.js",
+          "path": "js/"
+        },
+        {
+          "text": "FaqGridDetailsPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "FaqGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "FaqEditDialog.js",
+          "path": "js/"
+        },
+        {
+          "text": "AdminPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "FaqStatus.js",
+          "path": "js/"
+        },
+        {
+          "text": "FaqStatusFilterModel.js",
+          "path": "js/"
+        },
+        {
+          "text": "FaqType.js",
+          "path": "js/"
+        },
+        {
+          "text": "FaqTypeFilterModel.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "SimpleFAQ FAT Client",
+      "file": "css/SimpleFAQ-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "SimpleFAQ.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}

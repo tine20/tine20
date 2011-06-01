@@ -1,0 +1,19 @@
+/**
+ * CSS override for SinmpleFAQ
+ * 
+ * @package     SimpleFAQ
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Patrick Ryser <patrick.ryser@gmail.com>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
+
+
+.SimpleFAQIconCls {
+    background-image:url(../../images/oxygen/16x16/actions/help-contents.png) !important;
+}
+.x-btn-medium .SimpleFAQIconCls {
+    background-image:url(../../images/oxygen/22x22/actions/help-contents.png) !important;
+}
+.x-btn-large .SimpleFAQIconCls {
+    background-image:url(../../images/oxygen/32x32/actions/help-contents.png) !important;
+}
