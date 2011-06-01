@@ -99,7 +99,7 @@ Tine.Tinebase.tineInit = {
             if (e.ctrlKey && e.getKey() === e.A) {
                 // disable the native 'select all'
                 e.preventDefault();
-            } else if (e.getKey() === e.BACKSPACE && !e.getTarget('input')) {
+            } else if (e.getKey() === e.BACKSPACE && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
                 // disable the native 'history back'
                 e.preventDefault();
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
