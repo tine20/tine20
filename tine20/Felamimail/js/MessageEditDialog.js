@@ -573,6 +573,9 @@ Ext.namespace('Tine.Felamimail');
         
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);
 
+        // need to sync once again to make sure we have the correct recipients
+        this.recipientGrid.syncRecipientsToRecord();
+        
         /*
         if (this.record.data.note) {
             // show message box with note editing textfield

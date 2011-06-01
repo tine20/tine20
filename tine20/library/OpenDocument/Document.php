@@ -5,9 +5,8 @@
  * @package     OpenDocument
  * @subpackage  OpenDocument
  * @license     http://framework.zend.com/license/new-bsd     New BSD License
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @version     $Id$
  */
 
 /**
@@ -153,7 +152,7 @@ class OpenDocument_Document
      * @param string $_tmpdir
      * @return void
      */
-    public function __construct($_type, $_fileName = null, $_tmpdir = '/tmp', $_userStyles = array())
+    public function __construct($_type, $_fileName = null, $_tmpdir = NULL, $_userStyles = array())
     {
         if($_fileName !== null) {
             if (! file_exists($_fileName)) {
@@ -170,14 +169,14 @@ class OpenDocument_Document
         }
 
         $this->_document = new SimpleXMLElement($this->_content);
-        #echo $this->_document->asXML();
+        
         // register namespaces
         $namespaces = $this->_document->getNamespaces(true);
         foreach ($namespaces as $prefix => $ns) {
           $this->_document->registerXPathNamespace($prefix, $ns);
         }
         
-        $this->_tmpdir = $_tmpdir;
+        $this->_tmpdir = ($_tmpdir !== NULL) ? $_tmpdir : sys_get_temp_dir();
         $this->_userStyles = $_userStyles;
         
         switch ($_type) {
@@ -222,8 +221,8 @@ class OpenDocument_Document
     {
         $this->_addStyles();
 
-        $filename =  $_filename !== null ? $_filename : tempnam(sys_get_temp_dir(), 'OpenDocument');
-        $tempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'od_' . md5(uniqid(rand(), true));
+        $filename =  $_filename !== null ? $_filename : tempnam($this->_tmpdir, 'OpenDocument');
+        $tempDir = $this->_tmpdir . DIRECTORY_SEPARATOR . 'od_' . md5(uniqid(rand(), true));
         
         if (file_exists($tempDir)) {
             throw new Exception('Directory already exists.');
@@ -231,7 +230,6 @@ class OpenDocument_Document
         mkdir($tempDir);
         
         if($this->_templateFile !== null) {
-            #echo "Extract Zip" . PHP_EOL;
             $templateZip = new ZipArchive();
             if ($templateZip->open($this->_templateFile) === TRUE) {
                 $templateZip->extractTo($tempDir);

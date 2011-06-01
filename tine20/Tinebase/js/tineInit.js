@@ -102,6 +102,9 @@ Tine.Tinebase.tineInit = {
             } else if (e.getKey() === e.BACKSPACE && !e.getTarget('input')) {
                 // disable the native 'history back'
                 e.preventDefault();
+            } else if (e.getKey() === e.BACKSPACE && !e.getTarget('input')) {
+                // disable the native 'history back'
+                e.preventDefault();
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
                 // disable the native 'new tab' if in popup window^M
                 e.preventDefault();
