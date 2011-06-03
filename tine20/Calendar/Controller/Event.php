@@ -697,7 +697,9 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             // NOTE: recur exception is a fake event from client. 
             //       this might lead to problems, so we wrap the calls
             try {
-                $_event->attendee->bypassFilters = TRUE;
+                if (count($_event->attendee) > 0) {
+                    $_event->attendee->bypassFilters = TRUE;
+                }
                 $_event->created_by = $baseEvent->created_by;
                 
                 $this->doSendNotifications($notificationEvent, $this->_currentAccount, $notificationAction);
