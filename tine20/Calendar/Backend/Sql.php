@@ -538,11 +538,16 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
         // only save exdates if its an recurring event
         if (! empty($_event->rrule)) {
             foreach ((array)$_event->exdate as $exdate) {
-                $this->_db->insert($this->_tablePrefix . 'cal_exdate', array(
-                    'id'           => $_event->generateUID(),
-                    'cal_event_id' => $_event->getId(),
-                    'exdate'       => $exdate->get(Tinebase_Record_Abstract::ISO8601LONG)
-                ));
+                if (is_object($exdate)) {
+                    $this->_db->insert($this->_tablePrefix . 'cal_exdate', array(
+                        'id'           => $_event->generateUID(),
+                        'cal_event_id' => $_event->getId(),
+                        'exdate'       => $exdate->get(Tinebase_Record_Abstract::ISO8601LONG)
+                    ));
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                       . ' Exdate needs to be an object:' . var_export($exdate, TRUE));
+                }
             }
         }
     }
