@@ -256,8 +256,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
      */
     public function getSupportedFolders()
     {
-        // only the IPhone supports multiple folders for contacts currently
-        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'thundertine'))) {
+        // device supports multiple folders ?
+        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine'))) {
         
             // get the folders the user has access to
             $allowedFolders = $this->_getSyncableFolders();

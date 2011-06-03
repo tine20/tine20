@@ -895,8 +895,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     public function getSupportedFolders()
     {
-        // only the IPhone supports multiple folders for calendars currently
-        if(strtolower($this->_device->devicetype) == 'iphone') {
+        // device supports multiple folders ?
+        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine'))) {
         
             // get the folders the user has access to
             $allowedFolders = $this->_getSyncableFolders();
