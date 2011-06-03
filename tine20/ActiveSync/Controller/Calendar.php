@@ -935,6 +935,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         return $folders;
     }
     
+    /**
+     * get syncable folders
+     * 
+     * @return array
+     */
     protected function _getSyncableFolders()
     {
         $folders = array();
