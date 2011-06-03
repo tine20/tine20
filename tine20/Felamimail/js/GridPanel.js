@@ -1094,7 +1094,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 for (var j = 0; j < filter[i].value.length; j++) {
                     accountIdMatch = filter[i].value[j].match(/^\/([a-z0-9]*)/i);
                     if (accountIdMatch) {
-                        filterAccountId = [1];
+                        filterAccountId = accountIdMatch[1];
                         if (accountId && accountId != filterAccountId) {
                             // reset quota bar if we find multiple account ids in filter
                             this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
@@ -1115,7 +1115,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (accountInbox && accountInbox.get('quota_limit') && accountId == accountInbox.get('account_id')) {
             var usage = accountInbox.get('quota_usage') / accountInbox.get('quota_limit'),
                 left = accountInbox.get('quota_limit') - accountInbox.get('quota_usage'),
-                text = String.format(this.app.i18n._('{0} left'), Ext.util.Format.fileSize(left * 1024));
+                text = String.format(this.app.i18n._('{0} %'), Math.round(usage * 100));
             this.quotaBar.updateProgress(usage, text);
             
             Ext.QuickTips.register({
