@@ -206,7 +206,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var account = this.app.getActiveAccount(),
             accountId = account ? account.id : null,
             inbox = accountId ? this.app.getFolderStore().queryBy(function(record) {
-                return record.get('account_id') === accountId && record.get('localname') === 'INBOX';
+                return record.get('account_id') === accountId && record.get('localname').match(/^inbox$/i);
             }, this).first() : null;
             
         if (! inbox) {
