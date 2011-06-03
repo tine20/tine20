@@ -641,6 +641,20 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
+     * delete messages handler
+     * 
+     * @return {void}
+     */
+    onDeleteRecords: function() {
+        var account = this.app.getActiveAccount(),
+            trashId = (account) ? account.getTrashFolderId() : null,
+            trash = trashId ? this.app.getFolderStore().getById(trashId) : null
+            trashConfigured = (account.get('trash_folder')); 
+            
+        return (trash && ! trash.isCurrentSelection()) || (! trash && trashConfigured) ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();
+    },
+
+    /**
      * permanently delete selected messages
      */
     deleteSelectedMessages: function() {
@@ -654,7 +668,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Boolean} toTrash
      */
     moveSelectedMessages: function(folder, toTrash) {
-        if (folder.isCurrentSelection()) {
+        if (folder && folder.isCurrentSelection()) {
             // nothing to do ;-)
             return;
         }
@@ -714,7 +728,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             sm.selectRecords([nextRecord]);
         }
         
-        if (folder !== null) {
+        if (folder !== null || toTrash) {
             // move
             var targetFolderId = (toTrash) ? '_trash_' : folder.id;
             this.deleteTransactionId = Tine.Felamimail.messageBackend.moveMessages(filter, targetFolderId, { 
@@ -876,19 +890,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
     },
     
-    /**
-     * delete messages handler
-     * 
-     * @return {void}
-     */
-    onDeleteRecords: function() {
-        var account = this.app.getActiveAccount(),
-            trashId = (account) ? account.getTrashFolderId() : null,
-            trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
-            
-        return trash && !trash.isCurrentSelection() ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();
-    },
-
     /**
      * called when a row gets selected
      * 
