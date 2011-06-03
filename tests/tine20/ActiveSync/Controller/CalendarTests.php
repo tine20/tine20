@@ -394,4 +394,18 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $this->assertEquals(1       , count($event));
         $this->assertEquals('Repeat', $event[0]->summary);
     }
+    
+    /**
+     * test supported folders
+     */
+    public function testGetSupportedFolders()
+    {
+        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $syncable = $this->_getContainerWithSyncGrant();
+        $supportedFolders = $controller->getSupportedFolders();
+        
+        $this->assertEquals(1, count($supportedFolders));
+        $this->assertTrue(isset($supportedFolders[$syncable->getId()]));
+    }
 }
