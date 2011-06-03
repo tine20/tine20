@@ -396,6 +396,28 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     }
     
     /**
+     * test search events (unsyncable)
+     * 
+     * TODO finish this -> assertion fails atm because the event is found even if it is in an unsyncable folder and has no attendees (but 1 exdate)
+     */
+    public function tofinish_testUnsyncableSearch()
+    {
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        
+        $record = $controller->add($this->_getContainerWithoutSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $this->objects['events'][] = $record;
+        $record->attendee = NULL;
+        
+        Calendar_Controller_Event::getInstance()->update($record);
+        
+        $event = $controller->search($this->_specialFolderName, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        $this->assertEquals(0, count($event));
+    }
+    
+    /**
      * test supported folders
      */
     public function testGetSupportedFolders()
