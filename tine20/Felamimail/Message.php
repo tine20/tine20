@@ -130,6 +130,11 @@ class Felamimail_Message extends Zend_Mail_Message
             $date->setTimezone('UTC');
 
         } catch (Exception $e) {
+            // try to fix missing timezone char
+            if (preg_match('/UT$/', $_dateString)) {
+                $_dateString .= 'C';
+            }
+            
             // try some explicit formats
             foreach (self::$dateFormats as $format) {
                 $date = DateTime::createFromFormat($format, $_dateString);
