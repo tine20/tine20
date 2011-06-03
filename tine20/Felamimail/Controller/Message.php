@@ -55,6 +55,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     protected $_punycodeConverter = NULL;
     
     /**
+     * elements to remove from html body of a message / only images are supported atm
+     * 
+     * @var array
+     */
+    protected $_purifyElements = array('images');
+    
+    /**
      * fallback charset constant
      * 
      * @var string
@@ -264,6 +271,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * set elements to purify
+     * 
+     * @param array $_elementsToPurify
+     */
+    public function setPurifyElements($_elementsToPurify = array('images'))
+    {
+        $this->_purifyElements = $_elementsToPurify;
+    }
+    
+    /**
      * get message body
      * 
      * @param string|Felamimail_Model_Message $_messageId
@@ -466,9 +483,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $config->set('HTML.DefinitionRev', 1);
         $config->set('Cache.SerializerPath', $path);
         
-        // remove images
-        $config->set('HTML.ForbiddenElements', array('img'));
-        $config->set('CSS.ForbiddenProperties', array('background-image'));
+        if (in_array('images', $this->_purifyElements)) {
+            $config->set('HTML.ForbiddenElements', array('img'));
+            $config->set('CSS.ForbiddenProperties', array('background-image'));
+        }
         
         // add target="_blank" to anchors
         if ($def = $config->maybeGetRawHTMLDefinition()) {
