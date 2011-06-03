@@ -722,7 +722,17 @@ Tine.Felamimail.handleRequestException = function(exception) {
                 
             if (account) {
                 account.set('all_folders_fetched', true);
-                app.showCredentialsDialog(account, exception.username);
+                if (account.get('type') == 'system') {
+                    // just show message box for system accounts
+                    Ext.Msg.show({
+                       title:   app.i18n._('IMAP Credentials Error'),
+                       msg:     app.i18n._('Your email credentials are wrong. Please contact your administrator'),
+                       icon:    Ext.MessageBox.ERROR,
+                       buttons: Ext.Msg.OK
+                    });
+                } else {
+                    app.showCredentialsDialog(account, exception.username);
+                }
             } else {
                 exception.code = 910;
                 return this.handleRequestException(exception);

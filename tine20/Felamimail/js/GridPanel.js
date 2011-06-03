@@ -1085,22 +1085,28 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         var accountId = null, 
-            filterAccountId = null;
+            filterAccountId = null,
+            accountIdMatch = null;
             
+        // get account id from filter (TODO move this to separate function)
         for (var i = 0; i < filter.length; i++) {
             if (filter[i].field == 'path' && filter[i].operator == 'in') {
                 for (var j = 0; j < filter[i].value.length; j++) {
-                    filterAccountId = filter[i].value[j].match(/^\/([a-z0-9]*)/i)[1];
-                    if (accountId && accountId != filterAccountId) {
-                        // reset quota bar
-                        this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
-                        return;
-                    } else {
-                        accountId = filterAccountId;
+                    accountIdMatch = filter[i].value[j].match(/^\/([a-z0-9]*)/i);
+                    if (accountIdMatch) {
+                        filterAccountId = [1];
+                        if (accountId && accountId != filterAccountId) {
+                            // reset quota bar if we find multiple account ids in filter
+                            this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+                            return;
+                        } else {
+                            accountId = filterAccountId;
+                        }
                     }
                 }
             }
         }
+        
         if (! accountInbox) {
             var accountInbox = this.app.getFolderStore().queryBy(function(folder) {
                 return folder.isInbox() && (folder.get('account_id') == accountId);

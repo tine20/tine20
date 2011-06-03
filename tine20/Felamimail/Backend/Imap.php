@@ -574,7 +574,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $index = 0;
         
         // all arrays until the first non array value are parts
-        foreach($_structure as $part) {
+        foreach ($_structure as $part) {
             if (!is_array($part)) {
                 break;
             }
@@ -593,7 +593,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $index++;
         
         // body parameters
-        if(is_array($_structure[$index])) {
+        if(isset($_structure[$index]) && is_array($_structure[$index])) {
             $parameters = array();
             for($i=0; $i<count($_structure[$index]); $i++) {
                 $key   = strtolower($_structure[$index][$i]);
@@ -605,10 +605,10 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $index++;
         
         // body disposition
-        if($_structure[$index] != 'NIL') {
+        if (isset($_structure[$index]) && $_structure[$index] != 'NIL') {
             $structure['disposition']['type'] = $_structure[$index][0];
             
-            if($_structure[$index][1] != 'NIL') {
+            if ($_structure[$index][1] != 'NIL') {
                 $parameters = array();
                 for($i=0; $i<count($_structure[$index][1]); $i++) {
                     if ($_structure[$index][1][$i] != 'NIL') {
@@ -623,7 +623,7 @@ class Felamimail_Backend_Imap extends Zend_Mail_Storage_Imap
         $index++;
         
         // body language
-        if($_structure[$index] != 'NIL') {
+        if (isset($_structure[$index]) && $_structure[$index] != 'NIL') {
             $structure['language'] = $_structure[$index]; 
         }
         $index++;

@@ -1,0 +1,181 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - SimpleFAQ\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: en\n"
+"X-Poedit-Country: GB\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: Controller.php:109
+#, python-format
+msgid "%s's personal FAQs"
+msgstr "%s's personal FAQs"
+
+#: Controller.php:147
+msgid "Draft"
+msgstr "Draft"
+
+#: Controller.php:148
+msgid "released"
+msgstr "released"
+
+#: Controller.php:149
+msgid "obsolete"
+msgstr "obsolete"
+
+#: Controller.php:152
+msgid "Internal"
+msgstr "Internal"
+
+#: Controller.php:153
+msgid "Public"
+msgstr "Public"
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr "All my FAQs"
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr "Default Favorite"
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr "The default favorite which is loaded on FAQ startup"
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr "Default FAQ List"
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr "The default FAQ list to create new FAQ in."
+
+#: Setup/Initialize.php:35
+msgid "All FAQs of my FAQ Lists"
+msgstr "All FAQs of my FAQ Lists"
+
+#: Setup/Initialize.php:42
+msgid "Last modified by me"
+msgstr "Last modified by me"
+
+#: Setup/Initialize.php:43
+msgid "All FAQs that I have last modified"
+msgstr "All FAQs that I have last modified"
+
+#: js/FaqStatus.js:26 js/SimpleFAQ-FAT-debug.js:405
+#: js/SimpleFAQ-FAT-debug.js:920 js/SimpleFAQ-FAT-debug.js:952
+#: js/SimpleFAQ-FAT-debug.js:1047 js/SimpleFAQ-FAT-debug.js:1192
+#: js/FaqGridDetailsPanel.js:205 js/SimpleFAQ-FAT.js:6 js/AdminPanel.js:93
+#: js/AdminPanel.js:125 js/FaqStatusFilterModel.js:27
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] "FAQ Status"
+msgstr[1] "FAQ Status"
+
+#: js/FaqStatus.js:141 js/SimpleFAQ-FAT-debug.js:1162
+msgid "Add a new FAQ Status..."
+msgstr "Add a new FAQ Status..."
+
+#: js/SimpleFAQ-FAT-debug.js:38 js/SimpleFAQ-FAT-debug.js:141
+#: js/SimpleFAQ-FAT.js:6 js/Model.js:33 js/SimpleFAQ.js:19
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] "FAQ"
+msgstr[1] "FAQs"
+
+#: js/SimpleFAQ-FAT-debug.js:42 js/Model.js:37
+msgid "FAQ List, "
+msgid_plural "FAQ Lists"
+msgstr[0] "FAQ List, "
+msgstr[1] "FAQ Lists"
+
+#: js/SimpleFAQ-FAT-debug.js:77 js/SimpleFAQ-FAT.js:6 js/Model.js:72
+msgid "Quick search"
+msgstr "Quick search"
+
+#: js/SimpleFAQ-FAT-debug.js:303 js/SimpleFAQ-FAT-debug.js:388
+#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
+#: js/SimpleFAQ-FAT.js:6
+msgid "FAQ Infos"
+msgstr "FAQ Infos"
+
+#: js/SimpleFAQ-FAT-debug.js:357 js/SimpleFAQ-FAT-debug.js:615
+#: js/SimpleFAQ-FAT-debug.js:747 js/FaqGridDetailsPanel.js:157
+#: js/SimpleFAQ-FAT.js:6 js/FaqEditDialog.js:108 js/FaqGridPanel.js:120
+msgid "Question"
+msgstr "Question"
+
+#: js/SimpleFAQ-FAT-debug.js:363 js/SimpleFAQ-FAT-debug.js:622
+#: js/SimpleFAQ-FAT-debug.js:754 js/FaqGridDetailsPanel.js:163
+#: js/SimpleFAQ-FAT.js:6 js/FaqEditDialog.js:115 js/FaqGridPanel.js:127
+msgid "Answer"
+msgstr "Answer"
+
+#: js/SimpleFAQ-FAT-debug.js:369 js/SimpleFAQ-FAT-debug.js:596
+#: js/FaqGridDetailsPanel.js:169 js/SimpleFAQ-FAT.js:6 js/FaqGridPanel.js:101
+msgid "Tags"
+msgstr "Tags"
+
+#: js/SimpleFAQ-FAT-debug.js:395 js/FaqGridDetailsPanel.js:195
+#: js/SimpleFAQ-FAT.js:6
+msgid "Creation Time"
+msgstr "Creation Time"
+
+#: js/SimpleFAQ-FAT-debug.js:400 js/FaqGridDetailsPanel.js:200
+#: js/SimpleFAQ-FAT.js:6
+msgid "Created By"
+msgstr "Created By"
+
+#: js/SimpleFAQ-FAT-debug.js:410 js/SimpleFAQ-FAT-debug.js:924
+#: js/SimpleFAQ-FAT-debug.js:959 js/SimpleFAQ-FAT-debug.js:1332
+#: js/SimpleFAQ-FAT-debug.js:1480 js/FaqGridDetailsPanel.js:210
+#: js/SimpleFAQ-FAT.js:6 js/FaqType.js:26 js/FaqTypeFilterModel.js:27
+#: js/AdminPanel.js:97 js/AdminPanel.js:132
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "FAQ Type"
+msgstr[1] "FAQ Types"
+
+#: js/SimpleFAQ-FAT-debug.js:432 js/FaqGridDetailsPanel.js:232
+#: js/SimpleFAQ-FAT.js:6
+msgid "No answer yet"
+msgstr "No answer yet"
+
+#: js/SimpleFAQ-FAT-debug.js:589 js/SimpleFAQ-FAT.js:6 js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr "FAQ id"
+
+#: js/SimpleFAQ-FAT-debug.js:603 js/SimpleFAQ-FAT-debug.js:775
+#: js/SimpleFAQ-FAT.js:6 js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
+msgid "Status"
+msgstr "Status"
+
+#: js/SimpleFAQ-FAT-debug.js:609 js/SimpleFAQ-FAT-debug.js:763
+#: js/SimpleFAQ-FAT.js:6 js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
+msgid "Type"
+msgstr "Type"
+
+#: js/SimpleFAQ-FAT-debug.js:748 js/SimpleFAQ-FAT.js:6 js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr "Enter a question..."
+
+#: js/SimpleFAQ-FAT-debug.js:755 js/SimpleFAQ-FAT.js:6 js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr "Enter a answer..."
+
+#: js/SimpleFAQ-FAT-debug.js:932 js/SimpleFAQ-FAT.js:6 js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Defaults"
+
+#: js/SimpleFAQ-FAT-debug.js:1450 js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Add a new FAQ Type..."
