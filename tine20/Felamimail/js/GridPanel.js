@@ -728,16 +728,18 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             sm.selectRecords([nextRecord]);
         }
         
+        var callbackFn = this.onAfterDelete.createDelegate(this, [msgsIds]);
+        
         if (folder !== null || toTrash) {
             // move
             var targetFolderId = (toTrash) ? '_trash_' : folder.id;
             this.deleteTransactionId = Tine.Felamimail.messageBackend.moveMessages(filter, targetFolderId, { 
-                callback: this.onAfterDelete.createDelegate(this, [msgsIds, folder])
+                callback: callbackFn
             }); 
         } else {
             // delete
             this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', { 
-                callback: this.onAfterDelete.createDelegate(this, [msgsIds])
+                callback: callbackFn
             });
         }
     },
@@ -815,9 +817,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * executed after msg delete
      * 
      * @param {Array} [ids]
-     * @param {Tine.Felamimail.Model.Folder} [folder]
      */
-    onAfterDelete: function(ids, folder) {
+    onAfterDelete: function(ids) {
         this.editBuffer = this.editBuffer.diff(ids);
         this.movingOrDeleting = false;
 
@@ -959,12 +960,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folderId = msg ? msg.get('folder_id') : null,
             folder = folderId ? this.app.getFolderStore().getById(folderId) : null,
             accountId = folder ? folder.get('account_id') : null,
-            account = accountId ? this.app.getAccountStore().getById(accountId) : null,
-            trashId = account ? account.getTrashFolderId() : null,
-            trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
+            account = accountId ? this.app.getAccountStore().getById(accountId) : null;
             
         this.getStore().remove(msg);
-        this.onAfterDelete(null, trash);
+        this.onAfterDelete(null);
     },    
     
     /**
