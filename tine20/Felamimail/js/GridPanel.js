@@ -1080,33 +1080,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Array} filter
      */
     updateQuotaBar: function(filter, accountInbox) {
-        if (! filter) {
-            filter = this.filterToolbar.getValue();
-        }
+        var accountId = this.extractAccountIdFromFilter(filter);
         
-        var accountId = null, 
-            filterAccountId = null,
-            accountIdMatch = null;
+        if (accountId === null) {
+            // reset quota bar if we find multiple (or none) account ids in filter
+            this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+            return;
+        }
             
-        // get account id from filter (TODO move this to separate function)
-        for (var i = 0; i < filter.length; i++) {
-            if (filter[i].field == 'path' && filter[i].operator == 'in') {
-                for (var j = 0; j < filter[i].value.length; j++) {
-                    accountIdMatch = filter[i].value[j].match(/^\/([a-z0-9]*)/i);
-                    if (accountIdMatch) {
-                        filterAccountId = accountIdMatch[1];
-                        if (accountId && accountId != filterAccountId) {
-                            // reset quota bar if we find multiple account ids in filter
-                            this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
-                            return;
-                        } else {
-                            accountId = filterAccountId;
-                        }
-                    }
-                }
-            }
-        }
-        
         if (! accountInbox) {
             var accountInbox = this.app.getFolderStore().queryBy(function(folder) {
                 return folder.isInbox() && (folder.get('account_id') == accountId);
@@ -1129,6 +1110,41 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 200
             });
         }
+    },
+    
+    /**
+     * get account id from filter (only returns the id if a single account id was found)
+     * 
+     * @param {Array} filter
+     * @return {String}
+     */
+    extractAccountIdFromFilter: function(filter) {
+        if (! filter) {
+            filter = this.filterToolbar.getValue();
+        }
+        
+        var accountId = null, 
+            filterAccountId = null,
+            accountIdMatch = null;
+
+        for (var i = 0; i < filter.length; i++) {
+            if (filter[i].field == 'path' && filter[i].operator == 'in') {
+                for (var j = 0; j < filter[i].value.length; j++) {
+                    accountIdMatch = filter[i].value[j].match(/^\/([a-z0-9]*)/i);
+                    if (accountIdMatch) {
+                        filterAccountId = accountIdMatch[1];
+                        if (accountId && accountId != filterAccountId) {
+                            // multiple different account ids found!
+                            return null;
+                        } else {
+                            accountId = filterAccountId;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return accountId;
     },
     
     /**
