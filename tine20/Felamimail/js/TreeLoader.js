@@ -109,6 +109,7 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         }
         if (attr.globalname.match(/^inbox$/i)) {
             attr.cls = 'felamimail-node-inbox';
+            attr.text = this.app.i18n._hidden('INBOX');
         }
         if (attr.globalname.match(/^junk$/i)) {
             attr.cls = 'felamimail-node-junk';
