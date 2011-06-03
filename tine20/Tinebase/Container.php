@@ -175,7 +175,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
         $container = $this->create($_container);
-        $this->setGrants($container->getId(), $grants, TRUE);
+        $this->setGrants($container->getId(), $grants, TRUE, FALSE);
         
         return $container;
     }
