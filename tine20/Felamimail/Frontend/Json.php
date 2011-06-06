@@ -100,14 +100,14 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * remove all messages from folder
+     * remove all messages from folder and delete subfolders
      *
      * @param  string $folderId the folder id to delete
      * @return array with folder status
      */
     public function emptyFolder($folderId)
     {
-        $result = Felamimail_Controller_Folder::getInstance()->emptyFolder($folderId);
+        $result = Felamimail_Controller_Folder::getInstance()->emptyFolder($folderId, TRUE);
         return $this->_recordToJson($result);
     }
     
