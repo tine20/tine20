@@ -785,6 +785,8 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             }
         }
         
+        $this->_addNamespaceToFolderConfig($_account);
+        
         return $changed;
     }
     
