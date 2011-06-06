@@ -300,14 +300,25 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      * @param string $_accountId
      * @param string $_folderName globalName (complete path) of folder to delete
+     * @param boolean $_recursive
      * @return void
      */
-    public function delete($_accountId, $_folderName)
+    public function delete($_accountId, $_folderName, $_recursive = FALSE)
     {
+        try {
+            $folder = $this->getByBackendAndGlobalName($_accountId, $_folderName);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder ' . $_folderName);
+            $folder = NULL;
+        }            
+        
         // check if folder has subfolders and throw exception if that is the case
         // @todo this should not be a Tinebase_Exception_AccessDenied -> we have to create a new exception and call the fmail exception handler when deleting/adding/renaming folders
         $subfolders = $this->getSubfolders($_accountId, $_folderName);
         if (count($subfolders) > 0) {
+            if ($_recursive && $folder) {
+                $this->deleteSubfolders($folder, $subfolders);
+            }
             throw new Tinebase_Exception_AccessDenied('Could not delete folder ' . $_folderName . ' because it has subfolders.');
         }
         
@@ -318,14 +329,11 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             throw new Felamimail_Exception_IMAP('Could not delete folder ' . $_folderName . '. IMAP Error: ' . $zmse->getMessage());
         }
         
-        try {
-            $folder = $this->getByBackendAndGlobalName($_accountId, $_folderName);
+        if ($folder) {
             Felamimail_Controller_Message::getInstance()->deleteByFolder($folder);
             $this->_backend->delete($folder->getId());
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted folder ' . $_folderName);
             $this->_updateHasChildren($_accountId, $folder->parent);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder ' . $_folderName);
         }
     }
     
@@ -383,12 +391,14 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
 
     /**
      * delete all messages in one folder -> be careful, they are completly removed and not moved to trash
+     * -> delete subfolders if param set
      *
      * @param string $_folderId
+     * @param boolean $_deleteSubfolders
      * @return Felamimail_Model_Folder
      * @throws Felamimail_Exception_IMAPServiceUnavailable
      */
-    public function emptyFolder($_folderId)
+    public function emptyFolder($_folderId, $_deleteSubfolders = FALSE)
     {
         $folder = $this->_backend->get($_folderId);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
@@ -406,8 +416,29 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Folder could be empty (' . $zmse->getMessage() . ')');
         }
         
+        if ($_deleteSubfolders) {
+            $this->deleteSubfolders($folder);
+        }
+        
         $folder = Felamimail_Controller_Cache_Message::getInstance()->clear($_folderId);
         return $folder;
+    }
+    
+    /**
+     * delete subfolders recursivly
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @param Tinebase_Record_RecordSet $_subfolders if we know the subfolders already
+     */
+    public function deleteSubfolders(Felamimail_Model_Folder $_folder, $_subfolders = NULL)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
+        $subfolders = ($_subfolders === NULL) ? $this->getSubfolders($account, $_folder->globalname) : $_subfolders;
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete ' . count($subfolders) . ' subfolders of ' . $_folder->globalname);
+        foreach ($subfolders as $subfolder) {
+            $this->delete($account, $subfolder->globalname, TRUE);
+        }
     }
     
     /**
