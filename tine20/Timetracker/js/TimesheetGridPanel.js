@@ -210,7 +210,7 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 renderer: Tine.Tinebase.common.dateRenderer },
             { id: 'start_time',         header: this.app.i18n._("Start time"),          width: 100, dataIndex: 'start_time',            hidden: true,            
                 renderer: Tine.Tinebase.common.timeRenderer },
-            { id: 'timeaccount_id',     header: this.app.i18n._("Time Account"),        width: 500, dataIndex: 'timeaccount_id',        
+            { id: 'timeaccount_id',     header: this.app.i18n.ngettext('Time Account', 'Time Accounts', 1), width: 500, dataIndex: 'timeaccount_id',        
                 renderer: this.rendererTimeaccountId },
             { id: 'timeaccount_closed', header: this.app.i18n._("Time Account closed"), width: 100, dataIndex: 'timeaccount_closed',    hidden: true,    
                 renderer: this.rendererTimeaccountClosed },

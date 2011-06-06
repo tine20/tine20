@@ -118,7 +118,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
             activeTab: 0,
             items:[
                 {            	
-                title: this.app.i18n._('Timesheet'),
+                title: this.app.i18n.ngettext('Timesheet', 'Timesheets', 1),
                 autoScroll: true,
                 border: false,
                 frame: true,
@@ -135,7 +135,7 @@ Tine.Timetracker.TimesheetEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     },
                     items: [[new Tine.Timetracker.TimeAccountSelect({
                         columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Time Account'),
+                        fieldLabel: this.app.i18n.ngettext('Time Account', 'Time Accounts', 1),
                         emptyText: this.app.i18n._('Select Time Account...'),
                         loadingText: this.app.i18n._('Searching...'),
                         allowBlank: false,
