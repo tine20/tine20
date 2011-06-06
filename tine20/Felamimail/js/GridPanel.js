@@ -1083,7 +1083,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var accountId = this.extractAccountIdFromFilter(filter);
         
         if (accountId === null) {
-            // reset quota bar if we find multiple (or none) account ids in filter
+            Tine.log.debug('No or multiple account ids in filter. Resetting quota bar.');
             this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
             return;
         }
@@ -1109,6 +1109,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 ),
                 width: 200
             });
+        } else {
+            Tine.log.debug('No account inbox found or no quota info.');
+            this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
         }
     },
     
