@@ -139,7 +139,6 @@ Tine.Timetracker.TimesheetGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     update[field] = value;
                     
                     win.close();
-                    this.grid.loadMask.show();
                     
                     // some adjustments
                     if (field == 'is_cleared' && !update[field]) {

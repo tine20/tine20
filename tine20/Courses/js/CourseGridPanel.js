@@ -196,7 +196,6 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             toUpdateIds.push(courses[i].data.id);
         }
         
-        this.grid.loadMask.show();
         Ext.Ajax.request({
             params: {
                 method: 'Courses.updateAccess',
@@ -205,9 +204,7 @@ Tine.Courses.CourseGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 access: button.access
             },
             success: function(_result, _request) {
-                // reload store
                 this.store.load();
-                this.grid.loadMask.hide();
             },
             failure: function(result, request){
                 Ext.MessageBox.alert(
