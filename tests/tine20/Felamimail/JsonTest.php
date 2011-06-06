@@ -143,7 +143,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         if (count($this->_createdFolders) > 0) {
             foreach ($this->_createdFolders as $folderName) {
                 //echo "delete $folderName\n";
-                $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
+                try {
+                    $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
+                } catch (Zend_Mail_Storage_Exception $zmse) {
+                    // already deleted
+                }
             }
             Felamimail_Controller_Cache_Folder::getInstance()->clear($this->_account);
         }
@@ -242,6 +246,22 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * test emtpy folder (with subfolder)
+     */
+    public function testEmptyFolderWithSubfolder()
+    {
+        $folderName = $this->_testFolderName;
+        $folder = $this->_getFolder($this->_testFolderName);
+        $this->testCreateFolders();
+        
+        $folderArray = $this->_json->emptyFolder($folder->getId());
+        $this->assertEquals(0, $folderArray['has_children']);
+        
+        $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
+        $this->assertEquals(0, count($result));
+    }
+
     /**
      * testUpdateFolderCache
      */
