@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - SimpleFAQ\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-06-06 21:45+0100\n"
+"PO-Revision-Date: 2011-06-06 22:00+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -56,7 +56,7 @@ msgstr "Domyślna lista pytań"
 
 #: Preference.php:75
 msgid "The default FAQ list to create new FAQ in."
-msgstr "Domyślna lista pytań, w której można dodawać pytania"
+msgstr "Domyślna lista pytań, do której można dodawać pytania"
 
 #: Setup/Initialize.php:35
 msgid "All FAQs of my FAQ Lists"
