@@ -21,7 +21,7 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
     hasMainScreen: false,
     
     /**
-     * Get translated application title of this application
+     * Get translated application title of this application /test
      * 
      * @return {String}
      */
