@@ -544,16 +544,43 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $_account->ns_other      = (! empty($_capabilities['namespace']['other']))    ? $_capabilities['namespace']['other']['name']   : '';
         $_account->ns_shared     = (! empty($_capabilities['namespace']['shared']))   ? $_capabilities['namespace']['shared']['name']  : '';
 
-        if ($_account->ns_personal !== 'NIL') {
-            // update sent/trash folders
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting personal namespace: "' . $_account->ns_personal . '"');
-            if (! empty($_account->ns_personal) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->sent_folder) && ! preg_match('/^' . $_account->ns_personal . '/', $_account->trash_folder)) {
-                $_account->sent_folder = $_account->ns_personal . $_account->sent_folder;
-                $_account->trash_folder = $_account->ns_personal . $_account->trash_folder;
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated sent/trash folder names: ' . $_account->sent_folder .' / ' . $_account->trash_folder);
+        $this->_addNamespaceToFolderConfig($_account);
+    }
+    
+    /**
+     * add namespace to account system folder names
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_namespace
+     * @param array $_folders
+     */
+    protected function _addNamespaceToFolderConfig($_account, $_namespace = 'ns_personal', $_folders = array())
+    {
+        $folders = (empty($_folders)) ? array(
+            'sent_folder',
+            'trash_folder',
+            'drafts_folder',
+            'templates_folder',
+        ) : $_folders;
+        
+        if ($_account->{$_namespace} === 'NIL') {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No ' . $_namespace . ' namespace available for account ' . $_account->name);
+            return;
+        }
+        
+        if (empty($_account->{$_namespace})) {
+            return;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Setting ' . $_namespace . ' namespace: "' . $_account->{$_namespace} . '" for systemfolders of account ' . $_account->name);
+        
+        foreach ($folders as $folder) {
+            if (! preg_match('/^' . $_account->{$_namespace} . '/', $_account->{$folder})) {
+                $_account->{$folder} = $_account->{$_namespace} . $_account->{$folder};
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Updated system folder name: ' . $folder .' -> ' . $_account->{$folder});
             }
-        } else {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' No personal namespace available!');
         }
     }
     
