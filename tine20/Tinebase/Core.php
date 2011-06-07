@@ -492,6 +492,8 @@ class Tinebase_Core
                         $backendOptions = array(
                             'cache_dir'              => ($config->caching->path)     ? $config->caching->path     : Tinebase_Core::getTempDir(),
                             'hashed_directory_level' => ($config->caching->dirlevel) ? $config->caching->dirlevel : 4, 
+                            'logging'                => true,
+                            'logger'                 => self::getLogger(),
                         );
                         break;
                         
