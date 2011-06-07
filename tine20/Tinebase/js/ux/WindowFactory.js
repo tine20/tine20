@@ -63,7 +63,7 @@ Ext.ux.WindowFactory.prototype = {
     getBrowserWindow: function (config) {
         var win = Ext.ux.PopupWindowMgr.get(config.name);
         
-        if (! win) {
+        if (Ext.isOpera || ! win) {
             win = new this.windowClass(config);
         }
         
