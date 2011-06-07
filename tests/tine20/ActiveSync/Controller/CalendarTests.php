@@ -400,21 +400,21 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
      * 
      * TODO finish this -> assertion fails atm because the event is found even if it is in an unsyncable folder and has no attendees (but 1 exdate)
      */
-    public function tofinish_testUnsyncableSearch()
+    public function testUnsyncableSearch()
     {
         $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
 
         $xml = simplexml_import_dom($this->_getInputDOMDocument());
         
         $record = $controller->add($this->_getContainerWithoutSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-        $this->objects['events'][] = $record;
+        $record->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $record->attendee = NULL;
+
+        $this->objects['events'][] = Calendar_Controller_MSEventFacade::getInstance()->update($record);
         
-        Calendar_Controller_Event::getInstance()->update($record);
+        $events = $controller->search($this->_specialFolderName, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
-        $event = $controller->search($this->_specialFolderName, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
-        
-        $this->assertEquals(0, count($event));
+        $this->assertEquals(0, count($events));
     }
     
     /**
