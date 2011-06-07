@@ -478,7 +478,9 @@ class Tinebase_Core
                 'automatic_serialization'   => true, // turn that off for more speed
                 'caching'                   => true,
                 'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
-                'write_control'             => false // don't read cache entry after it got written
+                'write_control'             => false, // don't read cache entry after it got written
+                'logging'                   => true,
+                'logger'                    => self::getLogger(),
             );
 
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
