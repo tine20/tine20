@@ -227,7 +227,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 fieldLabel: this.app.i18n._('Web'),
                                 labelIcon: 'images/oxygen/16x16/actions/network.png',
                                 name: 'url',
-                                vtype: 'url',
                                 maxLength: 128,
                                 listeners: {
                                     scope: this,
