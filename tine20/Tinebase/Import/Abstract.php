@@ -155,7 +155,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
             
         } else {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($record->toArray(), true));
-            throw new Tinebase_Exception_Record_Validation('Imported record is invalid.');
+            throw new Tinebase_Exception_Record_Validation('Imported record is invalid (' . print_r($record->getValidationErrors(), TRUE) . ')');
         }
     }
     
@@ -178,6 +178,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
      */
     protected function _addSharedTags($_tags)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Adding tags: ' . print_r($_tags, TRUE));
+        
         $result = array();
         foreach ($_tags as $tag) {
             $tag = trim($tag);
@@ -206,7 +208,7 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                         'color'         => '#000099'
                     ));
                     
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' create new tag: ' . print_r($newTag->toArray(), true));
+                    if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Creating new shared tag: ' . $name);
                     
                     $newTag = Tinebase_Tags::getInstance()->createTag($newTag);
                     
@@ -221,9 +223,8 @@ abstract class Tinebase_Import_Abstract implements Tinebase_Import_Interface
                     Tinebase_Tags::getInstance()->setContexts(array('any'), $newTag->getId());
                     
                     $id = $newTag->getId();
-
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-                        ' Created new shared tag ' . $name);
+                } else {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Do not create shared tag (option not set)');
                 }
             }
             

@@ -228,7 +228,7 @@ class Tinebase_Translation
     {
         $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get('locale');
         
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cache = Tinebase_Core::getCache();
         
         $cacheId = 'getTranslation_' . (string)$locale . $_applicationName;
         
@@ -248,7 +248,7 @@ class Tinebase_Translation
 
         try {
             $translate->setLocale($locale);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)$locale);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . $_applicationName . '/' . (string)$locale);
             
         } catch (Zend_Translate_Exception $e) {
             // the locale of the user is not available
