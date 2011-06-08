@@ -278,7 +278,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
             );
             
             foreach ($iterator as $key => $value) {
-                if ($key == $_partId && is_array($value) && $value['partId'] == $_partId) {
+                if ($key == $_partId && is_array($value) && array_key_exists('partId', $value)) {
                     $result = ($_useMessageStructure && is_array($value) && array_key_exists('messageStructure', $value)) ? $value['messageStructure'] : $value;
                 }
             }
