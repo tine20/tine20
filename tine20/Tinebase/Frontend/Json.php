@@ -618,7 +618,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         $decodedFilter = is_array($filter) ? $filter : Zend_Json::decode($filter);
         
-        $filter = new Tinebase_Model_PreferenceFilter(array());
+        $appId = Tinebase_Application::getInstance()->getApplicationByName($applicationName)->getId();
+        $filter = new Tinebase_Model_PreferenceFilter(array(
+            array('field'     => 'application_id',  'operator'  => 'equals', 'value'     => $appId),
+        ));
         
         if (! empty($decodedFilter)) {
             $filter->setFromArrayInUsersTimezone($decodedFilter);
