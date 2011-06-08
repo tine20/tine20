@@ -73,13 +73,14 @@ Tine.Felamimail.setTreeContextMenus = function() {
                         isSelectedNode = (selectedNode && this.ctxNode.id == selectedNode.id);
                         
                     if (isSelectedNode) {
-                        var newRecord = Tine.Felamimail.folderBackend.recordReader(result);
-                        this.app.getFolderStore().updateFolder(newRecord);
+                        var folder = Tine.Felamimail.folderBackend.recordReader(result);
+                        this.app.getFolderStore().updateFolder(folder);
                     } else {
                         var folder = this.app.getFolderStore().getById(folderId);
                         folder.set('cache_unreadcount', 0);
                     }
                     this.ctxNode.getUI().removeClass("x-tree-node-loading");
+                    this.ctxNode.removeAll();
                 },
                 failure: function() {
                     this.ctxNode.getUI().removeClass("x-tree-node-loading");

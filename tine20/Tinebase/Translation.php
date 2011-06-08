@@ -3,37 +3,26 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Server
+ * @subpackage  Translation
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-
 
 /**
  * primary class to handle translations
  *
  * @package     Tinebase
- * @subpackage  Server
+ * @subpackage  Translation
  */
 class Tinebase_Translation
 {
     /**
-     * Layzy loading for {@see getCountryList()}
+     * Lazy loading for {@see getCountryList()}
      * 
      * @var array
      */
     protected static $_countryLists = array();
-    
-    /**
-     * array with translations for applications 
-     * - is used in getTranslations to save already initialized translations
-     * - 2 dim array -> language / application
-     * 
-     * @var array
-     */
-    protected static $_translations = array();
     
     /**
      * List of officially supported languages
