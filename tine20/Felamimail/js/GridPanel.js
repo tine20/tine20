@@ -136,8 +136,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.QuickTips.init();
         
         this.quotaBar = new Ext.ProgressBar({
-            width: 100,
-            height: 17,
+            width: 120,
+            height: 16,
             style: {
                 marginTop: '1px'
             },
@@ -1085,6 +1085,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (accountId === null) {
             Tine.log.debug('No or multiple account ids in filter. Resetting quota bar.');
             this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+            this.quotaBar.setWidth(120);
             return;
         }
             
@@ -1098,6 +1099,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 left = accountInbox.get('quota_limit') - accountInbox.get('quota_usage'),
                 text = String.format(this.app.i18n._('{0} %'), Math.round(usage * 100));
             this.quotaBar.updateProgress(usage, text);
+            this.quotaBar.setWidth(50);
             
             Ext.QuickTips.register({
                 target:  this.quotaBar,
@@ -1112,6 +1114,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         } else {
             Tine.log.debug('No account inbox found or no quota info.');
             this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+            this.quotaBar.setWidth(120);
         }
     },
     
