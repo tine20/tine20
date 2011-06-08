@@ -5,10 +5,8 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        add flags as consts here?
- * @todo        add more CONTENT_TYPE_ constants
  */
 
 /**
@@ -277,7 +275,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         );
         
         foreach ($iterator as $key => $value) {
-            if ($key == $_partId) {
+            if ($key == $_partId && is_array($value) && $value['partId'] == $_partId) {
                 $result = ($_useMessageStructure && is_array($value) && array_key_exists('messageStructure', $value)) ? $value['messageStructure'] : $value;
                 return $result;
             }
