@@ -59,11 +59,11 @@ msgstr "文件服务器开启"
 msgid "Fileserver Access Off"
 msgstr "文件服务器关闭"
 
-#: js/CourseGridPanel.js:214
+#: js/CourseGridPanel.js:211
 msgid "Failed"
 msgstr "失败"
 
-#: js/CourseGridPanel.js:215
+#: js/CourseGridPanel.js:212
 msgid "Some error occured while trying to update the courses."
 msgstr "试图更新课程时有错误发生"
 

@@ -253,7 +253,7 @@ msgstr "Biztosan ki akarsz jelentkezni?"
 msgid "Logging you out..."
 msgstr "Kijelentkezés..."
 
-#: js/MainMenu.js:227 js/LoginPanel.js:353
+#: js/MainMenu.js:227 js/LoginPanel.js:354
 msgid "Please wait!"
 msgstr "Kérlek várj!"
 
@@ -476,7 +476,7 @@ msgstr "Biztosan szeretnéd törölni ezt a kedvencet: \"{0}\"?"
 #: js/widgets/persistentfilter/PickerPanel.js:328
 #: js/widgets/tree/ContextMenu.js:42 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:143 js/widgets/container/GrantsDialog.js:95
-#: js/LoginPanel.js:340
+#: js/LoginPanel.js:341
 msgid "Please wait"
 msgstr "Kérlek várj"
 
@@ -589,14 +589,14 @@ msgstr "{0} átvitele..."
 #: js/widgets/dialog/ImportDialog.js:210
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
-#: js/widgets/dialog/ExportDialog.js:140 js/LoginPanel.js:370
+#: js/widgets/dialog/ExportDialog.js:140 js/LoginPanel.js:371
 msgid "Errors"
 msgstr "Hibák"
 
 #: js/widgets/dialog/EditDialog.js:507
 #: js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/ImportDialog.js:210 js/widgets/dialog/ExportDialog.js:140
-#: js/LoginPanel.js:370
+#: js/LoginPanel.js:371
 msgid "Please fix the errors noted."
 msgstr "Javítsd a jegyzett hibákat."
 
@@ -1476,6 +1476,10 @@ msgstr "Kép betöltése sikertelen. Értesítse a redszergazdáját"
 msgid "Software Version"
 msgstr "Szoftver verzió"
 
+#: js/ux/PopupWindowManager.js:153
+msgid "The window you want to work with is backgrounded. Your browser does't support to forground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
+msgstr ""
+
 #: js/ux/ConnectionStatus.js:56
 msgid "online"
 msgstr "online"
@@ -1644,11 +1648,11 @@ msgstr "Tine 2.0 Fórum"
 msgid "about {0} minutes"
 msgstr "kb. {0} perc"
 
-#: js/LoginPanel.js:196 js/LoginPanel.js:412
+#: js/LoginPanel.js:196 js/LoginPanel.js:413
 msgid "Tine 2.0 needs your help"
 msgstr "Tine 2.0-nek szüksége van a segítségedre"
 
-#: js/LoginPanel.js:198 js/LoginPanel.js:414
+#: js/LoginPanel.js:198 js/LoginPanel.js:415
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "Rendszeresen szükségünk van a visszajelzésedre, hogy a Tine 2.0 következő kiadása az igényeidet minnél jobban kielégítse. Segíts nekünk és magadnak ezekben résztvéve:"
 
@@ -1664,43 +1668,43 @@ msgstr "Nyelvek"
 msgid "Duration"
 msgstr "Időtartam"
 
-#: js/LoginPanel.js:267
+#: js/LoginPanel.js:268
 msgid "Browser incompatible"
 msgstr "Böngésző nem kompatibilis"
 
-#: js/LoginPanel.js:269
+#: js/LoginPanel.js:270
 msgid "Your browser is not supported by Tine 2.0."
 msgstr "A böngésződet nem támogatja a Tine 2.0."
 
-#: js/LoginPanel.js:274
+#: js/LoginPanel.js:275
 msgid "Browser incompatible?"
 msgstr "Böngésző nem kompatibilis?"
 
-#: js/LoginPanel.js:276
+#: js/LoginPanel.js:277
 msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
 msgstr "Ismeretlen böngészőt használsz. Ez ismeretlen viselkedést okozhat."
 
-#: js/LoginPanel.js:282
+#: js/LoginPanel.js:283
 msgid "You might try one of these browsers:"
 msgstr "Az alábbi böngészőket kell megpróbálnod:"
 
-#: js/LoginPanel.js:340
+#: js/LoginPanel.js:341
 msgid "Logging you in..."
 msgstr "Bejelentkezés..."
 
-#: js/LoginPanel.js:353
+#: js/LoginPanel.js:354
 msgid "Login successful. Loading {0}..."
 msgstr "Bejelentkezés sikeres. {0} betöltése..."
 
-#: js/LoginPanel.js:358
+#: js/LoginPanel.js:359
 msgid "Login failure"
 msgstr "Hibás bejelentkezés"
 
-#: js/LoginPanel.js:359
+#: js/LoginPanel.js:360
 msgid "Your username and/or your password are wrong!!!"
 msgstr "A felhasználóneved és/vagy a jelszavad hibás!!!"
 
-#: js/LoginPanel.js:385
+#: js/LoginPanel.js:386
 msgid "Please enter your login data"
 msgstr "Írd be a bejelentkezési adataidat"
 

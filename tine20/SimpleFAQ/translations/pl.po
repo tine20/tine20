@@ -38,6 +38,18 @@ msgstr "Wewnętrzny"
 msgid "Public"
 msgstr "Publiczny"
 
+#: Setup/Initialize.php:35
+msgid "All FAQs of my FAQ Lists"
+msgstr "Wszystkie pytania z mojej listy pytań"
+
+#: Setup/Initialize.php:42
+msgid "Last modified by me"
+msgstr "Ostatnio zmodyfikowane przeze mnie"
+
+#: Setup/Initialize.php:43
+msgid "All FAQs that I have last modified"
+msgstr "Wszystkie pytania, które ostatnio zmieniłam/em"
+
 #: Preference.php:28
 msgid "All my FAQs"
 msgstr "Wszystkie moje pytania"
@@ -58,52 +70,67 @@ msgstr "Domyślna lista pytań"
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Domyślna lista pytań, do której można dodawać pytania"
 
-#: Setup/Initialize.php:35
-msgid "All FAQs of my FAQ Lists"
-msgstr "Wszystkie pytania z mojej listy pytań"
-
-#: Setup/Initialize.php:42
-msgid "Last modified by me"
-msgstr "Ostatnio zmodyfikowane przeze mnie"
-
-#: Setup/Initialize.php:43
-msgid "All FAQs that I have last modified"
-msgstr "Wszystkie pytania, które ostatnio zmieniłam/em"
-
-#: js/FaqStatus.js:26
-#: js/SimpleFAQ-FAT-debug.js:405
-#: js/SimpleFAQ-FAT-debug.js:920
-#: js/SimpleFAQ-FAT-debug.js:952
-#: js/SimpleFAQ-FAT-debug.js:1047
-#: js/SimpleFAQ-FAT-debug.js:1192
-#: js/FaqGridDetailsPanel.js:205
-#: js/SimpleFAQ-FAT.js:6
-#: js/AdminPanel.js:93
-#: js/AdminPanel.js:125
-#: js/FaqStatusFilterModel.js:27
+#: js/FaqStatusFilterModel.js:27 js/AdminPanel.js:93 js/AdminPanel.js:125
+#: js/FaqStatus.js:26 js/FaqGridDetailsPanel.js:205
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "Status pytań"
 msgstr[1] "Statusy pytań"
 msgstr[2] "Statusów pytań"
 
-#: js/FaqStatus.js:141
-#: js/SimpleFAQ-FAT-debug.js:1162
-msgid "Add a new FAQ Status..."
-msgstr "Nowy status pytania..."
+#: js/FaqTypeFilterModel.js:27 js/AdminPanel.js:97 js/AdminPanel.js:132
+#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:210
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] "Typ FAQ"
+msgstr[1] "Typy FAQ"
+msgstr[2] "Typy FAQ"
 
-#: js/SimpleFAQ-FAT-debug.js:38
-#: js/SimpleFAQ-FAT-debug.js:141
-#: js/SimpleFAQ-FAT.js:6
-#: js/Model.js:33
-#: js/SimpleFAQ.js:19
+#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:157
+#: js/FaqGridPanel.js:120
+msgid "Question"
+msgstr "Pytanie"
+
+#: js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr "Wpisz pytanie..."
+
+#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:163
+#: js/FaqGridPanel.js:127
+msgid "Answer"
+msgstr "Odpowiedź"
+
+#: js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr "Wpisz odpowiedź..."
+
+#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
+msgid "Type"
+msgstr "Typ"
+
+#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
+msgid "Status"
+msgstr "Status"
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr "Domyślne"
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr "Dodaj nowy typ FAQ"
+
+#: js/SimpleFAQ.js:19 js/Model.js:33
 msgid "FAQ"
 msgid_plural "FAQs"
 msgstr[0] "Pytanie"
 msgstr[1] "Pytania"
 msgstr[2] "Pytania"
 
-#: js/SimpleFAQ-FAT-debug.js:42
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr "Nowy status pytania..."
+
 #: js/Model.js:37
 msgid "FAQ List, "
 msgid_plural "FAQ Lists"
@@ -111,125 +138,30 @@ msgstr[0] "Lista pytań"
 msgstr[1] "Listy pytań"
 msgstr[2] "Listy pytań"
 
-#: js/SimpleFAQ-FAT-debug.js:77
-#: js/SimpleFAQ-FAT.js:6
 #: js/Model.js:72
 msgid "Quick search"
 msgstr "Szybkie wyszukiwanie"
 
-#: js/SimpleFAQ-FAT-debug.js:303
-#: js/SimpleFAQ-FAT-debug.js:388
-#: js/FaqGridDetailsPanel.js:103
-#: js/FaqGridDetailsPanel.js:188
-#: js/SimpleFAQ-FAT.js:6
+#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
 msgid "FAQ Infos"
 msgstr "Informacje o FAQ"
 
-#: js/SimpleFAQ-FAT-debug.js:357
-#: js/SimpleFAQ-FAT-debug.js:615
-#: js/SimpleFAQ-FAT-debug.js:747
-#: js/FaqGridDetailsPanel.js:157
-#: js/SimpleFAQ-FAT.js:6
-#: js/FaqEditDialog.js:108
-#: js/FaqGridPanel.js:120
-msgid "Question"
-msgstr "Pytanie"
-
-#: js/SimpleFAQ-FAT-debug.js:363
-#: js/SimpleFAQ-FAT-debug.js:622
-#: js/SimpleFAQ-FAT-debug.js:754
-#: js/FaqGridDetailsPanel.js:163
-#: js/SimpleFAQ-FAT.js:6
-#: js/FaqEditDialog.js:115
-#: js/FaqGridPanel.js:127
-msgid "Answer"
-msgstr "Odpowiedź"
-
-#: js/SimpleFAQ-FAT-debug.js:369
-#: js/SimpleFAQ-FAT-debug.js:596
-#: js/FaqGridDetailsPanel.js:169
-#: js/SimpleFAQ-FAT.js:6
-#: js/FaqGridPanel.js:101
+#: js/FaqGridDetailsPanel.js:169 js/FaqGridPanel.js:101
 msgid "Tags"
 msgstr "Znaczniki"
 
-#: js/SimpleFAQ-FAT-debug.js:395
 #: js/FaqGridDetailsPanel.js:195
-#: js/SimpleFAQ-FAT.js:6
 msgid "Creation Time"
 msgstr "Czas użytkownika"
 
-#: js/SimpleFAQ-FAT-debug.js:400
 #: js/FaqGridDetailsPanel.js:200
-#: js/SimpleFAQ-FAT.js:6
 msgid "Created By"
 msgstr "Utworzone przez"
 
-#: js/SimpleFAQ-FAT-debug.js:410
-#: js/SimpleFAQ-FAT-debug.js:924
-#: js/SimpleFAQ-FAT-debug.js:959
-#: js/SimpleFAQ-FAT-debug.js:1332
-#: js/SimpleFAQ-FAT-debug.js:1480
-#: js/FaqGridDetailsPanel.js:210
-#: js/SimpleFAQ-FAT.js:6
-#: js/FaqType.js:26
-#: js/FaqTypeFilterModel.js:27
-#: js/AdminPanel.js:97
-#: js/AdminPanel.js:132
-msgid "FAQ Type"
-msgid_plural "FAQ Types"
-msgstr[0] "Typ FAQ"
-msgstr[1] "Typy FAQ"
-msgstr[2] "Typy FAQ"
-
-#: js/SimpleFAQ-FAT-debug.js:432
 #: js/FaqGridDetailsPanel.js:232
-#: js/SimpleFAQ-FAT.js:6
 msgid "No answer yet"
 msgstr "Na razie brak odpowiedzi"
 
-#: js/SimpleFAQ-FAT-debug.js:589
-#: js/SimpleFAQ-FAT.js:6
 #: js/FaqGridPanel.js:94
 msgid "FAQ id"
 msgstr "Id FAQ"
-
-#: js/SimpleFAQ-FAT-debug.js:603
-#: js/SimpleFAQ-FAT-debug.js:775
-#: js/SimpleFAQ-FAT.js:6
-#: js/FaqEditDialog.js:136
-#: js/FaqGridPanel.js:108
-msgid "Status"
-msgstr "Status"
-
-#: js/SimpleFAQ-FAT-debug.js:609
-#: js/SimpleFAQ-FAT-debug.js:763
-#: js/SimpleFAQ-FAT.js:6
-#: js/FaqEditDialog.js:124
-#: js/FaqGridPanel.js:114
-msgid "Type"
-msgstr "Typ"
-
-#: js/SimpleFAQ-FAT-debug.js:748
-#: js/SimpleFAQ-FAT.js:6
-#: js/FaqEditDialog.js:109
-msgid "Enter a question..."
-msgstr "Wpisz pytanie..."
-
-#: js/SimpleFAQ-FAT-debug.js:755
-#: js/SimpleFAQ-FAT.js:6
-#: js/FaqEditDialog.js:116
-msgid "Enter a answer..."
-msgstr "Wpisz odpowiedź..."
-
-#: js/SimpleFAQ-FAT-debug.js:932
-#: js/SimpleFAQ-FAT.js:6
-#: js/AdminPanel.js:105
-msgid "Defaults"
-msgstr "Domyślne"
-
-#: js/SimpleFAQ-FAT-debug.js:1450
-#: js/FaqType.js:144
-msgid "Add a new FAQ Type..."
-msgstr "Dodaj nowy typ FAQ"
-

@@ -142,7 +142,7 @@ msgstr "Löschen"
 msgid "Add Account"
 msgstr "Konto hinzufügen"
 
-#: js/GridPanel.js:302 js/GridPanel.js:1213 js/GridPanel.js:1229
+#: js/GridPanel.js:302 js/GridPanel.js:1241 js/GridPanel.js:1257
 #: js/MessageDisplayDialog.js:79
 msgid "Print Preview"
 msgstr "Druck Vorschau"
@@ -193,8 +193,8 @@ msgstr "Gesendet"
 msgid "Received"
 msgstr "Empfangen"
 
-#: js/GridPanel.js:524 js/TreeContextMenu.js:45 js/TreeContextMenu.js:99
-#: js/TreeContextMenu.js:102 js/TreeContextMenu.js:105
+#: js/GridPanel.js:524 js/TreeContextMenu.js:45 js/TreeContextMenu.js:100
+#: js/TreeContextMenu.js:103 js/TreeContextMenu.js:106
 #: js/FolderFilterModel.js:30 js/Model.js:52 js/Model.js:493
 msgid "Folder"
 msgid_plural "Folders"
@@ -217,21 +217,21 @@ msgstr "Weitergeleitet"
 msgid "Recent"
 msgstr "Neu"
 
-#: js/GridPanel.js:1096
+#: js/GridPanel.js:1087 js/GridPanel.js:1116
 msgid "Quota unknown"
 msgstr "Quota unbekannt"
 
-#: js/GridPanel.js:1112
-msgid "{0} left"
-msgstr "{0} übrig"
+#: js/GridPanel.js:1100
+msgid "{0} %"
+msgstr ""
 
-#: js/GridPanel.js:1118
+#: js/GridPanel.js:1107
 msgid "Your quota"
 msgstr "Ihre Quota"
 
-#: js/GridPanel.js:1119
-msgid "Current usage: {0} of {1}"
-msgstr "Speicherverbrauch: {0} von {1}"
+#: js/GridPanel.js:1108
+msgid "{0} available (total: {1})"
+msgstr ""
 
 #: js/FolderSelectPanel.js:75
 msgid "Cancel"
@@ -299,51 +299,51 @@ msgstr "Aktualisiere {0}"
 msgid "Empty Folder"
 msgstr "Ordner leeren"
 
-#: js/TreeContextMenu.js:94
+#: js/TreeContextMenu.js:95
 msgid "Add Folder"
 msgstr "Ordner hinzufügen"
 
-#: js/TreeContextMenu.js:99
+#: js/TreeContextMenu.js:100
 msgid "New {0}"
 msgstr "Neuer {0}"
 
-#: js/TreeContextMenu.js:99
+#: js/TreeContextMenu.js:100
 msgid "Please enter the name of the new {0}:"
 msgstr "Bitte tragen Sie einen Namen für den neuen {0} ein:"
 
-#: js/TreeContextMenu.js:102
+#: js/TreeContextMenu.js:103
 msgid "No {0} added"
 msgstr "Kein {0} hinzugefügt"
 
-#: js/TreeContextMenu.js:102
+#: js/TreeContextMenu.js:103
 msgid "You have to supply a {0} name!"
 msgstr "Sie müssen einen {0} Namen eingeben!"
 
-#: js/TreeContextMenu.js:105
+#: js/TreeContextMenu.js:106
 msgid "Please wait"
 msgstr "Bitte warten"
 
-#: js/TreeContextMenu.js:105
+#: js/TreeContextMenu.js:106
 msgid "Creating {0}..."
 msgstr "Erzeuge {0} ..."
 
-#: js/TreeContextMenu.js:134
+#: js/TreeContextMenu.js:135
 msgid "Edit Account"
 msgstr "Konto bearbeiten"
 
-#: js/TreeContextMenu.js:162
+#: js/TreeContextMenu.js:163
 msgid "Set Vacation Message"
 msgstr "Abwesenheitsnotiz setzen"
 
-#: js/TreeContextMenu.js:178
+#: js/TreeContextMenu.js:179
 msgid "Set Filter Rules"
 msgstr "Filterregeln definieren"
 
-#: js/TreeContextMenu.js:192
+#: js/TreeContextMenu.js:193
 msgid "Mark Folder as read"
 msgstr "Ordner als gelesen markieren"
 
-#: js/TreeContextMenu.js:229
+#: js/TreeContextMenu.js:230
 msgid "Update Folder List"
 msgstr "Ordnerliste aktualisieren"
 
@@ -464,7 +464,7 @@ msgstr "IMAP Zugangsdaten für {0}"
 msgid "Credentials"
 msgstr "Zugangsdaten"
 
-#: js/Felamimail.js:711 js/Felamimail.js:734
+#: js/Felamimail.js:711 js/Felamimail.js:744
 msgid "IMAP Error"
 msgstr "IMAP Fehler"
 
@@ -472,31 +472,39 @@ msgstr "IMAP Fehler"
 msgid "No connection to IMAP server."
 msgstr "Keine Verbindung zum IMAP Server"
 
-#: js/Felamimail.js:735
+#: js/Felamimail.js:728
+msgid "IMAP Credentials Error"
+msgstr ""
+
+#: js/Felamimail.js:729
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr ""
+
+#: js/Felamimail.js:745
 msgid "One of your folders was deleted from an other client, please reload you browser"
 msgstr "Ein Ordner wurde von einem anderen Klienten gelöscht. Bitte aktualisieren Sie Ihren Browser."
 
-#: js/Felamimail.js:763
+#: js/Felamimail.js:773
 msgid "SMTP Error"
 msgstr "SMTP Fehler"
 
-#: js/Felamimail.js:764
+#: js/Felamimail.js:774
 msgid "No connection to SMTP server."
 msgstr "Keine Verbindung zum SMTP Server"
 
-#: js/Felamimail.js:772
+#: js/Felamimail.js:782
 msgid "Sieve Error"
 msgstr "Sieve Fehler"
 
-#: js/Felamimail.js:773
+#: js/Felamimail.js:783
 msgid "No connection to Sieve server."
 msgstr "Keine Verbindung zum Sieve Server."
 
-#: js/Felamimail.js:781
+#: js/Felamimail.js:791
 msgid "Save Sieve Script Error"
 msgstr "Fehler beim Speichern des Sieve-Skriptes"
 
-#: js/Felamimail.js:782
+#: js/Felamimail.js:792
 msgid "Could not save script on Sieve server."
 msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 
@@ -956,6 +964,12 @@ msgstr "Entwurf"
 #: Controller/Message/Flags.php:28
 msgid "Flagged"
 msgstr "Markiert"
+
+#~ msgid "{0} left"
+#~ msgstr "{0} übrig"
+
+#~ msgid "Current usage: {0} of {1}"
+#~ msgstr "Speicherverbrauch: {0} von {1}"
 
 #~ msgid "wrote"
 #~ msgstr "hat geschrieben"

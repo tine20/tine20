@@ -60,11 +60,11 @@ msgstr "Servidor de Archivos Encendido"
 msgid "Fileserver Access Off"
 msgstr "Servidor de Archivos Apagado"
 
-#: js/CourseGridPanel.js:214
+#: js/CourseGridPanel.js:211
 msgid "Failed"
 msgstr "Falló"
 
-#: js/CourseGridPanel.js:215
+#: js/CourseGridPanel.js:212
 msgid "Some error occured while trying to update the courses."
 msgstr "Algún error ocurrió mientras intentaba actualizar los cursos."
 
