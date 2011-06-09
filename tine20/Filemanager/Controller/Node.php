@@ -43,7 +43,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract
      *
      * don't use the constructor. use the singleton
      */
-    private function __construct() {
+    private function __construct() 
+    {
         $this->_currentAccount = Tinebase_Core::getUser();
         $this->_backend = Tinebase_FileSystem::getInstance();
     }
@@ -68,5 +69,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract
         }
         
         return self::$_instance;
+    }
+    
+    /**
+     * search tree nodes
+     * 
+     * @param Tinebase_Model_Tree_NodeFilter $_filter
+     * @param Tinebase_Record_Interface $_pagination
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    public function search(Tinebase_Model_Tree_NodeFilter $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
+    {
+        $result = $this->_backend->searchNodes($_filter, $_pagination);
+        return $result;
     }
 }
