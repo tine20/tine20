@@ -1099,7 +1099,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 left = accountInbox.get('quota_limit') - accountInbox.get('quota_usage'),
                 text = String.format(this.app.i18n._('{0} %'), Math.round(usage * 100));
             this.quotaBar.updateProgress(usage, text);
-            this.quotaBar.setWidth(50);
+            this.quotaBar.setWidth(75);
             
             Ext.QuickTips.register({
                 target:  this.quotaBar,
