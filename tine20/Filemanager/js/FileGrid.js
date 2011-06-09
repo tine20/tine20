@@ -178,7 +178,7 @@ Tine.Filemanager.FileGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     
     /**
-     * returns add action
+     * returns add action / test
      * 
      * @return {Object} add action config
      */
