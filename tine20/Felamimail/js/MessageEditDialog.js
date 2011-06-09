@@ -96,7 +96,7 @@ Ext.namespace('Tine.Felamimail');
      * validation error message
      * @type String
      */
-     validationErrorMessage: '',
+    validationErrorMessage: '',
     
     /**
      * @private

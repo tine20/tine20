@@ -51,21 +51,21 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     input_file: null,
     /**
-     * @property originalHandler
+     * @property handler
      * @type Function
      * The handler originally defined for the Ext.Button during construction using the "handler" config option.
      * We need to null out the "handler" property so that it is only called when a file is selected.
      * @private
      */
-    originalHandler: null,
+    handler: null,
     /**
-     * @property originalScope
+     * @property scope
      * @type Object
      * The scope originally defined for the Ext.Button during construction using the "scope" config option.
-     * While the "scope" property doesn't need to be nulled, to be consistent with originalHandler, we do.
+     * While the "scope" property doesn't need to be nulled, to be consistent with handler, we do.
      * @private
      */
-    originalScope: null,
+    scope: null,
     
     /*
      * Protected Ext.Button overrides
@@ -74,8 +74,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @see Ext.Button.initComponent
      */
     init: function(cmp){
-        this.originalHandler = cmp.handler || null;
-        this.originalScope = cmp.scope || window;
+        if(cmp.handler) this.handler = cmp.handler;
+        if(cmp.scope) this.scope = cmp.scope || window;
         cmp.handler = null;
         cmp.scope = null;
         
@@ -282,8 +282,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.files[0].type = this.getFileCls();
         }
         
-        if (this.originalHandler) {
-            this.originalHandler.call(this.originalScope, this);
+        if (this.handler) {
+            this.handler.call(this.scope, this);
         }
     },
     

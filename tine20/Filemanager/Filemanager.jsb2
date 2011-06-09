@@ -12,7 +12,15 @@
       "isDebug": true,
       "fileIncludes": [
         {
-          "text": "Application.js",
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "Filemanager.js",
+          "path": "js/"
+        },
+        {
+          "text": "FileGrid.js",
           "path": "js/"
         }
       ]
