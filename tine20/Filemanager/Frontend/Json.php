@@ -33,6 +33,8 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $filter
      * @param  array $paging
      * @return array
+     * 
+     * @todo perhaps we can add searchCount() to the controller later and replace the count method TOTALCOUNT_COUNTRESULT
      */
     public function searchNodes($filter, $paging)
     {
@@ -42,7 +44,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
-        $result = $this->_search($filter, $paging, Filemanager_Controller_Node::getInstance(), 'Tinebase_Model_Tree_NodeFilter');
+        $result = $this->_search($filter, $paging, Filemanager_Controller_Node::getInstance(), 'Tinebase_Model_Tree_NodeFilter', FALSE, self::TOTALCOUNT_COUNTRESULT);
         
         return $result;
     }
