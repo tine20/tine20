@@ -19,7 +19,7 @@ Ext.ns('Ext.ux.file');
  */
 Ext.ux.file.Uploader = function(config) {
     Ext.apply(this, config);
-    
+
     Ext.ux.file.Uploader.superclass.constructor.apply(this, arguments);
     
     this.addEvents(
@@ -62,33 +62,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * a file selector
      */
     fileSelector: null,
-    /**
-     * @cfg {String} chunkName the prefix name for the uploaded chunks on the server
-     */
-    chunkName: 'tine_temp_chunks_',
     
-    /**
-     * The following is a conservative set of three functions you can use to test host objects.
-     * These reduce the chance of false positives. You can make them more permissive if you 
-     * learn about a browser with a different typeof result that should be allowed to pass the test.
-     *
-     * @see http://michaux.ca/articles/feature-detection-state-of-the-art-browser-scripting
-     */
-    isHostMethod: function (object, property) {
-        var t = typeof object[property];
-        
-        return t == 'function' || (!!(t == 'object' && object[property])) || t == 'unknown';
-    },
-    
-    isHostCollection: function (object, property) {
-        var t = typeof object[property];  
-        
-        return (!!(t == 'object' && object[property])) || t == 'function';
-    },
-    
-    isHostObject: function (object, property) {
-        return !!(typeof(object[property]) == 'object' && object[property]);
-    },
     
     /**
      * creates a form where the upload takes place in
@@ -122,11 +96,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             (! Ext.isGecko && window.XMLHttpRequest && window.File && window.FileList) || // safari, chrome, ...?
             (Ext.isGecko && window.FileReader) // FF
         ) && file) {
-            if (this.isHostMethod('Blob', 'slice')) {
-                return this.html5ChunkedUpload(file);
-            } else {
-                return this.html5upload(file);
-            }
+            return this.html5upload(file);
         } else {
             return this.html4upload();
         }
@@ -187,119 +157,6 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         upload['onprogress'] = this.onUploadProgress.createDelegate(this, [fileRecord], true);
         
         return fileRecord;
-    },
-    
-    /**
-     * 2011-03-04 Current Browsers implemetation state of:
-     *  http://www.w3.org/TR/FileAPI
-     *  
-     *  Interface    : File | Blob                         | FileReader | FileReaderSync | FileError
-     *  FF 3         : yes  | no                           | yes        | no             | yes      
-     *  FF 4 beta 10 : yes  | yes                          | yes        | no             | yes      
-     *  safari       : yes  | yes (without slice method)   | no         | no             | no       
-     *  chrome       : yes  | yes                          | yes        | no             | yes      
-     * 
-     * Testet on Mac OS 10.6
-     */
-    html5ChunkedUpload: function(file) {
-        var fileRecord = new Ext.ux.file.Uploader.file({
-            name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
-            type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
-            size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
-            status: 'uploading',
-            progress: 0,
-            input: this.getInput()
-        });
-        
-        // get the overall filesize
-        this.uploadFileSize = fileRecord.get('size');
-        
-        // get the original filename
-        this.uploadFilename = fileRecord.get('name');
-        
-        // get the original filetype
-        this.uploadFiletype = fileRecord.get('type');
-        
-        // get the amount of chunks
-        this.chunkCount = parseInt(this.uploadFileSize / this.maxFileSize, 10);
-        
-        // initialize some class member
-        this.actualChunkNumber = 0;
-        this.chunks = [];
-        
-        // prepare the chunks
-        for (i = 0; i <= this.chunkCount; i++) {
-            if (i === this.chunkCount) {
-                this.chunks[i] = file.slice((i * this.maxFileSize), this.uploadFileSize);
-            } else {
-                this.chunks[i] = file.slice((i * this.maxFileSize), this.maxFileSize);
-            }
-        }
-        
-        // start the first part of the chunked upload
-        this.chunkUpload(fileRecord);
-    },
-    
-    /**
-     * chunked upload method
-     *
-     * Need this to call it from the success method of ajax request
-     */
-    chunkUpload : function(fileRecord) {
-        // Upload chunk if there is one left.
-        if(this.actualChunkNumber <= this.chunkCount) {
-            this.conn = new Ext.data.Connection({
-                disableCaching: true,
-                method: 'POST',
-                //url: this.url + '?method=Tinebase.uploadTempFile',
-                url: 'upload.php',
-                timeout: 300000, // 5 mins
-                defaultHeaders: {
-                    "Content-Type"          : "application/x-www-form-urlencoded",
-                    "X-Tine20-Request-Type" : "HTTP",
-                    "X-Requested-With"      : "XMLHttpRequest"
-                }
-            });
-            
-            this.conn.request({
-                headers: {
-                    "X-Chunk-Count"         : this.chunks.length,
-                    "X-Chunk-Number"        : this.actualChunkNumber,
-                    "X-Chunk-Size"          : this.chunks[this.actualChunkNumber].size,
-                    "X-Chunk-Name"          : this.chunkName
-                },
-                xmlData: this.chunks[this.actualChunkNumber],
-                success: this.onChunkUploadSuccess.createDelegate(this, [fileRecord], true),
-                failure: this.onChunkUploadFail.createDelegate(this, [fileRecord], true),
-                fileRecord: fileRecord
-            });
-        } else {
-            // There are no more chunk's. Now tell the server that upload is finished
-            // and chunk's can concatinated.
-            this.conn = new Ext.data.Connection({
-                disableCaching: true,
-                method: 'POST',
-                //url: this.url + '?method=Tinebase.uploadTempFile',
-                url: 'upload.php',
-                timeout: 300000, // 5 mins
-                defaultHeaders: {
-                    "Content-Type"          : "application/x-www-form-urlencoded",
-                    "X-Tine20-Request-Type" : "HTTP",
-                    "X-Requested-With"      : "XMLHttpRequest"
-                }
-            });
-            
-            this.conn.request({
-                headers: {
-                    "X-Chunk-finished"      : true,
-                    "X-Chunk-Count"         : this.chunks.length,
-                    "X-Chunk-File-Name"     : this.uploadFilename,
-                    "X-Chunk-File-Size"     : this.uploadFileSize,
-                    "X-Chunk-File-Type"     : this.uploadFileType,
-                    "X-Chunk-Name"          : this.chunkName
-                }
-            });
-        }
     },
     
     /**
@@ -379,24 +236,6 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         this.fireEvent('uploadfailure', this, fileRecord);
     },
     
-    /**
-     * executed if a chunk got uploaded successfully
-     */
-    onChunkUploadSuccess: function(response, options, param) {
-        response = Ext.util.JSON.decode(response.responseText);
-        if(response.success !== true) {
-            this.onChunkUploadFail(response, options, param);
-        } else {
-            this.actualChunkNumber++;
-            this.chunkUpload();
-        }
-    },
-    
-    /**
-     * executed if a chunk upload failed
-     */
-    onChunkUploadFail: Ext.emptyFn,
-    
     // private
     getInput: function() {
         if (! this.input) {
@@ -424,3 +263,4 @@ Ext.ux.file.Uploader.file = Ext.data.Record.create([
 Ext.ux.file.Uploader.file.getFileData = function(file) {
     return Ext.copyTo({}, file.data, ['tempFile', 'name', 'path', 'size', 'type']);
 };
+    
