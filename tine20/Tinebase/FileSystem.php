@@ -437,6 +437,12 @@ class Tinebase_FileSystem
         return $treeNode;
     }
     
+    /**
+     * get tree node children
+     * 
+     * @param string $_nodeId
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
     protected function _getTreeNodeChildren($_nodeId)
     {
         $nodeId = $_nodeId instanceof Tinebase_Model_Tree_Node ? $_nodeId->getId() : $_nodeId;
@@ -450,9 +456,22 @@ class Tinebase_FileSystem
             )
         ));
         
-        $children = $this->_treeNodeBackend->search($searchFilter);
+        $children = $this->searchNodes($searchFilter);
         
         return $children;
+    }
+    
+    /**
+     * search tree nodes
+     * 
+     * @param Tinebase_Model_Tree_NodeFilter $_filter
+     * @param Tinebase_Record_Interface $_pagination
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    public function searchNodes(Tinebase_Model_Tree_NodeFilter $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
+    {
+        $result = $this->_treeNodeBackend->search($_filter, $_pagination);
+        return $result;
     }
     
     /**
