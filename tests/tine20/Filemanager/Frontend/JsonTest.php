@@ -82,7 +82,6 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     public function testSearchNodes()
     {
         $personalContainer = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Filemanager');
-        print_r($personalContainer->toArray());
         $path = $this->_fsController->getApplicationBasePath(
             Tinebase_Application::getInstance()->getApplicationByName('Filemanager'),
             Tinebase_Model_Container::TYPE_PERSONAL
@@ -94,7 +93,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'container_id', 'operator' => 'in', 'value' => array(array('path' => '/personal/' . $personalContainer->getId())))
         );
         $result = $this->_json->searchNodes($filter, array());
-        print_r($result);
+        
         $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals('unittestdir', $result['results'][0]['name']);
     }
 }		
