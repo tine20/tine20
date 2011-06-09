@@ -6,7 +6,7 @@
  * @subpackage  FileSystem
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -89,9 +89,9 @@ class Tinebase_FileSystem
             $this->mkDir($sharedBasePath);
         }
         
-        $sharedBasePath = '/' . $application->getId() . '/' . Tinebase_Model_Container::TYPE_PERSONAL;
-        if (!$this->fileExists($sharedBasePath)) {
-            $this->mkDir($sharedBasePath);
+        $personalBasePath = '/' . $application->getId() . '/' . Tinebase_Model_Container::TYPE_PERSONAL;
+        if (!$this->fileExists($personalBasePath)) {
+            $this->mkDir($personalBasePath);
         }
     }
     
