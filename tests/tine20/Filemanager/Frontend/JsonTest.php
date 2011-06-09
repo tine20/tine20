@@ -26,11 +26,18 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     protected $_objects = array();
     
     /**
-     * Tree
+     * uit
      *
      * @var Filemanager_Frontend_Json
      */
     protected $_json;
+    
+    /**
+     * uit
+     *
+     * @var Tinebase_FileSystem
+     */
+    protected $_fsController;
     
     /**
      * Runs the test methods of this class.
@@ -52,6 +59,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $this->_json = new Filemanager_Frontend_Json();
+        $this->_fsController = Tinebase_FileSystem::getInstance();
     }
 
     /**
@@ -62,5 +71,30 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
+        foreach ($this->_objects['paths'] as $path) {
+            $this->_fsController->rmDir($path);
+        }
+    }
+    
+    /**
+     * test search nodes
+     */
+    public function testSearchNodes()
+    {
+        $personalContainer = Tinebase_Container::getInstance()->getDefaultContainer(Tinebase_Core::getUser()->getId(), 'Filemanager');
+        print_r($personalContainer->toArray());
+        $path = $this->_fsController->getApplicationBasePath(
+            Tinebase_Application::getInstance()->getApplicationByName('Filemanager'),
+            Tinebase_Model_Container::TYPE_PERSONAL
+        ) . '/' . $personalContainer->getId() . '/unittestdir';
+        $this->_objects['paths'][] = $path;
+        $this->_fsController->mkDir($path);
+        
+        $filter = array(
+            array('field' => 'container_id', 'operator' => 'in', 'value' => array(array('path' => '/personal/' . $personalContainer->getId())))
+        );
+        $result = $this->_json->searchNodes($filter, array());
+        print_r($result);
+        $this->assertEquals(1, $result['totalcount']);
     }
 }		

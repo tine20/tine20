@@ -5,7 +5,7 @@
  * @package     Filemanager
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Lars Kneschke <l.kneschke@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
@@ -38,13 +38,42 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchNodes($filter, $paging)
     {
-        foreach ($filter as &$filterData) {
+        $nodeFilter = $this->_convertContainerToParentIdFilter($filter);
+        $result = $this->_search($nodeFilter, $paging, Filemanager_Controller_Node::getInstance(), 'Tinebase_Model_Tree_NodeFilter', FALSE, self::TOTALCOUNT_COUNTRESULT);
+        
+        return $result;
+    }
+    
+    /**
+     * convert generic container filter (with path) to node filter (with parent id)
+     * 
+     * @param array $_filter
+     * @return array
+     */
+    protected function _convertContainerToParentIdFilter($_filter)
+    {
+        $basePath = Tinebase_FileSystem::getInstance()->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName('Filemanager'));
+        
+        $result = array();
+        foreach ($_filter as $filterData) {
             if ($filterData['field'] === 'container_id') {
+                $parentIdFilter = array('field' => 'parent_id', 'operator' => 'in');
                 $filterData['field'] = 'parent_id';
+                $parentIds = array();
+                foreach ((array) $filterData['value'] as $value) {
+                    if (array_key_exists('path', $value)) {
+                        $path = $basePath . $value['path'];
+                        $node = Tinebase_FileSystem::getInstance()->stat($path);
+                        $parentIds[] = $node->getId();
+                    }
+                }
+                $parentIdFilter['value'] = $parentIds;
+                $result[] = $parentIdFilter;
+                
+            } else {
+                $result[] = $filterData;
             }
         }
-        
-        $result = $this->_search($filter, $paging, Filemanager_Controller_Node::getInstance(), 'Tinebase_Model_Tree_NodeFilter', FALSE, self::TOTALCOUNT_COUNTRESULT);
         
         return $result;
     }
