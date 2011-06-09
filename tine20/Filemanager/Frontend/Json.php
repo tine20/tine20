@@ -6,7 +6,7 @@
  * @subpackage  Frontend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -25,5 +25,25 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @var string
      */
-    protected $_applicationName = 'Filemanager';    
+    protected $_applicationName = 'Filemanager';
+    
+    /**
+     * search file/directory nodes
+     *
+     * @param  array $filter
+     * @param  array $paging
+     * @return array
+     */
+    public function searchNodes($filter, $paging)
+    {
+        foreach ($filter as &$filterData) {
+            if ($filterData['field'] === 'container_id') {
+                $filterData['field'] = 'parent_id';
+            }
+        }
+        
+        $result = $this->_search($filter, $paging, Filemanager_Controller_Node::getInstance(), 'Tinebase_Model_Tree_NodeFilter');
+        
+        return $result;
+    }
 }
