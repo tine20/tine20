@@ -26,6 +26,33 @@ msgstr "Gemeinsame Ordner verwalten"
 msgid "Create new shared folders"
 msgstr "Neue gemeinsame Ordner anlegen und verwalten"
 
-#: js/Application.js:29
+#: js/Filemanager.js:29
 msgid "Filemanager"
 msgstr "Dateimanager"
+
+msgid "user file"
+msgstr "Datei"
+
+msgid "user files"
+msgstr "Dateien"
+
+msgid "user file folder"
+msgstr "Ordner"
+
+msgid "user file folders"
+msgstr "Ordner"
+
+msgid "Upload"
+msgstr "Hochladen"
+
+msgid "Folder Up"
+msgstr "Aufwärts"
+
+msgid "Save locally"
+msgstr "Lokal speichern"
+
+msgid "Create Folder"
+msgstr "Ordner anlegen"
+
+msgid "Delete"
+msgstr "Löschen"
