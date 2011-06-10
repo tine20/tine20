@@ -74,26 +74,52 @@ class Tinebase_FileSystem
         return self::$_instance;
     }
     
-    public function initializeApplication($_applicationId)
+    /**
+     * init application base paths
+     * 
+     * @param Tinebase_Model_Application|string $_application
+     */
+    public function initializeApplication($_application)
     {
-        $application = $_applicationId instanceof Tinebase_Model_Application ? $_applicationId : Tinebase_Application::getInstance()->getApplicationById($_applicationId);
-
         // create app root node
-        $appPath = '/' . $application->getId();
+        $appPath = $this->getApplicationBasePath($_application);
         if (!$this->fileExists($appPath)) {
             $this->mkDir($appPath);
         }
         
-        $sharedBasePath = '/' . $application->getId() . '/' . Tinebase_Model_Container::TYPE_SHARED;
+        $sharedBasePath = $this->getApplicationBasePath($_application, Tinebase_Model_Container::TYPE_SHARED);
         if (!$this->fileExists($sharedBasePath)) {
             $this->mkDir($sharedBasePath);
         }
         
-        $personalBasePath = '/' . $application->getId() . '/' . Tinebase_Model_Container::TYPE_PERSONAL;
+        $personalBasePath = $this->getApplicationBasePath($_application, Tinebase_Model_Container::TYPE_PERSONAL);
         if (!$this->fileExists($personalBasePath)) {
             $this->mkDir($personalBasePath);
         }
     }
+    
+    /**
+     * get application base path
+     * 
+     * @param Tinebase_Model_Application|string $_application
+     * @param string $_type
+     * @return string
+     */
+    public function getApplicationBasePath($_application, $_type = NULL)
+    {
+        $application = $_application instanceof Tinebase_Model_Application ? $_application : Tinebase_Application::getInstance()->getApplicationById($_application);
+        
+        $result = '/' . $application->getId();
+        if ($_type !== NULL) {
+            if (! in_array($_type, array(Tinebase_Model_Container::TYPE_SHARED, Tinebase_Model_Container::TYPE_PERSONAL))) {
+                throw new Timetracker_Exception_UnexpectedValue('Type can only be shared or personal.');
+            }
+            
+            $result .= '/' . $_type;
+        }
+        
+        return $result;
+    } 
     
     public function createContainerNode(Tinebase_Model_Container $_container)
     {

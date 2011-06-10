@@ -15,7 +15,7 @@
  * @package     Filemanager
  * @subpackage  Controller
  */
-class Filemanager_Controller_Node extends Tinebase_Controller_Abstract
+class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implements Tinebase_Controller_SearchInterface
 {
     /**
      * application name (is needed in checkRight())
@@ -74,13 +74,28 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract
     /**
      * search tree nodes
      * 
-     * @param Tinebase_Model_Tree_NodeFilter $_filter
-     * @param Tinebase_Record_Interface $_pagination
+     * @param Tinebase_Model_Filter_FilterGroup|optional $_filter
+     * @param Tinebase_Model_Pagination|optional $_pagination
+     * @param bool $_getRelations
+     * @param bool $_onlyIds
+     * @param string|optional $_action
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    public function search(Tinebase_Model_Tree_NodeFilter $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
+    public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
         $result = $this->_backend->searchNodes($_filter, $_pagination);
         return $result;
+    }
+
+    /**
+     * Gets total count of search with $_filter
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string|optional $_action
+     * @return int
+     */
+    public function searchCount(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
+    {
+        throw new Tinebase_Exception_NotImplemented('searchCount not implemented yet');
     }
 }
