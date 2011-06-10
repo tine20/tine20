@@ -51,7 +51,6 @@ Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
  * @author      Martin Jatho <m.jatho@metaways.de>
  */
 Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
-    id: 'Filemanager_Tree',
     filterMode: 'filterToolbar',
     recordClass: Tine.Filemanager.Model.File,
     plugins: [{
