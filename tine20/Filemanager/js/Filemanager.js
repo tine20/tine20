@@ -39,7 +39,7 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
  */
 Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
-    activeContentType: 'File'
+    activeContentType: 'Node'
 });
 
     
@@ -52,7 +52,7 @@ Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
  */
 Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     filterMode: 'filterToolbar',
-    recordClass: Tine.Filemanager.Model.File,
+    recordClass: Tine.Filemanager.Model.Node,
     plugins: [{
         ptype: 'ux.browseplugin',
         multiple: true,
