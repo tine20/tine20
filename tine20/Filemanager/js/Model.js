@@ -10,13 +10,13 @@ Ext.ns('Tine.Filemanager.Model');
 
 /**
  * @namespace   Tine.Filemanager.Model
- * @class       Tine.Filemanager.Model.File
+ * @class       Tine.Filemanager.Model.Node
  * @extends     Tine.Tinebase.data.Record
  * Example record definition
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Filemanager.Model.File = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
+Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'name' },
     // TODO add more record fields here
@@ -28,7 +28,7 @@ Tine.Filemanager.Model.File = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     { name: 'description' }
 ]), {
     appName: 'Filemanager',
-    modelName: 'File',
+    modelName: 'Node',
     idProperty: 'id',
     titleProperty: 'title',
     // ngettext('example record', 'example records', n);
@@ -48,12 +48,12 @@ Tine.Filemanager.Model.File = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
  * @static
  * @return {Object} filterModel definition
  */ 
-Tine.Filemanager.Model.File.getFilterModel = function() {
+Tine.Filemanager.Model.Node.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Filemanager');
        
 	return [ 	
 	    {label : _('Quick search'), field : 'query', operators : [ 'contains' ]}, 
-	    {filtertype : 'tine.widget.container.filtermodel', app : app, recordClass : Tine.Filemanager.Model.File}, 
+	    {filtertype : 'tine.widget.container.filtermodel', app : app, recordClass : Tine.Filemanager.Model.Node}, 
 	    {filtertype : 'tinebase.tag', app : app} 
 	];
 };
