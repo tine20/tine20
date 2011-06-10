@@ -85,11 +85,19 @@
         </reflexive>
         
         <!-- original jsb2 builds -->
-        <!-- TODO as jsb2tk has no path adoption yet these files are not usefull yet -->
+        <!-- NOTE as jsb2tk has no path adoption yet we need to do it here -->
         <copy toDir="${project.basedir}">
             <fileset dir="${builddir}">
                 <include name="${name}/*/*" />
             </fileset>
+            
+            <filterchain>
+                <replaceregexp>
+                    <regexp pattern="(\.\.\/){2,}images" replace="../../images" modifiers="i"/>
+                    <regexp pattern="(\.\.\/){2,}library" replace="../../library" modifiers="i"/>
+                </replaceregexp>
+            </filterchain>
+            
         </copy>
         
         <!-- adopt path for getJS/getCSS -->
