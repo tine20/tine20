@@ -1093,13 +1093,16 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var accountInbox = this.app.getFolderStore().queryBy(function(folder) {
                 return folder.isInbox() && (folder.get('account_id') == accountId);
             }, this).first();
-        }        
-        if (accountInbox && accountInbox.get('quota_limit') && accountId == accountInbox.get('account_id')) {
-            var usage = accountInbox.get('quota_usage') / accountInbox.get('quota_limit'),
-                left = accountInbox.get('quota_limit') - accountInbox.get('quota_usage'),
-                text = String.format(this.app.i18n._('{0} %'), Math.round(usage * 100));
-            this.quotaBar.updateProgress(usage, text);
+        }
+        if (accountInbox && parseInt(accountInbox.get('quota_limit'), 10) && accountId == accountInbox.get('account_id')) {
+            var limit = parseInt(accountInbox.get('quota_limit'), 10),
+                usage = parseInt(accountInbox.get('quota_usage'), 10),
+                left = limit - usage,
+                percentage = Math.round(usage/limit * 100),
+                text = String.format(this.app.i18n._('{0} %'), percentage);
             this.quotaBar.setWidth(75);
+            this.quotaBar.updateProgress(usage, text);
+            
             
             Ext.QuickTips.register({
                 target:  this.quotaBar,
