@@ -11,10 +11,10 @@ Ext.ns('Tine.Filemanager');
  * File grid panel
  * 
  * @namespace   Tine.Filemanager
- * @class       Tine.Filemanager.FileGridPanel
+ * @class       Tine.Filemanager.NodeGridPanel
  * @extends     Tine.widgets.grid.GridPanel
  * 
- * <p>File Grid Panel</p>
+ * <p>Node Grid Panel</p>
  * <p><pre>
  * </pre></p>
  * 
@@ -26,12 +26,12 @@ Ext.ns('Tine.Filemanager');
  * @constructor
  * Create a new Tine.Filemanager.FileGridPanel
  */
-Tine.Filemanager.FileGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
+Tine.Filemanager.NodeGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * record class
-     * @cfg {Tine.Filemanager.Model.File} recordClass
+     * @cfg {Tine.Filemanager.Model.Node} recordClass
      */
-    recordClass: Tine.Filemanager.Model.File,
+    recordClass: Tine.Filemanager.Model.Node,
     
     /**
      * eval grants
@@ -70,7 +70,7 @@ Tine.Filemanager.FileGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             handler: function(e) {alert("grid handler");}
         });
         
-        Tine.Filemanager.FileGridPanel.superclass.initComponent.call(this);
+        Tine.Filemanager.NodeGridPanel.superclass.initComponent.call(this);
     },
     
     /**
