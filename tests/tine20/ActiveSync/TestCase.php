@@ -92,7 +92,7 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         foreach($this->objects['container'] as $container) {
-            Tinebase_Container::getInstance()->deleteContainer($container);
+            Tinebase_Container::getInstance()->deleteContainer($container, TRUE);
         }
         
         foreach($this->objects['devices'] as $device) {
@@ -279,7 +279,8 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
                 Tinebase_Model_Grants::GRANT_DELETE    => true,
                 //Tinebase_Model_Grants::GRANT_EXPORT    => true,
                 //Tinebase_Model_Grants::GRANT_SYNC      => true,
-                Tinebase_Model_Grants::GRANT_ADMIN     => true,
+                // NOTE: Admin Grant implies all other grants
+                //Tinebase_Model_Grants::GRANT_ADMIN     => true,
             );        	
         	$grants = new Tinebase_Record_RecordSet('Tinebase_Model_Grants', array($creatorGrants));
         	
@@ -289,7 +290,9 @@ abstract class ActiveSync_TestCase extends PHPUnit_Framework_TestCase
                 'backend'           => 'Sql',
                 'application_id'    => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId()
             ));
-            $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithoutSyncGrant, $grants);
+            
+            $containerWithSyncGrant = Tinebase_Container::getInstance()->addContainer($containerWithoutSyncGrant);
+            Tinebase_Container::getInstance()->setGrants($containerWithSyncGrant, $grants, TRUE, FALSE);
         }
         
         $this->objects['container']['withoutSyncGrant'] = $containerWithoutSyncGrant;

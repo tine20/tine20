@@ -136,8 +136,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.QuickTips.init();
         
         this.quotaBar = new Ext.ProgressBar({
-            width: 100,
-            height: 17,
+            width: 120,
+            height: 16,
             style: {
                 marginTop: '1px'
             },
@@ -1083,8 +1083,9 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var accountId = this.extractAccountIdFromFilter(filter);
         
         if (accountId === null) {
-            // reset quota bar if we find multiple (or none) account ids in filter
+            Tine.log.debug('No or multiple account ids in filter. Resetting quota bar.');
             this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+            this.quotaBar.setWidth(120);
             return;
         }
             
@@ -1092,23 +1093,31 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var accountInbox = this.app.getFolderStore().queryBy(function(folder) {
                 return folder.isInbox() && (folder.get('account_id') == accountId);
             }, this).first();
-        }        
-        if (accountInbox && accountInbox.get('quota_limit') && accountId == accountInbox.get('account_id')) {
-            var usage = accountInbox.get('quota_usage') / accountInbox.get('quota_limit'),
-                left = accountInbox.get('quota_limit') - accountInbox.get('quota_usage'),
-                text = String.format(this.app.i18n._('{0} %'), Math.round(usage * 100));
+        }
+        if (accountInbox && parseInt(accountInbox.get('quota_limit'), 10) && accountId == accountInbox.get('account_id')) {
+            var limit = parseInt(accountInbox.get('quota_limit'), 10),
+                usage = parseInt(accountInbox.get('quota_usage'), 10),
+                left = limit - usage,
+                percentage = Math.round(usage/limit * 100),
+                text = String.format(this.app.i18n._('{0} %'), percentage);
+            this.quotaBar.setWidth(75);
             this.quotaBar.updateProgress(usage, text);
+            
             
             Ext.QuickTips.register({
                 target:  this.quotaBar,
                 dismissDelay: 30000,
                 title: this.app.i18n._('Your quota'),
-                text: String.format(this.app.i18n._('Current usage: {0} of {1}'), 
+                text: String.format(this.app.i18n._('{0} available (total: {1})'), 
                     Ext.util.Format.fileSize(accountInbox.get('quota_usage')* 1024),
                     Ext.util.Format.fileSize(accountInbox.get('quota_limit')* 1024)
                 ),
                 width: 200
             });
+        } else {
+            Tine.log.debug('No account inbox found or no quota info.');
+            this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+            this.quotaBar.setWidth(120);
         }
     },
     

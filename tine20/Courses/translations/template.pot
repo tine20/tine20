@@ -44,11 +44,11 @@ msgstr ""
 msgid "Fileserver Access Off"
 msgstr ""
 
-#: js/CourseGridPanel.js:214
+#: js/CourseGridPanel.js:211
 msgid "Failed"
 msgstr ""
 
-#: js/CourseGridPanel.js:215
+#: js/CourseGridPanel.js:212
 msgid "Some error occured while trying to update the courses."
 msgstr ""
 

@@ -139,6 +139,9 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                 case 'to':
                     test = 'address';
                     break;
+                case 'fromheader':
+                    header = 'From';
+                    break;
                 case 'size':
                     test = 'size';
                     comperator = (conditions[i].operator == 'greater') ? 'over' : 'under';
@@ -188,8 +191,13 @@ Tine.Felamimail.sieve.RuleEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog
                     operator = conditions[i].comperator;
                     break;
                 default:
-                    operator = field;
-                    field = (conditions[i].comperator == 'contains') ? 'header' : 'headerregex';
+                    if (field == 'From') {
+                        operator = conditions[i].comperator;
+                        field = 'fromheader';
+                    } else {
+                        operator = field;
+                        field = (conditions[i].comperator == 'contains') ? 'header' : 'headerregex';
+                    }
             }
             filter = {
                 field: field,

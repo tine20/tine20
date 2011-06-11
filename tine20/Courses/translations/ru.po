@@ -60,11 +60,11 @@ msgstr "Доступ к файловому серверу вкл."
 msgid "Fileserver Access Off"
 msgstr "Доступ к файловому серверу выкл."
 
-#: js/CourseGridPanel.js:214
+#: js/CourseGridPanel.js:211
 msgid "Failed"
 msgstr "Сбой"
 
-#: js/CourseGridPanel.js:215
+#: js/CourseGridPanel.js:212
 msgid "Some error occured while trying to update the courses."
 msgstr "Произошла ошибка при попытке обновить курсы."
 

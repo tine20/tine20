@@ -737,7 +737,7 @@ abstract class Tinebase_Preference_Abstract extends Tinebase_Backend_Sql_Abstrac
                 break;
                 
             default:
-                throw new Tinebase_Exception_NotFound('Special option not found.');
+                throw new Tinebase_Exception_NotFound("Special option '{$_value}' not found.");
         }
 
         return $result;

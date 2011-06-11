@@ -57,6 +57,7 @@ abstract class Tinebase_Import_Csv_Abstract extends Tinebase_Import_Abstract
         'duplicates'        => 0,
         'headline'          => 0,
         'use_headline'      => 1,
+        'shared_tags'       => 'onlyexisting',
     );
     
     /**

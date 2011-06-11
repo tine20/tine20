@@ -34,7 +34,7 @@ msgstr "Herr"
 msgid "Ms"
 msgstr "Fru"
 
-#: Setup/setup.xml:760 js/ContactEditDialog.js:135 js/ContactEditDialog.js:423
+#: Setup/setup.xml:760 js/ContactEditDialog.js:135 js/ContactEditDialog.js:422
 #: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:109 js/Model.js:27
 #: js/Model.js:139
 msgid "Company"
@@ -133,7 +133,7 @@ msgstr "Fornavn"
 msgid "Middle Name"
 msgstr "Mellom Navn"
 
-#: js/ContactEditDialog.js:126 js/ContactEditDialog.js:423
+#: js/ContactEditDialog.js:126 js/ContactEditDialog.js:422
 #: js/ContactGrid.js:105 js/Model.js:19 js/Model.js:138
 msgid "Last Name"
 msgstr "Etternavn"
@@ -217,58 +217,58 @@ msgstr "E-Post (privat)"
 msgid "Web"
 msgstr "Internett"
 
-#: js/ContactEditDialog.js:261 js/Model.js:148 js/Model.js:149 js/Model.js:150
-#: js/Model.js:151
+#: js/ContactEditDialog.js:260 js/Model.js:148 js/Model.js:149 js/Model.js:150
+#: js/Model.js:151 js/Model.js:152
 msgid "Company Address"
 msgstr "Firma Adresse"
 
-#: js/ContactEditDialog.js:264 js/ContactEditDialog.js:293
-#: js/ContactGrid.js:114 js/Model.js:148 js/Model.js:152
+#: js/ContactEditDialog.js:263 js/ContactEditDialog.js:292
+#: js/ContactGrid.js:114 js/Model.js:148 js/Model.js:153
 msgid "Street"
 msgstr "Gate"
 
-#: js/ContactEditDialog.js:268 js/ContactEditDialog.js:297
+#: js/ContactEditDialog.js:267 js/ContactEditDialog.js:296
 msgid "Street 2"
 msgstr "Gate 2"
 
-#: js/ContactEditDialog.js:272 js/ContactEditDialog.js:301
-#: js/ContactGrid.js:116
+#: js/ContactEditDialog.js:271 js/ContactEditDialog.js:300
+#: js/ContactGrid.js:116 js/Model.js:149 js/Model.js:154
 msgid "Region"
 msgstr "Sted"
 
-#: js/ContactEditDialog.js:276 js/ContactEditDialog.js:305 js/Model.js:149
-#: js/Model.js:153
+#: js/ContactEditDialog.js:275 js/ContactEditDialog.js:304 js/Model.js:150
+#: js/Model.js:155
 msgid "Postal Code"
 msgstr "Post Nummer"
 
-#: js/ContactEditDialog.js:280 js/ContactEditDialog.js:309
-#: js/ContactGrid.js:115 js/Model.js:150 js/Model.js:154
+#: js/ContactEditDialog.js:279 js/ContactEditDialog.js:308
+#: js/ContactGrid.js:115 js/Model.js:151 js/Model.js:156
 msgid "City"
 msgstr "By"
 
-#: js/ContactEditDialog.js:285 js/ContactEditDialog.js:314
-#: js/ContactGrid.js:118 js/Model.js:151 js/Model.js:155
+#: js/ContactEditDialog.js:284 js/ContactEditDialog.js:313
+#: js/ContactGrid.js:118 js/Model.js:152 js/Model.js:157
 msgid "Country"
 msgstr "Land"
 
-#: js/ContactEditDialog.js:290 js/Model.js:152 js/Model.js:153 js/Model.js:154
-#: js/Model.js:155 Export/Pdf.php:88
+#: js/ContactEditDialog.js:289 js/Model.js:153 js/Model.js:154 js/Model.js:155
+#: js/Model.js:156 js/Model.js:157 Export/Pdf.php:88
 msgid "Private Address"
 msgstr "Privat Adresse"
 
-#: js/ContactEditDialog.js:335 js/Model.js:64
+#: js/ContactEditDialog.js:334 js/Model.js:64
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: js/ContactEditDialog.js:349
+#: js/ContactEditDialog.js:348
 msgid "Enter description"
 msgstr "Skriv en beskrivelse"
 
-#: js/ContactEditDialog.js:398
+#: js/ContactEditDialog.js:397
 msgid "Export as pdf"
 msgstr "Eksporter som pdf"
 
-#: js/ContactEditDialog.js:423
+#: js/ContactEditDialog.js:422
 msgid "Either {0} or {1} must be given"
 msgstr "Enten {0} eller {1} må oppgis"
 
@@ -296,7 +296,7 @@ msgstr ""
 msgid "Please review this link in edit dialog."
 msgstr ""
 
-#: js/ContactGrid.js:103 js/Model.js:156
+#: js/ContactGrid.js:103 js/Model.js:158
 msgid "Type"
 msgstr "Type"
 
@@ -404,7 +404,7 @@ msgstr ""
 msgid "New Contact"
 msgstr ""
 
-#: js/Addressbook.js:32 js/Model.js:96 js/Model.js:211
+#: js/Addressbook.js:32 js/Model.js:96 js/Model.js:213
 #, fuzzy
 msgid "Addressbook"
 msgid_plural "Addressbooks"
@@ -469,7 +469,7 @@ msgstr ""
 msgid "Web (private)"
 msgstr ""
 
-#: js/Model.js:96 js/Model.js:211
+#: js/Model.js:96 js/Model.js:213
 msgid "Addressbooks"
 msgstr ""
 
@@ -481,29 +481,29 @@ msgstr "Bruker Konto"
 msgid "Quick search"
 msgstr "Hurtig Søk"
 
-#: js/Model.js:157
+#: js/Model.js:159
 msgid "Last modified"
 msgstr ""
 
-#: js/Model.js:158
+#: js/Model.js:160
 msgid "Last modifier"
 msgstr ""
 
-#: js/Model.js:159
+#: js/Model.js:161
 msgid "Creation Time"
 msgstr "Opprettelses dato"
 
-#: js/Model.js:160
+#: js/Model.js:162
 msgid "Creator"
 msgstr ""
 
-#: js/Model.js:207
+#: js/Model.js:209
 msgid "List"
 msgid_plural "Lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:207
+#: js/Model.js:209
 msgid "Lists"
 msgstr ""
 

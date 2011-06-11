@@ -60,11 +60,11 @@ msgstr "Filserver Tilgang På"
 msgid "Fileserver Access Off"
 msgstr "Filserver Tilgang Av"
 
-#: js/CourseGridPanel.js:214
+#: js/CourseGridPanel.js:211
 msgid "Failed"
 msgstr "Feilet"
 
-#: js/CourseGridPanel.js:215
+#: js/CourseGridPanel.js:212
 msgid "Some error occured while trying to update the courses."
 msgstr "En feil oppstod ved forsøk på å oppdatere kursene."
 

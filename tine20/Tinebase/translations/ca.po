@@ -252,7 +252,7 @@ msgstr "Esteu segur que voleu sortir?"
 msgid "Logging you out..."
 msgstr "Tancant la sessió..."
 
-#: js/MainMenu.js:227 js/LoginPanel.js:353
+#: js/MainMenu.js:227 js/LoginPanel.js:354
 msgid "Please wait!"
 msgstr "Espereu!"
 
@@ -475,7 +475,7 @@ msgstr "Esteu segur que voleu eliminar el preferit \"{0}\"?"
 #: js/widgets/persistentfilter/PickerPanel.js:328
 #: js/widgets/tree/ContextMenu.js:42 js/widgets/tree/ContextMenu.js:86
 #: js/widgets/tree/ContextMenu.js:143 js/widgets/container/GrantsDialog.js:95
-#: js/LoginPanel.js:340
+#: js/LoginPanel.js:341
 msgid "Please wait"
 msgstr "Espereu"
 
@@ -588,14 +588,14 @@ msgstr ""
 #: js/widgets/dialog/ImportDialog.js:210
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
-#: js/widgets/dialog/ExportDialog.js:140 js/LoginPanel.js:370
+#: js/widgets/dialog/ExportDialog.js:140 js/LoginPanel.js:371
 msgid "Errors"
 msgstr "Errors"
 
 #: js/widgets/dialog/EditDialog.js:507
 #: js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/ImportDialog.js:210 js/widgets/dialog/ExportDialog.js:140
-#: js/LoginPanel.js:370
+#: js/LoginPanel.js:371
 msgid "Please fix the errors noted."
 msgstr "Arregleu els errors notificats."
 
@@ -1475,6 +1475,10 @@ msgstr "No s'ha pogut carregar la imatge. Notifiqueu l'administrador."
 msgid "Software Version"
 msgstr "Versió del programari."
 
+#: js/ux/PopupWindowManager.js:153
+msgid "The window you want to work with is backgrounded. Your browser does't support to forground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"
+msgstr ""
+
 #: js/ux/ConnectionStatus.js:56
 msgid "online"
 msgstr "en línia"
@@ -1641,11 +1645,11 @@ msgstr "Fòrums del Tine 2.0"
 msgid "about {0} minutes"
 msgstr "aproximadament {0} minuts"
 
-#: js/LoginPanel.js:196 js/LoginPanel.js:412
+#: js/LoginPanel.js:196 js/LoginPanel.js:413
 msgid "Tine 2.0 needs your help"
 msgstr "El Tine 2.0 necessita de la vostra ajuda"
 
-#: js/LoginPanel.js:198 js/LoginPanel.js:414
+#: js/LoginPanel.js:198 js/LoginPanel.js:415
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr "Freqüentment necessitem la vostra opinió per tal que la següent versió del Tine 2.0 acompleixi les vostres necessitats encara millor. Ajudeu-nos i participeu:"
 
@@ -1661,43 +1665,43 @@ msgstr "Idiomes"
 msgid "Duration"
 msgstr "Durada"
 
-#: js/LoginPanel.js:267
+#: js/LoginPanel.js:268
 msgid "Browser incompatible"
 msgstr ""
 
-#: js/LoginPanel.js:269
+#: js/LoginPanel.js:270
 msgid "Your browser is not supported by Tine 2.0."
 msgstr ""
 
-#: js/LoginPanel.js:274
+#: js/LoginPanel.js:275
 msgid "Browser incompatible?"
 msgstr ""
 
-#: js/LoginPanel.js:276
+#: js/LoginPanel.js:277
 msgid "You are using an unrecognized browser. This could result in unexpected behaviour."
 msgstr ""
 
-#: js/LoginPanel.js:282
+#: js/LoginPanel.js:283
 msgid "You might try one of these browsers:"
 msgstr ""
 
-#: js/LoginPanel.js:340
+#: js/LoginPanel.js:341
 msgid "Logging you in..."
 msgstr "Iniciant sessió..."
 
-#: js/LoginPanel.js:353
+#: js/LoginPanel.js:354
 msgid "Login successful. Loading {0}..."
 msgstr "L'inici de sessió ha anat bé. Es carrega {0}..."
 
-#: js/LoginPanel.js:358
+#: js/LoginPanel.js:359
 msgid "Login failure"
 msgstr "L'inici de sessió ha fallat"
 
-#: js/LoginPanel.js:359
+#: js/LoginPanel.js:360
 msgid "Your username and/or your password are wrong!!!"
 msgstr "El vostre nom d'usuari i/o la vostra contrasenya són incorrectes!!!"
 
-#: js/LoginPanel.js:385
+#: js/LoginPanel.js:386
 msgid "Please enter your login data"
 msgstr "Introduïu les vostres dades d'inici de sessió"
 

@@ -37,7 +37,7 @@ Ext.ux.PopupWindowGroup = function(config) {
         for(var id in list){
             try {
                 doc = list[id].popup.document;
-                if (Ext.isChrome && ! doc.defaultView) {
+                if ((Ext.isChrome || Ext.isOpera) && ! doc.defaultView) {
                     doc = false;
                 }
             } catch(e)  {
@@ -147,6 +147,11 @@ Ext.ux.PopupWindowGroup = function(config) {
             if(win != front){
                 win._lastAccess = new Date().getTime();
                 win.popup.focus();
+//                front = win;
+                // NOTE: we don't recognise the front window yet
+//                if (Ext.isOpera) {
+//                    Ext.Msg.alert(_("The window you want to work with is backgrounded. Your browser does't support to forground the window for you, so you need to use your operating systems window switching features. Please send complaints to your browser vendor!"))
+//                }
                 //orderWindows();
                 return true;
             }
