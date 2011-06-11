@@ -1,0 +1,76 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+db_version 2.0 || [ $? -lt 30 ]
+
+
+if [ "$1" = "configure" ]; then
+
+    db_get tine20/webserver_type
+    webserver="$RET"
+
+    #for webserver in $servers; do
+    #    webserver=${webserver%,}
+    #    test -x /usr/sbin/$webserver || continue
+
+        case "$webserver" in
+            apache2)
+                test -x /usr/sbin/$webserver || continue
+                
+                if [ -d /etc/$webserver/mods-enabled ]; then
+                    if [ ! -f /etc/$webserver/mods-enabled/expires.load -a ! -h /etc/$webserver/mods-enabled/expires.load ]; then
+                        ln -s /etc/$webserver/mods-available/expires.load /etc/$webserver/mods-enabled/expires.load
+                    fi
+		    if [ -f /etc/apache2/mods-available/php5.load ]; then
+                        if [ ! -f /etc/$webserver/mods-enabled/php5.load -a ! -h /etc/$webserver/mods-enabled/php5.load ]; then
+                            ln -s /etc/$webserver/mods-available/php5.load /etc/$webserver/mods-enabled/php5.load
+                        fi 
+                    fi
+                fi
+                ;;
+        esac
+        
+    #done
+
+    if [ ! -e /etc/tine20/config.inc.php ]; then
+        dbc_generate_include='template:/etc/tine20/config.inc.php'
+        dbc_generate_include_owner='root:www-data'
+        dbc_generate_include_perms='640'
+        dbc_generate_include_args="-U -o template_infile=/usr/share/doc/tine20/examples/config.inc.php.dist"
+        
+        . /usr/share/dbconfig-common/dpkg/postinst
+        dbc_go tine20 $@
+    fi
+
+    if [ ! -f /etc/php5/conf.d/tine20.ini -a ! -h /etc/php5/conf.d/tine20.ini ]; then
+        ln -s /etc/tine20/php5.ini /etc/php5/conf.d/tine20.ini
+    fi
+    
+    servers="$webserver"
+    linkdestination_apache="../../tine20/apache.conf"
+    #linkdestination_lighttpd="../../tine20/lighttpd.conf"
+    linkname="tine20"
+    if [ -e /usr/share/wwwconfig-common/confd-link.sh ]; then
+        . /usr/share/wwwconfig-common/confd-link.sh
+    fi
+    
+    
+    case "$webserver" in
+        apache2)
+            test -x /usr/sbin/$webserver || continue
+            db_reset tine20/webserver_restart || true
+            db_input high tine20/webserver_restart || true
+            db_go || true
+            db_get tine20/webserver_restart || true
+
+            if [ "$RET" = "true" ]; then
+                restart="$restart $webserver"
+            fi
+            ;;
+    esac
+
+    . /usr/share/wwwconfig-common/restart.sh
+
+fi
