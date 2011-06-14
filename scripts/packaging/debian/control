@@ -1,0 +1,57 @@
+Source: tine20
+Section: web
+Priority: optional
+Maintainer: Lars Kneschke <l.kneschke@metaways.de>
+Build-Depends: debhelper (>= 7), po-debconf
+Standards-Version: 3.8.4
+Homepage: http://www.tine20.org/
+
+Package: tine20
+Architecture: all
+Depends: ${misc:Depends}, tine20-tinebase, ${tine20:Modules}
+Suggests: mysql-server
+Description: webbased groupware and crm - metapackage
+ Tine 2.0 is a webbased groupware and crm solution.
+
+Package: tine20-tinebase
+Architecture: all
+Depends: ${misc:Depends}, httpd, php5 | php5-cgi | libapache2-mod-php5, mysql-client, dbconfig-common, wwwconfig-common, php5-mysql
+Recommends: mysql-client
+Description: webbased groupware and crm - calendar module
+ Tine 2.0 calendar module
+
+Package: tine20-calendar
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - calendar module
+ Tine 2.0 calendar module
+
+Package: tine20-crm
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - crm module
+ Tine 2.0 crm module
+
+Package: tine20-felamimail
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - email module
+ Tine 2.0 email module
+
+Package: tine20-tasks
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - tasks module
+ Tine 2.0 tasks module
+
+Package: tine20-sales
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - sales module
+ Tine 2.0 sales module
+
+Package: tine20-timetracker
+Architecture: all
+Depends: tine20-tinebase (= ${binary:Version})
+Description: webbased groupware and crm - timetracker module
+ Tine 2.0 timetracker module
