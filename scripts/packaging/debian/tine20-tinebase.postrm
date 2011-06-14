@@ -8,18 +8,21 @@ fi
 
 db_version 2.0 || [ $? -lt 30 ]
 
-if [ "$1" = "purge" ]; then
+if [ -f /usr/share/dbconfig-common/dpkg/postrm ]; then 
+    # currently we support mysql only
+    dbc_dbtypes="mysql"
+        
+    . /usr/share/dbconfig-common/dpkg/postrm 
+    dbc_go tine20 $@ 
+fi 
 
-    if [ -f /usr/share/dbconfig-common/dpkg/postrm ]; then 
-        . /usr/share/dbconfig-common/dpkg/postrm 
-        dbc_go tine20 $@ 
-    fi 
+if [ "$1" = "purge" ]; then
     
     rm -f /etc/tine20/config.inc.php
     if which ucf >/dev/null 2>&1; then
         ucf --purge /etc/tine20/config.inc.php
     fi
-    
+ 
 #    db_get tine20/reconfigure || true
 #
 #    db_get tine20/mysql/configure || true

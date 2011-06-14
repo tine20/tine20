@@ -35,12 +35,13 @@ if [ "$1" = "configure" ]; then
     #done
 
     if [ ! -e /etc/tine20/config.inc.php ]; then
+        . /usr/share/dbconfig-common/dpkg/postinst
+
         dbc_generate_include='template:/etc/tine20/config.inc.php'
         dbc_generate_include_owner='root:www-data'
         dbc_generate_include_perms='640'
         dbc_generate_include_args="-U -o template_infile=/usr/share/doc/tine20/examples/config.inc.php.dist"
         
-        . /usr/share/dbconfig-common/dpkg/postinst
         dbc_go tine20 $@
     fi
 
