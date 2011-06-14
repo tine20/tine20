@@ -201,8 +201,8 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         var allowedDomains = [Tine.Admin.registry.get('smtpConfig').primarydomain],
             emailDomain = email.split('@')[1];
             
-        if (Tine.Admin.registry.get('secondarydomains')) {
-            allowedDomains.concat(Tine.Admin.registry.get('secondarydomains').split(','));
+        if (Ext.isString(Tine.Admin.registry.get('smtpConfig').secondarydomains)) {
+            allowedDomains = allowedDomains.concat(Tine.Admin.registry.get('smtpConfig').secondarydomains.split(','));
         }
         
         return (allowedDomains.indexOf(emailDomain) !== -1);
