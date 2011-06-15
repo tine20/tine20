@@ -911,6 +911,22 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test move to another account (with message filter)
+     */
+    public function testMoveMessageToAnotherAccountWithFilter()
+    {
+        $clonedAccount = $this->_cloneAccount();
+        $folder = $this->_getFolder('INBOX', $clonedAccount);
+        
+        $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $messageFilter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($cachedMessage->getId()))
+        ));
+        
+        $this->_moveTestHelper($messageFilter, $folder);
+    }
+    
+    /**
      * move message test helper
      * 
      * @param mixed $_toMove
