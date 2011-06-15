@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<application>
+    <name>Sipgate</name>
+    <version>0.1</version>
+    <order>25</order>
+    <depends>
+        <application>Admin</application>
+        <application>Addressbook</application>
+    </depends>
+</application>

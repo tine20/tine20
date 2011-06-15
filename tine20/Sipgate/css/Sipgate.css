@@ -1,0 +1,54 @@
+/**
+ * Tine 2.0
+ * 
+ * @package     Sipgate
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL3
+ * @author      Alexander Stintzing <alex@stintzing.net>
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ *
+ */
+
+.SipgateIconCls {background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;}
+.x-btn-medium .SipgateIconCls {background-image:url(../../images/oxygen/22x22/apps/kcall.png) !important;}
+.x-btn-large .SipgateIconCls {background-image:url(../../images/oxygen/32x32/apps/kcall.png) !important;}
+
+.SipgateTreeNode_fax {background-image:url((../../images/../Sipgate/res/16x16/kfax.png) !important;}
+.SipgateTreeNode_phone {background-image:url(../../images/oxygen/16x16/apps/kcall.png) !important;}
+
+.SipgateCallStatePhone {background-image:url(../../images/../Sipgate/res/phone-connecting.png) !important;margin:13px}
+.SipgateCallStatePhone.established  {background-image:url(../../images/../Sipgate/res/phone-connected.png) !important}
+.SipgateCallStatePhone.error  {background-image:url(../../images/../Sipgate/res/phone-error.png) !important}
+
+.SipgateSendSms {height:100%;width:100%;background-repeat:no-repeat;background-position:right bottom;}
+.SipgateSendSms.ok {background-image:url(../../images/../Sipgate/res/phone-connected.png) !important}
+.SipgateSendSms.error {background-image:url(../../images/../Sipgate/res/phone-error.png) !important}
+
+/* .SipgateCallStateLine {background: transparent url(../../images/../Sipgate/res/line-normal.png) bottom left no-repeat !important;}
+.connecting .SipgateCallStateLine {background: transparent url(../../images/../Sipgate/res/line-connecting.gif) bottom left no-repeat !important;}
+.connected .SipgateCallStateLine {background: transparent url(../../images/../Sipgate/res/line-connected.png) bottom left no-repeat  !important;}
+ */
+#csw-my-phone, #csw-line {float:left}
+#csw-other-phone {float:right;}
+#csw-line {}
+#csw-call-info{text-align: center;padding-top:10px}
+
+
+.action_DialNumber {
+    background-image:url(../../images/oxygen/16x16/devices/audio-headset.png) !important;
+}
+.x-btn-medium .action_DialNumber {
+    background-image:url(../../images/oxygen/22x22/devices/audio-headset.png) !important;
+}
+.x-btn-large .action_DialNumber {
+    background-image:url(../../images/oxygen/32x32/devices/audio-headset.png) !important;
+}
+
+.SmsIconCls, .action_ComposeSms {
+    background-image:url(../../images/../Sipgate/res/16x16/send-sms.png) !important;
+}
+.x-btn-medium .SmsIconCls, .x-btn-medium .action_ComposeSms {
+    background-image:url(../../images/../Sipgate/res/22x22/send-sms.png) !important;
+}
+.x-btn-large .SmsIconCls, .x-btn-large .action_ComposeSms {
+    background-image:url(../../images/../Sipgate/res/32x32/send-sms.png) !important;
+}

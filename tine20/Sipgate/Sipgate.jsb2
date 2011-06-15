@@ -1,0 +1,44 @@
+{
+  "projectName": "Tine 2.0 - Sipgate",
+  "deployDir": "Sipgate",
+  "licenseText": "Tine 2.0 - Sipgate \nCopyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Sipgate FAT Client",
+      "file": "js/Sipgate-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "CallStateWindow.js",
+          "path": "js/"
+        },        
+        {
+          "text": "SmsEditDialog.js",
+          "path": "js/"
+        },      
+        {
+          "text": "AddressbookGridPanelHook.js",
+          "path": "js/"
+        },
+        {
+          "text": "Sipgate.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Sipgate FAT Client",
+      "file": "css/Sipgate-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Sipgate.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}
