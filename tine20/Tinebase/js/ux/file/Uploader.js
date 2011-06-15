@@ -50,9 +50,13 @@ Ext.ux.file.Uploader = function(config) {
  
 Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     /**
-     * @cfg {Int} maxFileSize the maximum file size in bytes
+     * @cfg {Int} maxFileUploadSize the maximum file size for traditinal form updoads
      */
-    maxFileSize: 20971520, // 20 MB
+    maxFileUploadSize: 20971520, // 20 MB
+    /**
+     * @cfg {Int} maxPostSize the maximum post size used for html5 uploads
+     */
+    maxPostSize: 20971520, // 20 MB
     /**
      * @cfg {String} url the url we upload to
      */
@@ -79,7 +83,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
                 tag: 'input',
                 type: 'hidden',
                 name: 'MAX_FILE_SIZE',
-                value: this.maxFileSize
+                value: this.maxFileUploadSize
             }]
         });
         return form;
