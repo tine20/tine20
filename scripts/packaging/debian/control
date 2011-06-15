@@ -15,7 +15,7 @@ Description: webbased groupware and crm - metapackage
 
 Package: tine20-tinebase
 Architecture: all
-Depends: ${misc:Depends}, httpd, php5 | php5-cgi | php5-mcrypt | php5-gd | php5-mysql | php5- libapache2-mod-php5, mysql-client, dbconfig-common, wwwconfig-common, php5-mysql
+Depends: ${misc:Depends}, httpd, php5 | php5-cgi | libapache2-mod-php5, mysql-client, dbconfig-common, wwwconfig-common, php5-mysql, php5-mcrypt, php5-gd 
 Recommends: mysql-client | php5-ldap
 Description: webbased groupware and crm - core + addressbook module
  Tine 2.0 calendar module
