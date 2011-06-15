@@ -103,8 +103,6 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
                 return true;
             }
             
-            console.log(app);
-            
             if (this.activeApp && (this.fireEvent('beforedeactivate', this.activeApp) === false || this.activeApp.onBeforeDeActivate() === false)) {
                 return false;
             }
