@@ -875,7 +875,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             ),
             Tinebase_Model_Config::SIEVE    => array(
                 'keys'      => array('hostname', 'port', 'ssl'),
-                'defaults'  => array('port' => 2000),
+                'defaults'  => array('port' => 2000, 'ssl' => Felamimail_Model_Account::SECURE_NONE),
             ),
         );
         
