@@ -89,12 +89,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * on upload failure
      * @private
      */
-    onUploadFail: function () {
+    onUploadFail: function (uploader, fileRecord) {
         Ext.MessageBox.alert(
             _('Upload Failed'), 
             _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') + Tine.Tinebase.registry.get('maxFileUploadSize')
         ).setIcon(Ext.MessageBox.ERROR);
-        this.loadMask.hide();
+        
+        this.getStore().remove(fileRecord);
+        if(this.loadMask) this.loadMask.hide();
     },
     
     /**
@@ -199,7 +201,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             renderer: function (value, metadata, record) {
                 var val = value;
                 if (record.get('status') !== 'complete') {
-                    //val += ' (' + record.get('progress') + '%)';
+//                    val += ' (' + record.get('progress') + '%)';
                     metadata.css = 'x-tinebase-uploadrow';
                 }
                 
@@ -244,7 +246,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     onFilesSelect: function (fileSelector, e) {
         var uploader = new Ext.ux.file.Uploader({
-            maxFileSize: 67108864, // 64MB
+//            maxFileSize: 67108864, // 64MB
             fileSelector: fileSelector
         });
                 

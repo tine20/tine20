@@ -41,6 +41,17 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
 });
 
 
+//
+///**
+// * default ExampleRecord backend
+// */
+//Tine.Filemanager.recordBackend = new Tine.Tinebase.data.RecordProxy({
+//    appName: 'Filemanager',
+//    modelName: 'Node',
+//    recordClass: Tine.Filemanager.Model.Node
+//});
+
+
 /**
  * get filtermodel of contact model
  * 
@@ -53,7 +64,10 @@ Tine.Filemanager.Model.Node.getFilterModel = function() {
        
 	return [ 	
 	    {label : _('Quick search'), field : 'query', operators : [ 'contains' ]}, 
-	    {filtertype : 'tine.widget.container.filtermodel', app : app, recordClass : Tine.Filemanager.Model.Node}, 
+	    {label: app.i18n._('Type'), field: 'type'},
+	    {label: app.i18n._('Contenttype'), field: 'contenttype'},
+        {label: app.i18n._('Creation Time'), field: 'creation_time', valueType: 'date'},
+	    {label: app.i18n._('user file folder'),filtertype : 'tine.widget.container.filtermodel', app : app, recordClass : Tine.Filemanager.Model.Node}, 
 	    {filtertype : 'tinebase.tag', app : app} 
 	];
 };

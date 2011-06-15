@@ -211,8 +211,15 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * executed if a file got uploaded successfully
      */
     onUploadSuccess: function(response, options, fileRecord) {
-        response = Ext.util.JSON.decode(response.responseText);
-        if (response.status && response.status !== 'success') {
+    	try {
+    		response = Ext.util.JSON.decode(response.responseText);
+    	}
+    	catch(e) {
+    		this.onUploadFail(response, options, fileRecord);
+    		return;
+    	}
+    		
+    	if (response.status && response.status !== 'success') {
             this.onUploadFail(response, options, fileRecord);
         } else {
             fileRecord.beginEdit();

@@ -35,6 +35,13 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     enableFileDrop: true,
     /**
+     * @cfg {Boolean} enableFileDialog
+     * @see http://www.w3.org/TR/2008/WD-html5-20080610/editing.html
+     * 
+     * enable file dialog on click(defaults to true)
+     */
+    enableFileDialog: true,
+    /**
      * @cfg {String} inputFileName
      * Name to use for the hidden input file DOM element.  Deaults to "file".
      */
@@ -51,7 +58,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     input_file: null,
     /**
-     * @property handler
+     * @cfg handler
      * @type Function
      * The handler originally defined for the Ext.Button during construction using the "handler" config option.
      * We need to null out the "handler" property so that it is only called when a file is selected.
@@ -59,7 +66,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     handler: null,
     /**
-     * @property scope
+     * @cfg scope
      * @type Object
      * The scope originally defined for the Ext.Button during construction using the "scope" config option.
      * While the "scope" property doesn't need to be nulled, to be consistent with handler, we do.
@@ -75,7 +82,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     init: function(cmp){
         if(cmp.handler) this.handler = cmp.handler;
-        if(cmp.scope) this.scope = cmp.scope || window;
+        this.scope = cmp.scope || window;
         cmp.handler = null;
         cmp.scope = null;
         
@@ -126,7 +133,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @see Ext.Button.onRender
      */
     onRender: function() {
-        this.button_container = this.buttonCt || this.component.el.child('tbody') || this.component.el;
+       
+    	this.button_container = this.buttonCt || this.component.el.child('tbody') || this.component.el;
         this.button_container.position('relative');
         this.wrap = this.component.el.wrap({cls:'tbody'});
 
@@ -144,7 +152,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
             this.component.ownerCt.on('resize', this.syncWrap, this);
         }
         
-        this.createInputFile();
+        if (this.enableFileDialog) this.createInputFile();
         
         if (this.enableFileDrop) {
             if (! this.dropEl) {
@@ -348,6 +356,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
             return fparts.pop().toLowerCase();
         }
     },
+    
     isImage: function() {
         var cls = this.getFileCls();
         return (cls == 'jpg' || cls == 'gif' || cls == 'png' || cls == 'jpeg');

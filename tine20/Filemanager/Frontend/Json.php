@@ -38,8 +38,8 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function searchNodes($filter, $paging)
     {
-        $nodeFilter = $this->_convertContainerToParentIdFilter($filter);
-        $result = $this->_search($nodeFilter, $paging, Filemanager_Controller_Node::getInstance(), 'Tinebase_Model_Tree_NodeFilter', FALSE, self::TOTALCOUNT_COUNTRESULT);
+        //$nodeFilter = $this->_convertContainerToParentIdFilter($filter);
+        $result = $this->_search($filter, $paging, Filemanager_Controller_Node::getInstance(), 'Tinebase_Model_Tree_NodeFilter', FALSE, self::TOTALCOUNT_COUNTRESULT);
         
         return $result;
     }

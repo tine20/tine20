@@ -54,7 +54,7 @@ Tine.Tinebase.container = {
      * @return {String}
      */
     getMyNodePath: function() {
-        return '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId
+        return '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId;
     },
     
     /**
