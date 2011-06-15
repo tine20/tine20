@@ -621,10 +621,9 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     /**
      * get system folder for account
      * 
-     * @param $_account
-     * @param $_systemFolder
+     * @param string|Felamimail_Model_Account $_account
+     * @param string $_systemFolder
      * @return NULL|Felamimail_Model_Folder
-     * @throws Tinebase_Exception_InvalidArgument
      */
     public function getSystemFolder($_account, $_systemFolder)
     {
@@ -632,27 +631,11 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $changed = $this->_addFolderDefaults($account);
         if ($changed) {
             // need to use backend update because we prohibit the change of some fields in _inspectBeforeUpdate()
-            $account = $this->_backend->update($account);            
+            $account = $this->_backend->update($account);
         }
         
-        $imapBackend = $this->_getIMAPBackend($account);
-        
-        switch ($_systemFolder) {
-            case Felamimail_Model_Folder::FOLDER_TRASH:
-                $folderName = $account->trash_folder;
-                break;
-            case Felamimail_Model_Folder::FOLDER_SENT:
-                $folderName = $account->sent_folder;
-                break;
-            case Felamimail_Model_Folder::FOLDER_TEMPLATES:
-                $folderName = $account->templates_folder;
-                break;
-            case Felamimail_Model_Folder::FOLDER_DRAFTS:
-                $folderName = $account->drafts_folder;
-                break;
-            default:
-                throw new Tinebase_Exception_InvalidArgument('No system folder: ' . $_systemFolder);
-        }
+        $systemFolderField = $this->_getSystemFolderField($_systemFolder);
+        $folderName = $account->{$systemFolderField};
         
         if (empty($folderName)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__
@@ -661,8 +644,13 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         }
         
         // check if folder exists on imap server
+        $imapBackend = $this->_getIMAPBackend($account);
         if ($imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
             $systemFolder = $this->_createSystemFolder($account, $folderName);
+            if ($systemFolder->globalname !== $folderName) {
+                $account->{$systemFolderField} = $systemFolder->globalname;
+                $this->_backend->update($account);
+            }
         } else {
             try {
                 $systemFolder = Felamimail_Controller_Folder::getInstance()->getByBackendAndGlobalName($account->getId(), $folderName);
@@ -683,6 +671,35 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     }
     
     /**
+     * map folder constant to account model field
+     * 
+     * @param string $_systemFolder
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getSystemFolderField($_systemFolder)
+    {
+        switch ($_systemFolder) {
+            case Felamimail_Model_Folder::FOLDER_TRASH:
+                $field = 'trash_folder';
+                break;
+            case Felamimail_Model_Folder::FOLDER_SENT:
+                $field = 'sent_folder';
+                break;
+            case Felamimail_Model_Folder::FOLDER_TEMPLATES:
+                $field = 'templates_folder';
+                break;
+            case Felamimail_Model_Folder::FOLDER_DRAFTS:
+                $field = 'drafts_folder';
+                break;
+            default:
+                throw new Tinebase_Exception_InvalidArgument('No system folder: ' . $_systemFolder);
+        }
+        
+        return $field;
+    }
+    
+    /**
      * create new system folder
      * 
      * @param Felamimail_Model_Account $_account
@@ -695,7 +712,16 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $splitFolderName = Felamimail_Model_Folder::extractLocalnameAndParent($_systemFolder, $_account->delimiter);
         
-        return Felamimail_Controller_Folder::getInstance()->create($_account, $splitFolderName['localname'], $splitFolderName['parent']);
+        try {
+            $result = Felamimail_Controller_Folder::getInstance()->create($_account, $splitFolderName['localname'], $splitFolderName['parent']);
+        } catch (Felamimail_Exception_IMAPServiceUnavailable $feisu) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' 
+                . $feisu->getMessage());
+            // try again with INBOX as parent because some IMAP servers can not handle namespaces correctly
+            $result = Felamimail_Controller_Folder::getInstance()->create($_account, $splitFolderName['localname'], 'INBOX');
+        }
+        
+        return $result;
     }
     
     /**
