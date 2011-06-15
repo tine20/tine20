@@ -907,11 +907,21 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $folder = $this->_getFolder('INBOX', $clonedAccount);
         
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $this->_moveTestHelper($cachedMessage, $folder);
+    }
+    
+    /**
+     * move message test helper
+     * 
+     * @param mixed $_toMove
+     * @param Felamimail_Model_Folder $_folder
+     */
+    protected function _moveTestHelper($_toMove, $_folder)
+    {
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($_toMove, $_folder);
+        $message = $this->_searchMessage('multipart/mixed', $_folder);
         
-        Felamimail_Controller_Message_Move::getInstance()->moveMessages($cachedMessage, $folder);
-        $message = $this->_searchMessage('multipart/mixed', $folder);
-        
-        $folder = $this->_cache->updateCache($folder, 30);
+        $folder = $this->_cache->updateCache($_folder, 30);
         while ($folder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
             $folder = $this->_cache->updateCache($folder, 30);
         }        
