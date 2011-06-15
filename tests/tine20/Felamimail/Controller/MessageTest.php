@@ -907,11 +907,37 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $folder = $this->_getFolder('INBOX', $clonedAccount);
         
         $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $this->_moveTestHelper($cachedMessage, $folder);
+    }
+    
+    /**
+     * test move to another account (with message filter)
+     */
+    public function testMoveMessageToAnotherAccountWithFilter()
+    {
+        $clonedAccount = $this->_cloneAccount();
+        $folder = $this->_getFolder('INBOX', $clonedAccount);
         
-        Felamimail_Controller_Message_Move::getInstance()->moveMessages($cachedMessage, $folder);
-        $message = $this->_searchMessage('multipart/mixed', $folder);
+        $cachedMessage = $this->messageTestHelper('multipart_mixed.eml', 'multipart/mixed');
+        $messageFilter = new Felamimail_Model_MessageFilter(array(
+            array('field' => 'id', 'operator' => 'in', 'value' => array($cachedMessage->getId()))
+        ));
         
-        $folder = $this->_cache->updateCache($folder, 30);
+        $this->_moveTestHelper($messageFilter, $folder);
+    }
+    
+    /**
+     * move message test helper
+     * 
+     * @param mixed $_toMove
+     * @param Felamimail_Model_Folder $_folder
+     */
+    protected function _moveTestHelper($_toMove, $_folder)
+    {
+        Felamimail_Controller_Message_Move::getInstance()->moveMessages($_toMove, $_folder);
+        $message = $this->_searchMessage('multipart/mixed', $_folder);
+        
+        $folder = $this->_cache->updateCache($_folder, 30);
         while ($folder->cache_status === Felamimail_Model_Folder::CACHE_STATUS_INCOMPLETE) {
             $folder = $this->_cache->updateCache($folder, 30);
         }        

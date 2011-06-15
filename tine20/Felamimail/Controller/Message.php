@@ -137,7 +137,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $message = (is_resource($_message)) ? stream_get_contents($_message) : $_message;
         $flags   = ($_flags !== null) ? (array) $_flags : null;
         
-        Felamimail_Backend_ImapFactory::factory($folder->account_id)->appendMessage($message, $folder->globalname, $flags);
+        $imapBackend = $this->_getBackendAndSelectFolder(NULL, $folder);
+        $imapBackend->appendMessage($message, $folder->globalname, $flags);
     }
     
     /**
