@@ -155,7 +155,6 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      *  => the only way of uploading is using the XMLHttpRequest Level 2.
      */
     html5upload: function(file) {
-    	console.log(" HTML 5 upload");
     	
     	var fileRecord = new Ext.ux.file.Uploader.file({
             name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
@@ -210,9 +209,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * @return {Ext.data.Connection}
      */
     html4upload: function() {
-    	
-    	console.log(" HTML 4 upload");
-    	
+    	    	
         var form = this.createForm();
         var input = this.getInput();
         form.appendChild(input);
@@ -258,9 +255,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     
     onUploadProgress: function(e, fileRecord) {
     	
-    	console.log("upload");
     	var percent = Math.round(e.loaded / e.total * 100);        
-    	console.log(percent);
     	fileRecord.set('progress', percent);
         this.fireEvent('uploadprogress', this, fileRecord, e);
     },

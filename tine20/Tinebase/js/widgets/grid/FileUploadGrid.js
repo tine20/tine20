@@ -208,7 +208,6 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             width: 300,
             header: _('name'),
             renderer: function (value, metadata, record) {
-            	console.log("render upload");
                 var val = value;
                 if (record.get('status') !== 'complete') {
 //                    val += ' (' + record.get('progress') + '%)';
