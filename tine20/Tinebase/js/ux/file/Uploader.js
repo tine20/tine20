@@ -102,6 +102,38 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         }
     },
     
+    
+    html5uploadNew: function(file) {
+    	console.log(" HTML 5 upload NEW");
+    	
+    	var fileRecord = new Ext.ux.file.Uploader.file({
+            name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
+            type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
+            size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
+            status: 'uploading',
+            progress: 0,
+            input: this.getInput()
+        });
+    	    	
+    	var xhrObj = new XMLHttpRequest(); 
+    	
+    	xhrObj.upload.addEventListener("success", this.onUploadSuccess.createDelegate(this, [fileRecord], true), false); 
+    	xhrObj.upload.addEventListener("progress", this.onUploadProgress.createDelegate(this, [fileRecord], true), false); 
+    	xhrObj.upload.addEventListener("failure", this.onUploadFail.createDelegate(this, [fileRecord], true), false); 
+    	
+    	xhrObj.open("POST", this.url + '?method=Tinebase.uploadTempFile', true); 
+    	
+    	xhrObj.setRequestHeader("Content-type", fileRecord.get('type')); 
+    	xhrObj.setRequestHeader("X_FILE_NAME", fileRecord.get('name')); 
+    	
+    	xhrObj.xmlData = file;
+    	xhrObj.fileRecord = fileRecord;
+
+    	xhrObj.send(fileRecord.input);  
+    	
+    	return fileRecord;
+    },
+    
     /**
      * 2010-01-26 Current Browsers implemetation state of:
      *  http://www.w3.org/TR/FileAPI
@@ -119,6 +151,8 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      *  => the only way of uploading is using the XMLHttpRequest Level 2.
      */
     html5upload: function(file) {
+    	console.log(" HTML 5 upload");
+    	
         var fileRecord = new Ext.ux.file.Uploader.file({
             name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
             type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
@@ -140,6 +174,8 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             }
         });
         
+        conn.addEvents('progress');
+        
         var transaction = conn.request({
             headers: {
                 "X-File-Name"           : fileRecord.get('name'),
@@ -153,9 +189,8 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         });
         
         var upload = transaction.conn.upload;
-        
-        upload['onprogress'] = this.onUploadProgress.createDelegate(this, [fileRecord], true);
-        
+        upload["onprogress"] = this.onUploadProgress.createDelegate(this, [fileRecord], true);
+
         return fileRecord;
     },
     
@@ -165,6 +200,9 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * @return {Ext.data.Connection}
      */
     html4upload: function() {
+    	
+    	console.log(" HTML 4 upload");
+    	
         var form = this.createForm();
         var input = this.getInput();
         form.appendChild(input);
@@ -202,8 +240,11 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     */
     
     onUploadProgress: function(e, fileRecord) {
-        var percent = Math.round(e.loaded / e.total * 100);
-        fileRecord.set('progress', percent);
+    	
+    	console.log("upload");
+    	var percent = Math.round(e.loaded / e.total * 100);        
+    	console.log(percent);
+    	fileRecord.set('progress', percent);
         this.fireEvent('uploadprogress', this, fileRecord, e);
     },
     

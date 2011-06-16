@@ -199,6 +199,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             width: 300,
             header: _('name'),
             renderer: function (value, metadata, record) {
+            	console.log("render upload");
                 var val = value;
                 if (record.get('status') !== 'complete') {
 //                    val += ' (' + record.get('progress') + '%)';
@@ -245,6 +246,8 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @param {} e
      */
     onFilesSelect: function (fileSelector, e) {
+    	
+    	alert(Tine.Tinebase.registry.get('maxFileUploadSize') + " - " + fileRecord.get('size'));
         var uploader = new Ext.ux.file.Uploader({
 //            maxFileSize: 67108864, // 64MB
             fileSelector: fileSelector
