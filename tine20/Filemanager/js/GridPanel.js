@@ -368,7 +368,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onFilesSelect: function (fileSelector, e) {
 //        var uploader = new Ext.ux.file.Uploader({
-//            maxFileSize: 67108864, // 64MB
 //            fileSelector: fileSelector
 //        });
 //                

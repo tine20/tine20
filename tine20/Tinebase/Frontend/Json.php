@@ -499,7 +499,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
             'titlePostfix'      => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value,
             'redirectUrl'       => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
-            'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')) / 1048576 . ' MB'
+            'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')),
+            'maxPostSize'       => convertToBytes(ini_get('post_max_size'))
         );
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
