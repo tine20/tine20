@@ -90,9 +90,18 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     onUploadFail: function (uploader, fileRecord) {
-        Ext.MessageBox.alert(
+        
+    	var dataSize;
+        if (fileRecord.html5upload) {
+        	dataSize = dataSize = Tine.Tinebase.registry.get('maxPostSize');
+        }
+        else {
+        	dataSize = Tine.Tinebase.registry.get('maxFileUploadSize');
+        }
+    	
+    	Ext.MessageBox.alert(
             _('Upload Failed'), 
-            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') + parseInt(Tine.Tinebase.registry.get('maxFileUploadSize'), 10) / 1048576 + ' MB'
+            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') + parseInt(dataSize, 10) / 1048576 + ' MB'
         ).setIcon(Ext.MessageBox.ERROR);
         
         this.getStore().remove(fileRecord);
@@ -247,17 +256,18 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     onFilesSelect: function (fileSelector, e) {
     	
-    	alert(Tine.Tinebase.registry.get('maxFileUploadSize') + " - " + fileRecord.get('size'));
         var uploader = new Ext.ux.file.Uploader({
             fileSelector: fileSelector
         });
-                
+        
         uploader.on('uploadfailure', this.onUploadFail, this);
         
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
             var fileRecord = uploader.upload(file);
-            this.store.add(fileRecord);
+        	if(fileRecord.data.status !== 'failure' ) {
+	            this.store.add(fileRecord);
+        	}
         }, this);
     },
     

@@ -107,37 +107,37 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     },
     
     
-    html5uploadNew: function(file) {
-    	console.log(" HTML 5 upload NEW");
-    	
-    	var fileRecord = new Ext.ux.file.Uploader.file({
-            name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
-            type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
-            size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
-            status: 'uploading',
-            progress: 0,
-            input: this.getInput()
-        });
-    	    	
-    	var xhrObj = new XMLHttpRequest(); 
-    	
-    	xhrObj.upload.addEventListener("success", this.onUploadSuccess.createDelegate(this, [fileRecord], true), false); 
-    	xhrObj.upload.addEventListener("progress", this.onUploadProgress.createDelegate(this, [fileRecord], true), false); 
-    	xhrObj.upload.addEventListener("failure", this.onUploadFail.createDelegate(this, [fileRecord], true), false); 
-    	
-    	xhrObj.open("POST", this.url + '?method=Tinebase.uploadTempFile', true); 
-    	
-    	xhrObj.setRequestHeader("Content-type", fileRecord.get('type')); 
-    	xhrObj.setRequestHeader("X_FILE_NAME", fileRecord.get('name')); 
-    	
-    	xhrObj.xmlData = file;
-    	xhrObj.fileRecord = fileRecord;
-
-    	xhrObj.send(fileRecord.input);  
-    	
-    	return fileRecord;
-    },
-    
+//    html5uploadNew: function(file) {
+//    	console.log(" HTML 5 upload NEW");
+//    	
+//    	var fileRecord = new Ext.ux.file.Uploader.file({
+//            name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
+//            type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
+//            size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
+//            status: 'uploading',
+//            progress: 0,
+//            input: this.getInput()
+//        });
+//    	    	
+//    	var xhrObj = new XMLHttpRequest(); 
+//    	
+//    	xhrObj.upload.addEventListener("success", this.onUploadSuccess.createDelegate(this, [fileRecord], true), false); 
+//    	xhrObj.upload.addEventListener("progress", this.onUploadProgress.createDelegate(this, [fileRecord], true), false); 
+//    	xhrObj.upload.addEventListener("failure", this.onUploadFail.createDelegate(this, [fileRecord], true), false); 
+//    	
+//    	xhrObj.open("POST", this.url + '?method=Tinebase.uploadTempFile', true); 
+//    	
+//    	xhrObj.setRequestHeader("Content-type", fileRecord.get('type')); 
+//    	xhrObj.setRequestHeader("X_FILE_NAME", fileRecord.get('name')); 
+//    	
+//    	xhrObj.xmlData = file;
+//    	xhrObj.fileRecord = fileRecord;
+//
+//    	xhrObj.send(fileRecord.input);  
+//    	
+//    	return fileRecord;
+//    },
+//    
     /**
      * 2010-01-26 Current Browsers implemetation state of:
      *  http://www.w3.org/TR/FileAPI
@@ -157,7 +157,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     html5upload: function(file) {
     	console.log(" HTML 5 upload");
     	
-        var fileRecord = new Ext.ux.file.Uploader.file({
+    	var fileRecord = new Ext.ux.file.Uploader.file({
             name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
             type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
             size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
@@ -166,7 +166,13 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             input: this.getInput()
         });
         
-        var conn = new Ext.data.Connection({
+    	if(Tine.Tinebase.registry.get('maxPostSize')/1 <  file.size/1) {
+    		fileRecord.html5upload = true;
+    		this.onUploadFail(null, null, fileRecord);
+    		return fileRecord;
+    	}
+    	
+    	var conn = new Ext.data.Connection({
             disableCaching: true,
             method: 'POST',
             url: this.url + '?method=Tinebase.uploadTempFile',
@@ -221,6 +227,13 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             progress: 0
         });
         
+        
+        if(Tine.Tinebase.registry.get('maxFileUploadSize')/1 <  file.size/1) {
+    		fileRecord.html4upload = true;
+        	this.onUploadFail(null, null, fileRecord);
+    		return fileRecord;
+    	}
+        
         Ext.Ajax.request({
             fileRecord: fileRecord,
             isUpload: true,
@@ -256,6 +269,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * executed if a file got uploaded successfully
      */
     onUploadSuccess: function(response, options, fileRecord) {
+    	
     	try {
     		response = Ext.util.JSON.decode(response.responseText);
     	}
