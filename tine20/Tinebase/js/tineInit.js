@@ -489,10 +489,7 @@ Tine.Tinebase.tineInit = {
                         }
                     }
                     
-                    Ext.override(Ext.ux.file.Uploader, {
-                        maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
-                        maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
-                    });
+                    Tine.Tinebase.tineInit.overrideFields();
                     
                     Tine.Tinebase.tineInit.initList.initRegistry = true;
                 }
@@ -506,13 +503,22 @@ Tine.Tinebase.tineInit = {
                 }
             }
             
-            Ext.override(Ext.ux.file.Uploader, {
-                maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
-                maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
-            });
+            Tine.Tinebase.tineInit.overrideFields();
             
             Tine.Tinebase.tineInit.initList.initRegistry = true;
         }
+    },
+    
+    /**
+     * Applying registry entries to Tine classes
+     */
+    overrideFields: function () {
+    	
+    	Ext.override(Ext.ux.file.Uploader, {
+            maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
+            maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
+        });
+            	
     },
     
     /**
@@ -703,7 +709,8 @@ Tine.Tinebase.tineInit = {
      */
     onLangFilesLoad: function () {
     	//Ext.ux.form.DateTimeField.prototype.format = Locale.getTranslationData('Date', 'medium') + ' ' + Locale.getTranslationData('Time', 'medium');
-    }
+    }    
+    
 };
 
 Ext.onReady(function () {
