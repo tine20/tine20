@@ -1101,7 +1101,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 percentage = Math.round(usage/limit * 100),
                 text = String.format(this.app.i18n._('{0} %'), percentage);
             this.quotaBar.setWidth(75);
-            this.quotaBar.updateProgress(usage, text);
+            this.quotaBar.updateProgress(usage/limit, text);
             
             
             Ext.QuickTips.register({
