@@ -265,6 +265,8 @@ Ext.namespace('Tine.Felamimail');
             }
         }
         
+        Tine.log.debug('Tine.Felamimail.GridDetailsPanel::onClick found target:"' + selector + '".');
+        
         switch (selector) {
             case 'span[class=tinebase-download-link]':
                 var idx = target.id.split(':')[1];
@@ -280,6 +282,8 @@ Ext.namespace('Tine.Felamimail');
                 var messageId = (this.record.id.match(/_/)) ? this.record.id.split('_')[0] : this.record.id;
                     
                 if (attachment['content-type'] === 'message/rfc822') {
+                    
+                    Tine.log.debug('Tine.Felamimail.GridDetailsPanel::onClick openWindow for:"' + messageId + '_' + attachment.partId + '".');
                     // display message
                     Tine.Felamimail.MessageDisplayDialog.openWindow({
                         record: new Tine.Felamimail.Model.Message({
