@@ -165,7 +165,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             input: this.getInput()
         });
         
-    	if(Tine.Tinebase.registry.get('maxPostSize')/1 <  file.size/1) {
+    	if(this.maxPostSize/1 < file.size/1) {
     		fileRecord.html5upload = true;
     		this.onUploadFail(null, null, fileRecord);
     		return fileRecord;
@@ -225,7 +225,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         });
         
         
-        if(Tine.Tinebase.registry.get('maxFileUploadSize')/1 <  file.size/1) {
+        if(this.maxFileUploadSize/1 < file.size/1) {
     		fileRecord.html4upload = true;
         	this.onUploadFail(null, null, fileRecord);
     		return fileRecord;

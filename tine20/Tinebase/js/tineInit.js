@@ -184,10 +184,6 @@ Tine.Tinebase.tineInit = {
                         var waitForRegistry = function () {
                             if (Tine.Tinebase.tineInit.initList.initRegistry) {
                                 Ext.MessageBox.hide();
-                                Ext.override(Ext.ux.file.Uploader, {
-                                    maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
-                                    maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
-                                });
                                 Tine.Tinebase.tineInit.initExtDirect();
                                 Tine.Tinebase.tineInit.initState();
                                 Tine.Tinebase.tineInit.renderWindow();
@@ -493,6 +489,11 @@ Tine.Tinebase.tineInit = {
                         }
                     }
                     
+                    Ext.override(Ext.ux.file.Uploader, {
+                        maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
+                        maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
+                    });
+                    
                     Tine.Tinebase.tineInit.initList.initRegistry = true;
                 }
             });
@@ -504,6 +505,11 @@ Tine.Tinebase.tineInit = {
                     Tine[p].registry = mainWindow.Tine[p].registry;
                 }
             }
+            
+            Ext.override(Ext.ux.file.Uploader, {
+                maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
+                maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
+            });
             
             Tine.Tinebase.tineInit.initList.initRegistry = true;
         }
