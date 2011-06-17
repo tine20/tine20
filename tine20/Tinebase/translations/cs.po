@@ -1267,22 +1267,22 @@ msgstr "Soukromé"
 msgid "The grant to access records marked as private in this container"
 msgstr "Oprávnění přístupovat k záznamům v tomto kontejneru, které jsou označeny jako soukromé"
 
-#: js/widgets/container/ContainerTree.js:136
+#: js/widgets/container/TreePanel.js:136
 msgid "container"
 msgid_plural "containers"
 msgstr[0] "kontejner"
 msgstr[1] "kontejnery"
 msgstr[2] "kontejnerů"
 
-#: js/widgets/container/ContainerTree.js:484
+#: js/widgets/container/TreePanel.js:484
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr "Nemáte oprávnění vybrat {0} '{1}':"
 
-#: js/widgets/container/ContainerTree.js:485
+#: js/widgets/container/TreePanel.js:485
 msgid "{0} grant is required for desired action"
 msgstr "Pro požadovanou akci je zapotřebí oprávnění {0}"
 
-#: js/widgets/container/ContainerTree.js:486
+#: js/widgets/container/TreePanel.js:486
 msgid "Insufficient Grants"
 msgstr "Nedostatečná oprávnění"
 

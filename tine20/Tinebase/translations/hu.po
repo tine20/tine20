@@ -1253,21 +1253,21 @@ msgstr "Személyes"
 msgid "The grant to access records marked as private in this container"
 msgstr "Ezen konténer személyesként megjelölt adataihoz való hozzáférés engedélyezése"
 
-#: js/widgets/container/ContainerTree.js:136
+#: js/widgets/container/TreePanel.js:136
 msgid "container"
 msgid_plural "containers"
 msgstr[0] "konténer"
 msgstr[1] "konténerek"
 
-#: js/widgets/container/ContainerTree.js:484
+#: js/widgets/container/TreePanel.js:484
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr "Nem választhatod a {0} '{1}':"
 
-#: js/widgets/container/ContainerTree.js:485
+#: js/widgets/container/TreePanel.js:485
 msgid "{0} grant is required for desired action"
 msgstr "{0} engedély szükséges a kívánt tevékenységhez"
 
-#: js/widgets/container/ContainerTree.js:486
+#: js/widgets/container/TreePanel.js:486
 msgid "Insufficient Grants"
 msgstr "Elégtelen engedélyek"
 

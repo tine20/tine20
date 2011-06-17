@@ -1253,21 +1253,21 @@ msgstr "Privé"
 msgid "The grant to access records marked as private in this container"
 msgstr "Le droit d'accéder aux entrées marquées comme privées dans ce dépôt"
 
-#: js/widgets/container/ContainerTree.js:136
+#: js/widgets/container/TreePanel.js:136
 msgid "container"
 msgid_plural "containers"
 msgstr[0] "dépôt"
 msgstr[1] "dépôts"
 
-#: js/widgets/container/ContainerTree.js:484
+#: js/widgets/container/TreePanel.js:484
 msgid "You are not allowed to select the {0} '{1}':"
 msgstr "Vous n'êtes pas autorisée à choisir le {0} '{1}' :"
 
-#: js/widgets/container/ContainerTree.js:485
+#: js/widgets/container/TreePanel.js:485
 msgid "{0} grant is required for desired action"
 msgstr "L'autorisation {0} est requise pour cette action"
 
-#: js/widgets/container/ContainerTree.js:486
+#: js/widgets/container/TreePanel.js:486
 msgid "Insufficient Grants"
 msgstr "Droits insuffisants"
 

@@ -224,8 +224,10 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.action_save = new Ext.Action({
             requiredGrant: 'readGrant',
+            allowMultiple: false,
             actionType: 'saveLocaly',
             text: this.app.i18n._('Save locally'),
+            actionUpdater: this.updateSaveAction,
             handler: function(){ alert("Save locally"); },
             iconCls: 'action_filemanager_save_all'
 //            disabled: true
@@ -260,6 +262,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 this.action_deleteRecord
             ]
         });
+        
     },
     
     /**
@@ -318,6 +321,17 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
         
         return this.actionToolbar;
+    },
+    
+    /**
+     * updates context menu
+     * 
+     * @param {Ext.Action} action
+     * @param {Object} grants grants sum of grants
+     * @param {Object} records
+     */
+    updateSaveAction: function(action, grants, records) {
+            action.setDisabled(true);
     },
     
 //    /**

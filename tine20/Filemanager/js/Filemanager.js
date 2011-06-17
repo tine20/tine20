@@ -71,5 +71,5 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         }
         
         return this.filterPlugin;
-    },
+    }
 });
