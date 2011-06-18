@@ -128,13 +128,6 @@ msgstr "Dzwoni"
 msgid "Call ID"
 msgstr "ID połączenia"
 
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "Lista nr telefonów"
-msgstr[1] "listy nr telefonów"
-msgstr[2] "listy nr telefonów"
-
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
 msgstr "Wywołaj kontakt"
@@ -154,6 +147,13 @@ msgstr "Komórka"
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
 msgstr "Prywatna komórka"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "Lista nr telefonów"
+msgstr[1] "listy nr telefonów"
+msgstr[2] "listy nr telefonów"
 
 #~ msgid "Dial phone number"
 #~ msgstr "Wybierz numer telefonu"

@@ -128,12 +128,6 @@ msgstr "Ringing"
 msgid "Call ID"
 msgstr "Call ID"
 
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "phones list"
-msgstr[1] "phones lists"
-
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
 msgstr "Call contact"
@@ -153,3 +147,9 @@ msgstr "Cell"
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
 msgstr "Cell private"
+
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "phones list"
+msgstr[1] "phones lists"
