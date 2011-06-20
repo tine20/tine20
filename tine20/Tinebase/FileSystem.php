@@ -501,8 +501,10 @@ class Tinebase_FileSystem
     }
     
     /**
-     * @param unknown_type $_parentId
-     * @param unknown_type $_name
+     * get tree node specified by parent node (or id) and name
+     * 
+     * @param string|Tinebase_Model_Tree_Node $_parentId
+     * @param string $_name
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Model_Tree_Node
      */
@@ -533,6 +535,8 @@ class Tinebase_FileSystem
     }
     
     /**
+     * split path
+     * 
      * @param  string  $_path
      * @return array
      */
