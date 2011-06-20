@@ -32,9 +32,9 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
      */
     protected $_operators = array(
         0 => 'equals',       // value is expected to represent a single container
-        1 => 'in',           // value is expected to be an array of container representitions
-        2 => 'specialNode',  // value is one of {all|shared|otherUsers|internal} (depricated please use equals with path instead)
-        3 => 'personalNode', // value is expected to be a user id (depricated please use equals with path instead)
+        1 => 'in',           // value is expected to be an array of container representations
+        2 => 'specialNode',  // value is one of {all|shared|otherUsers|internal} (deprecated please use equals with path instead)
+        3 => 'personalNode', // value is expected to be a user id (deprecated please use equals with path instead)
         //4 => 'not',        // value is expected to be a single container id
     );
     
