@@ -1109,8 +1109,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 dismissDelay: 30000,
                 title: this.app.i18n._('Your quota'),
                 text: String.format(this.app.i18n._('{0} available (total: {1})'), 
-                    Ext.util.Format.fileSize(accountInbox.get('quota_usage')* 1024),
-                    Ext.util.Format.fileSize(accountInbox.get('quota_limit')* 1024)
+                    Ext.util.Format.fileSize(left * 1024),
+                    Ext.util.Format.fileSize(limit * 1024)
                 ),
                 width: 200
             });
