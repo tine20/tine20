@@ -37,7 +37,9 @@ class Tinebase_Model_Tree_NodeFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'parent_id'            => array('filter' => 'Tinebase_Model_Tree_NodeParentIdFilter', 'options' => array('applicationName' => 'Filemanager')),
+        // @todo not sure about this yet as we do not have a connection between parent_id and a tine container
+        //'parent_id'            => array('filter' => 'Tinebase_Model_Tree_NodeParentIdFilter', 'options' => array('applicationName' => 'Filemanager')),
+        'parent_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
