@@ -547,8 +547,9 @@ abstract class Tinebase_User_Abstract implements Tinebase_User_Interface
     /**
      * Get multiple users
      *
-     * @param string|array $_id Ids
+     * @param string|array 	$_id Ids
+     * @param string  		$_accountClass  type of model to return
      * @return Tinebase_Record_RecordSet
      */
-    abstract public function getMultiple($_id);    
+    abstract public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User');    
 }

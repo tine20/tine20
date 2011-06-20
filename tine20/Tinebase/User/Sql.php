@@ -790,7 +790,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     /**
      * Get multiple users
      *
-     * @param string|array $_id Ids
+     * @param 	string|array $_id Ids
      * @param   string  $_accountClass  type of model to return
      * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User' or 'Tinebase_Model_FullUser'
      */

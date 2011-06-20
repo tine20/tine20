@@ -296,18 +296,18 @@ class Tinebase_Relations
         
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
+        	$getMultipleMethod = 'getMultiple';
+        	
             if ($modelName === 'Tinebase_Model_User') {
                 // @todo add related backend here
                 //$appController = Tinebase_User::factory($relations->related_backend);
                 $appController = Tinebase_User::factory(Tinebase_User::getConfiguredBackend());
+                $records = $appController->$getMultipleMethod($relations->related_id);
             } else {
                 list($appName, $i, $itemName) = explode('_', $modelName);
                 $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+                $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
             }
-            
-            $getMultipleMethod = 'getMultiple';
-            
-            $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
             
             foreach ($relations as $relation) {
                 $recordIndex    = $records->getIndexById($relation->related_id);
