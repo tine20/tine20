@@ -791,12 +791,13 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * Get multiple users
      *
      * @param string|array $_id Ids
-     * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User'
+     * @param   string  $_accountClass  type of model to return
+     * @return Tinebase_Record_RecordSet of 'Tinebase_Model_User' or 'Tinebase_Model_FullUser'
      */
-    public function getMultiple($_id) 
+    public function getMultiple($_id, $_accountClass = 'Tinebase_Model_User') 
     {
         if (empty($_id)) {
-            return new Tinebase_Record_RecordSet('Tinebase_Model_User');
+            return new Tinebase_Record_RecordSet($_accountClass);
         }
 
         $select = $this->_getUserSelectObject()            
@@ -805,7 +806,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
         $stmt = $this->_db->query($select);
         $queryResult = $stmt->fetchAll();
         
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_User', $queryResult, TRUE);
+        $result = new Tinebase_Record_RecordSet($_accountClass, $queryResult, TRUE);
         
         return $result;
     }
