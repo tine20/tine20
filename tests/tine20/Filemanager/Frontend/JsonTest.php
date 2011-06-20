@@ -93,8 +93,11 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             array('field' => 'container_id', 'operator' => 'in', 'value' => array(array('path' => '/personal/' . $personalContainer->getId())))
         );
         $result = $this->_json->searchNodes($filter, array());
+        //print_r($result);
         
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals('unittestdir', $result['results'][0]['name']);
+        
+        // @todo make sure that resolved filter is available in result
     }
 }		
