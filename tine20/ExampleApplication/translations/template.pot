@@ -1,10 +1,5 @@
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr ""
-
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
+#: js/ExampleApplication.js:25
+msgid "Example Application"
 msgstr ""
 
 #: js/ExampleRecordGridPanel.js:74
@@ -35,10 +30,6 @@ msgstr ""
 msgid "ExampleRecord"
 msgstr ""
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr ""
-
 #: js/Model.js:31
 msgid "example record"
 msgid_plural "example records"
@@ -50,3 +41,12 @@ msgid "example record list"
 msgid_plural "example record lists"
 msgstr[0] ""
 msgstr[1] ""
+
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr ""
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr ""

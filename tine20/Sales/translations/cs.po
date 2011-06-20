@@ -13,10 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Sdílené kontrakty"
-
 #: Acl/Rights.php:103
 msgid "manage products"
 msgstr "spravovat produkty"
@@ -24,6 +20,35 @@ msgstr "spravovat produkty"
 #: Acl/Rights.php:104
 msgid "add, edit and delete products"
 msgstr "vytvořit, editovat a mazat produkty"
+
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
+msgid "Title"
+msgstr "Název"
+
+#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
+#: js/ProductGridPanel.js:123
+msgid "Description"
+msgstr "Popis"
+
+#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
+msgid "Enter description..."
+msgstr "Vložte popis..."
+
+#: js/ContractGridPanel.js:59 js/Models.js:78
+msgid "Quick search"
+msgstr "Rychlé hledání"
+
+#: js/ContractGridPanel.js:60
+msgid "Summary"
+msgstr "Přehled"
+
+#: js/ContractGridPanel.js:79
+msgid "Contract number"
+msgstr "Číslo kontraktu"
+
+#: js/ContractGridPanel.js:91
+msgid "Status"
+msgstr "Stav"
 
 #: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
 msgid "Name"
@@ -41,14 +66,9 @@ msgstr "Výrobce"
 msgid "Category"
 msgstr "Kategorie"
 
-#: js/ProductEditDialog.js:123 js/ContractEditDialog.js:100
-#: js/ProductGridPanel.js:123
-msgid "Description"
-msgstr "Popis"
-
-#: js/ProductEditDialog.js:124 js/ContractEditDialog.js:101
-msgid "Enter description..."
-msgstr "Vložte popis..."
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr "Štítky"
 
 #: js/Models.js:40
 msgid "Product"
@@ -63,10 +83,6 @@ msgid_plural "record lists"
 msgstr[0] "seznam záznamů"
 msgstr[1] "seznamy záznamů"
 msgstr[2] "seznamů záznamů"
-
-#: js/Models.js:78 js/ContractGridPanel.js:59
-msgid "Quick search"
-msgstr "Rychlé hledání"
 
 #: js/Models.js:79
 msgid "Product name"
@@ -86,22 +102,6 @@ msgstr[0] "seznam kontraktů"
 msgstr[1] "seznamy kontraktů"
 msgstr[2] "seznamů kontraktů"
 
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
-msgid "Title"
-msgstr "Název"
-
-#: js/ContractGridPanel.js:60
-msgid "Summary"
-msgstr "Přehled"
-
-#: js/ContractGridPanel.js:79
-msgid "Contract number"
-msgstr "Číslo kontraktu"
-
-#: js/ContractGridPanel.js:91
-msgid "Status"
-msgstr "Stav"
-
 #: js/Sales.js:53
 msgid "Products"
 msgstr "Produkty"
@@ -118,6 +118,6 @@ msgstr "Kontrakty"
 msgid "All Contracts"
 msgstr "Všechny kontrakty"
 
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Štítky"
+#: Setup/setup.xml:243
+msgid "Shared Contracts"
+msgstr "Sdílené kontrakty"
