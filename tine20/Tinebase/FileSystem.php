@@ -297,8 +297,16 @@ class Tinebase_FileSystem
         return true;
     }
     
+    /**
+     * create directory
+     * 
+     * @param string $_path
+     */
     public function mkDir($_path)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Creating directory ' . $_path);
+        
         $path = '/';
         $parentNode = null;
         $pathParts = $this->_splitPath($_path);
@@ -353,6 +361,12 @@ class Tinebase_FileSystem
         return true;
     }
     
+    /**
+     * scan dir
+     * 
+     * @param string $_path
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
     public function scanDir($_path)
     {
         $node = $this->stat($_path);
@@ -512,6 +526,9 @@ class Tinebase_FileSystem
     {
         $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Getting tree node ' . $parentId . '/'. $_name);
+        
         $searchFilter = new Tinebase_Model_Tree_NodeFilter(array(
             array(
                 'field'     => 'name',
@@ -531,7 +548,7 @@ class Tinebase_FileSystem
             throw new Tinebase_Exception_InvalidArgument('directory node not found');
         }
         
-        return $result[0];
+        return $result->getFirstRecord();
     }
     
     /**
