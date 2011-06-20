@@ -479,7 +479,7 @@ class Tinebase_Core
                 'caching'                   => true,
                 'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
                 'write_control'             => false, // don't read cache entry after it got written
-                'logging'                   => true,
+                'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
                 'logger'                    => self::getLogger(),
             );
 
@@ -492,7 +492,7 @@ class Tinebase_Core
                         $backendOptions = array(
                             'cache_dir'              => ($config->caching->path)     ? $config->caching->path     : Tinebase_Core::getTempDir(),
                             'hashed_directory_level' => ($config->caching->dirlevel) ? $config->caching->dirlevel : 4, 
-                            'logging'                => true,
+                            'logging'                => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
                             'logger'                 => self::getLogger(),
                         );
                         break;
