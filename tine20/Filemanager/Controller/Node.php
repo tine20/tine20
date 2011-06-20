@@ -80,6 +80,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param bool $_onlyIds
      * @param string|optional $_action
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * 
+     * @todo make sure a parent_id filter is set
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
