@@ -40,10 +40,23 @@ if [ "$1" = "configure" ]; then
         dbc_generate_include='template:/etc/tine20/config.inc.php'
         dbc_generate_include_owner='root:www-data'
         dbc_generate_include_perms='640'
-        dbc_generate_include_args="-U -o template_infile=/usr/share/doc/tine20/examples/config.inc.php.dist"
+        dbc_generate_include_args="-U -o template_infile=/usr/share/doc/tine20-tinebase/examples/config.inc.php.dist"
         
         dbc_go tine20 $@
+        
+        db_get tine20/setupuser
+        setupuser="$RET"
+        db_get tine20/setuppasswd
+        setuppasswd="$RET"
+        
+        sed -i "s/_SETUPUSERNAME_/$setupuser/"   /etc/tine20/config.inc.php
+        sed -i "s/_SETUPPASSWORD_/$setuppasswd/" /etc/tine20/config.inc.php
+        
     fi
+
+
+    db_reset tine20/setupuser   || true
+    db_reset tine20/setuppasswd || true
 
     if [ ! -f /etc/php5/conf.d/tine20.ini -a ! -h /etc/php5/conf.d/tine20.ini ]; then
         ln -s /etc/tine20/php5.ini /etc/php5/conf.d/tine20.ini

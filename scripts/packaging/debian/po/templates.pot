@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: tine20@packages.debian.org\n"
-"POT-Creation-Date: 2011-06-11 22:13+0200\n"
+"POT-Creation-Date: 2011-06-15 17:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -78,4 +78,28 @@ msgstr ""
 #. Description
 #: ../tine20-tinebase.templates:5001
 msgid "Please choose whether the webserver should get restarted?"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../tine20-tinebase.templates:6001
+msgid "Tine 2.0 setup username"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../tine20-tinebase.templates:6001
+msgid "Username used to login into Tine 2.0 setup"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../tine20-tinebase.templates:7001
+msgid "Tine 2.0 setup password"
+msgstr ""
+
+#. Type: password
+#. Description
+#: ../tine20-tinebase.templates:7001
+msgid "Password used to login into Tine 2.0 setup"
 msgstr ""
