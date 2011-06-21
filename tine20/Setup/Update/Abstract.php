@@ -61,16 +61,16 @@ class Setup_Update_Abstract
 	 * set version number of a given application 
 	 * version is stored in database table "applications"
 	 *
-	 * @param string application
-	 * @param int new version number
+	 * @param string $_applicationName
+	 * @param string $_version new version number
+	 * @return Tinebase_Model_Application
 	 */	
-	public function setApplicationVersion($_application, $_version)
+	public function setApplicationVersion($_applicationName, $_version)
 	{
-		$applicationsTable = new Tinebase_Db_Table(array('name' =>  SQL_TABLE_PREFIX . 'applications'));
-		$where  = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier('name') . ' = ?', $_application),
-        );
-		$applicationsTable->update(array('version' => $_version), $where);
+	    $application = Tinebase_Application::getInstance()->getApplicationByName($_applicationName);
+	    $application->version = $_version;
+	    
+	    return Tinebase_Application::getInstance()->updateApplication($application);
 	}
 	
 	/**
