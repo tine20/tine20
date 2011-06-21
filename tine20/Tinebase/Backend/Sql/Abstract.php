@@ -746,7 +746,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $identifier = $_record->getIdProperty();
         
         if (!$_record instanceof $this->_modelName) {
-            throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type. Should be instance of ' . $this->_modelName);
+            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
         }
         
         // set uid if record has hash id and id is empty
@@ -953,7 +953,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $identifier = $_record->getIdProperty();
         
         if (!$_record instanceof $this->_modelName) {
-            throw new Tinebase_Exception_InvalidArgument('$_record is of invalid model type');
+            throw new Tinebase_Exception_InvalidArgument('invalid model type: $_record is instance of "' . get_class($_record) . '". but should be instance of ' . $this->_modelName);
         }
         
         $_record->isValid(TRUE);
