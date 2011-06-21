@@ -95,14 +95,23 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
             return;
         }
         
+        $originalMessageId = $_message->original_id;
+        if (strpos($originalMessageId, '_') !== FALSE ) {
+            list($originalMessageId, $partId) = explode('_', $originalMessageId);
+        } else {
+            $partId = NULL;
+        }
+        
         try {
-            $originalMessage = ($_message->original_id) ? $this->get($_message->original_id) : NULL;
+            $originalMessage = ($originalMessageId) ? $this->get($originalMessageId) : NULL;
         } catch (Tinebase_Exception_NotFound $tenf) {
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Did not find original message.');
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Did not find original message (' . $originalMessageId . ')');
             $originalMessage = NULL;
         }
         
-        $_message->original_id = $originalMessage;
+        $_message->original_id      = $originalMessage;
+        $_message->original_part_id = $partId;
     }
     
     /**
@@ -434,7 +443,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
                 
                 if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_message->original_id instanceof Felamimail_Model_Message) {
-                    $part = $this->getMessagePart($_message->original_id);
+                    $part = $this->getMessagePart($_message->original_id, ($_message->original_part_id) ? $_message->original_part_id : NULL);
                     $part->decodeContent();
                     
                     $name = $attachment['name'] . '.eml';
