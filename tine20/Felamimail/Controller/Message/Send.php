@@ -72,24 +72,37 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         // increase execution time (sending message with attachments can take a long time)
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
-        // get account
         $account = Felamimail_Controller_Account::getInstance()->get($_message->account_id);
+        $this->_resolveOriginalMessage($_message);
+
+        $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients);
+        $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients);
         
-        // get original message
+        // reset max execution time to old value
+        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
+        
+        return $_message;
+    }
+    
+    /**
+     * places a Felamimail_Model_Message in original_id field of given message (if it had an original_id set)
+     * 
+     * @param Felamimail_Model_Message $_message
+     */
+    protected function _resolveOriginalMessage(Felamimail_Model_Message $_message)
+    {
+        if (! $_message->original_id || $_message->original_id instanceof Felamimail_Model_Message) {
+            return;
+        }
+        
         try {
             $originalMessage = ($_message->original_id) ? $this->get($_message->original_id) : NULL;
         } catch (Tinebase_Exception_NotFound $tenf) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Did not find original message.');
             $originalMessage = NULL;
         }
-
-        $mail = $this->createMailForSending($_message, $account, $nonPrivateRecipients, $originalMessage);
-        $this->_sendMailViaTransport($mail, $account, $_message, true, $nonPrivateRecipients, $originalMessage);
         
-        // reset max execution time to old value
-        Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
-        
-        return $_message;
+        $_message->original_id = $originalMessage;
     }
     
     /**
@@ -124,10 +137,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Felamimail_Model_Message $_message
      * @param Felamimail_Model_Account $_account
      * @param array $_nonPrivateRecipients
-     * @param Felamimail_Model_Message $_originalMessage
      * @return Tinebase_Mail
      */
-    public function createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
+    public function createMailForSending(Felamimail_Model_Message $_message, Felamimail_Model_Account $_account, &$_nonPrivateRecipients = array())
     {
         // create new mail to send
         $mail = new Tinebase_Mail('UTF-8');
@@ -136,9 +148,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         $this->_setMailBody($mail, $_message);
         $this->_setMailFrom($mail, $_account, $_message);
         $_nonPrivateRecipients = $this->_setMailRecipients($mail, $_message);
-        $this->_setMailHeaders($mail, $_account, $_message, $_originalMessage);
+        $this->_setMailHeaders($mail, $_account, $_message);
         
-        $this->_addAttachments($mail, $_message, $_originalMessage);
+        $this->_addAttachments($mail, $_message);
         
         return $mail;
     }
@@ -151,9 +163,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param boolean $_saveInSent
      * @param Felamimail_Model_Message $_message
      * @param array $_nonPrivateRecipients
-     * @param Felamimail_Model_Message $_originalMessage
      */
-    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, $_saveInSent = false, $_nonPrivateRecipients = array(), Felamimail_Model_Message $_originalMessage = NULL)
+    protected function _sendMailViaTransport(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, $_saveInSent = false, $_nonPrivateRecipients = array())
     {
         $smtpConfig = $_account->getSmtpConfig();
         if (! empty($smtpConfig) && array_key_exists('hostname', $smtpConfig)) {
@@ -173,9 +184,9 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 // add reply/forward flags if set
                 if (! empty($_message->flags) 
                     && ($_message->flags == Zend_Mail_Storage::FLAG_ANSWERED || $_message->flags == Zend_Mail_Storage::FLAG_PASSED)
-                    && $_originalMessage !== NULL
+                    && $_message->original_id instanceof Felamimail_Model_Message
                 ) {
-                    Felamimail_Controller_Message_Flags::getInstance()->addFlags($_originalMessage, array($_message->flags));
+                    Felamimail_Controller_Message_Flags::getInstance()->addFlags($_message->original_id, array($_message->flags));
                 }
     
                 // add email notes to contacts (only to/cc)
@@ -378,11 +389,10 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Account $_account
      * @param Felamimail_Model_Message $_message
-     * @param Felamimail_Model_Message $_originalMessage
      * 
      * @todo what has to be set in the 'In-Reply-To' header?
      */
-    protected function _setMailHeaders(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL, Felamimail_Model_Message $_originalMessage = NULL)
+    protected function _setMailHeaders(Zend_Mail $_mail, Felamimail_Model_Account $_account, Felamimail_Model_Message $_message = NULL)
     {
         // add user agent
         $_mail->addHeader('User-Agent', 'Tine 2.0 Email Client (version ' . TINE20_CODENAME . ' - ' . TINE20_PACKAGESTRING . ')');
@@ -394,8 +404,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
         
         if ($_message !== NULL) {
             // set in reply to
-            if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_originalMessage !== NULL) {
-                $_mail->addHeader('In-Reply-To', $_originalMessage->messageuid);
+            if ($_message->flags && $_message->flags == Zend_Mail_Storage::FLAG_ANSWERED && $_message->original_id instanceof Felamimail_Model_Message) {
+                $_mail->addHeader('In-Reply-To', $_message->original_id->messageuid);
             }
         
             // add other headers
@@ -413,9 +423,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
      *
      * @param Tinebase_Mail $_mail
      * @param Felamimail_Model_Message $_message
-     * @param Felamimail_Model_Message $_originalMessage
      */
-    protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message, $_originalMessage = NULL)
+    protected function _addAttachments(Tinebase_Mail $_mail, Felamimail_Model_Message $_message)
     {
         if (isset($_message->attachments)) {
             $size = 0;
@@ -424,8 +433,8 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
                 
-                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_originalMessage !== NULL) {
-                    $part = $this->getMessagePart($_originalMessage);
+                if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_message->original_id instanceof Felamimail_Model_Message) {
+                    $part = $this->getMessagePart($_message->original_id);
                     $part->decodeContent();
                     
                     $name = $attachment['name'] . '.eml';
