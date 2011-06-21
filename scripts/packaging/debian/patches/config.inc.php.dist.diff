@@ -1,6 +1,6 @@
 --- a/config.inc.php.dist
 +++ b/config.inc.php.dist
-@@ -1,13 +1,11 @@
+@@ -1,47 +1,31 @@
  <?php
 -// TODO: rename to config.inc.php and add your database settings
  
@@ -18,9 +18,11 @@
          'adapter'       => 'pdo_mysql',
          'tableprefix'   => 'tine20_',
      ),
-@@ -15,33 +13,19 @@
-         'username'      => 'tine20setup',
-         'password'      => 'setup' 
+     'setupuser' => array(
+-        'username'      => 'tine20setup',
+-        'password'      => 'setup' 
++        'username'      => '_SETUPUSERNAME_',
++        'password'      => '_SETUPPASSWORD_' 
      ),
 -  /*'themes' => array(
 -  	'default' => 0,
