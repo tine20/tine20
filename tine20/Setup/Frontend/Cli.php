@@ -3,8 +3,8 @@
  * Tine 2.0
  * @package     Tinebase
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2008-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        add ext check again
  */
@@ -170,7 +170,7 @@ class Setup_Frontend_Cli
     {
         $controller = Setup_Controller::getInstance();
         
-        if($_opts->update === true) {
+        if ($_opts->update === true) {
             $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
         } else {
             $applications = new Tinebase_Record_RecordSet('Tinebase_Model_Application');
@@ -186,9 +186,9 @@ class Setup_Frontend_Cli
             }
         }
         
-        foreach($applications as $key => &$application) {
+        foreach ($applications as $key => &$application) {
             try {
-                if(!$controller->updateNeeded($application)) {
+                if (!$controller->updateNeeded($application)) {
                     //echo "Application $application is already up to date! Skipped...\n";
                     unset($applications[$key]);
                 }
@@ -198,13 +198,11 @@ class Setup_Frontend_Cli
             }
         }
 
-        $updatedApps = 0;
-        if(count($applications) > 0) {
+        if (count($applications) > 0) {
             $controller->updateApplications($applications);
-            $updatedApps++;
         }
         
-        echo "Updated " . $updatedApps . " applications.\n";        
+        echo "Updated " . count($applications) . " applications.\n";        
     }
 
     /**
