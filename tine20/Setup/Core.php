@@ -5,7 +5,7 @@
  * @package     Setup
  * @subpackage  Server
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schuele <p.schuele@metaways.de>
  *
  */
@@ -185,13 +185,19 @@ class Setup_Core extends Tinebase_Core
         
         // check database first
         if (self::configFileExists()) {
+            $dbConfig = Tinebase_Core::getConfig()->database;            
+            if ($dbConfig->adapter === self::PDO_MYSQL && (! defined(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY) || ! defined(PDO::MYSQL_ATTR_INIT_COMMAND))) {
+                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                    . ' PDO constants not defined.');
+                return;
+            }
+            
             try {
                 parent::setupDatabaseConnection();
                 
                 // check (mysql)db server version
                 $ext = new Setup_ExtCheck(dirname(__FILE__) . '/essentials.xml');
-                $dbConfig = Tinebase_Core::getConfig()->database;
-                if ($dbConfig->adapter === 'pdo_mysql' && ($mysqlRequired = $ext->getExtensionData('MySQL'))) {
+                if ($dbConfig->adapter === self::PDO_MYSQL && ($mysqlRequired = $ext->getExtensionData('MySQL'))) {
                     //Check if installed MySQL version is compatible with required version
                     $hostnameWithPort = (isset($dbConfig->port)) ? $dbConfig->host . ':' . $dbConfig->port : $dbConfig->host;
                     $link = @mysql_connect($hostnameWithPort, $dbConfig->username, $dbConfig->password);
