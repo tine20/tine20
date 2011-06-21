@@ -514,7 +514,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      * @param Tinebase_Model_Pagination $_pagination
      * @return array
      */
-    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Model_Pagination $_pagination = NULL)
+    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
     {
         $getIdValuePair = FALSE;
 
@@ -535,7 +535,9 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
             }
         }
         
-        $colsToFetch = $this->_addFilterColumns($colsToFetch, $_filter);
+        if ($_filter !== NULL) {
+            $colsToFetch = $this->_addFilterColumns($colsToFetch, $_filter);
+        }
         
         foreach((array) $_pagination->sort as $sort) {
             if (! array_key_exists($sort, $colsToFetch)) {
@@ -555,13 +557,11 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      */
     protected function _addFilterColumns($_colsToFetch, Tinebase_Model_Filter_FilterGroup $_filter)
     {
-        if ($_filter !== NULL) {
-            // need to ask filter if it needs additional columns
-            $filterCols = $_filter->getRequiredColumnsForSelect();
-            foreach ($filterCols as $key => $filterCol) {
-                if (! array_key_exists($key, $_colsToFetch)) {
-                    $_colsToFetch[$key] = $filterCol;
-                }
+        // need to ask filter if it needs additional columns
+        $filterCols = $_filter->getRequiredColumnsForSelect();
+        foreach ($filterCols as $key => $filterCol) {
+            if (! array_key_exists($key, $_colsToFetch)) {
+                $_colsToFetch[$key] = $filterCol;
             }
         }
         
