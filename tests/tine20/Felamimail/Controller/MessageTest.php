@@ -862,6 +862,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         
         //print_r($completeForwardedMessagePart->toArray());
         $this->assertTrue(! empty($completeForwardedMessagePart->headers), 'headers should not be empty');
+        $this->assertEquals('moz-screenshot-83.png', $completeForwardedMessagePart->attachments[0]['filename']);
     }
     
     /**
