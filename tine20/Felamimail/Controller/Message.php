@@ -228,7 +228,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $partStructure  = $message->getPartStructure($_partId, FALSE);
         
-        $rawContent = $this->_getPartContent($message, $partStructure, $_onlyBodyOfRfc822 = FALSE);
+        $rawContent = $this->_getPartContent($message, $_partId, $partStructure, $_onlyBodyOfRfc822 = FALSE);
         
         $part = $this->_createMimePart($rawContent, $partStructure);
         
@@ -239,11 +239,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * get part content (and update structure) from message part
      * 
      * @param Felamimail_Model_Message $_message
+     * @param string $_partId
      * @param array $_partStructure
      * @param boolean $_onlyBodyOfRfc822 only fetch body of rfc822 messages (FALSE to get headers, too)
      * @return string
      */
-    protected function _getPartContent(Felamimail_Model_Message $_message, &$_partStructure, $_onlyBodyOfRfc822 = FALSE)
+    protected function _getPartContent(Felamimail_Model_Message $_message, $_partId, &$_partStructure, $_onlyBodyOfRfc822 = FALSE)
     {
         $imapBackend = $this->_getBackendAndSelectFolder($_message->folder_id);
         
