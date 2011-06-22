@@ -231,26 +231,33 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         
-        $rawBody = '';
+        $rawContent = '';
         
         // special handling for rfc822 messages
         if ($_partId !== NULL && $partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
-            $rawBody .= $imapBackend->getRawContent($message->messageuid, $_partId . '.HEADER', true);
+            $logmessage = 'Fetch message part (HEADER + TEXT) ' . $_partId . ' of messageuid ' . $message->messageuid;
+            
+            $rawContent .= $imapBackend->getRawContent($message->messageuid, $_partId . '.HEADER', true);
             $part = $_partId . '.TEXT';
             if (array_key_exists('messageStructure', $partStructure)) {
                 $partStructure = $partStructure['messageStructure'];
             }
         } else {
+            $logmessage = ($_partId !== NULL) 
+                ? 'Fetch message part ' . $_partId . ' of messageuid ' . $message->messageuid 
+                : 'Fetch main of messageuid ' . $message->messageuid;
+            
             $part = $_partId;
         }
         
-        $rawBody .= $imapBackend->getRawContent($message->messageuid, $part, true);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $logmessage);
+        $rawContent .= $imapBackend->getRawContent($message->messageuid, $part, true);
         
         $stream = fopen("php://temp", 'r+');
-        fputs($stream, $rawBody);
+        fputs($stream, $rawContent);
         rewind($stream);
         
-        unset($rawBody);
+        unset($rawContent);
         
         $part = new Zend_Mime_Part($stream);
         $part->type        = $partStructure['contentType'];
