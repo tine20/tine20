@@ -218,7 +218,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param boolean $_onlyBodyOfRfc822 only fetch body of rfc822 messages (FALSE to get headers, too)
      * @return Zend_Mime_Part
      */
-    public function getMessagePart($_id, $_partId = null, $_onlyBodyOfRfc822 = FALSE)
+    public function getMessagePart($_id, $_partId = NULL, $_onlyBodyOfRfc822 = FALSE)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -228,61 +228,93 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $partStructure  = $message->getPartStructure($_partId, FALSE);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partStructure, TRUE));
+        $rawContent = $this->_getPartContent($message, $partStructure, $_onlyBodyOfRfc822 = FALSE);
         
-        $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
+        $part = $this->_createMimePart($rawContent, $partStructure);
+        
+        return $part;
+    }
+    
+    /**
+     * get part content (and update structure) from message part
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param array $_partStructure
+     * @param boolean $_onlyBodyOfRfc822 only fetch body of rfc822 messages (FALSE to get headers, too)
+     * @return string
+     */
+    protected function _getPartContent(Felamimail_Model_Message $_message, &$_partStructure, $_onlyBodyOfRfc822 = FALSE)
+    {
+        $imapBackend = $this->_getBackendAndSelectFolder($_message->folder_id);
         
         $rawContent = '';
         
         // special handling for rfc822 messages
-        if ($_partId !== NULL && $partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+        if ($_partId !== NULL && $_partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
             if ($_onlyBodyOfRfc822) {
-                $logmessage = 'Fetch message part (TEXT) ' . $_partId . ' of messageuid ' . $message->messageuid;
-                if (array_key_exists('messageStructure', $partStructure)) {
-                    $partStructure = $partStructure['messageStructure'];
+                $logmessage = 'Fetch message part (TEXT) ' . $_partId . ' of messageuid ' . $_message->messageuid;
+                if (array_key_exists('messageStructure', $_partStructure)) {
+                    $_partStructure = $_partStructure['messageStructure'];
                 }
             } else {
-                $logmessage = 'Fetch message part (HEADER + TEXT) ' . $_partId . ' of messageuid ' . $message->messageuid;
-                $rawContent .= $imapBackend->getRawContent($message->messageuid, $_partId . '.HEADER', true);
+                $logmessage = 'Fetch message part (HEADER + TEXT) ' . $_partId . ' of messageuid ' . $_message->messageuid;
+                $rawContent .= $imapBackend->getRawContent($_message->messageuid, $_partId . '.HEADER', true);
             }
             
-            $part = $_partId . '.TEXT';
+            $section = $_partId . '.TEXT';
         } else {
             $logmessage = ($_partId !== NULL) 
-                ? 'Fetch message part ' . $_partId . ' of messageuid ' . $message->messageuid 
-                : 'Fetch main of messageuid ' . $message->messageuid;
+                ? 'Fetch message part ' . $_partId . ' of messageuid ' . $_message->messageuid 
+                : 'Fetch main of messageuid ' . $_message->messageuid;
             
-            $part = $_partId;
+            $section = $_partId;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_partStructure, TRUE));
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $logmessage);
-        $rawContent .= $imapBackend->getRawContent($message->messageuid, $part, true);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Content: ' . $rawContent);
+        $rawContent .= $imapBackend->getRawContent($_message->messageuid, $section, TRUE);
+        
+        return $rawContent;
+    }
+    
+    /**
+     * create mime part from raw content and part structure
+     * 
+     * @param string $_rawContent
+     * @param array $_partStructure
+     * @return Zend_Mime_Part
+     */
+    protected function _createMimePart($_rawContent, $_partStructure)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Content: ' . $_rawContent);
         
         $stream = fopen("php://temp", 'r+');
-        fputs($stream, $rawContent);
+        fputs($stream, $_rawContent);
         rewind($stream);
         
-        unset($rawContent);
+        unset($_rawContent);
         
         $part = new Zend_Mime_Part($stream);
-        $part->type        = $partStructure['contentType'];
-        $part->encoding    = array_key_exists('encoding', $partStructure) ? $partStructure['encoding'] : null;
-        $part->id          = array_key_exists('id', $partStructure) ? $partStructure['id'] : null;
-        $part->description = array_key_exists('description', $partStructure) ? $partStructure['description'] : null;
-        $part->charset     = array_key_exists('charset', $partStructure['parameters']) ? $partStructure['parameters']['charset'] : 'iso-8859-15';
-        $part->boundary    = array_key_exists('boundary', $partStructure['parameters']) ? $partStructure['parameters']['boundary'] : null;
-        $part->location    = $partStructure['location'];
-        $part->language    = $partStructure['language'];
-        if (is_array($partStructure['disposition'])) {
-            $part->disposition = $partStructure['disposition']['type'];
-            if (array_key_exists('parameters', $partStructure['disposition'])) {
-                $part->filename    = array_key_exists('filename', $partStructure['disposition']['parameters']) ? $partStructure['disposition']['parameters']['filename'] : null;
+        $part->type        = $_partStructure['contentType'];
+        $part->encoding    = array_key_exists('encoding', $_partStructure) ? $_partStructure['encoding'] : null;
+        $part->id          = array_key_exists('id', $_partStructure) ? $_partStructure['id'] : null;
+        $part->description = array_key_exists('description', $_partStructure) ? $_partStructure['description'] : null;
+        $part->charset     = array_key_exists('charset', $_partStructure['parameters']) 
+            ? $_partStructure['parameters']['charset'] 
+            : self::DEFAULT_FALLBACK_CHARSET;
+        $part->boundary    = array_key_exists('boundary', $_partStructure['parameters']) ? $_partStructure['parameters']['boundary'] : null;
+        $part->location    = $_partStructure['location'];
+        $part->language    = $_partStructure['language'];
+        if (is_array($_partStructure['disposition'])) {
+            $part->disposition = $_partStructure['disposition']['type'];
+            if (array_key_exists('parameters', $_partStructure['disposition'])) {
+                $part->filename    = array_key_exists('filename', $_partStructure['disposition']['parameters']) ? $_partStructure['disposition']['parameters']['filename'] : null;
             }
         }
-        if (empty($part->filename) && array_key_exists('parameters', $partStructure) && array_key_exists('name', $partStructure['parameters'])) {
-            $part->filename = $partStructure['parameters']['name'];
+        if (empty($part->filename) && array_key_exists('parameters', $_partStructure) && array_key_exists('name', $_partStructure['parameters'])) {
+            $part->filename = $_partStructure['parameters']['name'];
         }
         
         return $part;
