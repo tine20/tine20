@@ -228,7 +228,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $partStructure  = $message->getPartStructure($_partId, FALSE);
         
-        $rawContent = $this->_getPartContent($message, $_partId, $partStructure, $_onlyBodyOfRfc822 = FALSE);
+        $rawContent = $this->_getPartContent($message, $_partId, $partStructure, $_onlyBodyOfRfc822);
         
         $part = $this->_createMimePart($rawContent, $partStructure);
         
