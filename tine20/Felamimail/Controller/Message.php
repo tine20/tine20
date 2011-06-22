@@ -215,9 +215,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string|Felamimail_Model_Message $_id
      * @param string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
+     * @param boolean $_onlyBody only fetch body of rfc822 messages (FALSE to get headers, too)
      * @return Zend_Mime_Part
      */
-    public function getMessagePart($_id, $_partId = null)
+    public function getMessagePart($_id, $_partId = null, $_onlyBody = TRUE)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -235,9 +236,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // special handling for rfc822 messages
         if ($_partId !== NULL && $partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
-            $logmessage = 'Fetch message part (HEADER + TEXT) ' . $_partId . ' of messageuid ' . $message->messageuid;
+            if (! $_onlyBody) {
+                $logmessage = 'Fetch message part (HEADER + TEXT) ' . $_partId . ' of messageuid ' . $message->messageuid;
+                $rawContent .= $imapBackend->getRawContent($message->messageuid, $_partId . '.HEADER', true);
+            } else {
+                $logmessage = 'Fetch message part (TEXT) ' . $_partId . ' of messageuid ' . $message->messageuid;
+            }
             
-            $rawContent .= $imapBackend->getRawContent($message->messageuid, $_partId . '.HEADER', true);
             $part = $_partId . '.TEXT';
             if (array_key_exists('messageStructure', $partStructure)) {
                 $partStructure = $partStructure['messageStructure'];
@@ -252,6 +257,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $logmessage);
         $rawContent .= $imapBackend->getRawContent($message->messageuid, $part, true);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $rawContent);
         
         $stream = fopen("php://temp", 'r+');
         fputs($stream, $rawContent);
