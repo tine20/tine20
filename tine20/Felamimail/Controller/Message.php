@@ -215,10 +215,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string|Felamimail_Model_Message $_id
      * @param string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
-     * @param boolean $_onlyBody only fetch body of rfc822 messages (FALSE to get headers, too)
+     * @param boolean $_onlyBodyOfRfc822 only fetch body of rfc822 messages (FALSE to get headers, too)
      * @return Zend_Mime_Part
      */
-    public function getMessagePart($_id, $_partId = null, $_onlyBody = TRUE)
+    public function getMessagePart($_id, $_partId = null, $_onlyBodyOfRfc822 = FALSE)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -236,17 +236,17 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         // special handling for rfc822 messages
         if ($_partId !== NULL && $partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
-            if (! $_onlyBody) {
+            if ($_onlyBodyOfRfc822) {
+                $logmessage = 'Fetch message part (TEXT) ' . $_partId . ' of messageuid ' . $message->messageuid;
+                if (array_key_exists('messageStructure', $partStructure)) {
+                    $partStructure = $partStructure['messageStructure'];
+                }
+            } else {
                 $logmessage = 'Fetch message part (HEADER + TEXT) ' . $_partId . ' of messageuid ' . $message->messageuid;
                 $rawContent .= $imapBackend->getRawContent($message->messageuid, $_partId . '.HEADER', true);
-            } else {
-                $logmessage = 'Fetch message part (TEXT) ' . $_partId . ' of messageuid ' . $message->messageuid;
             }
             
             $part = $_partId . '.TEXT';
-            if (array_key_exists('messageStructure', $partStructure)) {
-                $partStructure = $partStructure['messageStructure'];
-            }
         } else {
             $logmessage = ($_partId !== NULL) 
                 ? 'Fetch message part ' . $_partId . ' of messageuid ' . $message->messageuid 
@@ -258,7 +258,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $logmessage);
         $rawContent .= $imapBackend->getRawContent($message->messageuid, $part, true);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $rawContent);
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Content: ' . $rawContent);
         
         $stream = fopen("php://temp", 'r+');
         fputs($stream, $rawContent);
@@ -357,7 +357,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $messageBody = '';
         
         foreach ($bodyParts as $partId => $partStructure) {
-            $bodyPart = $this->getMessagePart($_message, $partId);
+            $bodyPart = $this->getMessagePart($_message, $partId, TRUE);
             
             $body = $this->_getDecodedBodyContent($bodyPart, $partStructure);
             
@@ -545,6 +545,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return $cache->load($cacheId);
         }
         
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Fetching headers for message uid ' .  $message->messageuid . ' (part:' . $_partId . ')');
+        
         try {
             $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
         } catch (Zend_Mail_Storage_Exception $zmse) {
@@ -565,6 +568,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $this->_backend->delete($message->getId());
             throw $feimnf;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Fetched Headers: ' . $rawHeaders);
+                    
         Zend_Mime_Decode::splitMessage($rawHeaders, $headers, $null);
         
         $cache->save($headers, $cacheId, array('getMessageHeaders'));

@@ -443,7 +443,7 @@ class Felamimail_Controller_Message_Send extends Felamimail_Controller_Message
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Adding attachment: ' . print_r($attachment, TRUE));
                 
                 if ($attachment['type'] == Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 && $_message->original_id instanceof Felamimail_Model_Message) {
-                    $part = $this->getMessagePart($_message->original_id, ($_message->original_part_id) ? $_message->original_part_id : NULL, FALSE);
+                    $part = $this->getMessagePart($_message->original_id, ($_message->original_part_id) ? $_message->original_part_id : NULL);
                     $part->decodeContent();
                     
                     $name = $attachment['name'] . '.eml';
