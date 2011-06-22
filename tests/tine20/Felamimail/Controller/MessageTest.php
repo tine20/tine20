@@ -551,6 +551,23 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
         
     /**
+     * testGetMessagePartRfc822
+     */
+    public function testGetMessagePartRfc822()
+    {
+        $cachedMessage = $this->messageTestHelper('multipart_rfc2822-2.eml', 'multipart_rfc2822-2');
+        
+        $messagePart = $this->_controller->getMessagePart($cachedMessage, 2);
+        
+        ob_start();
+        fpassthru($messagePart->getRawStream());
+        $out = ob_get_clean();
+        
+        $this->assertContains('X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]', $out, 'header not found');
+        $this->assertContains('This component, from the feedback I have, will mostly be used on', $out, 'body not found');
+    }
+    
+    /**
      * validate fetching a complete message
      */
     public function testGetCompleteMessage()
