@@ -555,7 +555,7 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      */
     public function testGetMessagePartRfc822()
     {
-        $cachedMessage = $this->messageTestHelper('multipart_rfc2822-2.eml', 'multipart_rfc2822-2');
+        $cachedMessage = $this->messageTestHelper('multipart_rfc2822-2.eml', 'multipart/rfc2822-2');
         
         $messagePart = $this->_controller->getMessagePart($cachedMessage, 2);
         
