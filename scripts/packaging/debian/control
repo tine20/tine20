@@ -9,14 +9,25 @@ Homepage: http://www.tine20.org/
 Package: tine20
 Architecture: all
 Depends: ${misc:Depends}, tine20-tinebase, ${tine20:Modules}
-Suggests: mysql-server
 Description: webbased groupware and crm - metapackage
  Tine 2.0 is a webbased groupware and crm solution.
 
 Package: tine20-tinebase
 Architecture: all
-Depends: ${misc:Depends}, httpd, php5 | php5-cgi | libapache2-mod-php5, mysql-client, dbconfig-common, wwwconfig-common, php5-mysql, php5-mcrypt, php5-gd 
-Recommends: mysql-client | php5-ldap
+Depends: ${misc:Depends}, 
+    httpd, 
+    libapache2-mod-php5 | php5 | php5-cgi | php5-fpm, 
+    mysql-client, 
+    dbconfig-common, 
+    wwwconfig-common, 
+    php5-mysql | php5-mysqli, 
+    php5-mcrypt, 
+    php5-gd 
+Recommends: mysql-client, 
+    php5-ldap, 
+    apache2 | lighttpd | httpd
+Suggests: mysql-server, 
+    www-browser
 Description: webbased groupware and crm - core + addressbook module
  Tine 2.0 calendar module
 
