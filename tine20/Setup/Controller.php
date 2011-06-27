@@ -1144,7 +1144,7 @@ class Setup_Controller
                         } catch (Exception $e) {
                             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                                 . ' Not installing import/export definion from file: ' . $filename
-                                . $e->getMessage());
+                                . ' / Error message: ' . $e->getMessage());
                         }
                     }
                 }
