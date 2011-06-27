@@ -242,7 +242,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     /**
      * add entry from xml data
      *
-     * @param unknown_type $_collectionId
+     * @param string $_folderId
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
@@ -486,5 +486,44 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     public function removeControlChars($_dirty)
     {
         return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $_dirty);
+    }
+    
+    /**
+     * converts an iso formated date into DateTime
+     *
+     * @param  string  $_iso  ISO8601 representation of a datetime filed
+     * @return DateTime
+     */
+    protected function _convertISOToZendDate($_iso)
+    {
+        $matches = array();
+        
+        preg_match("/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/", $_iso, $matches);
+
+        if (count($matches) !== 7) {
+            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_iso");
+        }
+        
+        return new Tinebase_DateTime($_iso);
+    }
+    
+    /**
+     * converts an iso formated date into a timestamp
+     *
+     * @param  string Tinebase_DateTime::ISO8601 representation of a datetime filed
+     * @return int    UNIX Timestamp
+     */
+    protected function _convertISOToTs($_ISO)
+    {
+        $matches = array();
+        
+        preg_match("/^(\d{4})-(\d{2})-(\d{2})[T ]{1}(\d{2}):(\d{2}):(\d{2})/", $_ISO, $matches);
+
+        if (count($matches) !== 7) {
+            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_ISO");
+        }
+        
+        list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
+        return  mktime($hour, $minute, $second, $month, $day, $year);
     }
 }
