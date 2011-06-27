@@ -165,7 +165,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
             
             // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
             this.dropEl.on('dragover', function(e) {
-                e.stopPropagation();
+
+            	e.stopPropagation();
                 e.preventDefault();
                 
                 // try to set the effectAllowed to copy (not all UA's accept this)
@@ -175,6 +176,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 if (e.browserEvent.dataTransfer.effectAllowed.match(/all|copy/i)) {
                     e.browserEvent.dataTransfer.dropEffect = 'copy';
                 }
+                
             }, this);
             
             this.dropEl.on('drop', function(e) {

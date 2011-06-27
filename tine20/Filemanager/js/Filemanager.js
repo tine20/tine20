@@ -71,5 +71,51 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         }
         
         return this.filterPlugin;
+    },
+    
+    onClick: function(node, e) {
+       	
+    	var actionToolbar = this.app.mainScreen.ActionToolbar;
+    	var items = actionToolbar.get(0).items.items;
+    	
+    	if(node.attributes.account_grants) {
+	    	if(node.attributes.account_grants.addGrant) {
+	    		items[0].enable();
+	    	}
+	    	else items[0].disable();
+	    	
+	    	if(node.attributes.account_grants.deleteGrant) {
+	    		items[1].enable();
+	    	}
+	    	else items[1].disable();
+	    	
+	    	if(node.attributes.account_grants.addGrant) {
+	    		items[2].enable();
+	    	}
+	    	else items[2].disable();
+	    	
+	    	if(node.attributes.account_grants.exportGrant) {
+	    		items[4].enable();
+	    	}
+	    	else items[4].disable();
+    	}
+    	else {
+    		items[0].disable();
+    		items[1].disable();
+    		items[4].disable();
+    		items[2].enable();
+			items[3].enable();
+    		
+    		if(node.isRoot) {
+    			items[2].disable();
+    			items[3].disable();
+    		}
+    	}
+    	
+    	console.log("overridden onClick");
+    	Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
+
     }
+    
+    
 });
