@@ -833,25 +833,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
     }
     
     /**
-     * converts an iso formated date into DateTime
-     *
-     * @param  string  $_iso  ISO8601 representation of a datetime filed
-     * @return DateTime
-     */
-    protected function _convertISOToZendDate($_iso)
-    {
-        $matches = array();
-        
-        preg_match("/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/", $_iso, $matches);
-
-        if (count($matches) !== 7) {
-            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_iso");
-        }
-        
-        return new Tinebase_DateTime($_iso);
-    }
-    
-    /**
      * return contentfilter array
      * 
      * @param $_filterType

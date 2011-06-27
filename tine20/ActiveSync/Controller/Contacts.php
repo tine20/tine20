@@ -433,25 +433,4 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
         
         return $filterArray;
     }
-    
-    /**
-     * converts an iso formated date into a timestamp
-     *
-     * @param  string Tinebase_DateTime::ISO8601 representation of a datetime filed
-     * @return int    UNIX Timestamp
-     */
-    protected function _convertISOToTs($_ISO)
-    {
-        $matches = array();
-        
-        preg_match("/^(\d{4})-(\d{2})-(\d{2})[T ]{1}(\d{2}):(\d{2}):(\d{2})/", $_ISO, $matches);
-
-        if (count($matches) !== 7) {
-            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_ISO");
-        }
-        
-        list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
-        return  mktime($hour, $minute, $second, $month, $day, $year);
-    }
-    
 }

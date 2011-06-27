@@ -551,6 +551,23 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
         
     /**
+     * testGetMessagePartRfc822
+     */
+    public function testGetMessagePartRfc822()
+    {
+        $cachedMessage = $this->messageTestHelper('multipart_rfc2822-2.eml', 'multipart/rfc2822-2');
+        
+        $messagePart = $this->_controller->getMessagePart($cachedMessage, 2);
+        
+        ob_start();
+        fpassthru($messagePart->getRawStream());
+        $out = ob_get_clean();
+        
+        $this->assertContains('X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]', $out, 'header not found');
+        $this->assertContains('This component, from the feedback I have, will mostly be used on', $out, 'body not found');
+    }
+    
+    /**
      * validate fetching a complete message
      */
     public function testGetCompleteMessage()
@@ -779,13 +796,10 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     {
         $cachedMessage = $this->messageTestHelper('multipart_related.eml', 'multipart/related');
         
-        // forward message
-        $config = TestServer::getInstance()->getConfig();
-        $email = ($config->email) ? $config->email : 'unittest@tine20.org';
         $forwardMessage = new Felamimail_Model_Message(array(
             'account_id'    => $this->_account->getId(),
             'subject'       => 'test forward',
-            'to'            => array($email),
+            'to'            => array($this->_getEmailAddress()),
             'body'          => 'aaaaaä <br>',
             'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822),
             'original_id'   => $cachedMessage->getId(),
@@ -805,7 +819,51 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822, $forwardedMessage['structure']['parts'][2]['contentType']);
         $this->assertEquals($cachedMessage->subject . '.eml', $forwardedMessage['structure']['parts'][2]['parameters']['name']);
         $this->assertEquals($cachedMessage->subject . '.eml', $completeForwardedMessage->attachments[0]['filename']);
-    }    
+        
+        return $forwardedMessage;
+    }
+    
+    /**
+     * get email address
+     * 
+     * @return string
+     */
+    protected function _getEmailAddress()
+    {
+        $config = TestServer::getInstance()->getConfig();
+        $email = ($config->email) ? $config->email : 'unittest@tine20.org';
+
+        return $email;
+    }
+
+    /**
+     * test forward message part
+     */
+    public function testForwardMessagePart()
+    {
+        $forwardedMessage = $this->testForwardMessageWithAttachment();
+        
+        $forwardMessage = new Felamimail_Model_Message(array(
+            'account_id'    => $this->_account->getId(),
+            'subject'       => 'test forward part',
+            'to'            => array($this->_getEmailAddress()),
+            'body'          => 'aaaaaä <br>',
+            'headers'       => array('X-Tine20TestMessage' => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 . 'part'),
+            'original_id'   => $forwardedMessage->getId() . '_2', // part 2 is the original forwared message
+            'attachments'   => array(new Tinebase_Model_TempFile(array(
+                'type'  => Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822,
+                'name'  => $forwardedMessage->subject,
+            ), TRUE)),
+        ));
+        Felamimail_Controller_Message_Send::getInstance()->sendMessage($forwardMessage);
+        
+        $forwardedMessage = $this->_searchAndCacheMessage(Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822 . 'part', $this->_getFolder('INBOX'));
+        $completeForwardedMessagePart = $this->_controller->getCompleteMessage($forwardedMessage, 2);
+        
+        //print_r($completeForwardedMessagePart->toArray());
+        $this->assertTrue(! empty($completeForwardedMessagePart->headers), 'headers should not be empty');
+        $this->assertEquals('moz-screenshot-83.png', $completeForwardedMessagePart->attachments[0]['filename']);
+    }
     
     /**
      * testGetBodyPartIdMultipartAlternative
