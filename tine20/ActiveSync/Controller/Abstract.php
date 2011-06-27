@@ -520,10 +520,17 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         preg_match("/^(\d{4})-(\d{2})-(\d{2})[T ]{1}(\d{2}):(\d{2}):(\d{2})/", $_ISO, $matches);
 
         if (count($matches) !== 7) {
-            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_ISO");
+            preg_match("/^(\d{4})-(\d{2})-(\d{2})/", $_ISO, $matches);
+            if (count($matches) === 4) {
+                list($match, $year, $month, $day) = $matches;
+                $hour = $minute = $second = 0;
+            } else {
+                throw new Tinebase_Exception_UnexpectedValue("invalid date format $_ISO");
+            }
+        } else {
+            list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
         }
         
-        list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
-        return  mktime($hour, $minute, $second, $month, $day, $year);
+        return mktime($hour, $minute, $second, $month, $day, $year);
     }
 }
