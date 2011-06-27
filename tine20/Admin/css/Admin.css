@@ -129,6 +129,9 @@
     background-image:url(../../images/oxygen/32x32/places/user-desktop.png) !important;
 }
 
+.admin-node-containers {
+    background-image:url(../../images/oxygen/16x16/places/folder.png) !important;
+}
 .admin-action-add-container {
     background-image:url(../../images/oxygen/16x16/places/folder.png) !important;
 }
