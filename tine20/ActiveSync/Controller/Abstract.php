@@ -38,7 +38,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     /**
      * class to use for search entries
      *
-     * @var Tinebase_Model_Filter_FilterGroup
+     * @var string
      */
     protected $_contentFilterClass;
     
