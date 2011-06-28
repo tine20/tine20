@@ -308,7 +308,11 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $xml = new SimpleXMLElement($this->_xmlContactBirthdayWithoutTimeAndroid);
         $result = $controller->add($this->objects['containerWithSyncGrant']->getId(), $xml->Collections->Collection->Commands->Add->ApplicationData);
         
-        $this->assertEquals('1969-12-31 00:00:00', $result->bday->toString());
+        $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $bday = new Tinebase_DateTime('1969-12-31', $userTimezone);
+        $bday->setTimezone('UTC');        
+        
+        $this->assertEquals($bday->toString(), $result->bday->toString());
         $this->assertEquals('Fritzchen', $result->n_given);
     }
     
