@@ -493,6 +493,8 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      *
      * @param  string  $_iso  ISO8601 representation of a datetime filed
      * @return DateTime
+     * 
+     * @deprecated DateTime constructor should know how to handle iso strong
      */
     protected function _convertISOToZendDate($_iso)
     {
@@ -512,6 +514,8 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
      *
      * @param  string Tinebase_DateTime::ISO8601 representation of a datetime filed
      * @return int    UNIX Timestamp
+     * 
+     * @deprecated DateTime constructor should know how to handle iso strong
      */
     protected function _convertISOToTs($_ISO)
     {
