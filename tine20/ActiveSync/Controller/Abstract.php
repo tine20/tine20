@@ -508,33 +508,4 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         
         return new Tinebase_DateTime($_iso);
     }
-    
-    /**
-     * converts an iso formated date into a timestamp
-     *
-     * @param  string Tinebase_DateTime::ISO8601 representation of a datetime filed
-     * @return int    UNIX Timestamp
-     * 
-     * @deprecated DateTime constructor should know how to handle iso strong
-     */
-    protected function _convertISOToTs($_ISO)
-    {
-        $matches = array();
-        
-        preg_match("/^(\d{4})-(\d{2})-(\d{2})[T ]{1}(\d{2}):(\d{2}):(\d{2})/", $_ISO, $matches);
-
-        if (count($matches) !== 7) {
-            preg_match("/^(\d{4})-(\d{2})-(\d{2})/", $_ISO, $matches);
-            if (count($matches) === 4) {
-                list($match, $year, $month, $day) = $matches;
-                $hour = $minute = $second = 0;
-            } else {
-                throw new Tinebase_Exception_UnexpectedValue("invalid date format $_ISO");
-            }
-        } else {
-            list($match, $year, $month, $day, $hour, $minute, $second) = $matches;
-        }
-        
-        return mktime($hour, $minute, $second, $month, $day, $year);
-    }
 }
