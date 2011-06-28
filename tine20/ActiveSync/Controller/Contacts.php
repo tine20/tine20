@@ -343,7 +343,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                         
                         if (
                             ($this->_device->devicetype == ActiveSync_Backend_Device::TYPE_PALM) ||
-                            ($this->_device->devicetype == ActiveSync_Backend_Device::TYPE_IPHONE && $this->_device->getMajorVersion() < 800)
+                            ($this->_device->devicetype == ActiveSync_Backend_Device::TYPE_IPHONE && $this->_device->getMajorVersion() < 800) ||
+                            preg_match("/^\d{4}-\d{2}-\d{2}$/", $isoDate)
                         ) {
                             // iOS < 4 & palm send birthdays to the entered date, but the time the birthday got entered on the device
                             // acutally iOS < 4 somtimes sends the bday at noon but the timezone is not clear
