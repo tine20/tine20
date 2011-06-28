@@ -238,7 +238,6 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         return $folder;
     }
     
-    
     /**
      * add entry from xml data
      *
@@ -345,6 +344,12 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         // does nothing by default
     }
     
+    /**
+     * add container filter to filter group
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_containerId
+     */
     protected function _getContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
     {
         $syncableContainers = $this->_getSyncableFolders();
@@ -462,9 +467,21 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     {
         return array();
     }
-            
+    
+    /**
+     * convert contact from xml to Tinebase_Record_Interface
+     *
+     * @param SimpleXMLElement $_data
+     * @return Tinebase_Record_Interface
+     */
     abstract public function toTineModel(SimpleXMLElement $_data, $_entry = null);
     
+    /**
+     * convert contact from xml to Addressbook_Model_ContactFilter
+     *
+     * @param SimpleXMLElement $_data
+     * @return array
+     */
     abstract protected function _toTineFilterArray(SimpleXMLElement $_data);
     
     /**
