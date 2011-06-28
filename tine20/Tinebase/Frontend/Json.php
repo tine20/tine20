@@ -822,6 +822,28 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $this->getConfig($recordData['id']);
     }
     
+    /************************ tempFile functions ******************************/
+    
+    /**
+     * joins all given tempfiles in given order to a single new tempFile
+     * 
+     * @param array of tempfiles arrays $tempFiles
+     * @return array new tempFile
+     */
+    public function joinTempFiles($tempFilesData)
+    {
+        $tempFileRecords = new Tinebase_Record_RecordSet('Tinebase_Model_TempFile');
+        foreach($tempFilesData as $tempFileData) {
+            $record = new Tinebase_Model_TempFile(array(), TRUE);
+            $record->setFromJsonInUsersTimezone($tempFileData);
+            $tempFileRecords->addRecord($record);
+        }
+        
+        $joinedTempFile = Tinebase_TempFile::getInstance()->joinTempFiles($tempFileRecords);
+        
+        return $joinedTempFile->toArray();
+    }
+    
     /************************ protected functions ***************************/
     
     /**
