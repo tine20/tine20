@@ -338,8 +338,8 @@ class ActiveSync_Controller_Contacts extends ActiveSync_Controller_Abstract
                     
                 case 'bday':
                     if(isset($xmlData->$fieldName)) {
-                        $timeStamp = $this->_convertISOToTs((string)$xmlData->$fieldName);
-                        $contact->bday = new Tinebase_DateTime($timeStamp);
+                        $isoDate = (string)$xmlData->$fieldName;
+                        $contact->bday = new Tinebase_DateTime($isoDate);
                         
                         if (
                             ($this->_device->devicetype == ActiveSync_Backend_Device::TYPE_PALM) ||
