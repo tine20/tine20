@@ -517,7 +517,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 case 'dtend':
                 case 'dtstart':
                     if(isset($xmlData->$fieldName)) {
-                        $event->$value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
+                        $event->$value = new Tinebase_DateTime((string)$xmlData->$fieldName);
                     } else {
                         $event->$value = null;
                     }
@@ -747,7 +747,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $rrule->interval = isset($xmlData->Recurrence->Interval) ? (int)$xmlData->Recurrence->Interval : 1;
             
             if(isset($xmlData->Recurrence->Until)) {
-                $rrule->until = $this->_convertISOToZendDate((string)$xmlData->Recurrence->Until);
+                $rrule->until = new Tinebase_DateTime((string)$xmlData->Recurrence->Until);
                 // until ends at 23:59:59 in Tine 2.0 but at 00:00:00 in Windows CE (local user time)
                 if ($rrule->until->format('s') == '00') {
                     $rrule->until->addHour(23)->addMinute(59)->addSecond(59);
@@ -764,7 +764,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                 foreach ($xmlData->Exceptions->Exception as $exception) {
                     $eventException = new Calendar_Model_Event(array(
-                        'recurid' => $this->_convertISOToZendDate((string)$exception->ExceptionStartTime)
+                        'recurid' => new Tinebase_DateTime((string)$exception->ExceptionStartTime)
                     ));
                     
                     if ((int)$exception->Deleted === 0) {
@@ -811,7 +811,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 switch ($field) {
                     case 'dtend':
                     case 'dtstart':
-                        $value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
+                        $value = new Tinebase_DateTime((string)$xmlData->$fieldName);
                         break;
                         
                     default:

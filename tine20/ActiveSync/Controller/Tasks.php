@@ -222,7 +222,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     break;
                 case 'due':
                     if(isset($xmlData->$fieldName)) {
-                        $task->$value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
+                        $task->$value = new Tinebase_DateTime((string)$xmlData->$fieldName);
                     } else {
                         $task->$value = null;
                     }
@@ -267,7 +267,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
             if(isset($xmlData->$fieldName)) {
                 switch ($field) {
                     case 'due':
-                        $value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
+                        $value = new Tinebase_DateTime((string)$xmlData->$fieldName);
                         break;
                         
                     default:
