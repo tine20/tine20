@@ -504,25 +504,4 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     {
         return preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F]/', null, $_dirty);
     }
-    
-    /**
-     * converts an iso formated date into DateTime
-     *
-     * @param  string  $_iso  ISO8601 representation of a datetime filed
-     * @return DateTime
-     * 
-     * @deprecated DateTime constructor should know how to handle iso strong
-     */
-    protected function _convertISOToZendDate($_iso)
-    {
-        $matches = array();
-        
-        preg_match("/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/", $_iso, $matches);
-
-        if (count($matches) !== 7) {
-            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_iso");
-        }
-        
-        return new Tinebase_DateTime($_iso);
-    }
 }
