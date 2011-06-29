@@ -495,4 +495,29 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($otherUsers->getRecordClassName() === 'Tinebase_Model_Container');
     }
     
+    /**
+     * search container with owner filter
+     */
+    public function testSearchContainerByOwner()
+    {
+        $filter = new Tinebase_Model_ContainerFilter(array(
+            array('field' => 'owner', 'operator' => 'equals', 'value' => Tinebase_Core::getUser()->getId())
+        ));
+        $result = Tinebase_Container::getInstance()->search($filter);
+        
+        $this->assertTrue(count($result) > 0);
+        
+        foreach ($result as $container) {
+            $this->assertEquals(Tinebase_Model_Container::TYPE_PERSONAL, $container->type);
+            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container)->toArray();
+            $isOwner = FALSE;
+            foreach ($grants as $grant) {
+                if ($grant['adminGrant'] && $grant['account_id'] == Tinebase_Core::getUser()->getId()) {
+                    $isOwner = TRUE;
+                }
+            }
+            
+            $this->assertTrue($isOwner, 'is no owner! ' . print_r($grants, TRUE));
+        }
+    }
 }
