@@ -27,7 +27,7 @@ Tine.Admin.ApplicationFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @private
      */
     initComponent: function() {
-        Tine.widgets.tags.TagFilter.superclass.initComponent.call(this);
+        Tine.Admin.ApplicationFilter.superclass.initComponent.call(this);
         
         this.operators = ['equals', 'not'];
         this.label = this.app.i18n._('Application');

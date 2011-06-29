@@ -242,7 +242,7 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     /**
      * add entry from xml data
      *
-     * @param unknown_type $_collectionId
+     * @param string $_folderId
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
