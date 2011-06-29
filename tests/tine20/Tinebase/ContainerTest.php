@@ -509,15 +509,9 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         foreach ($result as $container) {
             $this->assertEquals(Tinebase_Model_Container::TYPE_PERSONAL, $container->type);
-            $grants = Tinebase_Container::getInstance()->getGrantsOfContainer($container)->toArray();
-            $isOwner = FALSE;
-            foreach ($grants as $grant) {
-                if ($grant['adminGrant'] && $grant['account_id'] == Tinebase_Core::getUser()->getId()) {
-                    $isOwner = TRUE;
-                }
-            }
-            
-            $this->assertTrue($isOwner, 'is no owner! ' . print_r($grants, TRUE));
+            $this->assertTrue(Tinebase_Container::getInstance()->hasGrant(
+                Tinebase_Core::getUser()->getId(), $container->getId(), Tinebase_Model_Grants::GRANT_ADMIN
+            ), 'no admin grant:' . print_r($container->toArray(), TRUE));
         }
     }
 }
