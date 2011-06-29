@@ -17,13 +17,13 @@ msgstr ""
 msgid "Out of Office reply from %1$s"
 msgstr ""
 
-#: Controller/Message/Send.php:216 js/GridDetailsPanel.js:135
+#: Controller/Message/Send.php:236 js/GridDetailsPanel.js:135
 #: js/GridPanel.js:477 js/MessageEditDialog.js:858 js/Model.js:139
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "sujet"
 
-#: Controller/Message/Send.php:216 js/MessageEditDialog.js:833
+#: Controller/Message/Send.php:236 js/MessageEditDialog.js:833
 msgid "Body"
 msgstr "Corps"
 
@@ -79,7 +79,7 @@ msgstr "Ajouter au carnet d'adresse"
 msgid "Date"
 msgstr "Date"
 
-#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:362
+#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:366
 msgid "Show or hide header information"
 msgstr "Afficher/Masquer l'entête de message"
 
@@ -129,11 +129,11 @@ msgid "Add Account"
 msgstr "ajouter un compte"
 
 #: js/GridPanel.js:302 js/GridPanel.js:1244 js/GridPanel.js:1260
-#: js/MessageDisplayDialog.js:79
+#: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr "Aperçu avant impression"
 
-#: js/GridPanel.js:310 js/MessageDisplayDialog.js:73
+#: js/GridPanel.js:310 js/MessageDisplayDialog.js:72
 msgid "Print Message"
 msgstr "Imprimer le message"
 
@@ -753,7 +753,7 @@ msgstr[1] ""
 msgid "Compose email"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:66
+#: js/MessageDisplayDialog.js:65
 msgid "Save"
 msgstr ""
 

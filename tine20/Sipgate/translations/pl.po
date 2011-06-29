@@ -13,13 +13,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/SmsEditDialog.js:52
-#: js/SmsEditDialog.js:187
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:187
 msgid "Send"
 msgstr "Wyślij"
 
-#: js/SmsEditDialog.js:60
-#: js/CallStateWindow.js:50
+#: js/SmsEditDialog.js:60 js/CallStateWindow.js:50
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -51,8 +49,7 @@ msgstr "Rozpocznij połączenie wychodzące"
 msgid "Displaying calls {0} - {1} of {2}"
 msgstr "Wyświetl połączenia {0} - {1} z {2}"
 
-#: js/Sipgate.js:247
-#: js/Sipgate.js:329
+#: js/Sipgate.js:247 js/Sipgate.js:329
 msgid "No calls to display"
 msgstr "Brak połączeń do wyświetlenia"
 
@@ -136,13 +133,11 @@ msgstr "Praca"
 msgid "Home"
 msgstr "Dom"
 
-#: js/AddressbookGridPanelHook.js:275
-#: js/AddressbookGridPanelHook.js:318
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:318
 msgid "Cell"
 msgstr "Komórka"
 
-#: js/AddressbookGridPanelHook.js:284
-#: js/AddressbookGridPanelHook.js:327
+#: js/AddressbookGridPanelHook.js:284 js/AddressbookGridPanelHook.js:327
 msgid "Cell private"
 msgstr "Komórka prywatna"
 
@@ -169,4 +164,3 @@ msgstr "Numer tel. komórkowego"
 #: Preference.php:81
 msgid "Used when sending SMS"
 msgstr "Używany podczas wysyłania SMSa z poziomu aplikacji"
-
