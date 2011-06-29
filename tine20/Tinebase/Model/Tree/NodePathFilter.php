@@ -22,8 +22,8 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Abstract
      * @var array list of allowed operators
      */
     protected $_operators = array(
-        0 => 'equals',       // value is expected to represent a single container
-        1 => 'in',           // value is expected to be an array of container representations
+        0 => 'equals',       
+        //1 => 'in',         
     );
     
     /**
