@@ -86,7 +86,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
     protected function _rmDir($_node)
     {
         foreach ($_node->getChildren() as $child) {
-            if ($child instanceof Filemanager_Frontend_WebDavFile) {
+            if ($child instanceof Filemanager_Frontend_WebDav_File) {
                 $child->delete();
             } else {
                 $this->_rmDir($child);
@@ -181,7 +181,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * @return Filemanager_Frontend_WebDavDirectory
+     * @return Filemanager_Frontend_WebDav_Directory
      */
     public function testgetNodeForPath_dav_filemanager_personal_currentuser_unittestdirectory()
     {
@@ -189,7 +189,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName .'/unittestdirectory');
         
-        $this->assertType('Filemanager_Frontend_WebDavDirectory', $node);
+        $this->assertType('Filemanager_Frontend_WebDav_Directory', $node);
         $this->assertEquals('unittestdirectory', $node->getName());
         
         $children = $node->getChildren();
@@ -199,7 +199,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
     
     /**
      * 
-     * @return Filemanager_Frontend_WebDavDirectory
+     * @return Filemanager_Frontend_WebDav_Directory
      */
     public function testCreatePersonalDirectory()
     {
@@ -218,7 +218,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/personal/' . Tinebase_Core::getUser()->accountLoginName . '/unittestdirectory');
         $this->objects['nodes'][] = $node;
         
-        $this->assertType('Filemanager_Frontend_WebDavDirectory', $node);
+        $this->assertType('Filemanager_Frontend_WebDav_Directory', $node);
         
         return $node;
     }
@@ -238,7 +238,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * @return Filemanager_Frontend_WebDavDirectory
+     * @return Filemanager_Frontend_WebDav_Directory
      */
     public function testgetNodeForPath_dav_filemanager_shared_unittestdirectory()
     {
@@ -246,7 +246,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/shared/unittestdirectory');
         
-        $this->assertType('Filemanager_Frontend_WebDavDirectory', $node);
+        $this->assertType('Filemanager_Frontend_WebDav_Directory', $node);
         $this->assertEquals('unittestdirectory', $node->getName());
         
         $children = $node->getChildren();
@@ -260,13 +260,13 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/shared/unittestdirectory/tine_logo.png');
         
-        $this->assertType('Filemanager_Frontend_WebDavFile', $node);
+        $this->assertType('Filemanager_Frontend_WebDav_File', $node);
         $this->assertEquals('tine_logo.png', $node->getName());
     }
     
     /**
      * 
-     * @return Filemanager_Frontend_WebDavDirectory
+     * @return Filemanager_Frontend_WebDav_Directory
      */
     public function testCreateSharedDirectory()
     {
@@ -285,14 +285,14 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/shared/unittestdirectory');
         $this->objects['nodes'][] = $node;
         
-        $this->assertType('Filemanager_Frontend_WebDavDirectory', $node);
+        $this->assertType('Filemanager_Frontend_WebDav_Directory', $node);
         
         return $node;
     }
     
     /**
      * 
-     * @return Filemanager_Frontend_WebDavFile
+     * @return Filemanager_Frontend_WebDav_File
      */
     public function testCreateFile()
     {
@@ -310,7 +310,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node = $this->_webdavTree->getNodeForPath(Tinebase_WebDav_Root::ROOT_NODE . '/filemanager/shared/unittestdirectory/tine_logo.png');
         
-        $this->assertType('Filemanager_Frontend_WebDavFile', $node);
+        $this->assertType('Filemanager_Frontend_WebDav_File', $node);
         
         return $node;
     }
@@ -321,7 +321,7 @@ class Filemanager_Frontend_WebDavTest extends PHPUnit_Framework_TestCase
         
         $node->put(fopen(dirname(__FILE__) . '/../../Tinebase/files/tine_logo.png', 'r'));
         
-        $this->assertType('Filemanager_Frontend_WebDavFile', $node);
+        $this->assertType('Filemanager_Frontend_WebDav_File', $node);
     }
     
     public function testgetNodeForPath_invalidApplication()

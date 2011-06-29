@@ -14,7 +14,7 @@
  * 
  * @package     Filemanager
  */
-abstract class Filemanager_Frontend_WebDavNode implements Sabre_DAV_INode
+abstract class Filemanager_Frontend_WebDav_Node implements Sabre_DAV_INode
 {
     protected $_path;
     

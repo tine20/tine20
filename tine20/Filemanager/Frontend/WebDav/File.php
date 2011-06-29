@@ -14,7 +14,7 @@
  * 
  * @package     Filemanager
  */
-class Filemanager_Frontend_WebDavFile extends Filemanager_Frontend_WebDavNode implements Sabre_DAV_IFile
+class Filemanager_Frontend_WebDav_File extends Filemanager_Frontend_WebDav_Node implements Sabre_DAV_IFile
 {
     public function __construct($_path) 
     {

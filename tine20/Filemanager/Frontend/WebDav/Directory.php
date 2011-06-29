@@ -14,7 +14,7 @@
  * 
  * @package     Filemanager
  */
-class Filemanager_Frontend_WebDavDirectory extends Filemanager_Frontend_WebDavNode implements Sabre_DAV_ICollection
+class Filemanager_Frontend_WebDav_Directory extends Filemanager_Frontend_WebDav_Node implements Sabre_DAV_ICollection
 {
     public function __construct($_path) 
     {
@@ -66,7 +66,7 @@ class Filemanager_Frontend_WebDavDirectory extends Filemanager_Frontend_WebDavNo
         if (Tinebase_FileSystem::getInstance()->isDir(substr($path, 9))) {
             return new Filemanager_Frontend_WebDav($this->_path . '/' . $name);
         } else {
-            return new Filemanager_Frontend_WebDavFile($this->_path . '/' . $name);
+            return new Filemanager_Frontend_WebDav_File($this->_path . '/' . $name);
         }
     }
     
