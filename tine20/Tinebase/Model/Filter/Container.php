@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -311,67 +311,6 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
                 return "/personal/{$_value}";
             default:
                 throw new Tinebase_Exception_UnexpectedValue("operator '$_operator' not supported");
-        }
-    }
-    
-    /**
-     * transforms filter data from filter group into new representation if old
-     * container filter notation is in use
-     *
-     * @param  array &$_data
-     * @throws Tinebase_Exception_UnexpectedValue
-     */
-    public static function transformLegacyData(array &$_data, $_containerProperty = 'container_id')
-    {
-        $legacyData = array();
-        foreach ($_data as $key => $filterData) {
-            if (! is_array($filterData)) {
-                $filterData = Tinebase_Model_Filter_FilterGroup::sanitizeFilterData($key, $filterData);
-            }
-            
-            if (array_key_exists('field', $filterData) && in_array($filterData['field'], array('containerType', 'container', 'owner'))) {
-                $legacyData[$filterData['field']] = $filterData['value'];
-                unset($_data[$key]);
-            }
-        }
-        
-        if (! empty($legacyData)) {
-            Tinebase_Core::getLogger()->INFO(__METHOD__ . '::' . __LINE__ . 'HEADS UP DEVELOPERS: old container filter notation in use.  PLEASE UPDATE ');
-            
-            if (! $legacyData['containerType']) {
-                $legacyData['containerType'] = 'all';
-            }
-            
-            switch($legacyData['containerType']) {
-                case 'personal':
-                    $operator = 'personalNode';
-                    
-                    if (! $legacyData['owner']) {
-                        throw new Tinebase_Exception_UnexpectedValue('You need to set an owner when containerType is "Personal".');
-                    }
-                    $value = $legacyData['owner'];
-                    break;
-                case 'shared':
-                case 'otherUsers':
-                case 'internal':
-                case 'all':
-                    $operator = 'specialNode';
-                    $value = $legacyData['containerType'];
-                    break;    
-                case 'singleContainer':
-                    $operator = 'equals';
-                    $value = $legacyData['container'];
-                    break;
-                default:
-                    throw new Tinebase_Exception_UnexpectedValue('ContainerType not supported.');
-                    break;
-            }
-            
-            $_data[] = array(
-                'field'    => $_containerProperty,
-                'operator' => $operator,
-                'value'    => $value
-            );
         }
     }
 }

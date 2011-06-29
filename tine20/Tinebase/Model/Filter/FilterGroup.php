@@ -149,15 +149,10 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
      *
      * @param array $_data
      * @throws Tinebase_Exception_UnexpectedValue
-     * 
-     * @todo remove legacy handling
      */
     public function setFromArray($_data)
     {
         $this->_filterObjects = array();
-        
-        // legacy container handling
-        Tinebase_Model_Filter_Container::transformLegacyData($_data);
         
         foreach ($_data as $key => $filterData) {
             if (! is_array($filterData)) {
