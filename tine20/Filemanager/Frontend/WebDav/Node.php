@@ -109,6 +109,8 @@ abstract class Filemanager_Frontend_WebDav_Node implements Sabre_DAV_INode
      * path can be: 
      * 	 /applicationname/shared/containername(/*)
      *   /applicationname/personal/username/containername(/*)
+     *   
+     * @todo use Filemanager_Controller_Node::getContainer to fetch container
      */
     protected function _parsePath()
     {
