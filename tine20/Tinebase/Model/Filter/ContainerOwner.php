@@ -40,13 +40,15 @@ class Tinebase_Model_Filter_ContainerOwner extends Tinebase_Model_Filter_Abstrac
         
         $_select->joinLeft(
             /* table  */ array($correlationName => SQL_TABLE_PREFIX . 'container_acl'), 
-            /* on     */ $db->quoteIdentifier("{$correlationName}.container_id") . " = container_id AND " . 
-                $db->quoteIdentifier("{$correlationName}.account_id") . " = " . $db->quote($this->_value) . ' AND ' .
-                $db->quoteInto($db->quoteIdentifier("{$correlationName}.account_grant") . " = ?", Tinebase_Model_Grants::GRANT_ADMIN),
+            /* on     */ $db->quoteIdentifier("{$correlationName}.container_id") . " = container.id",
             /* select */ array()
         );
         
         // only personal containers have an owner!
         $_select->where("{$db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL);
+        
+        // assure admin grant
+        $_select->where($db->quoteIdentifier("{$correlationName}.account_id") . " = " . $db->quote($this->_value) . ' AND ' .
+            $db->quoteIdentifier("{$correlationName}.account_grant") . " = ?", Tinebase_Model_Grants::GRANT_ADMIN);
     }
 }
