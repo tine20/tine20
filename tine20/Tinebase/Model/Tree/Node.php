@@ -3,14 +3,17 @@
  * Tine 2.0
  * 
  * @package     Tinebase
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * class to hold data representing one node in the tree
  * 
+ * @package     Tinebase
+ * @subpackage  Model
  * @property  string             contenttype
  * @property  Tinebase_DateTime  creation_time
  * @property  string             hash
@@ -60,6 +63,8 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => '0',
             'InArray' => array(true, false)
         ),
+        // this is needed for ACL handling and should be sent by / delivered to client (not persistent in db atm)
+        'path'           => array(Zend_Filter_Input::DEFAULT_VALUE => NULL),
         
         // fields from filemanager_objects table (ro)
         'type'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
