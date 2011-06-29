@@ -347,10 +347,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
+     * 
+     * @deprecated this should be removed as it does not return a distinct container 
      */
     public function getContainerByName($_application, $_containerName, $_type)
     {
-        if($_type !== Tinebase_Model_Container::TYPE_PERSONAL && $_type !== Tinebase_Model_Container::TYPE_SHARED) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+            . ' This is deprecated. Please do not use it any more.');
+        
+        if ($_type !== Tinebase_Model_Container::TYPE_PERSONAL && $_type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
         }
         
