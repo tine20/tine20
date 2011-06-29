@@ -342,14 +342,15 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     /**
-     * return filter object
+     * return filter object(s)
      *
      * @param string $_field
-     * @return Tinebase_Model_Filter_Abstract
+     * @param boolean $_getAll
+     * @return Tinebase_Model_Filter_Abstract|array
      */
-    public function getFilter($_field)
+    public function getFilter($_field, $_getAll = FALSE)
     {
-        return $this->_findFilter($_field);
+        return $this->_findFilter($_field, $_getAll);
     }
     
     /**
@@ -492,28 +493,39 @@ class Tinebase_Model_Filter_FilterGroup implements Iterator
     }
     
     /**
-     * return filter object
+     * return filter object(s)
      *
      * @param string $_field
+     * @param boolean $_getAll
      * @return Tinebase_Model_Filter_Abstract|array
      */
-    protected function _findFilter($_field)
+    protected function _findFilter($_field, $_getAll = FALSE)
     {
+        $result = ($_getAll) ? array() : NULL;
+        
         foreach ($this->_filterObjects as $object) {
         	if ($object instanceof Tinebase_Model_Filter_Abstract) {
 	            if ($object->getField() == $_field) {
-	                return $object;
+    	            if ($_getAll) {
+                        $result[] = $object;
+                    } else {
+                        return $object;
+                    }	                
 	            }
         	}
         }
         
         foreach ($this->_customData as $customFilter) {
             if ($customFilter['field'] == $_field) {
-                return $customFilter;
+                if ($_getAll) {
+                    $result[] = $customFilter;
+                } else {
+                    return $customFilter;
+                }
             }
         }
         
-        return NULL;
+        return $result;
     }
     
     /**
