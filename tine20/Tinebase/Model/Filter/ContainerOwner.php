@@ -17,7 +17,7 @@
  * 
  * filters by container owner
  */
-class Tinebase_Model_Filter_ContainerOwner extends Tinebase_Model_Filter_Abstract implements Tinebase_Model_Filter_AclFilter 
+class Tinebase_Model_Filter_ContainerOwner extends Tinebase_Model_Filter_Abstract
 {
     /**
      * @var array list of allowed operators
@@ -38,12 +38,15 @@ class Tinebase_Model_Filter_ContainerOwner extends Tinebase_Model_Filter_Abstrac
         $db = $_backend->getAdapter();
         $correlationName = Tinebase_Record_Abstract::generateUID() . $this->_value . 'owner';
         
-        $_select->joinLeft(array(
+        $_select->joinLeft(
             /* table  */ array($correlationName => SQL_TABLE_PREFIX . 'container_acl'), 
             /* on     */ $db->quoteIdentifier("{$correlationName}.container_id") . " = container_id AND " . 
                 $db->quoteIdentifier("{$correlationName}.account_id") . " = " . $db->quote($this->_value) . ' AND ' .
                 $db->quoteInto($db->quoteIdentifier("{$correlationName}.account_grant") . " = ?", Tinebase_Model_Grants::GRANT_ADMIN),
             /* select */ array()
-        ));
+        );
+        
+        // only personal containers have an owner!
+        $_select->where("{$db->quoteIdentifier('container.type')} = ?", Tinebase_Model_Container::TYPE_PERSONAL);
     }
 }
