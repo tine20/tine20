@@ -134,7 +134,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param Tinebase_Model_Tree_NodePathFilter $_pathFilter
      * @return string
      * 
-     * @todo move this to path filter?
      * @todo add /folders?
      */
     public function addBasePath($_path)
