@@ -18,13 +18,13 @@ msgstr ""
 msgid "Out of Office reply from %1$s"
 msgstr ""
 
-#: Controller/Message/Send.php:216 js/GridDetailsPanel.js:135
+#: Controller/Message/Send.php:236 js/GridDetailsPanel.js:135
 #: js/GridPanel.js:477 js/MessageEditDialog.js:858 js/Model.js:139
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Emne"
 
-#: Controller/Message/Send.php:216 js/MessageEditDialog.js:833
+#: Controller/Message/Send.php:236 js/MessageEditDialog.js:833
 msgid "Body"
 msgstr "Melding"
 
@@ -80,7 +80,7 @@ msgstr "Legg til kontakt i adressebok"
 msgid "Date"
 msgstr "Dato"
 
-#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:362
+#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:366
 msgid "Show or hide header information"
 msgstr "Vis eller gjem hode informasjon"
 
@@ -130,11 +130,11 @@ msgid "Add Account"
 msgstr "Legg til Konto"
 
 #: js/GridPanel.js:302 js/GridPanel.js:1244 js/GridPanel.js:1260
-#: js/MessageDisplayDialog.js:79
+#: js/MessageDisplayDialog.js:78
 msgid "Print Preview"
 msgstr ""
 
-#: js/GridPanel.js:310 js/MessageDisplayDialog.js:73
+#: js/GridPanel.js:310 js/MessageDisplayDialog.js:72
 msgid "Print Message"
 msgstr ""
 
@@ -755,7 +755,7 @@ msgstr[1] ""
 msgid "Compose email"
 msgstr ""
 
-#: js/MessageDisplayDialog.js:66
+#: js/MessageDisplayDialog.js:65
 msgid "Save"
 msgstr ""
 
