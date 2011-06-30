@@ -112,9 +112,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         // add base path and check grants
         foreach ($pathFilters as $key => $pathFilter) {
-            $hasGrant = $this->_checkACLContainer($pathFilter->getValue());
+            $path = $pathFilter->getValue();
+            $container = $this->getContainer($path);
+            $hasGrant = $this->_checkACLContainer($container, $_action);
             if (! $hasGrant) {
                 unset($pathFilters[$key]);
+            } else {
+                $pathFilter->setValue($this->addBasePath($path));
+                $pathFilter->setContainer($container);
             }
         }
 
@@ -129,32 +134,30 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param Tinebase_Model_Tree_NodePathFilter $_pathFilter
      * @return string
      * 
-     * @todo use this
+     * @todo move this to path filter?
+     * @todo add /folders?
      */
-    protected function _addBasePath($_path)
+    public function addBasePath($_path)
     {
-        $application = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        $basePath = 'tine20:///' . $application->getId() . '/folders';
-        
+        $basePath = $this->_backend->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
+                
         return $basePath . $_path;
     }
     
     /**
      * check if user has the permissions for the container
      * 
-     * @param string $_path
+     * @param Tinebase_Model_Container $_container
      * @param string $_action get|update|...
      * @return boolean
      */
-    protected function _checkACLContainer($_path, $_action = 'get')
+    protected function _checkACLContainer($_container, $_action = 'get')
     {
-        $container = $this->getContainer($_path);
-        
-        if (! $container) {
+        if (! $_container) {
             return FALSE;
         }
         
-        if (Tinebase_Container::getInstance()->hasGrant($this->_currentAccount, $container, Tinebase_Model_Grants::GRANT_ADMIN)) {
+        if (Tinebase_Container::getInstance()->hasGrant($this->_currentAccount, $_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
             return TRUE;
         }
         
@@ -169,7 +172,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
         
-        return Tinebase_Container::getInstance()->hasGrant($this->_currentAccount, $container, $requiredGrant);
+        return Tinebase_Container::getInstance()->hasGrant($this->_currentAccount, $_container, $requiredGrant);
     }
     
     /**
