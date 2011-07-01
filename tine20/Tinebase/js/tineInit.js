@@ -205,6 +205,8 @@ Tine.Tinebase.tineInit = {
         // todo: find a better place for stuff to do after successfull login
         Tine.Tinebase.tineInit.initAppMgr();
         
+        Tine.Tinebase.tineInit.initUploadMgr();
+        
         /** temporary Tine.onReady for smooth transition to new window handling **/
         if (typeof(Tine.onReady) === 'function') {
             Tine.Tinebase.viewport.destroy();
@@ -689,6 +691,13 @@ Tine.Tinebase.tineInit = {
         } else {
             Tine.Tinebase.appMgr = new Tine.Tinebase.AppManager();
         }
+    },
+    
+    /**
+     * initialise upload manager
+     */
+    initUploadMgr: function () {       
+        Tine.Tinebase.uploadManager = new Ext.ux.file.UploadManager();
     },
     
     /**

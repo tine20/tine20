@@ -46,6 +46,9 @@ Ext.ux.file.Uploader = function(config) {
          */
          'uploadprogress'
     );
+    
+    // todo: entfernen, ist für DEBUG
+    this.maxChunkSize = 1048576;
 };
  
 Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
@@ -57,6 +60,20 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * @cfg {Int} maxPostSize the maximum post size used for html5 uploads
      */
     maxPostSize: 20971520, // 20 MB
+    /**
+     * @cfg {Int} maxChunkSize the maximum chunk size used for html5 uploads
+     */
+    maxChunkSize: 20955136,
+    /**
+     * @cfg {Int} minChunkSize the minimal chunk size used for html5 uploads
+     */
+    minChunkSize: 102400,
+    
+    /**
+     *  max number of upload retries
+     */
+    MAX_RETRY_COUNT: 10,
+    
     /**
      * @cfg {String} url the url we upload to
      */
@@ -126,10 +143,12 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             (! Ext.isGecko && window.XMLHttpRequest && window.File && window.FileList) || // safari, chrome, ...?
             (Ext.isGecko && window.FileReader) // FF
         ) && file) {
-            if (this.isHostMethod('Blob', 'slice')) {
-                return this.html5ChunkedUpload(file);
+        	
+        	this.file = file;
+            if (this.isHostMethod(file, 'mozSlice') || this.isHostMethod(file, 'webkitSlice')) {
+                return this.html5ChunkedUpload();
             } else {
-                return this.html5upload(file);
+                return this.html5upload();
             }
         } else {
             return this.html4upload();
@@ -137,37 +156,6 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     },
     
     
-//    html5uploadNew: function(file) {
-//    	console.log(" HTML 5 upload NEW");
-//    	
-//    	var fileRecord = new Ext.ux.file.Uploader.file({
-//            name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
-//            type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
-//            size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
-//            status: 'uploading',
-//            progress: 0,
-//            input: this.getInput()
-//        });
-//    	    	
-//    	var xhrObj = new XMLHttpRequest(); 
-//    	
-//    	xhrObj.upload.addEventListener("success", this.onUploadSuccess.createDelegate(this, [fileRecord], true), false); 
-//    	xhrObj.upload.addEventListener("progress", this.onUploadProgress.createDelegate(this, [fileRecord], true), false); 
-//    	xhrObj.upload.addEventListener("failure", this.onUploadFail.createDelegate(this, [fileRecord], true), false); 
-//    	
-//    	xhrObj.open("POST", this.url + '?method=Tinebase.uploadTempFile', true); 
-//    	
-//    	xhrObj.setRequestHeader("Content-type", fileRecord.get('type')); 
-//    	xhrObj.setRequestHeader("X_FILE_NAME", fileRecord.get('name')); 
-//    	
-//    	xhrObj.xmlData = file;
-//    	xhrObj.fileRecord = fileRecord;
-//
-//    	xhrObj.send(fileRecord.input);  
-//    	
-//    	return fileRecord;
-//    },
-//    
     /**
      * 2010-01-26 Current Browsers implemetation state of:
      *  http://www.w3.org/TR/FileAPI
@@ -184,166 +172,119 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      *   http://www.w3.org/TR/XMLHttpRequest2/
      *  => the only way of uploading is using the XMLHttpRequest Level 2.
      */
-    html5upload: function(file) {
+    html5upload: function(chunkContext) {
     	
     	var fileRecord = new Ext.ux.file.Uploader.file({
-            name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
-            type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
-            size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
-            status: 'uploading',
-            progress: 0,
-            input: this.getInput()
-        });
-        
-    	if(this.maxPostSize/1 < file.size/1) {
+	            name: this.file.name ? this.file.name : this.file.fileName,  // safari and chrome use the non std. fileX props
+	            type: (this.file.type ? this.file.type : this.file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
+	            size: (this.file.size ? this.file.size : this.file.fileSize) || 0, // non standard but all have it ;-)
+	            status: 'uploading',
+	            progress: 0,
+	            input: this.getInput()
+	        });
+    	
+    	if(chunkContext) {
+    		fileRecord.chunkContext = chunkContext;
+    		fileRecord.size = fileRecord.currentChunkSize;
+    	}
+    	
+    	if(this.maxPostSize/1 < this.file.size/1 && !fileRecord.chunkContext) {
     		fileRecord.html5upload = true;
     		this.onUploadFail(null, null, fileRecord);
     		return fileRecord;
     	}
     	
+    	var defaultHeaders = {
+            "Content-Type"          : "application/x-www-form-urlencoded",
+            "X-Tine20-Request-Type" : "HTTP",
+            "X-Requested-With"      : "XMLHttpRequest"
+        };
+    	
+    	var xmlData = this.file;
+    	
+    	if(fileRecord.chunkContext) {
+    		defaultHeaders["X-Chunk-Count"] = fileRecord.chunkContext.currentChunkIndex;
+    		defaultHeaders["X-Chunk-finished"] = fileRecord.chunkContext.lastChunk;
+    		xmlData = fileRecord.chunkContext.currentChunk;
+    	}
+    	    	
     	var conn = new Ext.data.Connection({
             disableCaching: true,
             method: 'POST',
             url: this.url + '?method=Tinebase.uploadTempFile',
             timeout: 300000, // 5 mins
-            defaultHeaders: {
-                "Content-Type"          : "application/x-www-form-urlencoded",
-                "X-Tine20-Request-Type" : "HTTP",
-                "X-Requested-With"      : "XMLHttpRequest"
-            }
+            defaultHeaders: defaultHeaders
         });
-        
-        conn.addEvents('progress');
-        
+                
         var transaction = conn.request({
             headers: {
                 "X-File-Name"           : fileRecord.get('name'),
                 "X-File-Type"           : fileRecord.get('type'),
                 "X-File-Size"           : fileRecord.get('size')
             },
-            xmlData: file,
-            success: this.onUploadSuccess.createDelegate(this, [fileRecord], true),
-            failure: this.onUploadFail.createDelegate(this, [fileRecord], true),
+            xmlData: xmlData,
+            success: this.onChunkUploadSuccess.createDelegate(this, [fileRecord], true),
+            failure: this.onChunkUploadFail.createDelegate(this, [fileRecord], true),
             fileRecord: fileRecord
         });
         
-        var upload = transaction.conn.upload;
-        upload["onprogress"] = this.onUploadProgress.createDelegate(this, [fileRecord], true);
+        // todo: Registrierung ist an dieser Stelle zu spät
+//        var upload = transaction.conn.upload;
+//        upload["onprogress"] = this.onUploadProgress.createDelegate(this, [fileRecord], true);
 
         return fileRecord;
     },
     
-    /**
-     * 2011-03-04 Current Browsers implemetation state of:
-     *  http://www.w3.org/TR/FileAPI
-     *  
-     *  Interface    : File | Blob                         | FileReader | FileReaderSync | FileError
-     *  FF 3         : yes  | no                           | yes        | no             | yes      
-     *  FF 4 beta 10 : yes  | yes                          | yes        | no             | yes      
-     *  safari       : yes  | yes (without slice method)   | no         | no             | no       
-     *  chrome       : yes  | yes                          | yes        | no             | yes      
-     * 
-     * Testet on Mac OS 10.6
-     */
+//    onlineState: function() {
+//    	
+//    	// todo: korrekt bestimmen
+//    	return (window.navigator.onLine == 'online');
+//    },
+    
     html5ChunkedUpload: function(file) {
-        var fileRecord = new Ext.ux.file.Uploader.file({
-            name: file.name ? file.name : file.fileName,  // safari and chrome use the non std. fileX props
-            type: (file.type ? file.type : file.fileType) || this.fileSelector.getFileCls(), // missing if safari and chrome
-            size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
-            status: 'uploading',
-            progress: 0,
-            input: this.getInput()
-        });
-        
-        // get the overall filesize
-        this.uploadFileSize = fileRecord.get('size');
-        
-        // get the original filename
-        this.uploadFilename = fileRecord.get('name');
-        
-        // get the original filetype
-        this.uploadFiletype = fileRecord.get('type');
-        
-        // get the amount of chunks
-        this.chunkCount = parseInt(this.uploadFileSize / this.maxFileSize, 10);
-        
-        // initialize some class member
-        this.actualChunkNumber = 0;
-        this.chunks = [];
-        
-        // prepare the chunks
-        for (i = 0; i <= this.chunkCount; i++) {
-            if (i === this.chunkCount) {
-                this.chunks[i] = file.slice((i * this.maxFileSize), this.uploadFileSize);
-            } else {
-                this.chunks[i] = file.slice((i * this.maxFileSize), this.maxFileSize);
-            }
-        }
-        
-        // start the first part of the chunked upload
-        this.chunkUpload(fileRecord);
+    	    	
+    	var chunkContext = {
+    			lastChunkUploadFailed: false,
+    			currentChunkIndex: 0,
+    			currentChunkPosition: 0,
+    			currentChunk: false,
+    			retryCount: 0,
+    			currentChunkSize: this.maxChunkSize,
+    			lastChunk: false
+    	};
+    	    	
+  		fileRecord = this.html5upload(this.prepareChunk(chunkContext));
+
+  		return fileRecord;
+    	
     },
     
-    /**
-     * chunked upload method
-     *
-     * Need this to call it from the success method of ajax request
-     */
-    chunkUpload : function(fileRecord) {
-        // Upload chunk if there is one left.
-        if(this.actualChunkNumber <= this.chunkCount) {
-            this.conn = new Ext.data.Connection({
-                disableCaching: true,
-                method: 'POST',
-                //url: this.url + '?method=Tinebase.uploadTempFile',
-                url: 'upload.php',
-                timeout: 300000, // 5 mins
-                defaultHeaders: {
-                    "Content-Type"          : "application/x-www-form-urlencoded",
-                    "X-Tine20-Request-Type" : "HTTP",
-                    "X-Requested-With"      : "XMLHttpRequest"
-                }
-            });
-            
-            this.conn.request({
-                headers: {
-                    "X-Chunk-Count"         : this.chunks.length,
-                    "X-Chunk-Number"        : this.actualChunkNumber,
-                    "X-Chunk-Size"          : this.chunks[this.actualChunkNumber].size,
-                    "X-Chunk-Name"          : this.chunkName
-                },
-                xmlData: this.chunks[this.actualChunkNumber],
-                success: this.onChunkUploadSuccess.createDelegate(this, [fileRecord], true),
-                failure: this.onChunkUploadFail.createDelegate(this, [fileRecord], true),
-                fileRecord: fileRecord
-            });
-        } else {
-            // There are no more chunk's. Now tell the server that upload is finished
-            // and chunk's can concatinated.
-            this.conn = new Ext.data.Connection({
-                disableCaching: true,
-                method: 'POST',
-                //url: this.url + '?method=Tinebase.uploadTempFile',
-                url: 'upload.php',
-                timeout: 300000, // 5 mins
-                defaultHeaders: {
-                    "Content-Type"          : "application/x-www-form-urlencoded",
-                    "X-Tine20-Request-Type" : "HTTP",
-                    "X-Requested-With"      : "XMLHttpRequest"
-                }
-            });
-            
-            this.conn.request({
-                headers: {
-                    "X-Chunk-finished"      : true,
-                    "X-Chunk-Count"         : this.chunks.length,
-                    "X-Chunk-File-Name"     : this.uploadFilename,
-                    "X-Chunk-File-Size"     : this.uploadFileSize,
-                    "X-Chunk-File-Type"     : this.uploadFileType,
-                    "X-Chunk-Name"          : this.chunkName
-                }
-            });
-        }
+    prepareChunk: function(chunkContext) {
+    	
+    	if(chunkContext.lastChunkUploadFailed){
+    		chunkContext.currentChunkPosition = Math.max(0
+    				, chunkContext.currentChunkPosition - chunkContext.currentChunkSize);
+    	}
+    	
+    	if(chunkContext.lastChunkUploadFailed) {
+    		chunkContext.currentChunkSize = Math.max(this.minChunkSize, chunkContext.currentChunkSize / 2);
+    	}
+    	else {
+    		chunkContext.currentChunkSize = Math.min(this.maxChunkSize, chunkContext.currentChunkSize * 2);
+    	}
+    	    	
+    	var nextChunkPosition = Math.min(this.file.fileSize, chunkContext.currentChunkPosition +  chunkContext.currentChunkSize);
+    	var currentChunk = this.sliceFile(this.file, chunkContext.currentChunkPosition, nextChunkPosition);
+    	
+    	if(nextChunkPosition/1 == this.file.fileSize/1) {
+    		chunkContext.lastChunk = true;
+    	}
+    	
+    	chunkContext.currentChunkPosition = nextChunkPosition;
+    	chunkContext.currentChunk = currentChunk;
+    	
+    	return chunkContext;
+    	
     },
     
     /**
@@ -358,7 +299,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         form.appendChild(input);
         
         var fileRecord = new Ext.ux.file.Uploader.file({
-            name: this.fileSelector.getFileName(),
+            name: this.fileSelector.getFileName(),          
             size: 0,
             type: this.fileSelector.getFileCls(),
             input: input,
@@ -408,6 +349,8 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      */
     onUploadSuccess: function(response, options, fileRecord) {
     	
+    	console.log("fired onUploadSuccess");
+    	
     	try {
     		response = Ext.util.JSON.decode(response.responseText);
     	}
@@ -443,20 +386,56 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     /**
      * executed if a chunk got uploaded successfully
      */
-    onChunkUploadSuccess: function(response, options, param) {
+    onChunkUploadSuccess: function(response, options, fileRecord) {
+    	
+    	console.log("onChunkUploadSuccess fired");
         response = Ext.util.JSON.decode(response.responseText);
-        if(response.success !== true) {
-            this.onChunkUploadFail(response, options, param);
+        
+        fileRecord.beginEdit();
+        fileRecord.set('tempFile', response.tempFile);
+        fileRecord.set('name', response.tempFile.name);
+        fileRecord.set('size', response.tempFile.size);
+        fileRecord.set('type', response.tempFile.type);
+        fileRecord.set('path', response.tempFile.path);
+        fileRecord.commit(false);
+        
+        if(response.status && response.status !== 'success') {
+            this.onChunkUploadFail(response, options, fileRecord);
         } else {
-            this.actualChunkNumber++;
-            this.chunkUpload();
-        }
+
+        	Tine.Tinebase.uploadManager.addTempfile(fileRecord.get('name'), fileRecord.get('tempFile'));
+        	
+        	console.log("uploaded " 
+        			+ parseInt(fileRecord.chunkContext.currentChunkPosition * 100 / fileRecord.get('size')/1) + " %");
+        	
+            if(fileRecord.chunkContext.lastChunk) {
+                fileRecord.set('status', 'complete');
+
+            	console.log("Last chunk uploaded");            
+            	Tine.Tinebase.uploadManager.finishUpload(fileRecord.get('name'));
+            	this.fireEvent('uploadcomplete', this, fileRecord);
+            }
+            else {
+            	fileRecord = this.html5upload(this.prepareChunk(fileRecord.chunkContext));
+            }           	            	            	
+        }        
     },
     
     /**
      * executed if a chunk upload failed
      */
-    onChunkUploadFail: Ext.emptyFn,
+    onChunkUploadFail: function(response, options, fileRecord) {
+
+		chunkContext.lastChunkUploadFailed = true;
+    	chunkContext.retryCount++;
+    	if (chunkContext.retryCount > this.MAX_RETRY_COUNT) {
+    		alert("Upload failed!");
+    	}
+    	else {
+    		chunkContext.lastChunkUploadFailed = true;
+    		fileRecord = this.html5upload(this.prepareChunk(fileRecord.chunkContext));
+    	}
+    },
     
     // private
     getInput: function() {
@@ -465,6 +444,20 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
         }
         
         return this.input;
+    },
+    
+    sliceFile: function(file, start, end, type) {
+    	
+    	if(file.mozSlice) {
+    		return file.mozSlice(start, end, type);
+    	}
+    	else if(file.webkitSlice) {
+    		return file.webkitSlice(start, end);
+    	}
+    	else {
+    		return false;
+    	}
+    	
     }
 });
 
@@ -478,6 +471,7 @@ Ext.ux.file.Uploader.file = Ext.data.Record.create([
     {name: 'form', system: true},
     {name: 'input', system: true},
     {name: 'request', system: true},
+    {name: 'chunkContext', system: true},
     {name: 'path', system: true},
     {name: 'tempFile', system: true}
 ]);

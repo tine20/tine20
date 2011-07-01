@@ -94,7 +94,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 	    	}
 	    	else items[2].disable();
 	    	
-	    	if(node.attributes.account_grants.exportGrant) {
+	    	if(node.attributes.account_grants.exportGrant || node.attributes.account_grants.readGrant) {
 	    		items[4].enable();
 	    	}
 	    	else items[4].disable();
@@ -112,7 +112,6 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     		}
     	}
     	
-    	console.log("overridden onClick");
     	Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
 
     }

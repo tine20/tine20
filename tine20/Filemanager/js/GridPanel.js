@@ -224,7 +224,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         this.action_save = new Ext.Action({
             requiredGrant: 'readGrant',
-            allowMultiple: false,
+            allowMultiple: true,
             actionType: 'saveLocaly',
             text: this.app.i18n._('Save locally'),
             actionUpdater: this.updateSaveAction,
