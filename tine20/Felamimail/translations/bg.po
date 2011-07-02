@@ -79,7 +79,7 @@ msgstr "Добави контакт в списъка с адреси"
 msgid "Date"
 msgstr ""
 
-#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:362
+#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:366
 msgid "Show or hide header information"
 msgstr "Показва или скрива header"
 

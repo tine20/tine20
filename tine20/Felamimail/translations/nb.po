@@ -80,7 +80,7 @@ msgstr "Legg til kontakt i adressebok"
 msgid "Date"
 msgstr "Dato"
 
-#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:362
+#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:366
 msgid "Show or hide header information"
 msgstr "Vis eller gjem hode informasjon"
 

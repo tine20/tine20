@@ -80,7 +80,7 @@ msgstr "Add contact to addressbook"
 msgid "Date"
 msgstr "Date"
 
-#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:362
+#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:366
 msgid "Show or hide header information"
 msgstr "Show or hide header information"
 

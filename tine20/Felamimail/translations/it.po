@@ -79,7 +79,7 @@ msgstr "Aggiungi contatto alla rubrica"
 msgid "Date"
 msgstr "Data"
 
-#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:362
+#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:366
 msgid "Show or hide header information"
 msgstr "Mostra o nascondi le intestazioni"
 
