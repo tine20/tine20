@@ -1,0 +1,167 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Sipgate\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n>1;\n"
+
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:187
+msgid "Send"
+msgstr ""
+
+#: js/SmsEditDialog.js:60 js/CallStateWindow.js:50
+msgid "Cancel"
+msgstr ""
+
+#: js/SmsEditDialog.js:68
+msgid "Close"
+msgstr ""
+
+#: js/Sipgate.js:29
+msgid "Edit phone settings"
+msgstr ""
+
+#: js/Sipgate.js:43
+msgid "Sipgate"
+msgstr ""
+
+#: js/Sipgate.js:54
+msgid "Devices"
+msgstr ""
+
+#: js/Sipgate.js:153
+msgid "Dial number"
+msgstr ""
+
+#: js/Sipgate.js:154
+msgid "Initiate a new outgoing call"
+msgstr ""
+
+#: js/Sipgate.js:246
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr ""
+
+#: js/Sipgate.js:247 js/Sipgate.js:329
+msgid "No calls to display"
+msgstr ""
+
+#: js/Sipgate.js:259
+msgid "Status"
+msgstr ""
+
+#: js/Sipgate.js:266
+msgid "Remote Party"
+msgstr ""
+
+#: js/Sipgate.js:272
+msgid "Remote Number"
+msgstr ""
+
+#: js/Sipgate.js:278
+msgid "Local Uri"
+msgstr ""
+
+#: js/Sipgate.js:284
+msgid "Remote Uri"
+msgstr ""
+
+#: js/Sipgate.js:291
+msgid "Call started"
+msgstr ""
+
+#: js/Sipgate.js:298
+msgid "Call ID"
+msgstr ""
+
+#: js/Sipgate.js:528
+msgid "first dial"
+msgstr ""
+
+#: js/Sipgate.js:534
+msgid "second dial"
+msgstr ""
+
+#: js/Sipgate.js:542
+msgid "established"
+msgstr ""
+
+#: js/Sipgate.js:547
+msgid "call 1 busy"
+msgstr ""
+
+#: js/Sipgate.js:555
+msgid "call 2 busy"
+msgstr ""
+
+#: js/Sipgate.js:563
+msgid "hungup before other called"
+msgstr ""
+
+#: js/Sipgate.js:566
+msgid "hungup"
+msgstr ""
+
+#: js/CallStateWindow.js:107
+msgid "connecting..."
+msgstr ""
+
+#: js/CallStateWindow.js:145
+msgid "Connecting to: "
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:37
+msgid "Call contact"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:257
+msgid "Work"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:266
+msgid "Home"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:318
+msgid "Cell"
+msgstr ""
+
+#: js/AddressbookGridPanelHook.js:284 js/AddressbookGridPanelHook.js:327
+msgid "Cell private"
+msgstr ""
+
+#: Preference.php:72
+msgid "Your phone"
+msgstr ""
+
+#: Preference.php:73
+msgid "This is your phone"
+msgstr ""
+
+#: Preference.php:76
+msgid "Your fax"
+msgstr ""
+
+#: Preference.php:77
+msgid "This is your fax"
+msgstr ""
+
+#: Preference.php:80
+msgid "Your mobile number"
+msgstr ""
+
+#: Preference.php:81
+msgid "Used when sending SMS"
+msgstr ""
