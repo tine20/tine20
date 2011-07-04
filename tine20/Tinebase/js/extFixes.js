@@ -8,40 +8,6 @@ Ext.override(Ext.data.Store, {
 });
 
 /**
- * progressbar is broken by updateing when its hidden
- * 
- * we make sure to always have the current width and take this, in case the dom widht is not available
- */
-Ext.override(Ext.ProgressBar, {
-    setWidth : function(width){
-        this.width = width;
-        return this.setSize(width);
-    },
-
-    updateProgress : function(value, text, animate){
-        this.value = value || 0;
-        if(text){
-            this.updateText(text);
-        }
-        if(this.rendered && !this.isDestroyed){
-            var barWidth = this.el.dom.firstChild.offsetWidth ? 
-                this.el.dom.firstChild.offsetWidth :
-                this.width;
-            
-            var w = Math.floor(value*barWidth);
-            
-            this.progressBar.setWidth(w, animate === true || (animate !== false && this.animate));
-            if(this.textTopEl){
-                //textTopEl should be the same width as the bar so overflow will clip as the bar moves
-                this.textTopEl.removeClass('x-hidden').setWidth(w);
-            }
-        }
-        this.fireEvent('update', this, value, text);
-        return this;
-    }
-});
-
-/**
  * for some reasons the original fix insertes two <br>'s on enter for webkit. But this is one to much
  */
 Ext.apply(Ext.form.HtmlEditor.prototype, {
