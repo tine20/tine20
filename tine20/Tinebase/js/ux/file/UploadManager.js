@@ -45,15 +45,33 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
 	
 	uploads: {},
 	
-	registerUpload: function(fileId, tempFile) {		
-		uploads[fileId] = {};		
+	uploadInProgress: false,
+	
+	registerUpload: function(file) {		
+		this.uploads[file.name] = {file: file};	
 	},
 	
 	getUploadSet: function(fileId) {
-		return uploads[fileId];
+		return this.uploads[fileId];
 	},
 	
-	addTempfile: function(fileId, tempFile) {
+	setChunkContext: function(fileId, chunkContext) {
+		this.uploads[fileId].chunkContext = chunkContext;
+	},
+	
+	getChunkContext: function chunkContext(fileId) {
+		return this.uploads[fileId].chunkContext;
+	},
+		
+	setOriginalFileRecord: function(fileId, fileRecord) {
+		this.uploads[fileId].fileRecord = fileRecord;
+	},
+	
+	getOriginalFileRecord: function chunkContext(fileId) {
+		return this.uploads[fileId].fileRecord;
+	},
+	
+	addTempfile: function(fileId, tempFile, uploadContext) {
 	
 		var currentUploadSet = {};
 		
@@ -69,6 +87,7 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
 			
 		tempFileArray.push(tempFile);
 		currentUploadSet['tempFileArray'] = tempFileArray;
+		currentUploadSet['uploadContext'] = uploadContext;
 		
 		this.uploads[fileId] = currentUploadSet;
 		
@@ -84,8 +103,22 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
 		return this.uploads[fileId].tempFileArray;
 	},
 	
+	getFile: function(fileId) {
+		return this.uploads[fileId].file;
+	},
+	
 	removeUploadSet: function(fileId) {
 		delete this.uploads[fileId];
+	},
+	
+	checkForPendingUploads: function() {
+		
+		var fileId = false;
+		for (var key in this.uploads) {
+			fileId = key;
+			break;			
+		}
+		return fileId;
 	}
 	
 });

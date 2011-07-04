@@ -85,6 +85,29 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         }, this);
     },
     
+    // onUploadComplete
+    
+    /**
+     * on upload failure
+     * @private
+     */
+    onUploadComplete: function (uploader, fileRecord) {
+        	
+    	
+    	var originalFileRecord = Tine.Tinebase.uploadManager.getOriginalFileRecord(fileRecord.get('name'));
+
+    	console.log("reading fileRecord id " + originalFileRecord.id + " for name " + fileRecord.get('name'));
+    	console.log("final progress was " + originalFileRecord.get("progress") + " %");
+    	
+    	Tine.Tinebase.uploadManager.finishUpload(fileRecord.get('name'));
+    	
+    	originalFileRecord.beginEdit();
+    	originalFileRecord.set('status', 'complete');
+    	originalFileRecord.endEdit();
+    	
+        if(this.loadMask) this.loadMask.hide();
+    },
+    
     /**
      * on upload failure
      * @private
@@ -107,6 +130,22 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         this.getStore().remove(fileRecord);
         if(this.loadMask) this.loadMask.hide();
     },
+    
+    /**
+     * on progress failure
+     * @private
+     */
+    onUploadProgress: function (uploader, fileRecord, percent) {
+    	
+    	var originalFileRecord = Tine.Tinebase.uploadManager.getOriginalFileRecord(fileRecord.get('name'));
+
+    	originalFileRecord.beginEdit();
+    	originalFileRecord.set('progress', percent);
+    	originalFileRecord.endEdit();
+    	
+    	console.log("upload in progress.. (" + originalFileRecord.get("progress") + " %)");
+    },
+    
     
     /**
      * on remove
@@ -218,6 +257,15 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             }
         }, {
             resizable: true,
+            id: 'progress',
+            dataIndex: 'progress',
+            width: 70,
+            header: _('progress'),
+            renderer: function (value, metadata, record) {
+                return value + " %";        
+            }
+        }, {
+            resizable: true,
             id: 'size',
             dataIndex: 'size',
             width: 70,
@@ -259,15 +307,21 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             fileSelector: fileSelector
         });
         
-        uploader.on('uploadfailure', this.onUploadFail, this);
-        
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
+        	Tine.Tinebase.uploadManager.registerUpload(file);
             var fileRecord = uploader.upload(file);
+			Tine.Tinebase.uploadManager.setOriginalFileRecord(fileRecord.get('name'), fileRecord);
         	if(fileRecord.data.status !== 'failure' ) {
 	            this.store.add(fileRecord);
         	}
         }, this);
+        
+        uploader.on('uploadfailure', this.onUploadFail, this);
+        uploader.on('uploadcomplete', this.onUploadComplete, this);
+        uploader.on('uploadprogress', this.onUploadProgress, this);
+
+
     },
     
     /**

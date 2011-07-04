@@ -1166,6 +1166,10 @@ msgstr "Name"
 msgid "size"
 msgstr "Größe"
 
+#: js/widgets/grid/FileUploadGrid.js:260
+msgid "progress"
+msgstr "Fortschritt"
+
 #: js/widgets/grid/FileUploadGrid.js:220
 msgid "type"
 msgstr "Typ"
