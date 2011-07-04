@@ -272,8 +272,9 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	    	if (is_null($_filter)) {
 	    		throw new Tinebase_Exception_InvalidArgument('Required argument $_filter is missing');
 	    	}
-	
+	        
 	        Tinebase_Notes::getInstance()->getMultipleNotesOfRecords($_records);
+	        
 	        Calendar_Model_Attender::resolveAttendee($_records->attendee);
 	        $this->_resolveOrganizer($_records);
 	        $this->_resolveRrule($_records);
@@ -298,6 +299,15 @@ class Calendar_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	        }
 	        
 	        // @todo sort (record set)
+	        $eventsData = parent::_multipleRecordsToJson($_records);
+	        foreach($eventsData as $eventData) {
+	            if (! array_key_exists(Tinebase_Model_Grants::GRANT_READ, $eventData) || ! $eventData[Tinebase_Model_Grants::GRANT_READ]) {
+	                $eventData['notes'] = array();
+	                $eventData['tags'] = array();
+	            }
+	        }
+	        
+	        return $eventsData;
     	}
           
         //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(print_r($_records->toArray(), true));
