@@ -145,6 +145,14 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
         this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
         this.pagingToolbar.insert(12, this.quotaBar);
+        
+        // NOTE: the Ext.progessbar has an ugly bug: it does not layout correctly when hidden
+        //       so we need to listen when we get activated to relayout the progessbar
+        Tine.Tinebase.appMgr.on('activate', function(app) {
+            if (app.appName === 'Felamimail') {
+                this.quotaBar.syncProgressBar();
+            }
+        }, this);
     },
     
     /**
