@@ -293,7 +293,7 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
         // assert json fe does not add history
         $json = new Calendar_Frontend_Json();
         $resolvedEvents = $json->searchEvents($filterData, array());
-        $this->assertEmpty($resolvedEvents['results'][0]['notes']);
+        $this->assertTrue(empty($resolvedEvents['results'][0]['notes']));
         
     }
     
