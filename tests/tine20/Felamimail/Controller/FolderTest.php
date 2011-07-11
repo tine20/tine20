@@ -29,6 +29,11 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     protected $_account = NULL;
     
     /**
+     * @var Felamimail_Backend_Imap
+     */
+    protected $_imap = NULL;
+    
+    /**
      * folders to delete in tearDown()
      * 
      * @var array
@@ -57,6 +62,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     {
         $this->_account = Felamimail_Controller_Account::getInstance()->search()->getFirstRecord();
         $this->_controller = Felamimail_Controller_Folder::getInstance();
+        $this->_imap       = Felamimail_Backend_ImapFactory::factory($this->_account);
         
         // fill folder cache first
         $this->_controller->search($this->_getFolderFilter(''));
@@ -143,7 +149,7 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * rename mail folder on the server
+     * rename mail folder
      */
     public function testRenameFolder()
     {
@@ -153,14 +159,39 @@ class Felamimail_Controller_FolderTest extends PHPUnit_Framework_TestCase
         $this->_createdFolders = array('INBOX' . $this->_account->delimiter . 'test_renamed');
         $renamedFolder = $this->_controller->rename($this->_account->getId(), 'test_renamed', 'INBOX' . $this->_account->delimiter . 'test');
         
-        $this->assertEquals('test_renamed', $renamedFolder->localname);
+        $this->_checkFolder($renamedFolder);
+    }
+    
+    /**
+     * check folder
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     */
+    protected function _checkFolder($_folder)
+    {
+        $this->assertEquals('test_renamed', $_folder->localname);
         
         $resultInboxSub = $this->_controller->search($this->_getFolderFilter());
         $this->assertGreaterThan(0, count($resultInboxSub), 'No subfolders found.');
-        $testFolder = $resultInboxSub->filter('localname', 'test_renamed')->getFirstRecord();
+        $testFolder = $resultInboxSub->filter('localname', $_folder->localname)->getFirstRecord();
         
-        $this->assertFalse($testFolder === NULL, 'No renamed folder found.');
+        $this->assertFalse($testFolder === NULL, 'No folder found.');
         $this->assertTrue(($testFolder->is_selectable == 1));
+    }
+
+    /**
+     * rename mail folder directly on the server (i.e. another client) and try to rename it with tine
+     */
+    public function testRenameFolderByAnotherClient()
+    {
+        $testFolderName = 'INBOX' . $this->_account->delimiter . 'test';
+        $this->_controller->create($this->_account->getId(), 'test', 'INBOX');
+        $this->_imap->renameFolder($testFolderName, $testFolderName . '_renamed');
+        
+        $this->_createdFolders = array($testFolderName . '_renamed');
+        
+        $this->setExpectedException('Felamimail_Exception_IMAPFolderNotFound');
+        $renamedFolder = $this->_controller->rename($this->_account->getId(), $testFolderName, $testFolderName);
     }
     
     /**
