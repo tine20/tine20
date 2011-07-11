@@ -227,13 +227,13 @@ abstract class Tinebase_Controller_Record_Abstract
      * @param  boolean optional
      * @return boolean
      */
-    public function ModlogActive()
+    public function modlogActive()
     {
     	if (! $this->_backend) {
     		throw new Tinebase_Exception_NotFound('Backend not defined');
     	}
     	
-		$currValue = $this->_backend->ModlogActive();
+		$currValue = $this->_backend->getModlogActive();
         if (func_num_args() === 1) {
             $paramValue = (bool) func_get_arg(0);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Resetting modlog active to ' . (int) $paramValue);
