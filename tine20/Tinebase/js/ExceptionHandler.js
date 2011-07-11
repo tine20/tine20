@@ -122,11 +122,18 @@ Tine.Tinebase.ExceptionHandler = function() {
     /**
      * generic request exception handling
      * 
-     * NOTE: status codes 9xx are reserverd for applications and must not be handled here! 
+     * NOTE: status codes 9xx are reserved for applications and must not be handled here!
+     * 
+     * @param {Tine.Exception|Object} exception
      */
     var handleRequestException = function(exception) {
-        switch(exception.code) {
-            
+         if (! exception.code && exception.responseText) {
+            // we need to decode the exception first
+            var response = Ext.util.JSON.decode(exception.responseText);
+            exception = response.data;
+        }
+    
+        switch (exception.code) {
             // not authorised
             case 401:
                 Ext.MessageBox.show({
