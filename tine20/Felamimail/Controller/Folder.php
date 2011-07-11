@@ -350,23 +350,63 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
+        $newGlobalName = $this->_buildNewGlobalName($_newLocalName, $_oldGlobalName);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
+        
+        $this->_renameFolderOnIMAP($account, $newGlobalName, $_oldGlobalName);
+        $folder = $this->_renameFolderInCache($account, $newGlobalName, $_oldGlobalName);
+        $this->_updateSubfoldersAfterRename($account, $newGlobalName, $_oldGlobalName);
+        
+        return $folder;
+    }
+    
+    /**
+     * remove old localname and build new globalname
+     * 
+     * @param string $_newLocalName
+     * @param string $_oldGlobalName
+     * @return string
+     */
+    protected function _buildNewGlobalName($_newLocalName, $_oldGlobalName)
+    {
         $foldername = $this->_prepareFolderName($_newLocalName);
         
-        // remove old localname and build new globalname
         $globalNameParts = explode($this->_delimiter, $_oldGlobalName);
         array_pop($globalNameParts);
         array_push($globalNameParts, $foldername);
         $newGlobalName = implode($this->_delimiter, $globalNameParts);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
-        
-        $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
-        $imap->renameFolder(Felamimail_Model_Folder::encodeFolderName($_oldGlobalName), Felamimail_Model_Folder::encodeFolderName($newGlobalName));
-        
-        // rename folder in db
+        return $newGlobalName;
+    }
+    
+    /**
+     * rename folder on imap server
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_newGlobalName
+     * @param string $_oldGlobalName
+     */
+    protected function _renameFolderOnIMAP(Felamimail_Model_Account $_account, $_newGlobalName, $_oldGlobalName)
+    {
+        $imap = Felamimail_Backend_ImapFactory::factory($_account);
+        $imap->renameFolder(Felamimail_Model_Folder::encodeFolderName($_oldGlobalName), Felamimail_Model_Folder::encodeFolderName($_newGlobalName));
+    }
+    
+    /**
+     * rename folder in cache
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_newGlobalName
+     * @param string $_oldGlobalName
+     * @return Felamimail_Model_Folder
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _renameFolderInCache(Felamimail_Model_Account $_account, $_newGlobalName, $_oldGlobalName)
+    {
         try {
-            $folder = $this->getByBackendAndGlobalName($_accountId, $_oldGlobalName);
-            $folder->globalname = $newGlobalName;
+            $folder = $this->getByBackendAndGlobalName($_account, $_oldGlobalName);
+            $folder->globalname = $_newGlobalName;
             $folder->localname = $foldername;
             $folder = $this->update($folder);
             
@@ -375,18 +415,29 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             throw $tenf;
         }
         
-        // loop subfolders (recursive) and replace new localname in globalname path
-        $subfolders = $this->getSubfolders($account, $_oldGlobalName);
+        return $folder;
+    }
+    
+    /**
+     * loop subfolders (recursive) and replace new localname in globalname path
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_newGlobalName
+     * @param string $_oldGlobalName
+     */
+    protected function _updateSubfoldersAfterRename(Felamimail_Model_Account $_account, $_newGlobalName, $_oldGlobalName)
+    {
+        $subfolders = $this->getSubfolders($_account, $_oldGlobalName);
         foreach ($subfolders as $subfolder) {
-            if ($newGlobalName != $subfolder->globalname) {
-                $newSubfolderGlobalname = str_replace($_oldGlobalName, $newGlobalName, $subfolder->globalname);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
+            if ($_newGlobalName != $subfolder->globalname) {
+                $newSubfolderGlobalname = str_replace($_oldGlobalName, $_newGlobalName, $subfolder->globalname);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
+                
                 $subfolder->globalname = $newSubfolderGlobalname;
                 $this->update($subfolder);
             }
         }
-        
-        return $folder;
     }
 
     /**
