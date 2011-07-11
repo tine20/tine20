@@ -696,9 +696,15 @@ Tine.Felamimail.getEmailStringFromContact = function(contact) {
  * TODO move all 902 exception handling here!
  * TODO invent requery on 902 with cred. dialog
  * 
- * @param {Tine.Exception} exception
+ * @param {Tine.Exception|Object} exception
  */
 Tine.Felamimail.handleRequestException = function(exception) {
+    if (! exception.code && exception.responseText) {
+        // we need to decode the exception first
+        var response = Ext.util.JSON.decode(exception.responseText);
+        exception = response.data;
+    }
+
     Tine.log.warn('Request exception :');
     Tine.log.warn(exception);
     
@@ -742,10 +748,11 @@ Tine.Felamimail.handleRequestException = function(exception) {
         case 913: // Felamimail_Exception_IMAPFolderNotFound
             Ext.Msg.show({
                title:   app.i18n._('IMAP Error'),
-               msg:     app.i18n._('One of your folders was deleted from an other client, please reload you browser'),
+               msg:     app.i18n._('One of your folders was deleted or renamed by another client. Please update the folder list of this account.'),
                icon:    Ext.MessageBox.ERROR,
                buttons: Ext.Msg.OK
             });
+            // TODO reload account root node
             break;
             
         case 914: // Felamimail_Exception_IMAPMessageNotFound
