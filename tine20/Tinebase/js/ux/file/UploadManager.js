@@ -14,30 +14,31 @@ Ext.ux.file.UploadManager = function(config) {
     
     Ext.ux.file.UploadManager.superclass.constructor.apply(this, arguments);
     
-    this.addEvents(
-        /**
-         * @event uploadcomplete
-         * Fires when the upload was done successfully 
-         * @param {Ext.ux.file.Uploader} this
-         * @param {Ext.Record} Ext.ux.file.Uploader.file
-         */
-         'uploadcomplete',
-        /**
-         * z@event uploadfailure
-         * Fires when the upload failed 
-         * @param {Ext.ux.file.Uploader} this
-         * @param {Ext.Record} Ext.ux.file.Uploader.file
-         */
-         'uploadfailure',
-        /**
-         * @event uploadprogress
-         * Fires on upload progress (html5 only)
-         * @param {Ext.ux.file.Uploader} this
-         * @param {Ext.Record} Ext.ux.file.Uploader.file
-         * @param {XMLHttpRequestProgressEvent}
-         */
-         'uploadprogress'
-    );
+//    this.addEvents(
+//        /**
+//         * @event uploadcomplete
+//         * Fires when the upload was done successfully 
+//         * @param {Ext.ux.file.Uploader} this
+//         * @param {Ext.Record} Ext.ux.file.Uploader.file
+//         */
+//         'uploadcomplete',
+//        /**
+//         * z@event uploadfailure
+//         * Fires when the upload failed 
+//         * @param {Ext.ux.file.Uploader} this
+//         * @param {Ext.Record} Ext.ux.file.Uploader.file
+//         */
+//         'uploadfailure',
+//        /**
+//         * @event uploadprogress
+//         * Fires on upload progress (html5 only)
+//         * @param {Ext.ux.file.Uploader} this
+//         * @param {Ext.Record} Ext.ux.file.Uploader.file
+//         * @param {XMLHttpRequestProgressEvent}
+//         */
+//         'uploadprogress'
+//    );
+    
 };
  
 
@@ -47,36 +48,46 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
 	
 	uploadInProgress: false,
 	
-	registerUpload: function(file) {		
-		this.uploads[file.name] = {file: file};	
+	registerUpload: function(file) {
+		var uploadKey = file.name + new Date().getTime();
+		this.uploads[uploadKey] = {file: file};	
+		return uploadKey;
 	},
 	
-	getUploadSet: function(fileId) {
-		return this.uploads[fileId];
+	getUploadSet: function(uploadKey) {
+		return this.uploads[uploadKey];
 	},
 	
-	setChunkContext: function(fileId, chunkContext) {
-		this.uploads[fileId].chunkContext = chunkContext;
+	setChunkContext: function(uploadKey, chunkContext) {		
+		this.uploads[uploadKey].chunkContext = chunkContext;
 	},
 	
-	getChunkContext: function chunkContext(fileId) {
-		return this.uploads[fileId].chunkContext;
+	getChunkContext: function(uploadKey) {
+		return this.uploads[uploadKey].chunkContext;
 	},
 		
-	setOriginalFileRecord: function(fileId, fileRecord) {
-		this.uploads[fileId].fileRecord = fileRecord;
+	setOriginalFileRecord: function(uploadKey, fileRecord) {
+		this.uploads[uploadKey].originalFileRecord = fileRecord;
 	},
 	
-	getOriginalFileRecord: function chunkContext(fileId) {
-		return this.uploads[fileId].fileRecord;
+	getOriginalFileRecord: function(uploadKey) {
+		return this.uploads[uploadKey].originalFileRecord;
 	},
 	
-	addTempfile: function(fileId, tempFile, uploadContext) {
+	setFileRecord: function(uploadKey, fileRecord) {
+		this.uploads[uploadKey].fileRecord = fileRecord;
+	},
+	
+	getFileRecord: function(uploadKey) {
+		return this.uploads[uploadKey].fileRecord;
+	},
+	
+	addTempfile: function(uploadKey, tempFile) {
 	
 		var currentUploadSet = {};
 		
-		if(this.uploads[fileId]) {
-			currentUploadSet = this.uploads[fileId];
+		if(this.uploads[uploadKey]) {
+			currentUploadSet = this.uploads[uploadKey];
 		}
 			
 		var tempFileArray = new Array();
@@ -87,38 +98,37 @@ Ext.extend(Ext.ux.file.UploadManager, Ext.util.Observable, {
 			
 		tempFileArray.push(tempFile);
 		currentUploadSet['tempFileArray'] = tempFileArray;
-		currentUploadSet['uploadContext'] = uploadContext;
 		
-		this.uploads[fileId] = currentUploadSet;
+		this.uploads[uploadKey] = currentUploadSet;
 		
 		return true;
 	},
 	
-	finishUpload: function(fileId) {		
-		Tine.Tinebase.joinTempFiles(this.uploads[fileId].tempFileArray);
-		this.removeUploadSet(fileId);
+	finishUpload: function(uploadKey) {		
+		Tine.Tinebase.joinTempFiles(this.uploads[uploadKey].tempFileArray);
+		this.removeUploadSet(uploadKey);
 	},
 	
-	getTempfiles: function(fileId) {
-		return this.uploads[fileId].tempFileArray;
+	getTempfiles: function(uploadKey) {
+		return this.uploads[uploadKey].tempFileArray;
 	},
 	
-	getFile: function(fileId) {
-		return this.uploads[fileId].file;
+	getFile: function(uploadKey) {
+		return this.uploads[uploadKey].file;
 	},
 	
-	removeUploadSet: function(fileId) {
-		delete this.uploads[fileId];
+	removeUploadSet: function(uploadKey) {
+		delete this.uploads[uploadKey];
 	},
 	
 	checkForPendingUploads: function() {
 		
-		var fileId = false;
+		var uploadKey = false;
 		for (var key in this.uploads) {
-			fileId = key;
+			uploadKey = key;
 			break;			
 		}
-		return fileId;
+		return uploadKey;
 	}
 	
 });

@@ -52,7 +52,7 @@ Ext.ux.file.Uploader = function(config) {
  
 Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
 	
-	uploadInProgress: false,
+//	uploadInProgress: false,
     /**
      * @cfg {Int} maxFileUploadSize the maximum file size for traditinal form updoads
      */
@@ -139,14 +139,15 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      * @param  {FILE} file to upload (optional for html5 uploads)
      * @return {Ext.Record} Ext.ux.file.Uploader.file
      */
-    upload: function(file) {
+    upload: function(uploadKey) {
     	
-    	if(this.uploadInProgress) {
+    	var file = Tine.Tinebase.uploadManager.getFile(uploadKey); 
+    	if(Tine.Tinebase.uploadManager.uploadInProgress) {
     		
-    		return this.createFileRecord(file, true);
+    		return this.createFileRecord(true, uploadKey);
     	}
     	else {
-    		this.uploadInProgress = file.name;
+    		Tine.Tinebase.uploadManager.uploadInProgress = uploadKey;
 
     		// calculate optimal maxChunkSize       
     		var fileSize = (file.size ? file.size : file.fileSize);
@@ -168,10 +169,11 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     		) && file) {
 
     			if (this.isHostMethod(file, 'mozSlice') || this.isHostMethod(file, 'webkitSlice')) {
-    				var fileRecord = this.html5ChunkedUpload(file.name);
+    				var fileRecord = this.html5ChunkedUpload(uploadKey);
     				return fileRecord;
     			} else {
-    				return this.html5upload();
+    				Tine.Tinebase.uploadManager.setFileRecord(uploadKey, this.createFileRecord(false, uploadKey));
+    				return this.html5upload(uploadKey);
     			}
     		} else {
     			return this.html4upload();
@@ -196,20 +198,19 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      *   http://www.w3.org/TR/XMLHttpRequest2/
      *  => the only way of uploading is using the XMLHttpRequest Level 2.
      */
-    html5upload: function(fileId) {
+    html5upload: function(uploadKey) {
     	
-    	var file = Tine.Tinebase.uploadManager.getFile(fileId);
-    	var fileRecord = this.createFileRecord(file);
+    	var file = Tine.Tinebase.uploadManager.getFile(uploadKey);
+    	var fileRecord = Tine.Tinebase.uploadManager.getFileRecord(uploadKey);
     	
-    	console.log("html5upload " + fileId);
+    	console.log("html5upload " + uploadKey);
     	
-    	var chunkContext = Tine.Tinebase.uploadManager.getChunkContext(fileId); 
+    	var chunkContext = Tine.Tinebase.uploadManager.getChunkContext(uploadKey); 
     	if(chunkContext) {
-    		fileRecord.chunkContext = chunkContext;
-    		fileRecord.size = fileRecord.currentChunkSize;
+//    		fileRecord.set('size', chunkContext.currentChunkSize);
     	}
     	
-    	if(this.maxPostSize/1 < file.size/1 && !fileRecord.chunkContext) {
+    	if(this.maxPostSize/1 < file.size/1 && !chunkContext) {
     		fileRecord.html5upload = true;
     		this.onUploadFail(null, null, fileRecord);
     		return fileRecord;
@@ -221,12 +222,12 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             "X-Requested-With"      : "XMLHttpRequest"
         };
     	
-    	var xmlData = this.file;
+    	var xmlData = file;
     	
-    	if(fileRecord.chunkContext) {
-    		defaultHeaders["X-Chunk-Count"] = fileRecord.chunkContext.currentChunkIndex;
-    		defaultHeaders["X-Chunk-finished"] = fileRecord.chunkContext.lastChunk;
-    		xmlData = fileRecord.chunkContext.currentChunk;
+    	if(chunkContext) {
+    		defaultHeaders["X-Chunk-Count"] = chunkContext.currentChunkIndex;
+    		defaultHeaders["X-Chunk-finished"] = chunkContext.lastChunk;
+    		xmlData = chunkContext.currentChunk;
     	}
     	    	
     	var conn = new Ext.data.Connection({
@@ -245,24 +246,15 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             },
             xmlData: xmlData,
             success: this.onChunkUploadSuccess.createDelegate(this, [fileRecord], true),
-            failure: this.onChunkUploadFail.createDelegate(this, [fileRecord], true),
-            fileRecord: fileRecord
+            failure: this.onChunkUploadFail.createDelegate(this, [fileRecord], true) //,
+            // fileRecord: fileRecord
         });
         
-        // todo: Registrierung ist an dieser Stelle zu spät
-//        var upload = transaction.conn.upload;
-//        upload["onprogress"] = this.onUploadProgress.createDelegate(this, [fileRecord], true);
 
         return fileRecord;
     },
-    
-//    onlineState: function() {
-//    	
-//    	// todo: korrekt bestimmen
-//    	return (window.navigator.onLine == 'online');
-//    },
-    
-    html5ChunkedUpload: function(fileId) {
+
+    html5ChunkedUpload: function(uploadKey) {
     	    	
     	var chunkContext = {
     			lastChunkUploadFailed: false,
@@ -274,18 +266,21 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     			lastChunk: false
     	};
     	    	
-    	Tine.Tinebase.uploadManager.setChunkContext(fileId, chunkContext);
+    	Tine.Tinebase.uploadManager.setChunkContext(uploadKey, chunkContext);
     	  
-    	this.prepareChunk(fileId);
-  		fileRecord = this.html5upload(fileId);
+    	this.prepareChunk(uploadKey);
+  		var fileRecord = this.createFileRecord(false, uploadKey);
+		Tine.Tinebase.uploadManager.setFileRecord(uploadKey, fileRecord);
+
+  		this.html5upload(uploadKey);
 
   		return fileRecord;
     	
     },
     
-    prepareChunk: function(fileId) {
+    prepareChunk: function(uploadKey) {
     	
-    	var chunkContext = Tine.Tinebase.uploadManager.getChunkContext(fileId);
+    	var chunkContext = Tine.Tinebase.uploadManager.getChunkContext(uploadKey);
     	
     	if(chunkContext.lastChunkUploadFailed){
     		chunkContext.currentChunkPosition = Math.max(0
@@ -299,7 +294,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     		chunkContext.currentChunkSize = Math.min(this.maxChunkSize, chunkContext.currentChunkSize * 2);
     	}
     	    	
-    	var file = Tine.Tinebase.uploadManager.getFile(fileId);
+    	var file = Tine.Tinebase.uploadManager.getFile(uploadKey);
     	var nextChunkPosition = Math.min(file.fileSize, chunkContext.currentChunkPosition +  chunkContext.currentChunkSize);
     	var currentChunk = this.sliceFile(file, chunkContext.currentChunkPosition, nextChunkPosition);
     	
@@ -310,7 +305,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     	chunkContext.currentChunkPosition = nextChunkPosition;
     	chunkContext.currentChunk = currentChunk;
     	
-    	Tine.Tinebase.uploadManager.setChunkContext(fileId, chunkContext);
+    	Tine.Tinebase.uploadManager.setChunkContext(uploadKey, chunkContext);
     	return chunkContext;
     	
     	
@@ -408,7 +403,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      */
     onUploadFail: function(response, options, fileRecord) {
         fileRecord.set('status', 'failure');
-        
+        Tine.Tinebase.uploadManager.uploadInProgress = false;
         this.fireEvent('uploadfailure', this, fileRecord);
     },
     
@@ -431,28 +426,28 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             this.onChunkUploadFail(response, options, fileRecord);
         } else {
 
-        	Tine.Tinebase.uploadManager.addTempfile(fileRecord.get('name'), fileRecord.get('tempFile'));
+        	Tine.Tinebase.uploadManager.addTempfile(fileRecord.get('uploadKey'), fileRecord.get('tempFile'));
 
-        	var chunkContext = Tine.Tinebase.uploadManager.getChunkContext(fileRecord.get('name'));
+        	var chunkContext = Tine.Tinebase.uploadManager.getChunkContext(fileRecord.get('uploadKey'));
 
         	var percent = parseInt(chunkContext.currentChunkPosition * 100 / fileRecord.get('size')/1);
             this.fireEvent('uploadprogress', this, fileRecord, percent);
 
             if(chunkContext.lastChunk) {
                 
-            	console.log("Finishing " + fileRecord.get('name') + "..");            
+            	console.log("Finishing " + fileRecord.get('uploadKey') + "..");            
             	this.fireEvent('uploadcomplete', this, fileRecord);
-            	this.uploadInProgress = false;
+            	Tine.Tinebase.uploadManager.uploadInProgress = false;
             	
-            	var nextFileId = Tine.Tinebase.uploadManager.checkForPendingUploads();
-            	if(nextFileId) {
-                  	this.upload(Tine.Tinebase.uploadManager.getFile(nextFileId));
+            	var nextUploadKey = Tine.Tinebase.uploadManager.checkForPendingUploads();
+            	if(nextUploadKey) {
+                  	this.upload(nextUploadKey);
             	}
             	
             }
             else {
-            	this.prepareChunk(fileRecord.get('name'));
-            	fileRecord = this.html5upload(fileRecord.get('name'));
+            	this.prepareChunk(fileRecord.get('uploadKey'));
+            	fileRecord = this.html5upload(fileRecord.get('uploadKey'));
             }           	            	            	
         }        
     },
@@ -462,7 +457,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
      */
     onChunkUploadFail: function(response, options, fileRecord) {
 
-    	var chunkContext = Tine.Tinebase.uploadManager.getChunkContext(fileRecord.get('name'));
+    	var chunkContext = Tine.Tinebase.uploadManager.getChunkContext(fileRecord.get('uploadKey'));
 		chunkContext.lastChunkUploadFailed = true;
     	chunkContext.retryCount++;
     	if (chunkContext.retryCount > this.MAX_RETRY_COUNT) {
@@ -470,7 +465,7 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     	}
     	else {
     		chunkContext.lastChunkUploadFailed = true;
-    		fileRecord = this.html5upload(this.prepareChunk(fileRecord.chunkContext, fileRecord.get('name')), fileRecord.get('name'));
+    		fileRecord = this.html5upload(fileRecord.get('uploadKey'));
     	}
     },
     
@@ -497,7 +492,10 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
     	
     },
     
-    createFileRecord: function(file, pending) {
+    createFileRecord: function(pending, uploadKey) {
+    	
+    	var file = Tine.Tinebase.uploadManager.getFile(uploadKey);
+
     	
     	var status = "uploading";
     	if(pending) {
@@ -510,7 +508,8 @@ Ext.extend(Ext.ux.file.Uploader, Ext.util.Observable, {
             size: (file.size ? file.size : file.fileSize) || 0, // non standard but all have it ;-)
             status: status,
             progress: 0,
-            input: this.getInput()
+            input: this.getInput(),
+            uploadKey: uploadKey
         });
     	
     	return fileRecord;
@@ -529,7 +528,8 @@ Ext.ux.file.Uploader.file = Ext.data.Record.create([
     {name: 'request', system: true},
     {name: 'chunkContext', system: true},
     {name: 'path', system: true},
-    {name: 'tempFile', system: true}
+    {name: 'tempFile', system: true},
+    {name: 'uploadKey', type: 'text', system: true}
 ]);
 
 Ext.ux.file.Uploader.file.getFileData = function(file) {
