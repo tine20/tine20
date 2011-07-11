@@ -151,6 +151,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Tinebase.appMgr.on('activate', function(app) {
             if (app.appName === 'Felamimail') {
                 this.quotaBar.syncProgressBar();
+                this.quotaBar.setWidth(this.quotaBar.getWidth());
             }
         }, this);
     },
