@@ -326,6 +326,12 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
             $imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($_folderName));
         } catch (Zend_Mail_Storage_Exception $zmse) {
+            try {
+                $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folderName));
+            } catch (Zend_Mail_Storage_Exception $zmse2) {
+                throw new Felamimail_Exception_IMAPFolderNotFound('Folder not found (error: ' . $zmse2->getMessage() . ').');
+            }
+            
             throw new Felamimail_Exception_IMAP('Could not delete folder ' . $_folderName . '. IMAP Error: ' . $zmse->getMessage());
         }
         
