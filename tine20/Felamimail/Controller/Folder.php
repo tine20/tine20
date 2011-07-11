@@ -399,12 +399,9 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $imap->renameFolder(Felamimail_Model_Folder::encodeFolderName($_oldGlobalName), Felamimail_Model_Folder::encodeFolderName($_newGlobalName));
         } catch (Zend_Mail_Storage_Exception $zmse) {
             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
-                . ' Folder could have been renamed / deleted by another client -> reloading parent folder cache ...');
-
-            $parentFolder = $this->_buildNewGlobalName('', $_newGlobalName);
-            $this->_cacheController->update($_account, $parentFolder);
+                . ' Folder could have been renamed / deleted by another client.');
             
-            throw new Felamimail_Exception_IMAPFolderNotFound('Folder not found - reloading cache. (error: ' . $zmse->getMessage() . ')');
+            throw new Felamimail_Exception_IMAPFolderNotFound('Folder not found (error: ' . $zmse->getMessage() . ').');
         }
     }
     
