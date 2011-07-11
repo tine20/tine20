@@ -312,16 +312,31 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             $folder = NULL;
         }            
         
-        // check if folder has subfolders and throw exception if that is the case
+        // check if folder has subfolders and throw exception if that is the case / OR: delete subfolders if recursive param is TRUE
         // @todo this should not be a Tinebase_Exception_AccessDenied -> we have to create a new exception and call the fmail exception handler when deleting/adding/renaming folders
         $subfolders = $this->getSubfolders($_accountId, $_folderName);
-        if (count($subfolders) > 0) {
-            if ($_recursive && $folder) {
+        if (count($subfolders) > 0 && $folder) {
+            if ($_recursive) {
                 $this->deleteSubfolders($folder, $subfolders);
+            } else {
+                throw new Tinebase_Exception_AccessDenied('Could not delete folder ' . $_folderName . ' because it has subfolders.');
             }
-            throw new Tinebase_Exception_AccessDenied('Could not delete folder ' . $_folderName . ' because it has subfolders.');
         }
         
+        $this->_deleteFolderOnIMAP($_accountId, $_folderName);
+        $this->_deleteFolderInCache($_accountId, $folder);
+    }
+
+    /**
+     * rename folder on imap server
+     * 
+     * @param string|Felamimail_Model_Account $_account
+     * @param string $_folderName
+     * @throws Felamimail_Exception_IMAPFolderNotFound
+     * @throws Felamimail_Exception_IMAP
+     */
+    protected function _deleteFolderOnIMAP($_accountId, $_folderName)
+    {
         try {
             $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
             $imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($_folderName));
@@ -334,13 +349,25 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             
             throw new Felamimail_Exception_IMAP('Could not delete folder ' . $_folderName . '. IMAP Error: ' . $zmse->getMessage());
         }
-        
-        if ($folder) {
-            Felamimail_Controller_Message::getInstance()->deleteByFolder($folder);
-            $this->_backend->delete($folder->getId());
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted folder ' . $_folderName);
-            $this->_updateHasChildren($_accountId, $folder->parent);
+    }
+    
+    /**
+     * rename folder in cache
+     * 
+     * @param string|Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Folder $_folder
+     */
+    protected function _deleteFolderInCache($_accountId, $_folder)
+    {
+        if ($_folder === NULL) {
+            return;
         }
+
+        Felamimail_Controller_Message::getInstance()->deleteByFolder($_folder);
+        $this->_backend->delete($_folder->getId());
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted folder ' . $_folder->globalname);
+        $this->_updateHasChildren($_accountId, $_folder->parent);
     }
     
     /**
