@@ -42,4 +42,47 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
+
+    /**
+     * create node(s)
+     * 
+     * @param string|array $filename
+     * @param string|array $tempFileId
+     */
+    public function createNodes($filename, $tempFileId)
+    {
+        
+    }
+
+    /**
+     * copy node(s)
+     * 
+     * @param string|array $sourceFilenames string->single file, array->multiple
+     * @param string|array $destinationFilenames string->singlefile OR directory, array->multiple files
+     */
+    public function copyNodes($sourceFilenames, $destinationFilenames)
+    {
+        
+    }
+
+    /**
+     * move node(s)
+     * 
+     * @param string|array $sourceFilenames string->single file, array->multiple
+     * @param string|array $destinationFilenames string->singlefile OR directory, array->multiple files
+     */
+    public function moveNodes($sourceFilenames, $destinationFilenames)
+    {
+        
+    }
+
+    /**
+     * delete node(s)
+     * 
+     * @param string|array $filenames string->single file, array->multiple
+     */
+    public function moveNodes($filenames)
+    {
+        
+    }
 }
