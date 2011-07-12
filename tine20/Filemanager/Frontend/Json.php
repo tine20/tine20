@@ -48,10 +48,13 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param string|array $filename
      * @param string|array $tempFileId
+     * @return array
+     * 
+     * @todo implement
      */
     public function createNodes($filename, $tempFileId)
     {
-        
+        throw new Tinebase_Exception_NotImplemented('not implemented yet');
     }
 
     /**
@@ -59,10 +62,13 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param string|array $sourceFilenames string->single file, array->multiple
      * @param string|array $destinationFilenames string->singlefile OR directory, array->multiple files
+     * @return array
+     * 
+     * @todo implement
      */
     public function copyNodes($sourceFilenames, $destinationFilenames)
     {
-        
+        throw new Tinebase_Exception_NotImplemented('not implemented yet');
     }
 
     /**
@@ -70,19 +76,25 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param string|array $sourceFilenames string->single file, array->multiple
      * @param string|array $destinationFilenames string->singlefile OR directory, array->multiple files
+     * @return array
+     * 
+     * @todo implement
      */
     public function moveNodes($sourceFilenames, $destinationFilenames)
     {
-        
+        throw new Tinebase_Exception_NotImplemented('not implemented yet');
     }
 
     /**
      * delete node(s)
      * 
      * @param string|array $filenames string->single file, array->multiple
+     * @return array
+     * 
+     * @todo implement
      */
-    public function moveNodes($filenames)
+    public function deleteNodes($filenames)
     {
-        
+        throw new Tinebase_Exception_NotImplemented('not implemented yet');
     }
 }
