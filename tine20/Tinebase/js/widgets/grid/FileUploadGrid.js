@@ -94,12 +94,12 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     onUploadComplete: function (uploader, fileRecord) {
         	
     	
-    	var originalFileRecord = Tine.Tinebase.uploadManager.getOriginalFileRecord(fileRecord.get('name'));
+    	var originalFileRecord = Tine.Tinebase.uploadManager.getOriginalFileRecord(fileRecord.get('uploadKey'));
 
-    	console.log("reading fileRecord id " + originalFileRecord.id + " for name " + fileRecord.get('name'));
+    	console.log("reading fileRecord id " + originalFileRecord.id + " for name " + fileRecord.get('uploadKey'));
     	console.log("final progress was " + originalFileRecord.get("progress") + " %");
     	
-    	Tine.Tinebase.uploadManager.finishUpload(fileRecord.get('name'));
+    	Tine.Tinebase.uploadManager.finishUpload(fileRecord.get('uploadKey'));
     	
     	originalFileRecord.beginEdit();
     	originalFileRecord.set('status', 'complete');
@@ -137,7 +137,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     onUploadProgress: function (uploader, fileRecord, percent) {
     	
-    	var originalFileRecord = Tine.Tinebase.uploadManager.getOriginalFileRecord(fileRecord.get('name'));
+    	var originalFileRecord = Tine.Tinebase.uploadManager.getOriginalFileRecord(fileRecord.get('uploadKey'));
 
     	originalFileRecord.beginEdit();
     	originalFileRecord.set('progress', percent);
@@ -261,9 +261,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             dataIndex: 'progress',
             width: 70,
             header: _('progress'),
-            renderer: function (value, metadata, record) {
-                return value + " %";        
-            }
+            renderer: Ext.ux.PercentRenderer
+//            	function (value, metadata, record) {
+//                return value + " %";        
+//            }
         }, {
             resizable: true,
             id: 'size',
@@ -303,15 +304,20 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     onFilesSelect: function (fileSelector, e) {
     	
+    	
+    	// todo: bei jedem file select / drop uploader neu instanzieren nötig ??
         var uploader = new Ext.ux.file.Uploader({
             fileSelector: fileSelector
         });
         
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
-        	Tine.Tinebase.uploadManager.registerUpload(file);
-            var fileRecord = uploader.upload(file);
-			Tine.Tinebase.uploadManager.setOriginalFileRecord(fileRecord.get('name'), fileRecord);
+ 
+        	var uploadKey = Tine.Tinebase.uploadManager.registerUpload(file);        	
+            var fileRecord = uploader.upload(uploadKey);           
+            fileRecord.set('uploadKey', uploadKey);           
+			Tine.Tinebase.uploadManager.setOriginalFileRecord(uploadKey, fileRecord);
+			
         	if(fileRecord.data.status !== 'failure' ) {
 	            this.store.add(fileRecord);
         	}
