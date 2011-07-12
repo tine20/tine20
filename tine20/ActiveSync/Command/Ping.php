@@ -174,15 +174,6 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
     }    
 
     /**
-     * (non-PHPdoc)
-     * @see ActiveSync_Command_Wbxml::getResponse()
-     */
-    public function getResponse($_keepSession = false)
-    {
-        parent::getResponse($_keepSession);
-    }
-    
-    /**
      * return number of chnaged entries
      * 
      * @param $_dataController
