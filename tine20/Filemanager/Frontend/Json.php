@@ -46,17 +46,31 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     /**
      * create node(s)
      * 
-     * @param string|array $filename
-     * @param string|array $tempFileId
+     * @param string|array $filenames
+     * @param string $type directory or file
      * @return array
      * 
      * @todo implement
      */
-    public function createNodes($filename, $tempFileId)
+    public function createNodes($filenames, $type)
     {
         throw new Tinebase_Exception_NotImplemented('not implemented yet');
     }
 
+    /**
+     * attach uploaded file to node
+     * 
+     * @param string $filename
+     * @param string $tempFileId
+     * @return array
+     * 
+     * @todo implement
+     */
+    public function attachFileToNode($filename, $tempFileId)
+    {
+        throw new Tinebase_Exception_NotImplemented('not implemented yet');
+    }
+    
     /**
      * copy node(s)
      * 
