@@ -104,12 +104,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         $pathFilters = $_filter->getFilter('path', TRUE);
         
-        if (! $pathFilters) {
-            // force a standard path filter as ACL filter
-            $pathFilters = array($_filter->createFilter('path', 'equals', '/personal/' . $this->_currentAccount->accountLoginName));
-            $_filter->addFilter($pathFilters[0]);
-        }
-        
         // add base path and check grants
         foreach ($pathFilters as $key => $pathFilter) {
             $path = $pathFilter->getValue();
