@@ -184,8 +184,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         Tinebase_UserProfile::getInstance()->checkRight($_userProfile->account_id);
         
-        $doContainerACLChecks = $this->_doContainerACLChecks;
-        $this->_doContainerACLChecks = FALSE;
+        $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
         
         $contact = $this->getContactByUserId($_userProfile->account_id, true);
         $userProfile = Tinebase_UserProfile::getInstance()->mergeProfileInfo($contact, $_userProfile);
@@ -194,7 +193,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         $userProfile = Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
 
-        $this->_doContainerACLChecks = $doContainerACLChecks;
+        $this->doContainerACLChecks($doContainerACLChecks);
         
         return $userProfile;
     }
