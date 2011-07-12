@@ -79,8 +79,10 @@ class ActiveSync_Command_Settings extends ActiveSync_Command_Wbxml
     
     /**
      * this function generates the response for the client
+     * 
+     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse()
+    public function getResponse($_keepSession = FALSE)
     {
         $settings = $this->_outputDom->documentElement;
         
@@ -106,6 +108,6 @@ class ActiveSync_Command_Settings extends ActiveSync_Command_Wbxml
             }
         }
         
-        parent::getResponse();
+        parent::getResponse($_keepSession);
     }
 }

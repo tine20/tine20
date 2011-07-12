@@ -88,8 +88,9 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
     /**
      * generate ItemOperations response
      * 
+     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse()
+    public function getResponse($_keepSession = FALSE)
     {
         // add aditional namespaces for contacts, tasks and email
         $this->_outputDom->documentElement->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:Contacts'    , 'uri:Contacts');
@@ -137,6 +138,6 @@ class ActiveSync_Command_ItemOperations extends ActiveSync_Command_Wbxml
             }
         }
         
-        parent::getResponse();
+        parent::getResponse($_keepSession);
     }
 }

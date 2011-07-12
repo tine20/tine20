@@ -54,8 +54,9 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
     /**
      * generate MoveItems response
      * 
+     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse()
+    public function getResponse($_keepSession = FALSE)
     {
         $folderStateBackend   = new ActiveSync_Backend_FolderState();
         
@@ -79,6 +80,6 @@ class ActiveSync_Command_MoveItems extends ActiveSync_Command_Wbxml
             }
         }
         
-        parent::getResponse();
+        parent::getResponse($_keepSession);
     }
 }
