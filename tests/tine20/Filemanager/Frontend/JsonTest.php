@@ -160,9 +160,9 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test search nodes
+     * test search nodes (personal)
      */
-    public function testSearchNodes()
+    public function testSearchPersonalNodes()
     {
         $filter = array(array(
             'field'    => 'path', 
@@ -170,6 +170,36 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'value'    => '/personal/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_personalContainer->name
         ));
         $this->_searchHelper($filter, 'unittestdir_personal');
+    }
+    
+    /**
+     * test search nodes (other)
+     * 
+     * @todo make it work
+     */
+    public function testSearchOtherUsersNodes()
+    {
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/otherUsers/sclever/' . $this->_otherUserContainer->name
+        ));
+        $this->_searchHelper($filter, 'unittestdir_other');
+    }
+    
+    /**
+     * test search nodes (shared)
+     * 
+     * @todo make it work
+     */
+    public function testSearchSharedNodes()
+    {
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/shared/' . $this->_sharedContainer->name
+        ));
+        $this->_searchHelper($filter, 'unittestdir_shared');
     }
     
     /**
@@ -184,6 +214,5 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals($_expectedName, $result['results'][0]['name']);
-        
     }
 }
