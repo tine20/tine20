@@ -321,8 +321,17 @@ class Tinebase_FileSystem
         }
     }
     
-    public function rmDir($_path, $_recursive = false)
+    /**
+     * remove directory
+     * 
+     * @param string $_path
+     * @param boolean $_recursive
+     */
+    public function rmDir($_path, $_recursive = FALSE)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Removing directory ' . $_path);
+        
         $node = $this->stat($_path);
         
         $children = $this->_getTreeNodeChildren($node);
@@ -396,6 +405,12 @@ class Tinebase_FileSystem
         return $node;
     }
     
+    /**
+     * get filesize
+     * 
+     * @param string $_path
+     * @return integer
+     */
     public function filesize($_path)
     {
         $node = $this->stat($_path);
@@ -403,6 +418,12 @@ class Tinebase_FileSystem
         return $node->size;
     }
     
+    /**
+     * delete file
+     * 
+     * @param string $_path
+     * @return boolean
+     */
     public function unlink($_path)
     {
         $node = $this->stat($_path);
@@ -424,9 +445,10 @@ class Tinebase_FileSystem
     }
     
     /**
-     * @param unknown_type $_parentId
-     * @param unknown_type $_name
-     * @throws Tinebase_Exception_InvalidArgument
+     * create directory
+     * 
+     * @param string $_parentId
+     * @param string $_name
      * @return Tinebase_Model_Tree_Node
      */
     protected function _createDirectoryTreeNode($_parentId, $_name)
