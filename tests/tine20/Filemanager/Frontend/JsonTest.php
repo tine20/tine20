@@ -164,18 +164,26 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchNodes()
     {
-        $filter = array(
-            array(
-                'field'    => 'path', 
-                'operator' => 'equals', 
-                'value'    => '/personal/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_personalContainer->name
-            )
-        );
-        
-        // @todo generalize
-        $result = $this->_json->searchNodes($filter, array());
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/personal/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_personalContainer->name
+        ));
+        $this->_searchHelper($filter, 'unittestdir_personal');
+    }
+    
+    /**
+     * search node helper
+     * 
+     * @param array $_filter
+     * @param string $_expectedName
+     */
+    protected function _searchHelper($_filter, $_expectedName)
+    {
+        $result = $this->_json->searchNodes($_filter, array());
         
         $this->assertEquals(1, $result['totalcount']);
-        $this->assertEquals('unittestdir_personal', $result['results'][0]['name']);
+        $this->assertEquals($_expectedName, $result['results'][0]['name']);
+        
     }
 }
