@@ -201,8 +201,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                     break;
                     
                 case Tinebase_Model_Container::TYPE_PERSONAL:
+                case Tinebase_Model_Container::TYPE_OTHERUSERS:
                     if (!empty($pathParts[1])) {
-                        if ($pathParts[1] != Tinebase_Core::getUser()->accountLoginName) {
+                        if ($containerType === Tinebase_Model_Container::TYPE_PERSONAL && $pathParts[1] !== Tinebase_Core::getUser()->accountLoginName) {
                             throw new Tinebase_Exception_NotFound('Invalid user name: ' . $pathParts[1] . '.');
                         }
                         
