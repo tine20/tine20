@@ -53,11 +53,7 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $path = $this->_value;
-        if ($this->_container) {
-            $path = $this->_replaceContainerNameWithId($path);
-        }
-        
+        $path = $this->_doPathReplacements($this->_value);
         $node = Tinebase_FileSystem::getInstance()->stat($path);
         
         $field = 'parent_id';
@@ -69,11 +65,47 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     }
     
     /**
+     * do path replacements (container name => container id, otherUsers => personal, ...)
+     * 
+     * [0] => app id
+     * [1] => type
+     * [2] => container | accountLoginName
+     * [3] => container | directory
+     * [4] => directory
+     * [5] => ...
+     * 
+     * @param string $_path
+     * @return string
+     * 
+     * @todo finish implementation
+     */
+    protected function _doPathReplacements($_path)
+    {
+        $pathParts = explode('/', trim($_path, '/'), 4);
+        //$result = $pathParts[0];
+        // @todo build path
+        
+        // this is @deprecated
+        if ($this->_container) {
+            $result = $this->_replaceContainerNameWithId($_path);
+        } else {
+            $result = $_path;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Path to stat: ' . $result);
+        
+        return $result;
+    }
+    
+    /**
      * replace container name in path with id
      * 
      * @param string $_path
      * @return string
      * @throws Tinebase_Exception
+     * 
+     * @deprecated
      */
     protected function _replaceContainerNameWithId($_path)
     {
