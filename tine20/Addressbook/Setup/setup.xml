@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>5.0</version>
+    <version>5.1</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,7 +11,7 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>12</version>
+            <version>13</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -211,7 +211,7 @@
                 <field>
                     <name>n_family</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>255</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
@@ -253,7 +253,7 @@
                 <field>
                     <name>org_name</name>
                     <type>text</type>
-                    <length>64</length>
+                    <length>255</length>
                     <notnull>false</notnull>
                 </field>
                 <field>
