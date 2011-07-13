@@ -109,7 +109,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         )));
         $this->_sharedContainer = (count($search) > 0) 
             ? $search->getFirstRecord()
-            : Tinebase_Container::getInstance()->create(new Tinebase_Model_Container(array(
+            : Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
                 'name'           => 'shared',
                 'type'           => Tinebase_Model_Container::TYPE_SHARED,
                 'backend'        => 'sql',
@@ -215,4 +215,6 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals($_expectedName, $result['results'][0]['name']);
     }
+    
+    // @todo add tests for the toplevel search for personal/other/shared
 }
