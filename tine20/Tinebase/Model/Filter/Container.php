@@ -257,7 +257,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             $containerIds = $this->_resolveContainerNode('personal', $ownerId);
         } else {
             $node = $_path == '/' ? 'all' : substr($_path, 1);
-            $node = $node === 'personal' ? 'otherUsers' : $node;
+            $node = $node === 'personal' ? Tinebase_Model_Container::TYPE_OTHERUSERS : $node;
 
             $containerIds = $this->_resolveContainerNode($node);
         }
@@ -282,7 +282,7 @@ class Tinebase_Model_Filter_Container extends Tinebase_Model_Filter_Abstract imp
             case 'all':        return Tinebase_Container::getInstance()->getContainerByACL($currentAccount, $appName, $this->_requiredGrants, TRUE, $this->_options['ignoreAcl']);
             case 'personal':   return Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName, $_ownerId, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
             case 'shared':     return Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
-            case 'otherUsers': return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
+            case Tinebase_Model_Container::TYPE_OTHERUSERS: return Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName, $this->_requiredGrants, $this->_options['ignoreAcl'])->getId();
             case 'internal':
                 // @todo remove legacy code
                 if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 

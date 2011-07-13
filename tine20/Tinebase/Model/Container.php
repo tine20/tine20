@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Record
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -26,17 +26,20 @@ class Tinebase_Model_Container extends Tinebase_Record_Abstract
 {
     /**
      * type for personal containers
-     *
      */
     const TYPE_PERSONAL = 'personal';
     
     /**
      * type for shared container
-     *
      */
     const TYPE_SHARED = 'shared';
     
-	/**
+    /**
+     * type for shared container
+     */
+    const TYPE_OTHERUSERS = 'otherUsers';
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
