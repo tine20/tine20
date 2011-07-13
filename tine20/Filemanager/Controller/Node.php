@@ -133,8 +133,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     public function addBasePath($_path)
     {
         $basePath = $this->_backend->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
+        
+        $path = (strpos($_path, '/') === 0) ? $_path : '/' . $_path;
                 
-        return $basePath . $_path;
+        return $basePath . $path;
     }
     
     /**
