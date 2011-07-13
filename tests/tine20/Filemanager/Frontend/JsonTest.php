@@ -132,8 +132,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             . '/' . $this->_personalContainer->getId() . '/unittestdir_personal';
         
         // add other users path
-        $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName 
-            . '/' . $this->_otherUserContainer->getId() . '/unittestdir_other';
+        $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/sclever/' . $this->_otherUserContainer->getId() . '/unittestdir_other';
         
         // add shared path
         $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->getId();
@@ -173,6 +172,21 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test search nodes (shared)
+     * 
+     * @todo make it work together with testSearchPersonalNodes / it already works when only this test is executed
+     */
+    public function testSearchSharedNodes()
+    {
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->name
+        ));
+        $this->_searchHelper($filter, 'unittestdir_shared');
+    }
+    
+    /**
      * test search nodes (other)
      * 
      * @todo make it work
@@ -185,21 +199,6 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'value'    => '/otherUsers/sclever/' . $this->_otherUserContainer->name
         ));
         $this->_searchHelper($filter, 'unittestdir_other');
-    }
-    
-    /**
-     * test search nodes (shared)
-     * 
-     * @todo make it work
-     */
-    public function testSearchSharedNodes()
-    {
-        $filter = array(array(
-            'field'    => 'path', 
-            'operator' => 'equals', 
-            'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->name
-        ));
-        $this->_searchHelper($filter, 'unittestdir_shared');
     }
     
     /**
