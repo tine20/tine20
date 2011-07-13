@@ -179,8 +179,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_path
      * @return Tinebase_Model_Container
-     * 
-     * @todo replace getContainerByName!
      */
     public function getContainer($_path)
     {
@@ -197,8 +195,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             switch($containerType) {
                 case Tinebase_Model_Container::TYPE_SHARED:
                     if (!empty($pathParts[1])) {
-                        // @todo replace getContainerByName!
-                        $container = Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $pathParts[2], $containerType);
+                        $container = $this->_searchContainerByName($pathParts[1], $containerType);
                     }
                     
                     break;
@@ -212,8 +209,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                         if (!empty($pathParts[2])) {
                             // explode again
                             $subPathParts = explode('/', $pathParts[2], 2);
-                            // @todo replace getContainerByName!
-                            $container = Tinebase_Container::getInstance()->getContainerByName($this->_applicationName, $subPathParts[0], $containerType);
+                            $container = $this->_searchContainerByName($subPathParts[0], $containerType);
                         }
                     } else {
                         throw new Tinebase_Exception_NotFound('User name missing.');
@@ -229,6 +225,28 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         return $container;
     }
     
+    /**
+     * search container by name and type
+     * 
+     * @param string $_name
+     * @param string $_type
+     * @return Tinebase_Model_Container
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _searchContainerByName($_name, $_type)
+    {
+        $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+            'name'           => $_name,
+            'type'           => $_type,
+        )));
+        
+        if (count($search) !== 1) {
+            throw new Tinebase_Exception_NotFound('Container not found: ' . $_name);
+        }
+        
+        return $search->getFirstRecord();
+    }
 
     /**
      * Gets total count of search with $_filter
