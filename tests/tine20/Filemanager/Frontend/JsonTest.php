@@ -167,7 +167,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/personal/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_personalContainer->name
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_personalContainer->name
         ));
         $this->_searchHelper($filter, 'unittestdir_personal');
     }
@@ -197,7 +197,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/shared/' . $this->_sharedContainer->name
+            'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->name
         ));
         $this->_searchHelper($filter, 'unittestdir_shared');
     }
