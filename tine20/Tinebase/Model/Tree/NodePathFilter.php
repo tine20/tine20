@@ -55,7 +55,19 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     {
         $path = $this->_value;
         if ($this->_container) {
-            $path = preg_replace('/' . $this->_container->name . '/', $this->_container->getId(), $path);
+            if (substr_count($path,  $this->_container->name) === 1) {
+                $path = str_replace($this->_container->name, $this->_container->getId(), $path);
+            } else if ($this->_container->name === Tinebase_Model_Container::TYPE_SHARED) {
+                // only replace the occurence after shared
+                $path = preg_replace(
+                    '@' . Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_container->name . '@', 
+                    Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_container->getId(), 
+                    $path
+                );
+            } else {
+                // FIXME add regexp that only replaces container name
+                throw new Tinebase_Exception('Container name and user name are the same!');
+            }
         }
         
         $node = Tinebase_FileSystem::getInstance()->stat($path);
@@ -66,5 +78,5 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
         
         $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
         $_select->where($where);
-    }    
+    }
 }
