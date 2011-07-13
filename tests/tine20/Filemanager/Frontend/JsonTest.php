@@ -85,6 +85,29 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName 
             . '/' . $personalContainer->getId() . '/unittestdir_personal';
         
+        // add other users path
+        $personas = Zend_Registry::get('personas');
+        $personalContainerOfSusan = Tinebase_Container::getInstance()->getDefaultContainer($personas['sclever']->getId(), 'Filemanager');
+        $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName 
+            . '/' . $personalContainerOfSusan->getId() . '/unittestdir_other';
+        
+        // add shared path
+        $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
+            'application_id' => $this->_application->getId(),
+            'name'           => 'shared',
+            'type'           => Tinebase_Model_Container::TYPE_SHARED,
+        )));
+        $sharedContainer = (count($search) > 0) 
+            ? $search->getFirstRecord()
+            : Tinebase_Container::getInstance()->create(new Tinebase_Model_Container(array(
+                'name'           => 'shared',
+                'type'           => Tinebase_Model_Container::TYPE_SHARED,
+                'backend'        => 'sql',
+                'application_id' => $this->_application->getId(),
+            )));
+        $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $sharedContainer->getId();
+        $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $sharedContainer->getId() . '/unittestdir_shared';
+        
         // mkdir
         foreach ($testPaths as $path) {
             $path = Filemanager_Controller_Node::getInstance()->addBasePath($path);
