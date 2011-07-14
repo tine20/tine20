@@ -116,7 +116,10 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             )));
             
         $personas = Zend_Registry::get('personas');
-        $this->_otherUserContainer = Tinebase_Container::getInstance()->getDefaultContainer($personas['sclever']->getId(), 'Filemanager');            
+        $this->_otherUserContainer = Tinebase_Container::getInstance()->getDefaultContainer($personas['sclever']->getId(), 'Filemanager');
+        Tinebase_Container::getInstance()->addGrants($this->_otherUserContainer->getId(), Tinebase_Acl_Rights::ACCOUNT_TYPE_ANYONE, NULL, array(
+            Tinebase_Model_Grants::GRANT_READ
+        ), TRUE);
     }
     
     /**
@@ -207,7 +210,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/otherUsers/sclever/' . $this->_otherUserContainer->name
+            'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS . '/sclever/' . $this->_otherUserContainer->name
         ));
         $this->_searchHelper($filter, 'unittestdir_other');
     }
