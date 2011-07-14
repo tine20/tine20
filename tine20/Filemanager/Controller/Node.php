@@ -190,12 +190,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $container = NULL;
         
         if (!empty($pathParts[0])) {
-            $containerType          = strtolower($pathParts[0]);
+            $containerType          = $pathParts[0];
             
             switch($containerType) {
                 case Tinebase_Model_Container::TYPE_SHARED:
                     if (!empty($pathParts[1])) {
-                        $container = $this->_searchContainerByName($pathParts[1], $containerType);
+                        $container = $this->_searchContainerByName($pathParts[1], Tinebase_Model_Container::TYPE_SHARED);
                     }
                     
                     break;
@@ -210,7 +210,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                         if (!empty($pathParts[2])) {
                             // explode again
                             $subPathParts = explode('/', $pathParts[2], 2);
-                            $container = $this->_searchContainerByName($subPathParts[0], $containerType);
+                            $container = $this->_searchContainerByName($subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL);
                         }
                     } else {
                         throw new Tinebase_Exception_NotFound('User name missing.');
