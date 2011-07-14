@@ -40,11 +40,25 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     protected $_containerType = NULL;
     
     /**
+     * container owner (account login name)
+     * 
+     * @var string
+     */
+    protected $_containerOwner = NULL;
+    
+    /**
      * stat path to fetch node with
      * 
      * @var string
      */
     protected $_statPath = NULL;
+    
+    /**
+     * @var array one of these grants must be met
+     */
+    protected $_requiredGrants = array(
+        Tinebase_Model_Grants::GRANT_READ
+    );
     
     /**
      * set container
@@ -69,7 +83,7 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
         $this->_addParentIdFilter($_select, $_backend);
         
         if (! $this->_container) {
-            // @todo add top level filter rules
+            $this->_addContainerTypeFilter($_select, $_backend);
         }
     }
     
@@ -81,6 +95,7 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
         $pathParts = $this->_getPathParts();
         
         $this->_containerType = $this->_getContainerType($pathParts);
+        $this->_containerOwner = $this->_getContainerOwner($pathParts);
         $this->_statPath = $this->_doPathReplacements($pathParts);
     }
     
@@ -120,6 +135,19 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
         }
         
         return $containerType;
+    }
+    
+    /**
+     * set container owner
+     * 
+     * @param array $_pathParts
+     * @return string
+     */
+    protected function _getContainerOwner($_pathParts)
+    {
+        $containerOwner = ($this->_containerType !== Tinebase_Model_Container::TYPE_SHARED && isset($_pathParts[2])) ? $_pathParts[2] : NULL;
+        
+        return $containerOwner;
     }
     
     /**
@@ -170,5 +198,49 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
 
         $parentIdFilter = new Tinebase_Model_Filter_Text('parent_id', 'equals', $node->getId());
         $parentIdFilter->appendFilterSql($_select, $_backend);
+    }
+
+    /**
+     * adds container type filter sql
+     *
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
+     */
+    protected function _addContainerTypeFilter($_select, $_backend)
+    {
+        $currentAccount = Tinebase_Core::getUser();
+        $appName = 'Filemanager';   // $this->_options['applicationName']   @todo add this to options
+        $ignoreAcl = FALSE;         // $this->_options['ignoreAcl']         @todo add this to options
+        
+        switch ($this->_containerType) {
+            case Tinebase_Model_Container::TYPE_PERSONAL:
+                $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
+                    $currentAccount, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
+                break;
+            case Tinebase_Model_Container::TYPE_SHARED:
+                $names = Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName,
+                    $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
+                break;
+            case Tinebase_Model_Container::TYPE_OTHERUSERS:
+                if ($this->_containerOwner) {
+                    $owner = Tinebase_User::getInstance()->getFullUserByLoginName($this->_containerOwner);
+                    $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
+                        $owner, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
+                } else {
+                    $users = Tinebase_Container::getInstance()->getOtherUsers($currentAccount, $appName, $this->_requiredGrants);
+                    $names = array();
+                    // @todo use getMultiple for full users
+                    foreach ($users as $user) {
+                        $names[] = Tinebase_User::getInstance()->getFullUserById($user)->accountLoginName;
+                    }
+                }
+                break;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Filter names: ' . print_r($names, TRUE));
+        
+        $nameFilter = new Tinebase_Model_Filter_Text('name', 'in', $names);
+        $nameFilter->appendFilterSql($_select, $_backend);
     }
 }
