@@ -67,8 +67,8 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     /**
      * do path replacements (container name => container id, otherUsers => personal, ...)
      * 
-     * [0] => app id
-     * [1] => type
+     * [0] => app id [required]
+     * [1] => type [required]
      * [2] => container | accountLoginName
      * [3] => container | directory
      * [4] => directory
@@ -77,52 +77,35 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
      * @param string $_path
      * @return string
      * 
-     * @todo finish implementation
+     * @todo add top level paths (only type given)
      */
     protected function _doPathReplacements($_path)
     {
         $pathParts = explode('/', trim($_path, '/'), 4);
-        //$result = $pathParts[0];
-        // @todo build path
         
-        // this is @deprecated
-        if ($this->_container) {
-            $result = $this->_replaceContainerNameWithId($_path);
-        } else {
-            $result = $_path;
+        if (count($pathParts) < 2) {
+            throw new Tinebase_Exception_InvalidArgument('Invalid path: ' . $_path);
         }
+
+        if (count($pathParts) === 2) {
+            // @todo get all containers user has read access to
+            throw new Tinebase_Exception_NotImplemented('Not implemented yet.');
+        }
+            
+        if ($pathParts[1] === Tinebase_Model_Container::TYPE_OTHERUSERS) {
+            $pathParts[1] = Tinebase_Model_Container::TYPE_PERSONAL;
+        }
+        
+        $containerPartIdx = ($pathParts[1] === Tinebase_Model_Container::TYPE_SHARED) ? 2 : 3;
+        
+        if (isset($pathParts[$containerPartIdx]) && $this->_container && $pathParts[$containerPartIdx] === $this->_container->name) {
+            $pathParts[$containerPartIdx] = $this->_container->getId();
+        }
+        
+        $result = implode('/', $pathParts);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Path to stat: ' . $result);
-        
-        return $result;
-    }
-    
-    /**
-     * replace container name in path with id
-     * 
-     * @param string $_path
-     * @return string
-     * @throws Tinebase_Exception
-     * 
-     * @deprecated
-     */
-    protected function _replaceContainerNameWithId($_path)
-    {
-        if (substr_count($_path,  $this->_container->name) === 1) {
-            // only one occurrence
-            $result = str_replace($this->_container->name, $this->_container->getId(), $_path);
-        } else if ($this->_container->name === Tinebase_Model_Container::TYPE_SHARED) {
-            // only replace the occurence after shared
-            $result = preg_replace(
-                '@' . Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_container->name . '@', 
-                Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_container->getId(), 
-                $_path
-            );
-        } else {
-            // FIXME add regexp that only replaces the container name
-            throw new Tinebase_Exception('Container name and user name are the same!');
-        }
         
         return $result;
     }
