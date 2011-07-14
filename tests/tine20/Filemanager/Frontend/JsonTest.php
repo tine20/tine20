@@ -163,8 +163,10 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        foreach ($this->_objects['paths'] as $path) {
-            $this->_fsController->rmDir($path, TRUE);
+        if (isset($this->_objects['paths'])) {
+            foreach ($this->_objects['paths'] as $path) {
+                $this->_fsController->rmDir($path, TRUE);
+            }
         }
     }
     
@@ -181,6 +183,20 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/' . $this->_personalContainer->name
         ));
         $this->_searchHelper($filter, 'unittestdir_personal');
+    }
+    
+    /**
+     * search node helper
+     * 
+     * @param array $_filter
+     * @param string $_expectedName
+     */
+    protected function _searchHelper($_filter, $_expectedName)
+    {
+        $result = $this->_json->searchNodes($_filter, array());
+        
+        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals($_expectedName, $result['results'][0]['name']);
     }
     
     /**
@@ -216,18 +232,15 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * search node helper
-     * 
-     * @param array $_filter
-     * @param string $_expectedName
+     * search top level containers of other users
      */
-    protected function _searchHelper($_filter, $_expectedName)
+    public function testSearchTopLevelContainersOfOtherUsers()
     {
-        $result = $this->_json->searchNodes($_filter, array());
-        
-        $this->assertEquals(1, $result['totalcount']);
-        $this->assertEquals($_expectedName, $result['results'][0]['name']);
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS
+        ));
+        $this->_searchHelper($filter, 'sclever');
     }
-    
-    // @todo add tests for the toplevel search for personal/other/shared
 }
