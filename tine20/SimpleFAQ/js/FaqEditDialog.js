@@ -139,7 +139,7 @@ Tine.SimpleFAQ.FaqEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                             store: Tine.SimpleFAQ.FaqStatus.getStore(),
                             value: Tine.SimpleFAQ.FaqStatus.getStore().getAt(0).id,
                             displayField:'faqstatus'
-                        }],] //end of center panel items
+                        }]] //end of center panel items
                     }, {
                         layout: 'accordion',
                         animate: true,
