@@ -66,14 +66,7 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     {
         $this->_parsePath();
         
-        $node = Tinebase_FileSystem::getInstance()->stat($this->_statPath);
-        
-        $field = 'parent_id';
-        $action = $this->_opSqlMap[$this->_operator];
-        $value = $node->getId();
-        
-        $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
-        $_select->where($where);
+        $this->_addParentIdFilter($_select, $_backend);
         
         if (! $this->_container) {
             // @todo add top level filter rules
@@ -163,5 +156,19 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
             . ' Path to stat: ' . $result);
         
         return $result;
+    }
+    
+    /**
+     * adds parent id filter sql
+     *
+     * @param  Zend_Db_Select                    $_select
+     * @param  Tinebase_Backend_Sql_Abstract     $_backend
+     */
+    protected function _addParentIdFilter($_select, $_backend)
+    {
+        $node = Tinebase_FileSystem::getInstance()->stat($this->_statPath);
+
+        $parentIdFilter = new Tinebase_Model_Filter_Text('parent_id', 'equals', $node->getId());
+        $parentIdFilter->appendFilterSql($_select, $_backend);
     }
 }
