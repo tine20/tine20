@@ -36,6 +36,13 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     protected $_container = NULL;
     
     /**
+     * container type
+     * 
+     * @var string
+     */
+    protected $_containerType = NULL;
+    
+    /**
      * set container
      * 
      * @param Tinebase_Model_Container $_container
@@ -53,7 +60,7 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $path = $this->_doPathReplacements($this->_value);
+        $path = $this->_parsePath();
         $node = Tinebase_FileSystem::getInstance()->stat($path);
         
         $field = 'parent_id';
@@ -62,6 +69,59 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
         
         $where = Tinebase_Core::getDb()->quoteInto($field . $action['sqlop'], $value);
         $_select->where($where);
+        
+        if (! $this->_container) {
+            // @todo add top level filter rules
+        }
+    }
+    
+    /**
+     * parse given path (filter value): check validity, set container type, do replacements
+     * 
+     * @return string
+     */
+    protected function _parsePath()
+    {
+        $pathParts = $this->_getPathParts();
+        $this->_setContainerType($pathParts);
+        $path = $this->_doPathReplacements($pathParts);
+        
+        return $path;
+    }
+    
+    /**
+     * get path parts
+     * 
+     * @return array
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getPathParts()
+    {
+        $pathParts = explode('/', trim($this->_value, '/'), 4);       
+        if (count($pathParts) < 2) {
+            throw new Tinebase_Exception_InvalidArgument('Invalid path: ' . $_path);
+        }
+        
+        return $pathParts;
+    }
+    
+    /**
+     * set container type
+     * 
+     * @param array $_pathParts
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _setContainerType($_pathParts)
+    {
+        $this->_containerType = $_pathParts[1];
+        
+        if (! in_array($this->_containerType, array(
+            Tinebase_Model_Container::TYPE_PERSONAL,
+            Tinebase_Model_Container::TYPE_SHARED,
+            Tinebase_Model_Container::TYPE_OTHERUSERS,
+        ))) {
+            throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $this->_containerType);
+        }
     }
     
     /**
@@ -74,32 +134,22 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
      * [4] => directory
      * [5] => ...
      * 
-     * @param string $_path
+     * @param array $_pathParts
      * @return string
-     * 
-     * @todo add top level paths (only type given)
      */
-    protected function _doPathReplacements($_path)
+    protected function _doPathReplacements($_pathParts)
     {
-        $pathParts = explode('/', trim($_path, '/'), 4);
+        $pathParts = $_pathParts;
         
-        if (count($pathParts) < 2) {
-            throw new Tinebase_Exception_InvalidArgument('Invalid path: ' . $_path);
-        }
-
-        if (count($pathParts) === 2) {
-            // @todo get all containers user has read access to
-            throw new Tinebase_Exception_NotImplemented('Not implemented yet.');
-        }
-            
-        if ($pathParts[1] === Tinebase_Model_Container::TYPE_OTHERUSERS) {
+        if ($this->_containerType === Tinebase_Model_Container::TYPE_OTHERUSERS) {
             $pathParts[1] = Tinebase_Model_Container::TYPE_PERSONAL;
         }
         
-        $containerPartIdx = ($pathParts[1] === Tinebase_Model_Container::TYPE_SHARED) ? 2 : 3;
-        
-        if (isset($pathParts[$containerPartIdx]) && $this->_container && $pathParts[$containerPartIdx] === $this->_container->name) {
-            $pathParts[$containerPartIdx] = $this->_container->getId();
+        if (count($pathParts) > 2) {
+            $containerPartIdx = ($this->_containerType === Tinebase_Model_Container::TYPE_SHARED) ? 2 : 3;
+            if (isset($pathParts[$containerPartIdx]) && $this->_container && $pathParts[$containerPartIdx] === $this->_container->name) {
+                $pathParts[$containerPartIdx] = $this->_container->getId();
+            }
         }
         
         $result = implode('/', $pathParts);
