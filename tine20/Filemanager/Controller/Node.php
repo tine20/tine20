@@ -107,13 +107,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         // add base path and check grants
         foreach ($pathFilters as $key => $pathFilter) {
             $path = $pathFilter->getValue();
+            $pathFilter->setValue($this->addBasePath($path));
+            
             $container = $this->getContainer($path);
-            $hasGrant = $this->_checkACLContainer($container, $_action);
-            if (! $hasGrant) {
-                unset($pathFilters[$key]);
-            } else {
-                $pathFilter->setValue($this->addBasePath($path));
-                $pathFilter->setContainer($container);
+            if ($container) {
+                $hasGrant = $this->_checkACLContainer($container, $_action);
+                if (! $hasGrant) {
+                    unset($pathFilters[$key]);
+                } else {
+                    $pathFilter->setContainer($container);
+                }
             }
         }
 
@@ -148,10 +151,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     protected function _checkACLContainer($_container, $_action = 'get')
     {
-        if (! $_container) {
-            return FALSE;
-        }
-        
         if (Tinebase_Container::getInstance()->hasGrant($this->_currentAccount, $_container, Tinebase_Model_Grants::GRANT_ADMIN)) {
             return TRUE;
         }
@@ -212,13 +211,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                             $subPathParts = explode('/', $pathParts[2], 2);
                             $container = $this->_searchContainerByName($subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL);
                         }
-                    } else {
-                        throw new Tinebase_Exception_NotFound('User name missing.');
                     }
                     break;
                     
                 default:
-                    throw new Tinebase_Exception_NotFound('Invalid path');
+                    throw new Tinebase_Exception_NotFound('Invalid path: ' . $_path);
                     break;
             }
         }
