@@ -92,7 +92,6 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->_application = Tinebase_Application::getInstance()->getApplicationByName('Filemanager');
         
         $this->_setupTestContainers();
-        $this->_setupTestPaths();
     }
     
     /**
@@ -122,21 +121,29 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * setup the test paths
+     * 
+     * @param string|array $_types
      */
-    protected function _setupTestPaths()
+    protected function _setupTestPath($_types)
     {
         $testPaths = array();
+        $types = (array) $_types;
         
-        // add personal path
-        $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName 
-            . '/' . $this->_personalContainer->getId() . '/unittestdir_personal';
-        
-        // add other users path
-        $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/sclever/' . $this->_otherUserContainer->getId() . '/unittestdir_other';
-        
-        // add shared path
-        $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->getId();
-        $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->getId() . '/unittestdir_shared';
+        foreach ($types as $type) {
+            switch ($type) {
+                case Tinebase_Model_Container::TYPE_PERSONAL:
+                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName 
+                        . '/' . $this->_personalContainer->getId() . '/unittestdir_personal';
+                    break;
+                case Tinebase_Model_Container::TYPE_SHARED:
+                    $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->getId();
+                    $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->getId() . '/unittestdir_shared';
+                    break;
+                case Tinebase_Model_Container::TYPE_OTHERUSERS:
+                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/sclever/' . $this->_otherUserContainer->getId() . '/unittestdir_other';
+                    break;
+            }
+        }
         
         foreach ($testPaths as $path) {
             $path = Filemanager_Controller_Node::getInstance()->addBasePath($path);
@@ -163,6 +170,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchPersonalNodes()
     {
+        $this->_setupTestPath(Tinebase_Model_Container::TYPE_PERSONAL);
+        
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
@@ -173,11 +182,11 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test search nodes (shared)
-     * 
-     * @todo make it work together with testSearchPersonalNodes / it already works when only this test is executed
      */
     public function testSearchSharedNodes()
     {
+        $this->_setupTestPath(Tinebase_Model_Container::TYPE_SHARED);
+        
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
@@ -193,6 +202,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchOtherUsersNodes()
     {
+        $this->_setupTestPath(Tinebase_Model_Container::TYPE_OTHERUSERS);
+        
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
