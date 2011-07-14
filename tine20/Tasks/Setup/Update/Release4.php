@@ -20,4 +20,12 @@ class Tasks_Setup_Update_Release4 extends Setup_Update_Abstract
 
         $this->setApplicationVersion('Tasks', '4.1');
     }
+
+    /**
+     * update to 5.0
+     */
+    public function update_1()
+    {
+        $this->setApplicationVersion('Tasks', '5.0');
+    }
 }
