@@ -20,12 +20,9 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
 {
     /**
      * @var array list of allowed operators
-     * 
-     * @todo add more operators?
      */
     protected $_operators = array(
         0 => 'equals',       
-        //1 => 'in',         
     );
     
     /**
@@ -41,6 +38,13 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
      * @var string
      */
     protected $_containerType = NULL;
+    
+    /**
+     * stat path to fetch node with
+     * 
+     * @var string
+     */
+    protected $_statPath = NULL;
     
     /**
      * set container
@@ -60,8 +64,9 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
      */
     public function appendFilterSql($_select, $_backend)
     {
-        $path = $this->_parsePath();
-        $node = Tinebase_FileSystem::getInstance()->stat($path);
+        $this->_parsePath();
+        
+        $node = Tinebase_FileSystem::getInstance()->stat($this->_statPath);
         
         $field = 'parent_id';
         $action = $this->_opSqlMap[$this->_operator];
@@ -77,16 +82,13 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     
     /**
      * parse given path (filter value): check validity, set container type, do replacements
-     * 
-     * @return string
      */
     protected function _parsePath()
     {
         $pathParts = $this->_getPathParts();
-        $this->_setContainerType($pathParts);
-        $path = $this->_doPathReplacements($pathParts);
         
-        return $path;
+        $this->_containerType = $this->_getContainerType($pathParts);
+        $this->_statPath = $this->_doPathReplacements($pathParts);
     }
     
     /**
@@ -109,19 +111,22 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
      * set container type
      * 
      * @param array $_pathParts
+     * @return string
      * @throws Tinebase_Exception_InvalidArgument
      */
-    protected function _setContainerType($_pathParts)
+    protected function _getContainerType($_pathParts)
     {
-        $this->_containerType = $_pathParts[1];
+        $containerType = $_pathParts[1];
         
-        if (! in_array($this->_containerType, array(
+        if (! in_array($containerType, array(
             Tinebase_Model_Container::TYPE_PERSONAL,
             Tinebase_Model_Container::TYPE_SHARED,
             Tinebase_Model_Container::TYPE_OTHERUSERS,
         ))) {
             throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $this->_containerType);
         }
+        
+        return $containerType;
     }
     
     /**
