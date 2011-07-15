@@ -144,6 +144,10 @@
           "path": "js/ux/file/"
         },
         {
+          "text": "Upload.js",
+          "path": "js/ux/file/"
+        },
+        {
           "text": "BrowsePlugin.js",
           "path": "js/ux/file/"
         },

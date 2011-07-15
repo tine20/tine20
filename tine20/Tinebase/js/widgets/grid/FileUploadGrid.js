@@ -56,12 +56,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     border: false,
     deferredRender: false,
     autoExpandColumn: 'name',
+    showProgress: true,
     
     /**
      * init
      * @private
      */
     initComponent: function () {
+    	
         this.record = this.record || null;
         this.id = this.id + Ext.id();
         
@@ -72,7 +74,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         
         this.plugins = [ new Ext.ux.grid.GridViewMenuPlugin({}) ];
         this.enableHdMenu = false;
-        
+      
         Tine.widgets.grid.FileUploadGrid.superclass.initComponent.call(this);
         
         this.on('rowcontextmenu', function (grid, row, e) {
@@ -83,29 +85,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             }
             this.contextMenu.showAt(e.getXY());
         }, this);
-    },
-    
-    // onUploadComplete
-    
-    /**
-     * on upload failure
-     * @private
-     */
-    onUploadComplete: function (uploader, fileRecord) {
-        	
-    	
-    	var originalFileRecord = Tine.Tinebase.uploadManager.getOriginalFileRecord(fileRecord.get('uploadKey'));
-
-    	console.log("reading fileRecord id " + originalFileRecord.id + " for name " + fileRecord.get('uploadKey'));
-    	console.log("final progress was " + originalFileRecord.get("progress") + " %");
-    	
-    	Tine.Tinebase.uploadManager.finishUpload(fileRecord.get('uploadKey'));
-    	
-    	originalFileRecord.beginEdit();
-    	originalFileRecord.set('status', 'complete');
-    	originalFileRecord.endEdit();
-    	
-        if(this.loadMask) this.loadMask.hide();
+               
     },
     
     /**
@@ -132,38 +112,57 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     },
     
     /**
-     * on progress failure
-     * @private
-     */
-    onUploadProgress: function (uploader, fileRecord, percent) {
-    	
-    	var originalFileRecord = Tine.Tinebase.uploadManager.getOriginalFileRecord(fileRecord.get('uploadKey'));
-
-    	originalFileRecord.beginEdit();
-    	originalFileRecord.set('progress', percent);
-    	originalFileRecord.endEdit();
-    	
-    	console.log("upload in progress.. (" + originalFileRecord.get("progress") + " %)");
-    },
-    
-    
-    /**
      * on remove
      * @param {} button
      * @param {} event
      */
     onRemove: function (button, event) {
+        
         var selectedRows = this.getSelectionModel().getSelections();
         for (var i = 0; i < selectedRows.length; i += 1) {
             this.store.remove(selectedRows[i]);
+            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            upload.setPaused(true);
+        }
+    },
+    
+    
+    /**
+     * on pause
+     * @param {} button
+     * @param {} event
+     */
+    onPause: function (button, event) {    	
+ 
+        var selectedRows = this.getSelectionModel().getSelections();   	
+    	for(var i=0; i < selectedRows.length; i++) {
+    	    var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+    	    upload.setPaused(true);
+    	}   	
+    },
+
+    
+    /**
+     * on resume
+     * @param {} button
+     * @param {} event
+     */
+    onResume: function (button, event) {
+
+        var selectedRows = this.getSelectionModel().getSelections();
+        for(var i=0; i < selectedRows.length; i++) {
+            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            upload.resumeUpload();
         }
     },
 
+    
     /**
      * init toolbar and context menu
      * @private
      */
     initToolbarAndContextMenu: function () {
+        
         this.action_add = new Ext.Action(this.getAddAction());
 
         this.action_remove = new Ext.Action({
@@ -174,17 +173,33 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             handler: this.onRemove
         });
         
-//        this.tbar = (this.showTopToolbar === true) ? [
-//            this.action_add,
-//            this.action_remove
-//        ] : [];
+        this.action_pause = new Ext.Action({
+            text: _('Pause upload'),
+            iconCls: 'action_pause',
+            scope: this,
+//            disabled: true,
+            handler: this.onPause
+        });
+        
+        this.action_resume = new Ext.Action({
+            text: _('Resume upload'),
+            iconCls: 'resume_pause',
+            scope: this,
+//            disabled: true,
+            handler: this.onResume
+        });
+        
         this.tbar = [
             this.action_add,
             this.action_remove
         ];
         
         this.contextMenu = new Ext.menu.Menu({
-            items:  this.action_remove
+            items:  [
+                     this.action_remove,
+                     this.action_pause,
+                     this.action_resume
+            ]
         });
     },
     
@@ -240,7 +255,11 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      * @private
      */
     initColumnModel: function () {
-        this.cm = new Ext.grid.ColumnModel([{
+        this.cm = new Ext.grid.ColumnModel(this.getColumns());
+    },
+    
+    getColumns: function() {
+    	var columns = [{
             resizable: true,
             id: 'name',
             dataIndex: 'name',
@@ -250,21 +269,14 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
                 var val = value;
                 if (record.get('status') !== 'complete') {
 //                    val += ' (' + record.get('progress') + '%)';
-                    metadata.css = 'x-tinebase-uploadrow';
+                    
+                    if(!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
+                        metadata.css = 'x-tinebase-uploadrow';
+                    }
                 }
                 
                 return val;
             }
-        }, {
-            resizable: true,
-            id: 'progress',
-            dataIndex: 'progress',
-            width: 70,
-            header: _('progress'),
-            renderer: Ext.ux.PercentRenderer
-//            	function (value, metadata, record) {
-//                return value + " %";        
-//            }
         }, {
             resizable: true,
             id: 'size',
@@ -280,7 +292,20 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             header: _('type')
             // TODO show type icon?
             //renderer: Ext.util.Format.fileSize
-        }]);
+        }];
+
+    	if(Ext.ux.file.Upload.prototype.isHtml5ChunkedUpload()) {
+    		columns.push({
+    			resizable: true,
+    			id: 'progress',
+    			dataIndex: 'progress',
+    			width: 70,
+    			header: _('progress'),
+    			renderer: Ext.ux.PercentRenderer
+    		});
+    	}
+    	
+    	return columns;
     },
 
     /**
@@ -304,30 +329,23 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     onFilesSelect: function (fileSelector, e) {
     	
-    	
-    	// todo: bei jedem file select / drop uploader neu instanzieren nötig ??
-        var uploader = new Ext.ux.file.Uploader({
-            fileSelector: fileSelector
-        });
-        
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
  
-        	var uploadKey = Tine.Tinebase.uploadManager.registerUpload(file);        	
-            var fileRecord = uploader.upload(uploadKey);           
-            fileRecord.set('uploadKey', uploadKey);           
-			Tine.Tinebase.uploadManager.setOriginalFileRecord(uploadKey, fileRecord);
-			
+            var upload = new Ext.ux.file.Upload({}, file);
+        	var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);        	
+            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
+            		
         	if(fileRecord.data.status !== 'failure' ) {
 	            this.store.add(fileRecord);
         	}
+
+        	upload.on('uploadfailure', this.onUploadFail, this);
+//            upload.on('uploadcomplete', this.onUploadComplete, this);
+//            upload.on('uploadprogress', this.onUploadProgress, this);
+            
         }, this);
         
-        uploader.on('uploadfailure', this.onUploadFail, this);
-        uploader.on('uploadcomplete', this.onUploadComplete, this);
-        uploader.on('uploadprogress', this.onUploadProgress, this);
-
-
     },
     
     /**

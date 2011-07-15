@@ -516,7 +516,7 @@ Tine.Tinebase.tineInit = {
      */
     overrideFields: function () {
     	
-    	Ext.override(Ext.ux.file.Uploader, {
+    	Ext.override(Ext.ux.file.Upload, {
             maxFileUploadSize: Tine.Tinebase.registry.get('maxFileUploadSize'),
             maxPostSize: Tine.Tinebase.registry.get('maxPostSize')
         });
