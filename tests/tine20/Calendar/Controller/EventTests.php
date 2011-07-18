@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Calendar_Controller_EventTests::main');
-}
-
 /**
  * Test class for Calendar_Controller_Event
  * 
@@ -24,7 +20,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class Calendar_Controller_EventTests extends Calendar_TestCase
 {
-    
     /**
      * @var Calendar_Controller_Event controller unter test
      */
@@ -234,7 +229,7 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->_controller->searchFreeTime($persistentEvent->dtstart->setHour(6), $persistentEvent->dtend->setHour(22), $persistentEvent->attendee); 
     }
     
-/**
+    /**
      * events from deleted calendars should not be shown
      */
     public function testSearchEventFromDeletedCalendar() {
@@ -875,6 +870,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $this->assertTrue($alarmTime->equals($updatedEvent->alarms->getFirstRecord()->alarm_time), 'alarm of updated event is not adjusted');
     }
     
+    /**
+     * testSetAlarmOfRecurSeries
+     */
     public function testSetAlarmOfRecurSeries()
     {
         $event = $this->_getEvent();
@@ -894,7 +892,6 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         $alarmTime->subMinute(30);
         $this->assertTrue($alarmTime->equals($persistentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
         
-        
         // move whole series
         $persistentEvent->dtstart->addHour(5);
         $persistentEvent->dtend->addHour(5);
@@ -905,7 +902,9 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         
         $alarmTime = clone $nextOccurance->dtstart;
         $alarmTime->subMinute(30);
-        $this->assertTrue($alarmTime->equals($updatedEvent->alarms->getFirstRecord()->alarm_time), 'updated alarm is not at expected time');
+        
+        $alarm = $updatedEvent->alarms->getFirstRecord();
+        $this->assertTrue($alarmTime->equals($alarm->alarm_time), 'updated alarm is not at expected time');
     }
     
     public function testSetAlarmOfRecurSeriesException()
@@ -991,10 +990,4 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             )
         ));
     }
-    
-}
-    
-
-if (PHPUnit_MAIN_METHOD == 'Calendar_Controller_EventTests::main') {
-    Calendar_Controller_EventTests::main();
 }
