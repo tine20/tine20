@@ -355,15 +355,23 @@ Tine.Tinebase.LoginPanel = Ext.extend(Ext.Panel, {
                         window.document.title = this.originalTitle;
                         this.onLogin.call(this.scope);
                     } else {
-                        Ext.MessageBox.show({
-                            title: _('Login failure'),
-                            msg: _('Your username and/or your password are wrong!!!'),
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.ERROR,
-                            fn: function () {
-                                this.getLoginPanel().getForm().findField('password').focus(true);
-                            }.createDelegate(this)
-                        });
+                        if (responseData.data && responseData.data.code === 510) {
+                            // NOTE: when communication is lost, we can't create a nice ext window.
+                            (function() {
+                                Ext.MessageBox.hide();
+                                alert(_('Connection lost, please check your network!'));
+                            }).defer(1000);
+                        } else {
+                            Ext.MessageBox.show({
+                                title: _('Login failure'),
+                                msg: _('Your username and/or your password are wrong!!!'),
+                                buttons: Ext.MessageBox.OK,
+                                icon: Ext.MessageBox.ERROR,
+                                fn: function () {
+                                    this.getLoginPanel().getForm().findField('password').focus(true);
+                                }.createDelegate(this)
+                            });
+                        }
                     }
                 }
             });
