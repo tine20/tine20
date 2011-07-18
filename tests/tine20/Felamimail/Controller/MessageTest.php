@@ -958,6 +958,19 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * testLongFrom
+     * 
+     * @todo make it work
+     */
+    public function testLongFrom()
+    {
+        $cachedMessage = $this->messageTestHelper('longfrom.eml');
+        //$completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
+        
+        //print_r($cachedMessage);
+    }
+        
+    /**
      * testGetMessageWithQuotedPrintableDecodeProblem
      */
     public function testGetMessageWithQuotedPrintableDecodeProblem()
