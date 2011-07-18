@@ -1043,11 +1043,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param Felamimail_Model_Folder $_folder
      * @return Felamimail_Model_Message
      */
-    public function messageTestHelper($_filename, $_testHeaderValue, $_folder = NULL)
+    public function messageTestHelper($_filename, $_testHeaderValue = NULL, $_folder = NULL)
     {
+        $testHeaderValue = ($_testHeaderValue !== NULL) ? $_testHeaderValue : $_filename;
         $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
         $this->_appendMessage($_filename, $folder);
-        return $this->_searchAndCacheMessage($_testHeaderValue, $folder);
+        return $this->_searchAndCacheMessage($testHeaderValue, $folder);
     }
     
     /**
