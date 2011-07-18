@@ -275,8 +275,10 @@ class Zend_Scheduler
         // Execute tasks until limit (if any) is reached
         foreach ($this->_tasks as $name => $task) {
             $task->setTime($this->_time);
-            if (($this->_limit == 0 or $completed < $this->_limit) && $task->isScheduled()) {
-                $responses[$name] = $task->run();
+            if (($this->_limit == 0 or $completed < $this->_limit)) {
+                if ($task->isScheduled()) {
+                    $responses[$name] = $task->run();
+                }
                 $completed++;
             } else {
                 break;
