@@ -19,7 +19,7 @@ msgid "Out of Office reply from %1$s"
 msgstr ""
 
 #: Controller/Message/Send.php:216 js/GridDetailsPanel.js:135
-#: js/GridPanel.js:477 js/MessageEditDialog.js:858 js/Model.js:139
+#: js/GridPanel.js:486 js/MessageEditDialog.js:858 js/Model.js:139
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Tárgy"
@@ -28,7 +28,7 @@ msgstr "Tárgy"
 msgid "Body"
 msgstr "Üzenet"
 
-#: Controller/Message/Flags.php:24 js/GridPanel.js:572
+#: Controller/Message/Flags.php:24 js/GridPanel.js:581
 msgid "Answered"
 msgstr "Megválaszolt"
 
@@ -84,7 +84,7 @@ msgstr "Dátum"
 msgid "Show or hide header information"
 msgstr "Fejléc információinak megjelenítése vagy elrejtése"
 
-#: js/GridDetailsPanel.js:232 js/GridPanel.js:463 js/MessageEditDialog.js:698
+#: js/GridDetailsPanel.js:232 js/GridPanel.js:472 js/MessageEditDialog.js:698
 msgid "Attachments"
 msgstr "Mellékletek"
 
@@ -96,81 +96,81 @@ msgstr "Nincs üzenet vagy a gyorsítótár üres."
 msgid "Quota usage"
 msgstr ""
 
-#: js/GridPanel.js:230
+#: js/GridPanel.js:239
 msgid "Compose"
 msgstr ""
 
-#: js/GridPanel.js:238 js/MessageDisplayDialog.js:47
+#: js/GridPanel.js:247 js/MessageDisplayDialog.js:47
 msgid "Reply"
 msgstr "Válasz"
 
-#: js/GridPanel.js:247 js/MessageDisplayDialog.js:53
+#: js/GridPanel.js:256 js/MessageDisplayDialog.js:53
 msgid "Reply To All"
 msgstr "Válasz mindenkinek"
 
-#: js/GridPanel.js:256 js/MessageDisplayDialog.js:59
+#: js/GridPanel.js:265 js/MessageDisplayDialog.js:59
 msgid "Forward"
 msgstr "Továbbítás"
 
-#: js/GridPanel.js:264
+#: js/GridPanel.js:273
 msgid "Toggle highlighting"
 msgstr "Megjelölés váltása"
 
-#: js/GridPanel.js:273
+#: js/GridPanel.js:282
 msgid "Mark read/unread"
 msgstr "Olvasott/olvasatlan jelölés"
 
-#: js/GridPanel.js:283 js/GridPanel.js:284 js/GridPanel.js:286
+#: js/GridPanel.js:292 js/GridPanel.js:293 js/GridPanel.js:295
 #: js/MessageDisplayDialog.js:40
 msgid "Delete"
 msgstr "Törlés"
 
-#: js/GridPanel.js:294
+#: js/GridPanel.js:303
 msgid "Add Account"
 msgstr "Fiók hozzáadása"
 
-#: js/GridPanel.js:302 js/GridPanel.js:1244 js/GridPanel.js:1260
+#: js/GridPanel.js:311 js/GridPanel.js:1253 js/GridPanel.js:1269
 #: js/MessageDisplayDialog.js:79
 msgid "Print Preview"
 msgstr "Nyomtatási nézet"
 
-#: js/GridPanel.js:310 js/MessageDisplayDialog.js:73
+#: js/GridPanel.js:319 js/MessageDisplayDialog.js:73
 msgid "Print Message"
 msgstr "Üzenet nyomtatása"
 
-#: js/GridPanel.js:456
+#: js/GridPanel.js:465
 msgid "Id"
 msgstr "Id"
 
-#: js/GridPanel.js:470 js/Model.js:145
+#: js/GridPanel.js:479 js/Model.js:145
 msgid "Flags"
 msgstr "Zászlók"
 
-#: js/GridPanel.js:483 js/Model.js:140 js/sieve/RuleConditionsPanel.js:69
+#: js/GridPanel.js:492 js/Model.js:140 js/sieve/RuleConditionsPanel.js:69
 msgid "From (Email)"
 msgstr "Feladó (Email)"
 
-#: js/GridPanel.js:489 js/Model.js:141
+#: js/GridPanel.js:498 js/Model.js:141
 msgid "From (Name)"
 msgstr "Feladó (Név)"
 
-#: js/GridPanel.js:495
+#: js/GridPanel.js:504
 msgid "Sender"
 msgstr "Küldő"
 
-#: js/GridPanel.js:502 js/Model.js:142
+#: js/GridPanel.js:511 js/Model.js:142
 msgid "To"
 msgstr "Címzett"
 
-#: js/GridPanel.js:509 js/Model.js:487
+#: js/GridPanel.js:518 js/Model.js:487
 msgid "Sent"
 msgstr "Elküldött"
 
-#: js/GridPanel.js:517 js/Model.js:148
+#: js/GridPanel.js:526 js/Model.js:148
 msgid "Received"
 msgstr "Beérkezett"
 
-#: js/GridPanel.js:524 js/FolderFilterModel.js:30 js/TreeContextMenu.js:45
+#: js/GridPanel.js:533 js/FolderFilterModel.js:30 js/TreeContextMenu.js:45
 #: js/TreeContextMenu.js:100 js/TreeContextMenu.js:103
 #: js/TreeContextMenu.js:106 js/Model.js:52 js/Model.js:493
 msgid "Folder"
@@ -178,31 +178,31 @@ msgid_plural "Folders"
 msgstr[0] "Mappa"
 msgstr[1] "Mappák"
 
-#: js/GridPanel.js:532 js/sieve/RuleConditionsPanel.js:73
+#: js/GridPanel.js:541 js/sieve/RuleConditionsPanel.js:73
 msgid "Size"
 msgstr "Méret"
 
-#: js/GridPanel.js:575
+#: js/GridPanel.js:584
 msgid "Forwarded"
 msgstr "Továbbított"
 
-#: js/GridPanel.js:578
+#: js/GridPanel.js:587
 msgid "Recent"
 msgstr "Legújabb"
 
-#: js/GridPanel.js:1087 js/GridPanel.js:1119
+#: js/GridPanel.js:1096 js/GridPanel.js:1128
 msgid "Quota unknown"
 msgstr ""
 
-#: js/GridPanel.js:1102
+#: js/GridPanel.js:1111
 msgid "{0} %"
 msgstr ""
 
-#: js/GridPanel.js:1110
+#: js/GridPanel.js:1119
 msgid "Your quota"
 msgstr ""
 
-#: js/GridPanel.js:1111
+#: js/GridPanel.js:1120
 msgid "{0} available (total: {1})"
 msgstr ""
 
@@ -600,47 +600,47 @@ msgstr "{0} IMAP belépési adatai"
 msgid "Credentials"
 msgstr "Belépési adatok"
 
-#: js/Felamimail.js:711 js/Felamimail.js:744
+#: js/Felamimail.js:717 js/Felamimail.js:750
 msgid "IMAP Error"
 msgstr "IMAP hiba"
 
-#: js/Felamimail.js:712
+#: js/Felamimail.js:718
 msgid "No connection to IMAP server."
 msgstr "Nincs kapcsolat az IMAP szerverrel."
 
-#: js/Felamimail.js:728
+#: js/Felamimail.js:734
 msgid "IMAP Credentials Error"
 msgstr ""
 
-#: js/Felamimail.js:729
+#: js/Felamimail.js:735
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr ""
 
-#: js/Felamimail.js:745
-msgid "One of your folders was deleted from an other client, please reload you browser"
-msgstr "Egy a mappáid közül egy másik kliensen törölve lett, kérlek töltsd újra a böngésződet"
+#: js/Felamimail.js:751
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+msgstr ""
 
-#: js/Felamimail.js:773
+#: js/Felamimail.js:780
 msgid "SMTP Error"
 msgstr "SMTP hiba"
 
-#: js/Felamimail.js:774
+#: js/Felamimail.js:781
 msgid "No connection to SMTP server."
 msgstr "Nincs kapcsolat az SMTP szerverrel."
 
-#: js/Felamimail.js:782
+#: js/Felamimail.js:789
 msgid "Sieve Error"
 msgstr "Sieve hiba"
 
-#: js/Felamimail.js:783
+#: js/Felamimail.js:790
 msgid "No connection to Sieve server."
 msgstr "Nincs kapcsolat a Sieve szerverrel."
 
-#: js/Felamimail.js:791
+#: js/Felamimail.js:798
 msgid "Save Sieve Script Error"
 msgstr ""
 
-#: js/Felamimail.js:792
+#: js/Felamimail.js:799
 msgid "Could not save script on Sieve server."
 msgstr ""
 
@@ -970,6 +970,9 @@ msgstr "Törlés megerősítése"
 #: Preference.php:123
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Megerősítés ablak mutatása üzenetek törlésekor."
+
+#~ msgid "One of your folders was deleted from an other client, please reload you browser"
+#~ msgstr "Egy a mappáid közül egy másik kliensen törölve lett, kérlek töltsd újra a böngésződet"
 
 #, fuzzy
 #~ msgid "wrote"

@@ -228,11 +228,11 @@ msgstr ""
 msgid "about {0} minutes"
 msgstr ""
 
-#: js/LoginPanel.js:196 js/LoginPanel.js:413
+#: js/LoginPanel.js:196 js/LoginPanel.js:421
 msgid "Tine 2.0 needs your help"
 msgstr ""
 
-#: js/LoginPanel.js:198 js/LoginPanel.js:415
+#: js/LoginPanel.js:198 js/LoginPanel.js:423
 msgid "We regularly need your feedback to make the next Tine 2.0 releases fit your needs even better. Help us and yourself by participating:"
 msgstr ""
 
@@ -274,7 +274,7 @@ msgstr "Регистрирую Вас в..."
 
 #: js/LoginPanel.js:341 js/widgets/container/GrantsDialog.js:95
 #: js/widgets/tree/ContextMenu.js:42 js/widgets/tree/ContextMenu.js:86
-#: js/widgets/tree/ContextMenu.js:143
+#: js/widgets/tree/ContextMenu.js:144
 #: js/widgets/persistentfilter/PickerPanel.js:282
 #: js/widgets/persistentfilter/PickerPanel.js:304
 #: js/widgets/persistentfilter/PickerPanel.js:328
@@ -290,15 +290,19 @@ msgstr "Успешный вход в систему. Загрузка Tine 2.0..
 msgid "Please wait!"
 msgstr "Пожалуйста, подождите!"
 
-#: js/LoginPanel.js:359
+#: js/LoginPanel.js:362 js/ExceptionHandler.js:204
+msgid "Connection lost, please check your network!"
+msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
+
+#: js/LoginPanel.js:366
 msgid "Login failure"
 msgstr "Регистрация не удалась"
 
-#: js/LoginPanel.js:360
+#: js/LoginPanel.js:367
 msgid "Your username and/or your password are wrong!!!"
 msgstr "Ваше имя пользователя и/или Ваш пароль являются неправильными!!!"
 
-#: js/LoginPanel.js:371 js/widgets/dialog/ExportDialog.js:140
+#: js/LoginPanel.js:379 js/widgets/dialog/ExportDialog.js:140
 #: js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/PreferencesDialog.js:245
 #: js/widgets/dialog/PreferencesDialog.js:274
@@ -306,13 +310,13 @@ msgstr "Ваше имя пользователя и/или Ваш пароль �
 msgid "Errors"
 msgstr "Ошибки"
 
-#: js/LoginPanel.js:371 js/widgets/dialog/ExportDialog.js:140
+#: js/LoginPanel.js:379 js/widgets/dialog/ExportDialog.js:140
 #: js/widgets/dialog/CredentialsDialog.js:128
 #: js/widgets/dialog/ImportDialog.js:210 js/widgets/dialog/EditDialog.js:507
 msgid "Please fix the errors noted."
 msgstr "Пожалуйста, исправьте отмеченные ошибки."
 
-#: js/LoginPanel.js:386
+#: js/LoginPanel.js:394
 msgid "Please enter your login data"
 msgstr "Пожалуйста, введите свои данные входа в систему"
 
@@ -527,7 +531,7 @@ msgstr "Пожалуйста, введите имя нового {0}:"
 msgid "No {0} added"
 msgstr "{0} не добавлены"
 
-#: js/widgets/tree/ContextMenu.js:39 js/widgets/tree/ContextMenu.js:140
+#: js/widgets/tree/ContextMenu.js:39 js/widgets/tree/ContextMenu.js:141
 msgid "You have to supply a {0} name!"
 msgstr "Вы должны назвать {0}!"
 
@@ -549,39 +553,39 @@ msgstr "Вы действительно хотите удалить {0} \"{1}\"?
 msgid "Deleting {0} \"{1}\""
 msgstr "Удаление {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:134
+#: js/widgets/tree/ContextMenu.js:135
 msgid "Please enter the new name of the {0}:"
 msgstr "Пожалуйста, введите новое имя {0}:"
 
-#: js/widgets/tree/ContextMenu.js:140
+#: js/widgets/tree/ContextMenu.js:141
 msgid "Not renamed {0}"
 msgstr "Не переименованы {0}"
 
-#: js/widgets/tree/ContextMenu.js:143
+#: js/widgets/tree/ContextMenu.js:144
 msgid "Updating {0} \"{1}\""
 msgstr "Обновление {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:212
+#: js/widgets/tree/ContextMenu.js:215
 msgid "Manage Permissions for {0} \"{1}\""
 msgstr "Управлять правами {0} \"{1}\""
 
-#: js/widgets/tree/ContextMenu.js:242 js/widgets/grid/GridPanel.js:368
+#: js/widgets/tree/ContextMenu.js:245 js/widgets/grid/GridPanel.js:368
 msgid "Add {0}"
 msgstr "Добавить {0}"
 
-#: js/widgets/tree/ContextMenu.js:260
+#: js/widgets/tree/ContextMenu.js:263
 msgid "Rename {0}"
 msgstr "Переименовать {0}"
 
-#: js/widgets/tree/ContextMenu.js:268
+#: js/widgets/tree/ContextMenu.js:271
 msgid "Set color for {0}"
 msgstr ""
 
-#: js/widgets/tree/ContextMenu.js:281
+#: js/widgets/tree/ContextMenu.js:284
 msgid "Manage permissions"
 msgstr "Управлять правами доступа"
 
-#: js/widgets/tree/ContextMenu.js:289
+#: js/widgets/tree/ContextMenu.js:292
 msgid "Reload {0}"
 msgstr "Перезагрузить {0}"
 
@@ -1725,80 +1729,76 @@ msgstr ""
 msgid "Fatal Error: Client self-update failed, please contact your administrator and/or restart/reload your browser."
 msgstr ""
 
-#: js/ExceptionHandler.js:133 Frontend/Http.php:357
+#: js/ExceptionHandler.js:140 Frontend/Http.php:357
 msgid "Authorisation Required"
 msgstr "Необходима регистрация"
 
-#: js/ExceptionHandler.js:134
+#: js/ExceptionHandler.js:141
 msgid "Your session timed out. You need to login again."
 msgstr "Время вашего сеанса истекло. Вам нужно зарегистрироваться снова. "
 
-#: js/ExceptionHandler.js:151
+#: js/ExceptionHandler.js:158
 msgid "Insufficient Rights"
 msgstr "Недостаточно прав"
 
-#: js/ExceptionHandler.js:152
+#: js/ExceptionHandler.js:159
 msgid "Sorry, you are not permitted to perform this action"
 msgstr "К сожалению Вам не позволяется выполнить это действие"
 
-#: js/ExceptionHandler.js:161
+#: js/ExceptionHandler.js:168
 msgid "Not Found"
 msgstr "Не найден"
 
-#: js/ExceptionHandler.js:162
+#: js/ExceptionHandler.js:169
 #, fuzzy
 msgid "Sorry, your request could not be completed because the required data could not be found. In most cases this means that someone already deleted the data. Please refresh your current view."
 msgstr "К сожалению, ваш запрос не может быть завершён, поскольку необходимые данные не могут быть найдены. В большинстве случаев это означает, что кто-то уже удалил данные. Просьба обновить ваш текущий вид."
 
-#: js/ExceptionHandler.js:171
+#: js/ExceptionHandler.js:178
 msgid "Concurrent Updates"
 msgstr "Параллельные обновления"
 
-#: js/ExceptionHandler.js:172
+#: js/ExceptionHandler.js:179
 msgid "Someone else saved this record while you where editing the data. You need to reload and make your changes again."
 msgstr "Вовремя того, как вы изменяли  эту запись, она была изменена кем-то другим. Вам нужно обновить и сделать изменения снова."
 
-#: js/ExceptionHandler.js:182
+#: js/ExceptionHandler.js:189
 msgid "Service Unavailable"
 msgstr ""
 
-#: js/ExceptionHandler.js:183
+#: js/ExceptionHandler.js:190
 msgid "The server is currently unable to handle the request due to a temporary overloading or maintenance of the server. Please try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:197
-msgid "Connection lost, please check your network!"
-msgstr "Связь оборвалась, пожалуйста проверьте свою сеть!"
-
-#: js/ExceptionHandler.js:203
+#: js/ExceptionHandler.js:210
 msgid "Timeout"
 msgstr ""
 
-#: js/ExceptionHandler.js:204
+#: js/ExceptionHandler.js:211
 msgid "Sorry, some timeout occured while processing your request. Please reload your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:213
+#: js/ExceptionHandler.js:220
 msgid "No Response"
 msgstr ""
 
-#: js/ExceptionHandler.js:214
+#: js/ExceptionHandler.js:221
 msgid "Sorry, the Server did not respond any data. Please reload your browser, try again or contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:223
+#: js/ExceptionHandler.js:230
 msgid "Out of Resources"
 msgstr ""
 
-#: js/ExceptionHandler.js:224
+#: js/ExceptionHandler.js:231
 msgid "Sorry, the Server stated a \"memory exhausted\" condition. Please contact your administrator."
 msgstr ""
 
-#: js/ExceptionHandler.js:233
+#: js/ExceptionHandler.js:240
 msgid "No Role Memberships"
 msgstr ""
 
-#: js/ExceptionHandler.js:234
+#: js/ExceptionHandler.js:241
 msgid "Your user account has no role memberships. Please contact your administrator."
 msgstr ""
 

@@ -18,7 +18,7 @@ msgid "Out of Office reply from %1$s"
 msgstr "Abwesenheitsnotiz von %1$s"
 
 #: Controller/Message/Send.php:216 js/GridDetailsPanel.js:135
-#: js/GridPanel.js:477 js/MessageEditDialog.js:858 js/Model.js:139
+#: js/GridPanel.js:486 js/MessageEditDialog.js:858 js/Model.js:139
 #: js/sieve/RuleConditionsPanel.js:72
 msgid "Subject"
 msgstr "Betreff"
@@ -27,7 +27,7 @@ msgstr "Betreff"
 msgid "Body"
 msgstr "Nachricht"
 
-#: Controller/Message/Flags.php:24 js/GridPanel.js:572
+#: Controller/Message/Flags.php:24 js/GridPanel.js:581
 msgid "Answered"
 msgstr "Beantwortet"
 
@@ -83,7 +83,7 @@ msgstr "Datum"
 msgid "Show or hide header information"
 msgstr "Ein/Ausblenden der Header"
 
-#: js/GridDetailsPanel.js:232 js/GridPanel.js:463 js/MessageEditDialog.js:698
+#: js/GridDetailsPanel.js:232 js/GridPanel.js:472 js/MessageEditDialog.js:698
 msgid "Attachments"
 msgstr "Anhänge"
 
@@ -95,81 +95,81 @@ msgstr "Keine Nachrichten gefunden oder Emailcache leer."
 msgid "Quota usage"
 msgstr "Speicherplatzquota"
 
-#: js/GridPanel.js:230
+#: js/GridPanel.js:239
 msgid "Compose"
 msgstr "Verfassen"
 
-#: js/GridPanel.js:238 js/MessageDisplayDialog.js:47
+#: js/GridPanel.js:247 js/MessageDisplayDialog.js:47
 msgid "Reply"
 msgstr "Antworten"
 
-#: js/GridPanel.js:247 js/MessageDisplayDialog.js:53
+#: js/GridPanel.js:256 js/MessageDisplayDialog.js:53
 msgid "Reply To All"
 msgstr "Allen antworten"
 
-#: js/GridPanel.js:256 js/MessageDisplayDialog.js:59
+#: js/GridPanel.js:265 js/MessageDisplayDialog.js:59
 msgid "Forward"
 msgstr "Weiterleiten"
 
-#: js/GridPanel.js:264
+#: js/GridPanel.js:273
 msgid "Toggle highlighting"
 msgstr "Markierung an/aus"
 
-#: js/GridPanel.js:273
+#: js/GridPanel.js:282
 msgid "Mark read/unread"
 msgstr "(Un)gelesen markieren"
 
-#: js/GridPanel.js:283 js/GridPanel.js:284 js/GridPanel.js:286
+#: js/GridPanel.js:292 js/GridPanel.js:293 js/GridPanel.js:295
 #: js/MessageDisplayDialog.js:40
 msgid "Delete"
 msgstr "Löschen"
 
-#: js/GridPanel.js:294
+#: js/GridPanel.js:303
 msgid "Add Account"
 msgstr "Konto hinzufügen"
 
-#: js/GridPanel.js:302 js/GridPanel.js:1244 js/GridPanel.js:1260
+#: js/GridPanel.js:311 js/GridPanel.js:1253 js/GridPanel.js:1269
 #: js/MessageDisplayDialog.js:79
 msgid "Print Preview"
 msgstr "Druck Vorschau"
 
-#: js/GridPanel.js:310 js/MessageDisplayDialog.js:73
+#: js/GridPanel.js:319 js/MessageDisplayDialog.js:73
 msgid "Print Message"
 msgstr "Nachricht drucken"
 
-#: js/GridPanel.js:456
+#: js/GridPanel.js:465
 msgid "Id"
 msgstr "Id"
 
-#: js/GridPanel.js:470 js/Model.js:145
+#: js/GridPanel.js:479 js/Model.js:145
 msgid "Flags"
 msgstr "Flags"
 
-#: js/GridPanel.js:483 js/Model.js:140 js/sieve/RuleConditionsPanel.js:69
+#: js/GridPanel.js:492 js/Model.js:140 js/sieve/RuleConditionsPanel.js:69
 msgid "From (Email)"
 msgstr "Von (Email)"
 
-#: js/GridPanel.js:489 js/Model.js:141
+#: js/GridPanel.js:498 js/Model.js:141
 msgid "From (Name)"
 msgstr "Von (Name)"
 
-#: js/GridPanel.js:495
+#: js/GridPanel.js:504
 msgid "Sender"
 msgstr "Absender"
 
-#: js/GridPanel.js:502 js/Model.js:142
+#: js/GridPanel.js:511 js/Model.js:142
 msgid "To"
 msgstr "An"
 
-#: js/GridPanel.js:509 js/Model.js:487
+#: js/GridPanel.js:518 js/Model.js:487
 msgid "Sent"
 msgstr "Gesendet"
 
-#: js/GridPanel.js:517 js/Model.js:148
+#: js/GridPanel.js:526 js/Model.js:148
 msgid "Received"
 msgstr "Empfangen"
 
-#: js/GridPanel.js:524 js/FolderFilterModel.js:30 js/TreeContextMenu.js:45
+#: js/GridPanel.js:533 js/FolderFilterModel.js:30 js/TreeContextMenu.js:45
 #: js/TreeContextMenu.js:100 js/TreeContextMenu.js:103
 #: js/TreeContextMenu.js:106 js/Model.js:52 js/Model.js:493
 msgid "Folder"
@@ -177,31 +177,31 @@ msgid_plural "Folders"
 msgstr[0] "Ordner"
 msgstr[1] "Ordner"
 
-#: js/GridPanel.js:532 js/sieve/RuleConditionsPanel.js:73
+#: js/GridPanel.js:541 js/sieve/RuleConditionsPanel.js:73
 msgid "Size"
 msgstr "Größe"
 
-#: js/GridPanel.js:575
+#: js/GridPanel.js:584
 msgid "Forwarded"
 msgstr "Weitergeleitet"
 
-#: js/GridPanel.js:578
+#: js/GridPanel.js:587
 msgid "Recent"
 msgstr "Neu"
 
-#: js/GridPanel.js:1087 js/GridPanel.js:1119
+#: js/GridPanel.js:1096 js/GridPanel.js:1128
 msgid "Quota unknown"
 msgstr "Quota unbekannt"
 
-#: js/GridPanel.js:1102
+#: js/GridPanel.js:1111
 msgid "{0} %"
 msgstr "{0} %"
 
-#: js/GridPanel.js:1110
+#: js/GridPanel.js:1119
 msgid "Your quota"
 msgstr "Ihre Quota"
 
-#: js/GridPanel.js:1111
+#: js/GridPanel.js:1120
 msgid "{0} available (total: {1})"
 msgstr "{0} verfügbar (insgesamt: {1})"
 
@@ -598,47 +598,47 @@ msgstr "IMAP Zugangsdaten für {0}"
 msgid "Credentials"
 msgstr "Zugangsdaten"
 
-#: js/Felamimail.js:711 js/Felamimail.js:744
+#: js/Felamimail.js:717 js/Felamimail.js:750
 msgid "IMAP Error"
 msgstr "IMAP Fehler"
 
-#: js/Felamimail.js:712
+#: js/Felamimail.js:718
 msgid "No connection to IMAP server."
 msgstr "Keine Verbindung zum IMAP Server"
 
-#: js/Felamimail.js:728
+#: js/Felamimail.js:734
 msgid "IMAP Credentials Error"
 msgstr "IMAP Zugangsdatenfehler"
 
-#: js/Felamimail.js:729
+#: js/Felamimail.js:735
 msgid "Your email credentials are wrong. Please contact your administrator"
 msgstr "Ihre Email-Zugangsdaten sind falsch. Bitte kontaktieren Sie Ihren Administrator."
 
-#: js/Felamimail.js:745
-msgid "One of your folders was deleted from an other client, please reload you browser"
-msgstr "Ein Ordner wurde von einem anderen Klienten gelöscht. Bitte aktualisieren Sie Ihren Browser."
+#: js/Felamimail.js:751
+msgid "One of your folders was deleted or renamed by another client. Please update the folder list of this account."
+msgstr ""
 
-#: js/Felamimail.js:773
+#: js/Felamimail.js:780
 msgid "SMTP Error"
 msgstr "SMTP Fehler"
 
-#: js/Felamimail.js:774
+#: js/Felamimail.js:781
 msgid "No connection to SMTP server."
 msgstr "Keine Verbindung zum SMTP Server"
 
-#: js/Felamimail.js:782
+#: js/Felamimail.js:789
 msgid "Sieve Error"
 msgstr "Sieve Fehler"
 
-#: js/Felamimail.js:783
+#: js/Felamimail.js:790
 msgid "No connection to Sieve server."
 msgstr "Keine Verbindung zum Sieve Server."
 
-#: js/Felamimail.js:791
+#: js/Felamimail.js:798
 msgid "Save Sieve Script Error"
 msgstr "Fehler beim Speichern des Sieve-Skriptes"
 
-#: js/Felamimail.js:792
+#: js/Felamimail.js:799
 msgid "Could not save script on Sieve server."
 msgstr "Konnte das Sieve-Skript nicht auf dem Server speichern."
 
@@ -968,6 +968,9 @@ msgstr "Löschen bestätigen"
 #: Preference.php:123
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Beim löschen von Nachrichten einen Bestätigungsdialog anzeigen."
+
+#~ msgid "One of your folders was deleted from an other client, please reload you browser"
+#~ msgstr "Ein Ordner wurde von einem anderen Klienten gelöscht. Bitte aktualisieren Sie Ihren Browser."
 
 #~ msgid "{0} left"
 #~ msgstr "{0} übrig"

@@ -92,11 +92,15 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: js/Model.js:37
-msgid "FAQ List, "
+msgid "FAQ List"
 msgid_plural "FAQ Lists"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr ""
 
 #: js/Model.js:72
 msgid "Quick search"

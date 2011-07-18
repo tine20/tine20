@@ -88,10 +88,14 @@ msgstr[0] "FAQ"
 msgstr[1] "FAQs"
 
 #: js/Model.js:37
-msgid "FAQ List, "
+msgid "FAQ List"
 msgid_plural "FAQ Lists"
-msgstr[0] "FAQ Liste"
-msgstr[1] "FAQ Listen"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:37
+msgid "FAQ Lists"
+msgstr ""
 
 #: js/Model.js:72
 msgid "Quick search"
@@ -161,3 +165,8 @@ msgstr "Standard FAQ List"
 #: Preference.php:75
 msgid "The default FAQ list to create new FAQ in."
 msgstr "Die Standard FAQ Liste, in der neue FAQs angelegt werden."
+
+#~ msgid "FAQ List, "
+#~ msgid_plural "FAQ Lists"
+#~ msgstr[0] "FAQ Liste"
+#~ msgstr[1] "FAQ Listen"
