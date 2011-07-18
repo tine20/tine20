@@ -959,15 +959,11 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     
     /**
      * testLongFrom
-     * 
-     * @todo make it work
      */
     public function testLongFrom()
     {
         $cachedMessage = $this->messageTestHelper('longfrom.eml');
-        //$completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
-        
-        //print_r($cachedMessage);
+        $this->assertEquals('nDqIxSoSTIC', $cachedMessage->subject);
     }
         
     /**
@@ -1139,6 +1135,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             $this->_cache->clear($folder);
             $cachedMessage = $this->_cache->addMessage($message, $folder);
         }
+        
+        $this->assertTrue($cachedMessage instanceof Felamimail_Model_Message, 'could not add message to cache');
         
         $this->_createdMessages->addRecord($cachedMessage);
         
