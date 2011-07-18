@@ -54,12 +54,32 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     protected $_statPath = NULL;
     
     /**
+     * application
+     * 
+     * @var Tinebase_Model_Application
+     */
+    protected $_application = NULL;
+    
+    /**
      * @var array one of these grants must be met
      */
     protected $_requiredGrants = array(
         Tinebase_Model_Grants::GRANT_READ
     );
     
+    /**
+     * set options 
+     *
+     * @param  array $_options
+     * @throws Tinebase_Exception_Record_NotDefined
+     */
+    protected function _setOptions(array $_options)
+    {
+        $_options['ignoreAcl'] = isset($_options['ignoreAcl']) ? $_options['ignoreAcl'] : false;
+        
+        $this->_options = $_options;
+    }
+        
     /**
      * set container
      * 
@@ -94,9 +114,10 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     {
         $pathParts = $this->_getPathParts();
         
-        $this->_containerType = $this->_getContainerType($pathParts);
-        $this->_containerOwner = $this->_getContainerOwner($pathParts);
-        $this->_statPath = $this->_doPathReplacements($pathParts);
+        $this->_containerType   = $this->_getContainerType($pathParts);
+        $this->_containerOwner  = $this->_getContainerOwner($pathParts);
+        $this->_application     = $this->_getApplication($pathParts);
+        $this->_statPath        = $this->_doPathReplacements($pathParts);
     }
     
     /**
@@ -116,7 +137,7 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     }
     
     /**
-     * set container type
+     * get container type from path
      * 
      * @param array $_pathParts
      * @return string
@@ -138,7 +159,7 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     }
     
     /**
-     * set container owner
+     * get container owner from path
      * 
      * @param array $_pathParts
      * @return string
@@ -150,6 +171,25 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
         return $containerOwner;
     }
     
+    
+    /**
+     * get application from path
+     * 
+     * @param array $_pathParts
+     * @return string
+     * @throws Tinebase_Exception_AccessDenied
+     */
+    protected function _getApplication($_pathParts)
+    {
+        $application = Tinebase_Application::getInstance()->getApplicationById($_pathParts[0]);
+        
+        if (! $this->_options['ignoreAcl'] && ! Tinebase_Core::getUser()->hasRight($application->name, Tinebase_Acl_Rights_Abstract::RUN)) {
+            throw new Tinebase_Exception_AccessDenied('You don\'t have the right to run this application');
+        }
+        
+        return $application;
+    }
+        
     /**
      * do path replacements (container name => container id, otherUsers => personal, ...)
      * 
@@ -209,8 +249,8 @@ class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text
     protected function _addContainerTypeFilter($_select, $_backend)
     {
         $currentAccount = Tinebase_Core::getUser();
-        $appName = 'Filemanager';   // $this->_options['applicationName']   @todo add this to options
-        $ignoreAcl = FALSE;         // $this->_options['ignoreAcl']         @todo add this to options
+        $appName        = $this->_application->name;
+        $ignoreAcl      = $this->_options['ignoreAcl'];
         
         switch ($this->_containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
