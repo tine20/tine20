@@ -197,6 +197,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     {
         $result = $this->_json->searchNodes($_filter, array());
         
+        print_r($result);
+        
         $this->assertEquals(1, $result['totalcount']);
         $this->assertEquals($_expectedName, $result['results'][0]['name']);
     }
@@ -244,5 +246,21 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS
         ));
         $this->_searchHelper($filter, 'sclever');
+    }
+
+    /**
+     * search containers of other user
+     * 
+     * @todo test path
+     * @todo test container
+     */
+    public function testSearchContainersOfOtherUser()
+    {
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS . '/sclever'
+        ));
+        //$this->_searchHelper($filter, '');
     }
 }
