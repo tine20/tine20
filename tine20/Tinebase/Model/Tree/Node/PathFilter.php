@@ -26,15 +26,6 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
     );
     
     /**
-     * a path could belong to one container
-     * 
-     * @var Tinebase_Model_Container
-     * 
-     * @todo get this from path
-     */
-    protected $_container = NULL;
-    
-    /**
      * the parsed path record
      * 
      * @var Tinebase_Model_Tree_Node_Path
@@ -62,16 +53,6 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
     }
     
     /**
-     * set container
-     * 
-     * @param Tinebase_Model_Container $_container
-     */
-    public function setContainer(Tinebase_Model_Container $_container)
-    {
-        $this->_container = $_container;
-    }
-    
-    /**
      * appends sql to given select statement
      *
      * @param  Zend_Db_Select                    $_select
@@ -83,7 +64,7 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
         
         $this->_addParentIdFilter($_select, $_backend);
         
-        if (! $this->_container) {
+        if (! $this->_path->container) {
             $this->_addContainerTypeFilter($_select, $_backend);
         }
     }

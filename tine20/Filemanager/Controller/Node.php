@@ -116,8 +116,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 $hasGrant = $this->_checkACLContainer($container, $_action);
                 if (! $hasGrant) {
                     unset($pathFilters[$key]);
-                } else {
-                    $pathFilter->setContainer($container);
                 }
             }
         }
