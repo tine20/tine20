@@ -43,7 +43,14 @@ Ext.ux.file.Upload = function(config, file, id) {
          * @param {Ext.Record} Ext.ux.file.Uploader.file
          * @param {XMLHttpRequestProgressEvent}
          */
-         'uploadprogress'
+         'uploadprogress',
+         /**
+          * @event uploadstart
+          * Fires on upload progress (html5 only)
+          * @param {Ext.ux.file.Uploader} this
+          * @param {Ext.Record} Ext.ux.file.Uploader.file
+          */
+          'uploadstart'
     );
         
     this.file = file;
@@ -94,48 +101,35 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     fileSelector: null,
     
-    
+    /**
+     * corespnding file record
+     */
     fileRecord: null,
     
-    
+    /**
+     * currentChunk to upload
+     */
     currentChunk: null,
     
-    
+    /**
+     * file to upload
+     */
     file: null,
     
-    
+    /**
+     * is this upload paused
+     */
     paused: false,
     
-    
-    tempFiles: new Array(),
-    
-    uploadSuccesFunction: null,
-    
-    uploadFailureFunction: null,
+    /**
+     * is this upload queued
+     */
+    queued: false,    
     
     /**
-     * The following is a conservative set of three functions you can use to test host objects.
-     * These reduce the chance of false positives. You can make them more permissive if you 
-     * learn about a browser with a different typeof result that should be allowed to pass the test.
-     *
-     * @see http://michaux.ca/articles/feature-detection-state-of-the-art-browser-scripting
+     * collected tempforary files
      */
-    isHostMethod: function (object, property) {
-        var t = typeof object[property];
-        
-        return t == 'function' || (!!(t == 'object' && object[property])) || t == 'unknown';
-    },
-    
-    isHostCollection: function (object, property) {
-        var t = typeof object[property];  
-        
-        return (!!(t == 'object' && object[property])) || t == 'function';
-    },
-    
-    isHostObject: function (object, property) {
-        return !!(typeof(object[property]) == 'object' && object[property]);
-    },
-    
+    tempFiles: new Array(),
         
     /**
      * creates a form where the upload takes place in
@@ -161,11 +155,10 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     /**
      * perform the upload
      * 
-     * @param  {FILE} file to upload (optional for html5 uploads)
      * @return {Ext.Record} Ext.ux.file.Uploader.file
      */
     upload: function() {
-                           
+                                   
         if ((
                 (! Ext.isGecko && window.XMLHttpRequest && window.File && window.FileList) || // safari, chrome, ...?
                 (Ext.isGecko && window.FileReader) // FF
@@ -187,13 +180,24 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 }       
                 this.maxChunkSize = actualChunkSize;
                 
-                this.createFileRecord(false);
-                this.html5ChunkedUpload();
+                if(Tine.Tinebase.uploadManager && Tine.Tinebase.uploadManager.isBusy()) {
+                    this.createFileRecord(true);
+                    this.setQueued(true);
+                }
+                else {
+                    this.createFileRecord(false);
+                    this.fireEvent('uploadstart', this);
+                    this.html5ChunkedUpload();
+                    
+                }
+                
                 return this.fileRecord;
 
             } else {
                 this.createFileRecord(false);
+                this.fireEvent('uploadstart', this);
                 this.html5upload();
+                
                 return this.fileRecord;
             }
         } else {
@@ -262,6 +266,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         return this.fileRecord;
     },
 
+    /**
+     * Starting chunked file upload
+     * 
+     * @param {Boolean} whether this restarts a paused upload
+     */
     html5ChunkedUpload: function(resumeUpload) {
                     
         if(!resumeUpload) {
@@ -270,11 +279,17 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.html5upload();                
     },
     
+    /**
+     * resume this upload
+     */
     resumeUpload: function() {
         this.setPaused(false);
         this.html5ChunkedUpload(true);
     },
     
+    /**
+     * calculation the next chunk size and slicing file
+     */
     prepareChunk: function() {
         
         this.fileRecord.beginEdit();
@@ -304,6 +319,9 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 
     },
     
+    /**
+     * Setting final fileRecord states
+     */
     finishUploadRecord: function(success) {
         
         if(success) {
@@ -311,6 +329,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('status', 'complete');
             this.fileRecord.set('progress', 100);
             this.fileRecord.commit(false);
+            this.fireEvent('uploadcomplete', this, this.fileRecord);               
         }
         else {
             this.fileRecord.beginEdit();
@@ -318,10 +337,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('progress', -1);
             this.fileRecord.commit(false);
         }
-        
-        
-        // Tine.Tinebase.uploadManager.unregisterUpload(this.id);
-        
+                
     },
     
    
@@ -369,13 +385,10 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 this.fileRecord.set('progress', percent);
                 this.fileRecord.commit(false);
 
-
                 if(this.fileRecord.get('lastChunk')) {
 
-                    this.fireEvent('uploadcomplete', this, this.fileRecord);               
-//                  Tine.Tinebase.joinTempFiles(this.tempFiles, this.finishUploadRecord.createDelegate(this));
                     Ext.Ajax.request({
-                        timeout: 10*60*1000,
+                        timeout: 10*60*1000, // Overriding Ajax timeout - important!
                         params: {
                             method: 'Tinebase.joinTempFiles',
                             tempFilesData: this.tempFiles
@@ -399,18 +412,27 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     onUploadFail: function(response, options, fileRecord) {
 
         if (this.isHtml5ChunkedUpload()) {
+            
+            this.fileRecord.beginEdit();
             this.fileRecord.set('lastChunkUploadFailed', true);
             this.fileRecord.set('retryCount', this.fileRecord.get('retryCount') + 1);
+            this.fileRecord.endEdit();
+            
             if (this.fileRecord.get('retryCount') > this.MAX_RETRY_COUNT) {
                 alert("Upload failed!");
             }
             else {
+                this.fileRecord.beginEdit();
                 this.fileRecord.set('lastChunkUploadFailed', true);
+                this.fileRecord.endEdit();
                 this.html5upload();
             }
         }
         else {
+            this.fileRecord.beginEdit();
             this.fileRecord.set('status', 'failure');
+            this.fileRecord.endEdit();
+
             this.fireEvent('uploadfailure', this, fileRecord);
         }
     },
@@ -462,6 +484,9 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         return this.fileRecord;
     },
     
+    /**
+     * creating initial fileRecord for this upload
+     */
     createFileRecord: function(pending) {
                
         var status = "uploading";
@@ -483,38 +508,62 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             uploadKey: this.id
         });
     },
-    
-    addTempfile: function(tempFile) {
-              
+   
+    /** 
+     * adding temporary file to array 
+     * 
+     * @param tempfile to add
+     */
+    addTempfile: function(tempFile) {              
         this.tempFiles.push(tempFile);               
         return true;
     },
     
+    /**
+     * returns the temporary files
+     * 
+     * @returns {Array} temporary files
+     */
     getTempfiles: function() {
         return this.tempFiles;
     },
     
-    finishUpload: function(uploadKey) {     
-        Tine.Tinebase.joinTempFiles(this.uploads[uploadKey].tempFileArray);
-        this.removeUploadSet(uploadKey);
-    },
-    
+    /**
+     * pause oder resume file upload
+     * 
+     * @param paused {Boolean} set true to pause file upload
+     */
     setPaused: function(paused) {
         this.paused = paused;
+        
+        var pausedState = 'paused';
+        if(!this.paused) {
+            pausedState = 'uploading';
+        }
+            
+        this.fileRecord.beginEdit();
+        this.fileRecord.set('status', pausedState);
+        this.fileRecord.endEdit();
     },
     
+    /**
+     * indicates whether this upload ist paused
+     * 
+     * @returns {Boolean}
+     */
     isPaused: function() {
         return this.paused;
     },
     
+    /**
+     * indicates whether the current browser supports der File.slice method
+     * 
+     * @returns {Boolean}
+     */
     isHtml5ChunkedUpload: function() {
         
-//        if(this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
-        console.log("isHtml5ChunkedUpload");
-        
         if(window.File == undefined) return false;
-        if(this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
-
+        if(Tine.Tinebase.uploadManager.isHostMethod(File.prototype, 'mozSlice') || Tine.Tinebase.uploadManager.isHostMethod(File.prototype, 'webkitSlice')) {
             return true;
         }
         else {
@@ -531,6 +580,15 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         return this.input;
     },
 
+    /**
+     * slices the given file
+     * 
+     * @param file  File object
+     * @param start start position
+     * @param end   end position            
+     * @param type  file type
+     * @returns
+     */
     sliceFile: function(file, start, end, type) {
         
         if(file.mozSlice) {
@@ -543,10 +601,32 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             return false;
         }
         
+    },
+    
+    /**
+     * sets dthe queued state of this upload
+     * 
+     * @param queued {Boolean}
+     */
+    setQueued: function (queued) {
+        this.queued = queued;
+    },
+    
+    /**
+     * indicates whethe this upload is queued
+     * 
+     * @returns {Boolean}
+     */
+    isQueued: function() {
+        return this.queued;
     }
+    
             
 });
 
+/**
+ * upload file record
+ */
 Ext.ux.file.Uploader.file = Ext.data.Record.create([
     {name: 'id', type: 'text', system: true},
     {name: 'uploadKey', type: 'number', system: true},

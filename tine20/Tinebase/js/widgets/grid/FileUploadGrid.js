@@ -266,13 +266,26 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             width: 300,
             header: _('name'),
             renderer: function (value, metadata, record) {
-                var val = value;
+                var val = value;               
+                
                 if (record.get('status') !== 'complete') {
 //                    val += ' (' + record.get('progress') + '%)';
-                    
-                    if(!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
+                
+                    if (record.get('status') == 'paused') {
+                        metadata.css = 'x-tinebase-uploadpaused';
+                    } 
+                    if (record.get('status') == 'pending') {
+                      metadata.css = 'x-tinebase-uploadstop';
+                    } 
+                    else if (record.get('status') == 'uploading') {
+                        metadata.css = 'x-tinebase-uploading';
+                    }
+                    else if (!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
                         metadata.css = 'x-tinebase-uploadrow';
                     }
+                }
+                else {
+                    metadata.css = 'x-tinebase-uploadcomplete';
                 }
                 
                 return val;
@@ -294,7 +307,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
             //renderer: Ext.util.Format.fileSize
         }];
 
-    	if(Ext.ux.file.Upload.prototype.isHtml5ChunkedUpload()) {
+    	if(Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
     		columns.push({
     			resizable: true,
     			id: 'progress',
@@ -331,18 +344,20 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
     	
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
- 
+
             var upload = new Ext.ux.file.Upload({}, file);
-        	var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);        	
+
+            upload.on('uploadfailure', this.onUploadFail, this);
+            upload.on('uploadcomplete', Tine.Tinebase.uploadManager.onUploadComplete, this);
+            upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
+
+            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);        	
             var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
             		
         	if(fileRecord.data.status !== 'failure' ) {
 	            this.store.add(fileRecord);
         	}
 
-        	upload.on('uploadfailure', this.onUploadFail, this);
-//            upload.on('uploadcomplete', this.onUploadComplete, this);
-//            upload.on('uploadprogress', this.onUploadProgress, this);
             
         }, this);
         
