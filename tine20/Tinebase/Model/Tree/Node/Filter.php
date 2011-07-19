@@ -13,14 +13,14 @@
  * 
  * @package     Tinebase
  */
-class Tinebase_Model_Tree_NodeFilter extends Tinebase_Model_Filter_FilterGroup
+class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
 {
     /**
      * @var string class name of this filter group
      *      this is needed to overcome the static late binding
      *      limitation in php < 5.3
      */
-    protected $_className = 'Tinebase_Model_Tree_NodeFilter';
+    protected $_className = 'Tinebase_Model_Tree_Node_Filter';
     
     /**
      * @var string application of this filter group
@@ -37,7 +37,7 @@ class Tinebase_Model_Tree_NodeFilter extends Tinebase_Model_Filter_FilterGroup
      */
     protected $_filterModel = array(
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'path'                 => array('filter' => 'Tinebase_Model_Tree_NodePathFilter'),
+        'path'                 => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
         'parent_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
         'name'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),

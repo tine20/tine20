@@ -99,7 +99,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     protected function _checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
     {
         if ($_filter === NULL) {
-            $_filter = new Tinebase_Model_Tree_NodeFilter();
+            $_filter = new Tinebase_Model_Tree_Node_Filter();
         }
         
         $pathFilters = $_filter->getFilter('path', TRUE);
@@ -128,7 +128,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     /**
      * add base path
      * 
-     * @param Tinebase_Model_Tree_NodePathFilter $_pathFilter
+     * @param Tinebase_Model_Tree_Node_PathFilter $_pathFilter
      * @return string
      * 
      * @todo add /folders?

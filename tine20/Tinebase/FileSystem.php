@@ -353,7 +353,7 @@ class Tinebase_FileSystem
         
         $this->_treeNodeBackend->delete($node->getId());
         
-        $searchFilter = new Tinebase_Model_Tree_NodeFilter(array(
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'object_id',
                 'operator'  => 'equals',
@@ -510,7 +510,7 @@ class Tinebase_FileSystem
         $nodeId = $_nodeId instanceof Tinebase_Model_Tree_Node ? $_nodeId->getId() : $_nodeId;
         $children = array();
         
-        $searchFilter = new Tinebase_Model_Tree_NodeFilter(array(
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'parent_id',
                 'operator'  => 'equals',
@@ -526,11 +526,11 @@ class Tinebase_FileSystem
     /**
      * search tree nodes
      * 
-     * @param Tinebase_Model_Tree_NodeFilter $_filter
+     * @param Tinebase_Model_Tree_Node_Filter $_filter
      * @param Tinebase_Record_Interface $_pagination
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    public function searchNodes(Tinebase_Model_Tree_NodeFilter $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
+    public function searchNodes(Tinebase_Model_Tree_Node_Filter $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL)
     {
         $result = $this->_treeNodeBackend->search($_filter, $_pagination);
         return $result;
@@ -551,7 +551,7 @@ class Tinebase_FileSystem
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Getting tree node ' . $parentId . '/'. $_name);
         
-        $searchFilter = new Tinebase_Model_Tree_NodeFilter(array(
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'name',
                 'operator'  => 'equals',

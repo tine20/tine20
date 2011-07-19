@@ -740,7 +740,7 @@ class Tinebase_Filesystem_StreamWrapper
     {
         $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
         
-        $searchFilter = new Tinebase_Model_Tree_NodeFilter(array(
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'name',
                 'operator'  => 'equals',

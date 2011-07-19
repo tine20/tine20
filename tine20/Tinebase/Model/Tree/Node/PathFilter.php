@@ -10,13 +10,13 @@
  */
 
 /**
- * Tinebase_Model_Tree_NodePathFilter
+ * Tinebase_Model_Tree_Node_PathFilter
  * 
  * @package     Tinebase
  * @subpackage  Filter
  * 
  */
-class Tinebase_Model_Tree_NodePathFilter extends Tinebase_Model_Filter_Text 
+class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text 
 {
     /**
      * @var array list of allowed operators

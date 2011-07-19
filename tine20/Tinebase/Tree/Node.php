@@ -71,7 +71,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     {
         $nodeId = $_nodeId instanceof Tinebase_Model_Tree_Node ? $_nodeId->getId() : $_nodeId;
         
-        $searchFilter = new Tinebase_Model_Tree_NodeFilter(array(
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'parent_id',
                 'operator'  => 'equals',
@@ -96,7 +96,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
     
     public function getObjectCount($_objectId)
     {
-        $searchFilter = new Tinebase_Model_Tree_NodeFilter(array(
+        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
                 'field'     => 'object_id',
                 'operator'  => 'equals',
