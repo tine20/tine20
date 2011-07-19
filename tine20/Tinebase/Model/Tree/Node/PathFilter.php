@@ -53,6 +53,23 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
     }
     
     /**
+     * returns array with the filter settings of this filter
+     *
+     * @param  bool $_valueToJson resolve value for json api?
+     * @return array
+     */
+    public function toArray($_valueToJson = false)
+    {
+        $result = parent::toArray($_valueToJson);
+        
+        if ($this->_value instanceof Tinebase_Model_Tree_Node_Path) {
+            $result['value'] = $this->_value->flatpath;
+        }
+        
+        return $result;
+    }
+    
+    /**
      * appends sql to given select statement
      *
      * @param  Zend_Db_Select                    $_select
