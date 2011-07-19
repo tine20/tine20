@@ -173,8 +173,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * get container from path
      * 
      * path can be: 
-     *   /shared/containername(/*)
-     *   /personal/username/containername(/*)
+     *   /shared(/containername(/*))
+     *   /personal(/username(/containername(/*)))
+     *   /otherUsers(/username(/containername(/*)))
      * 
      * @param string $_path
      * @return Tinebase_Model_Container
