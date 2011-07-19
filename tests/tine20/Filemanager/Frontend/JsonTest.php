@@ -7,7 +7,6 @@
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
- * @todo        add more testSearchTopLevelContainers (shared, personal, other/sclever)
  */
 
 /**
@@ -239,6 +238,34 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->_searchHelper($filter, 'unittestdir_other');
     }
     
+    /**
+     * search top level containers of user
+     */
+    public function testSearchTopLevelContainersOfUser()
+    {
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
+        ));
+        $this->_searchHelper($filter, $this->_personalContainer->name, TRUE);
+    }
+
+    /**
+     * search shared top level containers 
+     */
+    public function testSearchSharedTopLevelContainers()
+    {
+        $this->_setupTestPath(Tinebase_Model_Container::TYPE_SHARED);
+        
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED
+        ));
+        $result = $this->_searchHelper($filter, $this->_sharedContainer->name, TRUE);
+    }
+
     /**
      * search top level containers of other users
      */
