@@ -102,7 +102,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     fileSelector: null,
     
     /**
-     * corespnding file record
+     * coresponding file record
      */
     fileRecord: null,
     
@@ -556,6 +556,18 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     },
     
     /**
+     * checks for the existance of a method of an object
+     * 
+     * @param object    {Object}
+     * @param property  {String} method name 
+     * @returns {Boolean}
+     */
+    isHostMethod: function (object, property) {
+        var t = typeof object[property];
+        return t == 'function' || (!!(t == 'object' && object[property])) || t == 'unknown';
+    },
+    
+    /**
      * indicates whether the current browser supports der File.slice method
      * 
      * @returns {Boolean}
@@ -563,7 +575,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     isHtml5ChunkedUpload: function() {
         
         if(window.File == undefined) return false;
-        if(Tine.Tinebase.uploadManager.isHostMethod(File.prototype, 'mozSlice') || Tine.Tinebase.uploadManager.isHostMethod(File.prototype, 'webkitSlice')) {
+        if(this.isHostMethod(File.prototype, 'mozSlice') || this.isHostMethod(File.prototype, 'webkitSlice')) {
             return true;
         }
         else {
