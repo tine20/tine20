@@ -44,6 +44,51 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
+     * returns multiple records prepared for json transport
+     *
+     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @return array data
+     */
+    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
+    {
+        // resolve containers (if node name is a container id / path is toplevel (shared/personal with useraccount)
+        // @todo resolve containers
+//        if ($_filter !== NULL) {
+//            $pathFilter = $_filter->getFilter('path');
+//            if (Filemanager_Controller_Node::getInstance()->getContainer($pathFilter->getValue()) === NULL) {
+//                $this->_resolveNodeContainers($_records);
+//            }
+//        }
+        
+        // @todo add path to records
+        
+        return parent::_multipleRecordsToJson($_records, $_filter);
+    }
+    
+    /**
+     * replace name with container record
+     * 
+     * @param Tinebase_Record_RecordSet $_records
+     */
+    protected function _resolveNodeContainers(Tinebase_Record_RecordSet $_records)
+    {
+        if (count($_records) === 0) {
+            return;
+        }
+        
+        $containerIds = $_records->name;
+        $containers = Tinebase_Container::getInstance()->getMultiple($containerIds);
+        
+        foreach ($_records as $record) {
+            $idx = $containers->getIndexById($record->name);
+            if ($idx !== FALSE) {
+                $record->name = $containers[$idx];
+            }
+        }
+    }
+    
+    /**
      * create node(s)
      * 
      * @param string|array $filenames
