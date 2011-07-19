@@ -34,7 +34,7 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $paging
      * @return array
      * 
-     * @todo perhaps we can add searchCount() to the controller later and replace the count method TOTALCOUNT_COUNTRESULT
+     * @todo remove application id from (filter + record) paths?
      */
     public function searchNodes($filter, $paging)
     {
@@ -52,31 +52,29 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
     {
-        // resolve containers (if node name is a container id / path is toplevel (shared/personal with useraccount)
         if ($_filter !== NULL) {
-            $this->_resolveNodeContainers($_records, $_filter);
+            $path = Tinebase_Model_Tree_Node_Path::createFromPath($_filter->getFilter('path')->getValue());
+            $this->_resolveTopLevelContainers($_records, $path);
+            $this->_addPathToRecords($_records, $path);
         }
-        
-        // @todo add path to records
         
         return parent::_multipleRecordsToJson($_records, $_filter);
     }
     
     /**
      * replace name with container record
+     * - resolve containers (if node name is a container id / path is toplevel (shared/personal with useraccount)
      * 
      * @param Tinebase_Record_RecordSet $_records
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param Tinebase_Model_Tree_Node_Path $_path
      */
-    protected function _resolveNodeContainers(Tinebase_Record_RecordSet $_records, $_filter)
+    protected function _resolveTopLevelContainers(Tinebase_Record_RecordSet $_records, $_path)
     {
         if (count($_records) === 0) {
             return;
         }
 
-        $pathValue = $_filter->getFilter('path')->getValue();
-        $path = Tinebase_Model_Tree_Node_Path::createFromPath($pathValue); 
-        if ($path->container !== NULL) {
+        if ($_path->container !== NULL) {
             // only do it for top level nodes (above container nodes)
             return;
         }
@@ -89,6 +87,19 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             if ($idx !== FALSE) {
                 $record->name = $containers[$idx];
             }
+        }
+    }
+
+    /**
+     * add path to records
+     * 
+     * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_Model_Tree_Node_Path $_path
+     */
+    protected function _addPathToRecords(Tinebase_Record_RecordSet $_records, $_path)
+    {
+        foreach ($_records as $record) {
+            $record->path = $_path->flatpath . '/' . $record->name;
         }
     }
     
