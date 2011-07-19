@@ -108,9 +108,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         // add base path and check grants
         foreach ($pathFilters as $key => $pathFilter) {
-            $path = new Tinebase_Model_Tree_Node_Path(array(
-                'flatpath'  => $this->addBasePath($pathFilter->getValue())
-            ));
+            $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($pathFilter->getValue()));
             $pathFilter->setValue($path);
             
             if ($path->container) {

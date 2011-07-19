@@ -74,9 +74,7 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      */
     protected function _parsePath()
     {
-        $this->_path = ($this->_value instanceof Tinebase_Model_Tree_Node_Path) ? $this->_value : new Tinebase_Model_Tree_Node_Path(array(
-            'flatpath'  => $this->_value
-        ));
+        $this->_path = Tinebase_Model_Tree_Node_Path::createFromPath($this->_value);
         
         if (! $this->_options['ignoreAcl'] && ! Tinebase_Core::getUser()->hasRight($this->_path->application->name, Tinebase_Acl_Rights_Abstract::RUN)) {
             throw new Tinebase_Exception_AccessDenied('You don\'t have the right to run this application');

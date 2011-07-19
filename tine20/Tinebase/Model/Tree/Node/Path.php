@@ -66,6 +66,21 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     );
     
     /**
+     * create new path record from given path string
+     * 
+     * @param string|Tinebase_Model_Tree_Node_Path $_path
+     * @return Tinebase_Model_Tree_Node_Path
+     */
+    public static function createFromPath($_path)
+    {
+        $path = ($_path instanceof Tinebase_Model_Tree_Node_Path) ? $_path : new Tinebase_Model_Tree_Node_Path(array(
+            'flatpath'  => $_path
+        ));
+        
+        return $path;
+    }
+    
+    /**
      * sets the record related properties from user generated input.
      * 
      * if flatpath is set, parse it and set the fields accordingly
