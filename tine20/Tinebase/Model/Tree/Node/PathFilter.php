@@ -74,7 +74,7 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      */
     protected function _parsePath()
     {
-        $this->_path = new Tinebase_Model_Tree_Node_Path(array(
+        $this->_path = ($this->_value instanceof Tinebase_Model_Tree_Node_Path) ? $this->_value : new Tinebase_Model_Tree_Node_Path(array(
             'flatpath'  => $this->_value
         ));
         
