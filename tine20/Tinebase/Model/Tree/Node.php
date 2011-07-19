@@ -14,14 +14,14 @@
  * 
  * @package     Tinebase
  * @subpackage  Model
- * @property  string             contenttype
- * @property  Tinebase_DateTime  creation_time
- * @property  string             hash
- * @property  string             name
- * @property  Tinebase_DateTime  last_modified_time
- * @property  string             object_id
- * @property  string             size
- * @property  string             type
+ * @property    string             contenttype
+ * @property    Tinebase_DateTime  creation_time
+ * @property    string             hash
+ * @property    string             name
+ * @property    Tinebase_DateTime  last_modified_time
+ * @property    string             object_id
+ * @property    string             size
+ * @property    string             type
  */
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
@@ -85,30 +85,4 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'last_modified_time',
         'deleted_time'
     );
-    
-    /**
-     * converts a string or Addressbook_Model_List to a list id
-     *
-     * @param   string|Addressbook_Model_List  $_listId  the contact id to convert
-     * 
-     * @return  string
-     * @throws  UnexpectedValueException  if no list id set 
-     */
-    static public function convertListIdToInt($_listId)
-    {
-        if ($_listId instanceof self) {
-            if ($_listId->getId() == null) {
-                throw new UnexpectedValueException('No identifier set.');
-            }
-            $id = (string) $_listId->getId();
-        } else {
-            $id = (string) $_listId;
-        }
-        
-        if (empty($id)) {
-            throw new UnexpectedValueException('Identifier can not be empty.');
-        }
-        
-        return $id;
-    }    
 }
