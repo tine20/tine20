@@ -315,7 +315,7 @@ abstract class Tinebase_Frontend_Json_Abstract extends Tinebase_Frontend_Abstrac
      * returns multiple records prepared for json transport
      *
      * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
-     * @param Tinebase_Model_Filter_FilterGroup
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @return array data
      */
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
