@@ -113,9 +113,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             ));
             $pathFilter->setValue($path);
             
-            $container = $this->getContainer($path);
-            if ($container) {
-                $hasGrant = $this->_checkACLContainer($container, $_action);
+            if ($path->container) {
+                $hasGrant = $this->_checkACLContainer($path->container, $_action);
                 if (! $hasGrant) {
                     unset($pathFilters[$key]);
                 }
@@ -172,88 +171,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         return Tinebase_Container::getInstance()->hasGrant($this->_currentAccount, $_container, $requiredGrant);
     }
     
-    /**
-     * get container from path
-     * 
-     * path can be: 
-     *   /shared(/containername(/*))
-     *   /personal(/username(/containername(/*)))
-     *   /otherUsers(/username(/containername(/*)))
-     * 
-     * @param string $_path
-     * @return Tinebase_Model_Container
-     * 
-     * @deprecated functionality moved to Tinebase_Model_Tree_Node_Path
-     */
-    public function getContainer($_path)
-    {
-        // split path into parts
-        $pathParts = explode('/', trim($_path, '/'), 4);
-        
-        Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' PATH PARTS: ' . print_r($pathParts, true));
-        
-        $container = NULL;
-        
-        if (!empty($pathParts[0])) {
-            $containerType          = $pathParts[0];
-            
-            switch($containerType) {
-                case Tinebase_Model_Container::TYPE_SHARED:
-                    if (!empty($pathParts[1])) {
-                        $container = $this->_searchContainerByName($pathParts[1], Tinebase_Model_Container::TYPE_SHARED);
-                    }
-                    
-                    break;
-                    
-                case Tinebase_Model_Container::TYPE_PERSONAL:
-                case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                    if (!empty($pathParts[1])) {
-                        if ($containerType === Tinebase_Model_Container::TYPE_PERSONAL && $pathParts[1] !== Tinebase_Core::getUser()->accountLoginName) {
-                            throw new Tinebase_Exception_NotFound('Invalid user name: ' . $pathParts[1] . '.');
-                        }
-                        
-                        if (!empty($pathParts[2])) {
-                            // explode again
-                            $subPathParts = explode('/', $pathParts[2], 2);
-                            $container = $this->_searchContainerByName($subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL);
-                        }
-                    }
-                    break;
-                    
-                default:
-                    throw new Tinebase_Exception_NotFound('Invalid path: ' . $_path);
-                    break;
-            }
-        }
-        
-        return $container;
-    }
-    
-    /**
-     * search container by name and type
-     * 
-     * @param string $_name
-     * @param string $_type
-     * @return Tinebase_Model_Container
-     * @throws Tinebase_Exception_NotFound
-     * 
-     * @deprecated functionality moved to Tinebase_Model_Tree_Node_Path
-     */
-    protected function _searchContainerByName($_name, $_type)
-    {
-        $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
-            'name'           => $_name,
-            'type'           => $_type,
-        )));
-        
-        if (count($search) !== 1) {
-            throw new Tinebase_Exception_NotFound('Container not found: ' . $_name);
-        }
-        
-        return $search->getFirstRecord();
-    }
-
     /**
      * Gets total count of search with $_filter
      * 
