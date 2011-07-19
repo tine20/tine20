@@ -350,6 +350,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @return {String} class to use for file type icon
      */
     getFileCls: function() {
+
         var fparts = this.getFileName().split('.');
         if(fparts.length === 1) {
             return '';
