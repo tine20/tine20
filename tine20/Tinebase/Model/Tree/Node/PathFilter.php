@@ -29,36 +29,17 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      * a path could belong to one container
      * 
      * @var Tinebase_Model_Container
+     * 
+     * @todo get this from path
      */
     protected $_container = NULL;
     
     /**
-     * container type
+     * the parsed path record
      * 
-     * @var string
+     * @var Tinebase_Model_Tree_Node_Path
      */
-    protected $_containerType = NULL;
-    
-    /**
-     * container owner (account login name)
-     * 
-     * @var string
-     */
-    protected $_containerOwner = NULL;
-    
-    /**
-     * stat path to fetch node with
-     * 
-     * @var string
-     */
-    protected $_statPath = NULL;
-    
-    /**
-     * application
-     * 
-     * @var Tinebase_Model_Application
-     */
-    protected $_application = NULL;
+    protected $_path = NULL;
     
     /**
      * @var array one of these grants must be met
@@ -79,7 +60,7 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
         
         $this->_options = $_options;
     }
-        
+    
     /**
      * set container
      * 
@@ -112,120 +93,15 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      */
     protected function _parsePath()
     {
-        $pathParts = $this->_getPathParts();
+        $this->_path = new Tinebase_Model_Tree_Node_Path(array(
+            'flatpath'  => $this->_value
+        ));
         
-        $this->_containerType   = $this->_getContainerType($pathParts);
-        $this->_containerOwner  = $this->_getContainerOwner($pathParts);
-        $this->_application     = $this->_getApplication($pathParts);
-        $this->_statPath        = $this->_doPathReplacements($pathParts);
-    }
-    
-    /**
-     * get path parts
-     * 
-     * @return array
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _getPathParts()
-    {
-        $pathParts = explode('/', trim($this->_value, '/'), 4);       
-        if (count($pathParts) < 2) {
-            throw new Tinebase_Exception_InvalidArgument('Invalid path: ' . $_path);
-        }
-        
-        return $pathParts;
-    }
-    
-    /**
-     * get container type from path
-     * 
-     * @param array $_pathParts
-     * @return string
-     * @throws Tinebase_Exception_InvalidArgument
-     */
-    protected function _getContainerType($_pathParts)
-    {
-        $containerType = $_pathParts[1];
-        
-        if (! in_array($containerType, array(
-            Tinebase_Model_Container::TYPE_PERSONAL,
-            Tinebase_Model_Container::TYPE_SHARED,
-            Tinebase_Model_Container::TYPE_OTHERUSERS,
-        ))) {
-            throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $this->_containerType);
-        }
-        
-        return $containerType;
-    }
-    
-    /**
-     * get container owner from path
-     * 
-     * @param array $_pathParts
-     * @return string
-     */
-    protected function _getContainerOwner($_pathParts)
-    {
-        $containerOwner = ($this->_containerType !== Tinebase_Model_Container::TYPE_SHARED && isset($_pathParts[2])) ? $_pathParts[2] : NULL;
-        
-        return $containerOwner;
-    }
-    
-    
-    /**
-     * get application from path
-     * 
-     * @param array $_pathParts
-     * @return string
-     * @throws Tinebase_Exception_AccessDenied
-     */
-    protected function _getApplication($_pathParts)
-    {
-        $application = Tinebase_Application::getInstance()->getApplicationById($_pathParts[0]);
-        
-        if (! $this->_options['ignoreAcl'] && ! Tinebase_Core::getUser()->hasRight($application->name, Tinebase_Acl_Rights_Abstract::RUN)) {
+        if (! $this->_options['ignoreAcl'] && ! Tinebase_Core::getUser()->hasRight($this->_path->application->name, Tinebase_Acl_Rights_Abstract::RUN)) {
             throw new Tinebase_Exception_AccessDenied('You don\'t have the right to run this application');
         }
-        
-        return $application;
     }
-        
-    /**
-     * do path replacements (container name => container id, otherUsers => personal, ...)
-     * 
-     * [0] => app id [required]
-     * [1] => type [required]
-     * [2] => container | accountLoginName
-     * [3] => container | directory
-     * [4] => directory
-     * [5] => ...
-     * 
-     * @param array $_pathParts
-     * @return string
-     */
-    protected function _doPathReplacements($_pathParts)
-    {
-        $pathParts = $_pathParts;
-        
-        if ($this->_containerType === Tinebase_Model_Container::TYPE_OTHERUSERS) {
-            $pathParts[1] = Tinebase_Model_Container::TYPE_PERSONAL;
-        }
-        
-        if (count($pathParts) > 2) {
-            $containerPartIdx = ($this->_containerType === Tinebase_Model_Container::TYPE_SHARED) ? 2 : 3;
-            if (isset($pathParts[$containerPartIdx]) && $this->_container && $pathParts[$containerPartIdx] === $this->_container->name) {
-                $pathParts[$containerPartIdx] = $this->_container->getId();
-            }
-        }
-        
-        $result = implode('/', $pathParts);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-            . ' Path to stat: ' . $result);
-        
-        return $result;
-    }
-    
+
     /**
      * adds parent id filter sql
      *
@@ -234,7 +110,7 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
      */
     protected function _addParentIdFilter($_select, $_backend)
     {
-        $node = Tinebase_FileSystem::getInstance()->stat($this->_statPath);
+        $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
 
         $parentIdFilter = new Tinebase_Model_Filter_Text('parent_id', 'equals', $node->getId());
         $parentIdFilter->appendFilterSql($_select, $_backend);
@@ -249,10 +125,10 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
     protected function _addContainerTypeFilter($_select, $_backend)
     {
         $currentAccount = Tinebase_Core::getUser();
-        $appName        = $this->_application->name;
+        $appName        = $this->_path->application->name;
         $ignoreAcl      = $this->_options['ignoreAcl'];
         
-        switch ($this->_containerType) {
+        switch ($this->_path->containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
                 $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
                     $currentAccount, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
@@ -262,8 +138,8 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
                     $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
                 break;
             case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                if ($this->_containerOwner) {
-                    $owner = Tinebase_User::getInstance()->getFullUserByLoginName($this->_containerOwner);
+                if ($this->_path->containerOwner) {
+                    $owner = Tinebase_User::getInstance()->getFullUserByLoginName($this->_path->containerOwner);
                     $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
                         $owner, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
                 } else {

@@ -7,6 +7,8 @@
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * 
+ * @todo        use Tinebase_Model_Tree_Node_Path
  */
 
 /**
@@ -179,6 +181,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_path
      * @return Tinebase_Model_Container
+     * 
+     * @deprecated functionality moved to Tinebase_Model_Tree_Node_Path
      */
     public function getContainer($_path)
     {
@@ -231,6 +235,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_type
      * @return Tinebase_Model_Container
      * @throws Tinebase_Exception_NotFound
+     * 
+     * @deprecated functionality moved to Tinebase_Model_Tree_Node_Path
      */
     protected function _searchContainerByName($_name, $_type)
     {
