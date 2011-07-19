@@ -53,13 +53,9 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
     {
         // resolve containers (if node name is a container id / path is toplevel (shared/personal with useraccount)
-        // @todo resolve containers
-//        if ($_filter !== NULL) {
-//            $pathFilter = $_filter->getFilter('path');
-//            if (Filemanager_Controller_Node::getInstance()->getContainer($pathFilter->getValue()) === NULL) {
-//                $this->_resolveNodeContainers($_records);
-//            }
-//        }
+        if ($_filter !== NULL) {
+            $this->_resolveNodeContainers($_records, $_filter);
+        }
         
         // @todo add path to records
         
@@ -70,10 +66,18 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * replace name with container record
      * 
      * @param Tinebase_Record_RecordSet $_records
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
      */
-    protected function _resolveNodeContainers(Tinebase_Record_RecordSet $_records)
+    protected function _resolveNodeContainers(Tinebase_Record_RecordSet $_records, $_filter)
     {
         if (count($_records) === 0) {
+            return;
+        }
+
+        $pathValue = $_filter->getFilter('path')->getValue();
+        $path = Tinebase_Model_Tree_Node_Path::createFromPath($pathValue); 
+        if ($path->container !== NULL) {
+            // only do it for top level nodes (above container nodes)
             return;
         }
         

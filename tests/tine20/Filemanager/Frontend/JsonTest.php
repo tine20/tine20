@@ -192,15 +192,21 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      * 
      * @param array $_filter
      * @param string $_expectedName
+     * @return array search result
      */
-    protected function _searchHelper($_filter, $_expectedName)
+    protected function _searchHelper($_filter, $_expectedName, $_toplevel = FALSE)
     {
         $result = $this->_json->searchNodes($_filter, array());
         
-        print_r($result);
-        
         $this->assertEquals(1, $result['totalcount']);
-        $this->assertEquals($_expectedName, $result['results'][0]['name']);
+        if ($_toplevel) {
+            // toplevel containers are resolved
+            $this->assertEquals($_expectedName, $result['results'][0]['name']['name']);
+        } else {
+            $this->assertEquals($_expectedName, $result['results'][0]['name']);
+        }
+        
+        return $result;
     }
     
     /**
@@ -220,8 +226,6 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test search nodes (other)
-     * 
-     * @todo make it work
      */
     public function testSearchOtherUsersNodes()
     {
@@ -252,7 +256,6 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      * search containers of other user
      * 
      * @todo test path
-     * @todo test container
      */
     public function testSearchContainersOfOtherUser()
     {
@@ -261,6 +264,6 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'operator' => 'equals', 
             'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS . '/sclever'
         ));
-        //$this->_searchHelper($filter, '');
+        $this->_searchHelper($filter, $this->_otherUserContainer->name, TRUE);
     }
 }
