@@ -32,6 +32,10 @@ Ext.ux.file.UploadManager = function(config) {
          */
         uploads: new Object(),
 
+        /**
+         * counts session uploads
+         */
+        uploadCount: 0,
 
         /**
          * every upload in the upload manager gets queued initially
@@ -114,7 +118,7 @@ Ext.ux.file.UploadManager = function(config) {
          * 
          * @returns {Boolean}
          */
-         isBusy: function() {
+        isBusy: function() {
             return (this.maxConcurrentUploads == this.runningUploads);
         },
         
@@ -124,11 +128,11 @@ Ext.ux.file.UploadManager = function(config) {
         onUploadComplete: function() {
             
             Tine.Tinebase.uploadManager.runningUploads 
-            = Math.max(0, Tine.Tinebase.uploadManager.runningUploads - 1);  
+                = Math.max(0, Tine.Tinebase.uploadManager.runningUploads - 1);  
     
             for(var uploadKey in Tine.Tinebase.uploadManager.uploads){
-  
-                var upload = Tine.Tinebase.uploadManager.uploads[uploadKey];
+
+                var upload = Tine.Tinebase.uploadManager.uploads[uploadKey];                
                 if(upload.isQueued() && !upload.isPaused() && !Tine.Tinebase.uploadManager.isBusy()) {
                     upload.setQueued(false);
                     upload.resumeUpload();
