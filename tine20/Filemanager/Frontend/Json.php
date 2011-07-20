@@ -33,14 +33,29 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  array $filter
      * @param  array $paging
      * @return array
-     * 
-     * @todo remove application id from (filter + record) paths?
      */
     public function searchNodes($filter, $paging)
     {
         $result = $this->_search($filter, $paging, Filemanager_Controller_Node::getInstance(), 'Tinebase_Model_Tree_Node_Filter', FALSE, self::TOTALCOUNT_COUNTRESULT);
+        $this->_removeAppIdFromPathFilter($result);
         
         return $result;
+    }
+    
+    /**
+     * remove app id (base path) from filter
+     * 
+     * @param array $_result
+     */
+    protected function _removeAppIdFromPathFilter(&$_result)
+    {
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        
+        foreach ($_result['filter'] as $idx => &$filter) {
+            if ($filter['field'] === 'path') {
+                $filter['value'] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($filter['value'], $app);
+            }
+        }
     }
 
     /**
@@ -98,8 +113,10 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     protected function _addPathToRecords(Tinebase_Record_RecordSet $_records, $_path)
     {
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        
         foreach ($_records as $record) {
-            $record->path = $_path->flatpath . '/' . $record->name;
+            $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app) . '/' . $record->name;
         }
     }
     
