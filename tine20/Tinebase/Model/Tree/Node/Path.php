@@ -81,6 +81,19 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }
     
     /**
+     * remove app id from a path
+     * 
+     * @param string $_flatpath
+     * @param Tinebase_Model_Application $_application
+     * @return string
+     */
+    public static function removeAppIdFromPath($_flatpath, $_application)
+    {
+        $appId = $_application->getId();
+        return preg_replace('@^/' . $appId . '@', '', $_flatpath);
+    }
+    
+    /**
      * sets the record related properties from user generated input.
      * 
      * if flatpath is set, parse it and set the fields accordingly
