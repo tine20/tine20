@@ -594,10 +594,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     /**
      * get default container for new records
      * 
+     * @param {String} default container registry key
      * @return {Tine.Tinebase.Model.Container}
      */
-    getDefaultContainerForNewRecords: function() {
-        var container = Tine[this.appName].registry.get('defaultContainer');
+    getDefaultContainerForNewRecords: function(registryKey) {
+        if (! registryKey) {
+            registryKey = 'defaultContainer';
+        }
+        
+        var container = Tine[this.appName].registry.get(registryKey);
         
         return this.getSelectedContainer('addGrant', container, true);
     }
