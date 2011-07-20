@@ -69,56 +69,10 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         if ($_filter !== NULL) {
             $path = Tinebase_Model_Tree_Node_Path::createFromPath($_filter->getFilter('path')->getValue());
-            $this->_resolveTopLevelContainers($_records, $path);
-            $this->_addPathToRecords($_records, $path);
+            Filemanager_Controller_Node::getInstance()->resolveContainerAndAddPath($_records, $path);
         }
         
         return parent::_multipleRecordsToJson($_records, $_filter);
-    }
-    
-    /**
-     * replace name with container record
-     * - resolve containers (if node name is a container id / path is toplevel (shared/personal with useraccount)
-     * 
-     * @param Tinebase_Record_RecordSet $_records
-     * @param Tinebase_Model_Tree_Node_Path $_path
-     */
-    protected function _resolveTopLevelContainers(Tinebase_Record_RecordSet $_records, $_path)
-    {
-        if (count($_records) === 0) {
-            return;
-        }
-
-        if ($_path->container !== NULL) {
-            // only do it for top level nodes (above container nodes)
-            return;
-        }
-        
-        $containerIds = $_records->name;
-        $containers = Tinebase_Container::getInstance()->getMultiple($containerIds);
-        
-        foreach ($_records as $record) {
-            $idx = $containers->getIndexById($record->name);
-            if ($idx !== FALSE) {
-                $record->name = $containers[$idx];
-            }
-        }
-    }
-
-    /**
-     * add path to records
-     * 
-     * @param Tinebase_Record_RecordSet $_records
-     * @param Tinebase_Model_Tree_Node_Path $_path
-     */
-    protected function _addPathToRecords(Tinebase_Record_RecordSet $_records, $_path)
-    {
-        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
-        $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
-        
-        foreach ($_records as $record) {
-            $record->path = $flatpathWithoutBasepath . '/' . $record->name;
-        }
     }
     
     /**

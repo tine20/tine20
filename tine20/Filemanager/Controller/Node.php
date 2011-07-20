@@ -221,21 +221,59 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         if (! $parentPathRecord->container && Tinebase_Model_Tree_Node::TYPE_FOLDER) {
             $container = $this->_createContainer($newNodeName, $parentPathRecord->containerType);
             $newNodePath = $parentPathRecord . '/' . $container->getId();
+        } else {
+            $container = NULL;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $newNodePath . ' of type ' . $_type);
         
         $this->_backend->mkDir($newNodePath);
-        $newNode = $this->_backend->stat($newNodePath);
         
-        // add path and resolve container if required
-        $newNode->path = $newNodePath;
-        if (! $parentPathRecord->container && isset($container)) {
-            $newNode->name = $container;
-        }
+        $newNode = $this->_backend->stat($newNodePath);
+        $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
         
         return $newNode;
+    }
+    
+    /**
+     * resolve node container and path
+     * 
+     * (1) add path to records 
+     * (2) replace name with container record, if node name is a container id 
+     *     / path is toplevel (shared/personal with useraccount
+     * 
+     * @param Tinebase_Record_RecordSet|Tinebase_Model_Tree_Node $_records
+     * @param Tinebase_Model_Tree_Node_Path $_path
+     * @param Tinebase_Model_Container $_container
+     */
+    public function resolveContainerAndAddPath($_records, Tinebase_Model_Tree_Node_Path $_path, Tinebase_Model_Container $_container = NULL)
+    {
+        $records = ($_records instanceof Tinebase_Model_Tree_Node) 
+            ? new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array($_records)) : $_records;
+        
+        if (! $_path->container) {
+            // fetch top level container nodes
+            if ($_container === NULL) {
+                $containerIds = $_records->name;
+                $containers = Tinebase_Container::getInstance()->getMultiple($containerIds);
+            } else {
+                $containers = new Tinebase_Record_RecordSet('Tinebase_Model_Container', array($_container));
+            }
+        }
+        
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
+        
+        foreach ($records as $record) {
+            $record->path = $flatpathWithoutBasepath . '/' . $record->name;
+            if (! $_path->container) {
+                $idx = $containers->getIndexById($record->name);
+                if ($idx !== FALSE) {
+                    $record->name = $containers[$idx];
+                }
+            }
+        }
     }
     
     /**
