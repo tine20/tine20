@@ -1,41 +1,19 @@
 Template: tine20/webserver_type
-Type: select
-_Choices: apache2
+Type: multiselect
+_Choices: apache2, lighttpd
 Default: apache2
 _Description: Web server to reconfigure automatically:
  If you do not select a web server to reconfigure automatically, Tine 2.0
  will not be usable until you reconfigure your webserver to enable
  Tine 2.0.
 
-Template: tine20/mysql/dbadmin
-Type: string
-Default: root
-_Description: Database admin user who can create a database:
- Database admin user account capable of creating new databases.
-
-Template: tine20/mysql/dbadmpass
-Type: password
-_Description: Database admin password:
-
-Template: tine20/mysql/purge
-Type: boolean
-Default: false
-_Description: Delete database on purge?
- Please choose whether the database should be removed when Tine 2.0 is purged.
-
-Template: tine20/webserver_restart
-Type: boolean
-Default: true
-_Description: Restart webserver now?
- Please choose whether the webserver should get restarted?
-
 Template: tine20/setupuser
 Type: string
 Default: tine20setup
 _Description: Tine 2.0 setup username
- Username used to login into Tine 2.0 setup
+ Username used to login into Tine 2.0 setup (setup.php)
 
 Template: tine20/setuppasswd
 Type: password
 _Description: Tine 2.0 setup password
- Password used to login into Tine 2.0 setup
+ Password used to login into Tine 2.0 setup (setup.php)
