@@ -52,6 +52,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
         'contenttype'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'size'                 => array('filter' => 'Tinebase_Model_Filter_Int'),
         'object_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
     );    
 }
