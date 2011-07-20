@@ -166,7 +166,7 @@ Tine.Calendar.Model.Event.getDefaultData = function() {
         // if dtstart is out of current period, take start of current period
         mainPanel = app.getMainScreen().getCenterPanel(),
         period = mainPanel.getCalendarPanel(mainPanel.activeView).getView().getPeriod(),
-        container = app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainerForNewRecords(),
+        container = app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
         attender = Tine.Tinebase.registry.get('currentAccount');
         
     if (period.from.getTime() > dtstart.getTime() || period.until.getTime() < dtstart.getTime()) {

@@ -127,7 +127,7 @@ Tine.Tasks.Task.getDefaultData = function() {
         'class': 'PUBLIC',
         percent: 0,
         organizer: Tine.Tinebase.registry.get('currentAccount'),
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainerForNewRecords()
+        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer()
     };
 };
 

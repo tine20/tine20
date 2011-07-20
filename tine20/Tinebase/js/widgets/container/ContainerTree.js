@@ -597,7 +597,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @param {String} default container registry key
      * @return {Tine.Tinebase.Model.Container}
      */
-    getDefaultContainerForNewRecords: function(registryKey) {
+    getDefaultContainer: function(registryKey) {
         if (! registryKey) {
             registryKey = 'defaultContainer';
         }

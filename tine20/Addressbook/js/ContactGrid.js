@@ -268,7 +268,7 @@ Tine.Addressbook.ContactGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             },
             record: new Tine.Tinebase.Model.ImportJob({
-                container_id: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainerForNewRecords('defaultAddressbook'),
+                container_id: this.app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer('defaultAddressbook'),
                 model: this.recordClass,
                 import_definition_id:  Tine.Addressbook.registry.get('defaultImportDefinition').id
             }, 0)
