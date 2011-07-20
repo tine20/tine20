@@ -60,29 +60,32 @@ if [ "$1" = "purge" ]; then
 
 
     db_get tine20/webserver_type
-    webserver="$RET"
+    webservers="$RET"
 
-    #for webserver in $webservers; do
-    #    webserver=${webserver%,}
+    if [ "$webservers" != "" ]; then
 
-        case "$webserver" in
-            apache2)
-                rm -f /etc/$webserver/conf.d/tine20
-                test -x /usr/sbin/$webserver || continue
-                db_reset tine20/webserver_restart || true
-                #db_subst tine20/webserver_restart webserver "$webserver" || true
-                db_input high tine20/webserver_restart || true
-                db_go || true
-                db_get tine20/webserver_restart || true
+        for webserver in $webservers; do
+            webserver=${webserver%,}
 
-                if [ "$RET" = "true" ]; then
+            # check if webserver is installed
+            test -x /usr/sbin/$webserver || continue
+    
+            case "$webserver" in
+                apache2)
+                    rm -f /etc/$webserver/conf.d/tine20
+                    
+                    # mark webserver for restart (used by restart.sh)
                     restart="$restart $webserver"
-                fi
-                ;;
-        esac
-    #done
-
-    . /usr/share/wwwconfig-common/restart.sh
+                    ;;
+            esac
+        done
+    
+        # restart webserver
+        if [ -e /usr/share/wwwconfig-common/restart.sh ]; then
+            . /usr/share/wwwconfig-common/restart.sh
+        fi
+        
+    fi
 
     rm -rf /var/lib/tine20/sessions/*
     rm -rf /var/lib/tine20/cache/*
