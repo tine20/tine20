@@ -1,5 +1,5 @@
 /var/log/tine20/*.log {
-  rotate 52
+  rotate 12
   weekly
   compress
   delaycompress
