@@ -11,7 +11,11 @@ Architecture: all
 Depends: ${misc:Depends}, tine20-tinebase, 
     ${tine20:Modules}
 Description: webbased groupware and crm - metapackage
- Tine 2.0 is a webbased groupware and crm solution.
+ Tine 2.0 is an webbased open source project which combines groupware and 
+ CRM in one consistent interface. 
+ This is a metapackage which depends on all other Tine 2.0 packages. Install 
+ this package to get all Tine 2.0 applications installed. 
+
 
 Package: tine20-tinebase
 Architecture: all
@@ -30,40 +34,52 @@ Recommends: mysql-client,
 Suggests: mysql-server, 
     www-browser
 Description: webbased groupware and crm - core + addressbook module
- Tine 2.0 calendar module
+ This packages contains the core librarys of Tine 2.0 and the addressbook module.
+ Installing this package enables you to manage user accounts and contacts. Also
+ provides integration with openstreet map.
 
 Package: tine20-calendar
 Architecture: all
 Depends: tine20-tinebase (= ${binary:Version})
 Description: webbased groupware and crm - calendar module
- Tine 2.0 calendar module
+ This package contains the calendar module of Tine 2.0. Installing this package
+ enables you to schedule events for your self and other Tine 2.0 users.
 
 Package: tine20-crm
 Architecture: all
 Depends: tine20-tinebase (= ${binary:Version})
 Description: webbased groupware and crm - crm module
- Tine 2.0 crm module
+ This package contains the CRM module of Tine 2.0. Installing this package
+ enables you to manage leads. Typically used by sales people.
 
 Package: tine20-felamimail
 Architecture: all
 Depends: tine20-tinebase (= ${binary:Version})
 Description: webbased groupware and crm - email module
- Tine 2.0 email module
-
+ This package contains the email module of Tine 2.0. Installing this package
+ enables you to read emails stored on a imap server. You can read emails on 
+ multiple imap servers.
+ 
 Package: tine20-tasks
 Architecture: all
 Depends: tine20-tinebase (= ${binary:Version})
 Description: webbased groupware and crm - tasks module
- Tine 2.0 tasks module
-
+ This package contains the tasks module of Tine 2.0. Installing this package
+ enables you to manage tasks.
+ 
 Package: tine20-sales
 Architecture: all
 Depends: tine20-tinebase (= ${binary:Version})
 Description: webbased groupware and crm - sales module
- Tine 2.0 sales module
+ This package contains the sales module of Tine 2.0. Installing this package
+ enables you to manage products and orders. This package has only very limited
+ functionality, because it's integrated into other modules (for example the CRM
+ module)
 
 Package: tine20-timetracker
 Architecture: all
 Depends: tine20-tinebase (= ${binary:Version})
 Description: webbased groupware and crm - timetracker module
- Tine 2.0 timetracker module
+ This package contains the timetracke module of Tine 2.0. Installing this package
+ enables you to keep track of time spent on different projects. You can export
+ timesheets for easy reporting in different formats. 
