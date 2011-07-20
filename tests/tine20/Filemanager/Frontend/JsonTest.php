@@ -295,4 +295,34 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expectedPath, $result['results'][0]['path'], 'node path mismatch');
         $this->assertEquals($filter[0]['value'], $result['filter'][0]['value'], 'filter path mismatch');
     }
+
+    /**
+     * testCreateContainerNode
+     * 
+     * @todo implement
+     */
+    public function testCreateContainerNode()
+    {
+        
+    }
+
+    /**
+     * testCreateFileNode
+     * 
+     * @todo implement
+     */
+    public function testCreateFileNode()
+    {
+        
+    }
+
+    /**
+     * testCreateDirectoryNode
+     * 
+     * @todo implement
+     */
+    public function testCreateDirectoryNode()
+    {
+        
+    }
 }
