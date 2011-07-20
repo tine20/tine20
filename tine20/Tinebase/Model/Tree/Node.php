@@ -26,6 +26,16 @@
 class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
 {
     /**
+     * type for personal containers
+     */
+    const TYPE_FILE = 'file';
+    
+    /**
+     * type for personal containers
+     */
+    const TYPE_FOLDER = 'folder';
+    
+    /**
      * key in $_validators/$_properties array for the filed which 
      * represents the identifier
      * 
@@ -67,7 +77,7 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
         'path'           => array(Zend_Filter_Input::DEFAULT_VALUE => NULL),
         
         // fields from filemanager_objects table (ro)
-        'type'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'type'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::TYPE_FILE, self::TYPE_FOLDER)),
         'description'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'contenttype'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'revision'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
