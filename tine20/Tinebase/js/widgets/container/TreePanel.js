@@ -178,7 +178,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 return n.node.attributes.allowDrop;
             },
             completeDrop: Ext.emptyFn
-        }
+        };
         
         this.initContextMenu();
         

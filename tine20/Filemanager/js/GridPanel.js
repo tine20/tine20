@@ -57,7 +57,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.gridConfig.cm = this.getColumnModel();
         this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
-//        this.actionToolbar = this.getActionToolbar()
+//        this.actionToolbar = this.actionToolbar || this.getActionToolbar();
                 
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -163,8 +163,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             iconCls: 'action_showArchived',
             field: 'showClosed'
         });
-        
-        
+               
         return [
             
             new Ext.Toolbar.Separator(),
