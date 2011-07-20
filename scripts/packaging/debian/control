@@ -2,13 +2,14 @@ Source: tine20
 Section: web
 Priority: optional
 Maintainer: Lars Kneschke <l.kneschke@metaways.de>
-Build-Depends: debhelper (>= 7), po-debconf
-Standards-Version: 3.8.4
+Build-Depends: debhelper (>= 8), po-debconf
+Standards-Version: 3.9.2
 Homepage: http://www.tine20.org/
 
 Package: tine20
 Architecture: all
-Depends: ${misc:Depends}, tine20-tinebase, ${tine20:Modules}
+Depends: ${misc:Depends}, tine20-tinebase, 
+    ${tine20:Modules}
 Description: webbased groupware and crm - metapackage
  Tine 2.0 is a webbased groupware and crm solution.
 
