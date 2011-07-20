@@ -169,6 +169,11 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
                 $this->_fsController->rmDir($path, TRUE);
             }
         }
+        if (isset($this->_objects['containerids'])) {
+            foreach ($this->_objects['containerids'] as $containerId) {
+                Tinebase_Container::getInstance()->delete($containerId);
+            }
+        }
     }
     
     /**
@@ -298,20 +303,26 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * testCreateContainerNode
-     * 
-     * @todo implement
      */
-    public function testCreateContainerNode()
+    public function testCreateContainerNodeInPersonalFolder()
     {
+        $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER);
+        $createdNode = $result[0];
         
+        $this->_objects['paths'][] = $createdNode['path'];
+        $this->_objects['containerids'][] = $createdNode['name']['id'];
+        
+        $this->assertTrue(is_array($createdNode['name']));
+        $this->assertEquals('testcontainer', $createdNode['name']['name']);
     }
 
     /**
-     * testCreateFileNode
+     * testCreateFileNodes
      * 
      * @todo implement
      */
-    public function testCreateFileNode()
+    public function testCreateFileNodes()
     {
         
     }
