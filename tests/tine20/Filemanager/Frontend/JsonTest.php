@@ -296,7 +296,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         ));
         $result = $this->_searchHelper($filter, $this->_otherUserContainer->name, TRUE);
         
-        $expectedPath = $filter[0]['value'] . '/' . $this->_otherUserContainer->name;
+        $expectedPath = $filter[0]['value'] . '/' . $this->_otherUserContainer->getId();
         $this->assertEquals($expectedPath, $result['results'][0]['path'], 'node path mismatch');
         $this->assertEquals($filter[0]['value'], $result['filter'][0]['value'], 'filter path mismatch');
     }
@@ -310,7 +310,6 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER);
         $createdNode = $result[0];
         
-        $this->_objects['paths'][] = $createdNode['path'];
         $this->_objects['containerids'][] = $createdNode['name']['id'];
         
         $this->assertTrue(is_array($createdNode['name']));
