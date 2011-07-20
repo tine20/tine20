@@ -127,12 +127,12 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string|array $filenames
      * @param string $type directory or file
      * @return array
-     * 
-     * @todo implement
      */
     public function createNodes($filenames, $type)
     {
-        throw new Tinebase_Exception_NotImplemented('not implemented yet');
+        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $type);
+        
+        return $this->_multipleRecordsToJson($nodes);
     }
 
     /**
