@@ -36,6 +36,10 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
+        'query'                => array(
+            'filter' => 'Tinebase_Model_Filter_Query', 
+            'options' => array('fields' => array('name', 'type', 'contenttype'))
+        ),
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
         'path'                 => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
         'parent_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
@@ -46,6 +50,8 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
         'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'contenttype'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'object_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
     );    
 }
