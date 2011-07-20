@@ -180,4 +180,112 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     {
         throw new Tinebase_Exception_NotImplemented('searchCount not implemented yet');
     }
+
+    /**
+     * create node(s)
+     * 
+     * @param string|array $filenames
+     * @param string $type directory or file
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    public function createNodes($_filenames, $_type)
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        
+        foreach ($_filenames as $filename) {
+            $node = $this->_createNode($filename, $_type);
+            $result->addRecord($node);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * create new node
+     * 
+     * @param string $_flatpath
+     * @param string $_type
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _createNode($_flatpath, $_type)
+    {
+        if (! in_array($_type, array(Tinebase_Model_Tree_Node::TYPE_FILE, Tinebase_Model_Tree_Node::TYPE_FOLDER))) {
+            throw new Tinebase_Exception_InvalidArgument('Type ' . $_type . 'not supported.');
+        } 
+
+        list($parentPathRecord, $newNodeName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($this->addBasePath($_flatpath));
+        $this->_checkPathACL($parentPathRecord, 'update');
+        $newNodePath = $parentPathRecord . '/' . $newNodeName;
+        
+        if (! $parentPathRecord->container && Tinebase_Model_Tree_Node::TYPE_FOLDER) {
+            $container = $this->_createContainer($newNodeName, $parentPathRecord->containerType);
+            $newNodePath = $parentPathRecord . '/' . $container->getId();
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Creating new path ' . $newNodePath . ' of type ' . $_type);
+        
+        $this->_backend->mkDir($newNodePath);
+        $newNode = $this->_backend->stat($newNodePath);
+        
+        // add path and resolve container if required
+        $newNode->path = $newNodePath;
+        if (! $parentPathRecord->container && isset($container)) {
+            $newNode->name = $container;
+        }
+        
+        return $newNode;
+    }
+    
+    /**
+     * check acl of path
+     * 
+     * @param Tinebase_Model_Tree_Node_Path $_path
+     * @param string $_action
+     * @throws Tinebase_Exception_AccessDenied
+     * 
+     * @todo implement shared acl checking
+     */
+    protected function _checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get')
+    {
+        $hasPermission = FALSE;
+        
+        if ($_path->container) {
+            $hasPermission = $this->_checkACLContainer($path->container, $_action);
+        } else {
+            switch ($_path->containerType) {
+                case Tinebase_Model_Container::TYPE_PERSONAL:
+                    $hasPermission = ($_path->containerOwner === $this->_currentAccount->accountLoginName);
+                    break;
+                case Tinebase_Model_Container::TYPE_SHARED:
+                    throw new Tinebase_Exception_NotImplemented('not implemented yet');
+                    break;
+            }
+        }
+        
+        if (! $hasPermission) {
+            throw new Tinebase_Exception_AccessDenied('No permission to ' . $_action . ' in path ' . $_path->flatpath);
+        }
+    }
+    
+    /**
+     * create new container
+     * 
+     * @param string $_name
+     * @param string $_type
+     * 
+     * @todo make sure that the container does not exists already
+     */
+    protected function _createContainer($_name, $_type)
+    {
+        $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
+            'name'           => $_name,
+            'type'           => $_type,
+            'backend'        => 'sql',
+            'application_id' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+        )));
+        
+        return $container;
+    }
 }
