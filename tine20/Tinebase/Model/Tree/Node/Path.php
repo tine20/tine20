@@ -14,7 +14,9 @@
  * 
  * @package     Tinebase
  * @subpackage  Model
+ * 
  * @property    string                      containerType
+ * @property    string                      containerOwner
  * @property    string                      flatpath
  * @property    string                      statpath
  * @property    Tinebase_Model_Application  application
@@ -66,6 +68,15 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     );
     
     /**
+     * (non-PHPdoc)
+     * @see Tinebase/Record/Tinebase_Record_Abstract::__toString()
+     */
+    public function __toString()
+    {
+        return $this->flatpath;
+    }
+    
+    /**
      * create new path record from given path string
      * 
      * @param string|Tinebase_Model_Tree_Node_Path $_path
@@ -73,11 +84,34 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     public static function createFromPath($_path)
     {
-        $path = ($_path instanceof Tinebase_Model_Tree_Node_Path) ? $_path : new Tinebase_Model_Tree_Node_Path(array(
+        $pathRecord = ($_path instanceof Tinebase_Model_Tree_Node_Path) ? $_path : new Tinebase_Model_Tree_Node_Path(array(
             'flatpath'  => $_path
         ));
         
-        return $path;
+        return $pathRecord;
+    }
+    
+    /**
+     * create new parent path record from given path string
+     * 
+     * @param string $_path
+     * @return array with (Tinebase_Model_Tree_Node_Path, string)
+     * 
+     * @todo add child to model?
+     */
+    public static function getParentAndChild($_path)
+    {
+        $pathParts = $pathParts = explode('/', trim($_path, '/'), 4);
+        $child = array_pop($pathParts);
+        
+        $pathRecord = new Tinebase_Model_Tree_Node_Path(array(
+            'flatpath'  => '/' . implode('/', $pathParts)
+        ));
+        
+        return array(
+            $pathRecord,
+            $child
+        );
     }
     
     /**
@@ -134,7 +168,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _getPathParts($_path)
     {
-        $pathParts = explode('/', trim($_path, '/'), 4);       
+        $pathParts = explode('/', trim($_path, '/'), 4);
         if (count($pathParts) < 2) {
             throw new Tinebase_Exception_InvalidArgument('Invalid path: ' . $_path);
         }
