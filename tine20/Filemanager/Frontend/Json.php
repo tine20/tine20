@@ -114,9 +114,10 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     protected function _addPathToRecords(Tinebase_Record_RecordSet $_records, $_path)
     {
         $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
         
         foreach ($_records as $record) {
-            $record->path = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app) . '/' . $record->name;
+            $record->path = $flatpathWithoutBasepath . '/' . $record->name;
         }
     }
     
