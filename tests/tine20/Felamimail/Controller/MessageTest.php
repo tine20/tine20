@@ -946,6 +946,27 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
     }
     
     /**
+     * test utf8 header decode
+     */
+    public function testUtf8HeaderDecode()
+    {
+        $cachedMessage = $this->messageTestHelper('decode_utf8_header.eml');
+        $completeMessage = $this->_controller->getCompleteMessage($cachedMessage);
+        $this->assertEquals('"Jörn Meier" <j.meier@test.local>', $completeMessage->headers['reply-to']);
+        $this->assertEquals('Jörn Meier <j.meier@test.local>', $completeMessage->headers['from']);
+        $this->assertEquals('j.meier@test.local', $completeMessage->to[0]);
+    }
+    
+    /**
+     * testLongFrom
+     */
+    public function testLongFrom()
+    {
+        $cachedMessage = $this->messageTestHelper('longfrom.eml');
+        $this->assertEquals('nDqIxSoSTIC', $cachedMessage->subject);
+    }
+        
+    /**
      * testGetMessageWithQuotedPrintableDecodeProblem
      */
     public function testGetMessageWithQuotedPrintableDecodeProblem()
@@ -1088,11 +1109,12 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
      * @param Felamimail_Model_Folder $_folder
      * @return Felamimail_Model_Message
      */
-    public function messageTestHelper($_filename, $_testHeaderValue, $_folder = NULL)
+    public function messageTestHelper($_filename, $_testHeaderValue = NULL, $_folder = NULL)
     {
+        $testHeaderValue = ($_testHeaderValue !== NULL) ? $_testHeaderValue : $_filename;
         $folder = ($_folder !== NULL) ? $_folder : $this->_folder;
         $this->_appendMessage($_filename, $folder);
-        return $this->_searchAndCacheMessage($_testHeaderValue, $folder);
+        return $this->_searchAndCacheMessage($testHeaderValue, $folder);
     }
     
     /**
@@ -1113,6 +1135,8 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
             $this->_cache->clear($folder);
             $cachedMessage = $this->_cache->addMessage($message, $folder);
         }
+        
+        $this->assertTrue($cachedMessage instanceof Felamimail_Model_Message, 'could not add message to cache');
         
         $this->_createdMessages->addRecord($cachedMessage);
         

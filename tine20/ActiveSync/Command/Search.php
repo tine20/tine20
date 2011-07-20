@@ -53,7 +53,7 @@ class ActiveSync_Command_Search extends ActiveSync_Command_Wbxml
      * 
      * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse($_keepSession = false)
+    public function getResponse($_keepSession = FALSE)
     {
         $search = $this->_outputDom->documentElement;
         $search->appendChild($this->_outputDom->createElementNS($this->_defaultNameSpace, 'Status', self::STATUS_SUCCESS));

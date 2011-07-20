@@ -34,7 +34,7 @@ Tine.SimpleFAQ.Model.Faq = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.
     recordName: 'FAQ',
     recordsName: 'FAQs',
     containerProperty: 'container_id',
-    // ngettext('FAQ List, 'FAQ Lists', n); gettext('FAQ Lists');
+    // ngettext('FAQ List', 'FAQ Lists', n); gettext('FAQ Lists');
     containerName: 'FAQ List',
     containersName: 'FAQ Lists'
 });

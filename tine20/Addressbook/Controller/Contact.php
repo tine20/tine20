@@ -184,17 +184,20 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         Tinebase_UserProfile::getInstance()->checkRight($_userProfile->account_id);
         
-        $doContainerACLChecks = $this->_doContainerACLChecks;
-        $this->_doContainerACLChecks = FALSE;
+        $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
         
         $contact = $this->getContactByUserId($_userProfile->account_id, true);
+        
+        // we need to unset the jpegphoto because update() expects the image data and we only have a boolean value here
+        unset($contact->jpegphoto);
+        
         $userProfile = Tinebase_UserProfile::getInstance()->mergeProfileInfo($contact, $_userProfile);
         
         $contact = $this->update($userProfile);
         
         $userProfile = Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
 
-        $this->_doContainerACLChecks = $doContainerACLChecks;
+        $this->doContainerACLChecks($doContainerACLChecks);
         
         return $userProfile;
     }

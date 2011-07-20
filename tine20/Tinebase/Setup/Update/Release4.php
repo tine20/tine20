@@ -292,4 +292,12 @@ class Tinebase_Setup_Update_Release4 extends Setup_Update_Abstract
         Tinebase_Scheduler_Task::addTempFileCleanupTask($scheduler);
         $this->setApplicationVersion('Tinebase', '4.8');
     }    
+
+    /**
+     * update to 5.0
+     */
+    public function update_8()
+    {
+        $this->setApplicationVersion('Tinebase', '5.0');
+    }
 }

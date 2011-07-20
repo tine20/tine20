@@ -182,4 +182,12 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
         $this->setTableVersion('felamimail_account', '15');
         $this->setApplicationVersion('Felamimail', '4.6');
     }
+
+    /**
+     * update to 5.0
+     */    
+    public function update_6()
+    {
+        $this->setApplicationVersion('Felamimail', '5.0');
+    }
 }

@@ -125,7 +125,7 @@ abstract class ActiveSync_Command_Wbxml
      * 
      * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse($_keepSession = false)
+    public function getResponse($_keepSession = FALSE)
     {
         if($_keepSession !== true) {
             Tinebase_Controller::getInstance()->logout($_SERVER['REMOTE_ADDR']);
