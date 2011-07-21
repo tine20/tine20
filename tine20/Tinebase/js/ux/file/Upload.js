@@ -1,8 +1,8 @@
 /* Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Martin Jatho <m.jatho@metaways.de>
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -54,8 +54,11 @@ Ext.ux.file.Upload = function(config, file, id) {
     );
         
     this.file = file;
+    this.fileSize = (this.file.size ? this.file.size : this.file.fileSize);
+
     this.maxChunkSize = this.maxPostSize - 16384;
     this.currentChunkSize = this.maxChunkSize;
+    
     if(id && id > -1) {
         this.id = id;
     }
@@ -161,6 +164,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     currentChunkPosition: 0,
     
+    /**
+     * size of the file to upload
+     */
+    fileSize: 0,
+    
     
     /**
      * creates a form where the upload takes place in
@@ -197,17 +205,26 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 
             if (this.isHtml5ChunkedUpload()) {
 
+                if(this.fileSize > this.maxFileUploadSize) {
+                    this.createFileRecord(true);
+                    this.fileRecord.beginEdit();
+                    this.fileRecord.set('status', 'failure');
+                    this.fileRecord.endEdit();
+                    this.fireEvent('uploadfailure', this, this.fileRecord); 
+                    return this.fileRecord;
+                }
+                
                 // calculate optimal maxChunkSize       
-                var fileSize = (this.file.size ? this.file.size : this.file.fileSize);
+                
                 var chunkMax = this.maxChunkSize;
                 var chunkMin = this.minChunkSize;       
                 var actualChunkSize = this.maxChunkSize;
 
-                if(fileSize > 5 * chunkMax) {
+                if(this.fileSize > 5 * chunkMax) {
                     actualChunkSize = chunkMax;
                 }
                 else {
-                    actualChunkSize = Math.max(chunkMin, fileSize / 5);
+                    actualChunkSize = Math.max(chunkMin, this.fileSize / 5);
                 }       
                 this.maxChunkSize = actualChunkSize;
                 
@@ -333,11 +350,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         }
         this.lastChunkUploadFailed = false;
         
-        var nextChunkPosition = Math.min(this.file.fileSize, this.currentChunkPosition 
+        var nextChunkPosition = Math.min(this.fileSize, this.currentChunkPosition 
                 +  this.currentChunkSize);
         var newChunk = this.sliceFile(this.file, this.currentChunkPosition, nextChunkPosition);
         
-        if(nextChunkPosition/1 == this.file.fileSize/1) {
+        if(nextChunkPosition/1 == this.fileSize/1) {
             this.lastChunk = true;
         }
                      
@@ -363,6 +380,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('status', 'failure');
             this.fileRecord.set('progress', -1);
             this.fileRecord.commit(false);
+                       
         }
                 
     },
@@ -405,7 +423,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 
                 this.addTempfile(this.fileRecord.get('tempFile'));
 
-                var percent = parseInt(this.currentChunkPosition * 100 / this.file.fileSize/1);
+                var percent = parseInt(this.currentChunkPosition * 100 / this.fileSize/1);
 
                 if(this.lastChunk) {
                     percent = 99;
