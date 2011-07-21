@@ -369,6 +369,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param array $_filenames string->single file, array->multiple
      * @return int delete count
+     * 
+     * @todo add recursive param?
      */
     public function deleteNodes($_filenames)
     {
