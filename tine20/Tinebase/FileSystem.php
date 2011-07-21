@@ -326,6 +326,7 @@ class Tinebase_FileSystem
      * 
      * @param string $_path
      * @param boolean $_recursive
+     * @return boolean
      */
     public function rmDir($_path, $_recursive = FALSE)
     {
