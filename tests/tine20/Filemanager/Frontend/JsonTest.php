@@ -318,6 +318,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * create container in shared folder
+     * 
+     * @return array created node
      */
     public function testCreateContainerNodeInSharedFolder()
     {
@@ -335,6 +337,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * testCreateFileNodes
+     * 
+     * @return array file paths
      */
     public function testCreateFileNodes()
     {
@@ -351,10 +355,14 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($result));
         $this->assertEquals('file1', $result[0]['name']);
         $this->assertEquals('file2', $result[1]['name']);
+        
+        return $filepaths;
     }
 
     /**
      * testCreateDirectoryNodes
+     * 
+     * @return array dir paths
      */
     public function testCreateDirectoryNodes()
     {
@@ -365,11 +373,43 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $dirpaths = array(
             $sharedContainerNode['path'] . '/dir1',
             $sharedContainerNode['path'] . '/dir2',
-            );
+        );
         $result = $this->_json->createNodes($dirpaths, Tinebase_Model_Tree_Node::TYPE_FOLDER);
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('dir1', $result[0]['name']);
         $this->assertEquals('dir2', $result[1]['name']);
+        
+        return $dirpaths;
+    }
+
+    /**
+     * testDeleteContainerNodes
+     * 
+     * @todo implement
+     */
+    public function testDeleteContainerNodes()
+    {
+        
+    }
+
+    /**
+     * testDeleteFileNodes
+     * 
+     * @todo implement
+     */
+    public function testDeleteFileNodes()
+    {
+        
+    }
+
+    /**
+     * testDeleteDirectoryNodes
+     * 
+     * @todo implement
+     */
+    public function testDeleteDirectoryNodes()
+    {
+        
     }
 }
