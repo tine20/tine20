@@ -162,6 +162,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             case 'update':
                 $requiredGrant = Tinebase_Model_Grants::GRANT_EDIT;
                 break;
+            case 'delete':
+                $requiredGrant = Tinebase_Model_Grants::GRANT_DELETE;
+                break;
             default:
                 throw new Tinebase_Exception_UnexpectedValue('Unknown action: ' . $_action);
         }
@@ -184,8 +187,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     /**
      * create node(s)
      * 
-     * @param string|array $filenames
-     * @param string $type directory or file
+     * @param array $_filenames
+     * @param string $_type directory or file
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
     public function createNodes($_filenames, $_type)
@@ -334,5 +337,60 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 }
             }
         }
+    }
+    
+    /**
+     * delete node(s)
+     * 
+     * @param array $_filenames string->single file, array->multiple
+     * @return int delete count
+     */
+    public function deleteNodes($_filenames)
+    {
+        $deleteCount = 0;
+        foreach ($_filenames as $filename) {
+            $flatpathWithBasepath = $this->addBasePath($filename);
+            list($parentPathRecord, $nodeName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($flatpathWithBasepath);
+            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($flatpathWithBasepath);
+            
+            $this->_checkPathACL($parentPathRecord, 'delete');
+            
+            if (! $parentPathRecord->container) {
+                // check acl for deleting toplevel container
+                $this->_checkPathACL($pathRecord, 'delete');
+            }
+            
+            if ($this->_deleteNodeInBackend($pathRecord->flatpath)) {
+                $deleteCount++;
+            }
+            
+            if (! $parentPathRecord->container) {
+                // delete container too
+                Tinebase_Container::getInstance()->delete($nodeName);
+            }
+        }
+        
+        return $deleteCount;
+    }
+    
+    /**
+     * delete node in backend
+     * 
+     * @param string $_flatpath
+     * @return boolean
+     */
+    protected function _deleteNodeInBackend($_flatpath)
+    {
+        $node = $this->_backend->stat($_flatpath);
+        switch ($node->type) {
+            case Tinebase_Model_Tree_Node::TYPE_FILE:
+                $result = $this->_backend->unlink($_flatpath);
+                break;
+            case Tinebase_Model_Tree_Node::TYPE_FOLDER:
+                $result = $this->_backend->rmDir($_flatpath, TRUE);
+                break;
+        }
+        
+        return $result;
     }
 }
