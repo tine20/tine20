@@ -354,12 +354,22 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testCreateDirectoryNode
-     * 
-     * @todo implement
+     * testCreateDirectoryNodes
      */
-    public function testCreateDirectoryNode()
+    public function testCreateDirectoryNodes()
     {
+        $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
         
+        $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($sharedContainerNode['path']);
+        
+        $dirpaths = array(
+            $sharedContainerNode['path'] . '/dir1',
+            $sharedContainerNode['path'] . '/dir2',
+            );
+        $result = $this->_json->createNodes($dirpaths, Tinebase_Model_Tree_Node::TYPE_FOLDER);
+        
+        $this->assertEquals(2, count($result));
+        $this->assertEquals('dir1', $result[0]['name']);
+        $this->assertEquals('dir2', $result[1]['name']);
     }
 }
