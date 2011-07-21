@@ -136,11 +136,13 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param string|array $filenames string->single file, array->multiple
      * @return array
-     * 
-     * @todo implement
      */
     public function deleteNodes($filenames)
     {
-        throw new Tinebase_Exception_NotImplemented('not implemented yet');
+        Filemanager_Controller_Node::getInstance()->deleteNodes((array)$filenames);
+        
+        return array(
+            'status'    => 'success'
+        );
     }
 }
