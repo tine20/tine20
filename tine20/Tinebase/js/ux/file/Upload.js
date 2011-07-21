@@ -55,7 +55,7 @@ Ext.ux.file.Upload = function(config, file, id) {
         
     this.file = file;
     this.maxChunkSize = this.maxPostSize - 16384;
-    
+    this.currentChunkSize = this.maxChunkSize;
     if(id && id > -1) {
         this.id = id;
     }
@@ -90,6 +90,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      *  max number of upload retries
      */
     MAX_RETRY_COUNT: 10,
+    
+    /**
+     *  retry timeout in milliseconds
+     */
+    RETRY_TIMEOUT_MILLIS: 3000,
     
     /**
      * @cfg {String} url the url we upload to
@@ -130,7 +135,33 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * collected tempforary files
      */
     tempFiles: new Array(),
-        
+    
+    /**
+     * did the last chunk upload fail
+     */
+    lastChunkUploadFailed: false,
+    
+    /**
+     * current chunk to upload
+     */
+    currentChunk: null,
+    
+    /**
+     * how many retries were made while trying to upload current chunk
+     */
+    retryCount: 0,
+    
+    /**
+     * size of the current chunk
+     */
+    currentChunkSize: 0,
+    
+    /**
+     * where the chunk begins in file (byte number)
+     */
+    currentChunkPosition: 0,
+    
+    
     /**
      * creates a form where the upload takes place in
      * @private
@@ -239,8 +270,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         var xmlData = this.file;
                
         if(this.isHtml5ChunkedUpload()) {
-            defaultHeaders["X-Chunk-Count"] = this.fileRecord.get('currentChunkIndex');
-            defaultHeaders["X-Chunk-finished"] = this.fileRecord.get('lastChunk');
+            defaultHeaders["X-Chunk-finished"] = this.lastChunk;
             xmlData = this.currentChunk;
         }
 
@@ -292,31 +322,28 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     prepareChunk: function() {
         
-        this.fileRecord.beginEdit();
-        
-        if(this.fileRecord.get('lastChunkUploadFailed')) {
-            this.fileRecord.set('currentChunkPosition', Math.max(0
-                    , this.fileRecord.get('currentChunkPosition') - this.fileRecord.get('currentChunkSize')));
+        if(this.lastChunkUploadFailed) {
+            this.currentChunkPosition = Math.max(0
+                    , this.currentChunkPosition - this.currentChunkSize);
 
-            this.fileRecord.set('currentChunkSize', Math.max(this.minChunkSize, this.fileRecord.get('currentChunkSize') / 2));
+            this.currentChunkSize = Math.max(this.minChunkSize, this.currentChunkSize / 2);
         }
         else {
-            this.fileRecord.set('currentChunkSize', Math.min(this.maxChunkSize, this.fileRecord.get('currentChunkSize') * 2));
+            this.currentChunkSize = Math.min(this.maxChunkSize, this.currentChunkSize * 2);
         }
+        this.lastChunkUploadFailed = false;
         
-        var nextChunkPosition = Math.min(this.file.fileSize, this.fileRecord.get('currentChunkPosition') +  this.fileRecord.get('currentChunkSize'));
-        var newChunk = this.sliceFile(this.file, this.fileRecord.get('currentChunkPosition'), nextChunkPosition);
+        var nextChunkPosition = Math.min(this.file.fileSize, this.currentChunkPosition 
+                +  this.currentChunkSize);
+        var newChunk = this.sliceFile(this.file, this.currentChunkPosition, nextChunkPosition);
         
         if(nextChunkPosition/1 == this.file.fileSize/1) {
-            this.fileRecord.set('lastChunk', true);
+            this.lastChunk = true;
         }
                      
-        this.fileRecord.set('currentChunkPosition', nextChunkPosition);
-        this.fileRecord.set('currentChunk', newChunk);
-       
-        this.fileRecord.endEdit();
+        this.currentChunkPosition = nextChunkPosition;
         this.currentChunk = newChunk;
-
+       
     },
     
     /**
@@ -346,7 +373,10 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     onUploadSuccess: function(response, options, fileRecord) {
         
-        response = Ext.util.JSON.decode(response.responseText);
+        response =
+            Ext.util.JSON.decode(response.responseText);
+        
+        this.retryCount = 0;
         
         this.fileRecord.beginEdit();
         this.fileRecord.set('tempFile', response.tempFile);
@@ -375,9 +405,9 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 
                 this.addTempfile(this.fileRecord.get('tempFile'));
 
-                var percent = parseInt(this.fileRecord.get('currentChunkPosition') * 100 / this.fileRecord.get('size')/1);
+                var percent = parseInt(this.currentChunkPosition * 100 / this.file.fileSize/1);
 
-                if(this.fileRecord.get('lastChunk')) {
+                if(this.lastChunk) {
                     percent = 99;
                 }
 
@@ -385,7 +415,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 this.fileRecord.set('progress', percent);
                 this.fileRecord.commit(false);
 
-                if(this.fileRecord.get('lastChunk')) {
+                if(this.lastChunk) {
 
                     Ext.Ajax.request({
                         timeout: 10*60*1000, // Overriding Ajax timeout - important!
@@ -413,19 +443,23 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 
         if (this.isHtml5ChunkedUpload()) {
             
-            this.fileRecord.beginEdit();
-            this.fileRecord.set('lastChunkUploadFailed', true);
-            this.fileRecord.set('retryCount', this.fileRecord.get('retryCount') + 1);
-            this.fileRecord.endEdit();
+            this.lastChunkUploadFailed = true;
+            this.retryCount++;
             
-            if (this.fileRecord.get('retryCount') > this.MAX_RETRY_COUNT) {
-                alert("Upload failed!");
+            if (this.retryCount > this.MAX_RETRY_COUNT) {
+//                alert("Upload failed: " + this.fileRecord.get('name'));
+                
+                this.fileRecord.beginEdit();
+                this.fileRecord.set('status', 'failure');
+                this.fileRecord.endEdit();
+
+                this.fireEvent('uploadfailure', this, this.fileRecord);
             }
             else {
-                this.fileRecord.beginEdit();
-                this.fileRecord.set('lastChunkUploadFailed', true);
-                this.fileRecord.endEdit();
-                this.html5upload();
+                window.setTimeout(function() {
+                    this.prepareChunk();
+                    this.html5upload();
+                }.createDelegate(this), this.RETRY_TIMEOUT_MILLIS);
             }
         }
         else {
@@ -433,7 +467,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.set('status', 'failure');
             this.fileRecord.endEdit();
 
-            this.fireEvent('uploadfailure', this, fileRecord);
+            this.fireEvent('uploadfailure', this, this.fileRecord);
         }
     },
     
@@ -501,10 +535,6 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             status: status,
             progress: 0,
             input: this.getInput(),
-            currentChunkSize: this.maxChunkSize,
-            currentChunkPosition: 0,
-            currentChunkIndex: 0,
-            lastChunkUploadFailed: false,
             uploadKey: this.id
         });
     },
@@ -650,16 +680,8 @@ Ext.ux.file.Uploader.file = Ext.data.Record.create([
     {name: 'form', system: true},
     {name: 'input', system: true},
     {name: 'request', system: true},
-    {name: 'chunkContext', system: true},
     {name: 'path', system: true},
-    {name: 'tempFile', system: true},
-    {name: 'lastChunkUploadFailed', system: true},
-    {name: 'currentChunkIndex', type: 'number', system: true},
-    {name: 'currentChunkPosition', type: 'number', system: true},
-    {name: 'currentChunk', system: true},
-    {name: 'retryCount', type: 'number', system: true},
-    {name: 'currentChunkSize', type: 'number', system: true},
-    {name: 'lastChunk', system: true}
+    {name: 'tempFile', system: true}
 ]);
 
 Ext.ux.file.Uploader.file.getFileData = function(file) {
