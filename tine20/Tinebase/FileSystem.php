@@ -351,7 +351,7 @@ class Tinebase_FileSystem
             } else {
                 foreach ($children as $child) {
                     if ($this->isDir($_path . '/' . $child->name)) {
-                        $this->rmdir($_path . '/' . $child->name, true);
+                        $this->rmDir($_path . '/' . $child->name, true);
                     } else {
                         $this->unlink($_path . '/' . $child->name);
                     }
@@ -360,6 +360,7 @@ class Tinebase_FileSystem
         }
         
         $this->_treeNodeBackend->delete($node->getId());
+        unset($this->_statCache[$_path]);
         
         $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
             array(
