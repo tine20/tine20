@@ -121,6 +121,13 @@ class Tinebase_FileSystem
         return $result;
     } 
     
+    /**
+     * create container node
+     * 
+     * @param Tinebase_Model_Container $_container
+     * 
+     * FIXME is the account login name missing from the (personal) path? if not, we have to fix the path in Filemanager_Controller_Node
+     */
     public function createContainerNode(Tinebase_Model_Container $_container)
     {
         $application = Tinebase_Application::getInstance()->getApplicationById($_container->application_id);
