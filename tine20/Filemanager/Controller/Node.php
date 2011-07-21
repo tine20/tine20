@@ -270,16 +270,27 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_name
      * @param string $_type
-     * 
-     * @todo make sure that the container does not exists already
+     * @return Tinebase_Model_Container
+     * @throws Tinebase_Exception_Record_NotAllowed
      */
     protected function _createContainer($_name, $_type)
     {
+        $app = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName);
+        
+        $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
+            'application_id' => $app->getId(),
+            'name'           => $_name,
+            'type'           => $_type,
+        )));
+        if (count($search) > 0) {
+            throw new Tinebase_Exception_Record_NotAllowed('Container ' . $_name . ' of type ' . $_type . ' already exists.');
+        }
+        
         $container = Tinebase_Container::getInstance()->addContainer(new Tinebase_Model_Container(array(
             'name'           => $_name,
             'type'           => $_type,
             'backend'        => 'sql',
-            'application_id' => Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId(),
+            'application_id' => $app->getId(),
         )));
         
         return $container;
