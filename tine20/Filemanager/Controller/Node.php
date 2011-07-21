@@ -228,29 +228,42 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $newNodePath = $parentPathRecord . '/' . $newNodeName;
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Creating new path ' . $newNodePath . ' of type ' . $_type);
+        $newNode = $this->_createNodeInBackend($newNodePath, $_type);
         
-        switch ($_type) {
-            case Tinebase_Model_Tree_Node::TYPE_FILE:
-                $filehandle = $this->_backend->fopen($newNodePath, 'x');
-                $this->_backend->fclose($filehandle);
-                break;
-            case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                // @todo use createContainerNode?
-//                if ($container) {
-//                    $this->_backend->createContainerNode($container);
-//                } else {
-                $this->_backend->mkDir($newNodePath);
-                break;
-        }
-        
-        $newNode = $this->_backend->stat($newNodePath);
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
         
         return $newNode;
     }
     
+    /**
+     * delete node in backend
+     * 
+     * @param string $_flatpath
+     * @param type
+     * @return Tinebase_Model_Tree_Node
+     */
+    protected function _createNodeInBackend($_flatpath, $_type)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Creating new path ' . $_flatpath . ' of type ' . $_type);
+        
+        switch ($_type) {
+            case Tinebase_Model_Tree_Node::TYPE_FILE:
+                $filehandle = $this->_backend->fopen($_flatpath, 'x');
+                $this->_backend->fclose($filehandle);
+                break;
+            case Tinebase_Model_Tree_Node::TYPE_FOLDER:
+                // @todo use createContainerNode? we have to fix the path issue (with or without accountloginname) first
+//                if ($container) {
+//                    $this->_backend->createContainerNode($container);
+//                } else {
+                $this->_backend->mkDir($_flatpath);
+                break;
+        }
+        
+        return $this->_backend->stat($_flatpath);
+    }
+        
     /**
      * check acl of path
      * 
@@ -398,7 +411,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Removing path ' . $_flatpath . ' of type ' . $node->type);
         
-        print_r($node->toArray());
         switch ($node->type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
                 $result = $this->_backend->unlink($_flatpath);
