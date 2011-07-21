@@ -384,13 +384,24 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testDeleteContainerNodes
-     * 
-     * @todo implement
+     * testDeleteContainerNode
      */
-    public function testDeleteContainerNodes()
+    public function testDeleteContainerNode()
     {
+        $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
         
+        $result = $this->_json->deleteNodes($sharedContainerNode['path']);
+        
+        // check if container is deleted
+        $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
+            'id' => $sharedContainerNode['name']['id'],
+        )));
+        $this->assertEquals(0, count($search));
+        $this->_objects['containerids'] = array();
+        
+        // check if node is deleted
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_fsController->stat($sharedContainerNode['path']);
     }
 
     /**
