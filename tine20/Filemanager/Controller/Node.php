@@ -219,19 +219,31 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
 
         list($parentPathRecord, $newNodeName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($this->addBasePath($_flatpath));
         $this->_checkPathACL($parentPathRecord, 'update');
-        $newNodePath = $parentPathRecord . '/' . $newNodeName;
         
         if (! $parentPathRecord->container && Tinebase_Model_Tree_Node::TYPE_FOLDER) {
             $container = $this->_createContainer($newNodeName, $parentPathRecord->containerType);
             $newNodePath = $parentPathRecord . '/' . $container->getId();
         } else {
             $container = NULL;
+            $newNodePath = $parentPathRecord . '/' . $newNodeName;
         }
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $newNodePath . ' of type ' . $_type);
         
-        $this->_backend->mkDir($newNodePath);
+        switch ($_type) {
+            case Tinebase_Model_Tree_Node::TYPE_FILE:
+                $filehandle = $this->_backend->fopen($newNodePath, 'x');
+                $this->_backend->fclose($filehandle);
+                break;
+            case Tinebase_Model_Tree_Node::TYPE_FOLDER:
+                // @todo use createContainerNode?
+//                if ($container) {
+//                    $this->_backend->createContainerNode($container);
+//                } else {
+                $this->_backend->mkDir($newNodePath);
+                break;
+        }
         
         $newNode = $this->_backend->stat($newNodePath);
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
@@ -382,6 +394,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     protected function _deleteNodeInBackend($_flatpath)
     {
         $node = $this->_backend->stat($_flatpath);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+            ' Removing path ' . $_flatpath . ' of type ' . $node->type);
+        
+        print_r($node->toArray());
         switch ($node->type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
                 $result = $this->_backend->unlink($_flatpath);
