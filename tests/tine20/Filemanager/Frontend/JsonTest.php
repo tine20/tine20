@@ -354,7 +354,9 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(2, count($result));
         $this->assertEquals('file1', $result[0]['name']);
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[0]['type']);
         $this->assertEquals('file2', $result[1]['name']);
+        $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[1]['type']);
         
         return $filepaths;
     }
@@ -406,21 +408,29 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
 
     /**
      * testDeleteFileNodes
-     * 
-     * @todo implement
      */
     public function testDeleteFileNodes()
     {
+        $filepaths = $this->testCreateFileNodes();
         
+        $result = $this->_json->deleteNodes($filepaths);
+
+        // check if node is deleted
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath($filepaths[0]));
     }
 
     /**
      * testDeleteDirectoryNodes
-     * 
-     * @todo implement
      */
     public function testDeleteDirectoryNodes()
     {
+        $dirpaths = $this->testCreateDirectoryNodes();
         
+        $result = $this->_json->deleteNodes($dirpaths);
+
+        // check if node is deleted
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        $node = $this->_fsController->stat(Filemanager_Controller_Node::getInstance()->addBasePath($dirpaths[0]));
     }
 }
