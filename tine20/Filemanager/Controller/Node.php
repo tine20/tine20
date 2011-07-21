@@ -242,8 +242,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param string $_action
      * @throws Tinebase_Exception_AccessDenied
-     * 
-     * @todo implement shared acl checking
      */
     protected function _checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get')
     {
@@ -257,7 +255,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                     $hasPermission = ($_path->containerOwner === $this->_currentAccount->accountLoginName);
                     break;
                 case Tinebase_Model_Container::TYPE_SHARED:
-                    throw new Tinebase_Exception_NotImplemented('not implemented yet');
+                    $hasPermission = $this->checkRight(Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS, FALSE);
                     break;
             }
         }
