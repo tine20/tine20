@@ -302,11 +302,26 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testCreateContainerNode
+     * create container in personal folder
      */
     public function testCreateContainerNodeInPersonalFolder()
     {
         $testPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
+        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER);
+        $createdNode = $result[0];
+        
+        $this->_objects['containerids'][] = $createdNode['name']['id'];
+        
+        $this->assertTrue(is_array($createdNode['name']));
+        $this->assertEquals('testcontainer', $createdNode['name']['name']);
+    }
+
+    /**
+     * create container in shared folder
+     */
+    public function testCreateContainerNodeInSharedFolder()
+    {
+        $testPath = '/' . Tinebase_Model_Container::TYPE_SHARED . '/testcontainer';
         $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER);
         $createdNode = $result[0];
         
