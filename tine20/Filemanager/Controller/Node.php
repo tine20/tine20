@@ -248,7 +248,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $hasPermission = FALSE;
         
         if ($_path->container) {
-            $hasPermission = $this->_checkACLContainer($path->container, $_action);
+            $hasPermission = $this->_checkACLContainer($_path->container, $_action);
         } else {
             switch ($_path->containerType) {
                 case Tinebase_Model_Container::TYPE_PERSONAL:
