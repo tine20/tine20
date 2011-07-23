@@ -432,8 +432,8 @@ class Setup_ExtCheck
                             $link = @mysql_connect($hostnameWithPort, $dbConfig->username, $dbConfig->password);
                             if (!$link) {
                                 //die('Could not connect to mysql database: ' . mysql_error());
-                                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-                                    'Could not connect to mysql database: ' . mysql_error()); 
+                                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                    . 'Could not connect to mysql database: ' . mysql_error()); 
                                 Setup_Core::set(Setup_Core::CHECKDB, FALSE);
                             }
                             $mysqlVersion = @mysql_get_server_info();
@@ -463,8 +463,8 @@ class Setup_ExtCheck
                             $link = @pg_connect("host=$hostname port=$port user=$user password=$password");
                             if (PGSQL_CONNECTION_BAD === pg_connection_status($link)) {
                                 //die('Could not connect to postgresql database: ' . pg_errormessage());
-                                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 
-                                    'Could not connect to postgresql database: ' . pg_errormessage());
+                                Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                    . 'Could not connect to postgresql database: ' . pg_errormessage());
                                 Setup_Core::set(Setup_Core::CHECKDB, FALSE);
                             } else {
                                 $pgsqlVersion = @pg_version($link);
@@ -476,8 +476,8 @@ class Setup_ExtCheck
                         if (version_compare($value['attributes']['VERSION'], $pgsqlVersion, '<=')) {
                             $data[] = array($text, 'SUCCESS');
                         } else {
-                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ .
-                                ' PostgreSQL version incompatible: ' . $pgsqlVersion . ' < ' . $value['attributes']['VERSION']);
+                            Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
+                                . ' PostgreSQL version incompatible: ' . $pgsqlVersion . ' < ' . $value['attributes']['VERSION']);
                             $data[] = array($text, 'FAILURE');
                         }
                         break;
