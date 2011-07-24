@@ -137,7 +137,7 @@ class Setup_Controller
     }
     
     /**
-     * check which database is available
+     * check which database extensions are available
      * 
      * @return array
      */
@@ -1144,42 +1144,49 @@ class Setup_Controller
             throw new Setup_Exception('Need configured backend for install.');
         }
         
-        $createdTables = array();
-        if (isset($_xml->tables)) {
-            foreach ($_xml->tables[0] as $tableXML) {
-                $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
-                $this->_backend->createTable($table);
-                $createdTables[] = $table;
+        try {
+            $createdTables = array();
+            if (isset($_xml->tables)) {
+                foreach ($_xml->tables[0] as $tableXML) {
+                    $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
+                    $currentTable = $table->name;
+                    
+                    $this->_backend->createTable($table);
+                    $createdTables[] = $table;
+                }
             }
-        }
-
-        $application = new Tinebase_Model_Application(array(
-            'name'      => (string)$_xml->name,
-            'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
-            'order'     => $_xml->order ? (string)$_xml->order : 99,
-            'version'   => (string)$_xml->version
-        ));
-        
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
-        
-        $application = Tinebase_Application::getInstance()->addApplication($application);
-        
-        // keep track of tables belonging to this application
-        foreach ($createdTables as $table) {
-            Tinebase_Application::getInstance()->addApplicationTable($application, (string) $table->name, (int) $table->version);
-        }
-        
-        // insert default records
-        if (isset($_xml->defaultRecords)) {
-            foreach ($_xml->defaultRecords[0] as $record) {
-                $this->_backend->execInsertStatement($record);
+    
+            $application = new Tinebase_Model_Application(array(
+                'name'      => (string)$_xml->name,
+                'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
+                'order'     => $_xml->order ? (string)$_xml->order : 99,
+                'version'   => (string)$_xml->version
+            ));
+            
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
+            
+            $application = Tinebase_Application::getInstance()->addApplication($application);
+            
+            // keep track of tables belonging to this application
+            foreach ($createdTables as $table) {
+                Tinebase_Application::getInstance()->addApplicationTable($application, (string) $table->name, (int) $table->version);
             }
+            
+            // insert default records
+            if (isset($_xml->defaultRecords)) {
+                foreach ($_xml->defaultRecords[0] as $record) {
+                    $this->_backend->execInsertStatement($record);
+                }
+            }
+            
+            // look for import definitions and put them into the db
+            $this->createImportExportDefinitions($application);
+            
+            Setup_Initialize::initialize($application, $_options);
+        } catch (Exception $e) {
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error at installing: ' . $_xml->name . ' Table: ' . $currentTable  . 'Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
+            throw $e;
         }
-        
-        // look for import definitions and put them into the db
-        $this->createImportExportDefinitions($application);
-        
-        Setup_Initialize::initialize($application, $_options);
     }
 
     /**
