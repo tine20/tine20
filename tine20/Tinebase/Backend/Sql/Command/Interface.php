@@ -16,11 +16,11 @@
  * @subpackage  Backend
  */
 interface Tinebase_Backend_Sql_Command_Interface
-{	
-	/**
-	 * 
-	 * @param $adapter Zend_Db_Adapter_Abstract
-	 * @param $on boolean
-	 */
-	public static function setAutocommit($adapter,$on);
+{
+    /**
+     * 
+     * @param $adapter Zend_Db_Adapter_Abstract
+     * @param $on boolean
+     */
+    public static function setAutocommit($adapter,$on);
 }
