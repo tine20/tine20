@@ -16,27 +16,27 @@
  * @subpackage  Backend
  */
 class Tinebase_Backend_Sql_Command implements Tinebase_Backend_Sql_Command_Interface
-{	
-	
-	private static function _getClassName($adapter)
-	{
-		$completeClassName = explode('_',get_class($adapter));
-		$className = $completeClassName[count($completeClassName)-1];
-		$className = str_replace('Oci','Oracle',$className);
-		return $className;		
-	}
-	
-	/**
-	 * 
-	 * @param $adapter Zend_Db_Adapter_Abstract
-	 * @param $on boolean
-	 */
-	public static function setAutocommit($adapter, $on)
-	{
-		$className = self::_getClassName($adapter);
-		$className = __CLASS__ . '_' . $className;
-		$command = new $className();
+{
 
-		$command->setAutocommit($adapter,$on);		
-	}
+    private static function _getClassName($adapter)
+    {
+        $completeClassName = explode('_',get_class($adapter));
+        $className = $completeClassName[count($completeClassName)-1];
+        $className = str_replace('Oci','Oracle',$className);
+        return $className;		
+    }
+    
+    /**
+     * 
+     * @param $adapter Zend_Db_Adapter_Abstract
+     * @param $on boolean
+     */
+    public static function setAutocommit($adapter, $on)
+    {
+        $className = self::_getClassName($adapter);
+        $className = __CLASS__ . '_' . $className;
+        $command = new $className();
+        
+        $command->setAutocommit($adapter,$on);
+    }
 }
