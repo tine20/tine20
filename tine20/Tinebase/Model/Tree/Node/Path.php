@@ -101,7 +101,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     public static function getParentAndChild($_path)
     {
-        $pathParts = $pathParts = explode('/', trim($_path, '/'), 4);
+        $pathParts = $pathParts = explode('/', trim($_path, '/'));
         $child = array_pop($pathParts);
         
         $pathRecord = new Tinebase_Model_Tree_Node_Path(array(
@@ -168,7 +168,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _getPathParts($_path)
     {
-        $pathParts = explode('/', trim($_path, '/'), 4);
+        $pathParts = explode('/', trim($_path, '/'));
         if (count($pathParts) < 2) {
             throw new Tinebase_Exception_InvalidArgument('Invalid path: ' . $_path);
         }
