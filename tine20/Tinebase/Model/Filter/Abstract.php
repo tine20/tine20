@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -42,7 +42,7 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_value = NULL;
     
     /**
-     * @var array spechial options
+     * @var array special options
      */
     protected $_options = NULL;
     
@@ -161,11 +161,12 @@ abstract class Tinebase_Model_Filter_Abstract
      * @todo to be removed once we split filter model / backend
      */
     protected function _getQuotedFieldName($_backend) {
+        $tablename = (isset($this->_options['tablename'])) ? $this->_options['tablename'] : $_backend->getTableName();
+        
         return $_backend->getAdapter()->quoteIdentifier(
-            $_backend->getTableName() . '.' . $this->_field
+            $tablename . '.' . $this->_field
         );
     }
-    
     
     /**
      * returns array with the filter settings of this filter
