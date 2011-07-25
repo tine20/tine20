@@ -208,8 +208,9 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(1, $result['totalcount']);
         if ($_toplevel) {
-            // toplevel containers are resolved
+            // toplevel containers are resolved (incl. account grants)
             $this->assertEquals($_expectedName, $result['results'][0]['name']['name']);
+            $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['name']['account_grants']['account_id']);
         } else {
             $this->assertEquals($_expectedName, $result['results'][0]['name']);
         }

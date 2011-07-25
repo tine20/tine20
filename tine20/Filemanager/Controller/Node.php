@@ -359,6 +359,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 $idx = $containers->getIndexById($record->name);
                 if ($idx !== FALSE) {
                     $record->name = $containers[$idx];
+                    $record->name->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(
+                        Tinebase_Core::getUser(), 
+                        $record->name->getId()
+                    )->toArray();
                     $record->path = $flatpathWithoutBasepath . '/' . $record->name->name;
                 }
             }
