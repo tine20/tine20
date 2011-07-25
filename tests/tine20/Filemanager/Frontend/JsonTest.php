@@ -166,7 +166,11 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     {
         if (isset($this->_objects['paths'])) {
             foreach ($this->_objects['paths'] as $path) {
-                $this->_fsController->rmDir($path, TRUE);
+                try {
+                    $this->_fsController->rmDir($path, TRUE);
+                } catch (Tinebase_Exception_NotFound $tenf) {
+                    // already deleted
+                }
             }
         }
         if (isset($this->_objects['containerids'])) {
