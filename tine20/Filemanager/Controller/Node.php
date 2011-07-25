@@ -354,12 +354,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
         
         foreach ($records as $record) {
-            $record->path = $flatpathWithoutBasepath . '/' . $record->name;
             if (! $_path->container) {
                 $idx = $containers->getIndexById($record->name);
                 if ($idx !== FALSE) {
                     $record->name = $containers[$idx];
+                    $record->path = $flatpathWithoutBasepath . '/' . $record->name->name;
+                } else {
+                    throw new Tinebase_Exception_NotFound('Container not found'); 
                 }
+            } else {
+                $record->path = $flatpathWithoutBasepath . '/' . $record->name;
             }
         }
     }
