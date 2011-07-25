@@ -251,12 +251,12 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
     {
         /*
          * IF (`status` = 'enabled', (CASE WHEN NOW() > `expires_at` THEN 'expired' 
-         * WHEN (`login_failures` > 5 AND DATE_ADD(`last_login_failure_at`, INTERVAL 15 MINUTE) > NOW()) 
+         * WHEN (`login_failures` > 5 AND `last_login_failure_at` + INTERVAL 15 MINUTE > NOW()) 
          * THEN 'blocked' ELSE 'enabled' END), 'disabled')
          */
         $statusSQL = 'IF (' . $this->_db->quoteIdentifier($this->rowNameMapping['accountStatus']) . ' = ' . $this->_db->quote('enabled') . ', (CASE WHEN NOW() > ' . $this->_db->quoteIdentifier($this->rowNameMapping['accountExpires']) . ' THEN ' . $this->_db->quote('expired') . 
-            ' WHEN (' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . " > {$this->_maxLoginFailures} AND DATE_ADD(" . 
-                $this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure']) . ", INTERVAL {$this->_blockTime} MINUTE) > NOW()) THEN 'blocked'" . 
+            ' WHEN (' . $this->_db->quoteIdentifier($this->rowNameMapping['loginFailures']) . " > {$this->_maxLoginFailures} AND " . 
+                $this->_db->quoteIdentifier($this->rowNameMapping['lastLoginFailure']) . " + INTERVAL '{$this->_blockTime}' MINUTE > NOW()) THEN 'blocked'" . 
             ' ELSE ' . $this->_db->quote('enabled') . ' END), ' . $this->_db->quote('disabled') . ')';
         
         $select = $this->_db->select()
