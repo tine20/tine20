@@ -11,7 +11,7 @@
 /**
  * class for caching credentials
  */
-class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract
+class Tinebase_Auth_CredentialCache extends Tinebase_Backend_Sql_Abstract implements Tinebase_Controller_Interface
 {
     /**
      * Table name without prefix
