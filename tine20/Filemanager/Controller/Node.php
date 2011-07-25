@@ -225,7 +225,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $newNodePath = $parentPathRecord . '/' . $container->getId();
         } else {
             $container = NULL;
-            $newNodePath = $parentPathRecord . '/' . $newNodeName;
+            $newNodePath = $parentPathRecord->statpath . '/' . $newNodeName;
         }
         
         $newNode = $this->_createNodeInBackend($newNodePath, $_type);
