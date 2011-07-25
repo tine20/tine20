@@ -16,6 +16,15 @@ Ext.ns('Tine.Filemanager');
  * 
  * @author Martin Jatho <m.jatho@metaways.de>
  */
+
+//Tine.Filemanager.TreePanel = function() {
+//   
+//    Tine.Filemanager.TreePanel.superclass.constructor.call(this);
+//};
+
+
+//Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
+
 Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 //  filterMode : 'filterToolbar',
     recordClass : Tine.Filemanager.Model.Node,
@@ -64,7 +73,24 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                     id: 'otherUsers'
                 }].concat(this.getExtraItems())
         };
-
+               
+        this.on('beforeexpandnode', function(node, e){
+            // beforeexpandnode
+//            console.log('beforeexpandnode');
+            if(node) {
+//                node.reload();
+            }
+        });
+        
+        this.on('click', this.onClick);
+        
+        this.on('collapsenode', function(node, e){
+            
+//            console.log('collapsenode');
+//            if(node && node.reload) {
+//                node.reload(true);
+//            }
+        });
         
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
 
@@ -77,6 +103,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @return {Object}
      */
     onBeforeLoad: function(node) {
+        
         var path = node.attributes.path;
         var type = Tine.Tinebase.container.path2type(path);
         var owner = Tine.Tinebase.container.pathIsPersonalNode(path);
@@ -101,9 +128,11 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         var params = {
             method: 'Filemanager.searchNodes',
             application: this.app.appName,
-            containerType: type,
             owner: owner,
-            filter: [{field: 'path', operator:'equals', value: newPath}]
+            filter: [
+                     {field: 'path', operator:'equals', value: newPath} //,
+                     // {field: 'type', operator:'equals', value: 'folder'}
+                     ]
         };
         
         return params;
@@ -125,19 +154,37 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             attr.name = Tine.Tinebase.container.path2name(attr.path, this.containerName, this.containersName);
         }
         
-        Ext.applyIf(attr, {
-            text: Ext.util.Format.htmlEncode(attr.name),
-            qtip: Ext.util.Format.htmlEncode(attr.name),
-            leaf: !!attr.account_grants,
-            allowDrop: !!attr.account_grants && attr.account_grants.addGrant
-        });
+        if(attr.name.name) {
+            Ext.applyIf(attr, {
+                text: Ext.util.Format.htmlEncode(attr.name.name),
+                qtip: Ext.util.Format.htmlEncode(attr.name.name),
+                leaf: !(attr.type == 'folder'),
+                allowDrop: (attr.type == 'folder')
+            });
+        }
+        else {
+
+            Ext.applyIf(attr, {
+                text: Ext.util.Format.htmlEncode(attr.name),
+                qtip: Ext.util.Format.htmlEncode(attr.name),
+                leaf: !!attr.account_grants,
+                allowDrop: !!attr.account_grants && attr.account_grants.addGrant
+            });
+        }
+        
         
         // copy 'real' data to container space
         attr.container = Ext.copyTo({}, attr, Tine.Tinebase.Model.Container.getFieldNames());
     },
     
+    
     onClick: function(node, e) {
         
+        console.log("onclick");
+        if(node && node.reload) {
+            node.reload();
+        }
+
         var actionToolbar = this.app.mainScreen.ActionToolbar;
         var items = actionToolbar.get(0).items.items;
         
