@@ -71,10 +71,17 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
     },
     
     /**
-     * Change IMAP card layout depending on selected combo box entry
+     * Change session card layout depending on selected combo box entry
      */
     onChangeSessionBackend: function() {
         this.changeCard(this.sessionBackendCombo, this.sessionBackendIdPrefix);
+    },
+    
+    /**
+     * Change default ports when database adapter gets changed
+     */
+    onChangeSqlBackend: function() {
+        // @todo change default port
     },
     
     /**
@@ -115,6 +122,26 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
             }
         });
         
+        this.sqlBackendCombo = new Ext.form.ComboBox({
+            xtype: 'combo',
+            width: 283, // late rendering bug
+            listWidth: 300,
+            mode: 'local',
+            forceSelection: true,
+            allowEmpty: false,
+            triggerAction: 'all',
+            selectOnFocus: true,
+            value: 'pdo_mysql',
+            store: [['pdo_mysql', 'MySQL'], ['pdo_pgsql','PostgreSQL']],
+            name: 'database_adapter',
+            fieldLabel: this.app.i18n._('Adapter'),
+            listeners: {
+                scope: this,
+                change: this.onChangeSqlBackend,
+                select: this.onChangeSqlBackend
+            }
+        });
+        
         return [{
             title: this.app.i18n._('Setup Authentication'),
             items: [{
@@ -135,12 +162,9 @@ Tine.Setup.ConfigManagerPanel = Ext.extend(Tine.Tinebase.widgets.form.ConfigPane
         }, {
             title: this.app.i18n._('Database'),
             id: 'setup-database-group',
-            items: [{
-                name: 'database_adapter',
-                fieldLabel: this.app.i18n._('Adapter'),
-                value: 'pdo_mysql',
-                disabled: true
-            }, {
+            items: [
+            this.sqlBackendCombo, 
+            {
                 name: 'database_host',
                 fieldLabel: this.app.i18n._('Hostname'),
                 allowBlank: false

@@ -1,3 +1,0 @@
-#!/bin/bash 
-
-# must exist. otherwise ${misc:Depends} is not set

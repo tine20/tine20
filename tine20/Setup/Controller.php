@@ -59,6 +59,13 @@ class Setup_Controller
      *
      */
     private function __clone() {}
+    
+    /**
+     * url to Tine 2.0 wiki
+     * 
+     * @var string
+     */
+    protected $_helperLink = ' <a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
 
     /**
      * the singleton pattern
@@ -114,15 +121,67 @@ class Setup_Controller
     {
         $envCheck = $this->environmentCheck();
         
+        $databaseCheck = $this->checkDatabase();
+        
         $extCheck = new Setup_ExtCheck(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'essentials.xml');
         $extResult = $extCheck->getData();
 
         $result = array(
-            'success' => ($envCheck['success'] && $extResult['success']),
-            'results' => array_merge($envCheck['result'], $extResult['result']),
+            'success' => ($envCheck['success'] && $databaseCheck['success'] && $extResult['success']),
+            'results' => array_merge($envCheck['result'], $databaseCheck['result'], $extResult['result']),
         );
 
         $result['totalcount'] = count($result['results']);
+        
+        return $result;
+    }
+    
+    /**
+     * check which database extensions are available
+     * 
+     * @return array
+     */
+    public function checkDatabase()
+    {
+        $result = array(
+            'result'  => array(),
+            'success' => false
+        );
+        
+        $loadedExtensions = get_loaded_extensions();
+        
+        if (! in_array('PDO', $loadedExtensions)) {
+            $result['result'][] = array(
+                'key'       => 'Database',
+                'value'     => FALSE,
+                'message'   => "PDO extension not found."  . $this->_helperLink
+            );
+            
+            return $result;
+        }
+        
+        // check mysql requirements
+        $missingMysqlExtensions = array_diff(array('mysql', 'pdo_mysql'), $loadedExtensions);
+        
+        // check pgsql requirements
+        $missingPgsqlExtensions = array_diff(array('pgsql', 'pdo_pgsql'), $loadedExtensions);
+        
+        if (! empty($missingMysqlExtensions) && ! empty($missingPgsqlExtensions)) {
+            $result['result'][] = array(
+                'key'       => 'Database',
+                'value'     => FALSE,
+                'message'   => 'Database extensions missing. For MySQL install: ' . implode(', ', $missingMysqlExtensions) . ' For PostgreSQL install: ' . implode(', ', $missingPgsqlExtensions) . $this->_helperLink
+            );
+            
+            return $result;
+        }
+        
+        $result['result'][] = array(
+            'key'       => 'Database',
+            'value'     => TRUE,
+            'message'   => 'Support for following databases enabled: ' . (empty($missingMysqlExtensions) ? 'MySQL' : '') . ' ' . (empty($missingPgsqlExtensions) ? 'PostgreSQL' : '')
+        );
+        $result['success'] = TRUE;
         
         return $result;
     }
@@ -503,7 +562,7 @@ class Setup_Controller
         $message = array();
         $success = TRUE;
         
-        $helperLink = ' <a href="http://www.tine20.org/wiki/index.php/Admins/Install_Howto" target="_blank">Check the Tine 2.0 wiki for support.</a>';
+        
         
         // check php environment
         $requiredIniSettings = array(
@@ -526,7 +585,7 @@ class Setup_Controller
                     $result[] = array(
                         'key'       => $variable,
                         'value'     => FALSE,
-                        'message'   => "You need to set $variable equal or greater than $required (now: $set)." . $helperLink 
+                        'message'   => "You need to set $variable equal or greater than $required (now: $set)." . $this->_helperLink 
                     );
                     $success = FALSE;
                 }
@@ -536,7 +595,7 @@ class Setup_Controller
                     $result[] = array(
                         'key'       => $variable,
                         'value'     => FALSE,
-                        'message'   => "You need to set $variable from $oldValue to $newValue."  . $helperLink
+                        'message'   => "You need to set $variable from $oldValue to $newValue."  . $this->_helperLink
                     );
                     $success = FALSE;
                 }
@@ -1085,42 +1144,49 @@ class Setup_Controller
             throw new Setup_Exception('Need configured backend for install.');
         }
         
-        $createdTables = array();
-        if (isset($_xml->tables)) {
-            foreach ($_xml->tables[0] as $tableXML) {
-                $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
-                $this->_backend->createTable($table);
-                $createdTables[] = $table;
+        try {
+            $createdTables = array();
+            if (isset($_xml->tables)) {
+                foreach ($_xml->tables[0] as $tableXML) {
+                    $table = Setup_Backend_Schema_Table_Factory::factory('Xml', $tableXML);
+                    $currentTable = $table->name;
+                    
+                    $this->_backend->createTable($table);
+                    $createdTables[] = $table;
+                }
             }
-        }
-
-        $application = new Tinebase_Model_Application(array(
-            'name'      => (string)$_xml->name,
-            'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
-            'order'     => $_xml->order ? (string)$_xml->order : 99,
-            'version'   => (string)$_xml->version
-        ));
-        
-        Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
-        
-        $application = Tinebase_Application::getInstance()->addApplication($application);
-        
-        // keep track of tables belonging to this application
-        foreach ($createdTables as $table) {
-            Tinebase_Application::getInstance()->addApplicationTable($application, (string) $table->name, (int) $table->version);
-        }
-        
-        // insert default records
-        if (isset($_xml->defaultRecords)) {
-            foreach ($_xml->defaultRecords[0] as $record) {
-                $this->_backend->execInsertStatement($record);
+    
+            $application = new Tinebase_Model_Application(array(
+                'name'      => (string)$_xml->name,
+                'status'    => $_xml->status ? (string)$_xml->status : Tinebase_Application::ENABLED,
+                'order'     => $_xml->order ? (string)$_xml->order : 99,
+                'version'   => (string)$_xml->version
+            ));
+            
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' installing application: ' . $_xml->name);
+            
+            $application = Tinebase_Application::getInstance()->addApplication($application);
+            
+            // keep track of tables belonging to this application
+            foreach ($createdTables as $table) {
+                Tinebase_Application::getInstance()->addApplicationTable($application, (string) $table->name, (int) $table->version);
             }
+            
+            // insert default records
+            if (isset($_xml->defaultRecords)) {
+                foreach ($_xml->defaultRecords[0] as $record) {
+                    $this->_backend->execInsertStatement($record);
+                }
+            }
+            
+            // look for import definitions and put them into the db
+            $this->createImportExportDefinitions($application);
+            
+            Setup_Initialize::initialize($application, $_options);
+        } catch (Exception $e) {
+            Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' error at installing: ' . $_xml->name . ' Table: ' . $currentTable  . 'Exception: ' . $e->getMessage() . ' Trace: ' . $e->getTraceAsString());
+            throw $e;
         }
-        
-        // look for import definitions and put them into the db
-        $this->createImportExportDefinitions($application);
-        
-        Setup_Initialize::initialize($application, $_options);
     }
 
     /**

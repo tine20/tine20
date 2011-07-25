@@ -113,13 +113,29 @@ class Tinebase_Core
      *
      */
     const PDO_MYSQL = 'Pdo_Mysql';
+    
+    /**
+     * minimal version of MySQL supported
+     */
+    const MYSQL_MINIMAL_VERSION = '5.0.0';
+
+    /**
+     * const PDO_PGSQL
+     *
+     */
+    const PDO_PGSQL = 'Pdo_Pgsql';
+    
+    /**
+     * minimal version of PostgreSQL supported
+     */
+    const PGSQL_MINIMAL_VERSION = '8.4.8';
 
     /**
      * const PDO_OCI
      *
      */
     const PDO_OCI = 'Pdo_Oci';
-
+    
     /**
      * const ORACLE
      * Zend_Db adapter name for the oci8 driver.
@@ -767,15 +783,30 @@ class Tinebase_Core
                         self::getLogger()->warn('Failed to set "SET SQL_MODE to STRICT_ALL_TABLES or timezone: ' . $e->getMessage());
                     }
                     break;
+                    
                 case self::PDO_OCI:
                     $db = Zend_Db::factory('Pdo_Oci', $dbConfigArray);
                     break;
+                    
                 case self::ORACLE:
                     $db = Zend_Db::factory(self::ORACLE, $dbConfigArray);
                     $db->supportPositionalParameters(true);
                     $db->setLobAsString(true);
                     break;
-
+                    
+                case self::PDO_PGSQL:
+                    unset($dbConfigArray['adapter']);
+                    unset($dbConfigArray['tableprefix']);
+                    $db = Zend_Db::factory('Pdo_Pgsql', $dbConfigArray);
+                    try {
+                        // set mysql timezone to utc and activate strict mode
+                        $db->query("SET timezone ='+0:00';");
+                        // PostgreSQL has always been strict about making sure data is valid before allowing it into the database
+                    } catch (Exception $e) {
+                        self::getLogger()->warn('Failed to set "SET timezone: ' . $e->getMessage());
+                    }
+                    break;
+                    
                 default:
                     throw new Tinebase_Exception_UnexpectedValue('Invalid database adapter defined. Please set adapter to ' . self::PDO_MYSQL . ' or ' . self::PDO_OCI . ' in config.inc.php.');
                     break;
