@@ -395,14 +395,11 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'field'    => 'path', 
             'operator' => 'equals', 
             'value'    => $sharedContainerNode['path']
-        ), 
-        // @todo activate type filter
-//        array(
-//            'field'    => 'type', 
-//            'operator' => 'equals', 
-//            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
-//        )
-        );
+        ), array(
+            'field'    => 'type', 
+            'operator' => 'equals', 
+            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+        ));
         $result = $this->_json->searchNodes($filter, array());
         $this->assertEquals(2, $result['totalcount']);
         
@@ -434,14 +431,11 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'field'    => 'path', 
             'operator' => 'equals', 
             'value'    => $personalContainerNode['path']
-        ), 
-        // @todo activate type filter
-//        array(
-//            'field'    => 'type', 
-//            'operator' => 'equals', 
-//            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
-//        )
-        );
+        ), array(
+            'field'    => 'type', 
+            'operator' => 'equals', 
+            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+        ));
         $result = $this->_json->searchNodes($filter, array());
         $this->assertEquals(2, $result['totalcount']);
         
