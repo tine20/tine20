@@ -300,13 +300,15 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         ));
         $result = $this->_searchHelper($filter, $this->_otherUserContainer->name, TRUE);
         
-        $expectedPath = $filter[0]['value'] . '/' . $this->_otherUserContainer->getId();
+        $expectedPath = $filter[0]['value'] . '/' . $this->_otherUserContainer->name;
         $this->assertEquals($expectedPath, $result['results'][0]['path'], 'node path mismatch');
         $this->assertEquals($filter[0]['value'], $result['filter'][0]['value'], 'filter path mismatch');
     }
 
     /**
      * create container in personal folder
+     * 
+     * @return array created node
      */
     public function testCreateContainerNodeInPersonalFolder()
     {
@@ -318,6 +320,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(is_array($createdNode['name']));
         $this->assertEquals('testcontainer', $createdNode['name']['name']);
+        
+        return $createdNode;
     }
 
     /**
@@ -335,6 +339,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(is_array($createdNode['name']));
         $this->assertEquals('testcontainer', $createdNode['name']['name']);
+        $this->assertEquals($testPath, $createdNode['path']);
         
         return $createdNode;
     }
@@ -366,11 +371,11 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * testCreateDirectoryNodes
+     * testCreateDirectoryNodesInShared
      * 
      * @return array dir paths
      */
-    public function testCreateDirectoryNodes()
+    public function testCreateDirectoryNodesInShared()
     {
         $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
         
@@ -386,9 +391,63 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('dir1', $result[0]['name']);
         $this->assertEquals('dir2', $result[1]['name']);
         
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => $sharedContainerNode['path']
+        ), 
+        // @todo activate type filter
+//        array(
+//            'field'    => 'type', 
+//            'operator' => 'equals', 
+//            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+//        )
+        );
+        $result = $this->_json->searchNodes($filter, array());
+        $this->assertEquals(2, $result['totalcount']);
+        
         return $dirpaths;
     }
 
+    /**
+     * testCreateDirectoryNodesInPersonal
+     * 
+     * @return array dir paths
+     */
+    public function testCreateDirectoryNodesInPersonal()
+    {
+        $personalContainerNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($personalContainerNode['path']);
+        
+        $dirpaths = array(
+            $personalContainerNode['path'] . '/dir1',
+            $personalContainerNode['path'] . '/dir2',
+        );
+        $result = $this->_json->createNodes($dirpaths, Tinebase_Model_Tree_Node::TYPE_FOLDER);
+        
+        $this->assertEquals(2, count($result));
+        $this->assertEquals('dir1', $result[0]['name']);
+        $this->assertEquals('dir2', $result[1]['name']);
+        
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => $personalContainerNode['path']
+        ), 
+        // @todo activate type filter
+//        array(
+//            'field'    => 'type', 
+//            'operator' => 'equals', 
+//            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+//        )
+        );
+        $result = $this->_json->searchNodes($filter, array());
+        $this->assertEquals(2, $result['totalcount']);
+        
+        return $dirpaths;
+    }
+        
     /**
      * testDeleteContainerNode
      */
@@ -429,7 +488,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteDirectoryNodes()
     {
-        $dirpaths = $this->testCreateDirectoryNodes();
+        $dirpaths = $this->testCreateDirectoryNodesInShared();
         
         $result = $this->_json->deleteNodes($dirpaths);
 
