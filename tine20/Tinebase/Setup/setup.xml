@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
 	<name>Tinebase</name>
-	<version>5.0</version>
+	<version>5.1</version>
 	<tables>
 		<table>
 			<name>applications</name>
-			<version>2</version>
+			<version>3</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -21,9 +21,9 @@
 				</field>
 				<field>
 					<name>status</name>
-					<type>enum</type>
-					<value>enabled</value>
-					<value>disabled</value>
+					<type>text</type>
+                    <length>32</length>
+                    <default>enabled</default>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -143,7 +143,7 @@
 
 		<table>
 			<name>groups</name>
-			<version>3</version>
+			<version>4</version>
 			<declaration>
                 <field>
                     <name>id</name>
@@ -165,9 +165,8 @@
                 </field>
                 <field>
                     <name>visibility</name>
-                    <type>enum</type>
-                    <value>hidden</value>
-                    <value>displayed</value>
+                    <type>text</type>
+                    <length>32</length>
                     <default>displayed</default>
                     <notnull>true</notnull>
                 </field>
@@ -206,7 +205,7 @@
 
 		<table>
 			<name>accounts</name>
-			<version>8</version>
+			<version>9</version>
 			<declaration>
                 <field>
                 	<name>id</name>
@@ -289,9 +288,8 @@
                 </field>
                 <field>
                 	<name>visibility</name>
-                	<type>enum</type>
-                	<value>hidden</value>
-                	<value>displayed</value>
+                	<type>text</type>
+                    <length>32</length>
                 	<default>displayed</default>
                 	<notnull>true</notnull>
                 </field>
@@ -441,7 +439,7 @@
 
 		<table>
 			<name>registrations</name>
-			<version>1</version>
+			<version>2</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -472,9 +470,8 @@
 				</field>
 				<field>
 					<name>status</name>
-					<type>enum</type>
-					<value>justregistered</value>
-					<value>waitingforactivation</value>
+					<type>text</type>
+                    <length>32</length>
 					<value>activated</value>
 					<notnull>true</notnull>
 				</field>
@@ -539,7 +536,7 @@
 
 		<table>
 			<name>container</name>
-			<version>3</version>
+			<version>4</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -554,10 +551,8 @@
 				</field>
 				<field>
 					<name>type</name>
-					<type>enum</type>
-					<value>personal</value>
-					<value>shared</value>
-					<value>internal</value>
+					<type>text</type>
+                    <length>32</length>
 					<notnull>false</notnull>
 				</field>
                 <field>
@@ -644,7 +639,7 @@
 		</table>
 		<table>
 			<name>container_acl</name>
-			<version>2</version>
+			<version>3</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -660,11 +655,9 @@
 				</field>
 				<field>
 					<name>account_type</name>
-					<type>enum</type>
-					<value>anyone</value>
-					<value>user</value>
-					<value>group</value>
-					<notnull>true</notnull>
+					<type>text</type>
+                    <length>32</length>
+                    <notnull>true</notnull>
 				</field>
 				<field>
 					<name>account_id</name>
@@ -905,7 +898,7 @@
 
 		<table>
 			<name>relations</name>
-			<version>5</version>
+			<version>6</version>
 			<declaration>
                 <field>
                     <name>id</name>
@@ -939,10 +932,8 @@
 				</field>
 				<field>
 					<name>own_degree</name>
-					<type>enum</type>
-					<value>parent</value>
-					<value>child</value>
-					<value>sibling</value>
+					<type>text</type>
+                    <length>32</length>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -1156,7 +1147,7 @@
 
 		<table>
 			<name>tags</name>
-			<version>2</version>
+			<version>3</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -1166,9 +1157,8 @@
 				</field>
 				<field>
 					<name>type</name>
-					<type>enum</type>
-					<value>shared</value>
-					<value>personal</value>
+					<type>text</type>
+                    <length>32</length>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -1255,7 +1245,7 @@
 
 		<table>
 			<name>tags_acl</name>
-			<version>1</version>
+			<version>2</version>
 			<declaration>
 				<field>
 					<name>tag_id</name>
@@ -1265,10 +1255,8 @@
 				</field>
 				<field>
 					<name>account_type</name>
-					<type>enum</type>
-					<value>anyone</value>
-					<value>user</value>
-					<value>group</value>
+					<type>text</type>
+                    <length>32</length>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -1576,7 +1564,7 @@
 
 		<table>
 			<name>role_accounts</name>
-			<version>1</version>
+			<version>2</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -1591,10 +1579,8 @@
 				</field>
 				<field>
 					<name>account_type</name>
-					<type>enum</type>
-					<value>anyone</value>
-					<value>user</value>
-					<value>group</value>
+					<type>text</type>
+                    <length>32</length>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -1753,7 +1739,7 @@
 		</table>
 		<table>
 			<name>preferences</name>
-			<version>6</version>
+			<version>7</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -1763,10 +1749,8 @@
 				</field>
 				<field>
 					<name>account_type</name>
-					<type>enum</type>
-					<value>anyone</value>
-					<value>user</value>
-					<value>group</value>
+					<type>text</type>
+                    <length>32</length>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -1987,7 +1971,7 @@
 		</table>
         <table>
             <name>customfield_acl</name>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -2003,10 +1987,8 @@
                 </field>
                 <field>
                     <name>account_type</name>
-                    <type>enum</type>
-                    <value>anyone</value>
-                    <value>user</value>
-                    <value>group</value>
+                    <type>text</type>
+                    <length>32</length>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -2328,7 +2310,7 @@
 		</table>
 		<table>
 			<name>importexport_definition</name>
-			<version>4</version>
+			<version>5</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -2361,9 +2343,8 @@
 				</field>
 				<field>
 					<name>type</name>
-					<type>enum</type>
-					<value>import</value>
-					<value>export</value>
+					<type>text</type>
+                    <length>32</length>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -2448,7 +2429,7 @@
 		</table>
 		<table>
 			<name>alarm</name>
-			<version>1</version>
+			<version>2</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -2478,10 +2459,8 @@
 				</field>
 				<field>
 					<name>sent_status</name>
-					<type>enum</type>
-					<value>pending</value>
-					<value>failure</value>
-					<value>success</value>
+					<type>text</type>
+                    <length>32</length>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -2513,7 +2492,7 @@
 		</table>
 		<table>
 			<name>async_job</name>
-			<version>1</version>
+			<version>2</version>
 			<declaration>
 				<field>
 					<name>id</name>
@@ -2535,12 +2514,10 @@
 					<type>datetime</type>
 				</field>
 				<field>
-					<name>status</name>
-					<type>enum</type>
-					<value>running</value>
-					<value>failure</value>
-					<value>success</value>
-					<notnull>true</notnull>
+                    <name>status</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <notnull>true</notnull>
 				</field>
 				<field>
 					<name>message</name>

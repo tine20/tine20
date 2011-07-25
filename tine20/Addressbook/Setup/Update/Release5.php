@@ -31,4 +31,34 @@ class Addressbook_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('addressbook', 13);
         $this->setApplicationVersion('Addressbook', '5.1');
     }
+
+    /**
+     * update to 5.2
+     * - enum -> text
+     */
+    public function update_1()
+    {
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>gender</name>
+                <type>text</type>
+                <length>32</length>
+                <notnull>false</notnull>
+            </field>');
+        $this->_backend->alterCol('addressbook_salutations', $declaration);
+        $this->setTableVersion('addressbook_salutations', 3);
+        
+        $declaration = new Setup_Backend_Schema_Field_Xml('
+            <field>
+                <name>type</name>
+                <type>text</type>
+                <length>32</length>
+                <notnull>true</notnull>
+                <default>list</default>
+            </field>');
+        $this->_backend->alterCol('addressbook_lists', $declaration);
+        $this->setTableVersion('addressbook_lists', 2);
+        
+        $this->setApplicationVersion('Addressbook', '5.2');
+    }
 }
