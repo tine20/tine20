@@ -76,7 +76,22 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * create node(s)
+     * create node
+     * 
+     * @param array $filename
+     * @param string $type directory or file
+     * @return array
+     */
+    public function createNode($filename, $type)
+    {
+        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filename, $type);
+        $result = (count($nodes) === 0) ? array() :  $this->_recordToJson($nodes->getFirstRecord());
+        
+        return $result;
+    }
+
+    /**
+     * create nodes
      * 
      * @param string|array $filenames
      * @param string $type directory or file

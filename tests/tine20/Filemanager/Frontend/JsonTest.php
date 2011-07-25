@@ -332,8 +332,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     public function testCreateContainerNodeInSharedFolder()
     {
         $testPath = '/' . Tinebase_Model_Container::TYPE_SHARED . '/testcontainer';
-        $result = $this->_json->createNodes($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER);
-        $createdNode = $result[0];
+        $result = $this->_json->createNode($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER);
+        $createdNode = $result;
         
         $this->_objects['containerids'][] = $createdNode['name']['id'];
         
