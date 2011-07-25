@@ -242,7 +242,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         switch ($this->containerType) {
             case Tinebase_Model_Container::TYPE_SHARED:
                 if (!empty($_pathParts[2])) {
-                    $container = $this->_searchContainerByName($_pathParts[1], Tinebase_Model_Container::TYPE_SHARED);
+                    $container = $this->_searchContainerByName($_pathParts[2], Tinebase_Model_Container::TYPE_SHARED);
                 }
                 break;
                 
