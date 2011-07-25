@@ -365,7 +365,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     }
     
     /**
-     * delete node(s)
+     * delete nodes
      * 
      * @param array $_filenames string->single file, array->multiple
      * @return int delete count
@@ -376,28 +376,41 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     {
         $deleteCount = 0;
         foreach ($_filenames as $filename) {
-            $flatpathWithBasepath = $this->addBasePath($filename);
-            list($parentPathRecord, $nodeName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($flatpathWithBasepath);
-            $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($flatpathWithBasepath);
-            
-            $this->_checkPathACL($parentPathRecord, 'delete');
-            
-            if (! $parentPathRecord->container) {
-                // check acl for deleting toplevel container
-                $this->_checkPathACL($pathRecord, 'delete');
-            }
-            
-            if ($this->_deleteNodeInBackend($pathRecord->flatpath)) {
+            if ($this->_deleteNode($filename)) {
                 $deleteCount++;
-            }
-            
-            if (! $parentPathRecord->container) {
-                // delete container too
-                Tinebase_Container::getInstance()->delete($nodeName);
             }
         }
         
         return $deleteCount;
+    }
+
+    /**
+     * delete node
+     * 
+     * @param string $_flatpath
+     * @return boolean
+     */
+    protected function _deleteNode($_flatpath)
+    {
+        $flatpathWithBasepath = $this->addBasePath($_flatpath);
+        list($parentPathRecord, $nodeName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($flatpathWithBasepath);
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($flatpathWithBasepath);
+        
+        $this->_checkPathACL($parentPathRecord, 'delete');
+        
+        if (! $parentPathRecord->container) {
+            // check acl for deleting toplevel container
+            $this->_checkPathACL($pathRecord, 'delete');
+        }
+        
+        $success = $this->_deleteNodeInBackend($pathRecord->flatpath);
+        
+        if ($success && ! $parentPathRecord->container) {
+            // delete container too
+            Tinebase_Container::getInstance()->delete($nodeName);
+        }
+        
+        return $success;
     }
     
     /**
@@ -408,6 +421,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     protected function _deleteNodeInBackend($_flatpath)
     {
+        $success = FALSE;
+        
         $node = $this->_backend->stat($_flatpath);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
@@ -415,13 +430,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         switch ($node->type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                $result = $this->_backend->unlink($_flatpath);
+                $success = $this->_backend->unlink($_flatpath);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                $result = $this->_backend->rmDir($_flatpath, TRUE);
+                $success = $this->_backend->rmDir($_flatpath, TRUE);
                 break;
         }
         
-        return $result;
+        return $success;
     }
 }
