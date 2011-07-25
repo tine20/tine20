@@ -222,7 +222,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         if (! $parentPathRecord->container && Tinebase_Model_Tree_Node::TYPE_FOLDER) {
             $container = $this->_createContainer($newNodeName, $parentPathRecord->containerType);
-            $newNodePath = $parentPathRecord . '/' . $container->getId();
+            $newNodePath = $parentPathRecord->statpath . '/' . $container->getId();
         } else {
             $container = NULL;
             $newNodePath = $parentPathRecord->statpath . '/' . $newNodeName;
@@ -238,18 +238,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     /**
      * delete node in backend
      * 
-     * @param string $_flatpath
+     * @param string $_statpath
      * @param type
      * @return Tinebase_Model_Tree_Node
      */
-    protected function _createNodeInBackend($_flatpath, $_type)
+    protected function _createNodeInBackend($_statpath, $_type)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Creating new path ' . $_flatpath . ' of type ' . $_type);
+            ' Creating new path ' . $_statpath . ' of type ' . $_type);
         
         switch ($_type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                $filehandle = $this->_backend->fopen($_flatpath, 'x');
+                $filehandle = $this->_backend->fopen($_statpath, 'x');
                 $this->_backend->fclose($filehandle);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
@@ -257,11 +257,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
 //                if ($container) {
 //                    $this->_backend->createContainerNode($container);
 //                } else {
-                $this->_backend->mkDir($_flatpath);
+                $this->_backend->mkDir($_statpath);
                 break;
         }
         
-        return $this->_backend->stat($_flatpath);
+        return $this->_backend->stat($_statpath);
     }
         
     /**
@@ -354,16 +354,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
         
         foreach ($records as $record) {
+            $record->path = $flatpathWithoutBasepath . '/' . $record->name;
             if (! $_path->container) {
                 $idx = $containers->getIndexById($record->name);
                 if ($idx !== FALSE) {
                     $record->name = $containers[$idx];
                     $record->path = $flatpathWithoutBasepath . '/' . $record->name->name;
-                } else {
-                    throw new Tinebase_Exception_NotFound('Container not found'); 
                 }
-            } else {
-                $record->path = $flatpathWithoutBasepath . '/' . $record->name;
             }
         }
     }
@@ -407,11 +404,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $this->_checkPathACL($pathRecord, 'delete');
         }
         
-        $success = $this->_deleteNodeInBackend($pathRecord->flatpath);
+        $success = $this->_deleteNodeInBackend($pathRecord->statpath);
         
         if ($success && ! $parentPathRecord->container) {
-            // delete container too
-            Tinebase_Container::getInstance()->delete($nodeName);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Delete container ' . $pathRecord->container->name);
+            Tinebase_Container::getInstance()->delete($pathRecord->container->getId());
         }
         
         return $success;
@@ -420,24 +418,24 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     /**
      * delete node in backend
      * 
-     * @param string $_flatpath
+     * @param string $_statpath
      * @return boolean
      */
-    protected function _deleteNodeInBackend($_flatpath)
+    protected function _deleteNodeInBackend($_statpath)
     {
         $success = FALSE;
         
-        $node = $this->_backend->stat($_flatpath);
+        $node = $this->_backend->stat($_statpath);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Removing path ' . $_flatpath . ' of type ' . $node->type);
+            ' Removing path ' . $_statpath . ' of type ' . $node->type);
         
         switch ($node->type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                $success = $this->_backend->unlink($_flatpath);
+                $success = $this->_backend->unlink($_statpath);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                $success = $this->_backend->rmDir($_flatpath, TRUE);
+                $success = $this->_backend->rmDir($_statpath, TRUE);
                 break;
         }
         
