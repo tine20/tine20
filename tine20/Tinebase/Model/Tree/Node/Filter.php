@@ -38,7 +38,7 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
     protected $_filterModel = array(
         'query'                => array(
             'filter' => 'Tinebase_Model_Filter_Query', 
-            'options' => array('fields' => array('name', 'type', 'contenttype'))
+            'options' => array('fields' => array('name'))
         ),
         'id'                   => array('filter' => 'Tinebase_Model_Filter_Id'),
         'path'                 => array('filter' => 'Tinebase_Model_Tree_Node_PathFilter'),
@@ -49,10 +49,19 @@ class Tinebase_Model_Tree_Node_Filter extends Tinebase_Model_Filter_FilterGroup
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
         'last_modified_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
-        'type'                 => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'contenttype'          => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'type'                 => array(
+            'filter' => 'Tinebase_Model_Filter_Text', 
+            'options' => array('tablename' => 'tree_fileobjects')
+        ),
+        'contenttype'          => array(
+            'filter' => 'Tinebase_Model_Filter_Text',
+            'options' => array('tablename' => 'tree_fileobjects')
+        ),
         'description'          => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'size'                 => array('filter' => 'Tinebase_Model_Filter_Int'),
+        'size'                 => array(
+            'filter' => 'Tinebase_Model_Filter_Int',
+            'options' => array('tablename' => 'tree_filerevisions')
+        ),
         'object_id'            => array('filter' => 'Tinebase_Model_Filter_Text'),
     );    
 }
