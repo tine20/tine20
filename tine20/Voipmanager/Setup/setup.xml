@@ -1068,7 +1068,7 @@
             <name>snom_default_settings</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>1</version>
+            <version>2</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -1205,62 +1205,62 @@
                     <default>NULL</default>
                 </field>     
                 <field>
-                    <name>web_language_writable</name>
+                    <name>web_language_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>     
                 <field>
-                    <name>language_writable</name>
+                    <name>language_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>     
                 <field>
-                    <name>display_method_writable</name>
+                    <name>display_method_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>  
                 <field>
-                    <name>call_waiting_writable</name>
+                    <name>call_waiting_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>                     
                 <field>
-                    <name>mwi_notification_writable</name>
+                    <name>mwi_notification_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>     
                 <field>
-                    <name>mwi_dialtone_writable</name>
+                    <name>mwi_dialtone_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>     
                 <field>
-                    <name>headset_device_writable</name>
+                    <name>headset_device_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>     
                 <field>
-                    <name>message_led_other_writable</name>
+                    <name>message_led_other_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>     
                 <field>
-                    <name>global_missed_counter_writable</name>
+                    <name>global_missed_counter_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>     
                 <field>
-                    <name>scroll_outgoing_writable</name>
+                    <name>scroll_outgoing_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>     
                 <field>
-                    <name>show_local_line_writable</name>
+                    <name>show_local_line_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>     
                 <field>
-                    <name>show_call_status_writable</name>
+                    <name>show_call_status_w</name>
                     <type>boolean</type>
                     <default>false</default>
                 </field>          

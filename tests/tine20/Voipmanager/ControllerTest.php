@@ -511,9 +511,9 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertEquals($test->display_method, $returned->display_method);
-        $this->assertEquals($test->display_method_writable, $returned->display_method_writable);
+        $this->assertEquals($test->display_method_w, $returned->display_method_w);
         $this->assertEquals($test->mwi_notification, $returned->mwi_notification);
-        $this->assertEquals($test->mwi_notification_writable, $returned->mwi_notification_writable);
+        $this->assertEquals($test->mwi_notification_w, $returned->mwi_notification_w);
         $this->assertNotNull($returned->id);
         
         $this->_backends['Snom_Setting']->delete($returned->getId()); 
@@ -534,9 +534,9 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($test->name, $returned->name);
         $this->assertEquals($test->description, $returned->description);
         $this->assertEquals($test->display_method, $returned->display_method);
-        $this->assertEquals($test->display_method_writable, $returned->display_method_writable);
+        $this->assertEquals($test->display_method_w, $returned->display_method_w);
         $this->assertEquals($test->mwi_notification, $returned->mwi_notification);
-        $this->assertEquals($test->mwi_notification_writable, $returned->mwi_notification_writable);
+        $this->assertEquals($test->mwi_notification_w, $returned->mwi_notification_w);
         $this->assertNotNull($returned->id);
         
         $this->_backends['Snom_Setting']->delete($returned->getId()); 
@@ -576,9 +576,9 @@ class Voipmanager_ControllerTest extends PHPUnit_Framework_TestCase
             'name'                      => Tinebase_Record_Abstract::generateUID(),
             'description'               => Tinebase_Record_Abstract::generateUID(),
             'display_method'            => 'display_name_number',
-            'display_method_writable'   => 1,
+            'display_method_w'   => 1,
             'mwi_notification'          => 'silent',
-            'mwi_notification_writable' => 0
+            'mwi_notification_w' => 0
         ));
     }    
     
