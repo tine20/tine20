@@ -159,6 +159,12 @@ class Tinebase_FileSystem
         return $this->_treeNodeBackend->pathExists($_path);
     }
     
+    /**
+     * close file handle
+     * 
+     * @param handle $_handle
+     * @return boolean
+     */
     public function fclose($_handle)
     {
         if (!is_resource($_handle)) {
@@ -193,19 +199,22 @@ class Tinebase_FileSystem
                     fclose($hashHandle);
                 }
                 
-                $fileObject = $this->_fileObjectBackend->get($options['tine20']['node']->object_id);
-                $fileObject->hash = $hash;
-                $fileObject->size = filesize($hashFile);
+                $currentFileObject = $this->_fileObjectBackend->get($options['tine20']['node']->object_id);
+                $updatedFileObject = clone($currentFileObject);
+                $updatedFileObject->hash = $hash;
+                $updatedFileObject->size = filesize($hashFile);
                 if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
                     $finfo = finfo_open(FILEINFO_MIME_TYPE);
                     $mimeType = finfo_file($finfo, $hashFile);
                     if ($mimeType !== false) {
-                        $fileObject->contenttype = $mimeType;
+                        $updatedFileObject->contenttype = $mimeType;
                     }
                     finfo_close($finfo);
                 }
                 
-                $this->_fileObjectBackend->update($fileObject);
+                $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
+                $modLog->setRecordMetaData($updatedFileObject, 'update', $currentFileObject);
+                $this->_fileObjectBackend->update($updatedFileObject);
                 
                 break;
         }
@@ -215,6 +224,13 @@ class Tinebase_FileSystem
         return true;
     }
     
+    /**
+     * open file
+     * 
+     * @param string $_path
+     * @param string $_mode
+     * @return handle
+     */
     public function fopen($_path, $_mode)
     {
         switch ($_mode) {
@@ -467,8 +483,8 @@ class Tinebase_FileSystem
         $directoryObject = new Tinebase_Model_Tree_FileObject(array(
             'type'          => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
             'contentytype'  => null,
-            'creation_time' => Tinebase_DateTime::now() 
         ));
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($directoryObject, 'create');
         $directoryObject = $this->_fileObjectBackend->create($directoryObject);
         
         $treeNode = new Tinebase_Model_Tree_Node(array(
@@ -494,8 +510,8 @@ class Tinebase_FileSystem
         $fileObject = new Tinebase_Model_Tree_FileObject(array(
             'type'          => Tinebase_Model_Tree_FileObject::TYPE_FILE,
             'contentytype'  => null,
-            'creation_time' => Tinebase_DateTime::now() 
         ));
+        Tinebase_Timemachine_ModificationLog::setRecordMetaData($fileObject, 'create');
         $fileObject = $this->_fileObjectBackend->create($fileObject);
         
         $treeNode = new Tinebase_Model_Tree_Node(array(
