@@ -248,14 +248,22 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         
         $grants = $this->_instance->setGrants($this->objects['initialContainer'], $newGrants);
         $this->assertType('Tinebase_Record_RecordSet', $grants);
+        $this->assertEquals(2, count($grants));
 
         $grants = $grants->toArray();
-        $this->assertTrue($grants[0]["readGrant"]);
-        $this->assertFalse($grants[0]["addGrant"]);
-        $this->assertTrue($grants[0]["editGrant"]);
-        $this->assertTrue($grants[0]["deleteGrant"]);
-        $this->assertTrue($grants[0]["adminGrant"]);
-        $this->assertTrue($grants[1]["readGrant"]);
+        foreach ($grants as $grant) {
+            if ($grant['account_id'] === Tinebase_Core::getUser()->getId()) {
+                $this->assertTrue($grant["readGrant"], print_r($grant, TRUE));
+                $this->assertFalse($grant["addGrant"], print_r($grant, TRUE));
+                $this->assertTrue($grant["editGrant"], print_r($grant, TRUE));
+                $this->assertTrue($grant["deleteGrant"], print_r($grant, TRUE));
+                $this->assertTrue($grant["adminGrant"], print_r($grant, TRUE));
+                $this->assertEquals(Tinebase_Acl_Rights::ACCOUNT_TYPE_USER, $grant['account_type']);
+            } else {
+                $this->assertTrue($grant["readGrant"], print_r($grant, TRUE));
+                $this->assertEquals(Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $grant['account_type']);
+            }
+        }
     }
     
     /**
@@ -494,5 +502,4 @@ class Tinebase_ContainerTest extends PHPUnit_Framework_TestCase
         ));
         $this->assertTrue($otherUsers->getRecordClassName() === 'Tinebase_Model_Container');
     }
-    
 }
