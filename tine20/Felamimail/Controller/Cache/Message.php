@@ -499,10 +499,13 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param Felamimail_Model_Folder $_folder
      * @param Felamimail_Backend_ImapProxy $_imap
+     * 
+     * @todo split into smaller parts
      */
     protected function _addMessagesToCache(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " cache sequence: {$this->_imapMessageSequence} / imap count: {$_folder->imap_totalcount}");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            .  " cache sequence: {$this->_imapMessageSequence} / imap count: {$_folder->imap_totalcount}");
     
         // add new messages to cache
         if ($_folder->imap_totalcount > 0 && $this->_imapMessageSequence < $_folder->imap_totalcount) {
@@ -517,15 +520,24 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                 $messageSequenceStart = $this->_imapMessageSequence + 1;
                 
                 // add new messages
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Retrieve message from $messageSequenceStart to {$_folder->imap_totalcount}");
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . " Retrieve message from $messageSequenceStart to {$_folder->imap_totalcount}");
                 
                 while ($messageSequenceStart <= $_folder->imap_totalcount) {
                     
-                    $messageSequenceEnd = (($_folder->imap_totalcount - $messageSequenceStart) > $this->_importCountPerStep ) ? $messageSequenceStart+$this->_importCountPerStep : $_folder->imap_totalcount;
+                    $messageSequenceEnd = (($_folder->imap_totalcount - $messageSequenceStart) > $this->_importCountPerStep ) 
+                        ? $messageSequenceStart+$this->_importCountPerStep : $_folder->imap_totalcount;
                     
-                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .  " Fetch message from $messageSequenceStart to $messageSequenceEnd $this->_timeElapsed / $this->_availableUpdateTime");
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        .  " Fetch message from $messageSequenceStart to $messageSequenceEnd $this->_timeElapsed / $this->_availableUpdateTime");
                     
-                    $messages = $_imap->getSummary($messageSequenceStart, $messageSequenceEnd, false);
+                    try {
+                        $messages = $_imap->getSummary($messageSequenceStart, $messageSequenceEnd, false);
+                    } catch (Zend_Mail_Protocol_Exception $zmpe) {
+                        // imap server might have gone away during update
+                        Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+                            . ' IMAP protocol error during message fetching: ' . $zmpe->getMessage());
+                    }
 
                     $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
                     
@@ -543,7 +555,8 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} cache sequence: $this->_cacheMessageSequence imap sequence: $this->_imapMessageSequence");
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . " Cache status cache total count: {$_folder->cache_totalcount} imap total count: {$_folder->imap_totalcount} cache sequence: $this->_cacheMessageSequence imap sequence: $this->_imapMessageSequence");
     }
 
     /**
