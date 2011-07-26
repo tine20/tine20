@@ -129,6 +129,7 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
      *  
      * @param Zend_Db_Adapter_Abstract $_db (optional)
      * @param array $_options (optional)
+     * @throws Tinebase_Exception_Backend_Database
      */
     public function __construct($_dbAdapter = NULL, $_options = array())
     {
@@ -141,13 +142,17 @@ abstract class Tinebase_Backend_Sql_Abstract extends Tinebase_Backend_Abstract i
         $this->_useSubselectForCount = array_key_exists('useSubselectForCount', $_options) ? $_options['useSubselectForCount'] : $this->_useSubselectForCount;
         
         if (! ($this->_tableName && $this->_modelName)) {
-            throw new Tinebase_Exception_Backend('modelName and tableName must be configured or given.');
+            throw new Tinebase_Exception_Backend_Database('modelName and tableName must be configured or given.');
         }
         if (! $this->_db) {
-            throw new Tinebase_Exception_Backend('Database adapter must be configured or given.');
+            throw new Tinebase_Exception_Backend_Database('Database adapter must be configured or given.');
         }
         
-        $this->_schema = $this->_db->describeTable($this->_tablePrefix . $this->_tableName);
+        try {
+            $this->_schema = $this->_db->describeTable($this->_tablePrefix . $this->_tableName);
+        } catch (Zend_Db_Adapter_Exception $zdae) {
+            throw new Tinebase_Exception_Backend_Database('Connection failed: ' . $zdae->getMessage());
+        }
     }
     
     /*************************** getters and setters *********************************/
