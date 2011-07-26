@@ -66,7 +66,7 @@ abstract class Setup_Backend_Schema_Abstract
         }
 
         if (!$isValid) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . 'Invalid schema specified for field ' . $this->name . ': ' . print_r($messages, 1));
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Invalid schema specified for field ' . $this->name . ': ' . print_r($messages, 1));
             if ($throwException) {
                 throw new Setup_Exception_InvalidSchema('Invalid schema specified for field ' . $this->name . ': ' . print_r($messages, 1));
             }
