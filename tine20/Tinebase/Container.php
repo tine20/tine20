@@ -848,10 +848,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
 
         $grantsData = $stmt->fetchAll(Zend_Db::FETCH_ASSOC);
 
-
-        // @todo use _getGrantsFromArray here
         foreach($grantsData as $grantData) {
-        	
             $givenGrants = explode(',', $grantData['account_grants']);
             foreach($givenGrants as $grant) {
                 $grantData[$grant] = TRUE;
