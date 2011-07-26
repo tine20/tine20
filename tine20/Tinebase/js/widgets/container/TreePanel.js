@@ -147,7 +147,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             cls: 'tinebase-tree-hide-collapsetool',
             expanded: true,
             children: [{
-                path: Tine.Tinebase.container.getMyNodePath(),
+                path: this.getRootPath(),
                 id: 'personal'
             }, {
                 path: '/shared',
@@ -191,6 +191,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
+    },
+    
+    /**
+     * delivers the personal root node path
+     * 
+     * @returns personal root node path
+     */
+    getRootPath: function() {
+        return Tine.Tinebase.container.getMyNodePath();
     },
     
     /**
@@ -547,6 +556,9 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @param {} node
      */
     onSelectionChange: function(sm, nodes) {
+        
+        console.log("onSelectionChange");
+        
         if (this.filterMode == 'gridFilter' && this.filterPlugin) {
             this.filterPlugin.onFilterChange();
         }
