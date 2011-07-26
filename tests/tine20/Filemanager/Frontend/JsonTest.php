@@ -294,6 +294,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     public function testSearchContainersOfOtherUser()
     {
+        $this->_setupTestPath(Tinebase_Model_Container::TYPE_OTHERUSERS);
+        
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
@@ -321,6 +323,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertTrue(is_array($createdNode['name']));
         $this->assertEquals('testcontainer', $createdNode['name']['name']);
+        $this->assertEquals(Tinebase_Core::getUser()->getId(), $createdNode['created_by']['accountId']);
         
         return $createdNode;
     }
