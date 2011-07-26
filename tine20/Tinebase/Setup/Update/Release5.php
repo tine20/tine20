@@ -75,6 +75,7 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
                 <name>account_type</name>
                 <type>text</type>
                 <length>32</length>
+                <default>user</default>
                 <notnull>true</notnull>
             </field>');
         $this->_backend->alterCol('container_acl', $declaration);
@@ -105,6 +106,7 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
                 <name>account_type</name>
                 <type>text</type>
                 <length>32</length>
+                <default>user</default>
                 <notnull>true</notnull>
             </field>');
         $this->_backend->alterCol('tags_acl', $declaration);
@@ -115,6 +117,7 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
                 <name>account_type</name>
                 <type>text</type>
                 <length>32</length>
+                <default>user</default>
                 <notnull>true</notnull>
             </field>');
         $this->_backend->alterCol('role_accounts', $declaration);
@@ -125,6 +128,7 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
                 <name>account_type</name>
                 <type>text</type>
                 <length>32</length>
+                <default>user</default>
                 <notnull>true</notnull>
             </field>');
         $this->_backend->alterCol('preferences', $declaration);
@@ -135,6 +139,7 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
                 <name>account_type</name>
                 <type>text</type>
                 <length>32</length>
+                <default>user</default>
                 <notnull>true</notnull>
             </field>');
         $this->_backend->alterCol('customfield_acl', $declaration);
@@ -155,6 +160,7 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
                 <name>sent_status</name>
                 <type>text</type>
                 <length>32</length>
+                <default>pending</default>
                 <notnull>true</notnull>
             </field>');
         $this->_backend->alterCol('alarm', $declaration);
@@ -165,7 +171,6 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
                 <name>status</name>
                 <type>text</type>
                 <length>32</length>
-                <notnull>true</notnull>
             </field>');
         $this->_backend->alterCol('async_job', $declaration);
         $this->setTableVersion('async_job', 2);

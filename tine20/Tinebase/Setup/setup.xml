@@ -657,6 +657,7 @@
 					<name>account_type</name>
 					<type>text</type>
                     <length>32</length>
+                    <default>user</default>
                     <notnull>true</notnull>
 				</field>
 				<field>
@@ -1257,6 +1258,7 @@
 					<name>account_type</name>
 					<type>text</type>
                     <length>32</length>
+                    <default>user</default>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -1581,6 +1583,7 @@
 					<name>account_type</name>
 					<type>text</type>
                     <length>32</length>
+                    <default>user</default>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -1751,6 +1754,7 @@
 					<name>account_type</name>
 					<type>text</type>
                     <length>32</length>
+                    <default>user</default>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -1989,6 +1993,7 @@
                     <name>account_type</name>
                     <type>text</type>
                     <length>32</length>
+                    <default>user</default>
                     <notnull>true</notnull>
                 </field>
                 <field>
@@ -2461,6 +2466,7 @@
 					<name>sent_status</name>
 					<type>text</type>
                     <length>32</length>
+                    <default>pending</default>
 					<notnull>true</notnull>
 				</field>
 				<field>
@@ -2517,7 +2523,6 @@
                     <name>status</name>
                     <type>text</type>
                     <length>32</length>
-                    <notnull>true</notnull>
 				</field>
 				<field>
 					<name>message</name>
