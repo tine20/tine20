@@ -65,6 +65,7 @@ class Tinebase_Setup_Update_Release5 extends Setup_Update_Abstract
                 <name>type</name>
                 <type>text</type>
                 <length>32</length>
+                <default>personal</default>
                 <notnull>false</notnull>
             </field>');
         $this->_backend->alterCol('container', $declaration);

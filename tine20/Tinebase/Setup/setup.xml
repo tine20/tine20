@@ -553,6 +553,7 @@
                     <name>type</name>
                     <type>text</type>
                     <length>32</length>
+                    <default>personal</default>
                     <notnull>false</notnull>
                 </field>
                 <field>
