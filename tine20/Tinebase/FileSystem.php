@@ -57,7 +57,6 @@ class Tinebase_FileSystem
         }
         
         $this->_basePath = Tinebase_Core::getConfig()->filesdir;
-        
     }
     
     /**
@@ -145,6 +144,12 @@ class Tinebase_FileSystem
         $this->_statCache = array();
     }
     
+    /**
+     * get modification timestamp
+     * 
+     * @param string $_path
+     * @return string  UNIX timestamp
+     */
     public function getMTime($_path)
     {
         $node = $this->stat($_path);
@@ -154,6 +159,12 @@ class Tinebase_FileSystem
         return $timestamp;        
     }
     
+    /**
+     * check if file exists
+     * 
+     * @param string $_path
+     * @return boolean
+     */
     public function fileExists($_path) 
     {
         return $this->_treeNodeBackend->pathExists($_path);
@@ -272,17 +283,31 @@ class Tinebase_FileSystem
         return $handle;
     }
     
+    /**
+     * write into file
+     * 
+     * @param handle $_handle
+     * @param string $_data
+     * @param int $_length
+     * @return int
+     */
     public function fwrite($_handle, $_data, $_length = null)
     {
         if (!is_resource($_handle)) {
             return false;
         }
         
-        $written = fwrite($_handle, $_data);
+        $written = fwrite($_handle, $_data, $_length);
         
         return $written;
     }
     
+    /**
+     * get content type
+     * 
+     * @param string $_path
+     * @return string
+     */
     public function getContentType($_path)
     {
         $node = $this->stat($_path);
@@ -290,6 +315,12 @@ class Tinebase_FileSystem
         return $node->contenttype;        
     }
     
+    /**
+     * get etag
+     * 
+     * @param string $_path
+     * @return string
+     */
     public function getETag($_path)
     {
         $node = $this->stat($_path);
@@ -498,8 +529,10 @@ class Tinebase_FileSystem
     }
 
     /**
-     * @param unknown_type $_parentId
-     * @param unknown_type $_name
+     * create new file node
+     * 
+     * @param string $_parentId
+     * @param string $_name
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Model_Tree_Node
      */
