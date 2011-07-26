@@ -48,10 +48,19 @@ Tine.widgets.tree.ContextMenu = {
                         };
                         
                         // TODO try to generalize this and move app specific stuff to app
-                        if (config.backendModel == 'Container') {
+                        
+                        if (config.backendModel == 'Node') {
+                            params.application = this.app.appName || this.appName;                            
+                            var filename = parentNode.attributes.container.path + '/' + _text;
+                            params.filename = filename;
+                            params.type = 'folder';
+                            params.method = config.backend + ".createNode";
+                        }
+                        else if (config.backendModel == 'Container') {
                             params.application = this.app.appName || this.appName;
                             params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
-                        } else if (config.backendModel == 'Folder') {
+                        } 
+                        else if (config.backendModel == 'Folder') {
                             var parentFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(parentNode.attributes.folder_id);
                             params.parent = parentFolder.get('globalname');
                             params.accountId = parentFolder.get('account_id');
@@ -62,9 +71,16 @@ Tine.widgets.tree.ContextMenu = {
                             scope: this,
                             success: function(_result, _request){
                                 var nodeData = Ext.util.JSON.decode(_result.responseText);
-                                var newNode = this.loader.createNode(nodeData);
-                                parentNode.appendChild(newNode);
+                                
                                 // TODO add + icon if it wasn't expandable before
+                                if(nodeData.type == 'folder') {
+                                    parentNode.reload();
+                                }
+                                else {
+                                    var newNode = this.loader.createNode(nodeData);
+                                    parentNode.appendChild(newNode);
+                                }
+                                
                                 parentNode.expand();
                                 this.fireEvent('containeradd', nodeData);
                                 Ext.MessageBox.hide();
@@ -89,7 +105,13 @@ Tine.widgets.tree.ContextMenu = {
                                 method: config.backend + '.delete' + config.backendModel
                             }
                             
-                            if (config.backendModel == 'Container') {
+                            if (config.backendModel == 'Node') {
+                                params.application = this.app.appName || this.appName;                                
+                                var filename = this.ctxNode.attributes.path;
+                                params.filenames = [filename];
+                                params.method = config.backend + ".deleteNodes";
+                            
+                            } else if (config.backendModel == 'Container') {
                                 params.containerId = node.attributes.container.id
                             } else if (config.backendModel == 'Folder') {
                                 var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
@@ -146,6 +168,21 @@ Tine.widgets.tree.ContextMenu = {
                                     method: config.backend + '.rename' + config.backendModel,
                                     newName: _text
                                 };
+                                
+                                if (config.backendModel == 'Node') {
+                                    params.application = this.app.appName || this.appName;                                
+                                    var filename = this.ctxNode.attributes.path;
+                                    params.sourceFilenames = [filename];
+                                    
+                                    var targetFilename = "/";
+                                    var sourceSplitArray = filename.split("/");
+                                    for (var i=1; i<sourceSplitArray.length-1; i++) {
+                                        targetFilename += sourceSplitArray[i] + '/'; 
+                                    }
+                                    
+                                    params.destinationFilenames = [targetFilename + _text];
+                                    params.method = config.backend + '.moveNodes';
+                                }
                                 
                                 // TODO try to generalize this
                                 if (config.backendModel == 'Container') {
@@ -230,7 +267,7 @@ Tine.widgets.tree.ContextMenu = {
                     });                    
                 }
             }
-        }
+        };
         
         /****************** create ITEMS array ****************/
         
