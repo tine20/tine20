@@ -18,13 +18,13 @@
 class Tinebase_Backend_Sql_Command_Mysql implements Tinebase_Backend_Sql_Command_Interface
 {
     /**
+     * setAutocommit
      * 
-     * @param $adapter Zend_Db_Adapter_Abstract
-     * @param $on boolean
+     * @param Zend_Db_Adapter_Abstract $adapter
+     * @param boolean $on
      */
-    public static function setAutocommit($adapter,$on)
+    public static function setAutocommit($adapter, $on)
     {
-        // SET AUTOCOMMIT=0 is not supported for PostgreSQL
         if ($on) {
             $adapter->query('SET AUTOCOMMIT=1;');
         } else {
