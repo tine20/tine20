@@ -100,8 +100,8 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
             'snom_default_settings' => array(
                 'version' => 3,
                 'fields'  => array(
-                    'web_language' => array('default' => 'English'),
-                    'language' => array('default' => 'English'),
+                    'web_language' => array(),
+                    'language' => array(),
                     'display_method' => array('default' => 'full_contact'),
                     'mwi_notification' => array('default' => 'silent'),
                     'mwi_dialtone' => array('default' => 'normal'),
@@ -112,8 +112,8 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
             'snom_phone_settings' => array(
                 'version' => 2,
                 'fields'  => array(
-                    'web_language' => array('default' => 'English'),
-                    'language' => array('default' => 'English'),
+                    'web_language' => array(),
+                    'language' => array(),
                     'display_method' => array('default' => 'full_contact'),
                     'mwi_notification' => array('default' => 'silent'),
                     'mwi_dialtone' => array('default' => 'normal'),

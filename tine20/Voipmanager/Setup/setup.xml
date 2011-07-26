@@ -1054,15 +1054,11 @@
                     <name>web_language</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>English</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>language</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>English</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>display_method</name>
@@ -1267,15 +1263,11 @@
                     <name>web_language</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>English</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>language</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>English</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>display_method</name>
