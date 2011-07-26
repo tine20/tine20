@@ -537,6 +537,7 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
                         // imap server might have gone away during update
                         Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
                             . ' IMAP protocol error during message fetching: ' . $zmpe->getMessage());
+                        break;
                     }
 
                     $this->_addMessagesToCacheAndIncreaseCounters($messages, $_folder);
