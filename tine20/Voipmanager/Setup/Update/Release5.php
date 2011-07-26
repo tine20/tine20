@@ -19,6 +19,7 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
 {
     /**
      * shorten some db fields
+     * 
      * @return void
      */
     public function update_0()
@@ -51,5 +52,105 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
         $this->setTableVersion('snom_default_settings', 2);
         
         $this->setApplicationVersion('Voipmanager', '5.1');
+    }
+
+    /**
+     * replace enums
+     * 
+     * @return void
+     */
+    public function update_1()
+    {
+        $tables = array(
+            'snom_location' => array(
+                'version' => 2,
+                'fields'  => array(
+                    'update_policy' => array('default' => 'auto_update'),
+                    'admin_mode' => array('default' => 'false'),
+                    'webserver_type' => array('default' => 'https'),
+                    'tone_scheme' => array(),
+                )
+            ),
+            'snom_templates' => array(
+                'version' => 2,
+                'fields'  => array(
+                    'model' => array('default' => 'snom300'),
+                )
+            ),
+            'snom_phones' => array(
+                'version' => 2,
+                'fields'  => array(
+                    'current_model' => array('default' => 'snom300'),
+                    'redirect_event' => array('default' => 'none'),
+                )
+            ),
+            'asterisk_sip_peers' => array(
+                'version' => 2,
+                'fields'  => array(
+                    'dtmfmode' => array('default' => 'rfc2833'),
+                    'insecure' => array('default' => 'no'),
+                    'nat' => array('default' => 'no'),
+                    'qualify' => array('default' => 'no'),
+                    'type' => array('default' => 'friend'),
+                    'cfi_mode' => array('default' => 'off'),
+                    'cfb_mode' => array('default' => 'off'),
+                    'cfd_mode' => array('default' => 'off'),
+                )
+            ),
+            'snom_default_settings' => array(
+                'version' => 3,
+                'fields'  => array(
+                    'web_language' => array('default' => 'English'),
+                    'language' => array('default' => 'English'),
+                    'display_method' => array('default' => 'full_contact'),
+                    'mwi_notification' => array('default' => 'silent'),
+                    'mwi_dialtone' => array('default' => 'normal'),
+                    'headset_device' => array('default' => 'none'),
+                    'call_waiting' => array('default' => 'on'),
+                )
+            ),
+            'snom_phone_settings' => array(
+                'version' => 2,
+                'fields'  => array(
+                    'web_language' => array('default' => 'English'),
+                    'language' => array('default' => 'English'),
+                    'display_method' => array('default' => 'full_contact'),
+                    'mwi_notification' => array('default' => 'silent'),
+                    'mwi_dialtone' => array('default' => 'normal'),
+                    'headset_device' => array('default' => 'none'),
+                    'call_waiting' => array('default' => 'on'),
+                )
+            ),
+            'snom_phones_acl' => array(
+                'version' => 2,
+                'fields'  => array(
+                    'account_type' => array('default' => 'user'),
+                )
+            ),
+            'asterisk_redirects' => array(
+                'version' => 2,
+                'fields'  => array(
+                    'cfi_mode' => array('default' => 'off'),
+                    'cfb_mode' => array('default' => 'off'),
+                    'cfd_mode' => array('default' => 'off'),
+                )
+            ),
+        );
+        
+        foreach ($tables as $table => $data) {
+            foreach ($data['fields'] as $field => $fieldData) {
+                $declaration = new Setup_Backend_Schema_Field_Xml('
+                    <field>
+                        <name>' . $field . '</name>
+                        <type>text</type>
+                        <length>32</length>
+                        ' . ((! empty($fieldData)) ? '<default>' . $fieldData['default'] . '</default><notnull>true</notnull>' : '') . '
+                    </field>');
+                $this->_backend->alterCol($table, $declaration);
+            }
+            $this->setTableVersion($table, $data['version']);
+        }
+        
+        $this->setApplicationVersion('Voipmanager', '5.2');
     }
 }
