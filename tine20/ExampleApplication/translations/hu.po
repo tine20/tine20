@@ -14,60 +14,55 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s személyes példa rekordjai"
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr "Példa Alkalmazás"
 
-#: js/ExampleApplication-FAT-debug.js:36 js/Model.js:31
+#: js/ExampleRecordGridPanel.js:74
+msgid "Quick search"
+msgstr "Gyors keresés"
+
+#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
+msgid "Name"
+msgstr "Név"
+
+#: js/ExampleRecordGridPanel.js:108
+msgid "Title"
+msgstr "Beosztás"
+
+#: js/ExampleRecordGridPanel.js:114
+msgid "Status"
+msgstr "Státusz"
+
+#: js/ExampleRecordGridPanel.js:121
+msgid "Budget"
+msgstr "Költség"
+
+#: js/ExampleRecordGridPanel.js:145
+msgid "Show closed"
+msgstr "Mutasd a lezártakat"
+
+#: js/ExampleRecordEditDialog.js:87
+msgid "ExampleRecord"
+msgstr "PéldaRekord"
+
+#: js/Model.js:31
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] "példa rekord"
 msgstr[1] "példa rekordok"
 
-#: js/ExampleApplication-FAT-debug.js:40 js/Model.js:35
+#: js/Model.js:35
 msgid "example record list"
 msgid_plural "example record lists"
 msgstr[0] "példa rekord lista"
 msgstr[1] "példa rekord listák"
 
-#: js/ExampleApplication-FAT-debug.js:97 js/ExampleApplication-FAT.js:6
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr "Példa Alkalmazás"
-
-#: js/ExampleApplication-FAT-debug.js:201 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordGridPanel.js:75
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/ExampleApplication-FAT-debug.js:229
-#: js/ExampleApplication-FAT-debug.js:389 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:103
-msgid "Name"
-msgstr "Név"
-
-#: js/ExampleApplication-FAT-debug.js:235 js/ExampleRecordGridPanel.js:109
-msgid "Title"
-msgstr "Beosztás"
-
-#: js/ExampleApplication-FAT-debug.js:241 js/ExampleRecordGridPanel.js:115
-msgid "Status"
-msgstr "Státusz"
-
-#: js/ExampleApplication-FAT-debug.js:248 js/ExampleRecordGridPanel.js:122
-msgid "Budget"
-msgstr "Költség"
-
-#: js/ExampleApplication-FAT-debug.js:272 js/ExampleRecordGridPanel.js:146
-msgid "Show closed"
-msgstr "Mutasd a lezártakat"
-
-#: js/ExampleApplication-FAT-debug.js:372 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordEditDialog.js:87
-msgid "ExampleRecord"
-msgstr "PéldaRekord"
-
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "PéldaAlkalmazás"
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s személyes példa rekordjai"

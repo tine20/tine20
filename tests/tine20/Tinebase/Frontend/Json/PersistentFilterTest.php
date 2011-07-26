@@ -202,6 +202,32 @@ class Tinebase_Frontend_Json_PersistentFilterTest extends PHPUnit_Framework_Test
     }
     
     /**
+     * test overwriting existing filter
+     */
+    public function testOverwriteExistingFilter()
+    {
+        $filter1 = $this->testSaveFilter();
+        $filter2 = $this->testSaveFilter();
+        
+        $this->assertEquals($filter1['id'], $filter2['id']);
+    }
+    
+    /**
+     * test delete (and if prefs are removed
+     */
+    public function testDeleteFilter()
+    {
+        $filter = $this->testSaveFilter();
+        Tinebase_Core::getPreference('Tasks')->{Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER} = $filter['id'];
+        
+        $this->_uit->deletePersistentFilters(array($filter['id']));
+        $this->assertNotEquals(Tinebase_Core::getPreference('Tasks')->{Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER}, $filter['id']);
+        
+        $this->setExpectedException('Tinebase_Exception_NotFound');
+        Tinebase_PersistentFilter::getInstance()->get($filter['id']);
+    }
+    
+    /**
      * assert saved filer matches expections for $this->_testFilterData
      * 
      * @param array $savedFilter

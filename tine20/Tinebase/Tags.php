@@ -394,11 +394,19 @@ class Tinebase_Tags
             return;
         }
         
+        $recordIds = $_records->getArrayOfIds();
+        if (count($recordIds) == 0) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Can\'t get tags for records without ids');
+            // do nothing
+            return;
+        }
+        
         // get first record to determine application
         $first = $_records->getFirstRecord();
         $appId = Tinebase_Application::getInstance()->getApplicationByName($first->getApplication())->getId();
         
-        $select = $this->_getSelect($_records->getArrayOfIds(), $appId);
+        $select = $this->_getSelect($recordIds, $appId);
         $select->group(array('tagging.tag_id', 'tagging.record_id'));
         Tinebase_Model_TagRight::applyAclSql($select, $_right, 'tagging.tag_id');
         

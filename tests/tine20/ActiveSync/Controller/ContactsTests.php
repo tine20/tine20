@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'ActiveSync_Controller_ContactsTests::main');
-}
-
 /**
  * Test class for Calendar_Controller_Event
  * 
@@ -24,7 +20,6 @@ if (!defined('PHPUnit_MAIN_METHOD')) {
  */
 class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
 {
-    
     /**
      * @var ActiveSync_Controller_Contacts controller
      */
@@ -43,6 +38,10 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     protected $_exampleXMLExisting = '<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
 <Sync xmlns="uri:AirSync" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>1</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><GetChanges/><WindowSize>50</WindowSize><Options><FilterType>0</FilterType><Truncation>2</Truncation><Conflict>0</Conflict></Options><Commands><Add><ClientId>1</ClientId><ApplicationData><Contacts:FileAs>Kneschke, Lars</Contacts:FileAs><Contacts:FirstName>Lars</Contacts:FirstName><Contacts:LastName>Kneschke</Contacts:LastName></ApplicationData></Add></Commands></Collection></Collections></Sync>';
+    
+    protected $_xmlContactBirthdayWithoutTimeAndroid = '<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE AirSync PUBLIC "-//AIRSYNC//DTD AirSync//EN" "http://www.microsoft.com/">
+<Sync xmlns="uri:AirSync" xmlns:AirSyncBase="uri:AirSyncBase" xmlns:Contacts="uri:Contacts"><Collections><Collection><Class>Contacts</Class><SyncKey>3</SyncKey><CollectionId>addressbook-root</CollectionId><DeletesAsMoves/><WindowSize>100</WindowSize><Options><AirSyncBase:BodyPreference><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:TruncationSize>5120</AirSyncBase:TruncationSize></AirSyncBase:BodyPreference><Conflict>1</Conflict></Options><Commands><Add><ClientId>4600</ClientId><ApplicationData><Contacts:FileAs>Fritzchen</Contacts:FileAs><Contacts:FirstName>Fritzchen</Contacts:FirstName><Contacts:Birthday>1969-12-31</Contacts:Birthday><AirSyncBase:Body><AirSyncBase:Type>1</AirSyncBase:Type><AirSyncBase:EstimatedDataSize>0</AirSyncBase:EstimatedDataSize><AirSyncBase:Data></AirSyncBase:Data></AirSyncBase:Body><Contacts:Categories/><Contacts:Picture/></ApplicationData></Add></Commands></Collection></Collections></Sync>';
     
     /**
      * Runs the test methods of this class.
@@ -213,6 +212,11 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         $iphone->contactsfilter_id = $this->objects['filter']->getId();
         $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
         
+        $htcAndroid = ActiveSync_Backend_DeviceTests::getTestDevice();
+        $htcAndroid->devicetype = 'htcsaga';
+        $htcAndroid->owner_id   = $user->getId();
+        $htcAndroid->contactsfilter_id = $this->objects['filter']->getId();
+        $this->objects['deviceAndroid'] = ActiveSync_Controller_Device::getInstance()->create($htcAndroid);
     }
 
     /**
@@ -292,6 +296,24 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
     	// offset birthday 12 hours + user TZ and namespace === uri:Contacts
     	$this->assertEquals(Tinebase_Translation::getCountryNameByRegionCode('DE'), @$testDom->getElementsByTagNameNS('uri:Contacts', 'BusinessCountry')->item(0)->nodeValue, $testDom->saveXML());
     	$this->assertEquals('1975-01-02T16:00:00.000Z', @$testDom->getElementsByTagNameNS('uri:Contacts', 'Birthday')->item(0)->nodeValue, $testDom->saveXML());
+    }
+    
+    /**
+     * test add contact
+     */
+    public function testAddContact()
+    {
+        $controller = new ActiveSync_Controller_Contacts($this->objects['deviceAndroid'], new Tinebase_DateTime());
+        
+        $xml = new SimpleXMLElement($this->_xmlContactBirthdayWithoutTimeAndroid);
+        $result = $controller->add($this->objects['containerWithSyncGrant']->getId(), $xml->Collections->Collection->Commands->Add->ApplicationData);
+        
+        $userTimezone = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
+        $bday = new Tinebase_DateTime('1969-12-31', $userTimezone);
+        $bday->setTimezone('UTC');        
+        
+        $this->assertEquals($bday->toString(), $result->bday->toString());
+        $this->assertEquals('Fritzchen', $result->n_given);
     }
     
     /**
@@ -415,8 +437,4 @@ class ActiveSync_Controller_ContactsTests extends PHPUnit_Framework_TestCase
         
         $this->assertGreaterThanOrEqual(1, count($existing));
     }
-}
-    
-if (PHPUnit_MAIN_METHOD == 'ActiveSync_Controller_Contacts::main') {
-    ActiveSync_Controller_Contacts::main();
 }

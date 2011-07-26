@@ -95,11 +95,15 @@ Tine.Tinebase.tineInit = {
     },
     
     initWindow: function () {
-        // disable the native 'select all'
         Ext.getBody().on('keydown', function (e) {
             if (e.ctrlKey && e.getKey() === e.A) {
+                // disable the native 'select all'
+                e.preventDefault();
+            } else if (e.getKey() === e.BACKSPACE && ! (e.getTarget('form') || e.getTarget('input') || e.getTarget('textarea'))) {
+                // disable the native 'history back'
                 e.preventDefault();
             } else if (!window.isMainWindow && e.ctrlKey && e.getKey() === e.T) {
+                // disable the native 'new tab' if in popup window
                 e.preventDefault();
             }
         });
@@ -407,6 +411,7 @@ Tine.Tinebase.tineInit = {
                 });
             }
             
+            // NOTE: Tine.data.RecordProxy is implicitRPC atm.
             if (options.isImplicitJsonRpc) {
                 var jsonrpc = Ext.decode(response.responseText);
                 

@@ -300,33 +300,74 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
      *
      * @param string $_accountId
      * @param string $_folderName globalName (complete path) of folder to delete
+     * @param boolean $_recursive
      * @return void
      */
-    public function delete($_accountId, $_folderName)
+    public function delete($_accountId, $_folderName, $_recursive = FALSE)
     {
-        // check if folder has subfolders and throw exception if that is the case
+        try {
+            $folder = $this->getByBackendAndGlobalName($_accountId, $_folderName);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder ' . $_folderName);
+            $folder = NULL;
+        }            
+        
+        // check if folder has subfolders and throw exception if that is the case / OR: delete subfolders if recursive param is TRUE
         // @todo this should not be a Tinebase_Exception_AccessDenied -> we have to create a new exception and call the fmail exception handler when deleting/adding/renaming folders
         $subfolders = $this->getSubfolders($_accountId, $_folderName);
-        if (count($subfolders) > 0) {
-            throw new Tinebase_Exception_AccessDenied('Could not delete folder ' . $_folderName . ' because it has subfolders.');
+        if (count($subfolders) > 0 && $folder) {
+            if ($_recursive) {
+                $this->deleteSubfolders($folder, $subfolders);
+            } else {
+                throw new Tinebase_Exception_AccessDenied('Could not delete folder ' . $_folderName . ' because it has subfolders.');
+            }
         }
         
+        $this->_deleteFolderOnIMAP($_accountId, $_folderName);
+        $this->_deleteFolderInCache($_accountId, $folder);
+    }
+
+    /**
+     * rename folder on imap server
+     * 
+     * @param string|Felamimail_Model_Account $_account
+     * @param string $_folderName
+     * @throws Felamimail_Exception_IMAPFolderNotFound
+     * @throws Felamimail_Exception_IMAP
+     */
+    protected function _deleteFolderOnIMAP($_accountId, $_folderName)
+    {
         try {
             $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
             $imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($_folderName));
         } catch (Zend_Mail_Storage_Exception $zmse) {
+            try {
+                $imap->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folderName));
+            } catch (Zend_Mail_Storage_Exception $zmse2) {
+                throw new Felamimail_Exception_IMAPFolderNotFound('Folder not found (error: ' . $zmse2->getMessage() . ').');
+            }
+            
             throw new Felamimail_Exception_IMAP('Could not delete folder ' . $_folderName . '. IMAP Error: ' . $zmse->getMessage());
         }
-        
-        try {
-            $folder = $this->getByBackendAndGlobalName($_accountId, $_folderName);
-            Felamimail_Controller_Message::getInstance()->deleteByFolder($folder);
-            $this->_backend->delete($folder->getId());
-            Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted folder ' . $_folderName);
-            $this->_updateHasChildren($_accountId, $folder->parent);
-        } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to delete non-existant folder ' . $_folderName);
+    }
+    
+    /**
+     * rename folder in cache
+     * 
+     * @param string|Felamimail_Model_Account $_account
+     * @param Felamimail_Model_Folder $_folder
+     */
+    protected function _deleteFolderInCache($_accountId, $_folder)
+    {
+        if ($_folder === NULL) {
+            return;
         }
+
+        Felamimail_Controller_Message::getInstance()->deleteByFolder($_folder);
+        $this->_backend->delete($_folder->getId());
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleted folder ' . $_folder->globalname);
+        $this->_updateHasChildren($_accountId, $_folder->parent);
     }
     
     /**
@@ -342,53 +383,119 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
         $account = Felamimail_Controller_Account::getInstance()->get($_accountId);
         $this->_delimiter = $account->delimiter;
         
-        $foldername = $this->_prepareFolderName($_newLocalName);
-        
-        // remove old localname and build new globalname
-        $globalNameParts = explode($this->_delimiter, $_oldGlobalName);
-        array_pop($globalNameParts);
-        array_push($globalNameParts, $foldername);
-        $newGlobalName = implode($this->_delimiter, $globalNameParts);
+        $newLocalName = $this->_prepareFolderName($_newLocalName);
+        $newGlobalName = $this->_buildNewGlobalName($newLocalName, $_oldGlobalName);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $_oldGlobalName . ' -> ' . $newGlobalName);
         
-        $imap = Felamimail_Backend_ImapFactory::factory($_accountId);
-        $imap->renameFolder(Felamimail_Model_Folder::encodeFolderName($_oldGlobalName), Felamimail_Model_Folder::encodeFolderName($newGlobalName));
+        $this->_renameFolderOnIMAP($account, $newGlobalName, $_oldGlobalName);
+        $folder = $this->_renameFolderInCache($account, $newGlobalName, $_oldGlobalName, $newLocalName);
+        $this->_updateSubfoldersAfterRename($account, $newGlobalName, $_oldGlobalName);
         
-        // rename folder in db
+        return $folder;
+    }
+    
+    /**
+     * remove old localname and build new globalname
+     * 
+     * @param string $_newLocalName
+     * @param string $_oldGlobalName
+     * @return string
+     * 
+     * @todo generalize this
+     */
+    protected function _buildNewGlobalName($_newLocalName, $_oldGlobalName)
+    {
+        $globalNameParts = explode($this->_delimiter, $_oldGlobalName);
+        array_pop($globalNameParts);
+        if (! empty($_newLocalName)) {
+            array_push($globalNameParts, $_newLocalName);
+        }
+        $newGlobalName = implode($this->_delimiter, $globalNameParts);
+        
+        return $newGlobalName;
+    }
+    
+    /**
+     * rename folder on imap server
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_newGlobalName
+     * @param string $_oldGlobalName
+     * @throws Felamimail_Exception_IMAPFolderNotFound
+     */
+    protected function _renameFolderOnIMAP(Felamimail_Model_Account $_account, $_newGlobalName, $_oldGlobalName)
+    {
+        $imap = Felamimail_Backend_ImapFactory::factory($_account);
+        
         try {
-            $folder = $this->getByBackendAndGlobalName($_accountId, $_oldGlobalName);
-            $folder->globalname = $newGlobalName;
-            $folder->localname = $foldername;
+            $imap->renameFolder(Felamimail_Model_Folder::encodeFolderName($_oldGlobalName), Felamimail_Model_Folder::encodeFolderName($_newGlobalName));
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
+                . ' Folder could have been renamed / deleted by another client.');
+            
+            throw new Felamimail_Exception_IMAPFolderNotFound('Folder not found (error: ' . $zmse->getMessage() . ').');
+        }
+    }
+    
+    /**
+     * rename folder in cache
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_newGlobalName
+     * @param string $_oldGlobalName
+     * @param string $_newLocalName
+     * @return Felamimail_Model_Folder
+     * @throws Tinebase_Exception_NotFound
+     */
+    protected function _renameFolderInCache(Felamimail_Model_Account $_account, $_newGlobalName, $_oldGlobalName, $_newLocalName)
+    {
+        try {
+            $folder = $this->getByBackendAndGlobalName($_account, $_oldGlobalName);
+            $folder->globalname = $_newGlobalName;
+            $folder->localname = $_newLocalName;
             $folder = $this->update($folder);
             
         } catch (Tinebase_Exception_NotFound $tenf) {
-            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to rename non-existant folder.');
+            Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Trying to rename non-existant folder ' . $_oldGlobalName);
             throw $tenf;
-        }
-        
-        // loop subfolders (recursive) and replace new localname in globalname path
-        $subfolders = $this->getSubfolders($account, $_oldGlobalName);
-        foreach ($subfolders as $subfolder) {
-            if ($newGlobalName != $subfolder->globalname) {
-                $newSubfolderGlobalname = str_replace($_oldGlobalName, $newGlobalName, $subfolder->globalname);
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
-                $subfolder->globalname = $newSubfolderGlobalname;
-                $this->update($subfolder);
-            }
         }
         
         return $folder;
     }
+    
+    /**
+     * loop subfolders (recursive) and replace new localname in globalname path
+     * 
+     * @param Felamimail_Model_Account $_account
+     * @param string $_newGlobalName
+     * @param string $_oldGlobalName
+     */
+    protected function _updateSubfoldersAfterRename(Felamimail_Model_Account $_account, $_newGlobalName, $_oldGlobalName)
+    {
+        $subfolders = $this->getSubfolders($_account, $_oldGlobalName);
+        foreach ($subfolders as $subfolder) {
+            if ($_newGlobalName != $subfolder->globalname) {
+                $newSubfolderGlobalname = str_replace($_oldGlobalName, $_newGlobalName, $subfolder->globalname);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Renaming ... ' . $subfolder->globalname . ' -> ' . $newSubfolderGlobalname);
+                
+                $subfolder->globalname = $newSubfolderGlobalname;
+                $this->update($subfolder);
+            }
+        }
+    }
 
     /**
      * delete all messages in one folder -> be careful, they are completly removed and not moved to trash
+     * -> delete subfolders if param set
      *
      * @param string $_folderId
+     * @param boolean $_deleteSubfolders
      * @return Felamimail_Model_Folder
      * @throws Felamimail_Exception_IMAPServiceUnavailable
      */
-    public function emptyFolder($_folderId)
+    public function emptyFolder($_folderId, $_deleteSubfolders = FALSE)
     {
         $folder = $this->_backend->get($_folderId);
         $account = Felamimail_Controller_Account::getInstance()->get($folder->account_id);
@@ -406,8 +513,29 @@ class Felamimail_Controller_Folder extends Tinebase_Controller_Abstract implemen
             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Folder could be empty (' . $zmse->getMessage() . ')');
         }
         
+        if ($_deleteSubfolders) {
+            $this->deleteSubfolders($folder);
+        }
+        
         $folder = Felamimail_Controller_Cache_Message::getInstance()->clear($_folderId);
         return $folder;
+    }
+    
+    /**
+     * delete subfolders recursivly
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @param Tinebase_Record_RecordSet $_subfolders if we know the subfolders already
+     */
+    public function deleteSubfolders(Felamimail_Model_Folder $_folder, $_subfolders = NULL)
+    {
+        $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
+        $subfolders = ($_subfolders === NULL) ? $this->getSubfolders($account, $_folder->globalname) : $_subfolders;
+        
+        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete ' . count($subfolders) . ' subfolders of ' . $_folder->globalname);
+        foreach ($subfolders as $subfolder) {
+            $this->delete($account, $subfolder->globalname, TRUE);
+        }
     }
     
     /**

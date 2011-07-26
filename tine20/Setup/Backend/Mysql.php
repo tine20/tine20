@@ -3,9 +3,10 @@
  * Tine 2.0
  *
  * @package     Setup
+ * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -13,10 +14,10 @@
  * setup backend class for MySQL 5.0 +
  *
  * @package     Setup
+ * @subpackage  Backend
  */
 class Setup_Backend_Mysql extends Setup_Backend_Abstract
 {
- 
     /**
      * Define how database agnostic data types get mapped to mysql data types
      * 
@@ -62,10 +63,15 @@ class Setup_Backend_Mysql extends Setup_Backend_Abstract
             'defaultType' => 'enum')
     );
  
-    
+    /**
+     * get create table statement
+     * 
+     * @param Setup_Backend_Schema_Table_Abstract $_table
+     * @return string
+     */
     public function getCreateStatement(Setup_Backend_Schema_Table_Abstract  $_table)
     {
-        $statement = "CREATE TABLE `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
+        $statement = "CREATE TABLE IF NOT EXISTS `" . SQL_TABLE_PREFIX . $_table->name . "` (\n";
         $statementSnippets = array();
      
         foreach ($_table->fields as $field) {

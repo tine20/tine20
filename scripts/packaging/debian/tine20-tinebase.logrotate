@@ -1,0 +1,8 @@
+/var/log/tine20/*.log {
+  rotate 12
+  weekly
+  compress
+  delaycompress
+  missingok
+  notifempty
+}

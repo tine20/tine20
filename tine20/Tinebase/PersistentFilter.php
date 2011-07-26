@@ -6,12 +6,14 @@
  * @subpackage  PersistentFilter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-
 
 /**
  * persistent filter controller
+ * 
+ * @package     Tinebase
+ * @subpackage  PersistentFilter
  * 
  * @todo rework account_id to container_id to let Persistent_Filters be organised
  *       in standard contaienr / grants way. This depends on container class to cope
@@ -69,7 +71,6 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      * @var Tinebase_PersistentFilter
      */
     private static $_instance = NULL;
-    
     
     /**
      * the constructor
@@ -144,14 +145,29 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * inspect creation of one record
-     * 
+     * add one record
+     *
      * @param   Tinebase_Record_Interface $_record
-     * @return  void
+     * @return  Tinebase_Record_Interface
+     * @throws  Tinebase_Exception_AccessDenied
      */
-    protected function _inspectBeforeCreate(Tinebase_Record_Interface $_record)
+    public function create(Tinebase_Record_Interface $_record)
     {
+        // check first if we already have a filter with this name for this account/application in the db
         $this->_sanitizeAccountId($_record);
+        $existing = $this->search(new Tinebase_Model_PersistentFilterFilter(array(
+            'account_id'        => $_record->account_id,
+            'application_id'    => $_record->application_id,
+            'name'              => $_record->name,
+        )));
+        if (count($existing) > 0) {
+            $_record->setId($existing->getFirstRecord()->getId());
+            $result = $this->update($_record);
+        } else {
+            $result = parent::create($_record);
+        }
+        
+        return $result;
     }
     
     /**
@@ -174,8 +190,29 @@ class Tinebase_PersistentFilter extends Tinebase_Controller_Record_Abstract
      */
     protected function _sanitizeAccountId($_record)
     {
-        if (! Tinebase_Core::getUser()->hasRight($_record->application_id, Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES)) {
+        if ((! $_record->account_id || $_record->account_id !== $this->_currentAccount->getId())
+            && ! Tinebase_Core::getUser()->hasRight($_record->application_id, Tinebase_Acl_Rights::MANAGE_SHARED_FAVORITES)) {
             $_record->account_id = $this->_currentAccount->getId();
         }
+    }
+    
+    /**
+     * inspects delete action
+     *
+     * @param array $_ids
+     * @return array of ids to actually delete
+     * 
+     * @todo finish
+     */
+    protected function _inspectDelete(array $_ids) {
+        // delete all persistenfilter prefs with this ids
+        $prefFilter = new Tinebase_Model_PreferenceFilter(array(
+            'name'        => Tinebase_Preference_Abstract::DEFAULTPERSISTENTFILTER,
+            array('field' => 'value', 'operator' => 'in', 'value' => (array) $_ids),
+        ));
+        $prefIds = Tinebase_Core::getPreference()->search($prefFilter, NULL, TRUE);
+        Tinebase_Core::getPreference()->delete($prefIds);
+        
+        return $_ids;
     }
 }

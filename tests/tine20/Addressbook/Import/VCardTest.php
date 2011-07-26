@@ -70,10 +70,13 @@ class Addressbook_Import_VCardTest extends PHPUnit_Framework_TestCase
         $this->_instance = Addressbook_Import_VCard::createFromDefinition($definition, array('dryrun' => TRUE));
         
         $result = $this->_instance->importFile($this->_filename);
+        //print_r($result['results']->getFirstRecord()->toArray());
                 
         $this->assertEquals(2, $result['totalcount'], 'Didn\'t import anything.');
         $this->assertEquals('spass, alex', $result['results']->getFirstRecord()->n_fileas, 'file as not found');
         $this->assertEquals('+49732121258035', $result['results']->getFirstRecord()->tel_home, 'n_fileas not found');
         $this->assertEquals('mitbewohner', $result['results']->getFirstRecord()->note, 'note not found');
+        $this->assertEquals('Eisenhüttenstraße 723', $result['results']->getFirstRecord()->adr_one_street, 'street not found');
+        $this->assertEquals('http://www.vcard.de', $result['results']->getFirstRecord()->url, 'url not found');
     }
 }		

@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.widgets', 'Tine.widgets.container');
 
@@ -229,14 +229,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * 
      * @param {String} [requiredGrant]
      * @param {Tine.Tinebase.Model.Container} [defaultContainer]
+     * @param {Boolean} onlySingle use default if more than one container in selection
      * @return {Tine.Tinebase.Model.Container}
      */
-    getSelectedContainer: function(requiredGrant, defaultContainer) {
+    getSelectedContainer: function(requiredGrant, defaultContainer, onlySingle) {
         var container = defaultContainer,
             sm = this.getSelectionModel(),
             selection = typeof sm.getSelectedNodes == 'function' ? sm.getSelectedNodes() : [sm.getSelectedNode()];
         
-        if (Ext.isArray(selection) && selection.length > 0) {
+        if (Ext.isArray(selection) && selection.length > 0 && (! onlySingle || selection.length === 1 || ! container)) {
             container = this.getContainerFromSelection(selection, requiredGrant) || container;
         } 
         // postpone this as we don't get the whole container record here
@@ -597,6 +598,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      */
     getDefaultContainerForNewRecords: function() {
         var container = Tine[this.appName].registry.get('defaultContainer');
-        return this.getSelectedContainer('addGrant', container);
+        
+        return this.getSelectedContainer('addGrant', container, true);
     }
 });

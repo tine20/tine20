@@ -99,10 +99,12 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         
         this.store.on('beforeload', this.onBeforeLoad, this);
         this.store.on('load', this.onLoad, this);
+        this.store.on('loadexception', this.onLoadException, this);
         
         // init autoRefresh
         this.autoRefreshTask = new Ext.util.DelayedTask(this.store.load, this.store, [{
-            refresh: true
+            refresh: true,
+            autoRefresh: true
         }]);
     },
     
@@ -192,8 +194,32 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
         }
     },
     
+    /**
+     * on store load exception
+     * 
+     * @param {Tine.Tinebase.data.RecordProxy} proxy
+     * @param {String} type
+     * @param {Object} error
+     * @param {Object} options
+     */
+    onLoadException: function(proxy, type, error, options) {
+        
+        // reset autoRefresh
+        if (window.isMainWindow && this.autoRefreshInterval) {
+            this.autoRefreshTask.delay(this.autoRefreshInterval * 5000);
+        }
+        
+        this.setLoading(false);
+        this.loadMask.hide();
+        
+        if (! options.autoRefresh) {
+            this.onProxyFail(error);
+        }
+    },
+    
     onProxyFail: function(error, event) {
         this.setLoading(false);
+        this.loadMask.hide();
         
         if (error.code == 901) {
             
@@ -245,15 +271,16 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
             this.conflictConfirmWin = Tine.widgets.dialog.MultiOptionsDialog.openWindow({
                 modal: true,
                 allowCancel: false,
-                height: 150 + 15*error.freebusyinfo.length,
+                height: 180 + 15*error.freebusyinfo.length,
                 title: this.app.i18n._('Scheduling Conflict'),
                 questionText: '<div class = "cal-conflict-heading">' +
                                    this.app.i18n._('The following attendee are busy at the requested time:') + 
                                '</div>' +
                                busyAttendeeHTML,
                 options: [
-                    {text: this.app.i18n._('Ignore Conflict'), name: 'ignore'},
-                    {text: this.app.i18n._('Edit Event'), name: 'edit'}
+                    {text: this.app.i18n._('Ignore Conflict'), name: 'ignore', checked: true},
+                    {text: this.app.i18n._('Edit Event'), name: 'edit'},
+                    {text: this.app.i18n._('Cancel this action'), name: 'cancel'}
                 ],
                 scope: this,
                 handler: function(option) {
@@ -264,12 +291,18 @@ Tine.Calendar.CalendarPanel = Ext.extend(Ext.Panel, {
                             break;
                         
                         case 'edit':
-                        default:
                             this.view.getSelectionModel().select(event);
                             // mark event as not dirty to allow edit dlg
                             event.dirty = false;
                             this.view.fireEvent('dblclick', this.view, event);
                             this.conflictConfirmWin.close();
+                            break;
+                            
+                        case 'cancel':
+                        default:
+                            this.conflictConfirmWin.close();
+                            this.loadMask.show();
+                            this.store.load({refresh: true});
                             break;
                     }
                 }

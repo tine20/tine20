@@ -114,10 +114,12 @@ Tine.Tinebase.AppPile = Ext.extend(Ext.Panel, {
      */
     setActiveItem: function(el) {
         for (var appName in this.els) {
-            if (el == this.els[appName] || el.parent() == this.els[appName]) {
-                this.els[appName].addClass('app-panel-header-active');
-            } else {
-                this.els[appName].removeClass('app-panel-header-active');
+            if (el) {
+                if (el == this.els[appName] || el.parent() == this.els[appName]) {
+                    this.els[appName].addClass('app-panel-header-active');
+                } else {
+                    this.els[appName].removeClass('app-panel-header-active');
+                }
             }
         }
     }

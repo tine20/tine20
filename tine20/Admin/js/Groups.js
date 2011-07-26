@@ -269,7 +269,6 @@ Tine.Admin.Groups.Main = {
             autoSizeColumns: false,
             selModel: rowSelectionModel,
             enableColLock: false,
-            loadMask: true,
             autoExpandColumn: 'n_family',
             border: false,
             view: new Ext.grid.GridView({

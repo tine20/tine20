@@ -159,7 +159,7 @@ class Tinebase_Relations
      */
     public function getRelations($_model, $_backend, $_id, $_degree = NULL, array $_type = array(), $_ignoreACL = FALSE)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' " 
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . "  model: '$_model' backend: '$_backend' " 
             // . 'ids: ' . print_r((array)$_id, true)
         );
     
@@ -248,8 +248,8 @@ class Tinebase_Relations
             $method = 'update';
         }
 
-        Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' ' . ucfirst($method) . ' ' . $_relation->related_model . ' record.');
-        //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_relation->toArray(), TRUE));
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . ucfirst($method) . ' ' . $_relation->related_model . ' record.');
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_relation->toArray(), TRUE));
         
         $record = $appController->$method($_relation->related_record);
         $_relation->related_id = $record->getId();
@@ -296,18 +296,18 @@ class Tinebase_Relations
         
         // fill related_record
         foreach ($modelMap as $modelName => $relations) {
+        	$getMultipleMethod = 'getMultiple';
+        	
             if ($modelName === 'Tinebase_Model_User') {
                 // @todo add related backend here
                 //$appController = Tinebase_User::factory($relations->related_backend);
                 $appController = Tinebase_User::factory(Tinebase_User::getConfiguredBackend());
+                $records = $appController->$getMultipleMethod($relations->related_id);
             } else {
                 list($appName, $i, $itemName) = explode('_', $modelName);
                 $appController = Tinebase_Core::getApplicationInstance($appName, $itemName);
+                $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
             }
-            
-            $getMultipleMethod = 'getMultiple';
-            
-            $records = $appController->$getMultipleMethod($relations->related_id, $_ignoreACL);
             
             foreach ($relations as $relation) {
                 $recordIndex    = $records->getIndexById($relation->related_id);

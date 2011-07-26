@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Tinebase');
 
@@ -88,6 +88,14 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
      */
     activeApp: null,
     
+    /**
+     * activate application
+     * 
+     * @param {Tine.Application} app
+     * @return {Boolean}
+     * 
+     * TODO think about adding a fallback app if app mainscreen could not be fetched 
+     */
     activate: function(app) {
         if (app || (app = this.getDefault()) ) {
             if (app == this.getActive()) {
@@ -106,7 +114,14 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
                 return false;
             }
             
-            app.getMainScreen().show();
+            var mainscreen = app.getMainScreen(); 
+            if (mainscreen) {
+                mainscreen.show();
+            } else {
+                // app has no mainscreen / perhaps it has been disabled
+                return false;
+            }
+            
             this.activeApp = app;
             this.fireEvent('activate', app);
         }

@@ -93,6 +93,12 @@ Ext.namespace('Tine.Felamimail');
     sending: false,
     
     /**
+     * validation error message
+     * @type String
+     */
+     validationErrorMessage: '',
+    
+    /**
      * @private
      */
     windowNamePrefix: 'MessageEditWindow_',
@@ -255,13 +261,14 @@ Ext.namespace('Tine.Felamimail');
                     
                     var account = Tine.Tinebase.appMgr.get('Felamimail').getAccountStore().getById(this.record.get('account_id'));
             
-                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('content_type') == 'text/plain')) {
+                    if (account.get('display_format') == 'plain' || (account.get('display_format') == 'content_type' && message.get('body_content_type') == 'text/plain')) {
                         this.msgBody = Ext.util.Format.nl2br(this.msgBody);
                     }
                     
                     if (this.replyTo) {
+                        var date = (this.replyTo.get('received')) ? this.replyTo.get('received') : new Date();
                         this.msgBody = String.format(this.app.i18n._('On {0}, {1} wrote'), 
-                            Tine.Tinebase.common.dateTimeRenderer(new Date()), 
+                            Tine.Tinebase.common.dateTimeRenderer(date), 
                             Ext.util.Format.htmlEncode(this.replyTo.get('from_name'))
                         ) + ':<br/>'
                           + '<blockquote class="felamimail-body-blockquote">' + this.msgBody + '</blockquote><br/>';
@@ -332,6 +339,8 @@ Ext.namespace('Tine.Felamimail');
         this.htmlEditor.on('keydown', function(e) {
             if (e.getKey() == e.ENTER && e.ctrlKey) {
                 this.onSaveAndClose();
+            } else if (e.getKey() == e.TAB && e.shiftKey) {
+                this.subjectField.focus.defer(50, this.subjectField);
             }
         }, this);
     },
@@ -636,6 +645,9 @@ Ext.namespace('Tine.Felamimail');
 
         this.record.set('account_id', account.get('original_id'));
         
+        // need to sync once again to make sure we have the correct recipients
+        this.recipientGrid.syncRecipientsToRecord();
+        
         /*
         if (this.record.data.note) {
             // show message box with note editing textfield
@@ -866,14 +878,52 @@ Ext.namespace('Tine.Felamimail');
     },
 
     /**
-     * is form valid (checks if attachments are still uploading)
+     * is form valid (checks if attachments are still uploading / recipients set)
      * 
      * @return {Boolean}
      */
     isValid: function() {
-        var result = (! this.attachmentGrid.isUploading());
+        this.validationErrorMessage = Tine.Felamimail.MessageEditDialog.superclass.getValidationErrorMessage.call(this);
+        
+        var result = true;
+        
+        if (this.attachmentGrid.isUploading()) {
+            result = false;
+            this.validationErrorMessage = this.app.i18n._('Files are still uploading.');
+        }
+        
+        if (result) {
+            result = this.validateRecipients();
+        }
+        
+        
         return (result && Tine.Felamimail.MessageEditDialog.superclass.isValid.call(this));
-    }
+    },
+    
+    /**
+     * checks recipients
+     * 
+     * @return {Boolean}
+     */
+    validateRecipients: function() {
+        var result = true;
+        
+        if (this.record.get('to').length == 0 && this.record.get('cc').length == 0 && this.record.get('bcc').length == 0) {
+            this.validationErrorMessage = this.app.i18n._('No recipients set.');
+            result = false;
+        }
+        
+        return result;
+    },
+    
+    /**
+     * get validation error message
+     * 
+     * @return {String}
+     */
+    getValidationErrorMessage: function() {
+        return this.validationErrorMessage;
+    }    
 });
 
 /**

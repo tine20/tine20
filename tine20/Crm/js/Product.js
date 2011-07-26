@@ -3,8 +3,8 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -34,7 +34,6 @@ Tine.Crm.Product.GridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      */
     autoExpandColumn: 'name',
     clicksToEdit: 1,
-    loadMask: true,
     
     /**
      * The record currently being edited

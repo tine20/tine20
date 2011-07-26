@@ -4,7 +4,7 @@
  * 
  * @package     ActiveSync
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2010-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'ActiveSync_Controller_Calendar::main');
-}
 
 /**
  * Test class for Calendar_Controller_Event
@@ -36,11 +32,6 @@ class ActiveSync_Controller_CalendarTests extends ActiveSync_TestCase
     protected $_specialFolderName = 'calendar-root';
     
     protected $_class = ActiveSync_Controller::CLASS_CALENDAR;
-    
-    /**
-     * @var ActiveSync_Controller_Calendar controller
-     */
-    protected $_controller;
     
     /**
      * @var array test objects
@@ -69,7 +60,10 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         PHPUnit_TextUI_TestRunner::run($suite);
     }
     
-    
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync/ActiveSync_TestCase::setUp()
+     */
     protected function setUp()
     {   	
         parent::setUp();	
@@ -170,7 +164,6 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $iphone->owner_id   = $this->_testUser->getId();
         $iphone->calendarfilter_id = $this->objects['filter']->getId();
         $this->objects['deviceIPhone'] = ActiveSync_Controller_Device::getInstance()->create($iphone);
-        
     }
 
     /**
@@ -196,8 +189,6 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     
     /**
      * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
      */
     public function testAppendXml()
     {
@@ -216,7 +207,7 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $appData        = $add->appendChild($testDom->createElementNS('uri:AirSync', 'ApplicationData'));
         
         
-        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));     
+        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
         
         $controller->appendXML($appData, null, $this->objects['event']->getId(), array());
         
@@ -229,11 +220,11 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $outputStream = fopen("php://temp", 'r+');
         $encoder = new Wbxml_Encoder($outputStream, 'UTF-8', 3);
         $encoder->encode($testDom);
-        
-        #rewind($outputStream);
-        #fpassthru($outputStream);
     }
     
+    /**
+     * testAppendXml_allDayEvent
+     */
     public function testAppendXml_allDayEvent()
     {
         $startDate = Tinebase_DateTime::now()->setTime(0,0,0)->addMonth(1);
@@ -269,8 +260,6 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     
     /**
      * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
      */
     public function testAppendXml_dailyEvent()
     {
@@ -293,8 +282,6 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         
         $controller->appendXML($appData, null, $this->objects['eventDaily']->getId(), array());
         
-        #echo $testDom->saveXML();
-        
         // namespace === uri:Calendar
         $this->assertEquals(ActiveSync_Controller_Calendar::RECUR_TYPE_DAILY, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Type')->item(0)->nodeValue, $testDom->saveXML());
         $this->assertEquals(4, @$testDom->getElementsByTagNameNS('uri:Calendar', 'Exception')->length, $testDom->saveXML());
@@ -309,6 +296,10 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync/ActiveSync_TestCase::_validateGetServerEntries()
+     */
     protected function _validateGetServerEntries(Tinebase_Record_Abstract $_record)
     {
         $this->objects['events'][] = $_record;
@@ -322,8 +313,6 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     
     /**
      * test xml generation for IPhone
-     * 
-     * birthday must have 12 hours added
      */
     public function testConvertToTine20Model()
     {
@@ -333,13 +322,14 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         
         $event = $controller->toTineModel($xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
-        #var_dump($event->toArray());
-        
         $this->assertEquals('Repeat'             , $event->summary);
         $this->assertEquals(2                    , count($event->exdate));
         $this->assertEquals('2010-11-23 12:45:00', $event->alarms[0]->alarm_time->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    /**
+     * testConvertToTine20Model_fromPalm
+     */
     public function testConvertToTine20Model_fromPalm()
     {
         $xml = simplexml_import_dom($this->_getInputDOMDocument($this->_testXMLInput_palmPreV12));
@@ -356,6 +346,9 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $this->assertEquals("test beschreibung zeile 1\r\nZeile 2\r\nZeile 3", $event->description);
     }
     
+    /**
+     * testConvertToTine20Model_dailyRepeatingEvent
+     */
     public function testConvertToTine20Model_dailyRepeatingEvent()
     {
         $xml = simplexml_import_dom($this->_getInputDOMDocument($this->_testXMLInput_DailyRepeatingEvent));
@@ -369,6 +362,10 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         $this->assertEquals('2010-12-23 22:59:59', $event->rrule->until->format(Tinebase_Record_Abstract::ISO8601LONG));
     }
     
+    /**
+     * (non-PHPdoc)
+     * @see ActiveSync/ActiveSync_TestCase::_validateAddEntryToBackend()
+     */
     protected function _validateAddEntryToBackend(Tinebase_Record_Abstract $_record)
     {
         $this->objects['events'][] = $_record;
@@ -394,14 +391,43 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
         
         $event = $controller->search($this->_specialFolderName, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
         
-        #var_dump($event->toArray());
-        
         $this->assertEquals(1       , count($event));
         $this->assertEquals('Repeat', $event[0]->summary);
     }
     
-}
+    /**
+     * test search events (unsyncable)
+     * 
+     * TODO finish this -> assertion fails atm because the event is found even if it is in an unsyncable folder and has no attendees (but 1 exdate)
+     */
+    public function testUnsyncableSearch()
+    {
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        
+        $record = $controller->add($this->_getContainerWithoutSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $record->exdate = new Tinebase_Record_RecordSet('Calendar_Model_Event');
+        $record->attendee = NULL;
+
+        $this->objects['events'][] = Calendar_Controller_MSEventFacade::getInstance()->update($record);
+        
+        $events = $controller->search($this->_specialFolderName, $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        
+        $this->assertEquals(0, count($events));
+    }
     
-if (PHPUnit_MAIN_METHOD == 'ActiveSync_Controller_Calendar::main') {
-    ActiveSync_Controller_Calendar::main();
+    /**
+     * test supported folders
+     */
+    public function testGetSupportedFolders()
+    {
+        $controller = new ActiveSync_Controller_Calendar($this->objects['deviceIPhone'], new Tinebase_DateTime(null, null, 'de_DE'));
+        
+        $syncable = $this->_getContainerWithSyncGrant();
+        $supportedFolders = $controller->getSupportedFolders();
+        
+        $this->assertEquals(1, count($supportedFolders));
+        $this->assertTrue(isset($supportedFolders[$syncable->getId()]));
+    }
 }

@@ -112,7 +112,7 @@ Tine.Admin = function () {
 	    }, {
             text: translation.gettext('Containers'),
             cls: "treemain",
-            //iconCls: 'action_tag',
+            iconCls: 'admin-node-containers',
             allowDrag: false,
             allowDrop: true,
             id: "containers",

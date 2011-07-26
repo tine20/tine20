@@ -117,8 +117,19 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
         try {
             // does the user exist in the user database?
             if ($accountsController instanceof Tinebase_User_Interface_SyncAble) {
-                Tinebase_User::syncUser($_username);
+                /**
+                 * catch all exceptions during user data sync
+                 * either it's the first sync and no user data get synchronized or
+                 * we can work with the data synced during previous login
+                 */ 
+                try {
+                    Tinebase_User::syncUser($_username);
+                } catch (Exception $e) {
+                    Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Failed to sync user data for: ' . $_username . ' reason: ' . $e->getMessage());
+                    if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                }
             }
+            
             $user = $accountsController->getFullUserByLoginName($_username);
         } catch (Tinebase_Exception_NotFound $e) {
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . ' Account ' . $_username . ' not found in account storage.');

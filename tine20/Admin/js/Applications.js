@@ -326,7 +326,6 @@ Tine.Admin.Applications.Main = function() {
             autoSizeColumns: false,
             selModel: rowSelectionModel,
             enableColLock:false,
-            loadMask: true,
             autoExpandColumn: 'name',
             border: false,
             viewConfig: {            

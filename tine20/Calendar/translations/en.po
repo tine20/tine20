@@ -14,6 +14,46 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
+#: Controller/EventNotifications.php:263
+msgid "Alarm for event \"%1$s\" at %2$s"
+msgstr "Alarm for event \"%1$s\" at %2$s"
+
+#: Controller/EventNotifications.php:266
+msgid "Event invitation \"%1$s\" at %2$s"
+msgstr "Event invitation \"%1$s\" at %2$s"
+
+#: Controller/EventNotifications.php:269
+msgid "Event \"%1$s\" at %2$s has been canceled"
+msgstr "Event \"%1$s\" at %2$s has been canceled"
+
+#: Controller/EventNotifications.php:274
+msgid "Event \"%1$s\" at %2$s has been rescheduled"
+msgstr "Event \"%1$s\" at %2$s has been rescheduled"
+
+#: Controller/EventNotifications.php:278
+msgid "Event \"%1$s\" at %2$s has been updated"
+msgstr "Event \"%1$s\" at %2$s has been updated"
+
+#: Controller/EventNotifications.php:288
+msgid "%1$s accepted event \"%2$s\" at %3$s"
+msgstr "%1$s accepted event \"%2$s\" at %3$s"
+
+#: Controller/EventNotifications.php:292
+msgid "%1$s declined event \"%2$s\" at %3$s"
+msgstr "%1$s declined event \"%2$s\" at %3$s"
+
+#: Controller/EventNotifications.php:296
+msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Tentative response from %1$s for event \"%2$s\" at %3$s"
+
+#: Controller/EventNotifications.php:300
+msgid "No response from %1$s for event \"%2$s\" at %3$s"
+msgstr "No response from %1$s for event \"%2$s\" at %3$s"
+
+#: Controller/EventNotifications.php:304
+msgid "Attendee changes for event \"%1$s\" at %2$s"
+msgstr "Attendee changes for event \"%1$s\" at %2$s"
+
 #: Acl/Rights.php:96
 msgid "manage shared calendars"
 msgstr "manage shared calendars"
@@ -38,611 +78,530 @@ msgstr "manage resources"
 msgid "All Rights to administrate resources"
 msgstr "All Rights to administrate resources"
 
-#: Controller/EventNotifications.php:260
-msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr "Alarm for event \"%1$s\" at %2$s"
-
-#: Controller/EventNotifications.php:263
-msgid "Event invitation \"%1$s\" at %2$s"
-msgstr "Event invitation \"%1$s\" at %2$s"
-
-#: Controller/EventNotifications.php:266
-msgid "Event \"%1$s\" at %2$s has been canceled"
-msgstr "Event \"%1$s\" at %2$s has been canceled"
-
-#: Controller/EventNotifications.php:271
-msgid "Event \"%1$s\" at %2$s has been rescheduled"
-msgstr "Event \"%1$s\" at %2$s has been rescheduled"
-
-#: Controller/EventNotifications.php:275
-msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr "Event \"%1$s\" at %2$s has been updated"
-
-#: Controller/EventNotifications.php:285
-msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr "%1$s accepted event \"%2$s\" at %3$s"
-
-#: Controller/EventNotifications.php:289
-msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr "%1$s declined event \"%2$s\" at %3$s"
-
-#: Controller/EventNotifications.php:293
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Tentative response from %1$s for event \"%2$s\" at %3$s"
-
-#: Controller/EventNotifications.php:297
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "No response from %1$s for event \"%2$s\" at %3$s"
-
-#: Controller/EventNotifications.php:301
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Attendee changes for event \"%1$s\" at %2$s"
-
-#: Controller.php:103
-#, python-format
-msgid "%s's personal calendar"
-msgstr "%s's personal calendar"
-
-#: js/AdminPanel.js:44 js/Calendar-FAT-debug.js:867 js/Calendar-FAT.js:6
-msgid "Manage Resources"
-msgstr "Manage Resources"
-
-#: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:81
-#: js/Calendar-FAT-debug.js:637 js/Calendar-FAT-debug.js:4976
-#: js/Calendar-FAT-debug.js:6472 js/Calendar-FAT-debug.js:6988
-#: js/Calendar-FAT.js:6 js/EventDetailsPanel.js:249 js/Model.js:320
-msgid "Attendee"
-msgstr "Attendee"
-
-#: js/AttendeeFilterModel.js:101 js/Calendar-FAT-debug.js:7054
-#: js/Calendar-FAT.js:6
-msgid "Select Attendee"
-msgstr "Select Attendee"
-
-#: js/AttendeeGridPanel.js:107 js/Calendar-FAT-debug.js:6498
-#: js/Calendar-FAT.js:6
-msgid "Role"
-msgstr "Role"
-
-#: js/AttendeeGridPanel.js:116 js/Calendar-FAT-debug.js:6507
-msgid "Quantity"
-msgstr "Quantity"
-
-#: js/AttendeeGridPanel.js:125 js/Calendar-FAT-debug.js:6516
-#: js/Calendar-FAT.js:6
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "This is the calendar where the attender has saved this event in"
-
-#: js/AttendeeGridPanel.js:161 js/Calendar-FAT-debug.js:6552
-#: js/Calendar-FAT.js:6
-msgid "Type"
-msgstr "Type"
-
-#: js/AttendeeGridPanel.js:168 js/Calendar-FAT-debug.js:6559
-#: js/Calendar-FAT.js:6
-msgid "User"
-msgstr "User"
-
-#: js/AttendeeGridPanel.js:169 js/Calendar-FAT-debug.js:6560
-#: js/Calendar-FAT.js:6
-msgid "Group"
-msgstr "Group"
-
-#: js/AttendeeGridPanel.js:170 js/Calendar-FAT-debug.js:811
-#: js/Calendar-FAT-debug.js:6561 js/Calendar-FAT.js:6 js/Model.js:494
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Resource"
-msgstr[1] "Resources"
-
-#: js/AttendeeGridPanel.js:171 js/Calendar-FAT-debug.js:6562
-#: js/Calendar-FAT.js:6
-msgid "Member of group"
-msgstr "Member of group"
-
-#: js/AttendeeGridPanel.js:178 js/Calendar-FAT-debug.js:6569
-#: js/Calendar-FAT-debug.js:8841 js/Calendar-FAT-debug.js:8935
-#: js/Calendar-FAT.js:6 js/ResourceEditDialog.js:56
-#: js/ResourcesGridPanel.js:41
-msgid "Name"
-msgstr "Name"
-
-#: js/AttendeeGridPanel.js:186 js/Calendar-FAT-debug.js:6577
-#: js/Calendar-FAT.js:6 Model/Event.php:232
-msgid "Status"
-msgstr "Status"
-
-#: js/AttendeeGridPanel.js:325 js/Calendar-FAT-debug.js:6716
-#: js/Calendar-FAT.js:6
-msgid "Remove Attender"
-msgstr "Remove Attender"
-
-#: js/AttendeeGridPanel.js:420 js/Calendar-FAT-debug.js:6811
-#: js/Calendar-FAT.js:6
-msgid "Click here to invite another attender..."
-msgstr "Click here to invite another attender..."
-
-#: js/AttendeeGridPanel.js:438 js/AttendeeGridPanel.js:456
-#: js/AttendeeGridPanel.js:473 js/AttendeeGridPanel.js:485
-#: js/Calendar-FAT-debug.js:653 js/Calendar-FAT-debug.js:6829
-#: js/Calendar-FAT-debug.js:6847 js/Calendar-FAT-debug.js:6864
-#: js/Calendar-FAT-debug.js:6876 js/Calendar-FAT.js:6 js/Model.js:336
-msgid "No Information"
-msgstr "No Information"
-
-#: js/AttendeeGridPanel.js:443 js/Calendar-FAT-debug.js:6834
-#: js/Calendar-FAT.js:6
-msgid "(as a group member)"
-msgstr "(as a group member)"
-
-#: js/AttendeeGridPanel.js:497 js/Calendar-FAT-debug.js:6888
-#: js/Calendar-FAT.js:6
-msgid "Required"
-msgstr "Required"
-
-#: js/AttendeeGridPanel.js:500 js/Calendar-FAT-debug.js:6891
-#: js/Calendar-FAT.js:6
-msgid "Optional"
-msgstr "Optional"
-
-#: js/AttendeeGridPanel.js:522 js/Calendar-FAT-debug.js:781
-#: js/Calendar-FAT-debug.js:6913 js/Calendar-FAT.js:6 js/Model.js:464
-#: Model/Attender.php:45
-msgid "No response"
-msgstr "No response"
-
-#: js/AttendeeGridPanel.js:525 js/Calendar-FAT-debug.js:782
-#: js/Calendar-FAT-debug.js:6916 js/Calendar-FAT.js:6 js/Model.js:465
-#: Model/Attender.php:46
-msgid "Accepted"
-msgstr "Accepted"
-
-#: js/AttendeeGridPanel.js:528 js/Calendar-FAT-debug.js:783
-#: js/Calendar-FAT-debug.js:6919 js/Calendar-FAT.js:6 js/Model.js:466
-#: Model/Attender.php:47
-msgid "Declined"
-msgstr "Declined"
-
-#: js/AttendeeGridPanel.js:531 js/Calendar-FAT-debug.js:784
-#: js/Calendar-FAT-debug.js:6922 js/Calendar-FAT.js:6 js/Model.js:467
-#: Model/Attender.php:48
-msgid "Tentative"
-msgstr "Tentative"
-
-#: js/AttendeeStatusFilterModel.js:31 js/Calendar-FAT-debug.js:7145
-#: js/Calendar-FAT.js:6
-msgid "Attendee Status"
-msgstr "Attendee Status"
-
-#: js/Calendar-FAT-debug.js:372 js/Calendar-FAT-debug.js:641 js/Model.js:63
-#: js/Model.js:324
-msgid "Event"
-msgid_plural "Events"
-msgstr[0] "Event"
-msgstr[1] "Events"
-
-#: js/Calendar-FAT-debug.js:372 js/Calendar-FAT-debug.js:641 js/Model.js:63
-#: js/Model.js:324
-msgid "Events"
-msgstr "Events"
-
-#: js/Calendar-FAT-debug.js:376 js/Calendar-FAT-debug.js:5938
-#: js/Calendar-FAT.js:6 js/Calendar.js:39 js/Model.js:67 Setup/setup.xml:4
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] "Calendar"
-msgstr[1] "Calendars"
-
-#: js/Calendar-FAT-debug.js:376 js/Model.js:67
-msgid "Calendars"
-msgstr "Calendars"
-
-#: js/Calendar-FAT-debug.js:508 js/Calendar-FAT.js:6 js/Model.js:199
-msgid "Quick search"
-msgstr "Quick search"
-
-#: js/Calendar-FAT-debug.js:512 js/Calendar-FAT-debug.js:4959
-#: js/Calendar-FAT.js:6 js/EventDetailsPanel.js:232 js/Model.js:203
-#: Model/Event.php:230
-msgid "Organizer"
-msgstr "Organizer"
-
-#: js/Calendar-FAT-debug.js:637 js/Model.js:320
-msgid "Attender"
-msgid_plural "Attendee"
-msgstr[0] "Attender"
-msgstr[1] "Attendee"
-
-#: js/Calendar-FAT-debug.js:811 js/Model.js:494
-msgid "Resources"
-msgstr "Resources"
-
-#: js/Calendar-FAT-debug.js:928 js/CalendarPanel.js:39
-msgid "Loading events, please wait..."
-msgstr "Loading events, please wait..."
-
-#: js/Calendar-FAT-debug.js:1114 js/Calendar-FAT.js:6 js/CalendarPanel.js:225
-msgid "Scheduling Conflict"
-msgstr "Scheduling Conflict"
-
-#: js/Calendar-FAT-debug.js:1116 js/Calendar-FAT.js:6 js/CalendarPanel.js:227
-msgid "The following attendee are busy at the requested time:"
-msgstr "The following attendee are busy at the requested time:"
-
-#: js/Calendar-FAT-debug.js:1120 js/Calendar-FAT.js:6 js/CalendarPanel.js:231
-msgid "Ignore Conflict"
-msgstr "Ignore Conflict"
-
-#: js/Calendar-FAT-debug.js:1121 js/Calendar-FAT.js:6 js/CalendarPanel.js:232
-msgid "Edit Event"
-msgstr "Edit Event"
-
-#: js/Calendar-FAT-debug.js:1157 js/Calendar-FAT.js:6 js/CalendarPanel.js:268
-msgid "Confirm Update of Series"
-msgstr "Confirm Update of Series"
-
-#: js/Calendar-FAT-debug.js:1158 js/Calendar-FAT.js:6 js/CalendarPanel.js:269
-msgid "Do you really want to update all events of this recurring event series?"
-msgstr "Do you really want to update all events of this recurring event series?"
-
-#: js/Calendar-FAT-debug.js:1172 js/Calendar-FAT.js:6 js/CalendarPanel.js:283
-msgid "Update Event"
-msgstr "Update Event"
-
-#: js/Calendar-FAT-debug.js:1175 js/Calendar-FAT.js:6 js/CalendarPanel.js:286
-msgid "Update nothing"
-msgstr "Update nothing"
-
-#: js/Calendar-FAT-debug.js:1176 js/Calendar-FAT.js:6 js/CalendarPanel.js:287
-msgid "Update whole series"
-msgstr "Update whole series"
-
-#: js/Calendar-FAT-debug.js:1177 js/Calendar-FAT.js:6 js/CalendarPanel.js:288
-msgid "Update this event only"
-msgstr "Update this event only"
-
-#: js/Calendar-FAT-debug.js:1562 js/Calendar-FAT.js:6 js/EventUI.js:220
+#: js/EventUI.js:220
 msgid "private classification"
 msgstr "private classification"
 
-#: js/Calendar-FAT-debug.js:1569 js/Calendar-FAT.js:6 js/EventUI.js:227
+#: js/EventUI.js:227
 msgid "recurring event"
 msgstr "recurring event"
 
-#: js/Calendar-FAT-debug.js:1576 js/Calendar-FAT.js:6 js/EventUI.js:234
+#: js/EventUI.js:234
 msgid "has alarm"
 msgstr "has alarm"
 
-#: js/Calendar-FAT-debug.js:1925 js/Calendar-FAT-debug.js:3370
-#: js/Calendar.js:29 js/DaysView.js:88 js/MonthView.js:81
+#: js/CalendarPanel.js:51
+msgid "Loading events, please wait..."
+msgstr "Loading events, please wait..."
+
+#: js/CalendarPanel.js:275
+msgid "Scheduling Conflict"
+msgstr "Scheduling Conflict"
+
+#: js/CalendarPanel.js:277
+msgid "The following attendee are busy at the requested time:"
+msgstr "The following attendee are busy at the requested time:"
+
+#: js/CalendarPanel.js:281
+msgid "Ignore Conflict"
+msgstr "Ignore Conflict"
+
+#: js/CalendarPanel.js:282
+msgid "Edit Event"
+msgstr "Edit Event"
+
+#: js/CalendarPanel.js:283
+msgid "Cancel this action"
+msgstr "Cancel this action"
+
+#: js/CalendarPanel.js:325
+msgid "Update Event"
+msgstr "Update Event"
+
+#: js/CalendarPanel.js:329
+msgid "Update this event only"
+msgstr "Update this event only"
+
+#: js/CalendarPanel.js:330
+msgid "Update this and all future events"
+msgstr "Update this and all future events"
+
+#: js/CalendarPanel.js:331
+msgid "Update whole series"
+msgstr "Update whole series"
+
+#: js/CalendarPanel.js:332
+msgid "Update nothing"
+msgstr "Update nothing"
+
+#: js/DaysView.js:88 js/Calendar.js:29 js/MonthView.js:81
+#: js/AddressbookGridPanelHook.js:35
 msgid "New Event"
 msgstr "New Event"
 
-#: js/Calendar-FAT-debug.js:1930 js/DaysView.js:93
+#: js/DaysView.js:93
 msgid "{0}, the {1}. of {2}"
 msgstr "{0}, the {1}. of {2}"
 
-#: js/Calendar-FAT-debug.js:3375 js/Calendar-FAT-debug.js:5881
-#: js/Calendar-FAT.js:6 js/MainScreenWestPanel.js:52 js/MonthView.js:86
-msgid "WK"
-msgstr "WK"
-
-#: js/Calendar-FAT-debug.js:3380 js/MonthView.js:91
-msgid "{0} more..."
-msgstr "{0} more..."
-
-#: js/Calendar-FAT-debug.js:4574 js/Calendar-FAT-debug.js:5166
-#: js/Calendar-FAT.js:6 js/MainScreenCenterPanel.js:135
-#: js/PagingToolbar.js:275
+#: js/PagingToolbar.js:275 js/MainScreenCenterPanel.js:135
 msgid "Week"
 msgstr "Week"
 
-#: js/Calendar-FAT-debug.js:4776 js/Calendar-FAT.js:6
-#: js/EventDetailsPanel.js:49
-msgid "Unknown calendar"
-msgstr "Unknown calendar"
+#: js/ResourcesGridPanel.js:41 js/ResourceEditDialog.js:56
+#: js/AttendeeGridPanel.js:178
+msgid "Name"
+msgstr "Name"
 
-#: js/Calendar-FAT-debug.js:4787 js/Calendar-FAT.js:6
-#: js/EventDetailsPanel.js:60
-msgid "{0} {1} o'clock"
-msgstr "{0} {1} o'clock"
+#: js/ResourcesGridPanel.js:47 js/ResourceEditDialog.js:61
+msgid "Email"
+msgstr "Email"
 
-#: js/Calendar-FAT-debug.js:4904 js/Calendar-FAT-debug.js:6096
-#: js/Calendar-FAT.js:6 js/EventDetailsPanel.js:177 js/EventEditDialog.js:87
-#: Model/Event.php:233
-msgid "Summary"
-msgstr "Summary"
-
-#: js/Calendar-FAT-debug.js:4940 js/Calendar-FAT-debug.js:6108
-#: js/Calendar-FAT.js:6 js/EventDetailsPanel.js:213 js/EventEditDialog.js:99
-#: Preference.php:84
-msgid "Start Time"
-msgstr "Start Time"
-
-#: js/Calendar-FAT-debug.js:4945 js/Calendar-FAT-debug.js:6123
-#: js/Calendar-FAT.js:6 js/EventDetailsPanel.js:218 js/EventEditDialog.js:114
-msgid "End Time"
-msgstr "End Time"
-
-#: js/Calendar-FAT-debug.js:4950 js/Calendar-FAT.js:6
-#: js/EventDetailsPanel.js:223 Model/Event.php:226
-msgid "Blocking"
-msgstr "Blocking"
-
-#: js/Calendar-FAT-debug.js:4955 js/Calendar-FAT-debug.js:6103
-#: js/Calendar-FAT-debug.js:8852 js/Calendar-FAT.js:6
-#: js/EventDetailsPanel.js:228 js/EventEditDialog.js:94
-#: js/ResourcesGridPanel.js:52 Model/Event.php:229
+#: js/ResourcesGridPanel.js:52 js/EventDetailsPanel.js:228
+#: js/EventEditDialog.js:94 Model/Event.php:229
 msgid "Location"
 msgstr "Location"
 
-#: js/Calendar-FAT-debug.js:5149 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:118
 msgid "Print Page"
 msgstr "Print Page"
 
-#: js/Calendar-FAT-debug.js:5157 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:126
 msgid "Day"
 msgstr "Day"
 
-#: js/Calendar-FAT-debug.js:5175 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:144
 msgid "Month"
 msgstr "Month"
 
-#: js/Calendar-FAT-debug.js:5355 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:324
 msgid "Set my response"
 msgstr "Set my response"
 
-#: js/Calendar-FAT-debug.js:5406 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:375
 msgid "Please Change Selection"
 msgstr "Please Change Selection"
 
-#: js/Calendar-FAT-debug.js:5407 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:376
 msgid "Your selection contains recurring events. Recuring events must be deleted seperatly!"
 msgstr "Your selection contains recurring events. Recuring events must be deleted seperatly!"
 
-#: js/Calendar-FAT-debug.js:5421 js/Calendar-FAT.js:6
 #: js/MainScreenCenterPanel.js:390
-msgid "Confirm Deletion of Series"
-msgstr "Confirm Deletion of Series"
-
-#: js/Calendar-FAT-debug.js:5422 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:391
-msgid "Do you really want to delete all events of this recurring event series?"
-msgstr "Do you really want to delete all events of this recurring event series?"
-
-#: js/Calendar-FAT-debug.js:5435 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:404
 msgid "Delete Event"
 msgstr "Delete Event"
 
-#: js/Calendar-FAT-debug.js:5439 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:408
-msgid "Delete whole series"
-msgstr "Delete whole series"
-
-#: js/Calendar-FAT-debug.js:5440 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:409
-msgid "Delete this and all future events"
-msgstr "Delete this and all future events"
-
-#: js/Calendar-FAT-debug.js:5441 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:410
+#: js/MainScreenCenterPanel.js:394
 msgid "Delete this event only"
 msgstr "Delete this event only"
 
-#: js/Calendar-FAT-debug.js:5442 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:411
+#: js/MainScreenCenterPanel.js:395
+msgid "Delete this and all future events"
+msgstr "Delete this and all future events"
+
+#: js/MainScreenCenterPanel.js:396
+msgid "Delete whole series"
+msgstr "Delete whole series"
+
+#: js/MainScreenCenterPanel.js:397
 msgid "Delete nothing"
 msgstr "Delete nothing"
 
-#: js/Calendar-FAT-debug.js:5491 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:460
+#: js/MainScreenCenterPanel.js:441
 msgid "Do you really want to delete this event?"
 msgid_plural "Do you really want to delete the {0} selected events?"
 msgstr[0] "Do you really want to delete this event?"
 msgstr[1] "Do you really want to delete the {0} selected events?"
 
-#: js/Calendar-FAT-debug.js:5617 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:586
+#: js/MainScreenCenterPanel.js:580
 msgid "Could not Print"
 msgstr "Could not Print"
 
-#: js/Calendar-FAT-debug.js:5617 js/Calendar-FAT.js:6
-#: js/MainScreenCenterPanel.js:586
+#: js/MainScreenCenterPanel.js:580
 msgid "Sorry, your current view does not support printing."
 msgstr "Sorry, your current view does not support printing."
 
-#: js/Calendar-FAT-debug.js:5859 js/Calendar-FAT.js:6
-#: js/MainScreenWestPanel.js:30
-msgid "Mini Calendar"
-msgstr "Mini Calendar"
+#: js/Calendar.js:39 js/Model.js:67 Setup/setup.xml:4
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Calendar"
+msgstr[1] "Calendars"
 
-#: js/Calendar-FAT-debug.js:6131 js/Calendar-FAT-debug.js:9075
-#: js/Calendar-FAT.js:6 js/EventEditDialog.js:122 js/Printer/Base.js:66
-msgid "whole day"
-msgstr "whole day"
+#: js/AttendeeStatusFilterModel.js:31
+msgid "Attendee Status"
+msgstr "Attendee Status"
 
-#: js/Calendar-FAT-debug.js:6139 js/Calendar-FAT.js:6
-#: js/EventEditDialog.js:130
-msgid "non-blocking"
-msgstr "non-blocking"
-
-#: js/Calendar-FAT-debug.js:6164 js/Calendar-FAT.js:6
-#: js/EventEditDialog.js:155
-msgid "Private"
-msgstr "Private"
-
-#: js/Calendar-FAT-debug.js:6205 js/Calendar-FAT-debug.js:8951
-#: js/Calendar-FAT.js:6 js/EventEditDialog.js:196 js/ResourceEditDialog.js:72
-#: Model/Event.php:228
-msgid "Description"
-msgstr "Description"
-
-#: js/Calendar-FAT-debug.js:6219 js/Calendar-FAT.js:6
-#: js/EventEditDialog.js:210
-msgid "Enter description"
-msgstr "Enter description"
-
-#: js/Calendar-FAT-debug.js:6349 js/Calendar-FAT.js:6
-#: js/EventEditDialog.js:340
-msgid "End date is not valid"
-msgstr "End date is not valid"
-
-#: js/Calendar-FAT-debug.js:6352 js/Calendar-FAT.js:6
-#: js/EventEditDialog.js:343
-msgid "End date must be after start date"
-msgstr "End date must be after start date"
-
-#: js/Calendar-FAT-debug.js:6365 js/Calendar-FAT.js:6
-#: js/EventEditDialog.js:356
-msgid "Start date is not valid"
-msgstr "Start date is not valid"
-
-#: js/Calendar-FAT-debug.js:7577 js/Calendar-FAT.js:6
-#: js/CalendarSelectWidget.js:124
-msgid "Originally"
-msgstr "Originally"
-
-#: js/Calendar-FAT-debug.js:8041 js/Calendar-FAT.js:6 js/RrulePanel.js:28
-msgid "Recurrances"
-msgstr "Recurrances"
-
-#: js/Calendar-FAT-debug.js:8049 js/Calendar-FAT.js:6 js/RrulePanel.js:36
-msgid "No recurring rule defined"
-msgstr "No recurring rule defined"
-
-#: js/Calendar-FAT-debug.js:8089 js/Calendar-FAT.js:6 js/RrulePanel.js:76
-msgid "None"
-msgstr "None"
-
-#: js/Calendar-FAT-debug.js:8096 js/Calendar-FAT.js:6 js/RrulePanel.js:83
-msgid "Daily"
-msgstr "Daily"
-
-#: js/Calendar-FAT-debug.js:8103 js/Calendar-FAT.js:6 js/RrulePanel.js:90
-msgid "Weekly"
-msgstr "Weekly"
-
-#: js/Calendar-FAT-debug.js:8110 js/Calendar-FAT.js:6 js/RrulePanel.js:97
-msgid "Monthly"
-msgstr "Monthly"
-
-#: js/Calendar-FAT-debug.js:8117 js/Calendar-FAT.js:6 js/RrulePanel.js:104
-msgid "Yearly"
-msgstr "Yearly"
-
-#: js/Calendar-FAT-debug.js:8241 js/Calendar-FAT.js:6 js/RrulePanel.js:228
-msgid "forever"
-msgstr "forever"
-
-#: js/Calendar-FAT-debug.js:8259 js/RrulePanel.js:246
-msgid "Forever"
-msgstr "Forever"
-
-#: js/Calendar-FAT-debug.js:8260 js/RrulePanel.js:247
-msgid "at"
-msgstr "at"
-
-#: js/Calendar-FAT-debug.js:8300 js/Calendar-FAT.js:6 js/RrulePanel.js:287
-msgid "Until"
-msgstr "Until"
-
-#: js/Calendar-FAT-debug.js:8312 js/Calendar-FAT.js:6 js/RrulePanel.js:299
-msgid "Until has to be after event start"
-msgstr "Until has to be after event start"
-
-#: js/Calendar-FAT-debug.js:8334 js/Calendar-FAT.js:6 js/RrulePanel.js:321
-msgid "Every {0}. Day"
-msgstr "Every {0}. Day"
-
-#: js/Calendar-FAT-debug.js:8364 js/Calendar-FAT.js:6 js/RrulePanel.js:351
-msgid "Every {0}. Week at"
-msgstr "Every {0}. Week at"
-
-#: js/Calendar-FAT-debug.js:8433 js/Calendar-FAT.js:6 js/RrulePanel.js:420
-msgid "Every {0}. Month"
-msgstr "Every {0}. Month"
-
-#: js/Calendar-FAT-debug.js:8439 js/Calendar-FAT-debug.js:8488
-#: js/Calendar-FAT-debug.js:8619 js/Calendar-FAT-debug.js:8669
-#: js/Calendar-FAT.js:6 js/RrulePanel.js:426 js/RrulePanel.js:475
-#: js/RrulePanel.js:606 js/RrulePanel.js:656
-msgid "at the"
-msgstr "at the"
-
-#: js/Calendar-FAT-debug.js:8458 js/Calendar-FAT-debug.js:8638
-#: js/Calendar-FAT.js:6 js/RrulePanel.js:445 js/RrulePanel.js:625
-msgid "first"
-msgstr "first"
-
-#: js/Calendar-FAT-debug.js:8459 js/Calendar-FAT-debug.js:8639
-#: js/Calendar-FAT.js:6 js/RrulePanel.js:446 js/RrulePanel.js:626
-msgid "second"
-msgstr "second"
-
-#: js/Calendar-FAT-debug.js:8460 js/Calendar-FAT-debug.js:8640
-#: js/Calendar-FAT.js:6 js/RrulePanel.js:447 js/RrulePanel.js:627
-msgid "third"
-msgstr "third"
-
-#: js/Calendar-FAT-debug.js:8461 js/Calendar-FAT-debug.js:8641
-#: js/Calendar-FAT.js:6 js/RrulePanel.js:448 js/RrulePanel.js:628
-msgid "fourth"
-msgstr "fourth"
-
-#: js/Calendar-FAT-debug.js:8462 js/Calendar-FAT-debug.js:8642
-#: js/Calendar-FAT.js:6 js/RrulePanel.js:449 js/RrulePanel.js:629
-msgid "last"
-msgstr "last"
-
-#: js/Calendar-FAT-debug.js:8612 js/Calendar-FAT.js:6 js/RrulePanel.js:599
-msgid "Every {0}. Year"
-msgstr "Every {0}. Year"
-
-#: js/Calendar-FAT-debug.js:8709 js/Calendar-FAT-debug.js:8721
-#: js/Calendar-FAT.js:6 js/RrulePanel.js:696 js/RrulePanel.js:708
-msgid "of"
-msgstr "of"
-
-#: js/Calendar-FAT-debug.js:8847 js/Calendar-FAT-debug.js:8940
-#: js/Calendar-FAT.js:6 js/ResourceEditDialog.js:61
-#: js/ResourcesGridPanel.js:47
-msgid "Email"
-msgstr "Email"
-
-#: js/Calendar-FAT-debug.js:8946 js/Calendar-FAT-debug.js:8947
-#: js/Calendar-FAT.js:6 js/ResourceEditDialog.js:67
-#: js/ResourceEditDialog.js:68
+#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
 msgid "Is a location"
 msgstr "Is a location"
 
-#: js/Calendar-FAT-debug.js:8952 js/Calendar-FAT.js:6
+#: js/ResourceEditDialog.js:72 js/EventEditDialog.js:196 Model/Event.php:228
+msgid "Description"
+msgstr "Description"
+
 #: js/ResourceEditDialog.js:73
 msgid "Enter description..."
 msgstr "Enter description..."
 
-#: js/Calendar-FAT-debug.js:9170 js/Calendar-FAT.js:6
+#: js/CalendarSelectWidget.js:124
+msgid "Originally"
+msgstr "Originally"
+
+#: js/MonthView.js:86 js/MainScreenWestPanel.js:52
+msgid "WK"
+msgstr "WK"
+
+#: js/MonthView.js:91
+msgid "{0} more..."
+msgstr "{0} more..."
+
+#: js/EventDetailsPanel.js:49
+msgid "Unknown calendar"
+msgstr "Unknown calendar"
+
+#: js/EventDetailsPanel.js:60
+msgid "{0} {1} o'clock"
+msgstr "{0} {1} o'clock"
+
+#: js/EventDetailsPanel.js:177 js/EventEditDialog.js:87 Model/Event.php:233
+msgid "Summary"
+msgstr "Summary"
+
+#: js/EventDetailsPanel.js:213 js/EventEditDialog.js:99 Preference.php:79
+msgid "Start Time"
+msgstr "Start Time"
+
+#: js/EventDetailsPanel.js:218 js/EventEditDialog.js:114
+msgid "End Time"
+msgstr "End Time"
+
+#: js/EventDetailsPanel.js:223 Model/Event.php:226
+msgid "Blocking"
+msgstr "Blocking"
+
+#: js/EventDetailsPanel.js:232 js/Model.js:204 Model/Event.php:230
+msgid "Organizer"
+msgstr "Organizer"
+
+#: js/EventDetailsPanel.js:249 js/Model.js:321 js/AttendeeFilterModel.js:35
+#: js/AttendeeGridPanel.js:81
+msgid "Attendee"
+msgstr "Attendee"
+
 #: js/Printer/DaysView.js:36
 msgid "Week {0} :"
 msgstr "Week {0} :"
 
-#: Model/Attender.php:167
-msgid "unknown"
-msgstr "unknown"
+#: js/Printer/Base.js:66 js/EventEditDialog.js:122
+msgid "whole day"
+msgstr "whole day"
 
-#: Model/Attender.php:315
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "This contact has been automatically added by the system as an event attender"
+#: js/Model.js:63 js/Model.js:325
+msgid "Event"
+msgid_plural "Events"
+msgstr[0] "Event"
+msgstr[1] "Events"
 
-#: Model/Attender.php:203
-msgid "unknown)"
-msgstr "unknown)"
+#: js/Model.js:63 js/Model.js:325
+msgid "Events"
+msgstr "Events"
+
+#: js/Model.js:67
+msgid "Calendars"
+msgstr "Calendars"
+
+#: js/Model.js:200
+msgid "Quick search"
+msgstr "Quick search"
+
+#: js/Model.js:321
+msgid "Attender"
+msgid_plural "Attendee"
+msgstr[0] "Attender"
+msgstr[1] "Attendee"
+
+#: js/Model.js:337 js/AttendeeGridPanel.js:439 js/AttendeeGridPanel.js:457
+#: js/AttendeeGridPanel.js:474 js/AttendeeGridPanel.js:486
+msgid "No Information"
+msgstr "No Information"
+
+#: js/Model.js:465 js/AttendeeGridPanel.js:523 Model/Attender.php:45
+msgid "No response"
+msgstr "No response"
+
+#: js/Model.js:466 js/AttendeeGridPanel.js:526 Model/Attender.php:46
+msgid "Accepted"
+msgstr "Accepted"
+
+#: js/Model.js:467 js/AttendeeGridPanel.js:529 Model/Attender.php:47
+msgid "Declined"
+msgstr "Declined"
+
+#: js/Model.js:468 js/AttendeeGridPanel.js:532 Model/Attender.php:48
+msgid "Tentative"
+msgstr "Tentative"
+
+#: js/Model.js:495 js/AttendeeGridPanel.js:170
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Resource"
+msgstr[1] "Resources"
+
+#: js/Model.js:495
+msgid "Resources"
+msgstr "Resources"
+
+#: js/AdminPanel.js:44
+msgid "Manage Resources"
+msgstr "Manage Resources"
+
+#: js/AttendeeFilterModel.js:101
+msgid "Select Attendee"
+msgstr "Select Attendee"
+
+#: js/RrulePanel.js:28
+msgid "Recurrances"
+msgstr "Recurrances"
+
+#: js/RrulePanel.js:36
+msgid "No recurring rule defined"
+msgstr "No recurring rule defined"
+
+#: js/RrulePanel.js:76
+msgid "None"
+msgstr "None"
+
+#: js/RrulePanel.js:83
+msgid "Daily"
+msgstr "Daily"
+
+#: js/RrulePanel.js:90
+msgid "Weekly"
+msgstr "Weekly"
+
+#: js/RrulePanel.js:97
+msgid "Monthly"
+msgstr "Monthly"
+
+#: js/RrulePanel.js:104
+msgid "Yearly"
+msgstr "Yearly"
+
+#: js/RrulePanel.js:179
+msgid "Exceptions of reccuring events can't have recurrences themselves."
+msgstr "Exceptions of reccuring events can't have recurrences themselves."
+
+#: js/RrulePanel.js:237
+msgid "forever"
+msgstr "forever"
+
+#: js/RrulePanel.js:255
+msgid "Forever"
+msgstr "Forever"
+
+#: js/RrulePanel.js:256
+msgid "at"
+msgstr "at"
+
+#: js/RrulePanel.js:296
+msgid "Until"
+msgstr "Until"
+
+#: js/RrulePanel.js:308
+msgid "Until has to be after event start"
+msgstr "Until has to be after event start"
+
+#: js/RrulePanel.js:330
+msgid "Every {0}. Day"
+msgstr "Every {0}. Day"
+
+#: js/RrulePanel.js:360
+msgid "Every {0}. Week at"
+msgstr "Every {0}. Week at"
+
+#: js/RrulePanel.js:429
+msgid "Every {0}. Month"
+msgstr "Every {0}. Month"
+
+#: js/RrulePanel.js:435 js/RrulePanel.js:484 js/RrulePanel.js:615
+#: js/RrulePanel.js:665
+msgid "at the"
+msgstr "at the"
+
+#: js/RrulePanel.js:454 js/RrulePanel.js:634
+msgid "first"
+msgstr "first"
+
+#: js/RrulePanel.js:455 js/RrulePanel.js:635
+msgid "second"
+msgstr "second"
+
+#: js/RrulePanel.js:456 js/RrulePanel.js:636
+msgid "third"
+msgstr "third"
+
+#: js/RrulePanel.js:457 js/RrulePanel.js:637
+msgid "fourth"
+msgstr "fourth"
+
+#: js/RrulePanel.js:458 js/RrulePanel.js:638
+msgid "last"
+msgstr "last"
+
+#: js/RrulePanel.js:608
+msgid "Every {0}. Year"
+msgstr "Every {0}. Year"
+
+#: js/RrulePanel.js:705 js/RrulePanel.js:717
+msgid "of"
+msgstr "of"
+
+#: js/MainScreenWestPanel.js:30
+msgid "Mini Calendar"
+msgstr "Mini Calendar"
+
+#: js/EventEditDialog.js:130
+msgid "non-blocking"
+msgstr "non-blocking"
+
+#: js/EventEditDialog.js:155
+msgid "Private"
+msgstr "Private"
+
+#: js/EventEditDialog.js:210
+msgid "Enter description"
+msgstr "Enter description"
+
+#: js/EventEditDialog.js:340
+msgid "End date is not valid"
+msgstr "End date is not valid"
+
+#: js/EventEditDialog.js:343
+msgid "End date must be after start date"
+msgstr "End date must be after start date"
+
+#: js/EventEditDialog.js:356
+msgid "Start date is not valid"
+msgstr "Start date is not valid"
+
+#: js/AttendeeGridPanel.js:107
+msgid "Role"
+msgstr "Role"
+
+#: js/AttendeeGridPanel.js:116
+msgid "Quantity"
+msgstr "Quantity"
+
+#: js/AttendeeGridPanel.js:125
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "This is the calendar where the attender has saved this event in"
+
+#: js/AttendeeGridPanel.js:161
+msgid "Type"
+msgstr "Type"
+
+#: js/AttendeeGridPanel.js:168
+msgid "User"
+msgstr "User"
+
+#: js/AttendeeGridPanel.js:169
+msgid "Group"
+msgstr "Group"
+
+#: js/AttendeeGridPanel.js:171
+msgid "Member of group"
+msgstr "Member of group"
+
+#: js/AttendeeGridPanel.js:186 Model/Event.php:232
+msgid "Status"
+msgstr "Status"
+
+#: js/AttendeeGridPanel.js:325
+msgid "Remove Attender"
+msgstr "Remove Attender"
+
+#: js/AttendeeGridPanel.js:420
+msgid "Click here to invite another attender..."
+msgstr "Click here to invite another attender..."
+
+#: js/AttendeeGridPanel.js:444
+msgid "(as a group member)"
+msgstr "(as a group member)"
+
+#: js/AttendeeGridPanel.js:498
+msgid "Required"
+msgstr "Required"
+
+#: js/AttendeeGridPanel.js:501
+msgid "Optional"
+msgstr "Optional"
+
+#: views/eventNotification.php:12
+msgid "Updates"
+msgstr "Updates"
+
+#: views/eventNotification.php:20
+msgid "%1$s changed from \"%2$s\" to \"%3$s\""
+msgstr "%1$s changed from \"%2$s\" to \"%3$s\""
+
+#: views/eventNotification.php:27
+msgid "%1$s has been invited"
+msgstr "%1$s has been invited"
+
+#: views/eventNotification.php:32
+msgid "%1$s has been removed"
+msgstr "%1$s has been removed"
+
+#: views/eventNotification.php:39
+msgid "%1$s accepted invitation"
+msgstr "%1$s accepted invitation"
+
+#: views/eventNotification.php:43
+msgid "%1$s declined invitation"
+msgstr "%1$s declined invitation"
+
+#: views/eventNotification.php:47
+msgid "Tentative response from %1$s"
+msgstr "Tentative response from %1$s"
+
+#: views/eventNotification.php:51
+msgid "No response from %1$s"
+msgstr "No response from %1$s"
+
+#: views/eventNotification.php:60
+msgid "Event details"
+msgstr "Event details"
+
+#: Setup/Initialize.php:34 Setup/Update/Release3.php:164
+msgid "All events I attend"
+msgstr "All events I attend"
+
+#: Setup/Initialize.php:47
+msgid "Awaiting response"
+msgstr "Awaiting response"
+
+#: Setup/Initialize.php:48
+msgid "Events I have not yet responded to"
+msgstr "Events I have not yet responded to"
+
+#: Setup/Initialize.php:63
+msgid "Declined events"
+msgstr "Declined events"
+
+#: Setup/Initialize.php:64
+msgid "Events I have declined"
+msgstr "Events I have declined"
+
+#: Setup/Initialize.php:77
+msgid "I'm organizer"
+msgstr "I'm organizer"
+
+#: Setup/Initialize.php:78
+msgid "Events I'm the organizer of"
+msgstr "Events I'm the organizer of"
+
+#: Controller.php:103
+#, python-format
+msgid "%s's personal calendar"
+msgstr "%s's personal calendar"
 
 #: Model/Event.php:224
 msgid "Start"
@@ -684,126 +643,74 @@ msgstr "Yes"
 msgid "No"
 msgstr "No"
 
-#: Preference.php:36
+#: Model/Attender.php:167
+msgid "unknown"
+msgstr "unknown"
+
+#: Model/Attender.php:315
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "This contact has been automatically added by the system as an event attender"
+
+#: Model/Attender.php:203
+msgid "unknown)"
+msgstr "unknown)"
+
+#: Preference.php:31
 msgid "All my events"
 msgstr "All my events"
 
-#: Preference.php:85
+#: Preference.php:80
 msgid "Position on the left time axis, day and week view should start with"
 msgstr "Position on the left time axis, day and week view should start with"
 
-#: Preference.php:88
+#: Preference.php:83
 msgid "Default Calendar"
 msgstr "Default Calendar"
 
-#: Preference.php:89
+#: Preference.php:84
 msgid "The default calendar for invitations and new events"
 msgstr "The default calendar for invitations and new events"
 
-#: Preference.php:92
+#: Preference.php:87
 msgid "Default Favorite"
 msgstr "Default Favorite"
 
-#: Preference.php:93
+#: Preference.php:88
 msgid "The default favorite which is loaded on calendar startup"
 msgstr "The default favorite which is loaded on calendar startup"
 
-#: Preference.php:96
+#: Preference.php:91
 msgid "Get Notification Emails"
 msgstr "Get Notification Emails"
 
-#: Preference.php:97
+#: Preference.php:92
 msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 msgstr "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
 
-#: Preference.php:100
+#: Preference.php:95
 msgid "Send Notifications Emails of own Actions"
 msgstr "Send Notifications Emails of own Actions"
 
-#: Preference.php:101
+#: Preference.php:96
 msgid "Get notifications emails for actions you did yourself"
 msgstr "Get notifications emails for actions you did yourself"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "Never"
 msgstr "Never"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On invitation and cancellation only"
 msgstr "On invitation and cancellation only"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On time changes"
 msgstr "On time changes"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On all updates but attendee responses"
 msgstr "On all updates but attendee responses"
 
-#: Preference.php:154
+#: Preference.php:149
 msgid "On attendee responses too"
 msgstr "On attendee responses too"
-
-#: Setup/Initialize.php:34 Setup/Update/Release3.php:164
-msgid "All events I attend"
-msgstr "All events I attend"
-
-#: Setup/Initialize.php:47
-msgid "Awaiting response"
-msgstr "Awaiting response"
-
-#: Setup/Initialize.php:48
-msgid "Events I have not yet responded to"
-msgstr "Events I have not yet responded to"
-
-#: Setup/Initialize.php:63
-msgid "Declined events"
-msgstr "Declined events"
-
-#: Setup/Initialize.php:64
-msgid "Events I have declined"
-msgstr "Events I have declined"
-
-#: Setup/Initialize.php:77
-msgid "I'm organizer"
-msgstr "I'm organizer"
-
-#: Setup/Initialize.php:78
-msgid "Events I'm the organizer of"
-msgstr "Events I'm the organizer of"
-
-#: views/eventNotification.php:12
-msgid "Updates"
-msgstr "Updates"
-
-#: views/eventNotification.php:20
-msgid "%1$s changed from \"%2$s\" to \"%3$s\""
-msgstr "%1$s changed from \"%2$s\" to \"%3$s\""
-
-#: views/eventNotification.php:27
-msgid "%1$s has been invited"
-msgstr "%1$s has been invited"
-
-#: views/eventNotification.php:32
-msgid "%1$s has been removed"
-msgstr "%1$s has been removed"
-
-#: views/eventNotification.php:39
-msgid "%1$s accepted invitation"
-msgstr "%1$s accepted invitation"
-
-#: views/eventNotification.php:43
-msgid "%1$s declined invitation"
-msgstr "%1$s declined invitation"
-
-#: views/eventNotification.php:47
-msgid "Tentative response from %1$s"
-msgstr "Tentative response from %1$s"
-
-#: views/eventNotification.php:51
-msgid "No response from %1$s"
-msgstr "No response from %1$s"
-
-#: views/eventNotification.php:60
-msgid "Event details"
-msgstr "Event details"

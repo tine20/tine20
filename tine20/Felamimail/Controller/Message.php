@@ -9,7 +9,6 @@
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @todo        parse mail body and add <a> to telephone numbers?
- * @todo        check html purifier config (allow some tags/attributes?)
  */
 
 /**
@@ -54,6 +53,13 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @var idna_convert
      */
     protected $_punycodeConverter = NULL;
+    
+    /**
+     * elements to remove from html body of a message / only images are supported atm
+     * 
+     * @var array
+     */
+    protected $_purifyElements = array('images');
     
     /**
      * fallback charset constant
@@ -131,7 +137,8 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $message = (is_resource($_message)) ? stream_get_contents($_message) : $_message;
         $flags   = ($_flags !== null) ? (array) $_flags : null;
         
-        Felamimail_Backend_ImapFactory::factory($folder->account_id)->appendMessage($message, $folder->globalname, $flags);
+        $imapBackend = $this->_getBackendAndSelectFolder(NULL, $folder);
+        $imapBackend->appendMessage($message, $folder->globalname, $flags);
     }
     
     /**
@@ -208,9 +215,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      *
      * @param string|Felamimail_Model_Message $_id
      * @param string $_partId (the part id, can look like this: 1.3.2 -> returns the second part of third part of first part...)
+     * @param boolean $_onlyBodyOfRfc822 only fetch body of rfc822 messages (FALSE to get headers, too)
      * @return Zend_Mime_Part
      */
-    public function getMessagePart($_id, $_partId = null)
+    public function getMessagePart($_id, $_partId = NULL, $_onlyBodyOfRfc822 = FALSE)
     {
         if ($_id instanceof Felamimail_Model_Message) {
             $message = $_id;
@@ -220,48 +228,107 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $partStructure  = $message->getPartStructure($_partId, FALSE);
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($partStructure, TRUE));
+        $rawContent = $this->_getPartContent($message, $_partId, $partStructure, $_onlyBodyOfRfc822);
         
-        $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
+        $part = $this->_createMimePart($rawContent, $partStructure);
+        
+        return $part;
+    }
+    
+    /**
+     * get part content (and update structure) from message part
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @param string $_partId
+     * @param array $_partStructure
+     * @param boolean $_onlyBodyOfRfc822 only fetch body of rfc822 messages (FALSE to get headers, too)
+     * @return string
+     */
+    protected function _getPartContent(Felamimail_Model_Message $_message, $_partId, &$_partStructure, $_onlyBodyOfRfc822 = FALSE)
+    {
+        $imapBackend = $this->_getBackendAndSelectFolder($_message->folder_id);
+        
+        $rawContent = '';
         
         // special handling for rfc822 messages
-        if ($_partId !== NULL && $partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
-            $part = $_partId . '.TEXT';
-            if (array_key_exists('messageStructure', $partStructure)) {
-                $partStructure = $partStructure['messageStructure'];
+        if ($_partId !== NULL && $_partStructure['contentType'] === Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822) {
+            if ($_onlyBodyOfRfc822) {
+                $logmessage = 'Fetch message part (TEXT) ' . $_partId . ' of messageuid ' . $_message->messageuid;
+                if (array_key_exists('messageStructure', $_partStructure)) {
+                    $_partStructure = $_partStructure['messageStructure'];
+                }
+            } else {
+                $logmessage = 'Fetch message part (HEADER + TEXT) ' . $_partId . ' of messageuid ' . $_message->messageuid;
+                $rawContent .= $imapBackend->getRawContent($_message->messageuid, $_partId . '.HEADER', true);
             }
+            
+            $section = $_partId . '.TEXT';
         } else {
-            $part = $_partId;
+            $logmessage = ($_partId !== NULL) 
+                ? 'Fetch message part ' . $_partId . ' of messageuid ' . $_message->messageuid 
+                : 'Fetch main of messageuid ' . $_message->messageuid;
+            
+            $section = $_partId;
         }
-
-        $rawBody = $imapBackend->getRawContent($message->messageuid, $part, true);
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_partStructure, TRUE));
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $logmessage);
+        
+        $rawContent .= $imapBackend->getRawContent($_message->messageuid, $section, TRUE);
+        
+        return $rawContent;
+    }
+    
+    /**
+     * create mime part from raw content and part structure
+     * 
+     * @param string $_rawContent
+     * @param array $_partStructure
+     * @return Zend_Mime_Part
+     */
+    protected function _createMimePart($_rawContent, $_partStructure)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Content: ' . $_rawContent);
         
         $stream = fopen("php://temp", 'r+');
-        fputs($stream, $rawBody);
+        fputs($stream, $_rawContent);
         rewind($stream);
         
-        unset($rawBody);
+        unset($_rawContent);
         
         $part = new Zend_Mime_Part($stream);
-        $part->type        = $partStructure['contentType'];
-        $part->encoding    = array_key_exists('encoding', $partStructure) ? $partStructure['encoding'] : null;
-        $part->id          = array_key_exists('id', $partStructure) ? $partStructure['id'] : null;
-        $part->description = array_key_exists('description', $partStructure) ? $partStructure['description'] : null;
-        $part->charset     = array_key_exists('charset', $partStructure['parameters']) ? $partStructure['parameters']['charset'] : 'iso-8859-15';
-        $part->boundary    = array_key_exists('boundary', $partStructure['parameters']) ? $partStructure['parameters']['boundary'] : null;
-        $part->location    = $partStructure['location'];
-        $part->language    = $partStructure['language'];
-        if (is_array($partStructure['disposition'])) {
-            $part->disposition = $partStructure['disposition']['type'];
-            if (array_key_exists('parameters', $partStructure['disposition'])) {
-                $part->filename    = array_key_exists('filename', $partStructure['disposition']['parameters']) ? $partStructure['disposition']['parameters']['filename'] : null;
+        $part->type        = $_partStructure['contentType'];
+        $part->encoding    = array_key_exists('encoding', $_partStructure) ? $_partStructure['encoding'] : null;
+        $part->id          = array_key_exists('id', $_partStructure) ? $_partStructure['id'] : null;
+        $part->description = array_key_exists('description', $_partStructure) ? $_partStructure['description'] : null;
+        $part->charset     = array_key_exists('charset', $_partStructure['parameters']) 
+            ? $_partStructure['parameters']['charset'] 
+            : self::DEFAULT_FALLBACK_CHARSET;
+        $part->boundary    = array_key_exists('boundary', $_partStructure['parameters']) ? $_partStructure['parameters']['boundary'] : null;
+        $part->location    = $_partStructure['location'];
+        $part->language    = $_partStructure['language'];
+        if (is_array($_partStructure['disposition'])) {
+            $part->disposition = $_partStructure['disposition']['type'];
+            if (array_key_exists('parameters', $_partStructure['disposition'])) {
+                $part->filename    = array_key_exists('filename', $_partStructure['disposition']['parameters']) ? $_partStructure['disposition']['parameters']['filename'] : null;
             }
         }
-        if (empty($part->filename) && array_key_exists('parameters', $partStructure) && array_key_exists('name', $partStructure['parameters'])) {
-            $part->filename = $partStructure['parameters']['name'];
+        if (empty($part->filename) && array_key_exists('parameters', $_partStructure) && array_key_exists('name', $_partStructure['parameters'])) {
+            $part->filename = $_partStructure['parameters']['name'];
         }
         
         return $part;
+    }
+    
+    /**
+     * set elements to purify
+     * 
+     * @param array $_elementsToPurify
+     */
+    public function setPurifyElements($_elementsToPurify = array('images'))
+    {
+        $this->_purifyElements = $_elementsToPurify;
     }
     
     /**
@@ -284,7 +351,12 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         }
         
         $cache = Tinebase_Core::getCache();
-        $cacheId = 'getMessageBody_' . $message->getId() . str_replace('.', '', $_partId) . substr($_contentType, -4) . (($_account !== NULL) ? 'acc' : '');
+        $cacheId = 'getMessageBody_' 
+            . $message->getId() 
+            . str_replace('.', '', $_partId) 
+            . substr($_contentType, -4) 
+            . (($_account !== NULL) ? 'acc' : '')
+            . implode('', $this->_purifyElements);
         
         if ($cache->test($cacheId)) {
             return $cache->load($cacheId);
@@ -318,7 +390,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $messageBody = '';
         
         foreach ($bodyParts as $partId => $partStructure) {
-            $bodyPart = $this->getMessagePart($_message, $partId);
+            $bodyPart = $this->getMessagePart($_message, $partId, TRUE);
             
             $body = $this->_getDecodedBodyContent($bodyPart, $partStructure);
             
@@ -467,14 +539,16 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         $config->set('HTML.DefinitionRev', 1);
         $config->set('Cache.SerializerPath', $path);
         
-        // remove images
-        $config->set('HTML.ForbiddenElements', array('img'));
-        $config->set('CSS.ForbiddenProperties', array('background-image'));
+        if (in_array('images', $this->_purifyElements)) {
+            $config->set('HTML.ForbiddenElements', array('img'));
+            $config->set('CSS.ForbiddenProperties', array('background-image'));
+        }
         
         // add target="_blank" to anchors
-        $def = $config->getHTMLDefinition(true);
-        $a = $def->addBlankElement('a');
-        $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
+        if ($def = $config->maybeGetRawHTMLDefinition()) {
+            $a = $def->addBlankElement('a');
+            $a->attr_transform_post[] = new Felamimail_HTMLPurifier_AttrTransform_AValidator();
+        }
         
         $purifier = new HTMLPurifier($config);
         $content = $purifier->purify($_content);
@@ -488,6 +562,7 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
      * @param string|Felamimail_Model_Message $_messageId
      * @param boolean $_readOnly
      * @return array
+     * @throws Felamimail_Exception_IMAPMessageNotFound
      */
     public function getMessageHeaders($_messageId, $_partId = null, $_readOnly = false)
     {
@@ -503,10 +578,19 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             return $cache->load($cacheId);
         }
         
-        $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Fetching headers for message uid ' .  $message->messageuid . ' (part:' . $_partId . ')');
+        
+        try {
+            $imapBackend = $this->_getBackendAndSelectFolder($message->folder_id);
+        } catch (Zend_Mail_Storage_Exception $zmse) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::WARN)) Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getMessage());
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zmse->getTraceAsString());
+            throw new Felamimail_Exception_IMAPMessageNotFound('Folder not found');
+        }
         
         if ($imapBackend === null) {
-            throw new Felamimail_Exception('failed to get imap backend');
+            throw new Felamimail_Exception('Failed to get imap backend');
         }
         
         $section = ($_partId === null) ?  'HEADER' : $_partId . '.HEADER';
@@ -517,6 +601,10 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $this->_backend->delete($message->getId());
             throw $feimnf;
         }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Fetched Headers: ' . $rawHeaders);
+                    
         Zend_Mime_Decode::splitMessage($rawHeaders, $headers, $null);
         
         $cache->save($headers, $cacheId, array('getMessageHeaders'));
@@ -543,7 +631,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         try {
             $imapBackend = ($_imapBackend === NULL) ? Felamimail_Backend_ImapFactory::factory($_folder->account_id) : $_imapBackend;
-            if ($_select && $imapBackend->getCurrentFolder() != $_folder->globalname) {
+            if ($_select) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+                    . ' Select folder ' . $_folder->globalname);
                 $backendFolderValues = $imapBackend->selectFolder(Felamimail_Model_Folder::encodeFolderName($_folder->globalname));
             }
         } catch (Zend_Mail_Protocol_Exception $zmpe) {
@@ -568,8 +658,6 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
             $message = $_messageId;
         }
         
-        // @todo get complete structure because we need the size/name/... for rfc/822 messages?
-        //$structure = $message->getPartStructure($_partId, FALSE);
         $structure = $message->getPartStructure($_partId);
 
         $attachments = array();

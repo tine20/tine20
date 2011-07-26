@@ -151,10 +151,15 @@ class Tinebase_Config
      * @param   string      $_applicationName
      * @param   array       $_default the default value
      * @return  array       the config array
+     * @throws Tinebase_Exception_NotFound
      */
     public function getConfigAsArray($_name, $_applicationName = 'Tinebase', $_default = array())
     {
         $config = $this->getConfig($_name, Tinebase_Application::getInstance()->getApplicationByName($_applicationName)->getId(), $_default);
+        
+        if (! is_object($config)) {
+            throw new Tinebase_Exception_NotFound('Config object ' . $_name . ' not found or is not an object!');
+        }
         
         $result = (is_array($config->value)) ? $config->value : Zend_Json::decode($config->value);
         

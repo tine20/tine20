@@ -3,8 +3,8 @@
  * 
  * @package     Crm
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-20010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -49,7 +49,6 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     defaultSortInfo: {field: 'lead_name', direction: 'DESC'},
     gridConfig: {
-        loadMask: true,
         autoExpandColumn: 'title',
         // drag n drop
         enableDragDrop: true,
@@ -170,7 +169,7 @@ Tine.Crm.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 {header: this.app.i18n._('Leadstate'), id: 'leadstate_id', dataIndex: 'leadstate_id', sortable: false, width: 100, renderer: Tine.Crm.LeadState.Renderer},
                 {header: this.app.i18n._('Probability'), id: 'probability', dataIndex: 'probability', width: 50, renderer: Ext.util.Format.percentage },
                 {header: this.app.i18n._('Turnover'), id: 'turnover', dataIndex: 'turnover', width: 100, renderer: Ext.util.Format.euMoney },
-                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.euMoney }
+                {header: this.app.i18n._('Probable Turnover'), id: 'probableTurnover', dataIndex: 'probableTurnover', width: 100, renderer: Ext.util.Format.euMoney, sortable: false }
             ].concat(this.getModlogColumns())
         });
     },

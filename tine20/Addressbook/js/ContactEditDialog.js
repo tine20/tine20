@@ -125,7 +125,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 columnWidth: 0.35,
                                 fieldLabel: this.app.i18n._('Last Name'), 
                                 name: 'n_family',
-                                maxLength: 64
+                                maxLength: 255
                             }, {
                                 width: 100,
                                 hidden: true
@@ -134,7 +134,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 xtype: 'mirrortextfield',
                                 fieldLabel: this.app.i18n._('Company'), 
                                 name: 'org_name',
-                                maxLength: 64
+                                maxLength: 255
                             }, {
                                 columnWidth: 0.35,
                                 fieldLabel: this.app.i18n._('Unit'), 
@@ -227,7 +227,6 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                                 fieldLabel: this.app.i18n._('Web'),
                                 labelIcon: 'images/oxygen/16x16/actions/network.png',
                                 name: 'url',
-                                vtype: 'url',
                                 maxLength: 128,
                                 listeners: {
                                     scope: this,
@@ -428,7 +427,7 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
             isValid = false;
         }
         
-        return isValid && Tine.Calendar.EventEditDialog.superclass.isValid.apply(this, arguments);
+        return isValid && Tine.Addressbook.ContactEditDialog.superclass.isValid.apply(this, arguments);
     },
     
     /**

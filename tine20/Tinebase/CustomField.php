@@ -111,6 +111,20 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
         Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
         return $result;
     }
+    
+    /**
+     * update custom field
+     *
+     * @param Tinebase_Model_CustomField_Config $_customField
+     * @return Tinebase_Model_CustomField_Config
+     */
+    public function updateCustomField(Tinebase_Model_CustomField_Config $_record)
+    {
+        $this->_clearCache();
+        $result = $this->_backendConfig->update($_record);
+        Tinebase_CustomField::getInstance()->setGrants($result, Tinebase_Model_CustomField_Grant::getAllGrants());
+        return $result;
+    }
 
     /**
      * get custom field by id

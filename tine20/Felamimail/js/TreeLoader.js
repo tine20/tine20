@@ -90,27 +90,28 @@ Tine.Felamimail.TreeLoader = Ext.extend(Tine.widgets.tree.Loader, {
         
         // show standard folders icons 
         if (account) {
-            if (account.get('trash_folder') == attr.globalname) {
+            if (account.get('trash_folder') === attr.globalname) {
                 if (attr.cache_totalcount > 0) {
                     attr.cls = 'felamimail-node-trash-full';
                 } else {
                     attr.cls = 'felamimail-node-trash';
                 }
             }
-            if (account.get('sent_folder') == attr.globalname) {
+            if (account.get('sent_folder') === attr.globalname) {
                 attr.cls = 'felamimail-node-sent';
             }
+            if (account.get('drafts_folder') === attr.globalname) {
+                attr.cls = 'felamimail-node-drafts';
+            }
+            if (account.get('templates_folder') === attr.globalname) {
+                attr.cls = 'felamimail-node-templates';
+            }
         }
-        if ('INBOX' == attr.globalname) {
+        if (attr.globalname.match(/^inbox$/i)) {
             attr.cls = 'felamimail-node-inbox';
+            attr.text = this.app.i18n._hidden('INBOX');
         }
-        if ('Drafts' == attr.globalname) {
-            attr.cls = 'felamimail-node-drafts';
-        }
-        if ('Templates' == attr.globalname) {
-            attr.cls = 'felamimail-node-templates';
-        }
-        if ('Junk' == attr.globalname) {
+        if (attr.globalname.match(/^junk$/i)) {
             attr.cls = 'felamimail-node-junk';
         }
 

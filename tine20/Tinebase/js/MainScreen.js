@@ -158,9 +158,14 @@ Tine.Tinebase.MainScreen = Ext.extend(Ext.Panel, {
      * @param {Tine.Application} app
      */
     onAppActivate: function(app) {
+        Tine.log.info('Activating app ' + app.appName);
+        
         // set document / browser title
-        var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '';
-        document.title = Tine.title + postfix  + ' - ' + app.getTitle();
+        var postfix = (Tine.Tinebase.registry.get('titlePostfix')) ? Tine.Tinebase.registry.get('titlePostfix') : '',
+            // some apps (Felamimail atm) can add application specific title postfixes
+            // TODO generalize this
+            appPostfix = (document.title.match(/^\([0-9]+\) /)) ? document.title.match(/^\([0-9]+\) /)[0] : ''
+        document.title = appPostfix + Tine.title + postfix  + ' - ' + app.getTitle();
         
         // set left top title
         Ext.DomQuery.selectNode('div[class=app-panel-title]').innerHTML = app.getTitle();

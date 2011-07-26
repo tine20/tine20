@@ -3,6 +3,7 @@
  * Tine 2.0
  *
  * @package     ActiveSync
+ * @subpackage  Controller
  * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
@@ -15,6 +16,7 @@
  * controller events class
  * 
  * @package     ActiveSync
+ * @subpackage  Controller
  */
 class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
 {
@@ -517,7 +519,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 case 'dtend':
                 case 'dtstart':
                     if(isset($xmlData->$fieldName)) {
-                        $event->$value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
+                        $event->$value = new Tinebase_DateTime((string)$xmlData->$fieldName);
                     } else {
                         $event->$value = null;
                     }
@@ -747,7 +749,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
             $rrule->interval = isset($xmlData->Recurrence->Interval) ? (int)$xmlData->Recurrence->Interval : 1;
             
             if(isset($xmlData->Recurrence->Until)) {
-                $rrule->until = $this->_convertISOToZendDate((string)$xmlData->Recurrence->Until);
+                $rrule->until = new Tinebase_DateTime((string)$xmlData->Recurrence->Until);
                 // until ends at 23:59:59 in Tine 2.0 but at 00:00:00 in Windows CE (local user time)
                 if ($rrule->until->format('s') == '00') {
                     $rrule->until->addHour(23)->addMinute(59)->addSecond(59);
@@ -764,7 +766,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 
                 foreach ($xmlData->Exceptions->Exception as $exception) {
                     $eventException = new Calendar_Model_Event(array(
-                        'recurid' => $this->_convertISOToZendDate((string)$exception->ExceptionStartTime)
+                        'recurid' => new Tinebase_DateTime((string)$exception->ExceptionStartTime)
                     ));
                     
                     if ((int)$exception->Deleted === 0) {
@@ -811,7 +813,7 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 switch ($field) {
                     case 'dtend':
                     case 'dtstart':
-                        $value = $this->_convertISOToZendDate((string)$xmlData->$fieldName);
+                        $value = new Tinebase_DateTime((string)$xmlData->$fieldName);
                         break;
                         
                     default:
@@ -830,25 +832,6 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filterData " . print_r($filterArray, true));
         
         return $filterArray;
-    }
-    
-    /**
-     * converts an iso formated date into DateTime
-     *
-     * @param  string  $_iso  ISO8601 representation of a datetime filed
-     * @return DateTime
-     */
-    protected function _convertISOToZendDate($_iso)
-    {
-        $matches = array();
-        
-        preg_match("/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z/", $_iso, $matches);
-
-        if (count($matches) !== 7) {
-            throw new Tinebase_Exception_UnexpectedValue("invalid date format $_iso");
-        }
-        
-        return new Tinebase_DateTime($_iso);
     }
     
     /**
@@ -895,8 +878,8 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
      */
     public function getSupportedFolders()
     {
-        // only the IPhone supports multiple folders for calendars currently
-        if(strtolower($this->_device->devicetype) == 'iphone') {
+        // device supports multiple folders ?
+        if(in_array(strtolower($this->_device->devicetype), array('iphone', 'ipad', 'thundertine'))) {
         
             // get the folders the user has access to
             $allowedFolders = $this->_getSyncableFolders();
@@ -935,6 +918,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
         return $folders;
     }
     
+    /**
+     * get syncable folders
+     * 
+     * @return array
+     */
     protected function _getSyncableFolders()
     {
         $folders = array();

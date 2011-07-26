@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  * TODO         split into two files (grid & edit dlg)
  * TODO         fix autoheight in edit dlg (use border layout?)
@@ -259,7 +259,6 @@ Tine.Admin.Tags.Main = {
             autoSizeColumns: false,
             selModel: rowSelectionModel,
             enableColLock: false,
-            loadMask: true,
             autoExpandColumn: 'description',
             border: false,
             view: new Ext.grid.GridView({

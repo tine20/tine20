@@ -69,6 +69,12 @@ class Felamimail_Message extends Zend_Mail_Message
             $addresses = fgetcsv($stream);
         }
         
+        if (! is_array($addresses)) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . 
+                ' Could not parse addresses: ' . var_export($addresses, TRUE));
+            return array();
+        }
+        
         foreach ($addresses as $key => $address) {
             if (preg_match('/(.*)<(.+@[^@]+)>/', $address, $matches)) {
                 $name = trim(trim($matches[1]), '"');
@@ -124,6 +130,11 @@ class Felamimail_Message extends Zend_Mail_Message
             $date->setTimezone('UTC');
 
         } catch (Exception $e) {
+            // try to fix missing timezone char
+            if (preg_match('/UT$/', $_dateString)) {
+                $_dateString .= 'C';
+            }
+            
             // try some explicit formats
             foreach (self::$dateFormats as $format) {
                 $date = DateTime::createFromFormat($format, $_dateString);

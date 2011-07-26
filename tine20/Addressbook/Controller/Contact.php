@@ -6,7 +6,7 @@
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -184,17 +184,20 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     {
         Tinebase_UserProfile::getInstance()->checkRight($_userProfile->account_id);
         
-        $doContainerACLChecks = $this->_doContainerACLChecks;
-        $this->_doContainerACLChecks = FALSE;
+        $doContainerACLChecks = $this->doContainerACLChecks(FALSE);
         
         $contact = $this->getContactByUserId($_userProfile->account_id, true);
+        
+        // we need to unset the jpegphoto because update() expects the image data and we only have a boolean value here
+        unset($contact->jpegphoto);
+        
         $userProfile = Tinebase_UserProfile::getInstance()->mergeProfileInfo($contact, $_userProfile);
         
         $contact = $this->update($userProfile);
         
         $userProfile = Tinebase_UserProfile::getInstance()->doProfileCleanup($contact);
 
-        $this->_doContainerACLChecks = $doContainerACLChecks;
+        $this->doContainerACLChecks($doContainerACLChecks);
         
         return $userProfile;
     }
@@ -277,9 +280,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
      * set geodata of record
      * 
      * @param Addressbook_Model_Contact $_record
+     * @param array $_ommitFields do not submit these fields to nominatim
      * @return void
      */
-    protected function _setGeoData(Addressbook_Model_Contact $_record)
+    protected function _setGeoData(Addressbook_Model_Contact $_record, $_ommitFields = array())
     {
         if (! $this->_setGeoDataForContacts) {
             return;
@@ -294,21 +298,19 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         $nominatim = new Zend_Service_Nominatim();
 
-        // use city for only if no postalcode is set
-        // pickhuben 2,metaways founds nothing, while pickhuben 2,20457 find the correct address
-        if (!empty($_record->adr_one_locality) && empty($_record->adr_one_postalcode)) {
+        if (! empty($_record->adr_one_locality)) {
             $nominatim->setVillage($_record->adr_one_locality);
         }
         
-        if (!empty($_record->adr_one_postalcode)) {
+        if (! empty($_record->adr_one_postalcode) && ! in_array('adr_one_postalcode', $_ommitFields)) {
             $nominatim->setPostcode($_record->adr_one_postalcode);
         }
         
-        if (!empty($_record->adr_one_street)) {
+        if (! empty($_record->adr_one_street)) {
             $nominatim->setStreet($_record->adr_one_street);
         }
         
-        if (!empty($_record->adr_one_countryname)) {
+        if (! empty($_record->adr_one_countryname)) {
             $country = Zend_Locale::getTranslation($_record->adr_one_countryname, 'Country', $_record->adr_one_countryname);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' country ' . $country);
             $nominatim->setCountry($country);
@@ -326,19 +328,29 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 if (empty($_record->adr_one_countryname) && !empty($place->country_code)) {
                     $_record->adr_one_countryname = $place->country_code;
                 }
-                if (empty($_record->adr_one_postalcode) && !empty($place->postcode)) {
+                if ((empty($_record->adr_one_postalcode) || in_array('adr_one_postalcode', $_ommitFields)) && !empty($place->postcode)) {
                     $_record->adr_one_postalcode = $place->postcode;
                 }
                 if (empty($_record->adr_one_locality) && !empty($place->city)) {
                     $_record->adr_one_locality = $place->city;
                 }
                 
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
+                
             } else {
+                if (! in_array('adr_one_postalcode', $_ommitFields)) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' .
+                        'Could not find place - try it again without postalcode.');
+                    $this->_setGeoData($_record, array('adr_one_postalcode'));
+                    return;
+                }
+                
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find place.');
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->adr_one_street . ', ' 
                     . $_record->adr_one_postalcode . ', ' . $_record->adr_one_locality . ', ' . $_record->adr_one_countryname
                 );
+                
                 $_record->lon = NULL;
                 $_record->lat = NULL;
             }

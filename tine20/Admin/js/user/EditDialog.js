@@ -194,15 +194,15 @@ Tine.Admin.UserEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * TODO use this for smtp aliases, too
      */
     checkEmailDomain: function(email) {
-        if (! Tine.Admin.registry.get('smtpConfig').primarydomain) {
+        if (! Tine.Admin.registry.get('smtpConfig').primarydomain || ! email) {
             return true;
         }
         
         var allowedDomains = [Tine.Admin.registry.get('smtpConfig').primarydomain],
             emailDomain = email.split('@')[1];
             
-        if (Tine.Admin.registry.get('secondarydomains')) {
-            allowedDomains.concat(Tine.Admin.registry.get('secondarydomains').split(','));
+        if (Ext.isString(Tine.Admin.registry.get('smtpConfig').secondarydomains)) {
+            allowedDomains = allowedDomains.concat(Tine.Admin.registry.get('smtpConfig').secondarydomains.split(','));
         }
         
         return (allowedDomains.indexOf(emailDomain) !== -1);

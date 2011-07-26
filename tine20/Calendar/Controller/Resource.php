@@ -3,15 +3,17 @@
  * Tine 2.0
  * 
  * @package     Calendar
+ * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 /**
  * Calendar Resources Controller
  * 
  * @package Calendar
+ * @subpackage  Controller
  */
 class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
 {
@@ -119,23 +121,10 @@ class Calendar_Controller_Resource extends Tinebase_Controller_Record_Abstract
     {
         $container = Tinebase_Container::getInstance()->getContainerById($_record->container_id);
         $container->name = $_record->name;
-        Tinebase_Container::getInstance()->update($_record);
+        Tinebase_Container::getInstance()->update($container);
         
         return parent::update($_record);
     }
-    
-//    /**
-//     * Deletes a set of records.
-//     * 
-//     * If one of the records could not be deleted, no record is deleted
-//     * 
-//     * @param   array array of record identifiers
-//     * @return  Tinebase_Record_RecordSet
-//     * @throws Tinebase_Exception_NotFound|Tinebase_Exception
-//     */
-//    public function delete($_ids)
-//    {
-//    }
     
     /**
      * check if user has the right to manage resources

@@ -650,13 +650,19 @@ class Setup_Controller
             $config = new Zend_Config($_data);
         }
         
-        $doLogin = (! Setup_Core::configFileExists());
+        if (Setup_Core::configFileExists()) {
+            $doLogin = FALSE;
+            $filename = Setup_Core::getConfigFilePath();
+        } else {
+            $doLogin = TRUE;
+            $filename = dirname(__FILE__) . '/../config.inc.php';
+        }
         
         // write to file
         Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Updating config.inc.php');
         $writer = new Zend_Config_Writer_Array(array(
             'config'   => $config,
-            'filename' => dirname(__FILE__) . '/../config.inc.php'
+            'filename' => $filename,
         ));
         $writer->write();
         
@@ -1124,6 +1130,8 @@ class Setup_Controller
      */
     public function createImportExportDefinitions($_application)
     {
+        Tinebase_ImportExportDefinition::getInstance()->modlogActive(FALSE);
+        
         foreach (array('Import', 'Export') as $type) {
             $path = 
                 $this->_baseDir . DIRECTORY_SEPARATOR . $_application->name . 
@@ -1138,12 +1146,14 @@ class Setup_Controller
                         } catch (Exception $e) {
                             Setup_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ 
                                 . ' Not installing import/export definion from file: ' . $filename
-                                . $e->getMessage());
+                                . ' / Error message: ' . $e->getMessage());
                         }
                     }
                 }
             }
         }
+        
+        Tinebase_ImportExportDefinition::getInstance()->modlogActive(TRUE);
     }
     
     /**

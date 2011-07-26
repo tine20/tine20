@@ -21,11 +21,11 @@ msgstr "megosztott könyvtárak kezelése"
 msgid "Create new shared folders"
 msgstr "Új megosztott könyvtár létrehozása"
 
+#: js/Application.js:29
+msgid "Filemanager"
+msgstr "Filekezelő"
+
 #: Controller.php:95
 #, python-format
 msgid "%s's personal files"
 msgstr "%s személyes file-ai"
-
-#: js/Application.js:29 js/Filemanager-FAT-debug.js:34 js/Filemanager-FAT.js:6
-msgid "Filemanager"
-msgstr "Filekezelő"

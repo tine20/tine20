@@ -22,11 +22,11 @@ msgstr "manage shared folders"
 msgid "Create new shared folders"
 msgstr "Create new shared folders"
 
+#: js/Application.js:29
+msgid "Filemanager"
+msgstr "Filemanager"
+
 #: Controller.php:95
 #, python-format
 msgid "%s's personal files"
 msgstr "%s's personal files"
-
-#: js/Application.js:29 js/Filemanager-FAT-debug.js:34 js/Filemanager-FAT.js:6
-msgid "Filemanager"
-msgstr "Filemanager"

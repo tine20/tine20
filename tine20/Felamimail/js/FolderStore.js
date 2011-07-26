@@ -39,6 +39,7 @@ Tine.Felamimail.FolderStore = function(config) {
     
     this.on('load', this.onStoreLoad, this);
     this.on('add', this.onStoreAdd, this);
+    this.on('loadexception', this.onStoreLoadException, this);
 };
 
 Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
@@ -110,6 +111,24 @@ Ext.extend(Tine.Felamimail.FolderStore, Ext.data.Store, {
             });
         }
     },
+    
+    /**
+     * on store load exception
+     * 
+     * @param {Tine.Tinebase.data.RecordProxy} proxy
+     * @param {String} type
+     * @param {Object} error
+     * @param {Object} options
+     * 
+     * TODO remove loading class / remove from queriesDone?
+     */
+    onStoreLoadException: function(proxy, type, error, options) {
+        //var node = options.params.path
+        //node.getUI().removeClass("x-tree-node-loading");
+
+        Tine.Felamimail.handleRequestException(error);
+    },
+    
     
     /**
      * check if query has already loaded or is loading

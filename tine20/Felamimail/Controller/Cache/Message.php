@@ -117,10 +117,11 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
      * 
      * @param string $_folder
      * @param integer $_time in seconds
+     * @param integer $_updateFlagFactor 1 = update flags every time, x = update flags roughly each xth run (10 by default)
      * @return Felamimail_Model_Folder folder status (in cache)
      * @throws Felamimail_Exception
      */
-    public function updateCache($_folder, $_time = 10)
+    public function updateCache($_folder, $_time = 10, $_updateFlagFactor = 10)
     {
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(300); // 5 minutes
         
@@ -142,8 +143,12 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         $this->_addMessagesToCache($folder, $imap);
         $this->_checkForMissingMessages($folder, $imap);
         $this->_updateFolderStatus($folder);
-        // @todo perhaps we should do this only every 10th (?) time
-        $folder = $this->updateFlags($folder);
+        
+        if (rand(1, $_updateFlagFactor) == 1) {
+            $folder = $this->updateFlags($folder);
+        }
+        
+        $this->_updateFolderQuota($folder, $imap);
         
         // reset max execution time to old value
         Tinebase_Core::setExecutionLifeTime($oldMaxExcecutionTime);
@@ -654,7 +659,37 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             return FALSE;
         }
         
-        $messageToCache = new Felamimail_Model_Message(array(
+        $messageToCache = $this->_createMessageToCache($_message, $_folder);
+        $result = $this->_addMessageToCache($messageToCache);
+        
+        if ($result !== FALSE) { 
+            if ($messageToCache->received->isLater(Tinebase_DateTime::now()->subDay(1))) {
+                // only cache message headers if received during the last day
+                $cacheId = 'getMessageHeaders' . $result->getId();
+                Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));            
+            }
+            
+            if ($_updateFolderCounter == TRUE) {
+                Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
+                    'cache_totalcount'  => '+1',
+                    'cache_unreadcount' => (! $messageToCache->hasSeenFlag())   ? '+1' : '+0',
+                ));
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * create new message for the cache
+     * 
+     * @param array $_message
+     * @param Felamimail_Model_Folder $_folder
+     * @return Felamimail_Model_Message
+     */
+    protected function _createMessageToCache(array $_message, Felamimail_Model_Folder $_folder)
+    {
+        $message = new Felamimail_Model_Message(array(
             'account_id'    => $_folder->account_id,
             'messageuid'    => $_message['uid'],
             'folder_id'     => $_folder->getId(),
@@ -664,37 +699,41 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
             'flags'         => $_message['flags'],
         ));
 
-        $messageToCache->parseStructure($_message['structure']);
-        $messageToCache->parseHeaders($_message['header']);
-        $messageToCache->parseBodyParts();
+        $message->parseStructure($_message['structure']);
+        $message->parseHeaders($_message['header']);
+        $message->parseBodyParts();
         
-        $attachments = $this->getAttachments($messageToCache);
+        $attachments = $this->getAttachments($message);
+        $message->has_attachment = (count($attachments) > 0) ? true : false;
         
-        $messageToCache->has_attachment = (count($attachments) > 0) ? true : false;
-        
+        return $message;
+    }
+
+    /**
+     * add message to cache backend
+     * 
+     * @param Felamimail_Model_Message $_message
+     * @return Felamimail_Model_Message|bool
+     */
+    protected function _addMessageToCache(Felamimail_Model_Message $_message)
+    {
         try {
-            $result = $this->_backend->create($messageToCache);
-            // only cache message headers if received during the last day
-            if ( $messageToCache->received->isLater(Tinebase_DateTime::now()->subDay(1)) ) {
-                $cacheId = 'getMessageHeaders' . $result->getId();
-                Tinebase_Core::getCache()->save($_message['header'], $cacheId, array('getMessageHeaders'));
-            }
+            $result = $this->_backend->create($_message);
         } catch (Zend_Db_Statement_Exception $zdse) {
-            // @todo write test for this case
-            // perhaps we already have this message in our cache (duplicate)
             if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' ' . $zdse->getMessage());
-            return FALSE;
-        }
-        
-        if ($_updateFolderCounter == TRUE) {
-            Felamimail_Controller_Folder::getInstance()->updateFolderCounter($_folder, array(
-                'cache_totalcount'  => '+1',
-                'cache_unreadcount' => (! $messageToCache->hasSeenFlag())   ? '+1' : '+0',
-            ));
+            if (preg_match("/String data, right truncated: 1406 Data too long for column 'from_(email|name)'/", $zdse->getMessage())) {
+                // try to trim email fields
+                $_message->from_email = substr($_message->from_email, 0, 254);
+                $_message->from_name = substr($_message->from_name, 0, 254);
+                $result = $this->_addMessageToCache($_message);
+            } else {
+                // perhaps we already have this message in our cache (duplicate)
+                $result = FALSE;
+            }
         }
         
         return $result;
-    }
+    }   
     
     /**
      * update folder status and counters
@@ -883,5 +922,42 @@ class Felamimail_Controller_Cache_Message extends Felamimail_Controller_Message
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Updated ' . $updateCount . ' flags.');
         
         Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);        
+    }
+    
+    /**
+     * update folder quota (check if server supports QUOTA first)
+     * 
+     * @param Felamimail_Model_Folder $_folder
+     * @param Felamimail_Backend_ImapProxy $_imap
+     */
+    protected function _updateFolderQuota(Felamimail_Model_Folder $_folder, Felamimail_Backend_ImapProxy $_imap)
+    {
+        // only do it for INBOX
+        if ($_folder->localname !== 'INBOX') {
+            return;
+        }
+        
+        $account = Felamimail_Controller_Account::getInstance()->get($_folder->account_id);
+        if (! $account->hasCapability('QUOTA')) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Account ' . $account->name . ' has no QUOTA capability'); 
+            return;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Getting quota for INBOX ' . $_folder->getId());
+            
+        // get quota and save in folder
+        $quota = $_imap->getQuota($_folder->localname);
+        
+        if (! empty($quota) && isset($quota['STORAGE'])) {
+            $_folder->quota_usage = $quota['STORAGE']['usage'];
+            $_folder->quota_limit = $quota['STORAGE']['limit'];
+        } else {
+            $_folder->quota_usage = 0;
+            $_folder->quota_limit = 0;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' ' . print_r($quota, TRUE)); 
     }
 }

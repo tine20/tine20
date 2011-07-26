@@ -233,14 +233,16 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         $imapConfigFields = array('host', 'port', 'user', 'password');
         $result = array();
         foreach ($imapConfigFields as $field) {
-            $result[$field] = $this->{$field};
+            if ($field === 'user') {
+                $result[$field] = $this->getUsername();
+            } else {
+                $result[$field] = $this->{$field};
+            }
         }
         
         if ($this->ssl && $this->ssl != 'none') {
             $result['ssl'] = strtoupper($this->ssl);
         }
-        
-        $result['user'] = $this->_addDomainToUsername($result['user']);
         
         // overwrite settings with config.inc.php values if set
         if (Tinebase_Core::getConfig()->imap) {
@@ -268,9 +270,9 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
      * @param string $_username
      * @return string
      */
-    protected function _addDomainToUsername($_username)
+    public function getUsername($_username = NULL)
     {
-        $result = $_username;
+        $result = ($_username !== NULL) ? $_username : $this->user;
         
         if ($this->type == self::TYPE_SYSTEM) {
             $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
@@ -355,11 +357,9 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
             'host'      => $this->sieve_hostname,
             'port'      => $this->sieve_port, 
             'ssl'       => ($this->sieve_ssl && $this->sieve_ssl !== self::SECURE_NONE) ? $this->sieve_ssl : FALSE,
-            'username'  => $this->user,
+            'username'  => $this->getUsername(),
             'password'  => $this->password,
         );
-        
-        $result['username'] = $this->_addDomainToUsername($result['username']);
         
         return $result;
     }
@@ -449,5 +449,18 @@ class Felamimail_Model_Account extends Tinebase_Record_Abstract
         }
         
         return TRUE;
+    }
+
+    /**
+     * returns TRUE if account has capability (i.e. QUOTA, CONDSTORE, ...)
+     * 
+     * @param $_capability
+     * @return boolean
+     */
+    public function hasCapability($_capability)
+    {
+        $capabilities = Felamimail_Controller_Account::getInstance()->updateCapabilities($this);
+        
+        return (in_array($_capability, $capabilities['capabilities']));
     }
 }

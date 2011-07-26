@@ -134,7 +134,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         }
         
         
-        if($_grants === NULL) {
+        if($_grants === NULL || count($_grants) == 0) {
             $creatorGrants = array(
                 'account_id'     => $accountId,
                 'account_type'   => Tinebase_Acl_Rights::ACCOUNT_TYPE_USER,
@@ -175,7 +175,7 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
         
         Tinebase_Timemachine_ModificationLog::setRecordMetaData($_container, 'create');
         $container = $this->create($_container);
-        $this->setGrants($container->getId(), $grants, TRUE);
+        $this->setGrants($container->getId(), $grants, TRUE, FALSE);
         
         return $container;
     }
@@ -347,10 +347,15 @@ class Tinebase_Container extends Tinebase_Backend_Sql_Abstract
      * @return  Tinebase_Model_Container
      * @throws  Tinebase_Exception_NotFound
      * @throws  Tinebase_Exception_UnexpectedValue
+     * 
+     * @deprecated this should be removed as it does not return a distinct container 
      */
     public function getContainerByName($_application, $_containerName, $_type)
     {
-        if($_type !== Tinebase_Model_Container::TYPE_PERSONAL && $_type !== Tinebase_Model_Container::TYPE_SHARED) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::NOTICE)) Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ 
+            . ' This is deprecated. Please do not use it any more.');
+        
+        if ($_type !== Tinebase_Model_Container::TYPE_PERSONAL && $_type !== Tinebase_Model_Container::TYPE_SHARED) {
             throw new Tinebase_Exception_UnexpectedValue ("Invalid type $_type supplied.");
         }
         

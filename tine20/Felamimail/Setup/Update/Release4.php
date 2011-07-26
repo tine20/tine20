@@ -133,8 +133,14 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
      */    
     public function update_3()
     {
-        $this->_backend->dropCol('felamimail_folder', 'imap_uidnext');
-        $this->_backend->dropCol('felamimail_folder', 'cache_uidnext');
+        $colsToDrop = array('imap_uidnext', 'cache_uidnext');
+        foreach ($colsToDrop as $col) {
+            try {
+                $this->_backend->dropCol('felamimail_folder', $col);
+            } catch (Zend_Db_Statement_Exception $zdse) {
+                // do nothing
+            }
+        }
         
         $this->setTableVersion('felamimail_folder', '7');
         $this->setApplicationVersion('Felamimail', '4.4');
@@ -146,9 +152,42 @@ class Felamimail_Setup_Update_Release4 extends Setup_Update_Abstract
      */    
     public function update_4()
     {
-        $this->_backend->dropCol('felamimail_folder', 'user_id');
+        try {
+            $this->_backend->dropCol('felamimail_folder', 'user_id');
+        } catch (Zend_Db_Statement_Exception $zdse) {
+            // do nothing
+        }
         
         $this->setTableVersion('felamimail_folder', '8');
         $this->setApplicationVersion('Felamimail', '4.5');
+    }
+
+    /**
+     * update to 4.6
+     * - increase account system folders name length (64 -> 256)
+     */    
+    public function update_5()
+    {
+        foreach (array('sent_folder', 'trash_folder', 'drafts_folder', 'templates_folder') as $folderToChange) {
+            $declaration = new Setup_Backend_Schema_Field_Xml(
+                '<field>
+                    <name>' . $folderToChange . '</name>
+                    <type>text</type>
+                    <length>256</length>
+                </field>'
+            );
+            $this->_backend->alterCol('felamimail_account', $declaration);
+        }
+        
+        $this->setTableVersion('felamimail_account', '15');
+        $this->setApplicationVersion('Felamimail', '4.6');
+    }
+
+    /**
+     * update to 5.0
+     */    
+    public function update_6()
+    {
+        $this->setApplicationVersion('Felamimail', '5.0');
     }
 }

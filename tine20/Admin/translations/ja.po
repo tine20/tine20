@@ -13,6 +13,14 @@ msgstr ""
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
 
+#: Controller/Container.php:185
+msgid "Your container has been changed"
+msgstr ""
+
+#: Controller/Container.php:186
+msgid "Your container has been changed by %1$s %2$sNote: %3$s"
+msgstr ""
+
 #: Acl/Rights.php:185
 msgid "manage access log"
 msgstr "アクセスログの管理"
@@ -121,804 +129,763 @@ msgstr ""
 msgid "view personal and shared containers"
 msgstr ""
 
-#: js/AccessLog.js:106 js/Admin-FAT-debug.js:92 js/Admin-FAT-debug.js:381
-#: js/Admin-FAT-debug.js:2986 js/Admin-FAT.js:6 js/Admin.js:87 js/Models.js:51
-#, fuzzy
-msgid "Access Log"
-msgid_plural "Access Logs"
-msgstr[0] "アクセスログ"
+#: js/SambaMachineGrid.js:61 js/SambaMachineEditDialog.js:42
+msgid "Computer Name"
+msgstr ""
 
-#: js/AccessLog.js:107 js/AccessLog.js:133 js/Admin-FAT-debug.js:2987
-#: js/Admin-FAT-debug.js:3013
-msgid "IP Address"
-msgstr "ＩＰアドレス"
+#: js/SambaMachineGrid.js:62 js/SambaMachineGrid.js:92 js/Groups.js:236
+#: js/RoleEditDialog.js:291 js/user/GridPanel.js:99 js/GroupEditDialog.js:135
+#: js/TagEditDialog.js:225 js/Roles.js:239 js/Tags.js:226
+msgid "Description"
+msgstr "説明"
 
-#: js/AccessLog.js:108 js/Admin-FAT-debug.js:28 js/Admin-FAT-debug.js:928
-#: js/Admin-FAT-debug.js:1135 js/Admin-FAT-debug.js:2988 js/Admin-FAT.js:6
-#: js/Admin.js:23 js/user/GridPanel.js:99 js/user/Users.js:72
+#: js/SambaMachineGrid.js:79 js/container/GridPanel.js:70 js/Groups.js:234
+#: js/user/GridPanel.js:175 js/Roles.js:237
+msgid "ID"
+msgstr "ID"
+
+#: js/SambaMachineGrid.js:86 js/container/EditDialog.js:122 js/Groups.js:235
+#: js/user/EditDialog.js:278 js/user/EditDialog.js:314 js/Applications.js:278
+#: js/Roles.js:238 js/Tags.js:225 js/AccessLog.js:131
+msgid "Name"
+msgstr "名前"
+
+#: js/container/Container.js:46 js/container/GridPanel.js:103
+msgid "Container"
+msgid_plural "Containers"
+msgstr[0] ""
+
+#: js/container/GridPanel.js:71
+msgid "Container Name"
+msgstr ""
+
+#: js/container/GridPanel.js:72 js/container/EditDialog.js:134
+#: js/ApplicationFilter.js:33 js/Models.js:128
+msgid "Application"
+msgid_plural "Applications"
+msgstr[0] ""
+
+#: js/container/GridPanel.js:73 js/container/GridPanel.js:104
+#: js/container/EditDialog.js:141
+msgid "Type"
+msgstr ""
+
+#: js/container/EditDialog.js:142
+msgid "personal"
+msgstr ""
+
+#: js/container/EditDialog.js:142
+msgid "shared"
+msgstr ""
+
+#: js/container/EditDialog.js:154 js/TagEditDialog.js:231 js/Tags.js:222
+msgid "Color"
+msgstr "色"
+
+#: js/container/EditDialog.js:159
+msgid "Note for Owner"
+msgstr ""
+
+#: js/Groups.js:52 js/Roles.js:47 js/Tags.js:64
+msgid "Confirm"
+msgstr "確認"
+
+#: js/Groups.js:52
+msgid "Do you really want to delete the selected groups?"
+msgstr "本当に選択したグループを削除しますか？"
+
+#: js/Groups.js:69
+msgid "Deleting group(s)..."
+msgstr "グループを削除しています..."
+
+#: js/Groups.js:74 js/RoleEditDialog.js:106 js/RoleEditDialog.js:134
+#: js/GroupEditDialog.js:72 js/TagEditDialog.js:82 js/Roles.js:69
+msgid "Failed"
+msgstr "失敗"
+
+#: js/Groups.js:74
+msgid "Some error occurred while trying to delete the group."
+msgstr "グループの削除中にエラーが発生しました"
+
+#: js/Groups.js:104
+msgid "add group"
+msgstr "グループの追加"
+
+#: js/Groups.js:112
+msgid "edit group"
+msgstr "グループの編集"
+
+#: js/Groups.js:120
+msgid "delete group"
+msgstr "グループの削除"
+
+#: js/Groups.js:176 js/Applications.js:183 js/Roles.js:176 js/Tags.js:169
+msgid "Search:"
+msgstr "検索："
+
+#: js/Groups.js:223
+msgid "Displaying groups {0} - {1} of {2}"
+msgstr "グループの表示 {0} - {1} 件中 {2}"
+
+#: js/Groups.js:224 js/Groups.js:278
+msgid "No groups to display"
+msgstr "表示するグループがありません"
+
+#: js/SambaMachineModel.js:39
+msgid "Computer"
+msgid_plural "Computers"
+msgstr[0] ""
+
+#: js/RoleEditDialog.js:69 js/GroupEditDialog.js:37 js/TagEditDialog.js:37
+msgid "Please wait"
+msgstr "お待ちください"
+
+#: js/RoleEditDialog.js:69 js/GroupEditDialog.js:37
+msgid "Updating Memberships"
+msgstr "メンバーシップをアップデートしています"
+
+#: js/RoleEditDialog.js:106
+msgid "Could not save role."
+msgstr "ロールを保存できませんでした"
+
+#: js/RoleEditDialog.js:113 js/GroupEditDialog.js:77 js/TagEditDialog.js:87
+msgid "Errors"
+msgstr "エラー"
+
+#: js/RoleEditDialog.js:113 js/GroupEditDialog.js:77 js/TagEditDialog.js:87
+msgid "Please fix the errors noted."
+msgstr "表示されているエラーを修正してください"
+
+#: js/RoleEditDialog.js:126
+msgid "Deleting role..."
+msgstr "ロールを削除しています..."
+
+#: js/RoleEditDialog.js:134 js/Roles.js:69
+msgid "Some error occurred while trying to delete the role."
+msgstr "ロールの削除中にエラーが発生しました"
+
+#: js/RoleEditDialog.js:158
+msgid "Rights"
+msgstr "権限"
+
+#: js/RoleEditDialog.js:260
+msgid "Members"
+msgstr "メンバー"
+
+#: js/RoleEditDialog.js:283
+msgid "Role Name"
+msgstr "ロール名"
+
+#: js/RoleEditDialog.js:358 js/GroupEditDialog.js:215 js/TagEditDialog.js:289
+msgid "Transferring {0}..."
+msgstr ""
+
+#: js/RoleEditDialog.js:358
+msgid "Role"
+msgstr ""
+
+#: js/RoleEditDialog.js:368
+msgid "Add New Role"
+msgstr "新規ロールの追加"
+
+#: js/RoleEditDialog.js:370
+msgid "Edit Role \"{0}\""
+msgstr "ロールの編集 \"{0}\""
+
+#: js/user/GridPanel.js:56
+msgid "enable account"
+msgstr "アカウント有効"
+
+#: js/user/GridPanel.js:66
+msgid "disable account"
+msgstr "アカウント無効"
+
+#: js/user/GridPanel.js:76
+msgid "reset password"
+msgstr "パスワードリセット"
+
+#: js/user/GridPanel.js:98 js/user/Users.js:72 js/Admin.js:23
+#: js/AccessLog.js:107
 #, fuzzy
 msgid "User"
 msgid_plural "Users"
 msgstr[0] "ユーザ"
 
-#: js/AccessLog.js:109 js/AccessLog.js:134 js/Admin-FAT-debug.js:2989
-#: js/Admin-FAT-debug.js:3014
-msgid "Login Time"
-msgstr "ログイン時間"
-
-#: js/AccessLog.js:110 js/AccessLog.js:135 js/Admin-FAT-debug.js:2990
-#: js/Admin-FAT-debug.js:3015
-msgid "Logout Time"
-msgstr "ログアウト時間"
-
-#: js/AccessLog.js:111 js/AccessLog.js:137 js/Admin-FAT-debug.js:2991
-#: js/Admin-FAT-debug.js:3017
-msgid "Client Type"
-msgstr ""
-
-#: js/AccessLog.js:130 js/Admin-FAT-debug.js:3010
-msgid "Session ID"
-msgstr "セッションＩＤ"
-
-#: js/AccessLog.js:131 js/Admin-FAT-debug.js:2080 js/Admin-FAT-debug.js:2123
-#: js/Admin-FAT-debug.js:3011 js/user/EditDialog.js:748
-#: js/user/EditDialog.js:791
-msgid "Login Name"
-msgstr "ログイン名"
-
-#: js/AccessLog.js:132 js/Admin-FAT-debug.js:722 js/Admin-FAT-debug.js:1600
-#: js/Admin-FAT-debug.js:1636 js/Admin-FAT-debug.js:2517
-#: js/Admin-FAT-debug.js:3012 js/Admin-FAT-debug.js:3212
-#: js/Admin-FAT-debug.js:3511 js/Admin-FAT-debug.js:4180
-#: js/Applications.js:285 js/Groups.js:235 js/Roles.js:238
-#: js/SambaMachineGrid.js:92 js/Tags.js:225 js/user/EditDialog.js:268
-#: js/user/EditDialog.js:304
-msgid "Name"
-msgstr "名前"
-
-#: js/AccessLog.js:136 js/Admin-FAT-debug.js:3016
-msgid "Result"
-msgstr "結果"
-
-#: js/AccessLog.js:157 js/Admin-FAT-debug.js:3037
-msgid "user blocked"
-msgstr ""
-
-#: js/AccessLog.js:161 js/Admin-FAT-debug.js:3041
-msgid "password expired"
-msgstr ""
-
-#: js/AccessLog.js:165 js/Admin-FAT-debug.js:3045
-msgid "user disabled"
-msgstr ""
-
-#: js/AccessLog.js:169 js/Admin-FAT-debug.js:3049
-msgid "invalid password"
-msgstr "パスワードが違います"
-
-#: js/AccessLog.js:173 js/Admin-FAT-debug.js:3053
-msgid "ambiguous username"
-msgstr "あいまいなユーザ名"
-
-#: js/AccessLog.js:177 js/Admin-FAT-debug.js:3057
-msgid "user not found"
-msgstr "ユーザが見つかりません"
-
-#: js/AccessLog.js:181 js/Admin-FAT-debug.js:3061
-msgid "failure"
-msgstr "失敗"
-
-#: js/AccessLog.js:185 js/Admin-FAT-debug.js:3065
-msgid "success"
-msgstr "性向"
-
-#: js/Admin-FAT-debug.js:41 js/Admin-FAT-debug.js:417 js/Admin-FAT.js:6
-#: js/Admin.js:36 js/Models.js:87
-msgid "Groups"
-msgstr "グループ"
-
-#: js/Admin-FAT-debug.js:54 js/Admin-FAT.js:6 js/Admin.js:49
-msgid "Roles"
-msgstr "役割"
-
-#: js/Admin-FAT-debug.js:66 js/Admin-FAT.js:6 js/Admin.js:61
-msgid "Computers"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:79 js/Admin-FAT.js:6 js/Admin.js:74
-msgid "Applications"
-msgstr "アプリケーション"
-
-#: js/Admin-FAT-debug.js:105 js/Admin-FAT.js:6 js/Admin.js:100
-msgid "Shared Tags"
-msgstr "共有タグ"
-
-#: js/Admin-FAT-debug.js:142 js/Admin-FAT.js:6 js/Admin.js:149
-msgid "Admin"
-msgstr "管理者"
-
-#: js/Admin-FAT-debug.js:296 js/Admin-FAT.js:6 js/AdminPanel.js:46
-msgid "Default Addressbook for new contacts and groups"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:417 js/Admin-FAT-debug.js:2837
-#: js/GroupEditDialog.js:215 js/Models.js:87
-msgid "Group"
-msgid_plural "Groups"
-msgstr[0] ""
-
-#: js/Admin-FAT-debug.js:480 js/Applications.js:43
-#, fuzzy
-msgid "{0} Settings"
-msgstr "設定"
-
-#: js/Admin-FAT-debug.js:588 js/Applications.js:151
-msgid "enable application"
-msgstr "有効なアプリケーション"
-
-#: js/Admin-FAT-debug.js:589 js/Applications.js:152
-msgid "disable application"
-msgstr "無効なアプリケーション"
-
-#: js/Admin-FAT-debug.js:590 js/Applications.js:153
-msgid "settings"
-msgstr "設定"
-
-#: js/Admin-FAT-debug.js:627 js/Admin-FAT-debug.js:2458
-#: js/Admin-FAT-debug.js:3455 js/Admin-FAT-debug.js:4118
-#: js/Applications.js:190 js/Groups.js:176 js/Roles.js:176 js/Tags.js:169
-msgid "Search:"
-msgstr "検索："
-
-#: js/Admin-FAT-debug.js:670 js/Admin-FAT-debug.js:2151 js/Applications.js:233
-#: js/user/EditDialog.js:819
-msgid "disabled"
-msgstr "無効"
-
-#: js/Admin-FAT-debug.js:673 js/Admin-FAT-debug.js:2151 js/Applications.js:236
-#: js/user/EditDialog.js:819
-msgid "enabled"
-msgstr "有効"
-
-#: js/Admin-FAT-debug.js:677 js/Applications.js:240
-msgid "unknown status ({0})"
-msgstr "不明なステータス ({0})"
-
-#: js/Admin-FAT-debug.js:711 js/Applications.js:274
-msgid "Displaying application {0} - {1} of {2}"
-msgstr "アプリケーションの表示 {0} - {1} 件中 {2}"
-
-#: js/Admin-FAT-debug.js:712 js/Applications.js:275
-msgid "No applications to display"
-msgstr "表示するアプリケーションがありません"
-
-#: js/Admin-FAT-debug.js:721 js/Applications.js:284
-#, fuzzy
-msgid "Order"
-msgstr "オーダー"
-
-#: js/Admin-FAT-debug.js:723 js/Admin-FAT-debug.js:1213
-#: js/Admin-FAT-debug.js:2145 js/Applications.js:286 js/user/EditDialog.js:813
-#: js/user/GridPanel.js:177
+#: js/user/GridPanel.js:176 js/user/EditDialog.js:823 js/Applications.js:279
 msgid "Status"
 msgstr "ステータス"
 
-#: js/Admin-FAT-debug.js:724 js/Applications.js:287
-#, fuzzy
-msgid "Version"
-msgstr "バージョン"
+#: js/user/GridPanel.js:177
+msgid "Displayname"
+msgstr "表示名"
 
-#: js/Admin-FAT-debug.js:974 js/user/Users.js:118
+#: js/user/GridPanel.js:178
+msgid "Loginname"
+msgstr "ログイン名"
+
+#: js/user/GridPanel.js:179
+msgid "Last name"
+msgstr "姓"
+
+#: js/user/GridPanel.js:180
+msgid "First name"
+msgstr "名"
+
+#: js/user/GridPanel.js:181
+msgid "Email"
+msgstr "Eメール"
+
+#: js/user/GridPanel.js:182 js/user/EditDialog.js:800
+msgid "OpenID"
+msgstr ""
+
+#: js/user/GridPanel.js:183 js/user/EditDialog.js:884
+msgid "Last login at"
+msgstr "前回のログイン"
+
+#: js/user/GridPanel.js:184 js/user/EditDialog.js:888
+msgid "Last login from"
+msgstr "前回のログイン（From)"
+
+#: js/user/GridPanel.js:185
+msgid "Password changed"
+msgstr "パスワード変更"
+
+#: js/user/GridPanel.js:186 js/user/EditDialog.js:832
+msgid "Expires"
+msgstr "期間"
+
+#: js/user/GridPanel.js:243
+msgid "Set new password"
+msgstr "新しいパスワードの設定"
+
+#: js/user/GridPanel.js:243
+msgid "Please enter the new password:"
+msgstr "新しいパスワードを入力してください"
+
+#: js/user/Users.js:118
 msgid "Samba User"
 msgid_plural "Samba Users"
 msgstr[0] ""
 
-#: js/Admin-FAT-debug.js:1000 js/user/Users.js:144
+#: js/user/Users.js:144
 #, fuzzy
 msgid "Email User"
 msgid_plural "Email Users"
 msgstr[0] "Eメール"
 
-#: js/Admin-FAT-debug.js:1093 js/user/GridPanel.js:57
-msgid "enable account"
-msgstr "アカウント有効"
-
-#: js/Admin-FAT-debug.js:1103 js/user/GridPanel.js:67
-msgid "disable account"
-msgstr "アカウント無効"
-
-#: js/Admin-FAT-debug.js:1113 js/user/GridPanel.js:77
-msgid "reset password"
-msgstr "パスワードリセット"
-
-#: js/Admin-FAT-debug.js:1136 js/Admin-FAT-debug.js:2518
-#: js/Admin-FAT-debug.js:2757 js/Admin-FAT-debug.js:3188
-#: js/Admin-FAT-debug.js:3218 js/Admin-FAT-debug.js:3512
-#: js/Admin-FAT-debug.js:3845 js/Admin-FAT-debug.js:4181
-#: js/Admin-FAT-debug.js:4587 js/GroupEditDialog.js:135 js/Groups.js:236
-#: js/RoleEditDialog.js:291 js/Roles.js:239 js/SambaMachineGrid.js:68
-#: js/SambaMachineGrid.js:98 js/TagEditDialog.js:225 js/Tags.js:226
-#: js/user/GridPanel.js:100
-msgid "Description"
-msgstr "説明"
-
-#: js/Admin-FAT-debug.js:1212 js/Admin-FAT-debug.js:2516
-#: js/Admin-FAT-debug.js:3205 js/Admin-FAT-debug.js:4179
-#: js/container/GridPanel.js:67 js/Groups.js:234 js/Roles.js:237
-#: js/SambaMachineGrid.js:85 js/user/GridPanel.js:176
-msgid "ID"
-msgstr "ID"
-
-#: js/Admin-FAT-debug.js:1214 js/user/GridPanel.js:178
-msgid "Displayname"
-msgstr "表示名"
-
-#: js/Admin-FAT-debug.js:1215 js/user/GridPanel.js:179
-msgid "Loginname"
-msgstr "ログイン名"
-
-#: js/Admin-FAT-debug.js:1216 js/user/GridPanel.js:180
-msgid "Last name"
-msgstr "姓"
-
-#: js/Admin-FAT-debug.js:1217 js/user/GridPanel.js:181
-msgid "First name"
-msgstr "名"
-
-#: js/Admin-FAT-debug.js:1218 js/user/GridPanel.js:182
-msgid "Email"
-msgstr "Eメール"
-
-#: js/Admin-FAT-debug.js:1219 js/Admin-FAT-debug.js:2122
-#: js/user/EditDialog.js:790 js/user/GridPanel.js:183
-msgid "OpenID"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:1220 js/Admin-FAT-debug.js:2206
-#: js/user/EditDialog.js:874 js/user/GridPanel.js:184
-msgid "Last login at"
-msgstr "前回のログイン"
-
-#: js/Admin-FAT-debug.js:1221 js/Admin-FAT-debug.js:2210
-#: js/user/EditDialog.js:878 js/user/GridPanel.js:185
-msgid "Last login from"
-msgstr "前回のログイン（From)"
-
-#: js/Admin-FAT-debug.js:1222 js/user/GridPanel.js:186
-msgid "Password changed"
-msgstr "パスワード変更"
-
-#: js/Admin-FAT-debug.js:1223 js/Admin-FAT-debug.js:2154
-#: js/user/EditDialog.js:822 js/user/GridPanel.js:187
-msgid "Expires"
-msgstr "期間"
-
-#: js/Admin-FAT-debug.js:1280 js/user/GridPanel.js:244
-msgid "Set new password"
-msgstr "新しいパスワードの設定"
-
-#: js/Admin-FAT-debug.js:1280 js/user/GridPanel.js:244
-msgid "Please enter the new password:"
-msgstr "新しいパスワードを入力してください"
-
-#: js/Admin-FAT-debug.js:1502 js/user/EditDialog.js:170
+#: js/user/EditDialog.js:180
 msgid "Domain is not allowed. Check your SMTP domain configuration."
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1549 js/Admin-FAT-debug.js:1552
-#: js/Admin-FAT-debug.js:2002 js/user/EditDialog.js:217
-#: js/user/EditDialog.js:220 js/user/EditDialog.js:670
+#: js/user/EditDialog.js:227 js/user/EditDialog.js:230
+#: js/user/EditDialog.js:680
 #, fuzzy
 msgid "Passwords do not match!"
 msgstr "パスワードが一致していません"
 
-#: js/Admin-FAT-debug.js:1555 js/user/EditDialog.js:223
+#: js/user/EditDialog.js:233
 msgid "Passwords match!"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1601 js/Admin-FAT-debug.js:2128
-#: js/user/EditDialog.js:269 js/user/EditDialog.js:796
+#: js/user/EditDialog.js:279 js/user/EditDialog.js:806
 msgid "Primary group"
 msgstr "プライマリーグループ"
 
-#: js/Admin-FAT-debug.js:1678 js/user/EditDialog.js:346
+#: js/user/EditDialog.js:356
 msgid "Unix"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1692 js/user/EditDialog.js:360
+#: js/user/EditDialog.js:370
 msgid "Home Directory"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1696 js/user/EditDialog.js:364
+#: js/user/EditDialog.js:374
 msgid "Login Shell"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1702 js/user/EditDialog.js:370
+#: js/user/EditDialog.js:380
 msgid "Windows"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1716 js/user/EditDialog.js:384
+#: js/user/EditDialog.js:394
 msgid "Home Drive"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1721 js/user/EditDialog.js:389
+#: js/user/EditDialog.js:399
 msgid "Logon Time"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1723 js/Admin-FAT-debug.js:2208
-#: js/Admin-FAT-debug.js:2212 js/user/EditDialog.js:391
-#: js/user/EditDialog.js:876 js/user/EditDialog.js:880
+#: js/user/EditDialog.js:401 js/user/EditDialog.js:886
+#: js/user/EditDialog.js:890
 msgid "never logged in"
 msgstr "ログインしていません"
 
-#: js/Admin-FAT-debug.js:1726 js/user/EditDialog.js:394
+#: js/user/EditDialog.js:404
 msgid "Home Path"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1731 js/user/EditDialog.js:399
+#: js/user/EditDialog.js:409
 msgid "Logoff Time"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1733 js/user/EditDialog.js:401
+#: js/user/EditDialog.js:411
 msgid "never logged off"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1736 js/user/EditDialog.js:404
+#: js/user/EditDialog.js:414
 msgid "Profile Path"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1741 js/user/EditDialog.js:409
+#: js/user/EditDialog.js:419
 msgid "Password Last Set"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1743 js/Admin-FAT-debug.js:2156
-#: js/Admin-FAT-debug.js:2216 js/user/EditDialog.js:411
-#: js/user/EditDialog.js:824 js/user/EditDialog.js:884
+#: js/user/EditDialog.js:421 js/user/EditDialog.js:834
+#: js/user/EditDialog.js:894
 msgid "never"
 msgstr "未"
 
-#: js/Admin-FAT-debug.js:1746 js/user/EditDialog.js:414
+#: js/user/EditDialog.js:424
 msgid "Logon Script"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1751 js/user/EditDialog.js:419
+#: js/user/EditDialog.js:429
 msgid "Password Can Change"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1753 js/Admin-FAT-debug.js:1758
-#: js/Admin-FAT-debug.js:1763 js/user/EditDialog.js:421
-#: js/user/EditDialog.js:426 js/user/EditDialog.js:431
+#: js/user/EditDialog.js:431 js/user/EditDialog.js:436
+#: js/user/EditDialog.js:441
 msgid "not set"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1756 js/user/EditDialog.js:424
+#: js/user/EditDialog.js:434
 msgid "Password Must Change"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1761 js/user/EditDialog.js:429
+#: js/user/EditDialog.js:439
 msgid "Kick Off Time"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1781 js/user/EditDialog.js:449
+#: js/user/EditDialog.js:459
 msgid "IMAP Quota (MB)"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1800 js/Admin-FAT-debug.js:1838
-#: js/user/EditDialog.js:468 js/user/EditDialog.js:506
+#: js/user/EditDialog.js:478 js/user/EditDialog.js:516
 msgid "Quota"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1801 js/Admin-FAT-debug.js:1839
-#: js/user/EditDialog.js:469 js/user/EditDialog.js:507
+#: js/user/EditDialog.js:479 js/user/EditDialog.js:517
 msgid "no quota set"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1811 js/user/EditDialog.js:479
+#: js/user/EditDialog.js:489
 msgid "Current Mailbox size"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1819 js/user/EditDialog.js:487
+#: js/user/EditDialog.js:497
 msgid "Sieve Quota (MB)"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1849 js/user/EditDialog.js:517
+#: js/user/EditDialog.js:527
 msgid "Current Sieve size"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1858 js/Admin-FAT-debug.js:2191
-#: js/user/EditDialog.js:526 js/user/EditDialog.js:859
+#: js/user/EditDialog.js:536 js/user/EditDialog.js:869
 msgid "Information"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1872 js/user/EditDialog.js:540
+#: js/user/EditDialog.js:550
 #, fuzzy
 msgid "Last Login"
 msgstr "前回のログイン"
 
-#: js/Admin-FAT-debug.js:1909 js/user/EditDialog.js:577
+#: js/user/EditDialog.js:587
 msgid "Email Alias"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1915 js/user/EditDialog.js:583
+#: js/user/EditDialog.js:593
 msgid "Add an alias address..."
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1928 js/user/EditDialog.js:596
+#: js/user/EditDialog.js:606
 msgid "Email Forward"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1934 js/user/EditDialog.js:602
+#: js/user/EditDialog.js:612
 msgid "Add a forward address..."
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1946 js/user/EditDialog.js:614
+#: js/user/EditDialog.js:624
 msgid "Forward Only"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:1969 js/user/EditDialog.js:637
+#: js/user/EditDialog.js:647
 #, fuzzy
 msgid "Password confirmation"
 msgstr "もう一度パスワードを入力してください"
 
-#: js/Admin-FAT-debug.js:1986 js/user/EditDialog.js:654
+#: js/user/EditDialog.js:664
 #, fuzzy
 msgid "Repeat password"
 msgstr "パスワードリセット"
 
-#: js/Admin-FAT-debug.js:2005 js/user/EditDialog.js:673
+#: js/user/EditDialog.js:683
 msgid "Cancel"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2013 js/user/EditDialog.js:681
+#: js/user/EditDialog.js:691
 msgid "Ok"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2050 js/user/EditDialog.js:718
+#: js/user/EditDialog.js:728
 msgid "Account"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2065 js/user/EditDialog.js:733
+#: js/user/EditDialog.js:743
 msgid "First Name"
 msgstr "名"
 
-#: js/Admin-FAT-debug.js:2075 js/user/EditDialog.js:743
+#: js/user/EditDialog.js:753
 msgid "Last Name"
 msgstr "姓"
 
-#: js/Admin-FAT-debug.js:2085 js/user/EditDialog.js:753
+#: js/user/EditDialog.js:758 js/user/EditDialog.js:801 js/AccessLog.js:130
+msgid "Login Name"
+msgstr "ログイン名"
+
+#: js/user/EditDialog.js:763
 msgid "Password"
 msgstr "パスワード"
 
-#: js/Admin-FAT-debug.js:2089 js/user/EditDialog.js:757
+#: js/user/EditDialog.js:767
 msgid "no password set"
 msgstr "パスワードが設定されていません"
 
-#: js/Admin-FAT-debug.js:2116 js/user/EditDialog.js:784
+#: js/user/EditDialog.js:794
 msgid "Emailaddress"
 msgstr "Eメールアドレス"
 
-#: js/Admin-FAT-debug.js:2151 js/user/EditDialog.js:819
+#: js/user/EditDialog.js:829 js/Applications.js:229
+msgid "enabled"
+msgstr "有効"
+
+#: js/user/EditDialog.js:829 js/Applications.js:226
+msgid "disabled"
+msgstr "無効"
+
+#: js/user/EditDialog.js:829
 #, fuzzy
 msgid "expired"
 msgstr "期間"
 
-#: js/Admin-FAT-debug.js:2151 js/user/EditDialog.js:819
+#: js/user/EditDialog.js:829
 msgid "blocked"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2159 js/Admin-FAT-debug.js:2765
-#: js/GroupEditDialog.js:143 js/user/EditDialog.js:827
+#: js/user/EditDialog.js:837 js/GroupEditDialog.js:143
 msgid "Visibility"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2165 js/Admin-FAT-debug.js:2771
-#: js/GroupEditDialog.js:149 js/user/EditDialog.js:833
+#: js/user/EditDialog.js:843 js/GroupEditDialog.js:149
 #, fuzzy
 msgid "Display in addressbook"
 msgstr "表示名"
 
-#: js/Admin-FAT-debug.js:2165 js/Admin-FAT-debug.js:2771
-#: js/GroupEditDialog.js:149 js/user/EditDialog.js:833
+#: js/user/EditDialog.js:843 js/GroupEditDialog.js:149
 msgid "Hide from addressbook"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2179 js/Admin-FAT-debug.js:2782
-#: js/GroupEditDialog.js:160 js/user/EditDialog.js:847
+#: js/user/EditDialog.js:857 js/GroupEditDialog.js:160
 msgid "Saved in Addressbook"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2208 js/Admin-FAT-debug.js:2212
-#: js/user/EditDialog.js:876 js/user/EditDialog.js:880
+#: js/user/EditDialog.js:886 js/user/EditDialog.js:890
 msgid "don't know"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2214 js/user/EditDialog.js:882
+#: js/user/EditDialog.js:892
 msgid "Password set"
 msgstr "パスワード設定"
 
-#: js/Admin-FAT-debug.js:2221 js/user/EditDialog.js:889
+#: js/user/EditDialog.js:899
 msgid "User groups"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2227 js/user/EditDialog.js:895
+#: js/user/EditDialog.js:905
 msgid "User roles"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2233 js/user/EditDialog.js:901
+#: js/user/EditDialog.js:911
 msgid "Fileserver"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2239 js/user/EditDialog.js:907
+#: js/user/EditDialog.js:917
 msgid "IMAP"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2248 js/user/EditDialog.js:916
+#: js/user/EditDialog.js:926
 msgid "SMTP"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2334 js/Admin-FAT-debug.js:3350
-#: js/Admin-FAT-debug.js:3989 js/Groups.js:52 js/Roles.js:47 js/Tags.js:64
-msgid "Confirm"
-msgstr "確認"
+#: js/Admin.js:36 js/Models.js:87
+msgid "Groups"
+msgstr "グループ"
 
-#: js/Admin-FAT-debug.js:2334 js/Groups.js:52
-msgid "Do you really want to delete the selected groups?"
-msgstr "本当に選択したグループを削除しますか？"
+#: js/Admin.js:49
+msgid "Roles"
+msgstr "役割"
 
-#: js/Admin-FAT-debug.js:2351 js/Groups.js:69
-msgid "Deleting group(s)..."
-msgstr "グループを削除しています..."
-
-#: js/Admin-FAT-debug.js:2356 js/Admin-FAT-debug.js:2694
-#: js/Admin-FAT-debug.js:3702 js/Admin-FAT-debug.js:4011
-#: js/Admin-FAT-debug.js:4402 js/Admin-FAT-debug.js:4430
-#: js/GroupEditDialog.js:72 js/Groups.js:74 js/RoleEditDialog.js:106
-#: js/RoleEditDialog.js:134 js/Roles.js:69 js/TagEditDialog.js:82
-msgid "Failed"
-msgstr "失敗"
-
-#: js/Admin-FAT-debug.js:2356 js/Groups.js:74
-msgid "Some error occurred while trying to delete the group."
-msgstr "グループの削除中にエラーが発生しました"
-
-#: js/Admin-FAT-debug.js:2386 js/Groups.js:104
-msgid "add group"
-msgstr "グループの追加"
-
-#: js/Admin-FAT-debug.js:2394 js/Groups.js:112
-msgid "edit group"
-msgstr "グループの編集"
-
-#: js/Admin-FAT-debug.js:2402 js/Groups.js:120
-msgid "delete group"
-msgstr "グループの削除"
-
-#: js/Admin-FAT-debug.js:2505 js/Groups.js:223
-msgid "Displaying groups {0} - {1} of {2}"
-msgstr "グループの表示 {0} - {1} 件中 {2}"
-
-#: js/Admin-FAT-debug.js:2506 js/Admin-FAT-debug.js:2561 js/Groups.js:224
-#: js/Groups.js:279
-msgid "No groups to display"
-msgstr "表示するグループがありません"
-
-#: js/Admin-FAT-debug.js:2659 js/Admin-FAT-debug.js:3657
-#: js/Admin-FAT-debug.js:4365 js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
-#: js/TagEditDialog.js:37
-msgid "Please wait"
-msgstr "お待ちください"
-
-#: js/Admin-FAT-debug.js:2659 js/Admin-FAT-debug.js:4365
-#: js/GroupEditDialog.js:37 js/RoleEditDialog.js:69
-msgid "Updating Memberships"
-msgstr "メンバーシップをアップデートしています"
-
-#: js/Admin-FAT-debug.js:2694 js/GroupEditDialog.js:72
-msgid "Could not save group."
-msgstr "グループを保存できませんでした"
-
-#: js/Admin-FAT-debug.js:2699 js/Admin-FAT-debug.js:3707
-#: js/Admin-FAT-debug.js:4409 js/GroupEditDialog.js:77
-#: js/RoleEditDialog.js:113 js/TagEditDialog.js:87
-msgid "Errors"
-msgstr "エラー"
-
-#: js/Admin-FAT-debug.js:2699 js/Admin-FAT-debug.js:3707
-#: js/Admin-FAT-debug.js:4409 js/GroupEditDialog.js:77
-#: js/RoleEditDialog.js:113 js/TagEditDialog.js:87
-msgid "Please fix the errors noted."
-msgstr "表示されているエラーを修正してください"
-
-#: js/Admin-FAT-debug.js:2730 js/GroupEditDialog.js:108
-msgid "Group Members"
-msgstr "グループメンバー"
-
-#: js/Admin-FAT-debug.js:2749 js/GroupEditDialog.js:127
-msgid "Group Name"
-msgstr "グループ名"
-
-#: js/Admin-FAT-debug.js:2837 js/Admin-FAT-debug.js:3909
-#: js/Admin-FAT-debug.js:4654 js/GroupEditDialog.js:215
-#: js/RoleEditDialog.js:358 js/TagEditDialog.js:289
-msgid "Transferring {0}..."
+#: js/Admin.js:61
+msgid "Computers"
 msgstr ""
 
-#: js/Admin-FAT-debug.js:2842 js/Admin-FAT-debug.js:2853
-#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
-msgid "Add new group"
-msgstr "新規グループの追加"
+#: js/Admin.js:74 js/Models.js:128
+msgid "Applications"
+msgstr "アプリケーション"
 
-#: js/Admin-FAT-debug.js:2855 js/GroupEditDialog.js:233
-msgid "Edit Group \"{0}\""
-msgstr "グループの編集 \"{0}\""
-
-#: js/Admin-FAT-debug.js:3110 js/SambaMachineModel.js:39
-msgid "Computer"
-msgid_plural "Computers"
-msgstr[0] ""
-
-#: js/Admin-FAT-debug.js:3187 js/Admin-FAT-debug.js:3266
-#: js/SambaMachineEditDialog.js:42 js/SambaMachineGrid.js:67
-msgid "Computer Name"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:3350 js/Tags.js:64
-msgid "Do you really want to delete the selected tags?"
-msgstr "選択されたタグを本当に削除しますか？"
-
-#: js/Admin-FAT-debug.js:3368 js/Tags.js:82
-msgid "Deleting tag(s)..."
-msgstr "タグを削除しています..."
-
-#: js/Admin-FAT-debug.js:3383 js/Tags.js:97
-msgid "add tag"
-msgstr "タグの追加"
-
-#: js/Admin-FAT-debug.js:3391 js/Tags.js:105
-msgid "edit tag"
-msgstr "タグの編集"
-
-#: js/Admin-FAT-debug.js:3399 js/Tags.js:113
-msgid "delete tag"
-msgstr "タグの削除"
-
-#: js/Admin-FAT-debug.js:3497 js/Tags.js:211
-msgid "Displaying tags {0} - {1} of {2}"
-msgstr "タグの表示 {0} - {1} 件中 {2}"
-
-#: js/Admin-FAT-debug.js:3498 js/Admin-FAT-debug.js:3555 js/Tags.js:212
-#: js/Tags.js:269
-msgid "No tags to display"
-msgstr "表示するタグがありません"
-
-#: js/Admin-FAT-debug.js:3508 js/Admin-FAT-debug.js:3851
-#: js/TagEditDialog.js:231 js/Tags.js:222
-msgid "Color"
-msgstr "色"
-
-#: js/Admin-FAT-debug.js:3657 js/TagEditDialog.js:37
+#: js/Admin.js:87 js/Models.js:51 js/AccessLog.js:105
 #, fuzzy
-msgid "Updating Tag"
-msgstr "タグをロードしています..."
+msgid "Access Log"
+msgid_plural "Access Logs"
+msgstr[0] "アクセスログ"
 
-#: js/Admin-FAT-debug.js:3702 js/TagEditDialog.js:82
-msgid "Could not save tag."
-msgstr "タグを保存できませんでした"
-
-#: js/Admin-FAT-debug.js:3788 js/TagEditDialog.js:168
-msgid "Allowed Contexts"
-msgstr "許可されたコンテキスト"
-
-#: js/Admin-FAT-debug.js:3794 js/TagEditDialog.js:174
-msgid "Context"
-msgstr "コンテキスト"
-
-#: js/Admin-FAT-debug.js:3807 js/TagEditDialog.js:187
-msgid "Account Rights"
-msgstr "アカウントの権限"
-
-#: js/Admin-FAT-debug.js:3815 js/TagEditDialog.js:195
-msgid "View"
-msgstr "表示"
-
-#: js/Admin-FAT-debug.js:3820 js/TagEditDialog.js:200
-msgid "Use"
-msgstr "使用"
-
-#: js/Admin-FAT-debug.js:3838 js/TagEditDialog.js:218
-msgid "Tag Name"
-msgstr "タグ名"
-
-#: js/Admin-FAT-debug.js:3909 js/TagEditDialog.js:289
-msgid "Tag"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:3919 js/TagEditDialog.js:299
-msgid "Add New Tag"
-msgstr "タグの新規追加"
-
-#: js/Admin-FAT-debug.js:3921 js/TagEditDialog.js:301
-msgid "Edit Tag \"{0}\""
-msgstr "タグの編集 \"{0}\""
-
-#: js/Admin-FAT-debug.js:3989 js/Roles.js:47
-msgid "Do you really want to delete the selected roles?"
-msgstr "選択されたロールを本当に削除しますか？"
-
-#: js/Admin-FAT-debug.js:4006 js/Roles.js:64
-msgid "Deleting role(s)..."
-msgstr "ロールを削除しています..."
-
-#: js/Admin-FAT-debug.js:4011 js/Admin-FAT-debug.js:4430
-#: js/RoleEditDialog.js:134 js/Roles.js:69
-msgid "Some error occurred while trying to delete the role."
-msgstr "ロールの削除中にエラーが発生しました"
-
-#: js/Admin-FAT-debug.js:4044 js/Roles.js:102
-msgid "add role"
-msgstr "ロールの追加"
-
-#: js/Admin-FAT-debug.js:4052 js/Roles.js:110
-msgid "edit role"
-msgstr "ロールの編集"
-
-#: js/Admin-FAT-debug.js:4060 js/Roles.js:118
-msgid "delete role"
-msgstr "ロールの削除"
-
-#: js/Admin-FAT-debug.js:4168 js/Roles.js:226
-msgid "Displaying roles {0} - {1} of {2}"
-msgstr "ロールの表示 {0} - {1} 件中 {2}"
-
-#: js/Admin-FAT-debug.js:4169 js/Admin-FAT-debug.js:4224 js/Roles.js:227
-#: js/Roles.js:282
-msgid "No roles to display"
-msgstr "表示するロールがありません"
-
-#: js/Admin-FAT-debug.js:4402 js/RoleEditDialog.js:106
-msgid "Could not save role."
-msgstr "ロールを保存できませんでした"
-
-#: js/Admin-FAT-debug.js:4422 js/RoleEditDialog.js:126
-msgid "Deleting role..."
-msgstr "ロールを削除しています..."
-
-#: js/Admin-FAT-debug.js:4454 js/RoleEditDialog.js:158
-msgid "Rights"
-msgstr "権限"
-
-#: js/Admin-FAT-debug.js:4556 js/RoleEditDialog.js:260
-msgid "Members"
-msgstr "メンバー"
-
-#: js/Admin-FAT-debug.js:4579 js/RoleEditDialog.js:283
-msgid "Role Name"
-msgstr "ロール名"
-
-#: js/Admin-FAT-debug.js:4654 js/RoleEditDialog.js:358
-msgid "Role"
-msgstr ""
-
-#: js/Admin-FAT-debug.js:4664 js/RoleEditDialog.js:368
-msgid "Add New Role"
-msgstr "新規ロールの追加"
-
-#: js/Admin-FAT-debug.js:4666 js/RoleEditDialog.js:370
-msgid "Edit Role \"{0}\""
-msgstr "ロールの編集 \"{0}\""
+#: js/Admin.js:100
+msgid "Shared Tags"
+msgstr "共有タグ"
 
 #: js/Admin.js:113
 msgid "Containers"
 msgstr ""
 
-#: js/container/Container.js:50 js/container/GridPanel.js:80
-msgid "Container"
-msgid_plural "Containers"
+#: js/Admin.js:149
+msgid "Admin"
+msgstr "管理者"
+
+#: js/Applications.js:43
+#, fuzzy
+msgid "{0} Settings"
+msgstr "設定"
+
+#: js/Applications.js:144
+msgid "enable application"
+msgstr "有効なアプリケーション"
+
+#: js/Applications.js:145
+msgid "disable application"
+msgstr "無効なアプリケーション"
+
+#: js/Applications.js:146
+msgid "settings"
+msgstr "設定"
+
+#: js/Applications.js:233
+msgid "unknown status ({0})"
+msgstr "不明なステータス ({0})"
+
+#: js/Applications.js:267
+msgid "Displaying application {0} - {1} of {2}"
+msgstr "アプリケーションの表示 {0} - {1} 件中 {2}"
+
+#: js/Applications.js:268
+msgid "No applications to display"
+msgstr "表示するアプリケーションがありません"
+
+#: js/Applications.js:277
+#, fuzzy
+msgid "Order"
+msgstr "オーダー"
+
+#: js/Applications.js:280
+#, fuzzy
+msgid "Version"
+msgstr "バージョン"
+
+#: js/AdminPanel.js:46
+msgid "Default Addressbook for new contacts and groups"
+msgstr ""
+
+#: js/GroupEditDialog.js:72
+msgid "Could not save group."
+msgstr "グループを保存できませんでした"
+
+#: js/GroupEditDialog.js:108
+msgid "Group Members"
+msgstr "グループメンバー"
+
+#: js/GroupEditDialog.js:127
+msgid "Group Name"
+msgstr "グループ名"
+
+#: js/GroupEditDialog.js:215 js/Models.js:87
+msgid "Group"
+msgid_plural "Groups"
 msgstr[0] ""
 
-#: js/container/GridPanel.js:68
-msgid "Container Name"
+#: js/GroupEditDialog.js:220 js/GroupEditDialog.js:231
+msgid "Add new group"
+msgstr "新規グループの追加"
+
+#: js/GroupEditDialog.js:233
+msgid "Edit Group \"{0}\""
+msgstr "グループの編集 \"{0}\""
+
+#: js/TagEditDialog.js:37
+#, fuzzy
+msgid "Updating Tag"
+msgstr "タグをロードしています..."
+
+#: js/TagEditDialog.js:82
+msgid "Could not save tag."
+msgstr "タグを保存できませんでした"
+
+#: js/TagEditDialog.js:168
+msgid "Allowed Contexts"
+msgstr "許可されたコンテキスト"
+
+#: js/TagEditDialog.js:174
+msgid "Context"
+msgstr "コンテキスト"
+
+#: js/TagEditDialog.js:187
+msgid "Account Rights"
+msgstr "アカウントの権限"
+
+#: js/TagEditDialog.js:195
+msgid "View"
+msgstr "表示"
+
+#: js/TagEditDialog.js:200
+msgid "Use"
+msgstr "使用"
+
+#: js/TagEditDialog.js:218
+msgid "Tag Name"
+msgstr "タグ名"
+
+#: js/TagEditDialog.js:289
+msgid "Tag"
 msgstr ""
+
+#: js/TagEditDialog.js:299
+msgid "Add New Tag"
+msgstr "タグの新規追加"
+
+#: js/TagEditDialog.js:301
+msgid "Edit Tag \"{0}\""
+msgstr "タグの編集 \"{0}\""
+
+#: js/Roles.js:47
+msgid "Do you really want to delete the selected roles?"
+msgstr "選択されたロールを本当に削除しますか？"
+
+#: js/Roles.js:64
+msgid "Deleting role(s)..."
+msgstr "ロールを削除しています..."
+
+#: js/Roles.js:102
+msgid "add role"
+msgstr "ロールの追加"
+
+#: js/Roles.js:110
+msgid "edit role"
+msgstr "ロールの編集"
+
+#: js/Roles.js:118
+msgid "delete role"
+msgstr "ロールの削除"
+
+#: js/Roles.js:226
+msgid "Displaying roles {0} - {1} of {2}"
+msgstr "ロールの表示 {0} - {1} 件中 {2}"
+
+#: js/Roles.js:227 js/Roles.js:281
+msgid "No roles to display"
+msgstr "表示するロールがありません"
+
+#: js/Tags.js:64
+msgid "Do you really want to delete the selected tags?"
+msgstr "選択されたタグを本当に削除しますか？"
+
+#: js/Tags.js:82
+msgid "Deleting tag(s)..."
+msgstr "タグを削除しています..."
+
+#: js/Tags.js:97
+msgid "add tag"
+msgstr "タグの追加"
+
+#: js/Tags.js:105
+msgid "edit tag"
+msgstr "タグの編集"
+
+#: js/Tags.js:113
+msgid "delete tag"
+msgstr "タグの削除"
+
+#: js/Tags.js:211
+msgid "Displaying tags {0} - {1} of {2}"
+msgstr "タグの表示 {0} - {1} 件中 {2}"
+
+#: js/Tags.js:212 js/Tags.js:268
+msgid "No tags to display"
+msgstr "表示するタグがありません"
+
+#: js/AccessLog.js:106 js/AccessLog.js:132
+msgid "IP Address"
+msgstr "ＩＰアドレス"
+
+#: js/AccessLog.js:108 js/AccessLog.js:133
+msgid "Login Time"
+msgstr "ログイン時間"
+
+#: js/AccessLog.js:109 js/AccessLog.js:134
+msgid "Logout Time"
+msgstr "ログアウト時間"
+
+#: js/AccessLog.js:110 js/AccessLog.js:136
+msgid "Client Type"
+msgstr ""
+
+#: js/AccessLog.js:129
+msgid "Session ID"
+msgstr "セッションＩＤ"
+
+#: js/AccessLog.js:135
+msgid "Result"
+msgstr "結果"
+
+#: js/AccessLog.js:156
+msgid "user blocked"
+msgstr ""
+
+#: js/AccessLog.js:160
+msgid "password expired"
+msgstr ""
+
+#: js/AccessLog.js:164
+msgid "user disabled"
+msgstr ""
+
+#: js/AccessLog.js:168
+msgid "invalid password"
+msgstr "パスワードが違います"
+
+#: js/AccessLog.js:172
+msgid "ambiguous username"
+msgstr "あいまいなユーザ名"
+
+#: js/AccessLog.js:176
+msgid "user not found"
+msgstr "ユーザが見つかりません"
+
+#: js/AccessLog.js:180
+msgid "failure"
+msgstr "失敗"
+
+#: js/AccessLog.js:184
+msgid "success"
+msgstr "性向"
 
 #~ msgid "Loading Tag..."
 #~ msgstr "タグをロードしています..."

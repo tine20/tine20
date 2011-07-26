@@ -14,46 +14,53 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: js/ActiveSync-FAT-debug.js:35 js/ActiveSync-FAT.js:6 js/Application.js:30
+#: js/Application.js:30
 msgid "Active Sync"
 msgstr ""
 
-#: js/ActiveSync-FAT-debug.js:51 js/ActiveSync-FAT.js:6 js/Application.js:46
+#: js/Application.js:46
 msgid "Select a Device"
 msgstr ""
 
-#: js/ActiveSync-FAT-debug.js:65 js/ActiveSync-FAT.js:6 js/Application.js:60
+#: js/Application.js:60
 msgid "No ActiveSync Device registered"
 msgstr ""
 
-#: js/ActiveSync-FAT-debug.js:73 js/ActiveSync-FAT.js:6 js/Application.js:68
+#: js/Application.js:68
 msgid "Set as {0} Filter"
 msgstr ""
 
-#: js/ActiveSync-FAT-debug.js:98 js/ActiveSync-FAT.js:6 js/Application.js:93
+#: js/Application.js:93
 msgid "Resetted Sync Filter"
 msgstr ""
 
-#: js/ActiveSync-FAT-debug.js:99 js/ActiveSync-FAT-debug.js:111
-#: js/ActiveSync-FAT.js:6 js/Application.js:94 js/Application.js:106
+#: js/Application.js:94 js/Application.js:106
 msgid "{0} filter for device \"{1}\" is now \"{2}\""
 msgstr ""
 
-#: js/ActiveSync-FAT-debug.js:102 js/ActiveSync-FAT.js:6 js/Application.js:97
+#: js/Application.js:97
 msgid "resetted"
 msgstr ""
 
-#: js/ActiveSync-FAT-debug.js:110 js/ActiveSync-FAT.js:6 js/Application.js:105
+#: js/Application.js:105
 msgid "Set Sync Filter"
 msgstr ""
 
-#: js/ActiveSync-FAT-debug.js:164 js/Model.js:45
+#: js/Model.js:45
 msgid "Device"
 msgid_plural "Devices"
 msgstr[0] ""
 
-#: js/ActiveSync-FAT-debug.js:164 js/Model.js:45
+#: js/Model.js:45
 msgid "Devices"
+msgstr ""
+
+#: Setup/setup.xml:473
+msgid "Default Policy"
+msgstr ""
+
+#: Setup/setup.xml:478
+msgid "Default Policy installed during setup"
 msgstr ""
 
 #: Preference.php:74
@@ -78,12 +85,4 @@ msgstr ""
 
 #: Preference.php:83
 msgid "The default task list to create new tasks in."
-msgstr ""
-
-#: Setup/setup.xml:473
-msgid "Default Policy"
-msgstr ""
-
-#: Setup/setup.xml:478
-msgid "Default Policy installed during setup"
 msgstr ""

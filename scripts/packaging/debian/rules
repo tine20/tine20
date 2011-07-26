@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+PACKAGES := $(shell dh_listpackages)
+MODULES = $(filter-out tinebase,$(patsubst tine20-%,%,$(filter tine20-%,$(PACKAGES))))
+
+%:
+	dh  $@
+
+# overwrite dh_installdeb to execute an additional shell script
+override_dh_installdeb:
+	dh_installdeb
+	(echo -n "tine20:Modules="; for x in $(MODULES); do echo -n "tine20-$$x,"; done; echo "") >> debian/tine20.substvars

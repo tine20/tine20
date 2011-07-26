@@ -30,11 +30,6 @@ msgstr "kedvenc megosztott címjegyzék kezelése"
 msgid "Create or update shared addressbook favorites"
 msgstr "Kedvenc megosztott címjegyzék készítése vagy frissítése"
 
-#: Controller.php:95
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s személyes címjegyzéke"
-
 #: Export/Pdf.php:37
 msgid "Business Contact Data"
 msgstr "Üzleti Kapcsolati Adatok"
@@ -47,8 +42,7 @@ msgstr "Szervezet / Egység"
 msgid "Business Address"
 msgstr "Üzleti cím"
 
-#: Export/Pdf.php:52 js/Addressbook-FAT-debug.js:734 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:133
+#: Export/Pdf.php:52 js/ContactGrid.js:124
 msgid "Email"
 msgstr "Email"
 
@@ -80,9 +74,7 @@ msgstr "URL"
 msgid "Role"
 msgstr "Szerep"
 
-#: Export/Pdf.php:76 js/Addressbook-FAT-debug.js:38
-#: js/Addressbook-FAT-debug.js:723 js/Addressbook-FAT-debug.js:1324
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:172 js/ContactGrid.js:122
+#: Export/Pdf.php:76 js/ContactEditDialog.js:172 js/ContactGrid.js:113
 #: js/Model.js:33
 msgid "Room"
 msgstr "Szoba"
@@ -99,11 +91,8 @@ msgstr "Aszisztens telefonszáma"
 msgid "Private Contact Data"
 msgstr "Privát Kapcsolati Adatok"
 
-#: Export/Pdf.php:88 js/Addressbook-FAT-debug.js:148
-#: js/Addressbook-FAT-debug.js:149 js/Addressbook-FAT-debug.js:150
-#: js/Addressbook-FAT-debug.js:151 js/Addressbook-FAT-debug.js:1442
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:290 js/Model.js:143
-#: js/Model.js:144 js/Model.js:145 js/Model.js:146
+#: Export/Pdf.php:88 js/ContactEditDialog.js:289 js/Model.js:153
+#: js/Model.js:154 js/Model.js:155 js/Model.js:156 js/Model.js:157
 msgid "Private Address"
 msgstr "Privát cím"
 
@@ -131,557 +120,399 @@ msgstr "Otthoni URL"
 msgid "Other Data"
 msgstr "Egyéb adatok"
 
-#: Export/Pdf.php:114 js/Addressbook-FAT-debug.js:31
-#: js/Addressbook-FAT-debug.js:143 js/Addressbook-FAT-debug.js:749
-#: js/Addressbook-FAT-debug.js:1312 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:160 js/ContactGrid.js:148 js/Model.js:26
-#: js/Model.js:138
+#: Export/Pdf.php:114 js/ContactEditDialog.js:160 js/ContactGrid.js:139
+#: js/Model.js:26 js/Model.js:147
 msgid "Birthday"
 msgstr "Születésnap"
 
-#: Export/Pdf.php:117 js/Addressbook-FAT-debug.js:35
-#: js/Addressbook-FAT-debug.js:138 js/Addressbook-FAT-debug.js:721
-#: js/Addressbook-FAT-debug.js:1306 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:154 js/ContactGrid.js:120 js/Model.js:30
-#: js/Model.js:133
+#: Export/Pdf.php:117 js/ContactEditDialog.js:154 js/ContactGrid.js:111
+#: js/Model.js:30 js/Model.js:142
 msgid "Job Title"
 msgstr "Beosztás"
 
-#: js/Addressbook-FAT-debug.js:24 js/Addressbook-FAT-debug.js:134
-#: js/Addressbook-FAT-debug.js:715 js/Addressbook-FAT-debug.js:1278
-#: js/Addressbook-FAT-debug.js:1575 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:126 js/ContactEditDialog.js:423
-#: js/ContactGrid.js:114 js/Model.js:19 js/Model.js:129
-msgid "Last Name"
-msgstr "Vezeték név"
-
-#: js/Addressbook-FAT-debug.js:25 js/Addressbook-FAT-debug.js:133
-#: js/Addressbook-FAT-debug.js:716 js/Addressbook-FAT-debug.js:1268
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:116 js/ContactGrid.js:115
-#: js/Model.js:20 js/Model.js:128
-msgid "First Name"
-msgstr "Kereszt név"
-
-#: js/Addressbook-FAT-debug.js:26 js/Addressbook-FAT-debug.js:1273
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:121 js/Model.js:21
-msgid "Middle Name"
-msgstr "Középső név"
-
-#: js/Addressbook-FAT-debug.js:27 js/Addressbook-FAT-debug.js:1260
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:108 js/Model.js:22
-msgid "Title"
-msgstr "Előtag"
-
-#: js/Addressbook-FAT-debug.js:28 js/Addressbook-FAT-debug.js:1316
-#: js/ContactEditDialog.js:164 js/Model.js:23
-msgid "Suffix"
-msgstr "Utótag"
-
-#: js/Addressbook-FAT-debug.js:29 js/Addressbook-FAT-debug.js:718
-#: js/Addressbook-FAT-debug.js:1301 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:149 js/ContactGrid.js:117 js/Model.js:24
-msgid "Display Name"
-msgstr "Kijelzett név"
-
-#: js/Addressbook-FAT-debug.js:32 js/Addressbook-FAT-debug.js:135
-#: js/Addressbook-FAT-debug.js:436 js/Addressbook-FAT-debug.js:719
-#: js/Addressbook-FAT-debug.js:1287 js/Addressbook-FAT-debug.js:1575
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:135
-#: js/ContactEditDialog.js:423 js/ContactGrid.js:118
-#: js/ContactGridDetailsPanel.js:131 js/Model.js:27 js/Model.js:130
-#: Setup/setup.xml:760
-msgid "Company"
-msgstr "Cég"
-
-#: js/Addressbook-FAT-debug.js:33 js/Addressbook-FAT-debug.js:136
-#: js/Addressbook-FAT-debug.js:720 js/Addressbook-FAT-debug.js:1292
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:140 js/ContactGrid.js:119
-#: js/Model.js:28 js/Model.js:131
-msgid "Unit"
-msgstr "Egység"
-
-#: js/Addressbook-FAT-debug.js:34 js/Addressbook-FAT-debug.js:1238
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:86 js/Model.js:29
-msgid "Salutation"
-msgstr "Megszólítás"
-
-#: js/Addressbook-FAT-debug.js:36 js/Addressbook-FAT-debug.js:139
-#: js/Addressbook-FAT-debug.js:722 js/Addressbook-FAT-debug.js:1320
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:168 js/ContactGrid.js:121
-#: js/Model.js:31 js/Model.js:134
-msgid "Job Role"
-msgstr "Szerepkör"
-
-#: js/Addressbook-FAT-debug.js:39 js/Model.js:34
-msgid "Street (Company Address)"
-msgstr "Utca (Céges cím)"
-
-#: js/Addressbook-FAT-debug.js:40 js/Model.js:35
-msgid "Street 2 (Company Address)"
-msgstr "Utca 2 (Céges cím)"
-
-#: js/Addressbook-FAT-debug.js:41 js/Model.js:36
-msgid "City (Company Address)"
-msgstr "Város (Céges cím)"
-
-#: js/Addressbook-FAT-debug.js:42 js/Model.js:37
-msgid "Region (Company Address)"
-msgstr "Régió (Céges cím)"
-
-#: js/Addressbook-FAT-debug.js:43 js/Model.js:38
-msgid "Postal Code (Company Address)"
-msgstr "Irányítószám (Céges cím)"
-
-#: js/Addressbook-FAT-debug.js:44 js/Model.js:39
-msgid "Country (Company Address)"
-msgstr "Ország (Céges cím)"
-
-#: js/Addressbook-FAT-debug.js:46 js/Model.js:41
-msgid "Street (Private Address)"
-msgstr "Utca (Privát cím)"
-
-#: js/Addressbook-FAT-debug.js:47 js/Model.js:42
-msgid "Street 2 (Private Address)"
-msgstr "Utca 2 (Privát cím)"
-
-#: js/Addressbook-FAT-debug.js:48 js/Model.js:43
-msgid "City (Private Address)"
-msgstr "Város (Privát cím)"
-
-#: js/Addressbook-FAT-debug.js:49 js/Model.js:44
-msgid "Region (Private Address)"
-msgstr "Régió (Privát cím)"
-
-#: js/Addressbook-FAT-debug.js:50 js/Model.js:45
-msgid "Postal Code (Private Address)"
-msgstr "Irányítószám (Privát cím)"
-
-#: js/Addressbook-FAT-debug.js:51 js/Model.js:46
-msgid "Country (Private Address)"
-msgstr "Ország (Privát cím)"
-
-#: js/Addressbook-FAT-debug.js:52 js/Addressbook-FAT-debug.js:137
-#: js/Addressbook-FAT-debug.js:444 js/Addressbook-FAT-debug.js:468
-#: js/Addressbook-FAT-debug.js:735 js/Addressbook-FAT-debug.js:1336
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:184 js/ContactGrid.js:134
-#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
-#: js/Model.js:47 js/Model.js:132
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/Addressbook-FAT-debug.js:53 js/Addressbook-FAT-debug.js:445
-#: js/Addressbook-FAT-debug.js:469 js/Addressbook-FAT-debug.js:736
-#: js/Addressbook-FAT-debug.js:1341 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:189 js/ContactGrid.js:135
-#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
-#: js/Model.js:48
-msgid "Mobile"
-msgstr "Mobil"
-
-#: js/Addressbook-FAT-debug.js:54 js/Addressbook-FAT-debug.js:446
-#: js/Addressbook-FAT-debug.js:470 js/Addressbook-FAT-debug.js:737
-#: js/Addressbook-FAT-debug.js:1346 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:194 js/ContactGrid.js:136
-#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
-#: js/Model.js:49
-msgid "Fax"
-msgstr "Fax"
-
-#: js/Addressbook-FAT-debug.js:58 js/Addressbook-FAT-debug.js:740
-#: js/Addressbook-FAT-debug.js:1351 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:199 js/ContactGrid.js:139 js/Model.js:53
-msgid "Phone (private)"
-msgstr "Telefon (privát)"
-
-#: js/Addressbook-FAT-debug.js:59 js/Addressbook-FAT-debug.js:741
-#: js/Addressbook-FAT-debug.js:1361 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:209 js/ContactGrid.js:140 js/Model.js:54
-msgid "Fax (private)"
-msgstr "Fax (privát)"
-
-#: js/Addressbook-FAT-debug.js:60 js/Addressbook-FAT-debug.js:742
-#: js/Addressbook-FAT-debug.js:1356 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:204 js/ContactGrid.js:141 js/Model.js:55
-msgid "Mobile (private)"
-msgstr "Mobil (privát)"
-
-#: js/Addressbook-FAT-debug.js:63 js/Addressbook-FAT-debug.js:141
-#: js/Addressbook-FAT-debug.js:447 js/Addressbook-FAT-debug.js:471
-#: js/Addressbook-FAT-debug.js:1366 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:214 js/ContactGridDetailsPanel.js:142
-#: js/ContactGridDetailsPanel.js:166 js/Model.js:58 js/Model.js:136
-msgid "E-Mail"
-msgstr "E-Mail"
-
-#: js/Addressbook-FAT-debug.js:64 js/Addressbook-FAT-debug.js:1372
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:220 js/Model.js:59
-msgid "E-Mail (private)"
-msgstr "E-Mail (privát)"
-
-#: js/Addressbook-FAT-debug.js:65 js/Addressbook-FAT-debug.js:449
-#: js/Addressbook-FAT-debug.js:473 js/Addressbook-FAT-debug.js:744
-#: js/Addressbook-FAT-debug.js:1379 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:227 js/ContactGrid.js:143
-#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
-#: js/Model.js:60
-msgid "Web"
-msgstr "Web"
-
-#: js/Addressbook-FAT-debug.js:66 js/Model.js:61
-msgid "Web (private)"
-msgstr "Web (privát)"
-
-#: js/Addressbook-FAT-debug.js:69 js/Addressbook-FAT-debug.js:1487
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:335 js/Model.js:64
-msgid "Description"
-msgstr "Leírás"
-
-#: js/Addressbook-FAT-debug.js:97 js/Addressbook-FAT-debug.js:128
-#: js/Addressbook-FAT-debug.js:1109 js/Addressbook-FAT.js:6
-#: js/ContactFilterModel.js:35 js/Model.js:92 js/Model.js:123
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "Kapcsolat"
-msgstr[1] "Kapcsolatok"
-
-#: js/Addressbook-FAT-debug.js:97 js/Addressbook-FAT-debug.js:367
-#: js/Addressbook-FAT.js:6 js/ContactGridDetailsPanel.js:62 js/Model.js:92
-msgid "Contacts"
-msgstr "Kapcsolatok"
-
-#: js/Addressbook-FAT-debug.js:101 js/Addressbook-FAT-debug.js:207
-#: js/Addressbook-FAT-debug.js:269 js/Addressbook-FAT.js:6
-#: js/Addressbook.js:32 js/Model.js:96 js/Model.js:202
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Címjegyzék"
-msgstr[1] "Címjegyzékek"
-
-#: js/Addressbook-FAT-debug.js:101 js/Addressbook-FAT-debug.js:207
-#: js/Model.js:96 js/Model.js:202
-msgid "Addressbooks"
-msgstr "Címjegyzékek"
-
-#: js/Addressbook-FAT-debug.js:128 js/Addressbook-FAT.js:6 js/Model.js:123
-msgid "User Account"
-msgstr "Felhasználói fiók"
-
-#: js/Addressbook-FAT-debug.js:131 js/Addressbook-FAT.js:6 js/Model.js:126
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/Addressbook-FAT-debug.js:140 js/Addressbook-FAT-debug.js:746
-#: js/Addressbook-FAT.js:6 js/ContactGrid.js:145 js/Model.js:135
-msgid "Note"
-msgstr "Leírás"
-
-#: js/Addressbook-FAT-debug.js:144 js/Addressbook-FAT-debug.js:148
-#: js/Addressbook-FAT-debug.js:724 js/Addressbook-FAT-debug.js:1416
-#: js/Addressbook-FAT-debug.js:1445 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:264 js/ContactEditDialog.js:293
-#: js/ContactGrid.js:123 js/Model.js:139 js/Model.js:143
-msgid "Street"
-msgstr "Utca"
-
-#: js/Addressbook-FAT-debug.js:144 js/Addressbook-FAT-debug.js:145
-#: js/Addressbook-FAT-debug.js:146 js/Addressbook-FAT-debug.js:147
-#: js/Addressbook-FAT-debug.js:1413 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:261 js/Model.js:139 js/Model.js:140 js/Model.js:141
-#: js/Model.js:142
-msgid "Company Address"
-msgstr "Céges cím"
-
-#: js/Addressbook-FAT-debug.js:145 js/Addressbook-FAT-debug.js:149
-#: js/Addressbook-FAT-debug.js:1428 js/Addressbook-FAT-debug.js:1457
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:276
-#: js/ContactEditDialog.js:305 js/Model.js:140 js/Model.js:144
-msgid "Postal Code"
-msgstr "Irányítószám"
-
-#: js/Addressbook-FAT-debug.js:146 js/Addressbook-FAT-debug.js:150
-#: js/Addressbook-FAT-debug.js:725 js/Addressbook-FAT-debug.js:1432
-#: js/Addressbook-FAT-debug.js:1461 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:280 js/ContactEditDialog.js:309
-#: js/ContactGrid.js:124 js/Model.js:141 js/Model.js:145
-msgid "City"
-msgstr "Város"
-
-#: js/Addressbook-FAT-debug.js:147 js/Addressbook-FAT-debug.js:151
-#: js/Addressbook-FAT-debug.js:728 js/Addressbook-FAT-debug.js:1437
-#: js/Addressbook-FAT-debug.js:1466 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:285 js/ContactEditDialog.js:314
-#: js/ContactGrid.js:127 js/Model.js:142 js/Model.js:146
-msgid "Country"
-msgstr "Ország"
-
-#: js/Addressbook-FAT-debug.js:152 js/Addressbook-FAT-debug.js:713
-#: js/Addressbook-FAT.js:6 js/ContactGrid.js:112 js/Model.js:147
-msgid "Type"
-msgstr "Típus"
-
-#: js/Addressbook-FAT-debug.js:153 js/Addressbook-FAT.js:6 js/Model.js:148
-msgid "Last modified"
-msgstr "Utolsó módosítás"
-
-#: js/Addressbook-FAT-debug.js:154 js/Addressbook-FAT.js:6 js/Model.js:149
-msgid "Last modifier"
-msgstr "Utolsó módosító"
-
-#: js/Addressbook-FAT-debug.js:155 js/Addressbook-FAT.js:6 js/Model.js:150
-msgid "Creation Time"
-msgstr "Készítés ideje"
-
-#: js/Addressbook-FAT-debug.js:156 js/Addressbook-FAT.js:6 js/Model.js:151
-msgid "Creator"
-msgstr "Készítő"
-
-#: js/Addressbook-FAT-debug.js:203 js/Model.js:198
-msgid "List"
-msgid_plural "Lists"
-msgstr[0] "Lista"
-msgstr[1] "Listák"
-
-#: js/Addressbook-FAT-debug.js:203 js/Model.js:198
-msgid "Lists"
-msgstr "Listák"
-
-#: js/Addressbook-FAT-debug.js:370 js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:65
-msgid "Select contact"
-msgstr "Kapcsolat kiválasztása"
-
-#: js/Addressbook-FAT-debug.js:460 js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:155
-msgid "Private"
-msgstr "Privát"
-
-#: js/Addressbook-FAT-debug.js:483 js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:178
-msgid "Info"
-msgstr "Info"
-
-#: js/Addressbook-FAT-debug.js:519 js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:214
-msgid "Insecure link"
-msgstr "Nem biztonságos link"
-
-#: js/Addressbook-FAT-debug.js:519 js/Addressbook-FAT.js:6
-#: js/ContactGridDetailsPanel.js:214
-msgid "Please review this link in edit dialog."
-msgstr "Kérlek ellenőrizd ezt a linket a szerkesztő ablakban."
-
-#: js/Addressbook-FAT-debug.js:714 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:113
-msgid "Tags"
-msgstr "Címkék"
-
-#: js/Addressbook-FAT-debug.js:717 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:116
-msgid "Full Name"
-msgstr "Teljes név"
-
-#: js/Addressbook-FAT-debug.js:726 js/Addressbook-FAT-debug.js:1424
-#: js/Addressbook-FAT-debug.js:1453 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:272 js/ContactEditDialog.js:301
-#: js/ContactGrid.js:125
-msgid "Region"
-msgstr "Régió"
-
-#: js/Addressbook-FAT-debug.js:727 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:126
-msgid "Postalcode"
-msgstr "Irányítószám"
-
-#: js/Addressbook-FAT-debug.js:729 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:128
-msgid "Street (private)"
-msgstr "Utca (privát)"
-
-#: js/Addressbook-FAT-debug.js:730 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:129
-msgid "City (private)"
-msgstr "Város (privát)"
-
-#: js/Addressbook-FAT-debug.js:731 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:130
-msgid "Region (private)"
-msgstr "Régió (privát)"
-
-#: js/Addressbook-FAT-debug.js:732 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:131
-msgid "Postalcode (private)"
-msgstr "Irányítószám (privát)"
-
-#: js/Addressbook-FAT-debug.js:733 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:132
-msgid "Country (private)"
-msgstr "Ország (privát)"
-
-#: js/Addressbook-FAT-debug.js:738 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:137
-msgid "Car phone"
-msgstr "Autó telefon"
-
-#: js/Addressbook-FAT-debug.js:739 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:138
-msgid "Pager"
-msgstr "Személyhívó"
-
-#: js/Addressbook-FAT-debug.js:743 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:142
-msgid "Email (private)"
-msgstr "Email (privát)"
-
-#: js/Addressbook-FAT-debug.js:745 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:144
-msgid "URL (private)"
-msgstr "URL (privát)"
-
-#: js/Addressbook-FAT-debug.js:747 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:146
-msgid "Timezone"
-msgstr "Időzóna"
-
-#: js/Addressbook-FAT-debug.js:748 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:147
-msgid "Geo"
-msgstr "Geo"
-
-#: js/Addressbook-FAT-debug.js:759 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:158
-msgid "Export Contact"
-msgstr "Kapcsolat exportálása"
-
-#: js/Addressbook-FAT-debug.js:767 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:166
-msgid "Export as PDF"
-msgstr "Exportálás PDF-be"
-
-#: js/Addressbook-FAT-debug.js:774 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:173
-msgid "Export as CSV"
-msgstr "Exportálás CSV-be"
-
-#: js/Addressbook-FAT-debug.js:781 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:180
-msgid "Export as ODS"
-msgstr "Exportálás ODS-be"
-
-#: js/Addressbook-FAT-debug.js:788 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:187
-msgid "Export as XLS"
-msgstr "Exportálás XLS-be"
-
-#: js/Addressbook-FAT-debug.js:795 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:194
-msgid "Export as ..."
-msgstr "Exportálás mint ..."
-
-#: js/Addressbook-FAT-debug.js:811 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:210
-msgid "Call contact"
-msgstr "Kapcsolat hívása"
-
-#: js/Addressbook-FAT-debug.js:821 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:220
-msgid "Compose email"
-msgstr "Email írása"
-
-#: js/Addressbook-FAT-debug.js:831 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:230
-msgid "Import contacts"
-msgstr "Kapcsolatok importálása"
-
-#: js/Addressbook-FAT-debug.js:920 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:319
-msgid "Work"
-msgstr "Üzlet"
-
-#: js/Addressbook-FAT-debug.js:929 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:328
-msgid "Home"
-msgstr "Otthon"
-
-#: js/Addressbook-FAT-debug.js:938 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:337
-msgid "Cell"
-msgstr "Mobil"
-
-#: js/Addressbook-FAT-debug.js:947 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:346
-msgid "Cell private"
-msgstr "Mobil privát"
-
-#: js/Addressbook-FAT-debug.js:1055 js/Addressbook-FAT.js:6
-#: js/ContactGrid.js:454
-msgid "Internal Contact"
-msgstr "Belső kapcsolatok"
-
-#: js/Addressbook-FAT-debug.js:1187 js/Addressbook-FAT-debug.js:1194
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:35
-#: js/ContactEditDialog.js:42
+#: js/ContactEditDialog.js:35 js/ContactEditDialog.js:42
 msgid "Map"
 msgstr "Térkép"
 
-#: js/Addressbook-FAT-debug.js:1217 js/Addressbook-FAT.js:6
 #: js/ContactEditDialog.js:65
 msgid "Personal Information"
 msgstr "Személyes információk"
 
-#: js/Addressbook-FAT-debug.js:1331 js/Addressbook-FAT.js:6
+#: js/ContactEditDialog.js:86 js/Model.js:29
+msgid "Salutation"
+msgstr "Megszólítás"
+
+#: js/ContactEditDialog.js:108 js/Model.js:22
+msgid "Title"
+msgstr "Előtag"
+
+#: js/ContactEditDialog.js:116 js/ContactGrid.js:106 js/Model.js:20
+#: js/Model.js:137
+msgid "First Name"
+msgstr "Kereszt név"
+
+#: js/ContactEditDialog.js:121 js/Model.js:21
+msgid "Middle Name"
+msgstr "Középső név"
+
+#: js/ContactEditDialog.js:126 js/ContactEditDialog.js:422
+#: js/ContactGrid.js:105 js/Model.js:19 js/Model.js:138
+msgid "Last Name"
+msgstr "Vezeték név"
+
+#: js/ContactEditDialog.js:135 js/ContactEditDialog.js:422
+#: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:109 js/Model.js:27
+#: js/Model.js:139 Setup/setup.xml:760
+msgid "Company"
+msgstr "Cég"
+
+#: js/ContactEditDialog.js:140 js/ContactGrid.js:110 js/Model.js:28
+#: js/Model.js:140
+msgid "Unit"
+msgstr "Egység"
+
+#: js/ContactEditDialog.js:149 js/ContactGrid.js:108 js/Model.js:24
+msgid "Display Name"
+msgstr "Kijelzett név"
+
+#: js/ContactEditDialog.js:164 js/Model.js:23
+msgid "Suffix"
+msgstr "Utótag"
+
+#: js/ContactEditDialog.js:168 js/ContactGrid.js:112 js/Model.js:31
+#: js/Model.js:143
+msgid "Job Role"
+msgstr "Szerepkör"
+
 #: js/ContactEditDialog.js:179
 msgid "Contact Information"
 msgstr "Kapcsolati információk"
 
-#: js/Addressbook-FAT-debug.js:1420 js/Addressbook-FAT-debug.js:1449
-#: js/Addressbook-FAT.js:6 js/ContactEditDialog.js:268
-#: js/ContactEditDialog.js:297
+#: js/ContactEditDialog.js:184 js/ContactGridDetailsPanel.js:139
+#: js/ContactGridDetailsPanel.js:163 js/ContactGrid.js:125 js/Model.js:47
+#: js/Model.js:141
+msgid "Phone"
+msgstr "Telefon"
+
+#: js/ContactEditDialog.js:189 js/ContactGridDetailsPanel.js:140
+#: js/ContactGridDetailsPanel.js:164 js/ContactGrid.js:126 js/Model.js:48
+msgid "Mobile"
+msgstr "Mobil"
+
+#: js/ContactEditDialog.js:194 js/ContactGridDetailsPanel.js:141
+#: js/ContactGridDetailsPanel.js:165 js/ContactGrid.js:127 js/Model.js:49
+msgid "Fax"
+msgstr "Fax"
+
+#: js/ContactEditDialog.js:199 js/ContactGrid.js:130 js/Model.js:53
+msgid "Phone (private)"
+msgstr "Telefon (privát)"
+
+#: js/ContactEditDialog.js:204 js/ContactGrid.js:132 js/Model.js:55
+msgid "Mobile (private)"
+msgstr "Mobil (privát)"
+
+#: js/ContactEditDialog.js:209 js/ContactGrid.js:131 js/Model.js:54
+msgid "Fax (private)"
+msgstr "Fax (privát)"
+
+#: js/ContactEditDialog.js:214 js/ContactGridDetailsPanel.js:142
+#: js/ContactGridDetailsPanel.js:166 js/Model.js:58 js/Model.js:145
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: js/ContactEditDialog.js:220 js/Model.js:59
+msgid "E-Mail (private)"
+msgstr "E-Mail (privát)"
+
+#: js/ContactEditDialog.js:227 js/ContactGridDetailsPanel.js:144
+#: js/ContactGridDetailsPanel.js:168 js/ContactGrid.js:134 js/Model.js:60
+msgid "Web"
+msgstr "Web"
+
+#: js/ContactEditDialog.js:260 js/Model.js:148 js/Model.js:149 js/Model.js:150
+#: js/Model.js:151 js/Model.js:152
+msgid "Company Address"
+msgstr "Céges cím"
+
+#: js/ContactEditDialog.js:263 js/ContactEditDialog.js:292
+#: js/ContactGrid.js:114 js/Model.js:148 js/Model.js:153
+msgid "Street"
+msgstr "Utca"
+
+#: js/ContactEditDialog.js:267 js/ContactEditDialog.js:296
 msgid "Street 2"
 msgstr "Utca 2"
 
-#: js/Addressbook-FAT-debug.js:1501 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:349
+#: js/ContactEditDialog.js:271 js/ContactEditDialog.js:300
+#: js/ContactGrid.js:116 js/Model.js:149 js/Model.js:154
+msgid "Region"
+msgstr "Régió"
+
+#: js/ContactEditDialog.js:275 js/ContactEditDialog.js:304 js/Model.js:150
+#: js/Model.js:155
+msgid "Postal Code"
+msgstr "Irányítószám"
+
+#: js/ContactEditDialog.js:279 js/ContactEditDialog.js:308
+#: js/ContactGrid.js:115 js/Model.js:151 js/Model.js:156
+msgid "City"
+msgstr "Város"
+
+#: js/ContactEditDialog.js:284 js/ContactEditDialog.js:313
+#: js/ContactGrid.js:118 js/Model.js:152 js/Model.js:157
+msgid "Country"
+msgstr "Ország"
+
+#: js/ContactEditDialog.js:334 js/Model.js:64
+msgid "Description"
+msgstr "Leírás"
+
+#: js/ContactEditDialog.js:348
 msgid "Enter description"
 msgstr "Leírás megadása"
 
-#: js/Addressbook-FAT-debug.js:1550 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:398
+#: js/ContactEditDialog.js:397
 msgid "Export as pdf"
 msgstr "Exportálás pdf-be"
 
-#: js/Addressbook-FAT-debug.js:1575 js/Addressbook-FAT.js:6
-#: js/ContactEditDialog.js:423
+#: js/ContactEditDialog.js:422
 msgid "Either {0} or {1} must be given"
 msgstr "Vagy {0} vagy {1} megadása kötelező"
 
-#: js/Addressbook-FAT-debug.js:1750 js/Addressbook-FAT.js:6
-#: js/SearchCombo.js:95
-msgid "Searching..."
-msgstr "Keresés..."
+#: js/ContactGridDetailsPanel.js:62 js/Model.js:92
+msgid "Contacts"
+msgstr "Kapcsolatok"
+
+#: js/ContactGridDetailsPanel.js:65
+msgid "Select contact"
+msgstr "Kapcsolat kiválasztása"
+
+#: js/ContactGridDetailsPanel.js:155
+msgid "Private"
+msgstr "Privát"
+
+#: js/ContactGridDetailsPanel.js:178
+msgid "Info"
+msgstr "Info"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Insecure link"
+msgstr "Nem biztonságos link"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Please review this link in edit dialog."
+msgstr "Kérlek ellenőrizd ezt a linket a szerkesztő ablakban."
+
+#: js/ListMemberFilterModel.js:37
+msgid "Member of List"
+msgstr ""
 
 #: js/Addressbook.js:22
 msgid "New Contact"
 msgstr ""
 
-#: Preference.php:33
-msgid "All contacts"
-msgstr "Összes kapcsolat"
+#: js/Addressbook.js:32 js/Model.js:96 js/Model.js:213
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Címjegyzék"
+msgstr[1] "Címjegyzékek"
 
-#: Preference.php:70
-msgid "Default Addressbook"
-msgstr "Alapértelmezett címjegyzék"
+#: js/SearchCombo.js:95
+msgid "Searching..."
+msgstr "Keresés..."
 
-#: Preference.php:71
-msgid "The default addressbook for new contacts"
-msgstr "Alapértelmezett címjegyzék az új kapcsolatoknak"
+#: js/ContactGrid.js:103 js/Model.js:158
+msgid "Type"
+msgstr "Típus"
 
-#: Preference.php:74
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
+#: js/ContactGrid.js:104
+msgid "Tags"
+msgstr "Címkék"
 
-#: Preference.php:75
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Alapértelmezett kedvenc ami a címjegyzék indításakor betöltődik"
+#: js/ContactGrid.js:107
+msgid "Full Name"
+msgstr "Teljes név"
+
+#: js/ContactGrid.js:117
+msgid "Postalcode"
+msgstr "Irányítószám"
+
+#: js/ContactGrid.js:119
+msgid "Street (private)"
+msgstr "Utca (privát)"
+
+#: js/ContactGrid.js:120
+msgid "City (private)"
+msgstr "Város (privát)"
+
+#: js/ContactGrid.js:121
+msgid "Region (private)"
+msgstr "Régió (privát)"
+
+#: js/ContactGrid.js:122
+msgid "Postalcode (private)"
+msgstr "Irányítószám (privát)"
+
+#: js/ContactGrid.js:123
+msgid "Country (private)"
+msgstr "Ország (privát)"
+
+#: js/ContactGrid.js:128
+msgid "Car phone"
+msgstr "Autó telefon"
+
+#: js/ContactGrid.js:129
+msgid "Pager"
+msgstr "Személyhívó"
+
+#: js/ContactGrid.js:133
+msgid "Email (private)"
+msgstr "Email (privát)"
+
+#: js/ContactGrid.js:135
+msgid "URL (private)"
+msgstr "URL (privát)"
+
+#: js/ContactGrid.js:136 js/Model.js:144
+msgid "Note"
+msgstr "Leírás"
+
+#: js/ContactGrid.js:137
+msgid "Timezone"
+msgstr "Időzóna"
+
+#: js/ContactGrid.js:138
+msgid "Geo"
+msgstr "Geo"
+
+#: js/ContactGrid.js:149
+msgid "Export Contact"
+msgstr "Kapcsolat exportálása"
+
+#: js/ContactGrid.js:157
+msgid "Export as PDF"
+msgstr "Exportálás PDF-be"
+
+#: js/ContactGrid.js:164
+msgid "Export as CSV"
+msgstr "Exportálás CSV-be"
+
+#: js/ContactGrid.js:171
+msgid "Export as ODS"
+msgstr "Exportálás ODS-be"
+
+#: js/ContactGrid.js:178
+msgid "Export as XLS"
+msgstr "Exportálás XLS-be"
+
+#: js/ContactGrid.js:185
+msgid "Export as ..."
+msgstr "Exportálás mint ..."
+
+#: js/ContactGrid.js:197
+msgid "Import contacts"
+msgstr "Kapcsolatok importálása"
+
+#: js/ContactGrid.js:289
+msgid "Internal Contact"
+msgstr "Belső kapcsolatok"
+
+#: js/Model.js:34
+msgid "Street (Company Address)"
+msgstr "Utca (Céges cím)"
+
+#: js/Model.js:35
+msgid "Street 2 (Company Address)"
+msgstr "Utca 2 (Céges cím)"
+
+#: js/Model.js:36
+msgid "City (Company Address)"
+msgstr "Város (Céges cím)"
+
+#: js/Model.js:37
+msgid "Region (Company Address)"
+msgstr "Régió (Céges cím)"
+
+#: js/Model.js:38
+msgid "Postal Code (Company Address)"
+msgstr "Irányítószám (Céges cím)"
+
+#: js/Model.js:39
+msgid "Country (Company Address)"
+msgstr "Ország (Céges cím)"
+
+#: js/Model.js:41
+msgid "Street (Private Address)"
+msgstr "Utca (Privát cím)"
+
+#: js/Model.js:42
+msgid "Street 2 (Private Address)"
+msgstr "Utca 2 (Privát cím)"
+
+#: js/Model.js:43
+msgid "City (Private Address)"
+msgstr "Város (Privát cím)"
+
+#: js/Model.js:44
+msgid "Region (Private Address)"
+msgstr "Régió (Privát cím)"
+
+#: js/Model.js:45
+msgid "Postal Code (Private Address)"
+msgstr "Irányítószám (Privát cím)"
+
+#: js/Model.js:46
+msgid "Country (Private Address)"
+msgstr "Ország (Privát cím)"
+
+#: js/Model.js:61
+msgid "Web (private)"
+msgstr "Web (privát)"
+
+#: js/Model.js:92 js/Model.js:131 js/ContactFilterModel.js:35
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Kapcsolat"
+msgstr[1] "Kapcsolatok"
+
+#: js/Model.js:96 js/Model.js:213
+msgid "Addressbooks"
+msgstr "Címjegyzékek"
+
+#: js/Model.js:131
+msgid "User Account"
+msgstr "Felhasználói fiók"
+
+#: js/Model.js:134
+msgid "Quick search"
+msgstr "Gyors keresés"
+
+#: js/Model.js:159
+msgid "Last modified"
+msgstr "Utolsó módosítás"
+
+#: js/Model.js:160
+msgid "Last modifier"
+msgstr "Utolsó módosító"
+
+#: js/Model.js:161
+msgid "Creation Time"
+msgstr "Készítés ideje"
+
+#: js/Model.js:162
+msgid "Creator"
+msgstr "Készítő"
+
+#: js/Model.js:209
+msgid "List"
+msgid_plural "Lists"
+msgstr[0] "Lista"
+msgstr[1] "Listák"
+
+#: js/Model.js:209
+msgid "Lists"
+msgstr "Listák"
 
 #: Setup/Initialize.php:112 Setup/Update/Release3.php:37
 msgid "All contacts I have read grants for"
@@ -722,6 +553,49 @@ msgstr "Úr"
 #: Setup/setup.xml:738
 msgid "Ms"
 msgstr "Asszony"
+
+#: Controller.php:95
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s személyes címjegyzéke"
+
+#: Preference.php:28
+msgid "All contacts"
+msgstr "Összes kapcsolat"
+
+#: Preference.php:65
+msgid "Default Addressbook"
+msgstr "Alapértelmezett címjegyzék"
+
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr "Alapértelmezett címjegyzék az új kapcsolatoknak"
+
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
+
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "Alapértelmezett kedvenc ami a címjegyzék indításakor betöltődik"
+
+#~ msgid "Call contact"
+#~ msgstr "Kapcsolat hívása"
+
+#~ msgid "Compose email"
+#~ msgstr "Email írása"
+
+#~ msgid "Work"
+#~ msgstr "Üzlet"
+
+#~ msgid "Home"
+#~ msgstr "Otthon"
+
+#~ msgid "Cell"
+#~ msgstr "Mobil"
+
+#~ msgid "Cell private"
+#~ msgstr "Mobil privát"
 
 #~ msgid "Last Modified Time"
 #~ msgstr "Utolsó módosítás ideje"

@@ -5,10 +5,8 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Lars Kneschke <l.kneschke@metaways.de>
- * @copyright   Copyright (c) 2009-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        add flags as consts here?
- * @todo        add more CONTENT_TYPE_ constants
  */
 
 /**
@@ -98,6 +96,7 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'account_id'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'original_id'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'original_part_id'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'messageuid'            => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
         'folder_id'             => array(Zend_Filter_Input::ALLOW_EMPTY => false), 
         'subject'               => array(Zend_Filter_Input::ALLOW_EMPTY => true), 
@@ -261,30 +260,36 @@ class Felamimail_Model_Message extends Tinebase_Record_Abstract
      */
     public function getPartStructure($_partId, $_useMessageStructure = TRUE)
     {
-        // maybe we want no part at all => just return the whole structure
+        $result = NULL;
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' Getting structure for part ' . $_partId . ' / complete structure: ' . print_r($this->structure, TRUE));
+        
         if ($_partId == null) {
-            return $this->structure;
-        }
-        
-        // maybe we want the first part => just return the whole structure
-        if ($this->structure['partId'] == $_partId) {
-            return $this->structure;
-        }
-                
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveArrayIterator($this->structure),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-        
-        foreach ($iterator as $key => $value) {
-            if ($key == $_partId) {
-                $result = ($_useMessageStructure && is_array($value) && array_key_exists('messageStructure', $value)) ? $value['messageStructure'] : $value;
-                return $result;
+            // maybe we want no part at all => just return the whole structure
+            $result = $this->structure;
+        } else if ($this->structure['partId'] == $_partId) {
+            // maybe we want the first part => just return the whole structure
+            $result = $this->structure;
+        } else {
+            // iterate structure to find the correct part
+            $iterator = new RecursiveIteratorIterator(
+                new RecursiveArrayIterator($this->structure),
+                RecursiveIteratorIterator::SELF_FIRST
+            );
+            
+            foreach ($iterator as $key => $value) {
+                if ($key == $_partId && is_array($value) && array_key_exists('partId', $value)) {
+                    $result = ($_useMessageStructure && is_array($value) && array_key_exists('messageStructure', $value)) ? $value['messageStructure'] : $value;
+                }
             }
         }
         
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($this->structure, TRUE));
-        throw new Felamimail_Exception("Structure for partId $_partId not found!");
+        if ($result === NULL) {
+            throw new Felamimail_Exception("Structure for partId $_partId not found!");
+        }
+        
+        return $result;
     }
     
     /**

@@ -14,60 +14,55 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s's personal example records"
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr "Example Application"
 
-#: js/ExampleApplication-FAT-debug.js:36 js/Model.js:31
+#: js/ExampleRecordGridPanel.js:74
+msgid "Quick search"
+msgstr "Quick search"
+
+#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
+msgid "Name"
+msgstr "Name"
+
+#: js/ExampleRecordGridPanel.js:108
+msgid "Title"
+msgstr "Title"
+
+#: js/ExampleRecordGridPanel.js:114
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordGridPanel.js:121
+msgid "Budget"
+msgstr "Budget"
+
+#: js/ExampleRecordGridPanel.js:145
+msgid "Show closed"
+msgstr "Show closed"
+
+#: js/ExampleRecordEditDialog.js:87
+msgid "ExampleRecord"
+msgstr "ExampleRecord"
+
+#: js/Model.js:31
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] "example record"
 msgstr[1] "example records"
 
-#: js/ExampleApplication-FAT-debug.js:40 js/Model.js:35
+#: js/Model.js:35
 msgid "example record list"
 msgid_plural "example record lists"
 msgstr[0] "example record list"
 msgstr[1] "example record lists"
 
-#: js/ExampleApplication-FAT-debug.js:97 js/ExampleApplication-FAT.js:6
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr "Example Application"
-
-#: js/ExampleApplication-FAT-debug.js:201 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordGridPanel.js:75
-msgid "Quick search"
-msgstr "Quick search"
-
-#: js/ExampleApplication-FAT-debug.js:229
-#: js/ExampleApplication-FAT-debug.js:389 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:103
-msgid "Name"
-msgstr "Name"
-
-#: js/ExampleApplication-FAT-debug.js:235 js/ExampleRecordGridPanel.js:109
-msgid "Title"
-msgstr "Title"
-
-#: js/ExampleApplication-FAT-debug.js:241 js/ExampleRecordGridPanel.js:115
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleApplication-FAT-debug.js:248 js/ExampleRecordGridPanel.js:122
-msgid "Budget"
-msgstr "Budget"
-
-#: js/ExampleApplication-FAT-debug.js:272 js/ExampleRecordGridPanel.js:146
-msgid "Show closed"
-msgstr "Show closed"
-
-#: js/ExampleApplication-FAT-debug.js:372 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordEditDialog.js:87
-msgid "ExampleRecord"
-msgstr "ExampleRecord"
-
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "ExampleApplication"
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s's personal example records"

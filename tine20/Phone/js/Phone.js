@@ -716,7 +716,6 @@ Tine.Phone.Main = {
             autoSizeColumns: false,
             selModel: rowSelectionModel,
             enableColLock:false,
-            loadMask: true,
             autoExpandColumn: 'destination',
             border: false,
             view: new Ext.grid.GridView({

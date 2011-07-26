@@ -181,13 +181,19 @@ class Felamimail_Controller_Message_Flags extends Felamimail_Controller_Message
      */
     protected function _updateFlagsOnImap($_imapMessageUids, $_flags, $_imapBackend, $_mode)
     {
-        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' Writing flags on IMAP server for ' . count($_imapMessageUids) . ' messages.');
+        $flagsToChange = array_intersect($_flags, array_keys(self::$_allowedFlags));
+        if (empty($flagsToChange)) {
+            return;
+        }
+        
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
+            . ' ' . $_mode .'ing flags on IMAP server for ' . print_r($_imapMessageUids, TRUE) . ' messages:' . print_r($flagsToChange, TRUE));
         
         try {
             if ($_mode === 'add') {
-                $_imapBackend->addFlags($_imapMessageUids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+                $_imapBackend->addFlags($_imapMessageUids, $flagsToChange);
             } else if ($_mode === 'clear') {
-                $_imapBackend->clearFlags($_imapMessageUids, array_intersect($_flags, array_keys(self::$_allowedFlags)));
+                $_imapBackend->clearFlags($_imapMessageUids, $flagsToChange);
             }
         } catch (Zend_Mail_Storage_Exception $zmse) {
             throw new Felamimail_Exception_IMAP($zmse->getMessage());

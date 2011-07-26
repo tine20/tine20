@@ -3,12 +3,12 @@
  * Tine 2.0
  *
  * @package     ActiveSync
- * @subpackage  ActiveSync
+ * @subpackage  Controller
  * @license     http://www.tine20.org/licenses/agpl-nonus.txt AGPL Version 1 (Non-US)
  *              NOTE: According to sec. 8 of the AFFERO GENERAL PUBLIC LICENSE (AGPL), 
  *              Version 1, the distribution of the Tine 2.0 ActiveSync module in or to the 
  *              United States of America is excluded from the scope of this license.
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -16,7 +16,7 @@
  * class documentation
  *
  * @package     ActiveSync
- * @subpackage  ActiveSync
+ * @subpackage  Controller
  */
  
 abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_Interface
@@ -38,14 +38,14 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     /**
      * class to use for search entries
      *
-     * @var Tinebase_Model_Filter_FilterGroup
+     * @var string
      */
     protected $_contentFilterClass;
     
     /**
      * instance of the content specific controller
      *
-     * @var unknown_type
+     * @var Tinebase_Controller_Record_Abstract
      */
     protected $_contentController;
     
@@ -165,13 +165,20 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     abstract public function getSupportedFolders();
     
     /**
-     * returns content controller of this backend
+     * returns multiple records and resolves tags
      * 
-     * @return Tinebase_Controller_Record_Abstract
+     * @param  array $_ids array of record identifiers
+     * @return Tinebase_Record_RecordSet
      */
-    public function getContentController()
+    public function getMultipleAndResolveTags($_ids)
     {
-        return $this->_contentController;
+        $records = $this->_contentController->getMultiple($_ids);
+        
+        if (count($records) > 0 && $records->getFirstRecord()->has('tags')) {
+            Tinebase_Tags::getInstance()->getMultipleTagsOfRecords($records);
+        }
+        
+        return $records;
     }
     
     /**
@@ -231,11 +238,10 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         return $folder;
     }
     
-    
     /**
      * add entry from xml data
      *
-     * @param unknown_type $_collectionId
+     * @param string $_folderId
      * @param SimpleXMLElement $_data
      * @return Tinebase_Record_Abstract
      */
@@ -338,6 +344,12 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
         // does nothing by default
     }
     
+    /**
+     * add container filter to filter group
+     * 
+     * @param Tinebase_Model_Filter_FilterGroup $_filter
+     * @param string $_containerId
+     */
     protected function _getContainerFilter(Tinebase_Model_Filter_FilterGroup $_filter, $_containerId)
     {
         $syncableContainers = $this->_getSyncableFolders();
@@ -421,9 +433,11 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " defaultpersistentfilter: " . Tinebase_Core::getPreference($this->_applicationName)->defaultpersistentfilter);
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter id: " . $persistentFilterId);
             
-            $filter = Tinebase_PersistentFilter::getFilterById($persistentFilterId);
-            
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
+            $persistentFilter = Tinebase_PersistentFilter::getFilterById($persistentFilterId);
+            if ($persistentFilter) {
+                $filter = $persistentFilter;
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter class: " . get_class($filter));
+            }
         } catch (Tinebase_Exception_NotFound $tenf) {
             // filter got deleted already
         }
@@ -455,9 +469,21 @@ abstract class ActiveSync_Controller_Abstract implements ActiveSync_Controller_I
     {
         return array();
     }
-            
+    
+    /**
+     * convert contact from xml to Tinebase_Record_Interface
+     *
+     * @param SimpleXMLElement $_data
+     * @return Tinebase_Record_Interface
+     */
     abstract public function toTineModel(SimpleXMLElement $_data, $_entry = null);
     
+    /**
+     * convert contact from xml to Addressbook_Model_ContactFilter
+     *
+     * @param SimpleXMLElement $_data
+     * @return array
+     */
     abstract protected function _toTineFilterArray(SimpleXMLElement $_data);
     
     /**

@@ -1,0 +1,164 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - SimpleFAQ\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2008-07-29 21:14+0100\n"
+"Last-Translator: Cornelius Weiss <c.weiss@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Bulgarian\n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: js/FaqEditDialog.js:108 js/FaqGridPanel.js:120
+#: js/FaqGridDetailsPanel.js:157
+msgid "Question"
+msgstr ""
+
+#: js/FaqEditDialog.js:109
+msgid "Enter a question..."
+msgstr ""
+
+#: js/FaqEditDialog.js:115 js/FaqGridPanel.js:127
+#: js/FaqGridDetailsPanel.js:163
+msgid "Answer"
+msgstr ""
+
+#: js/FaqEditDialog.js:116
+msgid "Enter a answer..."
+msgstr ""
+
+#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
+msgid "Type"
+msgstr ""
+
+#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
+msgid "Status"
+msgstr ""
+
+#: js/FaqGridPanel.js:94
+msgid "FAQ id"
+msgstr ""
+
+#: js/FaqGridPanel.js:101 js/FaqGridDetailsPanel.js:169
+msgid "Tags"
+msgstr ""
+
+#: js/FaqType.js:26 js/FaqGridDetailsPanel.js:210 js/AdminPanel.js:97
+#: js/AdminPanel.js:132 js/FaqTypeFilterModel.js:27
+msgid "FAQ Type"
+msgid_plural "FAQ Types"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/FaqType.js:144
+msgid "Add a new FAQ Type..."
+msgstr ""
+
+#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
+msgid "FAQ Infos"
+msgstr ""
+
+#: js/FaqGridDetailsPanel.js:195
+msgid "Creation Time"
+msgstr ""
+
+#: js/FaqGridDetailsPanel.js:200
+msgid "Created By"
+msgstr ""
+
+#: js/FaqGridDetailsPanel.js:205 js/AdminPanel.js:93 js/AdminPanel.js:125
+#: js/FaqStatusFilterModel.js:27 js/FaqStatus.js:26
+msgid "FAQ Status"
+msgid_plural "FAQ Status"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/FaqGridDetailsPanel.js:232
+msgid "No answer yet"
+msgstr ""
+
+#: js/Model.js:33 js/SimpleFAQ.js:19
+msgid "FAQ"
+msgid_plural "FAQs"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:37
+msgid "FAQ List, "
+msgid_plural "FAQ Lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr ""
+
+#: js/AdminPanel.js:105
+msgid "Defaults"
+msgstr ""
+
+#: js/FaqStatus.js:141
+msgid "Add a new FAQ Status..."
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "All FAQs of my FAQ Lists"
+msgstr ""
+
+#: Setup/Initialize.php:42
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:43
+msgid "All FAQs that I have last modified"
+msgstr ""
+
+#: Controller.php:109
+#, python-format
+msgid "%s's personal FAQs"
+msgstr ""
+
+#: Controller.php:147
+msgid "Draft"
+msgstr ""
+
+#: Controller.php:148
+msgid "released"
+msgstr ""
+
+#: Controller.php:149
+msgid "obsolete"
+msgstr ""
+
+#: Controller.php:152
+msgid "Internal"
+msgstr ""
+
+#: Controller.php:153
+msgid "Public"
+msgstr ""
+
+#: Preference.php:28
+msgid "All my FAQs"
+msgstr ""
+
+#: Preference.php:70
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:71
+msgid "The default favorite which is loaded on FAQ startup"
+msgstr ""
+
+#: Preference.php:74
+msgid "Default FAQ List"
+msgstr ""
+
+#: Preference.php:75
+msgid "The default FAQ list to create new FAQ in."
+msgstr ""

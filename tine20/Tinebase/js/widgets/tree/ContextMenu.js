@@ -116,7 +116,8 @@ Tine.widgets.tree.ContextMenu = {
                                         this.fireEvent('containerdelete', node.attributes);
                                     }
                                     Ext.MessageBox.hide();
-                                }
+                                },
+                                failure: (config.backendModel == 'Folder') ? Tine.Felamimail.handleRequestException : Tine.Tinebase.ExceptionHandler.handleRequestException
                             });
                         }
                     }, this);
@@ -154,6 +155,7 @@ Tine.widgets.tree.ContextMenu = {
                                     var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
                                     params.oldGlobalName = folder.get('globalname');
                                     params.accountId = folder.get('account_id');
+                                    
                                 }
                                 
                                 Ext.Ajax.request({
@@ -164,7 +166,8 @@ Tine.widgets.tree.ContextMenu = {
                                         node.setText(_text);
                                         this.fireEvent('containerrename', nodeData);
                                         Ext.MessageBox.hide();
-                                    }
+                                    },
+                                    failure: (config.backendModel == 'Folder') ? Tine.Felamimail.handleRequestException : Tine.Tinebase.ExceptionHandler.handleRequestException
                                 });
                             }
                         },

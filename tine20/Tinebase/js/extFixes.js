@@ -126,7 +126,7 @@ Ext.applyIf(Ext.tree.MultiSelectionModel.prototype, {
  * @private
  */
  Ext.form.DateField.prototype.setValue = function(date){
-    // preserv original datetime information
+    // preserve original datetime information
     this.fullDateTime = date;
     Ext.form.DateField.superclass.setValue.call(this, this.formatDate(this.parseDate(date)));
 };
@@ -136,6 +136,27 @@ Ext.applyIf(Ext.tree.MultiSelectionModel.prototype, {
 Ext.form.DateField.prototype.getValue = function(){
     //var value = this.parseDate(Ext.form.DateField.superclass.getValue.call(this));
     
+    // return the value that was set (has time information when unchanged in client) 
+    // and not just the date part!
+    var value =  this.fullDateTime;
+    return value || "";
+};
+
+/**
+ * We need to overwrite to preserve original time information because 
+ * Ext.form.TimeField does not support seconds
+ * 
+ * @param {} time
+ * @private
+ */
+ Ext.form.TimeField.prototype.setValue = function(time){
+    this.fullDateTime = time;
+    Ext.form.DateField.superclass.setValue.call(this, this.formatDate(this.parseDate(time)));
+};
+/**
+ * @private
+ */
+Ext.form.TimeField.prototype.getValue = function(){
     // return the value that was set (has time information when unchanged in client) 
     // and not just the date part!
     var value =  this.fullDateTime;

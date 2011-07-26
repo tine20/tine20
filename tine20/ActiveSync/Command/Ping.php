@@ -39,7 +39,7 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
     
     protected $_changesDetected = false;
     
-    const PING_TIMEOUT = 10;
+    const PING_TIMEOUT = 60;
     
     /**
      * Enter description here...
@@ -173,15 +173,6 @@ class ActiveSync_Command_Ping extends ActiveSync_Command_Wbxml
         }                
     }    
 
-    /**
-     * (non-PHPdoc)
-     * @see ActiveSync_Command_Wbxml::getResponse()
-     */
-    public function getResponse($_keepSession = false)
-    {
-        parent::getResponse($_keepSession);
-    }
-    
     /**
      * return number of chnaged entries
      * 

@@ -16,12 +16,10 @@ Ext.ns('Tine.widgets.grid');
  * 
  * <p>Application Grid Panel</p>
  * <p>
- * TODO         remove the (delete) loadmask on error
  * </p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -176,7 +174,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @type Bool
      * @property copyEditAction
      * 
-     * TODO activate this per default
+     * TODO activate this by default
      */
     copyEditAction: false,
 
@@ -320,12 +318,14 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.items.push({
                 region: 'north',
                 border: false,
+                autoScroll: true,
                 items: this.filterToolbar,
                 listeners: {
                     scope: this,
                     afterlayout: function(ct) {
                     	ct.suspendEvents();
-                        ct.setHeight(this.filterToolbar.getHeight());
+                        ct.setHeight(Math.min(120, this.filterToolbar.getHeight()));
+                        ct.getEl().child('div[class^="x-panel-body"]', true).scrollTop = 1000000;
                         ct.ownerCt.layout.layout();
                         ct.resumeEvents();
                     }
@@ -430,7 +430,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
     initStore: function() {
         if (this.recordProxy) {
             this.store = new Ext.data.Store({
-                //autoLoad: true,
                 fields: this.recordClass,
                 proxy: this.recordProxy,
                 reader: this.recordProxy.getReader(),
@@ -441,7 +440,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                     'update': this.onStoreUpdate,
                     'beforeload': this.onStoreBeforeload,
                     'load': this.onStoreLoad,
-                    'beforeloadrecords': this.onStoreBeforeLoadRecords
+                    'beforeloadrecords': this.onStoreBeforeLoadRecords,
+                    'loadexception': this.onStoreLoadException
                 }
             });
         } else {
@@ -452,7 +452,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         
         // init autoRefresh
         this.autoRefreshTask = new Ext.util.DelayedTask(this.loadGridData, this, [{
-            removeStrategy: 'keepBuffered'
+            removeStrategy: 'keepBuffered',
+            autoRefresh: true
         }]);
     },
     
@@ -589,9 +590,10 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onStoreLoad: function(store, records, options) {
         // we always focus the first row so that keynav starts in the grid
-        if (this.store.getCount() > 0) {
+        // this resets scroller ;-( -> need a better solution
+//        if (this.store.getCount() > 0) {
 //            this.grid.getView().focusRow(0);
-        }
+//        }
         
         // restore selection
         if (Ext.isArray(options.preserveSelection)) {
@@ -611,6 +613,30 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
         // reset autoRefresh
         if (window.isMainWindow && this.autoRefreshInterval) {
             this.autoRefreshTask.delay(this.autoRefreshInterval * 1000);
+        }
+    },
+    
+    /**
+     * on store load exception
+     * 
+     * @param {Tine.Tinebase.data.RecordProxy} proxy
+     * @param {String} type
+     * @param {Object} error
+     * @param {Object} options
+     */
+    onStoreLoadException: function(proxy, type, error, options) {
+        
+        // reset autoRefresh
+        if (window.isMainWindow && this.autoRefreshInterval) {
+            this.autoRefreshTask.delay(this.autoRefreshInterval * 5000);
+        }
+        
+        if (this.usePagingToolbar && this.pagingToolbar.refresh) {
+            this.pagingToolbar.refresh.enable();
+        }
+        
+        if (! options.autoRefresh) {
+            proxy.handleRequestException(error);
         }
     },
     
@@ -1096,14 +1122,19 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                         e.preventDefault();
                     }
                     break;
-                
+                case e.F:
+                    if (this.filterToolbar && this.hasQuickSearchFilterToolbarPlugin) {
+                        e.preventDefault();
+                        this.filterToolbar.getQuickFilterPlugin().quickFilter.focus();
+                    }
+                    break;
             }
         } else {
             if ([e.BACKSPACE, e.DELETE].indexOf(e.getKey()) !== -1) {
                 if (!this.grid.editing && !this.grid.adding && !this.action_deleteRecord.isDisabled()) {
                     this.onDeleteRecords.call(this);
+                    e.preventDefault();
                 }
-                e.preventDefault();
             }
         }
     },
@@ -1187,7 +1218,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {String|Tine.Tinebase.data.Record} record
      */
     onUpdateRecord: function(record) {
-        if (Ext.isString(record)) {
+        if (Ext.isString(record) && this.recordProxy) {
             record = this.recordProxy.recordReader({responseText: record});
         } else if (record && Ext.isFunction(record.copy)) {
             record = record.copy();
@@ -1252,9 +1283,15 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             // don't show confirmation question for record deletion
             this.deleteRecords(sm, records);
         } else {
+            var recordNames = records[0].get(this.recordClass.getMeta('titleProperty'));
+            if (records.length > 1) {
+                recordNames += ', ...';
+            }
+            
             var i18nQuestion = this.i18nDeleteQuestion ?
                 this.app.i18n.n_hidden(this.i18nDeleteQuestion[0], this.i18nDeleteQuestion[1], records.length) :
-                Tine.Tinebase.translation.ngettext('Do you really want to delete the selected record', 'Do you really want to delete the selected records', records.length);
+                String.format(Tine.Tinebase.translation.ngettext('Do you really want to delete the selected record ({0})?',
+                    'Do you really want to delete the selected records ({0})?', records.length), recordNames);
             Ext.MessageBox.confirm(_('Confirm'), i18nQuestion, function(btn) {
                 if(btn == 'yes') {
                     this.deleteRecords(sm, records);
@@ -1270,15 +1307,11 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Array} records
      */
     deleteRecords: function(sm, records) {
-        // directly remove records from the store
-        if (Ext.isArray(records)) {
-        	// we need to suspend events before removing records from store because remove event will fire which will put isFilterSelect
-        	// and then we can't use deleteByFilter
-        	this.store.suspendEvents();
+        // directly remove records from the store (only for non-filter-selection)
+        if (Ext.isArray(records) && ! (sm.isFilterSelect && this.filterSelectionDelete)) {
             Ext.each(records, function(record) {
                 this.store.remove(record);
             });
-            this.store.resumeEvents();
         }
         
         if (this.recordProxy) {
@@ -1308,6 +1341,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 },
                 failure: function () {
                     this.refreshAfterDelete(recordIds);
+                    this.loadGridData();                    
                     Ext.MessageBox.alert(_('Failed'), String.format(_('Could not delete {0}.'), i18nItems)); 
                 }
             };

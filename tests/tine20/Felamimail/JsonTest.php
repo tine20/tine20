@@ -143,7 +143,11 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         if (count($this->_createdFolders) > 0) {
             foreach ($this->_createdFolders as $folderName) {
                 //echo "delete $folderName\n";
-                $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
+                try {
+                    $this->_imap->removeFolder(Felamimail_Model_Folder::encodeFolderName($folderName));
+                } catch (Zend_Mail_Storage_Exception $zmse) {
+                    // already deleted
+                }
             }
             Felamimail_Controller_Cache_Folder::getInstance()->clear($this->_account);
         }
@@ -242,6 +246,22 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         }
     }
     
+    /**
+     * test emtpy folder (with subfolder)
+     */
+    public function testEmptyFolderWithSubfolder()
+    {
+        $folderName = $this->_testFolderName;
+        $folder = $this->_getFolder($this->_testFolderName);
+        $this->testCreateFolders();
+        
+        $folderArray = $this->_json->emptyFolder($folder->getId());
+        $this->assertEquals(0, $folderArray['has_children']);
+        
+        $result = $this->_json->updateFolderCache($this->_account->getId(), $this->_testFolderName);
+        $this->assertEquals(0, count($result));
+    }
+
     /**
      * testUpdateFolderCache
      */
@@ -583,18 +603,13 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * test reply mail
-     * 
      */
     public function testReplyMessage()
     {
         $message = $this->_sendMessage();
         
-        $replyMessage               = $this->_getMessageData();
-        $replyMessage['flags']      = '\\Answered';
-        $replyMessage['subject']    = 'Re: ' . $message['subject'];
-        $replyMessage['original_id']= $message['id'];
-        $replyMessage['headers']    = array('X-Tine20TestMessage' => 'jsontest');
-        $returned                   = $this->_json->saveMessage($replyMessage);
+        $replyMessage = $this->_getReply($message);
+        $returned = $this->_json->saveMessage($replyMessage);
         
         $result = $this->_getMessages();
         //print_r($result);
@@ -614,6 +629,36 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         // check answered flag
         $this->assertTrue(in_array(Zend_Mail_Storage::FLAG_ANSWERED, $originalMessage['flags'], 'could not find flag'));
+    }
+    
+    /**
+     * get reply message data
+     * 
+     * @param array $_original
+     * @return array
+     */
+    protected function _getReply($_original)
+    {
+        $replyMessage               = $this->_getMessageData();
+        $replyMessage['subject']    = 'Re: ' . $_original['subject'];
+        $replyMessage['original_id']= $_original['id'];
+        $replyMessage['flags']      = Zend_Mail_Storage::FLAG_ANSWERED;
+        
+        return $replyMessage;
+    }
+
+    /**
+     * test reply mail in sent folder
+     */
+    public function testReplyMessageInSentFolder()
+    {
+        $messageInSent = $this->_sendMessage($this->_account->sent_folder);
+        $replyMessage = $this->_getReply($messageInSent);
+        $returned = $this->_json->saveMessage($replyMessage);
+        
+        $result = $this->_getMessages();
+        $sentMessage = $this->_getMessageFromSearchResult($result, $replyMessage['subject']);
+        $this->assertTrue(! empty($sentMessage));
     }
     
     /**
@@ -897,14 +942,14 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
      *
      * @return array
      */
-    protected function _sendMessage()
+    protected function _sendMessage($_folderName = 'INBOX')
     {
         $messageToSend = $this->_getMessageData();
         $returned = $this->_json->saveMessage($messageToSend);
         $this->_foldersToClear = array('INBOX', $this->_account->sent_folder); 
         
         //sleep(10);
-        $result = $this->_getMessages();
+        $result = $this->_getMessages($_folderName);
         $message = $this->_getMessageFromSearchResult($result, $messageToSend['subject']);
         
         $this->assertTrue(! empty($message), 'Sent message not found.');
@@ -942,7 +987,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         $folder = $this->_getFolder($_folderName);
         $filter = $this->_getMessageFilter($folder->getId());
         // update cache
-        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);
+        $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10, 1);
         $i = 0;
         while ($folder->cache_status != Felamimail_Model_Folder::CACHE_STATUS_COMPLETE && $i < 10) {
             $folder = Felamimail_Controller_Cache_Message::getInstance()->updateCache($folder, 10);

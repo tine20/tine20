@@ -736,7 +736,10 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
         $translate = Tinebase_Translation::getTranslation('Admin');
         $body = quoted_printable_decode($notification->getBodyText(TRUE));
         $this->assertContains($container['note'],  $body, $body);
-        $this->assertEquals($translate->_('Your container has been changed'), $notification->getSubject());
+        $this->assertEquals(iconv_mime_encode('Subject', $translate->_('Your container has been changed'), array(
+            'scheme'        => 'Q',
+            'line-length'   => 500,
+        )), 'Subject: ' . $notification->getSubject());
         $this->assertTrue(in_array(Tinebase_Core::getUser()->accountEmailAddress, $notification->getRecipients()));
     }
     

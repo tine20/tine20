@@ -3,8 +3,8 @@
  * 
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -22,8 +22,6 @@ Ext.namespace('Tine.Sales');
  * </pre></p>
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -48,7 +46,6 @@ Tine.Sales.ProductGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     defaultSortInfo: {field: 'name', direction: 'DESC'},
     gridConfig: {
-        loadMask: true,
         autoExpandColumn: 'name'
     },
      

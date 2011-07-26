@@ -431,7 +431,8 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         if (name.accountDisplayName) {
             return Ext.util.Format.htmlEncode(name.accountDisplayName);
         }
-        if (Ext.isString(name)) {
+        // how to detect hash/string ids
+        if (Ext.isString(name) && ! name.match('^[0-9a-f-]{40,}$') && ! parseInt(name, 10)) {
             return Ext.util.Format.htmlEncode(name);
         }
         // NOTE: this fn gets also called from other scopes

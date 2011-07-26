@@ -109,7 +109,7 @@ abstract class Wbxml_Abstract
      * @todo add well known identifiers from section 7.2
      * @return string
      */
-    public function getDPI($_uInt)
+    public function getDPI($_uInt = 0)
     {
         if(($dpi = constant('Wbxml_Abstract::DPI_' . $_uInt)) === NULL) {
             throw new Exception('unknown wellknown identifier: ' . $_uInt);

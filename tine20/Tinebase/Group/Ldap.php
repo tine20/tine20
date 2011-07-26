@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Group
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -393,12 +393,20 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         
         $memberships = $this->getGroupMemberships($_accountId);
         if (!in_array($groupId, $memberships)) {
-             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skipp removing group member, as $userId is not in group $groupId " . print_r($memberships, true));
+             if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " skip removing group member, as $userId is not in group $groupId " . print_r($memberships, true));
              return;
         }
         
-        $groupDn = $this->_getDn($_groupId);
-        
+        try {
+            $groupDn = $this->_getDn($_groupId);
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 
+                " Failed to remove groupmember $_accountId from group $_groupId: " . $tenf->getMessage()
+            );
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $tenf->getTraceAsString());
+            return;
+        }            
+            
         try {
             $accountMetaData = $this->_getAccountMetaData($_accountId);
         } catch (Tinebase_Exception_NotFound $tenf) {
@@ -434,8 +442,9 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
             $this->_ldap->deleteProperty($groupDn, $ldapData);
         } catch (Zend_Ldap_Exception $zle) {
             if (Tinebase_Core::isLogLevel(Zend_Log::CRIT)) Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . 
-                "failed to remove groupmember {$accountMetaData['dn']} from group $groupDn: " . $zle->getMessage()
+                " Failed to remove groupmember {$accountMetaData['dn']} from group $groupDn: " . $zle->getMessage()
             );
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zle->getTraceAsString());
         }
     }
         
@@ -559,6 +568,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
      *
      * @param  string $_groupId
      * @return array
+     * @throws Tinebase_Exception_NotFound
      * 
      * @todo remove obsolete code
      */
@@ -578,7 +588,7 @@ class Tinebase_Group_Ldap extends Tinebase_Group_Sql implements Tinebase_Group_I
         );
         
         if (count($result) !== 1) {
-            throw new Exception("group with id $_groupId not found");
+            throw new Tinebase_Exception_NotFound("Group with id $_groupId not found.");
         }
         
         return $result->getFirst();        

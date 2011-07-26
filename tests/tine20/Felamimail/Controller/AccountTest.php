@@ -5,7 +5,7 @@
  * @package     Felamimail
  * @license     http://www.gnu.org/licenses/agpl.html
  * @copyright   Copyright (c) 2009-2011 Metaways Infosystems GmbH (http://www.metaways.de)
- * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  */
 
@@ -140,8 +140,6 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         // deleting original account and check if user account is new default account
         $this->_controller->delete($this->_account->getId());
         $this->assertEquals($userAccount->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT});
-        
-        $userAccount = $this->_controller->create($this->_account);
     }
     
     /**
@@ -149,95 +147,33 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testGetAccountCapabilities()
     {
-        $account = $this->_controller->updateCapabilities($this->_account);
+        $capabilities = $this->_controller->updateCapabilities($this->_account);
+        $account = $this->_controller->get($this->_account);
         $accountToString = print_r($this->_account->toArray(), TRUE);
         
         $this->assertEquals('', $account->ns_personal, $accountToString);
         $this->assertEquals(1, preg_match('@/|\.@', $account->delimiter), $accountToString);
         
-        // @todo need to check first, which email server we have
-        //$this->assertEquals('#Users', $account->ns_other, $accountToString);
-        //$this->assertEquals('#Public', $account->ns_shared, $accountToString);
-    }
-    
-    /**
-     * check for sent/trash folders and create them if they do not exist / begin with filled folder cache
-     */
-    public function testCheckSystemFolderFolders()
-    {
-        // make sure, folder cache is filled
-        Felamimail_Controller_Folder::getInstance()->search(new Felamimail_Model_FolderFilter(array(
-            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
-        )));
+        $this->assertTrue(in_array('IMAP4', $capabilities['capabilities']) || in_array('IMAP4rev1', $capabilities['capabilities']), 
+            'no IMAP4(rev1) capability found in ' . print_r($capabilities['capabilities'], TRUE));
+        $this->assertTrue(in_array('QUOTA', $capabilities['capabilities']), 'no QUOTA capability found in ' . print_r($capabilities['capabilities'], TRUE));
         
-        $this->_sentTrashCheckHelper();
+        $this->assertEquals($capabilities, $_SESSION['Felamimail'][$this->_account->getId()]); 
     }
 
     /**
-     * check for sent/trash folders and create them if they do not exist / begin with empty folder cache
+     * test reset account capabilities
      */
-    public function testCheckSystemFolderFoldersEmptyCache()
+    public function testResetAccountCapabilities()
     {
-        Felamimail_Controller_Cache_Folder::getInstance()->clear($this->_account->getId());
-        
-        $this->_sentTrashCheckHelper(FALSE);
-    }
-    
-    /**
-     * helper fn for testCheckSystemFolderFolders and testCheckSystemFolderFoldersEmpty
-     */
-    protected function _sentTrashCheckHelper($_useCheckSystemFolders = TRUE)
-    {
-        $account = clone($this->_account);
-        $account->sent_folder = 'INBOX' . $account->delimiter . 'testsent';
-        $account->trash_folder = 'INBOX' . $account->delimiter . 'testtrash';
-        $this->_foldersToDelete = array($account->sent_folder, $account->trash_folder);
-        
-        $accountBackend = new Felamimail_Backend_Account();
-        $account = $accountBackend->update($account);
-        if ($_useCheckSystemFolders) {
-            $this->_controller->checkSystemFolders($account);
-        } else {
-            Felamimail_Controller_Cache_Folder::getInstance()->update($account);
-        }
-        
-        $inboxSubfolders = Felamimail_Controller_Folder::getInstance()->search(new Felamimail_Model_FolderFilter(array(
-            array('field' => 'globalname', 'operator' => 'equals', 'value' => 'INBOX'),
-            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
-        )));
-        
-        $folderFoundCount = 0;
-        foreach ($inboxSubfolders as $folder) {
-            if ($folder->globalname == $account->sent_folder || $folder->globalname == $account->trash_folder) {
-                $folderFoundCount++;
-            }
-        }
-        
-        $this->assertEquals(2, $folderFoundCount, 'sent/trash folders not found: ' . print_r($inboxSubfolders->globalname, TRUE));
-    }
-
-    /**
-     * check for sent/trash folder defaults
-     */
-    public function testCheckSystemFolderFolderDefaults()
-    {
-        // make sure, folder cache is filled
-        Felamimail_Controller_Folder::getInstance()->search(new Felamimail_Model_FolderFilter(array(
-            array('field' => 'account_id', 'operator' => 'equals', 'value' => $this->_account->getId())
-        )));
+        $capabilities = $this->_controller->updateCapabilities($this->_account);
         
         $account = clone($this->_account);
-        $account->sent_folder = '';
-        $account->trash_folder = '';
+        $account->host = 'unittest.org';
+        $account->type = Felamimail_Model_Account::TYPE_USER;
+        $this->_controller->update($account);
         
-        $accountBackend = new Felamimail_Backend_Account();
-        $account = $accountBackend->update($account);
-        $this->_controller->checkSystemFolders($account);
-        
-        $updatedAccount = $this->_controller->get($account->getId());
-        
-        $this->assertEquals('Trash', $updatedAccount->trash_folder);
-        $this->assertEquals('Sent', $updatedAccount->sent_folder);
+        $this->assertFalse(array_key_exists($this->_account->getId(), $_SESSION['Felamimail']), print_r($_SESSION['Felamimail'], TRUE));
     }
     
     /**

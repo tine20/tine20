@@ -3,37 +3,26 @@
  * Tine 2.0
  *
  * @package     Tinebase
- * @subpackage  Server
+ * @subpackage  Translation
  * @license     http://www.gnu.org/licenses/agpl.html AGPL3
- * @copyright   Copyright (c) 2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
-
-
 
 /**
  * primary class to handle translations
  *
  * @package     Tinebase
- * @subpackage  Server
+ * @subpackage  Translation
  */
 class Tinebase_Translation
 {
     /**
-     * Layzy loading for {@see getCountryList()}
+     * Lazy loading for {@see getCountryList()}
      * 
      * @var array
      */
     protected static $_countryLists = array();
-    
-    /**
-     * array with translations for applications 
-     * - is used in getTranslations to save already initialized translations
-     * - 2 dim array -> language / application
-     * 
-     * @var array
-     */
-    protected static $_translations = array();
     
     /**
      * List of officially supported languages
@@ -228,7 +217,7 @@ class Tinebase_Translation
     {
         $locale = ($_locale !== NULL) ? $_locale : Tinebase_Core::get('locale');
         
-        $cache = Tinebase_Core::get(Tinebase_Core::CACHE);
+        $cache = Tinebase_Core::getCache();
         
         $cacheId = 'getTranslation_' . (string)$locale . $_applicationName;
         
@@ -241,11 +230,14 @@ class Tinebase_Translation
             
         // create new translation
         $path = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . ucfirst($_applicationName) . DIRECTORY_SEPARATOR . 'translations';
-        $translate = new Zend_Translate('gettext', $path, null, array('scan' => Zend_Translate::LOCALE_FILENAME));
+        $translate = new Zend_Translate('gettext', $path, null, array(
+            'scan' => Zend_Translate::LOCALE_FILENAME,
+            'disableNotices' => TRUE,
+        ));
 
         try {
             $translate->setLocale($locale);
-            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . (string)$locale);
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' locale used: ' . $_applicationName . '/' . (string)$locale);
             
         } catch (Zend_Translate_Exception $e) {
             // the locale of the user is not available

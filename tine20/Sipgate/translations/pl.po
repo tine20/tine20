@@ -1,0 +1,166 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - Sipgate\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2011-06-18 10:50+0100\n"
+"Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Polish\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+
+#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:187
+msgid "Send"
+msgstr "Wyślij"
+
+#: js/SmsEditDialog.js:60 js/CallStateWindow.js:50
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: js/SmsEditDialog.js:68
+msgid "Close"
+msgstr "Zamknij"
+
+#: js/Sipgate.js:29
+msgid "Edit phone settings"
+msgstr "Edytuj ustawienia telefonu"
+
+#: js/Sipgate.js:43
+msgid "Sipgate"
+msgstr "Sipgate"
+
+#: js/Sipgate.js:54
+msgid "Devices"
+msgstr "Urządzenia końcowe"
+
+#: js/Sipgate.js:153
+msgid "Dial number"
+msgstr "Numer telefonu"
+
+#: js/Sipgate.js:154
+msgid "Initiate a new outgoing call"
+msgstr "Rozpocznij połączenie wychodzące"
+
+#: js/Sipgate.js:246
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Wyświetl połączenia {0} - {1} z {2}"
+
+#: js/Sipgate.js:247 js/Sipgate.js:329
+msgid "No calls to display"
+msgstr "Brak połączeń do wyświetlenia"
+
+#: js/Sipgate.js:259
+msgid "Status"
+msgstr "Status"
+
+#: js/Sipgate.js:266
+msgid "Remote Party"
+msgstr "Rozmówca"
+
+#: js/Sipgate.js:272
+msgid "Remote Number"
+msgstr "Zdalny numer"
+
+#: js/Sipgate.js:278
+msgid "Local Uri"
+msgstr "Lokalny URI"
+
+#: js/Sipgate.js:284
+msgid "Remote Uri"
+msgstr "Zdalny URI"
+
+#: js/Sipgate.js:291
+msgid "Call started"
+msgstr "Połączenie nawiązane"
+
+#: js/Sipgate.js:298
+msgid "Call ID"
+msgstr "ID połączenia"
+
+#: js/Sipgate.js:528
+msgid "first dial"
+msgstr "Aby połączyć się z rozmówcą, podnieś słuchawkę."
+
+#: js/Sipgate.js:534
+msgid "second dial"
+msgstr "Połączenie nawiązane"
+
+#: js/Sipgate.js:542
+msgid "established"
+msgstr "Połączono z"
+
+#: js/Sipgate.js:547
+msgid "call 1 busy"
+msgstr "Zajęty telefon, proszę sprawdzić, czy słuchawka jest odłożona."
+
+#: js/Sipgate.js:555
+msgid "call 2 busy"
+msgstr "Albo zajęte lub Twoje połączenie zostało odrzucone"
+
+#: js/Sipgate.js:563
+msgid "hungup before other called"
+msgstr "Słuchawka odłożona przed nawiązaniem połączenia"
+
+#: js/Sipgate.js:566
+msgid "hungup"
+msgstr "Rozmowa zakończona"
+
+#: js/CallStateWindow.js:107
+msgid "connecting..."
+msgstr "nawiązywanie połączenia..."
+
+#: js/CallStateWindow.js:145
+msgid "Connecting to: "
+msgstr "Łączę z:"
+
+#: js/AddressbookGridPanelHook.js:37
+msgid "Call contact"
+msgstr "Wybierz numer"
+
+#: js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr "Napisz SMSa"
+
+#: js/AddressbookGridPanelHook.js:257
+msgid "Work"
+msgstr "Praca"
+
+#: js/AddressbookGridPanelHook.js:266
+msgid "Home"
+msgstr "Dom"
+
+#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:318
+msgid "Cell"
+msgstr "Komórka"
+
+#: js/AddressbookGridPanelHook.js:284 js/AddressbookGridPanelHook.js:327
+msgid "Cell private"
+msgstr "Komórka prywatna"
+
+#: Preference.php:72
+msgid "Your phone"
+msgstr "Twój numer telefonu"
+
+#: Preference.php:73
+msgid "This is your phone"
+msgstr "Wychodzący numer telefonu wybierany z poziomu aplikacji"
+
+#: Preference.php:76
+msgid "Your fax"
+msgstr "Numer faksu"
+
+#: Preference.php:77
+msgid "This is your fax"
+msgstr "Twój faks"
+
+#: Preference.php:80
+msgid "Your mobile number"
+msgstr "Numer tel. komórkowego"
+
+#: Preference.php:81
+msgid "Used when sending SMS"
+msgstr "Używany podczas wysyłania SMSa z poziomu aplikacji"

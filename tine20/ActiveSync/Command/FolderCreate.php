@@ -96,8 +96,10 @@ class ActiveSync_Command_FolderCreate extends ActiveSync_Command_Wbxml
      * generate FolderCreate response
      *
      * @todo currently we support only the main folder which contains all contacts/tasks/events/notes per class
+     * 
+     * @param boolean $_keepSession keep session active(don't logout user) when true
      */
-    public function getResponse()
+    public function getResponse($_keepSession = FALSE)
     {
         $folderCreate = $this->_outputDom->documentElement;
         
@@ -119,7 +121,7 @@ class ActiveSync_Command_FolderCreate extends ActiveSync_Command_Wbxml
             $this->_controller->updateSyncKey($this->_device, $newSyncKey, $this->_syncTimeStamp, 'FolderSync');
         }
         
-        parent::getResponse();
+        parent::getResponse($_keepSession);
     }
     
     /**

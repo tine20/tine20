@@ -13,65 +13,60 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s przykładowe, osobiste wiersze"
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr "Przykładowa aplikacja"
 
-#: js/ExampleApplication-FAT-debug.js:36 js/Model.js:31
+#: js/ExampleRecordGridPanel.js:74
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
+
+#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
+msgid "Name"
+msgstr "Nazwa"
+
+#: js/ExampleRecordGridPanel.js:108
+msgid "Title"
+msgstr "Tytuł"
+
+#: js/ExampleRecordGridPanel.js:114
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordGridPanel.js:121
+msgid "Budget"
+msgstr "Budżet"
+
+#: js/ExampleRecordGridPanel.js:145
+msgid "Show closed"
+msgstr "Pokaż zakończone"
+
+#: js/ExampleRecordEditDialog.js:87
+msgid "ExampleRecord"
+msgstr "Przykładowy wiersz"
+
+#: js/Model.js:31
 msgid "example record"
 msgid_plural "example records"
 msgstr[0] "Przykładowy wiersz"
 msgstr[1] "przykładowe wiersze"
 msgstr[2] "przykładowe wiersze"
 
-#: js/ExampleApplication-FAT-debug.js:40 js/Model.js:35
+#: js/Model.js:35
 msgid "example record list"
 msgid_plural "example record lists"
 msgstr[0] "Lista przykładowych wierszy"
 msgstr[1] "listy przykładowych wierszy"
 msgstr[2] "listy przykładowych wierszy"
 
-#: js/ExampleApplication-FAT-debug.js:97 js/ExampleApplication-FAT.js:6
-#: js/ExampleApplication.js:25
-msgid "Example Application"
-msgstr "Przykładowa aplikacja"
-
-#: js/ExampleApplication-FAT-debug.js:201 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordGridPanel.js:75
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
-
-#: js/ExampleApplication-FAT-debug.js:229
-#: js/ExampleApplication-FAT-debug.js:389 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordEditDialog.js:104 js/ExampleRecordGridPanel.js:103
-msgid "Name"
-msgstr "Nazwa"
-
-#: js/ExampleApplication-FAT-debug.js:235 js/ExampleRecordGridPanel.js:109
-msgid "Title"
-msgstr "Tytuł"
-
-#: js/ExampleApplication-FAT-debug.js:241 js/ExampleRecordGridPanel.js:115
-msgid "Status"
-msgstr "Status"
-
-#: js/ExampleApplication-FAT-debug.js:248 js/ExampleRecordGridPanel.js:122
-msgid "Budget"
-msgstr "Budżet"
-
-#: js/ExampleApplication-FAT-debug.js:272 js/ExampleRecordGridPanel.js:146
-msgid "Show closed"
-msgstr "Pokaż zakończone"
-
-#: js/ExampleApplication-FAT-debug.js:372 js/ExampleApplication-FAT.js:6
-#: js/ExampleRecordEditDialog.js:87
-msgid "ExampleRecord"
-msgstr "Przykładowy wiersz"
-
 #: Setup/setup.xml:10
 msgid "ExampleApplication"
 msgstr "Przykładowa aplikacja"
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s przykładowe, osobiste wiersze"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "Przykładowe wiersze"

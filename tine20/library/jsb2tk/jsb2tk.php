@@ -149,15 +149,6 @@ class jsb2tk
         if (! array_key_exists('jsb2bin', $_config)) {
             $this->setJsb2bin(dirname(__FILE__) . "/{$this->_jsb2bin}");
         }
-        
-        if (! array_key_exists('homeDir', $_config)) {
-            $homedir = sys_get_temp_dir() . '/jsb2tk';
-            if (! is_dir($homedir)) {
-                mkdir($homedir, 0600, TRUE);
-            }
-            
-            $this->setHomeDir($homedir);
-        }
     }
     
     /**
@@ -410,6 +401,25 @@ class jsb2tk
         return $this;
     }
     
+    /**
+     * gets homedir for builds
+     * 
+     * @return string
+     */
+    public function getHomeDir()
+    {
+        if (! $this->_homeDir) {
+            $homedir = sys_get_temp_dir() . '/jsb2tk';
+            if (! is_dir($homedir)) {
+                mkdir($homedir, 0600, TRUE);
+            }
+            
+            $this->setHomeDir($homedir);
+        }
+        
+        return $this->_homeDir;
+    }
+    
     public function buildAll()
     {
         foreach($this->getRegisteredModules() as $modul) {
@@ -419,7 +429,9 @@ class jsb2tk
     
     public function buildModul($_modul)
     {
-        `java -jar {$this->_jsb2bin} --projectFile {$_modul->jsb2file} --homeDir {$this->_homeDir}`;
+        // NOTE: it's a shame, that jsb2bin does not do the path rewrite!
+        //       as it interprets the jsb2 file it would be the ultimate instance to do so!
+        `java -jar {$this->_jsb2bin} --projectFile {$_modul->jsb2file} --homeDir {$this->getHomeDir()}`;
     }
     
     public function adoptPath()

@@ -282,11 +282,19 @@ class Calendar_Controller_EventGrantsTests extends Calendar_TestCase
     {
         $persistentEvent = $this->_createEventInPersonasCalendar('pwulf', 'pwulf', 'pwulf', Calendar_Model_Event::CLASS_PRIVATE);
         
-        $events = $this->_uit->search(new Calendar_Model_EventFilter(array(
+        $filterData = array(
             array('field' => 'id', 'operator' => 'equals', 'value' => $persistentEvent->getId())
-        )), NULL, FALSE, FALSE);
+        );
+        
+        $events = $this->_uit->search(new Calendar_Model_EventFilter($filterData), NULL, FALSE, FALSE);
         
         $this->assertTrue($events[0]->summary == '');
+        
+        // assert json fe does not add history
+        $json = new Calendar_Frontend_Json();
+        $resolvedEvents = $json->searchEvents($filterData, array());
+        $this->assertTrue(empty($resolvedEvents['results'][0]['notes']));
+        
     }
     
 //    /**

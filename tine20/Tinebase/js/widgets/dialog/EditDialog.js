@@ -494,8 +494,17 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 }
             }
         } else {
-            Ext.MessageBox.alert(_('Errors'), _('Please fix the errors noted.'));
+            Ext.MessageBox.alert(_('Errors'), this.getValidationErrorMessage());
         }
+    },
+    
+    /**
+     * get validation error message
+     * 
+     * @return {String}
+     */
+    getValidationErrorMessage: function() {
+        return _('Please fix the errors noted.');
     },
     
     /**

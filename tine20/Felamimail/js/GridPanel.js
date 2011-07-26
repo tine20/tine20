@@ -68,7 +68,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     defaultSortInfo: {field: 'received', direction: 'DESC'},
     gridConfig: {
-        //loadMask: true,
         autoExpandColumn: 'subject',
         // drag n dropfrom
         enableDragDrop: true,
@@ -126,6 +125,35 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Tine.Felamimail.GridPanel.superclass.initComponent.call(this);
         this.grid.getSelectionModel().on('rowselect', this.onRowSelection, this);
         this.app.getFolderStore().on('update', this.onUpdateFolderStore, this);
+        
+        this.initPagingToolbar();
+    },
+    
+    /**
+     * add quota bar to paging toolbar
+     */
+    initPagingToolbar: function() {
+        Ext.QuickTips.init();
+        
+        this.quotaBar = new Ext.ProgressBar({
+            width: 120,
+            height: 16,
+            style: {
+                marginTop: '1px'
+            },
+            text: this.app.i18n._('Quota usage')
+        });
+        this.pagingToolbar.insert(12, new Ext.Toolbar.Separator());
+        this.pagingToolbar.insert(12, this.quotaBar);
+        
+        // NOTE: the Ext.progessbar has an ugly bug: it does not layout correctly when hidden
+        //       so we need to listen when we get activated to relayout the progessbar
+        Tine.Tinebase.appMgr.on('activate', function(app) {
+            if (app.appName === 'Felamimail') {
+                this.quotaBar.syncProgressBar();
+                this.quotaBar.setWidth(this.quotaBar.getWidth());
+            }
+        }, this);
     },
     
     /**
@@ -187,7 +215,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var account = this.app.getActiveAccount(),
             accountId = account ? account.id : null,
             inbox = accountId ? this.app.getFolderStore().queryBy(function(record) {
-                return record.get('account_id') === accountId && record.get('localname') === 'INBOX';
+                return record.get('account_id') === accountId && record.get('localname').match(/^inbox$/i);
             }, this).first() : null;
             
         if (! inbox) {
@@ -359,6 +387,11 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
     },
     
+    /**
+     * get action toolbar
+     * 
+     * @return {Ext.Toolbar}
+     */
     getActionToolbar: function() {
         if (! this.actionToolbar) {
             this.actionToolbar = new Ext.Toolbar({
@@ -617,6 +650,20 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
+     * delete messages handler
+     * 
+     * @return {void}
+     */
+    onDeleteRecords: function() {
+        var account = this.app.getActiveAccount(),
+            trashId = (account) ? account.getTrashFolderId() : null,
+            trash = trashId ? this.app.getFolderStore().getById(trashId) : null
+            trashConfigured = (account.get('trash_folder')); 
+            
+        return (trash && ! trash.isCurrentSelection()) || (! trash && trashConfigured) ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();
+    },
+
+    /**
      * permanently delete selected messages
      */
     deleteSelectedMessages: function() {
@@ -630,7 +677,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Boolean} toTrash
      */
     moveSelectedMessages: function(folder, toTrash) {
-        if (folder.isCurrentSelection()) {
+        if (folder && folder.isCurrentSelection()) {
             // nothing to do ;-)
             return;
         }
@@ -657,18 +704,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var msgs = this.getStore(),
                 nextRecord = null;
         } else {
-            var msgs = sm.getSelectionsCollection();
-            
-            if (sm.getCount() == 1 && this.getStore().getCount() > 1) {
-                // select next message (or previous if it was the last or BACKSPACE)
-                var lastIdx = this.getStore().indexOf(msgs.last()),
-                    direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
-                
-                nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
-                if (! nextRecord) {
-                    nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
-                }
-            }
+            var msgs = sm.getSelectionsCollection(),
+                nextRecord = this.getNextMessage(msgs);
         }
         
         var increaseUnreadCountInTargetFolder = 0;
@@ -700,18 +737,44 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             sm.selectRecords([nextRecord]);
         }
         
-        if (folder !== null) {
+        var callbackFn = this.onAfterDelete.createDelegate(this, [msgsIds]);
+        
+        if (folder !== null || toTrash) {
             // move
             var targetFolderId = (toTrash) ? '_trash_' : folder.id;
             this.deleteTransactionId = Tine.Felamimail.messageBackend.moveMessages(filter, targetFolderId, { 
-                callback: this.onAfterDelete.createDelegate(this, [msgsIds, folder])
+                callback: callbackFn
             }); 
         } else {
             // delete
             this.deleteTransactionId = Tine.Felamimail.messageBackend.addFlags(filter, '\\Deleted', { 
-                callback: this.onAfterDelete.createDelegate(this, [msgsIds])
+                callback: callbackFn
             });
         }
+    },
+
+    /**
+     * get next message in grid
+     * 
+     * @param {Ext.util.MixedCollection} msgs
+     * @return Tine.Felamimail.Model.Message
+     */
+    getNextMessage: function(msgs) {
+        
+        var nextRecord = null;
+        
+        if (msgs.getCount() == 1 && this.getStore().getCount() > 1) {
+            // select next message (or previous if it was the last or BACKSPACE)
+            var lastIdx = this.getStore().indexOf(msgs.last()),
+                direction = Ext.EventObject.getKey() == Ext.EventObject.BACKSPACE ? -1 : +1;
+            
+            nextRecord = this.getStore().getAt(lastIdx + 1 * direction);
+            if (! nextRecord) {
+                nextRecord = this.getStore().getAt(lastIdx + (-1) * direction);
+            }
+        }
+        
+        return nextRecord;
     },
     
     /**
@@ -763,9 +826,8 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * executed after msg delete
      * 
      * @param {Array} [ids]
-     * @param {Tine.Felamimail.Model.Folder} [folder]
      */
-    onAfterDelete: function(ids, folder) {
+    onAfterDelete: function(ids) {
         this.editBuffer = this.editBuffer.diff(ids);
         this.movingOrDeleting = false;
 
@@ -839,19 +901,6 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * delete messages handler
-     * 
-     * @return {void}
-     */
-    onDeleteRecords: function() {
-        var account = this.app.getActiveAccount(),
-            trashId = (account) ? account.getTrashFolderId() : null,
-            trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
-            
-        return trash && !trash.isCurrentSelection() ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();
-    },
-
-    /**
      * called when a row gets selected
      * 
      * @param {SelectionModel} sm
@@ -920,12 +969,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folderId = msg ? msg.get('folder_id') : null,
             folder = folderId ? this.app.getFolderStore().getById(folderId) : null,
             accountId = folder ? folder.get('account_id') : null,
-            account = accountId ? this.app.getAccountStore().getById(accountId) : null,
-            trashId = account ? account.getTrashFolderId() : null,
-            trash = trashId ? this.app.getFolderStore().getById(trashId) : null;
+            account = accountId ? this.app.getAccountStore().getById(accountId) : null;
             
         this.getStore().remove(msg);
-        this.onAfterDelete(null, trash);
+        this.onAfterDelete(null);
     },    
     
     /**
@@ -1020,6 +1067,102 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         if (! Ext.isEmpty(this.deleteQueue)) {
             options.params.filter.push({field: 'id', operator: 'notin', value: this.deleteQueue});
         }
+    },
+    
+    /**
+     *  called after a new set of Records has been loaded
+     *  
+     * @param  {Ext.data.Store} this.store
+     * @param  {Array}          loaded records
+     * @param  {Array}          load options
+     * @return {Void}
+     */
+    onStoreLoad: function(store, records, options) {
+        this.supr().onStoreLoad.apply(this, arguments);
+        
+        this.updateQuotaBar(options.params.filter);
+    },
+    
+    /**
+     * update quotaBar / only do it if we have a path filter with a single account id
+     * 
+     * @param {Array} filter
+     */
+    updateQuotaBar: function(filter, accountInbox) {
+        var accountId = this.extractAccountIdFromFilter(filter);
+        
+        if (accountId === null) {
+            Tine.log.debug('No or multiple account ids in filter. Resetting quota bar.');
+            this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+            this.quotaBar.setWidth(120);
+            return;
+        }
+            
+        if (! accountInbox) {
+            var accountInbox = this.app.getFolderStore().queryBy(function(folder) {
+                return folder.isInbox() && (folder.get('account_id') == accountId);
+            }, this).first();
+        }
+        if (accountInbox && parseInt(accountInbox.get('quota_limit'), 10) && accountId == accountInbox.get('account_id')) {
+            var limit = parseInt(accountInbox.get('quota_limit'), 10),
+                usage = parseInt(accountInbox.get('quota_usage'), 10),
+                left = limit - usage,
+                percentage = Math.round(usage/limit * 100),
+                text = String.format(this.app.i18n._('{0} %'), percentage);
+            this.quotaBar.setWidth(75);
+            this.quotaBar.updateProgress(usage/limit, text);
+            
+            
+            Ext.QuickTips.register({
+                target:  this.quotaBar,
+                dismissDelay: 30000,
+                title: this.app.i18n._('Your quota'),
+                text: String.format(this.app.i18n._('{0} available (total: {1})'), 
+                    Ext.util.Format.fileSize(left * 1024),
+                    Ext.util.Format.fileSize(limit * 1024)
+                ),
+                width: 200
+            });
+        } else {
+            Tine.log.debug('No account inbox found or no quota info.');
+            this.quotaBar.updateProgress(0, this.app.i18n._('Quota unknown'));
+            this.quotaBar.setWidth(120);
+        }
+    },
+    
+    /**
+     * get account id from filter (only returns the id if a single account id was found)
+     * 
+     * @param {Array} filter
+     * @return {String}
+     */
+    extractAccountIdFromFilter: function(filter) {
+        if (! filter) {
+            filter = this.filterToolbar.getValue();
+        }
+        
+        var accountId = null, 
+            filterAccountId = null,
+            accountIdMatch = null;
+
+        for (var i = 0; i < filter.length; i++) {
+            if (filter[i].field == 'path' && filter[i].operator == 'in') {
+                for (var j = 0; j < filter[i].value.length; j++) {
+                    accountIdMatch = filter[i].value[j].match(/^\/([a-z0-9]*)/i);
+                    if (accountIdMatch) {
+                        filterAccountId = accountIdMatch[1];
+                        if (accountId && accountId != filterAccountId) {
+                            // multiple different account ids found!
+                            return null;
+                        } else {
+                            accountId = filterAccountId;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return accountId;
     },
     
     /**

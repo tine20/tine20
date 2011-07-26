@@ -21,11 +21,11 @@ msgstr "Gemeinsame Ordner verwalten"
 msgid "Create new shared folders"
 msgstr "Neue gemeinsame Ordner anlegen und verwalten"
 
+#: js/Application.js:29
+msgid "Filemanager"
+msgstr "Dateimanager"
+
 #: Controller.php:95
 #, python-format
 msgid "%s's personal files"
 msgstr "Persönliche Dateien von %s"
-
-#: js/Application.js:29 js/Filemanager-FAT-debug.js:34 js/Filemanager-FAT.js:6
-msgid "Filemanager"
-msgstr "Dateimanager"

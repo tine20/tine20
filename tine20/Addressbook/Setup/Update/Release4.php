@@ -51,4 +51,13 @@ class Addressbook_Setup_Update_Release4 extends Setup_Update_Abstract
         
         $this->setApplicationVersion('Addressbook', '4.3');
     }
+    
+    /**
+     * update to 5.0
+     * @return void
+     */
+    public function update_3()
+    {
+        $this->setApplicationVersion('Addressbook', '5.0');
+    }
 }

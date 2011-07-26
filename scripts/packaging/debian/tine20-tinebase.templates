@@ -1,0 +1,18 @@
+Template: tine20/webserver_type
+Type: multiselect
+_Choices: apache2, lighttpd
+_Description: Web server to reconfigure automatically:
+ If you do not select a web server to reconfigure automatically, Tine 2.0
+ will not be usable until you reconfigure your webserver to enable
+ Tine 2.0.
+
+Template: tine20/setupuser
+Type: string
+Default: tine20setup
+_Description: Tine 2.0 setup username
+ Username used to login into Tine 2.0 setup (setup.php)
+
+Template: tine20/setuppasswd
+Type: password
+_Description: Tine 2.0 setup password
+ Password used to login into Tine 2.0 setup (setup.php)

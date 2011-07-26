@@ -13,10 +13,6 @@
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'ActiveSync_Controller_TasksTests::main');
-}
-
 /**
  * Test class for Tasks_Controller_Task
  * 
@@ -168,9 +164,6 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         #$this->assertNotContains($this->objects['unSyncableContact']->getId(), $entries);
     }
     
-    
-    
-    
     /**
      * test xml generation for IPhone
      * 
@@ -252,8 +245,4 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Tasks:Subject>Testaufgabe auf mfe<
         
         $this->assertEquals(count($existing), 1);
     }
-}
-    
-if (PHPUnit_MAIN_METHOD == 'ActiveSync_Controller_TasksTests::main') {
-    ActiveSync_Controller_TasksTests::main();
 }

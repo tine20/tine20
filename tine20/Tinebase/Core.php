@@ -478,7 +478,9 @@ class Tinebase_Core
                 'automatic_serialization'   => true, // turn that off for more speed
                 'caching'                   => true,
                 'automatic_cleaning_factor' => 0,    // no garbage collection as this is done by a scheduler task
-                'write_control'             => false // don't read cache entry after it got written
+                'write_control'             => false, // don't read cache entry after it got written
+                'logging'                   => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
+                'logger'                    => self::getLogger(),
             );
 
             $backendType = ($config->caching->backend) ? ucfirst($config->caching->backend) : 'File';
@@ -490,6 +492,8 @@ class Tinebase_Core
                         $backendOptions = array(
                             'cache_dir'              => ($config->caching->path)     ? $config->caching->path     : Tinebase_Core::getTempDir(),
                             'hashed_directory_level' => ($config->caching->dirlevel) ? $config->caching->dirlevel : 4, 
+                            'logging'                => (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)),
+                            'logger'                 => self::getLogger(),
                         );
                         break;
                         
@@ -611,11 +615,13 @@ class Tinebase_Core
      */
     public static function startSession($_options = array(), $_namespace = 'tinebase')
     {
-        self::setSessionOptionsAndBackend($_options);
+        self::setSessionOptions($_options);
+        self::setSessionBackend();
         
         try {
             Zend_Session::start();
         } catch (Zend_Session_Exception $zse) {
+            Zend_Session::destroy();
             self::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' Session error: ' . $zse->getMessage());
             self::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $zse->getTraceAsString());
             throw $zse;
@@ -630,13 +636,12 @@ class Tinebase_Core
 
         self::set(self::SESSION, $session);
     }
-
     /**
-     * set session options helper function
+     * set session options
      * 
      * @param array $_options
      */
-    public static function setSessionOptionsAndBackend($_options = array())
+    public static function setSessionOptions($_options = array())
     {
         Zend_Session::setOptions(array_merge($_options, array(
             'cookie_httponly'   => true,
@@ -659,6 +664,9 @@ class Tinebase_Core
                 $baseUri = '/' . $_SERVER['HTTP_HOST'] . (($baseUri == '/') ? '' : $baseUri);
             }
             
+            // fix for windows server with backslash directory separator
+            $baseUri = str_replace(DIRECTORY_SEPARATOR, '/', $baseUri);
+            
             Zend_Session::setOptions(array(
                 'cookie_path'     => $baseUri
             ));
@@ -669,7 +677,13 @@ class Tinebase_Core
                 'cookie_secure'     => true
             ));
         }
+    }
         
+    /**
+     * set session backend
+     */
+    public static function setSessionBackend()
+    {
         $config = self::getConfig();
         $backendType = ($config->session && $config->session->backend) ? ucfirst($config->session->backend) : 'File';
         $maxLifeTime = ($config->session && $config->session->lifetime) ? $config->session->lifetime : 86400; // one day is default

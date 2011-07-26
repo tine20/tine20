@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Felamimail\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-04-26 04:12+0100\n"
+"PO-Revision-Date: 2011-06-18 10:24+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -13,25 +13,21 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: Acl/Rights.php:106
-msgid "manage email accounts"
-msgstr "edycja kont pocztowych"
+#: Controller/Sieve.php:262
+msgid "Out of Office reply from %1$s"
+msgstr "%1$ jest poza biurem"
 
-#: Acl/Rights.php:107
-msgid "Edit and delete email accounts"
-msgstr "edycja i usuwanie kont pocztowych"
+#: Controller/Message/Send.php:236 js/GridDetailsPanel.js:135
+#: js/GridPanel.js:477 js/MessageEditDialog.js:858 js/Model.js:139
+#: js/sieve/RuleConditionsPanel.js:72
+msgid "Subject"
+msgstr "Temat"
 
-#: Acl/Rights.php:110
-msgid "Add email accounts"
-msgstr "dodawanie kont pocztowych"
+#: Controller/Message/Send.php:236 js/MessageEditDialog.js:833
+msgid "Body"
+msgstr "wiadomość"
 
-#: Acl/Rights.php:111
-msgid "Create new email accounts"
-msgstr "tworzenie nowych kont pocztowych"
-
-#: Controller/Message/Flags.php:24
-#: js/Felamimail-FAT-debug.js:4655
-#: js/GridPanel.js:538
+#: Controller/Message/Flags.php:24 js/GridPanel.js:572
 msgid "Answered"
 msgstr "Odpowiedziano"
 
@@ -51,40 +47,379 @@ msgstr "Szkic"
 msgid "Flagged"
 msgstr "Wyróżniona"
 
-#: Controller/Message/Send.php:215
-#: js/Felamimail-FAT-debug.js:144
-#: js/Felamimail-FAT-debug.js:2517
-#: js/Felamimail-FAT-debug.js:3881
-#: js/Felamimail-FAT-debug.js:4560
-#: js/Felamimail-FAT-debug.js:6299
-#: js/Felamimail-FAT.js:6
-#: js/GridDetailsPanel.js:135
-#: js/GridPanel.js:443
-#: js/MessageEditDialog.js:798
-#: js/Model.js:139
-#: js/sieve/RuleConditionsPanel.js:75
-msgid "Subject"
-msgstr "Temat"
+#: Acl/Rights.php:106
+msgid "manage email accounts"
+msgstr "edycja kont pocztowych"
 
-#: Controller/Message/Send.php:215
-#: js/Felamimail-FAT-debug.js:6274
-#: js/MessageEditDialog.js:773
-msgid "Body"
-msgstr "wiadomość"
+#: Acl/Rights.php:107
+msgid "Edit and delete email accounts"
+msgstr "edycja i usuwanie kont pocztowych"
 
-#: Controller/Sieve.php:262
-msgid "Out of Office reply from %1$s"
-msgstr "%1$ jest poza biurem"
+#: Acl/Rights.php:110
+msgid "Add email accounts"
+msgstr "dodawanie kont pocztowych"
+
+#: Acl/Rights.php:111
+msgid "Create new email accounts"
+msgstr "tworzenie nowych kont pocztowych"
+
+#: js/GridDetailsPanel.js:136 js/MessageEditDialog.js:764
+msgid "From"
+msgstr "Od"
+
+#: js/GridDetailsPanel.js:137
+msgid "Add"
+msgstr "Dodaj"
+
+#: js/GridDetailsPanel.js:138
+msgid "Add contact to addressbook"
+msgstr "Dodaj kontakt do książki adresowej"
+
+#: js/GridDetailsPanel.js:139
+msgid "Date"
+msgstr "Data"
+
+#: js/GridDetailsPanel.js:141 js/GridDetailsPanel.js:366
+msgid "Show or hide header information"
+msgstr "Pokaż lub ukryj informacje nagłówkowe"
+
+#: js/GridDetailsPanel.js:232 js/GridPanel.js:463 js/MessageEditDialog.js:698
+msgid "Attachments"
+msgstr "Załączniki"
+
+#: js/GridPanel.js:110
+msgid "No Messages found or the cache is empty."
+msgstr "Brak wiadomości lub pusta pamięć podręczna"
+
+#: js/GridPanel.js:144
+msgid "Quota usage"
+msgstr "Zużycie kwoty"
+
+#: js/GridPanel.js:230
+msgid "Compose"
+msgstr "Napisz"
+
+#: js/GridPanel.js:238 js/MessageDisplayDialog.js:47
+msgid "Reply"
+msgstr "Odpowiedz"
+
+#: js/GridPanel.js:247 js/MessageDisplayDialog.js:53
+msgid "Reply To All"
+msgstr "Odpowiedz wszystkim"
+
+#: js/GridPanel.js:256 js/MessageDisplayDialog.js:59
+msgid "Forward"
+msgstr "Prześlij dalej"
+
+#: js/GridPanel.js:264
+msgid "Toggle highlighting"
+msgstr "Podświetlanie"
+
+#: js/GridPanel.js:273
+msgid "Mark read/unread"
+msgstr "Oznacz jako (nie)przeczytane"
+
+#: js/GridPanel.js:283 js/GridPanel.js:284 js/GridPanel.js:286
+#: js/MessageDisplayDialog.js:40
+msgid "Delete"
+msgstr "Usuń"
+
+#: js/GridPanel.js:294
+msgid "Add Account"
+msgstr "Dodaj konto"
+
+#: js/GridPanel.js:302 js/GridPanel.js:1244 js/GridPanel.js:1260
+#: js/MessageDisplayDialog.js:78
+msgid "Print Preview"
+msgstr "Drukuj podgląd"
+
+#: js/GridPanel.js:310 js/MessageDisplayDialog.js:72
+msgid "Print Message"
+msgstr "Drukuj wiadomość"
+
+#: js/GridPanel.js:456
+msgid "Id"
+msgstr "Id"
+
+#: js/GridPanel.js:470 js/Model.js:145
+msgid "Flags"
+msgstr "Flagi"
+
+#: js/GridPanel.js:483 js/Model.js:140 js/sieve/RuleConditionsPanel.js:69
+msgid "From (Email)"
+msgstr "Od (e-mail)"
+
+#: js/GridPanel.js:489 js/Model.js:141
+msgid "From (Name)"
+msgstr "Od (nazwa)"
+
+#: js/GridPanel.js:495
+msgid "Sender"
+msgstr "Nadawca"
+
+#: js/GridPanel.js:502 js/Model.js:142
+msgid "To"
+msgstr "Do"
+
+#: js/GridPanel.js:509 js/Model.js:487
+msgid "Sent"
+msgstr "Wysłane"
+
+#: js/GridPanel.js:517 js/Model.js:148
+msgid "Received"
+msgstr "Odebrane"
+
+#: js/GridPanel.js:524 js/FolderFilterModel.js:30 js/TreeContextMenu.js:45
+#: js/TreeContextMenu.js:100 js/TreeContextMenu.js:103
+#: js/TreeContextMenu.js:106 js/Model.js:52 js/Model.js:493
+msgid "Folder"
+msgid_plural "Folders"
+msgstr[0] "Katalog"
+msgstr[1] "Katalog"
+msgstr[2] "Katalog"
+
+#: js/GridPanel.js:532 js/sieve/RuleConditionsPanel.js:73
+msgid "Size"
+msgstr "Rozmiar"
+
+#: js/GridPanel.js:575
+msgid "Forwarded"
+msgstr "Przesłane dalej"
+
+#: js/GridPanel.js:578
+msgid "Recent"
+msgstr "Nowe"
+
+#: js/GridPanel.js:1087 js/GridPanel.js:1119
+msgid "Quota unknown"
+msgstr "Kwota nieznana"
+
+#: js/GridPanel.js:1102
+msgid "{0} %"
+msgstr "{0} %"
+
+#: js/GridPanel.js:1110
+msgid "Your quota"
+msgstr "Twoja kwota"
+
+#: js/GridPanel.js:1111
+msgid "{0} available (total: {1})"
+msgstr "{0} dostępnych (w sumie: {1})"
+
+#: js/FolderSelectPanel.js:75
+msgid "Cancel"
+msgstr "Anuluj"
+
+#: js/FolderSelectPanel.js:84
+msgid "Ok"
+msgstr "OK"
+
+#: js/FolderSelectPanel.js:175
+msgid "Folders of account {0}"
+msgstr "Katalogi konta: {0}"
+
+#: js/FolderSelectPanel.js:176
+msgid "Folders of all accounts"
+msgstr "Katalogi ze wszystkich kont"
+
+#: js/RecipientPickerDialog.js:62
+msgid "(new message)"
+msgstr "(nowa wiadomość)"
+
+#: js/RecipientPickerDialog.js:63
+msgid "Select recipients for \"{0}\""
+msgstr "Zaznacz adresatów dla \"{0}\""
+
+#: js/MessageEditDialog.js:133
+msgid "Send"
+msgstr "Wyślij"
+
+#: js/MessageEditDialog.js:141
+msgid "Search Recipients"
+msgstr "Znajdź adresatów"
+
+#: js/MessageEditDialog.js:149
+msgid "Save As Draft"
+msgstr "Zapisz jako szkic"
+
+#: js/MessageEditDialog.js:157
+msgid "Save As Template"
+msgstr "Zapisz jako szablon"
+
+#: js/MessageEditDialog.js:166
+msgid "Save Email Note"
+msgstr "Zapisz e-mail w notatce"
+
+#: js/MessageEditDialog.js:174
+msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
+msgstr "Włącz przycisk zapisujący treść e-maila w notatce przypisanej do adresata/adresatów z listy kontaktów."
+
+#: js/MessageEditDialog.js:192
+msgid "Click to search for and add recipients from the Addressbook."
+msgstr "Kliknij, aby znaleźć i dodać adresatów z książki adresowej."
+
+#: js/MessageEditDialog.js:270
+msgid "On {0}, {1} wrote"
+msgstr "Dnia {0}, {1} napisał(a)"
+
+#: js/MessageEditDialog.js:276
+msgid "Original message"
+msgstr "Oryginalna wiadomość"
+
+#: js/MessageEditDialog.js:454 js/ContactGrid.js:341
+msgid "Loading Mail Addresses"
+msgstr "Ładowanie adresów e-mail"
+
+#: js/MessageEditDialog.js:476
+msgid "Re:"
+msgstr "Odp:"
+
+#: js/MessageEditDialog.js:486
+msgid "Fwd:"
+msgstr "Prześlij dalej:"
+
+#: js/MessageEditDialog.js:489
+msgid "{0} Message"
+msgstr "Wiadomość {0}"
+
+# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
+# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
+#: js/MessageEditDialog.js:549 js/MessageEditDialog.js:683
+msgid "Failed"
+msgstr "Próba nieudana"
+
+#: js/MessageEditDialog.js:550
+msgid "{0} account setting empty."
+msgstr "{0} puste ustawienia konta"
+
+#: js/MessageEditDialog.js:565
+msgid "Errors"
+msgstr "Błędy"
+
+#: js/MessageEditDialog.js:565
+msgid "Please fix the errors noted."
+msgstr "Proszę poprawić zgłoszone błędy."
+
+#: js/MessageEditDialog.js:607 js/MessageEditDialog.js:868
+msgid "Compose email:"
+msgstr "Nowa wiadomość:"
+
+#: js/MessageEditDialog.js:656
+msgid "Add Note"
+msgstr "Dodaj notatkę"
+
+#: js/MessageEditDialog.js:657
+msgid "Edit Email Note Text:"
+msgstr "Edytuj tekst wiadomości:"
+
+#: js/MessageEditDialog.js:684
+msgid "Could not send {0}."
+msgstr "Wysłanie {0} było niemożliwe."
+
+#: js/MessageEditDialog.js:685
+msgid "Error:"
+msgstr "Błąd:"
+
+#: js/MessageEditDialog.js:892
+msgid "Files are still uploading."
+msgstr "Trwa aktualizacja plików"
+
+#: js/MessageEditDialog.js:912
+msgid "No recipients set."
+msgstr "Nie zdefiniowano odbiorcy"
+
+#: js/TreeContextMenu.js:24
+msgid "Update {0} Cache"
+msgstr "Aktualizuj pamięć podręczną: {0}"
+
+#: js/TreeContextMenu.js:24 js/Model.js:48
+msgid "Message"
+msgid_plural "Messages"
+msgstr[0] "Wiadomość"
+msgstr[1] "wiadomości"
+msgstr[2] "wiadomości"
+
+#: js/TreeContextMenu.js:45
+msgid "Reload {0}"
+msgstr "Odśwież {0}"
+
+#: js/TreeContextMenu.js:59
+msgid "Empty Folder"
+msgstr "Opróżnij katalog"
+
+#: js/TreeContextMenu.js:95
+msgid "Add Folder"
+msgstr "Dodaj katalog"
+
+#: js/TreeContextMenu.js:100
+msgid "New {0}"
+msgstr "Nowy {0}"
+
+#: js/TreeContextMenu.js:100
+msgid "Please enter the name of the new {0}:"
+msgstr "Proszę wprowadzić nazwę nowego {0}:"
+
+#: js/TreeContextMenu.js:103
+msgid "No {0} added"
+msgstr "Nie dodano {0}"
+
+#: js/TreeContextMenu.js:103
+msgid "You have to supply a {0} name!"
+msgstr "Należy podać nazwę {0}!"
+
+#: js/TreeContextMenu.js:106
+msgid "Please wait"
+msgstr "Proszę czekać"
+
+#: js/TreeContextMenu.js:106
+msgid "Creating {0}..."
+msgstr "Tworzenie {0}..."
+
+#: js/TreeContextMenu.js:135
+msgid "Edit Account"
+msgstr "Edytuj konto"
+
+#: js/TreeContextMenu.js:163
+msgid "Set Vacation Message"
+msgstr "Ustaw informację o urlopie"
+
+#: js/TreeContextMenu.js:179
+msgid "Set Filter Rules"
+msgstr "Ustaw reguły filtrowania"
+
+#: js/TreeContextMenu.js:193
+msgid "Mark Folder as read"
+msgstr "Oznacz katalog jako przeczytany"
+
+#: js/TreeContextMenu.js:230
+msgid "Update Folder List"
+msgstr "Aktualizuj listę katalogów"
+
+#: js/RecipientGrid.js:204
+msgid "Click here to set To/CC/BCC."
+msgstr "Kliknij tutaj, aby ustawić Do/DW/UDW."
+
+#: js/RecipientGrid.js:208 js/RecipientGrid.js:232
+msgid "To:"
+msgstr "Do:"
+
+#: js/RecipientGrid.js:211 js/RecipientGrid.js:233
+msgid "Cc:"
+msgstr "DW:"
+
+#: js/RecipientGrid.js:214 js/RecipientGrid.js:234
+msgid "Bcc:"
+msgstr "UDW:"
+
+#: js/RecipientGrid.js:332
+msgid "Remove"
+msgstr "Usuń"
 
 #: js/AccountEditDialog.js:83
-#: js/Felamimail-FAT-debug.js:6430
 msgid "Signature"
 msgstr "Podpis"
 
-#: js/AccountEditDialog.js:103
-#: js/Felamimail-FAT-debug.js:352
-#: js/Felamimail-FAT-debug.js:6450
-#: js/Model.js:347
+#: js/AccountEditDialog.js:103 js/Model.js:347
 msgid "Account"
 msgid_plural "Accounts"
 msgstr[0] "konto"
@@ -92,302 +427,252 @@ msgstr[1] "konta"
 msgstr[2] "konta"
 
 #: js/AccountEditDialog.js:116
-#: js/Felamimail-FAT-debug.js:6463
 msgid "Account Name"
 msgstr "Nazwa konta"
 
 #: js/AccountEditDialog.js:120
-#: js/Felamimail-FAT-debug.js:6467
 msgid "User Email"
 msgstr "Adres pocztowy użytkownika"
 
 #: js/AccountEditDialog.js:125
-#: js/Felamimail-FAT-debug.js:6472
 msgid "User Name (From)"
 msgstr "Użytkownik (Od:)"
 
 #: js/AccountEditDialog.js:128
-#: js/Felamimail-FAT-debug.js:6475
 msgid "Organization"
 msgstr "Organizacja"
 
 #: js/AccountEditDialog.js:133
-#: js/Felamimail-FAT-debug.js:6480
 msgid "IMAP"
 msgstr "IMAP"
 
-#: js/AccountEditDialog.js:146
-#: js/AccountEditDialog.js:195
+#: js/AccountEditDialog.js:146 js/AccountEditDialog.js:195
 #: js/AccountEditDialog.js:256
-#: js/Felamimail-FAT-debug.js:6493
-#: js/Felamimail-FAT-debug.js:6542
-#: js/Felamimail-FAT-debug.js:6603
 msgid "Host"
 msgstr "Host"
 
 #: js/AccountEditDialog.js:150
-#: js/Felamimail-FAT-debug.js:6497
 msgid "Port (Default: 143 / SSL: 993)"
 msgstr "Port (domyślnie 143 / SSL: 993)"
 
-#: js/AccountEditDialog.js:156
-#: js/AccountEditDialog.js:204
+#: js/AccountEditDialog.js:156 js/AccountEditDialog.js:204
 #: js/AccountEditDialog.js:265
-#: js/Felamimail-FAT-debug.js:6503
-#: js/Felamimail-FAT-debug.js:6551
-#: js/Felamimail-FAT-debug.js:6612
 msgid "Secure Connection"
 msgstr "Bezpieczne połączenie"
 
-#: js/AccountEditDialog.js:167
-#: js/AccountEditDialog.js:214
-#: js/AccountEditDialog.js:229
-#: js/AccountEditDialog.js:275
-#: js/ContactGrid.js:112
-#: js/Felamimail-FAT-debug.js:6514
-#: js/Felamimail-FAT-debug.js:6561
-#: js/Felamimail-FAT-debug.js:6576
-#: js/Felamimail-FAT-debug.js:6622
-#: js/Felamimail-FAT-debug.js:9093
+#: js/AccountEditDialog.js:167 js/AccountEditDialog.js:214
+#: js/AccountEditDialog.js:229 js/AccountEditDialog.js:275
+#: js/ContactGrid.js:110
 msgid "None"
 msgstr "Brak"
 
-#: js/AccountEditDialog.js:168
-#: js/AccountEditDialog.js:215
+#: js/AccountEditDialog.js:168 js/AccountEditDialog.js:215
 #: js/AccountEditDialog.js:276
-#: js/Felamimail-FAT-debug.js:6515
-#: js/Felamimail-FAT-debug.js:6562
-#: js/Felamimail-FAT-debug.js:6623
 msgid "TLS"
 msgstr "TLS"
 
-#: js/AccountEditDialog.js:169
-#: js/AccountEditDialog.js:216
-#: js/Felamimail-FAT-debug.js:6516
-#: js/Felamimail-FAT-debug.js:6563
+#: js/AccountEditDialog.js:169 js/AccountEditDialog.js:216
 msgid "SSL"
 msgstr "SSL"
 
 #: js/AccountEditDialog.js:172
-#: js/Felamimail-FAT-debug.js:6519
 msgid "Username"
 msgstr "Użytkownik"
 
 #: js/AccountEditDialog.js:176
-#: js/Felamimail-FAT-debug.js:6523
 msgid "Password"
 msgstr "Hasło"
 
 #: js/AccountEditDialog.js:182
-#: js/Felamimail-FAT-debug.js:6529
 msgid "SMTP"
 msgstr "SMTP"
 
 # Note that in might be port 587 in Poland, i.e. for SMTP.WP.PL
 # Beachte, dass die Portnummer in Poland anders sein koenne, z.B. 587 fuer SMTP.WP.PL
 #: js/AccountEditDialog.js:198
-#: js/Felamimail-FAT-debug.js:6545
 msgid "Port (Default: 25)"
 msgstr "Port (domyślnie: 25)"
 
 #: js/AccountEditDialog.js:219
-#: js/Felamimail-FAT-debug.js:6566
 msgid "Authentication"
 msgstr "Uwierzytelnienie"
 
 #: js/AccountEditDialog.js:230
-#: js/Felamimail-FAT-debug.js:6577
 msgid "Login"
 msgstr "Login"
 
 #: js/AccountEditDialog.js:231
-#: js/Felamimail-FAT-debug.js:6578
 msgid "Plain"
 msgstr "Czysty tekst"
 
 #: js/AccountEditDialog.js:234
-#: js/Felamimail-FAT-debug.js:6581
 msgid "Username (optional)"
 msgstr "Użytkownik (opcjonalnie)"
 
 #: js/AccountEditDialog.js:237
-#: js/Felamimail-FAT-debug.js:6584
 msgid "Password (optional)"
 msgstr "Hasło (opcjonalnie)"
 
 #: js/AccountEditDialog.js:243
-#: js/Felamimail-FAT-debug.js:6590
 msgid "Sieve"
 msgstr "Filtr"
 
 #: js/AccountEditDialog.js:260
-#: js/Felamimail-FAT-debug.js:6607
 msgid "Port (Default: 2000)"
 msgstr "Port (domyślnie 2000)"
 
 #: js/AccountEditDialog.js:280
-#: js/Felamimail-FAT-debug.js:6627
 msgid "Other Settings"
 msgstr "Inne ustawienia"
 
 #: js/AccountEditDialog.js:293
-#: js/Felamimail-FAT-debug.js:6640
 msgid "Sent Folder Name"
 msgstr "Katalog: Wysłane"
 
 #: js/AccountEditDialog.js:299
-#: js/Felamimail-FAT-debug.js:6646
 msgid "Trash Folder Name"
 msgstr "Katalog: Kosz"
 
 #: js/AccountEditDialog.js:305
-#: js/Felamimail-FAT-debug.js:6652
 msgid "Drafts Folder Name"
 msgstr "Nazwa folderu: Szkice"
 
 #: js/AccountEditDialog.js:311
-#: js/Felamimail-FAT-debug.js:6658
 msgid "Templates Folder Name"
 msgstr "Nazwa folderu: Szablony"
 
 #: js/AccountEditDialog.js:317
-#: js/Felamimail-FAT-debug.js:6664
 msgid "Display Format"
 msgstr "Format edycji"
 
 #: js/AccountEditDialog.js:328
-#: js/Felamimail-FAT-debug.js:6675
 msgid "HTML"
 msgstr "HTML"
 
 #: js/AccountEditDialog.js:329
-#: js/Felamimail-FAT-debug.js:6676
 msgid "Plain Text"
 msgstr "Czysty tekst"
 
 #: js/AccountEditDialog.js:330
-#: js/Felamimail-FAT-debug.js:6677
 msgid "Depending on content type (experimental)"
 msgstr "Odpowiednio do typu treści (eksperymentalnie)"
 
-#: js/ContactGrid.js:256
-#: js/Felamimail-FAT-debug.js:9237
-#: js/Felamimail-FAT.js:6
+#: js/ContactGrid.js:254
 msgid "Add as \"To\""
 msgstr "Dodaj jako \"Do\""
 
-#: js/ContactGrid.js:267
-#: js/Felamimail-FAT-debug.js:9248
-#: js/Felamimail-FAT.js:6
+#: js/ContactGrid.js:265
 msgid "Add as \"Cc\""
 msgstr "Dodaj jako \"DW\""
 
-#: js/ContactGrid.js:278
-#: js/Felamimail-FAT-debug.js:9259
-#: js/Felamimail-FAT.js:6
+#: js/ContactGrid.js:276
 msgid "Add as \"Bcc\""
 msgstr "Dodaj jako \"UDW\""
 
-#: js/ContactGrid.js:289
-#: js/Felamimail-FAT-debug.js:9270
-#: js/Felamimail-FAT.js:6
+#: js/ContactGrid.js:287
 msgid "Remove from recipients"
 msgstr "Usuń z listy adresatów"
 
-#: js/Felamimail-FAT-debug.js:53
-#: js/Felamimail-FAT-debug.js:2546
-#: js/Model.js:48
-#: js/TreeContextMenu.js:24
-msgid "Message"
-msgid_plural "Messages"
-msgstr[0] "Wiadomość"
-msgstr[1] "wiadomości"
-msgstr[2] "wiadomości"
+#: js/Felamimail.js:33
+msgid "New Mail"
+msgstr "Nowa wiadomość pocztowa"
 
-#: js/Felamimail-FAT-debug.js:57
-#: js/Felamimail-FAT-debug.js:496
-#: js/Felamimail-FAT-debug.js:2567
-#: js/Felamimail-FAT-debug.js:2621
-#: js/Felamimail-FAT-debug.js:2624
-#: js/Felamimail-FAT-debug.js:2627
-#: js/Felamimail-FAT-debug.js:4607
-#: js/Felamimail-FAT-debug.js:9529
-#: js/Felamimail-FAT.js:6
-#: js/FolderFilterModel.js:30
-#: js/GridPanel.js:490
-#: js/Model.js:52
-#: js/Model.js:491
-#: js/TreeContextMenu.js:45
-#: js/TreeContextMenu.js:99
-#: js/TreeContextMenu.js:102
-#: js/TreeContextMenu.js:105
-msgid "Folder"
-msgid_plural "Folders"
-msgstr[0] "Katalog"
-msgstr[1] "Katalog"
-msgstr[2] "Katalog"
+#: js/Felamimail.js:83
+msgid "Email"
+msgstr "Poczta"
 
-#: js/Felamimail-FAT-debug.js:143
-#: js/Felamimail-FAT.js:6
+#: js/Felamimail.js:118
+msgid "Active Vacation Message"
+msgstr "Aktywna wiadomość o nieobecności"
+
+#: js/Felamimail.js:119
+msgid "Email account \"{0}\" has an active vacation message."
+msgstr "Konto pocztowe \"{0}\" ma włączone powiadamianie o nieobecności."
+
+#: js/Felamimail.js:451
+msgid "New mails"
+msgstr "Nowe wiadomości"
+
+#: js/Felamimail.js:452
+msgid "You got {0} new mail(s) in folder {1} ({2})."
+msgstr "Masz {0} nową/e wiadomość/i w folderze {1} ({2})."
+
+#: js/Felamimail.js:562
+msgid "IMAP Credentials for {0}"
+msgstr "Dane dostępowe IMAP dla {0}"
+
+#: js/Felamimail.js:565
+msgid "Credentials"
+msgstr "Dane dostępowe"
+
+#: js/Felamimail.js:711 js/Felamimail.js:744
+msgid "IMAP Error"
+msgstr "Błąd IMAP"
+
+#: js/Felamimail.js:712
+msgid "No connection to IMAP server."
+msgstr "Brak połączenia z serwerem IMAP."
+
+#: js/Felamimail.js:728
+msgid "IMAP Credentials Error"
+msgstr "Błędne dane logowania do serwera IMAP"
+
+#: js/Felamimail.js:729
+msgid "Your email credentials are wrong. Please contact your administrator"
+msgstr "Nieprawidłowe dane dostępowe do konta email. Proszę skontaktuj się ze swoim administratorem."
+
+#: js/Felamimail.js:745
+msgid "One of your folders was deleted from an other client, please reload you browser"
+msgstr "Jeden katalog został usunięty przez innego klienta, proszę odśwież widok w przeglądarce"
+
+#: js/Felamimail.js:773
+msgid "SMTP Error"
+msgstr "Błąd SMTP"
+
+#: js/Felamimail.js:774
+msgid "No connection to SMTP server."
+msgstr "Brak połączenia z serwerem SMTP"
+
+#: js/Felamimail.js:782
+msgid "Sieve Error"
+msgstr "Błąd filtrowania"
+
+#: js/Felamimail.js:783
+msgid "No connection to Sieve server."
+msgstr "Brak połączenia z serwerem filtrów."
+
+#: js/Felamimail.js:791
+msgid "Save Sieve Script Error"
+msgstr "Zapisz błąd skryptu filtrującego"
+
+#: js/Felamimail.js:792
+msgid "Could not save script on Sieve server."
+msgstr "Zapisanie skryptu na serwerze filtrującym było niemożliwe."
+
+#: js/RecipientPickerFavoritePanel.js:43
+msgid "Recipient filter"
+msgstr "Filtr adresatów"
+
+#: js/RecipientPickerFavoritePanel.js:54
+msgid "All recipients"
+msgstr "Wszyscy adresaci"
+
+#: js/RecipientPickerFavoritePanel.js:57
+msgid "\"{0}\" recipients"
+msgstr "\"{0}\" adresatów"
+
 #: js/Model.js:138
 msgid "Subject/From"
 msgstr "Temat / Od"
 
-#: js/Felamimail-FAT-debug.js:145
-#: js/Felamimail-FAT-debug.js:4566
-#: js/Felamimail-FAT.js:6
-#: js/GridPanel.js:449
-#: js/Model.js:140
-msgid "From (Email)"
-msgstr "Od (e-mail)"
-
-#: js/Felamimail-FAT-debug.js:146
-#: js/Felamimail-FAT-debug.js:4572
-#: js/Felamimail-FAT.js:6
-#: js/GridPanel.js:455
-#: js/Model.js:141
-msgid "From (Name)"
-msgstr "Od (nazwa)"
-
-#: js/Felamimail-FAT-debug.js:147
-#: js/Felamimail-FAT-debug.js:2516
-#: js/Felamimail-FAT-debug.js:4585
-#: js/Felamimail-FAT.js:6
-#: js/GridPanel.js:468
-#: js/Model.js:142
-#: js/sieve/RuleConditionsPanel.js:74
-msgid "To"
-msgstr "Do"
-
-#: js/Felamimail-FAT-debug.js:148
-#: js/Felamimail-FAT.js:6
 #: js/Model.js:143
 msgid "Cc"
 msgstr "DW"
 
-#: js/Felamimail-FAT-debug.js:149
-#: js/Felamimail-FAT.js:6
 #: js/Model.js:144
 msgid "Bcc"
 msgstr "UDW"
 
-#: js/Felamimail-FAT-debug.js:150
-#: js/Felamimail-FAT-debug.js:4553
-#: js/Felamimail-FAT.js:6
-#: js/GridPanel.js:436
-#: js/Model.js:145
-msgid "Flags"
-msgstr "Flagi"
-
-#: js/Felamimail-FAT-debug.js:153
-#: js/Felamimail-FAT-debug.js:4600
-#: js/Felamimail-FAT.js:6
-#: js/GridPanel.js:483
-#: js/Model.js:148
-msgid "Received"
-msgstr "Odebrane"
-
-#: js/Felamimail-FAT-debug.js:356
 #: js/Model.js:351
 msgid "Email Accounts"
 msgid_plural "Email Accounts"
@@ -395,1071 +680,264 @@ msgstr[0] "Konto e-mail"
 msgstr[1] "konta e-mail"
 msgstr[2] "konta-email"
 
-#: js/Felamimail-FAT-debug.js:490
-#: js/Model.js:485
+#: js/Model.js:487
 msgid "INBOX"
 msgstr "Pobrane"
 
-#: js/Felamimail-FAT-debug.js:490
-#: js/Model.js:485
+#: js/Model.js:487
 msgid "Drafts"
 msgstr "Szkice"
 
-#: js/Felamimail-FAT-debug.js:490
-#: js/Felamimail-FAT-debug.js:4592
-#: js/GridPanel.js:475
-#: js/Model.js:485
-msgid "Sent"
-msgstr "Wysłane"
-
-#: js/Felamimail-FAT-debug.js:490
-#: js/Model.js:485
+#: js/Model.js:487
 msgid "Templates"
 msgstr "Szablony"
 
-#: js/Felamimail-FAT-debug.js:490
-#: js/Model.js:485
+#: js/Model.js:487
 msgid "Junk"
 msgstr "Spam"
 
-#: js/Felamimail-FAT-debug.js:490
-#: js/Model.js:485
+#: js/Model.js:487
 msgid "Trash"
 msgstr "Kosz"
 
-#: js/Felamimail-FAT-debug.js:499
-#: js/Felamimail-FAT-debug.js:616
-#: js/Felamimail-FAT-debug.js:681
-#: js/Model.js:494
-#: js/Model.js:611
-#: js/Model.js:676
+#: js/Model.js:496 js/Model.js:613 js/Model.js:678
 msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "Lista wiadomości"
 msgstr[1] "listy wiadomości"
 msgstr[2] "listy wiadomości"
 
-#: js/Felamimail-FAT-debug.js:612
-#: js/Model.js:607
+#: js/Model.js:609
 msgid "Vacation"
 msgid_plural "Vacations"
 msgstr[0] "Urlop"
 msgstr[1] "urlopy"
 msgstr[2] "urlopy"
 
-#: js/Felamimail-FAT-debug.js:678
-#: js/Model.js:673
+#: js/Model.js:675
 msgid "Rule"
 msgid_plural "Rules"
 msgstr[0] "Reguła"
 msgstr[1] "reguły"
 msgstr[2] "reguły"
 
-#: js/Felamimail-FAT-debug.js:804
-#: js/Model.js:799
+#: js/Model.js:801
 msgid "Flag"
 msgid_plural "Flags"
 msgstr[0] "Flaga"
 msgstr[1] "flagi"
 msgstr[2] "flagi"
 
-#: js/Felamimail-FAT-debug.js:807
-#: js/Model.js:802
+#: js/Model.js:804
 msgid "Flag list"
 msgid_plural "Flag lists"
 msgstr[0] "Lista flag"
 msgstr[1] "listy flag"
 msgstr[2] "listy flag"
 
-#: js/Felamimail-FAT-debug.js:1190
-#: js/Felamimail-FAT.js:6
-#: js/FolderSelectPanel.js:75
-msgid "Cancel"
-msgstr "Anuluj"
-
-#: js/Felamimail-FAT-debug.js:1199
-#: js/Felamimail-FAT.js:6
-#: js/FolderSelectPanel.js:84
-msgid "Ok"
-msgstr "OK"
-
-#: js/Felamimail-FAT-debug.js:1290
-#: js/Felamimail-FAT.js:6
-#: js/FolderSelectPanel.js:175
-msgid "Folders of account {0}"
-msgstr "Katalogi konta: {0}"
-
-#: js/Felamimail-FAT-debug.js:1291
-#: js/Felamimail-FAT.js:6
-#: js/FolderSelectPanel.js:176
-msgid "Folders of all accounts"
-msgstr "Katalogi ze wszystkich kont"
-
-#: js/Felamimail-FAT-debug.js:1426
-#: js/Felamimail-FAT.js:6
-#: js/sieve/VacationEditDialog.js:76
-msgid "Vacation Message for {0}"
-msgstr "Informacja o urlopie dla {0}"
-
-#: js/Felamimail-FAT-debug.js:1444
-#: js/Felamimail-FAT.js:6
-#: js/sieve/VacationEditDialog.js:94
-msgid "Incoming mails will be answered with this text:"
-msgstr "Tekst odpowiedzi na wiadomości przychodzące"
-
-#: js/Felamimail-FAT-debug.js:1464
-#: js/Felamimail-FAT.js:6
-#: js/sieve/VacationEditDialog.js:114
-msgid "General"
-msgstr "Ogólne"
-
-#: js/Felamimail-FAT-debug.js:1483
-#: js/Felamimail-FAT-debug.js:1517
-#: js/Felamimail-FAT.js:6
-#: js/sieve/VacationEditDialog.js:133
-#: js/sieve/VacationEditDialog.js:167
-msgid "I am available (vacation message disabled)"
-msgstr "Jestem dostępny (wyłączona informacja o urlopie)"
-
-#: js/Felamimail-FAT-debug.js:1490
-#: js/Felamimail-FAT-debug.js:1518
-#: js/Felamimail-FAT.js:6
-#: js/sieve/VacationEditDialog.js:140
-#: js/sieve/VacationEditDialog.js:168
-msgid "I am not available (vacation message enabled)"
-msgstr "Jestem niedostępny (włączona informacja o urlopie)"
-
-#: js/Felamimail-FAT-debug.js:1506
-#: js/Felamimail-FAT.js:6
-#: js/sieve/VacationEditDialog.js:156
-msgid "Status"
-msgstr "Status"
-
-#: js/Felamimail-FAT-debug.js:1530
-#: js/Felamimail-FAT.js:6
-#: js/sieve/VacationEditDialog.js:180
-msgid "Advanced"
-msgstr "Zaawansowane"
-
-#: js/Felamimail-FAT-debug.js:1541
-#: js/Felamimail-FAT.js:6
-#: js/sieve/VacationEditDialog.js:191
-msgid "Only send all X days to the same sender"
-msgstr "Wysyłaj zawsze co X dni do tego samego nadawcy"
-
-#: js/Felamimail-FAT-debug.js:1674
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleEditDialog.js:96
-msgid "Edit Filter Rule"
-msgstr "Edytuj reguły filtrowania"
-
-#: js/Felamimail-FAT-debug.js:1820
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleEditDialog.js:242
-msgid "If all of the following conditions are met:"
-msgstr "Jeśli wszystkie z następujących warunków są spełnione:"
-
-#: js/Felamimail-FAT-debug.js:1837
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleEditDialog.js:259
-msgid "Do this action:"
-msgstr "Wykonaj działanie:"
-
-#: js/Felamimail-FAT-debug.js:1927
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleEditDialog.js:349
-msgid "Move mail to folder"
-msgstr "Przenieś wiadomość do katalogu"
-
-#: js/Felamimail-FAT-debug.js:1928
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleEditDialog.js:350
-msgid "Redirect mail to address"
-msgstr "Przekieruj wiadomość na adres"
-
-#: js/Felamimail-FAT-debug.js:1929
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleEditDialog.js:351
-msgid "Reject mail with this text"
-msgstr "Zablokuj wiadomość zawierającą tę treść"
-
-#: js/Felamimail-FAT-debug.js:1930
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleEditDialog.js:352
-msgid "Discard mail"
-msgstr "Usuń wiadomość"
-
-#: js/Felamimail-FAT-debug.js:1931
-#: js/sieve/RuleEditDialog.js:353
-msgid "Keep mail"
-msgstr "Zachowaj wiadomość"
-
-#: js/Felamimail-FAT-debug.js:2010
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:77
-msgid "Move up"
-msgstr "Do góry"
-
-#: js/Felamimail-FAT-debug.js:2017
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:84
-msgid "Move down"
-msgstr "Na dół"
-
-#: js/Felamimail-FAT-debug.js:2024
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:91
-msgid "Enable"
-msgstr "Włącz"
-
-#: js/Felamimail-FAT-debug.js:2031
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:98
-msgid "Disable"
-msgstr "Wyłącz"
-
-#: js/Felamimail-FAT-debug.js:2132
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:199
-msgid "ID"
-msgstr "Id"
-
-#: js/Felamimail-FAT-debug.js:2139
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:206
-msgid "Conditions"
-msgstr "Warunki"
-
-#: js/Felamimail-FAT-debug.js:2147
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:214
-msgid "Action"
-msgstr "Działanie"
-
-#: js/Felamimail-FAT-debug.js:2238
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:305
-msgid "is greater than"
-msgstr "większy od"
-
-#: js/Felamimail-FAT-debug.js:2238
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:305
-msgid "is less than"
-msgstr "mniejszy od"
-
-#: js/Felamimail-FAT-debug.js:2249
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesGridPanel.js:316
-msgid "Header \"{0}\" contains \"{1}\""
-msgstr "Nagłówek \"{0}\" zawiera \"{1}\""
-
-#: js/Felamimail-FAT-debug.js:2347
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesDialog.js:51
-msgid "Sieve Filter Rules"
-msgstr "Reguły filtrowania"
-
-#: js/Felamimail-FAT-debug.js:2378
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RulesDialog.js:82
-msgid "Sieve Filter Rules for {0}"
-msgstr "Reguły filtrowania dla {0}"
-
-#: js/Felamimail-FAT-debug.js:2515
-#: js/Felamimail-FAT-debug.js:3882
-#: js/Felamimail-FAT-debug.js:6206
-#: js/Felamimail-FAT.js:6
-#: js/GridDetailsPanel.js:136
-#: js/MessageEditDialog.js:705
-#: js/sieve/RuleConditionsPanel.js:73
-msgid "From"
-msgstr "Od"
-
-#: js/Felamimail-FAT-debug.js:2518
-#: js/Felamimail-FAT-debug.js:4615
-#: js/Felamimail-FAT.js:6
-#: js/GridPanel.js:498
-#: js/sieve/RuleConditionsPanel.js:76
-msgid "Size"
-msgstr "Rozmiar"
-
-#: js/Felamimail-FAT-debug.js:2519
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleConditionsPanel.js:77
-msgid "Header contains"
-msgstr "Nagłówek zawiera"
-
-#: js/Felamimail-FAT-debug.js:2520
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleConditionsPanel.js:78
-msgid "Header name"
-msgstr "Nazwa nagłówka"
-
-#: js/Felamimail-FAT-debug.js:2520
-#: js/Felamimail-FAT.js:6
-#: js/sieve/RuleConditionsPanel.js:78
-msgid "Header value"
-msgstr "Wartość nagłówka"
-
-#: js/Felamimail-FAT-debug.js:2546
-#: js/TreeContextMenu.js:24
-msgid "Update {0} Cache"
-msgstr "Aktualizuj pamięć podręczną: {0}"
-
-#: js/Felamimail-FAT-debug.js:2567
-#: js/TreeContextMenu.js:45
-msgid "Reload {0}"
-msgstr "Odśwież {0}"
-
-#: js/Felamimail-FAT-debug.js:2581
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:59
-msgid "Empty Folder"
-msgstr "Opróżnij katalog"
-
-#: js/Felamimail-FAT-debug.js:2616
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:94
-msgid "Add Folder"
-msgstr "Dodaj katalog"
-
-#: js/Felamimail-FAT-debug.js:2621
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:99
-msgid "New {0}"
-msgstr "Nowy {0}"
-
-#: js/Felamimail-FAT-debug.js:2621
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:99
-msgid "Please enter the name of the new {0}:"
-msgstr "Proszę wprowadzić nazwę nowego {0}:"
-
-#: js/Felamimail-FAT-debug.js:2624
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:102
-msgid "No {0} added"
-msgstr "Nie dodano {0}"
-
-#: js/Felamimail-FAT-debug.js:2624
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:102
-msgid "You have to supply a {0} name!"
-msgstr "Należy podać nazwę {0}!"
-
-#: js/Felamimail-FAT-debug.js:2627
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:105
-msgid "Please wait"
-msgstr "Proszę czekać"
-
-#: js/Felamimail-FAT-debug.js:2627
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:105
-msgid "Creating {0}..."
-msgstr "Tworzenie {0}..."
-
-#: js/Felamimail-FAT-debug.js:2656
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:134
-msgid "Edit Account"
-msgstr "Edytuj konto"
-
-#: js/Felamimail-FAT-debug.js:2684
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:162
-msgid "Set Vacation Message"
-msgstr "Ustaw informację o urlopie"
-
-#: js/Felamimail-FAT-debug.js:2700
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:178
-msgid "Set Filter Rules"
-msgstr "Ustaw reguły filtrowania"
-
-#: js/Felamimail-FAT-debug.js:2714
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:192
-msgid "Mark Folder as read"
-msgstr "Oznacz katalog jako przeczytany"
-
-#: js/Felamimail-FAT-debug.js:2751
-#: js/Felamimail-FAT.js:6
-#: js/TreeContextMenu.js:229
-msgid "Update Folder List"
-msgstr "Aktualizuj listę katalogów"
-
-#: js/Felamimail-FAT-debug.js:3627
-#: js/Felamimail-FAT.js:6
-#: js/TreePanel.js:690
+#: js/TreePanel.js:693
 msgid "Total Messages:"
 msgstr "Suma wiadomości:"
 
-#: js/Felamimail-FAT-debug.js:3631
-#: js/Felamimail-FAT.js:6
-#: js/TreePanel.js:694
+#: js/TreePanel.js:697
 msgid "Unread Messages:"
 msgstr "Nieprzeczytane wiadomości:"
 
-#: js/Felamimail-FAT-debug.js:3635
-#: js/Felamimail-FAT.js:6
-#: js/TreePanel.js:698
+#: js/TreePanel.js:701
 msgid "Name on Server:"
 msgstr "Skrzynka pocztowa:"
 
-#: js/Felamimail-FAT-debug.js:3639
-#: js/Felamimail-FAT.js:6
-#: js/TreePanel.js:702
+#: js/TreePanel.js:705
 msgid "Last update:"
 msgstr "Ostatnia aktualizacja:"
 
-#: js/Felamimail-FAT-debug.js:3659
-#: js/Felamimail-FAT.js:6
-#: js/TreePanel.js:722
+#: js/TreePanel.js:725
 #, python-format
 msgid "Fetching messages... ({0}% done)"
 msgstr "Pobieranie wiadomości... ({0}% pobrano)"
 
-#: js/Felamimail-FAT-debug.js:3675
-#: js/Felamimail-FAT.js:6
-#: js/TreePanel.js:738
+#: js/TreePanel.js:741
 msgid "{0} unread message"
 msgid_plural "{0} unread messages"
 msgstr[0] "{0} nieprzeczytana wiadomość"
 msgstr[1] "{0} nieprzeczytane wiadomości"
 msgstr[2] "{0} nieprzeczytanych wiadomości"
 
-#: js/Felamimail-FAT-debug.js:3883
-#: js/Felamimail-FAT.js:6
-#: js/GridDetailsPanel.js:137
-msgid "Add"
-msgstr "Dodaj"
-
-#: js/Felamimail-FAT-debug.js:3884
-#: js/Felamimail-FAT.js:6
-#: js/GridDetailsPanel.js:138
-msgid "Add contact to addressbook"
-msgstr "Dodaj kontakt do książki adresowej"
-
-#: js/Felamimail-FAT-debug.js:3885
-#: js/Felamimail-FAT.js:6
-#: js/GridDetailsPanel.js:139
-msgid "Date"
-msgstr "Data"
-
-#: js/Felamimail-FAT-debug.js:3887
-#: js/Felamimail-FAT-debug.js:4108
-#: js/Felamimail-FAT.js:6
-#: js/GridDetailsPanel.js:141
-#: js/GridDetailsPanel.js:362
-msgid "Show or hide header information"
-msgstr "Pokaż lub ukryj informacje nagłówkowe"
-
-#: js/Felamimail-FAT-debug.js:3978
-#: js/Felamimail-FAT-debug.js:4546
-#: js/Felamimail-FAT-debug.js:6140
-#: js/GridDetailsPanel.js:232
-#: js/GridPanel.js:429
-#: js/MessageEditDialog.js:639
-msgid "Attachments"
-msgstr "Załączniki"
-
-#: js/Felamimail-FAT-debug.js:4226
-#: js/GridPanel.js:109
-msgid "No Messages found or the cache is empty."
-msgstr "Brak wiadomości lub pusta pamięć podręczna"
-
-#: js/Felamimail-FAT-debug.js:4326
-#: js/GridPanel.js:209
-msgid "Compose"
-msgstr "Napisz"
-
-#: js/Felamimail-FAT-debug.js:4334
-#: js/Felamimail-FAT-debug.js:5291
-#: js/GridPanel.js:217
-#: js/MessageDisplayDialog.js:47
-msgid "Reply"
-msgstr "Odpowiedz"
-
-#: js/Felamimail-FAT-debug.js:4343
-#: js/Felamimail-FAT-debug.js:5297
-#: js/GridPanel.js:226
-#: js/MessageDisplayDialog.js:53
-msgid "Reply To All"
-msgstr "Odpowiedz wszystkim"
-
-#: js/Felamimail-FAT-debug.js:4352
-#: js/Felamimail-FAT-debug.js:5303
-#: js/GridPanel.js:235
-#: js/MessageDisplayDialog.js:59
-msgid "Forward"
-msgstr "Prześlij dalej"
-
-#: js/Felamimail-FAT-debug.js:4360
-#: js/GridPanel.js:243
-msgid "Toggle highlighting"
-msgstr "Podświetlanie"
-
-#: js/Felamimail-FAT-debug.js:4369
-#: js/GridPanel.js:252
-msgid "Mark read/unread"
-msgstr "Oznacz jako (nie)przeczytane"
-
-#: js/Felamimail-FAT-debug.js:4379
-#: js/Felamimail-FAT-debug.js:4380
-#: js/Felamimail-FAT-debug.js:4382
-#: js/Felamimail-FAT-debug.js:5284
-#: js/GridPanel.js:262
-#: js/GridPanel.js:263
-#: js/GridPanel.js:265
-#: js/MessageDisplayDialog.js:40
-msgid "Delete"
-msgstr "Usuń"
-
-#: js/Felamimail-FAT-debug.js:4390
-#: js/GridPanel.js:273
-msgid "Add Account"
-msgstr "Dodaj konto"
-
-#: js/Felamimail-FAT-debug.js:4398
-#: js/Felamimail-FAT-debug.js:5197
-#: js/Felamimail-FAT-debug.js:5213
-#: js/Felamimail-FAT-debug.js:5323
-#: js/GridPanel.js:281
-#: js/GridPanel.js:1100
-#: js/GridPanel.js:1116
-#: js/MessageDisplayDialog.js:79
-msgid "Print Preview"
-msgstr "Drukuj podgląd"
-
-#: js/Felamimail-FAT-debug.js:4406
-#: js/Felamimail-FAT-debug.js:5317
-#: js/GridPanel.js:289
-#: js/MessageDisplayDialog.js:73
-msgid "Print Message"
-msgstr "Drukuj wiadomość"
-
-#: js/Felamimail-FAT-debug.js:4539
-#: js/GridPanel.js:422
-msgid "Id"
-msgstr "Id"
-
-#: js/Felamimail-FAT-debug.js:4578
-#: js/GridPanel.js:461
-msgid "Sender"
-msgstr "Nadawca"
-
-#: js/Felamimail-FAT-debug.js:4658
-#: js/GridPanel.js:541
-msgid "Forwarded"
-msgstr "Przesłane dalej"
-
-#: js/Felamimail-FAT-debug.js:4661
-#: js/GridPanel.js:544
-msgid "Recent"
-msgstr "Nowe"
-
-#: js/Felamimail-FAT-debug.js:5310
-#: js/MessageDisplayDialog.js:66
-msgid "Save"
-msgstr "Zapisz"
-
-#: js/Felamimail-FAT-debug.js:5628
-#: js/MessageEditDialog.js:127
-msgid "Send"
-msgstr "Wyślij"
-
-#: js/Felamimail-FAT-debug.js:5636
-#: js/MessageEditDialog.js:135
-msgid "Search Recipients"
-msgstr "Znajdź adresatów"
-
-#: js/Felamimail-FAT-debug.js:5644
-#: js/MessageEditDialog.js:143
-msgid "Save As Draft"
-msgstr "Zapisz jako szkic"
-
-#: js/Felamimail-FAT-debug.js:5652
-#: js/MessageEditDialog.js:151
-msgid "Save As Template"
-msgstr "Zapisz jako szablon"
-
-#: js/Felamimail-FAT-debug.js:5661
-#: js/MessageEditDialog.js:160
-msgid "Save Email Note"
-msgstr "Zapisz e-mail w notatce"
-
-#: js/Felamimail-FAT-debug.js:5669
-#: js/MessageEditDialog.js:168
-msgid "Activate this toggle button to save the email text as a note attached to the recipient(s) contact(s)."
-msgstr "Włącz przycisk zapisujący treść e-maila w notatce przypisanej do adresata/adresatów z listy kontaktów."
-
-#: js/Felamimail-FAT-debug.js:5687
-#: js/MessageEditDialog.js:186
-msgid "Click to search for and add recipients from the Addressbook."
-msgstr "Kliknij, aby znaleźć i dodać adresatów z książki adresowej."
-
-#: js/Felamimail-FAT-debug.js:5764
-#: js/MessageEditDialog.js:263
-msgid "On {0}, {1} wrote"
-msgstr "Dnia {0}, {1} napisał(a)"
-
-#: js/Felamimail-FAT-debug.js:5770
-#: js/MessageEditDialog.js:269
-msgid "Original message"
-msgstr "Oryginalna wiadomość"
-
-#: js/Felamimail-FAT-debug.js:5921
-#: js/MessageEditDialog.js:420
-msgid "Re:"
-msgstr "Odp:"
-
-#: js/Felamimail-FAT-debug.js:5931
-#: js/MessageEditDialog.js:430
-msgid "Fwd:"
-msgstr "Prześlij dalej:"
-
-#: js/Felamimail-FAT-debug.js:5934
-#: js/MessageEditDialog.js:433
-msgid "{0} Message"
-msgstr "Wiadomość {0}"
-
-# The other possibilities would be: "Błąd" (see the german translation) or "Zakończone niepowodzeniem" or "Akcja nieudana".
-# Die anderen Moeglichkeiten waeren: "Błąd" (siehe die deutsche Uebersetzung) oder "Zakończone niepowodzeniem" oder "Akcja nieudana".
-#: js/Felamimail-FAT-debug.js:5994
-#: js/Felamimail-FAT-debug.js:6125
-#: js/MessageEditDialog.js:493
-#: js/MessageEditDialog.js:624
-msgid "Failed"
-msgstr "Próba nieudana"
-
-#: js/Felamimail-FAT-debug.js:5995
-#: js/MessageEditDialog.js:494
-msgid "{0} account setting empty."
-msgstr "{0} puste ustawienia konta"
-
-#: js/Felamimail-FAT-debug.js:6010
-#: js/MessageEditDialog.js:509
-msgid "Errors"
-msgstr "Błędy"
-
-#: js/Felamimail-FAT-debug.js:6010
-#: js/MessageEditDialog.js:509
-msgid "Please fix the errors noted."
-msgstr "Proszę poprawić zgłoszone błędy."
-
-#: js/Felamimail-FAT-debug.js:6052
-#: js/Felamimail-FAT-debug.js:6309
-#: js/MessageEditDialog.js:551
-#: js/MessageEditDialog.js:808
-msgid "Compose email:"
-msgstr "Nowa wiadomość:"
-
-#: js/Felamimail-FAT-debug.js:6098
-#: js/MessageEditDialog.js:597
-msgid "Add Note"
-msgstr "Dodaj notatkę"
-
-#: js/Felamimail-FAT-debug.js:6099
-#: js/MessageEditDialog.js:598
-msgid "Edit Email Note Text:"
-msgstr "Edytuj tekst wiadomości:"
-
-#: js/Felamimail-FAT-debug.js:6126
-#: js/MessageEditDialog.js:625
-msgid "Could not send {0}."
-msgstr "Wysłanie {0} było niemożliwe."
-
-#: js/Felamimail-FAT-debug.js:6127
-#: js/MessageEditDialog.js:626
-msgid "Error:"
-msgstr "Błąd:"
-
-#: js/Felamimail-FAT-debug.js:6805
-msgid "Searching..."
-msgstr "Wyszukiwanie..."
-
-#: js/Felamimail-FAT-debug.js:7330
-#: js/RecipientGrid.js:200
-msgid "Click here to set To/CC/BCC."
-msgstr "Kliknij tutaj, aby ustawić Do/DW/UDW."
-
-#: js/Felamimail-FAT-debug.js:7334
-#: js/Felamimail-FAT-debug.js:7358
-#: js/RecipientGrid.js:204
-#: js/RecipientGrid.js:228
-msgid "To:"
-msgstr "Do:"
-
-#: js/Felamimail-FAT-debug.js:7337
-#: js/Felamimail-FAT-debug.js:7359
-#: js/RecipientGrid.js:207
-#: js/RecipientGrid.js:229
-msgid "Cc:"
-msgstr "DW:"
-
-#: js/Felamimail-FAT-debug.js:7340
-#: js/Felamimail-FAT-debug.js:7360
-#: js/RecipientGrid.js:210
-#: js/RecipientGrid.js:230
-msgid "Bcc:"
-msgstr "UDW:"
-
-#: js/Felamimail-FAT-debug.js:7458
-#: js/RecipientGrid.js:328
-msgid "Remove"
-msgstr "Usuń"
-
-#: js/Felamimail-FAT-debug.js:7743
-#: js/Felamimail-FAT-debug.js:8641
-#: js/Felamimail-FAT.js:6
-#: js/Felamimail.js:77
-msgid "Email"
-msgstr "Poczta"
-
-#: js/Felamimail-FAT-debug.js:7777
-#: js/Felamimail.js:111
-msgid "Active Vacation Message"
-msgstr "Aktywna wiadomość o nieobecności"
-
-#: js/Felamimail-FAT-debug.js:7778
-#: js/Felamimail.js:112
-msgid "Email account \"{0}\" has an active vacation message."
-msgstr "Konto pocztowe \"{0}\" ma włączone powiadamianie o nieobecności."
-
-#: js/Felamimail-FAT-debug.js:8067
-#: js/Felamimail.js:401
-msgid "New mails"
-msgstr "Nowe wiadomości"
-
-#: js/Felamimail-FAT-debug.js:8068
-#: js/Felamimail.js:402
-msgid "You got {0} new mail(s) in folder {1} ({2})."
-msgstr "Masz {0} nową/e wiadomość/i w folderze {1} ({2})."
-
-#: js/Felamimail-FAT-debug.js:8139
-#: js/Felamimail.js:473
-msgid "IMAP Credentials for {0}"
-msgstr "Dane dostępowe IMAP dla {0}"
-
-#: js/Felamimail-FAT-debug.js:8142
-#: js/Felamimail.js:476
-msgid "Credentials"
-msgstr "Dane dostępowe"
-
-#: js/Felamimail-FAT-debug.js:8288
-#: js/Felamimail-FAT-debug.js:8311
-#: js/Felamimail.js:622
-#: js/Felamimail.js:645
-msgid "IMAP Error"
-msgstr "Błąd IMAP"
-
-#: js/Felamimail-FAT-debug.js:8289
-#: js/Felamimail.js:623
-msgid "No connection to IMAP server."
-msgstr "Brak połączenia z serwerem IMAP."
-
-#: js/Felamimail-FAT-debug.js:8312
-#: js/Felamimail.js:646
-msgid "One of your folders was deleted from an other client, please reload you browser"
-msgstr "Jeden katalog został usunięty przez innego klienta, proszę odśwież widok w przeglądarce"
-
-#: js/Felamimail-FAT-debug.js:8327
-#: js/Felamimail.js:661
-msgid "SMTP Error"
-msgstr "Błąd SMTP"
-
-#: js/Felamimail-FAT-debug.js:8328
-#: js/Felamimail.js:662
-msgid "No connection to SMTP server."
-msgstr "Brak połączenia z serwerem SMTP"
-
-#: js/Felamimail-FAT-debug.js:8336
-#: js/Felamimail.js:670
-msgid "Sieve Error"
-msgstr "Błąd filtrowania"
-
-#: js/Felamimail-FAT-debug.js:8337
-#: js/Felamimail.js:671
-msgid "No connection to Sieve server."
-msgstr "Brak połączenia z serwerem filtrów."
-
-#: js/Felamimail-FAT-debug.js:8345
-#: js/Felamimail.js:679
-msgid "Save Sieve Script Error"
-msgstr "Zapisz błąd skryptu filtrującego"
-
-#: js/Felamimail-FAT-debug.js:8346
-#: js/Felamimail.js:680
-msgid "Could not save script on Sieve server."
-msgstr "Zapisanie skryptu na serwerze filtrującym było niemożliwe."
-
-#: js/Felamimail-FAT-debug.js:8620
-#: js/Felamimail-FAT.js:6
-msgid "Type"
-msgstr "Typ"
-
-#: js/Felamimail-FAT-debug.js:8621
-#: js/Felamimail-FAT.js:6
-msgid "Tags"
-msgstr "Znaczniki"
-
-#: js/Felamimail-FAT-debug.js:8622
-#: js/Felamimail-FAT.js:6
-msgid "Last Name"
-msgstr "Nazwisko"
-
-#: js/Felamimail-FAT-debug.js:8623
-#: js/Felamimail-FAT.js:6
-msgid "First Name"
-msgstr "Imię"
-
-#: js/Felamimail-FAT-debug.js:8624
-#: js/Felamimail-FAT.js:6
-msgid "Full Name"
-msgstr "Imię i nazwisko"
-
-#: js/Felamimail-FAT-debug.js:8625
-#: js/Felamimail-FAT.js:6
-msgid "Display Name"
-msgstr "Wyświetlana nazwa"
-
-#: js/Felamimail-FAT-debug.js:8626
-#: js/Felamimail-FAT.js:6
-msgid "Company"
-msgstr "Firma"
-
-#: js/Felamimail-FAT-debug.js:8627
-#: js/Felamimail-FAT.js:6
-msgid "Unit"
-msgstr "Oddział"
-
-#: js/Felamimail-FAT-debug.js:8628
-#: js/Felamimail-FAT.js:6
-msgid "Job Title"
-msgstr "Zawód"
-
-#: js/Felamimail-FAT-debug.js:8629
-#: js/Felamimail-FAT.js:6
-msgid "Job Role"
-msgstr "Funkcja"
-
-#: js/Felamimail-FAT-debug.js:8630
-#: js/Felamimail-FAT.js:6
-msgid "Room"
-msgstr "Pokój"
-
-#: js/Felamimail-FAT-debug.js:8631
-#: js/Felamimail-FAT.js:6
-msgid "Street"
-msgstr "Ulica"
-
-#: js/Felamimail-FAT-debug.js:8632
-#: js/Felamimail-FAT.js:6
-msgid "City"
-msgstr "Miasto"
-
-#: js/Felamimail-FAT-debug.js:8633
-#: js/Felamimail-FAT.js:6
-msgid "Region"
-msgstr "Województwo"
-
-#: js/Felamimail-FAT-debug.js:8634
-#: js/Felamimail-FAT.js:6
-msgid "Postalcode"
-msgstr "Kod pocztowy"
-
-#: js/Felamimail-FAT-debug.js:8635
-#: js/Felamimail-FAT.js:6
-msgid "Country"
-msgstr "Państwo"
-
-#: js/Felamimail-FAT-debug.js:8636
-#: js/Felamimail-FAT.js:6
-msgid "Street (private)"
-msgstr "Ulica (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8637
-#: js/Felamimail-FAT.js:6
-msgid "City (private)"
-msgstr "Miasto (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8638
-#: js/Felamimail-FAT.js:6
-msgid "Region (private)"
-msgstr "Województwo (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8639
-#: js/Felamimail-FAT.js:6
-msgid "Postalcode (private)"
-msgstr "Kod pocztowy (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8640
-#: js/Felamimail-FAT.js:6
-msgid "Country (private)"
-msgstr "Kraj (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8642
-#: js/Felamimail-FAT.js:6
-msgid "Phone"
-msgstr "Telefon"
-
-#: js/Felamimail-FAT-debug.js:8643
-#: js/Felamimail-FAT.js:6
-msgid "Mobile"
-msgstr "Komórka"
-
-#: js/Felamimail-FAT-debug.js:8644
-#: js/Felamimail-FAT.js:6
-msgid "Fax"
-msgstr "Faks"
-
-#: js/Felamimail-FAT-debug.js:8645
-#: js/Felamimail-FAT.js:6
-msgid "Car phone"
-msgstr "Telefon w samochodzie"
-
-#: js/Felamimail-FAT-debug.js:8646
-#: js/Felamimail-FAT.js:6
-msgid "Pager"
-msgstr "Pager"
-
-#: js/Felamimail-FAT-debug.js:8647
-#: js/Felamimail-FAT.js:6
-msgid "Phone (private)"
-msgstr "Telefon (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8648
-#: js/Felamimail-FAT.js:6
-msgid "Fax (private)"
-msgstr "Faks (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8649
-#: js/Felamimail-FAT.js:6
-msgid "Mobile (private)"
-msgstr "Komórka (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8650
-#: js/Felamimail-FAT.js:6
-msgid "Email (private)"
-msgstr "E-mail (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8651
-#: js/Felamimail-FAT.js:6
-msgid "Web"
-msgstr "WWW"
-
-#: js/Felamimail-FAT-debug.js:8652
-#: js/Felamimail-FAT.js:6
-msgid "URL (private)"
-msgstr "URL (prywatnie)"
-
-#: js/Felamimail-FAT-debug.js:8653
-#: js/Felamimail-FAT.js:6
-msgid "Note"
-msgstr "Notatka"
-
-#: js/Felamimail-FAT-debug.js:8654
-#: js/Felamimail-FAT.js:6
-msgid "Timezone"
-msgstr "Strefa czasowa"
-
-#: js/Felamimail-FAT-debug.js:8655
-#: js/Felamimail-FAT.js:6
-msgid "Geo"
-msgstr "Położenie"
-
-#: js/Felamimail-FAT-debug.js:8656
-#: js/Felamimail-FAT.js:6
-msgid "Birthday"
-msgstr "Urodziny"
-
-#: js/Felamimail-FAT-debug.js:8666
-#: js/Felamimail-FAT.js:6
-msgid "Export Contact"
-msgstr "Eksportuj kontakt"
-
-#: js/Felamimail-FAT-debug.js:8674
-#: js/Felamimail-FAT.js:6
-msgid "Export as PDF"
-msgstr "Eksportuj jako PDF"
-
-#: js/Felamimail-FAT-debug.js:8681
-#: js/Felamimail-FAT.js:6
-msgid "Export as CSV"
-msgstr "Eksportuj jako CSV"
-
-#: js/Felamimail-FAT-debug.js:8688
-#: js/Felamimail-FAT.js:6
-msgid "Export as ODS"
-msgstr "Eksportuj jako ODS"
-
-#: js/Felamimail-FAT-debug.js:8695
-#: js/Felamimail-FAT.js:6
-msgid "Export as XLS"
-msgstr "Eksportuj jako XLS"
-
-#: js/Felamimail-FAT-debug.js:8702
-#: js/Felamimail-FAT.js:6
-msgid "Export as ..."
-msgstr "Eksportuj jako ..."
-
-#: js/Felamimail-FAT-debug.js:8718
-#: js/Felamimail-FAT.js:6
-msgid "Call contact"
-msgstr "Wywołaj kontakt"
-
-#: js/Felamimail-FAT-debug.js:8728
-#: js/Felamimail-FAT.js:6
+#: js/AddressbookGridPanelHook.js:33
 msgid "Compose email"
 msgstr "Napisz wiadomość e-mail"
 
-#: js/Felamimail-FAT-debug.js:8738
-#: js/Felamimail-FAT.js:6
-msgid "Import contacts"
-msgstr "Importuj kontakty"
+#: js/MessageDisplayDialog.js:65
+msgid "Save"
+msgstr "Zapisz"
 
-#: js/Felamimail-FAT-debug.js:8827
-#: js/Felamimail-FAT.js:6
-msgid "Work"
-msgstr "Praca"
+#: js/sieve/RulesGridPanel.js:77
+msgid "Move up"
+msgstr "Do góry"
 
-#: js/Felamimail-FAT-debug.js:8836
-#: js/Felamimail-FAT.js:6
-msgid "Home"
-msgstr "Dom"
+#: js/sieve/RulesGridPanel.js:84
+msgid "Move down"
+msgstr "Na dół"
 
-#: js/Felamimail-FAT-debug.js:8845
-#: js/Felamimail-FAT.js:6
-msgid "Cell"
-msgstr "Komórka"
+#: js/sieve/RulesGridPanel.js:91
+msgid "Enable"
+msgstr "Włącz"
 
-#: js/Felamimail-FAT-debug.js:8854
-#: js/Felamimail-FAT.js:6
-msgid "Cell private"
-msgstr "Prywatna komórka"
+#: js/sieve/RulesGridPanel.js:98
+msgid "Disable"
+msgstr "Wyłącz"
 
-#: js/Felamimail-FAT-debug.js:8962
-#: js/Felamimail-FAT.js:6
-msgid "Internal Contact"
-msgstr "Kontakt wewnętrzny"
+#: js/sieve/RulesGridPanel.js:199
+msgid "ID"
+msgstr "Id"
 
-#: js/Felamimail-FAT-debug.js:9413
-#: js/Felamimail-FAT.js:6
-#: js/RecipientPickerDialog.js:62
-msgid "(new message)"
-msgstr "(nowa wiadomość)"
+#: js/sieve/RulesGridPanel.js:206
+msgid "Conditions"
+msgstr "Warunki"
 
-#: js/Felamimail-FAT-debug.js:9414
-#: js/Felamimail-FAT.js:6
-#: js/RecipientPickerDialog.js:63
-msgid "Select recipients for \"{0}\""
-msgstr "Zaznacz adresatów dla \"{0}\""
+#: js/sieve/RulesGridPanel.js:214
+msgid "Action"
+msgstr "Działanie"
 
-#: js/Felamimail.js:33
-msgid "New Mail"
-msgstr "Nowa wiadomość pocztowa"
+#: js/sieve/RulesGridPanel.js:305
+msgid "is greater than"
+msgstr "większy od"
+
+#: js/sieve/RulesGridPanel.js:305
+msgid "is less than"
+msgstr "mniejszy od"
+
+#: js/sieve/RulesGridPanel.js:316
+msgid "Header \"{0}\" contains \"{1}\""
+msgstr "Nagłówek \"{0}\" zawiera \"{1}\""
+
+#: js/sieve/RulesGridPanel.js:316
+msgid "Header \"{0}\" matches \"{1}\""
+msgstr "Nagłówek \"{0}\" taki sam, jak \"{1}\""
+
+#: js/sieve/RulesDialog.js:51
+msgid "Sieve Filter Rules"
+msgstr "Reguły filtrowania"
+
+#: js/sieve/RulesDialog.js:82
+msgid "Sieve Filter Rules for {0}"
+msgstr "Reguły filtrowania dla {0}"
+
+#: js/sieve/VacationEditDialog.js:76
+msgid "Vacation Message for {0}"
+msgstr "Informacja o urlopie dla {0}"
+
+#: js/sieve/VacationEditDialog.js:94
+msgid "Incoming mails will be answered with this text:"
+msgstr "Tekst odpowiedzi na wiadomości przychodzące"
+
+#: js/sieve/VacationEditDialog.js:114
+msgid "General"
+msgstr "Ogólne"
+
+#: js/sieve/VacationEditDialog.js:133 js/sieve/VacationEditDialog.js:167
+msgid "I am available (vacation message disabled)"
+msgstr "Jestem dostępny (wyłączona informacja o urlopie)"
+
+#: js/sieve/VacationEditDialog.js:140 js/sieve/VacationEditDialog.js:168
+msgid "I am not available (vacation message enabled)"
+msgstr "Jestem niedostępny (włączona informacja o urlopie)"
+
+#: js/sieve/VacationEditDialog.js:156
+msgid "Status"
+msgstr "Status"
+
+#: js/sieve/VacationEditDialog.js:180
+msgid "Advanced"
+msgstr "Zaawansowane"
+
+#: js/sieve/VacationEditDialog.js:191
+msgid "Only send all X days to the same sender"
+msgstr "Wysyłaj zawsze co X dni do tego samego nadawcy"
+
+#: js/sieve/RuleConditionsPanel.js:70
+msgid "From (Email and Name)"
+msgstr "Od (e-mail i nazwa)"
+
+#: js/sieve/RuleConditionsPanel.js:71
+msgid "To (Email)"
+msgstr "Do (e-mail)"
+
+#: js/sieve/RuleConditionsPanel.js:74
+msgid "Header contains"
+msgstr "Nagłówek zawiera"
+
+#: js/sieve/RuleConditionsPanel.js:75 js/sieve/RuleConditionsPanel.js:77
+msgid "Header name"
+msgstr "Nazwa nagłówka"
+
+#: js/sieve/RuleConditionsPanel.js:75 js/sieve/RuleConditionsPanel.js:77
+msgid "Header value"
+msgstr "Wartość nagłówka"
+
+#: js/sieve/RuleConditionsPanel.js:76
+msgid "Header regex"
+msgstr "Wyrażenie regularne dla nagłówka"
+
+#: js/sieve/RuleEditDialog.js:96
+msgid "Edit Filter Rule"
+msgstr "Edytuj reguły filtrowania"
+
+#: js/sieve/RuleEditDialog.js:254
+msgid "If all of the following conditions are met:"
+msgstr "Jeśli wszystkie z następujących warunków są spełnione:"
+
+#: js/sieve/RuleEditDialog.js:271
+msgid "Do this action:"
+msgstr "Wykonaj działanie:"
+
+#: js/sieve/RuleEditDialog.js:361
+msgid "Move mail to folder"
+msgstr "Przenieś wiadomość do katalogu"
+
+#: js/sieve/RuleEditDialog.js:362
+msgid "Redirect mail to address"
+msgstr "Przekieruj wiadomość na adres"
+
+#: js/sieve/RuleEditDialog.js:363
+msgid "Reject mail with this text"
+msgstr "Zablokuj wiadomość zawierającą tę treść"
+
+#: js/sieve/RuleEditDialog.js:364
+msgid "Discard mail"
+msgstr "Usuń wiadomość"
+
+#: js/sieve/RuleEditDialog.js:365
+msgid "Keep mail"
+msgstr "Zachowaj wiadomość"
+
+#: Setup/Initialize.php:34
+msgid "All inboxes of my email accounts"
+msgstr "Wszystkie odebrane wiadomości z własnych kont pocztowych"
+
+#: Setup/Initialize.php:41
+msgid "All unread mail"
+msgstr "Wszystkie nieprzeczytane"
+
+#: Setup/Initialize.php:42
+msgid "All unread mail of my email accounts"
+msgstr "Wszystkie nieprzeczytane wiadomości z własnych kont pocztowych"
+
+#: Setup/Initialize.php:49
+msgid "All highlighted mail"
+msgstr "Wszystkie wyróżnione wiadomości"
+
+#: Setup/Initialize.php:50
+msgid "All highlighted mail of my email accounts"
+msgstr "Wszystkie wyróżnione wiadomości z własnych kont pocztowych"
+
+#: Setup/Initialize.php:57
+msgid "All drafts"
+msgstr "Wszystkie szkice"
+
+#: Setup/Initialize.php:58
+msgid "All mails with the draft flag"
+msgstr "Wszystkie wiadomości z flagą szkic"
 
 #: Preference.php:59
 msgid "All inboxes"
@@ -1505,33 +983,161 @@ msgstr "Potwierdź usunięcie"
 msgid "Show confirmation dialog when deleting mails."
 msgstr "Zanim usuniesz pocztę, wyświetl okno dialogowe z potwierdzeniem"
 
-#: Setup/Initialize.php:34
-msgid "All inboxes of my email accounts"
-msgstr "Wszystkie odebrane wiadomości z własnych kont pocztowych"
+#~ msgid "{0} left"
+#~ msgstr "Pozostało {0}"
 
-#: Setup/Initialize.php:41
-msgid "All unread mail"
-msgstr "Wszystkie nieprzeczytane"
+#~ msgid "Current usage: {0} of {1}"
+#~ msgstr "Bieżące zużycie: {0} z {1}"
 
-#: Setup/Initialize.php:42
-msgid "All unread mail of my email accounts"
-msgstr "Wszystkie nieprzeczytane wiadomości z własnych kont pocztowych"
+#~ msgid "Searching..."
+#~ msgstr "Wyszukiwanie..."
 
-#: Setup/Initialize.php:49
-msgid "All highlighted mail"
-msgstr "Wszystkie wyróżnione wiadomości"
+#~ msgid "Type"
+#~ msgstr "Typ"
 
-#: Setup/Initialize.php:50
-msgid "All highlighted mail of my email accounts"
-msgstr "Wszystkie wyróżnione wiadomości z własnych kont pocztowych"
+#~ msgid "Tags"
+#~ msgstr "Znaczniki"
 
-#: Setup/Initialize.php:57
-msgid "All drafts"
-msgstr "Wszystkie szkice"
+#~ msgid "Last Name"
+#~ msgstr "Nazwisko"
 
-#: Setup/Initialize.php:58
-msgid "All mails with the draft flag"
-msgstr "Wszystkie wiadomości z flagą szkic"
+#~ msgid "First Name"
+#~ msgstr "Imię"
+
+#~ msgid "Full Name"
+#~ msgstr "Imię i nazwisko"
+
+#~ msgid "Display Name"
+#~ msgstr "Wyświetlana nazwa"
+
+#~ msgid "Company"
+#~ msgstr "Firma"
+
+#~ msgid "Unit"
+#~ msgstr "Oddział"
+
+#~ msgid "Job Title"
+#~ msgstr "Zawód"
+
+#~ msgid "Job Role"
+#~ msgstr "Funkcja"
+
+#~ msgid "Room"
+#~ msgstr "Pokój"
+
+#~ msgid "Street"
+#~ msgstr "Ulica"
+
+#~ msgid "City"
+#~ msgstr "Miasto"
+
+#~ msgid "Region"
+#~ msgstr "Województwo"
+
+#~ msgid "Postalcode"
+#~ msgstr "Kod pocztowy"
+
+#~ msgid "Country"
+#~ msgstr "Państwo"
+
+#~ msgid "Street (private)"
+#~ msgstr "Ulica (prywatnie)"
+
+#~ msgid "City (private)"
+#~ msgstr "Miasto (prywatnie)"
+
+#~ msgid "Region (private)"
+#~ msgstr "Województwo (prywatnie)"
+
+#~ msgid "Postalcode (private)"
+#~ msgstr "Kod pocztowy (prywatnie)"
+
+#~ msgid "Country (private)"
+#~ msgstr "Kraj (prywatnie)"
+
+#~ msgid "Phone"
+#~ msgstr "Telefon"
+
+#~ msgid "Mobile"
+#~ msgstr "Komórka"
+
+#~ msgid "Fax"
+#~ msgstr "Faks"
+
+#~ msgid "Car phone"
+#~ msgstr "Telefon w samochodzie"
+
+#~ msgid "Pager"
+#~ msgstr "Pager"
+
+#~ msgid "Phone (private)"
+#~ msgstr "Telefon (prywatnie)"
+
+#~ msgid "Fax (private)"
+#~ msgstr "Faks (prywatnie)"
+
+#~ msgid "Mobile (private)"
+#~ msgstr "Komórka (prywatnie)"
+
+#~ msgid "Email (private)"
+#~ msgstr "E-mail (prywatnie)"
+
+#~ msgid "Web"
+#~ msgstr "WWW"
+
+#~ msgid "URL (private)"
+#~ msgstr "URL (prywatnie)"
+
+#~ msgid "Note"
+#~ msgstr "Notatka"
+
+#~ msgid "Timezone"
+#~ msgstr "Strefa czasowa"
+
+#~ msgid "Geo"
+#~ msgstr "Położenie"
+
+#~ msgid "Birthday"
+#~ msgstr "Urodziny"
+
+#~ msgid "Export Contact"
+#~ msgstr "Eksportuj kontakt"
+
+#~ msgid "Export as PDF"
+#~ msgstr "Eksportuj jako PDF"
+
+#~ msgid "Export as CSV"
+#~ msgstr "Eksportuj jako CSV"
+
+#~ msgid "Export as ODS"
+#~ msgstr "Eksportuj jako ODS"
+
+#~ msgid "Export as XLS"
+#~ msgstr "Eksportuj jako XLS"
+
+#~ msgid "Export as ..."
+#~ msgstr "Eksportuj jako ..."
+
+#~ msgid "Call contact"
+#~ msgstr "Wywołaj kontakt"
+
+#~ msgid "Import contacts"
+#~ msgstr "Importuj kontakty"
+
+#~ msgid "Work"
+#~ msgstr "Praca"
+
+#~ msgid "Home"
+#~ msgstr "Dom"
+
+#~ msgid "Cell"
+#~ msgstr "Komórka"
+
+#~ msgid "Cell private"
+#~ msgstr "Prywatna komórka"
+
+#~ msgid "Internal Contact"
+#~ msgstr "Kontakt wewnętrzny"
 
 #~ msgid "Out of Office reply"
 #~ msgstr "Poza biurem"

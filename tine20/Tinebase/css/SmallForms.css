@@ -86,3 +86,8 @@
     padding-top: 6px;
     padding-left: 0;
 }
+
+.x-progress-text {
+	font-size: 10px;
+	font-weight: bold;
+}

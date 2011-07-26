@@ -22,6 +22,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
     autoEl: 'div',
     value: '',
     increment: 15,
+    timeEditable: true,
     markedInvalid: false,
     
     initComponent: function () {
@@ -121,6 +122,7 @@ Ext.ux.form.DateTimeField = Ext.extend(Ext.form.Field, {
             readOnly: this.readOnly,
             hideTrigger: this.hideTrigger,
             disabled: this.disabled,
+            editable: this.timeEditable,
             tabIndex: this.tabIndex === -1 ? this.tabIndex : false,
             allowBlank: this.allowBlank,
             value: this.value,

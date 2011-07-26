@@ -478,6 +478,8 @@ Tine.Felamimail.Model.Folder = Tine.Tinebase.data.Record.create([
       { name: 'cache_timestamp',    type: 'date', dateFormat: Date.patterns.ISO8601Long  },
       { name: 'cache_job_actions_estimate',     type: 'int' },
       { name: 'cache_job_actions_done',         type: 'int' },
+      { name: 'quota_usage',         type: 'int' },
+      { name: 'quota_limit',         type: 'int' },
       { name: 'client_access_time', type: 'date', dateFormat: Date.patterns.ISO8601Long  }, // client only {@see Tine.Felamimail.folderBackend#updateMessageCache}
       { name: 'unread_children', type: 'Array', defaultValue: [] } // client only / array of unread child ids
 ], {

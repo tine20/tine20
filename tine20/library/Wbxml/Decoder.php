@@ -88,9 +88,10 @@ class Wbxml_Decoder extends Wbxml_Abstract
     /**
      * return the Document Public Identifier
      *
+     * @param integer $_uInt unused param, needed to satisfy abstract class method signature
      * @return string
      */
-    public function getDPI()
+    public function getDPI($_uInt = 0)
     {
         return $this->_dpi;
     }
