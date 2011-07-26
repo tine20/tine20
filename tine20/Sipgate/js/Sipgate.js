@@ -65,7 +65,7 @@ Tine.Sipgate.getPanel = function() {
 	/** ****** tree panel handlers ********** */
 
 	treePanel.on('click', function(node, event) {
-		// Tine.log.debug(node);
+		Tine.log.debug(node);
 		Tine.Sipgate.Main.show(node);
 	}, this);
 
@@ -77,11 +77,12 @@ Tine.Sipgate.getPanel = function() {
 	}, this);
 
 	treePanel.on('beforeexpand', function(panel) {
-		// expand root (Sipgates) node
+
 		if (panel.getSelectionModel().getSelectedNode() === null) {
 			var node = panel.getRootNode();
 			node.select();
 			node.expand();
+			Tine.Sipgate.Main.show(node);
 		} else {
 			panel.getSelectionModel().fireEvent('selectionchange', panel.getSelectionModel());
 		}
@@ -101,7 +102,7 @@ Tine.Sipgate.getPanel = function() {
 		}
 
 		// node.getOwnerTree().selectPath(node.getPath());
-		Tine.Sipgate.Main.show(node);
+		
 	}, this);
 
 	return treePanel;
@@ -130,7 +131,7 @@ Tine.Sipgate.Main = {
 	paging : {
 		start : 0,
 		limit : 50,
-		sort : 'start',
+		sort : 'Timestamp',
 		dir : 'DESC'
 	},
 
@@ -186,8 +187,8 @@ Tine.Sipgate.Main = {
 					scale : 'medium',
 					rowspan : 2,
 					iconAlign : 'top'
-				}), ]
-			}, '->', ]
+				}) ]
+			}, '->' ]
 		});
 
 		Tine.Tinebase.MainScreen.setActiveToolbar(toolbar);
@@ -207,13 +208,13 @@ Tine.Sipgate.Main = {
 			//root : 'results',
 			// totalProperty : 'totalcount',
 			fields : [ 'EntryID', 'Timestamp', 'RemoteUri', 'LocalUri', 'Status' , 'RemoteParty','RemoteRecord','RemoteNumber'],
-			remoteSort : true,
+			remoteSort : false,
 			baseParams : {
 				method : 'Sipgate.getCallHistory'
 			},
 			sortInfo : {
-			// field : this.paging.sort,
-			// direction : this.paging.dir
+			 field : this.paging.sort,
+			 direction : this.paging.dir
 			}
 		});
 
@@ -250,8 +251,8 @@ Tine.Sipgate.Main = {
 		// the columnmodel
 		var columnModel = new Ext.grid.ColumnModel({
 			defaults : {
-				sortable : false,
-				resizable : false
+				sortable : true,
+				resizable : true
 			},
 			columns : [
 			{
@@ -302,7 +303,7 @@ Tine.Sipgate.Main = {
 			]
 		});
 
-		columnModel.defaultSortable = false; // by default columns are
+		columnModel.defaultSortable = true; // by default columns are
 		// sortable
 
 		// the rowselection model
@@ -316,7 +317,7 @@ Tine.Sipgate.Main = {
 			store : this.store,
 			cm : columnModel,
 			tbar : pagingToolbar,
-			autoSizeColumns : false,
+			autoSizeColumns : true,
 			selModel : rowSelectionModel,
 			enableColLock : false,
 			loadMask : true,
@@ -348,6 +349,7 @@ Tine.Sipgate.Main = {
 		Tine.Tinebase.MainScreen.setActiveContentPanel(gridPanel);
 	},
 
+		
 	show : function(_node) {
 		
 			var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
@@ -355,16 +357,21 @@ Tine.Sipgate.Main = {
 			if (currentToolbar === false || currentToolbar.id != 'Sipgate_Toolbar') {
 				this.initComponent();
 				this.displayToolbar();
-				if (_node.id != 'root')	this.store.load({});
+				if (_node.id != 'root') {
+					this.store.load({});
+				}
 				this.displayGrid();
 			} else {
-				if (_node.id != 'root') this.store.load({});
+				if (_node.id != 'root'){
+					this.store.load({});
+				}
 			}
 		}
 	
 };
 
 /** ************************** store *************************************** */
+
 
 /**
  * get user phones store
