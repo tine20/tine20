@@ -102,11 +102,11 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
                 'fields'  => array(
                     'web_language' => array(),
                     'language' => array(),
-                    'display_method' => array('default' => 'full_contact'),
-                    'mwi_notification' => array('default' => 'silent'),
-                    'mwi_dialtone' => array('default' => 'normal'),
-                    'headset_device' => array('default' => 'none'),
-                    'call_waiting' => array('default' => 'on'),
+                    'display_method' => array(),
+                    'mwi_notification' => array(),
+                    'mwi_dialtone' => array(),
+                    'headset_device' => array(),
+                    'call_waiting' => array(),
                 )
             ),
             'snom_phone_settings' => array(
@@ -114,11 +114,11 @@ class Voipmanager_Setup_Update_Release5 extends Setup_Update_Abstract
                 'fields'  => array(
                     'web_language' => array(),
                     'language' => array(),
-                    'display_method' => array('default' => 'full_contact'),
-                    'mwi_notification' => array('default' => 'silent'),
-                    'mwi_dialtone' => array('default' => 'normal'),
-                    'headset_device' => array('default' => 'none'),
-                    'call_waiting' => array('default' => 'on'),
+                    'display_method' => array(),
+                    'mwi_notification' => array(),
+                    'mwi_dialtone' => array(),
+                    'headset_device' => array(),
+                    'call_waiting' => array(),
                 )
             ),
             'snom_phones_acl' => array(

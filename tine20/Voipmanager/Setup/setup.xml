@@ -1064,8 +1064,6 @@
                     <name>display_method</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>full_contact</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>mwi_notification</name>
@@ -1078,15 +1076,11 @@
                     <name>mwi_dialtone</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>normal</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>headset_device</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>none</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>message_led_other</name>
@@ -1122,8 +1116,6 @@
                     <name>call_waiting</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>on</default>
-                    <notnull>true</notnull>
                 </field>     
                 <field>
                     <name>web_language_w</name>
@@ -1273,29 +1265,21 @@
                     <name>display_method</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>full_contact</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>mwi_notification</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>silent</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>mwi_dialtone</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>normal</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>headset_device</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>none</default>
-                    <notnull>true</notnull>
                 </field>
                 <field>
                     <name>message_led_other</name>
@@ -1331,8 +1315,6 @@
                     <name>call_waiting</name>
                     <type>text</type>
                     <length>32</length>
-                    <default>on</default>
-                    <notnull>true</notnull>
                 </field>     
                 <index>
                     <name>phone_id</name>
