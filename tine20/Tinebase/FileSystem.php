@@ -210,22 +210,7 @@ class Tinebase_FileSystem
                     fclose($hashHandle);
                 }
                 
-                $currentFileObject = $this->_fileObjectBackend->get($options['tine20']['node']->object_id);
-                $updatedFileObject = clone($currentFileObject);
-                $updatedFileObject->hash = $hash;
-                $updatedFileObject->size = filesize($hashFile);
-                if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
-                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
-                    $mimeType = finfo_file($finfo, $hashFile);
-                    if ($mimeType !== false) {
-                        $updatedFileObject->contenttype = $mimeType;
-                    }
-                    finfo_close($finfo);
-                }
-                
-                $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
-                $modLog->setRecordMetaData($updatedFileObject, 'update', $currentFileObject);
-                $this->_fileObjectBackend->update($updatedFileObject);
+                $this->_updateFileObject($options['tine20']['node']->object_id, $hash, $hashFile);
                 
                 break;
         }
@@ -233,6 +218,34 @@ class Tinebase_FileSystem
         fclose($_handle);
         
         return true;
+    }
+    
+    /**
+     * update file object with hash file info
+     * 
+     * @param string $_id
+     * @param string $_hash
+     * @param string $_hashFile
+     * @return Tinebase_Model_Tree_FileObject
+     */
+    protected function _updateFileObject($_id, $_hash, $_hashFile)
+    {
+        $currentFileObject = $this->_fileObjectBackend->get($_id);
+        $updatedFileObject = clone($currentFileObject);
+        $updatedFileObject->hash = $_hash;
+        $updatedFileObject->size = filesize($_hashFile);
+        if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_file($finfo, $_hashFile);
+            if ($mimeType !== false) {
+                $updatedFileObject->contenttype = $mimeType;
+            }
+            finfo_close($finfo);
+        }
+        
+        $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
+        $modLog->setRecordMetaData($updatedFileObject, 'update', $currentFileObject);
+        return $this->_fileObjectBackend->update($updatedFileObject);
     }
     
     /**
