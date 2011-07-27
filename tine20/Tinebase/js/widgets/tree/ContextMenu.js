@@ -245,10 +245,16 @@ Tine.widgets.tree.ContextMenu = {
             managePermissions: function() {
                 if (this.ctxNode) {
                     var node = this.ctxNode;
+                    
+                    var grantContainer = node.attributes.container;
+                    if(grantContainer.name.id) {
+                        grantContainer = grantContainer.name;
+                    }
+                    
                     var window = Tine.widgets.container.GrantsDialog.openWindow({
                         title: String.format(_('Manage Permissions for {0} "{1}"'), config.nodeName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
                         containerName: config.nodeName,
-                        grantContainer: node.attributes.container
+                        grantContainer: grantContainer
                     });
                 }
             },
