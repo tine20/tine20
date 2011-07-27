@@ -100,6 +100,15 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
                         }
                     }
                     this.loadMask.hide();
+                },
+                failure: function(response, options) {
+                    this.loadMask.hide();
+                    var responseText = Ext.util.JSON.decode(response.responseText);
+                    // TODO add special setup / config exception handling?
+                    
+                    // call default exception handler
+                    var exception = responseText.data ? responseText.data : responseText;
+                    Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 }
             });
         } else {
