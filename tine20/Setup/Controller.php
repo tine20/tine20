@@ -773,28 +773,28 @@ class Setup_Controller
         $originalBackend = Tinebase_User::getConfiguredBackend();
         $newBackend = $_data['backend'];
         
-        try {
-            $db = Setup_Core::getDb();
-            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
-            
-            Tinebase_User::setBackendType($_data['backend']);
-            Tinebase_User::setBackendConfiguration($_data[$_data['backend']]);
-            Tinebase_User::saveBackendConfiguration();
-           
-            if ($originalBackend != $newBackend && $this->isInstalled('Addressbook')) {
-                Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Switching from $originalBackend to $newBackend account storage");
-                if ($originalBackend == Tinebase_User::SQL) {
-                    $this->_migrateFromSqlAccountsStorage();
-                }
+        Tinebase_User::setBackendType($_data['backend']);
+        Tinebase_User::setBackendConfiguration($_data[$_data['backend']]);
+        Tinebase_User::saveBackendConfiguration();
+        
+        if ($originalBackend != $newBackend && $this->isInstalled('Addressbook') && $originalBackend == Tinebase_User::SQL) {
+            Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . " Switching from $originalBackend to $newBackend account storage");
+            try {
+                $db = Setup_Core::getDb();
+                $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
+                $this->_migrateFromSqlAccountsStorage();
+                Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+        
+            } catch (Exception $e) {
+                Tinebase_TransactionManager::getInstance()->rollBack();
+                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+                Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+                
+                Tinebase_User::setBackendType($originalBackend);
+                Tinebase_User::saveBackendConfiguration();
+                
+                throw $e;
             }
-            
-            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
-            
-        } catch (Exception $e) {
-            Tinebase_TransactionManager::getInstance()->rollBack();
-            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
-            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
-            throw $e;
         }
     }
     
