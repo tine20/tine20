@@ -114,6 +114,7 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
      * the constructor
      *
      * @param  array  $_options  Options used in connecting, binding, etc.
+     * @throws Tinebase_Exception_Backend_Ldap
      */
     public function __construct(array $_options = array())
     {
@@ -153,8 +154,13 @@ class Tinebase_User_Ldap extends Tinebase_User_Sql implements Tinebase_User_Inte
 
         $this->_rowNameMapping['accountId'] = $this->_userUUIDAttribute;
         
-        $this->_ldap = new Tinebase_Ldap($this->_options);
-        $this->_ldap->bind();
+        try {
+            $this->_ldap = new Tinebase_Ldap($this->_options);
+            $this->_ldap->bind();
+        } catch (Zend_Ldap_Exception $zle) {
+            // @todo move this to Tinebase_Ldap?
+            throw new Tinebase_Exception_Backend_Ldap('Could not bind to LDAP: ' . $zle->getMessage());
+        }
         
         foreach ($this->_plugins as $plugin) {
             if ($plugin instanceof Tinebase_User_Plugin_LdapInterface) {
