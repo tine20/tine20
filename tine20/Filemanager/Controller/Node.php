@@ -370,6 +370,48 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     }
     
     /**
+     * copy nodes
+     * 
+     * @param array $_sourceFilenames array->multiple
+     * @param string|array $_destinationFilenames string->singlefile OR directory, array->multiple files
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * 
+     * @todo finish implementation
+     */
+    public function copyNodes($_sourceFilenames, $_destinationFilenames)
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        
+        foreach ($_sourceFilenames as $filename) {
+            //$node = $this->_copyNode($filename, $_type);
+            //$result->addRecord($node);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * move nodes
+     * 
+     * @param array $_sourceFilenames array->multiple
+     * @param string|array $_destinationFilenames string->singlefile OR directory, array->multiple files
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * 
+     * @todo finish implementation
+     */
+    public function moveNodes($_sourceFilenames, $_destinationFilenames)
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        
+        foreach ($_sourceFilenames as $filename) {
+            //$node = $this->_moveNode($filename, $_type);
+            //$result->addRecord($node);
+        }
+        
+        return $result;
+    }
+    
+    /**
      * delete nodes
      * 
      * @param array $_filenames string->single file, array->multiple
