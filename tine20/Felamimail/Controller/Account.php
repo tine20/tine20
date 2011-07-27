@@ -967,8 +967,12 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         $_account->name   = $_email;
         $_account->from   = $_user->accountFullName;
         
-        // add contact data
-        $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_user->getId(), TRUE);
-        $_account->organization = $contact->org_name;
+        // add contact data (if available)
+        try {
+            $contact = Addressbook_Controller_Contact::getInstance()->getContactByUserId($_user->getId(), TRUE);
+            $_account->organization = $contact->org_name;
+        } catch (Addressbook_Exception_NotFound $aenf) {
+            Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not get system account user contact: ' . $aenf->getMessage());
+        }
     }
 }
