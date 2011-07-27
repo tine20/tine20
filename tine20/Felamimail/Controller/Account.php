@@ -645,7 +645,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         // check if folder exists on imap server
         $imapBackend = $this->_getIMAPBackend($account);
-        if ($imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
+        if ($imapBackend && $imapBackend->getFolderStatus(Felamimail_Model_Folder::encodeFolderName($folderName)) === false) {
             $systemFolder = $this->_createSystemFolder($account, $folderName);
             if ($systemFolder->globalname !== $folderName) {
                 $account->{$systemFolderField} = $systemFolder->globalname;
