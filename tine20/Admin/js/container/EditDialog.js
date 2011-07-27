@@ -133,7 +133,9 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     valueField: 'id',
                     fieldLabel: this.app.i18n._('Application'),
                     mode: 'local',
-                    anchor: '100%'
+                    anchor: '100%',
+                    allowBlank: false,
+                    forceSelection: true
                 }, {
                     xtype: 'combo',
                     columnWidth: 0.3,
@@ -147,7 +149,9 @@ Tine.Admin.ContainerEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         }
                     },
                     mode: 'local',
-                    anchor: '100%'
+                    anchor: '100%',
+                    allowBlank: false,
+                    forceSelection: true
                 }, {
                     xtype: 'colorfield',
                     columnWidth: 0.1,
