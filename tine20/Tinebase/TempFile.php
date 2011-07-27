@@ -18,7 +18,7 @@
  * @package     Tinebase
  * @subpackage  File
  */
-class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract
+class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebase_Controller_Interface
 {
     /**
      * Table name without prefix
