@@ -454,11 +454,13 @@ class Tinebase_User
             try {
                 $user = self::syncUser($user, $_syncContactData);
             } catch (Tinebase_Exception_NotFound $ten) {
-                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: " . $ten->getMessage());
+                Tinebase_Core::getLogger()->crit(__METHOD__ . '::' . __LINE__ . " User {$user->accountLoginName} not synced: "
+                    . $ten->getMessage());
             }
         }
 
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ .' finnished synchronizing users');
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' finished synchronizing users');
     }
     
     /**
