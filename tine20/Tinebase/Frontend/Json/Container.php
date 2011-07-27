@@ -116,15 +116,10 @@ class Tinebase_Frontend_Json_Container
      * @param  int      $containerId
      * @param  string   $newName
      * @return array    updated container
-     * @throws Tinebase_Exception
      */
     public function renameContainer($containerId, $newName)
     {
-        try {
-            $container = Tinebase_Container::getInstance()->setContainerName($containerId, $newName);
-        } catch (Tinebase_Exception $e) {
-            throw new Tinebase_Exception('Container not found or permission to set containername denied!');
-        }
+        $container = Tinebase_Container::getInstance()->setContainerName($containerId, $newName);
         
         $result = $container->toArray();
         $result['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $container->getId())->toArray();
