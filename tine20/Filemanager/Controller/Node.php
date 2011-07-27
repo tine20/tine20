@@ -404,8 +404,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_sourceFlatpath
      * @param string $_destinationFlatpath
      * @return Tinebase_Model_Tree_Node
-     * 
-     * @todo finish
      */
     protected function _copyNode($_sourceFlatpath, $_destinationFlatpath)
     {
@@ -418,27 +416,46 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $this->_checkPathACL($sourcePathRecord, 'get', FALSE);
         
         $sourceNode = $this->_backend->stat($sourcePathRecord->statpath);
+        
+        $newNode = $this->_createNodeAtDestination($sourceNode, $_destinationFlatpath);
 
+        if ($sourceNode->type === Tinebase_Model_Tree_Node::TYPE_FILE) {
+            // need to persist the generated path
+            $path = $newNode->path;
+            
+            $newNode = $this->_backend->attachFileObjectToNode($newNode, $sourceNode->object_id);
+            $newNode->path = $path;
+        }
+        
+        return $newNode;
+    }
+    
+    /**
+     * create new node at destination path
+     * 
+     * @param Tinebase_Model_Tree_Node $_sourceNode
+     * @param string $_destinationFlatpath
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_InvalidArgument
+     * 
+     * @todo rename file automatically if it exists?
+     */
+    protected function _createNodeAtDestination(Tinebase_Model_Tree_Node $_sourceNode, $_destinationFlatpath)
+    {
         $destinationPathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_destinationFlatpath));
         try {
             $destinationNode = $this->_backend->stat($destinationPathRecord->statpath);
-            // target exists
+            // destination node exists
             switch ($destinationNode->type) {
                 case Tinebase_Model_Tree_Node::TYPE_FILE:
-                    throw new Tinebase_Exception_NotImplemented('existing file: not implemented yet');
+                    throw new Tinebase_Exception_InvalidArgument('File exists.');
                     break;
                 case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                    $newNode = $this->_createNode($_destinationFlatpath .'/' . $sourceNode->name, $sourceNode->type);
+                    $newNode = $this->_createNode($_destinationFlatpath .'/' . $_sourceNode->name, $_sourceNode->type);
                     break;
             }
-            
         } catch (Tinebase_Exception_NotFound $tenf) {
-            // new file / dir
-            throw new Tinebase_Exception_NotImplemented('new file / dir: not implemented yet');
-        }
-
-        if ($sourceNode->type === Tinebase_Model_Tree_Node::TYPE_FILE) {
-            throw new Tinebase_Exception_NotImplemented('attach file object to new node: not implemented yet');
+            $newNode = $this->_createNode($_destinationFlatpath, $_sourceNode->type);
         }
         
         return $newNode;

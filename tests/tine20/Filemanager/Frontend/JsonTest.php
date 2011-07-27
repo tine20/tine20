@@ -449,7 +449,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * testCopyFolderNodes
      */
-    public function testCopyFolderNodes()
+    public function testCopyFolderNodesToFolder()
     {
         $dirsToCopy = $this->testCreateDirectoryNodesInShared();
         $targetNode = $this->testCreateContainerNodeInPersonalFolder();
@@ -459,10 +459,19 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($targetNode['path'] . '/dir1', $result[0]['path']);
     }
     
-    // @todo add testCopyFolderExisting
-    // @todo add testCopyFileNodesToFolder
-    // @todo add testCopyFileNodesToFolderExisting
-    // @todo add testCopyFileNodeToFile
+    /**
+     * testCopyFileNodesToFolder
+     */
+    public function testCopyFileNodesToFolder()
+    {
+        $filesToCopy = $this->testCreateFileNodes();
+        $targetNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $result = $this->_json->copyNodes($filesToCopy, $targetNode['path']);
+        $this->assertEquals(2, count($result));
+        $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
+    }
+    
     // @todo add testCopyFileNodeToFileExisting
     
     // @todo add moveNodes tests
