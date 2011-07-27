@@ -58,7 +58,7 @@ Ext.ux.file.UploadManager = function(config) {
          * starts the upload
          * 
          * @param id {String} upload id
-         * @returns {Ext.ux.file.Uploader.file} upload file record
+         * @returns {Ext.ux.file.Upload.file} upload file record
          */
         upload: function(id) {            
             return this.uploads[id].upload();

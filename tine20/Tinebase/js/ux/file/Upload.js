@@ -687,7 +687,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 /**
  * upload file record
  */
-Ext.ux.file.Uploader.file = Ext.data.Record.create([
+Ext.ux.file.Upload.file = Ext.data.Record.create([
     {name: 'id', type: 'text', system: true},
     {name: 'uploadKey', type: 'number', system: true},
     {name: 'name', type: 'text', system: true},

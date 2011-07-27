@@ -209,7 +209,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
      */
     initStore: function () {
         this.store = new Ext.data.SimpleStore({
-            fields: Ext.ux.file.Uploader.file
+            fields: Ext.ux.file.Upload.file
         });
         
         this.loadRecord(this.record);
@@ -243,7 +243,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         if (record && record.get(this.filesProperty)) {
             var files = record.get(this.filesProperty);
             for (var i = 0; i < files.length; i += 1) {
-                var file = new Ext.ux.file.Uploader.file(files[i]);
+                var file = new Ext.ux.file.Upload.file(files[i]);
                 file.data.status = 'complete';
                 this.store.add(file);
             }
