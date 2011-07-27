@@ -11,7 +11,7 @@
  */
 
 /**
- * Backend exception
+ * Database Backend exception
  * 
  * @package     Tinebase
  * @subpackage  Exception
