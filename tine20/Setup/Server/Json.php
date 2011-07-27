@@ -26,10 +26,12 @@ class Setup_Server_Json extends Tinebase_Server_Json
     {
         try {
             // init server and request first
-            $request = new Zend_Json_Server_Request_Http();
             $server = new Zend_Json_Server();
             $server->setClass('Setup_Frontend_Json', 'Setup');
             $server->setClass('Tinebase_Frontend_Json', 'Tinebase');
+            $server->setAutoHandleExceptions(false);
+            $server->setAutoEmitResponse(false);
+            $request = new Zend_Json_Server_Request_Http();
             
             Setup_Core::initFramework();
             
@@ -72,11 +74,12 @@ class Setup_Server_Json extends Tinebase_Server_Json
                 }
             }
             
-            $server->handle($request);
+            $response = $server->handle($request);
             
         } catch (Exception $exception) {
-            echo $this->_handleException($server, $request, $exception);
-            exit;
+            $response = $this->_handleException($server, $request, $exception);
         }
+        
+        echo $response;
     }
 }
