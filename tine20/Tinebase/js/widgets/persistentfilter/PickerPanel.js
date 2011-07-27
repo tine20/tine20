@@ -301,6 +301,10 @@ Tine.widgets.persistentfilter.PickerPanel = Ext.extend(Ext.tree.TreePanel, {
     onRenamePersistentFilter: function(node) {
         Ext.MessageBox.prompt(_('New Name'), String.format(_('Please enter the new name for favorite "{0}"?'), node.text), function(_btn, _newName){
             if ( _btn == 'ok') {
+                if (_newName.length > 40) {
+                    Ext.Msg.alert(_('Favorite not Saved'), _('You have to supply a shorter name! Names of favorite can only be up to 40 characters long.'));
+                    return;
+                }
                 Ext.MessageBox.wait(_('Please wait'), String.format(_('Renaming Favorite "{0}"'), node.text));
                 
                 var record = this.store.getById(node.id);
