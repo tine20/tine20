@@ -472,7 +472,17 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
     }
     
-    // @todo add testCopyFileNodeToFileExisting
+    /**
+     * testCopyFileNodeToFileExisting
+     */
+    public function testCopyFileNodeToFileExisting()
+    {
+        $filesToCopy = $this->testCreateFileNodes();
+        $file1 = $filesToCopy[0];
+        
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $result = $this->_json->copyNodes($file1, $file1);
+    }
     
     // @todo add moveNodes tests
     
