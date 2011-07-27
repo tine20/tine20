@@ -113,7 +113,11 @@ Tine.Tinebase.widgets.form.ConfigPanel = Ext.extend(Ext.FormPanel, {
                                 title: _('Configuration Problem'), 
                                 msg: exception.message,
                                 buttons: Ext.Msg.OK,
-                                icon: Ext.MessageBox.WARNING
+                                icon: Ext.MessageBox.WARNING,
+                                fn: function() {
+                                    // TODO only reload own config data
+                                    window.location.reload();
+                                }
                             });
                             break;
                         default:
