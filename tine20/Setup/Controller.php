@@ -772,32 +772,44 @@ class Setup_Controller
     {
         $originalBackend = Tinebase_User::getConfiguredBackend();
         $newBackend = $_data['backend'];
-        Tinebase_User::setBackendType($_data['backend']);
-        Tinebase_User::setBackendConfiguration($_data[$_data['backend']]);
-        Tinebase_User::saveBackendConfiguration();
-       
-        if ($originalBackend != $newBackend && $this->isInstalled('Addressbook')) {
-            if ($originalBackend == Tinebase_User::SQL) {
-                Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleteing all user accounts, groups, roles and rights');
-                //delete all users, groups and roles because they will be imported from new accounts storage backend
-                Tinebase_User::factory(Tinebase_User::SQL)->deleteAllUsers();
-                
-                Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
-                $lists = new Addressbook_Backend_List();
-                $lists->deleteAllLists();
-                
-                $roles = Tinebase_Acl_Roles::getInstance();
-                $roles->deleteAllRoles();
-                
-                Tinebase_User::syncUsers(true); //import users(ldap)/create initial users(sql)
-                
-                $roles->createInitialRoles();
-                $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
-                foreach ($applications as $application)
-                {
-                     Setup_Initialize::initializeApplicationRights($application);
+        
+        try {
+            $db = Setup_Core::getDb();
+            $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);        
+            Tinebase_User::setBackendType($_data['backend']);
+            Tinebase_User::setBackendConfiguration($_data[$_data['backend']]);
+            Tinebase_User::saveBackendConfiguration();
+           
+            if ($originalBackend != $newBackend && $this->isInstalled('Addressbook')) {
+                if ($originalBackend == Tinebase_User::SQL) {
+                    Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Deleting all user accounts, groups, roles and rights');
+                    //delete all users, groups and roles because they will be imported from new accounts storage backend
+                    Tinebase_User::factory(Tinebase_User::SQL)->deleteAllUsers();
+                    
+                    Tinebase_Group::factory(Tinebase_Group::SQL)->deleteAllGroups();
+                    $lists = new Addressbook_Backend_List();
+                    $lists->deleteAllLists();
+                    
+                    $roles = Tinebase_Acl_Roles::getInstance();
+                    $roles->deleteAllRoles();
+                    
+                    Tinebase_User::syncUsers(true); //import users(ldap)/create initial users(sql)
+                    
+                    $roles->createInitialRoles();
+                    $applications = Tinebase_Application::getInstance()->getApplications(NULL, 'id');
+                    foreach ($applications as $application) {
+                         Setup_Initialize::initializeApplicationRights($application);
+                    }
                 }
             }
+            
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
+            
+        } catch (Exception $e) {
+            Tinebase_TransactionManager::getInstance()->rollBack();
+            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());
+            Setup_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' ' . $e->getTraceAsString());
+            throw $e;
         }
     }
     
