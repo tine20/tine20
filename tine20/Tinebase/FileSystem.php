@@ -654,4 +654,19 @@ class Tinebase_FileSystem
     {
         return explode('/', trim($_path, '/'));
     }
+    
+    /**
+     * attach existing file object to node
+     * 
+     * @param Tinebase_Model_Tree_Node $_node
+     * @param Tinebase_Model_Tree_FileObject|string $_fileObject
+     * @return Tinebase_Model_Tree_Node
+     */
+    public function attachFileObjectToNode(Tinebase_Model_Tree_Node $_node, $_fileObject)
+    {
+        $objectId = ($_fileObject instanceof Tinebase_Model_Tree_FileObject) ? $_fileObject->getId() : $_fileObject;
+        $_node->object_id = $objectId;
+        
+        return $this->_treeNodeBackend->update($_node);
+    }
 }

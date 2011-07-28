@@ -133,12 +133,12 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string|array $sourceFilenames string->single file, array->multiple
      * @param string|array $destinationFilenames string->singlefile OR directory, array->multiple files
      * @return array
-     * 
-     * @todo implement
      */
     public function copyNodes($sourceFilenames, $destinationFilenames)
     {
-        throw new Tinebase_Exception_NotImplemented('not implemented yet');
+        $nodes = Filemanager_Controller_Node::getInstance()->copyNodes((array)$sourceFilenames, $destinationFilenames);
+        
+        return $this->_multipleRecordsToJson($nodes);
     }
 
     /**
@@ -147,12 +147,12 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param string|array $sourceFilenames string->single file, array->multiple
      * @param string|array $destinationFilenames string->singlefile OR directory, array->multiple files
      * @return array
-     * 
-     * @todo implement
      */
     public function moveNodes($sourceFilenames, $destinationFilenames)
     {
-        throw new Tinebase_Exception_NotImplemented('not implemented yet');
+        $nodes = Filemanager_Controller_Node::getInstance()->moveNodes((array)$sourceFilenames, $destinationFilenames);
+        
+        return $this->_multipleRecordsToJson($nodes);
     }
 
     /**

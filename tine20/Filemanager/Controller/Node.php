@@ -269,15 +269,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param string $_action
+     * @param boolean $_topLevelAllowed
      * @throws Tinebase_Exception_AccessDenied
      */
-    protected function _checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get')
+    protected function _checkPathACL(Tinebase_Model_Tree_Node_Path $_path, $_action = 'get', $_topLevelAllowed = TRUE)
     {
         $hasPermission = FALSE;
         
         if ($_path->container) {
             $hasPermission = $this->_checkACLContainer($_path->container, $_action);
-        } else {
+        } else if ($_topLevelAllowed) {
             switch ($_path->containerType) {
                 case Tinebase_Model_Container::TYPE_PERSONAL:
                     $hasPermission = ($_path->containerOwner === $this->_currentAccount->accountLoginName);
@@ -367,6 +368,119 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 }
             }
         }
+    }
+    
+    /**
+     * copy nodes
+     * 
+     * @param array $_sourceFilenames array->multiple
+     * @param string|array $_destinationFilenames string->singlefile OR directory, array->multiple files
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    public function copyNodes($_sourceFilenames, $_destinationFilenames)
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        
+        foreach ($_sourceFilenames as $idx => $source) {
+            if (is_array($_destinationFilenames)) {
+                if (isset($_destinationFilenames[$idx])) {
+                    $destination = $_destinationFilenames[$idx];
+                } else {
+                    throw new Tinebase_Exception_InvalidArgument('No destination path found.');
+                }
+            } else {
+                $destination = $_destinationFilenames;
+            }
+            $node = $this->_copyNode($source, $destination);
+            $result->addRecord($node);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * copy single node
+     * 
+     * @param string $_sourceFlatpath
+     * @param string $_destinationFlatpath
+     * @return Tinebase_Model_Tree_Node
+     */
+    protected function _copyNode($_sourceFlatpath, $_destinationFlatpath)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Copy Node ' . $_sourceFlatpath . ' to ' . $_destinationFlatpath);
+                
+        $newNode = NULL;
+        
+        $sourcePathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_sourceFlatpath));
+        $this->_checkPathACL($sourcePathRecord, 'get', FALSE);
+        
+        $sourceNode = $this->_backend->stat($sourcePathRecord->statpath);
+        
+        $newNode = $this->_createNodeAtDestination($sourceNode, $_destinationFlatpath);
+
+        if ($sourceNode->type === Tinebase_Model_Tree_Node::TYPE_FILE) {
+            // need to persist the generated path
+            $path = $newNode->path;
+            
+            $newNode = $this->_backend->attachFileObjectToNode($newNode, $sourceNode->object_id);
+            $newNode->path = $path;
+        }
+        
+        return $newNode;
+    }
+    
+    /**
+     * create new node at destination path
+     * 
+     * @param Tinebase_Model_Tree_Node $_sourceNode
+     * @param string $_destinationFlatpath
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_InvalidArgument
+     * 
+     * @todo rename file automatically if it exists?
+     */
+    protected function _createNodeAtDestination(Tinebase_Model_Tree_Node $_sourceNode, $_destinationFlatpath)
+    {
+        $destinationPathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_destinationFlatpath));
+        try {
+            $destinationNode = $this->_backend->stat($destinationPathRecord->statpath);
+            // destination node exists
+            switch ($destinationNode->type) {
+                case Tinebase_Model_Tree_Node::TYPE_FILE:
+                    throw new Tinebase_Exception_InvalidArgument('File exists.');
+                    break;
+                case Tinebase_Model_Tree_Node::TYPE_FOLDER:
+                    $newNode = $this->_createNode($_destinationFlatpath .'/' . $_sourceNode->name, $_sourceNode->type);
+                    break;
+            }
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            $newNode = $this->_createNode($_destinationFlatpath, $_sourceNode->type);
+        }
+        
+        return $newNode;
+    }
+    
+    /**
+     * move nodes
+     * 
+     * @param array $_sourceFilenames array->multiple
+     * @param string|array $_destinationFilenames string->singlefile OR directory, array->multiple files
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * 
+     * @todo just use _copyNode and delete the source afterwards?
+     * @todo finish implementation
+     */
+    public function moveNodes($_sourceFilenames, $_destinationFilenames)
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        
+        foreach ($_sourceFilenames as $filename) {
+            //$node = $this->_moveNode($filename, $_type);
+            //$result->addRecord($node);
+        }
+        
+        return $result;
     }
     
     /**

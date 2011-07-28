@@ -447,6 +447,46 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
         
     /**
+     * testCopyFolderNodes
+     */
+    public function testCopyFolderNodesToFolder()
+    {
+        $dirsToCopy = $this->testCreateDirectoryNodesInShared();
+        $targetNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $result = $this->_json->copyNodes($dirsToCopy, $targetNode['path']);
+        $this->assertEquals(2, count($result));
+        $this->assertEquals($targetNode['path'] . '/dir1', $result[0]['path']);
+    }
+    
+    /**
+     * testCopyFileNodesToFolder
+     */
+    public function testCopyFileNodesToFolder()
+    {
+        $filesToCopy = $this->testCreateFileNodes();
+        $targetNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $result = $this->_json->copyNodes($filesToCopy, $targetNode['path']);
+        $this->assertEquals(2, count($result));
+        $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
+    }
+    
+    /**
+     * testCopyFileNodeToFileExisting
+     */
+    public function testCopyFileNodeToFileExisting()
+    {
+        $filesToCopy = $this->testCreateFileNodes();
+        $file1 = $filesToCopy[0];
+        
+        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $result = $this->_json->copyNodes($file1, $file1);
+    }
+    
+    // @todo add moveNodes tests
+    
+    /**
      * testDeleteContainerNode
      */
     public function testDeleteContainerNode()

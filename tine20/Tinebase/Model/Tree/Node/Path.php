@@ -192,7 +192,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             Tinebase_Model_Container::TYPE_SHARED,
             Tinebase_Model_Container::TYPE_OTHERUSERS,
         ))) {
-            throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $this->containerType);
+            throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $containerType);
         }
         
         return $containerType;
