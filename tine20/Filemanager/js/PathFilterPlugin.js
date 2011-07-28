@@ -101,6 +101,7 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
             
             this.treePanel.getSelectionModel().suspendEvents();
             this.selectValue(filter.value);
+            this.treePanel.getSelectionModel().resumeEvents();
         }, this);
     },
     
@@ -110,9 +111,12 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
      * @param {String} value
      */
     selectValue: function(value) {
+        console.log("selectValue PathFilterPlugin");
         var values = Ext.isArray(value) ? value : [value];
         Ext.each(values, function(value) {
-            var treePath = this.treePanel.getTreePath(value.path);
+//            var treePath = this.treePanel.getTreePath(value.path);
+            var treePath = value;
+
             this.selectPath.call(this.treePanel, treePath, null, function() {
                 // mark this expansion as done and check if all are done
                 value.isExpanded = true;
@@ -164,5 +168,21 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
                 callback(true, this.root);
             }
         }
+    },
+    
+    /**
+     * fires our change event
+     */
+    onFilterChange: function() {
+        if (this.getGridPanel() && typeof this.getGridPanel().getView === 'function') {
+            this.getGridPanel().getView().isPagingRefresh = true;
+        }
+        
+//        console.log(this.store);
+        if (this.store) {
+            this.store.load();
+        }
+        
+        this.fireEvent('change', this);
     }
 });
