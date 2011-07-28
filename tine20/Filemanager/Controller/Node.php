@@ -8,7 +8,7 @@
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
- * @todo        use Tinebase_Model_Tree_Node_Path
+ * @todo        add transactions to move/create/delete/copy 
  */
 
 /**
@@ -382,20 +382,35 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         
         foreach ($_sourceFilenames as $idx => $source) {
-            if (is_array($_destinationFilenames)) {
-                if (isset($_destinationFilenames[$idx])) {
-                    $destination = $_destinationFilenames[$idx];
-                } else {
-                    throw new Tinebase_Exception_InvalidArgument('No destination path found.');
-                }
-            } else {
-                $destination = $_destinationFilenames;
-            }
+            $destination = $this->_getDestinationPath($_destinationFilenames, $idx);
             $node = $this->_copyNode($source, $destination);
             $result->addRecord($node);
         }
         
         return $result;
+    }
+    
+    /**
+     * get single destination from an array of destinations and an index
+     * 
+     * @param string|array $_destinationFilenames
+     * @param int $_idx
+     * @return string
+     * @throws Tinebase_Exception_InvalidArgument
+     */
+    protected function _getDestinationPath($_destinationFilenames, $_idx)
+    {
+        if (is_array($_destinationFilenames)) {
+            if (isset($_destinationFilenames[$_idx])) {
+                $destination = $_destinationFilenames[$_idx];
+            } else {
+                throw new Tinebase_Exception_InvalidArgument('No destination path found.');
+            }
+        } else {
+            $destination = $_destinationFilenames;
+        }
+        
+        return $destination;    
     }
     
     /**
@@ -467,20 +482,32 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param array $_sourceFilenames array->multiple
      * @param string|array $_destinationFilenames string->singlefile OR directory, array->multiple files
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
-     * 
-     * @todo just use _copyNode and delete the source afterwards?
-     * @todo finish implementation
      */
     public function moveNodes($_sourceFilenames, $_destinationFilenames)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         
         foreach ($_sourceFilenames as $filename) {
-            //$node = $this->_moveNode($filename, $_type);
-            //$result->addRecord($node);
+            $destination = $this->_getDestinationPath($_destinationFilenames, $idx);
+            $node = $this->_copyNode($source, $destination);
+            $this->_deleteNode($source);
+            $result->addRecord($node);
         }
         
         return $result;
+    }
+    
+    /**
+     * copy single node
+     * 
+     * @param string $_sourceFlatpath
+     * @param string $_destinationFlatpath
+     * @return Tinebase_Model_Tree_Node
+     */
+    protected function _moveNode($_sourceFlatpath, $_destinationFlatpath)
+    {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Move Node ' . $_sourceFlatpath . ' to ' . $_destinationFlatpath);
     }
     
     /**
