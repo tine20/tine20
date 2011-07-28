@@ -484,7 +484,55 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->copyNodes($file1, $file1);
     }
     
-    // @todo add moveNodes tests
+    /**
+     * testMoveFolderNodesToFolder
+     */
+    public function testMoveFolderNodesToFolder()
+    {
+        $dirsToMove = $this->testCreateDirectoryNodesInShared();
+        $targetNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $result = $this->_json->moveNodes($dirsToMove, $targetNode['path']);
+        $this->assertEquals(2, count($result));
+        $this->assertEquals($targetNode['path'] . '/dir1', $result[0]['path']);
+        
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED . '/testcontainer'
+        ), array(
+            'field'    => 'type', 
+            'operator' => 'equals', 
+            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+        ));
+        $result = $this->_json->searchNodes($filter, array());
+        $this->assertEquals(0, $result['totalcount']);        
+    }
+
+    /**
+     * testMoveFileNodesToFolder
+     */
+    public function testMoveFileNodesToFolder()
+    {
+        $filesToMove = $this->testCreateFileNodes();
+        $targetNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $result = $this->_json->moveNodes($filesToMove, $targetNode['path']);
+        $this->assertEquals(2, count($result));
+        $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
+
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_SHARED . '/testcontainer'
+        ), array(
+            'field'    => 'type', 
+            'operator' => 'equals', 
+            'value'    => Tinebase_Model_Tree_Node::TYPE_FILE,
+        ));
+        $result = $this->_json->searchNodes($filter, array());
+        $this->assertEquals(0, $result['totalcount']);        
+    }
     
     /**
      * testDeleteContainerNode
