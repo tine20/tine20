@@ -379,11 +379,27 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     public function copyNodes($_sourceFilenames, $_destinationFilenames)
     {
+        return $this->_copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, 'copy');
+    }
+    
+    /**
+     * copy or move an array of nodes identified by their path
+     * 
+     * @param array $_sourceFilenames array->multiple
+     * @param string|array $_destinationFilenames string->singlefile OR directory, array->multiple files
+     * @param string $_action copy|move
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    protected function _copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, $_action)
+    {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         
         foreach ($_sourceFilenames as $idx => $source) {
             $destination = $this->_getDestinationPath($_destinationFilenames, $idx);
             $node = $this->_copyNode($source, $destination);
+            if ($_action === 'move') {
+                $this->_deleteNode($source);
+            }
             $result->addRecord($node);
         }
         
@@ -485,16 +501,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     public function moveNodes($_sourceFilenames, $_destinationFilenames)
     {
-        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
-        
-        foreach ($_sourceFilenames as $filename) {
-            $destination = $this->_getDestinationPath($_destinationFilenames, $idx);
-            $node = $this->_copyNode($source, $destination);
-            $this->_deleteNode($source);
-            $result->addRecord($node);
-        }
-        
-        return $result;
+        return $this->_copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, 'move');
     }
     
     /**
