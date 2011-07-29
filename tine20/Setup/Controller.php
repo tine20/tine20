@@ -1123,9 +1123,15 @@ class Setup_Controller
     public function uninstallApplications($_applications)
     {
         $this->_clearCache();
+
+        $installedApps = Tinebase_Application::getInstance()->getApplications();
+        
+        // uninstall all apps if tinebase ist going to be uninstalled
+        if (count($installedApps) !== count($_applications) && in_array('Tinebase', $_applications)) {
+            $_applications = $installedApps->name;
+        }
         
         // deactivate foreign key check if all installed apps should be uninstalled
-        $installedApps = Tinebase_Application::getInstance()->getApplications();
         if (count($installedApps) == count($_applications) && get_class($this->_backend) == 'Setup_Backend_Mysql') {
             $this->_backend->setForeignKeyChecks(0);
             foreach ($installedApps as $app) {
@@ -1139,7 +1145,6 @@ class Setup_Controller
             $this->_uninstallApplication($tinebase);
             $this->_backend->setForeignKeyChecks(1);
         } else {
-            
             // get xml and sort apps first
             $applications = array();
             foreach($_applications as $applicationName) {
