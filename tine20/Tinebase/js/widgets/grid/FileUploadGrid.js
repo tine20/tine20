@@ -269,14 +269,10 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
                 var val = value;               
                 
                 if (record.get('status') !== 'complete') {
-//                    val += ' (' + record.get('progress') + '%)';
                 
                     if (record.get('status') == 'paused') {
                         metadata.css = 'x-tinebase-uploadpaused';
                     } 
-//                    if (record.get('status') == 'pending') {
-//                      metadata.css = 'x-tinebase-uploadstop';
-//                    } 
                     else if (record.get('status') == 'uploading') {
                         metadata.css = 'x-tinebase-uploading';
                     }

@@ -529,6 +529,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * called when the store gets updated, e.g. from editgrid
      */
     onStoreUpdate: function(store, record, operation) {
+        
+        console.log("onStoreUpdate");
+        
         switch (operation) {
             case Ext.data.Record.EDIT:
             
@@ -561,6 +564,8 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * called before store queries for data
      */
     onStoreBeforeload: function(store, options) {
+        
+        console.log("onStoreBeforeload");
         // define a transaction
         this.lastStoreTransactionId = options.transactionId = Ext.id();
 
@@ -595,6 +600,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
 //            this.grid.getView().focusRow(0);
 //        }
         
+        
+        console.log("onStoreLoad");
+        
         // restore selection
         if (Ext.isArray(options.preserveSelection)) {
             Ext.each(options.preserveSelection, function(record) {
@@ -626,6 +634,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      */
     onStoreLoadException: function(proxy, type, error, options) {
         
+        console.log("onStoreLoadException");
         // reset autoRefresh
         if (window.isMainWindow && this.autoRefreshInterval) {
             this.autoRefreshTask.delay(this.autoRefreshInterval * 5000);
@@ -649,6 +658,9 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @param {Ext.data.Store} store
      */
     onStoreBeforeLoadRecords: function(o, options, success, store) {
+        
+        console.log("onStoreBeforeLoadRecords");
+
         if (this.lastStoreTransactionId && options.transactionId && this.lastStoreTransactionId !== options.transactionId) {
             Tine.log.debug('cancelling old transaction request.');
             return false;

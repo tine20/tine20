@@ -181,7 +181,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         };
         
         this.initContextMenu();
-        
+              
         this.getSelectionModel().on('beforeselect', this.onBeforeSelect, this);
         this.getSelectionModel().on('selectionchange', this.onSelectionChange, this);
         this.on('click', this.onClick, this);
@@ -487,6 +487,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @return {Boolean}
      */
     onBeforeSelect: function(sm, newSelection, oldSelection) {
+
         if (this.requiredGrant && newSelection.isLeaf()) {
             var accountGrants =  newSelection.attributes.container.account_grants || {};
             if (! accountGrants[this.requiredGrant]) {
@@ -556,9 +557,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @param {} node
      */
     onSelectionChange: function(sm, nodes) {
-        
-        console.log("onSelectionChange");
-        
+                
         if (this.filterMode == 'gridFilter' && this.filterPlugin) {
             this.filterPlugin.onFilterChange();
         }
@@ -571,7 +570,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             ftb.filterStore.each(function(filter) {
                 var field = filter.get('field');
                 // @todo find criteria what to remove
-                if (field === 'container_id' || field === 'attender') {
+                if (field === 'container_id' || field === 'attender' || field === 'path') {
                     ftb.deleteFilter(filter);
                 }
             }, this);

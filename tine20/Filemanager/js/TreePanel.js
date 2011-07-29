@@ -17,16 +17,9 @@ Ext.ns('Tine.Filemanager');
  * @author Martin Jatho <m.jatho@metaways.de>
  */
 
-//Tine.Filemanager.TreePanel = function() {
-//   
-//    Tine.Filemanager.TreePanel.superclass.constructor.call(this);
-//};
-
-
-//Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 
 Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
-//  filterMode : 'filterToolbar',
+    filterMode : 'filterToolbar',
     recordClass : Tine.Filemanager.Model.Node,
     allowMultiSelection : false, 
     plugins : [ {
@@ -50,42 +43,15 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         
         return this.filterPlugin;
     },
-    
-    initComponent: function() {
-              
-        var containerName = this.recordClass ? this.recordClass.getMeta('containerName') : 'container';
-        var containersName = this.recordClass ? this.recordClass.getMeta('containersName') : 'containers';
-        this.containerName = this.containerName || this.app.i18n.n_hidden(containerName, containersName, 1);
-        this.containersName = this.containersName || this.app.i18n._hidden(containersName);
-        
-        
-        this.loader = this.loader || new Tine.widgets.tree.Loader({
-            getParams: this.onBeforeLoad.createDelegate(this),
-            inspectCreateNode: this.onBeforeCreateNode.createDelegate(this)
-        });
-        
-        this.root = {
-                path: '/',
-                cls: 'tinebase-tree-hide-collapsetool',
-                expanded: true,
-                children: [{
-                    path: 'personal/' + Tine.Tinebase.registry.get('currentAccount').accountLoginName,
-                    id: 'personal'
-                }, {
-                    path: '/shared',
-                    id: 'shared'
-                }, {
-                    path: '/personal',
-                    id: 'otherUsers'
-                }].concat(this.getExtraItems())
-        };
-                 
-        this.on('click', this.onClick);
-        this.on('contextmenu', this.onContextMenu, this);
-               
-        this.initContextMenu();
-        Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
-
+//    
+//    initComponent: function() {
+//                    
+//        Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
+//        
+//    },
+//    
+    getRootPath: function() {
+        return 'personal/' + Tine.Tinebase.registry.get('currentAccount').accountLoginName;  
     },
     
     /**
@@ -96,6 +62,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      */
     onBeforeLoad: function(node) {
         
+        console.log("onBeforeLoad");
         var path = node.attributes.path;
         var type = Tine.Tinebase.container.path2type(path);
         var owner = Tine.Tinebase.container.pathIsPersonalNode(path);
@@ -114,9 +81,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
                 newPath += '/' + pathParts[3];
             } 
         }
-        
-        console.log(newPath);
-        
+                
         var params = {
             method: 'Filemanager.searchNodes',
             application: this.app.appName,
@@ -136,6 +101,8 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {Object} attr
      */
     onBeforeCreateNode: function(attr) {
+        console.log("onBeforeCreateNode");
+
         if (attr.accountDisplayName) {
             attr.name = attr.accountDisplayName;
             attr.path = '/personal/' + attr.accountId;
@@ -146,7 +113,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             attr.name = Tine.Tinebase.container.path2name(attr.path, this.containerName, this.containersName);
         }
         
-        if(attr.name && attr.name.name) {
+        if(attr.name && typeof attr.name == 'object') {
             Ext.applyIf(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),
                 qtip: Ext.util.Format.htmlEncode(attr.name.name),
@@ -171,11 +138,12 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     
     
     onClick: function(node, e) {
-        
-        console.log("onclick");
+        console.log("onClick");
         if(node && node.reload) {
             node.reload();
         }
+
+//        this.onSelectionChange(this.getSelectionModel(), node);
 
         var actionToolbar = this.app.mainScreen.ActionToolbar;
         var items = actionToolbar.get(0).items.items;
@@ -224,7 +192,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     initContextMenu: function() {
         
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
-            nodeName: this.containerName,
+            nodeName: this.app.i18n._(this.containerName),
             actions: ['add', 'delete', 'rename'],
             scope: this,
             backend: 'Filemanager',
@@ -240,9 +208,17 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 //        });
         
         
+        this.contextMenuRootFolder = Tine.widgets.tree.ContextMenu.getMenu({
+            nodeName: this.app.i18n._(this.containerName),
+            actions: ['add'],
+            scope: this,
+            backend: 'Filemanager',
+            backendModel: 'Node'
+        });
+        
         this.contextMenuContainerFolder = Tine.widgets.tree.ContextMenu.getMenu({
-            nodeName: this.containerName,
-            actions: ['add', 'grants'],
+            nodeName: this.app.i18n._(this.containerName),
+            actions: ['add', 'delete', 'rename', 'grants'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -257,6 +233,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      */
     onContextMenu: function(node, event) {
         
+        console.log("onContextMenu");
         var currentAccount = Tine.Tinebase.registry.get('currentAccount');
         
         this.ctxNode = node;
@@ -276,16 +253,33 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 //            
         
         if (!Tine.Tinebase.container.pathIsContainer(path)) {
-            this.contextMenuContainerFolder.showAt(event.getXY());
+            this.contextMenuRootFolder.showAt(event.getXY());
         }
         else if (path.match(/^\/shared$/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
                 || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))){
             this.contextMenuUserFolder.showAt(event.getXY());
         } 
         // TODO: check auf richtigen user !!!
-        else if (path.match(/^\/personal/) && path.match(currentAccount.accountLoginName)) {
-            this.contextMenuUserFolder.showAt(event.getXY());
+        else if (path.match(/^\/personal/) && path.match('/personal/' + currentAccount.accountLoginName)) {
+            if(typeof container.name == 'object') {
+                this.contextMenuContainerFolder.showAt(event.getXY());
+            }
+            else {
+                this.contextMenuUserFolder.showAt(event.getXY());
+            }
         }
+    },
+    
+    
+    /**
+     * called when tree selection changes
+     * 
+     * @param {} sm
+     * @param {} node
+     */
+    onSelectionChange: function(sm, nodes) {
+        
+        Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, nodes);
     }
     
     
