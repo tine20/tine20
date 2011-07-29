@@ -15,7 +15,7 @@ Ext.ns('Tine.Filemanager');
  * @class     Tine.Filemanager.PathFilterPlugin
  * @extends   Tine.widgets.grid.FilterPlugin
  */
-Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
+Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
     /**
      * @cfg {Tree Panel} treePanel (required)
      */
@@ -60,7 +60,7 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.grid.FilterPlugin, {
             
         var values = [];
         Ext.each(selection, function(node) {
-            if (node) {
+           if (node) {
                 values.push(node.attributes[this.nodeAttributeField].path);
             }
         }, this);
