@@ -19,6 +19,7 @@ Ext.ns('Tine.Filemanager.Model');
 Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'name' },
+    { name: 'path' },
     // TODO add more record fields here
     // tine 2.0 notes + tags
     { name: 'size' },

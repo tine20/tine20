@@ -62,7 +62,6 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      */
     onBeforeLoad: function(node) {
         
-        console.log("onBeforeLoad");
         var path = node.attributes.path;
         var type = Tine.Tinebase.container.path2type(path);
         var owner = Tine.Tinebase.container.pathIsPersonalNode(path);
@@ -101,7 +100,6 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {Object} attr
      */
     onBeforeCreateNode: function(attr) {
-        console.log("onBeforeCreateNode");
 
         if (attr.accountDisplayName) {
             attr.name = attr.accountDisplayName;
@@ -276,10 +274,14 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {} sm
      * @param {} node
      */
-    onSelectionChange: function(sm, nodes) {
+    onSelectionChange: function(sm, node) {
         
-        this.app.mainScreen.GridPanel.currentFolderNode = nodes; 
-        Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, nodes);
+        this.app.mainScreen.GridPanel.currentFolderNode = node; 
+        Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, node);
+    
+//        if(node.attributes.path == '/') {
+//            this.app.mainScreen.GridPanel.getStore().removeAll();
+//        }
     }
     
     

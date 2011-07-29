@@ -111,7 +111,7 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
      * @param {String} value
      */
     selectValue: function(value) {
-        console.log("selectValue PathFilterPlugin");
+
         var values = Ext.isArray(value) ? value : [value];
         Ext.each(values, function(value) {
 //            var treePath = this.treePanel.getTreePath(value.path);
