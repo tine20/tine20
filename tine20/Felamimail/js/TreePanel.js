@@ -565,6 +565,11 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
      * @param {Object} folderData
      */
     onFolderDelete: function(folderData) {
+    	// if we deleted account, remove it from account store
+    	if (folderData.record && folderData.record.modelName === 'Account') {
+    		this.accountStore.remove(this.accountStore.getById(folderData.id));
+    	}
+    	
         this.folderStore.remove(this.folderStore.getById(folderData.id));
     },
     

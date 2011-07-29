@@ -636,9 +636,10 @@ Ext.namespace('Tine.Felamimail');
             this.record.data.attachments.push(Ext.ux.file.Uploader.file.getFileData(attachment));
         }, this);
         
-        var accountId = this.accountCombo.getValue();
+        var accountId = this.accountCombo.getValue(),
             account = this.accountCombo.getStore().getById(accountId),
             emailFrom = account.get('email');
+            
         this.record.set('from_email', emailFrom);
         
         Tine.Felamimail.MessageEditDialog.superclass.onRecordUpdate.call(this);

@@ -238,6 +238,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             actionType: 'add',
             text: this.app.i18n._('Compose'),
             handler: this.onMessageCompose.createDelegate(this),
+            disabled: ! this.app.getActiveAccount(),
             iconCls: this.app.appName + 'IconCls'
         });
 
@@ -328,7 +329,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         });
         this.actionUpdater.addActions([
-            this.action_write,
+//            this.action_write,
             this.action_deleteRecord,
             this.action_reply,
             this.action_replyAll,
@@ -657,7 +658,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onDeleteRecords: function() {
         var account = this.app.getActiveAccount(),
             trashId = (account) ? account.getTrashFolderId() : null,
-            trash = trashId ? this.app.getFolderStore().getById(trashId) : null
+            trash = trashId ? this.app.getFolderStore().getById(trashId) : null,
             trashConfigured = (account.get('trash_folder')); 
             
         return (trash && ! trash.isCurrentSelection()) || (! trash && trashConfigured) ? this.moveSelectedMessages(trash, true) : this.deleteSelectedMessages();
@@ -855,7 +856,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * compose new message handler
      */
     onMessageCompose: function() {
-        Tine.Felamimail.MessageEditDialog.openWindow({
+        var win = Tine.Felamimail.MessageEditDialog.openWindow({
             listeners: {
                 'update': this.onAfterCompose.createDelegate(this, ['compose'], 1)
             }
@@ -873,7 +874,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.each(msgs, function(msg) {msgsData.push(msg.data)}, this);
         
         if (sm.getCount() > 0) {
-            Tine.Felamimail.MessageEditDialog.openWindow({
+            var win = Tine.Felamimail.MessageEditDialog.openWindow({
                 forwardMsgs : Ext.encode(msgsData),
                 listeners: {
                     'update': this.onAfterCompose.createDelegate(this, ['forward', msgs], 1)
@@ -891,7 +892,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var sm = this.getGrid().getSelectionModel(),
             msg = sm.getSelected();
             
-        Tine.Felamimail.MessageEditDialog.openWindow({
+        var win = Tine.Felamimail.MessageEditDialog.openWindow({
             replyTo : Ext.encode(msg.data),
             replyToAll: toAll,
             listeners: {
@@ -936,11 +937,12 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             folder = this.app.getFolderStore().getById(record.get('folder_id')),
             account = this.app.getAccountStore().getById(folder.get('account_id')),
             action = (folder.get('globalname') == account.get('drafts_folder')) ? 'senddraft' :
-                     folder.get('globalname') == account.get('templates_folder') ? 'sendtemplate' : null;
+                     folder.get('globalname') == account.get('templates_folder') ? 'sendtemplate' : null,
+           	win;
         
         // check folder to determine if mail should be opened in compose dlg
         if (action !== null) {
-            Tine.Felamimail.MessageEditDialog.openWindow({
+            win = Tine.Felamimail.MessageEditDialog.openWindow({
                 draftOrTemplate: Ext.encode(record.data),
                 listeners: {
                     scope: this,
@@ -948,7 +950,7 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             });
         } else {
-            Tine.Felamimail.MessageDisplayDialog.openWindow({
+            win = Tine.Felamimail.MessageDisplayDialog.openWindow({
                 record: record,
                 listeners: {
                     scope: this,

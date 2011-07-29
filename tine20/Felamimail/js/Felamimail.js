@@ -104,7 +104,7 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
             }
             
             this.showActiveVacation();
-            new Tine.Felamimail.AddressbookGridPanelHook({app: this});
+            var hook = new Tine.Felamimail.AddressbookGridPanelHook({app: this});
         }
     },
     
@@ -544,7 +544,18 @@ Tine.Felamimail.Application = Ext.extend(Tine.Tinebase.Application, {
                 root: 'results',
                 totalProperty: 'totalcount',
                 proxy: Tine.Felamimail.accountBackend,
-                reader: Tine.Felamimail.accountBackend.getReader()
+                reader: Tine.Felamimail.accountBackend.getReader(),
+                listeners: {
+                	scope: this,
+                	'add': function (store, records) {
+                		Tine.log.info('Account added: ' + records[0].get(Tine.Felamimail.Model.Account.getMeta('titleProperty')));
+                		this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
+                	},
+                	'remove': function (store, record) {
+                		Tine.log.info('Account removed: ' + record.get(Tine.Felamimail.Model.Account.getMeta('titleProperty')));
+                		this.getMainScreen().getCenterPanel().action_write.setDisabled(! this.getActiveAccount());
+                	}
+                }
             });
         } 
     
