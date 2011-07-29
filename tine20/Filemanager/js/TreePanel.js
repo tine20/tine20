@@ -138,7 +138,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     
     
     onClick: function(node, e) {
-        console.log("onClick");
+
         if(node && node.reload) {
             node.reload();
         }
@@ -233,7 +233,6 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      */
     onContextMenu: function(node, event) {
         
-        console.log("onContextMenu");
         var currentAccount = Tine.Tinebase.registry.get('currentAccount');
         
         this.ctxNode = node;
@@ -279,6 +278,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      */
     onSelectionChange: function(sm, nodes) {
         
+        this.app.mainScreen.GridPanel.currentFolderNode = nodes; 
         Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, nodes);
     }
     
