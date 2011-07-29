@@ -104,18 +104,22 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     getColumnModel: function(){
         
         var columns = [{
-                id: 'name',
+                id: 'path',
                 header: this.app.i18n._("Name"),
                 width: 70,
                 sortable: true,
-                dataIndex: 'name',
+                dataIndex: 'path',
                 renderer: function(value, metadata, record) {
     
                     var fileName = value;
-                    if (typeof value == 'object') {
-                        fileName = value.name;
-                    }
-    
+                    
+//                    if (typeof value == 'object') {
+//                        fileName = value.name;
+//                    }
+                    
+                    var pathParts = value.split("/");
+                    fileName = pathParts[pathParts.length-1];
+                    
                     if(record.data.type == 'folder') {
                         metadata.css = 'x-tinebase-typefolder';
                     }
@@ -315,7 +319,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.contextMenu = new Ext.menu.Menu({
             items: [
-                this.action_createFolder,
+//                this.action_createFolder,
 //                this.action_goUpFolder,
                 this.action_save,
                 this.action_deleteRecord
@@ -427,7 +431,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     scope: this,
                     success: function(_result, _request){
                         var nodeData = Ext.util.JSON.decode(_result.responseText);
-                        currentFolderNode.reload();                       
+                        currentFolderNode.reload();            
+                        app.mainScreen.GridPanel.getStore().reload();
                         this.fireEvent('containeradd', nodeData);
                         Ext.MessageBox.hide();
                     }
@@ -474,6 +479,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     scope: this,
                     success: function(_result, _request){
                         parentNode.reload();
+                        app.mainScreen.GridPanel.getStore().reload();
                         Ext.MessageBox.hide();
                     }
                 });
