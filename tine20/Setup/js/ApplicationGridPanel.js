@@ -251,20 +251,22 @@ Tine.Setup.ApplicationGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 longLoadMask.hide();
             },
             failure: function(exception) {
-                switch(exception.code) {
+                longLoadMask.hide();
+                
+                switch (exception.code) {
                     //Dependency Exception
                     case 501:
-                    Ext.MessageBox.show({
-                        title: this.app.i18n._('Dependency Violation'), 
-                        msg: data.msg,
-                        buttons: Ext.Msg.OK,
-                        icon: Ext.MessageBox.WARNING
-                    });
-                    this.store.load();
-                    longLoadMask.hide();
-                    return true;
+                        Ext.MessageBox.show({
+                            title: this.app.i18n._('Dependency Violation'), 
+                            msg: data.msg,
+                            buttons: Ext.Msg.OK,
+                            icon: Ext.MessageBox.WARNING
+                        });
+                        this.store.load();
+                        break;
+                    default:
+                        Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
                 }
-                return false;
             }
         });
     },
