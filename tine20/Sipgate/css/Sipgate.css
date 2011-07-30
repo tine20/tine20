@@ -32,6 +32,9 @@
 #csw-line {}
 #csw-call-info{text-align: center;padding-top:10px}
 
+.action_AddNumber {
+	background-image:url(../../images/oxygen/16x16/apps/kaddressbook.png) !important;
+	}
 
 .action_DialNumber {
     background-image:url(../../images/oxygen/16x16/devices/audio-headset.png) !important;

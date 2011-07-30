@@ -73,7 +73,7 @@ class Sipgate_Backend_Api {
 			'samurai.ClientIdentify',
 			array(0 => new Zend_XmlRpc_Value_Struct(array(
 				'ClientName' => new Zend_XmlRpc_Value_String('Tine 2.0 Sipgate'),
-				'ClientVersion' =>new Zend_XmlRpc_Value_String('0.1'),
+				'ClientVersion' =>new Zend_XmlRpc_Value_String('0.4'),
 				'ClientVendor' =>new Zend_XmlRpc_Value_String('Alexander Stintzing')
 				)))
 			);
