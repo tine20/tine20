@@ -130,10 +130,10 @@ class Sipgate_Backend_Api {
 	 * @return Zend_XmlRpc_Value_Struct
 	 */
 	public function getCallHistory($_sipUri) {
-
+	    
 		$localUriList[] = new Zend_XmlRpc_Value_String($_sipUri);
 		$structAr['LocalUriList'] = new Zend_XmlRpc_Value_Array($localUriList);
-		$structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime(time()-160480);
+		$structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime(time()-1160480);
 		$structAr['PeriodStop'] = new Zend_XmlRpc_Value_DateTime(time());
 		$struct = new Zend_XmlRpc_Value_Struct($structAr);
 
