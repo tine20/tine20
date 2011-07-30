@@ -65,7 +65,7 @@ Tine.Sipgate.getPanel = function() {
 	/** ****** tree panel handlers ********** */
 
 	treePanel.on('click', function(node, event) {
-		Tine.log.debug(node);
+		node.select();
 		Tine.Sipgate.Main.show(node);
 	}, this);
 
@@ -130,7 +130,7 @@ Tine.Sipgate.Main = {
 	 */
 	paging : {
 		start : 0,
-		limit : 50,
+		stop : 0,
 		sort : 'Timestamp',
 		dir : 'DESC'
 	},
@@ -226,6 +226,12 @@ Tine.Sipgate.Main = {
 			if (!options.params) {
 				options.params = {};
 			}
+			// starttime & stoptime
+			options.params.start = options.params.start ? options.params.start : this.paging.start;
+			options.params.stop = options.params.stop ? options.params.stop : this.paging.stop;
+			options.params.paging = Ext.copyTo({}, options.params, 'start,stop');
+            var quicksearchField = Ext.getCmp('callhistoryQuickSearchField');
+			//options.params.filter = filter;
 
 			var node = Ext.getCmp('sipgate-tree').getSelectionModel().getSelectedNode() || null;
 			this.store.setBaseParam('_sipUri', node.id);
@@ -241,7 +247,7 @@ Tine.Sipgate.Main = {
 
 		// the paging toolbar
 		var pagingToolbar = new Ext.PagingToolbar({
-			pageSize : 50,
+			pageSize : 10,
 			store : this.store,
 			displayInfo : true,
 			displayMsg : this.translation._('Displaying calls {0} - {1} of {2}'),
@@ -378,7 +384,7 @@ Tine.Sipgate.Main = {
  * 
  * @return Ext.data.JsonStore with phones
  */
-Tine.Sipgate.loadSipgateStore = function(reload) {
+Tine.Sipgate.loadSipgateStore = function() {
 
 	var store = Ext.StoreMgr.get('SipgateStore');
 
