@@ -154,23 +154,9 @@ class Sipgate_Controller extends Tinebase_Controller_Abstract
 	 * @param String $_sipUri
 	 */
 
-	public function getCallHistory($_sipUri) {
+	public function getCallHistory($_sipUri, $_start, $_stop) {
 
-//		$filter = array(array("field" => "telephone","operator" => "contains","value" => "86870"));
-//		$paging = array("sort"=>"email","dir"=>"ASC","start"=>0, "limit"=>1);
-//
-////		 var_dump($this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter'));
-//
-//
-//
-//		$history = Sipgate_Backend_Factory::factory()->getCallHistory($_sipUri);
-//		foreach($history as $entry) {
-//			die(var_dump($entry));
-//		}
-////
-////
-////
-		return Sipgate_Backend_Factory::factory()->getCallHistory($_sipUri);
+		return Sipgate_Backend_Factory::factory()->getCallHistory($_sipUri, $_start, $_stop);
 	}
 
 

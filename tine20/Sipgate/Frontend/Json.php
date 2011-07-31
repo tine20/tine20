@@ -49,10 +49,14 @@ class Sipgate_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	 *
 	 * returns the Call History of the uri
 	 * @param String $_sipUri
+	 * @param Integer $_start
+	 * @param Integer $_stop
 	 */
 
-	public function getCallHistory($_sipUri) {
+	public function getCallHistory($_sipUri, $_start, $_stop) {
 
+//	    var_dump($_start);die();
+	    
 		if(empty($_sipUri)) throw new Sipgate_Exception('Sip-Uri leer!');
 		if($_sipUri == 'root') return array();
 		
@@ -62,7 +66,7 @@ class Sipgate_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 		
 		$paging = array("start" => 0, "limit" => 1);
 		$ret = array();
-		$history = Sipgate_Controller::getInstance()->getCallHistory($_sipUri);
+		$history = Sipgate_Controller::getInstance()->getCallHistory($_sipUri, $_start, $_stop);
 		if(count($history)>0) {
 			foreach($history as &$hEntry) {
 				$rUri = str_replace($stripPrefix,$stripRepl,$hEntry['RemoteUri']);
