@@ -127,14 +127,21 @@ class Sipgate_Backend_Api {
 	/**
 	 * Get Call History
 	 * @param string $_sipUri
+	 * @param string $_start
+	 * @param string $_stop 
 	 * @return Zend_XmlRpc_Value_Struct
 	 */
-	public function getCallHistory($_sipUri) {
+	public function getCallHistory($_sipUri, $_start, $_stop) {
+	    
+	      
+	    $start = strtotime($_start);
+	    $stop = strtotime($_stop);
 	    
 		$localUriList[] = new Zend_XmlRpc_Value_String($_sipUri);
 		$structAr['LocalUriList'] = new Zend_XmlRpc_Value_Array($localUriList);
-		$structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime(time()-1160480);
-		$structAr['PeriodStop'] = new Zend_XmlRpc_Value_DateTime(time());
+		// TODO: respect paging
+		$structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime($start);
+		$structAr['PeriodEnd'] = new Zend_XmlRpc_Value_DateTime($stop);
 		$struct = new Zend_XmlRpc_Value_Struct($structAr);
 
 		$resp = $this->_rpc->call('samurai.HistoryGetByDate',array(0 => $struct));
@@ -156,7 +163,7 @@ class Sipgate_Backend_Api {
 //		$localUriList[] = new Zend_XmlRpc_Value_String($_sipUri);
 //		$structAr['LocalUriList'] = new Zend_XmlRpc_Value_Array($localUriList);
 //		$structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime(time()-604800);
-//		$structAr['PeriodStop'] = new Zend_XmlRpc_Value_DateTime(time());
+//		$structAr['PeriodEnd'] = new Zend_XmlRpc_Value_DateTime(time());
 //		$struct = new Zend_XmlRpc_Value_Struct($structAr);
 //
 //		$resp = $this->_rpc->call('samurai.HistoryGetByDate',array(0 => $struct));
