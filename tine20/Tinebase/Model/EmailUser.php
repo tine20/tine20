@@ -39,7 +39,7 @@ class Tinebase_Model_EmailUser extends Tinebase_Record_Abstract
     protected $_validators = array(
         'emailUID'          => array('allowEmpty' => true),
         'emailGID'          => array('allowEmpty' => true),
-        'emailMailQuota'    => array('allowEmpty' => true, Zend_Filter_Input::DEFAULT_VALUE => 500, 'Digits'),
+        'emailMailQuota'    => array('allowEmpty' => true, 'Digits'),
         'emailMailSize'     => array('allowEmpty' => true),
         'emailSieveQuota'   => array('allowEmpty' => true, 'Digits'),
         'emailSieveSize'    => array('allowEmpty' => true),
