@@ -24,6 +24,10 @@
           "path": "js/"
         },
         {
+          "text": "SearchAddressDialog.js",
+          "path": "js/"
+        },        
+        {
           "text": "Sipgate.js",
           "path": "js/"
         }
