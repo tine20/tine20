@@ -510,6 +510,31 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * testMoveContainerFolderNodesToContainerFolder
+     */
+    public function testMoveContainerFolderNodesToContainerFolder()
+    {
+        $sourceNode = $this->testCreateContainerNodeInPersonalFolder();
+        
+        $newPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainermoved';
+        $result = $this->_json->moveNodes($sourceNode['path'], $newPath);
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($newPath, $result[0]['path']);
+        
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName
+        ), array(
+            'field'    => 'type', 
+            'operator' => 'equals', 
+            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+        ));
+        $result = $this->_json->searchNodes($filter, array());
+        $this->assertEquals(1, $result['totalcount']);        
+    }
+    
+    /**
      * testMoveFileNodesToFolder
      */
     public function testMoveFileNodesToFolder()
