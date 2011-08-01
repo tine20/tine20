@@ -309,6 +309,19 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this
         });
         
+        this.action_renameItem = new Ext.Action({
+            requiredGrant: 'editGrant',
+            allowMultiple: false,
+            singularText: this.app.i18n._('Rename'),
+            pluralText: this.app.i18n._('Rename'),
+            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+            text: this.app.i18n._('Rename'),
+            handler: this.onRenameItem,
+            disabled: false,
+            iconCls: 'action_rename',
+            scope: this
+        });
+        
         this.actionUpdater.addActions([
             this.action_upload,
             this.action_deleteRecord,
@@ -322,6 +335,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 //                this.action_createFolder,
 //                this.action_goUpFolder,
                 this.action_save,
+                this.action_renameItem,
                 this.action_deleteRecord
             ]
         });
@@ -394,7 +408,75 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Object} records
      */
     updateSaveAction: function(action, grants, records) {
-            action.setDisabled(true);
+        action.setDisabled(true);
+    },
+    
+    
+    /**
+     * rename selected folder/file
+     * 
+     * @param button {Ext.Component}
+     * @param event {Event object}
+     */
+    onRenameItem: function(button, event) {
+        
+        var app = Tine.Tinebase.appMgr.get('Filemanager');
+        var nodeName = app.i18n._('user file folder');
+        
+        var selectedNode = app.mainScreen.GridPanel.selectionModel.getSelections()[0];
+        
+        if (selectedNode) {
+            var node = selectedNode;
+            Ext.MessageBox.show({
+                title: 'Rename ' + nodeName,
+                msg: String.format(_('Please enter the new name of the {0}:'), nodeName),
+                buttons: Ext.MessageBox.OKCANCEL,
+                value: node.text,
+                fn: function(_btn, _text){
+                    if (_btn == 'ok') {
+                        if (! _text) {
+                            Ext.Msg.alert(String.format(_('Not renamed {0}'), nodeName), String.format(_('You have to supply a {0} name!'), nodeName));
+                            return;
+                        }
+                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Updating {0} "{1}"'), nodeName, node.text));
+                                                
+                        var filename = node.data.path;                        
+                        var targetFilename = "/";
+                        var sourceSplitArray = filename.split("/");
+                        for (var i=1; i<sourceSplitArray.length-1; i++) {
+                            targetFilename += sourceSplitArray[i] + '/'; 
+                        }
+                        
+                        var params = {
+                            method: app.appName + '.moveNodes',
+                            newName: _text,
+                            application: this.app.appName || this.appName,
+                            sourceFilenames: [filename],
+                            destinationFilenames: [targetFilename + _text]
+                        };
+                        
+                        Ext.Ajax.request({
+                            params: params,
+                            scope: this,
+                            success: function(_result, _request){
+                                var nodeData = Ext.util.JSON.decode(_result.responseText);
+                                
+                                var currentFolderNode = app.mainScreen.GridPanel.currentFolderNode;
+                                if(currentFolderNode){
+                                    currentFolderNode.reload();
+                                }                                
+                                app.mainScreen.GridPanel.getStore().reload();
+                                this.fireEvent('containerrename', nodeData);
+                                Ext.MessageBox.hide();
+                            }
+                        });
+                    }
+                },
+                scope: this,
+                prompt: true,
+                icon: Ext.MessageBox.QUESTION
+            });
+        }
     },
     
     /**
