@@ -512,8 +512,8 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
     {
         $baseEvent = $this->getRecurBaseEvent($_recurInstance);
         
-        // compute time diff
-        $instancesOriginalDtStart = new Tinebase_DateTime(substr($_recurInstance->recurid, -19), 'UTC');
+        // compute time diff (NOTE: if the recur instance is the baseEvent, it has no recurid)
+        $instancesOriginalDtStart = $_recurInstance->recurid ? new Tinebase_DateTime(substr($_recurInstance->recurid, -19), 'UTC') : clone $baseEvent->dtstart;
         
         $dtstartDiff = $instancesOriginalDtStart->diff($_recurInstance->dtstart);
         
