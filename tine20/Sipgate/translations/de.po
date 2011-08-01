@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Sipgate\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-02 04:45+0100\n"
+"POT-Creation-Date: 2011-07-31 03:03+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Alexander Stintzing <alex@stintzing.net>\n"
 "Language-Team: Alexander Stintzing <alex@stintzing.net>\n"
@@ -18,161 +18,257 @@ msgstr ""
 "X-Poedit-Basepath: ../../\n"
 "X-Poedit-SearchPath-0: Sipgate\n"
 
-#: js/SmsEditDialog.js:52 js/SmsEditDialog.js:187
-msgid "Send"
-msgstr "SMS verschicken"
-
-#: js/SmsEditDialog.js:60 js/CallStateWindow.js:50
-msgid "Cancel"
-msgstr "abbrechen"
-
-#: js/SmsEditDialog.js:68
-msgid "Close"
-msgstr ""
-
-#: js/Sipgate.js:29
-msgid "Edit phone settings"
-msgstr "Bearbeite Sipgate Einstellungen"
-
-#: js/Sipgate.js:43
-msgid "Sipgate"
-msgstr "Sipgate"
-
-#: js/Sipgate.js:54
-msgid "Devices"
-msgstr "Endgeräte"
-
-#: js/Sipgate.js:153
-msgid "Dial number"
-msgstr "wählen"
-
-#: js/Sipgate.js:154
-msgid "Initiate a new outgoing call"
-msgstr "Neuer Telefonanruf"
-
-#: js/Sipgate.js:246
-msgid "Displaying calls {0} - {1} of {2}"
-msgstr "Zeige Anrufe {0} - {1} of {2}"
-
-#: js/Sipgate.js:247 js/Sipgate.js:329
-msgid "No calls to display"
-msgstr "Heute keine Anrufe"
-
-#: js/Sipgate.js:259
-msgid "Status"
-msgstr "Status"
-
-#: js/Sipgate.js:266
-msgid "Remote Party"
-msgstr "Gesprächspartner"
-
-#: js/Sipgate.js:272
-msgid "Remote Number"
-msgstr "Nummer des Gesprächspartners"
-
-#: js/Sipgate.js:278
-msgid "Local Uri"
-msgstr "lokale Uri"
-
-#: js/Sipgate.js:284
-msgid "Remote Uri"
-msgstr "Entfernte Uri"
-
-#: js/Sipgate.js:291
-msgid "Call started"
-msgstr "Zeitpunkt"
-
-#: js/Sipgate.js:298
-msgid "Call ID"
-msgstr "Anruf Id"
-
-#: js/Sipgate.js:528
-msgid "first dial"
-msgstr "Heben Sie ab, um mit Ihrem Gesprächspartner verbunden zu werden!"
-
-#: js/Sipgate.js:534
-msgid "second dial"
-msgstr "Verbindungsaufbau zu"
-
-#: js/Sipgate.js:542
-msgid "established"
-msgstr "Verbunden mit"
-
-#: js/Sipgate.js:547
-msgid "call 1 busy"
-msgstr "Ihr Telefon ist belegt. Bitte überprüfen Sie, ob es aufgelegt ist"
-
-#: js/Sipgate.js:555
-msgid "call 2 busy"
-msgstr "telefoniert selber gerade, oder hat Ihren Anruf abgewiesen"
-
-#: js/Sipgate.js:563
-msgid "hungup before other called"
-msgstr "Sie haben aufgelegt, bevor Ihr Gesprächspartner antworten hat können"
-
-#: js/Sipgate.js:566
-msgid "hungup"
-msgstr "Gespräch beendet"
-
-#: js/CallStateWindow.js:107
-#, fuzzy
-msgid "connecting..."
-msgstr "Verbinde zu:"
-
-#: js/CallStateWindow.js:145
-msgid "Connecting to: "
-msgstr "Verbinde zu:"
-
-#: js/AddressbookGridPanelHook.js:37
-msgid "Call contact"
-msgstr "Kontakt anrufen"
-
-#: js/AddressbookGridPanelHook.js:61
-msgid "Compose SMS"
-msgstr "Verfasse SMS"
-
-#: js/AddressbookGridPanelHook.js:257
-msgid "Work"
-msgstr "Arbeit"
-
-#: js/AddressbookGridPanelHook.js:266
-msgid "Home"
-msgstr "zu Hause"
-
-#: js/AddressbookGridPanelHook.js:275 js/AddressbookGridPanelHook.js:318
-msgid "Cell"
-msgstr "Handy"
-
-#: js/AddressbookGridPanelHook.js:284 js/AddressbookGridPanelHook.js:327
-msgid "Cell private"
-msgstr "Handy privat"
-
-#: Preference.php:72
+#: Sipgate/Preference.php:72
 #, fuzzy
 msgid "Your phone"
 msgstr "Ihre Telefonnummer"
 
-#: Preference.php:73
+#: Sipgate/Preference.php:73
 #, fuzzy
 msgid "This is your phone"
 msgstr "Das ist die ausgehende Rufnummer beim Wählen aus der Anwendung heraus"
 
-#: Preference.php:76
+#: Sipgate/Preference.php:76
 #, fuzzy
 msgid "Your fax"
 msgstr "Ihre Faxnummer"
 
-#: Preference.php:77
+#: Sipgate/Preference.php:77
 msgid "This is your fax"
 msgstr "Das ist Ihr Faxgerät"
 
-#: Preference.php:80
+#: Sipgate/Preference.php:80
 msgid "Your mobile number"
 msgstr "Ihre Handynummer"
 
-#: Preference.php:81
+#: Sipgate/Preference.php:81
 msgid "Used when sending SMS"
 msgstr "Wird benutzt beim Verschicken einer SMS aus der Anwendung heraus"
+
+#: Sipgate/js/AddressbookGridPanelHook.js:37
+msgid "Call contact"
+msgstr "Kontakt anrufen"
+
+#: Sipgate/js/AddressbookGridPanelHook.js:61
+msgid "Compose SMS"
+msgstr "Verfasse SMS"
+
+#: Sipgate/js/AddressbookGridPanelHook.js:257
+msgid "Work"
+msgstr "Arbeit"
+
+#: Sipgate/js/AddressbookGridPanelHook.js:266
+msgid "Home"
+msgstr "zu Hause"
+
+#: Sipgate/js/AddressbookGridPanelHook.js:275
+#: Sipgate/js/AddressbookGridPanelHook.js:318
+msgid "Cell"
+msgstr "Handy"
+
+#: Sipgate/js/AddressbookGridPanelHook.js:284
+#: Sipgate/js/AddressbookGridPanelHook.js:327
+msgid "Cell private"
+msgstr "Handy privat"
+
+#: Sipgate/js/SearchAddressDialog.js:56
+msgid "Add Number"
+msgstr "Nummer hinzufügen"
+
+#: Sipgate/js/SearchAddressDialog.js:64
+#: Sipgate/js/CallStateWindow.js:50
+#: Sipgate/js/SmsEditDialog.js:60
+msgid "Cancel"
+msgstr "abbrechen"
+
+#: Sipgate/js/SearchAddressDialog.js:72
+#: Sipgate/js/SmsEditDialog.js:68
+msgid "Close"
+msgstr "Schließen"
+
+#: Sipgate/js/SearchAddressDialog.js:130
+#: Sipgate/js/SearchAddressDialog.js:152
+msgid "Phone"
+msgstr "-- borrowed from addressbook ;) --"
+
+#: Sipgate/js/SearchAddressDialog.js:131
+#: Sipgate/js/SearchAddressDialog.js:153
+msgid "Mobile"
+msgstr "-- borrowed from addressbook ;) --"
+
+#: Sipgate/js/SearchAddressDialog.js:132
+#: Sipgate/js/SearchAddressDialog.js:154
+msgid "Fax"
+msgstr "-- borrowed from addressbook ;) --"
+
+#: Sipgate/js/SearchAddressDialog.js:133
+#: Sipgate/js/SearchAddressDialog.js:155
+#, fuzzy
+msgid "Car phone"
+msgstr "Ihre Telefonnummer"
+
+#: Sipgate/js/SearchAddressDialog.js:134
+#: Sipgate/js/SearchAddressDialog.js:156
+msgid "Pager"
+msgstr "-- borrowed from addressbook ;) --"
+
+#: Sipgate/js/SearchAddressDialog.js:135
+#: Sipgate/js/SearchAddressDialog.js:157
+#, fuzzy
+msgid "Phone (private)"
+msgstr "Handy privat"
+
+#: Sipgate/js/SearchAddressDialog.js:136
+#: Sipgate/js/SearchAddressDialog.js:158
+#, fuzzy
+msgid "Fax (private)"
+msgstr "Handy privat"
+
+#: Sipgate/js/SearchAddressDialog.js:137
+#: Sipgate/js/SearchAddressDialog.js:159
+#, fuzzy
+msgid "Mobile (private)"
+msgstr "Handy privat"
+
+#: Sipgate/js/SearchAddressDialog.js:142
+msgid "-- create new --"
+msgstr "-- neuen erstellen --"
+
+#: Sipgate/js/SearchAddressDialog.js:143
+msgid "Select existing contact or create a new one"
+msgstr "Fügen Sie die Nummer einem vorhandenen Kontakt hinzu, oder erstellen Sie einen neuen"
+
+#: Sipgate/js/SearchAddressDialog.js:178
+#, fuzzy
+msgid "Choose Device"
+msgstr "Endgeräte"
+
+#: Sipgate/js/SearchAddressDialog.js:211
+msgid "Choose Address"
+msgstr "Nummer zum Kontakt hinzufügen"
+
+#: Sipgate/js/CallStateWindow.js:107
+#, fuzzy
+msgid "connecting..."
+msgstr "Verbinde zu:"
+
+#: Sipgate/js/CallStateWindow.js:145
+msgid "Connecting to: "
+msgstr "Verbinde zu:"
+
+#: Sipgate/js/Sipgate.js:29
+msgid "Edit phone settings"
+msgstr "Bearbeite Sipgate Einstellungen"
+
+#: Sipgate/js/Sipgate.js:43
+msgid "Sipgate"
+msgstr "Sipgate"
+
+#: Sipgate/js/Sipgate.js:54
+msgid "Devices"
+msgstr "Endgeräte"
+
+#: Sipgate/js/Sipgate.js:154
+msgid "Dial number"
+msgstr "wählen"
+
+#: Sipgate/js/Sipgate.js:155
+#, fuzzy
+msgid "Initiates a new outgoing call"
+msgstr "Neuer Telefonanruf"
+
+#: Sipgate/js/Sipgate.js:162
+#, fuzzy
+msgid "Add Number to Addressbook"
+msgstr "Fügt die Telefonnummer zum Adressbuch hinzu"
+
+#: Sipgate/js/Sipgate.js:163
+#, fuzzy
+msgid "Adds this number to the Addressbook"
+msgstr "Fügt die Telefonnummer zum Adressbuch hinzu"
+
+#: Sipgate/js/Sipgate.js:268
+msgid "Calls from"
+msgstr "Anrufe vom"
+
+#: Sipgate/js/Sipgate.js:279
+#, fuzzy
+msgid "Calls to"
+msgstr "Anruf Id"
+
+#: Sipgate/js/Sipgate.js:295
+msgid "Displaying calls {0} - {1} of {2}"
+msgstr "Zeige Anrufe {0} - {1} of {2}"
+
+#: Sipgate/js/Sipgate.js:296
+#: Sipgate/js/Sipgate.js:375
+msgid "No calls to display"
+msgstr "Heute keine Anrufe"
+
+#: Sipgate/js/Sipgate.js:311
+msgid "Status"
+msgstr "Status"
+
+#: Sipgate/js/Sipgate.js:317
+msgid "Remote Party"
+msgstr "Gesprächspartner"
+
+#: Sipgate/js/Sipgate.js:322
+msgid "Remote Number"
+msgstr "Nummer des Gesprächspartners"
+
+#: Sipgate/js/Sipgate.js:327
+msgid "Local Uri"
+msgstr "lokale Uri"
+
+#: Sipgate/js/Sipgate.js:332
+msgid "Remote Uri"
+msgstr "Entfernte Uri"
+
+#: Sipgate/js/Sipgate.js:339
+msgid "Call started"
+msgstr "Zeitpunkt"
+
+#: Sipgate/js/Sipgate.js:345
+msgid "Call ID"
+msgstr "Anruf Id"
+
+#: Sipgate/js/Sipgate.js:489
+msgid "unknown Person"
+msgstr "unbekannte Person"
+
+#: Sipgate/js/Sipgate.js:601
+msgid "first dial"
+msgstr "Heben Sie ab, um mit Ihrem Gesprächspartner verbunden zu werden!"
+
+#: Sipgate/js/Sipgate.js:610
+msgid "second dial"
+msgstr "Verbindungsaufbau zu"
+
+#: Sipgate/js/Sipgate.js:626
+msgid "established"
+msgstr "Verbunden mit"
+
+#: Sipgate/js/Sipgate.js:636
+msgid "call 1 busy"
+msgstr "Ihr Telefon ist belegt. Bitte überprüfen Sie, ob es aufgelegt ist"
+
+#: Sipgate/js/Sipgate.js:651
+msgid "call 2 busy"
+msgstr "telefoniert selber gerade, oder hat Ihren Anruf abgewiesen"
+
+#: Sipgate/js/Sipgate.js:662
+msgid "hungup before other called"
+msgstr "Sie haben aufgelegt, bevor Ihr Gesprächspartner antworten hat können"
+
+#: Sipgate/js/Sipgate.js:669
+msgid "hungup"
+msgstr "Gespräch beendet"
+
+#: Sipgate/js/SmsEditDialog.js:52
+#: Sipgate/js/SmsEditDialog.js:187
+msgid "Send"
+msgstr "SMS verschicken"
 
 #~ msgid "Body"
 #~ msgstr "Text"
@@ -183,11 +279,9 @@ msgstr "Wird benutzt beim Verschicken einer SMS aus der Anwendung heraus"
 #~ msgid "Outgoing call"
 #~ msgstr "Ausgehender Anruf"
 
-#~ msgid "unknown number"
-#~ msgstr "unbekannte Telefonnummer"
-
 #~ msgid "This is the outgoing fax number"
-#~ msgstr "Das ist die ausgehende Faxnummer beim Faxen aus der Anwendung heraus"
+#~ msgstr ""
+#~ "Das ist die ausgehende Faxnummer beim Faxen aus der Anwendung heraus"
 
 #~ msgid "Sipgates"
 #~ msgstr "Sipgates"
@@ -199,6 +293,7 @@ msgstr "Wird benutzt beim Verschicken einer SMS aus der Anwendung heraus"
 #~ msgstr "Quelle oder Ziel"
 
 #~ msgid "Folder"
+
 #~ msgid_plural "Folders"
 #~ msgstr[0] "Ordner"
 #~ msgstr[1] "Ordner"
