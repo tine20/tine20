@@ -32,6 +32,8 @@ Ext.ns('Tine.Addressbook');
  * @param       {Object} config
  * @constructor
  * Create a new Tine.Addressbook.SearchCombo
+ * 
+ * TODO         add     forceSelection: true ?
  */
 Tine.Addressbook.SearchCombo = Ext.extend(Ext.form.ComboBox, {
 
