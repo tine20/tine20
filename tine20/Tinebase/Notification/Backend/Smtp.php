@@ -85,7 +85,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         }
         
         if($_updater !== NULL && ! empty($_updater->accountEmailAddress)) {
-            $mail->setFrom($_updater->accountEmailAddress, $_updater->accountDisplayName);
+            $mail->setFrom($_updater->accountEmailAddress, $_updater->accountFullName);
             $mail->setSender($this->_fromAddress, $this->_fromName);
         } else {
             $mail->setFrom($this->_fromAddress, $this->_fromName);
@@ -116,7 +116,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
         // send
         if(! empty($_recipient->email)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Send notification email to ' . $_recipient->email);
-            $mail->addTo($_recipient->email, $_recipient->n_fileas);
+            $mail->addTo($_recipient->email, $_recipient->n_fn);
             Tinebase_Smtp::getInstance()->sendMessage($mail);
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
