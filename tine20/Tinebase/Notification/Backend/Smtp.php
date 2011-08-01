@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Notification
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2008-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Lars Kneschke <l.kneschke@metaways.de>
  */
 
@@ -91,7 +91,7 @@ class Tinebase_Notification_Backend_Smtp implements Tinebase_Notification_Interf
             $mail->setFrom($this->_fromAddress, $this->_fromName);
         }
         
-        // attachements
+        // attachments
         if (is_array($_attachements)) {
             $attachements = &$_attachements;
         } elseif (is_string($_attachements)) {
