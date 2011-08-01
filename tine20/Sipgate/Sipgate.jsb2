@@ -20,10 +20,6 @@
           "path": "js/"
         },
         {
-          "text": "SearchAddressDialog.js",
-          "path": "js/"
-        },  
-        {
           "text": "AddressbookGridPanelHook.js",
           "path": "js/"
         },
