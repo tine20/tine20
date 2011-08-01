@@ -276,21 +276,25 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      * @param string $_name
      * @param string $_type
      * @return Tinebase_Model_Container
-     * @throws Tinebase_Exception_NotFound
+     * @throws Tinebase_Exception_NotFound|NULL
      */
     protected function _searchContainerByName($_name, $_type)
     {
+        $result = NULL;
+        
         $search = Tinebase_Container::getInstance()->search(new Tinebase_Model_ContainerFilter(array(
             'application_id' => $this->application->getId(),
             'name'           => $_name,
             'type'           => $_type,
         )));
         
-        if (count($search) !== 1) {
-            throw new Tinebase_Exception_NotFound('Container not found: ' . $_name);
+        if (count($search) > 1) {
+            throw new Tinebase_Exception_NotFound('Duplicate container found: ' . $_name);
+        } else if (count($search) === 1) {
+            $result = $search->getFirstRecord();
         }
         
-        return $search->getFirstRecord();
+        return $result;
     }    
         
     /**
