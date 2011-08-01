@@ -520,6 +520,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->moveNodes($sourceNode['path'], $newPath);
         $this->assertEquals(1, count($result));
         $this->assertEquals($newPath, $result[0]['path']);
+        $this->_objects['containerids'][] = $result[0]['name']['id'];
         
         $filter = array(array(
             'field'    => 'path', 
@@ -531,7 +532,9 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
         ));
         $result = $this->_json->searchNodes($filter, array());
-        $this->assertEquals(1, $result['totalcount']);        
+        foreach ($result['results'] as $node) {
+            $this->assertNotEquals($sourceNode['path'], $node['path']);
+        }
     }
     
     /**
