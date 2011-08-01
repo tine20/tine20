@@ -18,8 +18,6 @@ Tine.Sipgate.getPanel = function() {
 
 	var translation = new Locale.Gettext();
 	translation.textdomain('Sipgate');
-		
-	Tine.log.debug('NOW in getPanel');
 
 	new Tine.Sipgate.AddressbookGridPanelHook({
 				app : {
@@ -31,7 +29,7 @@ Tine.Sipgate.getPanel = function() {
 				text : translation._('Edit phone settings'),
 				iconCls : 'SipgateIconCls',
 				handler : function() {
-					
+					// TODO: options by user					
 				},
 				scope : this
 			});
@@ -67,13 +65,10 @@ Tine.Sipgate.getPanel = function() {
 	/** ****** tree panel handlers ********** */
 
 	treePanel.on('click', function(node, event) {
-		Tine.log.debug('NOW in treepanel ONCLICK');
 				node.select();
-				Tine.Sipgate.Main.show(node);
 			}, this);
 
 	treePanel.on('contextmenu', function(node, event) {
-		Tine.log.debug('NOW in treepanel ONCONTEXTMENU');
 				this.ctxNode = node;
 				if (node.id != 'root') {
 					contextMenu.showAt(event.getXY());
@@ -81,27 +76,17 @@ Tine.Sipgate.getPanel = function() {
 			}, this);
 
 	treePanel.on('beforeexpand', function(panel) {
-Tine.log.debug('NOW in treepanel ONBEFOREEXPAND');
-
-
 				if (panel.getSelectionModel().getSelectedNode() === null) {
 					var node = panel.getRootNode();
 					node.select();
 					node.expand();
-					Tine.Sipgate.Main.show(node);
 				} else {
 					panel.getSelectionModel().fireEvent('selectionchange', panel.getSelectionModel());
 				}
 			}, this);
 
 	treePanel.getSelectionModel().on('selectionchange',
-	
-
-
-	
 			function(_selectionModel) {
-//					Tine.Sipgate.Main.displayToolbar();
-				Tine.log.debug('NOW in treepanel ONSELECTIONCHANGE');
 				var node = _selectionModel.getSelectedNode();
 
 				// update toolbar
@@ -113,7 +98,7 @@ Tine.log.debug('NOW in treepanel ONBEFOREEXPAND');
 						settingsButton.setDisabled(true);
 					}
 				}
-
+			Tine.Sipgate.Main.show(node);
 		}, this);
 
 	return treePanel;
@@ -161,7 +146,6 @@ Tine.Sipgate.Main = {
 	initComponent : function() {
 		this.translation = new Locale.Gettext();
 		this.translation.textdomain('Sipgate');
-		Tine.log.debug('NOW in initComponent');
 
 		this.actions.dialNumber = new Ext.Action({
 					text: this.translation._('Dial number'),
@@ -180,6 +164,7 @@ Tine.Sipgate.Main = {
 		});
 
 		this.initStore();
+		
 	},
 
 	handlers : {
@@ -222,7 +207,7 @@ Tine.Sipgate.Main = {
 								})]
 					}, '->']
 				});
-Tine.log.debug('NOW display toolbar');
+
 		Tine.Tinebase.MainScreen.setActiveToolbar(toolbar);
 	},
 
@@ -233,8 +218,7 @@ Tine.log.debug('NOW display toolbar');
 	 * @todo use new filter toolbar later
 	 */
 	initStore : function() {
-		Tine.log.debug('NOW in initStore');
-
+		
 		this.store = new Ext.data.JsonStore({
 					id : 'EntryID',
 					autoLoad : false,
@@ -275,8 +259,6 @@ Tine.log.debug('NOW display toolbar');
 	 * 
 	 */
 	displayGrid : function() {
-
-		Tine.log.debug('NOW in displayGrid');
 		
 		var fromdate = new Ext.form.DateField({
 					format : 'D, d. M. Y',
@@ -413,22 +395,14 @@ Tine.log.debug('NOW display toolbar');
 	},
 
 	show : function(_node) {
-
-		Tine.log.debug('NOW IN show');
 		
 		var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
-		
-		if (currentToolbar.id != 'Sipgate_Toolbar') {
-			this.initComponent();
-			this.displayToolbar();
-			if (_node.id != 'root') {
-				this.store.load({});
-			}
-			this.displayGrid();
-		} else {
-			if (_node.id != 'root') {
-				this.store.load({});
-			}
+
+		this.initComponent();
+		this.displayToolbar();
+		this.displayGrid();
+		if (_node.id != 'root') {
+			this.store.load({});
 		}
 	}
 
@@ -441,8 +415,8 @@ Tine.log.debug('NOW display toolbar');
  * 
  * @return Ext.data.JsonStore with phones
  */
-Tine.Sipgate.loadSipgateStore = function() {
-Tine.log.debug('NOW IN loadSipgateStore');
+Tine.Sipgate.loadSipgateStore = function(reload) {
+
 	var store = Ext.StoreMgr.get('SipgateStore');
 
 	if (!store) {
@@ -464,7 +438,6 @@ Tine.log.debug('NOW IN loadSipgateStore');
  * load phones
  */
 Tine.Sipgate.updateSipgateTree = function(store) {
-Tine.log.debug('NOW IN updateSipgateTree');
 
 	var translation = new Locale.Gettext();
 	translation.textdomain('Phone');
@@ -479,8 +452,6 @@ Tine.log.debug('NOW IN updateSipgateTree');
 
 	// add phones to tree menu
 	store.each(function(record) {
-				// Tine.log.debug(record);
-
 				var node = new Ext.tree.TreeNode({
 							id : record.id,
 							record : record,
@@ -530,8 +501,6 @@ Tine.Sipgate.dialPhoneNumber = function(number, contact) {
 
 				success : function(_result, _request) {
 
-					// Tine.log.debug(_result);
-
 					sessionId = Ext.decode(_result.responseText).state.SessionID;
 					Ext.getCmp('callstate-window').sessionId = sessionId;
 					Tine.Sipgate.CallStateWindow.startTask(sessionId, contact);
@@ -557,7 +526,6 @@ Tine.Sipgate.addPhoneNumber = function(number) {
 };
 
 Tine.Sipgate.closeSession = function(sessionId) {
-	Tine.log.debug('Closing Session', sessionId);
 	Ext.Ajax.request({
 				url : 'index.php',
 
@@ -581,8 +549,6 @@ Tine.Sipgate.closeSession = function(sessionId) {
  *            contact
  */
 Tine.Sipgate.updateCallStateWindow = function(sessionId, contact) {
-
-	// Tine.log.debug('Update Call State: ' + sessionId);
 
 	Ext.Ajax.request({
 		url : 'index.php',
