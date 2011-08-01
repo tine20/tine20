@@ -9,11 +9,11 @@
 Ext.ns('Ext.ux.file');
 
 /**
- * a simple file uploader
+ * a simple file upload
  * objects of this class represent a single file uplaod
  * 
  * @namespace   Ext.ux.file
- * @class       Ext.ux.file.Uploader
+ * @class       Ext.ux.file.Upload
  * @extends     Ext.util.Observable
  */
 Ext.ux.file.Upload = function(config, file, id) {
@@ -25,30 +25,30 @@ Ext.ux.file.Upload = function(config, file, id) {
         /**
          * @event uploadcomplete
          * Fires when the upload was done successfully 
-         * @param {Ext.ux.file.Uploader} this
-         * @param {Ext.Record} Ext.ux.file.Uploader.file
+         * @param {Ext.ux.file.Upload} this
+         * @param {Ext.Record} Ext.ux.file.Upload.file
          */
          'uploadcomplete',
         /**
          * @event uploadfailure
          * Fires when the upload failed 
-         * @param {Ext.ux.file.Uploader} this
-         * @param {Ext.Record} Ext.ux.file.Uploader.file
+         * @param {Ext.ux.file.Upload} this
+         * @param {Ext.Record} Ext.ux.file.Upload.file
          */
          'uploadfailure',
         /**
          * @event uploadprogress
          * Fires on upload progress (html5 only)
-         * @param {Ext.ux.file.Uploader} this
-         * @param {Ext.Record} Ext.ux.file.Uploader.file
+         * @param {Ext.ux.file.Upload} this
+         * @param {Ext.Record} Ext.ux.file.Upload.file
          * @param {XMLHttpRequestProgressEvent}
          */
          'uploadprogress',
          /**
           * @event uploadstart
           * Fires on upload progress (html5 only)
-          * @param {Ext.ux.file.Uploader} this
-          * @param {Ext.Record} Ext.ux.file.Uploader.file
+          * @param {Ext.ux.file.Upload} this
+          * @param {Ext.Record} Ext.ux.file.Upload.file
           */
           'uploadstart'
     );
@@ -194,7 +194,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     /**
      * perform the upload
      * 
-     * @return {Ext.Record} Ext.ux.file.Uploader.file
+     * @return {Ext.Record} Ext.ux.file.Upload.file
      */
     upload: function() {
                                    
@@ -503,7 +503,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         var input = this.getInput();
         form.appendChild(input);
         
-        this.fileRecord = new Ext.ux.file.Uploader.file({
+        this.fileRecord = new Ext.ux.file.Upload.file({
             name: this.fileSelector.getFileName(),          
             size: 0,
             type: this.fileSelector.getFileCls(),
@@ -546,7 +546,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             status = "pending";
         }
 
-        this.fileRecord = new Ext.ux.file.Uploader.file({
+        this.fileRecord = new Ext.ux.file.Upload.file({
             name: this.file.name ? this.file.name : this.file.fileName,  // safari and chrome use the non std. fileX props
             type: (this.file.type ? this.file.type : this.file.fileType), // missing if safari and chrome
             size: (this.file.size ? this.file.size : this.file.fileSize) || 0, // non standard but all have it ;-)
@@ -702,6 +702,6 @@ Ext.ux.file.Upload.file = Ext.data.Record.create([
     {name: 'tempFile', system: true}
 ]);
 
-Ext.ux.file.Uploader.file.getFileData = function(file) {
+Ext.ux.file.Upload.file.getFileData = function(file) {
     return Ext.copyTo({}, file.data, ['tempFile', 'name', 'path', 'size', 'type']);
 };
