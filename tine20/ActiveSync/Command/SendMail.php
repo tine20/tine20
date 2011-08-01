@@ -65,8 +65,7 @@ class ActiveSync_Command_SendMail
         
         $emailStream = fopen("php://input", 'r');
 
-        /*
-        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) {
+        if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) {
             $debugStream = fopen("php://temp", 'r+');
             stream_copy_to_stream($emailStream, $debugStream);
             rewind($debugStream);
@@ -74,7 +73,6 @@ class ActiveSync_Command_SendMail
             rewind($debugStream);
             $emailStream = $debugStream;
         }
-        */
         
         $this->_incomingMessage = new Zend_Mail_Message(
             array(
