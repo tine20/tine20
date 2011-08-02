@@ -47,7 +47,7 @@ class Zend_Scheduler_Backend_File extends Zend_Scheduler_Backend_Abstract
      * 
      * @param array $tasks Remaining tasks
      */ 
-    public function saveQueue(array $tasks = null)
+    public function saveQueue($tasks = array())
     {
         if (empty($this->_filename)) {
             throw new Zend_Scheduler_Exception('Filename must be set in backend');

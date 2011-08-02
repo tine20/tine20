@@ -99,7 +99,7 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
      * 
      * @param array $tasks Remaining tasks
      */ 
-    public function saveQueue(array $tasks = null)
+    public function saveQueue($tasks = array())
     {
         $db = $this->getDbAdapter();
         $db->beginTransaction();
@@ -136,7 +136,6 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
             throw $e;
         }
     }
-    
     
     /**
      * Gets the remaining tasks to perform.
