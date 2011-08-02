@@ -183,6 +183,7 @@ Tine.Sipgate.Main = {
 		},
 		dialNumber : function(_button, _event) {
 			var number = null;
+			var contact = null;
 			var grid = Ext.getCmp('Sipgate_Callhistory_Grid');
 			if (grid) {
 				record = grid.getSelectionModel().getSelected();
