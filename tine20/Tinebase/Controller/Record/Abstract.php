@@ -295,7 +295,7 @@ abstract class Tinebase_Controller_Record_Abstract
     }
     
     /**
-     * Returns a set of leads identified by their id's
+     * Returns a set of records identified by their id's
      * 
      * @param   array $_ids       array of record identifiers
      * @param   bool  $_ignoreACL don't check acl grants
