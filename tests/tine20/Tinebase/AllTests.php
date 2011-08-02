@@ -63,7 +63,7 @@ class Tinebase_AllTests
         $suite->addTest(Tinebase_Frontend_AllTests::suite());
         $suite->addTest(Tinebase_Acl_AllTests::suite());
         $suite->addTest(Tinebase_Tree_AllTests::suite());
-        $suite->addTest(Tinebase_Scheduler_SchedulerTest::suite());
+        $suite->addTest(Tinebase_Scheduler_AllTests::suite());
         
         return $suite;
     }
