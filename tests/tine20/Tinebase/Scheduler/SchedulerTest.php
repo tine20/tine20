@@ -4,7 +4,7 @@
  * 
  * @package     Scheduler
  * @license     http://www.gnu.org/licenses/agpl.html
- * @copyright   Copyright (c) 2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2010-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Goekmen Ciyiltepe <g.ciyiltepe@metaways.de>
  */
 
@@ -12,10 +12,6 @@
  * Test helper
  */
 require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
-
-if (!defined('PHPUnit_MAIN_METHOD')) {
-    define('PHPUnit_MAIN_METHOD', 'Tinebase_Scheduler_SchedulerTest::main');
-}
 
 /**
  * Test class for Scheduler Test
@@ -81,7 +77,7 @@ class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * 
+     * can run task
      */
     public function testCanRunTask()
     {
