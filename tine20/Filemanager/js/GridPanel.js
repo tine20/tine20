@@ -86,6 +86,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.plugins.push({
             ptype: 'ux.browseplugin',
             multiple: true,
+            scope: this,
             handler: this.onFilesSelect //function(e) {alert("grid handler");}
         });
 
@@ -118,10 +119,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
                     if (typeof value == 'object') {
                         fileName = value.name;
-
-//                        value = value.replace(/\\/g, '/');
-//                        var pathParts = value.split("/");
-//                        fileName = pathParts[pathParts.length-1];
                     }
                     
                     if(record.data.type == 'folder') {
@@ -626,19 +623,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         ).setIcon(Ext.MessageBox.ERROR);
         this.loadMask.hide();
     },
-    
-    /**
-     * init store
-     * @private
-     */
-//    initStore: function () {
-//        this.store = new Ext.data.SimpleStore({
-//            fields: Ext.ux.file.Upload.file
-//        });
-//        
-//        this.loadRecord(this.record);
-//    },
-    
+       
     /**
      * populate grid store
      * 
@@ -655,6 +640,14 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
+    onUploadComplete: function(upload, response) {
+      
+        var fileName = response.tempFile.name;
+        Tine.Tinebase.uploadManager.onUploadComplete();
+        Tine.Filemanager.attachFileToNode(fileName, response.tempFile.id);
+
+    },
+    
     /**
      * upload new file and add to store
      * 
@@ -663,16 +656,20 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onFilesSelect: function (fileSelector, e) {
        
-        var app = this.app;
-        var gridStore = app.mainScreen.GridPanel.store;
+        var app = Tine.Tinebase.appMgr.get('Filemanager');
+        var grid = app.mainScreen.GridPanel; 
+        var gridStore = grid.store;
         
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
 
+            var fileName = file.name || file.fileName;
+            Tine.Filemanager.createNode(fileName, "file");
+            
             var upload = new Ext.ux.file.Upload({}, file);
 
-            upload.on('uploadfailure', this.onUploadFail, this);
-            upload.on('uploadcomplete', Tine.Tinebase.uploadManager.onUploadComplete, this);
+            upload.on('uploadfailure', grid.onUploadFail, this);
+            upload.on('uploadcomplete', grid.onUploadComplete, this);
             upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
 
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);            
