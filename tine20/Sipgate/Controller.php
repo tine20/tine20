@@ -154,9 +154,9 @@ class Sipgate_Controller extends Tinebase_Controller_Abstract
 	 * @param String $_sipUri
 	 */
 
-	public function getCallHistory($_sipUri, $_start, $_stop) {
+	public function getCallHistory($_sipUri, $_start, $_stop, $_pstart, $_plimit) {
 
-		return Sipgate_Backend_Factory::factory()->getCallHistory($_sipUri, $_start, $_stop);
+		return Sipgate_Backend_Factory::factory()->getCallHistory($_sipUri, $_start, $_stop, $_pstart, $_plimit);
 	}
 
 
