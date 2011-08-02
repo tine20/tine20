@@ -263,21 +263,22 @@ class Zend_Scheduler_Task implements Zend_Scheduler_Task_Interface
      */
     public function run()
     {
-        $controller = $this->getFrontController();
         //$router         = $controller->getRouter();
-        $returnResponse = $controller->returnResponse(true);
+        
+        $controller = $this->getFrontController();
+        
+        $returnResponse = ($controller) ? $controller->returnResponse(true) : NULL;
         $responses      = array();
         foreach ($this->_requests as $request) {
-            /*
-			if ($request->getControllerName()) { // Use default router
-                $controller->setRouter(new Zend_Controller_Router_Rewrite());
-            }
-			*/
-			$request->setPathInfo($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
+//			if ($request->getControllerName()) { // Use default router
+//                $controller->setRouter(new Zend_Controller_Router_Rewrite());
+//            }
+//			$request->setPathInfo($request->getModuleName() . '/' . $request->getControllerName() . '/' . $request->getActionName());
+//          $controller->setRouter($router);
+            
             if ($returnResponse) {
                 $responses[] = $controller->dispatch($request);
             }
-            //$controller->setRouter($router);
         }
         $this->_completed = true;
 
