@@ -24,19 +24,19 @@ Tine.Sipgate.getPanel = function() {
 					i18n : translation
 				}
 			});
-// TODO: wird bei der Konfigurationsänderung wieder gebraucht
-//	var editSipgateSettingsAction = new Ext.Action({
-//				text : translation._('Edit phone settings'),
-//				iconCls : 'SipgateIconCls',
-//				handler : function() {
-//					
-//				},
-//				scope : this
-//			});
-//
-//	var contextMenu = new Ext.menu.Menu({
-//				items : [editSipgateSettingsAction]
-//			});
+
+	var editSipgateSettingsAction = new Ext.Action({
+				text : translation._('Edit phone settings'),
+				iconCls : 'SipgateIconCls',
+				handler : function() {
+					// TODO: options by user					
+				},
+				scope : this
+			});
+
+	var contextMenu = new Ext.menu.Menu({
+				items : [editSipgateSettingsAction]
+			});
 	/** ********* tree panel **************** */
 
 	var treePanel = new Ext.tree.TreePanel({
@@ -66,7 +66,6 @@ Tine.Sipgate.getPanel = function() {
 
 	treePanel.on('click', function(node, event) {
 				node.select();
-				Tine.Sipgate.Main.show(node);
 			}, this);
 
 	treePanel.on('contextmenu', function(node, event) {
@@ -77,12 +76,10 @@ Tine.Sipgate.getPanel = function() {
 			}, this);
 
 	treePanel.on('beforeexpand', function(panel) {
-
 				if (panel.getSelectionModel().getSelectedNode() === null) {
 					var node = panel.getRootNode();
 					node.select();
 					node.expand();
-					Tine.Sipgate.Main.show(node);
 				} else {
 					panel.getSelectionModel().fireEvent('selectionchange', panel.getSelectionModel());
 				}
@@ -101,7 +98,7 @@ Tine.Sipgate.getPanel = function() {
 						settingsButton.setDisabled(true);
 					}
 				}
-
+			Tine.Sipgate.Main.show(node);
 		}, this);
 
 	return treePanel;
@@ -167,6 +164,7 @@ Tine.Sipgate.Main = {
 		});
 
 		this.initStore();
+		
 	},
 
 	handlers : {
@@ -220,7 +218,7 @@ Tine.Sipgate.Main = {
 	 * @todo use new filter toolbar later
 	 */
 	initStore : function() {
-
+		
 		this.store = new Ext.data.JsonStore({
 					id : 'EntryID',
 					autoLoad : false,
@@ -261,7 +259,7 @@ Tine.Sipgate.Main = {
 	 * 
 	 */
 	displayGrid : function() {
-
+		
 		var fromdate = new Ext.form.DateField({
 					format : 'D, d. M. Y',
 					value: new Date(new Date().getTime() - (24 * 60 * 60 * 1000)),
@@ -397,20 +395,14 @@ Tine.Sipgate.Main = {
 	},
 
 	show : function(_node) {
-
+		
 		var currentToolbar = Tine.Tinebase.MainScreen.getActiveToolbar();
 
-		if (currentToolbar === false || currentToolbar.id != 'Sipgate_Toolbar') {
-			this.initComponent();
-			this.displayToolbar();
-			if (_node.id != 'root') {
-				this.store.load({});
-			}
-			this.displayGrid();
-		} else {
-			if (_node.id != 'root') {
-				this.store.load({});
-			}
+		this.initComponent();
+		this.displayToolbar();
+		this.displayGrid();
+		if (_node.id != 'root') {
+			this.store.load({});
 		}
 	}
 
@@ -423,7 +415,7 @@ Tine.Sipgate.Main = {
  * 
  * @return Ext.data.JsonStore with phones
  */
-Tine.Sipgate.loadSipgateStore = function() {
+Tine.Sipgate.loadSipgateStore = function(reload) {
 
 	var store = Ext.StoreMgr.get('SipgateStore');
 
@@ -460,8 +452,6 @@ Tine.Sipgate.updateSipgateTree = function(store) {
 
 	// add phones to tree menu
 	store.each(function(record) {
-				// Tine.log.debug(record);
-
 				var node = new Ext.tree.TreeNode({
 							id : record.id,
 							record : record,
@@ -511,8 +501,6 @@ Tine.Sipgate.dialPhoneNumber = function(number, contact) {
 
 				success : function(_result, _request) {
 
-					// Tine.log.debug(_result);
-
 					sessionId = Ext.decode(_result.responseText).state.SessionID;
 					Ext.getCmp('callstate-window').sessionId = sessionId;
 					Tine.Sipgate.CallStateWindow.startTask(sessionId, contact);
@@ -538,7 +526,6 @@ Tine.Sipgate.addPhoneNumber = function(number) {
 };
 
 Tine.Sipgate.closeSession = function(sessionId) {
-	Tine.log.debug('Closing Session', sessionId);
 	Ext.Ajax.request({
 				url : 'index.php',
 
@@ -562,8 +549,6 @@ Tine.Sipgate.closeSession = function(sessionId) {
  *            contact
  */
 Tine.Sipgate.updateCallStateWindow = function(sessionId, contact) {
-
-	// Tine.log.debug('Update Call State: ' + sessionId);
 
 	Ext.Ajax.request({
 		url : 'index.php',
