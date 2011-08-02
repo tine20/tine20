@@ -73,7 +73,7 @@ class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
         
         $backend = $scheduler->getBackend();
         $tasks = $backend->loadQueue();
-        $this->assertTrue(count($tasks) == 1);
+        $this->assertEquals(1, count($tasks));
     }
     
     /**
