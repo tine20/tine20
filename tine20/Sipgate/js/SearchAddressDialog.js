@@ -101,7 +101,7 @@ Tine.Sipgate.SearchAddressDialog = Ext.extend(Ext.FormPanel, {
 
 	onSend : function() {
 		
-		var popupWindow = Tine.Addressbook.ContactEditDialog.openWindow({
+		if(Tine.Addressbook.ContactEditDialog.openWindow({
 			    record: this.searchBox.selectedRecord,
 			    field: this.chooseField.getValue(),
 				listeners : {
@@ -111,8 +111,11 @@ Tine.Sipgate.SearchAddressDialog = Ext.extend(Ext.FormPanel, {
 						editdlg.record.set(this.chooseField.getValue(), this.number);
 					}
 				}
-			});
-
+			})) {
+		
+			
+	this.onCancel();
+			}
 	},
 
 	onCancel : function() {

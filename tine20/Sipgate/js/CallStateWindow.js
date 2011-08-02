@@ -71,13 +71,10 @@ Tine.Sipgate.CallStateWindow = Ext.extend(Ext.FormPanel, {
 	
 	getFormItems: function() {
 		return {
-			
-			
+	
 			border : false,
 			frame : true,
 			layout : 'border',	
-
-			
 			
 			    items : [
 			            {

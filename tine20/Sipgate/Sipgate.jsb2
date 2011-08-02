@@ -26,7 +26,11 @@
         {
           "text": "SearchAddressDialog.js",
           "path": "js/"
-        },        
+        },     
+        {
+          "text": "DialNumberDialog.js",
+          "path": "js/"
+        },  
         {
           "text": "Sipgate.js",
           "path": "js/"

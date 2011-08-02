@@ -46,11 +46,10 @@ Tine.Sipgate.AddressbookGridPanelHook = function(config) {
         }
     });
             
-    this.callContactBtn = Ext.apply(new Ext.SplitButton(this.callContactAction), {
+    this.callContactBtn = Ext.apply(new Ext.Button(this.callContactAction), {
         scale: 'medium',
         rowspan: 2,
-        iconAlign: 'top',
-        arrowAlign:'right'
+        iconAlign: 'top'
     }),
 
 
@@ -70,11 +69,10 @@ Tine.Sipgate.AddressbookGridPanelHook = function(config) {
         }
     });
     
-    this.composeSmsBtn = Ext.apply(new Ext.SplitButton(this.composeSmsAction), {
+    this.composeSmsBtn = Ext.apply(new Ext.Button(this.composeSmsAction), {
         scale: 'medium',
         rowspan: 2,
-        iconAlign: 'top',
-        arrowAlign:'right'
+        iconAlign: 'top'
     }),    
     
     // register in toolbar + contextmenu
@@ -257,7 +255,8 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
                    text: this.app.i18n._('Work') + ' ' + contact.data.tel_work + '',
                    scope: this,
                    handler: this.onCallContact,
-                   field: 'tel_work'
+                   field: 'tel_work',
+                   iconCls: 'SipgateIconCls'
                 });
                 action.setDisabled(false);
             }
@@ -266,7 +265,8 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
                    text: this.app.i18n._('Home') + ' ' + contact.data.tel_home + '',
                    scope: this,
                    handler: this.onCallContact,
-                   field: 'tel_home'
+                   field: 'tel_home',
+                   iconCls: 'SipgateIconCls'
                 });
                 action.setDisabled(false);
             }
@@ -275,7 +275,8 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
                    text: this.app.i18n._('Cell') + ' ' + contact.data.tel_cell + '',
                    scope: this,
                    handler: this.onCallContact,
-                   field: 'tel_cell'
+                   field: 'tel_cell',
+                   iconCls: 'SmsIconCls'
                 });
                 action.setDisabled(false);
             }
@@ -284,7 +285,8 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
                    text: this.app.i18n._('Cell private') + ' ' + contact.data.tel_cell_private + '',
                    scope: this,
                    handler: this.onCallContact,
-                   field: 'tel_cell_private'
+                   field: 'tel_cell_private',
+                   iconCls: 'SmsIconCls'
                 });
                 action.setDisabled(false);
             }
@@ -318,7 +320,8 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
                    text: this.app.i18n._('Cell') + ' ' + contact.data.tel_cell + '',
                    scope: this,
                    handler: this.onComposeSms,
-                   field: 'tel_cell'
+                   field: 'tel_cell',
+                   iconCls: 'SmsIconCls'
                 });
                 action.setDisabled(false);
             }
@@ -327,7 +330,8 @@ Ext.apply(Tine.Sipgate.AddressbookGridPanelHook.prototype, {
                    text: this.app.i18n._('Cell private') + ' ' + contact.data.tel_cell_private + '',
                    scope: this,
                    handler: this.onComposeSms,
-                   field: 'tel_cell_private'
+                   field: 'tel_cell_private',
+                   iconCls: 'SmsIconCls'
                 });
                 action.setDisabled(false);
             }
