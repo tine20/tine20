@@ -111,8 +111,7 @@ class Zend_Scheduler
     /**
      * Return used Backend.
      * 
-     * 
-     * @return Zend_Scheduler_Backend
+     * @return Zend_Scheduler_Backend_Abstract
      */
     public function getBackend()
     {
