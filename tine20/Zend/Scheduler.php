@@ -238,6 +238,15 @@ class Zend_Scheduler
     }
 
     /**
+     * Removes all tasks
+     */
+    public function removeAllTasks()
+    {
+        $this->_removedTask = array();
+        $this->_tasks = array();
+    }
+
+    /**
      * Sets the maximum allowable tasks to run on a given request.  To allow 
      * an infinite number of tasks to run, set to 0.
      *
