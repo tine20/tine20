@@ -26,7 +26,8 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     { name: 'revision' },
     { name: 'type' },
     { name: 'contenttype' },
-    { name: 'description' }
+    { name: 'description' },
+    { name: 'creation_time' }
 ]), {
     appName: 'Filemanager',
     modelName: 'Node',
@@ -42,15 +43,83 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
 });
 
 
-//
-///**
-// * default ExampleRecord backend
-// */
-//Tine.Filemanager.recordBackend = new Tine.Tinebase.data.RecordProxy({
-//    appName: 'Filemanager',
-//    modelName: 'Node',
-//    recordClass: Tine.Filemanager.Model.Node
-//});
+
+/**
+ * default ExampleRecord backend
+ */
+Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
+    appName: 'Filemanager',
+    modelName: 'Node',
+    recordClass: Tine.Filemanager.Model.Node,
+    
+    createFolder: function(filename, options) {
+        
+        options = options || {};
+        var params = {
+                application : this.appName,                            
+                filename : filename,
+                type : 'folder',
+                method : this.appName + ".createNode"  
+        };
+                    
+        options.params = params;
+        
+        options.beforeSuccess = function(response) {
+            var folder = this.recordReader(response);
+            folder.set('client_access_time', new Date());
+            return [folder];
+        };
+        
+        options.success = function(_result){
+            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.recordBackend.appName);
+            var grid = app.mainScreen.GridPanel;
+            grid.currentFolderNode.reload();            
+            grid.getStore().reload();
+//            this.fireEvent('containeradd', nodeData);
+            Ext.MessageBox.hide();
+        };
+        
+        return this.doXHTTPRequest(options);
+        
+    },
+    
+    deleteItems: function(items, options) {
+        
+        options = options || {};
+        
+        var filenames = new Array();
+        var nodeCount = items.length;
+        for(var i=0; i<nodeCount; i++) {
+            filenames.push(items[i].json.path);
+        }
+
+        var params = {
+                application: this.appName,                                
+                filenames: filenames,
+                method: this.appName + ".deleteNodes"
+        };
+
+        options.params = params;
+        
+        options.beforeSuccess = function(response) {
+            var folder = this.recordReader(response);
+            folder.set('client_access_time', new Date());
+            return [folder];
+        };
+        
+        options.success = function(_result){
+            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.recordBackend.appName);
+            var grid = app.mainScreen.GridPanel;
+            grid.currentFolderNode.reload();            
+            grid.getStore().reload();
+//            this.fireEvent('containerdelete', nodeData);
+            Ext.MessageBox.hide();
+        };
+        
+        return this.doXHTTPRequest(options);
+    }
+    
+});
 
 
 /**

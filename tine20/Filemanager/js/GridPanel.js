@@ -76,7 +76,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initComponent: function() {
 
-        this.recordProxy = Tine.Filemanager.recordBackend;
+        this.recordProxy = Tine.Filemanager.fileRecordBackend;
                
         this.gridConfig.cm = this.getColumnModel();
 
@@ -90,7 +90,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             handler: this.onFilesSelect //function(e) {alert("grid handler");}
         });
 
-        Tine.Filemanager.GridPanel.superclass.initComponent.call(this);
+        Tine.Filemanager.GridPanel.superclass.initComponent.call(this);      
 
     },
     
@@ -470,7 +470,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                     currentFolderNode.reload();
                                 }                                
                                 app.mainScreen.GridPanel.getStore().reload();
-                                this.fireEvent('containerrename', nodeData);
+//                                this.fireEvent('containerrename', nodeData);
                                 Ext.MessageBox.hide();
                             }
                         });
@@ -505,24 +505,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 Ext.MessageBox.wait(_('Please wait'), String.format(_('Creating {0}...' ), nodeName));
 
                 var filename = currentFolderNode.attributes.path + '/' + _text;
-                var params = {
-                        application : app.appName,                            
-                        filename : filename,
-                        type : 'folder',
-                        method : app.appName + ".createNode"  
-                };
-                                              
-                Ext.Ajax.request({
-                    params: params,
-                    scope: this,
-                    success: function(_result, _request){
-                        var nodeData = Ext.util.JSON.decode(_result.responseText);
-                        currentFolderNode.reload();            
-                        app.mainScreen.GridPanel.getStore().reload();
-                        this.fireEvent('containeradd', nodeData);
-                        Ext.MessageBox.hide();
-                    }
-                });
+                Tine.Filemanager.recordBackend.createFolder(filename);
                 
             }
         }, this);
@@ -545,30 +528,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} ?'), nodeName), function(_btn){
             if (selectedNodes && _btn == 'yes') {
                 
-                var parentNode = app.mainScreen.GridPanel.currentFolderNode;
                 Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} ' ), nodeName ));
-              
-                var filenames = new Array();
-                var nodeCount = selectedNodes.length;
-                for(var i=0; i<nodeCount; i++) {
-                    filenames.push(selectedNodes[i].json.path);
-                }
-                
-                var params = {
-                        application: app.appName,                                
-                        filenames: filenames,
-                        method: app.appName + ".deleteNodes"
-                };
-           
-                Ext.Ajax.request({
-                    params: params,
-                    scope: this,
-                    success: function(_result, _request){
-                        parentNode.reload();
-                        app.mainScreen.GridPanel.getStore().reload();
-                        Ext.MessageBox.hide();
-                    }
-                });
+                Tine.Filemanager.recordBackend.deleteItems(selectedNodes);
             }
         }, this);
 
@@ -664,7 +625,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.each(files, function (file) {
 
             var fileName = file.name || file.fileName;
-            Tine.Filemanager.createNode(fileName, "file");
+            Tine.Filemanager.createNode(grid.currentFolderNode.attributes.path + '/' + fileName, "file");
             
             var upload = new Ext.ux.file.Upload({}, file);
 
@@ -682,6 +643,5 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             
         }, this);
     }
-    
 
 });
