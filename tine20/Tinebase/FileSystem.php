@@ -656,17 +656,17 @@ class Tinebase_FileSystem
     }
     
     /**
-     * attach existing file object to node
+     * update node
      * 
      * @param Tinebase_Model_Tree_Node $_node
-     * @param Tinebase_Model_Tree_FileObject|string $_fileObject
      * @return Tinebase_Model_Tree_Node
      */
-    public function attachFileObjectToNode(Tinebase_Model_Tree_Node $_node, $_fileObject)
+    public function updateNode(Tinebase_Model_Tree_Node $_node)
     {
-        $objectId = ($_fileObject instanceof Tinebase_Model_Tree_FileObject) ? $_fileObject->getId() : $_fileObject;
-        $_node->object_id = $objectId;
-        
+        $currentNodeObject = $this->_treeNodeBackend->get($_node->getId());
+        $modLog = Tinebase_Timemachine_ModificationLog::getInstance();
+        $modLog->setRecordMetaData($_node, 'update', $currentNodeObject);
+                
         return $this->_treeNodeBackend->update($_node);
     }
 }
