@@ -78,7 +78,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         };
         
         options.success = function(_result){
-            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.recordBackend.appName);
+            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
             var grid = app.mainScreen.GridPanel;
             grid.currentFolderNode.reload();            
             grid.getStore().reload();
@@ -122,7 +122,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         };
         
         options.success = function(_result){
-            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.recordBackend.appName);
+            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
             var grid = app.mainScreen.GridPanel;
             grid.currentFolderNode.reload();            
             grid.getStore().reload();
