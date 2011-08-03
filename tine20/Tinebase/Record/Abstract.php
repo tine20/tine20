@@ -433,10 +433,7 @@ abstract class Tinebase_Record_Abstract implements Tinebase_Record_Interface
         if($this->_isValidated === false) {
             
             $inputFilter = $this->_getFilter();
-            
             $inputFilter->setData($this->_properties);
-            
-          
             
             if ($inputFilter->isValid()) {
                 // set $this->_properties with the filtered values

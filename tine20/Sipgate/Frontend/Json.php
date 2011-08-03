@@ -51,26 +51,26 @@ class Sipgate_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 	 * @param String $_sipUri
 	 * @param Integer $_start
 	 * @param Integer $_stop
+	 * @param Integer $_pstart
+	 * @param Integer $_plimit
 	 */
 
-	public function getCallHistory($_sipUri, $_start, $_stop) {
-
-//	    var_dump($_start);die();
+	public function getCallHistory($_sipUri, $_start, $_stop, $_pstart = 0, $_plimit = 20) {
 	    
 		if(empty($_sipUri)) throw new Sipgate_Exception('Sip-Uri leer!');
 		if($_sipUri == 'root') return array();
 		
 		// Kein Plan, wo die Vorwahlen herkommen:
-		$stripPrefix = array('sip:2301','sip:2400','sip:','@sipgate.net');
-		$stripRepl = array('','');
+		$stripPrefix = array('sip:2301','sip:2400','sip:','@sipgate.net','anonymous');
+		$stripRepl = array('','','','','');
 		
 		$paging = array("start" => 0, "limit" => 1);
 		$ret = array();
-		$history = Sipgate_Controller::getInstance()->getCallHistory($_sipUri, $_start, $_stop);
-		if(count($history)>0) {
-			foreach($history as &$hEntry) {
+		$history = Sipgate_Controller::getInstance()->getCallHistory($_sipUri, $_start, $_stop, $_pstart, $_plimit);
+		if($history['totalcount'] > 0) {
+			foreach($history['items'] as &$hEntry) {
 				$rUri = str_replace($stripPrefix,$stripRepl,$hEntry['RemoteUri']);
-				
+				$hEntry['Timestamp'] = strtotime($hEntry['Timestamp']);
 				$hEntry['LocalNumber'] = '+' . preg_replace('/\D*/i','',$hEntry['LocalUri']);
 				$filter = array(array("field" => "telephone","operator" => "contains","value" => $rUri));
 				$s = $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
@@ -93,9 +93,7 @@ class Sipgate_Frontend_Json extends Tinebase_Frontend_Json_Abstract
 			
 			
 		}
-		
-//		var_dump($ret);die();
-		
+	
 		return $ret;
 	}
 

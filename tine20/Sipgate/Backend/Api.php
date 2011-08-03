@@ -17,274 +17,310 @@
  */
 class Sipgate_Backend_Api {
 
-	/**
-	 * @var Zend_Http_Client
-	 */
-	protected $_http;
+    /**
+     * @var Zend_Http_Client
+     */
+    protected $_http;
 
-	/**
-	 * @var Zend_XmlRpc_Client
-	 */
+    /**
+     * @var Zend_XmlRpc_Client
+     */
 
-	protected $_rpc;
+    protected $_rpc;
 
-	/**
-	 * Sipgate Devices
-	 * @var array
-	 */
+    /**
+     * Sipgate Devices
+     * @var array
+     */
 
-	protected $devices = false;
+    protected $devices = false;
 
-	/**
-	 * Phone Devices
-	 * @var array
-	 */
+    /**
+     * Phone Devices
+     * @var array
+     */
 
-	protected $phoneDevices = false;
+    protected $phoneDevices = false;
 
-	protected $faxDevices = false;
+    protected $faxDevices = false;
 
-	protected $allDevices = false;
+    protected $allDevices = false;
 
-	protected $_url;
+    protected $_url;
 
-	protected $_username;
+    protected $_username;
 
-	protected $_password;
+    protected $_password;
 
-	/**
-	 * the constructor
-	 *
-	 * don't use the constructor. use the singleton
-	 */
-	private function __construct($_username, $_password, $_url)	{
+    /**
+     * the constructor
+     *
+     * don't use the constructor. use the singleton
+     */
+    private function __construct($_username, $_password, $_url)	{
 
-		$this->_url = (empty($_url)) ? 'https://samurai.sipgate.net/RPC2' : $_url;
-		$this->_username = $_username;
-		$this->_password = $_password;
+        $this->_url = (empty($_url)) ? 'https://samurai.sipgate.net/RPC2' : $_url;
+        $this->_username = $_username;
+        $this->_password = $_password;
 
-		$this->_http = new Zend_Http_Client($this->_url);
-		$this->_http->setMethod('post');
-		$this->_http->setAuth($_username, $_password);
+        $this->_http = new Zend_Http_Client($this->_url);
+        $this->_http->setMethod('post');
+        $this->_http->setAuth($_username, $_password);
 
-		$this->_rpc = new Zend_XmlRpc_Client($this->_url,$this->_http->setAuth($_username, $_password));
+        $this->_rpc = new Zend_XmlRpc_Client($this->_url,$this->_http->setAuth($_username, $_password));
 
-		$this->_rpc->call(
+        $this->_rpc->call(
 			'samurai.ClientIdentify',
-			array(0 => new Zend_XmlRpc_Value_Struct(array(
+        array(0 => new Zend_XmlRpc_Value_Struct(array(
 				'ClientName' => new Zend_XmlRpc_Value_String('Tine 2.0 Sipgate'),
 				'ClientVersion' =>new Zend_XmlRpc_Value_String('0.4'),
 				'ClientVendor' =>new Zend_XmlRpc_Value_String('Alexander Stintzing')
-				)))
-			);
-		}
+        )))
+        );
+    }
 
 
-	/**
-	 * don't clone. Use the singleton.
-	 *
-	 */
-	private function __clone() {}
+    /**
+     * don't clone. Use the singleton.
+     *
+     */
+    private function __clone() {}
 
-	/**
-	 * holds the instance of the singleton
-	 *
-	 * @var Sipgate_Backend_Api
-	 */
-	private static $_instance = NULL;
+    /**
+     * holds the instance of the singleton
+     *
+     * @var Sipgate_Backend_Api
+     */
+    private static $_instance = NULL;
 
-	/**
-	 * the singleton pattern
-	 *
-	 * @return Sipgate_Backend_Api
-	 */
-	public static function getInstance($_username, $_password, $_url)
-	{
-		if (self::$_instance === NULL) {
-			self::$_instance = new Sipgate_Backend_Api($_username, $_password, $_url);
-		}
+    /**
+     * the singleton pattern
+     *
+     * @return Sipgate_Backend_Api
+     */
+    public static function getInstance($_username, $_password, $_url)
+    {
+        if (self::$_instance === NULL) {
+            self::$_instance = new Sipgate_Backend_Api($_username, $_password, $_url);
+        }
 
-		return self::$_instance;
-	}
+        return self::$_instance;
+    }
 
-	/**
-	 * initiate new call
-	 *
-	 * @param string $_caller
-	 * @param string $_callee
-	 */
-	public function dialNumber($_caller,$_callee)
-	{
-		$structAr['LocalUri'] = new Zend_XmlRpc_Value_String($_caller);
-		$structAr['RemoteUri'] = new Zend_XmlRpc_Value_String($_callee);
-		$structAr['TOS'] = new Zend_XmlRpc_Value_String('voice');
+    /**
+     * initiate new call
+     *
+     * @param string $_caller
+     * @param string $_callee
+     */
+    public function dialNumber($_caller,$_callee)
+    {
+        $structAr['LocalUri'] = new Zend_XmlRpc_Value_String($_caller);
+        $structAr['RemoteUri'] = new Zend_XmlRpc_Value_String($_callee);
+        $structAr['TOS'] = new Zend_XmlRpc_Value_String('voice');
 
-		$struct = new Zend_XmlRpc_Value_Struct($structAr);
+        $struct = new Zend_XmlRpc_Value_Struct($structAr);
 
-		return $this->_rpc->call('samurai.SessionInitiate',array(0 => $struct));
-	}
+        return $this->_rpc->call('samurai.SessionInitiate',array(0 => $struct));
+    }
 
-	/**
-	 * Get Call History
-	 * @param string $_sipUri
-	 * @param string $_start
-	 * @param string $_stop 
-	 * @return Zend_XmlRpc_Value_Struct
-	 */
-	public function getCallHistory($_sipUri, $_start, $_stop) {
-	    
-	      
-	    $start = strtotime($_start);
-	    $stop = strtotime($_stop);
-	    
-		$localUriList[] = new Zend_XmlRpc_Value_String($_sipUri);
-		$structAr['LocalUriList'] = new Zend_XmlRpc_Value_Array($localUriList);
-		// TODO: respect paging
-		$structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime($start);
-		$structAr['PeriodEnd'] = new Zend_XmlRpc_Value_DateTime($stop);
-		$struct = new Zend_XmlRpc_Value_Struct($structAr);
 
-		$resp = $this->_rpc->call('samurai.HistoryGetByDate',array(0 => $struct));
-		$ret = false;
-		if($resp['StatusCode'] === 200) {
-			$ret = $resp['History'];
+    /**
+     * initiate new conference
+     *
+     * @param string $_caller
+     * @param array $_callees
+     */
+    public function initiateConference($_caller,$_callees)
+    {
+        $structAr['LocalUri'] = new Zend_XmlRpc_Value_String($_caller);
 
-		}
-		return $ret;
-	}
+        foreach($_callees as $callee) {
+            $remotes[] = new Zend_XmlRpc_Value_String($_callee);
+        }
 
-	/**
-	 * Get Call Information (itemizedEntries)
-	 * @param string $_sipUri
-	 * @return Zend_XmlRpc_Value_Struct
-	 */
-//	public function getCallInfo($_sipUri) {
-//
-//		$localUriList[] = new Zend_XmlRpc_Value_String($_sipUri);
-//		$structAr['LocalUriList'] = new Zend_XmlRpc_Value_Array($localUriList);
-//		$structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime(time()-604800);
-//		$structAr['PeriodEnd'] = new Zend_XmlRpc_Value_DateTime(time());
-//		$struct = new Zend_XmlRpc_Value_Struct($structAr);
-//
-//		$resp = $this->_rpc->call('samurai.HistoryGetByDate',array(0 => $struct));
-//		$ret = false;
-//		if($resp['StatusCode'] === 200) {
-//			$ret = $resp['History'];
-//
-//		}
-//		return $ret;
-//	}
+        $structAr['RemoteUri'] = new Zend_XmlRpc_Value_Array($remotes);
 
-	/**
-	 * Get devices
-	 * @return Zend_XmlRpc_Response
-	 */
-	public function getDevices() {
-		if(is_array($this->devices)) return $this->devices;
-		$resp = $this->_rpc->call('samurai.OwnUriListGet');
-		if($resp['StatusCode'] === 200) {
-			$this->devices = $resp['OwnUriList'];
-			return $this->devices;
-		}
-		else {
-			return false;
-		}
-	}
+        $structAr['TOS'] = new Zend_XmlRpc_Value_String('voice');
 
-	public function getPhoneDevices() {
-		if(is_array($this->phoneDevices)) return $this->phoneDevices;
-		$ret = false;
-		if(($dev = $this->getDevices())) {
-			foreach($dev as $device) {
-				if(in_array('voice',$device['TOS'])) $this->phoneDevices[] = $device;
-			}
-			$ret = $this->phoneDevices;
-		}
-		return $ret;
-	}
+        $struct = new Zend_XmlRpc_Value_Struct($structAr);
 
-	public function getFaxDevices() {
-		if(is_array($this->faxDevices)) return $this->faxDevices;
-		$ret = false;
-		if(($dev = $this->getDevices())) {
-			foreach($dev as $device) {
-				if(in_array('fax',$device['TOS'])) $this->faxDevices[] = $device;
-			}
-			$ret = $this->faxDevices;
-		}
-		return $ret;
-	}
+        return $this->_rpc->call('samurai.SessionInitiateMulti',array(0 => $struct));
+    }
 
-	public function getAllDevices() {
-		if (is_array($this->allDevices)) return $this->allDevices;
-		$ret = false;
-		$i=0;
-		if (($phones = $this->getPhoneDevices())) {
-			foreach($phones as $phone) {
-				$this->allDevices[$i] = $phone;
-				$this->allDevices[$i]['type'] = 'phone';
-				$i++;
-			}
-			$ret = &$this->allDevices;
-		}
-		if (($faxes = $this->getFaxDevices())) {
-			foreach($faxes as $fax) {
-				$this->allDevices[$i] = $fax;
-				$this->allDevices[$i]['type'] = 'fax';
-				$i++;
-			}
-		}
-		return $ret;
-		}
 
-	/**
-	 * Get generic status
-	 * @param string $sessionId
-	 * @return Zend_XmlRpc_Response
-	 */
+    /**
+     * Get Call History
+     * @param string $_sipUri
+     * @param string $_start
+     * @param string $_stop
+     * @param integer $_pstart
+     * @param integer $_plimit
+     * @return Zend_XmlRpc_Value_Struct
+     */
+    public function getCallHistory($_sipUri, $_start, $_stop, $_pstart, $_plimit) {
+         
+        $start = strtotime($_start);
+        $stop = strtotime($_stop);
+         
+        $localUriList[] = new Zend_XmlRpc_Value_String($_sipUri);
+        $structAr['LocalUriList'] = new Zend_XmlRpc_Value_Array($localUriList);
 
-	public function getSessionStatus($sessionId) {
-		if(empty($sessionId)) throw new Sipgate_Exception('No Session-Id in API submitted!');
-		$structAr['SessionID'] = new Zend_XmlRpc_Value_String($sessionId);
-		$struct = new Zend_XmlRpc_Value_Struct($structAr);
-		return $this->_rpc->call('samurai.SessionStatusGet',array(0 => $struct));
-		}
+        $structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime($start);
+        $structAr['PeriodEnd'] = new Zend_XmlRpc_Value_DateTime($stop);
+        $struct = new Zend_XmlRpc_Value_Struct($structAr);
 
-	/**
-	 * Closes a Session
-	 * @param string $sessionId
-	 * @return Zend_XmlRpc_Response
-	 */
 
-	public function closeSession($sessionId) {
-		if(empty($sessionId)) throw new Sipgate_Exception('No Session-Id in API submitted!');
-		$structAr['SessionID'] = new Zend_XmlRpc_Value_String($sessionId);
-		$struct = new Zend_XmlRpc_Value_Struct($structAr);
-		return $this->_rpc->call('samurai.SessionClose',array(0 => $struct));
-		}
 
-	/**
-	 * send SMS
-	 *
-	 * @param string $_caller
-	 * @param string $_callee
-	 * @param string $_content
-	 */
+        $resp = $this->_rpc->call('samurai.HistoryGetByDate',array(0 => $struct));
+        $ret = false;
 
-	public function sendSms($_caller,$_callee,$_content)
-	{
+        if($resp) {
+            $history = array_reverse($resp['History'],false); 
 
-		$_callee = preg_replace('/\+/','',$_callee);
+            if($resp['StatusCode'] === 200) {
+                for ($i = $_pstart; $i < $_pstart + $_plimit; $i++) {
+                    if(!empty($history[$i])) $ret['items'][] = $history[$i];
+                    else break;
+                }
+                $ret['totalcount'] = count($resp['History']);
+            }
+        }
+        return $ret;
+    }
 
-		$structAr['LocalUri'] = new Zend_XmlRpc_Value_String('sip:'.$_caller.'@sipgate.net');
-		$structAr['RemoteUri'] = new Zend_XmlRpc_Value_String('sip:'.$_callee.'@sipgate.net');
-		$structAr['TOS'] = new Zend_XmlRpc_Value_String('text');
-		$structAr['Content'] = new Zend_XmlRpc_Value_String($_content);
-		$struct = new Zend_XmlRpc_Value_Struct($structAr);
+    /**
+     * Get Call Information (itemizedEntries)
+     * @param string $_sipUri
+     * @return Zend_XmlRpc_Value_Struct
+     */
+    //	public function getCallInfo($_sipUri) {
+    //
+    //		$localUriList[] = new Zend_XmlRpc_Value_String($_sipUri);
+    //		$structAr['LocalUriList'] = new Zend_XmlRpc_Value_Array($localUriList);
+    //		$structAr['PeriodStart'] = new Zend_XmlRpc_Value_DateTime(time()-604800);
+    //		$structAr['PeriodEnd'] = new Zend_XmlRpc_Value_DateTime(time());
+    //		$struct = new Zend_XmlRpc_Value_Struct($structAr);
+    //
+    //		$resp = $this->_rpc->call('samurai.HistoryGetByDate',array(0 => $struct));
+    //		$ret = false;
+    //		if($resp['StatusCode'] === 200) {
+    //			$ret = $resp['History'];
+    //
+    //		}
+    //		return $ret;
+    //	}
 
-		return $this->_rpc->call('samurai.SessionInitiate',array(0 => $struct));
+    /**
+     * Get devices
+     * @return Zend_XmlRpc_Response
+     */
+    public function getDevices() {
+        if(is_array($this->devices)) return $this->devices;
+        $resp = $this->_rpc->call('samurai.OwnUriListGet');
+        if($resp['StatusCode'] === 200) {
+            $this->devices = $resp['OwnUriList'];
+            return $this->devices;
+        }
+        else {
+            return false;
+        }
+    }
 
-	}
+    public function getPhoneDevices() {
+        if(is_array($this->phoneDevices)) return $this->phoneDevices;
+        $ret = false;
+        if(($dev = $this->getDevices())) {
+            foreach($dev as $device) {
+                if(in_array('voice',$device['TOS'])) $this->phoneDevices[] = $device;
+            }
+            $ret = $this->phoneDevices;
+        }
+        return $ret;
+    }
+
+    public function getFaxDevices() {
+        if(is_array($this->faxDevices)) return $this->faxDevices;
+        $ret = false;
+        if(($dev = $this->getDevices())) {
+            foreach($dev as $device) {
+                if(in_array('fax',$device['TOS'])) $this->faxDevices[] = $device;
+            }
+            $ret = $this->faxDevices;
+        }
+        return $ret;
+    }
+
+    public function getAllDevices() {
+        if (is_array($this->allDevices)) return $this->allDevices;
+        $ret = false;
+        $i=0;
+        if (($phones = $this->getPhoneDevices())) {
+            foreach($phones as $phone) {
+                $this->allDevices[$i] = $phone;
+                $this->allDevices[$i]['type'] = 'phone';
+                $i++;
+            }
+            $ret = &$this->allDevices;
+        }
+        if (($faxes = $this->getFaxDevices())) {
+            foreach($faxes as $fax) {
+                $this->allDevices[$i] = $fax;
+                $this->allDevices[$i]['type'] = 'fax';
+                $i++;
+            }
+        }
+        return $ret;
+    }
+
+    /**
+     * Get generic status
+     * @param string $sessionId
+     * @return Zend_XmlRpc_Response
+     */
+
+    public function getSessionStatus($sessionId) {
+        if(empty($sessionId)) throw new Sipgate_Exception('No Session-Id in API submitted!');
+        $structAr['SessionID'] = new Zend_XmlRpc_Value_String($sessionId);
+        $struct = new Zend_XmlRpc_Value_Struct($structAr);
+        return $this->_rpc->call('samurai.SessionStatusGet',array(0 => $struct));
+    }
+
+    /**
+     * Closes a Session
+     * @param string $sessionId
+     * @return Zend_XmlRpc_Response
+     */
+
+    public function closeSession($sessionId) {
+        if(empty($sessionId)) throw new Sipgate_Exception('No Session-Id in API submitted!');
+        $structAr['SessionID'] = new Zend_XmlRpc_Value_String($sessionId);
+        $struct = new Zend_XmlRpc_Value_Struct($structAr);
+        return $this->_rpc->call('samurai.SessionClose',array(0 => $struct));
+    }
+
+    /**
+     * send SMS
+     *
+     * @param string $_caller
+     * @param string $_callee
+     * @param string $_content
+     */
+
+    public function sendSms($_caller,$_callee,$_content)
+    {
+
+        $_callee = preg_replace('/\+/','',$_callee);
+
+        $structAr['LocalUri'] = new Zend_XmlRpc_Value_String('sip:'.$_caller.'@sipgate.net');
+        $structAr['RemoteUri'] = new Zend_XmlRpc_Value_String('sip:'.$_callee.'@sipgate.net');
+        $structAr['TOS'] = new Zend_XmlRpc_Value_String('text');
+        $structAr['Content'] = new Zend_XmlRpc_Value_String($_content);
+        $struct = new Zend_XmlRpc_Value_Struct($structAr);
+
+        return $this->_rpc->call('samurai.SessionInitiate',array(0 => $struct));
+
+    }
 
 }
 ?>
