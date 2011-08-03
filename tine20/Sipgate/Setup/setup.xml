@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Sipgate</name>
-    <version>0.1</version>
+    <version>1.0</version>
     <order>25</order>
     <depends>
         <application>Admin</application>
