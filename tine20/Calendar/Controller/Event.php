@@ -806,31 +806,17 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         if ($_record->rrule) {
             $exceptions = $this->getRecurExceptions($_record);
             $options = Zend_Json::decode($_alarm->options);
+            $_alarm->minutes_before = isset($options['minutes_before']) ? $options['minutes_before'] : $_alarm->minutes_before;
             $eventLength = $_record->dtstart->diff($_record->dtend);
             
-            if ($options['recurid']) {
-                $dtstart = new Tinebase_DateTime(substr($options['recurid'], -19));
-                $dtend = clone $dtstart;
-                $dtend->add($eventLength);
-                
-                // adopt event start
-                $_record->dtstart = clone $dtstart;
-                $_record->dtend = clone $dtend;
-            }
-            
             // compute next occurance
-            $computaionStartDate = clone $_record->dtstart;
-            $computaionStartDate->add($eventLength);
-            $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, $computaionStartDate);
+            $nextOccurrence = Calendar_Model_Rrule::computeNextOccurrence($_record, $exceptions, Tinebase_DateTime::now());
             
             if (! $nextOccurrence) {
                 $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
                 $_alarm->sent_message = 'Nothing to send, series is over';
                 return;
             }
-            
-            $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_PENDING;
-            $_alarm->sent_message = '';
             
             $eventStart = clone $nextOccurrence->dtstart;
         } else {
@@ -842,7 +828,6 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             $_alarm->minutes_before = 0;
             $customDateTime = TRUE;
         } else {
-            $_alarm->minutes_before = isset($options['minutes_before']) ? $options['minutes_before'] : $_alarm->minutes_before;
             $_alarm->setTime($eventStart);
             $customDateTime = FALSE;
         }
@@ -1381,10 +1366,23 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
         $event = $this->get($_alarm->record_id);
         
         if ($event->rrule) {
+            $options = Zend_Json::decode($_alarm->options);
+            if ($options['recurid']) {
+                // adopt event time to recur instance
+                $event->dtstart = new Tinebase_DateTime(substr($options['recurid'], -19));
+                
+                $event->dtend = clone $event->dtstart;
+                $event->dtend->add($event->dtstart->diff($event->dtend));
+            }
+            
             // NOTE: In case of recuring events $event is always the baseEvent.
-            // NOTE: Alarm inspection adopts the (referenced) event to the appropriate recur instance
             // NOTE: Alarm inspection adopts the (referenced) alarm and sets alarm time to next occurance
             $this->_inspectAlarmSet($event, $_alarm);
+            $_alarm->sent_status = Tinebase_Model_Alarm::STATUS_PENDING;
+            $_alarm->sent_message = '';
+            
+            
+            
         }
         $this->doContainerACLChecks($doContainerACLChecks);
         

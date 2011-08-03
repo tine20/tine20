@@ -883,13 +883,14 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
             ), TRUE)
         ));
         $persistentEvent = $this->_controller->create($event);
-        
+
         // assert alarm time is just before next occurence
         $exceptions = new Tinebase_Record_RecordSet('Calendar_Model_Event');
         $nextOccurance = Calendar_Model_Rrule::computeNextOccurrence($persistentEvent, $exceptions, new Tinebase_DateTime());
         
         $alarmTime = clone $nextOccurance->dtstart;
         $alarmTime->subMinute(30);
+        
         $this->assertTrue($alarmTime->equals($persistentEvent->alarms->getFirstRecord()->alarm_time), 'initial alarm is not at expected time');
         
         // move whole series
