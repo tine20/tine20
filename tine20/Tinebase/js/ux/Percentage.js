@@ -113,3 +113,51 @@ Ext.ux.PercentRenderer = function(percent) {
     
     return Ext.ux.PercentRenderer.template.apply({percent: percent});
 };
+
+/**
+ * Renders a percentage value to a percentage bar
+ * @constructor
+ */
+Ext.ux.PercentRendererWithName = function(value, metadata, record) {
+  
+    if (! Ext.ux.PercentRendererWithName.template) {
+        Ext.ux.PercentRendererWithName.template = new Ext.XTemplate(
+            '<table><tr><td><div class="x-progress-wrap PercentRenderer" style="width:40px;display:{display}">',
+            '<div class="x-progress-inner PercentRenderer">',
+                '<div class="x-progress-bar PercentRenderer" style="width:{percent}%">',
+                    '<div class="PercentRendererText PercentRenderer">',
+                         '<div>{percent}%</div>',
+                    '</div>',
+                '</div>',
+                '<div class="x-progress-text x-progress-text-back PercentRenderer">',
+                    '<div>&#160;</div>',
+                '</div>',
+            '</div>',
+        '</div></td><td>{fileName}</td></tr></table>'
+        ).compile();
+    }
+    
+    if(value == undefined) {
+        return '';
+    }                   
+    var fileName = value;
+
+    if (typeof value == 'object') {
+        fileName = value.name;
+    }
+    
+    if(record.data.type == 'folder') {
+        metadata.css = 'x-tinebase-typefolder';
+    }
+    else {
+        metadata.css = 'x-tinebase-typeoctet';
+    }
+       
+    var percent = record.data.progress;
+    var display = 'none';
+    if(percent > 0 && percent < 100) {
+        display = 'block';
+    }
+    
+    return Ext.ux.PercentRendererWithName.template.apply({percent: percent, display: display, fileName: fileName}) ;
+};

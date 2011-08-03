@@ -110,26 +110,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 70,
                 sortable: true,
                 dataIndex: 'name',
-                renderer: function(value, metadata, record) {
-    
-                    if(value == undefined) {
-                        return '';
-                    }                   
-                    var fileName = value;
-
-                    if (typeof value == 'object') {
-                        fileName = value.name;
-                    }
-                    
-                    if(record.data.type == 'folder') {
-                        metadata.css = 'x-tinebase-typefolder';
-                    }
-                    else {
-                        metadata.css = 'x-tinebase-typeoctet';
-                    }
-    
-                    return fileName;
-                }
+                renderer: Ext.ux.PercentRendererWithName
             },{
                 id: 'size',
                 header: this.app.i18n._("Size"),
@@ -186,14 +167,34 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         ];
 
-        if(Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
+        if(false/*Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()*/) {
             columns.push({
                 resizable: true,
                 id: 'progress',
                 dataIndex: 'progress',
                 width: 70,
                 header: _('progress'),
-                renderer: Ext.ux.PercentRenderer
+                renderer: function(percent) {
+                    
+                    if (! Ext.ux.PercentRenderer.template) {
+                        Ext.ux.PercentRenderer.template = new Ext.XTemplate(
+                            '<div class="x-progress-wrap PercentRenderer">',
+                            '<div class="x-progress-inner PercentRenderer">',
+                                '<div class="x-progress-bar PercentRenderer" style="width:{percent}%">',
+                                    '<div class="PercentRendererText PercentRenderer">',
+                                        '<div>{percent}%</div>',
+                                    '</div>',
+                                '</div>',
+                                '<div class="x-progress-text x-progress-text-back PercentRenderer">',
+                                    '<div>&#160;</div>',
+                                '</div>',
+                            '</div>',
+                        '</div>'
+                        ).compile();
+                    }
+                    
+                    return Ext.ux.PercentRenderer.template.apply({percent: percent});
+                }
             });
         }
         
@@ -505,7 +506,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 Ext.MessageBox.wait(_('Please wait'), String.format(_('Creating {0}...' ), nodeName));
 
                 var filename = currentFolderNode.attributes.path + '/' + _text;
-                Tine.Filemanager.recordBackend.createFolder(filename);
+                Tine.Filemanager.fileRecordBackend.createFolder(filename);
                 
             }
         }, this);
@@ -529,7 +530,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             if (selectedNodes && _btn == 'yes') {
                 
                 Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} ' ), nodeName ));
-                Tine.Filemanager.recordBackend.deleteItems(selectedNodes);
+                Tine.Filemanager.fileRecordBackend.deleteItems(selectedNodes);
             }
         }, this);
 
