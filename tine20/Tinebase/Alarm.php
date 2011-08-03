@@ -118,8 +118,9 @@ class Tinebase_Alarm extends Tinebase_Controller_Record_Abstract
                         $alarm->sent_time = Tinebase_DateTime::now();
                     
                         try {
-                            $appController->sendAlarm($alarm);
+                            // NOTE: we set the staus here, so controller can adopt the status itself
                             $alarm->sent_status = Tinebase_Model_Alarm::STATUS_SUCCESS;
+                            $appController->sendAlarm($alarm);
                         
                         } catch (Exception $e) {
                             Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . ' ' . $e->getMessage());

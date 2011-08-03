@@ -260,7 +260,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
      * 
      * @param  Calendar_Model_Event         $_event
      * @param  Tinebase_Record_RecordSet    $_exceptions
-     * @param  Tinebase_DateTime                    $_from
+     * @param  Tinebase_DateTime            $_from
      * @return Calendar_Model_Event
      */
     public static function computeNextOccurrence($_event, $_exceptions, $_from)
