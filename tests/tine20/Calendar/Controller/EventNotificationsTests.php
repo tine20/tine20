@@ -270,8 +270,9 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         $event->attendee = $this->_getPersonaAttendee('pwulf');
         $event->organizer = $this->_personasContacts['pwulf']->getId();
         
-        $event->dtstart = Tinebase_DateTime::now()->subDay(1)->addMinute(29);
-        $event->dtend = Tinebase_DateTime::now()->subDay(1)->addMinute(60);
+        // make sure next occurence contains now
+        $event->dtstart = Tinebase_DateTime::now()->subDay(1)->subMinute(30)->addSecond(2);
+        $event->dtend = Tinebase_DateTime::now()->subDay(1)->addSecond(2);
         $event->rrule = 'FREQ=DAILY;INTERVAL=1';
         $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
             new Tinebase_Model_Alarm(array(
@@ -284,11 +285,12 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $this->_flushMailer();
         
+        
+        sleep(2); // make sure we compute a 'new' next occurance
         Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
         
         $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
         $this->_assertMail('pwulf', $assertString);
-        
         
         $loadedEvent = $this->_eventController->get($persistentEvent->getId());
         
