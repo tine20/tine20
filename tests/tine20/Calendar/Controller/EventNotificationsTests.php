@@ -81,19 +81,6 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     }
     
     /**
-     * flush mailer (send all remaining mails first)
-     */
-    protected function _flushMailer()
-    {
-        // make sure all messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(100);
-        }
-        
-        $this->_mailer->flush();
-    }
-
-    /**
      * testUpdateEmpty
      */
     public function testUpdateEmpty()
@@ -275,6 +262,54 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
         
         $this->assertFalse($foundNonAccountMessage, 'notification has been sent to non-account');
         $this->assertTrue($foundPWulfMessage, 'notfication for pwulf not found');
+    }
+    
+    public function testRecuringAlarm()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getPersonaAttendee('pwulf');
+        $event->organizer = $this->_personasContacts['pwulf']->getId();
+        
+        $event->dtstart = Tinebase_DateTime::now()->subDay(1)->addMinute(29);
+        $event->dtend = Tinebase_DateTime::now()->subDay(1)->addMinute(60);
+        $event->rrule = 'FREQ=DAILY;INTERVAL=1';
+        $event->alarms = new Tinebase_Record_RecordSet('Tinebase_Model_Alarm', array(
+            new Tinebase_Model_Alarm(array(
+                'minutes_before' => 30
+            ), TRUE)
+        ));
+        
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        $persistentEvent = $this->_eventController->create($event);
+        
+        $this->_flushMailer();
+        
+        Tinebase_Alarm::getInstance()->sendPendingAlarms("Tinebase_Event_Async_Minutely");
+        
+        $assertString = ' at ' . Tinebase_DateTime::now()->format('M j');
+        $this->_assertMail('pwulf', $assertString);
+        
+        
+        $loadedEvent = $this->_eventController->get($persistentEvent->getId());
+        
+        $orgiginalAlarm = $persistentEvent->alarms->getFirstRecord()->alarm_time;
+        $adjustedAlarm = $loadedEvent->alarms->getFirstRecord()->alarm_time;
+        $this->assertTrue($adjustedAlarm->isLater($orgiginalAlarm), 'alarmtime is not adjusted');
+
+        $this->assertEquals(Tinebase_Model_Alarm::STATUS_PENDING, $loadedEvent->alarms->getFirstRecord()->sent_status, 'alarmtime is set to pending');
+    }
+    
+    /**
+     * flush mailer (send all remaining mails first)
+     */
+    protected function _flushMailer()
+    {
+        // make sure all messages are sent if queue is activated
+        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
+            Tinebase_ActionQueue::getInstance()->processQueue(100);
+        }
+        
+        $this->_mailer->flush();
     }
     
     /**
