@@ -19,10 +19,18 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
 class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
 {
     /**
+     * the scheduler
+     * 
+     * @var Zend_Scheduler
+     */
+    protected $_scheduler = NULL;
+    
+    /**
      * Sets up unit tests.
      */
     public function setUp()
     {
+        $this->_scheduler = Tinebase_Core::getScheduler();
     }
     
     /**
@@ -43,8 +51,7 @@ class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
      */
     public function testCanUseDbBackend()
     {
-        $scheduler = Tinebase_Core::getScheduler();
-        $backend = $scheduler->getBackend();
+        $backend = $this->_scheduler->getBackend();
         $tasks = $backend->loadQueue();
         $this->assertTrue(is_array($tasks));
     }
@@ -54,21 +61,22 @@ class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
      */
     public function testClearQueue()
     {
-        $scheduler = Tinebase_Core::getScheduler();
-        $backend = $scheduler->getBackend();
+        $backend = $this->_scheduler->getBackend();
         $backend->clearQueue();
         
         $tasks = $backend->loadQueue();
         $this->assertEquals(0, count($tasks));
+        $this->_scheduler->removeAllTasks();
+        $this->assertFalse($this->_scheduler->hasTask('Tinebase_Alarm'));
     }
     
     /**
      * Tests if a task can be saved.
-     * 
-     * @todo activate again
      */
-    public function _testSaveTask()
+    public function testSaveTask()
     {
+        $this->testClearQueue();
+        
         $request = new Zend_Controller_Request_Simple(); 
         $request->setControllerName('Tinebase_Alarm');
         $request->setActionName('sendPendingAlarms');
@@ -82,27 +90,19 @@ class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
             ->setMinutes("0/1")
             ->setRequest($request);
         
-        $scheduler = Tinebase_Core::getScheduler();
-        $scheduler->getBackend()->saveQueue();
+        $this->_scheduler->addTask('Tinebase_Alarm_Test', $task);
+        $this->_scheduler->saveTask();
         
-        $scheduler->addTask('Tinebase_Alarm_Test', $task);
-        $scheduler->saveTask();
-        
-        $backend = $scheduler->getBackend();
-        $tasks = $backend->loadQueue();
+        $tasks = $this->_scheduler->getBackend()->loadQueue();
         $this->assertEquals(1, count($tasks));
     }
     
     /**
      * can run task
-     * 
-     * @todo activate again
      */
-    public function _testCanRunTask()
+    public function testCanRunTask()
     {
         $this->testSaveTask();
-        
-        $scheduler = Tinebase_Core::getScheduler();
-        $scheduler->run();
+        $this->_scheduler->run();
     }
 }
