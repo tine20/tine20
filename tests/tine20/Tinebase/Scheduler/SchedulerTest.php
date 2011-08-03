@@ -103,6 +103,7 @@ class Tinebase_Scheduler_SchedulerTest extends PHPUnit_Framework_TestCase
     public function testCanRunTask()
     {
         $this->testSaveTask();
-        $this->_scheduler->run();
+        $result = $this->_scheduler->run();
+        $this->assertGreaterThan(0, count($result));
     }
 }
