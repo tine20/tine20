@@ -52,12 +52,19 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     modelName: 'Node',
     recordClass: Tine.Filemanager.Model.Node,
     
-    createFolder: function(filename, options) {
+    /**
+     * creating folder
+     * 
+     * @param name      folder name
+     * @param options   additional options
+     * @returns
+     */
+    createFolder: function(name, options) {
         
         options = options || {};
         var params = {
                 application : this.appName,                            
-                filename : filename,
+                filename : name,
                 type : 'folder',
                 method : this.appName + ".createNode"  
         };
@@ -83,6 +90,13 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
     },
     
+    /**
+     * deleting file or folder
+     * 
+     * @param items     files/folders to delete
+     * @param options   additional options
+     * @returns
+     */
     deleteItems: function(items, options) {
         
         options = options || {};
