@@ -83,6 +83,12 @@ Tine.widgets.tree.ContextMenu = {
                                 
                                 parentNode.expand();
                                 this.fireEvent('containeradd', nodeData);
+                                
+                                // TODO: im event auswerten
+                                if (config.backendModel == 'Node') {
+                                    this.app.mainScreen.GridPanel.getStore().reload();
+                                }
+
                                 Ext.MessageBox.hide();
                             }
                         });
