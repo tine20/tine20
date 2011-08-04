@@ -124,7 +124,7 @@ class Tinebase_Config
                 'application_id'    => $applicationId,
                 'name'              => $_name,
                 'value'             => $_default,
-            ), TRUE);            
+            ), TRUE);
         }
             
         // check config.inc.php and get value from there
