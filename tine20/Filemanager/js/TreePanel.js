@@ -31,13 +31,16 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         }
     } ],
     
-    /**Tine.widgets.tree.FilterPlugin
+    /**
+     * Tine.widgets.tree.FilterPlugin
      * returns a filter plugin to be used in a grid
      */
+    // TODO: Tine.widgets.tree.FilterPlugin
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
             this.filterPlugin = new Tine.Filemanager.PathFilterPlugin({
-                treePanel: this
+                treePanel: this,
+                field: 'path'
             });
         }
         

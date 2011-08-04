@@ -116,7 +116,15 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 header: this.app.i18n._("Size"),
                 width: 40,
                 sortable: true,
-                dataIndex: 'size'
+                dataIndex: 'size',
+                renderer: function(value, metadata, record) {
+                    if(record.data.progress < 100) {
+                        return 0;                      
+                    }
+                    else {
+                        return value;
+                    }
+                }
             },{
                 id: 'contenttype',
                 header: this.app.i18n._("Contenttype"),
@@ -167,36 +175,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         ];
 
-        if(false/*Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()*/) {
-            columns.push({
-                resizable: true,
-                id: 'progress',
-                dataIndex: 'progress',
-                width: 70,
-                header: _('progress'),
-                renderer: function(percent) {
-                    
-                    if (! Ext.ux.PercentRenderer.template) {
-                        Ext.ux.PercentRenderer.template = new Ext.XTemplate(
-                            '<div class="x-progress-wrap PercentRenderer">',
-                            '<div class="x-progress-inner PercentRenderer">',
-                                '<div class="x-progress-bar PercentRenderer" style="width:{percent}%">',
-                                    '<div class="PercentRendererText PercentRenderer">',
-                                        '<div>{percent}%</div>',
-                                    '</div>',
-                                '</div>',
-                                '<div class="x-progress-text x-progress-text-back PercentRenderer">',
-                                    '<div>&#160;</div>',
-                                '</div>',
-                            '</div>',
-                        '</div>'
-                        ).compile();
-                    }
-                    
-                    return Ext.ux.PercentRenderer.template.apply({percent: percent});
-                }
-            });
-        }
         
         return new Ext.grid.ColumnModel({ 
             defaults: {
@@ -327,6 +305,22 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this
         });
         
+        this.action_pause = new Ext.Action({
+            text: _('Pause upload'),
+            iconCls: 'action_pause',
+            scope: this,
+//            disabled: true,
+            handler: this.onPause
+        });
+        
+        this.action_resume = new Ext.Action({
+            text: _('Resume upload'),
+            iconCls: 'resume_pause',
+            scope: this,
+//            disabled: true,
+            handler: this.onResume
+        });
+        
         this.actionUpdater.addActions([
             this.action_upload,
             this.action_deleteRecord,
@@ -341,7 +335,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 //                this.action_goUpFolder,
                 this.action_save,
                 this.action_renameItem,
-                this.action_deleteRecord
+                this.action_deleteRecord,
+                this.action_pause,
+                this.action_resume
             ]
         });
         
@@ -584,6 +580,51 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') + Tine.Tinebase.registry.get('maxFileUploadSize')
         ).setIcon(Ext.MessageBox.ERROR);
         this.loadMask.hide();
+    },
+    
+    /**
+     * on remove
+     * @param {} button
+     * @param {} event
+     */
+    onRemove: function (button, event) {
+        
+        var selectedRows = this.selectionModel.getSelections();
+        for (var i = 0; i < selectedRows.length; i += 1) {
+            this.store.remove(selectedRows[i]);
+            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            upload.setPaused(true);
+        }
+    },
+    
+    
+    /**
+     * on pause
+     * @param {} button
+     * @param {} event
+     */
+    onPause: function (button, event) {     
+ 
+        var selectedRows = this.selectionModel.getSelections();    
+        for(var i=0; i < selectedRows.length; i++) {
+            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            upload.setPaused(true);
+        }       
+    },
+
+    
+    /**
+     * on resume
+     * @param {} button
+     * @param {} event
+     */
+    onResume: function (button, event) {
+
+        var selectedRows = this.selectionModel.getSelections();
+        for(var i=0; i < selectedRows.length; i++) {
+            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            upload.resumeUpload();
+        }
     },
        
     /**
