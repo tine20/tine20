@@ -63,12 +63,19 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
         $result = parent::toArray($_valueToJson);
         
         if (! $this->_path) {
-            $this->_value = Tinebase_Model_Tree_Node_Path::createFromPath($this->_value);
+            $this->_path = Tinebase_Model_Tree_Node_Path::createFromPath($this->_value);
         }
         
-        $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
-        $node->path = $this->_path->flatpath;
-        //Filemanager_Controller_Node::getInstance()->resolveContainerAndAddPath($node, $this->_path);
+        if ($this->_path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
+            $node = new Tinebase_Model_Tree_Node(array(
+                'name' => 'root',
+                'path' => '/',
+            ), TRUE);
+        } else {
+            $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
+            $node->path = $this->_path->flatpath;
+        }
+        
         $result['value'] = $node->toArray();
         
         return $result;
