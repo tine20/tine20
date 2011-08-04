@@ -42,6 +42,11 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     const STREAMWRAPPERPREFIX = 'tine20://';
     
     /**
+     * root type
+     */
+    const TYPE_ROOT = 'root';
+    
+    /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
      * 
@@ -177,7 +182,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     protected function _getPathParts($_path)
     {
         $pathParts = explode('/', trim($_path, '/'));
-        if (count($pathParts) < 2) {
+        if (count($pathParts) < 1) {
             throw new Tinebase_Exception_InvalidArgument('Invalid path: ' . $_path);
         }
         
@@ -193,12 +198,13 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _getContainerType($_pathParts)
     {
-        $containerType = $_pathParts[1];
+        $containerType = (isset($_pathParts[1])) ? $_pathParts[1] : self::TYPE_ROOT;
         
         if (! in_array($containerType, array(
             Tinebase_Model_Container::TYPE_PERSONAL,
             Tinebase_Model_Container::TYPE_SHARED,
             Tinebase_Model_Container::TYPE_OTHERUSERS,
+            self::TYPE_ROOT
         ))) {
             throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $containerType);
         }
@@ -267,10 +273,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
                         $container = $this->_searchContainerByName($subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL);
                     }
                 }
-                break;
-                
-            default:
-                throw new Tinebase_Exception_NotFound('Invalid path: ' . $_path);
                 break;
         }
         

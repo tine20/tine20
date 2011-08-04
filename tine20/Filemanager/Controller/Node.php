@@ -85,9 +85,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      */
     public function search(Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Record_Interface $_pagination = NULL, $_getRelations = FALSE, $_onlyIds = FALSE, $_action = 'get')
     {
-        $this->_checkFilterACL($_filter, 'get');
+        $path = $this->_checkFilterACL($_filter, 'get');
         
-        $result = $this->_backend->searchNodes($_filter, $_pagination);
+        if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
+            throw new Tinebase_Exception_NotImplemented('root');
+        } else {
+            $result = $this->_backend->searchNodes($_filter, $_pagination);
+        }
         return $result;
     }
     
@@ -96,6 +100,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param Tinebase_Model_Filter_FilterGroup $_filter
      * @param string $_action get|update
+     * @return Tinebase_Model_Tree_Node_Path
      * @throws Tinebase_Exception_AccessDenied
      */
     protected function _checkFilterACL(Tinebase_Model_Filter_FilterGroup $_filter, $_action = 'get')
@@ -106,23 +111,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         $pathFilters = $_filter->getFilter('path', TRUE);
         
+        if (count($pathFilters) !== 1) {
+            throw new Tinebase_Exception_AccessDenied('Exactly one path filter required.');
+        }
+        
         // add base path and check grants
-        foreach ($pathFilters as $key => $pathFilter) {
-            $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($pathFilter->getValue()));
-            $pathFilter->setValue($path);
-            
-            if ($path->container) {
-                $hasGrant = $this->_checkACLContainer($path->container, $_action);
-                if (! $hasGrant) {
-                    unset($pathFilters[$key]);
-                }
-            }
-            
-        }
-
-        if (empty($pathFilters)) {
-            throw new Tinebase_Exception_AccessDenied('Access denied.');
-        }
+        $pathFilter = $pathFilters[0];
+        $path = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($pathFilter->getValue()));
+        $pathFilter->setValue($path);
+        
+        $this->_checkPathACL($path, 'get');
+        
+        return $path;
     }
     
     /**
@@ -286,11 +286,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 case Tinebase_Model_Container::TYPE_SHARED:
                     $hasPermission = $this->checkRight(Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS, FALSE);
                     break;
+                case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
+                    $hasPermission = TRUE;
+                    break;
             }
         }
         
         if (! $hasPermission) {
-            throw new Tinebase_Exception_AccessDenied('No permission to ' . $_action . ' in path ' . $_path->flatpath);
+            throw new Tinebase_Exception_AccessDenied('No permission to ' . $_action . ' nodes in path ' . $_path->flatpath);
         }
     }
     
