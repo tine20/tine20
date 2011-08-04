@@ -146,6 +146,11 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 
 //        this.onSelectionChange(this.getSelectionModel(), node);
 
+        //var cp = this.app.getMainScreen().getCenterPanel(),
+        // TODO work on cp.*_action
+        // NOTE Action toolbar has grid actions only
+        
+        
         var actionToolbar = this.app.mainScreen.ActionToolbar;
         var items = actionToolbar.get(0).items.items;
         

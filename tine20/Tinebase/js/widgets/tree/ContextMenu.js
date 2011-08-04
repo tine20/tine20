@@ -27,6 +27,8 @@ Tine.widgets.tree.ContextMenu = {
      */
 	getMenu: function(config) {
         
+        this.config = config;
+        
         /***************** define action handlers *****************/
         var handler = {
             /**
@@ -329,8 +331,8 @@ Tine.widgets.tree.ContextMenu = {
                     items.push(new Ext.Action({
                         text: _('Manage permissions'),
                         iconCls: 'action_managePermissions',
-                        handler: handler.managePermissions,
-                        scope: config.scope
+                        handler: this.managePermissions,
+                        scope: this
                     }));
                     break;
                 case 'reload':
@@ -352,5 +354,27 @@ Tine.widgets.tree.ContextMenu = {
         return new Ext.menu.Menu({
 		    items: items
 		});
-	}
+	},
+    
+    /**
+     * manage permissions
+     * 
+     */
+    managePermissions: function() {
+        console.log(this.config.scope.ctxNode);
+        if (this.config.scope.ctxNode) {
+            var node = this.config.scope.ctxNode;
+            
+            var grantContainer = node.attributes.container;
+            if(grantContainer.name.id) {
+                grantContainer = grantContainer.name;
+            }
+            
+            var window = Tine.widgets.container.GrantsDialog.openWindow({
+                title: String.format(_('Manage Permissions for {0} "{1}"'), this.config.nodeName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
+                containerName: this.config.nodeName,
+                grantContainer: grantContainer
+            });
+        }
+    }
 };
