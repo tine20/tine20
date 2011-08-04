@@ -34,34 +34,38 @@ class Sales_Setup_Initialize extends Setup_Initialize
     public static function getSharedContractsContainer()
     {
         $sharedContracts = NULL;
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
         
         try {
-            $sharedContracts = Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', Tinebase_Model_Container::TYPE_SHARED);
+            $sharedContractsId = Tinebase_Config::getInstance()->getConfig(Sales_Model_Config::SHAREDCONTRACTSID, $appId)->value;
+            $sharedContracts = Tinebase_Container::getInstance()->get($sharedContractsId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $newContainer = new Tinebase_Model_Container(array(
                 'name'              => 'Shared Contracts',
                 'type'              => Tinebase_Model_Container::TYPE_SHARED,
                 'backend'           => 'Sql',
-                'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId() 
-            ));        
+                'application_id'    => $appId,
+            ));
             $sharedContracts = Tinebase_Container::getInstance()->addContainer($newContainer);
+            
+            Tinebase_Config::getInstance()->setConfigForApplication(Sales_Model_Config::SHAREDCONTRACTSID, $sharedContracts->getId(), 'Sales');
+            
+            // add grants for groups
+            $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
+            $adminGroup = $groupsBackend->getDefaultAdminGroup();
+            $userGroup  = $groupsBackend->getDefaultGroup();
+            Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
+                Tinebase_Model_Grants::GRANT_READ,
+                Tinebase_Model_Grants::GRANT_EDIT
+            ), TRUE);
+            Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
+                Tinebase_Model_Grants::GRANT_ADD,
+                Tinebase_Model_Grants::GRANT_READ,
+                Tinebase_Model_Grants::GRANT_EDIT,
+                Tinebase_Model_Grants::GRANT_DELETE,
+                Tinebase_Model_Grants::GRANT_ADMIN
+            ), TRUE);
         }
-
-        // add grants for groups
-        $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
-        $adminGroup = $groupsBackend->getDefaultAdminGroup();
-        $userGroup  = $groupsBackend->getDefaultGroup();
-        Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $userGroup, array(
-            Tinebase_Model_Grants::GRANT_READ,
-            Tinebase_Model_Grants::GRANT_EDIT
-        ), TRUE);
-        Tinebase_Container::getInstance()->addGrants($sharedContracts, Tinebase_Acl_Rights::ACCOUNT_TYPE_GROUP, $adminGroup, array(
-            Tinebase_Model_Grants::GRANT_ADD,
-            Tinebase_Model_Grants::GRANT_READ,
-            Tinebase_Model_Grants::GRANT_EDIT,
-            Tinebase_Model_Grants::GRANT_DELETE,
-            Tinebase_Model_Grants::GRANT_ADMIN
-        ), TRUE);
         
         return $sharedContracts;
     }
