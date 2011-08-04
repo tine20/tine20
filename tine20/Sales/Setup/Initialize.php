@@ -5,7 +5,7 @@
  * @package     Sales
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Jonas Fischer <j.fischer@metaways.de>
- * @copyright   Copyright (c) 2008-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -23,7 +23,14 @@ class Sales_Setup_Initialize extends Setup_Initialize
     protected function _createInitialRights(Tinebase_Model_Application $_application)
     {
         parent::_createInitialRights($_application);
-
+        self::createSharedContractsContainer();
+    }
+    
+    /**
+     * create container for shared contracts
+     */
+    public static function createSharedContractsContainer()
+    {
         $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
         $adminGroup = $groupsBackend->getDefaultAdminGroup();
         $userGroup  = $groupsBackend->getDefaultGroup();
