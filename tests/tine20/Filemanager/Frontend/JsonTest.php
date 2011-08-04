@@ -182,6 +182,22 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     /**
      * test search nodes (personal)
      */
+    public function testSearchRoot()
+    {
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/'
+        ));
+        $result = $this->_json->searchNodes($filter, array());
+        
+        $this->assertEquals(3, $result['totalcount']);
+        $this->assertEquals('/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName, $result['results'][0]['path']);
+    }
+    
+    /**
+     * test search nodes (personal)
+     */
     public function testSearchPersonalNodes()
     {
         $this->_setupTestPath(Tinebase_Model_Container::TYPE_PERSONAL);
