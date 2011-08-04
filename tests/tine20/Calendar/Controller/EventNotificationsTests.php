@@ -344,6 +344,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
                 $this->assertEquals(1, count($mailsForPersona), 'One mail should be send for '. $personaName);
                 $subject = $mailsForPersona[0]->getSubject();
                 $this->assertTrue(FALSE !== strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
+                $this->assertEquals('UTF-8', $mailsForPersona[0]->getCharset());
             }
         }
     }
