@@ -16,7 +16,7 @@ Ext.ns('Ext.ux.file');
  * @class       Ext.ux.file.Upload
  * @extends     Ext.util.Observable
  */
-Ext.ux.file.Upload = function(config, file, id) {
+Ext.ux.file.Upload = function(config, file, fileSelector, id) {
     Ext.apply(this, config);
     
     Ext.ux.file.Upload.superclass.constructor.apply(this, arguments);
@@ -53,6 +53,7 @@ Ext.ux.file.Upload = function(config, file, id) {
           'uploadstart'
     );
         
+    this.fileSelector = fileSelector;
     this.file = file;
     this.fileSize = (this.file.size ? this.file.size : this.file.fileSize);
 
@@ -497,10 +498,10 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     html4upload: function() {
                 
-        alert("html4upload");
-        
         var form = this.createForm();
         var input = this.getInput();
+//        alert(Ext.get(input));
+        
         form.appendChild(input);
         
         this.fileRecord = new Ext.ux.file.Upload.file({
@@ -512,7 +513,6 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             status: 'uploading',
             progress: 0
         });
-        
         
         if(this.maxFileUploadSize/1 < this.file.size/1) {
             this.fileRecord.html4upload = true;
@@ -634,7 +634,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     // private
     getInput: function() {
         if (! this.input) {
-            this.input = this.file;
+            this.input = this.fileSelector.detachInputFile();
         }
         
         return this.input;

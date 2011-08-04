@@ -341,7 +341,7 @@ Tine.widgets.grid.FileUploadGrid = Ext.extend(Ext.grid.GridPanel, {
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
 
-            var upload = new Ext.ux.file.Upload({}, file);
+            var upload = new Ext.ux.file.Upload({}, file, fileSelector);
 
             upload.on('uploadfailure', this.onUploadFail, this);
             upload.on('uploadcomplete', Tine.Tinebase.uploadManager.onUploadComplete, this);
