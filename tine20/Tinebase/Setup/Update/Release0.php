@@ -1545,7 +1545,7 @@ class Tinebase_Setup_Update_Release0 extends Setup_Update_Abstract
     public function update_18()
     {
         try {
-            $application = Tinebase_Application::getInstance()->getApplicationByName('Timetracker');
+            $application = Tinebase_Application::getInstance()->getApplicationByName('Sales');
         } catch (Tinebase_Exception_NotFound $enf) {
             // timetracker not installed
             $this->setApplicationVersion('Tinebase', '0.19');
