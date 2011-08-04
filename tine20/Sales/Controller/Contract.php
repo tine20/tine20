@@ -74,7 +74,7 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
     public function create(Tinebase_Record_Interface $_record)
     {        
         // add container
-        $_record->container_id = Tinebase_Container::getInstance()->getContainerByName('Sales', 'Shared Contracts', 'shared')->getId();
+        $_record->container_id = Sales_Setup_Initialize::getSharedContractsContainer()->getId();
         
         // add number
         $numberBackend = new Sales_Backend_Number();
