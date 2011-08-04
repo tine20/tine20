@@ -92,7 +92,7 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
     public static function getSharedContractsContainer()
     {
         $sharedContracts = NULL;
-        $appId = Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)->getId();
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
         
         try {
             $sharedContractsId = Tinebase_Config::getInstance()->getConfig(Sales_Model_Config::SHAREDCONTRACTSID, $appId)->value;
@@ -106,7 +106,7 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
             ));
             $sharedContracts = Tinebase_Container::getInstance()->addContainer($newContainer);
             
-            Tinebase_Config::getInstance()->setConfigForApplication(Sales_Model_Config::SHAREDCONTRACTSID, $sharedContracts->getId(), $this->_applicationName);
+            Tinebase_Config::getInstance()->setConfigForApplication(Sales_Model_Config::SHAREDCONTRACTSID, $sharedContracts->getId(), 'Sales');
             
             // add grants for groups
             $groupsBackend = Tinebase_Group::factory(Tinebase_Group::SQL);
