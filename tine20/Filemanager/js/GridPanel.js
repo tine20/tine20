@@ -669,7 +669,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var fileName = file.name || file.fileName;
             Tine.Filemanager.createNode(grid.currentFolderNode.attributes.path + '/' + fileName, "file");
             
-            var upload = new Ext.ux.file.Upload({}, file);
+            var upload = new Ext.ux.file.Upload({}, file, fileSelector);
 
             upload.on('uploadfailure', grid.onUploadFail, this);
             upload.on('uploadcomplete', grid.onUploadComplete, this);

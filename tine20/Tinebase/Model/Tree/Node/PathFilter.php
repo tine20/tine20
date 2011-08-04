@@ -66,7 +66,10 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
             $this->_value = Tinebase_Model_Tree_Node_Path::createFromPath($this->_value);
         }
         
-        $result['value'] = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
+        $node = Tinebase_FileSystem::getInstance()->stat($this->_path->statpath);
+        $node->path = $this->_path->flatpath;
+        //Filemanager_Controller_Node::getInstance()->resolveContainerAndAddPath($node, $this->_path);
+        $result['value'] = $node->toArray();
         
         return $result;
     }

@@ -286,6 +286,11 @@ Ext.ux.file.BrowsePlugin.prototype = {
         if (window.FileList) { // HTML5 FileList support
             this.files = files ? files : this.input_file.dom.files;
         } else {
+            
+            for(var objEl in this.input_file) {
+                alert(objEl + ': ' + this.input_file[objEl]);
+            }
+            
             this.files = [{
                 name : this.input_file.getValue().split(/[\/\\]/).pop()
             }];
@@ -342,6 +347,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     getFileName:function() {
         var file = this.getFileList()[0];
+        alert(file);
+        alert(file.name + " - " + file.fileName);
         return file.name ? file.name : file.fileName;
     },
     
@@ -351,6 +358,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     getFileCls: function() {
 
+        alert(this.getFileName());
         var fparts = this.getFileName().split('.');
         if(fparts.length === 1) {
             return '';
