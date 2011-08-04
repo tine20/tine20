@@ -88,9 +88,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $path = $this->_checkFilterACL($_filter, 'get');
         
         if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
-            throw new Tinebase_Exception_NotImplemented('root');
+            $result = $this->_getRootNodes();
         } else {
             $result = $this->_backend->searchNodes($_filter, $_pagination);
+            $this->resolveContainerAndAddPath($result, $path);
         }
         return $result;
     }
@@ -123,6 +124,32 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $this->_checkPathACL($path, 'get');
         
         return $path;
+    }
+    
+    /**
+     * get the three root nodes
+     * 
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    protected function _getRootNodes()
+    {
+        $translate = Tinebase_Translation::getTranslation($this->_applicationName);
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
+            array(
+                'name' => $translate->_('My Files'),
+                'path' => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
+            ),
+            array(
+                'name' => $translate->_('Shared Files'),
+                'path' => '/' . Tinebase_Model_Container::TYPE_SHARED,
+            ),
+            array(
+                'name' => $translate->_('Other Users Files'),
+                'path' => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS,
+            ),
+        ), TRUE); // bypass validation
+        
+        return $result;
     }
     
     /**
