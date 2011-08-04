@@ -122,18 +122,18 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
   
     if (! Ext.ux.PercentRendererWithName.template) {
         Ext.ux.PercentRendererWithName.template = new Ext.XTemplate(
-            '<table><tr><td><div class="x-progress-wrap PercentRenderer" style="width:40px;display:{display}">',
+            '<div class="x-progress-wrap PercentRenderer" style="display:{display}">',
             '<div class="x-progress-inner PercentRenderer">',
                 '<div class="x-progress-bar PercentRenderer" style="width:{percent}%">',
                     '<div class="PercentRendererText PercentRenderer">',
-                         '<div>{percent}%</div>',
+                         '<div>{fileName}</div>',
                     '</div>',
                 '</div>',
                 '<div class="x-progress-text x-progress-text-back PercentRenderer">',
                     '<div>&#160;</div>',
                 '</div>',
             '</div>',
-        '</div></td><td>{fileName}</td></tr></table>'
+        '</div>'
         ).compile();
     }
     
@@ -157,7 +157,11 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     var display = 'none';
     if(percent > 0 && percent < 100) {
         display = 'block';
+        return Ext.ux.PercentRendererWithName.template.apply({percent: percent, display: display, fileName: fileName}) ;
+    }
+    else {
+        return fileName;
     }
     
-    return Ext.ux.PercentRendererWithName.template.apply({percent: percent, display: display, fileName: fileName}) ;
+
 };

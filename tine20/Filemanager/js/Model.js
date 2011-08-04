@@ -104,7 +104,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         var filenames = new Array();
         var nodeCount = items.length;
         for(var i=0; i<nodeCount; i++) {
-            filenames.push(items[i].json.path);
+            filenames.push(items[i].data.path );
         }
 
         var params = {
@@ -131,6 +131,11 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         };
         
         return this.doXHTTPRequest(options);
+    },
+    
+    // TODO: check for other way to supress this funktion call
+    saveRecord: function(record, options, additionalArguments) {
+        Tine.log.debug("saveRecord supressed in fileManager");
     }
     
 });
