@@ -27,7 +27,7 @@
  * exploded flat path should look like this:
  * 
  * [0] => app id [required]
- * [1] => type [required]
+ * [1] => type [required] (personal|otherUsers|shared)
  * [2] => container | accountLoginName
  * [3] => container | directory
  * [4] => directory
@@ -167,7 +167,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         $this->streamwrapperpath    = self::STREAMWRAPPERPREFIX . $this->statpath;
     }
     
-    
     /**
      * get path parts
      * 
@@ -219,7 +218,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         
         return $containerOwner;
     }
-    
     
     /**
      * get application from path
@@ -307,7 +305,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }    
         
     /**
-     * do path replacements (container name => container id, otherUsers => personal, ...)
+     * do path replacements (container name => container id, otherUsers => personal, remove account name)
      * 
      * @param array $_pathParts
      * @return string
@@ -320,6 +318,12 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
             $pathParts[1] = Tinebase_Model_Container::TYPE_PERSONAL;
         }
         
+        // remove account name in stat path
+        if (count($pathParts) > 1 && $this->containerType !== Tinebase_Model_Container::TYPE_SHARED) {
+            unset($pathParts[2]);
+        }
+
+        // replace container name with id
         if (count($pathParts) > 2) {
             $containerPartIdx = ($this->containerType === Tinebase_Model_Container::TYPE_SHARED) ? 2 : 3;
             if (isset($pathParts[$containerPartIdx]) && $this->container && $pathParts[$containerPartIdx] === $this->container->name) {
