@@ -311,8 +311,9 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                     $hasPermission = ($_path->containerOwner === $this->_currentAccount->accountLoginName);
                     break;
                 case Tinebase_Model_Container::TYPE_SHARED:
-                    $hasPermission = $this->checkRight(Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS, FALSE);
+                    $hasPermission = ($_action !== 'get' ) ? $this->checkRight(Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS, FALSE) : TRUE;
                     break;
+                case Tinebase_Model_Container::TYPE_OTHERUSERS:
                 case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
                     $hasPermission = TRUE;
                     break;
@@ -365,6 +366,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param Tinebase_Record_RecordSet|Tinebase_Model_Tree_Node $_records
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param Tinebase_Model_Container $_container
+     * 
+     * @todo add account grants, too
      */
     public function resolveContainerAndAddPath($_records, Tinebase_Model_Tree_Node_Path $_path, Tinebase_Model_Container $_container = NULL)
     {
