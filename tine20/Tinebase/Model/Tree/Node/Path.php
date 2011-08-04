@@ -19,6 +19,7 @@
  * @property    string                      containerOwner
  * @property    string                      flatpath
  * @property    string                      statpath
+ * @property    string                      streamwrapperpath
  * @property    Tinebase_Model_Application  application
  * @property    Tinebase_Model_Container    container
  * @property    Tinebase_Model_FullUser     user
@@ -35,6 +36,11 @@
  */
 class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
 {
+    /**
+     * streamwrapper path prefix
+     */
+    const STREAMWRAPPERPREFIX = 'tine20://';
+    
     /**
      * key in $_validators/$_properties array for the field which 
      * represents the identifier
@@ -62,6 +68,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         'containerOwner'    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'flatpath'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'statpath'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'streamwrapperpath' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'application'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'user'			    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -152,12 +159,14 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     {
         $pathParts = $this->_getPathParts($_path);
         
-        $this->containerType   = $this->_getContainerType($pathParts);
-        $this->containerOwner  = $this->_getContainerOwner($pathParts);
-        $this->application     = $this->_getApplication($pathParts);
-        $this->container       = $this->_getContainer($pathParts);
-        $this->statpath        = $this->_getStatPath($pathParts);
+        $this->containerType        = $this->_getContainerType($pathParts);
+        $this->containerOwner       = $this->_getContainerOwner($pathParts);
+        $this->application          = $this->_getApplication($pathParts);
+        $this->container            = $this->_getContainer($pathParts);
+        $this->statpath             = $this->_getStatPath($pathParts);
+        $this->streamwrapperpath    = self::STREAMWRAPPERPREFIX . $this->statpath;
     }
+    
     
     /**
      * get path parts
