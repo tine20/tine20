@@ -199,4 +199,25 @@ class Tinebase_Mail extends Zend_Mail
         }
         return $this;
     }
+    
+    /**
+     * Formats e-mail address
+     * 
+     * NOTE: we always add quotes to the name as this caused problems when name is encoded
+     * @see Zend_Mail::_formatAddress
+     *
+     * @param string $email
+     * @param string $name
+     * @return string
+     */
+    protected function _formatAddress($email, $name)
+    {
+        if ($name === '' || $name === null || $name === $email) {
+            return $email;
+        } else {
+            $encodedName = $this->_encodeHeader($name);
+            $format = '"%s" <%s>';
+            return sprintf($format, $encodedName, $email);
+        }
+    }
 }
