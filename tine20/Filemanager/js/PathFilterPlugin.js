@@ -101,7 +101,6 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
             
             this.treePanel.getSelectionModel().suspendEvents();
             this.selectValue(filter.value);
-            this.treePanel.getSelectionModel().resumeEvents();
         }, this);
     },
     
