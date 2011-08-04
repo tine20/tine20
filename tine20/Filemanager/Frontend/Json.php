@@ -74,23 +74,6 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
 
     /**
-     * returns multiple records prepared for json transport
-     *
-     * @param Tinebase_Record_RecordSet $_records Tinebase_Record_Abstract
-     * @param Tinebase_Model_Filter_FilterGroup $_filter
-     * @return array data
-     */
-    protected function _multipleRecordsToJson(Tinebase_Record_RecordSet $_records, $_filter = NULL)
-    {
-        if ($_filter !== NULL) {
-            $path = Tinebase_Model_Tree_Node_Path::createFromPath($_filter->getFilter('path')->getValue());
-            Filemanager_Controller_Node::getInstance()->resolveContainerAndAddPath($_records, $path);
-        }
-        
-        return parent::_multipleRecordsToJson($_records, $_filter);
-    }
-    
-    /**
      * create node
      * 
      * @param array $filename
