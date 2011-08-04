@@ -474,10 +474,10 @@ Ext.namespace('Tine.Felamimail');
                 if (this.replyTo) {
                     // check if there is already a 'Re:' prefix
                     var replyPrefix = this.app.i18n._('Re:'),
-                        signatureRegexp = new RegExp('^' + replyPrefix),
+                        replyPrefixRegexp = new RegExp('^' + replyPrefix, 'i'),
                         replySubject = (this.replyTo.get('subject')) ? this.replyTo.get('subject') : '';
                         
-                    if (! replySubject.match(signatureRegexp)) {
+                    if (! replySubject.match(replyPrefixRegexp)) {
                         this.subject = replyPrefix + ' ' +  replySubject;
                     } else {
                         this.subject = replySubject;
