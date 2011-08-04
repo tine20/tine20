@@ -11,7 +11,7 @@
 /**
  * Test helper
  */
-require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Test class for Calendar_Controller_EventNotifications
@@ -41,77 +41,28 @@ class Tinebase_NotificationTest extends PHPUnit_Framework_TestCase
     
     /**
      * testNotificationWithSpecialCharContactName
-     * 
-     * @todo implement
      */
     public function testNotificationWithSpecialCharContactName()
     {
-        $this->_flushMailer();
-        
-        // @todo create contact with special chars
-
-        // @todo send notification
-        
-        // @todo check mail encoding
-        
-//        $event = $this->_getEvent();
-//        $event->attendee = $this->_getPersonaAttendee('jsmith, pwulf, sclever, jmcblack, rwright');
-//        
-//        $this->_flushMailer();
-//        $persistentEvent = $this->_eventController->create($event);
-//        $this->_assertMail('jsmith', NULL);
-//        $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'invit');
-//        
-//        $this->_flushMailer();
-//        $persistentEvent = $this->_eventController->delete($persistentEvent);
-//        $this->_assertMail('jsmith', NULL);
-//        $this->_assertMail('pwulf, sclever, jmcblack, rwright', 'cancel');
-    }
-    
-    /**
-     * flush mailer (send all remaining mails first)
-     */
-    protected function _flushMailer()
-    {
-        // make sure all messages are sent if queue is activated
-        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(100);
-        }
-        
         $this->_mailer->flush();
-    }
-    
-    /**
-     * checks if mail for persona got send
-     * 
-     * @param string $_personas
-     * @param string $_assertString
-     * @return void
-     */
-    protected function _assertMail($_personas, $_assertString = NULL)
-    {
-//        // make sure messages are sent if queue is activated
-//        if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-//            Tinebase_ActionQueue::getInstance()->processQueue();
-//        }
-//        
-//        foreach (explode(',', $_personas) as $personaName) {
-//            $mailsForPersona = array();
-//            $personaEmail = $this->_personas[trim($personaName)]->accountEmailAddress;
-//            
-//            foreach($this->_mailer->getMessages() as $message) {
-//                if (array_value(0, $message->getRecipients()) == $personaEmail) {
-//                    array_push($mailsForPersona, $message);
-//                }
-//            }
-//            
-//            if (! $_assertString) {
-//                $this->assertEquals(0, count($mailsForPersona), 'No mail should be send for '. $personaName);
-//            } else {
-//                $this->assertEquals(1, count($mailsForPersona), 'One mail should be send for '. $personaName);
-//                $subject = $mailsForPersona[0]->getSubject();
-//                $this->assertTrue(FALSE !== strpos($subject, $_assertString), 'Mail subject for ' . $personaName . ' should contain "' . $_assertString . '" but '. $subject . ' is given');
-//            }
-//        }
+        
+        // create contact with special chars
+        $contact = Addressbook_Controller_Contact::getInstance()->create(new Addressbook_Model_Contact(array(
+            'n_family'  => 'Hüßgen',
+            'n_given'   => 'Silke',
+            'email'     => 'unittest@tine20.org',
+        )));
+
+        // send notification
+        $subject = 'äöü unittest notification';
+        $text = 'unittest notification text';
+        Tinebase_Notification::getInstance()->send(Tinebase_Core::getUser(), array($contact), $subject, $text);
+        
+        // check mail (encoding)
+        $messages = $this->_mailer->getMessages();
+        $this->assertEquals(1, count($messages));
+        $headers = $messages[0]->getHeaders();
+        $this->assertEquals('=?UTF-8?Q?=C3=A4=C3=B6=C3=BC=20unittest=20notification?=', $headers['Subject'][0]);
+        $this->assertEquals('=?UTF-8?Q?Silke=20H=C3=BC=C3=9Fgen?= <unittest@tine20.org>', $headers['To'][0]);
     }
 }
