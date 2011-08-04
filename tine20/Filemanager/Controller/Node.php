@@ -396,9 +396,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         foreach ($_sourceFilenames as $idx => $source) {
             $destination = $this->_getDestinationPath($_destinationFilenames, $idx);
-            $node = $this->_copyNode($source, $destination);
             if ($_action === 'move') {
-                $this->_deleteNode($source);
+                $node = $this->_moveNode($source, $destination['path'], $destination['isdir']);
+            } else if ($_action === 'copy') {
+                $node = $this->_copyNode($source, $destination['path'], $destination['isdir']);
             }
             $result->addRecord($node);
         }
@@ -411,22 +412,27 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string|array $_destinationFilenames
      * @param int $_idx
-     * @return string
+     * @return array with 'dest' and 'isdir' keys
      * @throws Tinebase_Exception_InvalidArgument
      */
     protected function _getDestinationPath($_destinationFilenames, $_idx)
     {
         if (is_array($_destinationFilenames)) {
+            $isdir = FALSE;
             if (isset($_destinationFilenames[$_idx])) {
                 $destination = $_destinationFilenames[$_idx];
             } else {
                 throw new Tinebase_Exception_InvalidArgument('No destination path found.');
             }
         } else {
+            $isdir = TRUE;
             $destination = $_destinationFilenames;
         }
         
-        return $destination;    
+        return array(
+            'path'  => $destination,
+            'isdir' => $isdir
+        );    
     }
     
     /**
@@ -434,9 +440,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_sourceFlatpath
      * @param string $_destinationFlatpath
+     * @param boolean $_destinationIsFolder
      * @return Tinebase_Model_Tree_Node
+     * 
+     * @todo if folder is copied: copy all children, too?
+     * @todo use $_destinationIsFolder param 
      */
-    protected function _copyNode($_sourceFlatpath, $_destinationFlatpath)
+    protected function _copyNode($_sourceFlatpath, $_destinationFlatpath, $_destinationIsFolder)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Copy Node ' . $_sourceFlatpath . ' to ' . $_destinationFlatpath);
@@ -454,7 +464,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             // need to persist the generated path
             $path = $newNode->path;
             
-            $newNode = $this->_backend->attachFileObjectToNode($newNode, $sourceNode->object_id);
+            $newNode->object_id = $sourceNode->object_id;
+            $newNode = $this->_backend->updateNode($newNode);
             $newNode->path = $path;
         }
         
@@ -509,12 +520,78 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_sourceFlatpath
      * @param string $_destinationFlatpath
+     * @param boolean $_destinationIsFolder
      * @return Tinebase_Model_Tree_Node
      */
-    protected function _moveNode($_sourceFlatpath, $_destinationFlatpath)
+    protected function _moveNode($_sourceFlatpath, $_destinationFlatpath, $_destinationIsFolder)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                 . ' Move Node ' . $_sourceFlatpath . ' to ' . $_destinationFlatpath);
+        
+        $sourcePathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_sourceFlatpath));
+        $sourceNode = $this->_backend->stat($sourcePathRecord->statpath);
+                
+        switch ($sourceNode->type) {
+            case Tinebase_Model_Tree_Node::TYPE_FILE:
+                // @todo move files, too? they are copyied & deleted atm.
+                $movedNode = $this->_copyNode($_sourceFlatpath, $_destinationFlatpath, $_destinationIsFolder);
+                $this->_deleteNode($_sourceFlatpath);
+                break;
+            case Tinebase_Model_Tree_Node::TYPE_FOLDER:
+                $movedNode = $this->_moveFolderNode($sourcePathRecord, $sourceNode, $_destinationFlatpath, $_destinationIsFolder);
+                break;
+        }
+        
+        return $movedNode;
+    }
+    
+    /**
+     * move folder node
+     * 
+     * @param Tinebase_Model_Tree_Node_Path $_sourcePathRecord
+     * @param Tinebase_Model_Tree_Node $_sourceNode
+     * @param string $_destinationFlatpath
+     * @param boolean $_destinationIsFolder
+     * @return Tinebase_Model_Tree_Node
+     */
+    protected function _moveFolderNode($_sourcePathRecord, $_sourceNode, $_destinationFlatpath, $_destinationIsFolder)
+    {
+        $this->_checkPathACL($_sourcePathRecord, 'get', FALSE);
+        
+        if ($_destinationIsFolder) {
+            $destinationParentPathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_destinationFlatpath));
+        } else {
+            list($destinationParentPathRecord, $newName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($this->addBasePath($_destinationFlatpath));
+        }
+        
+        if (! $destinationParentPathRecord->container) {
+            if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                . ' Moving container ' . $_sourcePathRecord->container->name . ' to ' 
+                . (($_destinationIsFolder) ? 'folder ' : '') . $_destinationFlatpath);
+                
+            $this->_checkACLContainer($_sourcePathRecord->container, 'update');
+            $_sourceNode->name = $_sourcePathRecord->container->getId();
+            
+            if (! $_destinationIsFolder) {
+                $_sourcePathRecord->container->name = $newName;
+                $_sourcePathRecord->container = Tinebase_Container::getInstance()->update($_sourcePathRecord->container);
+            }
+        } else {
+            $this->_checkPathACL($destinationParentPathRecord, 'update');
+        }
+        
+        $parentNode = $this->_backend->stat($destinationParentPathRecord->statpath);
+        $_sourceNode->parent_id = $parentNode->getId();
+        
+        $movedNode = $this->_backend->updateNode($_sourceNode);
+        
+        // resolve path & (container) name
+        $movedNode->path = ($_destinationIsFolder) ? $_destinationFlatpath . '/' . $_sourceNode->name : $_destinationFlatpath;
+        if (! $destinationParentPathRecord->container) {
+            $movedNode->name = $_sourcePathRecord->container;
+        }
+        
+        return $movedNode;
     }
     
     /**

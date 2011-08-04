@@ -506,7 +506,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
         ));
         $result = $this->_json->searchNodes($filter, array());
-        $this->assertEquals(0, $result['totalcount']);        
+        $this->assertEquals(0, $result['totalcount']);
     }
 
     /**
@@ -517,7 +517,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $sourceNode = $this->testCreateContainerNodeInPersonalFolder();
         
         $newPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainermoved';
-        $result = $this->_json->moveNodes($sourceNode['path'], $newPath);
+        $result = $this->_json->moveNodes($sourceNode['path'], array($newPath));
         $this->assertEquals(1, count($result));
         $this->assertEquals($newPath, $result[0]['path']);
         $this->_objects['containerids'][] = $result[0]['name']['id'];
@@ -535,6 +535,33 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         foreach ($result['results'] as $node) {
             $this->assertNotEquals($sourceNode['path'], $node['path']);
         }
+    }
+    
+    /**
+     * testMoveContainerFolderNodesToContainerFolderWithChildNodes
+     */
+    public function testMoveContainerFolderNodesToContainerFolderWithChildNodes()
+    {
+        $children = $this->testCreateDirectoryNodesInPersonal();
+        
+        $oldPath = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer';
+        $newPath = $oldPath . 'moved';
+        $result = $this->_json->moveNodes(array($oldPath), array($newPath));
+        $this->assertEquals(1, count($result));
+        $this->assertEquals($newPath, $result[0]['path']);
+        $this->_objects['containerids'][] = $result[0]['name']['id'];
+        
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => $newPath
+        ), array(
+            'field'    => 'type', 
+            'operator' => 'equals', 
+            'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+        ));
+        $result = $this->_json->searchNodes($filter, array());
+        $this->assertEquals(2, $result['totalcount']);
     }
     
     /**
