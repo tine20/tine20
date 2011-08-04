@@ -55,6 +55,8 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * remove app id (base path) from filter
      * 
      * @param array $_result
+     * 
+     * @todo is this really needed? perhaps we can set the correct path in Tinebase_Model_Tree_Node_PathFilter::toArray
      */
     protected function _removeAppIdFromPathFilter(&$_result)
     {
@@ -62,7 +64,11 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         foreach ($_result['filter'] as $idx => &$filter) {
             if ($filter['field'] === 'path') {
-                $filter['value'] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($filter['value'], $app);
+                if (is_array($filter['value'])) {
+                    $filter['value']['path'] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($filter['value']['path'], $app);
+                } else {
+                    $filter['value'] = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($filter['value'], $app);
+                }
             }
         }
     }
