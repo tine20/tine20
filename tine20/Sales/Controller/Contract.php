@@ -104,7 +104,7 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
                 'backend'           => 'Sql',
                 'application_id'    => $appId,
             ));
-            $sharedContracts = Tinebase_Container::getInstance()->addContainer($newContainer);
+            $sharedContracts = Tinebase_Container::getInstance()->addContainer($newContainer, NULL, TRUE);
             
             Tinebase_Config::getInstance()->setConfigForApplication(Sales_Model_Config::SHAREDCONTRACTSID, $sharedContracts->getId(), 'Sales');
             
