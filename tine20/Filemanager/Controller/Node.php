@@ -237,6 +237,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_type
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_InvalidArgument
+     * 
+     * @todo use streamwrapper!
      */
     protected function _createNode($_flatpath, $_type)
     {
@@ -268,6 +270,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_statpath
      * @param type
      * @return Tinebase_Model_Tree_Node
+     * 
+     * @todo use streamwrapper!
      */
     protected function _createNodeInBackend($_statpath, $_type)
     {
@@ -362,12 +366,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * (1) add path to records 
      * (2) replace name with container record, if node name is a container id 
      *     / path is toplevel (shared/personal with useraccount
+     * (3) add account grants of acl container to node
      * 
      * @param Tinebase_Record_RecordSet|Tinebase_Model_Tree_Node $_records
      * @param Tinebase_Model_Tree_Node_Path $_path
      * @param Tinebase_Model_Container $_container
-     * 
-     * @todo add account grants, too
      */
     public function resolveContainerAndAddPath($_records, Tinebase_Model_Tree_Node_Path $_path, Tinebase_Model_Container $_container = NULL)
     {
@@ -388,17 +391,28 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $flatpathWithoutBasepath = Tinebase_Model_Tree_Node_Path::removeAppIdFromPath($_path->flatpath, $app);
         
         foreach ($records as $record) {
+            // path
             $record->path = $flatpathWithoutBasepath . '/' . $record->name;
+            
+            $aclContainer = NULL;
             if (! $_path->container) {
+                // resolve container
                 $idx = $containers->getIndexById($record->name);
                 if ($idx !== FALSE) {
-                    $record->name = $containers[$idx];
-                    $record->name->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(
-                        Tinebase_Core::getUser(), 
-                        $record->name->getId()
-                    )->toArray();
+                    $aclContainer = $containers[$idx];
+                    $record->name = $aclContainer;
                     $record->path = $flatpathWithoutBasepath . '/' . $record->name->name;
                 }
+            } else {
+                $aclContainer = $_path->container;
+            }
+            
+            // account grants
+            if ($aclContainer) {
+                $record->account_grants = Tinebase_Container::getInstance()->getGrantsOfAccount(
+                    Tinebase_Core::getUser(), 
+                    $aclContainer
+                )->toArray();
             }
         }
     }
@@ -476,7 +490,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param boolean $_destinationIsFolder
      * @return Tinebase_Model_Tree_Node
      * 
-     * @todo if folder is copied: copy all children, too?
+     * @todo use streamwrapper!
      * @todo use $_destinationIsFolder param 
      */
     protected function _copyNode($_sourceFlatpath, $_destinationFlatpath, $_destinationIsFolder)
@@ -513,6 +527,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_InvalidArgument
      * 
+     * @todo use streamwrapper!
      * @todo rename file automatically if it exists?
      */
     protected function _createNodeAtDestination(Tinebase_Model_Tree_Node $_sourceNode, $_destinationFlatpath)
@@ -555,6 +570,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_destinationFlatpath
      * @param boolean $_destinationIsFolder
      * @return Tinebase_Model_Tree_Node
+     * 
+     * @todo use streamwrapper!
      */
     protected function _moveNode($_sourceFlatpath, $_destinationFlatpath, $_destinationIsFolder)
     {
@@ -586,6 +603,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_destinationFlatpath
      * @param boolean $_destinationIsFolder
      * @return Tinebase_Model_Tree_Node
+     * 
+     * @todo use streamwrapper!
      */
     protected function _moveFolderNode($_sourcePathRecord, $_sourceNode, $_destinationFlatpath, $_destinationIsFolder)
     {
@@ -652,6 +671,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_flatpath
      * @return boolean
+     * 
+     * @todo use streamwrapper!
      */
     protected function _deleteNode($_flatpath)
     {
@@ -682,6 +703,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_statpath
      * @return boolean
+     * 
+     * @todo use streamwrapper!
      */
     protected function _deleteNodeInBackend($_statpath)
     {

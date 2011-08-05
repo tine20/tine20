@@ -217,17 +217,22 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      * @param string $_expectedName
      * @return array search result
      */
-    protected function _searchHelper($_filter, $_expectedName, $_toplevel = FALSE)
+    protected function _searchHelper($_filter, $_expectedName, $_toplevel = FALSE, $_checkAccountGrants = TRUE)
     {
         $result = $this->_json->searchNodes($_filter, array());
+        //print_r($result);
         
         $this->assertEquals(1, $result['totalcount']);
         if ($_toplevel) {
-            // toplevel containers are resolved (incl. account grants)
+            // toplevel containers are resolved
             $this->assertEquals($_expectedName, $result['results'][0]['name']['name']);
-            $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['name']['account_grants']['account_id']);
         } else {
             $this->assertEquals($_expectedName, $result['results'][0]['name']);
+        }
+        
+        if ($_checkAccountGrants) {
+            $this->assertTrue(isset($result['results'][0]['account_grants']));
+            $this->assertEquals(Tinebase_Core::getUser()->getId(), $result['results'][0]['account_grants']['account_id']);
         }
         
         return $result;
@@ -301,7 +306,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'operator' => 'equals', 
             'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS
         ));
-        $this->_searchHelper($filter, 'sclever');
+        $this->_searchHelper($filter, 'sclever', FALSE, FALSE);
     }
 
     /**

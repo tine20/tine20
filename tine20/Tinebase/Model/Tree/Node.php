@@ -76,8 +76,10 @@ class Tinebase_Model_Tree_Node extends Tinebase_Record_Abstract
             Zend_Filter_Input::DEFAULT_VALUE => '0',
             'InArray' => array(true, false)
         ),
+        
         // this is needed for ACL handling and should be sent by / delivered to client (not persistent in db atm)
-        'path'           => array(Zend_Filter_Input::DEFAULT_VALUE => NULL),
+        'path'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'account_grants' => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         
         // fields from filemanager_objects table (ro)
         'type'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'InArray' => array(self::TYPE_FILE, self::TYPE_FOLDER)),
