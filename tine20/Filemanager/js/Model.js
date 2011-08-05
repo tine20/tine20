@@ -133,7 +133,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         return this.doXHTTPRequest(options);
     },
     
-    // TODO: check for other way to supress this funktion call
+    // TODO: check for other way to supress this function call
     saveRecord: function(record, options, additionalArguments) {
         Tine.log.debug("saveRecord supressed in fileManager");
     }

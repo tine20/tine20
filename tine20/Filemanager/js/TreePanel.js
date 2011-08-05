@@ -38,9 +38,10 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     // TODO: Tine.widgets.tree.FilterPlugin
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
-            this.filterPlugin = new Tine.Filemanager.PathFilterPlugin({
+            this.filterPlugin = new Tine.widgets.tree.FilterPlugin({
                 treePanel: this,
-                field: 'path'
+                field: 'path',
+                nodeAttributeField: 'path'                
             });
         }
         
@@ -138,60 +139,60 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     },
     
     
-    onClick: function(node, e) {
-
-        if(node && node.reload) {
-            node.reload();
-        }
-
-//        this.onSelectionChange(this.getSelectionModel(), node);
-
-        //var cp = this.app.getMainScreen().getCenterPanel(),
-        // TODO work on cp.*_action
-        // NOTE Action toolbar has grid actions only
-        
-        
-        var actionToolbar = this.app.mainScreen.ActionToolbar;
-        var items = actionToolbar.get(0).items.items;
-        
-        if(node.attributes.account_grants) {
-            if(node.attributes.account_grants.addGrant) {
-                items[0].enable();
-            }
-            else items[0].disable();
-            
-            if(node.attributes.account_grants.deleteGrant) {
-                items[1].enable();
-            }
-            else items[1].disable();
-            
-            if(node.attributes.account_grants.addGrant) {
-                items[2].enable();
-            }
-            else items[2].disable();
-            
-            if(node.attributes.account_grants.exportGrant || node.attributes.account_grants.readGrant) {
-                items[4].enable();
-            }
-            else items[4].disable();
-        }
-        else {
-            items[0].disable();
-            items[1].disable();
-            items[4].disable();
-            items[2].enable();
-            items[3].enable();
-            
-            if(node.isRoot) {
-                items[2].disable();
-                items[3].disable();
-            }
-        }
-        
-        Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
-
-    },
-    
+//    onClick: function(node, e) {
+//
+//        if(node && node.reload) {
+//            node.reload();
+//        }
+//
+////        this.onSelectionChange(this.getSelectionModel(), node);
+//
+//        //var cp = this.app.getMainScreen().getCenterPanel(),
+//        // TODO work on cp.*_action
+//        // NOTE Action toolbar has grid actions only
+//        
+//        
+//        var actionToolbar = this.app.mainScreen.ActionToolbar;
+//        var items = actionToolbar.get(0).items.items;
+//        
+//        if(node.attributes.account_grants) {
+//            if(node.attributes.account_grants.addGrant) {
+//                items[0].enable();
+//            }
+//            else items[0].disable();
+//            
+//            if(node.attributes.account_grants.deleteGrant) {
+//                items[1].enable();
+//            }
+//            else items[1].disable();
+//            
+//            if(node.attributes.account_grants.addGrant) {
+//                items[2].enable();
+//            }
+//            else items[2].disable();
+//            
+//            if(node.attributes.account_grants.exportGrant || node.attributes.account_grants.readGrant) {
+//                items[4].enable();
+//            }
+//            else items[4].disable();
+//        }
+//        else {
+//            items[0].disable();
+//            items[1].disable();
+//            items[4].disable();
+//            items[2].enable();
+//            items[3].enable();
+//            
+//            if(node.isRoot) {
+//                items[2].disable();
+//                items[3].disable();
+//            }
+//        }
+//        
+//        Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
+//
+//    },
+//    
     /**
      * @private
      */
@@ -290,6 +291,28 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
 //        if(node.attributes.path == '/') {
 //            this.app.mainScreen.GridPanel.getStore().removeAll();
 //        }
+    },
+    
+    /**
+     * convert containerPath to treePath
+     * 
+     * @param {String} containerPath
+     * @return {String}
+     */
+    getTreePath: function(containerPath) {
+        var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
+
+        // replace personal with otherUsers if personal && ! personal/myaccountid
+        var matches = containerPath.match(/^\/personal\/{0,1}([0-9a-z_\-]*)\/{0,1}/i);
+        if (matches) {
+            if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountLoginName) {
+                treePath = treePath.replace('personal', 'otherUsers');
+            } else {
+//                treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
+            }
+        }
+        
+        return treePath;
     }
     
     

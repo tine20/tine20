@@ -552,7 +552,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             size: (this.file.size ? this.file.size : this.file.fileSize) || 0, // non standard but all have it ;-)
             status: status,
             progress: 0,
-            input: this.getInput(),
+            input: this.file,
             uploadKey: this.id
         });
     },

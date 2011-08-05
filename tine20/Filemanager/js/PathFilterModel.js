@@ -57,7 +57,68 @@ Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
         Tine.Filemanager.PathFilterModel.superclass.initComponent.call(this);
                 
         this.label = 'path';
+    },
+    
+    /**
+     * value renderer
+     * 
+     * @param {Ext.data.Record} filter line
+     * @param {Ext.Element} element to render to 
+     */
+    valueRenderer: function(filter, el) {
+        var value,
+            fieldWidth = this.filterValueWidth,
+            commonOptions = {
+                filter: filter,
+                width: fieldWidth,
+                id: 'tw-ftb-frow-valuefield-' + filter.id,
+                renderTo: el,
+                value: filter.data.value ? filter.data.value : this.defaultValue
+            };
+        
+        switch (this.valueType) {
+            
+            case 'string':
+                value = new Ext.ux.form.ClearableTextField(Ext.apply(commonOptions, {
+                    emptyText: this.emptyText,
+                    listeners: {
+                        scope: this,
+                        specialkey: function(field, e){
+                            if(e.getKey() == e.ENTER){
+                                this.onFiltertrigger();
+                            }
+                        }
+                    }
+                }));
+                var filterValue = filter.data.value;
+                if(typeof filterValue == 'object') {
+                    filterValue = filterValue.path;
+                }
+                else if(!filterValue.charAt(0) || filterValue.charAt(0) != '/') {
+                    filterValue = '/' + filterValue;
+                }
+                value.setValue(filterValue);
+                break;
+                
+            default:
+                value = new Ext.ux.form.ClearableTextField(Ext.apply(commonOptions, {
+                    emptyText: this.emptyText,
+                    listeners: {
+                        scope: this,
+                        specialkey: function(field, e){
+                            if(e.getKey() == e.ENTER){
+                                this.onFiltertrigger();
+                            }
+                        }
+                    }
+                }));
+                break;
+        }
+        
+        return value;
     }
+
+
    
    
     

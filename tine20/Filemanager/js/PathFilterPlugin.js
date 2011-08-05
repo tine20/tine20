@@ -61,7 +61,7 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
         var values = [];
         Ext.each(selection, function(node) {
            if (node) {
-                values.push(node.attributes[this.nodeAttributeField].name);
+                values.push(node.attributes[this.nodeAttributeField]);
             }
         }, this);
         
@@ -100,7 +100,13 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
             }
             
             this.treePanel.getSelectionModel().suspendEvents();
-            this.selectValue(filter.value);
+            
+            var pathValue = filter.value;
+            if(typeof pathValue == 'object' && pathValue.path) {
+                pathValue = pathValue.path;
+            }
+                
+            this.selectValue(pathValue);
         }, this);
     },
     
@@ -113,7 +119,13 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
 
         var values = Ext.isArray(value) ? value : [value];
         Ext.each(values, function(value) {
-            var treePath = this.treePanel.getTreePath(value.path);
+            
+            var treePathValue = value;
+            if(typeof treePathValue == 'object' && treePathValue.path) {
+                treePathValue = treePathValue.path;
+            }
+
+            var treePath = this.treePanel.getTreePath(treePathValue);
 
             this.selectPath.call(this.treePanel, treePath, null, function() {
                 // mark this expansion as done and check if all are done
