@@ -222,7 +222,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->searchNodes($_filter, array());
         //print_r($result);
         
-        $this->assertEquals(1, $result['totalcount']);
+        $this->assertEquals(1, $result['totalcount'], 'expected single result');
         if ($_toplevel) {
             // toplevel containers are resolved
             $this->assertEquals($_expectedName, $result['results'][0]['name']['name']);
@@ -306,7 +306,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'operator' => 'equals', 
             'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS
         ));
-        $this->_searchHelper($filter, 'sclever', FALSE, FALSE);
+        $this->_searchHelper($filter, 'Clever, Susan', FALSE, FALSE);
     }
 
     /**
@@ -356,7 +356,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     public function testCreateContainerNodeInSharedFolder()
     {
         $testPath = '/' . Tinebase_Model_Container::TYPE_SHARED . '/testcontainer';
-        $result = $this->_json->createNode($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER);
+        $result = $this->_json->createNode($testPath, Tinebase_Model_Tree_Node::TYPE_FOLDER, NULL, FALSE);
         $createdNode = $result;
         
         $this->_objects['containerids'][] = $createdNode['name']['id'];
@@ -392,6 +392,25 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Tinebase_Model_Tree_Node::TYPE_FILE, $result[1]['type']);
         
         return $filepaths;
+    }
+
+    /**
+     * testCreateFileNodeWithTempfile
+     */
+    public function testCreateFileNodeWithTempfile()
+    {
+        $sharedContainerNode = $this->testCreateContainerNodeInSharedFolder();
+        
+        $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($sharedContainerNode['path']);
+        
+        $tempFileBackend = new Tinebase_TempFile();
+        $tempFile = $tempFileBackend->createTempFile(dirname(dirname(__FILE__)) . '/files/test.txt');
+        
+        $filepath = $sharedContainerNode['path'] . '/test.txt';
+        $result = $this->_json->createNode($filepath, Tinebase_Model_Tree_Node::TYPE_FILE, $tempFile->getId(), FALSE);
+        
+        $this->assertEquals('text/plain', $result['contenttype']);
+        $this->assertEquals(17, $result['size']);
     }
 
     /**
