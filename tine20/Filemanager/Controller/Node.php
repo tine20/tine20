@@ -89,6 +89,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
             $result = $this->_getRootNodes();
+        } else if ($path->containerType === Tinebase_Model_Container::TYPE_OTHERUSERS && ! $path->containerOwner) {
+            $result = $this->_getOtherUserNodes();
         } else {
             $result = $this->_backend->searchNodes($_filter, $_pagination);
             $this->resolveContainerAndAddPath($result, $path);
@@ -151,6 +153,28 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
             ),
         ), TRUE); // bypass validation
+        
+        return $result;
+    }
+
+    /**
+     * get other users nodes
+     * 
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     */
+    protected function _getOtherUserNodes()
+    {
+        $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        $users = Tinebase_Container::getInstance()->getOtherUsers($this->_currentAccount, $this->_applicationName, Tinebase_Model_Grants::GRANT_READ);
+        foreach ($users as $user) {
+            $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
+            $record = new Tinebase_Model_Tree_Node(array(
+                'name' => $fullUser->accountDisplayName,
+                'path' => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS . '/' . $fullUser->accountLoginName,
+                'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+            ), TRUE);
+            $result->addRecord($record);
+        }
         
         return $result;
     }
@@ -279,26 +303,35 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
      * 
-     * @todo use streamwrapper!
      * @todo add $_forceOverwrite param functionality
-     * @todo add $_tempFileId param functionality
      */
     protected function _createNodeInBackend($_statpath, $_type, $_tempFileId = NULL, $_forceOverwrite = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $_statpath . ' of type ' . $_type);
         
+        $streamwrapperpath = Tinebase_Model_Tree_Node_Path::STREAMWRAPPERPREFIX . $_statpath;
+        
         switch ($_type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                $filehandle = $this->_backend->fopen($_statpath, 'x');
-                $this->_backend->fclose($filehandle);
+                if (!$handle = fopen($streamwrapperpath, 'w')) {
+                    throw new Tinebase_Exception_AccessDenied('Permission denied to create file (filename ' . $_statpath . ')');
+                }
+                
+                if ($_tempFileId !== NULL) {
+                    $tempFile = Tinebase_TempFile::getInstance()->getTempFile($_tempFileId);
+                    $tempData = fopen($tempFile->path, 'r');
+                    if ($tempData) {
+                        stream_copy_to_stream($tempData, $handle);
+                        fclose($tempData);
+                    } else {
+                        throw new Tinebase_Exception('Could not read tempfile ' . $tempFile->path);
+                    }
+                }
+                fclose($handle);                
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                // @todo use createContainerNode? we have to fix the path issue (with or without accountloginname) first
-//                if ($container) {
-//                    $this->_backend->createContainerNode($container);
-//                } else {
-                $this->_backend->mkDir($_statpath);
+                mkdir($streamwrapperpath);
                 break;
         }
         

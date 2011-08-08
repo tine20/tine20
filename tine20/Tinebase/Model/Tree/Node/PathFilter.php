@@ -151,8 +151,8 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
                     $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
                         $owner, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
                 } else {
-                    $names = Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName, 
-                        $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
+                    // NOTE: this is should be handled by the search fn because the usernames have no nodes ... 
+                    $names = array();
                 }
                 break;
         }
