@@ -219,9 +219,14 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param array $_filenames
      * @param string $_type directory or file
+     * @param string|array $_tempFileIds
+     * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * 
+     * @todo add $_tempFileIds param functionality
+     * @todo add $_forceOverwrite param functionality
      */
-    public function createNodes($_filenames, $_type)
+    public function createNodes($_filenames, $_type, $_tempFileIds, $_forceOverwrite = FALSE)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         
@@ -425,9 +430,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param array $_sourceFilenames array->multiple
      * @param string|array $_destinationFilenames string->singlefile OR directory, array->multiple files
+     * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    public function copyNodes($_sourceFilenames, $_destinationFilenames)
+    public function copyNodes($_sourceFilenames, $_destinationFilenames, $_forceOverwrite = FALSE)
     {
         return $this->_copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, 'copy');
     }
@@ -438,9 +444,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param array $_sourceFilenames array->multiple
      * @param string|array $_destinationFilenames string->singlefile OR directory, array->multiple files
      * @param string $_action copy|move
+     * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
+     * 
+     * @todo add $_forceOverwrite param functionality
      */
-    protected function _copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, $_action)
+    protected function _copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, $_action, $_forceOverwrite = FALSE)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         
@@ -559,11 +568,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param array $_sourceFilenames array->multiple
      * @param string|array $_destinationFilenames string->singlefile OR directory, array->multiple files
+     * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
-    public function moveNodes($_sourceFilenames, $_destinationFilenames)
+    public function moveNodes($_sourceFilenames, $_destinationFilenames, $_forceOverwrite = FALSE)
     {
-        return $this->_copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, 'move');
+        return $this->_copyOrMoveNodes($_sourceFilenames, $_destinationFilenames, 'move', $_forceOverwrite);
     }
     
     /**

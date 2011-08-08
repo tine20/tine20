@@ -78,12 +78,14 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param array $filename
      * @param string $type directory or file
+     * @param string $tempFileId
+     * @param boolean $forceOverwrite
      * @return array
      */
-    public function createNode($filename, $type)
+    public function createNode($filename, $type, $tempFileId, $forceOverwrite)
     {
-        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filename, $type);
-        $result = (count($nodes) === 0) ? array() :  $this->_recordToJson($nodes->getFirstRecord());
+        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filename, $type, $tempFileId, $forceOverwrite);
+        $result = (count($nodes) === 0) ? array() : $this->_recordToJson($nodes->getFirstRecord());
         
         return $result;
     }
@@ -93,27 +95,15 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param string|array $filenames
      * @param string $type directory or file
+     * @param string|array $tempFileIds
+     * @param boolean $forceOverwrite
      * @return array
      */
-    public function createNodes($filenames, $type)
+    public function createNodes($filenames, $type, $tempFileIds, $forceOverwrite)
     {
-        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $type);
+        $nodes = Filemanager_Controller_Node::getInstance()->createNodes((array)$filenames, $type, $tempFileIds, $forceOverwrite);
         
         return $this->_multipleRecordsToJson($nodes);
-    }
-
-    /**
-     * attach uploaded file to node
-     * 
-     * @param string $filename
-     * @param string $tempFileId
-     * @return array
-     * 
-     * @todo implement
-     */
-    public function attachFileToNode($filename, $tempFileId)
-    {
-        throw new Tinebase_Exception_NotImplemented('not implemented yet');
     }
     
     /**
@@ -121,11 +111,12 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param string|array $sourceFilenames string->single file, array->multiple
      * @param string|array $destinationFilenames string->singlefile OR directory, array->multiple files
+     * @param boolean $forceOverwrite
      * @return array
      */
-    public function copyNodes($sourceFilenames, $destinationFilenames)
+    public function copyNodes($sourceFilenames, $destinationFilenames, $forceOverwrite)
     {
-        $nodes = Filemanager_Controller_Node::getInstance()->copyNodes((array)$sourceFilenames, $destinationFilenames);
+        $nodes = Filemanager_Controller_Node::getInstance()->copyNodes((array)$sourceFilenames, $destinationFilenames, $forceOverwrite);
         
         return $this->_multipleRecordsToJson($nodes);
     }
@@ -135,11 +126,12 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * 
      * @param string|array $sourceFilenames string->single file, array->multiple
      * @param string|array $destinationFilenames string->singlefile OR directory, array->multiple files
+     * @param boolean $forceOverwrite
      * @return array
      */
-    public function moveNodes($sourceFilenames, $destinationFilenames)
+    public function moveNodes($sourceFilenames, $destinationFilenames, $forceOverwrite)
     {
-        $nodes = Filemanager_Controller_Node::getInstance()->moveNodes((array)$sourceFilenames, $destinationFilenames);
+        $nodes = Filemanager_Controller_Node::getInstance()->moveNodes((array)$sourceFilenames, $destinationFilenames, $forceOverwrite);
         
         return $this->_multipleRecordsToJson($nodes);
     }
