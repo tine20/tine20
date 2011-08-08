@@ -219,19 +219,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param array $_filenames
      * @param string $_type directory or file
-     * @param string|array $_tempFileIds
+     * @param array $_tempFileIds
      * @param boolean $_forceOverwrite
      * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
-     * 
-     * @todo add $_tempFileIds param functionality
-     * @todo add $_forceOverwrite param functionality
      */
-    public function createNodes($_filenames, $_type, $_tempFileIds, $_forceOverwrite = FALSE)
+    public function createNodes($_filenames, $_type, $_tempFileIds = array(), $_forceOverwrite = FALSE)
     {
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
         
-        foreach ($_filenames as $filename) {
-            $node = $this->_createNode($filename, $_type);
+        foreach ($_filenames as $idx => $filename) {
+            $tempFileId = (isset($_tempFileIds[$idx])) ? $_tempFileIds[$idx] : NULL;
+            $node = $this->_createNode($filename, $_type, $tempFileId, $_forceOverwrite);
             $result->addRecord($node);
         }
         
@@ -243,12 +241,12 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_flatpath
      * @param string $_type
+     * @param string $_tempFileId
+     * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_InvalidArgument
-     * 
-     * @todo use streamwrapper!
      */
-    protected function _createNode($_flatpath, $_type)
+    protected function _createNode($_flatpath, $_type, $_tempFileId = NULL, $_forceOverwrite = FALSE)
     {
         if (! in_array($_type, array(Tinebase_Model_Tree_Node::TYPE_FILE, Tinebase_Model_Tree_Node::TYPE_FOLDER))) {
             throw new Tinebase_Exception_InvalidArgument('Type ' . $_type . 'not supported.');
@@ -265,7 +263,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $newNodePath = $parentPathRecord->statpath . '/' . $newNodeName;
         }
         
-        $newNode = $this->_createNodeInBackend($newNodePath, $_type);
+        $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId, $_forceOverwrite);
         
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
         
@@ -277,11 +275,15 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_statpath
      * @param type
+     * @param string $_tempFileId
+     * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
      * 
      * @todo use streamwrapper!
+     * @todo add $_forceOverwrite param functionality
+     * @todo add $_tempFileId param functionality
      */
-    protected function _createNodeInBackend($_statpath, $_type)
+    protected function _createNodeInBackend($_statpath, $_type, $_tempFileId = NULL, $_forceOverwrite = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
             ' Creating new path ' . $_statpath . ' of type ' . $_type);
