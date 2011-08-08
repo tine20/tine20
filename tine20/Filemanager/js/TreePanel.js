@@ -48,13 +48,11 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         
         return this.filterPlugin;
     },
-//    
-//    initComponent: function() {
-//                    
-//        Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
-//        
-//    },
-//    
+
+    /**
+     * returns the personal root path
+     * @returns {String}
+     */
     getRootPath: function() {
         return 'personal/' + Tine.Tinebase.registry.get('currentAccount').accountLoginName;  
     },
@@ -140,7 +138,12 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         attr.container = Ext.copyTo({}, attr, Tine.Tinebase.Model.Container.getFieldNames());
     },
     
-    
+    /**
+     * treePanel on click handler
+     * 
+     * @param {Ext.tree.TreeNode} node
+     * @param {Ext.EventObject} e
+     */
     onClick: function(node, e) {
              
         if(node && node.reload) {
@@ -189,6 +192,8 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     },
     
     /**
+     * initiates tree context menues
+     * 
      * @private
      */
     initContextMenu: function() {
@@ -230,8 +235,8 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     /**
      * show context menu
      * 
-     * @param {} node
-     * @param {} event
+     * @param {Ext.tree.TreeNode} node
+     * @param {Ext.EventObject} event
      */
     onContextMenu: function(node, event) {
         
@@ -275,8 +280,8 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     /**
      * called when tree selection changes
      * 
-     * @param {} sm
-     * @param {} node
+     * @param {} sm     SelectionModel
+     * @param {Ext.tree.TreeNode} node
      */
     onSelectionChange: function(sm, node) {
         
@@ -292,7 +297,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * convert containerPath to treePath
      * 
      * @param {String} containerPath
-     * @return {String}
+     * @return {String} tree path
      */
     getTreePath: function(containerPath) {
         var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
