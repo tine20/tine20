@@ -138,14 +138,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             array(
                 'name' => $translate->_('My Files'),
                 'path' => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
+                'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
             ),
             array(
                 'name' => $translate->_('Shared Files'),
                 'path' => '/' . Tinebase_Model_Container::TYPE_SHARED,
+                'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
             ),
             array(
                 'name' => $translate->_('Other Users Files'),
                 'path' => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS,
+                'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
             ),
         ), TRUE); // bypass validation
         
