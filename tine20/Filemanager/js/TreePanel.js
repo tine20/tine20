@@ -35,10 +35,11 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * Tine.widgets.tree.FilterPlugin
      * returns a filter plugin to be used in a grid
      */
-    // TODO: Tine.widgets.tree.FilterPlugin
+    // Tine.widgets.tree.FilterPlugin
+    // Tine.Filemanager.PathFilterPlugin
     getFilterPlugin: function() {
         if (!this.filterPlugin) {
-            this.filterPlugin = new Tine.widgets.tree.FilterPlugin({
+            this.filterPlugin = new Tine.Filemanager.PathFilterPlugin({
                 treePanel: this,
                 field: 'path',
                 nodeAttributeField: 'path'                
@@ -115,6 +116,8 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             attr.name = Tine.Tinebase.container.path2name(attr.path, this.containerName, this.containersName);
         }
         
+        
+        
         if(attr.name && typeof attr.name == 'object') {
             Ext.applyIf(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),
@@ -124,11 +127,10 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             });
         }
         else {
-
             Ext.applyIf(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name),
                 qtip: Ext.util.Format.htmlEncode(attr.name),
-                leaf: !!attr.account_grants,
+                leaf: !!attr.account_grants && !(attr.type == 'folder'),
                 allowDrop: !!attr.account_grants && attr.account_grants.addGrant
             });
         }
@@ -139,60 +141,53 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     },
     
     
-//    onClick: function(node, e) {
-//
-//        if(node && node.reload) {
-//            node.reload();
-//        }
-//
-////        this.onSelectionChange(this.getSelectionModel(), node);
-//
-//        //var cp = this.app.getMainScreen().getCenterPanel(),
-//        // TODO work on cp.*_action
-//        // NOTE Action toolbar has grid actions only
-//        
-//        
-//        var actionToolbar = this.app.mainScreen.ActionToolbar;
-//        var items = actionToolbar.get(0).items.items;
-//        
-//        if(node.attributes.account_grants) {
-//            if(node.attributes.account_grants.addGrant) {
-//                items[0].enable();
-//            }
-//            else items[0].disable();
-//            
-//            if(node.attributes.account_grants.deleteGrant) {
-//                items[1].enable();
-//            }
-//            else items[1].disable();
-//            
-//            if(node.attributes.account_grants.addGrant) {
-//                items[2].enable();
-//            }
-//            else items[2].disable();
-//            
-//            if(node.attributes.account_grants.exportGrant || node.attributes.account_grants.readGrant) {
-//                items[4].enable();
-//            }
-//            else items[4].disable();
-//        }
-//        else {
-//            items[0].disable();
-//            items[1].disable();
-//            items[4].disable();
-//            items[2].enable();
-//            items[3].enable();
-//            
-//            if(node.isRoot) {
-//                items[2].disable();
-//                items[3].disable();
-//            }
-//        }
-//        
-//        Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
-//
-//    },
-//    
+    onClick: function(node, e) {
+             
+        if(node && node.reload) {
+            node.reload();
+        }
+        
+        var actionToolbar = this.app.getMainScreen().getNorthPanel();
+        var grid = this.app.getMainScreen().getCenterPanel();
+        
+        if(node.attributes.account_grants) {
+            if(node.attributes.account_grants.addGrant) {
+                grid.action_upload.enable();
+            }
+            else grid.action_upload.disable();
+            
+            if(node.attributes.account_grants.deleteGrant) {
+                grid.action_deleteRecord.enable();
+            }
+            else grid.action_deleteRecord.disable();
+            
+            if(node.attributes.account_grants.addGrant) {
+                grid.action_createFolder.enable();
+            }
+            else grid.action_createFolder.disable();
+            
+            if(node.attributes.account_grants.exportGrant || node.attributes.account_grants.readGrant) {
+                grid.action_save.enable();
+            }
+            else grid.action_save.disable();
+        }
+        else {
+            grid.action_upload.disable();
+            grid.action_deleteRecord.disable();
+            grid.action_save.disable();
+            grid.action_createFolder.enable();
+            grid.action_goUpFolder.enable();
+            
+            if(node.isRoot) {
+                grid.action_createFolder.disable();
+                grid.action_goUpFolder.disable();
+            }
+        }
+        
+        Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
+
+    },
+    
     /**
      * @private
      */

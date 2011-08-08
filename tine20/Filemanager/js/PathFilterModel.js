@@ -15,7 +15,7 @@ Ext.ns('Tine.Filemanager');
  * 
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
-Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.grid.FilterModel, {
+Tine.Filemanager.PathFilterModel = Ext.extend(Tine.widgets.container.FilterModel, {
     /**
      * @cfg {Tine.Tinebase.Application} app
      */

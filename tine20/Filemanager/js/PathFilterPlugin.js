@@ -16,99 +16,6 @@ Ext.ns('Tine.Filemanager');
  * @extends   Tine.widgets.grid.FilterPlugin
  */
 Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
-    /**
-     * @cfg {Tree Panel} treePanel (required)
-     */
-    treePanel: null,
-    
-    /**
-     * @cfg field
-     * @type String
-     */
-    field: 'path',
-
-    /**
-     * @cfg nodeAttributeField
-     * @type String
-     */
-    nodeAttributeField: 'container',
-    
-    /**
-     * @cfg singleNodeOperator
-     * @type String
-     */
-    singleNodeOperator: 'equals',
-    
-    /**
-     * @cfg selectNodes
-     * @type Boolean
-     */
-    selectNodes: true,
-    
-    /**
-     * get container filter object
-     * 
-     * @return {Object}
-     */
-    getFilter: function() {
-        var filter = {field: this.field},
-            sm = this.treePanel.getSelectionModel(),
-            multiSelection = typeof sm.getSelectedNodes == 'function',
-            selection = multiSelection ? sm.getSelectedNodes() : [sm.getSelectedNode()];
-        
-        filter.operator = multiSelection ? 'in' : this.singleNodeOperator;
-            
-        var values = [];
-        Ext.each(selection, function(node) {
-           if (node) {
-                values.push(node.attributes[this.nodeAttributeField]);
-            }
-        }, this);
-        
-        filter.value = Ext.isEmpty(values) ? '' : filter.operator === 'in' ? values : values[0];
-        return filter;
-    },
-    
-    /**
-     * gets value of this container filter
-     */
-    getValue: function() {
-        // only return values if gridFilter mode
-        if (this.treePanel.filterMode !== 'gridFilter') {
-            return null;
-        }
-        
-        return this.getFilter();
-    },
-    
-    /**
-     * sets the selected container (node) of this tree
-     * 
-     * @param {Array} all filters
-     */
-    setValue: function(filters) {
-        if (! this.selectNodes) {
-            return null;
-        }
-
-        var sm = this.treePanel.getSelectionModel();
-        sm.clearSelections(true);
-        
-        Ext.each(filters, function(filter) {
-            if (filter.field !== this.field) {
-                return;
-            }
-            
-            this.treePanel.getSelectionModel().suspendEvents();
-            
-            var pathValue = filter.value;
-            if(typeof pathValue == 'object' && pathValue.path) {
-                pathValue = pathValue.path;
-            }
-                
-            this.selectValue(pathValue);
-        }, this);
-    },
     
     /**
      * select tree node(s)
@@ -119,14 +26,17 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
 
         var values = Ext.isArray(value) ? value : [value];
         Ext.each(values, function(value) {
+            var treePath = '/';
             
-            var treePathValue = value;
-            if(typeof treePathValue == 'object' && treePathValue.path) {
-                treePathValue = treePathValue.path;
+            var nodeId = value.id;
+            if(value.name == 'personal') {
+                nodeId = 'personal';
             }
-
-            var treePath = this.treePanel.getTreePath(treePathValue);
-
+            var node = this.treePanel.getNodeById(nodeId);
+            if(node) {
+                treePath = node.getPath();
+            }
+            
             this.selectPath.call(this.treePanel, treePath, null, function() {
                 // mark this expansion as done and check if all are done
                 value.isExpanded = true;
@@ -140,59 +50,6 @@ Tine.Filemanager.PathFilterPlugin = Ext.extend(Tine.widgets.tree.FilterPlugin, {
                 }
             }.createDelegate(this), true);
         }, this);
-    },
-    
-    /**
-     * Selects the node in this tree at the specified path. A path can be retrieved from a node with {@link Ext.data.Node#getPath}
-     * @param {String} path
-     * @param {String} attr (optional) The attribute used in the path (see {@link Ext.data.Node#getPath} for more info)
-     * @param {Function} callback (optional) The callback to call when the selection is complete. The callback will be called with
-     * (bSuccess, oSelNode) where bSuccess is if the selection was successful and oSelNode is the selected node.
-     */
-    selectPath : function(path, attr, callback, keep){
-        attr = attr || 'id';
-        var keys = path.split(this.pathSeparator),
-            v = keys.pop();
-        if(keys.length > 1){
-            var f = function(success, node){
-                if(success && node){
-                    var n = node.findChild(attr, v);
-                    if(n){
-                        n.getOwnerTree().getSelectionModel().select(n, false, keep);
-                        if(callback){
-                            callback(true, n);
-                        }
-                    }else if(callback){
-                        callback(false, n);
-                    }
-                }else{
-                    if(callback){
-                        callback(false, n);
-                    }
-                }
-            };
-            this.expandPath(keys.join(this.pathSeparator), attr, f);
-        }else{
-            this.root.select();
-            if(callback){
-                callback(true, this.root);
-            }
-        }
-    },
-    
-    /**
-     * fires our change event
-     */
-    onFilterChange: function() {
-        if (this.getGridPanel() && typeof this.getGridPanel().getView === 'function') {
-            this.getGridPanel().getView().isPagingRefresh = true;
-        }
-        
-//        console.log(this.store);
-        if (this.store) {
-            this.store.load();
-        }
-        
-        this.fireEvent('change', this);
     }
+   
 });
