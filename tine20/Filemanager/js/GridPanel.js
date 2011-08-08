@@ -80,6 +80,11 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                
         this.gridConfig.cm = this.getColumnModel();
 
+        this.defaultFilters = [
+                               {field: 'query', operator: 'contains', value: ''},
+                               {field: 'path', operator: 'equals', value: '/'}
+                               ];
+
         this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -238,7 +243,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * init actions with actionToolbar, contextMenu and actionUpdater
-     * 
      * @private
      */
     initActions: function() {
@@ -416,8 +420,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * rename selected folder/file
      * 
-     * @param button {Ext.Component}
-     * @param event {Event object}
+     * @param {Ext.Component} button
+     * @param {Ext.EventObject} event
      */
     onRenameItem: function(button, event) {
         
@@ -483,8 +487,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * create folder in current position
      * 
-     * @param button {Ext.Component}
-     * @param event {Event object}
+     * @param {Ext.Component} button
+     * @param {Ext.EventObject} event
      */
     onCreateFolder: function(button, event) {
         
@@ -513,8 +517,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * delete selected files / folders
      * 
-     * @param button {Ext.Component}
-     * @param event {Event object}
+     * @param {Ext.Component} button
+     * @param {Ext.EventObject} event
      */
     onDeleteItems: function(button, event) {
 
@@ -535,8 +539,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * go up one folder
      * 
-     * @param button {Ext.Component}
-     * @param event {Event object}
+     * @param {Ext.Component} button
+     * @param {Ext.EventObject} event
      */
     onLoadParentFolder: function(button, event) {
      
@@ -550,18 +554,35 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * row doubleclick handler
+     * grid row doubleclick handler
      * 
-     * @param {} grid
-     * @param {} row
-     * @param {} e
+     * @param {Tine.Filemanager.GridPanel} grid
+     * @param {} row record
+     * @param {Ext.EventObjet} e
      */
     onRowDblClick: function(grid, row, e) {
         
         var app = this.app;
         var rowRecord = grid.getStore().getAt(row);
-
-        var currentFolderNode = app.mainScreen.westPanel.containerTreePanel.getNodeById(rowRecord.id);
+        var treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel();
+        
+        var currentFolderNode;
+        if(rowRecord.data.path == '/personal/system') {
+            currentFolderNode = treePanel.getNodeById('personal');
+            
+        }
+        else if(rowRecord.data.path == '/shared') {
+            currentFolderNode = treePanel.getNodeById('shared');
+            
+        }
+        else if(rowRecord.data.path == '/personal') {
+            currentFolderNode = treePanel.getNodeById('otherUsers');
+            
+        }
+        else {
+            currentFolderNode = treePanel.getNodeById(rowRecord.id);
+        }
+        
         if(currentFolderNode) {
             currentFolderNode.select();
             currentFolderNode.expand();
@@ -572,6 +593,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     /**
      * on upload failure
+     * 
      * @private
      */
     onUploadFail: function () {
@@ -583,7 +605,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * on remove
+     * on remove handler
+     * 
      * @param {} button
      * @param {} event
      */
@@ -605,7 +628,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onPause: function (button, event) {     
  
-        var selectedRows = this.selectionModel.getSelections();    
+        var selectedRows = this.selectionModel.getSelections();   
         for(var i=0; i < selectedRows.length; i++) {
             var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
             upload.setPaused(true);
@@ -643,11 +666,19 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
+    /**
+     * copies uploaded temporary file to target location
+     * 
+     * @param upload    {Ext.ux.file.Upload}
+     * @param response  {Http response} 
+     */
     onUploadComplete: function(upload, response) {
-      
-        var fileName = response.tempFile.name;
+              
+        var app = Tine.Tinebase.appMgr.get('Filemanager');
+        var currentPath = app.getMainScreen().getCenterPanel().currentFolderNode.attributes.container.path;
+        var fileName = response.name;
         Tine.Tinebase.uploadManager.onUploadComplete();
-        Tine.Filemanager.attachFileToNode(fileName, response.tempFile.id);
+        Tine.Filemanager.createNode(currentPath + '/' + fileName, "file", response.id, false);
 
     },
     
@@ -667,7 +698,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.each(files, function (file) {
 
             var fileName = file.name || file.fileName;
-            Tine.Filemanager.createNode(grid.currentFolderNode.attributes.path + '/' + fileName, "file");
+            Tine.Filemanager.createNode(grid.currentFolderNode.attributes.path + '/' + fileName, "file", [], false);
             
             var upload = new Ext.ux.file.Upload({}, file, fileSelector);
 

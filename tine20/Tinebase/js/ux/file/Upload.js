@@ -367,9 +367,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     /**
      * Setting final fileRecord states
      */
-    finishUploadRecord: function(success, response) {
+    finishUploadRecord: function(response) {
         
-        if(success) {
+        response = Ext.util.JSON.decode(response.responseText);
+       
+        if(response.error == 0) {
             this.fileRecord.beginEdit();
             this.fileRecord.set('status', 'complete');
             this.fileRecord.set('progress', 100);
@@ -442,8 +444,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                             method: 'Tinebase.joinTempFiles',
                             tempFilesData: this.tempFiles
                         },
-                        success: this.finishUploadRecord.createDelegate(this, [true, response]), 
-                        failure: this.finishUploadRecord.createDelegate(this, [false, response])
+                        success: this.finishUploadRecord.createDelegate(this), 
+                        failure: this.finishUploadRecord.createDelegate(this)
                     });
                 }
                 else {
