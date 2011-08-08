@@ -151,12 +151,8 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
                     $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
                         $owner, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
                 } else {
-                    $users = Tinebase_Container::getInstance()->getOtherUsers($currentAccount, $appName, $this->_requiredGrants);
-                    $names = array();
-                    // @todo use getMultiple for full users
-                    foreach ($users as $user) {
-                        $names[] = Tinebase_User::getInstance()->getFullUserById($user)->accountLoginName;
-                    }
+                    $names = Tinebase_Container::getInstance()->getOtherUsersContainer($currentAccount, $appName, 
+                        $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
                 }
                 break;
         }
