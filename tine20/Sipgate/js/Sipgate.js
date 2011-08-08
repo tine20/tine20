@@ -25,19 +25,19 @@ Tine.Sipgate.getPanel = function() {
 					i18n : translation
 				}
 			});
-
-	var editSipgateSettingsAction = new Ext.Action({
-				text : translation._('Edit phone settings'),
-				iconCls : 'SipgateIconCls',
-				handler : function() {
-					// TODO: options by user
-				},
-				scope : this
-			});
-
-	var contextMenu = new Ext.menu.Menu({
-				items : [editSipgateSettingsAction]
-			});
+// coming soon
+//	var editSipgateSettingsAction = new Ext.Action({
+//				text : translation._('Edit phone settings'),
+//				iconCls : 'SipgateIconCls',
+//				handler : function() {
+//					// TODO: options by user
+//				},
+//				scope : this
+//			});
+//
+//	var contextMenu = new Ext.menu.Menu({
+//				items : [editSipgateSettingsAction]
+//			});
 	/** ********* tree panel **************** */
 
 	var treePanel = new Ext.tree.TreePanel({
@@ -68,13 +68,13 @@ Tine.Sipgate.getPanel = function() {
 	treePanel.on('click', function(node, event) {
 				node.select();
 			}, this);
-
-	treePanel.on('contextmenu', function(node, event) {
-				this.ctxNode = node;
-				if (node.id != 'root') {
-					contextMenu.showAt(event.getXY());
-				}
-			}, this);
+// coming soon
+//	treePanel.on('contextmenu', function(node, event) {
+//				this.ctxNode = node;
+//				if (node.id != 'root') {
+//					contextMenu.showAt(event.getXY());
+//				}
+//			}, this);
 
 	treePanel.on('beforeexpand', function(panel) {
 				if (panel.getSelectionModel().getSelectedNode() === null) {
