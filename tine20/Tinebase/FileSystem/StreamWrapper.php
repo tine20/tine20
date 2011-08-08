@@ -142,7 +142,7 @@ class Tinebase_Filesystem_StreamWrapper
             try {
                 $parentDirectory = $this->_getTreeNode($parentDirectory, $directoryName);
             } catch (Tinebase_Exception_InvalidArgument $teia) {
-                $parentDirectory = $this->_createDirectoryTreeNode($parentDirectory, $directoryName);
+                $parentDirectory = Tinebase_FileSystem::getInstance()->createDirectoryTreeNode($parentDirectory, $directoryName);
             }
         }
         
@@ -623,34 +623,6 @@ class Tinebase_Filesystem_StreamWrapper
         return $stat;
     }
     
-    /**
-     * @param unknown_type $_parentId
-     * @param unknown_type $_name
-     * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Model_Tree_Nodenager_Model_Tree
-     */
-    protected function _createDirectoryTreeNode($_parentId, $_name)
-    {
-        $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
-        
-        $directoryObject = new Tinebase_Model_Tree_FileObject(array(
-            'type'          => Tinebase_Model_Tree_FileObject::TYPE_FOLDER,
-            'contentytype'  => null,
-            'creation_time' => Tinebase_DateTime::now() 
-        ));
-        $directoryObject = $this->_getObjectBackend()->create($directoryObject);
-        
-        $treeNode = new Tinebase_Model_Tree_Node(array(
-            'name'          => $_name,
-            'object_id'     => $directoryObject->getId(),
-            'parent_id'     => $parentId
-        ));
-        
-        $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
-        
-        return $treeNode;
-    }
-
     /**
      * @param unknown_type $_parentId
      * @param unknown_type $_name

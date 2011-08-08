@@ -381,7 +381,7 @@ class Tinebase_FileSystem
         foreach ($pathParts as $part) {
             $path .= '/' . $part;
             if (!$this->fileExists($path)) {
-                $parentNode = $this->_createDirectoryTreeNode($parentNode, trim($part));
+                $parentNode = $this->createDirectoryTreeNode($parentNode, trim($part));
             } else {
                 $parentNode = $this->_getTreeNode($parentNode, trim($part));
             }
@@ -520,7 +520,7 @@ class Tinebase_FileSystem
      * @param string $_name
      * @return Tinebase_Model_Tree_Node
      */
-    protected function _createDirectoryTreeNode($_parentId, $_name)
+    public function createDirectoryTreeNode($_parentId, $_name)
     {
         $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
         
