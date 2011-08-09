@@ -136,13 +136,15 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 50,
                 sortable: true,
                 dataIndex: 'contenttype'
-            },{
-                id: 'description',
-                header: this.app.i18n._("Description"),
-                width: 100,
-                sortable: true,
-                dataIndex: 'description'
-            },{
+            },
+//            {
+//                id: 'description',
+//                header: this.app.i18n._("Description"),
+//                width: 100,
+//                sortable: true,
+//                dataIndex: 'description'
+//            },
+            {
                 id: 'revision',
                 header: this.app.i18n._("Revision"),
                 width: 10,
