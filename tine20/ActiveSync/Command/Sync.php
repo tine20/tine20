@@ -199,8 +199,13 @@ class ActiveSync_Command_Sync extends ActiveSync_Command_Wbxml
             
             $this->_collections[$collectionData['class']][$collectionId] = $collectionData;
             
-            if($clientSyncKey === 0 || $this->_controller->validateSyncKey($this->_device, $clientSyncKey, $folder->class, $collectionId) !== true) {
-                Tinebase_Core::getLogger()->warn(__METHOD__ . '::' . __LINE__ . " invalid synckey $clientSyncKey provided");
+            if($clientSyncKey === 0) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->DEBUG(__METHOD__ . '::' . __LINE__ . " client synckey $clientSyncKey provided");
+                $this->_collections[$folder->class][$collectionId]['syncKeyValid'] = false;
+                continue;
+            }
+            if($this->_controller->validateSyncKey($this->_device, $clientSyncKey, $folder->class, $collectionId) !== true) {
+                Tinebase_Core::getLogger()->WARN(__METHOD__ . '::' . __LINE__ . " invalid synckey $clientSyncKey provided");
                 $this->_collections[$folder->class][$collectionId]['syncKeyValid'] = false;
                 continue;
             }
