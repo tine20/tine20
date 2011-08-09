@@ -356,6 +356,9 @@ Tine.widgets.tree.ContextMenu = {
 		});
 	},
     
+	/**
+	 * create tree node
+	 */
 	addNode: function() {
         Ext.MessageBox.prompt(String.format(_('New {0}'), this.nodeName), String.format(_('Please enter the name of the new {0}:'), this.nodeName), function(_btn, _text) {
             if( this.scope.ctxNode && _btn == 'ok') {
@@ -374,14 +377,14 @@ Tine.widgets.tree.ContextMenu = {
                 // TODO try to generalize this and move app specific stuff to app
                 
                 if (this.backendModel == 'Node') {
-                    params.application = this.scope.app.appName || this.appName;                            
+                    params.application = this.scope.app.appName || this.scope.appName;                            
                     var filename = parentNode.attributes.container.path + '/' + _text;
                     params.filename = filename;
                     params.type = 'folder';
                     params.method = this.backend + ".createNode";
                 }
                 else if (this.backendModel == 'Container') {
-                    params.application = this.scope.app.appName || this.appName;
+                    params.application = this.scope.app.appName || this.scope.appName;
                     params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
                 } 
                 else if (this.backendModel == 'Folder') {
@@ -421,6 +424,9 @@ Tine.widgets.tree.ContextMenu = {
         }, this);
     },
     
+    /**
+     * rename tree node
+     */
     renameNode: function() {
         if (this.scope.ctxNode) {
             var node = this.scope.ctxNode;
@@ -443,7 +449,7 @@ Tine.widgets.tree.ContextMenu = {
                         };
                         
                         if (this.backendModel == 'Node') {
-                            params.application = this.app.appName || this.appName;                                
+                            params.application = this.scope.app.appName || this.scope.appName;                                
                             var filename = node.attributes.path;
                             params.sourceFilenames = [filename];
                             
@@ -458,9 +464,9 @@ Tine.widgets.tree.ContextMenu = {
                         }
                         
                         // TODO try to generalize this
-                        if (config.backendModel == 'Container') {
+                        if (this.backendModel == 'Container') {
                             params.containerId = node.attributes.container.id;
-                        } else if (config.backendModel == 'Folder') {
+                        } else if (this.backendModel == 'Folder') {
                             var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
                             params.oldGlobalName = folder.get('globalname');
                             params.accountId = folder.get('account_id');
@@ -474,6 +480,11 @@ Tine.widgets.tree.ContextMenu = {
                                 node.setText(_text);
                                 this.scope.fireEvent('containerrename', nodeData);
                                 Ext.MessageBox.hide();
+                                
+                                // TODO: im event auswerten
+                                if (this.backendModel == 'Node') {
+                                    this.scope.app.mainScreen.GridPanel.getStore().reload();
+                                }
                             }
                         });
                     }
@@ -485,7 +496,9 @@ Tine.widgets.tree.ContextMenu = {
         }
     },
     
-    
+    /**
+     * delete tree node
+     */
     deleteNode: function() {
         if (this.scope.ctxNode) {
             var node = this.scope.ctxNode;
@@ -498,7 +511,7 @@ Tine.widgets.tree.ContextMenu = {
                     };
                     
                     if (this.backendModel == 'Node') {
-                        params.application = this.scope.app.appName || this.appName;                                
+                        params.application = this.scope.app.appName || this.scope.appName;                                
                         var filename = node.attributes.path;
                         params.filenames = [filename];
                         params.method = this.backend + ".deleteNodes";
@@ -530,6 +543,7 @@ Tine.widgets.tree.ContextMenu = {
                                 this.scope.fireEvent('containerdelete', node.attributes);
                             }
                             
+                            // TODO: im event auswerten
                             if (this.backendModel == 'Node') {
                                 this.scope.app.mainScreen.GridPanel.getStore().reload();
                             }
@@ -542,6 +556,9 @@ Tine.widgets.tree.ContextMenu = {
         }
     },
 	
+    /**
+     * change tree node color
+     */
     changeNodeColor: function(cp, color) {
         if (this.scope.ctxNode) {
             var node = this.scope.ctxNode;
