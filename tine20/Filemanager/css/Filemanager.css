@@ -42,6 +42,17 @@
 .action_create_folder {
     background-image:url(../../images/oxygen/16x16/actions/folder-new.png) !important;
 }
+
+.action_pause {
+    background-image: url("../../images/oxygen/16x16/actions/media-playback-pause.png");
+    background-repeat: no-repeat;
+}
+
+.action_resume {
+    background-image:url(../../images/oxygen/16x16/actions/media-playback-start.png);
+    background-repeat: no-repeat;
+}
+
 .x-btn-medium .action_create_folder {
     background-image:url(../../images/oxygen/22x22/actions/folder-new.png) !important;
 }

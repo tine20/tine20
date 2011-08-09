@@ -323,9 +323,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         this.action_resume = new Ext.Action({
             text: _('Resume upload'),
-            iconCls: 'resume_pause',
             scope: this,
 //            disabled: true,
+            iconCls: 'action_resume',
             handler: this.onResume
         });
         
