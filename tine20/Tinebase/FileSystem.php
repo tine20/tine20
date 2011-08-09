@@ -381,7 +381,7 @@ class Tinebase_FileSystem
             if (!$this->fileExists($path)) {
                 $parentNode = $this->createDirectoryTreeNode($parentNode, trim($part));
             } else {
-                $parentNode = $this->_getTreeNode($parentNode, trim($part));
+                $parentNode = $this->getTreeNode($parentNode, trim($part));
             }
         }
     }
@@ -613,7 +613,7 @@ class Tinebase_FileSystem
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Model_Tree_Node
      */
-    protected function _getTreeNode($_parentId, $_name)
+    public function getTreeNode($_parentId, $_name)
     {
         $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
         

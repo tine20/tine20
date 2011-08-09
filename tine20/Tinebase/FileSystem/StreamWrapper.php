@@ -66,6 +66,8 @@ class Tinebase_Filesystem_StreamWrapper
     protected $_stream;
     
     /**
+     * the filesystem
+     * 
      * @var Tinebase_FileSystem
      */
     protected $_tinebaseFileSystem;
@@ -164,9 +166,9 @@ class Tinebase_Filesystem_StreamWrapper
         
         foreach ($pathParts as $directoryName) {
             try {
-                $parentDirectory = $this->_getTreeNode($parentDirectory, $directoryName);
+                $parentDirectory = $this->_getTinebaseFileSystem()->getTreeNode($parentDirectory, $directoryName);
             } catch (Tinebase_Exception_InvalidArgument $teia) {
-                $parentDirectory = Tinebase_FileSystem::getInstance()->createDirectoryTreeNode($parentDirectory, $directoryName);
+                $parentDirectory = $this->_getTinebaseFileSystem()->createDirectoryTreeNode($parentDirectory, $directoryName);
             }
         }
         
@@ -418,7 +420,7 @@ class Tinebase_Filesystem_StreamWrapper
                     return false;
                 }
                 
-                $this->_currentNode = Tinebase_FileSystem::getInstance()->createFileTreeNode($parent, $fileName);
+                $this->_currentNode = $this->_getTinebaseFileSystem()->createFileTreeNode($parent, $fileName);
                 
                 $this->_stream = tmpfile();
                 $_opened_path = $_path;
@@ -449,7 +451,7 @@ class Tinebase_Filesystem_StreamWrapper
                 try {
                     $this->_currentNode = $this->_getTreeNodeBackend()->getLastPathNode($path);
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    $this->_currentNode = Tinebase_FileSystem::getInstance()->createFileTreeNode($parent, $fileName);
+                    $this->_currentNode = $this->_getTinebaseFileSystem()->createFileTreeNode($parent, $fileName);
                 }
                 
                 $this->_stream = tmpfile();
@@ -763,8 +765,8 @@ class Tinebase_Filesystem_StreamWrapper
      */
     protected function _getTinebaseFileSystem()
     {
-        if (!$this->_tinebaseFileSystem instanceof Tinebase_FileSystem) {
-            $this->_tinebaseFileSystem = new Tinebase_FileSystem();
+        if (! $this->_tinebaseFileSystem instanceof Tinebase_FileSystem) {
+            $this->_tinebaseFileSystem = Tinebase_FileSystem::getInstance();
         }
         
         return $this->_tinebaseFileSystem;
@@ -782,40 +784,6 @@ class Tinebase_Filesystem_StreamWrapper
         }
         
         return $this->_treeBackend;
-    }
-    
-    /**
-     * get tree node
-     * 
-     * @param  string  $_parentId  id of the parent node
-     * @param  string  $_name      name of the node
-     * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Model_Tree_Node
-     */
-    protected function _getTreeNode($_parentId, $_name)
-    {
-        $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
-        
-        $searchFilter = new Tinebase_Model_Tree_Node_Filter(array(
-            array(
-                'field'     => 'name',
-                'operator'  => 'equals',
-                'value'     => $_name
-            ),
-            array(
-                'field'     => 'parent_id',
-                'operator'  => $parentId === null ? 'isnull' : 'equals',
-                'value'     => $parentId
-            )
-        ));
-        
-        $result = $this->_getTreeNodeBackend()->search($searchFilter);
-        
-        if ($result->count() == 0) {
-            throw new Tinebase_Exception_InvalidArgument('directory node not found');
-        }
-        
-        return $result[0];
     }
     
     /**
