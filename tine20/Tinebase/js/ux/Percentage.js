@@ -115,7 +115,7 @@ Ext.ux.PercentRenderer = function(percent) {
 };
 
 /**
- * Renders a percentage value to a percentage bar
+ * Renders a percentage value to a percentage bar / uploadrow
  * @constructor
  */
 Ext.ux.PercentRendererWithName = function(value, metadata, record) {
