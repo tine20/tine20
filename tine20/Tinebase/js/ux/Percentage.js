@@ -120,6 +120,28 @@ Ext.ux.PercentRenderer = function(percent) {
  */
 Ext.ux.PercentRendererWithName = function(value, metadata, record) {
   
+    var metaStyle = '';
+    if(record.data.type == 'folder') {
+        metadata.css = 'x-tinebase-typefolder';
+    }
+    else {
+        metadata.css = 'x-tinebase-typeoctet';
+    }
+    
+    if (!Tine.Tinebase.uploadManager.isHtml5ChunkedUpload()) {
+
+        var fileName = value;
+        if (typeof value == 'object') {
+            fileName = value.name;
+        } 
+    
+        if(record.get('status') == 'uploading') {
+            metadata.css = 'x-tinebase-uploadrow';
+        }
+        
+        return fileName;       
+    }
+    
     if (! Ext.ux.PercentRendererWithName.template) {
         Ext.ux.PercentRendererWithName.template = new Ext.XTemplate(
             '<div class="x-progress-wrap PercentRenderer" style="{display}">',
@@ -153,14 +175,6 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
     if(record.get('status') == 'paused' && percent < 100) {
         fileName = _('(paused)') + '&#160;&#160;' + fileName;
         additionalStyle = 'background-image: url(\'/styles/images/tine20/progress/progress-bg-y.gif\') !important;';
-    }
-    
-    
-    if(record.data.type == 'folder') {
-        metadata.css = 'x-tinebase-typefolder';
-    }
-    else {
-        metadata.css = 'x-tinebase-typeoctet';
     }
        
     var display = 'width:0px';
