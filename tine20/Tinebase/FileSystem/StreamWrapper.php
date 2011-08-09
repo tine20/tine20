@@ -418,7 +418,7 @@ class Tinebase_Filesystem_StreamWrapper
                     return false;
                 }
                 
-                $this->_currentNode = $this->_createFileTreeNode($parent, $fileName);
+                $this->_currentNode = Tinebase_FileSystem::getInstance()->createFileTreeNode($parent, $fileName);
                 
                 $this->_stream = tmpfile();
                 $_opened_path = $_path;
@@ -449,7 +449,7 @@ class Tinebase_Filesystem_StreamWrapper
                 try {
                     $this->_currentNode = $this->_getTreeNodeBackend()->getLastPathNode($path);
                 } catch (Tinebase_Exception_NotFound $tenf) {
-                    $this->_currentNode = $this->_createFileTreeNode($parent, $fileName);
+                    $this->_currentNode = Tinebase_FileSystem::getInstance()->createFileTreeNode($parent, $fileName);
                 }
                 
                 $this->_stream = tmpfile();
@@ -721,33 +721,6 @@ class Tinebase_Filesystem_StreamWrapper
         );
         
         return $stat;
-    }
-    
-    /**
-     * @param unknown_type $_parentId
-     * @param unknown_type $_name
-     * @throws Tinebase_Exception_InvalidArgument
-     * @return Tinebase_Model_Tree_Node
-     */
-    protected function _createFileTreeNode($_parentId, $_name)
-    {
-        $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
-        
-        $fileObject = new Tinebase_Model_Tree_FileObject(array(
-            'type'          => Tinebase_Model_Tree_FileObject::TYPE_FILE,
-            'contentytype'  => null,
-            'creation_time' => Tinebase_DateTime::now() 
-        ));
-        $fileObject = $this->_getObjectBackend()->create($fileObject);
-        
-        $treeNode = new Tinebase_Model_Tree_Node(array(
-            'name'          => $_name,
-            'object_id'     => $fileObject->getId(),
-            'parent_id'     => $parentId
-        ));
-        $treeNode = $this->_getTreeNodeBackend()->create($treeNode);
-        
-        return $treeNode;
     }
     
     /**

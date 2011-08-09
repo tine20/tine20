@@ -264,7 +264,7 @@ class Tinebase_FileSystem
                     return false;
                 }
                 $parent = $this->stat($dirName);
-                $node = $this->_createFileTreeNode($parent, $fileName);
+                $node = $this->createFileTreeNode($parent, $fileName);
                 
                 $handle = tmpfile();
                 break;
@@ -547,7 +547,7 @@ class Tinebase_FileSystem
      * @throws Tinebase_Exception_InvalidArgument
      * @return Tinebase_Model_Tree_Node
      */
-    protected function _createFileTreeNode($_parentId, $_name)
+    public function createFileTreeNode($_parentId, $_name)
     {
         $parentId = $_parentId instanceof Tinebase_Model_Tree_Node ? $_parentId->getId() : $_parentId;
         
