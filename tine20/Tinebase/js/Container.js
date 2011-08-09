@@ -58,6 +58,15 @@ Tine.Tinebase.container = {
     },
     
     /**
+     * returns the file node path of the 'my ...' node
+     * 
+     * @return {String}
+     */
+    getMyFileNodePath: function() {
+        return '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountLoginName;
+    },
+    
+    /**
      * returns true if given path represents a (single) container
      * 
      * NOTE: if path could only be undefined when server send container without path.
@@ -116,7 +125,8 @@ Tine.Tinebase.container = {
             case '/personal':   return String.format(_('Other Users {0}'), containersName);
         }
         
-        if (path === Tine.Tinebase.container.getMyNodePath()) {
+        if (path === Tine.Tinebase.container.getMyNodePath()
+                || path === Tine.Tinebase.container.getMyFileNodePath()) {
             return String.format(_('My {0}'), containersName);
         }
         

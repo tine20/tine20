@@ -54,7 +54,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @returns {String}
      */
     getRootPath: function() {
-        return 'personal/' + Tine.Tinebase.registry.get('currentAccount').accountLoginName;  
+        return Tine.Tinebase.container.getMyFileNodePath();
     },
     
     /**

@@ -138,19 +138,24 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         $translate = Tinebase_Translation::getTranslation($this->_applicationName);
         $result = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node', array(
             array(
-                'name' => $translate->_('My Files'),
+                'name' => $translate->_('My folders'),
                 'path' => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName,
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+    	        'id' => Tinebase_Model_Container::TYPE_PERSONAL,
+
             ),
             array(
-                'name' => $translate->_('Shared Files'),
+                'name' => $translate->_('Shared folders'),
                 'path' => '/' . Tinebase_Model_Container::TYPE_SHARED,
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+                'id' => Tinebase_Model_Container::TYPE_SHARED,
+            
             ),
             array(
-                'name' => $translate->_('Other Users Files'),
+                'name' => $translate->_('Other users folders'),
                 'path' => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS,
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
+            	'id' => Tinebase_Model_Container::TYPE_OTHERUSERS,
             ),
         ), TRUE); // bypass validation
         
