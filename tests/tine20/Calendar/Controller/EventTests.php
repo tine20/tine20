@@ -82,6 +82,41 @@ class Calendar_Controller_EventTests extends Calendar_TestCase
         Tinebase_Core::set(Tinebase_Core::USERTIMEZONE, $currentTz);
     }
     
+    public function testUpdateAttendeeStatus()
+    {
+        $event = $this->_getEvent();
+        $event->attendee = $this->_getAttendee();
+        $event->attendee[1] = new Calendar_Model_Attender(array(
+            'user_type' => Calendar_Model_Attender::USERTYPE_USER,
+            'user_id'   => $this->_personasContacts['pwulf']->getId(),
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        
+        foreach($persistentEvent->attendee as $attender) {
+            $attender->status = Calendar_Model_Attender::STATUS_DECLINED;
+            $this->_controller->attenderStatusUpdate($persistentEvent, $attender, $attender->status_authkey);
+        }
+        
+        // update time
+        $persistentEvent->dtstart->addHour(2);
+        $persistentEvent->dtend->addHour(2);
+        $updatedEvent = $this->_controller->update($persistentEvent);
+
+        $currentUser = $updatedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
+            ->filter('user_id', Tinebase_Core::getUser()->contact_id)
+            ->getFirstRecord();
+            
+        $pwulf = $updatedEvent->attendee
+            ->filter('user_type', Calendar_Model_Attender::USERTYPE_USER)
+            ->filter('user_id', $this->_personasContacts['pwulf']->getId())
+            ->getFirstRecord();
+
+        $this->assertEquals(Calendar_Model_Attender::STATUS_DECLINED, $currentUser->status, 'current users status must not be touched');
+        $this->assertEquals(Calendar_Model_Attender::STATUS_NEEDSACTION, $pwulf->status, 'pwulfs status must be reset');
+    }
+    
     public function testUpdateMultiple()
     {
         $persistentEvent = $this->testCreateEvent();
