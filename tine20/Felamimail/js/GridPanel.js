@@ -856,7 +856,10 @@ Tine.Felamimail.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * compose new message handler
      */
     onMessageCompose: function() {
+        var activeAccount = Tine.Tinebase.appMgr.get('Felamimail').getActiveAccount();
+        
         var win = Tine.Felamimail.MessageEditDialog.openWindow({
+            accountId: activeAccount ? activeAccount.id : null,
             listeners: {
                 'update': this.onAfterCompose.createDelegate(this, ['compose'], 1)
             }
