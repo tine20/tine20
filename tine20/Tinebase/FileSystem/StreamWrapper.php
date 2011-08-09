@@ -459,6 +459,7 @@ class Tinebase_Filesystem_StreamWrapper
                 
                 break;
                 
+            case 'rb':
             case 'r':
                 try {
                     $node = $this->_getTreeNodeBackend()->getLastPathNode($path);
@@ -485,6 +486,9 @@ class Tinebase_Filesystem_StreamWrapper
                 break;
                 
             default:
+                if (!$quiet) {
+                    trigger_error('invalid mode: ' . $_mode, E_USER_WARNING);
+                }
                 return false;
         }
         

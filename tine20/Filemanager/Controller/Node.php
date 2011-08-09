@@ -274,6 +274,8 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
      * @throws Tinebase_Exception_InvalidArgument
+     * 
+     * @todo use filemanager exception
      */
     protected function _createNode($_flatpath, $_type, $_tempFileId = NULL, $_forceOverwrite = FALSE)
     {
@@ -292,7 +294,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $newNodePath = $parentPathRecord->statpath . '/' . $newNodeName;
         }
         
-        $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId, $_forceOverwrite);
+        try {
+            $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId, $_forceOverwrite);
+        } catch (Exception $e) {
+            throw new Tinebase_Exception_InvalidArgument('Could not create file: ' . $e->getMessage());
+        }
         
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
         
@@ -540,15 +546,13 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_sourceFlatpath
      * @param string $_destinationFlatpath
      * @param boolean $_destinationIsFolder
+     * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
-     * 
-     * @todo use streamwrapper!
-     * @todo use $_destinationIsFolder param 
      */
-    protected function _copyNode($_sourceFlatpath, $_destinationFlatpath, $_destinationIsFolder)
+    protected function _copyNode($_sourceFlatpath, $_destinationFlatpath, $_destinationIsFolder = FALSE, $_forceOverwrite = FALSE)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
-                . ' Copy Node ' . $_sourceFlatpath . ' to ' . $_destinationFlatpath);
+                . ' Copy Node ' . $_sourceFlatpath . ' to ' . (($_destinationIsFolder) ? 'folder ' : ''). $_destinationFlatpath);
                 
         $newNode = NULL;
         
@@ -557,48 +561,75 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         $sourceNode = $this->_backend->stat($sourcePathRecord->statpath);
         
-        $newNode = $this->_createNodeAtDestination($sourceNode, $_destinationFlatpath);
-
-        if ($sourceNode->type === Tinebase_Model_Tree_Node::TYPE_FILE) {
-            // need to persist the generated path
-            $path = $newNode->path;
-            
-            $newNode->object_id = $sourceNode->object_id;
-            $newNode = $this->_backend->updateNode($newNode);
-            $newNode->path = $path;
+        switch ($sourceNode->type) {
+            case Tinebase_Model_Tree_Node::TYPE_FILE:
+                $destinationFlatpath = ($_destinationIsFolder) ? $_destinationFlatpath . '/' . $sourceNode->name : $_destinationFlatpath;
+                $newNode = $this->_copyFileNode($sourcePathRecord, $destinationFlatpath, $_forceOverwrite);
+                break;
+                
+            case Tinebase_Model_Tree_Node::TYPE_FOLDER:
+                $newNode = $this->_copyFolderNode($sourcePathRecord, $_destinationFlatpath);
+                break;
         }
+        
+        return $newNode;        
+    }
+    
+    /**
+     * copy file node
+     * 
+     * @param Tinebase_Model_Tree_Node_Path $_sourcePathRecord
+     * @param string $_destinationFlatpath
+     * @param boolean $_forceOverwrite
+     * @return Tinebase_Model_Tree_Node
+     * @throws Tinebase_Exception_InvalidArgument
+     * 
+     * @todo use $_forceOverwrite param
+     * @todo use file_exists()
+     * @todo throw new file exists exception
+     */
+    protected function _copyFileNode($_sourcePathRecord, $_destinationFlatpath, $_forceOverwrite = FALSE)
+    {
+        list($parentPathRecord, $newNodeName) = Tinebase_Model_Tree_Node_Path::getParentAndChild($this->addBasePath($_destinationFlatpath));
+        $this->_checkPathACL($parentPathRecord, 'update', FALSE);
+        
+        $destinationPathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_destinationFlatpath));
+        
+        try {
+            $destinationNode = $this->_backend->stat($destinationPathRecord->statpath);
+            throw new Tinebase_Exception_InvalidArgument('File exists: ' . Zend_Json::encode($destinationNode->toArray()));
+        } catch (Tinebase_Exception_NotFound $tenf) {
+            copy($_sourcePathRecord->streamwrapperpath, $destinationPathRecord->streamwrapperpath);
+        }
+
+        $newNode = $this->_backend->stat($destinationPathRecord->statpath);
+        $this->resolveContainerAndAddPath($newNode, $parentPathRecord);
         
         return $newNode;
     }
     
     /**
-     * create new node at destination path
+     * copy folder node
      * 
-     * @param Tinebase_Model_Tree_Node $_sourceNode
+     * @param Tinebase_Model_Tree_Node_Path $_sourcePathRecord
      * @param string $_destinationFlatpath
      * @return Tinebase_Model_Tree_Node
-     * @throws Tinebase_Exception_InvalidArgument
      * 
-     * @todo use streamwrapper!
-     * @todo rename file automatically if it exists?
+     * @todo allow recursive copy for (sub-)folders/files
      */
-    protected function _createNodeAtDestination(Tinebase_Model_Tree_Node $_sourceNode, $_destinationFlatpath)
+    protected function _copyFolderNode($_sourcePathRecord, $_destinationFlatpath)
     {
+        $sourceNode = $this->_backend->stat($_sourcePathRecord->statpath);
         $destinationPathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($_destinationFlatpath));
+        
         try {
             $destinationNode = $this->_backend->stat($destinationPathRecord->statpath);
-            // destination node exists
-            switch ($destinationNode->type) {
-                case Tinebase_Model_Tree_Node::TYPE_FILE:
-                    throw new Tinebase_Exception_InvalidArgument('File exists.');
-                    break;
-                case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                    $newNode = $this->_createNode($_destinationFlatpath .'/' . $_sourceNode->name, $_sourceNode->type);
-                    break;
-            }
+            $name = ($_sourcePathRecord->container->getId() === $sourceNode->name) ? $_sourcePathRecord->container->name : $sourceNode->name;
+            $destinationFlatpath = $_destinationFlatpath . '/' . $name;
         } catch (Tinebase_Exception_NotFound $tenf) {
-            $newNode = $this->_createNode($_destinationFlatpath, $_sourceNode->type);
+            $destinationFlatpath = $_destinationFlatpath;
         }
+        $newNode = $this->_createNode($destinationFlatpath, Tinebase_Model_Tree_Node::TYPE_FOLDER);
         
         return $newNode;
     }
