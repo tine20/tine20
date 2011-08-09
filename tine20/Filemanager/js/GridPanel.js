@@ -122,7 +122,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 40,
                 sortable: true,
                 dataIndex: 'size',
-                renderer: function(value, metadata, record) {
+                renderer: 
+//                    Ext.util.Format.fileSize
+                function(value, metadata, record) {
                     if(record.data.progress < 100) {
                         return 0;                      
                     }
@@ -677,11 +679,55 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onUploadComplete: function(upload, response) {
               
         var app = Tine.Tinebase.appMgr.get('Filemanager');
+        var grid = app.mainScreen.GridPanel; 
         var currentPath = app.getMainScreen().getCenterPanel().currentFolderNode.attributes.container.path;
         var fileName = response.name;
         Tine.Tinebase.uploadManager.onUploadComplete();
-        Tine.Filemanager.createNode(currentPath + '/' + fileName, "file", response.id, false);
-
+//        Tine.Filemanager.createNode(currentPath + '/' + fileName, "file", response.id, false, this.onNodeCreated);
+        
+        // $filename, $type, $tempFileId, $forceOverwrite
+        Ext.Ajax.request({
+            timeout: 10*60*1000, // Overriding Ajax timeout - important!
+            params: {
+                method: 'Filemanager.createNode',
+                filename: currentPath + '/' + fileName,
+                type: 'file',
+                tempFileId: response.id,
+                forceOverwrite: false
+            },
+            success: grid.onNodeCreated.createDelegate(this, [upload], true), 
+            failure: grid.onNodeCreated.createDelegate(this, [upload], true)
+        });
+        
+    },
+    
+    /**
+     * updating fileRecord after creating node
+     * 
+     * @param response
+     * @param request
+     * @param upload
+     */
+    onNodeCreated: function(response, request, upload) {
+        
+        var record = Ext.util.JSON.decode(response.responseText);
+        var app = Tine.Tinebase.appMgr.get('Filemanager');
+        var grid = app.mainScreen.GridPanel; 
+        
+        var fileRecord = upload.fileRecord;
+        fileRecord.beginEdit();
+        fileRecord.set('contenttype', record.contenttype);
+//        fileRecord.set('created_by', record.created_by);
+        fileRecord.set('created_by', Tine.Tinebase.registry.get('currentAccount'));
+        fileRecord.set('creation_time', record.creation_time);
+        fileRecord.set('revision', record.revision);
+        fileRecord.set('last_modified_by', record.last_modified_by);
+        fileRecord.set('last_modified_time', record.last_modified_time);
+        fileRecord.set('size', record.size);
+        fileRecord.set('name', record.name);
+        fileRecord.set('path', record.path);
+        fileRecord.commit(false);
+        
     },
     
     /**
