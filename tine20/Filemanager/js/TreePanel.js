@@ -91,7 +91,8 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             filter: [
                      {field: 'path', operator:'equals', value: newPath},
                      {field: 'type', operator:'equals', value: 'folder'}
-                     ]
+                     ],
+            paging: {dir: 'ASC', limit: 50, sort: 'name', start: 0}         
         };
         
         return params;
