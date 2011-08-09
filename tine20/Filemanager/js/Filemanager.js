@@ -39,3 +39,4 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
  */
 Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {});
 
+
