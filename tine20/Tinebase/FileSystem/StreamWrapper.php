@@ -18,14 +18,23 @@
  */
 class Tinebase_Filesystem_StreamWrapper
 {
+    /**
+     * the context
+     * 
+     * @var resource
+     */
     public $context;
     
     /**
+     * object backend
+     * 
      * @var Tinebase_Tree_FileObject
      */
     protected $_objectBackend;
     
     /**
+     * node backend
+     * 
      * @var Tinebase_Tree_Node
      */
     protected $_treeBackend;
