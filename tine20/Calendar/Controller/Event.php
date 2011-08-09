@@ -849,7 +849,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
      */
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
-        // if dtstart of an event changes, we update the originator_tz and alarm times
+        // if dtstart of an event changes, we update the originator_tz, alarm times and reset attendee responses
         if (! $_oldRecord->dtstart->equals($_record->dtstart)) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' dtstart changed -> adopting organizer_tz');
             $_record->originator_tz = Tinebase_Core::get(Tinebase_Core::USERTIMEZONE);
@@ -888,7 +888,14 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 }
             }
             
-            //$this->_updateAlarms($_record);
+            foreach($_record->attendee as $attender) {
+                if ($attender->user_id == Tinebase_Core::getUser()->contact_id && in_array($attender->user_type, array(Calendar_Model_Attender::USERTYPE_USER, Calendar_Model_Attender::USERTYPE_GROUPMEMBER))) {
+                    // don't touch current users status
+                    continue;
+                }
+                
+                $attender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
+            }
         }
         
         // delete recur exceptions if update is not longer a recur series
