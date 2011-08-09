@@ -576,7 +576,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
             . ' Setting ' . $_namespace . ' namespace: "' . $_account->{$_namespace} . '" for systemfolders of account ' . $_account->name);
         
         foreach ($folders as $folder) {
-            if (! preg_match('/^' . $_account->{$_namespace} . '/', $_account->{$folder})) {
+            if (! preg_match('/^' . preg_quote($_account->{$_namespace}, '/') . '/', $_account->{$folder})) {
                 $_account->{$folder} = $_account->{$_namespace} . $_account->{$folder};
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . ' Updated system folder name: ' . $folder .' -> ' . $_account->{$folder});
