@@ -23,6 +23,8 @@
  * @property    Tinebase_Model_Application  application
  * @property    Tinebase_Model_Container    container
  * @property    Tinebase_Model_FullUser     user
+ * @property    string                      name (last part of path)
+ * @property    Tinebase_Model_Tree_Node_Path parentrecord
  * 
  * exploded flat path should look like this:
  * 
@@ -77,6 +79,8 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         'application'       => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'user'			    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'name'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'parentrecord'      => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     );
     
     /**
@@ -140,6 +144,19 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }
     
     /**
+     * get parent path of this record
+     * 
+     * @return Tinebase_Model_Tree_Node_Path
+     */
+    public function getParent()
+    {
+        if (! $this->parentrecord) {
+            list($this->parentrecord, $unused) = self::getParentAndChild($this->flatpath);
+        }
+        return $this->parentrecord;
+    }
+    
+    /**
      * sets the record related properties from user generated input.
      * 
      * if flatpath is set, parse it and set the fields accordingly
@@ -164,6 +181,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     {
         $pathParts = $this->_getPathParts($_path);
         
+        $this->name                 = $pathParts[count($pathParts) - 1];
         $this->containerType        = $this->_getContainerType($pathParts);
         $this->containerOwner       = $this->_getContainerOwner($pathParts);
         $this->application          = $this->_getApplication($pathParts);
