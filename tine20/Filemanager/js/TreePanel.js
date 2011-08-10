@@ -70,7 +70,7 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
         var owner = Tine.Tinebase.container.pathIsPersonalNode(path);
         var loginName = Tine.Tinebase.registry.get('currentAccount').accountLoginName;
         
-        if (type === 'personal' && ! owner) {
+        if (type === 'personal' && owner != loginName) {
             type = 'otherUsers';
         }
         
