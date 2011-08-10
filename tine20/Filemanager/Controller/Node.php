@@ -89,7 +89,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
             $result = $this->_getRootNodes();
-        } else if ($path->containerType === Tinebase_Model_Container::TYPE_OTHERUSERS && ! $path->containerOwner) {
+        } else if ($path->containerType === Tinebase_Model_Container::TYPE_PERSONAL && ! $path->containerOwner) {
             $result = $this->_getOtherUserNodes();
         } else {
             $result = $this->_backend->searchNodes($_filter, $_pagination);
@@ -153,7 +153,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             ),
             array(
                 'name' => $translate->_('Other users folders'),
-                'path' => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS,
+                'path' => '/' . Tinebase_Model_Container::TYPE_PERSONAL,
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
             	'id' => Tinebase_Model_Container::TYPE_OTHERUSERS,
             ),
@@ -175,7 +175,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $fullUser = Tinebase_User::getInstance()->getFullUserById($user);
             $record = new Tinebase_Model_Tree_Node(array(
                 'name' => $fullUser->accountDisplayName,
-                'path' => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS . '/' . $fullUser->accountLoginName,
+                'path' => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . $fullUser->accountLoginName,
                 'type' => Tinebase_Model_Tree_Node::TYPE_FOLDER,
             ), TRUE);
             $result->addRecord($record);
@@ -370,14 +370,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         } else if ($_topLevelAllowed) {
             switch ($_path->containerType) {
                 case Tinebase_Model_Container::TYPE_PERSONAL:
-                    $hasPermission = ($_path->containerOwner === $this->_currentAccount->accountLoginName);
+                    if ($_path->containerOwner) {
+                        $hasPermission = ($_path->containerOwner === $this->_currentAccount->accountLoginName || $_action === 'get');
+                    } else {
+                        $hasPermission = ($_action === 'get');
+                    }
                     break;
                 case Tinebase_Model_Container::TYPE_SHARED:
-                    $hasPermission = ($_action !== 'get' ) ? $this->checkRight(Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS, FALSE) : TRUE;
+                    $hasPermission = ($_action !== 'get') ? $this->checkRight(Tinebase_Acl_Rights::MANAGE_SHARED_FOLDERS, FALSE) : TRUE;
                     break;
-                case Tinebase_Model_Container::TYPE_OTHERUSERS:
                 case Tinebase_Model_Tree_Node_Path::TYPE_ROOT:
-                    $hasPermission = TRUE;
+                    $hasPermission = ($_action === 'get');
                     break;
             }
         }

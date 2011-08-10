@@ -138,22 +138,23 @@ class Tinebase_Model_Tree_Node_PathFilter extends Tinebase_Model_Filter_Text
         
         switch ($this->_path->containerType) {
             case Tinebase_Model_Container::TYPE_PERSONAL:
-                $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
-                    $currentAccount, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
-                break;
-            case Tinebase_Model_Container::TYPE_SHARED:
-                $names = Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName,
-                    $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
-                break;
-            case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                if ($this->_path->containerOwner) {
+                if (! $this->_path->containerOwner) {
+                    throw new Tinebase_Exception_InvalidArgument('Container owner not set.');
+                }
+                
+                if ($this->_path->containerOwner == $currentAccount->accountLoginName) {
+                    $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
+                        $currentAccount, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
+                } else {
                     $owner = Tinebase_User::getInstance()->getFullUserByLoginName($this->_path->containerOwner);
                     $names = Tinebase_Container::getInstance()->getPersonalContainer($currentAccount, $appName,
                         $owner, $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
-                } else {
-                    // NOTE: this is should be handled by the search fn because the usernames have no nodes ... 
-                    $names = array();
                 }
+                break;
+                
+            case Tinebase_Model_Container::TYPE_SHARED:
+                $names = Tinebase_Container::getInstance()->getSharedContainer($currentAccount, $appName,
+                    $this->_requiredGrants, $ignoreAcl)->getArrayOfIds();
                 break;
         }
         

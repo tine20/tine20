@@ -263,7 +263,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS . '/sclever/' . $this->_otherUserContainer->name
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/sclever/' . $this->_otherUserContainer->name
         ));
         $this->_searchHelper($filter, 'unittestdir_other');
     }
@@ -304,7 +304,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL
         ));
         $this->_searchHelper($filter, 'Clever, Susan', FALSE, FALSE);
     }
@@ -319,7 +319,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $filter = array(array(
             'field'    => 'path', 
             'operator' => 'equals', 
-            'value'    => '/' . Tinebase_Model_Container::TYPE_OTHERUSERS . '/sclever'
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/sclever'
         ));
         $result = $this->_searchHelper($filter, $this->_otherUserContainer->name, TRUE);
         

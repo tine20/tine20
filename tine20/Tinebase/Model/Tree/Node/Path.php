@@ -29,7 +29,7 @@
  * exploded flat path should look like this:
  * 
  * [0] => app id [required]
- * [1] => type [required] (personal|otherUsers|shared)
+ * [1] => type [required] (personal|shared)
  * [2] => container | accountLoginName
  * [3] => container | directory
  * [4] => directory
@@ -221,7 +221,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         if (! in_array($containerType, array(
             Tinebase_Model_Container::TYPE_PERSONAL,
             Tinebase_Model_Container::TYPE_SHARED,
-            Tinebase_Model_Container::TYPE_OTHERUSERS,
             self::TYPE_ROOT
         ))) {
             throw new Tinebase_Exception_InvalidArgument('Invalid type: ' . $containerType);
@@ -278,18 +277,9 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
                 break;
                 
             case Tinebase_Model_Container::TYPE_PERSONAL:
-            case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                if (!empty($_pathParts[2])) {
-                    if ($this->containerType === Tinebase_Model_Container::TYPE_PERSONAL 
-                        && $_pathParts[2] !== Tinebase_Core::getUser()->accountLoginName) 
-                    {
-                        throw new Tinebase_Exception_NotFound('Invalid user name: ' . $_pathParts[2] . '.');
-                    }
-                    
-                    if (!empty($_pathParts[3])) {
-                        $subPathParts = explode('/', $_pathParts[3], 2);
-                        $container = $this->_searchContainerByName($subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL);
-                    }
+                if (count($_pathParts) > 3) {
+                    $subPathParts = explode('/', $_pathParts[3], 2);
+                    $container = $this->_searchContainerByName($subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL);
                 }
                 break;
         }
@@ -325,7 +315,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }    
         
     /**
-     * do path replacements (container name => container id, otherUsers => personal, remove account name)
+     * do path replacements (container name => container id, remove account name)
      * 
      * @param array $_pathParts
      * @return string
@@ -333,10 +323,6 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     protected function _getStatPath($_pathParts)
     {
         $pathParts = $_pathParts;
-        
-        if ($this->containerType === Tinebase_Model_Container::TYPE_OTHERUSERS) {
-            $pathParts[1] = Tinebase_Model_Container::TYPE_PERSONAL;
-        }
         
         // remove account name in stat path
         if (count($pathParts) > 1 && $this->containerType !== Tinebase_Model_Container::TYPE_SHARED) {
