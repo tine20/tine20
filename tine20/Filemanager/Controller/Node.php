@@ -752,8 +752,6 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param string $_flatpath
      * @return boolean
-     * 
-     * @todo use streamwrapper!
      */
     protected function _deleteNode($_flatpath)
     {
@@ -768,7 +766,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             $this->_checkPathACL($pathRecord, 'delete');
         }
         
-        $success = $this->_deleteNodeInBackend($pathRecord->statpath);
+        $success = $this->_deleteNodeInBackend($pathRecord);
         
         if ($success && ! $parentPathRecord->container) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
@@ -782,26 +780,24 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
     /**
      * delete node in backend
      * 
-     * @param string $_statpath
+     * @param Tinebase_Model_Tree_Node_Path $_path
      * @return boolean
-     * 
-     * @todo use streamwrapper!
      */
-    protected function _deleteNodeInBackend($_statpath)
+    protected function _deleteNodeInBackend(Tinebase_Model_Tree_Node_Path $_path)
     {
         $success = FALSE;
         
-        $node = $this->_backend->stat($_statpath);
+        $node = $this->_backend->stat($_path->statpath);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
-            ' Removing path ' . $_statpath . ' of type ' . $node->type);
+            ' Removing path ' . $_path->flatpath . ' of type ' . $node->type);
         
         switch ($node->type) {
             case Tinebase_Model_Tree_Node::TYPE_FILE:
-                $success = $this->_backend->unlink($_statpath);
+                $success = unlink($_path->streamwrapperpath);
                 break;
             case Tinebase_Model_Tree_Node::TYPE_FOLDER:
-                $success = $this->_backend->rmDir($_statpath, TRUE);
+                $success = $this->_backend->rmDir($_path->statpath, TRUE);
                 break;
         }
         
