@@ -520,16 +520,32 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         foreach ($_sourceFilenames as $idx => $source) {
             $sourcePathRecord = Tinebase_Model_Tree_Node_Path::createFromPath($this->addBasePath($source));
             $destinationPathRecord = $this->_getDestinationPath($_destinationFilenames, $idx, $sourcePathRecord);
-            
-            if ($_action === 'move') {
-                $node = $this->_moveNode($sourcePathRecord, $destinationPathRecord, $_forceOverwrite);
-            } else if ($_action === 'copy') {
-                $node = $this->_copyNode($sourcePathRecord, $destinationPathRecord, $_forceOverwrite);
+
+            try {
+                if ($_action === 'move') {
+                    $node = $this->_moveNode($sourcePathRecord, $destinationPathRecord, $_forceOverwrite);
+                } else if ($_action === 'copy') {
+                    $node = $this->_copyNode($sourcePathRecord, $destinationPathRecord, $_forceOverwrite);
+                }
+                $result->addRecord($node);
+            } catch (Filemanager_Exception_NodeExists $fene) {
+                // collect all nodes that already exist and add them to exception info
+                if (! isset($nodeExistsException)) {
+                    $nodeExistsException = new Filemanager_Exception_NodeExists();
+                }
+                $nodesInfo = $fene->getExistingNodesInfo();
+                if (count($nodesInfo) > 0) {
+                    $nodeExistsException->addExistingNodeInfo($nodesInfo->getFirstRecord());
+                }
             }
-            $result->addRecord($node);
         }
         
         $this->resolveContainerAndAddPath($result, $destinationPathRecord->getParent());
+        
+        if (isset($nodeExistsException)) {
+            // @todo add correctly moved/copied files here?
+            throw $nodeExistsException;
+        }
         
         return $result;
     }
