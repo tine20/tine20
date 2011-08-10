@@ -219,7 +219,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
      */
     protected function _searchHelper($_filter, $_expectedName, $_toplevel = FALSE, $_checkAccountGrants = TRUE)
     {
-        $result = $this->_json->searchNodes($_filter, array());
+        $result = $this->_json->searchNodes($_filter, array('sort' => 'size'));
         //print_r($result);
         
         $this->assertEquals(1, $result['totalcount'], 'expected single result');
@@ -443,7 +443,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'operator' => 'equals', 
             'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
         ));
-        $result = $this->_json->searchNodes($filter, array());
+        $result = $this->_json->searchNodes($filter, array('sort' => 'creation_time'));
         $this->assertEquals(2, $result['totalcount']);
         
         return $dirpaths;
@@ -479,7 +479,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'operator' => 'equals', 
             'value'    => Tinebase_Model_Tree_Node::TYPE_FOLDER,
         ));
-        $result = $this->_json->searchNodes($filter, array());
+        $result = $this->_json->searchNodes($filter, array('sort' => 'contenttype'));
         $this->assertEquals(2, $result['totalcount']);
         
         return $dirpaths;
