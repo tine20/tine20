@@ -5,7 +5,7 @@
  * @package     Tinebase
  * @subpackage  Filter
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 
@@ -99,6 +99,11 @@ abstract class Tinebase_Model_Filter_Abstract
      */
     public function setOperator($_operator)
     {
+        if (empty($_operator) && isset($this->_operators[0])) {
+            // try to use default/first operator
+            $_operator = $this->_operators[0];
+        }
+        
         if (! in_array($_operator, $this->_operators)) {
             throw new Tinebase_Exception_UnexpectedValue("operator $_operator is not defined");
         }
