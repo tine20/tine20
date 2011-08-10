@@ -273,6 +273,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_tempFileId
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
+     * @throws Filemanager_Exception
      * @throws Tinebase_Exception_InvalidArgument
      * 
      * @todo use filemanager exception
@@ -301,7 +302,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         try {
             $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId, $_forceOverwrite);
         } catch (Exception $e) {
-            throw new Tinebase_Exception_InvalidArgument('Could not create file: ' . $e->getMessage());
+            throw new Filemanager_Exception('Could not create file: ' . $e->getMessage());
         }
         
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
@@ -317,6 +318,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_tempFileId
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
+     * @throws Filemanager_Exception
      * 
      * @todo add $_forceOverwrite param functionality
      */
@@ -340,7 +342,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                         stream_copy_to_stream($tempData, $handle);
                         fclose($tempData);
                     } else {
-                        throw new Tinebase_Exception('Could not read tempfile ' . $tempFile->path);
+                        throw new Filemanager_Exception('Could not read tempfile ' . $tempFile->path);
                     }
                 }
                 fclose($handle);                
@@ -530,7 +532,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param int $_idx
      * @param Tinebase_Model_Tree_Node_Path $_sourcePathRecord
      * @return Tinebase_Model_Tree_Node_Path
-     * @throws Tinebase_Exception_InvalidArgument
+     * @throws Filemanager_Exception
      * 
      * @todo add Tinebase_FileSystem::isDir() check?
      */
@@ -541,7 +543,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             if (isset($_destinationFilenames[$_idx])) {
                 $destination = $_destinationFilenames[$_idx];
             } else {
-                throw new Tinebase_Exception_InvalidArgument('No destination path found.');
+                throw new Filemanager_Exception('No destination path found.');
             }
         } else {
             $isdir = TRUE;
@@ -594,18 +596,16 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_action
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
-     * @throws Tinebase_Exception_InvalidArgument
-     * 
-     * @todo throw new Filemanager file exists exception
-     * @todo add move/rename functionality
+     * @throws Filemanager_Exception_NodeExists
      */
     protected function _copyOrMoveFileNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_action, $_forceOverwrite = FALSE)
     {
         $this->_checkPathACL($_destination->getParent(), 'update', FALSE);
         
         if (file_exists($_destination->streamwrapperpath) && ! $_forceOverwrite) {
-            $destinationNode = $this->_backend->stat($_destination->statpath);
-            throw new Tinebase_Exception_InvalidArgument('File exists: ' . Zend_Json::encode($destinationNode->toArray()));
+            $existsException = new Filemanager_Exception_NodeExists();
+            $existsException->addExistingNodeInfo($this->_backend->stat($_destination->statpath));
+            throw $existsException;
         }
             
         switch ($_action) {
@@ -628,15 +628,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param Tinebase_Model_Tree_Node_Path $_source
      * @param Tinebase_Model_Tree_Node_Path $_destination
      * @return Tinebase_Model_Tree_Node
+     * @throws Filemanager_Exception_NodeExists
      * 
-     * @todo throw new Filemanager file exists exception
      * @todo allow recursive copy for (sub-)folders/files
      * @todo add $_forceOverwrite?
      */
     protected function _copyFolderNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination)
     {
         if (file_exists($_destination->streamwrapperpath)) {
-            throw new Tinebase_Exception_InvalidArgument('File or folder exists.');
+            $existsException = new Filemanager_Exception_NodeExists('Folder exists');
+            $existsException->addExistingNodeInfo($this->_backend->stat($_destination->statpath));
+            throw $existsException;
         }
         
         $newNode = $this->_createNode($_destination, Tinebase_Model_Tree_Node::TYPE_FOLDER);

@@ -551,7 +551,7 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $filesToCopy = $this->testCreateFileNodes();
         $file1 = $filesToCopy[0];
         
-        $this->setExpectedException('Tinebase_Exception_InvalidArgument');
+        $this->setExpectedException('Filemanager_Exception_NodeExists');
         $result = $this->_json->copyNodes(array($file1), array($file1), FALSE);
     }
     
