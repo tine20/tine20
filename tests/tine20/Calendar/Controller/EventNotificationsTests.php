@@ -308,7 +308,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         // make sure all messages are sent if queue is activated
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue(100);
+            Tinebase_ActionQueue::getInstance()->processQueue(10000);
         }
         
         $this->_mailer->flush();
@@ -325,7 +325,7 @@ class Calendar_Controller_EventNotificationsTests extends Calendar_TestCase
     {
         // make sure messages are sent if queue is activated
         if (isset(Tinebase_Core::getConfig()->actionqueue)) {
-            Tinebase_ActionQueue::getInstance()->processQueue();
+            Tinebase_ActionQueue::getInstance()->processQueue(100);
         }
         
         foreach (explode(',', $_personas) as $personaName) {
