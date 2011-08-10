@@ -39,7 +39,7 @@ class Filemanager_Exception_NodeExists extends Filemanager_Exception
     /**
      * set existing nodes info
      * 
-     * @param Tinebase_Record_RecordSet $_fbInfo
+     * @param Tinebase_Record_RecordSet $_existingNode
      */
     public function addExistingNodeInfo(Tinebase_Model_Tree_Node $_existingNode)
     {
@@ -49,7 +49,7 @@ class Filemanager_Exception_NodeExists extends Filemanager_Exception
     /**
      * get existing nodes info
      * 
-     * @return Tinebase_Record_RecordSet
+     * @return Tinebase_Record_RecordSet of Tinebase_Model_Tree_Node
      */
     public function getExistingNodesInfo()
     {
