@@ -122,16 +122,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 40,
                 sortable: true,
                 dataIndex: 'size',
-                renderer: 
-//                    Ext.util.Format.fileSize
-                function(value, metadata, record) {
-                    if(record.data.progress < 100) {
-                        return 0;                      
-                    }
-                    else {
-                        return value;
-                    }
-                }
+                renderer: Ext.ux.file.Upload.fileSize               
             },{
                 id: 'contenttype',
                 header: this.app.i18n._("Contenttype"),
