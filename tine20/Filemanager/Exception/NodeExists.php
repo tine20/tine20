@@ -43,7 +43,7 @@ class Filemanager_Exception_NodeExists extends Filemanager_Exception
      */
     public function addExistingNodeInfo(Tinebase_Model_Tree_Node $_existingNode)
     {
-       $this->getExistingNodesInfo->addRecord($_existingNode);
+       $this->getExistingNodesInfo()->addRecord($_existingNode);
     }
     
     /**
