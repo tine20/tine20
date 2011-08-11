@@ -528,6 +528,36 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(2, count($result));
         $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
     }
+
+    /**
+     * testCopyFolderWithNodes
+     */
+    public function testCopyFolderWithNodes()
+    {
+        $filesToCopy = $this->testCreateFileNodes();
+        $target = '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName;
+        
+        $result = $this->_json->copyNodes(
+            '/' . Tinebase_Model_Container::TYPE_SHARED . '/testcontainer',
+            $target, 
+            FALSE
+        );
+        $this->_objects['paths'][] = Filemanager_Controller_Node::getInstance()->addBasePath($target . '/testcontainer');
+        $this->assertEquals(1, count($result));
+        $this->_objects['containerids'][] = $result[0]['name']['id'];
+        
+        $filter = array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->accountLoginName . '/testcontainer',
+        ), array(
+            'field'    => 'type', 
+            'operator' => 'equals', 
+            'value'    => Tinebase_Model_Tree_Node::TYPE_FILE,
+        ));
+        $result = $this->_json->searchNodes($filter, array());
+        $this->assertEquals(2, $result['totalcount']);
+    }
     
     /**
      * testCopyFileWithContentToFolder

@@ -653,12 +653,25 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @return Tinebase_Model_Tree_Node
      * @throws Filemanager_Exception_NodeExists
      * 
-     * @todo allow recursive copy for (sub-)folders/files
      * @todo add $_forceOverwrite?
      */
     protected function _copyFolderNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination)
     {
         $newNode = $this->_createNode($_destination, Tinebase_Model_Tree_Node::TYPE_FOLDER);
+        
+        // recursive copy for (sub-)folders/files
+        $filter = new Tinebase_Model_Tree_Node_Filter(array(array(
+            'field'    => 'path', 
+            'operator' => 'equals', 
+            'value'    => Tinebase_Model_Tree_Node_Path::removeAppIdFromPath(
+                $_source->flatpath, 
+                Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName)
+            ),
+        )));
+        $result = $this->search($filter);
+        if (count($result) > 0) {
+            $this->copyNodes($result->path, $newNode->path);
+        }
         
         return $newNode;
     }
