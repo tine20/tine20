@@ -28,7 +28,7 @@ Tine.widgets.tree.ContextMenu = {
 	getMenu: function(config) {
         
         this.config = config;
-        
+                
         /***************** define action handlers *****************/
         var handler = {
             /**
@@ -285,63 +285,105 @@ Tine.widgets.tree.ContextMenu = {
         
         /****************** create ITEMS array ****************/
         
+        
+        this.action_add = new Ext.Action({
+            text: String.format(_('Add')),
+            iconCls: 'action_add',
+            handler: this.addNode,
+            scope: this.config
+        });
+        
+        this.action_rename = new Ext.Action({
+            text: String.format(_('Rename')),
+            iconCls: 'action_rename',
+            handler: this.renameNode,
+            scope: this.config,
+            requiredGrant: 'editGrant',
+            allowMultiple: false
+        });
+        
+        
+        var i18n = new Locale.Gettext();
+        i18n.textdomain('Tinebase');
+        this.action_delete = new Ext.Action({
+            text: String.format(_('Delete')),
+            iconCls: 'action_delete',
+            handler: this.deleteNode,
+            scope: this.config,
+            requiredGrant: 'deleteGrant',
+            allowMultiple: true
+        });
+        
+        this.action_grants = new Ext.Action({
+            text: _('Manage permissions'),
+            iconCls: 'action_managePermissions',
+            handler: this.managePermissions,
+            scope: this.config
+        });
+        
+        this.action_changecolor = new Ext.Action({     
+            text: String.format(_('Set color')),
+            iconCls: 'action_changecolor',
+            requiredGrant: 'deleteGrant',
+            allowMultiple: true,
+            menu: new Ext.menu.ColorMenu({
+                scope: this,
+                listeners: {
+                    select: this.changeNodeColor,
+                    scope: this.config
+                }
+            })                                        
+        });
+        
+        this.action_reload = new Ext.Action({
+            text: String.format(_('Reload')),
+            iconCls: 'x-tbar-loading',
+            handler: this.reloadNode,
+            scope: this.config
+        });
+        
+        this.action_resume = new Ext.Action({
+            text: String.format(_('Resume upload'), config.nodeName),
+            iconCls: 'action_resume',
+            handler: this.onResume,
+            scope: this.config,
+            disabled: true
+        });
+        
+        this.action_pause = new Ext.Action({
+            text: String.format(_('Pause upload'), config.nodeName),
+            iconCls: 'action_pause',
+            handler: this.onPause,
+            scope: this.config
+        });
+        
+        
         var items = [];
         for (var i=0; i < config.actions.length; i++) {
             switch(config.actions[i]) {
                 case 'add':
-                    items.push(new Ext.Action({
-                        text: String.format(_('Add {0}'), config.nodeName),
-                        iconCls: 'action_add',
-                        handler: this.addNode,
-                        scope: this.config
-                    }));
+                    items.push(this.action_add);
                     break;
-                case 'delete':
-                    var i18n = new Locale.Gettext();
-                    i18n.textdomain('Tinebase');
-                    items.push(new Ext.Action({
-                        text: String.format(i18n.n_('Delete {0}', 'Delete {0}', 1), config.nodeName),
-                        iconCls: 'action_delete',
-                        handler: this.deleteNode,
-                        scope: this.config
-                    }));
+                case 'delete':                    
+                    items.push(this.action_delete);
                     break;
                 case 'rename':
-                    items.push(new Ext.Action({
-                        text: String.format(_('Rename {0}'), config.nodeName),
-                        iconCls: 'action_rename',
-                        handler: this.renameNode,
-                        scope: this.config
-                    }));
+                    items.push(this.action_rename);
                     break;
                 case 'changecolor':
-                    items.push(new Ext.Action({     
-                        text: String.format(_('Set color for {0}'), config.nodeName),
-                        iconCls: 'action_changecolor',
-                        menu: new Ext.menu.ColorMenu({
-                            scope: this,
-                            listeners: {
-                                select: this.changeNodeColor,
-                                scope: this.config
-                            }
-                        })                                        
-                    }));
+                    items.push(this.action_changecolor);
                     break;
                 case 'grants':
-                    items.push(new Ext.Action({
-                        text: _('Manage permissions'),
-                        iconCls: 'action_managePermissions',
-                        handler: this.managePermissions,
-                        scope: this.config
-                    }));
+                    items.push(this.action_grants);
                     break;
                 case 'reload':
-                    items.push(new Ext.Action({
-                        text: String.format(_('Reload {0}'), config.nodeName),
-                        iconCls: 'x-tbar-loading',
-                        handler: this.reloadNode,
-                        scope: this.config
-                    }));
+                    items.push(this.action_reload);
+                    break;
+                case 'resume':
+                    items.push(this.action_resume);
+                    break;
+                case 'pause':
+                    items.push(this.action_pause);
                     break;
                 default:
                     // add custom actions
@@ -349,6 +391,7 @@ Tine.widgets.tree.ContextMenu = {
             }
         }
 
+             
         /******************* return menu **********************/
         
         return new Ext.menu.Menu({
@@ -500,24 +543,57 @@ Tine.widgets.tree.ContextMenu = {
      * delete tree node
      */
     deleteNode: function() {
+        
         if (this.scope.ctxNode) {
-            var node = this.scope.ctxNode;
-            Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), this.nodeName, node.text), function(_btn){
+            var nodes = this.scope.ctxNode;
+
+            var nodeName = "";
+            var node;
+            if(nodes && nodes.length) {
+                node = null;
+                for(var i=0; i<nodes.length; i++) {
+                    var currNodeData = nodes[i].data;
+                    
+                    if(typeof currNodeData.name == 'object') {
+                        nodeName += currNodeData.name.name + '; ';    
+                    }
+                    else {
+                        nodeName += currNodeData.name + '; ';  
+                    }
+                }
+            }
+            else {
+                node = nodes;
+                nodes = null;
+                nodeName = node.text;
+
+            }
+
+            Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), this.nodeName, nodeName), function(_btn){
                 if ( _btn == 'yes') {
-                    Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), this.nodeName , node.text));
+                    Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), this.nodeName , nodeName));
                     
                     var params = {
                         method: this.backend + '.delete' + this.backendModel
                     };
                     
                     if (this.backendModel == 'Node') {
-                        params.application = this.scope.app.appName || this.scope.appName;                                
-                        var filename = node.attributes.path;
-                        params.filenames = [filename];
+                        
+                        var filenames = new Array();
+                        if(node) {
+                            var filenames = [node.attributes.path];
+                        }
+                        else if(nodes) {
+                             for(var i=0; i<nodes.length; i++) {
+                                 filenames.push(nodes[i].data.path);
+                             }   
+                        }
+                        params.application = this.scope.app.appName || this.scope.appName;    
+                        params.filenames = filenames;
                         params.method = this.backend + ".deleteNodes";
                     
                     } else if (this.backendModel == 'Container') {
-                        params.containerId = node.attributes.container.id
+                        params.containerId = node.attributes.container.id;
                     } else if (this.backendModel == 'Folder') {
                         var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
                         params.folder = folder.get('globalname');
@@ -532,17 +608,30 @@ Tine.widgets.tree.ContextMenu = {
                         params: params,
                         scope: this,
                         success: function(_result, _request){
-                            if(node.isSelected()) {
-                                this.scope.getSelectionModel().select(node.parentNode);
-                                this.scope.fireEvent('click', node.parentNode, Ext.EventObject.setEvent());
+                              
+                            if(node) {
+                                if(node.isSelected()) {
+                                    this.scope.getSelectionModel().select(node.parentNode);
+                                    this.scope.fireEvent('click', node.parentNode, Ext.EventObject.setEvent());
+                                }
+                                node.remove();
+                                if (this.backendModel == 'Container' || this.backendModel == 'Node') {
+                                    this.scope.fireEvent('containerdelete', node.attributes.container);
+                                } else {
+                                    this.scope.fireEvent('containerdelete', node.attributes);
+                                }
                             }
-                            node.remove();
-                            if (this.backendModel == 'Container' || this.backendModel == 'Node') {
-                                this.scope.fireEvent('containerdelete', node.attributes.container);
-                            } else {
-                                this.scope.fireEvent('containerdelete', node.attributes);
+                            else if(nodes &&  this.backendModel == 'Node') {
+                                for(var i=0; i<nodes.length; i++){
+                                    this.scope.fireEvent('containerdelete', nodes[i].data.container_id);
+                                    
+                                    // TODO: in EventHandler auslagern
+                                    this.scope.app.getMainScreen().getCenterPanel().getStore().reload();
+                                    this.scope.app.getMainScreen().getCenterPanel().currentFolderNode.reload();
+                                    
+                                }
                             }
-                            
+
                             // TODO: im event auswerten
                             if (this.backendModel == 'Node') {
                                 this.scope.app.mainScreen.GridPanel.getStore().reload();
@@ -617,5 +706,50 @@ Tine.widgets.tree.ContextMenu = {
                 tree.filterPlugin.onFilterChange();
             });                    
         }
+    },
+    
+    /**
+     * on pause
+     * @param {} button
+     * @param {} event
+     */
+    onPause: function (button, event) {     
+
+        this.scope.action_pause.setDisabled(true);
+        this.scope.action_resume.setDisabled(false);
+        var gridStore = this.scope.app.getMainScreen().getCenterPanel().store;
+        gridStore.suspendEvents();
+        var selectedRows = this.scope.selectionModel.getSelections();   
+        for(var i=0; i < selectedRows.length; i++) {
+            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            upload.setPaused(true);
+        }       
+        gridStore.resumeEvents();
+    },
+
+    
+    /**
+     * on resume
+     * @param {} button
+     * @param {} event
+     */
+    onResume: function (button, event) {
+        
+        this.scope.action_pause.setDisabled(false);
+        this.scope.action_resume.setDisabled(true);
+        var gridStore = this.scope.app.getMainScreen().getCenterPanel().store;
+        gridStore.suspendEvents();
+        var selectedRows = this.scope.selectionModel.getSelections();
+        for(var i=0; i < selectedRows.length; i++) {
+            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
+            upload.resumeUpload();
+        }
+        gridStore.resumeEvents();
+    },
+    
+    getActions: function() {
+        
     }
+    
+    
 };

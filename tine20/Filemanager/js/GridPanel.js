@@ -332,15 +332,17 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 //            ]
 //        });
         
+        
+//        Ext.apply(Tine.widgets.tree.ContextMenu, Tine.Filemanager.GridContextMenuMethods);
         this.contextMenu = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.app.getMainScreen().getWestPanel().getContainerTreePanel().containerName),
-            actions: ['add', 'delete', 'rename', 'resume', 'pause'],
+            actions: ['delete', 'rename', 'resume', 'pause'],
             scope: this,
             backend: 'Filemanager',
-            backendModel: 'Node',
-            recordClass: this.recordClass
-        });
+            backendModel: 'Node'
+        }); 
         
+        this.actionUpdater.addActions(this.contextMenu.items);
 
         this.actionUpdater.addActions([
                                        this.action_createFolder,

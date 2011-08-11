@@ -38,5 +38,3 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
  * @author Martin Jatho <m.jatho@metaways.de>
  */
 Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {});
-
-
