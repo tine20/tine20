@@ -556,7 +556,6 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     
                     $registryData[$application->name] = $applicationJson->getRegistryData();
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
-                    $registryData[$application->name]['config'] = Tinebase_Config::getInstance()->getConfigForApplication($application);
                     
                     // @todo do we need this for all apps?
                     $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
