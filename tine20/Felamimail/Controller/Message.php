@@ -243,6 +243,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
 
         $rawBody = $imapBackend->getRawContent($message->messageuid, $part, true);
         
+        // need to replace those \r\n with \n (the one and only Zend_Mime::LINEEND)
+        $rawBody = preg_replace("/\\x0d\\x0a/", Zend_Mime::LINEEND, $rawBody);
+        
         $stream = fopen("php://temp", 'r+');
         fputs($stream, $rawBody);
         rewind($stream);
