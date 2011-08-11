@@ -123,6 +123,13 @@ Ext.ux.file.UploadManager = function(config) {
         },
         
         /**
+         * are there uploads in progress or queued
+         */
+        isUploadsPending: function (){
+            return (this.uploads.length > 0);
+        },
+        
+        /**
          * on upload complete handler
          */
         onUploadComplete: function() {

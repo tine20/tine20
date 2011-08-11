@@ -551,11 +551,12 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.fileRecord = new Ext.ux.file.Upload.file({
             name: this.file.name ? this.file.name : this.file.fileName,  // safari and chrome use the non std. fileX props
             type: (this.file.type ? this.file.type : this.file.fileType), // missing if safari and chrome
-            size: (this.file.size ? this.file.size : this.file.fileSize) || 0, // non standard but all have it ;-)
+            size: 0,
             status: status,
             progress: 0,
             input: this.file,
-            uploadKey: this.id
+            uploadKey: this.id,
+            type: 'file'
         });
     },
    
@@ -710,8 +711,11 @@ Ext.ux.file.Upload.file.getFileData = function(file) {
 
 Ext.ux.file.Upload.fileSize = function (value, metadata, record) {
     
-  if (!value || value/1 < 1) {
+  if (!value || record.get('type') == 'folder') {
       return '';
+  }
+  else if (value < 1) {
+      return '0 bytes';
   }
 
   var intValue= value/1;  

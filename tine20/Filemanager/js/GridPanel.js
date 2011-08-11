@@ -129,15 +129,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 50,
                 sortable: true,
                 dataIndex: 'contenttype'
-            },
-//            {
-//                id: 'description',
-//                header: this.app.i18n._("Description"),
-//                width: 100,
-//                sortable: true,
-//                dataIndex: 'description'
-//            },
-            {
+            },{
                 id: 'revision',
                 header: this.app.i18n._("Revision"),
                 width: 10,
@@ -320,26 +312,44 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             handler: this.onResume
         });
         
-        this.actionUpdater.addActions([
-            this.action_upload,
-            this.action_deleteRecord,
-            this.action_createFolder,
-            this.action_goUpFolder,
-            this.action_save
-        ]);
+//        this.actionUpdater.addActions([
+//            this.action_upload,
+//            this.action_deleteRecord,
+//            this.action_createFolder,
+//            this.action_goUpFolder,
+//            this.action_save
+//        ]);
+//        
+//        this.contextMenu = new Ext.menu.Menu({
+//            items: [
+////                this.action_createFolder,
+////                this.action_goUpFolder,
+//                this.action_save,
+//                this.action_renameItem,
+//                this.action_deleteRecord,
+//                this.action_pause,
+//                this.action_resume
+//            ]
+//        });
         
-        this.contextMenu = new Ext.menu.Menu({
-            items: [
-//                this.action_createFolder,
-//                this.action_goUpFolder,
-                this.action_save,
-                this.action_renameItem,
-                this.action_deleteRecord,
-                this.action_pause,
-                this.action_resume
-            ]
+        this.contextMenu = Tine.widgets.tree.ContextMenu.getMenu({
+            nodeName: this.app.i18n._(this.app.getMainScreen().getWestPanel().getContainerTreePanel().containerName),
+            actions: ['add', 'delete', 'rename', 'resume', 'pause'],
+            scope: this,
+            backend: 'Filemanager',
+            backendModel: 'Node',
+            recordClass: this.recordClass
         });
         
+
+        this.actionUpdater.addActions([
+                                       this.action_createFolder,
+                                       this.action_goUpFolder,
+                                       this.action_save,
+                                       this.action_renameItem,
+                                       this.action_deleteRecord
+                                       ]);
+
     },
     
     /**
@@ -373,7 +383,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             rowspan: 2,
                             iconAlign: 'top'
                         }),
-                        Ext.apply(new Ext.Button(this.action_createFolder), {
+                        Ext.apply(new Ext.Button(this.contextMenu.action_addNode), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign: 'top'
@@ -617,35 +627,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     
     /**
-     * on pause
-     * @param {} button
-     * @param {} event
-     */
-    onPause: function (button, event) {     
- 
-        var selectedRows = this.selectionModel.getSelections();   
-        for(var i=0; i < selectedRows.length; i++) {
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
-            upload.setPaused(true);
-        }       
-    },
-
-    
-    /**
-     * on resume
-     * @param {} button
-     * @param {} event
-     */
-    onResume: function (button, event) {
-
-        var selectedRows = this.selectionModel.getSelections();
-        for(var i=0; i < selectedRows.length; i++) {
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
-            upload.resumeUpload();
-        }
-    },
-       
-    /**
      * populate grid store
      * 
      * @param {} record
@@ -684,7 +665,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 filename: currentPath + '/' + fileName,
                 type: 'file',
                 tempFileId: response.id,
-                forceOverwrite: false
+                forceOverwrite: true
             },
             success: grid.onNodeCreated.createDelegate(this, [upload], true), 
             failure: grid.onNodeCreated.createDelegate(this, [upload], true)
@@ -701,9 +682,10 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onNodeCreated: function(response, request, upload) {
         
+
         var record = Ext.util.JSON.decode(response.responseText);
         var app = Tine.Tinebase.appMgr.get('Filemanager');
-        var grid = app.mainScreen.GridPanel; 
+        var grid = app.getMainScreen().getCenterPanel(); 
         
         var fileRecord = upload.fileRecord;
         fileRecord.beginEdit();
@@ -719,6 +701,10 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         fileRecord.set('path', record.path);
         fileRecord.commit(false);
         
+        grid.pagingToolbar.disable();
+        if(!Tine.Tinebase.uploadManager.isUploadsPending() && !Tine.Tinebase.uploadManager.isBusy()) {
+            grid.pagingToolbar.enable();
+        }
     },
     
     /**
@@ -730,8 +716,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onFilesSelect: function (fileSelector, e) {
        
         var app = Tine.Tinebase.appMgr.get('Filemanager');
-        var grid = app.mainScreen.GridPanel; 
+        var grid = app.getMainScreen().getCenterPanel(); 
         var gridStore = grid.store;
+        grid.pagingToolbar.disable();
         
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
@@ -754,6 +741,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
             
         }, this);
+        
+
     }
 
 });
