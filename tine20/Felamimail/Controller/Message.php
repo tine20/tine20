@@ -277,6 +277,9 @@ class Felamimail_Controller_Message extends Tinebase_Controller_Record_Abstract
         
         $rawContent .= $imapBackend->getRawContent($_message->messageuid, $section, TRUE);
         
+        // need to replace those \r\n with \n (the one and only Zend_Mime::LINEEND)
+        $rawContent = preg_replace("/\\x0d\\x0a/", Zend_Mime::LINEEND, $rawContent);
+        
         return $rawContent;
     }
     
