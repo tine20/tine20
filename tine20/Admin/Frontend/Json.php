@@ -78,8 +78,8 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'manageSAM'                     => $this->_manageSAM,
             'manageImapEmailUser'           => $this->_manageImapEmailUser,
             'manageSmtpEmailUser'           => $this->_manageSmtpEmailUser,
-            'primarydomain'                 => (array_key_exists($smtpConfig['primarydomain']))     ? $smtpConfig['primarydomain'] : '',
-            'secondarydomains'              => (array_key_exists($smtpConfig['secondarydomains']))  ? $smtpConfig['secondarydomains'] : '',
+            'primarydomain'                 => (array_key_exists('primarydomain', $smtpConfig))     ? $smtpConfig['primarydomain'] : '',
+            'secondarydomains'              => (array_key_exists('secondarydomains', $smtpConfig))  ? $smtpConfig['secondarydomains'] : '',
             'defaultPrimaryGroup'           => Tinebase_Group::getInstance()->getDefaultGroup()->toArray(),
             'defaultInternalAddressbook'    => ($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK] !== NULL) 
                 ? Tinebase_Container::getInstance()->get($appConfigDefaults[Admin_Model_Config::DEFAULTINTERNALADDRESSBOOK])->toArray() 
