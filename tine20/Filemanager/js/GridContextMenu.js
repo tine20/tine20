@@ -234,6 +234,15 @@ Tine.Filemanager.GridContextMenu = {
      * @param records
      */
     isResumeEnabled: function(action, grants, records) {
+        
+        for(var i=0; i<records.length; i++) {
+            if(records[i].data.type === 'folder') {
+                action.hide();
+                return;
+            }
+        }
+        action.show();
+        
         var grid = this.scope.app.getMainScreen().getCenterPanel();
         var selectedRows = grid.selectionModel.getSelections(); 
         for(var i=0; i < selectedRows.length; i++) {
@@ -258,6 +267,15 @@ Tine.Filemanager.GridContextMenu = {
      * @param records
      */
     isPauseEnabled: function(action, grants, records) {
+        
+        for(var i=0; i<records.length; i++) {
+            if(records[i].data.type === 'folder') {
+                action.hide();
+                return;
+            }
+        }
+        action.show();
+        
         var grid = this.scope.app.getMainScreen().getCenterPanel();
         var selectedRows = grid.selectionModel.getSelections(); 
         for(var i=0; i < selectedRows.length; i++) {
