@@ -519,6 +519,7 @@ class Felamimail_JsonTest extends PHPUnit_Framework_TestCase
         
         $this->assertEquals(0, $result['totalcount']);
         $accountFilterFound = FALSE;
+        
         foreach ($result['filter'] as $filter) {
             if ($filter['field'] === 'account_id' && empty($filter['value'])) {
                 $accountFilterFound = TRUE;
