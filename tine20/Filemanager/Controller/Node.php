@@ -90,9 +90,29 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         if ($path->containerType === Tinebase_Model_Tree_Node_Path::TYPE_ROOT) {
             $result = $this->_getRootNodes();
         } else if ($path->containerType === Tinebase_Model_Container::TYPE_PERSONAL && ! $path->containerOwner) {
+            if (! file_exists($path->statpath)) {
+                mkdir($path->streamwrapperpath);
+            }
             $result = $this->_getOtherUserNodes();
         } else {
-            $result = $this->_backend->searchNodes($_filter, $_pagination);
+            try {
+                $result = $this->_backend->searchNodes($_filter, $_pagination);
+            } catch (Tinebase_Exception_NotFound $tenf) {
+                // create basic nodes like personal|shared|user root
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                        ' ' . $path->statpath);
+                if ($path->name === Tinebase_Model_Container::TYPE_SHARED || 
+                    $path->statpath === '/' . Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId()
+                        . '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . $this->_currentAccount->getId()
+                ) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
+                        ' Creating new path ' . $path->statpath);
+                    mkdir($path->streamwrapperpath);
+                    $result = $this->_backend->searchNodes($_filter, $_pagination);
+                } else {
+                    throw $tenf;
+                }
+            }
             $this->resolveContainerAndAddPath($result, $path);
         }
         return $result;
