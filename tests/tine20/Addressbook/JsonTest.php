@@ -291,7 +291,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             // try another address
             $updatedContact['adr_one_locality']    = 'Wien';
             $updatedContact['adr_one_street']      = 'Blindengasse 52';
-            $updatedContact['adr_one_postalcode']  = '1080';
+            $updatedContact['adr_one_postalcode']  = '1095';
             $updatedContact['adr_one_countryname'] = '';
             $updatedContact = $this->_instance->saveContact($updatedContact);
             
@@ -299,7 +299,7 @@ class Addressbook_JsonTest extends PHPUnit_Framework_TestCase
             $this->assertEquals('16.3419589',   $updatedContact['lon'], 'wrong geodata (lon)');
             $this->assertEquals('48.2147964',   $updatedContact['lat'], 'wrong geodata (lat)');
             $this->assertEquals('AT',           $updatedContact['adr_one_countryname'], 'wrong country');
-            $this->assertEquals('1095',         $updatedContact['adr_one_postalcode'], 'wrong postalcode');
+            $this->assertEquals('1080',         $updatedContact['adr_one_postalcode'], 'wrong postalcode');
         }
     }
     
