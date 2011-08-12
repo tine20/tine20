@@ -95,7 +95,7 @@ class Sales_Controller_Contract extends Tinebase_Controller_Record_Abstract
         $appId = Tinebase_Application::getInstance()->getApplicationByName('Sales')->getId();
         
         try {
-            $sharedContractsId = Tinebase_Config::getInstance()->getConfig(Sales_Model_Config::SHAREDCONTRACTSID, $appId)->value;
+            $sharedContractsId = Tinebase_Config::getInstance()->getConfig(Sales_Model_Config::SHAREDCONTRACTSID, $appId, '')->value;
             $sharedContracts = Tinebase_Container::getInstance()->get($sharedContractsId);
         } catch (Tinebase_Exception_NotFound $tenf) {
             $newContainer = new Tinebase_Model_Container(array(

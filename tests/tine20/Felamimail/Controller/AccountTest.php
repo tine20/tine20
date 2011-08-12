@@ -129,7 +129,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
      */
     public function testDefaultAccountPreference()
     {
-        $this->assertEquals($this->_account->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT});
+        $this->assertEquals($this->_account->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, 'current account is not the default account');
         
         $userAccount = clone($this->_account);
         unset($userAccount->id);
@@ -139,7 +139,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
 
         // deleting original account and check if user account is new default account
         $this->_controller->delete($this->_account->getId());
-        $this->assertEquals($userAccount->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT});
+        $this->assertEquals($userAccount->getId(), Tinebase_Core::getPreference('Felamimail')->{Felamimail_Preference::DEFAULTACCOUNT}, 'other account is not default account');
     }
     
     /**

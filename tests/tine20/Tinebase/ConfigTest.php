@@ -73,19 +73,6 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test set config
-     *
-     */
-    public function testSetConfig()
-    {
-        $configSet = $this->_instance->setConfig($this->objects['config']);
-        
-        $configGet = $this->_instance->getConfig($configSet->name);
-            
-        $this->assertEquals($this->objects['config']->value, $configGet->value);
-    }
-        
-    /**
      * test set config for app
      *
      */
@@ -98,20 +85,20 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($this->objects['config']->value, $configGet->value);
     }
         
-    /**
-     * test get applicaton config
-     *
-     */
-    public function testGetApplicationConfig()
-    {
-        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
-        $result = $this->_instance->getConfigForApplication($tinebase);
-            
-        //print_r($result);    
-            
-        $this->assertGreaterThan(0, count($result));
-        $this->assertEquals($this->objects['config']->value, $result[$this->objects['config']->name]);
-    }
+//    /**
+//     * test get applicaton config
+//     *
+//     */
+//    public function testGetApplicationConfig()
+//    {
+//        $tinebase = Tinebase_Application::getInstance()->getApplicationByName('Tinebase');
+//        $result = $this->_instance->getConfigForApplication($tinebase);
+//            
+//        //print_r($result);    
+//            
+//        $this->assertGreaterThan(0, count($result));
+//        $this->assertEquals($this->objects['config']->value, $result[$this->objects['config']->name]);
+//    }
 
     
     /**
@@ -142,10 +129,8 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $config = $this->_instance->getConfig($this->objects['config']->name);
         
         $this->_instance->deleteConfig($config);
-            
-        $this->setExpectedException('Exception');
         
-        $config = $this->_instance->getConfig($this->objects['config']->name);        
+        $this->assertFalse(isset($this->_instance->{$this->objects['config']->name}));
     }
     
     /**
@@ -155,7 +140,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
     public function testGetConfigFromFile()
     {
         $result = $this->_instance->getConfigAsArray('database');
-            
+        
         $this->assertGreaterThan(0, count($result), 'could not get db config');
         $this->assertTrue($result['dbname'] != '', 'could not get dbname');
     }
