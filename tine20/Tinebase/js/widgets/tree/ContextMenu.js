@@ -347,13 +347,14 @@ Tine.widgets.tree.ContextMenu = {
             iconCls: 'action_resume',
             handler: this.onResume,
             scope: this.config,
-            disabled: true
+            actionUpdater: this.isResumeEnabled
         });
         
         this.action_pause = new Ext.Action({
             text: String.format(_('Pause upload'), config.nodeName),
             iconCls: 'action_pause',
             handler: this.onPause,
+            actionUpdater: this.isPauseEnabled,
             scope: this.config
         });
         
@@ -472,6 +473,7 @@ Tine.widgets.tree.ContextMenu = {
      */
     renameNode: function() {
         if (this.scope.ctxNode) {
+                       
             var node = this.scope.ctxNode;
             Ext.MessageBox.show({
                 title: 'Rename ' + this.nodeName,
@@ -545,49 +547,19 @@ Tine.widgets.tree.ContextMenu = {
     deleteNode: function() {
         
         if (this.scope.ctxNode) {
-            var nodes = this.scope.ctxNode;
-
-            var nodeName = "";
-            var node;
-            if(nodes && nodes.length) {
-                node = null;
-                for(var i=0; i<nodes.length; i++) {
-                    var currNodeData = nodes[i].data;
-                    
-                    if(typeof currNodeData.name == 'object') {
-                        nodeName += currNodeData.name.name + '; ';    
-                    }
-                    else {
-                        nodeName += currNodeData.name + '; ';  
-                    }
-                }
-            }
-            else {
-                node = nodes;
-                nodes = null;
-                nodeName = node.text;
-
-            }
-
-            Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), this.nodeName, nodeName), function(_btn){
+            var node = this.scope.ctxNode;
+            
+            Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), this.nodeName, node.text), function(_btn){
                 if ( _btn == 'yes') {
-                    Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), this.nodeName , nodeName));
+                    Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), this.nodeName , node.text));
                     
                     var params = {
                         method: this.backend + '.delete' + this.backendModel
                     };
                     
                     if (this.backendModel == 'Node') {
-                        
-                        var filenames = new Array();
-                        if(node) {
-                            var filenames = [node.attributes.path];
-                        }
-                        else if(nodes) {
-                             for(var i=0; i<nodes.length; i++) {
-                                 filenames.push(nodes[i].data.path);
-                             }   
-                        }
+                                           
+                        var filenames = [node.attributes.path];                                              
                         params.application = this.scope.app.appName || this.scope.appName;    
                         params.filenames = filenames;
                         params.method = this.backend + ".deleteNodes";
@@ -621,17 +593,7 @@ Tine.widgets.tree.ContextMenu = {
                                     this.scope.fireEvent('containerdelete', node.attributes);
                                 }
                             }
-                            else if(nodes &&  this.backendModel == 'Node') {
-                                for(var i=0; i<nodes.length; i++){
-                                    this.scope.fireEvent('containerdelete', nodes[i].data.container_id);
-                                    
-                                    // TODO: in EventHandler auslagern
-                                    this.scope.app.getMainScreen().getCenterPanel().getStore().reload();
-                                    this.scope.app.getMainScreen().getCenterPanel().currentFolderNode.reload();
-                                    
-                                }
-                            }
-
+                           
                             // TODO: im event auswerten
                             if (this.backendModel == 'Node') {
                                 this.scope.app.mainScreen.GridPanel.getStore().reload();
@@ -706,50 +668,6 @@ Tine.widgets.tree.ContextMenu = {
                 tree.filterPlugin.onFilterChange();
             });                    
         }
-    },
-    
-    /**
-     * on pause
-     * @param {} button
-     * @param {} event
-     */
-    onPause: function (button, event) {     
-
-        this.scope.action_pause.setDisabled(true);
-        this.scope.action_resume.setDisabled(false);
-        var gridStore = this.scope.app.getMainScreen().getCenterPanel().store;
-        gridStore.suspendEvents();
-        var selectedRows = this.scope.selectionModel.getSelections();   
-        for(var i=0; i < selectedRows.length; i++) {
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
-            upload.setPaused(true);
-        }       
-        gridStore.resumeEvents();
-    },
-
-    
-    /**
-     * on resume
-     * @param {} button
-     * @param {} event
-     */
-    onResume: function (button, event) {
-        
-        this.scope.action_pause.setDisabled(false);
-        this.scope.action_resume.setDisabled(true);
-        var gridStore = this.scope.app.getMainScreen().getCenterPanel().store;
-        gridStore.suspendEvents();
-        var selectedRows = this.scope.selectionModel.getSelections();
-        for(var i=0; i < selectedRows.length; i++) {
-            var upload = Tine.Tinebase.uploadManager.getUpload(selectedRows[i].get('uploadKey'));
-            upload.resumeUpload();
-        }
-        gridStore.resumeEvents();
-    },
-    
-    getActions: function() {
-        
     }
-    
     
 };
