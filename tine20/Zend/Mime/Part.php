@@ -128,6 +128,11 @@ class Zend_Mime_Part {
                 ));
                 break;
             default:
+                require_once 'StreamFilter/StringReplace.php';
+                $this->_appendFilterToStream('str.replace', array(
+                    'search'    => "\x0d\x0a",
+                    'replace'   => $EOL
+                ));
         }
         return $this->_content;
     }
@@ -223,10 +228,17 @@ class Zend_Mime_Part {
     public function getContent($EOL = Zend_Mime::LINEEND)
     {
         if ($this->_isStream) {
-            return stream_get_contents($this->getEncodedStream());
+            $result = stream_get_contents($this->getEncodedStream($EOL));
         } else {
-            return Zend_Mime::encode($this->_content, $this->encoding, $EOL);
+            $result = Zend_Mime::encode($this->_content, $this->encoding, $EOL);
+
+            if ($this->encoding !== Zend_Mime::ENCODING_QUOTEDPRINTABLE && $this->encoding !== Zend_Mime::ENCODING_BASE64) {
+                // need to replace those \r\n with $EOL and we don't want to overwrite Zend_Mime
+                $result = str_replace("\x0d\x0a", $EOL, $result);
+            }
         }
+        
+        return $result;
     }
     
     /**
@@ -237,11 +249,13 @@ class Zend_Mime_Part {
     public function getDecodedContent()
     {
         if ($this->_isStream) {
-            return stream_get_contents($this->getDecodedStream());
+            $result = stream_get_contents($this->getDecodedStream());
         } else {
             // Zend_Mime::decode not yet implemented
-            return Zend_Mime::decode($this->_content, $this->encoding);
+            $result = Zend_Mime::decode($this->_content, $this->encoding);
         }
+        
+        return $result;
     }
     
     /**

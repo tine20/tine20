@@ -1012,6 +1012,45 @@ class Felamimail_Controller_MessageTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('albert@xn--stermnn-9wa0n.org', $recipients[0]);
     }
     
+    /**
+     * test line end encoding of Zend_Mime_Part / Smtp Protocol
+     */
+    public function testSendWithWrongLineEnd()
+    {
+        // build message with wrong line end rfc822 part
+        $mail = new Tinebase_Mail('utf-8');
+        $mail->setBodyText('testmail' . "\r\n" . "\r\n");
+        $mail->setFrom('unittest@tine20.org', 'unittest');
+        $mail->setSubject('line end test');
+        $mail->addTo('unittest@tine20.org');
+        $mail->addHeader('X-Tine20TestMessage', 'lineend');
+        
+        // replace EOLs
+        $content = file_get_contents(dirname(dirname(__FILE__)) . '/files/text_plain.eml');
+        $content = preg_replace("/\\x0a/", "\r\n", $content);
+        $stream = fopen("php://temp", 'r+');
+        fputs($stream, $content);
+        rewind($stream);
+        
+        $attachment = new Zend_Mime_Part($stream);
+        $attachment->type        = Felamimail_Model_Message::CONTENT_TYPE_MESSAGE_RFC822;
+        $attachment->encoding    =  null;
+        $attachment->charset     = 'ISO-8859-1';
+        $attachment->filename    = 'attach.eml';
+        $attachment->disposition = Zend_Mime::DISPOSITION_ATTACHMENT;
+                
+        $mail->addAttachment($attachment);
+        
+        $smtpConfig = $this->_account->getSmtpConfig();
+        $transport = new Felamimail_Transport($smtpConfig['hostname'], $smtpConfig);
+        $mail->send($transport);
+        
+        $smtpLog = $transport->getConnection()->getLog();
+        
+        $badLineEndCount = preg_match_all("/\\x0d\\x0d\\x0a/", $smtpLog, $matches);
+        $this->assertEquals(0, $badLineEndCount);
+    }
+    
     /********************************* protected helper funcs *************************************/
     
     /**
