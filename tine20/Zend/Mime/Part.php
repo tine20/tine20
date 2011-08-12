@@ -107,7 +107,7 @@ class Zend_Mime_Part {
      * @return stream
      * @throws Zend_Mime_Exception if not a stream or unable to append filter
      */
-    public function getEncodedStream()
+    public function getEncodedStream($EOL = Zend_Mime::LINEEND)
     {
         if (!$this->_isStream) {
             require_once 'Zend/Mime/Exception.php';
@@ -118,13 +118,13 @@ class Zend_Mime_Part {
             case Zend_Mime::ENCODING_QUOTEDPRINTABLE:
                 $this->_appendFilterToStream('convert.quoted-printable-encode', array(
                     'line-length'      => 76,
-                    'line-break-chars' => Zend_Mime::LINEEND
+                    'line-break-chars' => $EOL
                 ));
                 break;
             case Zend_Mime::ENCODING_BASE64:
                 $this->_appendFilterToStream('convert.base64-encode', array(
                     'line-length'      => 76,
-                    'line-break-chars' => Zend_Mime::LINEEND
+                    'line-break-chars' => $EOL
                 ));
                 break;
             default:
@@ -218,12 +218,13 @@ class Zend_Mime_Part {
     /**
      * Get the Content of the current Mime Part in the given encoding.
      *
-     * @return String
+     * @param string $EOL
+     * @return string
      */
     public function getContent($EOL = Zend_Mime::LINEEND)
     {
         if ($this->_isStream) {
-            return stream_get_contents($this->getEncodedStream());
+            return stream_get_contents($this->getEncodedStream($EOL));
         } else {
             return Zend_Mime::encode($this->_content, $this->encoding, $EOL);
         }
