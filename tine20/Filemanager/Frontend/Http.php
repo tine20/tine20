@@ -23,6 +23,8 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * download file
      * 
      * @param string $_path
+     * 
+     * @todo allow to download a folder as ZIP file
      */
     public function downloadFile($_path)
     {
