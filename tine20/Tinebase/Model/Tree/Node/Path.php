@@ -315,7 +315,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }    
         
     /**
-     * do path replacements (container name => container id, remove account name)
+     * do path replacements (container name => container id, account name => account id)
      * 
      * @param array $_pathParts
      * @return string
@@ -324,20 +324,20 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     {
         $pathParts = $_pathParts;
         
-        // remove account name in stat path
-        if (count($pathParts) > 1 && $this->containerType !== Tinebase_Model_Container::TYPE_SHARED) {
-            unset($pathParts[2]);
-        }
-
-        // replace container name with id
         if (count($pathParts) > 2) {
+            // replace account login name with id
+            if ($this->containerOwner) {
+                $pathParts[2] = Tinebase_User::getInstance()->getFullUserByLoginName($this->containerOwner)->getId();
+            }
+            
+            // replace container name with id
             $containerPartIdx = ($this->containerType === Tinebase_Model_Container::TYPE_SHARED) ? 2 : 3;
             if (isset($pathParts[$containerPartIdx]) && $this->container && $pathParts[$containerPartIdx] === $this->container->name) {
                 $pathParts[$containerPartIdx] = $this->container->getId();
             }
         }
         
-        $result = implode('/', $pathParts);
+        $result = '/' . implode('/', $pathParts);
         
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
             . ' Path to stat: ' . $result);

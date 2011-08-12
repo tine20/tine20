@@ -136,14 +136,17 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         foreach ($types as $type) {
             switch ($type) {
                 case Tinebase_Model_Container::TYPE_PERSONAL:
-                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . $this->_personalContainer->getId() . '/unittestdir_personal';
+                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . Tinebase_Core::getUser()->getId() . '/' 
+                        . $this->_personalContainer->getId() . '/unittestdir_personal';
                     break;
                 case Tinebase_Model_Container::TYPE_SHARED:
                     $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->getId();
                     $testPaths[] = Tinebase_Model_Container::TYPE_SHARED . '/' . $this->_sharedContainer->getId() . '/unittestdir_shared';
                     break;
                 case Tinebase_Model_Container::TYPE_OTHERUSERS:
-                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . $this->_otherUserContainer->getId() . '/unittestdir_other';
+                    $personas = Zend_Registry::get('personas');
+                    $testPaths[] = Tinebase_Model_Container::TYPE_PERSONAL . '/' . $personas['sclever']->getId() . '/' 
+                        . $this->_otherUserContainer->getId() . '/unittestdir_other';
                     break;
             }
         }
