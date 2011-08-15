@@ -18,10 +18,43 @@ Ext.ns('Tine.Filemanager');
  */
 
 
-Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
+Tine.Filemanager.TreePanel = function(config) {
+    Ext.apply(this, config);
+    
+    this.addEvents(
+        /**
+         * @event containeradd
+         * Fires when a folder was added
+         * @param {folder} the new folder
+         */
+        'containeradd',
+        /**
+         * @event containerdelete
+         * Fires when a folder got deleted
+         * @param {folder} the deleted folder
+         */
+        'containerdelete',
+        /**
+         * @event containerrename
+         * Fires when a folder got renamed
+         * @param {folder} the renamed folder
+         */
+        'containerrename'
+    );
+        
+    Tine.Filemanager.TreePanel.superclass.constructor.call(this);
+};
+
+Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
+    
     filterMode : 'filterToolbar',
+    
     recordClass : Tine.Filemanager.Model.Node,
+    
     allowMultiSelection : false, 
+    
+    ddGroup: 'fileDDGroup',
+    
     plugins : [ {
         ptype : 'ux.browseplugin',
         enableFileDialog: false,
@@ -30,6 +63,17 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
             alert("tree drop");
         }
     } ],
+    
+    initComponent: function() {
+      
+        this.on('beforenodedrop', this.onBeforenodedrop, this);
+//        this.on('containeradd', this.onFolderAdd, this);
+//        this.on('containerrename', this.onFolderRename, this);
+        this.on('containerdelete', this.onFolderDelete, this);
+        
+        Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
+
+    },
     
     /**
      * Tine.widgets.tree.FilterPlugin
@@ -300,21 +344,62 @@ Tine.Filemanager.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
      * @param {String} containerPath
      * @return {String} tree path
      */
-    getTreePath: function(containerPath) {
+    getTreePath: function(valueItem) {
+        
+        var containerPath = '';
+        if(valueItem && !valueItem.id) return valueItem.path;
+
+
+        if(valueItem) {
+            var node = this.getNodeById(valueItem.id);
+            if(node) {
+                return node.getPath();
+            }
+
+            containerPath = valueItem.path;
+        }
         var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
 
+        if(containerPath === '/shared') {
+            return treePath;
+        }
+            
         // replace personal with otherUsers if personal && ! personal/myaccountid
         var matches = containerPath.match(/^\/personal\/{0,1}([0-9a-z_\-]*)\/{0,1}/i);
         if (matches) {
             if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountLoginName) {
                 treePath = treePath.replace('personal', 'otherUsers');
             } else {
-//                treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
+                treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
+                
             }
         }
         
         return treePath;
-    }
+    },
+    
+   
+    /**
+     * mail(s) got dropped on node
+     * 
+     * @param {Object} dropEvent
+     * @private
+     */
+    onBeforenodedrop: function(dropEvent) {
+//        var targetFolderId = dropEvent.target.attributes.folder_id,
+//            targetFolder = this.app.getFolderStore().getById(targetFolderId);
+//                
+//        this.app.getMainScreen().getCenterPanel().moveSelectedMessages(targetFolder, false);
+//        return true;
+    
+        console.log("onBeforenodedrop");
+        return true;
+     },
+     
+     onFolderDelete: function() {
+         console.log("onFolderDelete");
+     }
+    
     
     
 });
