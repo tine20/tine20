@@ -557,7 +557,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
             if ($_allFollowing) {
                 throw new Exception('please edit or delete complete series!');
             }
-            // NOTE: if the baseEvent gets a time change, we can't compute the recurdid w.o. knoing the original dtstart
+            // NOTE: if the baseEvent gets a time change, we can't compute the recurdid w.o. knowing the original dtstart
             $recurid = $baseEvent->setRecurId();
             unset($baseEvent->recurid);
             $_event->recurid = $recurid;
@@ -1107,6 +1107,7 @@ class Calendar_Controller_Event extends Tinebase_Controller_Record_Abstract impl
                 $baseEvent->dtend   = clone $baseEvent->dtstart;
                 $baseEvent->dtend->add($diff);
                 
+                $baseEvent->id = $_recurInstance->id;
                 $baseEvent->recurid = $_recurInstance->recurid;
                 
                 $attendee = $baseEvent->attendee;
