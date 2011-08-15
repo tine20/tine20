@@ -5,6 +5,8 @@ Maintainer: Lars Kneschke <l.kneschke@metaways.de>
 Build-Depends: debhelper (>= 8), po-debconf
 Standards-Version: 3.9.2
 Homepage: http://www.tine20.org/
+Vcs-Git: http://git.tine20.org/git/tine20/scripts/packaging/debian/
+Vcs-Browser: http://git.tine20.org/git/tine20/scripts/packaging/debian/
 
 Package: tine20
 Architecture: all
