@@ -103,6 +103,10 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
             array('field' => 'period', 'operator' => 'within', 'value' => array('from' => $from, 'until' => $until)),
             array('field' => 'uid', 'operator' => 'equals', 'value' => $persistentEvent->uid)
         )));
+        
+        $recurid = array_values(array_filter($events->recurid));
+        $this->assertEquals(1, count($recurid), 'only recur instance must have a recurid');
+        $this->assertEquals('2009-03-26 18:00:00', substr($recurid[0], -19));
         $this->assertEquals(2, count($events));
     }
     
