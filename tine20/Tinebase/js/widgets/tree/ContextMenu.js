@@ -35,6 +35,7 @@ Tine.widgets.tree.ContextMenu = {
             text: String.format(_('Add')),
             iconCls: 'action_add',
             handler: this.addNode,
+            requiredGrant: 'addGrant',
             scope: this.config
         });
         
@@ -63,6 +64,7 @@ Tine.widgets.tree.ContextMenu = {
             text: _('Manage permissions'),
             iconCls: 'action_managePermissions',
             handler: this.managePermissions,
+            requiredGrant: 'editGrant',
             scope: this.config
         });
         
@@ -105,9 +107,10 @@ Tine.widgets.tree.ContextMenu = {
         
         this.action_download = new Ext.Action({
             text: String.format(_('Download'), config.nodeName),
-            iconCls: 'action_download',
+            iconCls: 'action_filemanager_save_all',
             handler: this.downloadFile,
             actionUpdater: this.isDownloadEnabled,
+            requiredGrant: 'exportGrant',
             scope: this.config
         });
         

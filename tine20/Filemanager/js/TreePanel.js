@@ -194,43 +194,45 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         if(node && node.reload) {
             node.reload();
         }
+
+       
         
-        var actionToolbar = this.app.getMainScreen().getNorthPanel();
-        var grid = this.app.getMainScreen().getCenterPanel();
-        
-        if(node.attributes.account_grants) {
-            if(node.attributes.account_grants.addGrant) {
-                grid.action_upload.enable();
-            }
-            else grid.action_upload.disable();
-            
-            if(node.attributes.account_grants.deleteGrant) {
-                grid.action_deleteRecord.enable();
-            }
-            else grid.action_deleteRecord.disable();
-            
-            if(node.attributes.account_grants.addGrant) {
-                grid.action_createFolder.enable();
-            }
-            else grid.action_createFolder.disable();
-            
-            if(node.attributes.account_grants.exportGrant || node.attributes.account_grants.readGrant) {
-                grid.action_save.enable();
-            }
-            else grid.action_save.disable();
-        }
-        else {
-            grid.action_upload.disable();
-            grid.action_deleteRecord.disable();
-            grid.action_save.disable();
-            grid.action_createFolder.enable();
-            grid.action_goUpFolder.enable();
-            
-            if(node.isRoot) {
-                grid.action_createFolder.disable();
-                grid.action_goUpFolder.disable();
-            }
-        }
+//        var actionToolbar = this.app.getMainScreen().getNorthPanel();
+//        var grid = this.app.getMainScreen().getCenterPanel();
+//        
+//        if(node.attributes.account_grants) {
+//            if(node.attributes.account_grants.addGrant) {
+//                grid.action_upload.enable();
+//            }
+//            else grid.action_upload.disable();
+//            
+//            if(node.attributes.account_grants.deleteGrant) {
+//                grid.action_deleteRecord.enable();
+//            }
+//            else grid.action_deleteRecord.disable();
+//            
+//            if(node.attributes.account_grants.addGrant) {
+//                grid.action_createFolder.enable();
+//            }
+//            else grid.action_createFolder.disable();
+//            
+//            if(node.attributes.account_grants.exportGrant || node.attributes.account_grants.readGrant) {
+//                grid.action_save.enable();
+//            }
+//            else grid.action_save.disable();
+//        }
+//        else {
+//            grid.action_upload.disable();
+//            grid.action_deleteRecord.disable();
+//            grid.action_save.disable();
+//            grid.action_createFolder.enable();
+//            grid.action_goUpFolder.enable();
+//            
+//            if(node.isRoot) {
+//                grid.action_createFolder.disable();
+//                grid.action_goUpFolder.disable();
+//            }
+//        }
         
         Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
 
@@ -292,7 +294,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             path = container.path,
             owner;
         
-        if (! Ext.isString(path)) {
+        if (! Ext.isString(path) || node.isRoot) {
             return;
         }
         
@@ -329,6 +331,23 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @param {Ext.tree.TreeNode} node
      */
     onSelectionChange: function(sm, node) {
+        
+        var grid = this.app.getMainScreen().getCenterPanel();
+        if(node.isRoot) {
+            grid.action_goUpFolder.disable();
+        }
+        else {
+            grid.action_goUpFolder.enable();
+        }
+        
+//        if(node.getDepth() > 0 ||)
+        
+        if(node.attributes && node.attributes.account_grants && node.attributes.account_grants.addGrant) {
+            grid.action_upload.enable();
+        }
+        else {
+            grid.action_upload.disable();
+        }
         
         this.app.mainScreen.GridPanel.currentFolderNode = node; 
         Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, node);

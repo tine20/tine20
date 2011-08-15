@@ -218,6 +218,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             actionType: 'add',
             text: this.app.i18n._('Upload'),
             handler: this.onFilesSelect,
+            disabled: true,
             scope: this,
             plugins: [{
                 ptype: 'ux.browseplugin',
@@ -237,7 +238,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.action_upload = new Ext.Action(this.getAddAction());
 
         this.action_createFolder = new Ext.Action({
-            requiredGrant: 'readGrant',
+            requiredGrant: 'addGrant',
             actionType: 'reply',
             allowMultiple: true,
             text: this.app.i18n._('Create Folder'),
@@ -248,7 +249,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
 
         this.action_goUpFolder = new Ext.Action({
-            requiredGrant: 'readGrant',
+//            requiredGrant: 'readGrant',
             allowMultiple: true,
             actionType: 'goUpFolder',
             text: this.app.i18n._('Folder Up'),
@@ -259,8 +260,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
 
         this.action_save = new Ext.Action({
-            requiredGrant: 'readGrant',
-            allowMultiple: true,
+            requiredGrant: 'exportGrant',
+            allowMultiple: false,
             actionType: 'saveLocaly',
             text: this.app.i18n._('Save locally'),
             actionUpdater: this.updateSaveAction,
@@ -269,7 +270,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             disabled: true,
             scope: this
         });
-             
+//             
         this.action_deleteRecord = new Ext.Action({
             requiredGrant: 'deleteGrant',
             allowMultiple: true,
@@ -283,53 +284,31 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this
         });
         
-        this.action_renameItem = new Ext.Action({
-            requiredGrant: 'editGrant',
-            allowMultiple: false,
-            singularText: this.app.i18n._('Rename'),
-            pluralText: this.app.i18n._('Rename'),
-            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
-            text: this.app.i18n._('Rename'),
-            handler: this.onRenameItem,
-            disabled: false,
-            iconCls: 'action_rename',
-            scope: this
-        });
+//        this.action_renameItem = new Ext.Action({
+//            requiredGrant: 'editGrant',
+//            allowMultiple: false,
+//            singularText: this.app.i18n._('Rename'),
+//            pluralText: this.app.i18n._('Rename'),
+//            translationObject: this.i18nDeleteActionText ? this.app.i18n : Tine.Tinebase.translation,
+//            text: this.app.i18n._('Rename'),
+//            handler: this.onRenameItem,
+//            disabled: false,
+//            iconCls: 'action_rename',
+//            scope: this
+//        });
         
-        this.action_pause = new Ext.Action({
-            text: _('Pause upload'),
-            iconCls: 'action_pause',
-            scope: this,
-//            disabled: true,
-            handler: this.onPause
-        });
-        
-        this.action_resume = new Ext.Action({
-            text: _('Resume upload'),
-            scope: this,
-//            disabled: true,
-            iconCls: 'action_resume',
-            handler: this.onResume
-        });
-        
-//        this.actionUpdater.addActions([
-//            this.action_upload,
-//            this.action_deleteRecord,
-//            this.action_createFolder,
-//            this.action_goUpFolder,
-//            this.action_save
-//        ]);
+//        this.action_pause = new Ext.Action({
+//            text: _('Pause upload'),
+//            iconCls: 'action_pause',
+//            scope: this,
+//            handler: this.onPause
+//        });
 //        
-//        this.contextMenu = new Ext.menu.Menu({
-//            items: [
-////                this.action_createFolder,
-////                this.action_goUpFolder,
-//                this.action_save,
-//                this.action_renameItem,
-//                this.action_deleteRecord,
-//                this.action_pause,
-//                this.action_resume
-//            ]
+//        this.action_resume = new Ext.Action({
+//            text: _('Resume upload'),
+//            scope: this,
+//            iconCls: 'action_resume',
+//            handler: this.onResume
 //        });
         
         
@@ -348,7 +327,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                                        this.action_createFolder,
                                        this.action_goUpFolder,
                                        this.action_save,
-                                       this.action_renameItem,
+//                                       this.action_renameItem,
                                        this.action_deleteRecord
                                        ]);
 
@@ -385,7 +364,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             rowspan: 2,
                             iconAlign: 'top'
                         }),
-                        Ext.apply(new Ext.Button(this.contextMenu.action_addNode), {
+                        Ext.apply(new Ext.Button(this.action_createFolder), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign: 'top'
