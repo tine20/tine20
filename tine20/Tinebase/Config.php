@@ -382,7 +382,7 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     
     /**
      * (non-PHPdoc)
-     * @see tine20/Tinebase/Config/Abstract::getProperties
+     * @see tine20/Tinebase/Config/Abstract::getProperties()
      */
     public static function getProperties()
     {

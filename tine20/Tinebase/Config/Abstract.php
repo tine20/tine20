@@ -1,4 +1,18 @@
 <?php
+/**
+ * base for config classes
+ * 
+ * @package     Tinebase
+ * @subpackage  Config
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * 
+ * @todo support protected function interceptor for get property: _get<PropertyName>(&$data)
+ * @todo support protected function interceptor for set property: _set<PropertyName>(&$data)
+ * @todo update db to json encode all configs
+ * @todo support array collections definitions
+ */
 abstract class Tinebase_Config_Abstract
 {
     
