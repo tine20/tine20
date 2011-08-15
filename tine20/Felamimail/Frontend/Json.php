@@ -508,8 +508,8 @@ class Felamimail_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             ),
         );
         
-        $defaults = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
-        $defaults['smtp'] = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $defaults = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
+        $defaults['smtp'] = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
         
         // remove sensitive data
         unset($defaults['user']);

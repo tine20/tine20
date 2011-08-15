@@ -38,7 +38,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         $this->_purgeRecords = FALSE;
         $this->_resolveCustomFields = TRUE;
         
-        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value;
+        $this->_setGeoDataForContacts = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value;
         if (! $this->_setGeoDataForContacts) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Mappanel/geoext/nominatim disabled with config option.');
         }

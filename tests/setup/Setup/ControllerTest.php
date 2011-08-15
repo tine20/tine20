@@ -129,20 +129,20 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
     public function testSaveAuthenticationRedirectSettings()
     {
         $originalRedirectSettings = array(
-          Tinebase_Model_Config::REDIRECTURL => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
-          Tinebase_Model_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value
+          Tinebase_Config::REDIRECTURL => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value,
+          Tinebase_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTTOREFERRER, NULL, '')->value
         );
         
         $newRedirectSettings = array(
-          Tinebase_Model_Config::REDIRECTURL => 'http://tine20.org',
-          Tinebase_Model_Config::REDIRECTTOREFERRER => '1'
+          Tinebase_Config::REDIRECTURL => 'http://tine20.org',
+          Tinebase_Config::REDIRECTTOREFERRER => '1'
         );
         
         $this->_uit->saveAuthentication(array('redirectSettings' => $newRedirectSettings));
         
         $storedRedirectSettings = array(
-          Tinebase_Model_Config::REDIRECTURL => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
-          Tinebase_Model_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value
+          Tinebase_Config::REDIRECTURL => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value,
+          Tinebase_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTTOREFERRER, NULL, '')->value
         );
         
         $this->assertEquals($storedRedirectSettings, $newRedirectSettings);
@@ -150,15 +150,15 @@ class Setup_ControllerTest extends PHPUnit_Framework_TestCase
         
         //test empty redirectUrl
         $newRedirectSettings = array(
-          Tinebase_Model_Config::REDIRECTURL => '',
-          Tinebase_Model_Config::REDIRECTTOREFERRER => '0'
+          Tinebase_Config::REDIRECTURL => '',
+          Tinebase_Config::REDIRECTTOREFERRER => '0'
         );
         
         $this->_uit->saveAuthentication(array('redirectSettings' => $newRedirectSettings));
         
         $storedRedirectSettings = array(
-          Tinebase_Model_Config::REDIRECTURL => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
-          Tinebase_Model_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value
+          Tinebase_Config::REDIRECTURL => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value,
+          Tinebase_Config::REDIRECTTOREFERRER => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTTOREFERRER, NULL, '')->value
         );
         
         $this->assertEquals($storedRedirectSettings, $newRedirectSettings);

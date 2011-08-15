@@ -497,8 +497,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
-            'titlePostfix'      => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value,
-            'redirectUrl'       => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
+            'titlePostfix'      => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::PAGETITLEPOSTFIX, NULL, '')->value,
+            'redirectUrl'       => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value,
             'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')) / 1048576 . ' MB'
         );
         
@@ -523,7 +523,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 'stateInfo'         => Tinebase_State::getInstance()->loadStateInfo(),
                 'changepw'          => Tinebase_User::getBackendConfiguration('changepw', true),
                 'mustchangepw'      => $user->mustChangePassword(),
-                'mapPanel'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::MAPPANEL, NULL, TRUE)->value,
+                'mapPanel'          => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::MAPPANEL, NULL, TRUE)->value,
                 'confirmLogout'     => Tinebase_Core::getPreference()->getValue(Tinebase_Preference::CONFIRM_LOGOUT, 1),
                 'persistentFilters' => Tinebase_Frontend_Json_PersistentFilter::getAllPersistentFilters(),
             );

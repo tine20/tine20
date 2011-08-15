@@ -1,22 +1,6 @@
 <?php
 abstract class Tinebase_Config_Abstract
 {
-        
-//    /**
-//     * entry is readable part of registry
-//     * @var int
-//     */
-//    const SCOPE_REGISTRY = 1;
-//    /**
-//     * entry is get- setable in admin module
-//     * @var int
-//     */
-//    const SCOPE_ADMIN = 2;
-//    /**
-//     * entry is get- setable in setup
-//     * @var int
-//     */
-//    const SCOPE_SETUP = 4;
     
     /**
      * application name this config belongs to
@@ -30,7 +14,7 @@ abstract class Tinebase_Config_Abstract
      * 
      * @var array
      */
-    private static $_configFileData = NULL;
+    private static $_configFileData;
     
     /**
      * config database backend
@@ -39,34 +23,16 @@ abstract class Tinebase_Config_Abstract
      */
     private static $_backend;
     
-    
-//    /**
-//     * Array of property definition arrays
-//     * 
-//     * @staticvar array
-//     */
-//    abstract protected static $_properties = array();
-//    
-//    /**
-//     * get properties definitions 
-//     * 
-//     * NOTE: as static late binding is not possible in PHP < 5.3 
-//     *       this function has to be implemented in each subclass
-//     * 
-//     * @return array
-//     */
+    /**
+     * get properties definitions 
+     * 
+     * NOTE: as static late binding is not possible in PHP < 5.3 
+     *       this function has to be implemented in each subclass
+     *       and can not even be declared here
+     * 
+     * @return array
+     */
 //    abstract public static function getProperties();
-    
-//    /**
-//     * the constructor
-//     *
-//     * don't use the constructor. use the singleton 
-//     */    
-//    protected function __construct() 
-//    {
-//        $this->_configFileData = $this->_getConfigFileData();
-//    }
-    
     
     /**
      * retrieve a value and return $default if there is no element set.
@@ -90,23 +56,14 @@ abstract class Tinebase_Config_Abstract
         
         // config file overwrites db
         if ($configFileSection) {
-            $configData = $configFileSection[$_name];
+            return $this->_rawToConfig($configFileSection[$_name], $_name);
+        } else if ($configRecord = $this->_loadConfig($_name, $this->_appName)) {
+            $configData = json_decode($configRecord->value, TRUE);
+            // @todo JSON encode all config data via update script!
+            return $this->_rawToConfig($configData ? $configData : $configRecord->value, $_name);
         } else {
-            $configRecord = $this->_loadConfig($_name, $this->_appName);
-            $configData = $configRecord ? $configRecord->value : $_default;
+            return $_default;
         }
-        
-        // @todo JSON encode all config data via update script!
-        // auto JSON decode
-        if ($configData && is_scalar($configData)) {
-            $decodedData = json_decode($configData, TRUE);
-            if ($decodedData) {
-                $configData = $decodedData;
-            }
-        }
-        
-        // convert array data to struct as long as we don't know better
-        return is_array($configData) ? new Tinebase_Config_Struct($configData) : $configData;
     }
     
     /**
@@ -254,7 +211,7 @@ abstract class Tinebase_Config_Abstract
      */
     protected function _saveConfig(Tinebase_Model_Config $_config)
     {
-        Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Setting config ' . $_config->name);
+        if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' setting config ' . $_config->name);
         
         $config = $this->_loadConfig($_config->name, $_config->application_id);
         if ($config) {
@@ -287,5 +244,50 @@ abstract class Tinebase_Config_Abstract
         }
         
         return self::$_backend;
+    }
+    
+    /**
+     * converts raw data to config values of defined type
+     * 
+     * @TODO support array contents conversion
+     * 
+     * @param   mixed     $_rawData
+     * @param   string    $_name
+     * @return  mixed
+     */
+    protected function _rawToConfig($_rawData, $_name)
+    {
+        $definition = self::getDefinition($_name);
+        
+        if (! $definition) {
+//            if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no config definition ->  returning scalar/struct');
+            return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
+        }
+        
+        if ($definition['type'] == 'object' && isset($definition['class']) && @class_exists($definition['class'])) {
+            return new $definition['class']($_rawData);
+        }
+        
+        switch ($definition['type']) {
+            case 'int':         return (int) $_rawData;
+            case 'string':      return (string) $_rawData;
+            case 'float':       return (float) $_rawData;
+            case 'dateTime':    return new DateTime($_rawData);
+            default:            return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
+        }
+    }
+    
+    /**
+     * get definition of given property
+     * 
+     * @param   string  $_name
+     * @return  array
+     */
+    public function getDefinition($_name)
+    {
+        // NOTE we can't call statecally here (static late binding again)
+        $properties = $this->getProperties();
+        
+        return array_key_exists($_name, $properties) ? $properties[$_name] : NULL;
     }
 }

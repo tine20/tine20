@@ -119,7 +119,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
     public function getConfigSettings($_resolve = FALSE)
     {
         $settings = Tinebase_Config::getInstance()->getConfigAsArray(
-            Tinebase_Model_Config::APPDEFAULTS, 
+            Tinebase_Config::APPDEFAULTS, 
             $this->_applicationName, 
             $this->_defaultsSettings
         );
@@ -149,7 +149,7 @@ abstract class Tinebase_Controller_Abstract implements Tinebase_Controller_Inter
         $this->checkRight(Tinebase_Acl_Rights::ADMIN);
         
         Tinebase_Config::getInstance()->setConfigForApplication(
-            Tinebase_Model_Config::APPDEFAULTS, 
+            Tinebase_Config::APPDEFAULTS, 
             Zend_Json::encode($_settings), 
             $this->_applicationName
         );

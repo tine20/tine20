@@ -187,7 +187,7 @@ class Felamimail_Controller_AccountTest extends PHPUnit_Framework_TestCase
         unset($account->id);
         $account->type = Felamimail_Model_Account::TYPE_USER;
         $account->user = $testConfig->username;
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         if (isset($imapConfig['domain']) && ! empty($imapConfig['domain'])) {
             $account->user .= '@' . $imapConfig['domain'];
         }

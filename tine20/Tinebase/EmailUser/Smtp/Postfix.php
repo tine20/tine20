@@ -148,7 +148,7 @@ class Tinebase_EmailUser_Smtp_Postfix extends Tinebase_User_Plugin_Abstract
      */
     public function __construct(array $_options = array())
     {
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
         
         // merge _config and postfix smtp
         $this->_config = array_merge($smtpConfig['postfix'], $this->_config);

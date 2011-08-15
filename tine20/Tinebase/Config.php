@@ -18,6 +18,326 @@
  */
 class Tinebase_Config extends Tinebase_Config_Abstract
 {
+    /**
+     * imap conf name
+     * 
+     * @var string
+     */
+    const IMAP = 'imap';
+    
+    /**
+     * smtp conf name
+     * 
+     * @var string
+     */
+    const SMTP = 'smtp';
+
+    /**
+     * sieve conf name
+     * 
+     * @var string
+     */
+    const SIEVE = 'sieve';
+
+    /**
+     * authentication backend config
+     * 
+     * @var string
+     */
+    const AUTHENTICATIONBACKEND = 'Tinebase_Authentication_BackendConfiguration';
+    
+    /**
+     * authentication backend type config
+     * 
+     * @var string
+     */
+    const AUTHENTICATIONBACKENDTYPE = 'Tinebase_Authentication_BackendType';
+    
+    /**
+     * save automatic alarms when creating new record
+     * 
+     * @var string
+     */
+    const AUTOMATICALARM = 'automaticalarm';
+    
+    /**
+     * user backend config
+     * 
+     * @var string
+     */
+    const USERBACKEND = 'Tinebase_User_BackendConfiguration';
+    
+    /**
+     * user backend type config
+     * 
+     * @var string
+     */
+    const USERBACKENDTYPE = 'Tinebase_User_BackendType';
+    
+    /**
+     * cronjob user id
+     * 
+     * @var string
+     */
+    const CRONUSERID = 'cronuserid';
+    
+    /**
+     * user defined page title postfix for browser page title
+     * 
+     * @var string
+     */
+    const PAGETITLEPOSTFIX = 'pagetitlepostfix';
+
+    /**
+     * logout redirect url
+     * 
+     * @var string
+     */
+    const REDIRECTURL = 'redirectUrl';
+    
+    /**
+     * redirect always
+     * 
+     * @var string
+     */
+    const REDIRECTALWAYS = 'redirectAlways';
+    
+    /**
+     * Config key for Setting "Redirect to referring site if exists?"
+     * 
+     * @var string
+     */
+    const REDIRECTTOREFERRER = 'redirectToReferrer';
+    
+    /**
+     * Config key for acceptedTermsVersion
+     * @var string
+     */
+    const ACCEPTEDTERMSVERSION = 'acceptedTermsVersion';
+    
+    /**
+     * Config key for map panel in addressbook / include geoext code
+     * @var string
+     */
+    const MAPPANEL = 'mapPanel';
+    
+    /**
+     * Config key for session ip validation -> if this is set to FALSE no Zend_Session_Validator_IpAddress is registered
+     * 
+     * @var string
+     */
+    const SESSIONIPVALIDATION = 'sessionIpValidation';
+    
+    /**
+     * Config key for session user agent validation -> if this is set to FALSE no Zend_Session_Validator_HttpUserAgent is registered
+     * 
+     * @var string
+     */
+    const SESSIONUSERAGENTVALIDATION = 'sessionUserAgentValidation';
+    
+    /**
+     * filestore directory
+     * 
+     * @var string
+     */
+    const FILESDIR = 'filesdir';
+    
+    /**
+     * xls export config
+     * 
+     * @deprecated move to app config
+     * @var string
+     */
+    const XLSEXPORTCONFIG = 'xlsexportconfig';
+    
+    /**
+     * app defaults
+     * 
+     * @deprecated move to app and split
+     * @var string
+     */
+    const APPDEFAULTS = 'appdefaults';
+    
+    /**
+     * config definitions for Tinebase
+     */
+    protected static $_properties = array(
+        self::IMAP => array(
+                                   //_('System IMAP')
+            'label'                 => 'System IMAP',
+                                   //_('System IMAP server configuration.')
+            'description'           => 'System IMAP server configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::SMTP => array(
+                                   //_('System SMTP')
+            'label'                 => 'System SMTP',
+                                   //_('System SMTP server configuration.')
+            'description'           => 'System SMTP server configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::SIEVE => array(
+                                   //_('System SIEVE')
+            'label'                 => 'System SIEVE',
+                                   //_('System SIEVE server configuration.')
+            'description'           => 'System SIEVE server configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::AUTHENTICATIONBACKENDTYPE => array(
+                                   //_('Authentication Backend')
+            'label'                 => 'Authentication Backend',
+                                   //_('Backend adapter for user authentication.')
+            'description'           => 'Backend adapter for user authentication.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::AUTHENTICATIONBACKEND => array(
+                                   //_('Authentication Configuration')
+            'label'                 => 'Authentication Configuration',
+                                   //_('Authentication backend configuration.')
+            'description'           => 'Authentication backend configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::USERBACKENDTYPE => array(
+                                   //_('User Backend')
+            'label'                 => 'User Backend',
+                                   //_('Backend adapter for user data.')
+            'description'           => 'Backend adapter for user data.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::USERBACKEND => array(
+                                   //_('User Configuration')
+            'label'                 => 'User Configuration',
+                                   //_('User backend configuration.')
+            'description'           => 'User backend configuration.',
+            'type'                  => 'object',
+            'class'                 => 'Tinebase_Config_Struct',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::CRONUSERID => array(
+                                   //_('Cronuser ID')
+            'label'                 => 'Cronuser ID',
+                                   //_('User ID of the cron user.')
+            'description'           => 'User ID of the cron user.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::PAGETITLEPOSTFIX => array(
+                                   //_('Title Postfix')
+            'label'                 => 'Title Postfix',
+                                   //_('Postfix string appended to the title of this installation.')
+            'description'           => 'Postfix string appended to the title of this installation.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => TRUE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::REDIRECTURL => array(
+                                   //_('Redirect URL')
+            'label'                 => 'Redirect URL',
+                                   //_('Redirect to this URL after logout.')
+            'description'           => 'Redirect to this URL after logout.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::REDIRECTTOREFERRER => array(
+                                   //_('Redirect to Referrer')
+            'label'                 => 'Redirect to Referrer',
+                                   //_('Redirect to referrer after logout.')
+            'description'           => 'Redirect to referrer after logout.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::REDIRECTALWAYS => array(
+                                   //_('Redirect Always')
+            'label'                 => 'Redirect Always',
+                                   //_('Redirect to configured redirect URL also for login.')
+            'description'           => 'Redirect to configured redirect URL also for login.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::ACCEPTEDTERMSVERSION => array(
+                                   //_('Accepted Terms Version')
+            'label'                 => 'Accepted Terms Version',
+                                   //_('Accepted version number of the terms and conditions document.')
+            'description'           => 'Accepted version number of the terms and conditions document.',
+            'type'                  => 'int',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => FALSE,
+        ),
+        self::MAPPANEL => array(
+                                   //_('Use Geolocation Services')
+            'label'                 => 'Use Geolocation Services',
+                                   //_('Use of external Geolocation services is allowed.')
+            'description'           => 'Use of external Geolocation services is allowed.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::SESSIONIPVALIDATION => array(
+                                   //_('IP Session Validator')
+            'label'                 => 'IP Session Validator',
+                                   //_('Destroy session if the users IP changes.')
+            'description'           => 'Destroy session if the users IP changes.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::SESSIONUSERAGENTVALIDATION => array(
+                                   //_('UA Session Validator')
+            'label'                 => 'UA Session Validator',
+                                   //_('Destroy session if the users user agent string changes.')
+            'description'           => 'Destroy session if the users user agent string changes.',
+            'type'                  => 'bool',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+        self::FILESDIR => array(
+                                   //_('Files Directory')
+            'label'                 => 'Files Directory',
+                                   //_('Directory with web server write access for user files.')
+            'description'           => 'Directory with web server write access for user files.',
+            'type'                  => 'string',
+            'clientRegistryInclude' => FALSE,
+            'setByAdminModule'      => FALSE,
+            'setBySetupModule'      => TRUE,
+        ),
+    );
     
     /**
      * (non-PHPdoc)
@@ -60,7 +380,14 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         return self::$_instance;
     }
     
-
+    /**
+     * (non-PHPdoc)
+     * @see tine20/Tinebase/Config/Abstract::getProperties
+     */
+    public static function getProperties()
+    {
+        return self::$_properties;
+    }
     
     /**
      * returns one config value identified by config name and application id

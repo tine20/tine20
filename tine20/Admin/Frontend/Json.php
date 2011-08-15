@@ -55,10 +55,10 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         }
         
         // manage email user settings
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::IMAP)) {
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
             $this->_manageImapEmailUser = TRUE; 
         }
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::SMTP)) {
+        if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
             $this->_manageSmtpEmailUser = TRUE; 
         }
     }
@@ -72,7 +72,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     public function getRegistryData()
     {   
         $appConfigDefaults = Admin_Controller::getInstance()->getConfigSettings();
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
         
         $registryData = array(
             'manageSAM'                     => $this->_manageSAM,

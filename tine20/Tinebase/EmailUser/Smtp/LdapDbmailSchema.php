@@ -48,7 +48,7 @@ class Tinebase_EmailUser_Smtp_LdapDbmailSchema extends Tinebase_EmailUser_Ldap
         'dbmailUser'
     );    
     
-    protected $_backendType = Tinebase_Model_Config::SMTP;
+    protected $_backendType = Tinebase_Config::SMTP;
     
     /**
      * the constructor

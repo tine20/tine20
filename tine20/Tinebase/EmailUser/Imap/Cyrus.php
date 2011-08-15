@@ -47,7 +47,7 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
     public function __construct(array $_options = array())
     {
         // get cyrus imap config options (host, username, password, port)
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         
         // merge _config and dovecot imap
         $this->_config = array_merge($this->_config, $imapConfig['cyrus']);
