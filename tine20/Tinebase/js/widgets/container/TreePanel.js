@@ -313,8 +313,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     /**
      * convert containerPath to treePath
      * 
-     * @param {String} containerPath
-     * @return {String}
+     * @param {String}  containerPath
+     * @return {String} treePath
      */
     getTreePath: function(containerPath) {
         var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
