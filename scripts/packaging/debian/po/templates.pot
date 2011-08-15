@@ -3,25 +3,16 @@
 # This file is distributed under the same license as the tine20 package.
 # Lars Kneschke <l.kneschke@metaways.de>, 2011.
 #
-#, fuzzy
-msgid ""
-msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: tine20@packages.debian.org\n"
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: packages@tine20.org\n"
 "POT-Creation-Date: 2011-07-14 19:05+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: Lars Kneschke <l.kneschke@metaways.de>\n"
+"Language-Team: EN <translators@tine20.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF8\n"
 "Content-Transfer-Encoding: 8bit\n"
-
-#. Type: select
-#. Choices
-#: ../tine20-tinebase.templates:1001
-msgid "apache2, lighttpd"
-msgstr ""
 
 #. Type: select
 #. Description
@@ -35,49 +26,6 @@ msgstr ""
 msgid ""
 "If you do not select a web server to reconfigure automatically, Tine 2.0 "
 "will not be usable until you reconfigure your webserver to enable Tine 2.0."
-msgstr ""
-
-#. Type: string
-#. Description
-#: ../tine20-tinebase.templates:2001
-msgid "Database admin user who can create a database:"
-msgstr ""
-
-#. Type: string
-#. Description
-#: ../tine20-tinebase.templates:2001
-msgid "Database admin user account capable of creating new databases."
-msgstr ""
-
-#. Type: password
-#. Description
-#: ../tine20-tinebase.templates:3001
-msgid "Database admin password:"
-msgstr ""
-
-#. Type: boolean
-#. Description
-#: ../tine20-tinebase.templates:4001
-msgid "Delete database on purge?"
-msgstr ""
-
-#. Type: boolean
-#. Description
-#: ../tine20-tinebase.templates:4001
-msgid ""
-"Please choose whether the database should be removed when Tine 2.0 is purged."
-msgstr ""
-
-#. Type: boolean
-#. Description
-#: ../tine20-tinebase.templates:5001
-msgid "Restart webserver now?"
-msgstr ""
-
-#. Type: boolean
-#. Description
-#: ../tine20-tinebase.templates:5001
-msgid "Please choose whether the webserver should get restarted?"
 msgstr ""
 
 #. Type: string
