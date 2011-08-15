@@ -1,6 +1,6 @@
 Template: tine20/webserver_type
 Type: multiselect
-_Choices: apache2, lighttpd
+Choices: apache2, lighttpd
 _Description: Web server to reconfigure automatically:
  If you do not select a web server to reconfigure automatically, Tine 2.0
  will not be usable until you reconfigure your webserver to enable
