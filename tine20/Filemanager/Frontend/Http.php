@@ -26,15 +26,15 @@ class Filemanager_Frontend_Http extends Tinebase_Frontend_Http_Abstract
      * 
      * @todo allow to download a folder as ZIP file
      */
-    public function downloadFile($_path)
+    public function downloadFile($path)
     {
         $oldMaxExcecutionTime = Tinebase_Core::setExecutionLifeTime(0);
 
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' '
-            . ' Download file ' . $_path 
+            . ' Download file ' . $path 
         );
         
-        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(Filemanager_Controller_Node::getInstance()->addBasePath($_path));
+        $pathRecord = Tinebase_Model_Tree_Node_Path::createFromPath(Filemanager_Controller_Node::getInstance()->addBasePath($path));
         $node = Filemanager_Controller_Node::getInstance()->getFileNode($pathRecord);
         
         // cache for 3600 seconds

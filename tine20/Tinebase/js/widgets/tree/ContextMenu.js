@@ -29,263 +29,8 @@ Tine.widgets.tree.ContextMenu = {
         
         this.config = config;
                 
-        /***************** define action handlers *****************/
-        var handler = {
-            /**
-             * create
-             */
-//            addNode: function() {
-//                Ext.MessageBox.prompt(String.format(_('New {0}'), config.nodeName), String.format(_('Please enter the name of the new {0}:'), config.nodeName), function(_btn, _text) {
-//                    if( this.ctxNode && _btn == 'ok') {
-//                        if (! _text) {
-//                            Ext.Msg.alert(String.format(_('No {0} added'), config.nodeName), String.format(_('You have to supply a {0} name!'), config.nodeName));
-//                            return;
-//                        }
-//                        Ext.MessageBox.wait(_('Please wait'), String.format(_('Creating {0}...' ), config.nodeName));
-//                        var parentNode = this.ctxNode;
-//                        
-//                        var params = {
-//                            method: config.backend + '.add' + config.backendModel,
-//                            name: _text
-//                        };
-//                        
-//                        // TODO try to generalize this and move app specific stuff to app
-//                        
-//                        if (config.backendModel == 'Node') {
-//                            params.application = this.app.appName || this.appName;                            
-//                            var filename = parentNode.attributes.container.path + '/' + _text;
-//                            params.filename = filename;
-//                            params.type = 'folder';
-//                            params.method = config.backend + ".createNode";
-//                        }
-//                        else if (config.backendModel == 'Container') {
-//                            params.application = this.app.appName || this.appName;
-//                            params.containerType = Tine.Tinebase.container.path2type(parentNode.attributes.path);
-//                        } 
-//                        else if (config.backendModel == 'Folder') {
-//                            var parentFolder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(parentNode.attributes.folder_id);
-//                            params.parent = parentFolder.get('globalname');
-//                            params.accountId = parentFolder.get('account_id');
-//                        }
-//                        
-//                        Ext.Ajax.request({
-//                            params: params,
-//                            scope: this,
-//                            success: function(_result, _request){
-//                                var nodeData = Ext.util.JSON.decode(_result.responseText);
-//                                
-//                                // TODO add + icon if it wasn't expandable before
-//                                if(nodeData.type == 'folder') {
-//                                    parentNode.reload();
-//                                }
-//                                else {
-//                                    var newNode = this.loader.createNode(nodeData);
-//                                    parentNode.appendChild(newNode);
-//                                }
-//                                
-//                                parentNode.expand();
-//                                this.fireEvent('containeradd', nodeData);
-//                                
-//                                // TODO: im event auswerten
-//                                if (config.backendModel == 'Node') {
-//                                    this.app.mainScreen.GridPanel.getStore().reload();
-//                                }
-//
-//                                Ext.MessageBox.hide();
-//                            }
-//                        });
-//                        
-//                    }
-//                }, this);
-//            },
-            
-            /**
-             * delete
-             */
-//            deleteNode: function() {
-//                if (this.ctxNode) {
-//                    var node = this.ctxNode;
-//                    Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} "{1}"?'), config.nodeName, node.text), function(_btn){
-//                        if ( _btn == 'yes') {
-//                            Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), config.nodeName , node.text));
-//                            
-//                            var params = {
-//                                method: config.backend + '.delete' + config.backendModel
-//                            };
-//                            
-//                            if (config.backendModel == 'Node') {
-//                                params.application = this.app.appName || this.appName;                                
-//                                var filename = this.ctxNode.attributes.path;
-//                                params.filenames = [filename];
-//                                params.method = config.backend + ".deleteNodes";
-//                            
-//                            } else if (config.backendModel == 'Container') {
-//                                params.containerId = node.attributes.container.id
-//                            } else if (config.backendModel == 'Folder') {
-//                                var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
-//                                params.folder = folder.get('globalname');
-//                                params.accountId = folder.get('account_id');
-//                            } else {
-//                                // use default json api style
-//                                params.ids = [node.id];
-//                                params.method = params.method + 's';
-//                            }
-//                            
-//                            Ext.Ajax.request({
-//                                params: params,
-//                                scope: this,
-//                                success: function(_result, _request){
-//                                    if(node.isSelected()) {
-//                                        this.getSelectionModel().select(node.parentNode);
-//                                        this.fireEvent('click', node.parentNode, Ext.EventObject.setEvent());
-//                                    }
-//                                    node.remove();
-//                                    if (config.backendModel == 'Container') {
-//                                        this.fireEvent('containerdelete', node.attributes.container);
-//                                    } else {
-//                                        this.fireEvent('containerdelete', node.attributes);
-//                                    }
-//                                    Ext.MessageBox.hide();
-//                                }
-//                            });
-//                        }
-//                    }, this);
-//                }
-//            },
-            
-            /**
-             * rename
-             */
-//            renameNode: function() {
-//                if (this.ctxNode) {
-//                    var node = this.ctxNode;
-//                    Ext.MessageBox.show({
-//                        title: 'Rename ' + config.nodeName,
-//                        msg: String.format(_('Please enter the new name of the {0}:'), config.nodeName),
-//                        buttons: Ext.MessageBox.OKCANCEL,
-//                        value: node.text,
-//                        fn: function(_btn, _text){
-//                            if (_btn == 'ok') {
-//                                if (! _text) {
-//                                    Ext.Msg.alert(String.format(_('Not renamed {0}'), config.nodeName), String.format(_('You have to supply a {0} name!'), config.nodeName));
-//                                    return;
-//                                }
-//                                Ext.MessageBox.wait(_('Please wait'), String.format(_('Updating {0} "{1}"'), config.nodeName, node.text));
-//                                
-//                                var params = {
-//                                    method: config.backend + '.rename' + config.backendModel,
-//                                    newName: _text
-//                                };
-//                                
-//                                if (config.backendModel == 'Node') {
-//                                    params.application = this.app.appName || this.appName;                                
-//                                    var filename = this.ctxNode.attributes.path;
-//                                    params.sourceFilenames = [filename];
-//                                    
-//                                    var targetFilename = "/";
-//                                    var sourceSplitArray = filename.split("/");
-//                                    for (var i=1; i<sourceSplitArray.length-1; i++) {
-//                                        targetFilename += sourceSplitArray[i] + '/'; 
-//                                    }
-//                                    
-//                                    params.destinationFilenames = [targetFilename + _text];
-//                                    params.method = config.backend + '.moveNodes';
-//                                }
-//                                
-//                                // TODO try to generalize this
-//                                if (config.backendModel == 'Container') {
-//                                    params.containerId = node.attributes.container.id;
-//                                } else if (config.backendModel == 'Folder') {
-//                                    var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
-//                                    params.oldGlobalName = folder.get('globalname');
-//                                    params.accountId = folder.get('account_id');
-//                                }
-//                                
-//                                Ext.Ajax.request({
-//                                    params: params,
-//                                    scope: this,
-//                                    success: function(_result, _request){
-//                                        var nodeData = Ext.util.JSON.decode(_result.responseText);
-//                                        node.setText(_text);
-//                                        this.fireEvent('containerrename', nodeData);
-//                                        Ext.MessageBox.hide();
-//                                    }
-//                                });
-//                            }
-//                        },
-//                        scope: this,
-//                        prompt: true,
-//                        icon: Ext.MessageBox.QUESTION
-//                    });
-//                }
-//            },
-//            
-            /**
-             * set color
-             */
-//            changeNodeColor: function(cp, color) {
-//                if (this.ctxNode) {
-//                    var node = this.ctxNode;
-//                    node.getUI().addClass("x-tree-node-loading");
-//                        Ext.Ajax.request({
-//                            params: {
-//                                method: config.backend + '.set' + config.backendModel + 'Color',
-//                                containerId: node.attributes.container.id,
-//                                color: '#' + color
-//                            },
-//                            scope: this,
-//                            success: function(_result, _request){
-//                                var nodeData = Ext.util.JSON.decode(_result.responseText);
-//                                node.getUI().colorNode.setStyle({color: nodeData.color});
-//                                node.attributes.container.color = nodeData.color;
-//                                this.fireEvent('containercolorset', nodeData);
-//                                node.getUI().removeClass("x-tree-node-loading");
-//                            }
-//                        });
-//                
-//                }
-//            },
-            
-            /**
-             * manage permissions
-             * 
-             */
-//            managePermissions: function() {
-//                if (this.ctxNode) {
-//                    var node = this.ctxNode;
-//                    
-//                    var grantContainer = node.attributes.container;
-//                    if(grantContainer.name.id) {
-//                        grantContainer = grantContainer.name;
-//                    }
-//                    
-//                    var window = Tine.widgets.container.GrantsDialog.openWindow({
-//                        title: String.format(_('Manage Permissions for {0} "{1}"'), config.nodeName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
-//                        containerName: config.nodeName,
-//                        grantContainer: grantContainer
-//                    });
-//                }
-//            },
-            
-//            /**
-//             * reload node
-//             */
-//            reloadNode: function() {
-//                if (this.ctxNode) {
-//                    var tree = this;
-//                    this.ctxNode.reload(function(node) {
-//                        node.expand();
-//                        node.select();
-//                        // update grid
-//                        tree.filterPlugin.onFilterChange();
-//                    });                    
-//                }
-//            }
-        };
-        
         /****************** create ITEMS array ****************/
-        
-        
+              
         this.action_add = new Ext.Action({
             text: String.format(_('Add')),
             iconCls: 'action_add',
@@ -358,6 +103,13 @@ Tine.widgets.tree.ContextMenu = {
             scope: this.config
         });
         
+        this.action_download = new Ext.Action({
+            text: String.format(_('Download'), config.nodeName),
+            iconCls: 'action_download',
+            handler: this.downloadFile,
+            actionUpdater: this.isDownloadEnabled,
+            scope: this.config
+        });
         
         var items = [];
         for (var i=0; i < config.actions.length; i++) {
@@ -385,6 +137,9 @@ Tine.widgets.tree.ContextMenu = {
                     break;
                 case 'pause':
                     items.push(this.action_pause);
+                    break;
+                case 'download':
+                    items.push(this.action_download);
                     break;
                 default:
                     // add custom actions

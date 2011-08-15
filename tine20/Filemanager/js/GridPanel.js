@@ -336,7 +336,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.apply(Tine.widgets.tree.ContextMenu, Tine.Filemanager.GridContextMenu);
         this.contextMenu = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.app.getMainScreen().getWestPanel().getContainerTreePanel().containerName),
-            actions: ['delete', 'rename', 'resume', 'pause'],
+            actions: ['delete', 'rename', 'download', 'resume', 'pause'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'

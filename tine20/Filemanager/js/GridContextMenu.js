@@ -142,7 +142,8 @@ Tine.Filemanager.GridContextMenu = {
                            if(nodes &&  this.backendModel == 'Node') {
                                 for(var i=0; i<nodes.length; i++){
                                     this.scope.fireEvent('containerdelete', nodes[i].data.container_id);
-                                    
+                                    this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel().fireEvent('containerdelete', nodes[i].data.container_id);
+
                                     // TODO: in EventHandler auslagern
                                     this.scope.app.getMainScreen().getCenterPanel().getStore().reload();
                                     this.scope.app.getMainScreen().getCenterPanel().currentFolderNode.reload();
@@ -150,7 +151,7 @@ Tine.Filemanager.GridContextMenu = {
                                 }
                             }
                            
-                            // TODO: im event auswerten
+                            // TODO: evaluate in event handler
                             if (this.backendModel == 'Node') {
                                 this.scope.app.mainScreen.GridPanel.getStore().reload();
                             }
@@ -185,6 +186,57 @@ Tine.Filemanager.GridContextMenu = {
      */
     reloadNode: function() {
         alert("grid reload node");
+    },
+    
+    /**
+     * download file
+     * 
+     * @param {} button
+     * @param {} event
+     */
+    downloadFile: function(button, event) {
+        
+        var grid = this.scope.app.getMainScreen().getCenterPanel();
+        var selectedRows = grid.selectionModel.getSelections();
+        
+        var fileRow = selectedRows[0];
+               
+        var downloadPath = fileRow.data.path;
+        var downloader = new Ext.ux.file.Download({
+            params: {
+                method: 'Filemanager.downloadFile',
+                requestType: 'HTTP',
+                path: downloadPath
+            }
+        }).start();
+    },
+    
+    /**
+     * is the download context menu option visible / enabled
+     * 
+     * @param action
+     * @param grants
+     * @param records
+     */
+    isDownloadEnabled: function(action, grants, records) {
+        for(var i=0; i<records.length; i++) {
+            if(records[i].data.type === 'folder') {
+                action.hide();
+                return;
+            }
+        }
+        action.show();
+        
+        var grid = this.scope.app.getMainScreen().getCenterPanel();
+        var selectedRows = grid.selectionModel.getSelections(); 
+        
+        if(selectedRows.length > 1) {
+            action.setDisabled(true);
+        }
+        else {
+            action.setDisabled(false);
+        }
+        
     },
     
     /**
