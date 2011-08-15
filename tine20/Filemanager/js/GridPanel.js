@@ -399,7 +399,23 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {Object} records
      */
     updateSaveAction: function(action, grants, records) {
-        action.setDisabled(true);
+        for(var i=0; i<records.length; i++) {
+            if(records[i].data.type === 'folder') {
+                action.setDisabled(true);
+                return;
+            }
+        }
+        action.setDisabled(false);
+        
+        var grid = this;
+        var selectedRows = grid.selectionModel.getSelections(); 
+        
+        if(selectedRows.length > 1) {
+            action.setDisabled(true);
+        }
+        else {
+            action.setDisabled(false);
+        }
     },
     
     

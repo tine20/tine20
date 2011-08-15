@@ -333,7 +333,10 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     onSelectionChange: function(sm, node) {
         
         var grid = this.app.getMainScreen().getCenterPanel();
-        if(node.isRoot) {
+        
+        grid.action_deleteRecord.disable();
+        
+        if(node && node.isRoot) {
             grid.action_goUpFolder.disable();
         }
         else {
@@ -344,9 +347,11 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         if(node.attributes && node.attributes.account_grants && node.attributes.account_grants.addGrant) {
             grid.action_upload.enable();
+            grid.action_createFolder.enable();
         }
         else {
             grid.action_upload.disable();
+            grid.action_createFolder.disable();
         }
         
         this.app.mainScreen.GridPanel.currentFolderNode = node; 
