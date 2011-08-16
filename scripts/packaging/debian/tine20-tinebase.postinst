@@ -4,8 +4,7 @@ set -e
 
 fix_permissions() {
     for dir in sessions tmp cache files; do
-        chown www-data:www-data /var/lib/tine20/$dir
-        chmod 0750 /var/lib/tine20/$dir
+        install -d -m 0750 -u www-data -g www-data /var/lib/tine20/$dir
     done
     
     chown www-data:www-data /var/log/tine20
