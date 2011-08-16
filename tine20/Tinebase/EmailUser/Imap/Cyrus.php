@@ -80,17 +80,15 @@ class Tinebase_EmailUser_Imap_Cyrus extends Tinebase_User_Plugin_Abstract
     /**
      * delete user by id
      *
-     * @param  string  $_userId
+     * @param  Tinebase_Model_FullUser  $_user
      */
-    public function inspectDeleteUser($_userId)
+    public function inspectDeleteUser(Tinebase_Model_FullUser $_user)
     {
-        $user = $_userId instanceof Tinebase_Model_User ? $_userId : Tinebase_User::getInstance()->getFullUserById($_userId);
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Cyrus imap account of user ' . $user->accountLoginName);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Cyrus imap account of user ' . $_user->accountLoginName);
 
         $imap = $this->_getImapConnection();
         
-        $mailboxString = $this->_getUserMailbox($user->accountLoginName);
+        $mailboxString = $this->_getUserMailbox($_user->accountLoginName);
         
         $mailboxes = $imap->listMailbox('', $mailboxString);
         
