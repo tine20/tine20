@@ -148,7 +148,7 @@ Ext.ux.PercentRendererWithName = function(value, metadata, record) {
             '<div class="x-progress-inner PercentRenderer">',
                 '<div class="x-progress-bar PercentRenderer" style="width:{percent}%;{additionalStyle}">',
                     '<div class="PercentRendererText PercentRenderer">',
-                         '<div>{fileName}</div>',
+                         '{fileName}',
                     '</div>',
                 '</div>',
                 '<div class="x-progress-text x-progress-text-back PercentRenderer">',
