@@ -128,13 +128,31 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 header: this.app.i18n._("Contenttype"),
                 width: 50,
                 sortable: true,
-                dataIndex: 'contenttype'
+                dataIndex: 'contenttype',
+                renderer: function(value, metadata, record) {
+                    
+                    var app = Tine.Tinebase.appMgr.get('Filemanager');
+                    if(record.data.type == 'folder') {
+                        return app.i18n._("Folder");
+                    }
+                    else {
+                        return value;
+                    }
+                }
             },{
                 id: 'revision',
                 header: this.app.i18n._("Revision"),
                 width: 10,
                 sortable: true,
-                dataIndex: 'revision'
+                dataIndex: 'revision',
+                renderer: function(value, metadata, record) {
+                    if(record.data.type == 'folder') {
+                        return '';
+                    }
+                    else {
+                        return value;
+                    }
+                }
             },{
                 id: 'creation_time',
                 header: this.app.i18n._("Creation Time"),
@@ -259,13 +277,13 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             scope: this
         });
 
-        this.action_save = new Ext.Action({
+        this.action_download = new Ext.Action({
             requiredGrant: 'exportGrant',
             allowMultiple: false,
             actionType: 'saveLocaly',
             text: this.app.i18n._('Save locally'),
             actionUpdater: this.updateSaveAction,
-            handler: function(){ alert("Save locally"); },
+            handler: this.onDownload,
             iconCls: 'action_filemanager_save_all',
             disabled: true,
             scope: this
@@ -326,7 +344,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.actionUpdater.addActions([
                                        this.action_createFolder,
                                        this.action_goUpFolder,
-                                       this.action_save,
+                                       this.action_download,
 //                                       this.action_renameItem,
                                        this.action_deleteRecord
                                        ]);
@@ -374,7 +392,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                             rowspan: 2,
                             iconAlign: 'top'
                         }),
-                        Ext.apply(new Ext.Button(this.action_save), {
+                        Ext.apply(new Ext.Button(this.action_download), {
                             scale: 'medium',
                             rowspan: 2,
                             iconAlign: 'top'
@@ -734,12 +752,34 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     
             if(fileRecord.data.status !== 'failure' ) {
                 gridStore.add(fileRecord);
-            }
-
-            
+            }           
         }, this);
         
 
+    },
+    
+    /**
+     * download file
+     * 
+     * @param {} button
+     * @param {} event
+     */
+    onDownload: function(button, event) {
+        
+        var app = Tine.Tinebase.appMgr.get('Filemanager');
+        var grid = app.getMainScreen().getCenterPanel(); 
+        var selectedRows = grid.selectionModel.getSelections();
+        
+        var fileRow = selectedRows[0];
+               
+        var downloadPath = fileRow.data.path;
+        var downloader = new Ext.ux.file.Download({
+            params: {
+                method: 'Filemanager.downloadFile',
+                requestType: 'HTTP',
+                path: downloadPath
+            }
+        }).start();
     }
 
 });

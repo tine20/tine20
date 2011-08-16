@@ -335,6 +335,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var grid = this.app.getMainScreen().getCenterPanel();
         
         grid.action_deleteRecord.disable();
+        grid.action_save.disable()
         
         if(node && node.isRoot) {
             grid.action_goUpFolder.disable();
@@ -342,10 +343,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         else {
             grid.action_goUpFolder.enable();
         }
-        
-//        if(node.getDepth() > 0 ||)
-        
-        if(node.attributes && node.attributes.account_grants && node.attributes.account_grants.addGrant) {
+                
+        if(node && node.attributes && node.attributes.account_grants && node.attributes.account_grants.addGrant) {
             grid.action_upload.enable();
             grid.action_createFolder.enable();
         }
@@ -357,9 +356,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         this.app.mainScreen.GridPanel.currentFolderNode = node; 
         Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, node);
     
-//        if(node.attributes.path == '/') {
-//            this.app.mainScreen.GridPanel.getStore().removeAll();
-//        }
     },
     
     /**

@@ -33,11 +33,9 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     modelName: 'Node',
     idProperty: 'id',
     titleProperty: 'title',
-    // ngettext('example record', 'example records', n);
     recordName: 'user file',
     recordsName: 'user files',
     containerProperty: 'container_id',
-    // ngettext('example record list', 'example record lists', n);
     containerName: 'user file folder',
     containersName: 'user file folders'
 });
@@ -82,7 +80,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             var grid = app.mainScreen.GridPanel;
             grid.currentFolderNode.reload();            
             grid.getStore().reload();
-//            this.fireEvent('containeradd', nodeData);
+            this.fireEvent('containeradd', nodeData);
             Ext.MessageBox.hide();
         };
         
@@ -134,7 +132,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     },
     
     saveRecord : function() {
-        // NOP
+        // NOOP
     }
     
 });
