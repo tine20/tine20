@@ -9,10 +9,7 @@ fix_permissions() {
     done
     
     chown www-data:www-data /var/log/tine20
-    chmod 0750 /var/log/tine20
-    
-    find /usr/share/tine20 -type f -exec chmod 644 {} \;
-    chmod 0755 /usr/share/tine20/tine20.php
+    chmod 0750 /var/log/tine20    
 }
 
 . /usr/share/debconf/confmodule
