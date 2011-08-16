@@ -96,7 +96,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         });
 
         Tine.Filemanager.GridPanel.superclass.initComponent.call(this);      
-
+        this.getStore().on('load', this.onLoad);
+        
     },
     
     /**
@@ -696,8 +697,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param upload
      */
     onNodeCreated: function(response, request, upload) {
-        
-
+       
         var record = Ext.util.JSON.decode(response.responseText);
         var app = Tine.Tinebase.appMgr.get('Filemanager');
         var grid = app.getMainScreen().getCenterPanel(); 
@@ -739,9 +739,11 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         Ext.each(files, function (file) {
 
             var fileName = file.name || file.fileName;
-            Tine.Filemanager.createNode(grid.currentFolderNode.attributes.path + '/' + fileName, "file", [], false);
             
-            var upload = new Ext.ux.file.Upload({}, file, fileSelector);
+            var filePath = grid.currentFolderNode.attributes.path + '/' + fileName;
+            Tine.Filemanager.createNode(filePath, "file", [], false);
+            
+            var upload = new Ext.ux.file.Upload({}, file, fileSelector, filePath);
 
             upload.on('uploadfailure', grid.onUploadFail, this);
             upload.on('uploadcomplete', grid.onUploadComplete, this);
@@ -750,6 +752,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);            
             var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
                     
+            Tine.log.debug(uploadKey);
+            
             if(fileRecord.data.status !== 'failure' ) {
                 gridStore.add(fileRecord);
             }           
@@ -780,6 +784,31 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 path: downloadPath
             }
         }).start();
+    },
+    
+    /**
+     * grid on load handler
+     * 
+     * @param grid
+     * @param records
+     * @param options
+     */
+    onLoad: function(store, records, options){
+
+        for(var i=records.length-1; i>=0; i--) {
+            var record = records[i];
+            if(record.data.type == 'file' && (!record.data.size || record.data.size == 0)) {
+                var upload = Tine.Tinebase.uploadManager.getUpload(record.data.path);
+
+                if(upload) {
+                      if(record.get('name') === upload.fileRecord.get('name')) {
+                        var index = this.indexOf(record);
+                        this.remove(record);
+                        this.insert(index, [upload.fileRecord]);
+                    }
+                }
+            }
+        }
     }
 
 });

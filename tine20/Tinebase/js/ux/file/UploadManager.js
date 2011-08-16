@@ -45,7 +45,7 @@ Ext.ux.file.UploadManager = function(config) {
          */
         queueUpload: function(upload) {
             var uploadId = this.uploadIdPrefix + (1000 + this.uploadCount++).toString(); 
-            if(upload.id && upload.id > -1) {
+            if(upload.id && upload.id !== -1) {
                 uploadId = upload.id;
             }
             upload.id = uploadId;

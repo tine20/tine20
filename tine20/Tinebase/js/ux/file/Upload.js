@@ -60,7 +60,7 @@ Ext.ux.file.Upload = function(config, file, fileSelector, id) {
     this.maxChunkSize = this.maxPostSize - 16384;
     this.currentChunkSize = this.maxChunkSize;
     
-    if(id && id > -1) {
+    if(id) {
         this.id = id;
     }
     
