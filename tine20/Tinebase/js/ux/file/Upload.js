@@ -402,7 +402,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
         this.fileRecord.beginEdit();
         this.fileRecord.set('tempFile', response.tempFile);
         this.fileRecord.set('name', response.tempFile.name);
-        this.fileRecord.set('size', response.tempFile.size);
+//        this.fileRecord.set('size', response.tempFile.size);
+        this.fileRecord.set('size', 0);
         this.fileRecord.set('type', response.tempFile.type);
         this.fileRecord.set('path', response.tempFile.path);
         
