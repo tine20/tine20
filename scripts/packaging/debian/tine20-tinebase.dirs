@@ -1,6 +1,3 @@
 /etc/tine20
-/var/lib/tine20/sessions
-/var/lib/tine20/tmp
-/var/lib/tine20/cache
-/var/lib/tine20/files
+/var/lib/tine20
 /var/log/tine20
