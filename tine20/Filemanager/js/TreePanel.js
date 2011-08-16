@@ -335,7 +335,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var grid = this.app.getMainScreen().getCenterPanel();
         
         grid.action_deleteRecord.disable();
-        grid.action_save.disable()
+        grid.action_upload.disable();
         
         if(node && node.isRoot) {
             grid.action_goUpFolder.disable();
