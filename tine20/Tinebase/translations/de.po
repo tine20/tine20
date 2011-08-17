@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-11 10:47+0100\n"
-"PO-Revision-Date: 2011-08-11 10:48+0100\n"
+"POT-Creation-Date: 2011-08-17 15:59+0100\n"
+"PO-Revision-Date: 2011-08-17 16:01+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1501,45 +1501,45 @@ msgid_plural "Delete {0}"
 msgstr[0] "{0} löschen"
 msgstr[1] "{0} löschen"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:757
+#: Tinebase/js/widgets/grid/GridPanel.js:758
 msgid "Displaying records {0} - {1} of {2}"
 msgstr "Zeige Datensätze {0} - {1} von {2}"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:758
+#: Tinebase/js/widgets/grid/GridPanel.js:759
 msgid "No {0} to display"
 msgstr "Keine {0} gefunden"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:957
+#: Tinebase/js/widgets/grid/GridPanel.js:958
 msgid "Tagging"
 msgstr "Taggen"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:998
+#: Tinebase/js/widgets/grid/GridPanel.js:999
 msgid "Creation Time"
 msgstr "Erstelldatum"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:1000
+#: Tinebase/js/widgets/grid/GridPanel.js:1001
 msgid "Last Modified Time"
 msgstr "Letztes Modifikationsdatum"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:1001
+#: Tinebase/js/widgets/grid/GridPanel.js:1002
 msgid "Last Modified By"
 msgstr "Zuletzt geändert von"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:1277
+#: Tinebase/js/widgets/grid/GridPanel.js:1278
 msgid "Not Allowed"
 msgstr "Mangelnde Erlaubnis"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:1278
+#: Tinebase/js/widgets/grid/GridPanel.js:1279
 msgid "You are not allowed to delete all pages at once"
 msgstr "Es ist ihnen nicht erlaubt alle Seiten auf einmal zu löschen"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:1301
+#: Tinebase/js/widgets/grid/GridPanel.js:1302
 msgid "Do you really want to delete the selected record ({0})?"
 msgid_plural "Do you really want to delete the selected records ({0})?"
 msgstr[0] "Wollen Sie wirklich den ausgewählten Eintrag löschen ({0})?"
 msgstr[1] "Wollen Sie wirklich die ausgewählten Einträge löschen ({0})?"
 
-#: Tinebase/js/widgets/grid/GridPanel.js:1336
+#: Tinebase/js/widgets/grid/GridPanel.js:1337
 msgid " ... This may take a long time!"
 msgstr "... Das kann eine ganze Weile dauern!"
 
@@ -1804,78 +1804,70 @@ msgstr "Tag-Name eingegeben"
 msgid "Color"
 msgstr "Farbe"
 
-#: Tinebase/js/widgets/tree/ContextMenu.js:40
-#: Tinebase/js/widgets/tree/ContextMenu.js:406
-msgid "New {0}"
-msgstr "Neue {0}"
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:40
-#: Tinebase/js/widgets/tree/ContextMenu.js:406
-msgid "Please enter the name of the new {0}:"
-msgstr "Bitte den Namen für neue {0} eingeben:"
-
 #: Tinebase/js/widgets/tree/ContextMenu.js:43
-#: Tinebase/js/widgets/tree/ContextMenu.js:409
-msgid "No {0} added"
-msgstr "Kein {0} hinzugefügt"
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:43
-#: Tinebase/js/widgets/tree/ContextMenu.js:172
-#: Tinebase/js/widgets/tree/ContextMenu.js:409
-#: Tinebase/js/widgets/tree/ContextMenu.js:484
-msgid "You have to supply a {0} name!"
-msgstr "Sie sollten einen Namen für {0} angeben!"
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:46
-#: Tinebase/js/widgets/tree/ContextMenu.js:412
-msgid "Creating {0}..."
-msgstr "Einrichten {0}..."
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:110
-#: Tinebase/js/widgets/tree/ContextMenu.js:548
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Möchten Sie {0} \"{1}\" wirklich löschen?"
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:112
-#: Tinebase/js/widgets/tree/ContextMenu.js:550
-msgid "Deleting {0} \"{1}\""
-msgstr "{0} \"{1}\" löschen"
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:166
-#: Tinebase/js/widgets/tree/ContextMenu.js:478
-msgid "Please enter the new name of the {0}:"
-msgstr "Bitte den Namen für {0}: eingeben: "
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:172
-#: Tinebase/js/widgets/tree/ContextMenu.js:484
-msgid "Not renamed {0}"
-msgstr "{0} nicht umbenannt"
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:175
-#: Tinebase/js/widgets/tree/ContextMenu.js:487
-msgid "Updating {0} \"{1}\""
-msgstr "{0} \"{1}\" aktualisieren"
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:265
-#: Tinebase/js/widgets/tree/ContextMenu.js:643
-msgid "Manage Permissions for {0} \"{1}\""
-msgstr "Rechte für {0} :\"{1}\" verwalten"
-
-#: Tinebase/js/widgets/tree/ContextMenu.js:298
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: Tinebase/js/widgets/tree/ContextMenu.js:319
+#: Tinebase/js/widgets/tree/ContextMenu.js:64
 msgid "Manage permissions"
 msgstr "Zugriffsrechte bearbeiten"
 
-#: Tinebase/js/widgets/tree/ContextMenu.js:326
+#: Tinebase/js/widgets/tree/ContextMenu.js:72
 msgid "Set color"
 msgstr "Farbe für einstellen"
 
-#: Tinebase/js/widgets/tree/ContextMenu.js:340
+#: Tinebase/js/widgets/tree/ContextMenu.js:86
 msgid "Reload"
 msgstr "Neu laden"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:109
+msgid "Download"
+msgstr "Download"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:165
+msgid "New {0}"
+msgstr "Neue {0}"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:165
+msgid "Please enter the name of the new {0}:"
+msgstr "Bitte den Namen für neue {0} eingeben:"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:168
+msgid "No {0} added"
+msgstr "Kein {0} hinzugefügt"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:168
+#: Tinebase/js/widgets/tree/ContextMenu.js:244
+msgid "You have to supply a {0} name!"
+msgstr "Sie sollten einen Namen für {0} angeben!"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:171
+msgid "Creating {0}..."
+msgstr "Einrichten {0}..."
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:238
+msgid "Please enter the new name of the {0}:"
+msgstr "Bitte den Namen für {0}: eingeben: "
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:244
+msgid "Not renamed {0}"
+msgstr "{0} nicht umbenannt"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:247
+msgid "Updating {0} \"{1}\""
+msgstr "{0} \"{1}\" aktualisieren"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:310
+msgid "Do you really want to delete the {0} \"{1}\"?"
+msgstr "Möchten Sie {0} \"{1}\" wirklich löschen?"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:312
+msgid "Deleting {0} \"{1}\""
+msgstr "{0} \"{1}\" löschen"
+
+#: Tinebase/js/widgets/tree/ContextMenu.js:409
+msgid "Manage Permissions for {0} \"{1}\""
+msgstr "Rechte für {0} :\"{1}\" verwalten"
 
 #~ msgid "Your session is not valid. You need to login again."
 #~ msgstr "Ihre Sitzung ist ausgelaufen. Bitte melden Sie sich erneut an."
