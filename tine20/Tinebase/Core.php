@@ -290,8 +290,6 @@ class Tinebase_Core
     {
         Tinebase_Core::setupConfig();
         
-        Tinebase_Core::setupTempDir();
-        
         // Server Timezone must be setup before logger, as logger has timehandling!
         Tinebase_Core::setupServerTimezone();
         
@@ -299,6 +297,8 @@ class Tinebase_Core
         
         // Database Connection must be setup before cache because setupCache uses constant "SQL_TABLE_PREFIX" 
         Tinebase_Core::setupDatabaseConnection();
+        
+        Tinebase_Core::setupTempDir();
         
         Tinebase_Core::setupStreamWrapper();
         
@@ -406,8 +406,8 @@ class Tinebase_Core
     {
         $config = self::getConfig();
 
-        $tmpdir = $config->get('tmpdir', null);
-        if (empty($tmpdir) || !@is_writable($tmpdir)) {
+        $tmpdir = $config->tmpdir;
+        if ($tmpdir == Tinebase_Model_Config::NOTSET || !@is_writable($tmpdir)) {
             $tmpdir = sys_get_temp_dir();
             if (empty($tmpdir) || !@is_writable($tmpdir)) {
                 $tmpdir = session_save_path();

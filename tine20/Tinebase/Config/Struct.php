@@ -25,7 +25,15 @@ class Tinebase_Config_Struct extends ArrayObject
      */
     public function toArray()
     {
-        return (array) $this;
+        $array = (array) $this;
+        
+        foreach($array as $key => $value) {
+            if (is_object($value) && method_exists($value, 'toArray')) {
+                $array[$key] = $value->toArray();
+            }
+        }
+
+        return $array;
     }
     
     /**

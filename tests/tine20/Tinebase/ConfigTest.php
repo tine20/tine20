@@ -138,4 +138,18 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($dbConfig['dbname'] != '', 'could not get dbname via arrayAccess');
         $this->assertTrue($dbConfig->dbname != '', 'could not get dbname via objectAccess');
     }
+    
+    /**
+     * test client config retrival
+     * 
+     */
+    public function testGetClientRegistryConfig()
+    {
+        $clientConfig = $this->_instance->getClientRegistryConfig();
+        $this->assertTrue($clientConfig instanceof Tinebase_Config_Struct, 'clientconfig is not a struct');
+        $this->assertTrue($clientConfig->Calendar instanceof Tinebase_Config_Struct, 'calendar clientconfig is not a struct');
+        $this->assertEquals($this->_instance->calendar->fixedCalendars, $clientConfig->Calendar->fixedCalendars, 'fixed calendar config not correct');
+        
+        $this->assertFalse(array_key_exists('SMTP', $clientConfig->Tinebase), 'SMTP is not a client config');
+    }
 }
