@@ -293,10 +293,21 @@ Tine.Filemanager.GridContextMenu = {
                 return;
             }
         }
-        action.show();
-        
+       
         var grid = this.scope.app.getMainScreen().getCenterPanel();
         var selectedRows = grid.selectionModel.getSelections(); 
+        
+        for(var i=0; i < selectedRows.length; i++) {
+            if(!selectedRows[i].get('status') || (selectedRows[i].get('type ') !== 'folder' &&  selectedRows[i].get('status') !== 'uploading' 
+                    &&  selectedRows[i].get('status') !== 'paused' && selectedRows[i].get('status') !== 'pending')) {
+                action.hide();
+                return;
+            }
+        }
+        
+        action.show();
+        
+       
         for(var i=0; i < selectedRows.length; i++) {
             if(selectedRows[i].get('status')) {
                 action.setDisabled(false);
@@ -304,8 +315,8 @@ Tine.Filemanager.GridContextMenu = {
             else {
                 action.setDisabled(true);
             }
-            if(selectedRows[i].get('status') && selectedRows[i].get('status') !== 'paused'){
-                action.setDisabled(true);
+            if(selectedRows[i].get('status') && selectedRows[i].get('status') !== 'paused'){               
+                action.setDisabled(true);               
             }
             
         }   
@@ -326,10 +337,20 @@ Tine.Filemanager.GridContextMenu = {
                 return;
             }
         }
-        action.show();
         
         var grid = this.scope.app.getMainScreen().getCenterPanel();
         var selectedRows = grid.selectionModel.getSelections(); 
+       
+        for(var i=0; i < selectedRows.length; i++) {
+            if(!selectedRows[i].get('status') || (selectedRows[i].get('type ') !== 'folder' && selectedRows[i].get('status') !== 'paused'
+                    &&  selectedRows[i].get('status') !== 'uploading' && selectedRows[i].get('status') !== 'pending')) {
+                action.hide();
+                return;
+            }
+        }
+        
+        action.show();
+        
         for(var i=0; i < selectedRows.length; i++) {
             if(selectedRows[i].get('status')) {
                 action.setDisabled(false);
