@@ -1,0 +1,2 @@
+version=3
+http://www.tine20.org/download.html /downloads/(\d+)-(\d+)-(\d+)/tine20-allinone_.+\.tar\.bz2 debian uupdate

@@ -697,15 +697,15 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      */
     public function deleteUser($_userId)
     {
-        $this->deleteUserInSqlBackend($_userId);
+        $deletedUser = $this->deleteUserInSqlBackend($_userId);
         
         if($this instanceof Tinebase_User_Interface_SyncAble) {
-            $this->deleteUserInSyncBackend($_userId);
+            $this->deleteUserInSyncBackend($deletedUser);
         }
         
         // update data from plugins
         foreach ($this->_sqlPlugins as $plugin) {
-            $plugin->inspectDeleteUser($_userId);
+            $plugin->inspectDeleteUser($deletedUser);
         }
         
     }
@@ -714,43 +714,42 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
      * delete a user
      *
      * @param  mixed  $_userId
+     * @return Tinebase_Model_FullUser  the delete user
      */
     public function deleteUserInSqlBackend($_userId)
     {   
         if ($_userId instanceof Tinebase_Model_FullUser) {
-            $accountId = $_userId->getId();
-            $account = $_userId;
+            $user = $_userId;
         } else {
-            $accountId = Tinebase_Model_User::convertUserIdToInt($_userId);
-            $account = $this->getFullUserById($accountId);
+            $user = $this->getFullUserById($_userId);
         }
         
-        $accountsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
-        $groupMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
-        $roleMembersTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
+        $accountsTable          = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'accounts'));
+        $groupMembersTable      = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'group_members'));
+        $roleMembersTable       = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'role_accounts'));
         $userRegistrationsTable = new Tinebase_Db_Table(array('name' => SQL_TABLE_PREFIX . 'registrations'));
         
         try {
             $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($this->_db);
             
             $where  = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $user->getId()),
             );
             $groupMembersTable->delete($where);
 
             $where  = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id') . ' = ?', $accountId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('account_id')   . ' = ?', $user->getId()),
                 $this->_db->quoteInto($this->_db->quoteIdentifier('account_type') . ' = ?', Tinebase_Acl_Rights::ACCOUNT_TYPE_USER),
-                );
+            );
             $roleMembersTable->delete($where);
             
             $where  = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $accountId),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('id') . ' = ?', $user->getId()),
             );
             $accountsTable->delete($where);
 
             $where  = array(
-                $this->_db->quoteInto($this->_db->quoteIdentifier('login_name') . ' = ?', $account->accountLoginName),
+                $this->_db->quoteInto($this->_db->quoteIdentifier('login_name') . ' = ?', $user->accountLoginName),
             );
             $userRegistrationsTable->delete($where);
             
@@ -761,6 +760,7 @@ class Tinebase_User_Sql extends Tinebase_User_Abstract
             throw($e);
         }
         
+        return $user;
     }
     
     /**

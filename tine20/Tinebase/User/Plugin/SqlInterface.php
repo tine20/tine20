@@ -67,7 +67,7 @@ interface Tinebase_User_Plugin_SqlInterface extends Tinebase_User_Plugin_Interfa
     /**
      * delete user by id
      *
-     * @param   string         $_userId
+     * @param   Tinebase_Model_FullUser $_user
      */
-    public function inspectDeleteUser($_userId);    
+    public function inspectDeleteUser(Tinebase_Model_FullUser $_user);    
 }  

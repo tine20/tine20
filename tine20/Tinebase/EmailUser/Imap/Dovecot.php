@@ -296,16 +296,14 @@ class Tinebase_EmailUser_Imap_Dovecot extends Tinebase_User_Plugin_Abstract
     /**
      * delete user by id
      *
-     * @param  string  $_userId
+     * @param  Tinebase_Model_FullUser  $_user
      */
-    public function inspectDeleteUser($_userId)
+    public function inspectDeleteUser(Tinebase_Model_FullUser $_user)
     {
-        $userId = $_userId instanceof Tinebase_Model_User ? $_userId->getId() : $_userId;
-        
-        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Dovecot settings for user ' . $userId);
+        if (Tinebase_Core::isLogLevel(Zend_Log::INFO)) Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Delete Dovecot settings for user ' . $_user->accountLoginName);
 
         $where = array(
-            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $userId)
+            $this->_db->quoteInto($this->_db->quoteIdentifier($this->_propertyMapping['emailUserId']) . ' = ?', $_user->getId())
         );
         // append domain if set or domain IS NULL
         if (array_key_exists('domain', $this->_config) && ! empty($this->_config['domain'])) {
