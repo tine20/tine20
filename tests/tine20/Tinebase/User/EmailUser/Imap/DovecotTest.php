@@ -80,7 +80,7 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
     {
         // delete email account
         foreach ($this->_objects['addedUsers'] as $user) {
-            $this->_backend->inspectDeleteUser($user->getId());
+            $this->_backend->inspectDeleteUser($user);
         }
     }
     
