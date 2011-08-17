@@ -6,7 +6,7 @@ Ext.ns('Ext.ux.file');
  * collects all uploads
  * 
  * @namespace   Ext.ux.file
- * @class       Ext.ux.file.Uploadmanager
+ * @class       Ext.ux.file.UploadManager
  */
 Ext.ux.file.UploadManager = function(config) {
 

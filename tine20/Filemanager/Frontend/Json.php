@@ -150,4 +150,17 @@ class Filemanager_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'status'    => 'success'
         );
     }
+
+    /**
+     * save node(s) / NOOP
+     * 
+     * save node doesn't do anything at the moment
+     * @param string|array $filenames string->single file, array->multiple
+     * @return input param
+     */
+    public function saveNode($recordData)
+    {      
+        return $recordData;
+    }
+    
 }

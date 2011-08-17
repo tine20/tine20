@@ -131,7 +131,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         return this.doXHTTPRequest(options);
     },
     
-    
+    /**
+     * copy folder/files to a folder
+     * 
+     * @param items files/folders to copy
+     * @param targetPath
+     */
     copyNodes: function(items, targetPath) {
         
         var sourceFilenames = new Array(),
@@ -152,6 +157,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
     },
     
+    /**
+     * move folder/files to a folder
+     * 
+     * @param items files/folders to copy
+     * @param targetPath
+     */
     moveNodes: function(items, targetPath) {
         
         var sourceFilenames = new Array(),
