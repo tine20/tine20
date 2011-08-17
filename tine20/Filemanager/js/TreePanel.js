@@ -70,6 +70,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 //        this.on('containeradd', this.onFolderAdd, this);
 //        this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
+               
+        Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
         
         // init drop zone
         this.dropConfig = {
@@ -91,33 +93,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 return n.node.attributes.allowDrop;
             },
             completeDrop: Ext.emptyFn
-        };
-        
-        
-        Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
-        
-        // init drop zone
-        this.dropConfig = {
-            ddGroup: this.ddGroup || 'TreeDD',
-            appendOnly: this.ddAppendOnly === true,
-            /**
-             * @todo check acl!
-             */
-            onNodeOver : function(n, dd, e, data) {
-                var node = n.node;
-                
-                // auto node expand check
-                if(node.hasChildNodes() && !node.isExpanded()){
-                    this.queueExpand(node);
-                }
-                return node.attributes.allowDrop ? 'tinebase-tree-drop-move' : false;
-            },
-            isValidDropPoint: function(n, dd, e, data){
-                return n.node.attributes.allowDrop;
-            },
-            completeDrop: function() {
-                Tine.log.debug('completeDrop');
-            }
         };
         
 
