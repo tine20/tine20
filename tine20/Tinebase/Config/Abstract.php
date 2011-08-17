@@ -63,15 +63,13 @@ abstract class Tinebase_Config_Abstract
             return call_user_func(array($configClassName, 'getInstance'));
         }      
         
-        // appName section overwrites global section in config file
-        $configFileData = $this->_getConfigFileData();
-        $configFileSection = array_key_exists($this->_appName, $configFileData) && array_key_exists($_name, $configFileData[$this->_appName]) ? $configFileData[$this->_appName] :
-                            (array_key_exists($_name, $configFileData) ? $configFileData : NULL);
-        
-        // config file overwrites db
+        // NOTE: we check config file data here to prevent db lookup when db is not yet setup
+        $configFileSection = $this->_getConfigFileSection($_name);
         if ($configFileSection) {
             return $this->_rawToConfig($configFileSection[$_name], $_name);
-        } else if ($configRecord = $this->_loadConfig($_name, $this->_appName)) {
+        }
+        
+        if ($configRecord = $this->_loadConfig($_name, $this->_appName)) {
             $configData = json_decode($configRecord->value, TRUE);
             // @todo JSON encode all config data via update script!
             return $this->_rawToConfig($configData ? $configData : $configRecord->value, $_name);
@@ -162,9 +160,9 @@ abstract class Tinebase_Config_Abstract
     public function __isset($_name)
     {
         // NOTE: we can't test more precise here due to cacheing
-        $value = $this->get($_name, '###NOTSET###');
+        $value = $this->get($_name, Tinebase_Model_Config::NOTSET);
         
-        return $value !== '###NOTSET###';
+        return $value !== Tinebase_Model_Config::NOTSET;
     }
     
     /**
@@ -188,6 +186,21 @@ abstract class Tinebase_Config_Abstract
     }
     
     /**
+     * get config file section where config identified by name is in
+     * 
+     * @param  string $_name
+     * @return array
+     */
+    protected function _getConfigFileSection($_name)
+    {
+        $configFileData = $this->_getConfigFileData();
+        
+        // appName section overwrites global section in config file
+        return array_key_exists($this->_appName, $configFileData) && array_key_exists($_name, $configFileData[$this->_appName]) ? $configFileData[$this->_appName] :
+              (array_key_exists($_name, $configFileData) ? $configFileData : NULL);
+    }
+    
+    /**
      * load a config record from database
      * 
      * @param  string                   $_name
@@ -198,10 +211,11 @@ abstract class Tinebase_Config_Abstract
     {
         $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application ? $_application : $this->_appName);
         
+        $cache = Tinebase_Core::getCache();
         $cacheId = '_loadConfig_' . sha1($applicationId . $_name);
         
-        if (Tinebase_Core::getCache()->test($cacheId)) {
-            $result = Tinebase_Core::getCache()->load($cacheId);
+        if ($cache && $cache->test($cacheId)) {
+            $result = $cache->load($cacheId);
             return $result;
         }
         
@@ -212,7 +226,7 @@ abstract class Tinebase_Config_Abstract
         
         $result = $this->_getBackend()->search($filter)->getFirstRecord();
         
-        Tinebase_Core::getCache()->save($result, $cacheId, array('config'));
+        if ($cache) $cache->save($result, $cacheId, array('config'));
         
         return $result;
     }
@@ -264,6 +278,8 @@ abstract class Tinebase_Config_Abstract
      * converts raw data to config values of defined type
      * 
      * @TODO support array contents conversion
+     * @TODO support interceptors
+     * @TODO find a place for defaults of definition
      * 
      * @param   mixed     $_rawData
      * @param   string    $_name
@@ -273,10 +289,22 @@ abstract class Tinebase_Config_Abstract
     {
         $definition = self::getDefinition($_name);
         
+//        // config.inc.php overwrites all other rawData
+//        $configFileSection = $this->_getConfigFileSection($_name);
+//        if ($configFileSection) {
+//            $_rawData = $configFileSection[$_name];
+//        }
+        
         if (! $definition) {
-//            if (Setup_Core::isLogLevel(Zend_Log::DEBUG)) Setup_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' no config definition ->  returning scalar/struct');
             return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
+        
+//        // get default from definition if needed
+//        if (is_string($_rawData) && $_rawData == Tinebase_Model_Config::NOTSET) {
+//            if (array_key_exists('default', $definition)) {
+//                $_rawData = $definition['default'];
+//            }
+//        }
         
         if ($definition['type'] == 'object' && isset($definition['class']) && @class_exists($definition['class'])) {
             return new $definition['class']($_rawData);

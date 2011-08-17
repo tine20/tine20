@@ -389,6 +389,60 @@ class Tinebase_Config extends Tinebase_Config_Abstract
         return self::$_properties;
     }
     
+    public function getClientRegistryConfig()
+    {
+        // get all config names to be included in registry
+        $clientProperties = new Tinebase_Config_Struct(array());
+        $filters = array();
+        $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+        foreach ($userApplications as $application) {
+            $config = $this->{$application->name};
+            if ($config instanceof Tinebase_Config_Abstract) {
+                $clientProperties[$application->name] = new Tinebase_Config_Struct(array());
+                $properties = $config->getProperties();
+                foreach( (array) $properties as $name => $definition) {
+                    if (array_key_exists('clientRegistryInclude', $definition) && $definition['clientRegistryInclude'] === TRUE) {
+                        // might not be too bad as we have a cache
+                        $clientProperties[$application->name][$name] = $config->{$name};
+//                        $clientProperties[$application->name][$name] = $definition;
+                    }
+                }
+                
+//                if (isset($clientProperties[$application->name])) {
+//                    $filters[] = array('condition' => 'AND', 'filters' => array(
+//                        array('field' => 'application_id', 'operator' => 'equals', 'value' => $application->getId()),
+//                        array('field' => 'name',           'operator' => 'in',     'value' => array_keys((array) $clientProperties[$application->name])),
+//                    ));
+//                }
+            }
+        }
+        
+//        // get all configs at once
+//        $clientRecords = $this->_getBackend()->search(new Tinebase_Model_ConfigFilter(array(array('condition' => 'OR', 'filters' => $filters))));
+//        $clientRecords->addIndices(array('application_id', 'name'));
+//        
+//        // data to config
+//        foreach($clientProperties as $appName => $properties) {
+//            $config = $this->{$appName};
+//            $appClientRecords = $clientRecords->filter('application_id', Tinebase_Model_Application::convertApplicationIdToInt($appName));
+//            foreach($properties as $name => $definition) {
+//                $configRecord = $appClientRecords->filter('name', $name)->getFirstRecord();
+//                $configData = Tinebase_Model_Config::NOTSET;
+//                
+//                if ($configRecord) {
+//                    // @todo JSON encode all config data via update script!
+//                    $configData = json_decode($configRecord->value, TRUE);
+//                    $configData = $configData ? $configData : $configRecord->value;
+//                }
+//                
+//                // CRAP we need to have a public method in $config!!!
+//                $clientProperties[$appName][$name] = $config->_rawToConfig($configData, $name);
+//            }
+//        }
+        
+        return $clientProperties;
+    }
+    
     /**
      * returns one config value identified by config name and application id
      * -> value in config.inc.php overwrites value in db if $_fromFile is TRUE
