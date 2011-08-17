@@ -705,7 +705,7 @@ class Admin_JsonTest extends PHPUnit_Framework_TestCase
     public function testContainerNotification()
     {
         // prepare smtp transport
-        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::SMTP);
+        $smtpConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::SMTP);
         if (empty($smtpConfig)) {
              $this->markTestSkipped('No SMTP config found: this is needed to send notifications.');
         }

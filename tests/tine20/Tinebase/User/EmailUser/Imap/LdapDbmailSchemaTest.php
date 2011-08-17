@@ -67,7 +67,7 @@ class Tinebase_User_EmailUser_Imap_LdapDbmailSchemaTest extends PHPUnit_Framewor
             $this->markTestSkipped('Dbmail LDAP plugin not enabled');
         }
         
-        $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         
         $this->objects['users'] = array();
     }

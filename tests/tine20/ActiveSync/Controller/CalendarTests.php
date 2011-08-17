@@ -396,6 +396,24 @@ Zeile 3</AirSyncBase:Data></AirSyncBase:Body><Calendar:Timezone>xP///wAAAAAAAAAA
     }
     
     /**
+     * test get multiple
+     * 
+     * @todo check alarm
+     */
+    public function testGetMultiple()
+    {
+        $controller = $this->_getController($this->_getDevice(ActiveSync_Backend_Device::TYPE_PALM));
+        $xml = simplexml_import_dom($this->_getInputDOMDocument());
+        
+        $record = $controller->add($this->_getContainerWithSyncGrant()->getId(), $xml->Collections->Collection->Commands->Change[0]->ApplicationData);
+        $this->objects['events'][] = $record;
+        $events = $controller->getMultiple(array($record->getId()));
+        
+        $this->assertEquals(1       , count($events));
+        $this->assertEquals('Repeat', $events[0]->summary);
+    }
+    
+    /**
      * test search events (unsyncable)
      * 
      * TODO finish this -> assertion fails atm because the event is found even if it is in an unsyncable folder and has no attendees (but 1 exdate)

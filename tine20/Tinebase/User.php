@@ -147,11 +147,11 @@ class Tinebase_User
         $options['plugins'] = array();
         
         // manage email user settings
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::IMAP)) {
-            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::IMAP);
+        if (Tinebase_EmailUser::manages(Tinebase_Config::IMAP)) {
+            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         }
-        if (Tinebase_EmailUser::manages(Tinebase_Model_Config::SMTP)) {
-            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::SMTP);
+        if (Tinebase_EmailUser::manages(Tinebase_Config::SMTP)) {
+            $options['plugins'][] = Tinebase_EmailUser::getInstance(Tinebase_Config::SMTP);
         }
         
         switch ($_backendType) {
@@ -192,7 +192,7 @@ class Tinebase_User
     {
         if (!isset(self::$_backendType)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                self::setBackendType(Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKENDTYPE, null, self::SQL)->value);
+                self::setBackendType(Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKENDTYPE, null, self::SQL)->value);
             } else {
                 self::setBackendType(self::SQL); 
             }
@@ -268,8 +268,8 @@ class Tinebase_User
      */
     public static function saveBackendConfiguration()
     {
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::USERBACKEND, Zend_Json::encode(self::getBackendConfiguration()));
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::USERBACKENDTYPE, self::getConfiguredBackend());
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::USERBACKEND, Zend_Json::encode(self::getBackendConfiguration()));
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::USERBACKENDTYPE, self::getConfiguredBackend());
     }
     
     /**
@@ -283,7 +283,7 @@ class Tinebase_User
         //lazy loading for $_backendConfiguration
         if (!isset(self::$_backendConfiguration)) {
             if (Setup_Controller::getInstance()->isInstalled('Tinebase')) {
-                $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKEND, null, array())->value;
+                $rawBackendConfiguration = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKEND, null, array())->value;
             } else {
                 $rawBackendConfiguration = array();
             }

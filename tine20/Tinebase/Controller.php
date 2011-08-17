@@ -210,13 +210,13 @@ class Tinebase_Controller extends Tinebase_Controller_Abstract
      */
     protected function _initUserSession(Tinebase_Model_FullUser $_user)
     {
-        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONUSERAGENTVALIDATION, NULL, TRUE)->value) {
+        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Config::SESSIONUSERAGENTVALIDATION, NULL, TRUE)->value) {
             Zend_Session::registerValidator(new Zend_Session_Validator_HttpUserAgent());
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' User agent validation disabled.');
         }
         
-        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
+        if (Tinebase_Config::getInstance()->getConfig(Tinebase_Config::SESSIONIPVALIDATION, NULL, TRUE)->value) {
             Zend_Session::registerValidator(new Zend_Session_Validator_IpAddress());
         } else {
             Tinebase_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ . ' Session ip validation disabled.');

@@ -82,12 +82,12 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
     {
         Tinebase_Auth::setBackendType(Tinebase_Auth::LDAP);
      
-        $rawConfigBefore = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::AUTHENTICATIONBACKEND, null, 'null');
+        $rawConfigBefore = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::AUTHENTICATIONBACKEND, null, 'null');
         $key = 'host';
         $testValue = 'phpunit-test-host2';
         Tinebase_Auth::setBackendConfiguration($testValue, $key);
         Tinebase_Auth::saveBackendConfiguration();
-        $rawConfigAfter = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::AUTHENTICATIONBACKEND);
+        $rawConfigAfter = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::AUTHENTICATIONBACKEND);
         $this->assertNotEquals($rawConfigBefore, $rawConfigAfter);
     }
     
@@ -159,7 +159,7 @@ class Tinebase_AuthTest extends PHPUnit_Framework_TestCase
     public function testImapAuth()
     {
         // use imap config for the auth config
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         
         if (empty($imapConfig)) {
              $this->markTestSkipped('No IMAP config found.');

@@ -72,7 +72,7 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
         
         $this->_currentAccount = Tinebase_Core::getUser();
         
-        $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $this->_imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         $this->_useSystemAccount = (array_key_exists('useSystemAccount', $this->_imapConfig) && $this->_imapConfig['useSystemAccount']);
     }
     
@@ -891,15 +891,15 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
     protected function _addSystemAccountConfigValues(Felamimail_Model_Account $_account)
     {
         $configs = array(
-            Tinebase_Model_Config::IMAP     => array(
+            Tinebase_Config::IMAP     => array(
                 'keys'      => array('host', 'port', 'ssl'),
                 'defaults'  => array('port' => 143),
             ),
-            Tinebase_Model_Config::SMTP     => array(
+            Tinebase_Config::SMTP     => array(
                 'keys'      => array('hostname', 'port', 'ssl', 'auth'),
                 'defaults'  => array('port' => 25),
             ),
-            Tinebase_Model_Config::SIEVE    => array(
+            Tinebase_Config::SIEVE    => array(
                 'keys'      => array('hostname', 'port', 'ssl'),
                 'defaults'  => array('port' => 2000, 'ssl' => Felamimail_Model_Account::SECURE_NONE),
             ),
@@ -923,14 +923,14 @@ class Felamimail_Controller_Account extends Tinebase_Controller_Record_Abstract
      * add config values to account
      * 
      * @param Felamimail_Model_Account $_account
-     * @param string $_configKey for example Tinebase_Model_Config::IMAP for imap settings 
+     * @param string $_configKey for example Tinebase_Config::IMAP for imap settings 
      * @param array $_keysOverwrite keys to overwrite
      * @param array $_defaults
      */
     protected function _addConfigValuesToAccount(Felamimail_Model_Account $_account, $_configKey, $_keysOverwrite = array(), $_defaults = array())
     {
-        $config = ($_configKey == Tinebase_Model_Config::IMAP) ? $this->_imapConfig : Tinebase_Config::getInstance()->getConfigAsArray($_configKey, 'Tinebase', $_defaults);
-        $prefix = ($_configKey == Tinebase_Model_Config::IMAP) ? '' : strtolower($_configKey) . '_';
+        $config = ($_configKey == Tinebase_Config::IMAP) ? $this->_imapConfig : Tinebase_Config::getInstance()->getConfigAsArray($_configKey, 'Tinebase', $_defaults);
+        $prefix = ($_configKey == Tinebase_Config::IMAP) ? '' : strtolower($_configKey) . '_';
         
         if (! is_array($config)) {
             throw new Felamimail_Exception('Invalid config found for ' . $_configKey);

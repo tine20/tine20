@@ -104,9 +104,9 @@ class Setup_Controller
         }
         
         $this->_emailConfigKeys = array(
-            'imap'  => Tinebase_Model_Config::IMAP,
-            'smtp'  => Tinebase_Model_Config::SMTP,
-            'sieve' => Tinebase_Model_Config::SIEVE,
+            'imap'  => Tinebase_Config::IMAP,
+            'smtp'  => Tinebase_Config::SMTP,
+            'sieve' => Tinebase_Config::SIEVE,
         );
     }
 
@@ -893,7 +893,7 @@ class Setup_Controller
     protected function _updateRedirectSettings($_data)
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($_data, 1));
-        $keys = array(Tinebase_Model_Config::REDIRECTURL, Tinebase_Model_Config::REDIRECTALWAYS, Tinebase_Model_Config::REDIRECTTOREFERRER);
+        $keys = array(Tinebase_Config::REDIRECTURL, Tinebase_Config::REDIRECTALWAYS, Tinebase_Config::REDIRECTTOREFERRER);
         foreach ($keys as $key) {
             if (array_key_exists($key, $_data)) {
                 if (strlen($_data[$key]) === 0) {
@@ -943,12 +943,12 @@ class Setup_Controller
     protected function _getRedirectSettings()
     {
         $return = array(
-              Tinebase_Model_Config::REDIRECTURL => '',
-              Tinebase_Model_Config::REDIRECTTOREFERRER => '0'
+              Tinebase_Config::REDIRECTURL => '',
+              Tinebase_Config::REDIRECTTOREFERRER => '0'
         );       
         if (Setup_Core::get(Setup_Core::CHECKDB) && $this->isInstalled('Tinebase')) {
-            $return[Tinebase_Model_Config::REDIRECTURL] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value;
-            $return[Tinebase_Model_Config::REDIRECTTOREFERRER] = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTTOREFERRER, NULL, '')->value;      
+            $return[Tinebase_Config::REDIRECTURL] = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value;
+            $return[Tinebase_Config::REDIRECTTOREFERRER] = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTTOREFERRER, NULL, '')->value;      
         }
         return $return;
     }
@@ -1006,7 +1006,7 @@ class Setup_Controller
      */
     public function getAcceptedTerms()
     {
-        return Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::ACCEPTEDTERMSVERSION, 'Tinebase', 0);
+        return Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::ACCEPTEDTERMSVERSION, 'Tinebase', 0);
     }
     
     /**
@@ -1017,7 +1017,7 @@ class Setup_Controller
      */
     public function saveAcceptedTerms($_data)
     {
-        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Model_Config::ACCEPTEDTERMSVERSION, Zend_Json::encode($_data));
+        Tinebase_Config::getInstance()->setConfigForApplication(Tinebase_Config::ACCEPTEDTERMSVERSION, Zend_Json::encode($_data));
     }
     
     /**

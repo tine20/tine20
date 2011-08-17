@@ -57,12 +57,12 @@ class Tinebase_User_EmailUser_Imap_DovecotTest extends PHPUnit_Framework_TestCas
      */
     protected function setUp()
     {
-        $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $this->_config = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         if (!isset($this->_config['backend']) || !(ucfirst($this->_config['backend']) == Tinebase_EmailUser::DOVECOT_IMAP) || $this->_config['active'] != true) {
             $this->markTestSkipped('Dovecot MySQL backend not configured or not enabled');
         }
         
-        $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Model_Config::IMAP);
+        $this->_backend = Tinebase_EmailUser::getInstance(Tinebase_Config::IMAP);
         
         $personas = Zend_Registry::get('personas');
         $this->_objects['user'] = clone $personas['jsmith'];

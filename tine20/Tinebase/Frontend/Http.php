@@ -183,9 +183,9 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     public function login()
     {
         // redirect to REDIRECTURL if set
-        $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value;
+        $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value;
 
-        if ($redirectUrl !== '' && Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTALWAYS, NULL, FALSE)->value) {
+        if ($redirectUrl !== '' && Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTALWAYS, NULL, FALSE)->value) {
             header('Location: ' . $redirectUrl);
             return;
         }
@@ -284,7 +284,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
     {
         if (!empty($username)) {
             # removed this line on 09-06-2010 Lars
-            #Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::USERBACKEND, null, $_SERVER["HTTP_REFERER"])->value;
+            #Tinebase_Config::getInstance()->getConfig(Tinebase_Config::USERBACKEND, null, $_SERVER["HTTP_REFERER"])->value;
             
             // try to login user
             $success = (Tinebase_Controller::getInstance()->login($username, $password, $_SERVER['REMOTE_ADDR'], 'TineHttpPost') === TRUE); 
@@ -308,7 +308,7 @@ class Tinebase_Frontend_Http extends Tinebase_Frontend_Http_Abstract
         // redirect back to loginurl
         if ($success !== TRUE) {
             $defaultUrl = (array_key_exists('HTTP_REFERER', $_SERVER)) ? $_SERVER['HTTP_REFERER'] : '';
-            $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, $defaultUrl)->value;
+            $redirectUrl = Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, $defaultUrl)->value;
             if (! empty($redirectUrl)) {
                 header('Location: ' . $redirectUrl);
             }

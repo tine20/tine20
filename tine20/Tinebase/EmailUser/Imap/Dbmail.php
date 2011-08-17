@@ -97,7 +97,7 @@ class Tinebase_EmailUser_Imap_Dbmail extends Tinebase_User_Plugin_Abstract
      */
     public function __construct(array $_options = array())
     {
-        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Model_Config::IMAP);
+        $imapConfig = Tinebase_Config::getInstance()->getConfigAsArray(Tinebase_Config::IMAP);
         
         // merge _config and dbmail imap
         $this->_config = array_merge($imapConfig['dbmail'], $this->_config);

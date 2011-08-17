@@ -314,7 +314,7 @@ class Tinebase_Core
         Tinebase_Core::set('locale', new Zend_Locale('en_US'));
         Tinebase_Core::set('userTimeZone', 'UTC');
         
-        Tinebase_Core::setupMailer();
+//        Tinebase_Core::setupMailer();
         
         Tinebase_Core::setupUserCredentialCache();
         
@@ -383,14 +383,7 @@ class Tinebase_Core
      */
     public static function setupConfig()
     {
-        $configData = include('config.inc.php');
-        if($configData === false) {
-            die ('central configuration file config.inc.php not found in includepath: ' . get_include_path());
-        }
-
-        $config = new Zend_Config($configData);
-
-        self::set(self::CONFIG, $config);
+        self::set(self::CONFIG, Tinebase_Config::getInstance());
     }
 
     /**
@@ -947,26 +940,26 @@ class Tinebase_Core
         return $timezone;
     }
 
-    /**
-     * function to initialize the smtp connection
-     *
-     */
-    public static function setupMailer()
-    {
-        $config = self::getConfig();
-
-        if (isset($config->smtp)) {
-            $mailConfig = $config->smtp;
-        } else {
-            $mailConfig = new Zend_Config(array(
-                'hostname' => 'localhost', 
-                'port' => 25
-            ));
-        }
-
-        $transport = new Zend_Mail_Transport_Smtp($mailConfig->hostname,  $mailConfig->toArray());
-        Zend_Mail::setDefaultTransport($transport);
-    }
+//    /**
+//     * function to initialize the smtp connection
+//     *
+//     */
+//    public static function setupMailer()
+//    {
+//        $config = self::getConfig();
+//
+//        if (isset($config->smtp)) {
+//            $mailConfig = $config->smtp;
+//        } else {
+//            $mailConfig = new Zend_Config(array(
+//                'hostname' => 'localhost', 
+//                'port' => 25
+//            ));
+//        }
+//
+//        $transport = new Zend_Mail_Transport_Smtp($mailConfig->hostname,  $mailConfig->toArray());
+//        Zend_Mail::setDefaultTransport($transport);
+//    }
 
     /**
      * set php execution life (max) time
