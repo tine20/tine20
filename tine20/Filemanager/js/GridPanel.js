@@ -716,10 +716,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         fileRecord.set('path', record.path);
         fileRecord.commit(false);
         
-        grid.pagingToolbar.disable();
-        if(!Tine.Tinebase.uploadManager.isUploadsPending() && !Tine.Tinebase.uploadManager.isBusy()) {
-            grid.pagingToolbar.enable();
-        }
+        grid.pagingToolbar.enable();
+       
     },
     
     /**
@@ -733,7 +731,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var app = Tine.Tinebase.appMgr.get('Filemanager');
         var grid = app.getMainScreen().getCenterPanel(); 
         var gridStore = grid.store;
-        grid.pagingToolbar.disable();
         
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {

@@ -65,13 +65,61 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     } ],
     
     initComponent: function() {
-      
+        
         this.on('beforenodedrop', this.onBeforenodedrop, this);
 //        this.on('containeradd', this.onFolderAdd, this);
 //        this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
         
+        // init drop zone
+        this.dropConfig = {
+            ddGroup: this.ddGroup || 'TreeDD',
+            appendOnly: this.ddAppendOnly === true,
+            /**
+             * @todo check acl!
+             */
+            onNodeOver : function(n, dd, e, data) {
+                var node = n.node;
+                
+                // auto node expand check
+//                if(node.hasChildNodes() && !node.isExpanded()){
+//                    this.queueExpand(node);
+//                }
+                return node.attributes.allowDrop ? 'tinebase-tree-drop-move' : false;
+            },
+            isValidDropPoint: function(n, dd, e, data){
+                return n.node.attributes.allowDrop;
+            },
+            completeDrop: Ext.emptyFn
+        };
+        
+        
         Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
+        
+        // init drop zone
+        this.dropConfig = {
+            ddGroup: this.ddGroup || 'TreeDD',
+            appendOnly: this.ddAppendOnly === true,
+            /**
+             * @todo check acl!
+             */
+            onNodeOver : function(n, dd, e, data) {
+                var node = n.node;
+                
+                // auto node expand check
+                if(node.hasChildNodes() && !node.isExpanded()){
+                    this.queueExpand(node);
+                }
+                return node.attributes.allowDrop ? 'tinebase-tree-drop-move' : false;
+            },
+            isValidDropPoint: function(n, dd, e, data){
+                return n.node.attributes.allowDrop;
+            },
+            completeDrop: function() {
+                Tine.log.debug('completeDrop');
+            }
+        };
+        
 
     },
     
@@ -337,14 +385,14 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         grid.action_deleteRecord.disable();
         grid.action_upload.disable();
         
-        if(node && node.isRoot) {
+        if(!!node && !!node.isRoot) {
             grid.action_goUpFolder.disable();
         }
         else {
             grid.action_goUpFolder.enable();
         }
                 
-        if(node && node.attributes && node.attributes.account_grants && node.attributes.account_grants.addGrant) {
+        if(!!node && !!node.attributes && !!node.attributes.account_grants && node.attributes.account_grants.addGrant) {
             grid.action_upload.enable();
             grid.action_createFolder.enable();
         }
@@ -353,7 +401,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             grid.action_createFolder.disable();
         }
         
-        this.app.mainScreen.GridPanel.currentFolderNode = node; 
+        grid.currentFolderNode = node; 
         Tine.Filemanager.TreePanel.superclass.onSelectionChange.call(this, sm, node);
     
     },
@@ -406,14 +454,18 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @private
      */
     onBeforenodedrop: function(dropEvent) {
-//        var targetFolderId = dropEvent.target.attributes.folder_id,
-//            targetFolder = this.app.getFolderStore().getById(targetFolderId);
-//                
-//        this.app.getMainScreen().getCenterPanel().moveSelectedMessages(targetFolder, false);
-//        return true;
-    
-        console.log("onBeforenodedrop");
-        return true;
+
+        var nodes = dropEvent.data.selections,
+            targetPath = dropEvent.target.attributes.path;
+            
+        if(dropEvent.rawEvent.ctrlKey) {
+            Tine.Filemanager.fileRecordBackend.moveNodes(nodes, targetPath);
+        }
+        else {
+            Tine.Filemanager.fileRecordBackend.copyNodes(nodes, targetPath);
+        }
+        
+        return false;
      },
      
      onFolderDelete: function() {

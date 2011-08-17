@@ -77,7 +77,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         options.success = function(_result){
             var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-            var grid = app.mainScreen.GridPanel;
+            var grid = app.getMainScreen().getCenterPanel();
             grid.currentFolderNode.reload();            
             grid.getStore().reload();
             this.fireEvent('containeradd', nodeData);
@@ -121,7 +121,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         options.success = function(_result){
             var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-            var grid = app.mainScreen.GridPanel;
+            var grid = app.getMainScreen().getCenterPanel();
             grid.currentFolderNode.reload();            
             grid.getStore().reload();
 //            this.fireEvent('containerdelete', nodeData);
@@ -129,6 +129,50 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         };
         
         return this.doXHTTPRequest(options);
+    },
+    
+    
+    copyNodes: function(items, targetPath) {
+        
+        var sourceFilenames = new Array(),
+            destinationFilenames = new Array(),
+            forceOverwrite = false;
+        
+        Ext.each(items, function(item) {
+            sourceFilenames.push(item.data.path);
+            destinationFilenames.push(targetPath + '/' + item.data.name);
+        }, this);
+        
+        Ext.MessageBox.wait(_('Please wait'), String.format(_('Copying data .. {0}' ), '' ));
+        Tine.Filemanager.copyNodes(sourceFilenames, destinationFilenames, forceOverwrite, 
+                (function() {
+                    Ext.MessageBox.hide();
+                }).createDelegate(this));
+        
+        
+    },
+    
+    moveNodes: function(items, targetPath) {
+        
+        var sourceFilenames = new Array(),
+            destinationFilenames = new Array(),
+            forceOverwrite = false;
+        
+        Ext.each(items, function(item) {
+            sourceFilenames.push(item.data.path);
+            destinationFilenames.push(targetPath + '/' + item.data.name);
+        }, this);
+        
+        Ext.MessageBox.wait(_('Please wait'), String.format(_('Moving data .. {0}' ), '' ));
+        Tine.Filemanager.moveNodes(sourceFilenames, destinationFilenames, forceOverwrite, 
+                (function() {
+                    Ext.MessageBox.hide();
+                    var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
+                    var grid = app.getMainScreen().getCenterPanel();
+                    grid.getStore().reload();
+                }).createDelegate(this));
+        
+        
     },
     
     saveRecord : function() {
