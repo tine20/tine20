@@ -178,7 +178,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             attr.id = attr.accountId;
         }
         
-        if (! attr.name && attr.path) {
+        if (!attr.name && attr.path) {
             attr.name = Tine.Tinebase.container.path2name(attr.path, this.containerName, this.containersName);
         }
         

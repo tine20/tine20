@@ -147,7 +147,13 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         Ext.each(items, function(item) {
             sourceFilenames.push(item.data.path);
-            destinationFilenames.push(targetPath + '/' + item.data.name);
+            
+            var itemName = item.data.name;
+            if(typeof itemName == 'object') {
+                itemName = itemName.name;
+            }
+            
+            destinationFilenames.push(targetPath + '/' + itemName);
             if(item.data.type == 'folder') {
                 refreshTree = true;
             }
@@ -181,7 +187,13 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         Ext.each(items, function(item) {
             sourceFilenames.push(item.data.path);
-            destinationFilenames.push(targetPath + '/' + item.data.name);
+            
+            var itemName = item.data.name;
+            if(typeof itemName == 'object') {
+                itemName = itemName.name;
+            }
+                       
+            destinationFilenames.push(targetPath + '/' + itemName);
             if(item.data.type == 'folder') {
                 refreshTree = true;
             }
