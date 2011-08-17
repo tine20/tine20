@@ -431,13 +431,13 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     onBeforenodedrop: function(dropEvent) {
 
         var nodes = dropEvent.data.selections,
-            targetPath = dropEvent.target.attributes.path;
+            target = dropEvent.target;
             
         if(dropEvent.rawEvent.ctrlKey) {
-            Tine.Filemanager.fileRecordBackend.moveNodes(nodes, targetPath);
+            Tine.Filemanager.fileRecordBackend.moveNodes(nodes, target);
         }
         else {
-            Tine.Filemanager.fileRecordBackend.copyNodes(nodes, targetPath);
+            Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target);
         }
         
         return false;

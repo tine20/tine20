@@ -137,12 +137,13 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      * @param items files/folders to copy
      * @param targetPath
      */
-    copyNodes: function(items, targetPath) {
+    copyNodes: function(items, target) {
         
         var sourceFilenames = new Array(),
             destinationFilenames = new Array(),
             forceOverwrite = false,
-            refreshTree = false;
+            refreshTree = false,
+            targetPath = target.attributes.path;
         
         Ext.each(items, function(item) {
             sourceFilenames.push(item.data.path);
@@ -157,9 +158,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 (function() {
                     Ext.MessageBox.hide();
                     if(refreshTree) {
-                        var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-                        var grid = app.getMainScreen().getCenterPanel();
-                        grid.currentTreeNode.reload();
+                        target.reload();                       
                     }
                 }).createDelegate(this));
         
@@ -172,12 +171,13 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      * @param items files/folders to copy
      * @param targetPath
      */
-    moveNodes: function(items, targetPath) {
+    moveNodes: function(items, target) {
         
         var sourceFilenames = new Array(),
             destinationFilenames = new Array(),
             forceOverwrite = false,
-            refreshTree = false;
+            refreshTree = false,
+            targetPath = target.attributes.path;
         
         Ext.each(items, function(item) {
             sourceFilenames.push(item.data.path);
@@ -195,7 +195,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                     var grid = app.getMainScreen().getCenterPanel();
                     grid.getStore().reload();
                     if(refreshTree) {
-                        grid.currentTreeNode.reload();
+                        grid.currentFolderNode.reload();
+                        target.reload(); 
                     }
                 }).createDelegate(this));
         
