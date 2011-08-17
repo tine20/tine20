@@ -548,6 +548,7 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             foreach ($userApplications as $application) {
                 
                 $jsonAppName = $application->name . '_Frontend_Json';
+                $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
                 
                 if (class_exists($jsonAppName)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
@@ -556,6 +557,8 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                     
                     $registryData[$application->name] = $applicationJson->getRegistryData();
                     $registryData[$application->name]['rights'] = Tinebase_Core::getUser()->getRights($application->name);
+                    
+                    $registryData[$application->name]['config'] = isset($clientConfig[$application->name]) ? $clientConfig[$application->name]->toArray() : array();
                     
                     // @todo do we need this for all apps?
                     $exportDefinitions = Tinebase_ImportExportDefinition::getInstance()->getExportDefinitionsForApplication($application);
