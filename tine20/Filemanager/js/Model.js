@@ -146,15 +146,20 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             targetPath = target.attributes.path;
         
         Ext.each(items, function(item) {
-            sourceFilenames.push(item.data.path);
             
-            var itemName = item.data.name;
+            var itemData = item.data;
+            if(!itemData) {
+                itemData = item.attributes;
+            }
+            sourceFilenames.push(itemData.path);
+            
+            var itemName = itemData.name;
             if(typeof itemName == 'object') {
                 itemName = itemName.name;
             }
             
             destinationFilenames.push(targetPath + '/' + itemName);
-            if(item.data.type == 'folder') {
+            if(itemData.type == 'folder') {
                 refreshTree = true;
             }
         }, this);
@@ -183,18 +188,25 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             destinationFilenames = new Array(),
             forceOverwrite = false,
             refreshTree = false,
-            targetPath = target.attributes.path;
+            targetPath = target.attributes.path,
+            reloadParent = false;
         
         Ext.each(items, function(item) {
-            sourceFilenames.push(item.data.path);
             
-            var itemName = item.data.name;
+            var itemData = item.data;
+            if(!itemData) {
+                itemData = item.attributes;
+                reloadParent = true;
+            }
+            sourceFilenames.push(itemData.path);
+            
+            var itemName = itemData.name;
             if(typeof itemName == 'object') {
                 itemName = itemName.name;
             }
-                       
+            
             destinationFilenames.push(targetPath + '/' + itemName);
-            if(item.data.type == 'folder') {
+            if(itemData.type == 'folder') {
                 refreshTree = true;
             }
         }, this);
@@ -205,9 +217,16 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                     Ext.MessageBox.hide();
                     var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
                     var grid = app.getMainScreen().getCenterPanel();
-                    grid.getStore().reload();
                     if(refreshTree) {
-                        grid.currentFolderNode.reload();
+                        if(reloadParent && items[0].parentNode) {
+                            items[0].parentNode.reload();
+                        }
+                        else {
+                            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
+                            var grid = app.getMainScreen().getCenterPanel();
+                            grid.currentFolderNode.reload();
+                            grid.getStore().reload();
+                        }
                         target.reload(); 
                     }
                 }).createDelegate(this));

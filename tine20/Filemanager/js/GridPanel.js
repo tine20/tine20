@@ -756,6 +756,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }           
         }, this);
         
+        gridStore.reload();
 
     },
     

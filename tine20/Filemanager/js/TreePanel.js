@@ -55,6 +55,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     
     ddGroup: 'fileDDGroup',
     
+    enableDD: true,
+    
     plugins : [ {
         ptype : 'ux.browseplugin',
         enableFileDialog: false,
@@ -433,11 +435,15 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var nodes = dropEvent.data.selections,
             target = dropEvent.target;
             
+        if(!nodes && dropEvent.data.node) {
+            nodes = [dropEvent.data.node];
+        }
+        
         if(dropEvent.rawEvent.ctrlKey) {
-            Tine.Filemanager.fileRecordBackend.moveNodes(nodes, target);
+            Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target);
         }
         else {
-            Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target);
+            Tine.Filemanager.fileRecordBackend.moveNodes(nodes, target);
         }
         
         return false;
