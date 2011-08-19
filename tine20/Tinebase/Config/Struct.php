@@ -1,7 +1,17 @@
 <?php
+/**
+ * @package     Tinebase
+ * @subpackage  Config
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ */
 
 /**
  * Zend_Config like access to array data
+ * 
+ * @package     Tinebase
+ * @subpackage  Config
  */
 class Tinebase_Config_Struct extends ArrayObject
 {

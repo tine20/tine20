@@ -1,13 +1,17 @@
 <?php
 /**
- * base for config classes
- * 
  * @package     Tinebase
  * @subpackage  Config
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Cornelius Weiss <c.weiss@metaways.de>
+ */
+
+/**
+ * base for config classes
  * 
+ * @package     Tinebase
+ * @subpackage  Config
  * @todo support protected function interceptor for get property: _get<PropertyName>(&$data)
  * @todo support protected function interceptor for set property: _set<PropertyName>(&$data)
  * @todo update db to json encode all configs
@@ -315,6 +319,7 @@ abstract class Tinebase_Config_Abstract
             case 'string':      return (string) $_rawData;
             case 'float':       return (float) $_rawData;
             case 'dateTime':    return new DateTime($_rawData);
+            case 'keyField':    return new Tinebase_Config_KeyField($_rawData, $definition['class']);
             default:            return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
     }
