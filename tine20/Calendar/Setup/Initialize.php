@@ -81,4 +81,45 @@ class Calendar_Setup_Initialize extends Setup_Initialize
             )
         ))));        
     }
+    
+    /**
+     * init favorites
+     */
+    protected function _initializeKeyFields()
+    {
+        $cb = new Tinebase_Backend_Sql(array(
+            'modelName' => 'Tinebase_Model_Config', 
+            'tableName' => 'config',
+        ));
+        
+        $attendeeRolesConfig = array(
+            'name'    => Calendar_Config::ATTENDEE_ROLES,
+            'records' => array(
+                array('id' => 'REQ', 'value' => 'Requierd', 'system' => true), //_('Requierd')
+                array('id' => 'OPT', 'value' => 'Optional', 'system' => true), //_('Optional')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'name'              => Calendar_Config::ATTENDEE_ROLES,
+            'value'             => json_encode($attendeeRolesConfig),
+        )));
+        
+        $attendeeStatusConfig = array(
+            'name'    => Calendar_Config::ATTENDEE_STATUS,
+            'records' => array(
+                array('id' => 'NEEDS-ACTION', 'value' => 'Needs Action', 'system' => true), //_('Needs Action')
+                array('id' => 'ACCEPTED',     'value' => 'Accepted',     'system' => true), //_('Accepted')
+                array('id' => 'DECLINED',     'value' => 'Declined',     'system' => true), //_('Declined')
+                array('id' => 'TENTATIVE',    'value' => 'Tenetative',   'system' => true), //_('Tenetative')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Calendar')->getId(),
+            'name'              => Calendar_Config::ATTENDEE_STATUS,
+            'value'             => json_encode($attendeeStatusConfig),
+        )));
+    }
 }

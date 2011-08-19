@@ -1,6 +1,16 @@
 <?php
+/**
+ * @package     Calendar
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ */
 
-
+/**
+ * calendar config class
+ * 
+ * @package     Calendar
+ */
 class Calendar_Config extends Tinebase_Config_Abstract
 {
     /**
@@ -44,18 +54,20 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'label'                 => 'Attendee Status Available',
                                    //_('Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation.')
             'description'           => 'Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Model_KeyFieldConfig',
+            'type'                  => 'keyField',
+            'class'                 => 'Calendar_Model_AttendeeStatus',
             'clientRegistryInclude' => TRUE,
+            'default'               => 'NEEDS-ACTION'
         ),
         self::ATTENDEE_ROLES => array(
                                    //_('Attendee Roles Available')
             'label'                 => 'Attendee Roles Available',
                                    //_('Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation.')
             'description'           => 'Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation.',
-            'type'                  => 'object',
-            'class'                 => 'Tinebase_Model_KeyFieldConfig',
+            'type'                  => 'keyField',
+            'class'                 => 'Calendar_Model_AttendeeRole',
             'clientRegistryInclude' => TRUE,
+            'default'               => 'REQ'
         ),
     );
     
