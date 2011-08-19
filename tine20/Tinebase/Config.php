@@ -159,7 +159,8 @@ class Tinebase_Config extends Tinebase_Config_Abstract
     const APPDEFAULTS = 'appdefaults';
     
     /**
-     * config definitions for Tinebase
+     * (non-PHPdoc)
+     * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
         self::IMAP => array(
