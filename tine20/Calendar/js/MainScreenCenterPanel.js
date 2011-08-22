@@ -328,7 +328,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                     
                     Tine.Calendar.Model.Attender.getAttendeeStatusStore().each(function(status) {
                         responseAction.menu.push({
-                            text: status.get('status_name'),
+                            text: status.get('i18nValue'),
                             handler: this.setResponseStatus.createDelegate(this, [event, status.id]),
                             iconCls: 'cal-response-action-' + status.id,
                             disabled: myAttenderRecord.get('status') === status.id

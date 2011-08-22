@@ -109,10 +109,10 @@ class Calendar_Setup_Initialize extends Setup_Initialize
         $attendeeStatusConfig = array(
             'name'    => Calendar_Config::ATTENDEE_STATUS,
             'records' => array(
-                array('id' => 'NEEDS-ACTION', 'value' => 'Needs Action', 'system' => true), //_('Needs Action')
+                array('id' => 'NEEDS-ACTION', 'value' => 'No response',  'system' => true), //_('No response')
                 array('id' => 'ACCEPTED',     'value' => 'Accepted',     'system' => true), //_('Accepted')
                 array('id' => 'DECLINED',     'value' => 'Declined',     'system' => true), //_('Declined')
-                array('id' => 'TENTATIVE',    'value' => 'Tenetative',   'system' => true), //_('Tenetative')
+                array('id' => 'TENTATIVE',    'value' => 'Tentative',    'system' => true), //_('Tentative')
             ),
         );
         

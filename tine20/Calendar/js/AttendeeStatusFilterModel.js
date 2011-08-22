@@ -97,7 +97,7 @@ Tine.Calendar.AttendeeStatusFilterModelValueField = Ext.extend(Ext.ux.form.Layer
         Tine.Calendar.Model.Attender.getAttendeeStatusStore().each(function(status) {
             items.push({
                 xtype: 'checkbox',
-                boxLabel: status.get('status_name'),
+                boxLabel: status.get('i18nValue'),
                 icon: status.get('status_icon'),
                 name: status.get('id')
             });
@@ -119,7 +119,7 @@ Tine.Calendar.AttendeeStatusFilterModelValueField = Ext.extend(Ext.ux.form.Layer
         
         Tine.Calendar.Model.Attender.getAttendeeStatusStore().each(function(status) {
             var id = status.get('id');
-            var name = status.get('status_name');
+            var name = status.get('i18nValue');
             if (value.indexOf(id) >= 0) {
                 statusText.push(name);
                 this.currentValue.push(id);

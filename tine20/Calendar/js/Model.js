@@ -456,21 +456,34 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
 
 Tine.Calendar.Model.Attender.getAttendeeStatusStore = function() {
     if (! Tine.Calendar.Model.Attender.attendeeStatusStore) {
-        var app = Tine.Tinebase.appMgr.get('Calendar');
-        Tine.Calendar.Model.Attender.attendeeStatusStore = new Ext.data.ArrayStore({
-            storeId: 'calendar.attener.status',
-            idIndex: 0,  
-            fields: ['id', 'status_name'],
-            data: [
-                ['NEEDS-ACTION', app.i18n._('No response')],
-                ['ACCEPTED',     app.i18n._('Accepted')   ],
-                ['DECLINED',     app.i18n._('Declined')   ],
-                ['TENTATIVE',    app.i18n._('Tentative')  ]
-            ]
+        var app = Tine.Tinebase.appMgr.get('Calendar'),
+            config = app.getRegistry().get('config'),
+            status = config.attendeeStatus && Ext.isArray(config.attendeeStatus.records) ? config.attendeeStatus.records : [];
+            
+        Ext.each(status, function(s) {s.i18nValue = app.i18n._hidden(s.value);});
+        Tine.Calendar.Model.Attender.attendeeStatusStore = new Ext.data.JsonStore({
+            fields: ['id', 'value', 'system', 'i18nValue'],
+            data: status
         });
     }
     
     return Tine.Calendar.Model.Attender.attendeeStatusStore;
+}
+
+Tine.Calendar.Model.Attender.getAttendeeRolesStore = function() {
+    if (! Tine.Calendar.Model.Attender.attendeeRolesStore) {
+        var app = Tine.Tinebase.appMgr.get('Calendar'),
+            config = app.getRegistry().get('config'),
+            roles = config.attendeeStatus && Ext.isArray(config.attendeeRoles.records) ? config.attendeeRoles.records : [];
+            
+        Ext.each(roles, function(r) {r.i18nValue = app.i18n._hidden(r.value);});
+        Tine.Calendar.Model.Attender.attendeeRolesStore = new Ext.data.JsonStore({
+            fields: ['id', 'value', 'system', 'i18nValue'],
+            data: roles
+        });
+    }
+    
+    return Tine.Calendar.Model.Attender.attendeeRolesStore;
 }
 
 /**

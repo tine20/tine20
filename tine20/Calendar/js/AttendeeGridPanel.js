@@ -67,11 +67,6 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     
     stateful: true,
     stateId: 'cal-attendeegridpanel',
-    //stateEvents: ['sortchange', ],
-    applyState: Ext.emptyFn,
-    //applyState: function(state) {
-    //    console.log(state);
-    //},
     
     initComponent: function() {
         this.app = this.app ? this.app : Tine.Tinebase.appMgr.get('Calendar');
@@ -105,7 +100,15 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             sortable: true,
             hidden: this.showNamesOnly || true,
             header: this.app.i18n._('Role'),
-            renderer: this.renderAttenderRole.createDelegate(this)
+            renderer: this.renderAttenderRole.createDelegate(this),
+            editor: new Ext.form.ComboBox({
+                blurOnSelect  : true,
+                expandOnFocus : true,
+                mode          : 'local',
+                displayField  : 'i18nValue',
+                valueField    : 'id',
+                store         : Tine.Calendar.Model.Attender.getAttendeeRolesStore()
+            })
         },/* {
             id: 'quantity',
             dataIndex: 'quantity',
@@ -190,7 +193,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 blurOnSelect  : true,
                 expandOnFocus : true,
                 mode          : 'local',
-                displayField  : 'status_name',
+                displayField  : 'i18nValue',
                 valueField    : 'id',
                 store         : Tine.Calendar.Model.Attender.getAttendeeStatusStore()
             })
@@ -259,10 +262,13 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             return;
         }
         
-        // don't allow to set anything besides quantity for already set attendee
+        // don't allow to set anything besides quantity and role for already set attendee
         if (o.record.get('user_id')) {
             o.cancel = true;
             if (o.field == 'quantity' && o.record.get('user_type') == 'resource') {
+                o.cancel = false;
+            }
+            if (o.field == 'role') {
                 o.cancel = false;
             }
             return;
@@ -492,21 +498,25 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         return quantity > 1 ? quantity : '';
     },
     
-    renderAttenderRole: function(role) {
-        switch (role) {
-            case 'REQ':
-                return this.app.i18n._('Required');
-                break;
-            case 'OPT':
-                return this.app.i18n._('Optional');
-                break;
-            default:
-                return Ext.util.Format.htmlEncode(this.app.i18n._hidden(role));
-                break;
+    renderAttenderRole: function(role, metadata, attender) {
+        var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n;
+
+        if (this.record && this.record.get('editGrant')) {
+            metadata.attr = 'style = "cursor:pointer;"';
+        } else {
+            metadata.css = 'x-form-empty-field';
         }
+        
+        var store = Tine.Calendar.Model.Attender.getAttendeeRolesStore(),
+            roleRecord = store.getById(role);
+            
+        return roleRecord ? roleRecord.get('i18nValue') : Ext.util.Format.htmlEncode(i18n._hidden(role));
+        
     },
     
     renderAttenderStatus: function(status, metadata, attender) {
+        var i18n = Tine.Tinebase.appMgr.get('Calendar').i18n;
+        
         if (! attender.get('user_id')) {
             return '';
         }
@@ -517,24 +527,10 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             metadata.css = 'x-form-empty-field';
         }
         
-        var il8n = Tine.Tinebase.appMgr.get('Calendar').i18n;
-        switch (status) {
-            case 'NEEDS-ACTION':
-                return il8n._('No response');
-                break;
-            case 'ACCEPTED':
-                return il8n._('Accepted');
-                break;
-            case 'DECLINED':
-                return il8n._('Declined');
-                break;
-            case 'TENTATIVE':
-                return il8n._('Tentative');
-                break;
-            default:
-                return Ext.util.Format.htmlEncode(il8n._hidden(status));
-                break;
-        }
+        var store = Tine.Calendar.Model.Attender.getAttendeeStatusStore(),
+            statusRecord = store.getById(status);
+            
+        return statusRecord ? statusRecord.get('i18nValue') : Ext.util.Format.htmlEncode(i18n._hidden(status));
     },
     
     renderAttenderType: function(type, metadata, attender) {

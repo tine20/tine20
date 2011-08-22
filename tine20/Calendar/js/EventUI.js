@@ -235,11 +235,13 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
             });
         }
         
-        var myAttenderRecord = this.event.getMyAttenderRecord();
-        if (myAttenderRecord) {
+        var myAttenderRecord = this.event.getMyAttenderRecord(),
+            myAttenderStatusRecord = myAttenderRecord ? Tine.Calendar.Model.Attender.getAttendeeStatusStore().getById(myAttenderRecord.get('status')) : null;
+            
+        if (myAttenderStatusRecord && myAttenderStatusRecord.get('system')) {
             this.statusIcons.push({
                 status: myAttenderRecord.get('status'),
-                text: Tine.Calendar.Model.Attender.getAttendeeStatusStore().getById(myAttenderRecord.get('status')).get('status_name')
+                text: myAttenderStatusRecord.get('i18nValue')
             });
         }
         
