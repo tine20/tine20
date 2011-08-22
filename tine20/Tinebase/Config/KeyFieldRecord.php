@@ -16,7 +16,13 @@
  */
 class Tinebase_Config_KeyFieldRecord extends Tinebase_Record_Abstract
 {
-
+    
+    /**
+     * (non-PHPdoc)
+     * @see tine20/Tinebase/Record/Abstract::$_identifier
+     */
+    protected $_identifier = 'id';
+    
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Record/Abstract::$_validators

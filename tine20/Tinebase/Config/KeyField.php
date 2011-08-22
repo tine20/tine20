@@ -45,8 +45,8 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      */
     public function setFromArray(array $_data)
     {
-        if (isset($_data['keyFieldRecords']) && is_array($_data['keyFieldRecords'])) {
-            $_data['keyFieldRecords'] = new Tinebase_Record_RecordSet($this->_keyFieldRecordModel, $_data['keyFieldRecords'], TRUE);
+        if (isset($_data['records']) && is_array($_data['records'])) {
+            $_data['records'] = new Tinebase_Record_RecordSet($this->_keyFieldRecordModel, $_data['records'], TRUE);
         }
         
         parent::setFromArray($_data);
