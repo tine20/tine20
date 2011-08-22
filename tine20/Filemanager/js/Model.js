@@ -27,7 +27,8 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     { name: 'type' },
     { name: 'contenttype' },
     { name: 'description' },
-    { name: 'creation_time' }
+    { name: 'creation_time' },
+    { name: 'account_grants' }
 ]), {
     appName: 'Filemanager',
     modelName: 'Node',
@@ -37,7 +38,17 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     recordsName: 'user files',
     containerProperty: 'container_id',
     containerName: 'user file folder',
-    containersName: 'user file folders'
+    containersName: 'user file folders',
+    
+    isWriteable: function() {
+        var grants = this.get('account_grants');
+        
+        if(!grants) {
+            return false;
+        }
+        
+        return this.get('type') == 'file' ? grants.editGrant : grants.addGrant;
+    }
 });
 
 

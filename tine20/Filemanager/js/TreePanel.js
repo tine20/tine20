@@ -89,10 +89,10 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 //                if(node.hasChildNodes() && !node.isExpanded()){
 //                    this.queueExpand(node);
 //                }
-                return node.attributes.allowDrop ? 'tinebase-tree-drop-move' : false;
+                return node.attributes.nodeRecord.isWriteable() ? 'tinebase-tree-drop-move' : false;
             },
             isValidDropPoint: function(n, dd, e, data){
-                return n.node.attributes.allowDrop;
+                return n.node.attributes.nodeRecord.isWriteable();
             },
             completeDrop: Ext.emptyFn
         };
@@ -191,7 +191,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),
                 qtip: Ext.util.Format.htmlEncode(attr.name.name),
                 leaf: !(attr.type == 'folder'),
-                allowDrop: (attr.type == 'folder')
+                //allowDrop: (attr.type == 'folder')
             });
         }
         else {
@@ -199,13 +199,15 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 text: Ext.util.Format.htmlEncode(attr.name),
                 qtip: Ext.util.Format.htmlEncode(attr.name),
                 leaf: !!attr.account_grants && !(attr.type == 'folder'),
-                allowDrop: !!attr.account_grants && attr.account_grants.addGrant
+                //allowDrop: !!attr.account_grants && attr.account_grants.addGrant
             });
         }
         
         
-        // copy 'real' data to container space
-        attr.container = Ext.copyTo({}, attr, Tine.Tinebase.Model.Container.getFieldNames());
+        // copy 'real' data to a node record NOTE: not a full record as we have no record reader here
+        var nodeData = Ext.copyTo({}, attr, Tine.Filemanager.Model.Node.getFieldNames());
+        attr.nodeRecord = new Tine.Filemanager.Model.Node(nodeData);
+        
     },
     
     /**
