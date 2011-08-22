@@ -215,6 +215,19 @@ class Tinebase_Record_RecordSet implements IteratorAggregate, Countable, ArrayAc
     }
     
     /**
+     * returns record identified by its id
+     * 
+     * @param  string $_id id of record
+     * @return Tinebase_Record_Abstract::|bool    record or false if not in set
+     */
+    public function getById($_id)
+    {
+        $idx = $this->getIndexById($_id);
+        
+        return $idx !== false ? $this[$idx] : false;
+    }
+    
+    /**
      * returns array of ids
      */
     public function getArrayOfIds()
