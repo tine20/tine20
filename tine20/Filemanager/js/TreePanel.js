@@ -72,6 +72,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 //        this.on('containeradd', this.onFolderAdd, this);
 //        this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
+        this.on('nodedragover', this.onNodeDragOver, this);
                
         Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
         
@@ -89,7 +90,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 //                if(node.hasChildNodes() && !node.isExpanded()){
 //                    this.queueExpand(node);
 //                }
-                return node.attributes.nodeRecord.isWriteable() ? 'tinebase-tree-drop-move' : false;
+                return node.attributes.nodeRecord.isWriteable() ? 'x-dd-drop-ok' : false;
             },
             isValidDropPoint: function(n, dd, e, data){
                 return n.node.attributes.nodeRecord.isWriteable();
@@ -190,7 +191,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             Ext.applyIf(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name.name),
                 qtip: Ext.util.Format.htmlEncode(attr.name.name),
-                leaf: !(attr.type == 'folder'),
+                leaf: !(attr.type == 'folder')
                 //allowDrop: (attr.type == 'folder')
             });
         }
@@ -198,7 +199,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             Ext.applyIf(attr, {
                 text: Ext.util.Format.htmlEncode(attr.name),
                 qtip: Ext.util.Format.htmlEncode(attr.name),
-                leaf: !!attr.account_grants && !(attr.type == 'folder'),
+                leaf: !!attr.account_grants && !(attr.type == 'folder')
                 //allowDrop: !!attr.account_grants && attr.account_grants.addGrant
             });
         }
@@ -222,45 +223,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             node.reload();
         }
 
-       
-        
-//        var actionToolbar = this.app.getMainScreen().getNorthPanel();
-//        var grid = this.app.getMainScreen().getCenterPanel();
-//        
-//        if(node.attributes.account_grants) {
-//            if(node.attributes.account_grants.addGrant) {
-//                grid.action_upload.enable();
-//            }
-//            else grid.action_upload.disable();
-//            
-//            if(node.attributes.account_grants.deleteGrant) {
-//                grid.action_deleteRecord.enable();
-//            }
-//            else grid.action_deleteRecord.disable();
-//            
-//            if(node.attributes.account_grants.addGrant) {
-//                grid.action_createFolder.enable();
-//            }
-//            else grid.action_createFolder.disable();
-//            
-//            if(node.attributes.account_grants.exportGrant || node.attributes.account_grants.readGrant) {
-//                grid.action_save.enable();
-//            }
-//            else grid.action_save.disable();
-//        }
-//        else {
-//            grid.action_upload.disable();
-//            grid.action_deleteRecord.disable();
-//            grid.action_save.disable();
-//            grid.action_createFolder.enable();
-//            grid.action_goUpFolder.enable();
-//            
-//            if(node.isRoot) {
-//                grid.action_createFolder.disable();
-//                grid.action_goUpFolder.disable();
-//            }
-//        }
-        
         Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
 
     },
@@ -317,7 +279,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var currentAccount = Tine.Tinebase.registry.get('currentAccount');
         
         this.ctxNode = node;
-        var container = node.attributes.container,
+        var container = node.attributes.nodeRecord.data,
             path = container.path,
             owner;
         

@@ -180,7 +180,7 @@ Tine.widgets.tree.ContextMenu = {
                 
                 if (this.backendModel == 'Node') {
                     params.application = this.scope.app.appName || this.scope.appName;                            
-                    var filename = parentNode.attributes.container.path + '/' + _text;
+                    var filename = parentNode.attributes.nodeRecord.data.path + '/' + _text;
                     params.filename = filename;
                     params.type = 'folder';
                     params.method = this.backend + ".createNode";
@@ -268,7 +268,7 @@ Tine.widgets.tree.ContextMenu = {
                         
                         // TODO try to generalize this
                         if (this.backendModel == 'Container') {
-                            params.containerId = node.attributes.container.id;
+                            params.containerId = node.attributes.nodeRecord.data.id;
                         } else if (this.backendModel == 'Folder') {
                             var folder = Tine.Tinebase.appMgr.get('Felamimail').getFolderStore().getById(node.attributes.folder_id);
                             params.oldGlobalName = folder.get('globalname');
@@ -375,14 +375,14 @@ Tine.widgets.tree.ContextMenu = {
                 Ext.Ajax.request({
                     params: {
                         method: this.backend + '.set' + this.backendModel + 'Color',
-                        containerId: node.attributes.container.id,
+                        containerId: node.attributes.nodeRecord.data.id,
                         color: '#' + color
                     },
                     scope: this,
                     success: function(_result, _request){
                         var nodeData = Ext.util.JSON.decode(_result.responseText);
                         node.getUI().colorNode.setStyle({color: nodeData.color});
-                        node.attributes.container.color = nodeData.color;
+                        node.attributes.nodeRecord.data.color = nodeData.color;
                         this.scope.fireEvent('containercolorset', nodeData);
                         node.getUI().removeClass("x-tree-node-loading");
                     }
@@ -400,13 +400,13 @@ Tine.widgets.tree.ContextMenu = {
         if (this.scope.ctxNode) {
             var node = this.scope.ctxNode;
             
-            var grantContainer = node.attributes.container;
+            var grantContainer = node.attributes.nodeRecord.data;
             if(grantContainer.name.id) {
                 grantContainer = grantContainer.name;
             }
             
             var window = Tine.widgets.container.GrantsDialog.openWindow({
-                title: String.format(_('Manage Permissions for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(node.attributes.container.name)),
+                title: String.format(_('Manage Permissions for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(node.attributes.nodeRecord.data.name)),
                 containerName: this.nodeName,
                 grantContainer: grantContainer
             });
