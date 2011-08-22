@@ -410,7 +410,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             Tine.Filemanager.fileRecordBackend.moveNodes(nodes, target);
         }
         
-        return false;
+//        return false;
      },
      
      onFolderDelete: function() {
