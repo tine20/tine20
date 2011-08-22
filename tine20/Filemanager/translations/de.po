@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-17 15:53+0100\n"
-"PO-Revision-Date: 2011-08-17 15:55+0100\n"
+"POT-Creation-Date: 2011-08-22 18:47+0100\n"
+"PO-Revision-Date: 2011-08-22 18:47+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -46,39 +46,47 @@ msgstr "Ordner anderer Benutzer"
 msgid "Filemanager"
 msgstr "Dateimanager"
 
+#: Filemanager/js/Filemanager.js:57
+msgid "Failure on create folder/file"
+msgstr "Fehler beim anlegen des Ordners / der Datei"
+
+#: Filemanager/js/Filemanager.js:58
+msgid "Item with this name allready exists!"
+msgstr "Es existiert bereits ein Eintrag mit diesem Namen!"
+
 #: Filemanager/js/GridContextMenu.js:36
-#: Filemanager/js/GridPanel.js:458
+#: Filemanager/js/GridPanel.js:467
 msgid "Please enter the new name of the {0}:"
 msgstr "Bitte den neuen Namen von {0} eingeben"
 
 #: Filemanager/js/GridContextMenu.js:42
-#: Filemanager/js/GridPanel.js:464
+#: Filemanager/js/GridPanel.js:473
 msgid "Not renamed {0}"
 msgstr "Unbenannter {0}"
 
 #: Filemanager/js/GridContextMenu.js:42
-#: Filemanager/js/GridPanel.js:464
-#: Filemanager/js/GridPanel.js:524
+#: Filemanager/js/GridPanel.js:473
+#: Filemanager/js/GridPanel.js:533
 msgid "You have to supply a {0} name!"
 msgstr "Sie müssen einen {0}-namen angeben!"
 
 #: Filemanager/js/GridContextMenu.js:45
 #: Filemanager/js/GridContextMenu.js:118
-#: Filemanager/js/GridPanel.js:467
-#: Filemanager/js/GridPanel.js:527
-#: Filemanager/js/GridPanel.js:553
-#: Filemanager/js/Model.js:155
+#: Filemanager/js/GridPanel.js:476
+#: Filemanager/js/GridPanel.js:536
+#: Filemanager/js/GridPanel.js:562
 #: Filemanager/js/Model.js:190
+#: Filemanager/js/Model.js:249
 msgid "Please wait"
 msgstr "Bitte warten"
 
 #: Filemanager/js/GridContextMenu.js:45
-#: Filemanager/js/GridPanel.js:467
+#: Filemanager/js/GridPanel.js:476
 msgid "Updating {0} \"{1}\""
 msgstr "Update {0} \"{1}\""
 
 #: Filemanager/js/GridContextMenu.js:116
-#: Filemanager/js/GridPanel.js:550
+#: Filemanager/js/GridPanel.js:559
 msgid "Confirm"
 msgstr "Bestätigen"
 
@@ -90,139 +98,139 @@ msgstr "Möchten Sie wirklich den {0} löschen? "
 msgid "Deleting {0} \"{1}\""
 msgstr "Lösche {0} \"{1}\""
 
-#: Filemanager/js/GridPanel.js:115
+#: Filemanager/js/GridPanel.js:124
 msgid "Name"
 msgstr "Name"
 
-#: Filemanager/js/GridPanel.js:122
+#: Filemanager/js/GridPanel.js:131
 msgid "Size"
 msgstr "Größe"
 
-#: Filemanager/js/GridPanel.js:129
-#: Filemanager/js/Model.js:225
+#: Filemanager/js/GridPanel.js:138
+#: Filemanager/js/Model.js:303
 msgid "Contenttype"
 msgstr "Typ"
 
-#: Filemanager/js/GridPanel.js:137
+#: Filemanager/js/GridPanel.js:146
 msgid "Folder"
 msgstr "Ordner"
 
-#: Filemanager/js/GridPanel.js:145
+#: Filemanager/js/GridPanel.js:154
 msgid "Revision"
 msgstr "Version"
 
-#: Filemanager/js/GridPanel.js:159
-#: Filemanager/js/Model.js:226
+#: Filemanager/js/GridPanel.js:168
+#: Filemanager/js/Model.js:304
 msgid "Creation Time"
 msgstr "Erstellt am"
 
-#: Filemanager/js/GridPanel.js:167
+#: Filemanager/js/GridPanel.js:176
 msgid "Created By"
 msgstr "Erstellt von"
 
-#: Filemanager/js/GridPanel.js:174
+#: Filemanager/js/GridPanel.js:183
 msgid "Last Modified Time"
 msgstr "Zuletzt geändert"
 
-#: Filemanager/js/GridPanel.js:181
+#: Filemanager/js/GridPanel.js:190
 msgid "Last Modified By"
 msgstr "Zuletzt geändert von"
 
-#: Filemanager/js/GridPanel.js:215
+#: Filemanager/js/GridPanel.js:224
 msgid "Show closed"
 msgstr "Zeige archivierte"
 
-#: Filemanager/js/GridPanel.js:238
+#: Filemanager/js/GridPanel.js:247
 msgid "Upload"
 msgstr "Hochladen"
 
-#: Filemanager/js/GridPanel.js:263
+#: Filemanager/js/GridPanel.js:272
 msgid "Create Folder"
 msgstr "Ordner anlegen"
 
-#: Filemanager/js/GridPanel.js:274
+#: Filemanager/js/GridPanel.js:283
 msgid "Folder Up"
 msgstr "Aufwärts"
 
-#: Filemanager/js/GridPanel.js:285
+#: Filemanager/js/GridPanel.js:294
 msgid "Save locally"
 msgstr "Lokal speichern"
 
-#: Filemanager/js/GridPanel.js:296
-#: Filemanager/js/GridPanel.js:297
-#: Filemanager/js/GridPanel.js:299
+#: Filemanager/js/GridPanel.js:305
+#: Filemanager/js/GridPanel.js:306
+#: Filemanager/js/GridPanel.js:308
 msgid "Delete"
 msgstr "Löschen"
 
-#: Filemanager/js/GridPanel.js:309
-#: Filemanager/js/GridPanel.js:310
-#: Filemanager/js/GridPanel.js:312
+#: Filemanager/js/GridPanel.js:318
+#: Filemanager/js/GridPanel.js:319
+#: Filemanager/js/GridPanel.js:321
 msgid "Rename"
 msgstr "Umbenennen"
 
-#: Filemanager/js/GridPanel.js:320
+#: Filemanager/js/GridPanel.js:329
 msgid "Pause upload"
 msgstr "Upload pausieren"
 
-#: Filemanager/js/GridPanel.js:327
+#: Filemanager/js/GridPanel.js:336
 msgid "Resume upload"
 msgstr "Upload fortsetzen"
 
-#: Filemanager/js/GridPanel.js:450
-#: Filemanager/js/GridPanel.js:517
-#: Filemanager/js/Model.js:227
+#: Filemanager/js/GridPanel.js:459
+#: Filemanager/js/GridPanel.js:526
+#: Filemanager/js/Model.js:305
 msgid "user file folder"
 msgstr "Ordner"
 
-#: Filemanager/js/GridPanel.js:519
+#: Filemanager/js/GridPanel.js:528
 msgid "New {0}"
 msgstr "Neuer {0}"
 
-#: Filemanager/js/GridPanel.js:519
+#: Filemanager/js/GridPanel.js:528
 msgid "Please enter the name of the new {0}:"
 msgstr "Bitte geben Sie den Namen des neuen {0} an:"
 
-#: Filemanager/js/GridPanel.js:524
+#: Filemanager/js/GridPanel.js:533
 msgid "No {0} added"
 msgstr "Kein {0} hinzugefügt"
 
-#: Filemanager/js/GridPanel.js:527
+#: Filemanager/js/GridPanel.js:536
 msgid "Creating {0}..."
 msgstr "Erstelle {0}..."
 
-#: Filemanager/js/GridPanel.js:547
+#: Filemanager/js/GridPanel.js:556
 msgid "user file folders"
 msgstr "Ordner"
 
-#: Filemanager/js/GridPanel.js:550
+#: Filemanager/js/GridPanel.js:559
 msgid "Do you really want to delete the {0} ?"
 msgstr "Möchten Sie wirrklich den {0} löschen? "
 
-#: Filemanager/js/GridPanel.js:553
+#: Filemanager/js/GridPanel.js:562
 msgid "Deleting {0} "
 msgstr "Lösche {0}"
 
-#: Filemanager/js/GridPanel.js:622
+#: Filemanager/js/GridPanel.js:631
 msgid "Upload Failed"
 msgstr "Hochladen fehlgeschlagen"
 
-#: Filemanager/js/GridPanel.js:623
+#: Filemanager/js/GridPanel.js:632
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator. Maximale erlaubte Dateigröße:"
 
-#: Filemanager/js/Model.js:155
+#: Filemanager/js/Model.js:190
 msgid "Copying data .. {0}"
 msgstr "Kopiere Daten .. {0}"
 
-#: Filemanager/js/Model.js:190
+#: Filemanager/js/Model.js:249
 msgid "Moving data .. {0}"
 msgstr "Verschiebe Daten .. {0}"
 
-#: Filemanager/js/Model.js:223
+#: Filemanager/js/Model.js:301
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: Filemanager/js/Model.js:224
+#: Filemanager/js/Model.js:302
 msgid "Type"
 msgstr "Typ"
 
