@@ -72,7 +72,7 @@ class Calendar_Setup_Update_Release5 extends Setup_Update_Abstract
         $attendeeRolesConfig = array(
             'name'    => Calendar_Config::ATTENDEE_ROLES,
             'records' => array(
-                array('id' => 'REQ', 'value' => 'Requierd', 'system' => true), //_('Requierd')
+                array('id' => 'REQ', 'value' => 'Required', 'system' => true), //_('Required')
                 array('id' => 'OPT', 'value' => 'Optional', 'system' => true), //_('Optional')
             ),
         );
