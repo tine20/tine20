@@ -150,14 +150,26 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      */
     copyNodes: function(items, target) {
         
+        if(!target || !items || items.length < 1) {
+            return false;
+        }
+        
         var sourceFilenames = new Array(),
             destinationFilenames = new Array(),
             forceOverwrite = false,
             refreshTree = false,
-            targetPath = target.attributes.path;
+            targetPath;
         
-        Ext.each(items, function(item) {
-            
+        if(target.data) {
+           targetPath = target.data.path;
+        }
+        else {
+           targetPath = target.attributes.path;
+        }
+           
+        for(var i=0; i<items.length; i++) {
+
+            var item = items[i];
             var itemData = item.data;
             if(!itemData) {
                 itemData = item.attributes;
@@ -173,7 +185,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             if(itemData.type == 'folder') {
                 refreshTree = true;
             }
-        }, this);
+        };
         
         Ext.MessageBox.wait(_('Please wait'), String.format(_('Copying data .. {0}' ), '' ));
         Tine.Filemanager.copyNodes(sourceFilenames, destinationFilenames, forceOverwrite, 
@@ -195,15 +207,27 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      */
     moveNodes: function(items, target) {
         
+        if(!target || !items || items.length < 1) {
+            return false;
+        }
+        
         var sourceFilenames = new Array(),
             destinationFilenames = new Array(),
             forceOverwrite = false,
             refreshTree = false,
-            targetPath = target.attributes.path,
-            reloadParent = false;
+            reloadParent = false,
+            targetPath;
         
-        Ext.each(items, function(item) {
-            
+        if(target.data) {
+           targetPath = target.data.path;
+        }
+        else {
+           targetPath = target.attributes.path;
+        }
+        
+        for(var i=0; i<items.length; i++) {
+
+            var item = items[i];            
             var itemData = item.data;
             if(!itemData) {
                 itemData = item.attributes;
@@ -220,7 +244,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             if(itemData.type == 'folder') {
                 refreshTree = true;
             }
-        }, this);
+        };
         
         Ext.MessageBox.wait(_('Please wait'), String.format(_('Moving data .. {0}' ), '' ));
         Tine.Filemanager.moveNodes(sourceFilenames, destinationFilenames, forceOverwrite, 
@@ -232,14 +256,12 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                         if(reloadParent && items[0].parentNode) {
                             items[0].parentNode.reload();
                         }
-                        else {
-                            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-                            var grid = app.getMainScreen().getCenterPanel();
-                            grid.currentFolderNode.reload();
-                            grid.getStore().reload();
-                        }
                         target.reload(); 
                     }
+                   
+                    grid.currentFolderNode.reload();
+                    grid.getStore().reload();
+                    
                 }).createDelegate(this));
         
         

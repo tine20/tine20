@@ -68,6 +68,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         ddGroup: 'fileDDGroup'
     },
      
+    ddGroup : 'fileDDGroup',  
     currentFolderNode : '/',
     
     /**
@@ -97,7 +98,15 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         Tine.Filemanager.GridPanel.superclass.initComponent.call(this);      
         this.getStore().on('load', this.onLoad);
+//        this.initDropZone();
         
+    },
+    
+    afterRender: function() {
+        
+        Tine.Filemanager.GridPanel.superclass.afterRender.call(this);      
+        this.initDropZone();
+
     },
     
     /**
@@ -668,7 +677,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
               
         var app = Tine.Tinebase.appMgr.get('Filemanager');
         var grid = app.mainScreen.GridPanel; 
-        var currentPath = app.getMainScreen().getCenterPanel().currentFolderNode.attributes.container.path;
+        var currentPath = app.getMainScreen().getCenterPanel().currentFolderNode.attributes.path;
         var fileName = response.name;
         Tine.Tinebase.uploadManager.onUploadComplete();
 //        Tine.Filemanager.createNode(currentPath + '/' + fileName, "file", response.id, false, this.onNodeCreated);
@@ -756,8 +765,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }           
         }, this);
         
-        gridStore.reload();
-
     },
     
     /**
@@ -807,6 +814,66 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
             }
         }
+    },
+    
+    initDropZone: function(){
+              
+        var ddrow = new Ext.dd.DropTarget(this.getEl(), {  
+            ddGroup : 'fileDDGroup',  
+            notifyDrop : function(dd, e, data){  
+                
+                var dropIndex = dd.getDragData(e).rowIndex,
+                    target = data.grid.getStore().getAt(dropIndex),
+                    nodes = data.selections;
+                              
+                if(e.ctrlKey) {
+                    Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target);
+                }
+                else {
+                    Tine.Filemanager.fileRecordBackend.moveNodes(nodes, target);
+                }
+                
+            }  
+        });  
+        
+//        this.dropZone = new Ext.dd.DropZone(this.getView().rowSelector, {
+//
+////          If the mouse is over a grid row, return that node. This is
+////          provided as the "target" parameter in all "onNodeXXXX" node event handling functions
+//            getTargetFromEvent: function(e) {
+//                return e.getTarget(this.getView().rowSelector);
+//            },
+//
+////          On entry into a target node, highlight that node.
+//            onNodeEnter : function(target, dd, e, data){ 
+//                Ext.fly(target).addClass('my-row-highlight-class');
+//            },
+//
+////          On exit from a target node, unhighlight that node.
+//            onNodeOut : function(target, dd, e, data){ 
+//                Ext.fly(target).removeClass('my-row-highlight-class');
+//            },
+//
+////          While over a target node, return the default drop allowed class which
+////          places a "tick" icon into the drag proxy.
+//            onNodeOver : function(target, dd, e, data){ 
+//                return Ext.dd.DropZone.prototype.dropAllowed;
+//            },
+//
+////          On node drop we can interrogate the target to find the underlying
+////          application object that is the real target of the dragged data.
+////          In this case, it is a Record in the GridPanel's Store.
+////          We can use the data set up by the DragZone's getDragData method to read
+////          any data we decided to attach in the DragZone's getDragData method.
+//            onNodeDrop : function(target, dd, e, data){
+//                var rowIndex = myGridPanel.getView().findRowIndex(target);
+//                var r = myGridPanel.getStore().getAt(rowIndex);
+//                Ext.Msg.alert('Drop gesture', 'Dropped Record id ' + data.draggedRecord.id +
+//                    ' on Record id ' + r.id);
+//                return true;
+//            }
+//        });
+//        
     }
 
 });
