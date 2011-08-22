@@ -21,7 +21,7 @@ class Sales_Setup_Update_Release5 extends Setup_Update_Abstract
     {
         try {
             $sharedContractsId = Tinebase_Config::getInstance()->getConfig(Sales_Model_Config::SHAREDCONTRACTSID, $appId)->value;
-            $sharedContracts = Tinebase_Container::getInstance()->get($sharedContractsId);
+            $sharedContracts = Tinebase_Container::getInstance()->get($sharedContractsId ? $sharedContractsId : 1);
         } catch (Tinebase_Exception_NotFound $tenf) {
             // try to fetch default shared container
             $filter = new Tinebase_Model_ContainerFilter(array(
