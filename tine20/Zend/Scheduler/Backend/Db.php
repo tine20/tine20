@@ -102,7 +102,7 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
     public function saveQueue($tasks = array())
     {
         $db = $this->getDbAdapter();
-        $db->beginTransaction();
+        $transactionId = Tinebase_TransactionManager::getInstance()->startTransaction($db);
         
         try {
             $db->delete($this->getTableName());
@@ -129,10 +129,10 @@ class Zend_Scheduler_Backend_Db extends Zend_Scheduler_Backend_Abstract
                 
                 $db->insert($this->getTableName(), array('name' => $name, 'data' => Zend_Json::encode($data)));
             }
-            $db->commit();
+            Tinebase_TransactionManager::getInstance()->commitTransaction($transactionId);
             
         } catch (Exception $e) {
-            $db->rollBack();
+            Tinebase_TransactionManager::getInstance()->rollBack();
             throw $e;
         }
     }
