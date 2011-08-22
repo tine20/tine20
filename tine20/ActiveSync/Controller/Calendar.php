@@ -404,8 +404,11 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 $attendee->appendChild(new DOMElement('Name', $attenderObject->getName(), 'uri:Calendar'));
                 $attendee->appendChild(new DOMElement('Email', $attenderObject->getEmail(), 'uri:Calendar'));
                 if(version_compare($this->_device->acsversion, '12.0', '>=') === true) {
-                    $attendee->appendChild(new DOMElement('AttendeeType', array_search($attenderObject->role, $this->_attendeeTypeMapping), 'uri:Calendar'));
-                    $attendee->appendChild(new DOMElement('AttendeeStatus', array_search($attenderObject->status, $this->_attendeeStatusMapping), 'uri:Calendar'));
+                    $acsType = array_search($attenderObject->role, $this->_attendeeTypeMapping);
+                    $attendee->appendChild(new DOMElement('AttendeeType', $acsType ? $acsType : self::ATTENDEE_TYPE_REQUIRED , 'uri:Calendar'));
+                    
+                    $acsStatus = array_search($attenderObject->status, $this->_attendeeStatusMapping);
+                    $attendee->appendChild(new DOMElement('AttendeeStatus', $acsStatus ? $acsStatus : self::ATTENDEE_STATUS_UNKNOWN, 'uri:Calendar'));
                 }
             }
         }
@@ -647,12 +650,12 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                         'user_id'   => $contactId,
                         'user_type' => Calendar_Model_Attender::USERTYPE_USER,
                     ));
-                    if(isset($attendee->AttendeeType)) {
+                    if(isset($attendee->AttendeeType) && array_key_exists((int)$attendee->AttendeeType, $this->_attendeeTypeMapping)) {
                         $newAttender->role = $this->_attendeeTypeMapping[(int)$attendee->AttendeeType];
                     } else {
                         $newAttender->role = Calendar_Model_Attender::ROLE_REQUIRED;
                     }
-                    if(isset($attendee->AttendeeStatus)) {
+                    if(isset($attendee->AttendeeStatus) && array_key_exists((int)$attendee->AttendeeStatus, $this->_attendeeStatusMapping)) {
                         $newAttender->status = $this->_attendeeStatusMapping[(int)$attendee->AttendeeStatus];
                     } else {
                         $newAttender->status = Calendar_Model_Attender::STATUS_NEEDSACTION;
@@ -662,10 +665,10 @@ class ActiveSync_Controller_Calendar extends ActiveSync_Controller_Abstract
                 } else {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " updating attendee");
                     $currentAttendee = $matchingAttendee->getFirstRecord();
-                    if(isset($attendee->AttendeeType)) {
+                    if(isset($attendee->AttendeeType) && array_key_exists((int)$attendee->AttendeeType, $this->_attendeeTypeMapping)) {
                         $currentAttendee->role = $this->_attendeeTypeMapping[(int)$attendee->AttendeeType];
                     }
-                    if(isset($attendee->AttendeeStatus)) {
+                    if(isset($attendee->AttendeeStatus) && array_key_exists((int)$attendee->AttendeeStatus, $this->_attendeeStatusMapping)) {
                         $newAttender->status = $this->_attendeeStatusMapping[(int)$attendee->AttendeeStatus];
                     }
                 }
