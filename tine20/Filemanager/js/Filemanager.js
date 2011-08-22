@@ -38,3 +38,31 @@ Tine.Filemanager.Application = Ext.extend(Tine.Tinebase.Application, {
  * @author Martin Jatho <m.jatho@metaways.de>
  */
 Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {});
+
+
+/**
+ * generic exception handler for filemanager (used by folder and message backends and updateMessageCache)
+ * 
+ * @param {Tine.Exception} exception
+ */
+Tine.Filemanager.handleRequestException = function(exception) {
+    Tine.log.warn('Request exception :');
+    Tine.log.warn(exception);
+    
+    var app = Tine.Tinebase.appMgr.get('Filemanager');
+    
+    switch(exception.code) {
+        case 901: // Felamimail_Exception_IMAPServiceUnavailable
+            Ext.Msg.show({
+               title:   app.i18n._('Failure on create folder/file'),
+               msg:     app.i18n._('Item with this name allready exists!'),
+               icon:    Ext.MessageBox.ERROR,
+               buttons: Ext.Msg.OK
+            });
+            break;
+  
+        default:
+            Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
+            break;
+    }
+};

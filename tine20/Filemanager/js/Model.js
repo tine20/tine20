@@ -259,7 +259,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                         target.reload(); 
                     }
                    
-                    grid.currentFolderNode.reload();
+                    if(grid.currentFolderNode) {
+                        grid.currentFolderNode.reload();
+                    }
                     grid.getStore().reload();
                     
                 }).createDelegate(this));
@@ -269,6 +271,15 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     
     saveRecord : function() {
         // NOOP
+    },
+    
+    /**
+     * exception handler for this proxy
+     * 
+     * @param {Tine.Exception} exception
+     */
+    handleRequestException: function(exception) {
+        Tine.Filemanager.handleRequestException(exception);
     }
     
 });
