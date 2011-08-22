@@ -820,60 +820,60 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
               
         var ddrow = new Ext.dd.DropTarget(this.getEl(), {  
             ddGroup : 'fileDDGroup',  
-            notifyDrop : function(dd, e, data){  
+            notifyDrop : function(dragSource, e, data){  
                 
-                var dropIndex = dd.getDragData(e).rowIndex,
-                    target = data.grid.getStore().getAt(dropIndex),
-                    nodes = data.selections;
-                              
+                var dragData = dragSource.getDragData(e), 
+                    nodes = data.selections,
+                    target;
+                
+                if(dragData) {
+                    var dropIndex = dragSource.getDragData(e).rowIndex;
+                    target = data.grid.getStore().getAt(dropIndex);    
+                }
+                else {
+//                    var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
+//                    var grid = app.getMainScreen().getCenterPanel();
+//                    target = grid.currentFolderNode;
+                }
+              
+                if(!target) {
+                    return false;
+                }
+                
                 if(e.ctrlKey) {
                     Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target);
                 }
                 else {
                     Tine.Filemanager.fileRecordBackend.moveNodes(nodes, target);
+                }          
+            },
+            
+            notifyOver : function( dragSource , e, data ) {
+                
+                var dragData = dragSource.getDragData(e), 
+                    target;
+
+                if(dragData) {
+                    var dropIndex = dragSource.getDragData(e).rowIndex;
+                    target = data.grid.getStore().getAt(dropIndex);    
+                }
+                else {
+//                    var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
+//                    var grid = app.getMainScreen().getCenterPanel();
+//                    target = grid.currentFolderNode;
+                }
+                         
+                // TODO: return corurent folder node?
+                if(!target) {
+                    return false;
                 }
                 
-            }  
+                return this.dropAllowed;
+                
+            }
         });  
         
-//        this.dropZone = new Ext.dd.DropZone(this.getView().rowSelector, {
-//
-////          If the mouse is over a grid row, return that node. This is
-////          provided as the "target" parameter in all "onNodeXXXX" node event handling functions
-//            getTargetFromEvent: function(e) {
-//                return e.getTarget(this.getView().rowSelector);
-//            },
-//
-////          On entry into a target node, highlight that node.
-//            onNodeEnter : function(target, dd, e, data){ 
-//                Ext.fly(target).addClass('my-row-highlight-class');
-//            },
-//
-////          On exit from a target node, unhighlight that node.
-//            onNodeOut : function(target, dd, e, data){ 
-//                Ext.fly(target).removeClass('my-row-highlight-class');
-//            },
-//
-////          While over a target node, return the default drop allowed class which
-////          places a "tick" icon into the drag proxy.
-//            onNodeOver : function(target, dd, e, data){ 
-//                return Ext.dd.DropZone.prototype.dropAllowed;
-//            },
-//
-////          On node drop we can interrogate the target to find the underlying
-////          application object that is the real target of the dragged data.
-////          In this case, it is a Record in the GridPanel's Store.
-////          We can use the data set up by the DragZone's getDragData method to read
-////          any data we decided to attach in the DragZone's getDragData method.
-//            onNodeDrop : function(target, dd, e, data){
-//                var rowIndex = myGridPanel.getView().findRowIndex(target);
-//                var r = myGridPanel.getStore().getAt(rowIndex);
-//                Ext.Msg.alert('Drop gesture', 'Dropped Record id ' + data.draggedRecord.id +
-//                    ' on Record id ' + r.id);
-//                return true;
-//            }
-//        });
-//        
+
     }
 
 });
