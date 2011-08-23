@@ -506,11 +506,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             metadata.css = 'x-form-empty-field';
         }
         
-        var store = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeRoles'),
-            roleRecord = store.getById(role);
-            
-        return roleRecord ? roleRecord.get('i18nValue') : Ext.util.Format.htmlEncode(i18n._hidden(role));
-        
+        return Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeRoles', role);
     },
     
     renderAttenderStatus: function(status, metadata, attender) {
@@ -526,10 +522,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             metadata.css = 'x-form-empty-field';
         }
         
-        var store = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus'),
-            statusRecord = store.getById(status);
-            
-        return statusRecord ? statusRecord.get('i18nValue') : Ext.util.Format.htmlEncode(i18n._hidden(status));
+        return Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', status);
     },
     
     renderAttenderType: function(type, metadata, attender) {

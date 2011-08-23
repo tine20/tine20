@@ -332,6 +332,10 @@
           "path": "js/widgets/keyfield/"
         },
         {
+          "text": "Renderer.js",
+          "path": "js/widgets/keyfield/"
+        },
+        {
           "text": "LangChooser.js",
           "path": "js/widgets/"
         },

@@ -29,8 +29,8 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
         var a = [];
         attendeeStore.each(function(attender) {
             var name = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderName.call(Tine.Calendar.AttendeeGridPanel.prototype, attender.get('user_id'), false, attender),
-                status = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderStatus.call(Tine.Calendar.AttendeeGridPanel.prototype, attender.get('status'), {}, attender),
-                role = Tine.Calendar.AttendeeGridPanel.prototype.renderAttenderRole.call(Tine.Calendar.AttendeeGridPanel.prototype, attender.get('role'), {}, attender);
+                status = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeStatus', attender.get('status')),
+                role = Tine.Tinebase.widgets.keyfield.Renderer.render('Calendar', 'attendeeRoles', attender.get('role'))
             a.push(name + ' (' + role + ', ' + status + ')');
         });
         
