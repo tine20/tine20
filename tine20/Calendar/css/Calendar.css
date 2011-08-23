@@ -86,22 +86,6 @@
     background-position: 2px 2px;
 }
 
-.cal-response-action-NEEDS-ACTION {
-	background-image:url(../../images/oxygen/16x16/actions/mail-mark-unread-new.png) !important;
-}
-
-.cal-response-action-ACCEPTED {
-    background-image:url(../../images/oxygen/16x16/actions/ok.png) !important;
-}
-
-.cal-response-action-DECLINED {
-    background-image:url(../../images/oxygen/16x16/actions/dialog-cancel.png) !important;
-}
-
-.cal-response-action-TENTATIVE {
-    background-image:url(../../images/calendar-response-tentative.png) !important;
-}
-
 /**** calendar select widget ****/
 .cal-calselectwidget-faketriggerwrap {
     position: absolute;

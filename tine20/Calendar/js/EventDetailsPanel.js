@@ -247,6 +247,7 @@ Tine.Calendar.EventDetailsPanel = Ext.extend(Tine.widgets.grid.DetailsPanel, {
                                 xtype: 'ux.displayfield',
                                 name: 'attendee',
                                 nl2br: true,
+                                htmlEncode: false,
                                 fieldLabel: this.app.i18n._('Attendee'),
                                 renderer: this.attendeeRenderer
                             }]

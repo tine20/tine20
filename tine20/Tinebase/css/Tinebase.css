@@ -715,3 +715,14 @@ span:hover.tinebase-addtocontacts-link {
 span:hover.tinebase-showheaders-link {
     color: #4444ff;
 }
+
+.tine-keyfield-renderer-icon {
+    width: 12px;
+    height: 12px;
+    vertical-align: text-bottom;
+    padding-right: 2px;
+}
+
+.x-grid .tine-keyfield-renderer-icon {
+    vertical-align: text-top;
+}

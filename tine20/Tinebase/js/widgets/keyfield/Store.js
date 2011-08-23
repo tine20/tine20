@@ -30,7 +30,7 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
     config.data = data;
     
     // use standard field so far
-    config.fields = ['id', 'value', 'system', 'i18nValue'];
+    config.fields = ['id', 'value', 'icon', 'system', 'i18nValue'];
     
     Tine.Tinebase.widgets.keyfield.Store.superclass.constructor.call(this, config);
 };

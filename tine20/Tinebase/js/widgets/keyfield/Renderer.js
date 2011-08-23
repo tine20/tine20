@@ -24,19 +24,33 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
          * 
          * @param {String/Application}  app
          * @param {String}              keyFieldName 
+         * @param {String}              what pipe seperated field with text|icon
          * @return Ext.data.Store
          */
-        get: function(app, keyFieldName) {
+        get: function(app, keyFieldName, what) {
             var appName = Ext.isString(app) ? app : app.appName,
                 app = Tine.Tinebase.appMgr.get(appName),
-                key = appName + '_' + keyFieldName;
+                store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName),
+                what = what ? what : 'text|icon',
+                whatParts = what.split('|'),
+                key = appName + keyFieldName + what;
                 
             if (! renderers[key]) {
                 renderers[key] = function(id) {
-                    var store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(app, keyFieldName),
-                        record = store.getById(id);
+                    var record = store.getById(id),
+                        i18nValue = record ? record.get('i18nValue') : app.i18n._hidden(id),
+                        icon = record ? record.get('icon') : null,
+                        string = '';
+                        
+                    if (whatParts.indexOf('icon') > -1 && icon) {
+                        string = string + '<img src="' + icon + '" class="tine-keyfield-renderer-icon" />';
+                    }
+                        
+                    if (whatParts.indexOf('text') > -1 && i18nValue) {
+                        string = string + Ext.util.Format.htmlEncode(i18nValue);
+                    }
                     
-                    return Ext.util.Format.htmlEncode(record ? record.get('i18nValue') : i18n._hidden(id));
+                    return string;
                 }
             }
             

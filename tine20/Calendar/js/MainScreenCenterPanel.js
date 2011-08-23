@@ -318,19 +318,26 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
             
             // assemble response action
             if (event) {
-                var myAttenderRecord = event.getMyAttenderRecord();
+                var statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus'),
+                    myAttenderRecord = event.getMyAttenderRecord(),
+                    myAttenderStatus = myAttenderRecord ? myAttenderRecord.get('status') : null,
+                    myAttenderStatusRecord = statusStore.getById(myAttenderStatus);
+                    
+                    
+                    
                 if (myAttenderRecord) {
                     responseAction = {
                         text: this.app.i18n._('Set my response'),
-                        iconCls: 'cal-response-action-' + myAttenderRecord.get('status'),
+                        icon: myAttenderStatusRecord ? myAttenderStatusRecord.get('icon') : false,
                         menu: []
                     };
                     
-                    Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').each(function(status) {
+                    statusStore.each(function(status) {
+                        console.log(status.get('icon'));
                         responseAction.menu.push({
                             text: status.get('i18nValue'),
                             handler: this.setResponseStatus.createDelegate(this, [event, status.id]),
-                            iconCls: 'cal-response-action-' + status.id,
+                            icon: status.get('icon'),
                             disabled: myAttenderRecord.get('status') === status.id
                         });
                     }, this);
