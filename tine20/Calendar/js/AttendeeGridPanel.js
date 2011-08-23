@@ -101,14 +101,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             hidden: this.showNamesOnly || true,
             header: this.app.i18n._('Role'),
             renderer: this.renderAttenderRole.createDelegate(this),
-            editor: new Ext.form.ComboBox({
-                blurOnSelect  : true,
-                expandOnFocus : true,
-                mode          : 'local',
-                displayField  : 'i18nValue',
-                valueField    : 'id',
-                store         : Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeRoles')
-            })
+            editor: {
+                xtype: 'widget-keyfieldcombo',
+                app:   'Calendar',
+                keyFieldName: 'attendeeRoles'
+            }
         },/* {
             id: 'quantity',
             dataIndex: 'quantity',
@@ -189,14 +186,11 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             header: this.app.i18n._('Status'),
             hidden: this.showNamesOnly,
             renderer: this.renderAttenderStatus.createDelegate(this),
-            editor: new Ext.form.ComboBox({
-                blurOnSelect  : true,
-                expandOnFocus : true,
-                mode          : 'local',
-                displayField  : 'i18nValue',
-                valueField    : 'id',
-                store         : Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus')
-            })
+            editor: {
+                xtype: 'widget-keyfieldcombo',
+                app:   'Calendar',
+                keyFieldName: 'attendeeStatus'
+            }
         }];
     },
     

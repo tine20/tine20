@@ -328,6 +328,10 @@
           "path": "js/widgets/keyfield/"
         },
         {
+          "text": "ComboBox.js",
+          "path": "js/widgets/keyfield/"
+        },
+        {
           "text": "LangChooser.js",
           "path": "js/widgets/"
         },
