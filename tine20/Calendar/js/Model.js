@@ -454,38 +454,6 @@ Tine.Calendar.Model.Attender.getAttendeeStore = function(attendeeData) {
     return attendeeStore;
 };
 
-Tine.Calendar.Model.Attender.getAttendeeStatusStore = function() {
-    if (! Tine.Calendar.Model.Attender.attendeeStatusStore) {
-        var app = Tine.Tinebase.appMgr.get('Calendar'),
-            config = app.getRegistry().get('config'),
-            status = config.attendeeStatus && Ext.isArray(config.attendeeStatus.records) ? config.attendeeStatus.records : [];
-            
-        Ext.each(status, function(s) {s.i18nValue = app.i18n._hidden(s.value);});
-        Tine.Calendar.Model.Attender.attendeeStatusStore = new Ext.data.JsonStore({
-            fields: ['id', 'value', 'system', 'i18nValue'],
-            data: status
-        });
-    }
-    
-    return Tine.Calendar.Model.Attender.attendeeStatusStore;
-}
-
-Tine.Calendar.Model.Attender.getAttendeeRolesStore = function() {
-    if (! Tine.Calendar.Model.Attender.attendeeRolesStore) {
-        var app = Tine.Tinebase.appMgr.get('Calendar'),
-            config = app.getRegistry().get('config'),
-            roles = config.attendeeStatus && Ext.isArray(config.attendeeRoles.records) ? config.attendeeRoles.records : [];
-            
-        Ext.each(roles, function(r) {r.i18nValue = app.i18n._hidden(r.value);});
-        Tine.Calendar.Model.Attender.attendeeRolesStore = new Ext.data.JsonStore({
-            fields: ['id', 'value', 'system', 'i18nValue'],
-            data: roles
-        });
-    }
-    
-    return Tine.Calendar.Model.Attender.attendeeRolesStore;
-}
-
 /**
  * @namespace Tine.Calendar.Model
  * @class Tine.Calendar.Model.Resource

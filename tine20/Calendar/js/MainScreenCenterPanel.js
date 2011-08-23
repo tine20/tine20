@@ -326,7 +326,7 @@ Tine.Calendar.MainScreenCenterPanel = Ext.extend(Ext.Panel, {
                         menu: []
                     };
                     
-                    Tine.Calendar.Model.Attender.getAttendeeStatusStore().each(function(status) {
+                    Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').each(function(status) {
                         responseAction.menu.push({
                             text: status.get('i18nValue'),
                             handler: this.setResponseStatus.createDelegate(this, [event, status.id]),

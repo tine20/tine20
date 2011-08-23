@@ -107,7 +107,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 mode          : 'local',
                 displayField  : 'i18nValue',
                 valueField    : 'id',
-                store         : Tine.Calendar.Model.Attender.getAttendeeRolesStore()
+                store         : Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeRoles')
             })
         },/* {
             id: 'quantity',
@@ -195,7 +195,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 mode          : 'local',
                 displayField  : 'i18nValue',
                 valueField    : 'id',
-                store         : Tine.Calendar.Model.Attender.getAttendeeStatusStore()
+                store         : Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus')
             })
         }];
     },
@@ -512,7 +512,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             metadata.css = 'x-form-empty-field';
         }
         
-        var store = Tine.Calendar.Model.Attender.getAttendeeRolesStore(),
+        var store = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeRoles'),
             roleRecord = store.getById(role);
             
         return roleRecord ? roleRecord.get('i18nValue') : Ext.util.Format.htmlEncode(i18n._hidden(role));
@@ -532,7 +532,7 @@ Tine.Calendar.AttendeeGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
             metadata.css = 'x-form-empty-field';
         }
         
-        var store = Tine.Calendar.Model.Attender.getAttendeeStatusStore(),
+        var store = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus'),
             statusRecord = store.getById(status);
             
         return statusRecord ? statusRecord.get('i18nValue') : Ext.util.Format.htmlEncode(i18n._hidden(status));

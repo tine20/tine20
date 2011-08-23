@@ -79,7 +79,7 @@ Tine.Calendar.AttendeeStatusFilterModelValueField = Ext.extend(Ext.ux.form.Layer
     
     getFormValue: function() {
         var ids = [];
-        var statusStore = Tine.Calendar.Model.Attender.getAttendeeStatusStore();
+        var statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus');
         
         var formValues = this.getInnerForm().getForm().getValues();
         for (var id in formValues) {
@@ -94,7 +94,7 @@ Tine.Calendar.AttendeeStatusFilterModelValueField = Ext.extend(Ext.ux.form.Layer
     getItems: function() {
         var items = [];
         
-        Tine.Calendar.Model.Attender.getAttendeeStatusStore().each(function(status) {
+        Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').each(function(status) {
             items.push({
                 xtype: 'checkbox',
                 boxLabel: status.get('i18nValue'),
@@ -113,11 +113,11 @@ Tine.Calendar.AttendeeStatusFilterModelValueField = Ext.extend(Ext.ux.form.Layer
     setValue: function(value) {
         value = Ext.isArray(value) ? value : [value];
         
-        var statusStore = Tine.Calendar.Model.Attender.getAttendeeStatusStore();
+        var statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus');
         var statusText = [];
         this.currentValue = [];
         
-        Tine.Calendar.Model.Attender.getAttendeeStatusStore().each(function(status) {
+        Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').each(function(status) {
             var id = status.get('id');
             var name = status.get('i18nValue');
             if (value.indexOf(id) >= 0) {

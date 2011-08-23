@@ -236,7 +236,7 @@ Tine.Calendar.DaysViewEventUI = Ext.extend(Tine.Calendar.EventUI, {
         }
         
         var myAttenderRecord = this.event.getMyAttenderRecord(),
-            myAttenderStatusRecord = myAttenderRecord ? Tine.Calendar.Model.Attender.getAttendeeStatusStore().getById(myAttenderRecord.get('status')) : null;
+            myAttenderStatusRecord = myAttenderRecord ? Tine.Tinebase.widgets.keyfield.StoreMgr.get('Calendar', 'attendeeStatus').getById(myAttenderRecord.get('status')) : null;
             
         if (myAttenderStatusRecord && myAttenderStatusRecord.get('system')) {
             this.statusIcons.push({
