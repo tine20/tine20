@@ -78,6 +78,14 @@ Tine.Filemanager.GridContextMenu = {
                                     grid.getStore().reload();
                                     grid.currentFolderNode.reload();
                                 }
+                            },
+                            failure: function(result, request) {
+                                var nodeData = Ext.util.JSON.decode(result.responseText);
+                                
+                                var appContext = Tine[this.scope.app.appName];
+                                if(appContext && appContext.handleRequestException) {
+                                    appContext.handleRequestException(nodeData.data);
+                                }
                             }
                         });
                     }
@@ -157,6 +165,14 @@ Tine.Filemanager.GridContextMenu = {
                             }
                             
                             Ext.MessageBox.hide();
+                        },
+                        failure: function(result, request) {
+                            var nodeData = Ext.util.JSON.decode(result.responseText);
+                            
+                            var appContext = Tine[this.scope.app.appName];
+                            if(appContext && appContext.handleRequestException) {
+                                appContext.handleRequestException(nodeData.data);
+                            }
                         }
                     });
                 }

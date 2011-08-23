@@ -198,8 +198,8 @@ Tine.widgets.tree.ContextMenu = {
                 Ext.Ajax.request({
                     params: params,
                     scope: this,
-                    success: function(_result, _request){
-                        var nodeData = Ext.util.JSON.decode(_result.responseText);
+                    success: function(result, request){
+                        var nodeData = Ext.util.JSON.decode(result.responseText);
                         
                         // TODO add + icon if it wasn't expandable before
                         if(nodeData.type == 'folder') {
@@ -215,10 +215,21 @@ Tine.widgets.tree.ContextMenu = {
                         
                         // TODO: im event auswerten
                         if (this.backendModel == 'Node') {
-                            this.scope.app.mainScreen.GridPanel.getStore().reload();
+                            this.scope.app.getMainScreen().getCenterPanel().getStore().reload();
+                            if(nodeData.error) {
+                                Tine.log.debug(nodeData);
+                            }
                         }
 
                         Ext.MessageBox.hide();
+                    },
+                    failure: function(result, request) {
+                        var nodeData = Ext.util.JSON.decode(result.responseText);
+                        
+                        var appContext = Tine[this.scope.app.appName];
+                        if(appContext && appContext.handleRequestException) {
+                            appContext.handleRequestException(nodeData.data);
+                        }
                     }
                 });
                 
@@ -286,7 +297,15 @@ Tine.widgets.tree.ContextMenu = {
                                 
                                 // TODO: im event auswerten
                                 if (this.backendModel == 'Node') {
-                                    this.scope.app.mainScreen.GridPanel.getStore().reload();
+                                    this.scope.app.getMainScreen().getCenterPanel().getStore().reload();
+                                }
+                            },
+                            failure: function(result, request) {
+                                var nodeData = Ext.util.JSON.decode(result.responseText);
+                                
+                                var appContext = Tine[this.scope.app.appName];
+                                if(appContext && appContext.handleRequestException) {
+                                    appContext.handleRequestException(nodeData.data);
                                 }
                             }
                         });
@@ -358,6 +377,14 @@ Tine.widgets.tree.ContextMenu = {
                             }
                             
                             Ext.MessageBox.hide();
+                        },
+                        failure: function(result, request) {
+                            var nodeData = Ext.util.JSON.decode(result.responseText);
+                            
+                            var appContext = Tine[this.scope.app.appName];
+                            if(appContext && appContext.handleRequestException) {
+                                appContext.handleRequestException(nodeData.data);
+                            }
                         }
                     });
                 }
@@ -385,6 +412,14 @@ Tine.widgets.tree.ContextMenu = {
                         node.attributes.nodeRecord.data.color = nodeData.color;
                         this.scope.fireEvent('containercolorset', nodeData);
                         node.getUI().removeClass("x-tree-node-loading");
+                    },
+                    failure: function(result, request) {
+                        var nodeData = Ext.util.JSON.decode(result.responseText);
+                        
+                        var appContext = Tine[this.scope.app.appName];
+                        if(appContext && appContext.handleRequestException) {
+                            appContext.handleRequestException(nodeData.data);
+                        }
                     }
                 });
         
