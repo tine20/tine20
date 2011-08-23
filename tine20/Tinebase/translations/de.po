@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-17 15:59+0100\n"
-"PO-Revision-Date: 2011-08-17 17:02+0100\n"
+"PO-Revision-Date: 2011-08-23 10:16+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -252,7 +252,7 @@ msgstr "Bericht Senden"
 
 #: Tinebase/js/ExceptionDialog.js:75
 msgid "An error occurred, the program ended abnormal."
-msgstr "Ein Fehler ist aufgetreten, dass Programm wurde unerwartet beendet."
+msgstr "Ein Fehler ist aufgetreten, das Programm wurde unerwartet beendet."
 
 #: Tinebase/js/ExceptionDialog.js:76
 msgid "The last action you made was potentially not performed correctly."
