@@ -73,7 +73,10 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 //        this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
         this.on('nodedragover', this.onNodeDragOver, this);
-               
+        
+//        this.getEl().on('mousedown', function(){alert('mousedown')}, this);
+//        this.on('mouseup', function(){alert('mouseup')}, this);
+//       
         Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
         
         // init drop zone

@@ -104,7 +104,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     
     afterRender: function() {
         
-        Tine.Filemanager.GridPanel.superclass.afterRender.call(this);      
+        Tine.Filemanager.GridPanel.superclass.afterRender.call(this);  
+        this.action_upload.setDisabled(true);
         this.initDropZone();
 
     },
@@ -251,7 +252,8 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             plugins: [{
                 ptype: 'ux.browseplugin',
                 multiple: true,
-                enableFileDrop: false
+                enableFileDrop: false,
+                disable: true
             }],
             iconCls: this.app.appName + 'IconCls'            
         };
@@ -714,7 +716,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         var fileRecord = upload.fileRecord;
         fileRecord.beginEdit();
         fileRecord.set('contenttype', record.contenttype);
-//        fileRecord.set('created_by', record.created_by);
         fileRecord.set('created_by', Tine.Tinebase.registry.get('currentAccount'));
         fileRecord.set('creation_time', record.creation_time);
         fileRecord.set('revision', record.revision);
@@ -816,6 +817,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }
     },
     
+    /**
+     * init grid drop arget
+     */
     initDropZone: function(){
               
         var ddrow = new Ext.dd.DropTarget(this.getEl(), {  
@@ -824,20 +828,27 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 
                 var dragData = dragSource.getDragData(e), 
                     nodes = data.selections,
+                    app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
+                    grid = app.getMainScreen().getCenterPanel(),
                     target;
-                
+
+                var dropIndex;
                 if(dragData) {
-                    var dropIndex = dragSource.getDragData(e).rowIndex;
-                    target = data.grid.getStore().getAt(dropIndex);    
+                    dropIndex = dragData.rowIndex;                   
                 }
                 else {
-//                    var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-//                    var grid = app.getMainScreen().getCenterPanel();
-//                    target = grid.currentFolderNode;
+                    dropIndex = grid.getView().findRowIndex(e.target);
                 }
+
+                target = grid.getStore().getAt(dropIndex);    
+
               
                 if(!target) {
                     return false;
+                }
+                
+                if(target.data.type === 'file' && grid.currentFolderNode) {
+                    target = grid.currentFolderNode;
                 }
                 
                 if(e.ctrlKey) {
@@ -851,21 +862,26 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             notifyOver : function( dragSource , e, data ) {
                 
                 var dragData = dragSource.getDragData(e), 
+                    app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
+                    grid = app.getMainScreen().getCenterPanel(),
                     target;
-
+                
+                var dropIndex;
                 if(dragData) {
-                    var dropIndex = dragSource.getDragData(e).rowIndex;
-                    target = data.grid.getStore().getAt(dropIndex);    
+                    dropIndex = dragData.rowIndex;                   
                 }
                 else {
-//                    var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-//                    var grid = app.getMainScreen().getCenterPanel();
-//                    target = grid.currentFolderNode;
+                    dropIndex = grid.getView().findRowIndex(e.target);
                 }
-                         
-                // TODO: return corurent folder node?
+                    
+                target = grid.getStore().getAt(dropIndex);    
+               
                 if(!target) {
                     return false;
+                }
+                
+                if(target.data.type === 'file' && grid.currentFolderNode) {
+                    target = grid.currentFolderNode;
                 }
                 
                 return this.dropAllowed;

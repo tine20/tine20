@@ -52,7 +52,7 @@ Tine.Filemanager.handleRequestException = function(exception) {
     var app = Tine.Tinebase.appMgr.get('Filemanager');
     
     switch(exception.code) {
-        case 901: // Felamimail_Exception_IMAPServiceUnavailable
+        case 901: 
             Ext.Msg.show({
                title:   app.i18n._('Failure on create folder/file'),
                msg:     app.i18n._('Item with this name allready exists!'),

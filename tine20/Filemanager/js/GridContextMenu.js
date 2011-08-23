@@ -14,7 +14,7 @@ Tine.Filemanager.GridContextMenu = {
      * create tree node
      */
     addNode: function() {
-        alert("grid add");
+        Tine.log.debug("grid add");
     },
 
     /**
@@ -184,7 +184,7 @@ Tine.Filemanager.GridContextMenu = {
      * change tree node color
      */
     changeNodeColor: function(cp, color) {
-        alert("grid change color");
+        Tine.log.debug("grid change color");
         
         
     },
@@ -194,14 +194,14 @@ Tine.Filemanager.GridContextMenu = {
      * 
      */
     managePermissions: function() {
-        alert("grid manage permissions");
+        Tine.log.debug("grid manage permissions");
     },
     
     /**
      * reload node
      */
     reloadNode: function() {
-        alert("grid reload node");
+        Tine.log.debug("grid reload node");
     },
     
     /**
