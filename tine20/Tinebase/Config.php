@@ -404,7 +404,11 @@ class Tinebase_Config extends Tinebase_Config_Abstract
                 foreach( (array) $properties as $name => $definition) {
                     if (array_key_exists('clientRegistryInclude', $definition) && $definition['clientRegistryInclude'] === TRUE) {
                         // might not be too bad as we have a cache
-                        $clientProperties[$application->name][$name] = $config->{$name};
+                        $clientProperties[$application->name][$name] = new Tinebase_Config_Struct(array(
+                            'value'         => $config->{$name},
+                            // add definition here till we have a better palce
+                            'definition'    => new Tinebase_Config_Struct($definition),
+                        ));
 //                        $clientProperties[$application->name][$name] = $definition;
                     }
                 }

@@ -16,8 +16,6 @@ Ext.ns('Tine.Tinebase.widgets.keyfield');
  * @constructor
  */
 Tine.Tinebase.widgets.keyfield.Store = function(config) {
-//    Ext.apply(this, config);
-    
     // init app
     config.app = Ext.isString(config.app) ? Tine.Tinebase.appMgr.get(config.app) : config.app;
     
@@ -25,12 +23,17 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
     config.keyFieldConfig = config.app.getRegistry().get('config')[config.keyFieldName];
     
     // init data / translate values
-    var data = Ext.isArray(config.keyFieldConfig.records) ? config.keyFieldConfig.records : [];
-    Ext.each(data, function(d) {d.i18nValue = config.app.i18n._hidden(d.value);});
+    var data = config.keyFieldConfig && config.keyFieldConfig.value && Ext.isArray(config.keyFieldConfig.value.records) ? config.keyFieldConfig.value.records : [];
+    Ext.each(data, function(d) {
+        d.i18nValue = d.value ? config.app.i18n._hidden(d.value) : "";
+    });
     config.data = data;
     
-    // use standard field so far
-    config.fields = ['id', 'value', 'icon', 'system', 'i18nValue'];
+    var modelName = config.keyFieldConfig.definition ? config.keyFieldConfig.definition['class'] : "Tinebase_Config_KeyFieldRecord",
+        modelParts = modelName.split('_'),
+        recordClass = Tine[modelParts[0]] && Tine[modelParts[0]]['Model'] && Tine[modelParts[0]]['Model'][modelParts[2]] ? Tine[modelParts[0]]['Model'][modelParts[2]] : null;
+    
+    config.fields = recordClass ? recordClass : ['id', 'value', 'icon', 'system', 'i18nValue'];
     
     Tine.Tinebase.widgets.keyfield.Store.superclass.constructor.call(this, config);
 };

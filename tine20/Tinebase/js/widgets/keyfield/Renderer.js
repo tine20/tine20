@@ -37,13 +37,14 @@ Tine.Tinebase.widgets.keyfield.Renderer = function(){
                 
             if (! renderers[key]) {
                 renderers[key] = function(id) {
+                    if (! id) return "";
                     var record = store.getById(id),
                         i18nValue = record ? record.get('i18nValue') : app.i18n._hidden(id),
                         icon = record ? record.get('icon') : null,
                         string = '';
                         
                     if (whatParts.indexOf('icon') > -1 && icon) {
-                        string = string + '<img src="' + icon + '" class="tine-keyfield-renderer-icon" />';
+                        string = string + '<img src="' + icon + '" class="tine-keyfield-renderer-icon" ext:qtip="' + i18nValue + '" />';
                     }
                         
                     if (whatParts.indexOf('text') > -1 && i18nValue) {
