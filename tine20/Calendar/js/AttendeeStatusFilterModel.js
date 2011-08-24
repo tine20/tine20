@@ -98,7 +98,7 @@ Tine.Calendar.AttendeeStatusFilterModelValueField = Ext.extend(Ext.ux.form.Layer
             items.push({
                 xtype: 'checkbox',
                 boxLabel: status.get('i18nValue'),
-                icon: status.get('status_icon'),
+                icon: status.get('icon'),
                 name: status.get('id')
             });
         }, this);

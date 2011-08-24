@@ -131,7 +131,7 @@ Ext.namespace('Tine.Tasks');
      * @return {Boolean}
      */
     isValid: function() {
-        isValid = true;
+        var isValid = true;
         
         var dueField = this.getForm().findField('due'),
             dueDate = dueField.getValue(),

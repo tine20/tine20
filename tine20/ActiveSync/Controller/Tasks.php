@@ -200,25 +200,11 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
         foreach($this->_mapping as $fieldName => $value) {
             switch($value) {
                 case 'completed':
-                    
-                    // get status COMPLETED/IN-PROCESS
-                    $allStatus = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records;
-                    foreach ($allStatus as $status) {
-                        switch ($status->status_name) {
-                            case  'COMPLETED':
-                                $completedStatus = $status;
-                                break;
-                            case  'IN-PROCESS':
-                                $inprocessStatus = $status;
-                                break;
-                        }
-                    }
-                    
                     if((int)$xmlData->$fieldName === 1) {
-                        $task->status_id = (isset($completedStatus)) ? $completedStatus->getId() : 2;
+                        $task->status = 'COMPLETED';
                         $task->completed = (string)$xmlData->DateCompleted;
                     } else {
-                        $task->status_id = (isset($inprocessStatus)) ? $inprocessStatus->getId() : 3;
+                        $task->status = 'IN-PROCESS';
                         $task->completed = NULL;
                     }
                     break;
@@ -341,7 +327,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                     
                     $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)
                         ->records
-                        ->filter('status_is_open', 1);
+                        ->filter('is_open', 1);
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($status->getArrayOfIds(), true));
                     

@@ -91,7 +91,7 @@ class Crm_Export_Helper
                         if ($idx) {
                             $status = $_resolvedRecords['tasksStatus'][$idx];
                             //if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . print_r($status->toArray(), TRUE)); 
-                            if ($status->status_is_open) {
+                            if ($status->is_open) {
                                 $value++;
                             }
                         }
