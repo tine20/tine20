@@ -148,7 +148,7 @@ class Tinebase_ConfigTest extends PHPUnit_Framework_TestCase
         $clientConfig = $this->_instance->getClientRegistryConfig();
         $this->assertTrue($clientConfig instanceof Tinebase_Config_Struct, 'clientconfig is not a struct');
         $this->assertTrue($clientConfig->Calendar instanceof Tinebase_Config_Struct, 'calendar clientconfig is not a struct');
-        $this->assertEquals($this->_instance->calendar->fixedCalendars, $clientConfig->Calendar->fixedCalendars, 'fixed calendar config not correct');
+        $this->assertEquals($this->_instance->calendar->fixedCalendars, $clientConfig->Calendar->fixedCalendars->value, 'fixed calendar config not correct');
         
         $this->assertFalse(array_key_exists('SMTP', $clientConfig->Tinebase), 'SMTP is not a client config');
     }
