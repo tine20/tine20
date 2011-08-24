@@ -57,7 +57,6 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
     protected $_tableNames = array(
         'tasks'     => 'tasks',
         'contact'   => 'tasks_contact',
-        'status'    => 'tasks_status',
     );
     
     /**
@@ -67,19 +66,6 @@ class Tasks_Backend_Sql extends Tinebase_Backend_Sql_Abstract
      */
     protected $_tables = array();
     
-    /**
-     * foreign tables (key => tablename)
-     *
-     * @var array
-     */
-    protected $_foreignTables = array(
-        'status'    => array(
-            'table'         => 'tasks_status',
-            'joinOn'        => 'id',
-            'joinId'        => 'status_id',
-            'singleValue'   => TRUE,
-        ),
-    );
     
     /**
      * Creates new entry

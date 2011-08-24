@@ -45,7 +45,7 @@ abstract class Tasks_TestCase extends PHPUnit_Framework_TestCase
             'location'             => 'here and there',
             'organizer'            => 4,
             'priority'             => 2,
-            //'status_id'            => 2,
+            //'status'               => 'NEDDS_ACTION',
             'summary'              => 'our first test task',
             'url'                  => 'http://www.testtask.com',
         ),true, false);

@@ -213,18 +213,20 @@ Tine.Crm.Task.GridPanel = Ext.extend(Ext.ux.grid.QuickaddGridPanel, {
                         autoExpand: true
                     })
                 }, {
-                    id: 'status_id',
+                    id: 'status',
                     header: this.app.i18n._("Status"),
                     width: 45,
-                    dataIndex: 'status_id',
-                    renderer: Tine.Tasks.status.getStatusIcon,
-                    editor: new Tine.Tasks.status.ComboBox({
-                        autoExpand: true,
-                        blurOnSelect: true,
-                        listClass: 'x-combo-list-small'
-                    }),
-                    quickaddField: new Tine.Tasks.status.ComboBox({
-                        autoExpand: true
+                    dataIndex: 'status',
+                    renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Tasks', 'taskStatus'),
+                    editor: {
+                        xtype: 'widget-keyfieldcombo',
+                        app: 'Tasks',
+                        keyFieldName: 'taskStatus'
+                    },
+                    quickaddField: new Tine.Tinebase.widgets.keyfield.ComboBox({
+                        app: 'Tasks',
+                        keyFieldName: 'taskStatus',
+                        value: 'NEEDS-ACTION'
                     })
                 }
             ]}

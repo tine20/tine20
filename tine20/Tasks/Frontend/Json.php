@@ -150,17 +150,6 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     }
     
     /**
-     * retruns all possible task stati
-     * 
-     * @return Tinebase_Record_RecordSet of Tasks_Model_Status
-     */
-    public function getAllStatus() {
-        $result = Tasks_Controller_Status::getInstance()->getAllStatus();    
-        $result->translate();
-        return $result->toArray();
-    }
-    
-    /**
      * Returns registry data of the tasks application.
      * @see Tinebase_Application_Json_Abstract
      * 
@@ -168,15 +157,11 @@ class Tasks_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      */
     public function getRegistryData()
     {
-        $allStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
-        $allStatus->setTimezone(Tinebase_Core::get('userTimeZone'));
-        
         $defaultContainer = Tasks_Controller::getInstance()->getDefaultContainer()->toArray();
         $defaultContainer['account_grants'] = Tinebase_Container::getInstance()->getGrantsOfAccount(Tinebase_Core::getUser(), $defaultContainer['id'])->toArray();
         
         
         $registryData = array(
-            'AllStatus' => $allStatus->toArray(),
             'defaultContainer' => $defaultContainer
         );
         

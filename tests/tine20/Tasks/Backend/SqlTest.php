@@ -71,7 +71,7 @@ class Tasks_Backend_SqlTest extends PHPUnit_Framework_TestCase
 	        'location'             => 'here and there',
 	        'organizer'            => Tinebase_Core::getUser()->getId(),
 	        'priority'             => 2,
-	        //'status_id'            => 2,
+	        //'status'               => 'NEEDS-ACTION',
 	        'summary'              => 'our first test task',
 	        'url'                  => 'http://www.testtask.com',
         ));

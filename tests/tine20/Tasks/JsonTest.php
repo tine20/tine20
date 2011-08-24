@@ -381,38 +381,6 @@ class Tasks_JsonTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * test get status
-     *
-     */
-    public function testGetStatus()
-    {
-        $task = $this->_getTask();
-        $returned = $this->_backend->saveTask($task->toArray());
-        $status = $this->_backend->getAllStatus();
-        
-        $this->assertGreaterThan(0, count($status));
-        $this->assertNotEquals('', $status[0]['status_name']);
-        
-        $this->_backend->deleteTasks(array($returned['id']));
-    }
-    
-    /**
-     * test get registry data
-     *
-     */
-    public function testGetRegistryData()
-    {
-        $task = $this->_getTask();
-        $returned = $this->_backend->saveTask($task->toArray());
-        $regData = $this->_backend->getRegistryData();
-        
-        $this->assertGreaterThan(0, count($regData['AllStatus']));
-        $this->assertNotEquals('', $regData['AllStatus'][0]['status_name']);
-        
-        $this->_backend->deleteTasks(array($returned['id']));
-    }
-    
-    /**
      * Create and save dummy user object
      * 
      * @return Tinebase_Model_FullUser

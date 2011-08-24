@@ -67,7 +67,7 @@ Tine.Tasks.TaskArray = Tine.Tinebase.Model.genericFields.concat([
     { name: 'organizer' },
     { name: 'originator_tz' },
     { name: 'priority' },
-    { name: 'status_id' },
+    { name: 'status' },
     { name: 'summary' },
     { name: 'url' },
     // ical common fields with multiple appearance
@@ -164,4 +164,23 @@ Tine.Tasks.JsonBackend = new Tine.Tinebase.data.RecordProxy({
     appName: 'Tasks',
     modelName: 'Task',
     recordClass: Tine.Tasks.Task
+});
+
+Ext.ns('Tine.Tasks.Model');
+
+Tine.Tasks.Model.Status = Tine.Tinebase.data.Record.create([
+    { name: 'id' },
+    { name: 'value' },
+    { name: 'icon' },
+    { name: 'system' },
+    { name: 'is_open' },
+    { name: 'i18nValue' }
+], {
+    appName: 'Tasks',
+    modelName: 'Status',
+    idProperty: 'id',
+    titleProperty: 'i18nValue',
+    // ngettext('Status', 'Status', n); gettext('Status');
+    recordName: 'Status',
+    recordsName: 'Status'
 });
