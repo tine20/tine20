@@ -202,7 +202,7 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                 case 'completed':
                     
                     // get status COMPLETED/IN-PROCESS
-                    $allStatus = Tasks_Controller_Status::getInstance()->getAllStatus();
+                    $allStatus = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records;
                     foreach ($allStatus as $status) {
                         switch ($status->status_name) {
                             case  'COMPLETED':
@@ -339,8 +339,8 @@ class ActiveSync_Controller_Tasks extends ActiveSync_Controller_Abstract
                 case self::FILTER_INCOMPLETE:
                     $_filter->removeFilter('status_id');
                     
-                    $status = Tasks_Controller_Status::getInstance()
-                        ->getAllStatus()
+                    $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)
+                        ->records
                         ->filter('status_is_open', 1);
 
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . " filter by status ids " . print_r($status->getArrayOfIds(), true));

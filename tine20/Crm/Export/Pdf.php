@@ -232,8 +232,8 @@ class Crm_Export_Pdf extends Tinebase_Export_Pdf
                         
                         $taskTitle = $task->summary . " ( " . $task->percent . " % ) ";
                         // @todo add big icon to db or preg_replace? 
-                        if ( !empty($task->status_id) ) {
-                            $status = Tasks_Controller_Status::getInstance()->getTaskStatus($task->status_id);
+                        if ( !empty($task->status) ) {
+                            $status = Tasks_Config::getInstance()->get(Tasks_Config::TASK_STATUS)->records->getById($task->status);
                             $icon = "/" . $status['status_icon'];
                             $linkedObjects[] = array ($taskTitle, 'separator', $icon);
                         } else {
