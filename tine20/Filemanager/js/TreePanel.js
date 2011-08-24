@@ -406,12 +406,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             nodes = [dropEvent.data.node];
         }
         
-        if(dropEvent.rawEvent.ctrlKey) {
-            Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target);
-        }
-        else {
-            Tine.Filemanager.fileRecordBackend.moveNodes(nodes, target);
-        }
+        Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target, !dropEvent.rawEvent.ctrlKey);
+       
         
 //        return false;
      },

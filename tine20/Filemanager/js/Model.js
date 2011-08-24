@@ -143,165 +143,109 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     },
     
     /**
-     * copy folder/files to a folder
+     * copy/move folder/files to a folder
      * 
      * @param items files/folders to copy
      * @param targetPath
+     * @param move
      */
-    copyNodes: function(items, target) {
-        
-        var options = {};
-        
-        if(!target || !items || items.length < 1) {
-            return false;
-        }
-        
-        var sourceFilenames = new Array(),
-            destinationFilenames = new Array(),
-            forceOverwrite = false,
-            refreshTree = false,
-            targetPath;
-        
-        if(target.data) {
-           targetPath = target.data.path;
-        }
-        else {
-           targetPath = target.attributes.path;
-        }
-           
-        for(var i=0; i<items.length; i++) {
-
-            var item = items[i];
-            var itemData = item.data;
-            if(!itemData) {
-                itemData = item.attributes;
-            }
-            sourceFilenames.push(itemData.path);
-            
-            var itemName = itemData.name;
-            if(typeof itemName == 'object') {
-                itemName = itemName.name;
-            }
-            
-            destinationFilenames.push(targetPath + '/' + itemName);
-            if(itemData.type == 'folder') {
-                refreshTree = true;
-            }
-        };
-        
-        var params = {
-                application: this.appName,                                
-                sourceFilenames: sourceFilenames,
-                destinationFilenames: destinationFilenames,
-                forceOverwrite: forceOverwrite,
-                method: "Filemanager.copyNodes"
-        };
-        
-        options.params = params;
-        
-        options.success = function(response) {
-            Ext.MessageBox.hide();
-            if(refreshTree) {
-                target.reload();                       
-            }
-        };
-        
-        options.failure =  function(result) {
-            var nodeData = Ext.util.JSON.decode(result.response);
-            Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data);
-        };
-        
-        Ext.MessageBox.wait(_('Please wait'), String.format(_('Copying data .. {0}' ), '' ));
-        return this.doXHTTPRequest(options);
-        
-    },
     
-    /**
-     * move folder/files to a folder
-     * 
-     * @param items files/folders to copy
-     * @param targetPath
-     */
-    moveNodes: function(items, target) {
+    copyNodes : function(items, target, move, params) {
         
         var options = {};
         
-        if(!target || !items || items.length < 1) {
-            return false;
-        }
+        var containsFolder = false,
+            reloadParent = false;
         
-        var sourceFilenames = new Array(),
+        if(!params) {
+        
+            if(!target || !items || items.length < 1) {
+                return false;
+            }
+
+            var sourceFilenames = new Array(),
             destinationFilenames = new Array(),
             forceOverwrite = false,
-            refreshTree = false,
-            reloadParent = false,
             targetPath;
-        
-        if(target.data) {
-           targetPath = target.data.path;
+
+            if(target.data) {
+                targetPath = target.data.path;
+            }
+            else {
+                targetPath = target.attributes.path;
+            }
+
+            for(var i=0; i<items.length; i++) {
+
+                var item = items[i];            
+                var itemData = item.data;
+                if(!itemData) {
+                    itemData = item.attributes;
+                    reloadParent = true;
+                }
+                sourceFilenames.push(itemData.path);
+
+                var itemName = itemData.name;
+                if(typeof itemName == 'object') {
+                    itemName = itemName.name;
+                }
+
+                destinationFilenames.push(targetPath + '/' + itemName);
+                if(itemData.type == 'folder') {
+                    containsFolder = true;
+                }
+            };
+
+            var method = "Filemanager.copyNodes";
+            if(move) {
+                method = "Filemanager.moveNodes";
+            }
+
+            params = {
+                    application: this.appName,                                
+                    sourceFilenames: sourceFilenames,
+                    destinationFilenames: destinationFilenames,
+                    forceOverwrite: forceOverwrite,
+                    method: method
+            };
+
         }
         else {
-           targetPath = target.attributes.path;
+            reloadParent = true;
         }
         
-        for(var i=0; i<items.length; i++) {
-
-            var item = items[i];            
-            var itemData = item.data;
-            if(!itemData) {
-                itemData = item.attributes;
-                reloadParent = true;
-            }
-            sourceFilenames.push(itemData.path);
-            
-            var itemName = itemData.name;
-            if(typeof itemName == 'object') {
-                itemName = itemName.name;
-            }
-            
-            destinationFilenames.push(targetPath + '/' + itemName);
-            if(itemData.type == 'folder') {
-                refreshTree = true;
-            }
-        };
-        
-        
-        var params = {
-                application: this.appName,                                
-                sourceFilenames: sourceFilenames,
-                destinationFilenames: destinationFilenames,
-                forceOverwrite: forceOverwrite,
-                method: "Filemanager.moveNodes"
-        };
-        
         options.params = params;
-        
-        
+              
         options.success = function(response) {
+            
             Ext.MessageBox.hide();
-            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-            var grid = app.getMainScreen().getCenterPanel();
-            if(refreshTree) {
-                if(reloadParent && items[0].parentNode) {
-                    items[0].parentNode.reload();
+            
+            if(method) {
+                var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
+                var grid = app.getMainScreen().getCenterPanel();
+                if(containsFolder && reloadParent && items[0].parentNode) {
+                    items[0].parentNode.reload();                             
                 }
+
+                if(grid.currentFolderNode) {
+                    grid.currentFolderNode.reload();
+                }
+                grid.getStore().reload();
+            }
+
+            if (containsFolder) {
                 target.reload(); 
             }
-           
-            if(grid.currentFolderNode) {
-                grid.currentFolderNode.reload();
-            }
-            grid.getStore().reload();
         };
         
         options.failure =  function(result) {
-            var nodeData = Ext.util.JSON.decode(result.response);
-            Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data);
+            var nodeData = Ext.util.JSON.decode(result.response),
+                request = Ext.util.JSON.decode(result.request);
+            Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
         };
         
         Ext.MessageBox.wait(_('Please wait'), String.format(_('Moving data .. {0}' ), '' ));
         return this.doXHTTPRequest(options);
-        
     },
     
     saveRecord : function() {
@@ -313,8 +257,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      * 
      * @param {Tine.Exception} exception
      */
-    handleRequestException: function(exception) {
-        Tine.Filemanager.handleRequestException(exception);
+    handleRequestException: function(exception, request) {
+        Tine.Filemanager.handleRequestException(exception, request);
     }
     
 });

@@ -45,20 +45,37 @@ Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {});
  * 
  * @param {Tine.Exception} exception
  */
-Tine.Filemanager.handleRequestException = function(exception) {
-    Tine.log.warn('Request exception :');
-    Tine.log.warn(exception);
+Tine.Filemanager.handleRequestException = function(exception, request) {
     
     var app = Tine.Tinebase.appMgr.get('Filemanager');
     
     switch(exception.code) {
         case 901: 
-            Ext.Msg.show({
-               title:   app.i18n._('Failure on create folder/file'),
-               msg:     app.i18n._('Item with this name allready exists!'),
-               icon:    Ext.MessageBox.ERROR,
-               buttons: Ext.Msg.OK
-            });
+            if(request) {
+                Ext.Msg.show({
+                    title:   app.i18n._('File allready exists'),
+                    msg:     app.i18n._('Do you want to replace the file?'),
+                    icon:    Ext.Msg.WARNING,
+                    buttons: Ext.Msg.YESNO,
+                    scope: this,
+                    fn: function(button){
+                        if (button === 'yes') {
+                            var params = request.params;
+                            params.forceOverwrite = true;
+                            params.method = request.method;
+                            Tine.Filemanager.fileRecordBackend.copyNodes(null, null, null, params);                      
+                        }
+                    }
+                });
+            }
+            else {
+                Ext.Msg.show({
+                  title:   app.i18n._('Failure on create folder'),
+                  msg:     app.i18n._('Item with this name allready exists!'),
+                  icon:    Ext.MessageBox.ERROR,
+                  buttons: Ext.Msg.OK
+               });
+            }
             break;
   
         default:

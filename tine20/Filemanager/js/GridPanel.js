@@ -850,13 +850,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 if(target.data.type === 'file' && grid.currentFolderNode) {
                     target = grid.currentFolderNode;
                 }
+                               
+                Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target, !e.ctrlKey);
                 
-                if(e.ctrlKey) {
-                    Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target);
-                }
-                else {
-                    Tine.Filemanager.fileRecordBackend.moveNodes(nodes, target);
-                }          
             },
             
             notifyOver : function( dragSource , e, data ) {
