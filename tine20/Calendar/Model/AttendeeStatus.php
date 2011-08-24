@@ -11,7 +11,7 @@
  * 
  * @package     Calendar
  */
-class Calendar_Model_AttendeeStatus extends Tinebase_Record_Abstract
+class Calendar_Model_AttendeeStatus extends Tinebase_Config_KeyField
 {
     
 }

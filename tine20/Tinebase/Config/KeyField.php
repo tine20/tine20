@@ -40,6 +40,24 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
     );
     
     /**
+     * create a new instance
+     * 
+     * @param mixed     $_data
+     * @param string    $_keyFieldRecordModel
+     * @return          Tinebase_Config_KeyField 
+     */
+    public static function create($_data, $_keyFieldRecordModel = null)
+    {
+        $record = new self();
+        if ($_keyFieldRecordModel) {
+            $record->setKeyFieldRecordModel($_keyFieldRecordModel);
+        }
+        
+        $record->setFromArray($_data);
+        return $record;
+    }
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Record/Abstract::setFromArray()
      */
@@ -50,5 +68,15 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
         }
         
         parent::setFromArray($_data);
+    }
+    
+    /**
+     * set key field record model
+     * 
+     * @param  string $_keyFieldRecordModel
+     * @return Tinebase_Config_KeyField $this
+     */
+    public function setKeyFieldRecordModel($_keyFieldRecordModel) {
+        $this->_keyFieldRecordModel = $_keyFieldRecordModel;
     }
 }

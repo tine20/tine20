@@ -319,7 +319,7 @@ abstract class Tinebase_Config_Abstract
             case 'string':      return (string) $_rawData;
             case 'float':       return (float) $_rawData;
             case 'dateTime':    return new DateTime($_rawData);
-            case 'keyField':    return new Tinebase_Config_KeyField($_rawData, $definition['class']);
+            case 'keyField':    return Tinebase_Config_KeyField::create($_rawData, $definition['class']);
             default:            return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
     }
