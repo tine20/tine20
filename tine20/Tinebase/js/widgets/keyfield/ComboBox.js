@@ -27,6 +27,12 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
      */
     keyFieldName: null,
     
+    /**
+     * @cfg {Boolean} showIcon
+     * show icon in list and value
+     */
+    showIcon: true,
+    
     /* begin config */
     blurOnSelect  : true,
     expandOnFocus : true,
@@ -38,7 +44,16 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
     initComponent: function() {
         this.store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app, this.keyFieldName);
         
+        this.showIcon = this.showIcon && this.store.find('icon', /^.+$/) > -1;
+        
+        this.initTpl();
         Tine.Tinebase.widgets.keyfield.ComboBox.superclass.initComponent.call(this);
+    },
+    
+    initTpl: function() {
+        if (this.showIcon) {
+            this.tpl = '<tpl for="."><div class="x-combo-list-item"><img src="{icon}" class="tine-keyfield-icon"/>{' + this.displayField + '}</div></tpl>';
+        }
     }
 });
 
