@@ -57,6 +57,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     
     enableDD: true,
     
+    dragDropInProgress: false,
+    
     plugins : [ {
         ptype : 'ux.browseplugin',
         enableFileDialog: false,
@@ -68,17 +70,19 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     
     initComponent: function() {
         
-        this.on('beforenodedrop', this.onBeforenodedrop, this);
 //        this.on('containeradd', this.onFolderAdd, this);
 //        this.on('containerrename', this.onFolderRename, this);
         this.on('containerdelete', this.onFolderDelete, this);
         this.on('nodedragover', this.onNodeDragOver, this);
-        
-//        this.getEl().on('mousedown', function(){alert('mousedown')}, this);
-//        this.on('mouseup', function(){alert('mouseup')}, this);
-//       
+
+        this.selModel = new Ext.ux.tree.FileTreeSelectionModel({});
+                
+        this.getSelectionModel().on('initDrag', this.onInitDrag, this);
+        this.getSelectionModel().on('dragEnter', this.onDragEnter, this);
+        this.getSelectionModel().on('dragDrop', this.onDragDrop, this);
+
         Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
-        
+
         // init drop zone
         this.dropConfig = {
             ddGroup: this.ddGroup || 'TreeDD',
@@ -88,11 +92,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
              */
             onNodeOver : function(n, dd, e, data) {
                 var node = n.node;
-                
-                // auto node expand check
-//                if(node.hasChildNodes() && !node.isExpanded()){
-//                    this.queueExpand(node);
-//                }
                 return node.attributes.nodeRecord.isWriteable() ? 'x-dd-drop-ok' : false;
             },
             isValidDropPoint: function(n, dd, e, data){
@@ -225,7 +224,9 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         if(node && node.reload) {
             node.reload();
         }
-
+        
+        Tine.log.debug("tree onClick");
+        
         Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
 
     },
@@ -269,6 +270,19 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             backend: 'Filemanager',
             backendModel: 'Node'
         });
+    },
+    
+    /**
+     * @private
+     * - select default path
+     */
+    afterRender: function() {
+                
+        this.getEl().on('onmousedown', function() {
+                alert('onmousedown');
+            }, this);
+        Tine.Filemanager.TreePanel.superclass.afterRender.call(this);
+
     },
     
     /**
@@ -323,7 +337,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @param {Ext.tree.TreeNode} node
      */
     onSelectionChange: function(sm, node) {
-        
+        Tine.log.debug('onSelectionChange');
         var grid = this.app.getMainScreen().getCenterPanel();
         
         grid.action_deleteRecord.disable();
@@ -397,8 +411,9 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @param {Object} dropEvent
      * @private
      */
-    onBeforenodedrop: function(dropEvent) {
+    onBeforeNodeDrop: function(dropEvent) {
 
+        Tine.log.debug("onBeforeNodeDrop");
         var nodes = dropEvent.data.selections,
             target = dropEvent.target;
             
@@ -407,15 +422,12 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         }
         
         Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target, !dropEvent.rawEvent.ctrlKey);
-       
         
-//        return false;
-     },
-     
-     onFolderDelete: function() {
-         console.log("onFolderDelete");
-     }
-    
-    
-    
+
+    },
+
+    onFolderDelete: function() {
+        console.log("onFolderDelete");
+    }
+
 });
