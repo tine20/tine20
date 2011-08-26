@@ -46,11 +46,11 @@ class Tinebase_Config_KeyField extends Tinebase_Record_Abstract
      * @param string    $_keyFieldRecordModel
      * @return          Tinebase_Config_KeyField 
      */
-    public static function create($_data, $_keyFieldRecordModel = null)
+    public static function create($_data, array $_options = array())
     {
         $record = new self();
-        if ($_keyFieldRecordModel) {
-            $record->setKeyFieldRecordModel($_keyFieldRecordModel);
+        if (isset($_options['recordModel'])) {
+            $record->setKeyFieldRecordModel($_options['recordModel']);
         }
         
         $record->setFromArray($_data);

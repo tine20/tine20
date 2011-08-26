@@ -315,12 +315,12 @@ abstract class Tinebase_Config_Abstract
         }
         
         switch ($definition['type']) {
-            case 'int':         return (int) $_rawData;
-            case 'string':      return (string) $_rawData;
-            case 'float':       return (float) $_rawData;
-            case 'dateTime':    return new DateTime($_rawData);
-            case 'keyField':    return Tinebase_Config_KeyField::create($_rawData, $definition['class']);
-            default:            return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
+            case 'int':             return (int) $_rawData;
+            case 'string':          return (string) $_rawData;
+            case 'float':           return (float) $_rawData;
+            case 'dateTime':        return new DateTime($_rawData);
+            case 'keyFieldConfig':  return Tinebase_Config_KeyField::create($_rawData, array_key_exists('options', $definition) ? (array) $definition['options'] : array());
+            default:                return is_array($_rawData) ? new Tinebase_Config_Struct($_rawData) : $_rawData;
         }
     }
     

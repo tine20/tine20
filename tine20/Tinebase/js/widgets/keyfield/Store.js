@@ -29,7 +29,7 @@ Tine.Tinebase.widgets.keyfield.Store = function(config) {
     });
     config.data = data;
     
-    var modelName = config.keyFieldConfig.definition ? config.keyFieldConfig.definition['class'] : "Tinebase_Config_KeyFieldRecord",
+    var modelName = config.keyFieldConfig.definition && config.keyFieldConfig.definition.options ? config.keyFieldConfig.definition.options['recordModel'] : "Tinebase_Config_KeyFieldRecord",
         modelParts = modelName.split('_'),
         recordClass = Tine[modelParts[0]] && Tine[modelParts[0]]['Model'] && Tine[modelParts[0]]['Model'][modelParts[2]] ? Tine[modelParts[0]]['Model'][modelParts[2]] : null;
     

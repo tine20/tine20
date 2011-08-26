@@ -30,8 +30,8 @@ class Tasks_Config extends Tinebase_Config_Abstract
             'label'                 => 'Tasks Status Available',
                                    //_('Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.')
             'description'           => 'Possible tasks status. Please note that additional attendee status might impact other Tasks systems on export or syncronisation.',
-            'type'                  => 'keyField',
-            'class'                 => 'Tasks_Model_Status',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Tasks_Model_Status'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'NEEDS-ACTION'
         ),

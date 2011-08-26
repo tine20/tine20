@@ -54,8 +54,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'label'                 => 'Attendee Status Available',
                                    //_('Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation.')
             'description'           => 'Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation.',
-            'type'                  => 'keyField',
-            'class'                 => 'Calendar_Model_AttendeeStatus',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Calendar_Model_AttendeeStatus'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'NEEDS-ACTION'
         ),
@@ -64,8 +64,8 @@ class Calendar_Config extends Tinebase_Config_Abstract
             'label'                 => 'Attendee Roles Available',
                                    //_('Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation.')
             'description'           => 'Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation.',
-            'type'                  => 'keyField',
-            'class'                 => 'Calendar_Model_AttendeeRole',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Calendar_Model_AttendeeRole'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'REQ'
         ),
