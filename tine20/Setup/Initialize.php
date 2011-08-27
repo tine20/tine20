@@ -59,10 +59,12 @@ class Setup_Initialize
     {
         $this->_createInitialRights($_application);
         
-        $methods = get_class_methods($this);
+        $reflectionClass = new ReflectionClass($this);
+        $methods = $reflectionClass->getMethods();
         foreach ($methods as $method) {
-            if (preg_match('/^_initialize.+/', $method)) {
-                $this->$method($_application, $_options);
+        	$methodName = $method->name;
+            if (preg_match('/^_initialize.+/', $methodName)) {
+                $this->$methodName($_application, $_options);
             }
         }
     }
