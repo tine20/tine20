@@ -42,6 +42,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         if (! $this->_setGeoDataForContacts) {
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Mappanel/geoext/nominatim disabled with config option.');
         }
+        
+        $appConfigDefaults = Addressbook_Controller::getInstance()->getConfigSettings();
+        $this->_mapAddress = $appConfigDefaults[Addressbook_Model_Config::DEFAULTMAPADDRESS] !== NULL ? $appConfigDefaults[Addressbook_Model_Config::DEFAULTMAPADDRESS] : 'adr_one_';
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Address prefix for map panel: ' . $this->_mapAddress);
     }
     
     /**
@@ -263,10 +267,10 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
     protected function _inspectBeforeUpdate($_record, $_oldRecord)
     {
         if (
-            ($_record->adr_one_locality    != $_oldRecord->adr_one_locality) ||
-            ($_record->adr_one_postalcode  != $_oldRecord->adr_one_postalcode) ||
-            ($_record->adr_one_street      != $_oldRecord->adr_one_street) ||
-            ($_record->adr_one_countryname != $_oldRecord->adr_one_countryname)
+            ($_record->{$this->_mapAddress . 'locality'} 	!= $_oldRecord->{$this->_mapAddress . 'locality'}) ||
+            ($_record->{$this->_mapAddress . 'postalcode'}  != $_oldRecord->{$this->_mapAddress . 'postalcode'}) ||
+            ($_record->{$this->_mapAddress . 'street'}      != $_oldRecord->{$this->_mapAddress . 'street'}) ||
+            ($_record->{$this->_mapAddress . 'countryname'} != $_oldRecord->{$this->_mapAddress . 'countryname'})
         ) {
             $this->_setGeoData($_record);
         }
@@ -289,7 +293,7 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
             return;
         }
         
-        if(empty($_record->adr_one_locality) && empty($_record->adr_one_postalcode) && empty($_record->adr_one_street) && empty($_record->adr_one_countryname)) {
+        if (empty($_record->{$this->_mapAddress . 'locality'}) && empty($_record->{$this->_mapAddress . 'postalcode'}) && empty($_record->{$this->_mapAddress . 'street'}) && empty($_record->{$this->_mapAddress . 'countryname'})) {
             $_record->lon = NULL;
             $_record->lat = NULL;
             
@@ -298,20 +302,20 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
         
         $nominatim = new Zend_Service_Nominatim();
 
-        if (! empty($_record->adr_one_locality)) {
-            $nominatim->setVillage($_record->adr_one_locality);
+        if (! empty($_record->{$this->_mapAddress . 'locality'})) {
+            $nominatim->setVillage($_record->{$this->_mapAddress . 'locality'});
         }
         
-        if (! empty($_record->adr_one_postalcode) && ! in_array('adr_one_postalcode', $_ommitFields)) {
-            $nominatim->setPostcode($_record->adr_one_postalcode);
+        if (! empty($_record->{$this->_mapAddress . 'postalcode'}) && ! in_array($this->_mapAddress . 'postalcode', $_ommitFields)) {
+            $nominatim->setPostcode($_record->{$this->_mapAddress . 'postalcode'});
         }
         
-        if (! empty($_record->adr_one_street)) {
-            $nominatim->setStreet($_record->adr_one_street);
+        if (! empty($_record->{$this->_mapAddress . 'street'})) {
+            $nominatim->setStreet($_record->{$this->_mapAddress . 'street'});
         }
         
-        if (! empty($_record->adr_one_countryname)) {
-            $country = Zend_Locale::getTranslation($_record->adr_one_countryname, 'Country', $_record->adr_one_countryname);
+        if (! empty($_record->{$this->_mapAddress . 'countryname'})) {
+            $country = Zend_Locale::getTranslation($_record->{$this->_mapAddress . 'countryname'}, 'Country', $_record->{$this->_mapAddress . 'countryname'});
             if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' country ' . $country);
             $nominatim->setCountry($country);
         }
@@ -325,30 +329,30 @@ class Addressbook_Controller_Contact extends Tinebase_Controller_Record_Abstract
                 $_record->lon = $place->lon;
                 $_record->lat = $place->lat;
                 
-                if (empty($_record->adr_one_countryname) && !empty($place->country_code)) {
-                    $_record->adr_one_countryname = $place->country_code;
+                if (empty($_record->{$this->_mapAddress . 'countryname'}) && ! empty($place->country_code)) {
+                    $_record->{$this->_mapAddress . 'countryname'} = $place->country_code;
                 }
-                if ((empty($_record->adr_one_postalcode) || in_array('adr_one_postalcode', $_ommitFields)) && !empty($place->postcode)) {
-                    $_record->adr_one_postalcode = $place->postcode;
+                if ((empty($_record->{$this->_mapAddress . 'postalcode'}) || in_array($this->_mapAddress . 'postalcode', $_ommitFields)) && ! empty($place->postcode)) {
+                    $_record->{$this->_mapAddress . 'postalcode'} = $place->postcode;
                 }
-                if (empty($_record->adr_one_locality) && !empty($place->city)) {
-                    $_record->adr_one_locality = $place->city;
+                if (empty($_record->{$this->_mapAddress . 'locality'}) && ! empty($place->city)) {
+                    $_record->{$this->_mapAddress . 'locality'} = $place->city;
                 }
                 
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
                     . ' Place found: lon/lat ' . $_record->lon . ' / ' . $_record->lat);
                 
             } else {
-                if (! in_array('adr_one_postalcode', $_ommitFields)) {
+                if (! in_array($this->_mapAddress . 'postalcode', $_ommitFields)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' .
                         'Could not find place - try it again without postalcode.');
-                    $this->_setGeoData($_record, array('adr_one_postalcode'));
+                    $this->_setGeoData($_record, array($this->_mapAddress . 'postalcode'));
                     return;
                 }
                 
                 Tinebase_Core::getLogger()->notice(__METHOD__ . '::' . __LINE__ . ' Could not find place.');
-                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->adr_one_street . ', ' 
-                    . $_record->adr_one_postalcode . ', ' . $_record->adr_one_locality . ', ' . $_record->adr_one_countryname
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' ' . $_record->{$this->_mapAddress . 'street'} . ', ' 
+                    . $_record->{$this->_mapAddress . 'postalcode'} . ', ' . $_record->{$this->_mapAddress . 'locality'} . ', ' . $_record->{$this->_mapAddress . 'countryname'}
                 );
                 
                 $_record->lon = NULL;
