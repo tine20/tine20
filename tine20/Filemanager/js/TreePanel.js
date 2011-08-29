@@ -453,7 +453,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         copy.attributes.nodeRecord.beginEdit();
         copy.attributes.nodeRecord.set('path', newPath);
         copy.attributes.nodeRecord.endEdit();       
-
+        
+        copy.parentNode = target;
         return copy;
     }
 
