@@ -152,8 +152,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     
     copyNodes : function(items, target, move, params) {
         
-        var options = {};
-        
         var containsFolder = false,
             reloadParent = false;
         
@@ -217,50 +215,52 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             reloadParent = true;
         }
         
-        options.params = params;
-              
-        options.success = function(response) {
-            
-            Ext.MessageBox.hide();
-           
-            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),           
-                treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
-                grid = app.getMainScreen().getCenterPanel();
-
-            
-            
-            // Tree refresh
-            if(treeInvolved) {
-                
-                // source parent 
-                if(move) {                    
-                    var nodeToMove = items[0],
-                        copiedNode = treePanel.cloneTreeNode(items[0], target),
-                        nodeToMoveId = nodeToMove.id;
-                    
-                    nodeToMove.parentNode.removeChild(nodeToMove);                                      
-                    target.appendChild(copiedNode); 
-                    copiedNode.setId(nodeToMoveId);    
-                } 
-                else {
-                    var copiedNode = treePanel.cloneTreeNode(items[0], target);
-                    target.appendChild(copiedNode);          
-                    
-                }
-            }
-             
-         // Grid refresh
-            grid.getStore().reload();
-        };
-        
-        options.failure =  function(result) {
-            var nodeData = Ext.util.JSON.decode(result.response),
-                request = Ext.util.JSON.decode(result.request);
-            Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
-        };
-        
         Ext.MessageBox.wait(_('Please wait'), String.format(_('Moving data .. {0}' ), '' ));
-        return this.doXHTTPRequest(options);
+
+        Ext.Ajax.request({
+            params: params,
+            scope: this,
+            success: function(result, request){
+                
+                Ext.MessageBox.hide();
+                
+                var nodeData = Ext.util.JSON.decode(result.responseText);
+                
+                var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),           
+                    treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
+                    grid = app.getMainScreen().getCenterPanel();
+             
+                // Tree refresh
+                if(treeInvolved) {
+                    
+                    // source parent 
+                    if(move) {                    
+                        var nodeToMove = items[0],
+                            copiedNode = treePanel.cloneTreeNode(items[0], target),
+                            nodeToMoveId = nodeToMove.id;
+                        
+                        nodeToMove.parentNode.removeChild(nodeToMove);                                      
+                        target.appendChild(copiedNode); 
+                        copiedNode.setId(nodeToMoveId);    
+                    } 
+                    else {
+                        var copiedNode = treePanel.cloneTreeNode(items[0], target);
+                        target.appendChild(copiedNode);  
+                        copiedNode.setId(nodeData[0].id);
+                        
+                    }
+                }
+                                 
+             // Grid refresh
+                grid.getStore().reload();
+            },
+            failure: function(result) {
+                var nodeData = Ext.util.JSON.decode(result.response),
+                request = Ext.util.JSON.decode(result.request);
+                Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
+            }
+        });
+               
     },
     
     saveRecord : function() {
