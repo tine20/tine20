@@ -42,6 +42,16 @@ Tine.Tinebase.widgets.keyfield.ComboBox = Ext.extend(Ext.form.ComboBox, {
     /* end config */
     
     initComponent: function() {
+        this.app = Ext.isString(this.app) ? Tine.Tinebase.appMgr.get(this.app) : this.app;
+    
+        // get keyField config
+        this.keyFieldConfig = this.app.getRegistry().get('config')[this.keyFieldName];
+    
+        if (this.keyFieldConfig && Ext.isObject(this.keyFieldConfig.value) && this.keyFieldConfig.value.hasOwnProperty('default')) {
+            this.value = this.keyFieldConfig.value['default'];
+            //@todo see if keyFieldConfig.definition has a default
+        }
+        
         this.store = Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app, this.keyFieldName);
         
         this.showIcon = this.showIcon && this.store.find('icon', /^.+$/) > -1;

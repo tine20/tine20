@@ -168,16 +168,11 @@ Tine.Tinebase.Model.NoteType = Ext.data.Record.create([
  * Model of a customfield definition
  */
 Tine.Tinebase.Model.Customfield = Ext.data.Record.create([
-    { name: 'application_id' },
     { name: 'id'             },
+    { name: 'application_id' },
     { name: 'model'          },
     { name: 'name'           },
-    { name: 'label'          },
-    { name: 'type'           },
-    { name: 'length'         },
-    { name: 'group'          },
-    { name: 'order'          },
-    { name: 'value_search'   },
+    { name: 'definition'     },
     { name: 'account_grants' }
 ]);
 

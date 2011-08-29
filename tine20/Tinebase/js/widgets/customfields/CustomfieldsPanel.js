@@ -78,7 +78,31 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                         anchor: '95%',
                         readOnly: cfConfig.get('account_grants').indexOf('writeGrant') < 0
                     };
-                
+                    
+                    // auto xtype per type
+                    if (! uiConfig.xtype && def.type) {
+                        switch (def.type) {
+                            case 'keyField':
+                                var options = def.options ? def.options : {},
+                                    keyFieldConfig = def.keyFieldConfig ? def.keyFieldConfig : null;
+                                    
+                                Ext.apply(fieldDef, {
+                                    xtype: 'widget-keyfieldcombo',
+                                    app: options.app ? options.app : this.recordClass.getMeta('appName'),
+                                    keyFieldName: options.keyFieldName ? options.keyFieldName : cfConfig.get('name')
+                                });
+                                
+                                if (keyFieldConfig) {
+                                    var app = Ext.isString(fieldDef.app) ? Tine.Tinebase.appMgr.get(fieldDef.app) : fieldDef.app;
+                                    console.log(app);
+                                    app.getRegistry().get('config')[fieldDef.keyFieldName] = keyFieldConfig;
+                                }
+                                
+                                break;
+                             //@todo support more types!   
+                        }
+                    }
+                    
                 if (def.length) {
                     fieldDef.maxLength = def.length;
                 }
