@@ -79,10 +79,13 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                         readOnly: cfConfig.get('account_grants').indexOf('writeGrant') < 0
                     };
                     
-                    // auto xtype per type
+                    // auto xtype per data type
+                    // @todo move this to a generic place
+                    // @todo support array of scalars
+                    // @todo suppot recordSets of model
                     if (! uiConfig.xtype && def.type) {
-                        switch (def.type) {
-                            case 'keyField':
+                        switch (Ext.util.Format.lowercase(def.type)) {
+                            case 'keyfield':
                                 var options = def.options ? def.options : {},
                                     keyFieldConfig = def.keyFieldConfig ? def.keyFieldConfig : null;
                                     
@@ -93,13 +96,36 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                                 });
                                 
                                 if (keyFieldConfig) {
+                                    // place keyFieldConfig in registry so we can use the standard widgets
                                     var app = Ext.isString(fieldDef.app) ? Tine.Tinebase.appMgr.get(fieldDef.app) : fieldDef.app;
-                                    console.log(app);
                                     app.getRegistry().get('config')[fieldDef.keyFieldName] = keyFieldConfig;
                                 }
                                 
                                 break;
-                             //@todo support more types!   
+                            case 'integer':
+                            case 'int':
+                                fieldDef.xtype = 'numberfield';
+                                break;
+                            case 'date':
+                                fieldDef.xtype = 'datefield';
+                                fieldDef.listAlign = 'tr-br?';
+                                break;
+                            case 'time':
+                                fieldDef.xtype = 'timefield';
+                                fieldDef.listAlign = 'tr-br?';
+                                break;
+                            case 'datetime':
+                                fieldDef.xtype = 'datetimefield';
+                                fieldDef.listAlign = 'tr-br?';
+                                break;
+                            case 'boolean':
+                            case 'bool':
+                                fieldDef.xtype = 'checkbox';
+                                break;
+                            case 'string':
+                            default:
+                                fieldDef.xtype = 'textfield';
+                                break;
                         }
                     }
                     
@@ -254,8 +280,8 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
                 
                 var value = values[cfConfig.get('name')];
                 if (value) {
-                    var datetimeFields = ['datefield', 'datetimefield', 'extuxclearabledatefield'];
-                    if (datetimeFields.indexOf(uiconfig.xtype) != -1) {
+                    var datetimeTypes = ['date', 'datetime'];
+                    if (datetimeTypes.indexOf(Ext.util.Format.lowercase(def.type)) != -1) {
                         value = Date.parseDate(value, Date.patterns.ISO8601Long);
                     }
                     cfConfig.fieldObj.setValue(value);
