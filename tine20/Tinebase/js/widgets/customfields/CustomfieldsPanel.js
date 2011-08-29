@@ -67,37 +67,38 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
         if (cfStore) {
             this.items = [];
             this.getFieldSet(_('General'));
-            cfStore.each(function(def) {
+            cfStore.each(function(cfConfig) {
+                var def = cfConfig.get('definition'),
+                    uiConfig = def && def.uiconfig ? def.uiconfig : {},
+                    fieldDef = {
+                        fieldLabel: def.label,
+                        name: 'customfield_' + cfConfig.get('name'),
+                        xtype: (def.value_search == 1) ? 'customfieldsearchcombo' : uiConfig.xtype,
+                        customfieldId: cfConfig.id,
+                        anchor: '95%',
+                        readOnly: cfConfig.get('account_grants').indexOf('writeGrant') < 0
+                    };
                 
-                var fieldDef = {
-                    fieldLabel: def.get('label'),
-                    name: 'customfield_' + def.get('name'),
-                    xtype: (def.get('value_search') == 1) ? 'customfieldsearchcombo' : def.get('type'),
-                    customfieldId: def.id,
-                    anchor: '95%',
-                    readOnly: def.get('account_grants').indexOf('writeGrant') < 0
-                };
-                
-                if (def.get('length')) {
-                    fieldDef.maxLength = def.get('length');
+                if (def.length) {
+                    fieldDef.maxLength = def.length;
                 }
                 
                 try {
                     var fieldObj = Ext.ComponentMgr.create(fieldDef);
-                    order = (def.get('order')) ? def.get('order') : order++;
+                    order = (uiConfig.order) ? uiConfig.order : order++;
                     
-                    if (! def.get('group') || def.get('group') == '') {
+                    if (! uiConfig.group || uiConfig.group == '') {
                         this.getFieldSet(_('General')).insert(order,fieldObj);
                     } else {
-                        this.getFieldSet(def.get('group')).insert(order,fieldObj);
+                        this.getFieldSet(uiConfig.group).insert(order,fieldObj);
                     }
                     
                     // ugh a bit ugly
-                    def.fieldObj = fieldObj;
+                    cfConfig.fieldObj = fieldObj;
                 } catch (e) {
                     Tine.log.debug(e);
-                    Tine.log.err('Unable to create custom field "' + def.get('name') + '". Check definition!');
-                    cfStore.remove(def);
+                    Tine.log.err('Unable to create custom field "' + cfConfig.get('name') + '". Check definition!');
+                    cfStore.remove(cfConfig);
                 }
                 
             }, this);
@@ -211,8 +212,8 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
      */
     getValue: function() {
         var values = new Tine.Tinebase.widgets.customfields.Cftransport();
-        this.cfStore.each(function(def) {
-            values[def.get('name')] = def.fieldObj.getValue();
+        this.cfStore.each(function(cfConfig) {
+            values[cfConfig.get('name')] = cfConfig.fieldObj.getValue();
         }, this);
         
         return values;
@@ -223,14 +224,17 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
      */
     setValue: function(values){
         if (values) {
-            this.cfStore.each(function(def) {
-                var value = values[def.get('name')];
+            this.cfStore.each(function(cfConfig) {
+                var def = cfConfig.get('definition'),
+                    uiconfig = def && def.uiconfig ? def.uiconfig : {};
+                
+                var value = values[cfConfig.get('name')];
                 if (value) {
                     var datetimeFields = ['datefield', 'datetimefield', 'extuxclearabledatefield'];
-                    if (datetimeFields.indexOf(def.get('type')) != -1) {
+                    if (datetimeFields.indexOf(uiconfig.xtype) != -1) {
                         value = Date.parseDate(value, Date.patterns.ISO8601Long);
                     }
-                    def.fieldObj.setValue(value);
+                    cfConfig.fieldObj.setValue(value);
                 }
             });
         }
