@@ -104,4 +104,20 @@ class Tinebase_CustomField_Config extends Tinebase_Backend_Sql_Abstract
         
         return $result;
     }
+    
+    /**
+     * (non-PHPdoc)
+     * @see tine20/Tinebase/Backend/Sql/Abstract.php::_rawDataToRecordSet()
+     */
+    protected function _recordToRawData($_record)
+    {
+        $data = $_record->toArray();
+        if (is_object($data['definition']) && method_exists($data['definition'], 'toArray')) {
+            $data['definition'] = $data['definition']->toArray();
+        }
+        if (is_array($data['definition'])) {
+            $data['definition'] = Zend_Json::encode($data['definition']);
+        }
+        return $data;
+    }
 }

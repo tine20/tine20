@@ -178,10 +178,7 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             
             $filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
             $filter->setRequiredGrants((array)$_requiredGrant);
-            $pagination = new Tinebase_Model_Pagination(array(
-                'sort'  => 'order'
-            ));
-            $result = $this->_backendConfig->search($filter, $pagination);
+            $result = $this->_backendConfig->search($filter);
         
             if (count($result) > 0) {
                 if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ 
