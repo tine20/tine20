@@ -220,12 +220,21 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.wrap.on('mousemove', function(e) {
             var xy = e.getXY();
             this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
+//            var pos = this.input_file.translatePoints([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
+//            this.input_file.applyStyles({
+//                top: pos.top,
+//                left: pos.left
+//            });
         }, this, {buffer: 20});
         
         // IE
         this.button_container.on('mousemove', function(e) {
             var xy = e.getXY();
-            this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
+            //this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
+//            this.input_file.applyStyles({
+//                top: xy[1] - 5,
+//                left: xy[0] - this.input_file.getWidth()/2
+//            });
         }, this, {buffer: 30});
         
         this.input_file.setOpacity(0.0);

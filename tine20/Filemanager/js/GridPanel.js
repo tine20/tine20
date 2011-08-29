@@ -98,7 +98,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         Tine.Filemanager.GridPanel.superclass.initComponent.call(this);      
         this.getStore().on('load', this.onLoad);
-//        this.initDropZone();
         
     },
     
@@ -106,7 +105,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         Tine.Filemanager.GridPanel.superclass.afterRender.call(this);  
         this.action_upload.setDisabled(true);
-        this.initDropZone();
+        this.initDropTarget();
 
     },
     
@@ -818,9 +817,9 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
-     * init grid drop arget
+     * init grid drop target
      */
-    initDropZone: function(){
+    initDropTarget: function(){
               
         var ddrow = new Ext.dd.DropTarget(this.getEl(), {  
             ddGroup : 'fileDDGroup',  
@@ -839,20 +838,26 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 else {
                     dropIndex = grid.getView().findRowIndex(e.target);
                 }
+                
+                if(data.selections) {
+                    nodes = data.selections;                   
+                }
+                else {
+                    nodes = [data.node];
+                }
 
                 target = grid.getStore().getAt(dropIndex);    
-
-              
+                
+                if((!target || target.data.type === 'file') && grid.currentFolderNode) {
+                    target = grid.currentFolderNode;
+                }
+                
                 if(!target) {
                     return false;
                 }
                 
-                if(target.data.type === 'file' && grid.currentFolderNode) {
-                    target = grid.currentFolderNode;
-                }
-                               
                 Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target, !e.ctrlKey);
-                
+                return true;
             },
             
             notifyOver : function( dragSource , e, data ) {
@@ -872,12 +877,12 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     
                 target = grid.getStore().getAt(dropIndex);    
                
-                if(!target) {
-                    return false;
+                if((!target || target.data.type === 'file') && grid.currentFolderNode) {
+                    target = grid.currentFolderNode;
                 }
                 
-                if(target.data.type === 'file' && grid.currentFolderNode) {
-                    target = grid.currentFolderNode;
+                if(!target) {
+                    return false;
                 }
                 
                 return this.dropAllowed;
