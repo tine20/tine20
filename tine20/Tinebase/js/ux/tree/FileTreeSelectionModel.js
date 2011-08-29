@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Martin Jatho <m.jatho@metaways.de>
+ * @copyright   Copyright (c) 20011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
  
@@ -41,11 +41,13 @@ Ext.extend(Ext.ux.tree.FileTreeSelectionModel, Ext.tree.DefaultSelectionModel, {
     onInitDrag: function(e) {
         
         Tine.log.debug('initDrag');
+        
         var data = this.dragData;
         this.tree.eventModel.disable();
         this.proxy.update("");
         data.node.ui.appendDDGhost(this.proxy.ghost.dom);
         this.tree.fireEvent("startdrag", this.tree, data.node, e); 
+        
     }
 
 });

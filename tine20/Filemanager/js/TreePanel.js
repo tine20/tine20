@@ -427,7 +427,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target, !dropEvent.rawEvent.ctrlKey);
         
         dropEvent.dropStatus = true;
-        return false;
+//        return true;
     },
 
     onFolderDelete: function() {
