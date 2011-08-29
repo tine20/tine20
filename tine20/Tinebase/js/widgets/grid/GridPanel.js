@@ -1011,7 +1011,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             for (var i=0; i < allCfs.length; i++) {
                 result.push({
                     id: allCfs[i].id,
-                    header: allCfs[i].label,
+                    header: allCfs[i].definition.label,
                     dataIndex: 'customfields',
                     renderer: Tine.Tinebase.common.customfieldRenderer.createDelegate(this, [allCfs[i].name], true),
                     sortable: false,
@@ -1035,7 +1035,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             var allCfs = Tine[this.app.appName].registry.get('customfields');
             for (var i=0; i < allCfs.length; i++) {
                 result.push({
-                    label: allCfs[i].label, 
+                    label: allCfs[i].definition.label, 
                     field: 'customfield:' + allCfs[i].id, 
                     valueType: 'customfield'
                 })
