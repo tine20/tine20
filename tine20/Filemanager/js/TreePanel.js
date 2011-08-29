@@ -187,7 +187,17 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             attr.name = Tine.Tinebase.container.path2name(attr.path, this.containerName, this.containersName);
         }
         
-        
+        if(attr.path && !attr.created_by) {
+            var matches = attr.path.match(/^\/personal\/{0,1}([0-9a-z_\-]*)\/{0,1}/i);
+            if (matches) {
+                if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountLoginName && matches[1].length > 0) {
+                    attr.id = matches[1];
+                } 
+                else if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountLoginName) {
+                    attr.id = 'otherUsers';
+                }
+            }
+        }
         
         if(attr.name && typeof attr.name == 'object') {
             Ext.applyIf(attr, {
@@ -245,16 +255,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             backend: 'Filemanager',
             backendModel: 'Node'
         });
-    
-//        this.contextMenuSingleContainer = Tine.widgets.tree.ContextMenu.getMenu({
-//            nodeName: this.containerName,
-//            actions: ['delete', 'rename', 'grants'].concat(this.useContainerColor ? ['changecolor'] : []),
-//            scope: this,
-//            backend: 'Tinebase_Container',
-//            backendModel: 'Container'
-//        });
-        
-        
+            
         this.contextMenuRootFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
             actions: ['add'],
@@ -278,9 +279,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      */
     afterRender: function() {
                 
-        this.getEl().on('onmousedown', function() {
-                alert('onmousedown');
-            }, this);
         Tine.Filemanager.TreePanel.superclass.afterRender.call(this);
 
     },
@@ -379,7 +377,9 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         if(valueItem) {
             var node = this.getNodeById(valueItem.id);
             if(node) {
-                return node.getPath();
+                Tine.log.debug(valueItem.path + ' | ' + node.getPath());
+                var returnPath = node.getPath().replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
+                return returnPath;
             }
 
             containerPath = valueItem.path;
@@ -387,6 +387,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
 
         if(containerPath === '/shared') {
+            Tine.log.debug(valueItem.path + ' | ' + treePath);
             return treePath;
         }
             
@@ -395,18 +396,20 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         if (matches) {
             if (matches[1] != Tine.Tinebase.registry.get('currentAccount').accountLoginName) {
                 treePath = treePath.replace('personal', 'otherUsers');
-            } else {
+            } 
+            else {
                 treePath = treePath.replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
                 
             }
         }
         
+        Tine.log.debug(valueItem.path + ' | ' + treePath);
         return treePath;
     },
     
    
     /**
-     * mail(s) got dropped on node
+     * files/folder got dropped on node
      * 
      * @param {Object} dropEvent
      * @private
@@ -423,11 +426,35 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target, !dropEvent.rawEvent.ctrlKey);
         
-
+        dropEvent.dropStatus = true;
+        return false;
     },
 
     onFolderDelete: function() {
         console.log("onFolderDelete");
+    },
+
+    /**
+     * clone a tree node
+     * 
+     * @param node
+     * @returns {Ext.tree.AsyncTreeNode}
+     */
+    cloneTreeNode: function(node, target) {
+        var targetPath = target.attributes.path;
+        var nodeName = node.attributes.name;
+        if(typeof nodeName == 'object') {
+            nodeName = nodeName.name;
+        }
+        var newPath = targetPath + '/' + nodeName;
+        
+        var copy = new Ext.tree.AsyncTreeNode({text: node.text, path: newPath, name: node.attributes.name
+            , nodeRecord: node.attributes.nodeRecord});
+        copy.attributes.nodeRecord.beginEdit();
+        copy.attributes.nodeRecord.set('path', newPath);
+        copy.attributes.nodeRecord.endEdit();       
+
+        return copy;
     }
 
 });
