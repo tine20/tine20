@@ -127,6 +127,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 input_file = null;
             }, this);
         }
+        
     },
     
     /**
@@ -153,7 +154,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
         }
         
         if (this.enableFileDialog) this.createInputFile();
-        
+      
         if (this.enableFileDrop) {
             if (! this.dropEl) {
                 if (this.dropElSelector) {
@@ -209,6 +210,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
             name: this.inputFileName || Ext.id(this.component.el),
             style: "position: absolute; display: block; border: none; cursor: pointer;"
         }, this.multiple ? {multiple: true} : {}));
+
+        this.input_file.dom.disabled = this.component.disabled;
         
         var button_box = this.button_container.getBox();
         
@@ -254,14 +257,14 @@ Ext.ux.file.BrowsePlugin.prototype = {
             
             this.wrap.on('mouseover', function(e) {
                 this.isMouseOver = true;
-                if (this.component.el.hasClass('x-btn')) {
+                if (this.component.el.hasClass('x-btn') && !this.component.disabled) {
                     this.component.el.addClass('x-btn-over');
                 }
             }, this);
     
             this.wrap.on('mouseout', function(e) {
                 this.isMouseOver = false;
-                if (this.component.el.hasClass('x-btn')) {
+                if (this.component.el.hasClass('x-btn') && !this.component.disabled) {
                     this.component.el.removeClass('x-btn-over');
                 }
             }, this);
