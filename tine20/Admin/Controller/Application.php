@@ -120,5 +120,38 @@ class Admin_Controller_Application extends Tinebase_Controller_Abstract
         
         return $tineApplications->setApplicationState($_applicationIds, $_state);
     }
+    
+    /**
+     * Get list of application models
+     * 
+     * @param string $_application
+     * @return array
+     */
+    public function getApplicationModels($_application)
+    {
+    	$applicationModels = array();
+    	
+    	// get application id in case we got application name
+    	$applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_application);
+    	
+    	// now we can get application data by its id
+    	$application = Tinebase_Application::getInstance()->getApplicationById($applicationId);
+    	
+    	$applicationReflection = new ReflectionClass(Tinebase_Core::getApplicationInstance($application->name));
+    	
+    	$files = scandir(dirname($applicationReflection->getFileName()) . '/Model');
+    	foreach ( $files as $file ) {
+    		$file = basename($file, '.php');
+    		
+       		if (! preg_match('/^\.{1,2}|Filter$/', $file) && class_exists($application->name . '_Model_' . $file)) {
+       			$applicationModels[] = array(
+       				'value' => $application->name . '_Model_' . $file,
+       				'name' 	=> $application->name . '_Model_' . $file
+       			);
+       		}
+		}
+		
+		return $applicationModels;
+    }
             
 }

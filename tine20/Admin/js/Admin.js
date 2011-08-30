@@ -121,6 +121,18 @@ Tine.Admin = function () {
             expanded: true,
             dataPanelType: "containers",
             viewRight: 'containers'
+        }, {
+            text: translation.gettext('Customfields'),
+            cls: "treemain",
+            iconCls: 'admin-node-customfields',
+            allowDrag: false,
+            allowDrop: true,
+            id: "customfields",
+            children: [],
+            leaf: null,
+            expanded: true,
+            dataPanelType: "customfields",
+            viewRight: 'customfields'
         }];
 	};
 
@@ -209,6 +221,9 @@ Tine.Admin = function () {
                 break;
             case 'containers':
                 Tine.Admin.container.show();
+                break;
+           	case 'customfields':
+                Tine.Admin.customfield.show();
                 break;
             }
         }, this);
