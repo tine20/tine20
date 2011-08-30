@@ -80,16 +80,35 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
              * @todo check acl!
              */
             onNodeOver : function(n, dd, e, data) {
-                
-                var node = n.node;
-                return node.attributes.nodeRecord.isWriteable() 
-                    && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
-                    && node.id !== dd.dragData.node.id ? 'x-dd-drop-ok' : false;
+
+                var selectionsIdMatch = false;
+                if(dd.dragData.selections) {
+                    for(var i=0; i<dd.dragData.selections.length; i++) {
+                        if(n.node.id == dd.dragData.selections[i].id) {
+                            dd.dragData.selections = true;
+                            break;
+                        }
+                    }
+                }
+
+                return n.node.attributes.nodeRecord.isWriteable() 
+                            && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
+                            && !selectionsIdMatch ? 'x-dd-drop-ok' : false;
             },
             isValidDropPoint: function(n, op, dd, e){
+
+                var selectionsIdMatch = false;
+                if(dd.dragData.selections) {
+                    for(var i=0; i<dd.dragData.selections.length; i++) {
+                        if(n.node.id == dd.dragData.selections[i].id) {
+                            data.selections = true;
+                            break;
+                        }
+                    }
+                }
                 return n.node.attributes.nodeRecord.isWriteable()
-                            && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable()
-                            && n.node.id !== dd.dragData.node.id);
+                            && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
+                            && !selectionsIdMatch;
             },
             completeDrop: function(de) {
                 var ns = de.dropNode, p = de.point, t = de.target;
@@ -299,24 +318,16 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         this.ctxNode = node;
         var container = node.attributes.nodeRecord.data,
-            path = container.path,
-            owner;
+            path = container.path;
         
         if (! Ext.isString(path) || node.isRoot) {
             return;
         }
-        
-//        if (Tine.Tinebase.container.pathIsContainer(path)) {
-//            if (container.account_grants && container.account_grants.adminGrant) {
-//                this.contextMenuSingleContainer.showAt(event.getXY());
-//            }
-//        } else 
-//            
-        
-        if (!Tine.Tinebase.container.pathIsContainer(path)) {
+   
+        if (node.id == 'personal' || node.id == 'shared') {
             this.contextMenuRootFolder.showAt(event.getXY());
         }
-        else if (path.match(/^\/shared$/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
+        else if (path.match(/^\/shared/) && (Tine.Tinebase.common.hasRight('admin', this.app.appName) 
                 || Tine.Tinebase.common.hasRight('manage_shared_folders', this.app.appName))){
             this.contextMenuUserFolder.showAt(event.getXY());
         } 
@@ -328,6 +339,9 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             else {
                 this.contextMenuUserFolder.showAt(event.getXY());
             }
+        }
+        else if (path.match(/^\/personal/) && container.account_grants) {
+            this.contextMenuUserFolder.showAt(event.getXY());
         }
     },
     
@@ -418,8 +432,11 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     onBeforeNodeDrop: function(dropEvent) {
 
         Tine.log.debug("onBeforeNodeDrop");
-        var nodes = dropEvent.data.selections,
-            target = dropEvent.target;
+        var nodes, target = dropEvent.target;
+        
+        if(dropEvent.data.selections) {
+            nodes = dropEvent.data.grid.selModel.selections.items;
+        }    
             
         if(!nodes && dropEvent.data.node) {
             nodes = [dropEvent.data.node];
