@@ -1004,21 +1004,21 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * @return {Array}
      */
     getCustomfieldColumns: function() {
-        var result = [];
-        
-        if (Tine[this.app.appName].registry.containsKey('customfields')) {
-            var allCfs = Tine[this.app.appName].registry.get('customfields');
-            for (var i=0; i < allCfs.length; i++) {
-                result.push({
-                    id: allCfs[i].id,
-                    header: allCfs[i].definition.label,
-                    dataIndex: 'customfields',
-                    renderer: Tine.Tinebase.common.customfieldRenderer.createDelegate(this, [allCfs[i].name], true),
-                    sortable: false,
-                    hidden: true
-                })
-            }
-        }
+        var modelName = this.recordClass.getMeta('appName') + '_Model_' + this.recordClass.getMeta('modelName'),
+            cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
+            result = [];
+            
+        Ext.each(cfConfigs, function(cfConfig) {
+            result.push({
+                id: cfConfig.id,
+                header: cfConfig.get('definition').label,
+                dataIndex: 'customfields',
+                renderer: Tine.widgets.customfields.Renderer.get(this.app, cfConfig),
+//                renderer: Tine.Tinebase.common.customfieldRenderer.createDelegate(this, [allCfs[i].name], true),
+                sortable: false,
+                hidden: true
+            })
+        }, this);
         
         return result;
     },
@@ -1034,11 +1034,6 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             result = [];
         Ext.each(cfConfigs, function(cfConfig) {
             result.push({filtertype: 'tinebase.customfield', app: this.app, cfConfig: cfConfig});
-//            result.push({
-//                label: cfConfig.get('definition').label, 
-//                field: 'customfield:' + cfConfig.id, 
-//                valueType: 'customfield'
-//            });
         }, this);
         
         return result;

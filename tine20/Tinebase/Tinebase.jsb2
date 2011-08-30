@@ -480,6 +480,10 @@
           "path": "js/widgets/customfields/"
         },
         {
+          "text": "Renderer.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
           "text": "CustomfieldSearchCombo.js",
           "path": "js/widgets/customfields/"
         },
