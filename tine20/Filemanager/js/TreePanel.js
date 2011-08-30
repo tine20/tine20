@@ -85,11 +85,14 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 if(dd.dragData.selections) {
                     for(var i=0; i<dd.dragData.selections.length; i++) {
                         if(n.node.id == dd.dragData.selections[i].id) {
-                            dd.dragData.selections = true;
+                            selectionsIdMatch = true;
                             break;
                         }
                     }
                 }
+                else if(dd.dragData.node && dd.dragData.node.id == n.node.id) {
+                    selectionsIdMatch = true;
+                } 
 
                 return n.node.attributes.nodeRecord.isWriteable() 
                             && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
@@ -101,11 +104,15 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 if(dd.dragData.selections) {
                     for(var i=0; i<dd.dragData.selections.length; i++) {
                         if(n.node.id == dd.dragData.selections[i].id) {
-                            data.selections = true;
+                            selectionsIdMatch = true;
                             break;
                         }
                     }
                 }
+                else if(dd.dragData.node && dd.dragData.node.id == n.node.id) {
+                    selectionsIdMatch = true;
+                } 
+                
                 return n.node.attributes.nodeRecord.isWriteable()
                             && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
                             && !selectionsIdMatch;
