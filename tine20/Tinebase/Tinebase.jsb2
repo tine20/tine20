@@ -400,18 +400,6 @@
           "path": "js/widgets/dialog/"
         },
         {
-          "text": "CustomfieldSearchCombo.js",
-          "path": "js/widgets/customfields/"
-        },
-        {
-          "text": "CustomfieldsPanel.js",
-          "path": "js/widgets/customfields/"
-        },
-        {
-          "text": "CustomfieldsCombo.js",
-          "path": "js/widgets/customfields/"
-        },
-        {
           "text": "DetailsPanel.js",
           "path": "js/widgets/grid/"
         },
@@ -478,6 +466,30 @@
         {
           "text": "FilterPlugin.js",
           "path": "js/widgets/tree/"
+        },
+        {
+          "text": "ConfigManager.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "Field.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "FilterModel.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "CustomfieldSearchCombo.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "CustomfieldsPanel.js",
+          "path": "js/widgets/customfields/"
+        },
+        {
+          "text": "CustomfieldsCombo.js",
+          "path": "js/widgets/customfields/"
         },
         {
           "text": "PickerGridPanel.js",

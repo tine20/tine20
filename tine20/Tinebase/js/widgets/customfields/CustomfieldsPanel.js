@@ -61,81 +61,22 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     initComponent: function() {
         this.title = _('Custom Fields');
         this.fieldset = [];
+        this.app = Tine.Tinebase.appMgr.get(this.recordClass.getMeta('appName'));
         
-        var cfStore = this.getCustomFieldDefinition();
-        var order = 1;
-        if (cfStore) {
+        var modelName = this.recordClass.getMeta('appName') + '_Model_' + this.recordClass.getMeta('modelName'),
+            cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
+            order = 1;
+            
+        if (! Ext.isEmpty(cfConfigs)) {
             this.items = [];
             this.getFieldSet(_('General'));
-            cfStore.each(function(cfConfig) {
+            Ext.each(cfConfigs, function(cfConfig) {
                 var def = cfConfig.get('definition'),
-                    uiConfig = def && def.uiconfig ? def.uiconfig : {},
-                    fieldDef = {
-                        fieldLabel: def.label,
-                        name: 'customfield_' + cfConfig.get('name'),
-                        xtype: (def.value_search == 1) ? 'customfieldsearchcombo' : uiConfig.xtype,
-                        customfieldId: cfConfig.id,
-                        anchor: '95%',
-                        readOnly: cfConfig.get('account_grants').indexOf('writeGrant') < 0
-                    };
-                    
-                    // auto xtype per data type
-                    // @todo move this to a generic place
-                    // @todo support array of scalars
-                    // @todo suppot recordSets of model
-                    if (! uiConfig.xtype && def.type) {
-                        switch (Ext.util.Format.lowercase(def.type)) {
-                            case 'keyfield':
-                                var options = def.options ? def.options : {},
-                                    keyFieldConfig = def.keyFieldConfig ? def.keyFieldConfig : null;
-                                    
-                                Ext.apply(fieldDef, {
-                                    xtype: 'widget-keyfieldcombo',
-                                    app: options.app ? options.app : this.recordClass.getMeta('appName'),
-                                    keyFieldName: options.keyFieldName ? options.keyFieldName : cfConfig.get('name')
-                                });
-                                
-                                if (keyFieldConfig) {
-                                    // place keyFieldConfig in registry so we can use the standard widgets
-                                    var app = Ext.isString(fieldDef.app) ? Tine.Tinebase.appMgr.get(fieldDef.app) : fieldDef.app;
-                                    app.getRegistry().get('config')[fieldDef.keyFieldName] = keyFieldConfig;
-                                }
-                                
-                                break;
-                            case 'integer':
-                            case 'int':
-                                fieldDef.xtype = 'numberfield';
-                                break;
-                            case 'date':
-                                fieldDef.xtype = 'datefield';
-                                fieldDef.listAlign = 'tr-br?';
-                                break;
-                            case 'time':
-                                fieldDef.xtype = 'timefield';
-                                fieldDef.listAlign = 'tr-br?';
-                                break;
-                            case 'datetime':
-                                fieldDef.xtype = 'datetimefield';
-                                fieldDef.listAlign = 'tr-br?';
-                                break;
-                            case 'boolean':
-                            case 'bool':
-                                fieldDef.xtype = 'checkbox';
-                                break;
-                            case 'string':
-                            default:
-                                fieldDef.xtype = 'textfield';
-                                break;
-                        }
-                    }
-                    
-                if (def.length) {
-                    fieldDef.maxLength = def.length;
-                }
+                    uiConfig = def && def.uiconfig ? def.uiconfig : {};
                 
                 try {
-                    var fieldObj = Ext.ComponentMgr.create(fieldDef);
-                    order = (uiConfig.order) ? uiConfig.order : order++;
+                    var fieldObj = Tine.widgets.customfields.Field.get(this.app, cfConfig, {anchor: '95%'}),
+                        order = (uiConfig.order) ? uiConfig.order : order++;
                     
                     if (! uiConfig.group || uiConfig.group == '') {
                         this.getFieldSet(_('General')).insert(order,fieldObj);
@@ -148,13 +89,13 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
                 } catch (e) {
                     Tine.log.debug(e);
                     Tine.log.err('Unable to create custom field "' + cfConfig.get('name') + '". Check definition!');
-                    cfStore.remove(cfConfig);
+//                    cfStore.remove(cfConfig);
                 }
                 
             }, this);
             
             this.formField = new Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField({
-                cfStore: cfStore
+                cfConfigs: cfConfigs
             });
             
             this.items.push(this.formField);
@@ -201,29 +142,6 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanel = Ext.extend(Ext.Panel, {
     },    
     
     /**
-     * get cf definitions from registry
-     * 
-     * @return {Ext.data.JsonStore}
-     */
-    getCustomFieldDefinition: function() {
-        var appName = this.recordClass.getMeta('appName');
-        var modelName = this.recordClass.getMeta('modelName');
-        if (Tine[appName].registry.containsKey('customfields')) {
-            var allCfs = Tine[appName].registry.get('customfields');
-            var cfStore = new Ext.data.JsonStore({
-                fields: Tine.Tinebase.Model.Customfield,
-                data: allCfs
-            });
-            
-            cfStore.filter('model', appName + '_Model_' + modelName);
-            
-            if (cfStore.getCount() > 0) {
-                return cfStore;
-            }
-        }
-    },
-    
-    /**
      * set form field cf values
      * 
      * @param {Array} customfields
@@ -251,7 +169,7 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
      * @cfg {Ext.data.store} cfObject
      * Custom field Objects
      */
-    cfStore: null,
+    cfConfigs: null,
     
     name: 'customfields',
     hidden: true,
@@ -262,7 +180,7 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
      */
     getValue: function() {
         var values = new Tine.Tinebase.widgets.customfields.Cftransport();
-        this.cfStore.each(function(cfConfig) {
+        Ext.each(this.cfConfigs, function(cfConfig) {
             values[cfConfig.get('name')] = cfConfig.fieldObj.getValue();
         }, this);
         
@@ -274,7 +192,7 @@ Tine.Tinebase.widgets.customfields.CustomfieldsPanelFormField = Ext.extend(Ext.f
      */
     setValue: function(values){
         if (values) {
-            this.cfStore.each(function(cfConfig) {
+            Ext.each(this.cfConfigs, function(cfConfig) {
                 var def = cfConfig.get('definition'),
                     uiconfig = def && def.uiconfig ? def.uiconfig : {};
                 

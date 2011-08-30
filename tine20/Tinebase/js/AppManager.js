@@ -134,6 +134,9 @@ Ext.extend(Tine.Tinebase.AppManager, Ext.util.Observable, {
      * @return {Tine.Application}
      */
     get: function(appName) {
+        if (Ext.isObject(appName) && appName.hasOwnProperty('appName')) {
+            appName = appName.appName;
+        }
         if (! this.isEnabled(appName)) {
             return false;
         }
