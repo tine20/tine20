@@ -77,7 +77,9 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                });
             }
             break;
-  
+            
+//        case 403:    
+            
         default:
             Tine.Tinebase.ExceptionHandler.handleRequestException(exception);
             break;

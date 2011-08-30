@@ -426,12 +426,15 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         return true;
     },
 
+    /**
+     * folder delete handler
+     */
     onFolderDelete: function() {
-        console.log("onFolderDelete");
+        Tine.log.debug("onFolderDelete");
     },
 
     /**
-     * clone a tree node
+     * clone a tree node / create a node from grid node
      * 
      * @param node
      * @returns {Ext.tree.AsyncTreeNode}

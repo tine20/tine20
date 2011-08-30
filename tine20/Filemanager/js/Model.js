@@ -197,9 +197,11 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 }
             };
 
-            var method = "Filemanager.copyNodes";
+            var method = "Filemanager.copyNodes",
+                message = 'Copying data .. {0}';
             if(move) {
                 method = "Filemanager.moveNodes";
+                message = 'Moving data .. {0}';
             }
 
             params = {
@@ -215,7 +217,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             reloadParent = true;
         }
         
-        Ext.MessageBox.wait(_('Please wait'), String.format(_('Moving data .. {0}' ), '' ));
+        var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
+        Ext.MessageBox.wait(_('Please wait'), String.format(app.i18n._(message), '' ));
 
         Ext.Ajax.request({
             params: params,
@@ -225,7 +228,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 Ext.MessageBox.hide();
                 
                 var nodeData = Ext.util.JSON.decode(result.responseText),
-                    app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),           
                     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
                     grid = app.getMainScreen().getCenterPanel();
              
@@ -265,9 +267,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
              // Grid refresh
                 grid.getStore().reload();
             },
-            failure: function(result) {
-                var nodeData = Ext.util.JSON.decode(result.response),
-                request = Ext.util.JSON.decode(result.request);
+            failure: function(response, request) {
+                var nodeData = Ext.util.JSON.decode(response.responseText),
+                request = Ext.util.JSON.decode(request.jsonData);
                 Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
             }
         });
