@@ -184,6 +184,22 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         return $result;
     }
     
+    /**
+     * get application models
+     * 
+     * @param string $application
+     * @return array
+     */
+    public function getApplicationModels($application)
+    {
+    	$models = Admin_Controller_Application::getInstance()->getApplicationModels($application);
+    	
+    	return array(
+            'results'       => $models,
+            'totalcount'    => count($models)
+        );
+    }
+        
     /********************************** Users *********************************/
     
     /**
@@ -1078,6 +1094,55 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_delete($ids, Admin_Controller_Container::getInstance());
     }    
+    
+    /****************************** Customfield ******************************/
+
+    /**
+     * Search for records matching given arguments
+     *
+     * @param array $filter 
+     * @param array $paging 
+     * @return array
+     */
+    public function searchCustomfields($filter, $paging)
+    {
+        $result = $this->_search($filter, $paging, Admin_Controller_Customfield::getInstance(), 'Tinebase_Model_CustomField_ConfigFilter');
+        
+        return $result;
+    }
+    
+    /**
+     * Return a single record
+     *
+     * @param   string $id
+     * @return  array record data
+     */
+    public function getCustomfield($id)
+    {
+        return $this->_get($id, Admin_Controller_Customfield::getInstance());
+    }
+
+    /**
+     * creates/updates a record
+     *
+     * @param  array $recordData
+     * @return array created/updated record
+     */
+    public function saveCustomfield($recordData)
+    {
+        return $this->_save($recordData, Admin_Controller_Customfield::getInstance(), 'Tinebase_Model_CustomField_Config', 'id');
+    }
+    
+    /**
+     * deletes existing records
+     *
+     * @param  array  $ids 
+     * @return array
+     */
+    public function deleteCustomfields($ids)
+    {
+        return $this->_delete($ids, Admin_Controller_Customfield::getInstance());
+    }   
 
     /****************************** common ******************************/
     
@@ -1121,6 +1186,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
                 }
                 break;
             case 'Tinebase_Model_Container':
+            case 'Tinebase_Model_CustomField_Config':
                 $applications = Tinebase_Application::getInstance()->getApplications();
                 foreach ($_records as $record) {
                     $idx = $applications->getIndexById($record->application_id);

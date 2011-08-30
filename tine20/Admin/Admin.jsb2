@@ -94,6 +94,18 @@
         {
           "text": "GridPanel.js",
           "path": "js/container/"
+        },
+        {
+          "text": "Customfield.js",
+          "path": "js/customfield/"
+        },
+        {
+          "text": "EditDialog.js",
+          "path": "js/customfield/"
+        },
+        {
+          "text": "GridPanel.js",
+          "path": "js/customfield/"
         }
       ]
     },
