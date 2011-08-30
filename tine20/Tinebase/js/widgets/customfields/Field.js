@@ -22,10 +22,9 @@ Tine.widgets.customfields.Field = {
             };
             
             // auto xtype per data type
-            // @todo move this to a generic place
             // @todo support array of scalars
             // @todo suppot recordSets of model
-            if (! uiConfig.xtype && def.type) {
+            if (! uiConfig.xtype && def.type && ! def.value_search) {
                 switch (Ext.util.Format.lowercase(def.type)) {
                     case 'keyfield':
                         var options = def.options ? def.options : {},
