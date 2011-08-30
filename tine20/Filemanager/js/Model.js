@@ -164,7 +164,8 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             var sourceFilenames = new Array(),
             destinationFilenames = new Array(),
             forceOverwrite = false,
-            treeInvolved = false,
+            treeIsTarget = false,
+            treeIsSource = false,
             targetPath;
 
             if(target.data) {
@@ -172,7 +173,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
             else {
                 targetPath = target.attributes.path;
-                treeInvolved = true;
+                treeIsTarget = true;
             }
 
             for(var i=0; i<items.length; i++) {
@@ -181,8 +182,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 var itemData = item.data;
                 if(!itemData) {
                     itemData = item.attributes;
-                    reloadParent = true;
-                    treeInvolved = true;
+                    treeIsSource = true;
                 }
                 sourceFilenames.push(itemData.path);
 
@@ -224,32 +224,43 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 
                 Ext.MessageBox.hide();
                 
-                var nodeData = Ext.util.JSON.decode(result.responseText);
-                
-                var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),           
+                var nodeData = Ext.util.JSON.decode(result.responseText),
+                    app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),           
                     treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
                     grid = app.getMainScreen().getCenterPanel();
              
                 // Tree refresh
-                if(treeInvolved) {
+                if(treeIsTarget) {
                     
-                    // source parent 
-                    if(move) {                    
-                        var nodeToMove = items[0],
-                            copiedNode = treePanel.cloneTreeNode(items[0], target),
-                            nodeToMoveId = nodeToMove.id;
+                    for(var i=0; i<items.length; i++) {
                         
-                        nodeToMove.parentNode.removeChild(nodeToMove);                                      
-                        target.appendChild(copiedNode); 
-                        copiedNode.setId(nodeToMoveId);    
-                    } 
-                    else {
-                        var copiedNode = treePanel.cloneTreeNode(items[0], target);
-                        target.appendChild(copiedNode);  
-                        copiedNode.setId(nodeData[0].id);
+                        var nodeToCopy = items[i];
                         
+                        if(nodeToCopy.data && nodeToCopy.data.type !== 'folder') {
+                            continue;
+                        }
+
+                        if(move) {   
+                            var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target),
+                                nodeToCopyId = nodeToCopy.id,
+                                removeNode = treePanel.getNodeById(nodeToCopyId);
+                            
+                            if(removeNode && removeNode.parentNode) {
+                                removeNode.parentNode.removeChild(removeNode);
+                            }
+
+                            target.appendChild(copiedNode); 
+                            copiedNode.setId(nodeData[i].id);    
+                        } 
+                        else {
+                            var copiedNode = treePanel.cloneTreeNode(nodeToCopy, target);
+                            target.appendChild(copiedNode);  
+                            copiedNode.setId(nodeData[i].id);
+
+                        }
                     }
                 }
+               
                                  
              // Grid refresh
                 grid.getStore().reload();

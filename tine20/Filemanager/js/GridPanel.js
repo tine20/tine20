@@ -732,10 +732,10 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     /**
      * upload new file and add to store
      * 
-     * @param {} btn
+     * @param {} fileSelector
      * @param {} e
      */
-    onFilesSelect: function (fileSelector, e) {
+    onFilesSelect: function (fileSelector) {
        
         var app = Tine.Tinebase.appMgr.get('Filemanager');
         var grid = app.getMainScreen().getCenterPanel(); 

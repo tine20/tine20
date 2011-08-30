@@ -56,18 +56,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     ddGroup: 'fileDDGroup',
     
     enableDD: true,
-    
-    dragDropInProgress: false,
-    
-    plugins : [ {
-        ptype : 'ux.browseplugin',
-        enableFileDialog: false,
-        multiple : true,
-        handler : function() {
-            alert("tree drop");
-        }
-    } ],
-    
+       
     initComponent: function() {
         
 //        this.on('containeradd', this.onFolderAdd, this);
@@ -103,6 +92,14 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 this.tree.fireEvent("nodedrop", de);
             }
         };
+        
+        this.plugins = this.plugins || [];
+        this.plugins.push({
+            ptype : 'ux.browseplugin',
+            enableFileDialog: false,
+            multiple : true,
+            handler : this.dropIntoTree
+        });
         
 
     },
@@ -238,9 +235,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         if(node && node.reload) {
             node.reload();
         }
-        
-        Tine.log.debug("tree onClick");
-        
+                
         Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
 
     },
@@ -381,7 +376,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         if(valueItem) {
             var node = this.getNodeById(valueItem.id);
             if(node) {
-                Tine.log.debug(valueItem.path + ' | ' + node.getPath());
                 var returnPath = node.getPath().replace('personal/'  + Tine.Tinebase.registry.get('currentAccount').accountLoginName, 'personal');
                 return returnPath;
             }
@@ -392,7 +386,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 
         if(containerPath === '/shared') {
             Tine.log.debug(valueItem.path + ' | ' + treePath);
-            return treePath;
         }
             
         // replace personal with otherUsers if personal && ! personal/myaccountid
@@ -407,7 +400,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             }
         }
         
-        Tine.log.debug(valueItem.path + ' | ' + treePath);
         return treePath;
     },
     
@@ -445,21 +437,44 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @returns {Ext.tree.AsyncTreeNode}
      */
     cloneTreeNode: function(node, target) {
-        var targetPath = target.attributes.path;
-        var nodeName = node.attributes.name;
-        if(typeof nodeName == 'object') {
-            nodeName = nodeName.name;
-        }
-        var newPath = targetPath + '/' + nodeName;
+        var targetPath = target.attributes.path,
+            newPath = '',
+            copy;
         
-        var copy = new Ext.tree.AsyncTreeNode({text: node.text, path: newPath, name: node.attributes.name
-            , nodeRecord: node.attributes.nodeRecord});
+        if(node.attributes) {
+            var nodeName = node.attributes.name;
+            if(typeof nodeName == 'object') {
+                nodeName = nodeName.name;
+            }
+            newPath = targetPath + '/' + nodeName;
+            
+            copy = new Ext.tree.AsyncTreeNode({text: node.text, path: newPath, name: node.attributes.name
+                , nodeRecord: node.attributes.nodeRecord, account_grants: node.attributes.account_grants});
+        }
+        else {
+            var nodeName = node.data.name;
+            if(typeof nodeName == 'object') {
+                nodeName = nodeName.name;
+            }
+            
+            var nodeData = Ext.copyTo({}, node.data, Tine.Filemanager.Model.Node.getFieldNames());
+            var newNodeRecord = new Tine.Filemanager.Model.Node(nodeData);
+             
+            newPath = targetPath + '/' + nodeName;
+            copy = new Ext.tree.AsyncTreeNode({text: node.data.name, path: newPath, name: node.data.name
+                , nodeRecord: newNodeRecord, accountGrants: node.data.account_grants});           
+        }
+                
         copy.attributes.nodeRecord.beginEdit();
         copy.attributes.nodeRecord.set('path', newPath);
         copy.attributes.nodeRecord.endEdit();       
         
         copy.parentNode = target;
         return copy;
+    },
+    
+    dropIntoTree: function(fileSelector) {
+        Tine.log.debug(fileSelector.button_container.getCenterXY());
     }
 
 });
