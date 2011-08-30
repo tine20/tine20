@@ -54,32 +54,34 @@ Tine.widgets.customfields.Renderer = function(){
             
             return renderers[key];
         },
-//        
-//        /**
-//         * render a given value
-//         * 
-//         * @param {String/Application}  app
-//         * @param {String}              keyFieldName 
-//         * @return Ext.data.Store
-//         */
-//        render: function(app, keyFieldName, id) {
-//            var renderer = this.get(app, keyFieldName);
-//            
-//            return renderer(id);
-//        },
-//        
-//        /**
-//         * register a custom renderer
-//         * 
-//         * @param {String/Application}  app
-//         * @param {String}              keyFieldName 
-//         * @param {Function}            renderer
-//         */
-//        register: function(app, keyFieldName, renderer) {
-//            var appName = Ext.isString(app) ? app : app.appName,
-//                key = appName + '_' + keyFieldName;
-//                
-//            renderers[key] = renderer;
-//        }
+        
+        /**
+         * render a given value
+         * 
+         * @param {String/Application}  app
+         * @param {Record}              cfConfig 
+         * @return Ext.data.Store
+         */
+        render: function(app, cfConfig, id) {
+            var renderer = this.get(app, cfConfig);
+            
+            return renderer(id);
+        },
+        
+        /**
+         * register a custom renderer
+         * 
+         * @param {String/Application}  app
+         * @param {Record}              cfConfig 
+         * @param {Function}            renderer
+         */
+        register: function(app, cfConfig, renderer) {
+            var appName = Ext.isString(app) ? app : app.appName,
+                cfDefinition = cfConfig.get('definition'),
+                cfName = cfConfig.get('name'),
+                key = appName + cfConfig.id;
+                
+            renderers[key] = renderer;
+        }
     }
 }();
