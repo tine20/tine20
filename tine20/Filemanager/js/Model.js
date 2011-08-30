@@ -48,6 +48,20 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
         }
         
         return this.get('type') == 'file' ? grants.editGrant : grants.addGrant;
+    },
+
+    isDragable: function() {
+        var grants = this.get('account_grants');
+
+        if(!grants) {
+            return false;
+        }
+        
+        if(this.get('id') === 'personal' || this.get('id') === 'shared' || this.get('id') === 'otherUsers') {
+            return false;
+        }
+        
+        return true;
     }
 });
 
@@ -264,7 +278,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 }
                
                                  
-             // Grid refresh
+                // Grid refresh
                 grid.getStore().reload();
             },
             failure: function(response, request) {

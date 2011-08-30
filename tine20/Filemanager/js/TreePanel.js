@@ -74,17 +74,22 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 
         // init drop zone
         this.dropConfig = {
-            ddGroup: this.ddGroup || 'TreeDD',
+            ddGroup: this.ddGroup || 'fileDDGroup',
             appendOnly: this.ddAppendOnly === true,
             /**
              * @todo check acl!
              */
             onNodeOver : function(n, dd, e, data) {
+                
                 var node = n.node;
-                return node.attributes.nodeRecord.isWriteable() ? 'x-dd-drop-ok' : false;
+                return node.attributes.nodeRecord.isWriteable() 
+                    && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
+                    && node.id !== dd.dragData.node.id ? 'x-dd-drop-ok' : false;
             },
-            isValidDropPoint: function(n, dd, e, data){
-                return n.node.attributes.nodeRecord.isWriteable();
+            isValidDropPoint: function(n, op, dd, e){
+                return n.node.attributes.nodeRecord.isWriteable()
+                            && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable()
+                            && n.node.id !== dd.dragData.node.id);
             },
             completeDrop: function(de) {
                 var ns = de.dropNode, p = de.point, t = de.target;

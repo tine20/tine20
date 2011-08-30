@@ -39,9 +39,7 @@ Ext.extend(Ext.ux.tree.FileTreeSelectionModel, Ext.tree.DefaultSelectionModel, {
      * @param e
      */
     onInitDrag: function(e) {
-        
-        Tine.log.debug('initDrag');
-        
+                
         var data = this.dragData;
         this.tree.eventModel.disable();
         this.proxy.update("");

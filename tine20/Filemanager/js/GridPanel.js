@@ -847,13 +847,18 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
 
                 target = grid.getStore().getAt(dropIndex);    
-                
                 if((!target || target.data.type === 'file') && grid.currentFolderNode) {
                     target = grid.currentFolderNode;
                 }
                 
                 if(!target) {
                     return false;
+                }
+                
+                for(var i=0; i<nodes.length; i++) {
+                    if(nodes[i].id == target.id) {
+                        return false;
+                    }
                 }
                 
                 Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target, !e.ctrlKey);
@@ -875,14 +880,26 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     dropIndex = grid.getView().findRowIndex(e.target);
                 }
                     
+                if(data.selections) {
+                    nodes = data.selections;                   
+                }
+                else {
+                    nodes = [data.node];
+                }
+
                 target = grid.getStore().getAt(dropIndex);    
-               
                 if((!target || target.data.type === 'file') && grid.currentFolderNode) {
                     target = grid.currentFolderNode;
                 }
-                
+               
                 if(!target) {
                     return false;
+                }
+                
+                for(var i=0; i<nodes.length; i++) {
+                    if(nodes[i].id == target.id) {
+                        return false;
+                    }
                 }
                 
                 return this.dropAllowed;
