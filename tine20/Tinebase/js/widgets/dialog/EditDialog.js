@@ -169,6 +169,10 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             });
         }
         
+        // init cf plugin
+        this.plugins = this.plugins ? this.plugins : [];
+        this.plugins.push(new Tine.widgets.customfields.EditDialogPlugin({}));
+        
         // init actions
         this.initActions();
         // init buttons and tbar
