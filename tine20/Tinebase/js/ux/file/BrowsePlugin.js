@@ -223,21 +223,44 @@ Ext.ux.file.BrowsePlugin.prototype = {
         this.wrap.on('mousemove', function(e) {
             var xy = e.getXY();
             this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
-//            var pos = this.input_file.translatePoints([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
-//            this.input_file.applyStyles({
-//                top: pos.top,
-//                left: pos.left
-//            });
+            
+            // if split button
+            if(this.component.btnEl) {
+                var buttonEl = Ext.get(this.wrap.dom);
+                var buttonX = buttonEl.getX(),
+                    buttonWidth = buttonEl.getWidth(),
+                    mouseX = xy[0];
+                
+                if(mouseX - buttonX > this.component.btnEl.dom.clientWidth) {
+                    this.input_file.dom.style.zIndex = -1;
+                }
+                else {
+                    this.input_file.dom.style.zIndex = '';
+                }
+            }
+            
         }, this, {buffer: 20});
+        
         
         // IE
         this.button_container.on('mousemove', function(e) {
             var xy = e.getXY();
-            //this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
-//            this.input_file.applyStyles({
-//                top: xy[1] - 5,
-//                left: xy[0] - this.input_file.getWidth()/2
-//            });
+            this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
+            
+         // if split button
+            if(this.component.btnEl) {
+                var buttonEl = Ext.get(this.button_container.dom);
+                var buttonX = buttonEl.getX(),
+                    buttonWidth = buttonEl.getWidth(),
+                    mouseX = xy[0];
+                
+                if(mouseX - buttonX > this.component.btnEl.dom.clientWidth) {
+                    this.input_file.dom.style.zIndex = -1;
+                }
+                else {
+                    this.input_file.dom.style.zIndex = '';
+                }
+            }
         }, this, {buffer: 30});
         
         this.input_file.setOpacity(0.0);
