@@ -594,29 +594,44 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         
         var app = this.app;
         var rowRecord = grid.getStore().getAt(row);
-        var treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel();
-        
-        var currentFolderNode;
-        if(rowRecord.data.path == '/personal/system') {
-            currentFolderNode = treePanel.getNodeById('personal');
-            
+
+
+        if(rowRecord.data.type == 'file') {
+            var downloadPath = rowRecord.data.path;
+            var downloader = new Ext.ux.file.Download({
+                params: {
+                    method: 'Filemanager.downloadFile',
+                    requestType: 'HTTP',
+                    path: downloadPath
+                }
+            }).start();
         }
-        else if(rowRecord.data.path == '/shared') {
-            currentFolderNode = treePanel.getNodeById('shared');
-            
-        }
-        else if(rowRecord.data.path == '/personal') {
-            currentFolderNode = treePanel.getNodeById('otherUsers');
-            
-        }
-        else {
-            currentFolderNode = treePanel.getNodeById(rowRecord.id);
-        }
-        
-        if(currentFolderNode) {
-            currentFolderNode.select();
-            currentFolderNode.expand();
-            app.mainScreen.GridPanel.currentFolderNode = currentFolderNode; 
+
+        else if (rowRecord.data.type == 'folder'){
+            var treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel();
+
+            var currentFolderNode;
+            if(rowRecord.data.path == '/personal/system') {
+                currentFolderNode = treePanel.getNodeById('personal');
+
+            }
+            else if(rowRecord.data.path == '/shared') {
+                currentFolderNode = treePanel.getNodeById('shared');
+
+            }
+            else if(rowRecord.data.path == '/personal') {
+                currentFolderNode = treePanel.getNodeById('otherUsers');
+
+            }
+            else {
+                currentFolderNode = treePanel.getNodeById(rowRecord.id);
+            }
+
+            if(currentFolderNode) {
+                currentFolderNode.select();
+                currentFolderNode.expand();
+                app.mainScreen.GridPanel.currentFolderNode = currentFolderNode; 
+            }
         }
     }, 
     
