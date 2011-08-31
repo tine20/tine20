@@ -200,10 +200,14 @@ Tine.widgets.tree.ContextMenu = {
                     scope: this,
                     success: function(result, request){
                         var nodeData = Ext.util.JSON.decode(result.responseText);
-                        
+
                         // TODO add + icon if it wasn't expandable before
                         if(nodeData.type == 'folder') {
-                            parentNode.reload();
+                            var nodeData = Ext.util.JSON.decode(result.responseText);
+
+                            var app = Tine.Tinebase.appMgr.get(this.scope.app.appName);
+                            var newNode = app.getMainScreen().getWestPanel().getContainerTreePanel().createTreeNode(nodeData, parentNode);
+                            parentNode.appendChild(newNode);
                         }
                         else {
                             var newNode = this.loader.createNode(nodeData);
