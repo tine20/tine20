@@ -167,8 +167,12 @@ Ext.ux.file.BrowsePlugin.prototype = {
             // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
             this.dropEl.on('dragover', function(e) {
 
-            	e.stopPropagation();
+                e.stopPropagation();
                 e.preventDefault();
+                
+//                this.dropEl.fireEvent('mouseover', e, e.getTarget());
+////                Ext.get(e.getTarget()).fireEvent('mouseover', e, e.getTarget());
+//                this.component.fireEvent('mouseover', e, e.getTarget());
                 
                 // try to set the effectAllowed to copy (not all UA's accept this)
                 e.browserEvent.dataTransfer.effectAllowed = 'copy';
@@ -181,8 +185,15 @@ Ext.ux.file.BrowsePlugin.prototype = {
             }, this);
             
             this.dropEl.on('drop', function(e) {
+               
                 e.stopPropagation();
                 e.preventDefault();
+                
+                var targetNodeId;
+                var treeNodeAttribute = e.getTarget('div').attributes['ext:tree-node-id'];
+                if(treeNodeAttribute) {
+                    targetNodeId = treeNodeAttribute.nodeValue;
+                }
                 
                 // a bit hackish, I know...
                 this.onBrowseButtonClick();
@@ -190,7 +201,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 var dt = e.browserEvent.dataTransfer;
                 var files = dt.files;
                 
-                this.onInputFileChange(null, null, null, files);
+                this.onInputFileChange(null, null, null, files, targetNodeId);
             }, this);
         }
     },
@@ -247,7 +258,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
             var xy = e.getXY();
             this.input_file.setXY([xy[0] - this.input_file.getWidth()/2, xy[1] - 5]);
             
-         // if split button
+            // if split button
             if(this.component.btnEl) {
                 var buttonEl = Ext.get(this.button_container.dom);
                 var buttonX = buttonEl.getX(),
@@ -317,7 +328,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
      * @param {FileList} files when input comes from drop...
      * @private
      */
-    onInputFileChange: function(e, target, options, files){
+    onInputFileChange: function(e, target, options, files, targetNodeId){
         if (window.FileList) { // HTML5 FileList support
             this.files = files ? files : this.input_file.dom.files;
         } else {
@@ -328,7 +339,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
         }
         
         if (this.handler) {
-            this.handler.call(this.scope, this);
+            this.handler.call(this.scope, this, targetNodeId);
         }
     },
     

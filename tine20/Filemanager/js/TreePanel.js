@@ -377,7 +377,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @param {Ext.tree.TreeNode} node
      */
     onSelectionChange: function(sm, node) {
-        Tine.log.debug('onSelectionChange');
+
         var grid = this.app.getMainScreen().getCenterPanel();
         
         grid.action_deleteRecord.disable();
@@ -415,7 +415,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var containerPath = '';
         if(valueItem && !valueItem.id) return valueItem.path;
 
-
         if(valueItem) {
             var node = this.getNodeById(valueItem.id);
             if(node) {
@@ -427,10 +426,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         }
         var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
 
-        if(containerPath === '/shared') {
-            Tine.log.debug(valueItem.path + ' | ' + treePath);
-        }
-            
         // replace personal with otherUsers if personal && ! personal/myaccountid
         var matches = containerPath.match(/^\/personal\/{0,1}([0-9a-z_\-]*)\/{0,1}/i);
         if (matches) {
@@ -455,7 +450,6 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      */
     onBeforeNodeDrop: function(dropEvent) {
 
-        Tine.log.debug("onBeforeNodeDrop");
         var nodes, target = dropEvent.target;
         
         if(dropEvent.data.selections) {
@@ -550,8 +544,47 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
     },
     
-    dropIntoTree: function(fileSelector) {
-        Tine.log.debug(fileSelector.button_container.getCenterXY());
+    /**
+     * handels tree drop of object from outside the browser
+     * 
+     * @param fileSelector
+     * @param targetNodeId
+     */
+    dropIntoTree: function(fileSelector, targetNodeId) {
+        var targetNode = fileSelector.component.getNodeById(targetNodeId);
+            targetNodePath = targetNode.attributes.path;
+            
+        Tine.log.debug(targetNodePath);
+        
+        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+        grid = app.getMainScreen().getCenterPanel(),
+        gridStore = grid.store;
+        
+        var files = fileSelector.getFileList();
+        Ext.each(files, function (file) {
+
+            var fileName = file.name || file.fileName;
+            
+            var filePath = targetNodePath + '/' + fileName;
+            Tine.Filemanager.createNode(filePath, "file", [], false);
+            
+            var upload = new Ext.ux.file.Upload({}, file, fileSelector, filePath);
+
+            upload.on('uploadfailure', grid.onUploadFail, this);
+            upload.on('uploadcomplete', grid.onUploadComplete, this);
+            upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
+
+            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);            
+            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
+                    
+            Tine.log.debug(uploadKey);
+            
+            if(fileRecord.data.status !== 'failure' && grid.currentFolderNode.id === targetNodeId) {
+                gridStore.add(fileRecord);
+            }           
+        }, this);
+        
+        
     }
 
 });
