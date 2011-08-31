@@ -33,9 +33,6 @@ class Addressbook_Controller extends Tinebase_Controller_Event implements Tineba
     private function __construct() {
         $this->_currentAccount = Tinebase_Core::getUser();
         $this->_applicationName = 'Addressbook';
-        $this->_defaultsSettings = array(
-            Addressbook_Model_Config::DEFAULTMAPADDRESS  => 'adr_one_',
-        );
     }
     
     /**

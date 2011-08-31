@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <application>
     <name>Addressbook</name>
-    <version>5.2</version>
+    <version>5.3</version>
     <order>10</order>
     <depends>
         <application>Admin</application>
@@ -11,7 +11,7 @@
             <name>addressbook</name>
             <engine>InnoDB</engine>
             <charset>utf8</charset>
-            <version>13</version>
+            <version>14</version>
             <declaration>
                 <field>
                     <name>id</name>
@@ -56,6 +56,16 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
+                    <name>adr_one_lon</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                </field>
+                <field>
+                    <name>adr_one_lat</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                </field>
+                <field>
                     <name>adr_two_countryname</name>
                     <type>text</type>
                     <length>64</length>
@@ -90,6 +100,16 @@
                     <type>text</type>
                     <length>64</length>
                     <notnull>false</notnull>
+                </field>
+                <field>
+                    <name>adr_two_lon</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
+                </field>
+                <field>
+                    <name>adr_two_lat</name>
+                    <type>float</type>
+                    <unsigned>false</unsigned>
                 </field>
                 <field>
                     <name>cat_id</name>
@@ -359,16 +379,6 @@
                 <field>
                     <name>deleted_time</name>
                     <type>datetime</type>
-                </field>
-                <field>
-                    <name>lon</name>
-                    <type>float</type>
-                    <unsigned>false</unsigned>
-                </field>
-                <field>
-                    <name>lat</name>
-                    <type>float</type>
-                    <unsigned>false</unsigned>
                 </field>
                 <field>
                     <name>type</name>

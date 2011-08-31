@@ -30,11 +30,10 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
     getFormItems: function () {
         
         if (Tine.Tinebase.registry.get('mapPanel') && Tine.widgets.MapPanel) {
-            this.mapPanel = new Tine.widgets.MapPanel({
+            this.mapPanel = new Tine.Addressbook.MapPanel({
                 layout: 'fit',
                 title: this.app.i18n._('Map'),
-                disabled: (! this.record.get('lon') || this.record.get('lon') === null) && (! this.record.get('lat') || this.record.get('lat') === null),
-                zoom: 15        
+                disabled: (Ext.isEmpty(this.record.get('adr_one_lon')) || Ext.isEmpty(this.record.get('adr_one_lat'))) && (Ext.isEmpty(this.record.get('adr_two_lon')) || Ext.isEmpty(this.record.get('adr_two_lat')))
             });
         } else {
             this.mapPanel = new Ext.Panel({
@@ -465,8 +464,15 @@ Tine.Addressbook.ContactEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, 
                 this.record.set('container_id', container);
             }
             
-            if (Tine.Tinebase.registry.get('mapPanel') && Tine.widgets.MapPanel && this.record.get('lon') && this.record.get('lon') !== null && this.record.get('lat') && this.record.get('lat') !== null) {
-                this.mapPanel.setCenter(this.record.get('lon'), this.record.get('lat'));
+            if (
+            	Tine.Tinebase.registry.get('mapPanel') && 
+            	Tine.widgets.MapPanel &&
+            	(
+            		(! Ext.isEmpty(this.record.get('adr_one_lon')) && ! Ext.isEmpty(this.record.get('adr_one_lat'))) || 
+            		(! Ext.isEmpty(this.record.get('adr_two_lon')) && ! Ext.isEmpty(this.record.get('adr_two_lat')))
+            	)
+            ) {
+            	this.mapPanel.onRecordLoad(this.record);
             }
         }
         

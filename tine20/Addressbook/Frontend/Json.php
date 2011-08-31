@@ -256,14 +256,9 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             }
         }
         
-        $appConfigDefaults = Addressbook_Controller::getInstance()->getConfigSettings();
-        
         $registryData = array(
             'Salutations'               => $this->getSalutations(),
             'defaultAddressbook'        => $this->getDefaultAddressbook(),
-            'defaultMapAddress'    		=> ($appConfigDefaults[Addressbook_Model_Config::DEFAULTMAPADDRESS] !== NULL) 
-                ? $appConfigDefaults[Addressbook_Model_Config::DEFAULTMAPADDRESS] 
-                : 'adr_one_',
             'defaultImportDefinition'   => $defaultDefinitionArray,
             'importDefinitions'         => array(
                 'results'               => $importDefinitions->toArray(),

@@ -37,6 +37,8 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'adr_one_region', label: 'Region (Company Address)' }, //_('Region (Company Address)')
     {name: 'adr_one_postalcode', label: 'Postal Code (Company Address)' }, //_('Postal Code (Company Address)')
     {name: 'adr_one_countryname', label: 'Country (Company Address)' }, //_('Country (Company Address)')
+    {name: 'adr_one_lon'},
+    {name: 'adr_one_lat'},
     {name: 'label'},
     {name: 'adr_two_street', label: 'Street (Private Address)' }, //_('Street (Private Address)')
     {name: 'adr_two_street2', label: 'Street 2 (Private Address)' }, //_('Street 2 (Private Address)')
@@ -44,6 +46,8 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'adr_two_region', label: 'Region (Private Address)' }, //_('Region (Private Address)')
     {name: 'adr_two_postalcode', label: 'Postal Code (Private Address)' }, //_('Postal Code (Private Address)')
     {name: 'adr_two_countryname', label: 'Country (Private Address)' }, //_('Country (Private Address)')
+    {name: 'adr_two_lon'},
+    {name: 'adr_two_lat'},
     {name: 'tel_work', label: 'Phone' }, //_('Phone')
     {name: 'tel_cell', label: 'Mobile' }, //_('Mobile')
     {name: 'tel_fax', label: 'Fax' }, //_('Fax')
@@ -63,8 +67,6 @@ Tine.Addressbook.Model.ContactArray = Tine.Tinebase.Model.genericFields.concat([
     {name: 'calendar_uri'},
     {name: 'note', label: 'Description' }, //_('Description')
     {name: 'tz'},
-    {name: 'lon'},
-    {name: 'lat'},
     {name: 'pubkey'},
     {name: 'jpegphoto'},
     {name: 'account_id'},
