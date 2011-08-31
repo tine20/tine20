@@ -98,7 +98,6 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
         Tine.Filemanager.GridPanel.superclass.initComponent.call(this);      
         this.getStore().on('load', this.onLoad);
-        
     },
     
     afterRender: function() {
@@ -825,20 +824,12 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ddGroup : 'fileDDGroup',  
             notifyDrop : function(dragSource, e, data){  
                 
-                var dragData = dragSource.getDragData(e), 
-                    nodes = data.selections,
-                    app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
-                    grid = app.getMainScreen().getCenterPanel(),
-                    target;
+                var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
+                grid = app.getMainScreen().getCenterPanel(),
+                dropIndex = grid.getView().findRowIndex(e.target),
+                dragData = data,
+                target; 
 
-                var dropIndex;
-                if(dragData) {
-                    dropIndex = dragData.rowIndex;                   
-                }
-                else {
-                    dropIndex = grid.getView().findRowIndex(e.target);
-                }
-                
                 if(data.selections) {
                     nodes = data.selections;                   
                 }
@@ -865,21 +856,14 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 return true;
             },
             
-            notifyOver : function( dragSource , e, data ) {
-                
-                var dragData = dragSource.getDragData(e), 
-                    app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
+            notifyOver : function( dragSource, e, data ) {
+                     
+                var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
                     grid = app.getMainScreen().getCenterPanel(),
-                    target;
-                
-                var dropIndex;
-                if(dragData) {
-                    dropIndex = dragData.rowIndex;                   
-                }
-                else {
-                    dropIndex = grid.getView().findRowIndex(e.target);
-                }
-                    
+                    dropIndex = grid.getView().findRowIndex(e.target),
+                    dragData = data,
+                    target; 
+                                
                 if(data.selections) {
                     nodes = data.selections;                   
                 }
@@ -888,10 +872,10 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 }
 
                 target = grid.getStore().getAt(dropIndex);    
-                if((!target || target.data.type === 'file') && grid.currentFolderNode) {
+                if((!target || (target.data && target.data.type === 'file')) && grid.currentFolderNode) {
                     target = grid.currentFolderNode;
-                }
-               
+                }                
+                
                 if(!target) {
                     return false;
                 }
@@ -902,8 +886,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     }
                 }
                 
-                return this.dropAllowed;
-                
+                return this.dropAllowed;               
             }
         });  
         
