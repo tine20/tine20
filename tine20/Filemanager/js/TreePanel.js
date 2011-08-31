@@ -81,41 +81,58 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
              */
             onNodeOver : function(n, dd, e, data) {
 
-                var selectionsIdMatch = false;
+                var preventDrop = false,
+                    selectionContainsFiles = false;
+                
                 if(dd.dragData.selections) {
                     for(var i=0; i<dd.dragData.selections.length; i++) {
                         if(n.node.id == dd.dragData.selections[i].id) {
-                            selectionsIdMatch = true;
-                            break;
+                            preventDrop = true;
+                        }
+                        if(dd.dragData.selections[i].data.type == 'file') {
+                            selectionContainsFiles = true;
                         }
                     }
                 }
                 else if(dd.dragData.node && dd.dragData.node.id == n.node.id) {
-                    selectionsIdMatch = true;
+                    preventDrop = true;
                 } 
+                
+                if(selectionContainsFiles && !n.node.attributes.account_grants) {
+                    preventDrop = true;
+                }
 
                 return n.node.attributes.nodeRecord.isWriteable() 
                             && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
-                            && !selectionsIdMatch ? 'x-dd-drop-ok' : false;
+                            && !preventDrop ? 'x-dd-drop-ok' : false;
             },
+            
             isValidDropPoint: function(n, op, dd, e){
 
-                var selectionsIdMatch = false;
+                var preventDrop = false,
+                selectionContainsFiles = false;
+
                 if(dd.dragData.selections) {
                     for(var i=0; i<dd.dragData.selections.length; i++) {
                         if(n.node.id == dd.dragData.selections[i].id) {
-                            selectionsIdMatch = true;
-                            break;
+                            preventDrop = true;
+                        }
+                        if(dd.dragData.selections[i].data.type == 'file') {
+                            selectionContainsFiles = true;
                         }
                     }
                 }
                 else if(dd.dragData.node && dd.dragData.node.id == n.node.id) {
-                    selectionsIdMatch = true;
+                    preventDrop = true;
                 } 
+
+                if(selectionContainsFiles && !n.node.attributes.account_grants) {
+                    preventDrop = true;
+                }
                 
                 return n.node.attributes.nodeRecord.isWriteable()
-                            && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
-                            && !selectionsIdMatch;
+                        && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
+                        && !preventDrop;
             },
             completeDrop: function(de) {
                 var ns = de.dropNode, p = de.point, t = de.target;
@@ -263,10 +280,10 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      */
     onClick: function(node, e) {
              
-        if(node && node.reload) {
-            node.reload();
-        }
-                
+//        if(node && node.reload) {
+//            node.reload();
+//        }
+//                
         Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
 
     },
@@ -280,7 +297,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         this.contextMenuUserFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
-            actions: ['add', 'delete', 'rename'],
+            actions: ['add', 'reload', 'delete', 'rename'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -288,7 +305,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             
         this.contextMenuRootFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
-            actions: ['add'],
+            actions: ['add', 'reload'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
@@ -296,7 +313,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         
         this.contextMenuContainerFolder = Tine.widgets.tree.ContextMenu.getMenu({
             nodeName: this.app.i18n._(this.containerName),
-            actions: ['add', 'delete', 'rename', 'grants'],
+            actions: ['add', 'reload', 'delete', 'rename', 'grants'],
             scope: this,
             backend: 'Filemanager',
             backendModel: 'Node'
