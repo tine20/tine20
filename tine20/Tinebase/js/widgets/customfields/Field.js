@@ -6,7 +6,7 @@
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
-Ext.ns('Tine.widgets', 'Tine.widgets.customfields');
+Ext.ns('Tine.widgets.customfields');
 
 Tine.widgets.customfields.Field = {
 //    this.cfConfig = Tine.widgets.customfields.ConfigManager.getConfig(this.app, this.model, this.name);
@@ -22,10 +22,9 @@ Tine.widgets.customfields.Field = {
             };
             
             // auto xtype per data type
-            // @todo move this to a generic place
             // @todo support array of scalars
             // @todo suppot recordSets of model
-            if (! uiConfig.xtype && def.type) {
+            if (! uiConfig.xtype && def.type && ! def.value_search) {
                 switch (Ext.util.Format.lowercase(def.type)) {
                     case 'keyfield':
                         var options = def.options ? def.options : {},
@@ -36,13 +35,6 @@ Tine.widgets.customfields.Field = {
                             app: options.app ? options.app : app,
                             keyFieldName: options.keyFieldName ? options.keyFieldName : cfConfig.get('name')
                         });
-                        
-                        if (keyFieldConfig) {
-                            // place keyFieldConfig in registry so we can use the standard widgets
-                            var app = Ext.isString(fieldDef.app) ? Tine.Tinebase.appMgr.get(fieldDef.app) : fieldDef.app;
-                            app.getRegistry().get('config')[fieldDef.keyFieldName] = keyFieldConfig;
-                        }
-                        
                         break;
                     case 'integer':
                     case 'int':

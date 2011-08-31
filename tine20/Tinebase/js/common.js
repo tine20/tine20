@@ -288,22 +288,6 @@ Tine.Tinebase.common = {
     },
     
     /**
-     * custom field renderer
-     * 
-     * @param {Object} customfields of record
-     * @param {} metadata
-     * @param {} record
-     * @param {} rowIndex
-     * @param {} colIndex
-     * @param {} store
-     * @param {String} name of the customfield
-     * @return {String}
-     */
-    customfieldRenderer: function (customfields, metadata, record, rowIndex, colIndex, store, name) {
-        return Ext.util.Format.htmlEncode(customfields[name]); 
-    },
-    
-    /**
      * sorts account/user objects
      * 
      * @param {Object|String} user_id

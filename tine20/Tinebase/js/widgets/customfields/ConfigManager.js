@@ -19,6 +19,17 @@ Tine.widgets.customfields.ConfigManager = function() {
                 fields: Tine.Tinebase.Model.Customfield,
                 data: allCfs ? allCfs : []
             });
+            
+            // place keyFieldConfig in registry so we can use the standard widgets
+            stores[app.appName].each(function(cfConfig) {
+                var definition = cfConfig.get('definition'),
+                    options = definition.options ? definition.options : {},
+                    keyFieldConfig = definition.keyFieldConfig ? definition.keyFieldConfig : null;
+                    
+                if (keyFieldConfig) {
+                    app.getRegistry().get('config')[cfConfig.get('name')] = keyFieldConfig;
+                }
+            });
         }
         
         return stores[app.appName];
