@@ -94,13 +94,14 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
      */
     onBeforeRender: function() {
         var modelName = this.editDialog.recordClass.getMeta('appName') + '_Model_' + this.editDialog.recordClass.getMeta('modelName'),
-            cfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
-            form = this.editDialog.getForm();
+            allCfConfigs = Tine.widgets.customfields.ConfigManager.getConfigs(this.app, modelName),
+            form = this.editDialog.getForm(),
+            cfConfigs = [];
         
         // remove already applied cf's
-        Ext.each(cfConfigs, function(cfConfig) {
-            if (form.findField('customfield_' + cfConfig.get('name'))) {
-                cfConfigs.remove(cfConfig);
+        Ext.each(allCfConfigs, function(cfConfig) {
+            if (! form.findField('customfield_' + cfConfig.get('name'))) {
+                cfConfigs.push(cfConfig);
             }
         }, this);
         
