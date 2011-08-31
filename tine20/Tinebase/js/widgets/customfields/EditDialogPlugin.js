@@ -28,9 +28,6 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
         this.customfieldsValue = [];
         
-        // register on field add
-        // -> convert cf's from name to fields (we can skip this atm)
-        
         // compute cf's for cf tab and add a cf tab on demand
         this.editDialog.on('beforerender', this.onBeforeRender, this);
         
