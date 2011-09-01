@@ -69,7 +69,43 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
     {
         return $this->_search($filter, $paging, Addressbook_Controller_Contact::getInstance(), 'Addressbook_Model_ContactFilter');
     }    
-
+    
+    /**
+     * return autocomplete suggestions for a given property and value
+     * 
+     * @todo have spechial controller/backend fns for this
+     *
+     * @param  string   $property
+     * @param  string   $startswith
+     * @return array
+     */
+    public function autoCompleteContactProperty($property, $startswith)
+    {
+        if (preg_match('/[^A-Za-z0-9_]/', $property)) {
+            // NOTE: it would be better to ask the model for property presece, but we can't atm.
+            throw new Tasks_Exception_UnexpectedValue('bad property name');
+        }
+        
+        $filter = new Addressbook_Model_ContactFilter(array(
+            array('field' => $property, 'operator' => 'startswith', 'value' => $startswith),
+        ));
+        
+        $paging = new Tinebase_Model_Pagination(array('sort' => $property));
+        
+        $values = array_unique(Addressbook_Controller_Contact::getInstance()->search($filter, $paging)->{$property});
+        
+        $result = array(
+            'results'   => array(),
+            'totalcount' => count($values)
+        );
+        
+        foreach($values as $value) {
+            $result['results'][] = array($property => $value);
+        }
+        
+        return $result;
+    }
+    
     /**
      * Search for lists matching given arguments
      *
