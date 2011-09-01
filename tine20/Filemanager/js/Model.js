@@ -40,14 +40,30 @@ Tine.Filemanager.Model.Node = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     containerName: 'user file folder',
     containersName: 'user file folders',
     
-    isWriteable: function() {
+    isCreateFolderAllowed: function() {
         var grants = this.get('account_grants');
         
-        if(!grants) {
+        if(!grants && this.data.id !== 'personal' && this.data.id !== 'shared') {
             return false;
+        }
+        else if(!grants && (this.data.id === 'personal' 
+            || (this.data.id === 'shared' && (Tine.Tinebase.common.hasRight('admin', this.appName) 
+                    || Tine.Tinebase.common.hasRight('manage_shared_folders', this.appName))))) {
+            return true;
         }
         
         return this.get('type') == 'file' ? grants.editGrant : grants.addGrant;
+    },
+    
+    isDropFilesAllowed: function() {
+        var grants = this.get('account_grants');
+        if(!grants) {
+            return false;
+        }
+        else if(!grants.addGrant) {
+            return false;
+        }
+        return true;
     },
 
     isDragable: function() {
