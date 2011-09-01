@@ -484,7 +484,6 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.retryCount++;
             
             if (this.retryCount > this.MAX_RETRY_COUNT) {
-//                alert("Upload failed: " + this.fileRecord.get('name'));
                 
                 this.fileRecord.beginEdit();
                 this.fileRecord.set('status', 'failure');

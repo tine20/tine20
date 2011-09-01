@@ -235,15 +235,18 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 
             }, this);
             
-            this.dropEl.on('drop', function(e) {
+            this.dropEl.on('drop', function(e, target) {
                
                 e.stopPropagation();
                 e.preventDefault();
                 
-                var targetNodeId;
+                var dropTarget;
                 var treeNodeAttribute = e.getTarget('div').attributes['ext:tree-node-id'];
                 if(treeNodeAttribute) {
-                    targetNodeId = treeNodeAttribute.nodeValue;
+                    dropTarget = treeNodeAttribute.nodeValue;
+                }
+                else {
+                    dropTarget = target;
                 }
                 
                 // a bit hackish, I know...
@@ -252,7 +255,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 var dt = e.browserEvent.dataTransfer;
                 var files = dt.files;
                 
-                this.onInputFileChange(null, null, null, files, targetNodeId);
+                this.onInputFileChange(null, null, null, files, dropTarget);
             }, this);
         }
     },
