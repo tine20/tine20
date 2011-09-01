@@ -84,6 +84,8 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
         this.customfieldsValue.toString = function() {
             return Ext.util.JSON.encode(this.customfieldsValue);
         }
+        
+        this.editDialog.record.set('customfields', this.customfieldsValue);
     },
     
     /**

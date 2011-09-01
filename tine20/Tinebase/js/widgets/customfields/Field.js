@@ -68,7 +68,7 @@ Tine.widgets.customfields.Field = {
         }
         
         try {
-            var fieldObj = Ext.ComponentMgr.create(Ext.applyIf(fieldDef, config));
+            var fieldObj = Ext.ComponentMgr.create(Ext.apply(fieldDef, config));
             return fieldObj;
         } catch (e) {
             Tine.log.debug(e);
