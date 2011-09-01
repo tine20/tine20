@@ -93,7 +93,7 @@ Tine.Admin.customfield.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @return {String}
      */
     typeRenderer: function(value) {
-        return this.app.i18n._(value.uiconfig.xtype);
+        return this.app.i18n._(value.type);
     },
     
     /**

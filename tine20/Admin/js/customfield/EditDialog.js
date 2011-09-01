@@ -38,8 +38,10 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Admin.customfieldBackend,
     evalGrants: false,
     
-    definitionFields: ['label'],
-    uiconfigFields: ['xtype', 'order', 'group'],
+    definitionFields: ['label', 'type', 'value_search', 'length'],
+    uiconfigFields: ['order', 'group'],
+    
+    keyFieldConfig: null,
     
     /**
      * executed after record got updated from proxy
@@ -70,10 +72,20 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         	uiconfig: {}
         };
         
+        // save definition
         Ext.each(this.definitionFields, function (name) {
-        	this.record.data.definition[name] = this.getForm().findField(name).getValue();
+        	var field = this.getForm().findField(name);
+        	
+        	if (! field.disabled && (name !== 'value_search' || (name === 'value_search' && field.getValue() == 1))) { 
+        		this.record.data.definition[name] = field.getValue();
+        	}
         }, this);
         
+        if (this.keyFieldConfig) {
+        	this.record.data.definition.keyFieldConfig = this.keyFieldConfig;
+        }
+        
+        // save ui config
         Ext.each(this.uiconfigFields, function (name) {
         	this.record.data.definition.uiconfig[name] = this.getForm().findField(name).getValue();;
         }, this);
@@ -87,17 +99,35 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	 * @param {Int}  				index
 	 */
 	onTypeComboSelect: function (combo, record, index) {
-		switch (combo.getValue()) 
-		{
-		case 'textfield' :
-			this.getForm().findField('length').enable();
-			break;
-		default :
-			this.getForm().findField('length').disable();
-			break;
-		}
+		var type = Ext.util.Format.lowercase(combo.getValue());
+		
+		this.getForm().findField('length').setDisabled(type !== 'string');
+		this.getForm().findField('value_search').setValue(type === 'searchcombo' ? 1 : 0);
+		this.configureStoreBtn.setDisabled(type !== 'keyfield');
 	},
     
+	/**
+	 * Set value
+	 * 
+	 *  @param {String} type
+	 */	
+	onStoreWindowOK: function () {
+		this.keyFieldConfig = {
+			value: {
+				records: this.storeWindowGrid.getValue()		
+			}
+		};
+		this.onStoreWindowClose();
+	},
+	
+	/**
+	 * Close store Window
+	 */
+	onStoreWindowClose: function () {
+        this.storeWindow.purgeListeners();
+        this.storeWindow.close();
+	},
+	
     /**
      * Get available model for given application
      * 
@@ -125,6 +155,110 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+	 * Create store + grid
+	 * 
+	 * @returns {Tine.widgets.grid.QuickaddGridPanel}
+	 */
+	initStoreWindowGrid: function () {        
+		var self = this,
+			storeEntry = Ext.data.Record.create([
+			    {name: 'id'},
+			    {name: 'value'}
+			]);
+		
+    	this.storeWindowGrid = new Tine.widgets.grid.QuickaddGridPanel({
+    		autoExpandColumn: 'value',
+			quickaddMandatory: 'id',
+			resetAllOnNew: true,
+			useBBar: true,
+			recordClass: storeEntry,
+    		getColumnModel: function () {
+		        return new Ext.grid.ColumnModel([{ 
+		            id: 'id', 
+		            header: self.app.i18n._('ID'), 
+		            dataIndex: 'id', 
+		            width: 170, 
+		            hideable: false, 
+		            sortable: false, 
+		            quickaddField: new Ext.form.TextField({
+		                emptyText: self.app.i18n._('Add a New ID...')
+		            })
+		        }, { 
+		            id: 'value', 
+		            header: self.app.i18n._('Value'), 
+		            dataIndex: 'value', 
+		            width: 170, 
+		            hideable: false, 
+		            sortable: false, 
+		            quickaddField: new Ext.form.TextField({
+		                emptyText: self.app.i18n._('Add a New Value...')
+		            })
+		        }]);
+		    },
+		    onNewentry: function (recordData) {
+		    	// check if id exists in grid
+				if (this.store.findExact('id', recordData.id) !== -1) {
+					Ext.Msg.alert(self.app.i18n._('Error'), self.app.i18n._('ID allready exists'));
+					return false;
+				}
+					
+				// check if value exists in grid
+				if (this.store.findExact('value', recordData.value) !== -1) {
+					Ext.Msg.alert(self.app.i18n._('Error'), self.app.i18n._('Value allready exists'));
+					return false;
+				}
+				
+				// if value is empty, set it to ID
+				if (Ext.isEmpty(recordData.value)) {
+					recordData.value = recordData.id;
+				}
+		    	
+		    	Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.apply(this, arguments);
+		    },
+		    getValue: function () {
+		    	var data = [];
+		    	this.store.each(function (rec) {
+		    		data.push(rec.data);
+		    	});
+		    	
+		    	return data;
+		    }
+    	});
+    	
+    	if (this.record.id != 0 && this.record.get('definition').keyFieldConfig.value) {
+    		this.storeWindowGrid.setStoreFromArray(this.record.get('definition').keyFieldConfig.value.records);
+    	}
+		
+		return this.storeWindowGrid;
+	},
+    
+    /**
+	 * Show window with configuring combobox store
+	 * 
+	 * @param {String} type
+	 */
+	showStoreWindow: function (type) {
+		this.storeWindow = Tine.WindowFactory.getWindow({
+			width: 500,
+			height: 320,
+			items: this.initStoreWindowGrid(),
+			fbar: ['->', {
+				text: _('OK'),
+            	minWidth: 70,
+            	scope: this,
+            	handler: this.onStoreWindowOK,
+            	iconCls: 'action_applyChanges'
+			}, {
+				text: _('Cancel'),
+            	minWidth: 70,
+            	scope: this,
+            	handler: this.onStoreWindowClose,
+            	iconCls: 'action_cancel'
+			}]
+		});
+	},
+    
+    /**
      * returns dialog
      */
     getFormItems: function () {
@@ -143,6 +277,17 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
         	totalProperty: 'totalcount',
             fields: [{name: 'value'}, {name: 'name'}]
         });
+        
+        this.configureStoreBtn = new Ext.Button({
+        	columnWidth: 0.333,
+        	fieldLabel: '&#160;',
+			xtype: 'button',
+			icon: 'images/oxygen/16x16/apps/kexi.png',
+			text: this.app.i18n._('Configure store'),
+			disabled: this.record.id != 0 && Ext.util.Format.lowercase(this.record.get('definition').type) === 'keyfield' ? false : true,
+			scope: this,
+			handler: this.showStoreWindow
+		});
         
         return {
             layout: 'vbox',
@@ -197,24 +342,34 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                	labelAlign: 'top',
                	defaults: {anchor: '100%'},
                	items: [{
-               		xtype: 'combo',
-                    readOnly: this.record.id != 0,
-                    store: [
-                    	['textfield', this.app.i18n._('Text')],
-						['numberfield', this.app.i18n._('Number')],
-						['datefield', this.app.i18n._('Date')],
-						['timefield', this.app.i18n._('Time')]
-                    ],
-                    name: 'xtype',
-                    fieldLabel: this.app.i18n._('Type'),
-                    mode: 'local',
-                    allowBlank: false,
-                    editable: false,
-                    forceSelection: true,
-                    listeners: {
-						scope: this,
-						'select': this.onTypeComboSelect
-					}
+               		xtype: 'columnform',
+               		border: false,
+               		items: [[{
+               			columnWidth: 0.666,
+                        xtype: 'combo',
+	                    readOnly: this.record.id != 0,
+	                    store: [
+	                    	['string', this.app.i18n._('Text')],
+							['int', this.app.i18n._('Number')],
+							['date', this.app.i18n._('Date')],
+							['datetime', this.app.i18n._('DateTime')],
+							['time', this.app.i18n._('Time')],
+							['boolean', this.app.i18n._('Boolean')],
+							['searchcombo', this.app.i18n._('Search Combo')],
+							['keyfield', this.app.i18n._('Key Field')]
+							
+	                    ],
+	                    name: 'type',
+	                    fieldLabel: this.app.i18n._('Type'),
+	                    mode: 'local',
+	                    allowBlank: false,
+	                    editable: false,
+	                    forceSelection: true,
+	                    listeners: {
+							scope: this,
+							'select': this.onTypeComboSelect
+						}
+                    }, this.configureStoreBtn]]
                	}, {
                		xtype: 'textfield',
                     fieldLabel: this.app.i18n._('Name'), 
@@ -231,13 +386,12 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 					xtype: 'numberfield',
 					fieldLabel: this.app.i18n._('Length'),
 					name: 'length',
-					disabled: this.record.id != 0 && this.record.get('definition').uiconfig.xtype === 'textfield' ? false : true
+					disabled: this.record.id != 0 && Ext.util.Format.lowercase(this.record.get('definition').type) === 'string' ? false : true
 				}]
             }, {
             	xtype: 'fieldset',
             	bodyStyle: 'padding: 5px',
             	margins: {top: 5, right: 0, bottom: 0, left: 0},
-            	collapsible: true,
                	title: this.app.i18n._('Custom field additional properties'),
                	labelAlign: 'top',
                	defaults: {anchor: '100%'},
@@ -251,6 +405,10 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 					fieldLabel: this.app.i18n._('Order'),
 					name: 'order'
 				}]
+            }, {
+            	xtype: 'hidden',
+            	name: 'value_search',
+            	value: 0
             }]            
         };
     }
