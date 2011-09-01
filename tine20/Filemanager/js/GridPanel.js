@@ -758,10 +758,10 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             nodeRecord = null;
         
         if(targetNode.attributes) {
-            nodeRecord = targetNode.attributes.nodeRecord.isDropFilesAllowed();
+            nodeRecord = targetNode.attributes.nodeRecord;
         }
         
-        if(rowIndex > -1) {
+        if(rowIndex !== false && rowIndex > -1) {
             var newTargetNode = gridStore.getAt(rowIndex);
             if(newTargetNode && newTargetNode.data.type == 'folder') {
                 targetFolderPath = newTargetNode.data.path; 
