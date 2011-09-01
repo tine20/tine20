@@ -74,6 +74,8 @@ Ext.ux.file.BrowsePlugin.prototype = {
      */
     scope: null,
     
+    currentTreeNodeUI: null,
+    
     /*
      * Protected Ext.Button overrides
      */
@@ -164,14 +166,38 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 }
             }
             
+            this.dropEl.on('dragout', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+               Tine.log.debug('dragout'); 
+            });
+            
             // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
             this.dropEl.on('dragover', function(e) {
 
                 e.stopPropagation();
                 e.preventDefault();
                 
+                if(this.currentTreeNodeUI) {
+                    this.currentTreeNodeUI.onOut();
+                }
+                var targetNodeId;
+                var treeNodeAttribute = e.getTarget('div').attributes['ext:tree-node-id'];
+                if(treeNodeAttribute) {
+                    targetNodeId = treeNodeAttribute.nodeValue;
+                }
+                if(targetNodeId) {
+                    var treeNodeUI = this.component.getNodeById(targetNodeId).getUI();
+                    treeNodeUI.onOver(); 
+                    this.currentTreeNodeUI = treeNodeUI;
+                }
+                else if(this.currentTreeNodeUI) {
+                    this.currentTreeNodeUI.onOut();
+//                    this.currentTreeNodeUI = null; 
+                }
+                
 //                this.dropEl.fireEvent('mouseover', e, e.getTarget());
-////                Ext.get(e.getTarget()).fireEvent('mouseover', e, e.getTarget());
+//                Ext.get(e.getTarget()).fireEvent('mouseover', e, e.getTarget());
 //                this.component.fireEvent('mouseover', e, e.getTarget());
                 
                 // try to set the effectAllowed to copy (not all UA's accept this)

@@ -102,7 +102,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                     preventDrop = true;
                 }
 
-                return n.node.attributes.nodeRecord.isWriteable() 
+                return n.node.attributes.nodeRecord.isCreateFolderAllowed() 
                             && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
                             && !preventDrop ? 'x-dd-drop-ok' : false;
             },
@@ -130,7 +130,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                     preventDrop = true;
                 }
                 
-                return n.node.attributes.nodeRecord.isWriteable()
+                return n.node.attributes.nodeRecord.isCreateFolderAllowed()
                         && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
                         && !preventDrop;
             },
@@ -545,18 +545,95 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     },
     
     /**
+     * TODO: move to Upload class or elsewhere??
+     * updating fileRecord after creating node
+     * 
+     * @param response
+     * @param request
+     * @param upload
+     */
+    onNodeCreated: function(response, request, upload) {
+       
+        var record = Ext.util.JSON.decode(response.responseText);
+                
+        var fileRecord = upload.fileRecord;
+        fileRecord.beginEdit();
+        fileRecord.set('contenttype', record.contenttype);
+        fileRecord.set('created_by', Tine.Tinebase.registry.get('currentAccount'));
+        fileRecord.set('creation_time', record.creation_time);
+        fileRecord.set('revision', record.revision);
+        fileRecord.set('last_modified_by', record.last_modified_by);
+        fileRecord.set('last_modified_time', record.last_modified_time);
+        fileRecord.set('size', record.size);
+        fileRecord.set('name', record.name);
+        fileRecord.set('path', record.path);
+        fileRecord.commit(false);
+               
+    },
+    
+    /**
+     * copies uploaded temporary file to target location
+     * 
+     * @param upload    {Ext.ux.file.Upload}
+     * @param response  {Http response} 
+     */
+    onUploadComplete: function(upload, response) {
+             
+        var app = Tine.Tinebase.appMgr.get('Filemanager');
+        var treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(); 
+        
+        Tine.Tinebase.uploadManager.onUploadComplete();
+        
+        // $filename, $type, $tempFileId, $forceOverwrite
+        Ext.Ajax.request({
+            timeout: 10*60*1000, // Overriding Ajax timeout - important!
+            params: {
+                method: 'Filemanager.createNode',
+                filename: upload.id,
+                type: 'file',
+                tempFileId: response.id,
+                forceOverwrite: true
+            },
+            success: treePanel.onNodeCreated.createDelegate(this, [upload], true), 
+            failure: treePanel.onNodeCreated.createDelegate(this, [upload], true)
+        });
+        
+    },
+    
+    /**
+     * on upload failure
+     * 
+     * @private
+     */
+    onUploadFail: function () {
+        Ext.MessageBox.alert(
+            _('Upload Failed'), 
+            _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') + Tine.Tinebase.registry.get('maxFileUploadSize')
+        ).setIcon(Ext.MessageBox.ERROR);
+    },
+    
+    /**
      * handels tree drop of object from outside the browser
      * 
      * @param fileSelector
      * @param targetNodeId
      */
     dropIntoTree: function(fileSelector, targetNodeId) {
-        var targetNode = fileSelector.component.getNodeById(targetNodeId);
-            targetNodePath = targetNode.attributes.path;
+        var treePanel = fileSelector.component,
+            targetNode = treePanel.getNodeById(targetNodeId);
+            targetNodePath = targetNode.attributes.path,
+            app = treePanel.app;
+
             
-        Tine.log.debug(targetNodePath);
-        
-        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+        if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
+            Ext.MessageBox.alert(
+                    _('Upload Failed'), 
+                    app.i18n._('Dropping on this folder not allowed!')
+                ).setIcon(Ext.MessageBox.ERROR);
+            
+            return;
+        }    
+      
         grid = app.getMainScreen().getCenterPanel(),
         gridStore = grid.store;
         
@@ -570,15 +647,13 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             
             var upload = new Ext.ux.file.Upload({}, file, fileSelector, filePath);
 
-            upload.on('uploadfailure', grid.onUploadFail, this);
-            upload.on('uploadcomplete', grid.onUploadComplete, this);
+            upload.on('uploadfailure', treePanel.onUploadFail, this);
+            upload.on('uploadcomplete', treePanel.onUploadComplete, this);
             upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
 
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);            
             var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
                     
-            Tine.log.debug(uploadKey);
-            
             if(fileRecord.data.status !== 'failure' && grid.currentFolderNode.id === targetNodeId) {
                 gridStore.add(fileRecord);
             }           

@@ -119,6 +119,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      * currentChunk to upload
      */
     currentChunk: null,
+       
+    /**
+     * uploadPath
+     */
+    uploadPath: '/',
     
     /**
      * file to upload
