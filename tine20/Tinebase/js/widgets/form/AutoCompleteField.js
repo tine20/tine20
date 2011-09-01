@@ -50,7 +50,7 @@ Tine.Tinebase.widgets.form.AutoCompleteField = Ext.extend(Ext.form.ComboBox, {
                 dir: 'ASC'
             },
             root: 'results',
-            totalProperty: 'totalcount',
+            totalProperty: 'totalcount'
         });
         
         

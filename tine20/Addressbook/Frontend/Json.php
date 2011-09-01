@@ -74,6 +74,7 @@ class Addressbook_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * return autocomplete suggestions for a given property and value
      * 
      * @todo have spechial controller/backend fns for this
+     * @todo move to abstract json class and have tests
      *
      * @param  string   $property
      * @param  string   $startswith
