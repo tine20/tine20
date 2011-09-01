@@ -544,12 +544,11 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         if (Tinebase_Core::getUser()) { 
             $userApplications = Tinebase_Core::getUser()->getApplications(TRUE);
+			$clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
             
             foreach ($userApplications as $application) {
-                
                 $jsonAppName = $application->name . '_Frontend_Json';
-                $clientConfig = Tinebase_Config::getInstance()->getClientRegistryConfig();
-                
+                               
                 if (class_exists($jsonAppName)) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . ' Getting registry data for app ' . $application->name);
                     
