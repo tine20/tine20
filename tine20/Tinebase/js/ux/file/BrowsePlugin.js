@@ -166,10 +166,33 @@ Ext.ux.file.BrowsePlugin.prototype = {
                 }
             }
             
-            this.dropEl.on('dragout', function(e) {
+            this.dropEl.on('dragleave', function(e) {
                 e.stopPropagation();
                 e.preventDefault();
-               Tine.log.debug('dragout'); 
+
+                if(document.createEvent)  {
+                    var evObj = document.createEvent('MouseEvents');
+                    evObj.initMouseEvent('mouseout', true, true, window, e.browserEvent.detail, e.browserEvent.screenX, e.browserEvent.screenY
+                            , e.browserEvent.clientX, e.browserEvent.clientY, e.browserEvent.ctrlKey, e.browserEvent.altKey
+                            , e.browserEvent.shiftKey, e.browserEvent.metaKey, e.browserEvent.button, e.browserEvent.relatedTarget);
+                    e.target.dispatchEvent(evObj);
+                }    
+                // TODO: IE problem on drag over tree nodes (not the whole row tracks onmouseout)
+                else if(document.createEventObject) {
+                    var evObj = document.createEventObject();
+                    evObj.detail = e.browserEvent.detail;
+                    evObj.screenX = e.browserEvent.screenX;
+                    evObj.screenY = e.browserEvent.screenY;
+                    evObj.clientX = e.browserEvent.clientX;
+                    evObj.clientY = e.browserEvent.clientY;
+                    evObj.ctrlKey = e.browserEvent.ctrlKey;
+                    evObj.altKey = e.browserEvent.altKey;
+                    evObj.shiftKey = e.browserEvent.shiftKey;
+                    evObj.metaKey = e.browserEvent.metaKey;
+                    evObj.button = e.browserEvent.button;
+                    evObj.relatedTarget = e.browserEvent.relatedTarget;
+                    e.getTarget('div').fireEvent('onmouseout',evObj);
+                }
             });
             
             // @see http://dev.w3.org/html5/spec/Overview.html#the-dragevent-and-datatransfer-interfaces
@@ -177,36 +200,38 @@ Ext.ux.file.BrowsePlugin.prototype = {
 
                 e.stopPropagation();
                 e.preventDefault();
+                                         
+                if(document.createEvent) {
+                    var evObj = document.createEvent('MouseEvents');
+                    evObj.initMouseEvent('mouseover', true, true, window, e.browserEvent.detail, e.browserEvent.screenX, e.browserEvent.screenY
+                            , e.browserEvent.clientX, e.browserEvent.clientY, e.browserEvent.ctrlKey, e.browserEvent.altKey
+                            , e.browserEvent.shiftKey, e.browserEvent.metaKey, e.browserEvent.button, e.browserEvent.relatedTarget);
+                    e.target.dispatchEvent(evObj);
+                }    
+                // TODO: IE problem on drag over tree nodes (not the whole row tracks onmouseover)
+                else if(document.createEventObject) {
+                    var evObj = document.createEventObject();
+                    evObj.detail = e.browserEvent.detail;
+                    evObj.screenX = e.browserEvent.screenX;
+                    evObj.screenY = e.browserEvent.screenY;
+                    evObj.clientX = e.browserEvent.clientX;
+                    evObj.clientY = e.browserEvent.clientY;
+                    evObj.ctrlKey = e.browserEvent.ctrlKey;
+                    evObj.altKey = e.browserEvent.altKey;
+                    evObj.shiftKey = e.browserEvent.shiftKey;
+                    evObj.metaKey = e.browserEvent.metaKey;
+                    evObj.button = e.browserEvent.button;
+                    evObj.relatedTarget = e.browserEvent.relatedTarget;
+                    e.getTarget('div').fireEvent('onmouseover',evObj);
+                }
                 
-                if(this.currentTreeNodeUI) {
-                    this.currentTreeNodeUI.onOut();
-                }
-                var targetNodeId;
-                var treeNodeAttribute = e.getTarget('div').attributes['ext:tree-node-id'];
-                if(treeNodeAttribute) {
-                    targetNodeId = treeNodeAttribute.nodeValue;
-                }
-                if(targetNodeId) {
-                    var treeNodeUI = this.component.getNodeById(targetNodeId).getUI();
-                    treeNodeUI.onOver(); 
-                    this.currentTreeNodeUI = treeNodeUI;
-                }
-                else if(this.currentTreeNodeUI) {
-                    this.currentTreeNodeUI.onOut();
-//                    this.currentTreeNodeUI = null; 
-                }
-                
-//                this.dropEl.fireEvent('mouseover', e, e.getTarget());
-//                Ext.get(e.getTarget()).fireEvent('mouseover', e, e.getTarget());
-//                this.component.fireEvent('mouseover', e, e.getTarget());
-                
-                // try to set the effectAllowed to copy (not all UA's accept this)
-                e.browserEvent.dataTransfer.effectAllowed = 'copy';
-                    
-                // set drop effect to copy if allowed
-                if (e.browserEvent.dataTransfer.effectAllowed.match(/all|copy/i)) {
-                    e.browserEvent.dataTransfer.dropEffect = 'copy';
-                }
+//                // try to set the effectAllowed to copy (not all UA's accept this)
+//                e.browserEvent.dataTransfer.effectAllowed = 'copy';
+//                    
+//                // set drop effect to copy if allowed
+//                if (e.browserEvent.dataTransfer.effectAllowed.match(/all|copy/i)) {
+//                    e.browserEvent.dataTransfer.dropEffect = 'copy';
+//                }
                 
             }, this);
             
