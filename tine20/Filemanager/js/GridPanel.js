@@ -677,6 +677,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             for (var i = 0; i < files.length; i += 1) {
                 var file = new Ext.ux.file.Upload.file(files[i]);
                 file.data.status = 'complete';
+                file.data.nodeRecord = new Tine.Filemanager.Model.Node(file.data);
                 this.store.add(file);
             }
         }
@@ -744,15 +745,33 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @param {} fileSelector
      * @param {} e
      */
-    onFilesSelect: function (fileSelector) {
+    onFilesSelect: function (fileSelector, targetEl) {
        
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel(),
             targetNode = grid.currentFolderNode,
-            gridStore = grid.store;
+            gridStore = grid.store,
+            rowIndex = grid.getView().findRowIndex(targetEl),
+            targetFolderPath = grid.currentFolderNode.attributes.path,
+            addToGrid = true,
+            dropAllowed = false,
+            nodeRecord = null;
+        
+        if(targetNode.attributes) {
+            nodeRecord = targetNode.attributes.nodeRecord.isDropFilesAllowed();
+        }
+        
+        if(rowIndex > -1) {
+            var newTargetNode = gridStore.getAt(rowIndex);
+            if(newTargetNode && newTargetNode.data.type == 'folder') {
+                targetFolderPath = newTargetNode.data.path; 
+                addToGrid = false;
+                nodeRecord = new Tine.Filemanager.Model.Node(newTargetNode.data);
+            }
+        }
         
         
-        if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
+        if(!nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     _('Upload Failed'), 
                     app.i18n._('Dropping on this folder not allowed!')
@@ -766,7 +785,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
             var fileName = file.name || file.fileName;
             
-            var filePath = grid.currentFolderNode.attributes.path + '/' + fileName;
+            var filePath = targetFolderPath + '/' + fileName;
             Tine.Filemanager.createNode(filePath, "file", [], false);
             
             var upload = new Ext.ux.file.Upload({}, file, fileSelector, filePath);
@@ -778,7 +797,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);            
             var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
                                 
-            if(fileRecord.data.status !== 'failure' ) {
+            if(fileRecord.data.status !== 'failure' && addToGrid) {
                 gridStore.add(fileRecord);
             }           
         }, this);
