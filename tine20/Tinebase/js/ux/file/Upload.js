@@ -101,6 +101,11 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     RETRY_TIMEOUT_MILLIS: 3000,
     
     /**
+     *  retry timeout in milliseconds
+     */
+    CHUNK_TIMEOUT_MILLIS: 100,
+    
+    /**
      * @cfg {String} url the url we upload to
      */
     url: 'index.php',
@@ -444,19 +449,24 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
 
                 if(this.lastChunk) {
 
-                    Ext.Ajax.request({
-                        timeout: 10*60*1000, // Overriding Ajax timeout - important!
-                        params: {
-                            method: 'Tinebase.joinTempFiles',
-                            tempFilesData: this.tempFiles
-                        },
-                        success: this.finishUploadRecord.createDelegate(this), 
-                        failure: this.finishUploadRecord.createDelegate(this)
-                    });
+                    window.setTimeout((function() {
+                        Ext.Ajax.request({
+                            timeout: 10*60*1000, // Overriding Ajax timeout - important!
+                            params: {
+                                method: 'Tinebase.joinTempFiles',
+                                tempFilesData: this.tempFiles
+                            },
+                            success: this.finishUploadRecord.createDelegate(this), 
+                            failure: this.finishUploadRecord.createDelegate(this)
+                        });
+                    }).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
+
                 }
                 else {
-                    this.prepareChunk();
-                    this.html5upload();
+                    window.setTimeout((function() {
+                        this.prepareChunk();
+                        this.html5upload();
+                    }).createDelegate(this), this.CHUNK_TIMEOUT_MILLIS);
                 }                                               
             }  
         }
@@ -483,10 +493,10 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 this.fireEvent('uploadfailure', this, this.fileRecord);
             }
             else {
-                window.setTimeout(function() {
+                window.setTimeout((function() {
                     this.prepareChunk();
                     this.html5upload();
-                }.createDelegate(this), this.RETRY_TIMEOUT_MILLIS);
+                }).createDelegate(this), this.RETRY_TIMEOUT_MILLIS);
             }
         }
         else {
