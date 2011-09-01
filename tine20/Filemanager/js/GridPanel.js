@@ -646,7 +646,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             _('Upload Failed'), 
             _('Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: ') + Tine.Tinebase.registry.get('maxFileUploadSize')
         ).setIcon(Ext.MessageBox.ERROR);
-        this.loadMask.hide();
+//        this.loadMask.hide();
     },
     
     /**
@@ -690,19 +690,17 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onUploadComplete: function(upload, response) {
               
-        var app = Tine.Tinebase.appMgr.get('Filemanager');
-        var grid = app.mainScreen.GridPanel; 
-        var currentPath = app.getMainScreen().getCenterPanel().currentFolderNode.attributes.path;
-        var fileName = response.name;
+        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+            grid = app.getMainScreen().getCenterPanel(); 
+
         Tine.Tinebase.uploadManager.onUploadComplete();
-//        Tine.Filemanager.createNode(currentPath + '/' + fileName, "file", response.id, false, this.onNodeCreated);
         
         // $filename, $type, $tempFileId, $forceOverwrite
         Ext.Ajax.request({
             timeout: 10*60*1000, // Overriding Ajax timeout - important!
             params: {
                 method: 'Filemanager.createNode',
-                filename: currentPath + '/' + fileName,
+                filename: upload.id,
                 type: 'file',
                 tempFileId: response.id,
                 forceOverwrite: true
@@ -714,6 +712,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     },
     
     /**
+     * TODO: move to Upload class or elsewhere??
      * updating fileRecord after creating node
      * 
      * @param response
@@ -723,9 +722,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onNodeCreated: function(response, request, upload) {
        
         var record = Ext.util.JSON.decode(response.responseText);
-        var app = Tine.Tinebase.appMgr.get('Filemanager');
-        var grid = app.getMainScreen().getCenterPanel(); 
-        
+                
         var fileRecord = upload.fileRecord;
         fileRecord.beginEdit();
         fileRecord.set('contenttype', record.contenttype);
@@ -738,9 +735,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         fileRecord.set('name', record.name);
         fileRecord.set('path', record.path);
         fileRecord.commit(false);
-        
-        grid.pagingToolbar.enable();
-       
+               
     },
     
     /**
@@ -751,9 +746,20 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     onFilesSelect: function (fileSelector) {
        
-        var app = Tine.Tinebase.appMgr.get('Filemanager');
-        var grid = app.getMainScreen().getCenterPanel(); 
-        var gridStore = grid.store;
+        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+            grid = app.getMainScreen().getCenterPanel(),
+            targetNode = grid.currentFolderNode,
+            gridStore = grid.store;
+        
+        
+        if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
+            Ext.MessageBox.alert(
+                    _('Upload Failed'), 
+                    app.i18n._('Dropping on this folder not allowed!')
+                ).setIcon(Ext.MessageBox.ERROR);
+            
+            return;
+        }    
         
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
@@ -771,9 +777,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);            
             var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
-                    
-            Tine.log.debug(uploadKey);
-            
+                                
             if(fileRecord.data.status !== 'failure' ) {
                 gridStore.add(fileRecord);
             }           
