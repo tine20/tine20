@@ -38,13 +38,27 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     recordProxy: Tine.Admin.customfieldBackend,
     evalGrants: false,
     
+    /**
+     * definition properties for cusomfield
+     * @type {Array}
+     */
     definitionFields: ['label', 'type', 'value_search', 'length'],
+    
+    /**
+     * ui properties for customfield
+     * @type {Array}
+     */
     uiconfigFields: ['order', 'group'],
     
+    /**
+     * configuration for keyfild
+     * @type {Object}
+     */
     keyFieldConfig: null,
     
     /**
      * executed after record got updated from proxy
+     *  - load values for customfield definition and ui
      */
     onRecordLoad: function () {
         Tine.Admin.CustomfieldEditDialog.superclass.onRecordLoad.apply(this, arguments);
@@ -63,6 +77,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     
     /**
      * executed when record gets updated from form
+     *  - get values for customfield definition and ui
      */
     onRecordUpdate: function () {
         Tine.Admin.CustomfieldEditDialog.superclass.onRecordUpdate.apply(this, arguments);
@@ -92,6 +107,23 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     },
     
     /**
+     * Apply changes handler
+     *  - validate some additional data before saving
+     * 
+     * @param {Ext.Button} button
+     * @param {Ext.EventObject} event
+     * @param {Boolean} closeWindow
+     */
+    onApplyChanges: function (button, event, closeWindow) {
+    	if (this.getForm().findField('type').getValue() === 'keyfield' && ! this.keyFieldConfig) {
+    		Ext.Msg.alert(_('Errors'), this.app.i18n._('Please configure store for keyfield'));
+    		return;
+    	}
+    	
+    	Tine.Admin.CustomfieldEditDialog.superclass.onApplyChanges.apply(this, arguments);
+    },
+    
+    /**
 	 * Called on type combo select
 	 * 
 	 * @param {Ext.form.Combobox}  	combo
@@ -107,9 +139,7 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	},
     
 	/**
-	 * Set value
-	 * 
-	 *  @param {String} type
+	 * Set keyfield config
 	 */	
 	onStoreWindowOK: function () {
 		this.keyFieldConfig = {
@@ -117,6 +147,12 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 				records: this.storeWindowGrid.getValue()		
 			}
 		};
+		
+		var defaultRecIdx = this.storeWindowGrid.store.findExact('default', true);
+		if (defaultRecIdx !== -1) {
+			this.keyFieldConfig.value['default'] = this.storeWindowGrid.store.getAt(defaultRecIdx).get('id');
+		}
+		 
 		this.onStoreWindowClose();
 	},
 	
@@ -131,27 +167,31 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     /**
      * Get available model for given application
      * 
-     *  @param {String} application
+     *  @param {Tine.Tinebase.data.Record} application
      */
     getApplicationModels: function (application) {
     	// remove all current data
     	this.modelStore.removeAll();
     	
-    	this.recordProxy.doXHTTPRequest({
-            scope: this,
-            params: { 
-                method: 'Admin.getApplicationModels',
-                application: application
-            },
-            beforeSuccess: function (response) {
-                return [Ext.util.JSON.decode(response.responseText)];
-            },
-            success: function (result) {
-                this.modelStore.loadData(result);
-            },
-            failure: this.onRequestFailed,
-            timeout: 3600000 // 60 minutes
-        });
+    	var customfieldsModels = [],
+    		app = Tine.Tinebase.appMgr.get(application.get('name'));
+    		appModels = Tine[application.get('name')].Model; 
+    	
+    	if (appModels) {
+    		for (var model in appModels) {
+    			if (
+    				appModels.hasOwnProperty(model) &&
+    				typeof appModels[model].getField === 'function' &&
+    				appModels[model].getField('customfields')
+    			) {
+    				var useModel = appModels[model].getMeta('appName') + '_Model_' + appModels[model].getMeta('modelName');
+    				Tine.log.info('Found model with customfields property: ' + useModel);
+    				customfieldsModels.push([useModel, app.i18n.n_hidden(appModels[model].getMeta('recordName'), appModels[model].getMeta('recordsName'), 1)]);
+    			}
+    		}
+    	}
+    	
+    	this.modelStore.loadData(customfieldsModels);
     },
     
     /**
@@ -162,22 +202,53 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 	initStoreWindowGrid: function () {        
 		var self = this,
 			storeEntry = Ext.data.Record.create([
+				{name: 'default'},
 			    {name: 'id'},
 			    {name: 'value'}
 			]);
 		
+		var defaultCheck = new Ext.ux.grid.CheckColumn({
+        	id: 'default', 
+	        header: self.app.i18n._('Default'),
+	        dataIndex: 'default',
+            sortable: false,
+            align: 'center',
+	        width: 55
+	    });
+			
     	this.storeWindowGrid = new Tine.widgets.grid.QuickaddGridPanel({
     		autoExpandColumn: 'value',
 			quickaddMandatory: 'id',
 			resetAllOnNew: true,
 			useBBar: true,
 			recordClass: storeEntry,
+			store: new Ext.data.Store({
+                reader: new Ext.data.ArrayReader({idIndex: 0}, storeEntry),
+                listeners: {
+                	scope: this,
+                	'update': function (store, rec, operation) {
+                		rec.commit(true);
+                		
+                		// be sure that only one default is checked
+                		if (rec.get('default')) {
+							store.each(function (r) {
+                				if (r.id !== rec.id) {
+                					r.set('default', false);
+                					r.commit(true);
+                				}
+                			}, this);	
+                		}                		
+                	}
+                }
+            }),
+			plugins: [defaultCheck],
     		getColumnModel: function () {
-		        return new Ext.grid.ColumnModel([{ 
+		        return new Ext.grid.ColumnModel([
+		        defaultCheck,
+		        { 
 		            id: 'id', 
 		            header: self.app.i18n._('ID'), 
 		            dataIndex: 'id', 
-		            width: 170, 
 		            hideable: false, 
 		            sortable: false, 
 		            quickaddField: new Ext.form.TextField({
@@ -187,7 +258,6 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		            id: 'value', 
 		            header: self.app.i18n._('Value'), 
 		            dataIndex: 'value', 
-		            width: 170, 
 		            hideable: false, 
 		            sortable: false, 
 		            quickaddField: new Ext.form.TextField({
@@ -195,6 +265,9 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		            })
 		        }]);
 		    },
+		    /**
+		     * Do some checking on new entry add
+		     */
 		    onNewentry: function (recordData) {
 		    	// check if id exists in grid
 				if (this.store.findExact('id', recordData.id) !== -1) {
@@ -215,10 +288,16 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
 		    	
 		    	Tine.widgets.grid.QuickaddGridPanel.prototype.onNewentry.apply(this, arguments);
 		    },
+		    /**
+		     * Get records from stre
+		     */
 		    getValue: function () {
 		    	var data = [];
 		    	this.store.each(function (rec) {
-		    		data.push(rec.data);
+		    		data.push({
+		    			id: rec.get('id'),
+		    			value: rec.get('value')
+		    		});
 		    	});
 		    	
 		    	return data;
@@ -227,6 +306,14 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     	
     	if (this.record.id != 0 && this.record.get('definition').keyFieldConfig.value) {
     		this.storeWindowGrid.setStoreFromArray(this.record.get('definition').keyFieldConfig.value.records);
+    		
+    		// if there is default value check it
+    		if (this.record.get('definition').keyFieldConfig.value['default']) {
+    			var defaultRecIdx = this.storeWindowGrid.store.findExact('id', this.record.get('definition').keyFieldConfig.value['default']);
+    			if (defaultRecIdx !== -1) {
+    				this.storeWindowGrid.store.getAt(defaultRecIdx).set('default', true);
+    			}
+    		}
     	}
 		
 		return this.storeWindowGrid;
@@ -272,9 +359,8 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             totalcount: Tine.Tinebase.registry.get('userApplications').length
         });
         
-        this.modelStore = new Ext.data.JsonStore({
-        	root: 'results',
-        	totalProperty: 'totalcount',
+        this.modelStore = new Ext.data.ArrayStore({
+			idIndex: 0,
             fields: [{name: 'value'}, {name: 'name'}]
         });
         
@@ -315,8 +401,8 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     forceSelection: true,
                     listeners: {
                     	scope: this,
-                    	'select': function (combo) {
-                    		this.getApplicationModels(combo.getValue());
+                    	'select': function (combo, rec) {
+                    		this.getApplicationModels(rec);
                     	}
                     }
                 }, {

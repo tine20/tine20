@@ -183,23 +183,7 @@ class Admin_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         
         return $result;
     }
-    
-    /**
-     * get application models
-     * 
-     * @param string $application
-     * @return array
-     */
-    public function getApplicationModels($application)
-    {
-    	$models = Admin_Controller_Application::getInstance()->getApplicationModels($application);
-    	
-    	return array(
-            'results'       => $models,
-            'totalcount'    => count($models)
-        );
-    }
-        
+            
     /********************************** Users *********************************/
     
     /**
