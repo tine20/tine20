@@ -76,12 +76,3 @@ Tine.widgets.customfields.Field = {
         }
     }
 };
-
-//Tine.widgets.customfields.Field.prototype = {
-//    app: null,
-//    cfConfig: null
-//    
-////    app: null,
-////    model: null,
-////    name: null
-//};
