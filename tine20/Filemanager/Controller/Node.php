@@ -102,8 +102,10 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                         ' ' . $path->statpath);
                 if ($path->name === Tinebase_Model_Container::TYPE_SHARED || 
-                    $path->statpath === '/' . Tinebase_Application::getInstance()->getApplicationByName('Filemanager')->getId()
-                        . '/' . Tinebase_Model_Container::TYPE_PERSONAL . '/' . $this->_currentAccount->getId()
+                    $path->statpath === $this->_backend->getApplicationBasePath(
+                        Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName), 
+                        Tinebase_Model_Container::TYPE_PERSONAL
+                    ) . '/' . $this->_currentAccount->getId()
                 ) {
                     if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ . 
                         ' Creating new path ' . $path->statpath);
@@ -230,12 +232,11 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * 
      * @param Tinebase_Model_Tree_Node_PathFilter $_pathFilter
      * @return string
-     * 
-     * @todo add /folders?
      */
     public function addBasePath($_path)
     {
         $basePath = $this->_backend->getApplicationBasePath(Tinebase_Application::getInstance()->getApplicationByName($this->_applicationName));
+        $basePath .= '/folders';
         
         $path = (strpos($_path, '/') === 0) ? $_path : '/' . $_path;
                 

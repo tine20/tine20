@@ -114,7 +114,7 @@ class Tinebase_FileSystem
                 throw new Timetracker_Exception_UnexpectedValue('Type can only be shared or personal.');
             }
             
-            $result .= '/' . $_type;
+            $result .= '/folders/' . $_type;
         }
         
         return $result;

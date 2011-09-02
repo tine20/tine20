@@ -26,14 +26,17 @@
  * @property    string                      name (last part of path)
  * @property    Tinebase_Model_Tree_Node_Path parentrecord
  * 
+ * @todo rename this to Tinebase_Model_Tree_Node_FoldersPath ?
+ * 
  * exploded flat path should look like this:
  * 
  * [0] => app id [required]
- * [1] => type [required] (personal|shared)
- * [2] => container | accountLoginName
- * [3] => container | directory
- * [4] => directory
+ * [1] => folders [required]
+ * [2] => type [required] (personal|shared)
+ * [3] => container | accountLoginName
+ * [4] => container | directory
  * [5] => directory
+ * [6] => directory
  * [...]
  */
 class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
@@ -131,7 +134,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     }
     
     /**
-     * remove app id from a path
+     * removes app id (and /folders namespace) from a path
      * 
      * @param string $_flatpath
      * @param Tinebase_Model_Application $_application
@@ -140,7 +143,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     public static function removeAppIdFromPath($_flatpath, $_application)
     {
         $appId = $_application->getId();
-        return preg_replace('@^/' . $appId . '@', '', $_flatpath);
+        return preg_replace('@^/' . $appId . '/folders@', '', $_flatpath);
     }
     
     /**
@@ -179,6 +182,9 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _parsePath($_path)
     {
+        if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+            . ' Parsing path: ' . $_path);
+        
         $pathParts = $this->_getPathParts($_path);
         
         $this->name                 = $pathParts[count($pathParts) - 1];
@@ -216,7 +222,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _getContainerType($_pathParts)
     {
-        $containerType = (isset($_pathParts[1])) ? $_pathParts[1] : self::TYPE_ROOT;
+        $containerType = (isset($_pathParts[2])) ? $_pathParts[2] : self::TYPE_ROOT;
         
         if (! in_array($containerType, array(
             Tinebase_Model_Container::TYPE_PERSONAL,
@@ -237,7 +243,7 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
      */
     protected function _getContainerOwner($_pathParts)
     {
-        $containerOwner = ($this->containerType !== Tinebase_Model_Container::TYPE_SHARED && isset($_pathParts[2])) ? $_pathParts[2] : NULL;
+        $containerOwner = ($this->containerType !== Tinebase_Model_Container::TYPE_SHARED && isset($_pathParts[3])) ? $_pathParts[3] : NULL;
         
         return $containerOwner;
     }
@@ -271,14 +277,14 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
         
         switch ($this->containerType) {
             case Tinebase_Model_Container::TYPE_SHARED:
-                if (!empty($_pathParts[2])) {
-                    $container = $this->_searchContainerByName($_pathParts[2], Tinebase_Model_Container::TYPE_SHARED);
+                if (!empty($_pathParts[3])) {
+                    $container = $this->_searchContainerByName($_pathParts[3], Tinebase_Model_Container::TYPE_SHARED);
                 }
                 break;
                 
             case Tinebase_Model_Container::TYPE_PERSONAL:
-                if (count($_pathParts) > 3) {
-                    $subPathParts = explode('/', $_pathParts[3], 2);
+                if (count($_pathParts) > 4) {
+                    $subPathParts = explode('/', $_pathParts[4], 2);
                     $container = $this->_searchContainerByName($subPathParts[0], Tinebase_Model_Container::TYPE_PERSONAL);
                 }
                 break;
@@ -324,14 +330,14 @@ class Tinebase_Model_Tree_Node_Path extends Tinebase_Record_Abstract
     {
         $pathParts = $_pathParts;
         
-        if (count($pathParts) > 2) {
+        if (count($pathParts) > 3) {
             // replace account login name with id
             if ($this->containerOwner) {
-                $pathParts[2] = Tinebase_User::getInstance()->getFullUserByLoginName($this->containerOwner)->getId();
+                $pathParts[3] = Tinebase_User::getInstance()->getFullUserByLoginName($this->containerOwner)->getId();
             }
             
             // replace container name with id
-            $containerPartIdx = ($this->containerType === Tinebase_Model_Container::TYPE_SHARED) ? 2 : 3;
+            $containerPartIdx = ($this->containerType === Tinebase_Model_Container::TYPE_SHARED) ? 3 : 4;
             if (isset($pathParts[$containerPartIdx]) && $this->container && $pathParts[$containerPartIdx] === $this->container->name) {
                 $pathParts[$containerPartIdx] = $this->container->getId();
             }
