@@ -505,7 +505,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
              
             newPath = targetPath + '/' + nodeName;
             copy = new Ext.tree.AsyncTreeNode({text: nodeName, path: newPath, name: node.data.name
-                , nodeRecord: newNodeRecord, accountGrants: node.data.account_grants});           
+                , nodeRecord: newNodeRecord, account_grants: node.data.account_grants});           
         }
                 
         copy.attributes.nodeRecord.beginEdit();
@@ -533,7 +533,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var newNodeRecord = new Tine.Filemanager.Model.Node(nodeData);
 
         var newNode = new Ext.tree.AsyncTreeNode({text: nodeName, path: nodeData.path, name: nodeData.name
-            , nodeRecord: newNodeRecord, accountGrants: nodeData.account_grants, id: nodeData.id});           
+            , nodeRecord: newNodeRecord, account_grants: nodeData.account_grants, id: nodeData.id});           
 
         newNode.attributes.nodeRecord.beginEdit();
         newNode.attributes.nodeRecord.set('path', nodeData.path);
