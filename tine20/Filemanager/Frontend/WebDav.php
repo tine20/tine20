@@ -16,6 +16,12 @@
  */
 class Filemanager_Frontend_WebDav extends Filemanager_Frontend_WebDav_Node implements Sabre_DAV_ICollection
 {
+    /**
+     * (non-PHPdoc)
+     * @see library/Sabre/DAV/Sabre_DAV_ICollection::getChildren()
+     * 
+     * @todo should check if tree nodes exist in db
+     */
     public function getChildren() 
     {
         if (Tinebase_Core::isLogLevel(Zend_Log::TRACE)) Tinebase_Core::getLogger()->trace(__METHOD__ . '::' . __LINE__ . ' path: ' . $this->_fileSystemPath);
