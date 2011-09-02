@@ -36,6 +36,17 @@ Tine.widgets.customfields.Field = {
                             keyFieldName: options.keyFieldName ? options.keyFieldName : cfConfig.get('name')
                         });
                         break;
+                   	case 'record':
+                   		var options = def.options ? def.options : {},
+                            recordConfig = def.recordConfig ? def.recordConfig : null;
+                            
+                        Ext.apply(fieldDef, {
+                            xtype: 'tinerecordpickercombobox',
+                            app: options.app ? options.app : app,
+                            resizable: true,
+                            recordClass: eval(recordConfig.value.records)
+                        });
+                        break;
                     case 'integer':
                     case 'int':
                         fieldDef.xtype = 'numberfield';

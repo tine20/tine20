@@ -45,6 +45,14 @@ Tine.widgets.customfields.Renderer = function(){
                         return Tine.Tinebase.widgets.keyfield.Renderer.render(app, keyFieldName, customfields[cfName]);
                     };
                     
+                } else if (['record'].indexOf(Ext.util.Format.lowercase(cfDefinition.type)) > -1) {
+                	renderers[key] = function(customfields) {
+                		var recordClass = eval(cfDefinition.recordConfig.value.records);
+                		                		
+                        return Ext.isObject(customfields[cfName]) && customfields[cfName].hasOwnProperty(recordClass.getMeta('titleProperty'))
+                        	? customfields[cfName][recordClass.getMeta('titleProperty')]
+                        	: customfields[cfName];
+                    };
                 } else {
                     renderers[key] = function(customfields) {
                     	switch (cfDefinition.type)

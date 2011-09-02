@@ -322,7 +322,15 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $idx = $_configs->getIndexById($customField->customfield_id);
             if ($idx !== FALSE) {
                 $config = $_configs[$idx];
-                $result[$config->name] = $customField->value;
+                if ($config->definition['type'] == 'record') {
+                	$modelParts = explode('.', $config->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
+                	$controllerName = $modelParts[1] . '_Controller_' . $modelParts[3];	
+                	$controller = call_user_func(array($controllerName, 'getInstance'));
+                	$result[$config->name] = $controller->get($customField->value)->toArray();
+                }
+                else {
+                	$result[$config->name] = $customField->value;
+                }
             }
         }
         $_record->customfields = $result;
