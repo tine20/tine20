@@ -47,7 +47,17 @@ Tine.widgets.customfields.Renderer = function(){
                     
                 } else {
                     renderers[key] = function(customfields) {
-                        return Ext.util.Format.htmlEncode(customfields[cfName]); 
+                    	switch (cfDefinition.type)
+                    	{
+                    		case 'date':
+                    			return Tine.Tinebase.common.dateRenderer(customfields[cfName]);
+                    		case 'datetime':
+                    			return Tine.Tinebase.common.dateTimeRenderer(customfields[cfName]);
+                    		case 'time':
+                    			return Tine.Tinebase.common.timeRenderer(customfields[cfName]);
+                    		default:
+                    			return Ext.util.Format.htmlEncode(customfields[cfName]);	
+                    	}
                     };
                 }
             }
