@@ -371,6 +371,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     
     
     /**
+     * TODO: action handler should do this
+//     *  
      * called when tree selection changes
      * 
      * @param {} sm     SelectionModel
@@ -390,13 +392,18 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             grid.action_goUpFolder.enable();
         }
                 
-        if(!!node && !!node.attributes && !!node.attributes.account_grants && node.attributes.account_grants.addGrant) {
-            grid.action_upload.enable();
+        if(node && node.attributes && node.attributes.nodeRecord.isCreateFolderAllowed()) {
             grid.action_createFolder.enable();
         }
         else {
-            grid.action_upload.disable();
             grid.action_createFolder.disable();
+        }
+        
+        if(node && node.attributes && node.attributes.nodeRecord.isDropFilesAllowed()) {
+            grid.action_upload.enable();
+        }
+        else {
+            grid.action_upload.disable();
         }
         
         grid.currentFolderNode = node; 
