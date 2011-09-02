@@ -735,14 +735,30 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         fileRecord.set('size', record.size);
         fileRecord.set('name', record.name);
         fileRecord.set('path', record.path);
+        fileRecord.endEdit();
         fileRecord.commit(false);
-               
+       
+        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+        grid = app.getMainScreen().getCenterPanel();
+
+        var allRecordsComplete = true;
+        var storeItems = grid.getStore().getRange();
+        for(var i=0; i<storeItems.length; i++) {
+            if(storeItems[i].get('status') && storeItems[i].get('status') !== 'complete') {
+                allRecordsComplete = false;
+                break;
+            }
+        }
+
+        if(allRecordsComplete) {
+            grid.pagingToolbar.refresh.enable();
+        }
     },
     
     /**
      * upload new file and add to store
      * 
-     * @param {} fileSelector
+     * @param {ux.BrowsePlugin} fileSelector
      * @param {} e
      */
     onFilesSelect: function (fileSelector, targetEl) {
@@ -770,8 +786,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             }
         }
         
-        
-        if(!nodeRecord.isDropFilesAllowed()) {
+                if(!nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     _('Upload Failed'), 
                     app.i18n._('Dropping on this folder not allowed!')
@@ -781,6 +796,11 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         }    
         
         var files = fileSelector.getFileList();
+
+        if(files.length > 0) {
+            grid.pagingToolbar.refresh.disable();
+        }
+        
         Ext.each(files, function (file) {
 
             var fileName = file.name || file.fileName;

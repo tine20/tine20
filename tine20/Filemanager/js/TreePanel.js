@@ -554,8 +554,11 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      */
     onNodeCreated: function(response, request, upload) {
        
+        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+        grid = app.getMainScreen().getCenterPanel();
+
         var record = Ext.util.JSON.decode(response.responseText);
-                
+
         var fileRecord = upload.fileRecord;
         fileRecord.beginEdit();
         fileRecord.set('contenttype', record.contenttype);
@@ -568,7 +571,9 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         fileRecord.set('name', record.name);
         fileRecord.set('path', record.path);
         fileRecord.commit(false);
-               
+
+        grid.pagingToolbar.refresh.enable();
+
     },
     
     /**
