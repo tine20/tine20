@@ -244,6 +244,36 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
     }
     
     /**
+     * delete custom fields for an application
+     *
+     * @param string|Tinebase_Model_Application $_applicationId
+     * @return integer numer of deleted custom fields
+     */
+    public function deleteCustomFieldsForApplication($_applicationId)
+    {
+    	$this->_clearCache();
+        $applicationId = Tinebase_Model_Application::convertApplicationIdToInt($_applicationId);
+ 
+        $filterValues = array(array(
+            'field'     => 'application_id', 
+            'operator'  => 'equals', 
+            'value'     => $applicationId
+        ));
+            
+      	$filter = new Tinebase_Model_CustomField_ConfigFilter($filterValues);
+      	$filter->customfieldACLChecks(FALSE);
+        $customFields = $this->_backendConfig->search($filter);
+            
+    	$deletedCount = 0;
+        foreach ($customFields as $customField) {
+       		$this->deleteCustomField($customField);
+       		$deletedCount++;
+		}
+		
+		return $deletedCount;
+    }
+    
+    /**
      * save custom fields of record in its custom fields table
      *
      * @param Tinebase_Record_Interface $_record
