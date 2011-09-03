@@ -160,21 +160,23 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * Set field with store config
      */ 
     onStoreWindowOK: function () {
-        this[this.fieldType + 'Config'] = {
-            value: {
-                records: this[this.fieldType + 'Store'].getValue()      
-            }
-        };
-        
-        // set default if defined for keyField
-        if (this.fieldType === 'keyField') {
-	        var defaultRecIdx = this[this.fieldType + 'Store'].store.findExact('default', true);
-	        if (defaultRecIdx !== -1) {
-	            this[this.fieldType + 'Config'].value['default'] = this[this.fieldType + 'Store'].store.getAt(defaultRecIdx).get('id');
+    	if (this[this.fieldType + 'Store'].isValid()) {
+	        this[this.fieldType + 'Config'] = {
+	            value: {
+	                records: this[this.fieldType + 'Store'].getValue()      
+	            }
+	        };
+	        
+	        // set default if defined for keyField
+	        if (this.fieldType === 'keyField') {
+		        var defaultRecIdx = this[this.fieldType + 'Store'].store.findExact('default', true);
+		        if (defaultRecIdx !== -1) {
+		            this[this.fieldType + 'Config'].value['default'] = this[this.fieldType + 'Store'].store.getAt(defaultRecIdx).get('id');
+		        }
 	        }
-        }
-         
-        this.onStoreWindowClose();
+	         
+	        this.onStoreWindowClose();
+    	}
     },
     
     /**
@@ -193,10 +195,10 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getApplicationModels: function (application, customFieldModel) {
         var models      = [],
-            useMode,
+            useModel,
             appName     = Ext.isString(application) ? application : application.get('name'),
-            app         = Tine.Tinebase.appMgr.get(appName);
-            trans       = app && app.i18n ? app.i18n : Tine.Tinebase.translation;
+            app         = Tine.Tinebase.appMgr.get(appName),
+            trans       = app && app.i18n ? app.i18n : Tine.Tinebase.translation,
             appModels   = Tine[appName].Model; 
         
         if (appModels) {
@@ -332,6 +334,9 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 });
                 
                 return data;
+            },
+            isValid: function () {
+            	return true;
             }
         });
         
@@ -419,6 +424,16 @@ Tine.Admin.CustomfieldEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             },
             getValue: function () {
             	return this.items.get(1).getValue();
+            },
+            isValid: function () {
+            	try {
+            		var model = eval(this.items.get(1).getValue());
+            	} catch (e) {
+            		Ext.Msg.alert(_('Errors'), self.app.i18n._('Given record class not found'));
+            		return false;
+            	}
+            	
+            	return true;
             }
         });
         
