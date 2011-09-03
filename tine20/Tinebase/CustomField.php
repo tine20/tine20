@@ -322,11 +322,16 @@ class Tinebase_CustomField implements Tinebase_Controller_SearchInterface
             $idx = $_configs->getIndexById($customField->customfield_id);
             if ($idx !== FALSE) {
                 $config = $_configs[$idx];
-                if ($config->definition['type'] == 'record') {
-                	$modelParts = explode('.', $config->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
-                	$controllerName = $modelParts[1] . '_Controller_' . $modelParts[3];	
-                	$controller = call_user_func(array($controllerName, 'getInstance'));
-                	$result[$config->name] = $controller->get($customField->value)->toArray();
+                if (strtolower($config->definition['type']) == 'record') {
+                	try {
+	                	$modelParts = explode('.', $config->definition['recordConfig']['value']['records']); // get model parts from saved record class e.g. Tine.Admin.Model.Group
+	                	$controllerName = $modelParts[1] . '_Controller_' . $modelParts[3];	
+	                	$controller = call_user_func(array($controllerName, 'getInstance'));
+	                	$result[$config->name] = $controller->get($customField->value)->toArray();
+                	} catch (Exception $e) {
+                		if (Tinebase_Core::isLogLevel(Zend_Log::ERR)) Tinebase_Core::getLogger()->err(__METHOD__ . '::' . __LINE__ . ' Error resolving custom field record: ' . $e->getMessage());
+                		$result[$config->name] = $customField->value;
+                	}
                 }
                 else {
                 	$result[$config->name] = $customField->value;
