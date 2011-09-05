@@ -387,8 +387,12 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
             {
                 key: [10,13], // ctrl + return
                 ctrl: true,
-                fn: this.onSaveAndClose,
-                scope: this
+                scope: this,
+                fn: function() {
+                    // focus ok btn
+                    this.action_saveAndClose.items[0].focus();
+                    this.onSaveAndClose.defer(10, this);
+                }
             }
         ]);
 

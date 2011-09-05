@@ -48,6 +48,7 @@ Tine.widgets.customfields.CustomfieldSearchCombo = Ext.extend(Ext.form.ComboBox,
     pageSize: 10,
     displayField: 'value',
     valueField: 'value',
+    enableKeyEvents: true,
     
     /**
      * @private
@@ -65,6 +66,7 @@ Tine.widgets.customfields.CustomfieldSearchCombo = Ext.extend(Ext.form.ComboBox,
         });
         
         this.on('beforequery', this.onBeforeQuery, this);
+        this.on('keypress', this.syncValues, this, {buffer: 500});
         
         Tine.widgets.customfields.CustomfieldSearchCombo.superclass.initComponent.call(this);
     },
@@ -82,6 +84,15 @@ Tine.widgets.customfields.CustomfieldSearchCombo = Ext.extend(Ext.form.ComboBox,
         };
     },
     
+    /**
+     * sync values so values don't get lost if no value is explicitly selected
+     * this happens e.g. when ctrl+enter after searching
+     */
+    syncValues: function() {
+        var val = this.getRawValue();
+        this.setValue(val);
+    },
+     
     /**
      * use beforequery to set query filter
      * 
