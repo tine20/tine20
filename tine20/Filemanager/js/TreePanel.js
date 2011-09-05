@@ -101,6 +101,10 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 if(selectionContainsFiles && !n.node.attributes.account_grants) {
                     preventDrop = true;
                 }
+                
+                if(n.node.isAncestor(dd.dragData.node)) {
+                    preventDrop = true;
+                }
 
                 return n.node.attributes.nodeRecord.isCreateFolderAllowed() 
                             && (!dd.dragData.node || dd.dragData.node.attributes.nodeRecord.isDragable())
@@ -127,6 +131,10 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
                 } 
 
                 if(selectionContainsFiles && !n.node.attributes.account_grants) {
+                    preventDrop = true;
+                }
+                
+                if(n.node.isAncestor(dd.dragData.node)) {
                     preventDrop = true;
                 }
                 
@@ -372,7 +380,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     
     /**
      * TODO: action handler should do this
-//     *  
+     *  
      * called when tree selection changes
      * 
      * @param {} sm     SelectionModel

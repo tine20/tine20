@@ -93,7 +93,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             ptype: 'ux.browseplugin',
             multiple: true,
             scope: this,
-            handler: this.onFilesSelect //function(e) {alert("grid handler");}
+            handler: this.onFilesSelect
         });
 
         Tine.Filemanager.GridPanel.superclass.initComponent.call(this);      
@@ -553,14 +553,30 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     onDeleteItems: function(button, event) {
 
         var app = this.app;
-        var nodeName = app.i18n._('user file folders');
+        var nodeName = '';
+        var nodes = app.getMainScreen().getCenterPanel().selectionModel.getSelections();
         
-        var selectedNodes = app.mainScreen.GridPanel.selectionModel.getSelections();
-        Ext.MessageBox.confirm(_('Confirm'), String.format(_('Do you really want to delete the {0} ?'), nodeName), function(_btn){
-            if (selectedNodes && _btn == 'yes') {
+        if(nodes && nodes.length) {
+            for(var i=0; i<nodes.length; i++) {
+                var currNodeData = nodes[i].data;
+                
+                if(typeof currNodeData.name == 'object') {
+                    nodeName += currNodeData.name.name + ', ';    
+                }
+                else {
+                    nodeName += currNodeData.name + ', ';  
+                }
+            }
+            if(nodeName.length > 0) {
+                nodeName = nodeName.substring(0, nodeName.length - 2);
+            }
+        }
+        
+        Ext.MessageBox.confirm(_('Confirm'), String.format(app.i18n._('Do you really want to delete "{0}"?'), nodeName), function(_btn){
+            if (nodes && _btn == 'yes') {
                 
                 Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} ' ), nodeName ));
-                Tine.Filemanager.fileRecordBackend.deleteItems(selectedNodes);
+                Tine.Filemanager.fileRecordBackend.deleteItems(nodes);
             }
         }, this);
 
@@ -785,16 +801,16 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 nodeRecord = new Tine.Filemanager.Model.Node(newTargetNode.data);
             }
         }
-        
-                if(!nodeRecord.isDropFilesAllowed()) {
+
+        if(!nodeRecord.isDropFilesAllowed()) {
             Ext.MessageBox.alert(
                     _('Upload Failed'), 
                     app.i18n._('Dropping on this folder not allowed!')
-                ).setIcon(Ext.MessageBox.ERROR);
-            
+            ).setIcon(Ext.MessageBox.ERROR);
+
             return;
         }    
-        
+
         var files = fileSelector.getFileList();
 
         if(files.length > 0) {
@@ -910,6 +926,11 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     }
                 }
                 
+                var targetNode = treePanel.getNodeById(target.id);
+                if(targetNode && targetNode.isAncestor(nodes[0])) {
+                    return false;
+                }
+                
                 Tine.Filemanager.fileRecordBackend.copyNodes(nodes, target, !e.ctrlKey);
                 return true;
             },
@@ -919,6 +940,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
                     grid = app.getMainScreen().getCenterPanel(),
                     dropIndex = grid.getView().findRowIndex(e.target),
+                    treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
                     dragData = data,
                     target; 
                                 
@@ -944,6 +966,11 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                     }
                 }
                 
+                var targetNode = treePanel.getNodeById(target.id);
+                if(targetNode && targetNode.isAncestor(nodes[0])) {
+                    return false;
+                }
+                               
                 return this.dropAllowed;               
             }
         });  
