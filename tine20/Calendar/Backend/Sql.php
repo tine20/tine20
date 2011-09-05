@@ -197,6 +197,7 @@ class Calendar_Backend_Sql extends Tinebase_Backend_Sql_Abstract
 
         $select = $this->_getSelectSimple('*', $_getDeleted);
         $select->where($this->_db->quoteInto("{$this->_db->quoteIdentifier('cal_events.id')} IN (?)", !empty($ids) ? $ids : ' ' ));
+        $_pagination->appendPaginationSql($select);
         
         // append grants filters : only take limited set of attendee into account for grants computation
         $attenderFilter = $_filter->getFilter('attender');
