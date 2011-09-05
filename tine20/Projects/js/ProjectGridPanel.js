@@ -75,7 +75,9 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 sortable: true,
                 resizable: true
             },
-            columns: [{
+            columns: [
+            {   id: 'tags', header: this.app.i18n._('Tags'), width: 40,  dataIndex: 'tags', sortable: false, renderer: Tine.Tinebase.common.tagsRenderer },                
+            {
                 id: 'number',
                 header: this.app.i18n._("Number"),
                 width: 100,
