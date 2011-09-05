@@ -68,7 +68,7 @@ Tine.Filemanager.GridContextMenu = {
                             params: params,
                             scope: this,
                             success: function(_result, _request){
-                                var nodeData = Ext.util.JSON.decode(_result.responseText);
+                                var nodeData = Ext.util.JSON.decode(_result.responseText)[0];
                                 this.scope.fireEvent('containerrename', nodeData);
                                 Ext.MessageBox.hide();
 
@@ -76,7 +76,16 @@ Tine.Filemanager.GridContextMenu = {
                                 if (this.backendModel == 'Node') {
                                     var grid = this.scope.app.getMainScreen().getCenterPanel();
                                     grid.getStore().reload();
-                                    grid.currentFolderNode.reload();
+                                    
+                                    var nodeName = nodeData.name;
+                                    if(typeof nodeName == 'object') {
+                                        nodeName = nodeName.name;
+                                    }
+                                    
+                                    var treeNode = this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel().getNodeById(nodeData.id);                                 
+                                    if(treeNode) {
+                                        treeNode.setText(nodeName);
+                                    }
                                 }
                             },
                             failure: function(result, request) {
@@ -148,16 +157,22 @@ Tine.Filemanager.GridContextMenu = {
                         success: function(_result, _request){
                               
                            if(nodes &&  this.backendModel == 'Node') {
-                                for(var i=0; i<nodes.length; i++){
-                                    this.scope.fireEvent('containerdelete', nodes[i].data.container_id);
-                                    this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel().fireEvent('containerdelete', nodes[i].data.container_id);
+                               var treePanel = this.scope.app.getMainScreen().getWestPanel().getContainerTreePanel();
+                               for(var i=0; i<nodes.length; i++){
+                                    this.scope.fireEvent('containerdelete', nodes[i].data.container_id);                                    
+                                    treePanel.fireEvent('containerdelete', nodes[i].data.container_id);
 
                                     // TODO: in EventHandler auslagern
-                                    this.scope.app.getMainScreen().getCenterPanel().getStore().reload();
-                                    this.scope.app.getMainScreen().getCenterPanel().currentFolderNode.reload();
+                                  var treeNode = treePanel.getNodeById(nodes[i].id);
+                                  if(treeNode) {
+                                      treeNode.parentNode.removeChild(treeNode);
+                                  }
+                                    
                                     
                                 }
-                            }
+                                this.scope.app.getMainScreen().getCenterPanel().getStore().reload();
+
+                           }
                            
                             // TODO: evaluate in event handler
                             if (this.backendModel == 'Node') {

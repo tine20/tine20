@@ -116,10 +116,16 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             return [folder];
         };
         
-        options.success = function(_result){
+        options.success = function(result){
             var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
             var grid = app.getMainScreen().getCenterPanel();
-            grid.currentFolderNode.reload();            
+            var nodeData = Ext.util.JSON.decode(result);
+            var newNode = app.getMainScreen().getWestPanel().getContainerTreePanel().createTreeNode(nodeData, parentNode);
+            
+            var parentNode = grid.currentFolderNode;
+            if(parentNode) {
+                parentNode.appendChild(newNode);
+            }
             grid.getStore().reload();
 //            this.fireEvent('containeradd', nodeData);
             Ext.MessageBox.hide();
@@ -160,14 +166,23 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             return [folder];
         };
         
-        options.success = function(_result){
-            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-            var grid = app.getMainScreen().getCenterPanel();
-            grid.currentFolderNode.reload();            
+        options.success = (function(result){
+            var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
+                grid = app.getMainScreen().getCenterPanel(),
+                treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
+                nodeData = this.items;
+            
+            for(var i=0; i<nodeData.length; i++) {
+                var treeNode = treePanel.getNodeById(nodeData[i].id);
+                if(treeNode) {
+                    treeNode.parentNode.removeChild(treeNode);
+                }              
+            }
+            
             grid.getStore().reload();
 //            this.fireEvent('containerdelete', nodeData);
             Ext.MessageBox.hide();
-        };
+        }).createDelegate({items: items});
         
         return this.doXHTTPRequest(options);
     },
