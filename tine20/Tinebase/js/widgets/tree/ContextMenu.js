@@ -367,6 +367,15 @@ Tine.widgets.tree.ContextMenu = {
                                     this.scope.getSelectionModel().select(node.parentNode);
                                     this.scope.fireEvent('click', node.parentNode, Ext.EventObject.setEvent());
                                 }
+
+                                // TODO: im event auswerten
+                                if (this.backendModel == 'Node') {
+                                    var grid = this.scope.app.getMainScreen().getCenterPanel();
+                                    if(grid.currentFolderNode.isAncestor(node)) {
+                                        node.parentNode.select();
+                                    }
+                                }
+                                
                                 node.remove();
                                 if (this.backendModel == 'Container' || this.backendModel == 'Node') {
                                     this.scope.fireEvent('containerdelete', node.attributes.container);
@@ -375,10 +384,7 @@ Tine.widgets.tree.ContextMenu = {
                                 }
                             }
                            
-                            // TODO: im event auswerten
-                            if (this.backendModel == 'Node') {
-                                this.scope.app.mainScreen.GridPanel.getStore().reload();
-                            }
+                            
                             
                             Ext.MessageBox.hide();
                         },
