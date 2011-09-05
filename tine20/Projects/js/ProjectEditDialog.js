@@ -124,17 +124,37 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     margins: '0 5 0 5',
                     border: true,
                     items: [
-                    new Tine.widgets.activities.ActivitiesPanel({
-                        app: 'Projects',
-                        showAddNoteForm: false,
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    }),
-                    new Tine.widgets.tags.TagPanel({
-                        app: 'Projects',
-                        border: false,
-                        bodyStyle: 'border:1px solid #B5B8C8;'
-                    })]
+                        new Ext.Panel({
+                            title: this.app.i18n._('Description'),
+                            iconCls: 'descriptionIcon',
+                            layout: 'form',
+                            labelAlign: 'top',
+                            border: false,
+                            items: [{
+                                style: 'margin-top: -4px; border 0px;',
+                                labelSeparator: '',
+                                xtype: 'textarea',
+                                name: 'description',
+                                hideLabel: true,
+                                grow: false,
+                                preventScrollbars: false,
+                                anchor: '100% 100%',
+                                emptyText: this.app.i18n._('Enter description'),
+                                requiredGrant: 'editGrant'                           
+                            }]
+                        }),
+                        new Tine.widgets.activities.ActivitiesPanel({
+                            app: 'Projects',
+                            showAddNoteForm: false,
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        }),
+                        new Tine.widgets.tags.TagPanel({
+                            app: 'Projects',
+                            border: false,
+                            bodyStyle: 'border:1px solid #B5B8C8;'
+                        })
+                    ]
                 }]
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
