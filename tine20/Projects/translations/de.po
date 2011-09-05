@@ -1,0 +1,111 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - ExampleApplication\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2010-04-23 12:36+0100\n"
+"Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr "Beispielanwendung"
+
+#: js/ExampleRecordGridPanel.js:74
+msgid "Quick search"
+msgstr "Schnellsuche"
+
+#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
+msgid "Name"
+msgstr "Name"
+
+#: js/ExampleRecordGridPanel.js:108
+msgid "Title"
+msgstr "Titel"
+
+#: js/ExampleRecordGridPanel.js:114
+msgid "Status"
+msgstr "Status"
+
+#: js/ExampleRecordGridPanel.js:121
+msgid "Budget"
+msgstr "Budget"
+
+#: js/ExampleRecordGridPanel.js:145
+msgid "Show closed"
+msgstr "Zeige geschlossene"
+
+#: js/ExampleRecordEditDialog.js:87
+msgid "ExampleRecord"
+msgstr "BeispielEintrag"
+
+#: js/Model.js:31
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] "Beispieleintrag"
+msgstr[1] "Beispieleinträge"
+
+#: js/Model.js:35
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] "Liste von Beispieleinträgen"
+msgstr[1] "Listen von Beispieleinträgen"
+
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr "BeispielAnwendung"
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s persönliche Beispieleinträge"
+
+#~ msgid "ExampleRecords"
+#~ msgstr "BeispielEinträge"
+
+#~ msgid "All ExampleRecords"
+#~ msgstr "Alle BeispielEinträge"
+
+#~ msgid "Description"
+#~ msgstr "Beschreibung"
+
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "Eintrags Liste"
+#~ msgstr[1] "Eintrags Listen"
+
+#~ msgid "Number"
+#~ msgstr "Zahl"
+
+#~ msgid "Unit"
+#~ msgstr "Einheit"
+
+#~ msgid "Unit Price"
+#~ msgstr "Preis pro Einheit"
+
+#~ msgid "Timesheets are billable"
+#~ msgstr "Stundenzettel sind abrechenbar"
+
+#~ msgid "closed"
+#~ msgstr "geschlossen"
+
+#~ msgid "open"
+#~ msgstr "offen"
+
+#~ msgid "Billed"
+#~ msgstr "Berechnet"
+
+#~ msgid "not yet billed"
+#~ msgstr "noch nicht berechnet"
+
+#~ msgid "to bill"
+#~ msgstr "zu berechnen"
+
+#~ msgid "billed"
+#~ msgstr "berechnet"

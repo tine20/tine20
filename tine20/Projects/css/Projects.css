@@ -1,0 +1,20 @@
+/**
+ * Tine 2.0
+ * 
+ * @package     ExampleApplication
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schuele <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @version     $Id: Tasks.css 3797 2008-08-11 08:33:21Z c.weiss@metaways.de $
+ *
+ */
+ 
+.ExampleApplicationIconCls {
+    background-image:url(../../images/oxygen/16x16/actions/document-open-recent.png) !important;
+}
+.x-btn-medium .ExampleApplicationIconCls {
+    background-image:url(../../images/oxygen/22x22/actions/document-open-recent.png) !important;
+}
+.x-btn-large .ExampleApplicationIconCls {
+    background-image:url(../../images/oxygen/32x32/actions/document-open-recent.png) !important;
+}
