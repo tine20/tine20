@@ -67,7 +67,7 @@ Tine.Projects.Model.Project.getDefaultData = function() {
  * @return {Object} filterModel definition
  */ 
 Tine.Projects.Model.Project.getFilterModel = function() {
-    var app = Tine.Tinebase.appMgr.get('ExampleApplication');
+    var app = Tine.Tinebase.appMgr.get('Projects');
     
     return [
         {label: _('Quick search'),    field: 'query',       operators: ['contains']},

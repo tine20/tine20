@@ -33,7 +33,6 @@ Tine.Projects.Application = Ext.extend(Tine.Tinebase.Application, {
  * @author      Philipp Schüle <p.schuele@metaways.de>
  */
 Tine.Projects.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
-    
     activeContentType: 'Project'
 });
     

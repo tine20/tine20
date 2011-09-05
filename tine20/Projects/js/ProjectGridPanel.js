@@ -55,6 +55,7 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         this.recordProxy = Tine.Projects.recordBackend;
         
         this.gridConfig.cm = this.getColumnModel();
+        this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -93,7 +94,7 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 sortable: true,
                 dataIndex: 'status',
                 renderer: this.statusRenderer.createDelegate(this)
-            }]
+            }].concat(this.getModlogColumns())
         });
     },
     
@@ -104,14 +105,5 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     statusRenderer: function(value) {
         return this.app.i18n._hidden(value);
-    },
-    
-    /**
-     * return additional tb items
-     * @private
-     */
-    getToolbarItems: function(){
-        return [
-        ];
-    }    
+    }
 });
