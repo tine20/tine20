@@ -26,6 +26,8 @@ Tine.Tinebase.widgets.keyfield.Filter = Ext.extend(Tine.widgets.grid.FilterModel
      */
     keyfieldName: null,
     
+    defaultOperator: 'in',
+    
     /**
      * @private
      */
