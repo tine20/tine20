@@ -48,6 +48,7 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
     initComponent: function() {
         this.app = Tine.Tinebase.appMgr.get('Calendar');
         this.title = this.app.i18n._('Events');
+        this.record = this.editDialog.record;
 
         this.gridConfig.cm = this.getColumnModel();
         this.initFilterToolbar();
@@ -66,17 +67,17 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             typeof this.autoLoad == 'object' ?
                 this.autoLoad : undefined]);
     },
-    
-    /**
-     * called before store queries for data
-     */
-    onStoreBeforeload: function(store, options) {
-        
-        Tine.Calendar.ContactEventsGridPanel.superclass.onStoreBeforeload.apply(this, arguments);
-        if (! this.record_id) return false;
-        
-        options.params.filter.push({field: 'attender', operator: 'equals', value: {user_type: 'user', user_id: this.record_id}});
-    },
+//    
+//    /**
+//     * called before store queries for data
+//     */
+//    onStoreBeforeload: function(store, options) {
+//        
+//        Tine.Calendar.ContactEventsGridPanel.superclass.onStoreBeforeload.apply(this, arguments);
+//        if (! this.record.id) return false;
+//        
+//        options.params.filter.push({field: 'attender', operator: 'equals', value: {user_type: 'user', user_id: this.record.id}});
+//    },
     
     /**
      * initialises filter toolbar
@@ -84,15 +85,16 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     initFilterToolbar: function() {
         this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: _('Quick search'),    field: 'query',       operators: ['contains']},
-                {filtertype: 'tine.widget.container.filtermodel', app: this.app, recordClass: this.recordClass},
-                {filtertype: 'tinebase.tag', app: this.app}
-            ],
+            neverAllowSaving: true,
+            filterModels: Tine.Calendar.Model.Event.getFilterModel(),
             defaultFilter: 'query',
-            filters: []
+            filters: [
+                {field: 'query', operator: 'contains', value: ''},
+                {field: 'attender', operator: 'equals', value: {user_type: 'user', user_id: this.record}}
+            ]
         });
     },
+    
     /**
      * returns cm
      * 
@@ -134,7 +136,7 @@ Tine.Calendar.ContactEventsGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         attender = null;
         
         store.each(function(a) {
-            if (a.getUserId() == this.record_id && a.get('user_type') == 'user') {
+            if (a.getUserId() == this.record.id && a.get('user_type') == 'user') {
                 attender = a;
                 return false;
             }
