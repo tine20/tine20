@@ -56,6 +56,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
         this.recordProxy = Tine.ExampleApplication.recordBackend;
         
         this.gridConfig.cm = this.getColumnModel();
+        this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
@@ -102,7 +103,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
                 width: 100,
                 sortable: true,
                 dataIndex: 'budget'
-            }*/]
+            }*/].concat(this.getModlogColumns())
         });
     },
     
