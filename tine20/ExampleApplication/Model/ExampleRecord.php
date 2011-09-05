@@ -3,6 +3,7 @@
  * class to hold ExampleRecord data
  * 
  * @package     ExampleApplication
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,6 +14,7 @@
  * class to hold ExampleRecord data
  * 
  * @package     ExampleApplication
+ * @subpackage  Model
  */
 class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
 {  

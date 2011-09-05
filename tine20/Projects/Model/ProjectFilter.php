@@ -3,6 +3,7 @@
  * Tine 2.0
  * 
  * @package     Projects
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -12,6 +13,7 @@
 /**
  * Project filter Class
  * @package     Projects
+ * @subpackage  Model
  */
 class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup 
 {

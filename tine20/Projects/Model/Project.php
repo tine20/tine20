@@ -3,6 +3,7 @@
  * class to hold Project data
  * 
  * @package     Projects
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
@@ -13,6 +14,7 @@
  * class to hold Project data
  * 
  * @package     Projects
+ * @subpackage  Model
  */
 class Projects_Model_Project extends Tinebase_Record_Abstract
 {  
