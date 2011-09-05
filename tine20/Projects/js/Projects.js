@@ -48,3 +48,17 @@ Tine.Projects.TreePanel = Ext.extend(Tine.widgets.container.TreePanel, {
     filterMode: 'filterToolbar',
     recordClass: Tine.Projects.Model.Project
 });
+
+/**
+ * @class       Tine.Projects.FilterPanel
+ * @extends     Tine.widgets.persistentfilter.PickerPanel
+ *  
+ * @param {Object} config
+ */
+Tine.Projects.FilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.Projects.FilterPanel.superclass.constructor.call(this);
+};
+Ext.extend(Tine.Projects.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'Projects_Model_ProjectFilter'}]
+});
