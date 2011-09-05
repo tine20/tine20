@@ -46,15 +46,13 @@ Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
  *  
  * @return {Object} default data
  * @static
- * 
- * TODO generalize default container id handling
  */ 
 Tine.Projects.Model.Project.getDefaultData = function() { 
     var app = Tine.Tinebase.appMgr.get('Projects');
     var defaultsContainer = Tine.Projects.registry.get('defaultContainer');
     
     return {
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', defaultsContainer),
+        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer(),
         status: 'IN-PROCESS'
     };
 };

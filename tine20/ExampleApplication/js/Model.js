@@ -43,16 +43,14 @@ Tine.ExampleApplication.Model.ExampleRecord = Tine.Tinebase.data.Record.create(T
  *  
  * @return {Object} default data
  * @static
- * 
- * TODO generalize default container id handling
  */ 
 Tine.ExampleApplication.Model.ExampleRecord.getDefaultData = function() { 
     var app = Tine.Tinebase.appMgr.get('ExampleApplication');
     var defaultsContainer = Tine.ExampleApplication.registry.get('defaultContainer');
     
     return {
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', defaultsContainer)
-        // TODO add more defaults
+        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getDefaultContainer()
+        // [...] add more defaults
     };
 };
 
