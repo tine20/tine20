@@ -60,6 +60,27 @@ Tine.Projects.Model.Project.getDefaultData = function() {
 };
 
 /**
+ * get filtermodel of projects
+ * 
+ * @namespace Tine.ExampleApplication.Model
+ * @static
+ * @return {Object} filterModel definition
+ */ 
+Tine.Projects.Model.Project.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('ExampleApplication');
+    
+    return [
+        {label: _('Quick search'),    field: 'query',       operators: ['contains']},
+        {filtertype: 'tinebase.tag', app: app},
+        {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Projects.Model.Project},
+        {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},
+        {label: app.i18n._('Last modifier'),                                            field: 'last_modified_by',   valueType: 'user'},
+        {label: app.i18n._('Creation Time'),                                            field: 'creation_time',      valueType: 'date'},
+        {label: app.i18n._('Creator'),                                                  field: 'created_by',         valueType: 'user'}
+    ];
+};
+
+/**
  * default Project backend
  */
 Tine.Projects.recordBackend = new Tine.Tinebase.data.RecordProxy({
