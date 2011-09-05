@@ -148,7 +148,8 @@ Tine.Tasks.Task.getFilterModel = function() {
         {label: app.i18n._('Summary'),         field: 'summary' },
         {label: app.i18n._('Due Date'),        field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
         {
-            label: app.i18n._('Status'), 
+            label: app.i18n._('Status'),
+            field: 'status',
             filtertype: 'tine.widget.keyfield.filter', 
             app: app, 
             defaultValue: Tine.Tasks.Task.getClosedStatus(), 
