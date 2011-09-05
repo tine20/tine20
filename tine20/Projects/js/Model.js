@@ -54,8 +54,8 @@ Tine.Projects.Model.Project.getDefaultData = function() {
     var defaultsContainer = Tine.Projects.registry.get('defaultContainer');
     
     return {
-        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', defaultsContainer)
-        // TODO add more defaults
+        container_id: app.getMainScreen().getWestPanel().getContainerTreePanel().getSelectedContainer('addGrant', defaultsContainer),
+        status: 'IN-PROCESS'
     };
 };
 

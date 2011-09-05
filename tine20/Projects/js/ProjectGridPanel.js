@@ -80,7 +80,8 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 header: this.app.i18n._("Number"),
                 width: 100,
                 sortable: true,
-                dataIndex: 'number'
+                dataIndex: 'number',
+                hidden: true
             }, {
                 id: 'title',
                 header: this.app.i18n._("Title"),
@@ -93,7 +94,7 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 width: 150,
                 sortable: true,
                 dataIndex: 'status',
-                renderer: this.statusRenderer.createDelegate(this)
+                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Projects', 'projectStatus')
             }].concat(this.getModlogColumns())
         });
     },

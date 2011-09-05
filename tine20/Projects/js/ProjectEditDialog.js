@@ -103,7 +103,13 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                         fieldLabel: this.app.i18n._('Title'),
                         name: 'title',
                         allowBlank: false
-                        }]
+                        }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'Projects',
+                            keyFieldName: 'projectStatus',
+                            fieldLabel: this.app.i18n._('Status'),
+                            name: 'status',
+                            columnWidth: 0.5
+                        })]
                     ] 
                 }, {
                     // activities and tags
