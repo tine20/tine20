@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-01 11:27+0100\n"
-"PO-Revision-Date: 2011-09-01 11:27+0100\n"
+"POT-Creation-Date: 2011-09-02 14:18+0100\n"
+"PO-Revision-Date: 2011-09-02 14:18+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -83,7 +83,7 @@ msgstr "You have to supply a {0} name!"
 #: Filemanager/js/GridContextMenu.js:126
 #: Filemanager/js/GridPanel.js:476
 #: Filemanager/js/GridPanel.js:536
-#: Filemanager/js/GridPanel.js:562
+#: Filemanager/js/GridPanel.js:578
 #: Filemanager/js/Model.js:251
 msgid "Please wait"
 msgstr "Please wait"
@@ -94,13 +94,14 @@ msgid "Updating {0} \"{1}\""
 msgstr "Updating {0} \"{1}\""
 
 #: Filemanager/js/GridContextMenu.js:124
-#: Filemanager/js/GridPanel.js:559
+#: Filemanager/js/GridPanel.js:575
 msgid "Confirm"
 msgstr "Confirm"
 
 #: Filemanager/js/GridContextMenu.js:124
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Do you really want to delete the {0} \"{1}\"?"
+#: Filemanager/js/GridPanel.js:575
+msgid "Do you really want to delete \"{0}\"?"
+msgstr "Do you really want to delete \"{0}\"?"
 
 #: Filemanager/js/GridContextMenu.js:126
 msgid "Deleting {0} \"{1}\""
@@ -206,26 +207,26 @@ msgstr "No {0} added"
 msgid "Creating {0}..."
 msgstr "Creating {0}..."
 
-#: Filemanager/js/GridPanel.js:556
-msgid "user file folders"
-msgstr "folders"
-
-#: Filemanager/js/GridPanel.js:559
-msgid "Do you really want to delete the {0} ?"
-msgstr "Do you really want to delete the {0} ?"
-
-#: Filemanager/js/GridPanel.js:562
+#: Filemanager/js/GridPanel.js:578
 msgid "Deleting {0} "
 msgstr "Deleting {0} "
 
-#: Filemanager/js/GridPanel.js:646
-#: Filemanager/js/TreePanel.js:559
+#: Filemanager/js/GridPanel.js:662
+#: Filemanager/js/GridPanel.js:807
+#: Filemanager/js/TreePanel.js:615
+#: Filemanager/js/TreePanel.js:635
 msgid "Upload Failed"
 msgstr "Upload Failed"
 
-#: Filemanager/js/GridPanel.js:647
+#: Filemanager/js/GridPanel.js:663
+#: Filemanager/js/TreePanel.js:616
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
+
+#: Filemanager/js/GridPanel.js:808
+#: Filemanager/js/TreePanel.js:636
+msgid "Dropping on this folder not allowed!"
+msgstr "Dropping on this folder not allowed!"
 
 #: Filemanager/js/Model.js:337
 msgid "Quick search"
@@ -239,9 +240,11 @@ msgstr "Type"
 msgid "path"
 msgstr "path"
 
-#: Filemanager/js/TreePanel.js:560
-msgid "Dropping on this folder not allowed!"
-msgstr "Dropping on this folder not allowed!"
+#~ msgid "user file folders"
+#~ msgstr "folders"
+
+#~ msgid "Do you really want to delete the {0} \"{1}\"?"
+#~ msgstr "Do you really want to delete the {0} \"{1}\"?"
 
 #~ msgid "Copying data .. {0}"
 #~ msgstr "Copying data .. {0}"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Tine 2.0 - Tinebase\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-17 15:59+0100\n"
-"PO-Revision-Date: 2011-08-23 10:16+0100\n"
+"PO-Revision-Date: 2011-09-02 13:54+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1830,7 +1830,7 @@ msgstr "Neue {0}"
 
 #: Tinebase/js/widgets/tree/ContextMenu.js:165
 msgid "Please enter the name of the new {0}:"
-msgstr "Bitte den Namen für neue {0} eingeben:"
+msgstr "Bitte den Namen für neuen {0} eingeben:"
 
 #: Tinebase/js/widgets/tree/ContextMenu.js:168
 msgid "No {0} added"

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-01 11:26+0100\n"
-"PO-Revision-Date: 2011-09-01 11:27+0100\n"
+"POT-Creation-Date: 2011-09-02 14:08+0100\n"
+"PO-Revision-Date: 2011-09-02 14:18+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -98,8 +98,9 @@ msgid "Confirm"
 msgstr "Bestätigen"
 
 #: Filemanager/js/GridContextMenu.js:124
-msgid "Do you really want to delete the {0} \"{1}\"?"
-msgstr "Möchten Sie wirklich den {0} löschen? "
+#: Filemanager/js/GridPanel.js:559
+msgid "Do you really want to delete \"{0}\"?"
+msgstr "Möchten Sie \"{0}\" wirklich löschen? "
 
 #: Filemanager/js/GridContextMenu.js:126
 msgid "Deleting {0} \"{1}\""
@@ -209,22 +210,26 @@ msgstr "Erstelle {0}..."
 msgid "user file folders"
 msgstr "Ordner"
 
-#: Filemanager/js/GridPanel.js:559
-msgid "Do you really want to delete the {0} ?"
-msgstr "Möchten Sie wirrklich den {0} löschen? "
-
 #: Filemanager/js/GridPanel.js:562
 msgid "Deleting {0} "
 msgstr "Lösche {0}"
 
 #: Filemanager/js/GridPanel.js:646
-#: Filemanager/js/TreePanel.js:559
+#: Filemanager/js/GridPanel.js:791
+#: Filemanager/js/TreePanel.js:615
+#: Filemanager/js/TreePanel.js:635
 msgid "Upload Failed"
 msgstr "Hochladen fehlgeschlagen"
 
 #: Filemanager/js/GridPanel.js:647
+#: Filemanager/js/TreePanel.js:616
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Die Datei konnte nicht hochgeladen werden. Möglicherweise ist die Datei zu groß. Bitte benachrichtigen Sie Ihren Administrator. Maximale erlaubte Dateigröße:"
+
+#: Filemanager/js/GridPanel.js:792
+#: Filemanager/js/TreePanel.js:636
+msgid "Dropping on this folder not allowed!"
+msgstr "Auf diesen Ordner darf nicht gedropt werden!"
 
 #: Filemanager/js/Model.js:337
 msgid "Quick search"
@@ -238,9 +243,8 @@ msgstr "Typ"
 msgid "path"
 msgstr "Pfad"
 
-#: Filemanager/js/TreePanel.js:560
-msgid "Dropping on this folder not allowed!"
-msgstr "Auf diesen Ordner darf nicht gedropt werden!"
+#~ msgid "Do you really want to delete the {0} \"{1}\"?"
+#~ msgstr "Möchten Sie wirklich den {0} löschen? "
 
 #~ msgid "Copying data .. {0}"
 #~ msgstr "Kopiere Daten .. {0}"
