@@ -830,12 +830,17 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             upload.on('uploadcomplete', grid.onUploadComplete, this);
             upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
 
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);            
-            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
-                                
-            if(fileRecord.data.status !== 'failure' && addToGrid) {
-                gridStore.add(fileRecord);
-            }           
+            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);   
+            
+            var params = {
+                    filename: filePath,
+                    type: "file",
+                    tempFileId: [],
+                    forceOverwrite: false
+            };
+
+            Tine.Filemanager.fileRecordBackend.createNode(params, uploadKey, true);
+            
         }, this);
         
     },

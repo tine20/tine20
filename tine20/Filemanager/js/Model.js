@@ -321,6 +321,55 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                
     },
     
+    createNode: function(params, uploadKey, addToGridStore) {
+        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+            grid = app.getMainScreen().getCenterPanel(),
+            gridStore = grid.store;
+        
+        params.application = 'Filemanager';                              
+        params.method = 'Filemanager.createNode';
+        params.uploadKey = uploadKey;
+        params.addToGridStore = addToGridStore;
+        
+        if(addToGridStore) {
+            gridStore.reload();
+        }
+        
+        var onSuccess = function(result, request){ 
+            
+            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
+
+            if(addToGridStore) {
+                gridStore.add(fileRecord);
+                
+                // TODO: replace more elegantly
+                if(params.forceOverwrite) {
+                    gridStore.reload();
+                }
+            }           
+        };
+        
+        var onFailure = (function(response, request) {
+            
+            var nodeData = Ext.util.JSON.decode(response.responseText),
+            request = Ext.util.JSON.decode(request.jsonData);
+            nodeData.data.uploadKey = this.uploadKey;
+            nodeData.data.addToGridStore = this.addToGridStore;
+            Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
+            
+        }).createDelegate({uploadKey: uploadKey, addToGridStore: addToGridStore});
+        
+        
+        Ext.Ajax.request({
+            params: params,
+            scope: this,
+            success: onSuccess || Ext.emptyFn,
+            failure: onFailure || Ext.emptyFn
+        });
+        
+        
+    },
+    
     saveRecord : function() {
         // NOOP
     },
@@ -332,7 +381,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      */
     handleRequestException: function(exception, request) {
         Tine.Filemanager.handleRequestException(exception, request);
-    }
+    },
+    
+    
 
 
 });

@@ -638,7 +638,8 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         var treePanel = fileSelector.component,
             targetNode = treePanel.getNodeById(targetNodeId);
             targetNodePath = targetNode.attributes.path,
-            app = treePanel.app;
+            app = treePanel.app,
+            grid = this.app.getMainScreen().getCenterPanel();
 
             
         if(!targetNode.attributes.nodeRecord.isDropFilesAllowed()) {
@@ -650,32 +651,34 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             return;
         }    
       
-        grid = app.getMainScreen().getCenterPanel(),
-        gridStore = grid.store;
-        
         var files = fileSelector.getFileList();
         Ext.each(files, function (file) {
 
-            var fileName = file.name || file.fileName;
-            
-            var filePath = targetNodePath + '/' + fileName;
-            Tine.Filemanager.createNode(filePath, "file", [], false);
-            
+            var fileName = file.name || file.fileName,
+                filePath = targetNodePath + '/' + fileName;           
+
             var upload = new Ext.ux.file.Upload({}, file, fileSelector, filePath);
 
             upload.on('uploadfailure', treePanel.onUploadFail, this);
             upload.on('uploadcomplete', treePanel.onUploadComplete, this);
             upload.on('uploadstart', Tine.Tinebase.uploadManager.onUploadStart, this);
 
-            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);            
-            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
-                    
-            if(fileRecord.data.status !== 'failure' && grid.currentFolderNode.id === targetNodeId) {
-                gridStore.add(fileRecord);
-            }           
+            var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);     
+            
+            var params = {
+                    filename: filePath,
+                    type: "file",
+                    tempFileId: [],
+                    forceOverwrite: false
+            };
+
+            var addToGridStore = grid.currentFolderNode.id === targetNodeId;
+            Tine.Filemanager.fileRecordBackend.createNode(params, uploadKey, addToGridStore);
+            
+                      
         }, this);
         
         
     }
-
+    
 });
