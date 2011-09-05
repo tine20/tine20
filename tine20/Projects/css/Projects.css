@@ -9,11 +9,11 @@
  */
  
 .ProjectsIconCls {
-    background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
+    background-image:url(../../images/../Projects/res/projects_small.png) !important;
 }
 .x-btn-medium .ProjectsIconCls {
-    background-image:url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
+    background-image:url(../../images/../Projects/res/projects_medium.png) !important;
 }
 .x-btn-large .ProjectsIconCls {
-    background-image:url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
+    background-image:url(../../images/../Projects/res/projects_big.png) !important;
 }
