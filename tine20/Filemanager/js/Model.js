@@ -248,7 +248,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                 method = "Filemanager.moveNodes";
                 message = 'Moving data .. {0}';
             }
-
+ 
             params = {
                     application: this.appName,                                
                     sourceFilenames: sourceFilenames,

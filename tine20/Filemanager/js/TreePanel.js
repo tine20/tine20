@@ -67,8 +67,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         this.selModel = new Ext.ux.tree.FileTreeSelectionModel({});
                 
         this.getSelectionModel().on('initDrag', this.onInitDrag, this);
-//        this.getSelectionModel().on('dragEnter', this.onDragEnter, this);
-//        this.getSelectionModel().on('dragDrop', this.onDragDrop, this);
+
 
         Tine.Filemanager.TreePanel.superclass.initComponent.call(this);
 
@@ -287,13 +286,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
      * @param {Ext.EventObject} e
      */
     onClick: function(node, e) {
-             
-//        if(node && node.reload) {
-//            node.reload();
-//        }
-//                
         Tine.Filemanager.TreePanel.superclass.onClick.call(this, node, e);
-
     },
     
     /**
@@ -484,8 +477,11 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
     /**
      * folder delete handler
      */
-    onFolderDelete: function() {
-        Tine.log.debug("onFolderDelete");
+    onFolderDelete: function(node) {
+        var grid = this.app.getMainScreen().getCenterPanel();
+        if(grid.currentFolderNode.isAncestor(node)) {
+            node.parentNode.select();
+        }
     },
 
     /**

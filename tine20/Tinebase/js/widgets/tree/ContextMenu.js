@@ -368,17 +368,11 @@ Tine.widgets.tree.ContextMenu = {
                                     this.scope.fireEvent('click', node.parentNode, Ext.EventObject.setEvent());
                                 }
 
-                                // TODO: im event auswerten
-                                if (this.backendModel == 'Node') {
-                                    var grid = this.scope.app.getMainScreen().getCenterPanel();
-                                    if(grid.currentFolderNode.isAncestor(node)) {
-                                        node.parentNode.select();
-                                    }
-                                }
-                                
                                 node.remove();
-                                if (this.backendModel == 'Container' || this.backendModel == 'Node') {
+                                if (this.backendModel == 'Container') {
                                     this.scope.fireEvent('containerdelete', node.attributes.container);
+                                } else if (this.backendModel == 'Node') {
+                                    this.scope.fireEvent('containerdelete', node);
                                 } else {
                                     this.scope.fireEvent('containerdelete', node.attributes);
                                 }

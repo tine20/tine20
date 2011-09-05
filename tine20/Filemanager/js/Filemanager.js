@@ -41,7 +41,7 @@ Tine.Filemanager.MainScreen = Ext.extend(Tine.widgets.MainScreen, {});
 
 
 /**
- * generic exception handler for filemanager (used by folder and message backends and updateMessageCache)
+ * generic exception handler for filemanager (used by folder)
  * 
  * @param {Tine.Exception} exception
  */
