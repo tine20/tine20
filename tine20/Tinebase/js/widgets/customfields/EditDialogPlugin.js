@@ -54,13 +54,15 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
             field = form.findField('customfield_' + name);
             cfConfig = Tine.widgets.customfields.ConfigManager.getConfig(this.app, modelName, name);
             
-            // transform datetime values
-            if (['date', 'datetime'].indexOf(Ext.util.Format.lowercase(cfConfig.get('definition').type)) != -1) {
-                this.customfieldsValue[name] = Date.parseDate(this.customfieldsValue[name], Date.patterns.ISO8601Long);
-            }
-            
-            if (field) {
-                field.setValue(this.customfieldsValue[name]);
+            if (cfConfig) {
+                // transform datetime values
+                if (['date', 'datetime'].indexOf(Ext.util.Format.lowercase(cfConfig.get('definition').type)) != -1) {
+                    this.customfieldsValue[name] = Date.parseDate(this.customfieldsValue[name], Date.patterns.ISO8601Long);
+                }
+                
+                if (field) {
+                    field.setValue(this.customfieldsValue[name]);
+                }
             }
         }
     },
