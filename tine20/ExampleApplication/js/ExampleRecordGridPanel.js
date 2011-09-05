@@ -84,19 +84,19 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
                 width: 100,
                 sortable: true,
                 dataIndex: 'name'
+            }, {
+                id: 'status',
+                header: this.app.i18n._("Status"),
+                width: 150,
+                sortable: true,
+                dataIndex: 'status',
+                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('ExampleApplication', 'exampleStatus')
             }/*,{
                 id: 'title',
                 header: this.app.i18n._("Title"),
                 width: 350,
                 sortable: true,
                 dataIndex: 'title'
-            },{
-                id: 'status',
-                header: this.app.i18n._("Status"),
-                width: 150,
-                sortable: true,
-                dataIndex: 'status',
-                renderer: this.statusRenderer.createDelegate(this)
             },{
                 id: 'budget',
                 header: this.app.i18n._("Budget"),

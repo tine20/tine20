@@ -35,6 +35,7 @@ class ExampleApplication_Model_ExampleRecordFilter extends Tinebase_Model_Filter
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', /*'...'*/))),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'ExampleApplication')),
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
+        'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'example_application_record.id')),
     
         // modlog filters
@@ -49,7 +50,6 @@ class ExampleApplication_Model_ExampleRecordFilter extends Tinebase_Model_Filter
         'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         */
     );
 }

@@ -18,6 +18,7 @@ Ext.ns('Tine.ExampleApplication.Model');
 Tine.ExampleApplication.Model.ExampleRecord = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'name' },
+    { name: 'status' },
     // TODO add more record fields here
     // tine 2.0 notes + tags
     { name: 'notes'},
@@ -66,6 +67,13 @@ Tine.ExampleApplication.Model.ExampleRecord.getFilterModel = function() {
     
     return [
         {label: _('Quick search'),    field: 'query',       operators: ['contains']},
+        {
+            label: app.i18n._('Status'),
+            field: 'status',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            keyfieldName: 'exampleStatus'
+        },
         {filtertype: 'tinebase.tag', app: app},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.ExampleApplication.Model.ExampleRecord},
         {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},

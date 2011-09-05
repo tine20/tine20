@@ -43,6 +43,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
     // @todo add more fields
     // modlog information

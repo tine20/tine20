@@ -104,7 +104,13 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                         fieldLabel: this.app.i18n._('Name'),
                         name: 'name',
                         allowBlank: false
-                        }]
+                        }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'ExampleApplication',
+                            keyFieldName: 'exampleStatus',
+                            fieldLabel: this.app.i18n._('Status'),
+                            name: 'status',
+                            columnWidth: 0.5
+                        })]
                     ] 
                 }, {
                     // activities and tags
