@@ -56,32 +56,12 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
         this.recordProxy = Tine.ExampleApplication.recordBackend;
         
         this.gridConfig.cm = this.getColumnModel();
-        this.initFilterToolbar();
         
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         
         Tine.ExampleApplication.ExampleRecordGridPanel.superclass.initComponent.call(this);
     },
-    
-    /**
-     * initialises filter toolbar
-     *  @private
-     */
-    initFilterToolbar: function() {
-        this.filterToolbar = new Tine.widgets.grid.FilterToolbar({
-            filterModels: [
-                {label: _('Quick search'),    field: 'query',       operators: ['contains']},
-                {filtertype: 'tine.widget.container.filtermodel', app: this.app, recordClass: this.recordClass},
-                {filtertype: 'tinebase.tag', app: this.app}
-            ],
-            defaultFilter: 'query',
-            filters: [],
-            plugins: [
-                new Tine.widgets.grid.FilterToolbarQuickFilterPlugin()
-            ]
-        });
-    },    
     
     /**
      * returns cm

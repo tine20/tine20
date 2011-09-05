@@ -57,6 +57,27 @@ Tine.ExampleApplication.Model.ExampleRecord.getDefaultData = function() {
 };
 
 /**
+ * get filtermodel of record
+ * 
+ * @namespace Tine.ExampleApplication.Model
+ * @static
+ * @return {Object} filterModel definition
+ */ 
+Tine.ExampleApplication.Model.ExampleRecord.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('ExampleApplication');
+    
+    return [
+        {label: _('Quick search'),    field: 'query',       operators: ['contains']},
+        {filtertype: 'tinebase.tag', app: app},
+        {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.ExampleApplication.Model.ExampleRecord},
+        {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},
+        {label: app.i18n._('Last modifier'),                                            field: 'last_modified_by',   valueType: 'user'},
+        {label: app.i18n._('Creation Time'),                                            field: 'creation_time',      valueType: 'date'},
+        {label: app.i18n._('Creator'),                                                  field: 'created_by',         valueType: 'user'}
+    ];
+};
+
+/**
  * default ExampleRecord backend
  */
 Tine.ExampleApplication.recordBackend = new Tine.Tinebase.data.RecordProxy({
