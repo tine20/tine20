@@ -71,6 +71,13 @@ Tine.Projects.Model.Project.getFilterModel = function() {
     
     return [
         {label: _('Quick search'),    field: 'query',       operators: ['contains']},
+        {
+            label: app.i18n._('Status'),
+            field: 'status',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            keyfieldName: 'projectStatus'
+        },
         {filtertype: 'tinebase.tag', app: app},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Projects.Model.Project},
         {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},
