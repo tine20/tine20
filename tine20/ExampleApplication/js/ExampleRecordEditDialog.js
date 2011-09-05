@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.ExampleApplication');
 
@@ -104,7 +104,13 @@ Tine.ExampleApplication.ExampleRecordEditDialog = Ext.extend(Tine.widgets.dialog
                         fieldLabel: this.app.i18n._('Name'),
                         name: 'name',
                         allowBlank: false
-                        }]
+                        }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
+                            app: 'ExampleApplication',
+                            keyFieldName: 'exampleStatus',
+                            fieldLabel: this.app.i18n._('Status'),
+                            name: 'status',
+                            columnWidth: 0.5
+                        })]
                     ] 
                 }, {
                     // activities and tags

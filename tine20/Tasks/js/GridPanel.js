@@ -84,7 +84,7 @@ Tine.Tasks.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             filterModels: Tine.Tasks.Task.getFilterModel(),
             defaultFilter: 'query',
             filters: [
-//                {field: 'status', operator: 'notin', value: Tine.Tasks.status.getClosedStatus()},
+//                {field: 'status', operator: 'notin', value: Tine.Tasks.Task.getClosedStatus()},
                 {field: 'container_id', operator: 'equals', value: {path: Tine.Tinebase.container.getMyNodePath()}}
             ],
             plugins: [

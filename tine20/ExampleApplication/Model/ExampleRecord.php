@@ -3,9 +3,10 @@
  * class to hold ExampleRecord data
  * 
  * @package     ExampleApplication
+ * @subpackage  Model
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -13,6 +14,7 @@
  * class to hold ExampleRecord data
  * 
  * @package     ExampleApplication
+ * @subpackage  Model
  */
 class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
 {  
@@ -41,6 +43,7 @@ class ExampleApplication_Model_ExampleRecord extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
     // @todo add more fields
     // modlog information

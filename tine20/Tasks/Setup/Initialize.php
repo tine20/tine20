@@ -17,7 +17,7 @@
 class Tasks_Setup_Initialize extends Setup_Initialize
 {
     /**
-     * init favorites
+     * init key fields
      */
     protected function _initializeKeyFields()
     {
@@ -28,7 +28,7 @@ class Tasks_Setup_Initialize extends Setup_Initialize
         ));
         
         $tasksStatusConfig = array(
-            'name'    => Calendar_Config::ATTENDEE_STATUS,
+            'name'    => Tasks_Config::TASK_STATUS,
             'records' => array(
                 array('id' => 'NEEDS-ACTION', 'value' => 'No response', 'is_open' => 1,  'icon' => 'images/oxygen/16x16/actions/mail-mark-unread-new.png', 'system' => true), //_('No response')
                 array('id' => 'COMPLETED',    'value' => 'Completed',   'is_open' => 0, 'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Completed')

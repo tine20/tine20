@@ -1,0 +1,83 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - ExampleApplication\n"
+"POT-Creation-Date: 2008-05-17 22:12+0100\n"
+"PO-Revision-Date: 2010-02-10 16:34-0400\n"
+"Last-Translator: \n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Spanish\n"
+"X-Poedit-Country: NOT SPECIFIED / ANY\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:74
+msgid "Quick search"
+msgstr "Búsqueda Rápida"
+
+#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
+msgid "Name"
+msgstr "Nombre"
+
+#: js/ExampleRecordGridPanel.js:108
+msgid "Title"
+msgstr "Título"
+
+#: js/ExampleRecordGridPanel.js:114
+msgid "Status"
+msgstr "Estado"
+
+#: js/ExampleRecordGridPanel.js:121
+msgid "Budget"
+msgstr "Presupuesto"
+
+#: js/ExampleRecordGridPanel.js:145
+msgid "Show closed"
+msgstr "Función Cerrada"
+
+#: js/ExampleRecordEditDialog.js:87
+#, fuzzy
+msgid "ExampleRecord"
+msgstr "RegistroDeEjemplo"
+
+#: js/Model.js:31
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:35
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr "AplicaciónDeEjemplo"
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr ""
+
+#~ msgid "ExampleRecords"
+#~ msgstr "RegistrosDeEjemplo"
+
+#~ msgid "All ExampleRecords"
+#~ msgstr "Todos los RegistrosDeEjemplo"
+
+#~ msgid "Description"
+#~ msgstr "Descripción"
+
+#~ msgid "record list"
+#~ msgid_plural "record lists"
+#~ msgstr[0] "listado de registro"
+#~ msgstr[1] "listado de registros"

@@ -1,0 +1,52 @@
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:74
+msgid "Quick search"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
+msgid "Name"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:108
+msgid "Title"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:114
+msgid "Status"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:121
+msgid "Budget"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:145
+msgid "Show closed"
+msgstr ""
+
+#: js/ExampleRecordEditDialog.js:87
+msgid "ExampleRecord"
+msgstr ""
+
+#: js/Model.js:31
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Model.js:35
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr ""
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr ""

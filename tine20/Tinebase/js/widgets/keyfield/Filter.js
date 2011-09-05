@@ -2,37 +2,39 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
-Ext.ns('Tine.Tasks.status');
+Ext.ns('Tine.Tinebase.widgets.keyfield');
 
 /**
  * @namespace   Tine.Tasks
- * @class       Tine.Tasks.status.StatusFilter
+ * @class       Tine.Tinebase.widgets.keyfield.Filter
  * @extends     Tine.widgets.grid.FilterModel
  * 
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  */
-Tine.Tasks.status.StatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
+Tine.Tinebase.widgets.keyfield.Filter = Ext.extend(Tine.widgets.grid.FilterModel, {
     /**
      * @property Tine.Tinebase.Application app
      */
     app: null,
     
-    field: 'status',
-    defaultOperator: 'notin',
+    /**
+     * @cfg
+     * @type String
+     */
+    keyfieldName: null,
+    
+    defaultOperator: 'in',
     
     /**
      * @private
      */
     initComponent: function() {
         this.operators = ['in', 'notin'];
-        this.label = _('Status');
         
-        this.defaultValue = Tine.Tasks.status.getClosedStatus();
-        
-        this.supr().initComponent.call(this);
+        Tine.Tinebase.widgets.keyfield.Filter.superclass.initComponent.call(this);
     },
     
     /**
@@ -42,13 +44,14 @@ Tine.Tasks.status.StatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
      * @param {Ext.Element} element to render to 
      */
     valueRenderer: function(filter, el) {
-        var value = new Tine.Tasks.status.StatusFilterValueField({
+        var value = new Tine.Tinebase.widgets.keyfield.FilterValueField({
             app: this.app,
             filter: filter,
             width: 200,
             id: 'tw-ftb-frow-valuefield-' + filter.id,
             value: filter.data.value ? filter.data.value : this.defaultValue,
-            renderTo: el
+            renderTo: el,
+            keyfieldName: this.keyfieldName
         });
         value.on('specialkey', function(field, e){
              if(e.getKey() == e.ENTER){
@@ -61,29 +64,42 @@ Tine.Tasks.status.StatusFilter = Ext.extend(Tine.widgets.grid.FilterModel, {
     }
 });
 
-Tine.widgets.grid.FilterToolbar.FILTERS['tasks.status'] = Tine.Tasks.status.StatusFilter;
+Tine.widgets.grid.FilterToolbar.FILTERS['tine.widget.keyfield.filter'] = Tine.Tinebase.widgets.keyfield.Filter;
 
 /**
  * @namespace   Tine.Tasks
- * @class       Tine.Tasks.status.StatusFilterValueField
+ * @class       Tine.Tinebase.widgets.keyfield.FilterValueField
  * @extends     Ext.ux.form.LayerCombo
  * 
- * @author      Cornelius Weiss <c.weiss@metaways.de>
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * 
+ * TODO think about using Tine.widgets.grid.FilterModelMultiSelectValueField
  */
-Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
+Tine.Tinebase.widgets.keyfield.FilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     hideButtons: false,
     formConfig: {
         labelAlign: 'left',
         labelWidth: 30
     },
     
+    /**
+     * @property Tine.Tinebase.Application app
+     */
+    app: null,
+    
+    /**
+     * @cfg
+     * @type String
+     */
+    keyfieldName: null,
+    
     getFormValue: function() {
         var ids = [];
-        var statusStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus');
+        var keyfieldStore = Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.appName, this.keyfieldName);
         
         var formValues = this.getInnerForm().getForm().getValues();
         for (var id in formValues) {
-            if (formValues[id] === 'on' && statusStore.getById(id)) {
+            if (formValues[id] === 'on' && keyfieldStore.getById(id)) {
                 ids.push(id);
             }
         }
@@ -93,13 +109,15 @@ Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     
     getItems: function() {
         var items = [];
-        
-        Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus').each(function(status) {
+        console.log(this.app.appName);
+        console.log(this.keyfieldName);
+        console.log(Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.appName, this.keyfieldName));
+        Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.appName, this.keyfieldName).each(function(keyfieldRecord) {
             items.push({
                 xtype: 'checkbox',
-                boxLabel: status.get('i18nValue'),
-                icon: status.get('icon'),
-                name: status.get('id')
+                boxLabel: keyfieldRecord.get('i18nValue'),
+                icon: keyfieldRecord.get('icon'),
+                name: keyfieldRecord.get('id')
             });
         }, this);
         
@@ -113,19 +131,19 @@ Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
     setValue: function(value) {
         value = Ext.isArray(value) ? value : [value];
         
-        var statusText = [];
+        var keyfieldRecordText = [];
         this.currentValue = [];
         
-        Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus').each(function(status) {
-            var id = status.get('id');
-            var name = status.get('i18nValue');
+        Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.appName, this.keyfieldName).each(function(keyfieldRecord) {
+            var id = keyfieldRecord.get('id');
+            var name = keyfieldRecord.get('i18nValue');
             if (value.indexOf(id) >= 0) {
-                statusText.push(name);
+                keyfieldRecordText.push(name);
                 this.currentValue.push(id);
             }
         }, this);
         
-        this.setRawValue(statusText.join(', '));
+        this.setRawValue(keyfieldRecordText.join(', '));
         
         return this;
     },
@@ -139,15 +157,3 @@ Tine.Tasks.status.StatusFilterValueField = Ext.extend(Ext.ux.form.LayerCombo, {
         }, this);
     }
 });
-
-Tine.Tasks.status.getClosedStatus = function() {
-    var reqStatus = [];
-        
-    Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus').each(function(status) {
-        if (! status.get('is_open')) {
-            reqStatus.push(status.get('id'));
-        }
-    }, this);
-    
-    return reqStatus;
-};
