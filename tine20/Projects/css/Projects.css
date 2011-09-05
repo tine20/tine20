@@ -8,12 +8,12 @@
  *
  */
  
-.ExampleApplicationIconCls {
-    background-image:url(../../images/oxygen/16x16/actions/datashowchart.png) !important;
+.ProjectsIconCls {
+    background-image:url(../../images/oxygen/16x16/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
 }
-.x-btn-medium .ExampleApplicationIconCls {
-    background-image:url(../../images/oxygen/22x22/actions/datashowchart.png) !important;
+.x-btn-medium .ProjectsIconCls {
+    background-image:url(../../images/oxygen/22x22/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
 }
-.x-btn-large .ExampleApplicationIconCls {
-    background-image:url(../../images/oxygen/32x32/actions/datashowchart.png) !important;
+.x-btn-large .ProjectsIconCls {
+    background-image:url(../../images/oxygen/32x32/mimetypes/application-vnd.oasis.opendocument.spreadsheet-template.png) !important;
 }
