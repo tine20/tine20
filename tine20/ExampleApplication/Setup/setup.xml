@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
-	/**
-	 * $Id$
-	 * Notes: field descriptions may be in Setup_Backend_Schema_Field_Xml 
-	 */
--->
 <application>
     <name>ExampleApplication</name>
     <!-- gettext('ExampleApplication') -->   

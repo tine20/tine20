@@ -2,11 +2,10 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.ExampleApplication');
-
 
 /**
  * @namespace   Tine.ExampleApplication
@@ -37,7 +36,6 @@ Tine.ExampleApplication.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
     
     activeContentType: 'ExampleRecord'
 });
-
     
 /**
  * @namespace   Tine.ExampleApplication
@@ -51,4 +49,3 @@ Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.container.TreePanel,
     filterMode: 'filterToolbar',
     recordClass: Tine.ExampleApplication.Model.ExampleRecord
 });
-
