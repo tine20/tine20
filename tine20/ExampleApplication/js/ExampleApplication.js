@@ -33,7 +33,6 @@ Tine.ExampleApplication.Application = Ext.extend(Tine.Tinebase.Application, {
  * @author      Cornelius Weiss <c.weiss@metaways.de>
  */
 Tine.ExampleApplication.MainScreen = Ext.extend(Tine.widgets.MainScreen, {
-    
     activeContentType: 'ExampleRecord'
 });
     
@@ -48,4 +47,20 @@ Tine.ExampleApplication.TreePanel = Ext.extend(Tine.widgets.container.TreePanel,
     id: 'ExampleApplication_Tree',
     filterMode: 'filterToolbar',
     recordClass: Tine.ExampleApplication.Model.ExampleRecord
+});
+
+/**
+ * favorites panel
+ * 
+ * @class       Tine.ExampleApplication.FilterPanel
+ * @extends     Tine.widgets.persistentfilter.PickerPanel
+ *  
+ * @param {Object} config
+ */
+Tine.ExampleApplication.FilterPanel = function(config) {
+    Ext.apply(this, config);
+    Tine.ExampleApplication.FilterPanel.superclass.constructor.call(this);
+};
+Ext.extend(Tine.ExampleApplication.FilterPanel, Tine.widgets.persistentfilter.PickerPanel, {
+    filter: [{field: 'model', operator: 'equals', value: 'ExampleApplication_Model_ExampleRecordFilter'}]
 });
