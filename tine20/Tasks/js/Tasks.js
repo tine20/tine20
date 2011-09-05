@@ -147,7 +147,14 @@ Tine.Tasks.Task.getFilterModel = function() {
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Tasks.Task},
         {label: app.i18n._('Summary'),         field: 'summary' },
         {label: app.i18n._('Due Date'),        field: 'due', valueType: 'date', operators: ['within', 'before', 'after']},
-        {filtertype: 'tasks.status'},
+        {
+            label: app.i18n._('Status'), 
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            defaultValue: Tine.Tasks.Task.getClosedStatus(), 
+            keyfieldName: 'taskStatus', 
+            defaultOperator: 'notin'
+        },
         {label: app.i18n._('Responsible'),     field: 'organizer', valueType: 'user'},
         {filtertype: 'tinebase.tag', app: app},
         {label: app.i18n._('Last modified'),   field: 'last_modified_time', valueType: 'date'},
@@ -155,6 +162,26 @@ Tine.Tasks.Task.getFilterModel = function() {
         {label: app.i18n._('Creation Time'),   field: 'creation_time',      valueType: 'date'},
         {label: app.i18n._('Creator'),         field: 'created_by',         valueType: 'user'}
     ];
+};
+
+/**
+ * @namespace Tine.Tasks.Task
+ * 
+ * get closed status ids
+ *  
+ * @return {Array} status ids objects
+ * @static
+ */ 
+Tine.Tasks.Task.getClosedStatus = function() {
+    var reqStatus = [];
+        
+    Tine.Tinebase.widgets.keyfield.StoreMgr.get('Tasks', 'taskStatus').each(function(status) {
+        if (! status.get('is_open')) {
+            reqStatus.push(status.get('id'));
+        }
+    }, this);
+    
+    return reqStatus;
 };
 
 /**
