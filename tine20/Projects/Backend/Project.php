@@ -5,8 +5,8 @@
  * @package     Projects
  * @subpackage  Backend
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 
 
@@ -23,7 +23,7 @@ class Projects_Backend_Project extends Tinebase_Backend_Sql_Abstract
      *
      * @var string
      */
-    protected $_tableName = 'example_application_record';
+    protected $_tableName = 'projects_project';
     
     /**
      * Model name
@@ -38,8 +38,4 @@ class Projects_Backend_Project extends Tinebase_Backend_Sql_Abstract
      * @var boolean
      */
     protected $_modlogActive = TRUE;
-
-    /************************ overwritten functions *******************/  
-    
-    /************************ helper functions ************************/
 }

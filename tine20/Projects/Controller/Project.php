@@ -5,8 +5,8 @@
  * @package     Projects
  * @subpackage  Controller
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2009 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  *
  */
 
@@ -28,9 +28,9 @@ class Projects_Controller_Project extends Tinebase_Controller_Record_Abstract
         $this->_backend = new Projects_Backend_Project();
         $this->_modelName = 'Projects_Model_Project';
         $this->_currentAccount = Tinebase_Core::getUser();   
-        $this->_purgeRecords = FALSE;
+        $this->_purgeRecords = TRUE;
         // activate this if you want to use containers
-        $this->_doContainerACLChecks = FALSE;
+        $this->_doContainerACLChecks = TRUE;
     }    
     
     /**
@@ -53,7 +53,4 @@ class Projects_Controller_Project extends Tinebase_Controller_Record_Abstract
         
         return self::$_instance;
     }        
-
-    /****************************** overwritten functions ************************/    
-    
 }

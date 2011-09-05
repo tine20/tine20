@@ -3,7 +3,7 @@
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schüle <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Projects');
 
@@ -20,7 +20,6 @@ Ext.ns('Tine.Projects');
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
  * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  * @param       {Object} config
  * @constructor
@@ -45,7 +44,7 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      */
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
     gridConfig: {
-        autoExpandColumn: 'name'
+        autoExpandColumn: 'title'
     },
      
     /**
@@ -88,8 +87,6 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * 
      * @return Ext.grid.ColumnModel
      * @private
-     * 
-     * TODO    add more columns
      */
     getColumnModel: function(){
         return new Ext.grid.ColumnModel({ 
@@ -98,31 +95,25 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 resizable: true
             },
             columns: [{
-                id: 'name',
-                header: this.app.i18n._("Name"),
+                id: 'number',
+                header: this.app.i18n._("Number"),
                 width: 100,
                 sortable: true,
-                dataIndex: 'name'
-            }/*,{
+                dataIndex: 'number'
+            }, {
                 id: 'title',
                 header: this.app.i18n._("Title"),
                 width: 350,
                 sortable: true,
                 dataIndex: 'title'
-            },{
+            }, {
                 id: 'status',
                 header: this.app.i18n._("Status"),
                 width: 150,
                 sortable: true,
                 dataIndex: 'status',
                 renderer: this.statusRenderer.createDelegate(this)
-            },{
-                id: 'budget',
-                header: this.app.i18n._("Budget"),
-                width: 100,
-                sortable: true,
-                dataIndex: 'budget'
-            }*/]
+            }]
         });
     },
     
@@ -140,19 +131,7 @@ Tine.Projects.ProjectGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
      * @private
      */
     getToolbarItems: function(){
-    	/*
-        this.action_showClosedToggle = new Tine.widgets.grid.FilterButton({
-            text: this.app.i18n._('Show closed'),
-            iconCls: 'action_showArchived',
-            field: 'showClosed'
-        });
-        */
-        
         return [
-            /*
-            new Ext.Toolbar.Separator(),
-            this.action_showClosedToggle
-            */
         ];
     }    
 });

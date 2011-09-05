@@ -2,11 +2,10 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Projects.Model');
-
 
 /**
  * @namespace   Tine.Projects.Model
@@ -18,8 +17,11 @@ Ext.ns('Tine.Projects.Model');
  */
 Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
-    { name: 'name' },
-    // TODO add more record fields here
+    { name: 'title' },
+    { name: 'number' },
+    { name: 'description' },
+    { name: 'status' },
+    { name: 'attendee' },
     // tine 2.0 notes + tags
     { name: 'notes'},
     { name: 'tags' }
@@ -28,13 +30,13 @@ Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     modelName: 'Project',
     idProperty: 'id',
     titleProperty: 'title',
-    // ngettext('example record', 'example records', n);
-    recordName: 'example record',
-    recordsName: 'example records',
+    // ngettext('Project', 'Projects', n);
+    recordName: 'Project',
+    recordsName: 'Projects',
     containerProperty: 'container_id',
-    // ngettext('example record list', 'example record lists', n);
-    containerName: 'example record list',
-    containersName: 'example record lists'
+    // ngettext('Project list', 'Project lists', n);
+    containerName: 'Project list',
+    containersName: 'Project lists'
 });
 
 /**

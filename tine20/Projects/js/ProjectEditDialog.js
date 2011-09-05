@@ -2,8 +2,8 @@
  * Tine 2.0
  * 
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  */
 Ext.ns('Tine.Projects');
 
@@ -15,9 +15,8 @@ Ext.ns('Tine.Projects');
  * <p>Project Compose Dialog</p>
  * <p></p>
  * 
- *  @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Cornelius Weiss <c.weiss@metaways.de>
- * @copyright   Copyright (c) 2007-2008 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
+ * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
  * @param       {Object} config
  * @constructor
@@ -101,8 +100,8 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     },
                     items: [[{
                         columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Name'),
-                        name: 'name',
+                        fieldLabel: this.app.i18n._('Title'),
+                        name: 'title',
                         allowBlank: false
                         }]
                     ] 

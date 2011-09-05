@@ -4,8 +4,8 @@
  * 
  * @package     Projects
  * @license     http://www.gnu.org/licenses/agpl.html AGPL Version 3
- * @author      Philipp Schuele <p.schuele@metaways.de>
- * @copyright   Copyright (c) 2007-2010 Metaways Infosystems GmbH (http://www.metaways.de)
+ * @author      Philipp Schüle <p.schuele@metaways.de>
+ * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * 
  */
 
@@ -40,9 +40,12 @@ class Projects_Model_Project extends Tinebase_Record_Abstract
      */
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'number'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'title'                 => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
+        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-    // @todo add more fields
+        'attendee'              => array('allowEmpty' => true         ), // RecordSet of Projects_Model_Attender
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
