@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - Filemanager\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-02 14:18+0100\n"
-"PO-Revision-Date: 2011-09-02 14:18+0100\n"
+"POT-Creation-Date: 2011-09-05 15:22+0100\n"
+"PO-Revision-Date: 2011-09-05 15:22+0100\n"
 "Last-Translator: Martin Jatho <m.jatho@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "MIME-Version: 1.0\n"
@@ -31,15 +31,15 @@ msgstr "manage shared folders"
 msgid "Create new shared folders"
 msgstr "Create new shared folders"
 
-#: Filemanager/Controller/Node.php:161
+#: Filemanager/Controller/Node.php:163
 msgid "My folders"
 msgstr "My folders"
 
-#: Filemanager/Controller/Node.php:168
+#: Filemanager/Controller/Node.php:170
 msgid "Shared folders"
 msgstr "Shared folders"
 
-#: Filemanager/Controller/Node.php:175
+#: Filemanager/Controller/Node.php:177
 msgid "Other users folders"
 msgstr "Other users folders"
 
@@ -80,11 +80,11 @@ msgid "You have to supply a {0} name!"
 msgstr "You have to supply a {0} name!"
 
 #: Filemanager/js/GridContextMenu.js:45
-#: Filemanager/js/GridContextMenu.js:126
+#: Filemanager/js/GridContextMenu.js:135
 #: Filemanager/js/GridPanel.js:476
 #: Filemanager/js/GridPanel.js:536
 #: Filemanager/js/GridPanel.js:578
-#: Filemanager/js/Model.js:251
+#: Filemanager/js/Model.js:271
 msgid "Please wait"
 msgstr "Please wait"
 
@@ -93,17 +93,17 @@ msgstr "Please wait"
 msgid "Updating {0} \"{1}\""
 msgstr "Updating {0} \"{1}\""
 
-#: Filemanager/js/GridContextMenu.js:124
+#: Filemanager/js/GridContextMenu.js:133
 #: Filemanager/js/GridPanel.js:575
 msgid "Confirm"
 msgstr "Confirm"
 
-#: Filemanager/js/GridContextMenu.js:124
+#: Filemanager/js/GridContextMenu.js:133
 #: Filemanager/js/GridPanel.js:575
 msgid "Do you really want to delete \"{0}\"?"
 msgstr "Do you really want to delete \"{0}\"?"
 
-#: Filemanager/js/GridContextMenu.js:126
+#: Filemanager/js/GridContextMenu.js:135
 msgid "Deleting {0} \"{1}\""
 msgstr "Deleting {0} \"{1}\""
 
@@ -116,7 +116,7 @@ msgid "Size"
 msgstr "Size"
 
 #: Filemanager/js/GridPanel.js:137
-#: Filemanager/js/Model.js:339
+#: Filemanager/js/Model.js:359
 msgid "Contenttype"
 msgstr "Contenttype"
 
@@ -129,7 +129,7 @@ msgid "Revision"
 msgstr "Revision"
 
 #: Filemanager/js/GridPanel.js:167
-#: Filemanager/js/Model.js:340
+#: Filemanager/js/Model.js:360
 msgid "Creation Time"
 msgstr "Creation Time"
 
@@ -187,7 +187,7 @@ msgstr "Resume upload"
 
 #: Filemanager/js/GridPanel.js:459
 #: Filemanager/js/GridPanel.js:526
-#: Filemanager/js/Model.js:341
+#: Filemanager/js/Model.js:361
 msgid "user file folder"
 msgstr "folder"
 
@@ -213,26 +213,38 @@ msgstr "Deleting {0} "
 
 #: Filemanager/js/GridPanel.js:662
 #: Filemanager/js/GridPanel.js:807
-#: Filemanager/js/TreePanel.js:615
-#: Filemanager/js/TreePanel.js:635
+#: Filemanager/js/TreePanel.js:626
+#: Filemanager/js/TreePanel.js:646
 msgid "Upload Failed"
 msgstr "Upload Failed"
 
 #: Filemanager/js/GridPanel.js:663
-#: Filemanager/js/TreePanel.js:616
+#: Filemanager/js/TreePanel.js:627
 msgid "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 msgstr "Could not upload file. Filesize could be too big. Please notify your Administrator. Max upload size: "
 
 #: Filemanager/js/GridPanel.js:808
-#: Filemanager/js/TreePanel.js:636
+#: Filemanager/js/TreePanel.js:647
 msgid "Dropping on this folder not allowed!"
 msgstr "Dropping on this folder not allowed!"
 
-#: Filemanager/js/Model.js:337
+#: Filemanager/js/Model.js:252
+msgid "Copying data .. {0}"
+msgstr "Copying data .. {0}"
+
+#: Filemanager/js/Model.js:253
+msgid "Moving data .. {0}"
+msgstr "Moving data .. {0}"
+
+#: Filemanager/js/Model.js:255
+msgid "user file folders"
+msgstr "folders"
+
+#: Filemanager/js/Model.js:357
 msgid "Quick search"
 msgstr "Quick search"
 
-#: Filemanager/js/Model.js:338
+#: Filemanager/js/Model.js:358
 msgid "Type"
 msgstr "Type"
 
@@ -240,17 +252,8 @@ msgstr "Type"
 msgid "path"
 msgstr "path"
 
-#~ msgid "user file folders"
-#~ msgstr "folders"
-
 #~ msgid "Do you really want to delete the {0} \"{1}\"?"
 #~ msgstr "Do you really want to delete the {0} \"{1}\"?"
-
-#~ msgid "Copying data .. {0}"
-#~ msgstr "Copying data .. {0}"
-
-#~ msgid "Moving data .. {0}"
-#~ msgstr "Moving data .. {0}"
 
 #~ msgid "example record"
 
