@@ -59,28 +59,6 @@ class ExampleApplication_Controller extends Tinebase_Controller_Event implements
     }
     
     /**
-     * temporaray function to get a default container]
-     * 
-     * @param string $_referingApplication
-     * @return Tinebase_Model_Container container
-     * 
-     * @todo replace this by Tinebase_Container::getDefaultContainer
-     */
-    public function getDefaultContainer($_referingApplication = 'tasks')
-    {
-        $taskConfig = Tinebase_Core::getConfig()->tasks;
-        $configString = 'defaultcontainer_' . ( empty($_referingApplication) ? 'tasks' : $_referingApplication );
-        
-        if (isset($taskConfig->$configString)) {
-            $defaultContainer = Tinebase_Container::getInstance()->getContainerById((int)$taskConfig->$configString);
-        } else {
-            $defaultContainer = Tinebase_Container::getInstance()->getDefaultContainer($this->_currentAccount->accountId, 'ExampleApplication');
-        }
-        
-        return $defaultContainer;
-    }
-        
-    /**
      * creates the initial folder for new accounts
      *
      * @param mixed[int|Tinebase_Model_User] $_account   the accountd object
