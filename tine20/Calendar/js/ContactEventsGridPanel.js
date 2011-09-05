@@ -11,6 +11,11 @@ Ext.ns('Tine.Calendar');
 /**
  * show all events, given contact record is attender of
  * 
+ * NOTE: This Grid does not show recuings yet!
+ *       If we want to display recurings we need to add a period filter.
+ *       We might be able to do so after we have a generic calendar list widget
+ *       with a generic period paging tbar
+ *       
  * @namespace   Tine.Calendar
  * @class       Tine.Calendar.ContactEventsGridPanel
  * @extends     Tine.widgets.grid.GridPanel
