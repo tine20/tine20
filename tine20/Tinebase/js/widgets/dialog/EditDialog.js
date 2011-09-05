@@ -124,6 +124,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
              * @event update
              * @desc  Fired when the record got updated
              * @param {Json String} data data of the entry
+             * @pram  {String} this.mode
              */
             'update',
             /**
@@ -472,7 +473,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                             //       closing of native windows
                             this.onRecordLoad();
                         }
-                        this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+                        this.fireEvent('update', Ext.util.JSON.encode(this.record.data), this.mode);
                         
                         // free 0 namespace if record got created
                         this.window.rename(this.windowNamePrefix + this.record.id);
@@ -487,7 +488,7 @@ Tine.widgets.dialog.EditDialog = Ext.extend(Ext.FormPanel, {
                 });
             } else {
                 this.onRecordLoad();
-                this.fireEvent('update', Ext.util.JSON.encode(this.record.data));
+                this.fireEvent('update', Ext.util.JSON.encode(this.record.data), this.mode);
                 
                 // free 0 namespace if record got created
                 this.window.rename(this.windowNamePrefix + this.record.id);

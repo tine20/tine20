@@ -1196,7 +1196,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             config = null,
             popupWindow = editDialogClass.openWindow(Ext.copyTo(
             this.editDialogConfig || {}, {
-                record: record,
+                record: editDialogClass.prototype.mode == 'local' ? Ext.encode(record.data) : record,
                 copyRecord: (button.actionType == 'copy'),
                 listeners: {
                     scope: this,
@@ -1211,7 +1211,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
      * 
      * @param {String|Tine.Tinebase.data.Record} record
      */
-    onUpdateRecord: function(record) {
+    onUpdateRecord: function(record, mode) {
         if (Ext.isString(record) && this.recordProxy) {
             record = this.recordProxy.recordReader({responseText: record});
         } else if (record && Ext.isFunction(record.copy)) {
@@ -1224,6 +1224,7 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
                 var isSelected = this.getGrid().getSelectionModel().isSelected(idx);
                 this.getStore().removeAt(idx);
                 this.getStore().insert(idx, [record]);
+                
                 if (isSelected) {
                     this.getGrid().getSelectionModel().selectRow(idx, true);
                 }
@@ -1233,9 +1234,13 @@ Ext.extend(Tine.widgets.grid.GridPanel, Ext.Panel, {
             this.addToEditBuffer(record);
         }
         
-        this.loadGridData({
-            removeStrategy: 'keepBuffered'
-        });
+        if (mode == 'local') {
+            this.onStoreUpdate(this.getStore(), record, Ext.data.Record.EDIT);
+        } else {
+            this.loadGridData({
+                removeStrategy: 'keepBuffered'
+            });
+        }
     },
     
     /**
