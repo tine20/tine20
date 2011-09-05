@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 
-	/**
-	 * $Id$
-	 * Notes: field descriptions may be in Setup_Backend_Schema_Field_Xml 
-	 */
--->
 <application>
     <name>Projects</name>
     <!-- gettext('Projects') -->   
-    <version>0.1</version>
+    <version>1.0</version>
     <order>60</order>
-    <status>disabled</status>
+    <status>enabled</status>
     <tables>
+        <!-- project -->
         <table>
-            <name>example_application_record</name>
+            <name>projects_project</name>
             <version>1</version>
             <declaration>
                 <field>
@@ -28,13 +23,27 @@
                     <notnull>false</notnull>
                 </field>
                 <field>
-                    <name>name</name>
+                    <name>title</name>
                     <type>text</type>
                     <length>255</length>
                     <notnull>true</notnull>
                 </field>
-                <!-- add more fields here -->
-                <!-- defaults for tine system -->
+                <field>
+                    <name>number</name>
+                    <type>text</type>
+                    <length>255</length>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                </field>
+                <field>
+                    <name>status</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <default>IN-PROCESS</default>
+                    <notnull>true</notnull>
+                </field>
                 <field>
                     <name>created_by</name>
                     <type>text</type>
@@ -80,6 +89,110 @@
                         <name>container_id</name>
                     </field>
                 </index>
+            </declaration>
+        </table>
+        
+        <!-- attendee -->
+        <table>
+            <name>projects_attendee</name>
+            <version>1</version>
+            <declaration>
+                <field>
+                    <name>id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>project_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>user_id</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>user_type</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>user</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>role</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>REQ</default>
+                    <notnull>true</notnull>
+                </field>
+                <!-- do we need that? -->
+                <!--field>
+                    <name>quantity</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                    <default>1</default>
+                </field>
+                <field>
+                    <name>status</name>
+                    <type>text</type>
+                    <length>32</length>
+                    <default>NEEDS-ACTION</default>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>status_authkey</name>
+                    <type>text</type>
+                    <length>40</length>
+                    <notnull>true</notnull>
+                </field-->
+                <index>
+                    <name>id</name>
+                    <primary>true</primary>
+                    <field>
+                        <name>id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>projects_attendee::project_id-projects_project::id</name>
+                    <field>
+                        <name>project_id</name>
+                    </field>
+                    <foreign>true</foreign>
+                    <reference>
+                        <table>projects_project</table>
+                        <field>id</field>
+                        <ondelete>CASCADE</ondelete>
+                    </reference>
+                    <ondelete>cascade</ondelete>
+                </index>
+                <index>
+                    <name>user_id</name>
+                    <field>
+                        <name>user_id</name>
+                    </field>
+                </index>
+                <index>
+                    <name>user_type</name>
+                    <field>
+                        <name>user_type</name>
+                    </field>
+                </index>
+                <!--index>
+                    <name>status</name>
+                    <field>
+                        <name>status</name>
+                    </field>
+                </index>
+                <index>
+                    <name>status_authkey</name>
+                    <field>
+                        <name>status_authkey</name>
+                    </field>
+                </index-->
             </declaration>
         </table>
     </tables>
