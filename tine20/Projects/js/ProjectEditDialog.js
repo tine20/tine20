@@ -76,6 +76,11 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
+        
+//        this.contactLinkPanel = new Tine.widgets.grid.LinkGridPanel({
+//            recordClass: Tine.Addressbook.Model.Contact
+//        });
+        
         return {
             xtype: 'tabpanel',
             border: false,
@@ -90,27 +95,51 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                 layout: 'border',
                 items: [{
                     region: 'center',
-                    xtype: 'columnform',
-                    labelAlign: 'top',
-                    formDefaults: {
-                        xtype:'textfield',
-                        anchor: '100%',
-                        labelSeparator: '',
-                        columnWidth: .333
-                    },
-                    items: [[{
-                        columnWidth: 1,
-                        fieldLabel: this.app.i18n._('Title'),
-                        name: 'title',
-                        allowBlank: false
-                        }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
-                            app: 'Projects',
-                            keyFieldName: 'projectStatus',
-                            fieldLabel: this.app.i18n._('Status'),
-                            name: 'status',
-                            columnWidth: 0.5
-                        })]
-                    ] 
+                    layout: 'hfit',
+                    border: false,
+                    items: [{
+                        xtype: 'fieldset',
+                        layout: 'hfit',
+                        autoHeight: true,
+                        title: this.app.i18n._('Project'),
+                        items: [{
+                            xtype: 'columnform',
+                            labelAlign: 'top',
+                            formDefaults: {
+                                xtype:'textfield',
+                                anchor: '100%',
+                                labelSeparator: '',
+                                columnWidth: .333
+                            },
+                            items: [[{
+                                    columnWidth: 1,
+                                    fieldLabel: this.app.i18n._('Title'),
+                                    name: 'title',
+                                    allowBlank: false
+                                }], [{
+                                    columnWidth: .5,
+                                    fieldLabel: this.app.i18n._('Number'),
+                                    name: 'number'
+                                }, new Tine.Tinebase.widgets.keyfield.ComboBox({
+                                    columnWidth: .5,
+                                    app: 'Projects',
+                                    keyFieldName: 'projectStatus',
+                                    fieldLabel: this.app.i18n._('Status'),
+                                    name: 'status'
+                                })]
+                            ]
+                        }]
+                    }, {
+                        xtype: 'tabpanel',
+                        deferredRender: false,
+                        activeTab: 0,
+                        border: false,
+                        height: 235,
+                        form: true,
+                        items: [
+                            //this.contactLinkPanel
+                        ]
+                    }]
                 }, {
                     // activities and tags
                     layout: 'accordion',
