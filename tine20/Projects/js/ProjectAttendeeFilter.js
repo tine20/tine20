@@ -34,11 +34,23 @@ Tine.Projects.ProjectAttendeeFilter = Ext.extend(Tine.widgets.grid.ForeignRecord
      */
     ownField: 'contact',
     
+    /**
+     * get subfilter models
+     * @return Array of filter models
+     */
     getSubFilters: function() {
+        var attendeeRoleFilter = new Tine.Tinebase.widgets.keyfield.Filter({
+            label: this.app.i18n._('Attendee Role'),
+            field: 'relation_type',
+            app: this.app, 
+            keyfieldName: 'projectAttendeeRole'
+        });
+        this.subFilterModels.push(attendeeRoleFilter);
         
         this.subFilterModels = Tine.Projects.ProjectAttendeeFilter.superclass.getSubFilters.call(this);
         
         return this.subFilterModels;
     }
 });
+
 Tine.widgets.grid.FilterToolbar.FILTERS['tine.projects.attendee'] = Tine.Projects.ProjectAttendeeFilter;
