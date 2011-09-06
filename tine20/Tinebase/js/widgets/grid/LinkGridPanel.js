@@ -65,6 +65,8 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
      */
     app: null,
     
+    typeColumnHeader: null,
+    
     /**
      * @return Ext.grid.ColumnModel
      * @private
@@ -100,7 +102,7 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
             columns:  [
                 {   id: 'name', header: _('Name'), dataIndex: 'related_record', renderer: this.relatedRecordRender, scope: this}, {
                     id: 'type', 
-                    header: _('Type'), 
+                    header: (this.typeColumnHeader) ? this.typeColumnHeader : _('Type'), 
                     dataIndex: 'type', 
                     width: 100, 
                     sortable: true,
