@@ -21,7 +21,7 @@ Tine.ExampleApplication.Application = Ext.extend(Tine.Tinebase.Application, {
      * @return {String}
      */
     getTitle: function() {
-        return this.i18n.gettext('Example Application');
+        return this.i18n.gettext('Example Application test');
     }
 });
 

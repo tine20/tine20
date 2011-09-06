@@ -172,7 +172,7 @@ Ext.extend(Tine.Felamimail.TreePanel, Ext.tree.TreePanel, {
             isValidDropPoint: function(n, dd, e, data){
                 return n.node.attributes.allowDrop;
             }
-        }
+        };
         
         // init selection model (multiselect)
         this.selModel = new Ext.tree.MultiSelectionModel({});

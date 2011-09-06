@@ -147,7 +147,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             cls: 'tinebase-tree-hide-collapsetool',
             expanded: true,
             children: [{
-                path: Tine.Tinebase.container.getMyNodePath(),
+                path: this.getRootPath(),
                 id: 'personal'
             }, {
                 path: '/shared',
@@ -178,10 +178,10 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
                 return n.node.attributes.allowDrop;
             },
             completeDrop: Ext.emptyFn
-        }
+        };
         
         this.initContextMenu();
-        
+              
         this.getSelectionModel().on('beforeselect', this.onBeforeSelect, this);
         this.getSelectionModel().on('selectionchange', this.onSelectionChange, this);
         this.on('click', this.onClick, this);
@@ -191,6 +191,15 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
         
         Tine.widgets.container.TreePanel.superclass.initComponent.call(this);
         return;
+    },
+    
+    /**
+     * delivers the personal root node path
+     * 
+     * @returns personal root node path
+     */
+    getRootPath: function() {
+        return Tine.Tinebase.container.getMyNodePath();
     },
     
     /**
@@ -304,8 +313,8 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
     /**
      * convert containerPath to treePath
      * 
-     * @param {String} containerPath
-     * @return {String}
+     * @param {String}  containerPath
+     * @return {String} treePath
      */
     getTreePath: function(containerPath) {
         var treePath = '/' + this.getRootNode().id + (containerPath !== '/' ? containerPath : '');
@@ -478,6 +487,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @return {Boolean}
      */
     onBeforeSelect: function(sm, newSelection, oldSelection) {
+
         if (this.requiredGrant && newSelection.isLeaf()) {
             var accountGrants =  newSelection.attributes.container.account_grants || {};
             if (! accountGrants[this.requiredGrant]) {
@@ -547,6 +557,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
      * @param {} node
      */
     onSelectionChange: function(sm, nodes) {
+                
         if (this.filterMode == 'gridFilter' && this.filterPlugin) {
             this.filterPlugin.onFilterChange();
         }
@@ -559,7 +570,7 @@ Ext.extend(Tine.widgets.container.TreePanel, Ext.tree.TreePanel, {
             ftb.filterStore.each(function(filter) {
                 var field = filter.get('field');
                 // @todo find criteria what to remove
-                if (field === 'container_id' || field === 'attender') {
+                if (field === 'container_id' || field === 'attender' || field === 'path') {
                     ftb.deleteFilter(filter);
                 }
             }, this);

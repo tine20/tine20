@@ -692,6 +692,24 @@ span:hover.tinebase-download-link {
     padding-left: 19px;
 }
 
+.x-tinebase-uploadpaused .x-grid3-cell-inner {
+    background-image:url(../../images/oxygen/16x16/actions/media-playback-pause.png);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+
+.x-tinebase-uploading .x-grid3-cell-inner {
+    background-image:url(../../images/oxygen/16x16/actions/media-playback-start.png);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+
+.x-tinebase-uploadcomplete .x-grid3-cell-inner {
+    background-image:url(../../images/oxygen/16x16/actions/dialog-ok-apply.png);
+    background-repeat: no-repeat;
+    padding-left: 19px;
+}
+
 /******** email ***********/
 
 a:hover.tinebase-email-link {

@@ -172,6 +172,33 @@ class Tinebase_TempFile extends Tinebase_Backend_Sql_Abstract implements Tinebas
     }
     
     /**
+     * joins all given tempfiles in given order to a single new tempFile
+     * 
+     * @param Tinebase_Record_RecordSet $_tempFiles
+     * @return Tinebase_Model_TempFile
+     */
+    public function joinTempFiles($_tempFiles)
+    {
+        $path = tempnam(Tinebase_Core::getTempDir(), 'tine_tempfile_');
+        $name = preg_replace('/\.\d+\.chunk$/', '', $_tempFiles->getFirstRecord()->name);
+        $type = $_tempFiles->getFirstRecord()->type;
+        
+        $fJoin = fopen($path, 'w+b');
+        foreach ($_tempFiles as $tempFile) {
+            $fChunk = @fopen($tempFile->path, "rb");
+            if (! $fChunk) {
+                throw new Tinebase_Exception_UnexpectedValue("Can not open chunk {$tempFile->id}");
+            }
+            stream_copy_to_stream($fChunk, $fJoin);
+            fclose($fChunk);
+        }
+        
+        fclose($fJoin);
+        
+        return $this->createTempFile($path, $name, $type);
+    }
+    
+    /**
      * remove all temp file records before $_date
      * 
      * @param Tinebase_DateTime|string $_date

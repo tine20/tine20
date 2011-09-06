@@ -497,9 +497,10 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
             'defaultUsername'   => $defaultUsername,
             'defaultPassword'   => $defaultPassword,
             'denySurveys'       => Tinebase_Core::getConfig()->denySurveys,
-            'titlePostfix'      => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::PAGETITLEPOSTFIX, NULL, '')->value,
-            'redirectUrl'       => Tinebase_Config::getInstance()->getConfig(Tinebase_Config::REDIRECTURL, NULL, '')->value,
-            'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')) / 1048576 . ' MB'
+            'titlePostfix'      => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::PAGETITLEPOSTFIX, NULL, '')->value,
+            'redirectUrl'       => Tinebase_Config::getInstance()->getConfig(Tinebase_Model_Config::REDIRECTURL, NULL, '')->value,
+            'maxFileUploadSize' => convertToBytes(ini_get('upload_max_filesize')),
+            'maxPostSize'       => convertToBytes(ini_get('post_max_size'))
         );
         
         if (Tinebase_Core::isRegistered(Tinebase_Core::USER)) {
@@ -823,6 +824,28 @@ class Tinebase_Frontend_Json extends Tinebase_Frontend_Json_Abstract
         $appController->saveConfigSettings($recordData['settings']);
         
         return $this->getConfig($recordData['id']);
+    }
+    
+    /************************ tempFile functions ******************************/
+    
+    /**
+     * joins all given tempfiles in given order to a single new tempFile
+     * 
+     * @param array of tempfiles arrays $tempFiles
+     * @return array new tempFile
+     */
+    public function joinTempFiles($tempFilesData)
+    {
+        $tempFileRecords = new Tinebase_Record_RecordSet('Tinebase_Model_TempFile');
+        foreach($tempFilesData as $tempFileData) {
+            $record = new Tinebase_Model_TempFile(array(), TRUE);
+            $record->setFromJsonInUsersTimezone($tempFileData);
+            $tempFileRecords->addRecord($record);
+        }
+        
+        $joinedTempFile = Tinebase_TempFile::getInstance()->joinTempFiles($tempFileRecords);
+        
+        return $joinedTempFile->toArray();
     }
     
     /************************ protected functions ***************************/

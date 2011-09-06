@@ -91,3 +91,20 @@ Tine.ExampleApplication.recordBackend = new Tine.Tinebase.data.RecordProxy({
     modelName: 'ExampleRecord',
     recordClass: Tine.ExampleApplication.Model.ExampleRecord
 });
+
+/**
+ * get filtermodel of contact model
+ * 
+ * @namespace Tine.ExampleRecord.Model
+ * @static
+ * @return {Object} filterModel definition
+ */ 
+Tine.ExampleApplication.Model.ExampleRecord.getFilterModel = function() {
+    var app = Tine.Tinebase.appMgr.get('ExampleApplication');
+       
+	return [ 	
+	    {label : _('Quick search'), field : 'query', operators : [ 'contains' ]}, 
+	    {filtertype : 'tine.widget.container.filtermodel', app : app, recordClass : Tine.ExampleApplication.Model.ExampleRecord}, 
+	    {filtertype : 'tinebase.tag', app : app} 
+	];
+};
