@@ -651,7 +651,11 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
             return;
         }    
       
-        var files = fileSelector.getFileList();
+        var files = fileSelector.getFileList(),
+            filePathsArray = [],
+            uploadKeyArray = [],
+            addToGridStore = false;
+
         Ext.each(files, function (file) {
 
             var fileName = file.name || file.fileName,
@@ -665,20 +669,22 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
 
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);     
             
-            var params = {
-                    filename: filePath,
-                    type: "file",
-                    tempFileId: [],
-                    forceOverwrite: false
-            };
-
-            var addToGridStore = grid.currentFolderNode.id === targetNodeId;
-            Tine.Filemanager.fileRecordBackend.createNode(params, uploadKey, addToGridStore);
+            filePathsArray.push(filePath);
+            uploadKeyArray.push(uploadKey);
+  
+            addToGridStore = grid.currentFolderNode.id === targetNodeId;
             
                       
         }, this);
         
-        
+        var params = {
+                filenames: filePathsArray,
+                type: "file",
+                tempFileIds: [],
+                forceOverwrite: false
+        };
+        Tine.Filemanager.fileRecordBackend.createNodes(params, uploadKeyArray, addToGridStore);
+
     }
     
 });
