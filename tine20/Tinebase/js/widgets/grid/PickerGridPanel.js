@@ -34,6 +34,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     enableBbar: true,
 
     /**
+     * @cfg {bool}
+     * enable top toolbar (with search combo)
+     */
+    enableTbar: false,
+    
+    /**
      * store to hold records
      * 
      * @type Ext.data.Store
@@ -52,6 +58,8 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * @cfg {} recordClass
      */
     searchRecordClass: null,
+    
+    searchComboClass: null,
     
     /**
      * @type Ext.Menu
@@ -132,6 +140,21 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
                 ]
             });
         }
+
+        if (this.enableTbar) {
+            this.tbar = new Ext.Toolbar({
+                items: [
+                	// TODO set width to 100%
+                    this.getSearchCombo()
+//                    new Ext.Panel({
+//                        //layout: 'hfit',
+//                        //layout: 'anchor',
+//                        border: false,
+//                        items: this.getSearchCombo()
+//                    })
+                ]
+            });
+        }
     },
     
     /**
@@ -173,10 +196,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     },
     
     /**
-     * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox}
+     * @return {Tine.Tinebase.widgets.form.RecordPickerComboBox|this.searchComboClass}
      */
     getSearchCombo: function() {
-        return new Tine.Tinebase.widgets.form.RecordPickerComboBox({
+        var searchComboClass = (this.searchComboClass !== null) ? this.searchComboClass : Tine.Tinebase.widgets.form.RecordPickerComboBox;
+        
+        return new searchComboClass({
             recordStore: this.store,
             blurOnSelect: true,
             recordClass: (this.searchRecordClass !== null) ? this.searchRecordClass : this.recordClass,
@@ -192,8 +217,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
      * TODO make reset work correctly -> show emptyText again
      */
     onAddRecordFromCombo: function(recordToAdd) {
-        var record = new this.newRecordClass(recordToAdd, recordToAdd.id);
-        
+        var record = new this.newRecordClass((recordToAdd.data) ? recordToAdd.data : recordToAdd, recordToAdd.id);
         // check if already in
         if (! this.recordStore.getById(record.id)) {
             this.recordStore.add([record]);

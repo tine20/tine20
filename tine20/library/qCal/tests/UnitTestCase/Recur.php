@@ -203,11 +203,11 @@ class UnitTestCase_Recur extends UnitTestCase {
 			->rewind(); // is this even necessary? It shouldn't be...
 		
 		$this->assertEqual($recur->count(), 25);
-		$this->assertEqual($recur->current()->format('Y-m-d H:i:s'), '2008-02-15 08:00:00')
-		$this->assertEqual($recur->next()->format('Y-m-d H:i:s'), '2008-02-16 08:00:00')
-		$this->assertEqual($recur->next()->format('Y-m-d H:i:s'), '2008-03-15 08:00:00')
-		$this->assertEqual($recur->next()->format('Y-m-d H:i:s'), '2008-03-16 08:00:00')
-		$this->assertEqual($recur->next()->format('Y-m-d H:i:s'), '2008-04-12 08:00:00')
+		$this->assertEqual($recur->current()->format('Y-m-d H:i:s'), '2008-02-15 08:00:00');
+		$this->assertEqual($recur->next()->format('Y-m-d H:i:s'), '2008-02-16 08:00:00');
+		$this->assertEqual($recur->next()->format('Y-m-d H:i:s'), '2008-03-15 08:00:00');
+		$this->assertEqual($recur->next()->format('Y-m-d H:i:s'), '2008-03-16 08:00:00');
+		$this->assertEqual($recur->next()->format('Y-m-d H:i:s'), '2008-04-12 08:00:00');
 		$this->assertEqual($recur->next()->format('Y-m-d H:i:s'), '2008-04-13 08:00:00');
 	
 	}

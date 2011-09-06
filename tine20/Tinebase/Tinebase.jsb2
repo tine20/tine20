@@ -464,6 +464,10 @@
           "path": "js/widgets/grid/"
         },
         {
+          "text": "LinkGridPanel.js",
+          "path": "js/widgets/grid/"
+        },
+        {
           "text": "GridPanel.js",
           "path": "js/widgets/grid/"
         },
