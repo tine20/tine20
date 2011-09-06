@@ -192,25 +192,3 @@ Tine.Crm.LinkGridPanel.initGrid = function() {
         }
     }, this);
 };
-
-//  update event handler for related records
-//  
-//  TODO make this generic
-//--
-//Tine.Crm.LinkGridPanel.onUpdate = function(record) {
-//    var response = {
-//        responseText: record
-//    };
-//    record = this.recordProxy.recordReader(response);
-//    
-//    var myRecord = this.store.getById(record.id);
-//    if (myRecord) {
-//        myRecord.beginEdit();
-//        for (var p in record.data) { 
-//            myRecord.set(p, record.get(p));
-//        }
-//        myRecord.endEdit();
-//    } else {
-//        this.store.add(record);
-//    }
-//};
