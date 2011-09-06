@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2010-04-23 12:36+0100\n"
+"PO-Revision-Date: 2011-09-06 20:25+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -15,11 +15,11 @@ msgstr ""
 
 #: Config.php:31
 msgid "Status Available"
-msgstr ""
+msgstr "Verfügbare Status"
 
 #: Config.php:33
 msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
-msgstr ""
+msgstr "Mögliche Statuswerte. Bitte beachten Sie, dass Änderungen an dieser Stelle Auswirkungen auf Export und Synchronisation haben können."
 
 #: Controller.php:74
 #, python-format
@@ -32,21 +32,23 @@ msgstr "BeispielAnwendung"
 
 #: Setup/Initialize.php:33
 msgid "Completed"
-msgstr ""
+msgstr "Abgeschlossen"
 
 #: Setup/Initialize.php:34
 msgid "Cancelled"
-msgstr ""
+msgstr "Abgebrochen"
 
 #: Setup/Initialize.php:35
 msgid "In process"
-msgstr ""
+msgstr "In Bearbeitung"
 
-#: js/ExampleRecordGridPanel.js:83 js/ExampleRecordEditDialog.js:104
+#: js/ExampleRecordGridPanel.js:83
+#: js/ExampleRecordEditDialog.js:104
 msgid "Name"
 msgstr "Name"
 
-#: js/ExampleRecordGridPanel.js:89 js/ExampleRecordEditDialog.js:110
+#: js/ExampleRecordGridPanel.js:89
+#: js/ExampleRecordEditDialog.js:110
 #: js/Model.js:71
 msgid "Status"
 msgstr "Status"
@@ -69,7 +71,7 @@ msgstr "BeispielEintrag"
 
 #: js/ExampleApplication.js:24
 msgid "Example Application test"
-msgstr ""
+msgstr "Beispiel Anwendung Test"
 
 #: js/Model.js:31
 msgid "example record"
@@ -83,25 +85,26 @@ msgid_plural "example record lists"
 msgstr[0] "Liste von Beispieleinträgen"
 msgstr[1] "Listen von Beispieleinträgen"
 
-#: js/Model.js:69 js/Model.js:106
+#: js/Model.js:69
+#: js/Model.js:106
 msgid "Quick search"
 msgstr "Schnellsuche"
 
 #: js/Model.js:79
 msgid "Last modified"
-msgstr ""
+msgstr "Letzte Bearbeitung"
 
 #: js/Model.js:80
 msgid "Last modifier"
-msgstr ""
+msgstr "Letzter Bearbeiter"
 
 #: js/Model.js:81
 msgid "Creation Time"
-msgstr ""
+msgstr "Erstelldatum"
 
 #: js/Model.js:82
 msgid "Creator"
-msgstr ""
+msgstr "Ersteller"
 
 #~ msgid "Example Application"
 #~ msgstr "Beispielanwendung"
@@ -116,6 +119,7 @@ msgstr ""
 #~ msgstr "Beschreibung"
 
 #~ msgid "record list"
+
 #~ msgid_plural "record lists"
 #~ msgstr[0] "Eintrags Liste"
 #~ msgstr[1] "Eintrags Listen"
