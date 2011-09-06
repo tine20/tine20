@@ -13,41 +13,9 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/StatusCombo.js:25
-msgid "New"
-msgstr "Nový"
-
-#: js/StatusCombo.js:26
-msgid "Open"
-msgstr "Otevřené"
-
-#: js/StatusCombo.js:27
-msgid "Stalled"
-msgstr "Po termínu"
-
-#: js/StatusCombo.js:28
-msgid "Waiting"
-msgstr "Čekající"
-
-#: js/StatusCombo.js:29
-msgid "Pending"
-msgstr "Pozastavené"
-
-#: js/StatusCombo.js:30
-msgid "Resolved"
-msgstr "Vyřešené"
-
-#: js/StatusCombo.js:31
-msgid "Rejected"
-msgstr "Odmítnuté"
-
-#: js/StatusCombo.js:32
-msgid "Deleted"
-msgstr "Smazané"
-
-#: js/StatusCombo.js:50 js/TicketGridPanel.js:94
-msgid "Status"
-msgstr "Stav"
+#: js/TreePanel.js:23
+msgid "All Queues"
+msgstr "Všechny fronty"
 
 #: js/Model.js:41 js/TicketGridPanel.js:41
 msgid "Ticket"
@@ -80,6 +48,10 @@ msgstr "Vlastník"
 msgid "Description"
 msgstr "Popis"
 
+#: js/TicketGridPanel.js:94 js/StatusCombo.js:50
+msgid "Status"
+msgstr "Stav"
+
 #: js/TicketGridPanel.js:100
 msgid "Final Priority"
 msgstr "Priorita"
@@ -88,6 +60,34 @@ msgstr "Priorita"
 msgid "Due"
 msgstr "Vyřešit do"
 
-#: js/TreePanel.js:23
-msgid "All Queues"
-msgstr "Všechny fronty"
+#: js/StatusCombo.js:25
+msgid "New"
+msgstr "Nový"
+
+#: js/StatusCombo.js:26
+msgid "Open"
+msgstr "Otevřené"
+
+#: js/StatusCombo.js:27
+msgid "Stalled"
+msgstr "Po termínu"
+
+#: js/StatusCombo.js:28
+msgid "Waiting"
+msgstr "Čekající"
+
+#: js/StatusCombo.js:29
+msgid "Pending"
+msgstr "Pozastavené"
+
+#: js/StatusCombo.js:30
+msgid "Resolved"
+msgstr "Vyřešené"
+
+#: js/StatusCombo.js:31
+msgid "Rejected"
+msgstr "Odmítnuté"
+
+#: js/StatusCombo.js:32
+msgid "Deleted"
+msgstr "Smazané"

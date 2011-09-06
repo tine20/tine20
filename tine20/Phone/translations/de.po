@@ -127,6 +127,12 @@ msgstr "Klingeln"
 msgid "Call ID"
 msgstr "Anruf-ID"
 
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "Telefonliste"
+msgstr[1] "Telefonlisten"
+
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
 msgstr "Kontakt anrufen"
@@ -146,12 +152,6 @@ msgstr "Handy"
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
 msgstr "Handy privat"
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "Telefonliste"
-msgstr[1] "Telefonlisten"
 
 #~ msgid "Dial phone number"
 #~ msgstr "Telefonnummer wählen"

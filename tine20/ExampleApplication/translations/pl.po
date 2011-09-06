@@ -13,37 +13,63 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/ExampleApplication.js:25
-msgid "Example Application"
+#: Config.php:31
+msgid "Status Available"
+msgstr ""
+
+#: Config.php:33
+msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgstr ""
+
+#: Controller.php:74
+#, python-format
+msgid "%s's personal example records"
+msgstr "%s przykładowe, osobiste wiersze"
+
+#: Setup/setup.xml:4
+msgid "ExampleApplication"
 msgstr "Przykładowa aplikacja"
 
-#: js/ExampleRecordGridPanel.js:74
-msgid "Quick search"
-msgstr "Szybkie wyszukiwanie"
+#: Setup/Initialize.php:33
+msgid "Completed"
+msgstr ""
 
-#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
+#: Setup/Initialize.php:34
+msgid "Cancelled"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "In process"
+msgstr ""
+
+#: js/ExampleRecordGridPanel.js:83 js/ExampleRecordEditDialog.js:104
 msgid "Name"
 msgstr "Nazwa"
 
-#: js/ExampleRecordGridPanel.js:108
-msgid "Title"
-msgstr "Tytuł"
-
-#: js/ExampleRecordGridPanel.js:114
+#: js/ExampleRecordGridPanel.js:89 js/ExampleRecordEditDialog.js:110
+#: js/Model.js:71
 msgid "Status"
 msgstr "Status"
 
-#: js/ExampleRecordGridPanel.js:121
+#: js/ExampleRecordGridPanel.js:96
+msgid "Title"
+msgstr "Tytuł"
+
+#: js/ExampleRecordGridPanel.js:102
 msgid "Budget"
 msgstr "Budżet"
 
-#: js/ExampleRecordGridPanel.js:145
+#: js/ExampleRecordGridPanel.js:126
 msgid "Show closed"
 msgstr "Pokaż zakończone"
 
 #: js/ExampleRecordEditDialog.js:87
 msgid "ExampleRecord"
 msgstr "Przykładowy wiersz"
+
+#: js/ExampleApplication.js:24
+msgid "Example Application test"
+msgstr ""
 
 #: js/Model.js:31
 msgid "example record"
@@ -59,14 +85,28 @@ msgstr[0] "Lista przykładowych wierszy"
 msgstr[1] "listy przykładowych wierszy"
 msgstr[2] "listy przykładowych wierszy"
 
-#: Setup/setup.xml:10
-msgid "ExampleApplication"
-msgstr "Przykładowa aplikacja"
+#: js/Model.js:69 js/Model.js:106
+msgid "Quick search"
+msgstr "Szybkie wyszukiwanie"
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal example records"
-msgstr "%s przykładowe, osobiste wiersze"
+#: js/Model.js:79
+msgid "Last modified"
+msgstr ""
+
+#: js/Model.js:80
+msgid "Last modifier"
+msgstr ""
+
+#: js/Model.js:81
+msgid "Creation Time"
+msgstr ""
+
+#: js/Model.js:82
+msgid "Creator"
+msgstr ""
+
+#~ msgid "Example Application"
+#~ msgstr "Przykładowa aplikacja"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "Przykładowe wiersze"

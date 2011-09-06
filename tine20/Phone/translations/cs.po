@@ -131,6 +131,13 @@ msgstr "Vyzvání"
 msgid "Call ID"
 msgstr "ID hovoru"
 
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "seznam telefonů"
+msgstr[1] "seznamy telefonů"
+msgstr[2] "seznamů telefonů"
+
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
 msgstr ""
@@ -150,13 +157,6 @@ msgstr ""
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
 msgstr ""
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "seznam telefonů"
-msgstr[1] "seznamy telefonů"
-msgstr[2] "seznamů telefonů"
 
 #~ msgid "Name"
 #~ msgstr "Název"

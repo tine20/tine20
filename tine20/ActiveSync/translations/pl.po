@@ -13,49 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/Application.js:30
-msgid "Active Sync"
-msgstr "Zdalna synchronizacja"
-
-#: js/Application.js:46
-msgid "Select a Device"
-msgstr "Wybierz urządzenie"
-
-#: js/Application.js:60
-msgid "No ActiveSync Device registered"
-msgstr "Usługa ActiveSync niezarejestrowana"
-
-#: js/Application.js:68
-msgid "Set as {0} Filter"
-msgstr "Ustaw jako filtr: {0}"
-
-#: js/Application.js:93
-msgid "Resetted Sync Filter"
-msgstr "Zresetowany filtr synchronizacji"
-
-#: js/Application.js:94 js/Application.js:106
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "Filtrem {0} dla urządzenia \"{1}\"  jest teraz \"{2}\""
-
-#: js/Application.js:97
-msgid "resetted"
-msgstr "zresetowane"
-
-#: js/Application.js:105
-msgid "Set Sync Filter"
-msgstr "Ustaw filtr synchronizacji"
-
-#: js/Model.js:45
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Urządzenie"
-msgstr[1] "urządzenia"
-msgstr[2] "urządzenia"
-
-#: js/Model.js:45
-msgid "Devices"
-msgstr "Urządzenia"
-
 #: Setup/setup.xml:473
 msgid "Default Policy"
 msgstr "Domyślna polityka"
@@ -87,3 +44,46 @@ msgstr "Domyślna lista zadań"
 #: Preference.php:83
 msgid "The default task list to create new tasks in."
 msgstr "Domyślna lista dla nowo tworzonych zadań"
+
+#: js/Model.js:45
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Urządzenie"
+msgstr[1] "urządzenia"
+msgstr[2] "urządzenia"
+
+#: js/Model.js:45
+msgid "Devices"
+msgstr "Urządzenia"
+
+#: js/Application.js:30
+msgid "Active Sync"
+msgstr "Zdalna synchronizacja"
+
+#: js/Application.js:46
+msgid "Select a Device"
+msgstr "Wybierz urządzenie"
+
+#: js/Application.js:60
+msgid "No ActiveSync Device registered"
+msgstr "Usługa ActiveSync niezarejestrowana"
+
+#: js/Application.js:68
+msgid "Set as {0} Filter"
+msgstr "Ustaw jako filtr: {0}"
+
+#: js/Application.js:93
+msgid "Resetted Sync Filter"
+msgstr "Zresetowany filtr synchronizacji"
+
+#: js/Application.js:94 js/Application.js:106
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "Filtrem {0} dla urządzenia \"{1}\"  jest teraz \"{2}\""
+
+#: js/Application.js:97
+msgid "resetted"
+msgstr "zresetowane"
+
+#: js/Application.js:105
+msgid "Set Sync Filter"
+msgstr "Ustaw filtr synchronizacji"

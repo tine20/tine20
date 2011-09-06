@@ -128,6 +128,11 @@ msgstr "響鈴中"
 msgid "Call ID"
 msgstr "來電ID"
 
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] ""
+
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
 msgstr ""
@@ -147,11 +152,6 @@ msgstr ""
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
 msgstr ""
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] ""
 
 #~ msgid "Dial phone number"
 #~ msgstr "撥打電話"

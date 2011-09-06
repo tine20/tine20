@@ -13,41 +13,9 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/StatusCombo.js:25
-msgid "New"
-msgstr "Новый"
-
-#: js/StatusCombo.js:26
-msgid "Open"
-msgstr "Открытый"
-
-#: js/StatusCombo.js:27
-msgid "Stalled"
-msgstr "Остановленный"
-
-#: js/StatusCombo.js:28
-msgid "Waiting"
-msgstr "Ожидающий"
-
-#: js/StatusCombo.js:29
-msgid "Pending"
-msgstr "Ожидающий"
-
-#: js/StatusCombo.js:30
-msgid "Resolved"
-msgstr "Решённый"
-
-#: js/StatusCombo.js:31
-msgid "Rejected"
-msgstr "Отвергнутый"
-
-#: js/StatusCombo.js:32
-msgid "Deleted"
-msgstr "Удалённый"
-
-#: js/StatusCombo.js:50 js/TicketGridPanel.js:94
-msgid "Status"
-msgstr "Статус"
+#: js/TreePanel.js:23
+msgid "All Queues"
+msgstr "Все очереди"
 
 #: js/Model.js:41 js/TicketGridPanel.js:41
 msgid "Ticket"
@@ -80,6 +48,10 @@ msgstr "Владелец"
 msgid "Description"
 msgstr "Описание"
 
+#: js/TicketGridPanel.js:94 js/StatusCombo.js:50
+msgid "Status"
+msgstr "Статус"
+
 #: js/TicketGridPanel.js:100
 msgid "Final Priority"
 msgstr "Финальный приоритет"
@@ -88,6 +60,34 @@ msgstr "Финальный приоритет"
 msgid "Due"
 msgstr "Точно"
 
-#: js/TreePanel.js:23
-msgid "All Queues"
-msgstr "Все очереди"
+#: js/StatusCombo.js:25
+msgid "New"
+msgstr "Новый"
+
+#: js/StatusCombo.js:26
+msgid "Open"
+msgstr "Открытый"
+
+#: js/StatusCombo.js:27
+msgid "Stalled"
+msgstr "Остановленный"
+
+#: js/StatusCombo.js:28
+msgid "Waiting"
+msgstr "Ожидающий"
+
+#: js/StatusCombo.js:29
+msgid "Pending"
+msgstr "Ожидающий"
+
+#: js/StatusCombo.js:30
+msgid "Resolved"
+msgstr "Решённый"
+
+#: js/StatusCombo.js:31
+msgid "Rejected"
+msgstr "Отвергнутый"
+
+#: js/StatusCombo.js:32
+msgid "Deleted"
+msgstr "Удалённый"

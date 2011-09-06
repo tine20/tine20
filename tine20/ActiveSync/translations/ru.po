@@ -14,49 +14,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: js/Application.js:30
-msgid "Active Sync"
-msgstr ""
-
-#: js/Application.js:46
-msgid "Select a Device"
-msgstr ""
-
-#: js/Application.js:60
-msgid "No ActiveSync Device registered"
-msgstr ""
-
-#: js/Application.js:68
-msgid "Set as {0} Filter"
-msgstr ""
-
-#: js/Application.js:93
-msgid "Resetted Sync Filter"
-msgstr ""
-
-#: js/Application.js:94 js/Application.js:106
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr ""
-
-#: js/Application.js:97
-msgid "resetted"
-msgstr ""
-
-#: js/Application.js:105
-msgid "Set Sync Filter"
-msgstr ""
-
-#: js/Model.js:45
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:45
-msgid "Devices"
-msgstr ""
-
 #: Setup/setup.xml:473
 msgid "Default Policy"
 msgstr ""
@@ -87,4 +44,47 @@ msgstr ""
 
 #: Preference.php:83
 msgid "The default task list to create new tasks in."
+msgstr ""
+
+#: js/Model.js:45
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:45
+msgid "Devices"
+msgstr ""
+
+#: js/Application.js:30
+msgid "Active Sync"
+msgstr ""
+
+#: js/Application.js:46
+msgid "Select a Device"
+msgstr ""
+
+#: js/Application.js:60
+msgid "No ActiveSync Device registered"
+msgstr ""
+
+#: js/Application.js:68
+msgid "Set as {0} Filter"
+msgstr ""
+
+#: js/Application.js:93
+msgid "Resetted Sync Filter"
+msgstr ""
+
+#: js/Application.js:94 js/Application.js:106
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr ""
+
+#: js/Application.js:97
+msgid "resetted"
+msgstr ""
+
+#: js/Application.js:105
+msgid "Set Sync Filter"
 msgstr ""

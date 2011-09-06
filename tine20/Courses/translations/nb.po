@@ -14,17 +14,15 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "lærer"
+#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:137
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurs"
+msgstr[1] "Kurs"
 
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "Lærer"
-
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "Lærer Konto"
+#: Setup/setup.xml:4 js/Courses.js:32
+msgid "Courses"
+msgstr "Kurs"
 
 #: js/CourseGridPanel.js:49
 msgid "Quick search"
@@ -70,15 +68,25 @@ msgstr "Feilet"
 msgid "Some error occured while trying to update the courses."
 msgstr "En feil oppstod ved forsøk på å oppdatere kursene."
 
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "opptaks liste"
+msgstr[1] "opptaks lister"
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Kurs Type"
+msgstr[1] "Kurs Typer"
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr "Alle Kursene"
+
 #: js/CourseEditDialog.js:31
 msgid "Import course members"
 msgstr "Importer kurs medlemmer"
-
-#: js/CourseEditDialog.js:137 js/Models.js:41 Frontend/Json.php:254
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurs"
-msgstr[1] "Kurs"
 
 #: js/CourseEditDialog.js:153
 msgid "Course Name"
@@ -116,22 +124,14 @@ msgstr "Sett nytt passord"
 msgid "Please enter the new password:"
 msgstr "Vennligst skriv inn det nye passordet:"
 
-#: js/Courses.js:32 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurs"
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "lærer"
 
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "Alle Kursene"
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Lærer"
 
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "opptaks liste"
-msgstr[1] "opptaks lister"
-
-#: js/Models.js:74
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Kurs Type"
-msgstr[1] "Kurs Typer"
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Lærer Konto"

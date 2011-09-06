@@ -128,6 +128,12 @@ msgstr "Csörgés"
 msgid "Call ID"
 msgstr "Hívás azonosító"
 
+#: js/Models.js:73
+msgid "phones list"
+msgid_plural "phones lists"
+msgstr[0] "telefon lista"
+msgstr[1] "telefon listák"
+
 #: js/AddressbookGridPanelHook.js:35
 msgid "Call contact"
 msgstr ""
@@ -147,9 +153,3 @@ msgstr ""
 #: js/AddressbookGridPanelHook.js:199
 msgid "Cell private"
 msgstr ""
-
-#: js/Models.js:73
-msgid "phones list"
-msgid_plural "phones lists"
-msgstr[0] "telefon lista"
-msgstr[1] "telefon listák"

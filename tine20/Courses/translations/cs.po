@@ -13,17 +13,16 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "lektor"
+#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:137
+msgid "Course"
+msgid_plural "Courses"
+msgstr[0] "Kurz"
+msgstr[1] "Kurzy"
+msgstr[2] "Kurzů"
 
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "Lektor"
-
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "Účet lektora"
+#: Setup/setup.xml:4 js/Courses.js:32
+msgid "Courses"
+msgstr "Kurzy"
 
 #: js/CourseGridPanel.js:49
 msgid "Quick search"
@@ -69,16 +68,27 @@ msgstr "Nepodařilo se"
 msgid "Some error occured while trying to update the courses."
 msgstr "Při aktualizaci kurzů došlo k chybě."
 
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "seznam záznamů"
+msgstr[1] "seznamy záznamů"
+msgstr[2] "seznamů záznamů"
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Typ kurzu"
+msgstr[1] "Typy kurzů"
+msgstr[2] "Typů kurzů"
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr "Všechny kurzy"
+
 #: js/CourseEditDialog.js:31
 msgid "Import course members"
 msgstr "Importovat členy kurzu"
-
-#: js/CourseEditDialog.js:137 js/Models.js:41 Frontend/Json.php:254
-msgid "Course"
-msgid_plural "Courses"
-msgstr[0] "Kurz"
-msgstr[1] "Kurzy"
-msgstr[2] "Kurzů"
 
 #: js/CourseEditDialog.js:153
 msgid "Course Name"
@@ -116,24 +126,14 @@ msgstr "Nastavit nové heslo"
 msgid "Please enter the new password:"
 msgstr "Zadejte prosím nové heslo:"
 
-#: js/Courses.js:32 Setup/setup.xml:4
-msgid "Courses"
-msgstr "Kurzy"
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "lektor"
 
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "Všechny kurzy"
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Lektor"
 
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "seznam záznamů"
-msgstr[1] "seznamy záznamů"
-msgstr[2] "seznamů záznamů"
-
-#: js/Models.js:74
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Typ kurzu"
-msgstr[1] "Typy kurzů"
-msgstr[2] "Typů kurzů"
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Účet lektora"

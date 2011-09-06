@@ -22,35 +22,6 @@ msgstr "termékek kezelése"
 msgid "add, edit and delete products"
 msgstr "termékek hozzáadása, szerkesztése és törlése"
 
-#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
-msgid "Title"
-msgstr "Cím"
-
-#: js/ContractEditDialog.js:100 js/ProductEditDialog.js:123
-#: js/ProductGridPanel.js:123
-msgid "Description"
-msgstr "Leírás"
-
-#: js/ContractEditDialog.js:101 js/ProductEditDialog.js:124
-msgid "Enter description..."
-msgstr "Leírás bevitele..."
-
-#: js/ContractGridPanel.js:59 js/Models.js:78
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/ContractGridPanel.js:60
-msgid "Summary"
-msgstr "Összefoglalás"
-
-#: js/ContractGridPanel.js:79
-msgid "Contract number"
-msgstr "Szerződés száma"
-
-#: js/ContractGridPanel.js:91
-msgid "Status"
-msgstr "Állapot"
-
 #: js/ProductEditDialog.js:102 js/ProductGridPanel.js:120
 msgid "Name"
 msgstr "Név"
@@ -67,9 +38,14 @@ msgstr "Gyártó"
 msgid "Category"
 msgstr "Kategória"
 
-#: js/ProductGridPanel.js:119
-msgid "Tags"
-msgstr "Címke"
+#: js/ProductEditDialog.js:123 js/ContractEditDialog.js:100
+#: js/ProductGridPanel.js:123
+msgid "Description"
+msgstr "Leírás"
+
+#: js/ProductEditDialog.js:124 js/ContractEditDialog.js:101
+msgid "Enter description..."
+msgstr "Leírás bevitele..."
 
 #: js/Models.js:40
 msgid "Product"
@@ -82,6 +58,10 @@ msgid "record list"
 msgid_plural "record lists"
 msgstr[0] "adat lista"
 msgstr[1] "adat listák"
+
+#: js/Models.js:78 js/ContractGridPanel.js:59
+msgid "Quick search"
+msgstr "Gyors keresés"
 
 #: js/Models.js:79
 msgid "Product name"
@@ -99,6 +79,22 @@ msgid_plural "contracts lists"
 msgstr[0] "szerződés lista"
 msgstr[1] "szerződés listák"
 
+#: js/ContractEditDialog.js:95 js/ContractGridPanel.js:85
+msgid "Title"
+msgstr "Cím"
+
+#: js/ContractGridPanel.js:60
+msgid "Summary"
+msgstr "Összefoglalás"
+
+#: js/ContractGridPanel.js:79
+msgid "Contract number"
+msgstr "Szerződés száma"
+
+#: js/ContractGridPanel.js:91
+msgid "Status"
+msgstr "Állapot"
+
 #: js/Sales.js:53
 msgid "Products"
 msgstr "Termék"
@@ -115,6 +111,9 @@ msgstr "Szerződések"
 msgid "All Contracts"
 msgstr "Összes szerződés"
 
-#: Setup/setup.xml:243
-msgid "Shared Contracts"
-msgstr "Megosztott szerződések"
+#: js/ProductGridPanel.js:119
+msgid "Tags"
+msgstr "Címke"
+
+#~ msgid "Shared Contracts"
+#~ msgstr "Megosztott szerződések"
