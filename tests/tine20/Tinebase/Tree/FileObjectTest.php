@@ -129,7 +129,7 @@ class Tinebase_Tree_FileObjectTest extends PHPUnit_Framework_TestCase
         $this->objects['objects'][] =  $testObject;
         #var_dump($testObject->toArray());
         
-        $this->assertEquals('application/octect-stream',         $testObject->contenttype , 'contenttype mismatch');
+        $this->assertEquals('application/octet-stream',         $testObject->contenttype , 'contenttype mismatch');
         $this->assertEquals(1,                                   $testObject->revision    , 'revision mismatch');
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $testObject->type        , 'filetype mismatch');
         $this->assertEquals(Tinebase_Core::getUser()->getId(),   $testObject->created_by);
@@ -151,7 +151,7 @@ class Tinebase_Tree_FileObjectTest extends PHPUnit_Framework_TestCase
         $testObject = $this->_backend->update($object);
         #var_dump($testObject->toArray());
         
-        $this->assertEquals('application/octect-stream',         $testObject->contenttype);
+        $this->assertEquals('application/octet-stream',         $testObject->contenttype);
         $this->assertEquals(2,                                   $testObject->revision);
         $this->assertEquals(Tinebase_Model_Tree_FileObject::TYPE_FILE, $testObject->type);
         $this->assertEquals(Tinebase_Core::getUser()->getId(),   $testObject->created_by);

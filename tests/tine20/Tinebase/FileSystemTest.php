@@ -176,7 +176,7 @@ class Tinebase_FileSystemTest extends PHPUnit_Framework_TestCase
         $contentType = $this->_controller->getContentType($this->_basePath . '/PHPUNIT/phpunit.txt');
         
         // finfo_open() for content type detection is only available in php versions >= 5.3.0'
-        $expectedContentType = (version_compare(PHP_VERSION, '5.3.0', '>=')) ? 'text/plain' : 'application/octect-stream'; 
+        $expectedContentType = (version_compare(PHP_VERSION, '5.3.0', '>=')) ? 'text/plain' : 'application/octet-stream'; 
         
         $this->assertEquals($expectedContentType, $contentType);
     }
