@@ -72,6 +72,12 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     searchComboConfig: null,
     
     /**
+     * is the row selected after adding?
+     * @type Boolean
+     */
+    selectRowAfterAdd: true,
+    
+    /**
      * @type Ext.Menu
      * @property contextMenu
      */
@@ -119,8 +125,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.store.on('add', function(store, records, index) {
             (function() {
                 if (this.rendered) {
-                    this.getView().focusRow(index);
-                    this.getSelectionModel().selectRow(index); 
+                    if (this.selectRowAfterAdd) {
+                        this.getView().focusRow(index);
+                        this.getSelectionModel().selectRow(index);
+                    } else {
+                        // some eyecandy
+                        var row = this.getView().getRow(index);
+                        Ext.fly(row).highlight();
+                    }
                 }
             }).defer(300, this);
         }, this);
