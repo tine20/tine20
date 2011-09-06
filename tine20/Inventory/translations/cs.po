@@ -1,0 +1,105 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Tine 2.0 - ExampleApplication\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2010-07-27 11:08+0100\n"
+"Last-Translator: Michal Sladek <msladek@brotel.cz>\n"
+"Language-Team: Tine 2.0 Translators\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Czech\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#: js/ExampleApplication.js:25
+msgid "Example Application"
+msgstr "Ukázková aplikace"
+
+#: js/ExampleRecordGridPanel.js:74
+msgid "Quick search"
+msgstr "Rychlé hledání"
+
+#: js/ExampleRecordGridPanel.js:102 js/ExampleRecordEditDialog.js:104
+msgid "Name"
+msgstr "Název"
+
+#: js/ExampleRecordGridPanel.js:108
+msgid "Title"
+msgstr "Název"
+
+#: js/ExampleRecordGridPanel.js:114
+msgid "Status"
+msgstr "Stav"
+
+#: js/ExampleRecordGridPanel.js:121
+msgid "Budget"
+msgstr "Rozpočet"
+
+#: js/ExampleRecordGridPanel.js:145
+msgid "Show closed"
+msgstr "Zobrazit uzavřené"
+
+#: js/ExampleRecordEditDialog.js:87
+msgid "ExampleRecord"
+msgstr "Ukázkový záznam"
+
+#: js/Model.js:31
+msgid "example record"
+msgid_plural "example records"
+msgstr[0] "ukázkový záznam"
+msgstr[1] "ukázkové záznamy"
+msgstr[2] "ukázkových záznamů"
+
+#: js/Model.js:35
+msgid "example record list"
+msgid_plural "example record lists"
+msgstr[0] "seznam ukázkových záznamů"
+msgstr[1] "seznamy ukázkových záznamů"
+msgstr[2] "seznamů ukázkových záznamů"
+
+#: Setup/setup.xml:10
+msgid "ExampleApplication"
+msgstr "Ukázková aplikace"
+
+#: Controller.php:96
+#, python-format
+msgid "%s's personal example records"
+msgstr "Osobní ukázkové záznamy uživatele %s"
+
+#~ msgid "ExampleRecords"
+#~ msgstr "Ukázkové záznamy"
+
+#~ msgid "All ExampleRecords"
+#~ msgstr "Všechny ukázkové záznamy"
+
+#~ msgid "Unit"
+#~ msgstr "Jednotka"
+
+#~ msgid "Unit Price"
+#~ msgstr "Jednotková cena"
+
+#~ msgid "Timesheets are billable"
+#~ msgstr "Pracovní výkazy lze účtovat"
+
+#~ msgid "closed"
+#~ msgstr "uzavřený"
+
+#~ msgid "open"
+#~ msgstr "otevřený"
+
+#~ msgid "Billed"
+#~ msgstr "Účtovaný"
+
+#~ msgid "not yet billed"
+#~ msgstr "zatím neúčtovaný"
+
+#~ msgid "to bill"
+#~ msgstr "k účtování"
+
+#~ msgid "billed"
+#~ msgstr "účtovaný"
+
+#~ msgid "Description"
+#~ msgstr "Popis"

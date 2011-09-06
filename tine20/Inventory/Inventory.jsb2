@@ -1,0 +1,44 @@
+{
+  "projectName": "Tine 2.0 - Inventory",
+  "deployDir": "Inventory",
+  "licenseText": "Tine 2.0 - Inventory \nCopyright (c) 2007-2011 Metaways Infosystems GmbH (http://www.metaways.de)\nhttp://www.gnu.org/licenses/agpl.html AGPL Version 3",
+  "resources": [
+    
+  ],
+  "pkgs": [
+    {
+      "name": "Inventory FAT Client",
+      "file": "js/Inventory-FAT.js",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Model.js",
+          "path": "js/"
+        },
+        {
+          "text": "Inventory.js",
+          "path": "js/"
+        },
+        {
+          "text": "InventoryItemGridPanel.js",
+          "path": "js/"
+        },
+        {
+          "text": "InventoryItemEditDialog.js",
+          "path": "js/"
+        }
+      ]
+    },
+    {
+      "name": "Inventory FAT Client",
+      "file": "css/Inventory-FAT.css",
+      "isDebug": true,
+      "fileIncludes": [
+        {
+          "text": "Inventory.css",
+          "path": "css/"
+        }
+      ]
+    }
+  ]
+}
