@@ -17,10 +17,14 @@ class Tasks_Setup_Update_Release5 extends Setup_Update_Abstract
     public function update_0()
     {
         // remove status_id keys
-        $this->_db->query("ALTER TABLE `" . SQL_TABLE_PREFIX . "tasks` DROP FOREIGN KEY `tasks::status_id--tasks_status::id`");
+        $this->_backend->dropForeignKey('tasks', 'tasks::status_id--tasks_status::id');
         $this->_backend->dropIndex('tasks', 'status_id');
         
-        
+        // need to replace all NULL values first
+        $this->_db->update(SQL_TABLE_PREFIX . 'tasks', array(
+            'status_id' => 1,
+        ), "`status_id` IS NULL");
+
         // alter status_id -> status
         $declaration = new Setup_Backend_Schema_Field_Xml('
             <field>
