@@ -50,9 +50,12 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     onRecordLoad: function() {
-    	// you can do something here
-
     	Tine.Projects.ProjectEditDialog.superclass.onRecordLoad.call(this);        
+
+        if (this.rendered) {
+            // TODO init store of link panel
+            this.contactLinkPanel.record = this.record;
+        }
     },
     
     /**
@@ -77,21 +80,17 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         
-        // TODO set width of search combo to 100%
         // TODO add relation type
         // TODO update from / to record
+        // TODO set width of search combo to 100%
         this.contactLinkPanel = new Tine.widgets.grid.LinkGridPanel({
             border: false,
             frame: false,
             autoExpandColumn: 'name',
             enableTbar: true,
-            recordClass: Tine.Addressbook.Model.Contact,
             searchRecordClass: Tine.Addressbook.Model.Contact,
             title: this.app.i18n._('Attendee'),
-            searchComboClass: Tine.Addressbook.SearchCombo,
-            columns:  [
-                {id: 'name', header: _('Name'), dataIndex: 'n_fileas'}
-            ]
+            searchComboClass: Tine.Addressbook.SearchCombo
         });
         
         return {
