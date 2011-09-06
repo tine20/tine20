@@ -239,24 +239,17 @@ class Tinebase_Filesystem_StreamWrapper
             return false;
         }
         
-        $recursive       = (bool)($_options & 1);
-        
         $node = $this->_getTreeNodeBackend()->getLastPathNode($path);
         
         $children = $this->_getTreeNodeBackend()->getChildren($node);
         
         // check if child entries exists and delete if $recursive is true
         if ($children->count() > 0) {
-            if ($recursive !== true) {
-                trigger_error('directory not empty', E_USER_WARNING);
-                return false;
-            } else {
-                foreach ($children as $child) {
-                    if ($this->isDir($_path . '/' . $child->name)) {
-                        $this->rmdir($_path . '/' . $child->name, STREAM_MKDIR_RECURSIVE);
-                    } else {
-                        $this->unlink($_path . '/' . $child->name);
-                    }
+            foreach ($children as $child) {
+                if ($this->isDir($_path . '/' . $child->name)) {
+                    $this->rmdir($_path . '/' . $child->name, STREAM_MKDIR_RECURSIVE);
+                } else {
+                    $this->unlink($_path . '/' . $child->name);
                 }
             }
         }

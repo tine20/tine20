@@ -70,7 +70,7 @@ class Tinebase_Tree_Node extends Tinebase_Backend_Sql_Abstract
      * @param Tinebase_Model_Pagination $_pagination
      * @return array
      */
-    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter, Tinebase_Model_Pagination $_pagination = NULL)
+    protected function _getColumnsToFetch($_cols, Tinebase_Model_Filter_FilterGroup $_filter = NULL, Tinebase_Model_Pagination $_pagination = NULL)
     {
         $result = parent::_getColumnsToFetch($_cols, $_filter, $_pagination);
         

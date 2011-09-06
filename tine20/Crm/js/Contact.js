@@ -342,7 +342,7 @@ Tine.Crm.Contact.TypeComboBox = Ext.extend(Ext.form.ComboBox, {
         translation.textdomain('Crm');
         
         Tine.Crm.Contact.TypeComboBox.superclass.initComponent.call(this);
-        // allways set a default
+        // always set a default
         if(!this.value) {
             this.value = 'responsible';
         }

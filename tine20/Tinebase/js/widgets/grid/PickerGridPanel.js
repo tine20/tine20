@@ -54,12 +54,28 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     recordClass: null,
     
     /**
-     * record class
+     * search record class
      * @cfg {} recordClass
      */
     searchRecordClass: null,
     
+    /**
+     * search combo class
+     * @cfg {} searchComboClass
+     */
     searchComboClass: null,
+    
+    /**
+     * search combo config
+     * @cfg {} searchComboConfig
+     */
+    searchComboConfig: null,
+    
+    /**
+     * is the row selected after adding?
+     * @type Boolean
+     */
+    selectRowAfterAdd: true,
     
     /**
      * @type Ext.Menu
@@ -84,6 +100,7 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     initComponent: function() {
         this.contextMenuItems = (this.contextMenuItems !== null) ? this.contextMenuItems : [];
         this.configColumns = (this.configColumns !== null) ? this.configColumns : [];
+        this.searchComboConfig = this.searchComboConfig || {};
         
         this.initStore();
         this.initActionsAndToolbars();
@@ -108,8 +125,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
         this.store.on('add', function(store, records, index) {
             (function() {
                 if (this.rendered) {
-                    this.getView().focusRow(index);
-                    this.getSelectionModel().selectRow(index); 
+                    if (this.selectRowAfterAdd) {
+                        this.getView().focusRow(index);
+                        this.getSelectionModel().selectRow(index);
+                    } else {
+                        // some eyecandy
+                        var row = this.getView().getRow(index);
+                        Ext.fly(row).highlight();
+                    }
                 }
             }).defer(300, this);
         }, this);
@@ -201,14 +224,14 @@ Tine.widgets.grid.PickerGridPanel = Ext.extend(Ext.grid.EditorGridPanel, {
     getSearchCombo: function() {
         var searchComboClass = (this.searchComboClass !== null) ? this.searchComboClass : Tine.Tinebase.widgets.form.RecordPickerComboBox;
         
-        return new searchComboClass({
+        return new searchComboClass(Ext.apply({
             recordStore: this.store,
             blurOnSelect: true,
             recordClass: (this.searchRecordClass !== null) ? this.searchRecordClass : this.recordClass,
             newRecordClass: this.recordClass,
             emptyText: _('Search for records ...'),
             onSelect: this.onAddRecordFromCombo
-        });        
+        }, this.searchComboConfig));        
     },
     
     /**
