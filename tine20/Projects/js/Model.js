@@ -78,7 +78,7 @@ Tine.Projects.Model.Project.getFilterModel = function() {
         },
         {filtertype: 'tinebase.tag', app: app},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Projects.Model.Project},
-        {filtertype: 'foreignrecord', app: app, foreignRecordClass: Tine.Addressbook.Model.Contact, ownField: 'contact'},
+        {filtertype: 'tine.projects.attendee', app: app},
         {label: app.i18n._('Last modified'),                                            field: 'last_modified_time', valueType: 'date'},
         {label: app.i18n._('Last modifier'),                                            field: 'last_modified_by',   valueType: 'user'},
         {label: app.i18n._('Creation Time'),                                            field: 'creation_time',      valueType: 'date'},
