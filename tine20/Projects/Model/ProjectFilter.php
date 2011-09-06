@@ -41,6 +41,11 @@ class Projects_Model_ProjectFilter extends Tinebase_Model_Filter_FilterGroup
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
     
+        'contact'        => array('filter' => 'Tinebase_Model_Filter_Relation', 'options' => array(
+            'related_model'     => 'Addressbook_Model_Contact',
+            'related_filter'    => 'Addressbook_Model_ContactFilter'
+        )),
+    
         'last_modified_time'   => array('filter' => 'Tinebase_Model_Filter_Date'),
         'deleted_time'         => array('filter' => 'Tinebase_Model_Filter_DateTime'),
         'creation_time'        => array('filter' => 'Tinebase_Model_Filter_Date'),
