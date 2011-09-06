@@ -57,7 +57,7 @@ Tine.ExampleApplication.ExampleRecordGridPanel = Ext.extend(Tine.widgets.grid.Gr
         
         this.gridConfig.cm = this.getColumnModel();
         this.filterToolbar = this.filterToolbar || this.getFilterToolbar();
-        
+
         this.plugins = this.plugins || [];
         this.plugins.push(this.filterToolbar);
         

@@ -190,6 +190,7 @@ class Setup_Core extends Tinebase_Core
             if ($dbConfig->adapter === self::PDO_MYSQL && (! defined(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY) || ! defined(PDO::MYSQL_ATTR_INIT_COMMAND))) {
                 Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 
                     . ' MySQL PDO constants not defined.');
+
                 return;
             }
             
@@ -201,6 +202,7 @@ class Setup_Core extends Tinebase_Core
                 switch($dbConfig->adapter) {
                     case self::PDO_MYSQL:
                         if (version_compare(self::MYSQL_MINIMAL_VERSION, $serverVersion, '<')) {
+
                             self::set(Setup_Core::CHECKDB, TRUE);
                         } else {
                             Setup_Core::getLogger()->info(__METHOD__ . '::' . __LINE__ 

@@ -54,7 +54,16 @@ Tine.Tinebase.container = {
      * @return {String}
      */
     getMyNodePath: function() {
-        return '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId
+        return '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountId;
+    },
+    
+    /**
+     * returns the file node path of the 'my ...' node
+     * 
+     * @return {String}
+     */
+    getMyFileNodePath: function() {
+        return '/personal/' + Tine.Tinebase.registry.get('currentAccount').accountLoginName;
     },
     
     /**
@@ -116,7 +125,8 @@ Tine.Tinebase.container = {
             case '/personal':   return String.format(_('Other Users {0}'), containersName);
         }
         
-        if (path === Tine.Tinebase.container.getMyNodePath()) {
+        if (path === Tine.Tinebase.container.getMyNodePath()
+                || path === Tine.Tinebase.container.getMyFileNodePath()) {
             return String.format(_('My {0}'), containersName);
         }
         

@@ -74,7 +74,7 @@ class Tinebase_Model_Tree_FileObject extends Tinebase_Record_Abstract
         // model specific fields
         'revision'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     	'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-    	'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'application/octect-stream'),
+    	'contenttype'           => array(Zend_Filter_Input::ALLOW_EMPTY => true, Zend_Filter_Input::DEFAULT_VALUE => 'application/octet-stream'),
     	'size'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true, 'Digits'),
     	'hash'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'type'                  => array(

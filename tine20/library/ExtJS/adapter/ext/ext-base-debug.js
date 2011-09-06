@@ -2550,7 +2550,7 @@ Ext.lib.Ajax = function() {
     
     // private
     function handleReadyState(o, callback){
-    callback = callback || {};
+    	callback = callback || {};
         var conn = o.conn,
             tId = o.tId,
             poll = pub.poll,

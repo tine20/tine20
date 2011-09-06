@@ -99,6 +99,7 @@ Tine.widgets.container.GrantsDialog = Ext.extend(Tine.widgets.dialog.EditDialog,
             grants.push(_record.data);
         });
         
+              
         Ext.Ajax.request({
             params: {
                 method: 'Tinebase_Container.setContainerGrants',

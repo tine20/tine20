@@ -136,7 +136,15 @@
           "path": "js/ux/grid/"
         },
         {
+          "text": "UploadManager.js",
+          "path": "js/ux/file/"
+        },
+        {
           "text": "Uploader.js",
+          "path": "js/ux/file/"
+        },
+        {
+          "text": "Upload.js",
           "path": "js/ux/file/"
         },
         {
@@ -237,6 +245,10 @@
         },
         {
           "text": "CheckboxSelectionModel.js",
+          "path": "js/ux/tree/"
+        },
+        {
+          "text": "FileTreeSelectionModel.js",
           "path": "js/ux/tree/"
         },
         {
@@ -520,7 +532,7 @@
           "path": "js/widgets/container/"
         },
         {
-          "text": "ContainerTree.js",
+          "text": "TreePanel.js",
           "path": "js/widgets/container/"
         },
         {

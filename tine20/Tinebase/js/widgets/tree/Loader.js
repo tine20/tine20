@@ -59,7 +59,7 @@ Tine.widgets.tree.Loader = Ext.extend(Ext.tree.TreeLoader, {
         return {
             method: this.method,
             filter: this.filter
-        }
+        };
     },
     
     /**

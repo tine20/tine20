@@ -42,7 +42,7 @@ abstract class Tinebase_Model_Filter_Abstract
     protected $_value = NULL;
     
     /**
-     * @var array spechial options
+     * @var array special options
      */
     protected $_options = NULL;
     
@@ -166,11 +166,12 @@ abstract class Tinebase_Model_Filter_Abstract
      * @todo to be removed once we split filter model / backend
      */
     protected function _getQuotedFieldName($_backend) {
+        $tablename = (isset($this->_options['tablename'])) ? $this->_options['tablename'] : $_backend->getTableName();
+        
         return $_backend->getAdapter()->quoteIdentifier(
-            $_backend->getTableName() . '.' . $this->_field
+            $tablename . '.' . $this->_field
         );
     }
-    
     
     /**
      * returns array with the filter settings of this filter
