@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2011 Metaways Infosystems GmbH (http://www.metaways.de)
  * @author      Philipp Schüle <p.schuele@metaways.de>
  * 
- * @todo        add attendee tests
+ * @todo        add relations tests
  */
 
 /**

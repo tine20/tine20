@@ -21,7 +21,7 @@ Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     { name: 'number' },
     { name: 'description' },
     { name: 'status' },
-    { name: 'attendee' },
+    { name: 'relations' },
     // tine 2.0 notes + tags
     { name: 'notes'},
     { name: 'tags' }

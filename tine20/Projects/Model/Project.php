@@ -47,7 +47,6 @@ class Projects_Model_Project extends Tinebase_Record_Abstract
         'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
-        'attendee'              => array('allowEmpty' => true         ), // RecordSet of Projects_Model_Attender
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
