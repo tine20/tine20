@@ -26,6 +26,7 @@ class Projects_Setup_Initialize extends Setup_Initialize
             'modelName' => 'Tinebase_Model_Config', 
             'tableName' => 'config',
         ));
+        $appId = Tinebase_Application::getInstance()->getApplicationByName('Projects')->getId();
         
         $projectsStatusConfig = array(
             'name'    => Projects_Config::PROJECT_STATUS,
@@ -37,9 +38,23 @@ class Projects_Setup_Initialize extends Setup_Initialize
         );
         
         $cb->create(new Tinebase_Model_Config(array(
-            'application_id'    => Tinebase_Application::getInstance()->getApplicationByName('Projects')->getId(),
+            'application_id'    => $appId,
             'name'              => Projects_Config::PROJECT_STATUS,
             'value'             => json_encode($projectsStatusConfig),
+        )));
+
+        $projectsAttendeeRoleConfig = array(
+            'name'    => Projects_Config::PROJECT_ATTENDEE_ROLE,
+            'records' => array(
+                array('id' => 'COWORKER',    'value' => 'Coworker',    'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Coworker')
+                array('id' => 'RESPONSIBLE', 'value' => 'Responsible', 'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Responsible')
+            ),
+        );
+        
+        $cb->create(new Tinebase_Model_Config(array(
+            'application_id'    => $appId,
+            'name'              => Projects_Config::PROJECT_ATTENDEE_ROLE,
+            'value'             => json_encode($projectsAttendeeRoleConfig),
         )));
     }
 }
