@@ -31,7 +31,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Projects',
     recordClass: Tine.Projects.Model.Project,
     recordProxy: Tine.Projects.recordBackend,
-    loadRecord: false,
+    //loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: true,
     showContainerSelector: true,
@@ -53,8 +53,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     	Tine.Projects.ProjectEditDialog.superclass.onRecordLoad.call(this);        
 
         if (this.rendered) {
-            // TODO init store of link panel
-            this.contactLinkPanel.record = this.record;
+            this.contactLinkPanel.onRecordLoad(this.record);
         }
     },
     
@@ -67,7 +66,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     onRecordUpdate: function() {
         Tine.Projects.ProjectEditDialog.superclass.onRecordUpdate.call(this);
         
-        // you can do something here    
+        this.record.set('relations', this.contactLinkPanel.getData());
     },
     
     /**
@@ -80,17 +79,26 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      */
     getFormItems: function() {
         
-        // TODO add relation type
-        // TODO update from / to record
         // TODO set width of search combo to 100%
         this.contactLinkPanel = new Tine.widgets.grid.LinkGridPanel({
-            border: false,
-            frame: false,
-            autoExpandColumn: 'name',
-            enableTbar: true,
+            app: this.app,
             searchRecordClass: Tine.Addressbook.Model.Contact,
             title: this.app.i18n._('Attendee'),
-            searchComboClass: Tine.Addressbook.SearchCombo
+            searchComboClass: Tine.Addressbook.SearchCombo,
+            searchComboConfig: {
+                relationDefaults: {
+                    type: 'customer',
+                    own_model: 'Projects_Model_Project',
+                    related_model: 'Addressbook_Model_Contact',
+                    own_degree: 'sibling',
+                    related_backend: 'Sql'
+                }
+            },
+            relationTypes: [
+                [this.app.i18n._('Responsible'), 'responsible'],
+                [this.app.i18n._('Customer'), 'customer'],
+                [this.app.i18n._('Partner'), 'partner']
+            ]
         });
         
         return {
