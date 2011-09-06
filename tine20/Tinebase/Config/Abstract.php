@@ -73,7 +73,7 @@ abstract class Tinebase_Config_Abstract
             return $this->_rawToConfig($configFileSection[$_name], $_name);
         }
         
-        if ($configRecord = $this->_loadConfig($_name, $this->_appName)) {
+        if (Tinebase_Core::getDb() && $configRecord = $this->_loadConfig($_name, $this->_appName)) {
             $configData = json_decode($configRecord->value, TRUE);
             // @todo JSON encode all config data via update script!
             return $this->_rawToConfig($configData ? $configData : $configRecord->value, $_name);
