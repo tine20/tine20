@@ -86,6 +86,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             title: this.app.i18n._('Attendee'),
             searchComboClass: Tine.Addressbook.SearchCombo,
             searchComboConfig: {
+                width: 550,
                 relationDefaults: {
                     type: 'customer',
                     own_model: 'Projects_Model_Project',
