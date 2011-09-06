@@ -33,6 +33,8 @@ Tine.widgets.grid.LinkGridPanel = Ext.extend(Tine.widgets.grid.PickerGridPanel, 
     recordClass: Tine.Tinebase.Model.Relation,
     autoExpandColumn: 'name',
     enableTbar: true,
+    clicksToEdit: 1,
+    selectRowAfterAdd: false,
 
     /**
      * the record
