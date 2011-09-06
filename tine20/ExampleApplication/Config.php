@@ -27,7 +27,7 @@ class ExampleApplication_Config extends Tinebase_Config_Abstract
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
-        self::PROJECT_STATUS => array(
+        self::EXAMPLE_STATUS => array(
                                    //_('Status Available')
             'label'                 => 'Status Available',
                                    //_('Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation.')
