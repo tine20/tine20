@@ -361,14 +361,14 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact = $this->_addContact();
         
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
         $count1 = $this->_instance->searchCount($filter);
         
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'creation_time', 'operator' => 'inweek',   'value' => 0),
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
         $count2 = $this->_instance->searchCount($filter);
@@ -383,7 +383,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $contact = $this->_addContact();
         
         $filter = new Addressbook_Model_ContactFilter(array(
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
         $count1 = $this->_instance->searchCount($filter);
@@ -391,7 +391,7 @@ class Addressbook_ControllerTest extends PHPUnit_Framework_TestCase
         $date = Tinebase_DateTime::now();
         $filter = new Addressbook_Model_ContactFilter(array(
             array('field' => 'creation_time', 'operator' => 'equals',   'value' => $date->toString('Y-m-d')),
-            array('field' => 'containerType', 'operator' => 'equals',   'value' => 'personal'),
+            array('field' => 'container_id',  'operator' => 'equals',   'value' => $contact->container_id),
             array('field' => 'owner',         'operator' => 'equals',   'value' => Zend_Registry::get('currentAccount')->getId()),
         ));
         $count2 = $this->_instance->searchCount($filter);

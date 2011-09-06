@@ -23,6 +23,13 @@ class Projects_Config extends Tinebase_Config_Abstract
     const PROJECT_STATUS = 'projectStatus';
     
     /**
+     * Project attendee role
+     * 
+     * @var string
+     */
+    const PROJECT_ATTENDEE_ROLE = 'projectAttendeeRole';
+    
+    /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
@@ -36,6 +43,16 @@ class Projects_Config extends Tinebase_Config_Abstract
             'options'               => array('recordModel' => 'Projects_Model_Status'),
             'clientRegistryInclude' => TRUE,
             'default'               => 'IN-PROCESS'
+        ),
+        self::PROJECT_ATTENDEE_ROLE => array(
+                                   //_('Project Attendee Role Available')
+            'label'                 => 'Project Attendee Role Available',
+                                   //_('Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation.')
+            'description'           => 'Possible Project attendee roles. Please note that additional project attendee roles might impact other Projects systems on export or syncronisation.',
+            'type'                  => 'keyFieldConfig',
+            'options'               => array('recordModel' => 'Projects_Model_AttendeeRole'),
+            'clientRegistryInclude' => TRUE,
+            'default'               => 'COWORKER'
         ),
     );
     

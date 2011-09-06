@@ -78,7 +78,6 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
-        
         // TODO set width of search combo to 100%
         this.contactLinkPanel = new Tine.widgets.grid.LinkGridPanel({
             app: this.app,
@@ -88,18 +87,14 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             searchComboConfig: {
                 width: 550,
                 relationDefaults: {
-                    type: 'customer',
+                    type: this.app.getRegistry().get('config')['projectAttendeeRole'].definition['default'],
                     own_model: 'Projects_Model_Project',
                     related_model: 'Addressbook_Model_Contact',
                     own_degree: 'sibling',
                     related_backend: 'Sql'
                 }
             },
-            relationTypes: [
-                [this.app.i18n._('Responsible'), 'responsible'],
-                [this.app.i18n._('Customer'), 'customer'],
-                [this.app.i18n._('Partner'), 'partner']
-            ]
+            relationTypesKeyfield: 'projectAttendeeRole'
         });
         
         return {
