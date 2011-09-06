@@ -817,12 +817,14 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
             grid.pagingToolbar.refresh.disable();
         }
         
+        
+        var filePathsArray = [], uploadKeyArray = [];
+        
         Ext.each(files, function (file) {
 
             var fileName = file.name || file.fileName;
             
             var filePath = targetFolderPath + '/' + fileName;
-            Tine.Filemanager.createNode(filePath, "file", [], false);
             
             var upload = new Ext.ux.file.Upload({}, file, fileSelector, filePath);
 
@@ -832,16 +834,19 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
 
             var uploadKey = Tine.Tinebase.uploadManager.queueUpload(upload);   
             
-            var params = {
-                    filename: filePath,
-                    type: "file",
-                    tempFileId: [],
-                    forceOverwrite: false
-            };
-
-            Tine.Filemanager.fileRecordBackend.createNode(params, uploadKey, true);
-            
+            filePathsArray.push(filePath);
+            uploadKeyArray.push(uploadKey);
+                                    
         }, this);
+
+        var params = {
+                filenames: filePathsArray,
+                type: "file",
+                tempFileIds: [],
+                forceOverwrite: false
+        };
+        Tine.Filemanager.fileRecordBackend.createNodes(params, uploadKeyArray, true);
+
         
     },
     
@@ -884,7 +889,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 var upload = Tine.Tinebase.uploadManager.getUpload(record.data.path);
 
                 if(upload) {
-                      if(record.get('name') === upload.fileRecord.get('name')) {
+                      if(upload.fileRecord && record.get('name') === upload.fileRecord.get('name')) {
                         var index = this.indexOf(record);
                         this.remove(record);
                         this.insert(index, [upload.fileRecord]);

@@ -54,8 +54,12 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
             if(request) {
                 
                 var fileName = '';
-                if(exception.uploadKey) {
-                    fileName = "('" + exception.uploadKey + "')";
+                if(exception.uploadKeyArray) {
+                    fileName = "('";
+                    for(var i=0; i<exception.uploadKeyArray.length; i++) {
+                        fileName += exception.uploadKeyArray[i] + '; '; 
+                    }
+                    fileName += "')";
                 }
                 
                 Ext.Msg.show({
@@ -72,8 +76,8 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
                             if(params.method == 'Filemanager.copyNodes' ) {
                                 Tine.Filemanager.fileRecordBackend.copyNodes(null, null, null, params);
                             }
-                            else if (params.method == 'Filemanager.createNode' ){
-                                Tine.Filemanager.fileRecordBackend.createNode(params, exception.uploadKey, exception.addToGridStore);
+                            else if (params.method == 'Filemanager.createNodes' ){
+                                Tine.Filemanager.fileRecordBackend.createNodes(params, exception.uploadKeyArray, exception.addToGridStore);
                             }
                         }
                     }

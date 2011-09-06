@@ -335,9 +335,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             gridStore.reload();
         }
         
-        var onSuccess = function(result, request){ 
+        var onSuccess = (function(result, request){ 
             
-            var fileRecord = Tine.Tinebase.uploadManager.upload(uploadKey);  
+            var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKey);  
 
             if(addToGridStore) {
                 gridStore.add(fileRecord);
@@ -347,7 +347,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                     gridStore.reload();
                 }
             }           
-        };
+        }).createDelegate({uploadKey: uploadKey, addToGridStore: addToGridStore});
         
         var onFailure = (function(response, request) {
             
@@ -370,6 +370,57 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
     },
     
+    createNodes: function(params, uploadKeyArray, addToGridStore) {
+        var app = Tine.Tinebase.appMgr.get('Filemanager'),
+            grid = app.getMainScreen().getCenterPanel(),
+            gridStore = grid.store;
+        
+        params.application = 'Filemanager';                              
+        params.method = 'Filemanager.createNodes';
+        params.uploadKeyArray = uploadKeyArray;
+        params.addToGridStore = addToGridStore;
+        
+        if(addToGridStore) {
+            gridStore.reload();
+        }
+        
+        var onSuccess = (function(result, request){ 
+                       
+            for(var i=0; i<this.uploadKeyArray.length; i++) {
+                var fileRecord = Tine.Tinebase.uploadManager.upload(this.uploadKeyArray[i]);  
+    
+                if(addToGridStore) {
+                    gridStore.add(fileRecord);
+                    
+                }   
+            }
+
+            // TODO: replace more elegantly
+            if(this.addToGridStore && params.forceOverwrite) {
+                gridStore.reload();
+            }
+        }).createDelegate({uploadKeyArray: uploadKeyArray, addToGridStore: addToGridStore});
+        
+        var onFailure = (function(response, request) {
+            
+            var nodeData = Ext.util.JSON.decode(response.responseText),
+            request = Ext.util.JSON.decode(request.jsonData);
+            nodeData.data.uploadKeyArray = this.uploadKeyArray;
+            nodeData.data.addToGridStore = this.addToGridStore;
+            Tine.Filemanager.fileRecordBackend.handleRequestException(nodeData.data, request);
+            
+        }).createDelegate({uploadKeyArray: uploadKeyArray, addToGridStore: addToGridStore});
+        
+        
+        Ext.Ajax.request({
+            params: params,
+            scope: this,
+            success: onSuccess || Ext.emptyFn,
+            failure: onFailure || Ext.emptyFn
+        });
+        
+        
+    },
     saveRecord : function() {
         // NOOP
     },
