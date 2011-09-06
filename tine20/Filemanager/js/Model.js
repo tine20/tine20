@@ -321,6 +321,13 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
                
     },
     
+    /**
+     * upload file 
+     * 
+     * @param {} params Request parameters
+     * @param String uploadKey
+     * @param Boolean addToGridStore 
+     */
     createNode: function(params, uploadKey, addToGridStore) {
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel(),
@@ -370,6 +377,14 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
     },
     
+    
+    /**
+     * upload files
+     * 
+     * @param {} params Request parameters
+     * @param [] uploadKeyArray
+     * @param Boolean addToGridStore 
+     */
     createNodes: function(params, uploadKeyArray, addToGridStore) {
         var app = Tine.Tinebase.appMgr.get('Filemanager'),
             grid = app.getMainScreen().getCenterPanel(),
@@ -421,6 +436,10 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
         
         
     },
+    
+    /**
+     * is automatically called in generic GridPanel
+     */
     saveRecord : function() {
         // NOOP
     },
@@ -432,7 +451,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
      */
     handleRequestException: function(exception, request) {
         Tine.Filemanager.handleRequestException(exception, request);
-    },
+    }
     
     
 
