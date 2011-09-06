@@ -52,9 +52,15 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
     switch(exception.code) {
         case 901: 
             if(request) {
+                
+                var fileName = '';
+                if(exception.uploadKey) {
+                    fileName = "('" + exception.uploadKey + "')";
+                }
+                
                 Ext.Msg.show({
                     title:   app.i18n._('File allready exists'),
-                    msg:     app.i18n._('Do you want to replace the file?'),
+                    msg:     app.i18n._('Do you want to replace the file?') + ' ' +  fileName,
                     icon:    Ext.Msg.WARNING,
                     buttons: Ext.Msg.YESNO,
                     scope: this,
