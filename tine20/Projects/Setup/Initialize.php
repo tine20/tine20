@@ -46,8 +46,8 @@ class Projects_Setup_Initialize extends Setup_Initialize
         $projectsAttendeeRoleConfig = array(
             'name'    => Projects_Config::PROJECT_ATTENDEE_ROLE,
             'records' => array(
-                array('id' => 'COWORKER',    'value' => 'Coworker',    'icon' => 'images/oxygen/16x16/actions/ok.png',                   'system' => true), //_('Coworker')
-                array('id' => 'RESPONSIBLE', 'value' => 'Responsible', 'icon' => 'images/oxygen/16x16/actions/dialog-cancel.png',        'system' => true), //_('Responsible')
+                array('id' => 'COWORKER',    'value' => 'Coworker',    'icon' => 'images/oxygen/16x16/apps/preferences-desktop-user.png', 'system' => true), //_('Coworker')
+                array('id' => 'RESPONSIBLE', 'value' => 'Responsible', 'icon' => 'images/oxygen/16x16/apps/system-users.png',             'system' => true), //_('Responsible')
             ),
         );
         
