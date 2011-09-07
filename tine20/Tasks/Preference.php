@@ -21,7 +21,7 @@ class Tasks_Preference extends Tinebase_Preference_Abstract
     /**************************** application preferences/settings *****************/
     
     /**
-     * have name of default favorite an a central palce
+     * have name of default favorite on a central place
      * _("All my tasks")
      */
     const DEFAULTPERSISTENTFILTER_NAME = "All my tasks";
