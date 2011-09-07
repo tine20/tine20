@@ -35,7 +35,7 @@ class Inventory_Model_InventoryItemFilter extends Tinebase_Model_Filter_FilterGr
         'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', /*'...'*/))),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Inventory')),
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
-        'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'type'           => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'inventory_item.id')),
     
         // modlog filters
@@ -46,10 +46,17 @@ class Inventory_Model_InventoryItemFilter extends Tinebase_Model_Filter_FilterGr
         'created_by'           => array('filter' => 'Tinebase_Model_Filter_User'),
     
         // @todo add filters
+        'name'           => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'inventory_id'   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+    	'location'       => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'add_time'       => array('filter' => 'Tinebase_Model_Filter_Date'),
+        'total_number'   => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'active_number'  => array('filter' => 'Tinebase_Model_Filter_Text'),
         /*
         'title'          => array('filter' => 'Tinebase_Model_Filter_Text'),
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
-        'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
+        
         */
     );
 }

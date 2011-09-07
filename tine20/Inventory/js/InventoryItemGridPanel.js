@@ -45,7 +45,7 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
      */
     defaultSortInfo: {field: 'creation_time', direction: 'DESC'},
     gridConfig: {
-        autoExpandColumn: 'name'
+        autoExpandColumn: 'inventory_id'
     },
      
     /**
@@ -79,19 +79,61 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 resizable: true
             },
             columns: [{
+                id: 'inventory_id',
+                header: this.app.i18n._("ID"),
+                width: 50,
+                sortable: true,
+                dataIndex: 'inventory_id'
+            }, {
                 id: 'name',
                 header: this.app.i18n._("Name"),
-                width: 100,
+                width: 50,
                 sortable: true,
                 dataIndex: 'name'
             }, {
-                id: 'status',
-                header: this.app.i18n._("Status"),
-                width: 150,
+                id: 'type',
+                header: this.app.i18n._("Type"),
+                width: 50,
                 sortable: true,
-                dataIndex: 'status',
-                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Inventory', 'inventoryStatus')
-            }/*,{
+                dataIndex: 'type',
+                renderer: Tine.Tinebase.widgets.keyfield.Renderer.get('Inventory', 'inventoryType')
+            },{
+                id: 'add_time',
+                header: this.app.i18n._("Added"),
+                width: 50,
+                sortable: true,
+                dataIndex: 'add_time'
+            },{
+                id: 'location',
+                header: this.app.i18n._("Location"),
+                width: 50,
+                sortable: true,
+                dataIndex: 'location'
+            },{
+                id: 'total_number',
+                header: this.app.i18n._("Total number"),
+                width: 50,
+                sortable: true,
+                dataIndex: 'total_number'
+            },{
+                id: 'active_number',
+                header: this.app.i18n._("Active number"),
+                width: 50,
+                sortable: true,
+                dataIndex: 'active_number'
+            },{
+                id: 'description',
+                header: this.app.i18n._("Description"),
+                width: 50,
+                sortable: true,
+                dataIndex: 'description'
+            }
+            
+            
+            
+            
+            
+            /*,{
                 id: 'title',
                 header: this.app.i18n._("Title"),
                 width: 350,

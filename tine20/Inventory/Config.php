@@ -20,14 +20,14 @@ class Inventory_Config extends Tinebase_Config_Abstract
      * 
      * @var string
      */
-    const INVENTORY_STATUS = 'inventoryStatus';
+    const INVENTORY_TYPE = 'inventoryType';
     
     /**
      * (non-PHPdoc)
      * @see tine20/Tinebase/Config/Definition::$_properties
      */
     protected static $_properties = array(
-        self::INVENTORY_STATUS => array(
+        self::INVENTORY_TYPE => array(
                                    //_('Status Available')
             'label'                 => 'Status Available',
                                    //_('Possible status. Please note that additional status might impact other Inventory systems on export or syncronisation.')
@@ -35,7 +35,7 @@ class Inventory_Config extends Tinebase_Config_Abstract
             'type'                  => 'keyFieldConfig',
             'options'               => array('recordModel' => 'Inventory_Model_Status'),
             'clientRegistryInclude' => TRUE,
-            'default'               => 'IN-PROCESS'
+            'default'               => 'UNKNOWN'
         ),
     );
     

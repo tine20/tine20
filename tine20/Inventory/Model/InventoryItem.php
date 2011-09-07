@@ -43,9 +43,15 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
     protected $_validators = array(
         'id'                    => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'name'                  => array(Zend_Filter_Input::ALLOW_EMPTY => true),
-        'status'                => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'type'               	=> array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'container_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => false, 'presence'=>'required'),
     // @todo add more fields
+        'inventory_id'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'description'           => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'location'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'add_time'              => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'total_number'          => array(Zend_Filter_Input::ALLOW_EMPTY => true),
+        'active_number'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
     // modlog information
         'created_by'            => array(Zend_Filter_Input::ALLOW_EMPTY => true),
         'creation_time'         => array(Zend_Filter_Input::ALLOW_EMPTY => true),
@@ -68,7 +74,8 @@ class Inventory_Model_InventoryItem extends Tinebase_Record_Abstract
     protected $_datetimeFields = array(
         'creation_time',
         'last_modified_time',
-        'deleted_time'
+        'deleted_time',
+        'add_time'
     );
     
     /**

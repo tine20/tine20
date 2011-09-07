@@ -18,7 +18,13 @@ Ext.ns('Tine.Inventory.Model');
 Tine.Inventory.Model.InventoryItem = Tine.Tinebase.data.Record.create(Tine.Tinebase.Model.genericFields.concat([
     { name: 'id' },
     { name: 'name' },
-    { name: 'status' },
+    { name: 'type' },
+    { name: 'inventory_id' },
+    { name: 'location' },
+    { name: 'description' },
+    { name: 'add_time' },
+    { name: 'total_number' },
+    { name: 'active_number' },
     // TODO add more record fields here
     // tine 2.0 notes + tags
     { name: 'notes'},
@@ -68,11 +74,11 @@ Tine.Inventory.Model.InventoryItem.getFilterModel = function() {
     return [
         {label: _('Quick search'),    field: 'query',       operators: ['contains']},
         {
-            label: app.i18n._('Status'),
-            field: 'status',
+            label: app.i18n._('Type'),
+            field: 'type',
             filtertype: 'tine.widget.keyfield.filter', 
             app: app, 
-            keyfieldName: 'inventoryStatus'
+            keyfieldName: 'inventoryType'
         },
         {filtertype: 'tinebase.tag', app: app},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Inventory.Model.InventoryItem},

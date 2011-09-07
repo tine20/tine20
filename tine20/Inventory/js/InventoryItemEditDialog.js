@@ -84,13 +84,13 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
             activeTab: 0,
             border: false,
             items:[{               
-                title: this.app.i18n._('InventoryItem'),
+                title: this.app.i18n._('Inventory Item'),
                 autoScroll: true,
                 border: false,
                 frame: true,
                 layout: 'border',
                 items: [{
-                    region: 'center',
+                	region: 'center',
                     xtype: 'columnform',
                     labelAlign: 'top',
                     formDefaults: {
@@ -106,12 +106,44 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         allowBlank: false
                         }], [new Tine.Tinebase.widgets.keyfield.ComboBox({
                             app: 'Inventory',
-                            keyFieldName: 'inventoryStatus',
-                            fieldLabel: this.app.i18n._('Status'),
-                            name: 'status',
+                            keyFieldName: 'inventoryType',
+                            fieldLabel: this.app.i18n._('Type'),
+                            name: 'type',
                             columnWidth: 0.5
-                        })]
+                        })],
+                        [{
+                            columnWidth: 0.5,
+                            fieldLabel: this.app.i18n._('ID'),
+                            name: 'inventory_id',
+                            allowBlank: false
+                        }],
+                        [{
+                            columnWidth: 0.5,
+                            fieldLabel: this.app.i18n._('Location'),
+                            name: 'location',
+                            allowBlank: false
+                        }],
+                        [{
+                        	xtype: 'extuxclearabledatefield',
+                            columnWidth: 0.5,
+                            fieldLabel: this.app.i18n._('Added'),
+                            name: 'add_time',
+                        }],
+                        [{
+                            columnWidth: 0.5,
+                            fieldLabel: this.app.i18n._('Total number'),
+                            name: 'total_number',
+                            allowBlank: false
+                        }],
+                        [{
+                            columnWidth: 0.5,
+                            fieldLabel: this.app.i18n._('Active number'),
+                            name: 'active_number',
+                            allowBlank: false
+                        }],
+                        
                     ] 
+                   
                 }, {
                     // activities and tags
                     layout: 'accordion',
@@ -124,19 +156,47 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     header: false,
                     margins: '0 5 0 5',
                     border: true,
+                    
+                          
                     items: [
+                            
+                     new Ext.Panel({
+                          // @todo generalise!
+                         title: this.app.i18n._('Description'),
+                         iconCls: 'descriptionIcon',
+                         layout: 'form',
+                         labelAlign: 'top',
+                         border: false,
+                          items: [{
+                               style: 'margin-top: -4px; border 0px;',
+                               labelSeparator: '',
+                               xtype: 'textarea',
+                               name: 'description',
+                               hideLabel: true,
+                               grow: false,
+                               preventScrollbars: false,
+                               anchor: '100% 100%',
+                               emptyText: this.app.i18n._('Enter description'),
+                               requiredGrant: 'editGrant'  
+                          
+                        }]
+                    }),  
+                    
                     new Tine.widgets.activities.ActivitiesPanel({
                         app: 'Inventory',
                         showAddNoteForm: false,
                         border: false,
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     }),
+                    
                     new Tine.widgets.tags.TagPanel({
                         app: 'Inventory',
                         border: false,
                         bodyStyle: 'border:1px solid #B5B8C8;'
                     })]
                 }]
+                
+                
             }, new Tine.widgets.activities.ActivitiesTabPanel({
                 app: this.appName,
                 record_id: this.record.id,

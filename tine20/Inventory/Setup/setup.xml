@@ -29,13 +29,47 @@
                 </field>
                 <!-- keyfield 'status' -->
                 <field>
-                    <name>status</name>
+                    <name>type</name>
                     <type>text</type>
                     <length>40</length>
-                    <default>IN-PROCESS</default>
+                    <default>UNKNOWN</default>
                     <notnull>true</notnull>
                 </field>
                 <!-- add more fields here -->
+                <field>
+                    <name>inventory_id</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>description</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>location</name>
+                    <type>text</type>
+                    <length>255</length>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>add_time</name>
+                    <type>datetime</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>total_number</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+                <field>
+                    <name>active_number</name>
+                    <type>integer</type>
+                    <notnull>true</notnull>
+                </field>
+              
                 <!-- defaults for tine system -->
                 <field>
                     <name>created_by</name>
@@ -82,6 +116,7 @@
                         <name>container_id</name>
                     </field>
                 </index>
+ 
             </declaration>
         </table>
     </tables>
