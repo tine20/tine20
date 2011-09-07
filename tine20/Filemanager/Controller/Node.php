@@ -337,7 +337,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 $existingNode = $this->_backend->stat($_path->statpath);
                 $this->resolveContainerAndAddPath($existingNode, $parentPathRecord);
                 return $existingNode;
-            } else {
+            } else if (! $_forceOverwrite) {
                 throw $fene;
             }
         }
