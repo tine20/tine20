@@ -663,14 +663,20 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_action
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
-     * @throws Filemanager_Exception_NodeExists
      */
     protected function _copyOrMoveFileNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_action, $_forceOverwrite = FALSE)
     {
         $this->_checkPathACL($_destination->getParent(), 'update', FALSE);
         
-        if (! $_forceOverwrite) {
+        try {
             $this->_checkIfExists($_destination);
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            if ($_forceOverwrite) {
+                // delete old node
+                unlink($_destination->streamwrapperpath);
+            } else {
+                throw $fene;
+            }
         }
             
         switch ($_action) {
