@@ -684,7 +684,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         try {
             $this->_checkIfExists($_destination);
         } catch (Filemanager_Exception_NodeExists $fene) {
-            if ($_forceOverwrite) {
+            if ($_forceOverwrite && $_source->streamwrapperpath !== $_destination->streamwrapperpath) {
                 // delete old node
                 unlink($_destination->streamwrapperpath);
             } else {
