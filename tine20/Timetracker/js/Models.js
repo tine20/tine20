@@ -133,6 +133,7 @@ Tine.Timetracker.Model.Timeaccount.getFilterModel = function() {
         {label: app.i18n._('Description'),  field: 'description', operators: ['contains']},
         {label: app.i18n._('Created By'),   field: 'created_by',  valueType: 'user'},
         {label: app.i18n._('Status'),       field: 'status',      filtertype: 'timetracker.timeaccountstatus'},
+        {label: app.i18n._('Booking deadline'), field: 'deadline'},
         {filtertype: 'tinebase.tag', app: app}
     ];
 }

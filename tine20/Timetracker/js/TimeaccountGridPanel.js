@@ -116,6 +116,12 @@ Tine.Timetracker.TimeaccountGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 header: this.app.i18n._("Cleared in"),
                 width: 150,
                 dataIndex: 'billed_in'
+            },{
+                id: 'deadline',
+                hidden: true,
+                header: this.app.i18n._("Booking deadline"),
+                width: 100,
+                dataIndex: 'deadline'
             }]
         });
     },
