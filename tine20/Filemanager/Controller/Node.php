@@ -687,7 +687,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
             if ($_forceOverwrite && $_source->streamwrapperpath !== $_destination->streamwrapperpath) {
                 // delete old node
                 unlink($_destination->streamwrapperpath);
-            } else {
+            } else if (! $_forceOverwrite) {
                 throw $fene;
             }
         }
