@@ -329,6 +329,9 @@ class Tinebase_Filesystem_StreamWrapper
                 $fileObject = $this->_getObjectBackend()->get($this->_currentNode->object_id);
                 $fileObject->hash = $hash;
                 $fileObject->size = filesize($hashFile);
+                if (empty($fileObject->size)) {
+                    $fileObject->size = 0;
+                }
                 if (version_compare(PHP_VERSION, '5.3.0', '>=')) {
                     $finfo = finfo_open(FILEINFO_MIME_TYPE);
                     $mimeType = finfo_file($finfo, $hashFile);
