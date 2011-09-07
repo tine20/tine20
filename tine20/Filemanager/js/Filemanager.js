@@ -54,17 +54,21 @@ Tine.Filemanager.handleRequestException = function(exception, request) {
             if(request) {
                 
                 var fileName = '';
-                if(exception.uploadKeyArray) {
+                if(exception.existingnodesinfo) {
                     fileName = "('";
-                    for(var i=0; i<exception.uploadKeyArray.length; i++) {
-                        fileName += exception.uploadKeyArray[i] + '; '; 
+                    for(var i=0; i<exception.existingnodesinfo.length; i++) {
+                        fileName += exception.existingnodesinfo[i].name + ', '; 
+                    }
+                    if(fileName.length > 2) {
+                        fileName = fileName.substring(0, fileName.length - 2);
                     }
                     fileName += "')";
+                    
                 }
                 
                 Ext.Msg.show({
-                    title:   app.i18n._('File already exists'),
-                    msg:     app.i18n._('Do you want to replace the file?') + ' ' +  fileName,
+                    title:   app.i18n._('Files already exists'),
+                    msg:     app.i18n._('Do you want to replace the files?') + ' ' +  fileName,
                     icon:    Ext.Msg.WARNING,
                     buttons: Ext.Msg.YESNO,
                     scope: this,

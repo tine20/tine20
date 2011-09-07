@@ -149,21 +149,23 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                         return value;
                     }
                 }
-            },{
-                id: 'revision',
-                header: this.app.i18n._("Revision"),
-                width: 10,
-                sortable: true,
-                dataIndex: 'revision',
-                renderer: function(value, metadata, record) {
-                    if(record.data.type == 'folder') {
-                        return '';
-                    }
-                    else {
-                        return value;
-                    }
-                }
-            },{
+            },
+//            {
+//                id: 'revision',
+//                header: this.app.i18n._("Revision"),
+//                width: 10,
+//                sortable: true,
+//                dataIndex: 'revision',
+//                renderer: function(value, metadata, record) {
+//                    if(record.data.type == 'folder') {
+//                        return '';
+//                    }
+//                    else {
+//                        return value;
+//                    }
+//                }
+//            },
+            {
                 id: 'creation_time',
                 header: this.app.i18n._("Creation Time"),
                 width: 50,
@@ -911,6 +913,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
                 
                 var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName),
                 grid = app.getMainScreen().getCenterPanel(),
+                treePanel = app.getMainScreen().getWestPanel().getContainerTreePanel(),
                 dropIndex = grid.getView().findRowIndex(e.target),
                 dragData = data,
                 target; 
