@@ -31,7 +31,6 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
     appName: 'Projects',
     recordClass: Tine.Projects.Model.Project,
     recordProxy: Tine.Projects.recordBackend,
-    //loadRecord: false,
     tbarItems: [{xtype: 'widget-activitiesaddbutton'}],
     evalGrants: true,
     showContainerSelector: true,
@@ -78,7 +77,6 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
      * @private
      */
     getFormItems: function() {
-        // TODO set width of search combo to 100%
         this.contactLinkPanel = new Tine.widgets.grid.LinkGridPanel({
             app: this.app,
             searchRecordClass: Tine.Addressbook.Model.Contact,
