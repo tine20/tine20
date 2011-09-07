@@ -1290,7 +1290,7 @@ msgstr ""
 msgid "Remove record"
 msgstr "Usuń wiersz"
 
-#: js/widgets/grid/PickerGridPanel.js:238
+#: js/widgets/grid/PickerGridPanel.js:247
 msgid "Search for records ..."
 msgstr "Znajdź wiersze ..."
 

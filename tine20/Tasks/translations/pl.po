@@ -77,23 +77,23 @@ msgstr "Wszystkie zadania zmienione ostatnio przeze mnie"
 msgid "Tasks without responsible"
 msgstr "Nieprzypisane zadania"
 
-#: Preference.php:23
+#: Preference.php:25
 msgid "All my tasks"
 msgstr "Wszystkie moje zadania"
 
-#: Preference.php:65
+#: Preference.php:67
 msgid "Default Favorite"
 msgstr "Domyślne ulubione"
 
-#: Preference.php:66
+#: Preference.php:68
 msgid "The default favorite which is loaded on Tasks startup"
 msgstr "Domyślne ulubione zadanie ładowane przy uruchamianiu zadań"
 
-#: Preference.php:69
+#: Preference.php:71
 msgid "Default Task List"
 msgstr "Domyślna lista zadań"
 
-#: Preference.php:70
+#: Preference.php:72
 msgid "The default task list to create new tasks in."
 msgstr "Domyślna lista zadań dla nowych zadań"
 

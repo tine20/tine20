@@ -29,38 +29,74 @@ msgid "Projects"
 msgstr ""
 
 #: Setup/Initialize.php:34
-msgid "Completed"
+msgid "On hold"
 msgstr ""
 
 #: Setup/Initialize.php:35
-msgid "Cancelled"
+msgid "Completed"
 msgstr ""
 
 #: Setup/Initialize.php:36
+msgid "Cancelled"
+msgstr ""
+
+#: Setup/Initialize.php:37
 msgid "In process"
 msgstr ""
 
-#: Setup/Initialize.php:49
+#: Setup/Initialize.php:50
 msgid "Coworker"
 msgstr ""
 
-#: Setup/Initialize.php:50
+#: Setup/Initialize.php:51
 msgid "Responsible"
+msgstr ""
+
+#: Setup/Initialize.php:79
+msgid "All my open projects"
+msgstr ""
+
+#: Setup/Initialize.php:94
+msgid "My projects that I'm responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:95
+msgid "All my open projects that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:110
+msgid "My waiting projects"
+msgstr ""
+
+#: Setup/Initialize.php:111
+msgid "My projects that are on hold"
+msgstr ""
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr ""
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr ""
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
 msgstr ""
 
 #: js/ProjectGridPanel.js:79
 msgid "Tags"
 msgstr ""
 
-#: js/ProjectGridPanel.js:82 js/ProjectEditDialog.js:138
+#: js/ProjectGridPanel.js:82 js/ProjectEditDialog.js:137
 msgid "Number"
 msgstr ""
 
-#: js/ProjectGridPanel.js:89 js/ProjectEditDialog.js:133
+#: js/ProjectGridPanel.js:89 js/ProjectEditDialog.js:132
 msgid "Title"
 msgstr ""
 
-#: js/ProjectGridPanel.js:95 js/ProjectEditDialog.js:144 js/Model.js:73
+#: js/ProjectGridPanel.js:95 js/ProjectEditDialog.js:143 js/Model.js:74
 msgid "Status"
 msgstr ""
 
@@ -72,17 +108,17 @@ msgstr ""
 msgid "Role"
 msgstr ""
 
-#: js/ProjectEditDialog.js:108 js/ProjectEditDialog.js:121 js/Model.js:33
+#: js/ProjectEditDialog.js:107 js/ProjectEditDialog.js:120 js/Model.js:33
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/ProjectEditDialog.js:174
+#: js/ProjectEditDialog.js:173
 msgid "Description"
 msgstr ""
 
-#: js/ProjectEditDialog.js:188
+#: js/ProjectEditDialog.js:187
 msgid "Enter description"
 msgstr ""
 
@@ -92,23 +128,27 @@ msgid_plural "Project lists"
 msgstr[0] ""
 msgstr[1] ""
 
-#: js/Model.js:71
+#: js/Model.js:40
+msgid "Project lists"
+msgstr ""
+
+#: js/Model.js:72
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:82
+#: js/Model.js:83
 msgid "Last modified"
 msgstr ""
 
-#: js/Model.js:83
+#: js/Model.js:84
 msgid "Last modifier"
 msgstr ""
 
-#: js/Model.js:84
+#: js/Model.js:85
 msgid "Creation Time"
 msgstr ""
 
-#: js/Model.js:85
+#: js/Model.js:86
 msgid "Creator"
 msgstr ""
 

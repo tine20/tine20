@@ -1282,7 +1282,7 @@ msgstr "Fortschritt"
 msgid "Remove record"
 msgstr "Entferne Eintrag"
 
-#: js/widgets/grid/PickerGridPanel.js:238
+#: js/widgets/grid/PickerGridPanel.js:247
 msgid "Search for records ..."
 msgstr "Suche nach Einträgen ..."
 

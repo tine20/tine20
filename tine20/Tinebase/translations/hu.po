@@ -1280,7 +1280,7 @@ msgstr ""
 msgid "Remove record"
 msgstr "Adat törlése"
 
-#: js/widgets/grid/PickerGridPanel.js:238
+#: js/widgets/grid/PickerGridPanel.js:247
 msgid "Search for records ..."
 msgstr "Adatok keresése ..."
 
