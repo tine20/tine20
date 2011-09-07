@@ -13,49 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: js/Application.js:30
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:46
-msgid "Select a Device"
-msgstr "Vybrat zařízení"
-
-#: js/Application.js:60
-msgid "No ActiveSync Device registered"
-msgstr "Žádná ActiveSync zařízení nejsou zaregistrována"
-
-#: js/Application.js:68
-msgid "Set as {0} Filter"
-msgstr "Nastavit jako filtr {0}"
-
-#: js/Application.js:93
-msgid "Resetted Sync Filter"
-msgstr "Resetován synchronizační filtr"
-
-#: js/Application.js:94 js/Application.js:106
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "filtr {0} pro zařízení \"{1}\" je nyní \"{2}\""
-
-#: js/Application.js:97
-msgid "resetted"
-msgstr "resetován"
-
-#: js/Application.js:105
-msgid "Set Sync Filter"
-msgstr "Nastavit synchronizační filtr"
-
-#: js/Model.js:45
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Zařízení"
-msgstr[1] "Zařízení"
-msgstr[2] "Zařízení"
-
-#: js/Model.js:45
-msgid "Devices"
-msgstr "Zařízení"
-
 #: Setup/setup.xml:473
 msgid "Default Policy"
 msgstr "Výchozí politika"
@@ -87,3 +44,46 @@ msgstr ""
 #: Preference.php:83
 msgid "The default task list to create new tasks in."
 msgstr ""
+
+#: js/Model.js:45
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Zařízení"
+msgstr[1] "Zařízení"
+msgstr[2] "Zařízení"
+
+#: js/Model.js:45
+msgid "Devices"
+msgstr "Zařízení"
+
+#: js/Application.js:30
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:46
+msgid "Select a Device"
+msgstr "Vybrat zařízení"
+
+#: js/Application.js:60
+msgid "No ActiveSync Device registered"
+msgstr "Žádná ActiveSync zařízení nejsou zaregistrována"
+
+#: js/Application.js:68
+msgid "Set as {0} Filter"
+msgstr "Nastavit jako filtr {0}"
+
+#: js/Application.js:93
+msgid "Resetted Sync Filter"
+msgstr "Resetován synchronizační filtr"
+
+#: js/Application.js:94 js/Application.js:106
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "filtr {0} pro zařízení \"{1}\" je nyní \"{2}\""
+
+#: js/Application.js:97
+msgid "resetted"
+msgstr "resetován"
+
+#: js/Application.js:105
+msgid "Set Sync Filter"
+msgstr "Nastavit synchronizační filtr"

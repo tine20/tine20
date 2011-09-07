@@ -1,37 +1,5 @@
-#: js/StatusCombo.js:25
-msgid "New"
-msgstr ""
-
-#: js/StatusCombo.js:26
-msgid "Open"
-msgstr ""
-
-#: js/StatusCombo.js:27
-msgid "Stalled"
-msgstr ""
-
-#: js/StatusCombo.js:28
-msgid "Waiting"
-msgstr ""
-
-#: js/StatusCombo.js:29
-msgid "Pending"
-msgstr ""
-
-#: js/StatusCombo.js:30
-msgid "Resolved"
-msgstr ""
-
-#: js/StatusCombo.js:31
-msgid "Rejected"
-msgstr ""
-
-#: js/StatusCombo.js:32
-msgid "Deleted"
-msgstr ""
-
-#: js/StatusCombo.js:50 js/TicketGridPanel.js:94
-msgid "Status"
+#: js/TreePanel.js:23
+msgid "All Queues"
 msgstr ""
 
 #: js/Model.js:41 js/TicketGridPanel.js:41
@@ -64,6 +32,10 @@ msgstr ""
 msgid "Description"
 msgstr ""
 
+#: js/TicketGridPanel.js:94 js/StatusCombo.js:50
+msgid "Status"
+msgstr ""
+
 #: js/TicketGridPanel.js:100
 msgid "Final Priority"
 msgstr ""
@@ -72,6 +44,34 @@ msgstr ""
 msgid "Due"
 msgstr ""
 
-#: js/TreePanel.js:23
-msgid "All Queues"
+#: js/StatusCombo.js:25
+msgid "New"
+msgstr ""
+
+#: js/StatusCombo.js:26
+msgid "Open"
+msgstr ""
+
+#: js/StatusCombo.js:27
+msgid "Stalled"
+msgstr ""
+
+#: js/StatusCombo.js:28
+msgid "Waiting"
+msgstr ""
+
+#: js/StatusCombo.js:29
+msgid "Pending"
+msgstr ""
+
+#: js/StatusCombo.js:30
+msgid "Resolved"
+msgstr ""
+
+#: js/StatusCombo.js:31
+msgid "Rejected"
+msgstr ""
+
+#: js/StatusCombo.js:32
+msgid "Deleted"
 msgstr ""

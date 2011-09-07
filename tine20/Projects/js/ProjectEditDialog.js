@@ -83,6 +83,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
             app: this.app,
             searchRecordClass: Tine.Addressbook.Model.Contact,
             title: this.app.i18n._('Attendee'),
+            typeColumnHeader: this.app.i18n._('Role'),
             searchComboClass: Tine.Addressbook.SearchCombo,
             searchComboConfig: {
                 width: 550,
@@ -94,7 +95,7 @@ Tine.Projects.ProjectEditDialog = Ext.extend(Tine.widgets.dialog.EditDialog, {
                     related_backend: 'Sql'
                 }
             },
-            relationTypesKeyfield: 'projectAttendeeRole'
+            relationTypesKeyfieldName: 'projectAttendeeRole'
         });
         
         return {

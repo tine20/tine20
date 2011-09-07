@@ -14,41 +14,9 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/StatusCombo.js:25
-msgid "New"
-msgstr "Ny"
-
-#: js/StatusCombo.js:26
-msgid "Open"
-msgstr "Åpen"
-
-#: js/StatusCombo.js:27
-msgid "Stalled"
-msgstr "Stoppet"
-
-#: js/StatusCombo.js:28
-msgid "Waiting"
-msgstr "Venter"
-
-#: js/StatusCombo.js:29
-msgid "Pending"
-msgstr "På vent"
-
-#: js/StatusCombo.js:30
-msgid "Resolved"
-msgstr "Løst"
-
-#: js/StatusCombo.js:31
-msgid "Rejected"
-msgstr "Avvist"
-
-#: js/StatusCombo.js:32
-msgid "Deleted"
-msgstr "Slettet"
-
-#: js/StatusCombo.js:50 js/TicketGridPanel.js:94
-msgid "Status"
-msgstr "Status"
+#: js/TreePanel.js:23
+msgid "All Queues"
+msgstr "Akke Køer"
 
 #: js/Model.js:41 js/TicketGridPanel.js:41
 msgid "Ticket"
@@ -80,6 +48,10 @@ msgstr "Eier"
 msgid "Description"
 msgstr "Beskrivelse"
 
+#: js/TicketGridPanel.js:94 js/StatusCombo.js:50
+msgid "Status"
+msgstr "Status"
+
 #: js/TicketGridPanel.js:100
 msgid "Final Priority"
 msgstr "Endelig Prioritet"
@@ -88,6 +60,34 @@ msgstr "Endelig Prioritet"
 msgid "Due"
 msgstr "Utløper"
 
-#: js/TreePanel.js:23
-msgid "All Queues"
-msgstr "Akke Køer"
+#: js/StatusCombo.js:25
+msgid "New"
+msgstr "Ny"
+
+#: js/StatusCombo.js:26
+msgid "Open"
+msgstr "Åpen"
+
+#: js/StatusCombo.js:27
+msgid "Stalled"
+msgstr "Stoppet"
+
+#: js/StatusCombo.js:28
+msgid "Waiting"
+msgstr "Venter"
+
+#: js/StatusCombo.js:29
+msgid "Pending"
+msgstr "På vent"
+
+#: js/StatusCombo.js:30
+msgid "Resolved"
+msgstr "Løst"
+
+#: js/StatusCombo.js:31
+msgid "Rejected"
+msgstr "Avvist"
+
+#: js/StatusCombo.js:32
+msgid "Deleted"
+msgstr "Slettet"

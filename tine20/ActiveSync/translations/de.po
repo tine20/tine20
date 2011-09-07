@@ -13,48 +13,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: js/Application.js:30
-msgid "Active Sync"
-msgstr "Active Sync"
-
-#: js/Application.js:46
-msgid "Select a Device"
-msgstr "Gerät auswählen"
-
-#: js/Application.js:60
-msgid "No ActiveSync Device registered"
-msgstr "Kein ActiveSync Gerät verfügbar"
-
-#: js/Application.js:68
-msgid "Set as {0} Filter"
-msgstr "Als {0} Filter Setzen"
-
-#: js/Application.js:93
-msgid "Resetted Sync Filter"
-msgstr "Sync Filter zurückgesetzt"
-
-#: js/Application.js:94 js/Application.js:106
-msgid "{0} filter for device \"{1}\" is now \"{2}\""
-msgstr "{0} Filter für das Gerät \"{1}\" ist jetzt \"{2}\""
-
-#: js/Application.js:97
-msgid "resetted"
-msgstr "zurückgesetzt"
-
-#: js/Application.js:105
-msgid "Set Sync Filter"
-msgstr "Setze Sync Filter"
-
-#: js/Model.js:45
-msgid "Device"
-msgid_plural "Devices"
-msgstr[0] "Gerät"
-msgstr[1] "Geräte"
-
-#: js/Model.js:45
-msgid "Devices"
-msgstr "Geräte"
-
 #: Setup/setup.xml:473
 msgid "Default Policy"
 msgstr "Standard Policy"
@@ -86,3 +44,45 @@ msgstr "Standard-Aufgabenliste"
 #: Preference.php:83
 msgid "The default task list to create new tasks in."
 msgstr "Die Standard-Aufgabenliste, in der neue Aufgaben angelegt werden."
+
+#: js/Model.js:45
+msgid "Device"
+msgid_plural "Devices"
+msgstr[0] "Gerät"
+msgstr[1] "Geräte"
+
+#: js/Model.js:45
+msgid "Devices"
+msgstr "Geräte"
+
+#: js/Application.js:30
+msgid "Active Sync"
+msgstr "Active Sync"
+
+#: js/Application.js:46
+msgid "Select a Device"
+msgstr "Gerät auswählen"
+
+#: js/Application.js:60
+msgid "No ActiveSync Device registered"
+msgstr "Kein ActiveSync Gerät verfügbar"
+
+#: js/Application.js:68
+msgid "Set as {0} Filter"
+msgstr "Als {0} Filter Setzen"
+
+#: js/Application.js:93
+msgid "Resetted Sync Filter"
+msgstr "Sync Filter zurückgesetzt"
+
+#: js/Application.js:94 js/Application.js:106
+msgid "{0} filter for device \"{1}\" is now \"{2}\""
+msgstr "{0} Filter für das Gerät \"{1}\" ist jetzt \"{2}\""
+
+#: js/Application.js:97
+msgid "resetted"
+msgstr "zurückgesetzt"
+
+#: js/Application.js:105
+msgid "Set Sync Filter"
+msgstr "Setze Sync Filter"
