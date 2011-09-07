@@ -435,21 +435,36 @@ Tine.widgets.tree.ContextMenu = {
      * 
      */
     managePermissions: function() {
-        console.log(this.scope.ctxNode);
+
         if (this.scope.ctxNode) {
             var node = this.scope.ctxNode;
-            
-            var grantContainer = node.attributes.nodeRecord.data;
-            if(grantContainer.name.id) {
-                grantContainer = grantContainer.name;
-            }
-            
             var window = Tine.widgets.container.GrantsDialog.openWindow({
-                title: String.format(_('Manage Permissions for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(node.attributes.nodeRecord.data.name)),
+                title: String.format(_('Manage Permissions for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(node.attributes.name.name)),
                 containerName: this.nodeName,
-                grantContainer: grantContainer
+                grantContainer: node.attributes.name
             });
         }
+        
+//        if (this.scope.ctxNode) {
+//            var node = this.scope.ctxNode;
+//            
+//            var grantContainer = node.attributes.nodeRecord.data;
+////            if(typeof grantContainer.name == 'object') {
+////                grantContainer = grantContainer.name;
+////            }
+//            
+//            var recordName = node.attributes.nodeRecord.data.name;
+//            if(typeof recordName == 'object') {
+//                recordName = recordName.name;
+//            }
+//            
+//            var window = Tine.widgets.container.GrantsDialog.openWindow({
+//                title: String.format(_('Manage Permissions for {0} "{1}"'), this.nodeName, Ext.util.Format.htmlEncode(recordName)),
+//                containerName: this.nodeName,
+//                grantContainer: grantContainer,
+//                app: this.scope.app.appName
+//            });
+//        }
     },
     
     /**
