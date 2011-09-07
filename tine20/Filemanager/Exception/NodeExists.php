@@ -33,6 +33,8 @@ class Filemanager_Exception_NodeExists extends Filemanager_Exception
      * @return void
      */
     public function __construct($_message = 'file exists', $_code = 901) {
+        $this->_existingNodes = new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        
         parent::__construct($_message, $_code);
     }
     
@@ -43,7 +45,7 @@ class Filemanager_Exception_NodeExists extends Filemanager_Exception
      */
     public function addExistingNodeInfo(Tinebase_Model_Tree_Node $_existingNode)
     {
-       $this->getExistingNodesInfo()->addRecord($_existingNode);
+        $this->_existingNodes->addRecord($_existingNode);
     }
     
     /**
@@ -53,7 +55,7 @@ class Filemanager_Exception_NodeExists extends Filemanager_Exception
      */
     public function getExistingNodesInfo()
     {
-        return $this->_existingNodes ? $this->_existingNodes : new Tinebase_Record_RecordSet('Tinebase_Model_Tree_Node');
+        return $this->_existingNodes;
     }
     
     /**
@@ -65,7 +67,7 @@ class Filemanager_Exception_NodeExists extends Filemanager_Exception
     {
         $this->getExistingNodesInfo()->setTimezone(Tinebase_Core::get('userTimeZone'));
         return array(
-            'existingnodesinfo' => $this->getExistingNodesInfo()->toArray()
+            'existingnodesinfo' => $this->_existingNodes->toArray()
         );
     }
 }
