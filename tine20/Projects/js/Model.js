@@ -37,6 +37,7 @@ Tine.Projects.Model.Project = Tine.Tinebase.data.Record.create(Tine.Tinebase.Mod
     // ngettext('Project list', 'Project lists', n);
     containerName: 'Project list',
     containersName: 'Project lists'
+    // _('Project lists')
 });
 
 /**

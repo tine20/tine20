@@ -109,16 +109,19 @@ Tine.Tinebase.widgets.keyfield.FilterValueField = Ext.extend(Ext.ux.form.LayerCo
     
     getItems: function() {
         var items = [];
-        console.log(this.app.appName);
-        console.log(this.keyfieldName);
-        console.log(Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.appName, this.keyfieldName));
         Tine.Tinebase.widgets.keyfield.StoreMgr.get(this.app.appName, this.keyfieldName).each(function(keyfieldRecord) {
-            items.push({
+            var checkbox = {
                 xtype: 'checkbox',
                 boxLabel: keyfieldRecord.get('i18nValue'),
                 icon: keyfieldRecord.get('icon'),
                 name: keyfieldRecord.get('id')
-            });
+            };
+            
+            if (checkbox.icon) {
+                checkbox.boxLabel = '<img src="' + keyfieldRecord.get('icon') + '" class="tine-keyfield-icon"/>' + checkbox.boxLabel;
+            }
+            
+            items.push(checkbox);
         }, this);
         
         return items;

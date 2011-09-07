@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - ExampleApplication\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-09-06 20:29+0100\n"
+"PO-Revision-Date: 2011-09-07 14:06+0100\n"
 "Last-Translator: Philipp Schuele <p.schuele@metaways.de>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -40,42 +40,78 @@ msgid "Projects"
 msgstr "Projekte"
 
 #: Setup/Initialize.php:34
+msgid "On hold"
+msgstr "Wartend"
+
+#: Setup/Initialize.php:35
 msgid "Completed"
 msgstr "Abgeschlossen"
 
-#: Setup/Initialize.php:35
+#: Setup/Initialize.php:36
 msgid "Cancelled"
 msgstr "Abgebrochen"
 
-#: Setup/Initialize.php:36
+#: Setup/Initialize.php:37
 msgid "In process"
 msgstr "In Bearbeitung"
 
-#: Setup/Initialize.php:49
+#: Setup/Initialize.php:50
 msgid "Coworker"
 msgstr "Mitarbeiter"
 
-#: Setup/Initialize.php:50
+#: Setup/Initialize.php:51
 msgid "Responsible"
 msgstr "Projektleiter"
+
+#: Setup/Initialize.php:79
+msgid "All my open projects"
+msgstr "Alle meine offenen Projekte"
+
+#: Setup/Initialize.php:94
+msgid "My projects that I'm responsible for"
+msgstr "Alle Projekte für die ich verantwortlich bin"
+
+#: Setup/Initialize.php:95
+msgid "All my open projects that I am responsible for"
+msgstr "Alle offenen Projekte für die ich verantwortlich bin"
+
+#: Setup/Initialize.php:110
+msgid "My waiting projects"
+msgstr "Meine wartenden Projekte"
+
+#: Setup/Initialize.php:111
+msgid "My projects that are on hold"
+msgstr "Meine wartenden Projekte"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Alle meine Projekte"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Standard-Favorit"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Standard_favorit, der beim starten von Projekten geladen wird"
 
 #: js/ProjectGridPanel.js:79
 msgid "Tags"
 msgstr "Tags"
 
 #: js/ProjectGridPanel.js:82
-#: js/ProjectEditDialog.js:138
+#: js/ProjectEditDialog.js:137
 msgid "Number"
 msgstr "Projektnummer"
 
 #: js/ProjectGridPanel.js:89
-#: js/ProjectEditDialog.js:133
+#: js/ProjectEditDialog.js:132
 msgid "Title"
 msgstr "Titel"
 
 #: js/ProjectGridPanel.js:95
-#: js/ProjectEditDialog.js:144
-#: js/Model.js:73
+#: js/ProjectEditDialog.js:143
+#: js/Model.js:74
 msgid "Status"
 msgstr "Status"
 
@@ -87,19 +123,19 @@ msgstr "Teilnehmer"
 msgid "Role"
 msgstr "Rolle"
 
-#: js/ProjectEditDialog.js:108
-#: js/ProjectEditDialog.js:121
+#: js/ProjectEditDialog.js:107
+#: js/ProjectEditDialog.js:120
 #: js/Model.js:33
 msgid "Project"
 msgid_plural "Projects"
 msgstr[0] "Projekt"
 msgstr[1] "Projekte"
 
-#: js/ProjectEditDialog.js:174
+#: js/ProjectEditDialog.js:173
 msgid "Description"
 msgstr "Beschreibung"
 
-#: js/ProjectEditDialog.js:188
+#: js/ProjectEditDialog.js:187
 msgid "Enter description"
 msgstr "Beschreibung eingeben"
 
@@ -109,23 +145,27 @@ msgid_plural "Project lists"
 msgstr[0] "Projektliste"
 msgstr[1] "Projektlisten"
 
-#: js/Model.js:71
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Projektlisten"
+
+#: js/Model.js:72
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: js/Model.js:82
+#: js/Model.js:83
 msgid "Last modified"
 msgstr "Letzte Bearbeitung"
 
-#: js/Model.js:83
+#: js/Model.js:84
 msgid "Last modifier"
 msgstr "Letzter Bearbeiter"
 
-#: js/Model.js:84
+#: js/Model.js:85
 msgid "Creation Time"
 msgstr "Erstelldatum"
 
-#: js/Model.js:85
+#: js/Model.js:86
 msgid "Creator"
 msgstr "Ersteller"
 

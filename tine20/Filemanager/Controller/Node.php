@@ -329,8 +329,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         $this->_checkPathACL($parentPathRecord, 'update');
         
-        if (! $_forceOverwrite) {
+        try {
             $this->_checkIfExists($path);
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            if ($_forceOverwrite && ! $_tempFileId) {
+                // just return the exisiting node and do not overwrite existing file if no tempfile id was given
+                $existingNode = $this->_backend->stat($_path->statpath);
+                $this->resolveContainerAndAddPath($existingNode, $parentPathRecord);
+                return $existingNode;
+            } else if (! $_forceOverwrite) {
+                throw $fene;
+            }
         }
 
         if (! $parentPathRecord->container && $_type === Tinebase_Model_Tree_Node::TYPE_FOLDER) {
@@ -342,9 +351,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         }
         
         $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId);
-        
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
-        
         return $newNode;
     }
     
@@ -571,12 +578,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 }
                 $result->addRecord($node);
             } catch (Filemanager_Exception_NodeExists $fene) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Node exists: ' . $destinationPathRecord->statpath);
+                
                 // collect all nodes that already exist and add them to exception info
                 if (! isset($nodeExistsException)) {
                     $nodeExistsException = new Filemanager_Exception_NodeExists();
                 }
+                
                 $nodesInfo = $fene->getExistingNodesInfo();
                 if (count($nodesInfo) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . ' Adding node info to exception.');
                     $nodeExistsException->addExistingNodeInfo($nodesInfo->getFirstRecord());
                 }
             }
@@ -663,14 +676,20 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
      * @param string $_action
      * @param boolean $_forceOverwrite
      * @return Tinebase_Model_Tree_Node
-     * @throws Filemanager_Exception_NodeExists
      */
     protected function _copyOrMoveFileNode(Tinebase_Model_Tree_Node_Path $_source, Tinebase_Model_Tree_Node_Path $_destination, $_action, $_forceOverwrite = FALSE)
     {
         $this->_checkPathACL($_destination->getParent(), 'update', FALSE);
         
-        if (! $_forceOverwrite) {
+        try {
             $this->_checkIfExists($_destination);
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            if ($_forceOverwrite) {
+                // delete old node
+                unlink($_destination->streamwrapperpath);
+            } else {
+                throw $fene;
+            }
         }
             
         switch ($_action) {

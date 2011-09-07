@@ -1286,7 +1286,7 @@ msgstr ""
 msgid "Remove record"
 msgstr ""
 
-#: js/widgets/grid/PickerGridPanel.js:238
+#: js/widgets/grid/PickerGridPanel.js:247
 msgid "Search for records ..."
 msgstr ""
 

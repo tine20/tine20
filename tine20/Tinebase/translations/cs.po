@@ -1294,7 +1294,7 @@ msgstr ""
 msgid "Remove record"
 msgstr "Odstranit záznam"
 
-#: js/widgets/grid/PickerGridPanel.js:238
+#: js/widgets/grid/PickerGridPanel.js:247
 msgid "Search for records ..."
 msgstr "Hledat záznamy..."
 

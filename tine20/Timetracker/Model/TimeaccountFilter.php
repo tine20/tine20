@@ -35,6 +35,7 @@ class Timetracker_Model_TimeaccountFilter extends Tinebase_Model_Filter_FilterGr
         'number'         => array('filter' => 'Tinebase_Model_Filter_Text'),
         'description'    => array('filter' => 'Tinebase_Model_Filter_Text'),
         'status'         => array('filter' => 'Tinebase_Model_Filter_Text'),
+        'deadline'       => array('filter' => 'Tinebase_Model_Filter_Text'),
         'tag'            => array('filter' => 'Tinebase_Model_Filter_Tag', 'options' => array('idProperty' => 'timetracker_timeaccount.id')),
         'created_by'     => array('filter' => 'Tinebase_Model_Filter_User'),
         'showClosed'     => array('filter' => 'Timetracker_Model_TimeaccountClosedFilter'),

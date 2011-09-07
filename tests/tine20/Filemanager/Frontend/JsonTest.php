@@ -521,6 +521,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testCopyFileNodesToFolder
+     * 
+     * @return array target node
      */
     public function testCopyFileNodesToFolder()
     {
@@ -530,6 +532,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
         $result = $this->_json->copyNodes($filesToCopy, $targetNode['path'], FALSE);
         $this->assertEquals(2, count($result));
         $this->assertEquals($targetNode['path'] . '/file1', $result[0]['path']);
+        
+        return $targetNode;
     }
 
     /**
@@ -670,6 +674,8 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
     
     /**
      * testMoveFileNodesToFolder
+     * 
+     * @return array target node
      */
     public function testMoveFileNodesToFolder()
     {
@@ -690,7 +696,23 @@ class Filemanager_Frontend_JsonTest extends PHPUnit_Framework_TestCase
             'value'    => Tinebase_Model_Tree_Node::TYPE_FILE,
         ));
         $result = $this->_json->searchNodes($filter, array());
-        $this->assertEquals(0, $result['totalcount']);        
+        $this->assertEquals(0, $result['totalcount']);
+        
+        return $targetNode;
+    }
+
+    /**
+     * testMoveFileNodesOverwrite
+     */
+    public function testMoveFileNodesOverwrite()
+    {
+        $targetNode = $this->testCopyFileNodesToFolder();
+        
+        $sharedContainerPath = '/' . Tinebase_Model_Container::TYPE_SHARED . '/testcontainer/';
+        $filesToMove = array($sharedContainerPath . 'file1', $sharedContainerPath . 'file2');
+        $result = $this->_json->moveNodes($filesToMove, $targetNode['path'], TRUE);
+        
+        $this->assertEquals(2, count($result));
     }
     
     /**

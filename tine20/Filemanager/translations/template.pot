@@ -19,7 +19,7 @@ msgstr ""
 msgid "Size"
 msgstr ""
 
-#: js/GridPanel.js:138 js/Model.js:475
+#: js/GridPanel.js:138 js/Model.js:478
 msgid "Contenttype"
 msgstr ""
 
@@ -31,7 +31,7 @@ msgstr ""
 msgid "Revision"
 msgstr ""
 
-#: js/GridPanel.js:168 js/Model.js:476
+#: js/GridPanel.js:168 js/Model.js:479
 msgid "Creation Time"
 msgstr ""
 
@@ -83,7 +83,7 @@ msgstr ""
 msgid "Resume upload"
 msgstr ""
 
-#: js/GridPanel.js:460 js/GridPanel.js:527 js/Model.js:477
+#: js/GridPanel.js:460 js/GridPanel.js:527 js/Model.js:480
 msgid "user file folder"
 msgstr ""
 
@@ -100,7 +100,7 @@ msgid "You have to supply a {0} name!"
 msgstr ""
 
 #: js/GridPanel.js:477 js/GridPanel.js:537 js/GridPanel.js:579
-#: js/GridContextMenu.js:45 js/GridContextMenu.js:135 js/Model.js:266
+#: js/GridContextMenu.js:45 js/GridContextMenu.js:135 js/Model.js:269
 msgid "Please wait"
 msgstr ""
 
@@ -159,11 +159,11 @@ msgstr ""
 msgid "Deleting {0} \"{1}\""
 msgstr ""
 
-#: js/Model.js:473
+#: js/Model.js:476
 msgid "Quick search"
 msgstr ""
 
-#: js/Model.js:474
+#: js/Model.js:477
 msgid "Type"
 msgstr ""
 

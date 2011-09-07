@@ -42,13 +42,11 @@ msgstr "Abgebrochen"
 msgid "In process"
 msgstr "In Bearbeitung"
 
-#: js/ExampleRecordGridPanel.js:83
-#: js/ExampleRecordEditDialog.js:104
+#: js/ExampleRecordGridPanel.js:83 js/ExampleRecordEditDialog.js:104
 msgid "Name"
 msgstr "Name"
 
-#: js/ExampleRecordGridPanel.js:89
-#: js/ExampleRecordEditDialog.js:110
+#: js/ExampleRecordGridPanel.js:89 js/ExampleRecordEditDialog.js:110
 #: js/Model.js:71
 msgid "Status"
 msgstr "Status"
@@ -85,8 +83,7 @@ msgid_plural "example record lists"
 msgstr[0] "Liste von Beispieleinträgen"
 msgstr[1] "Listen von Beispieleinträgen"
 
-#: js/Model.js:69
-#: js/Model.js:106
+#: js/Model.js:69 js/Model.js:106
 msgid "Quick search"
 msgstr "Schnellsuche"
 
@@ -119,7 +116,6 @@ msgstr "Ersteller"
 #~ msgstr "Beschreibung"
 
 #~ msgid "record list"
-
 #~ msgid_plural "record lists"
 #~ msgstr[0] "Eintrags Liste"
 #~ msgstr[1] "Eintrags Listen"
