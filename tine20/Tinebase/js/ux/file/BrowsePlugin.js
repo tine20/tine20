@@ -157,7 +157,7 @@ Ext.ux.file.BrowsePlugin.prototype = {
         
         if (this.enableFileDialog) this.createInputFile();
       
-        if (this.enableFileDrop) {
+        if (this.enableFileDrop && !Ext.isIE) {
             if (! this.dropEl) {
                 if (this.dropElSelector) {
                     this.dropEl = this.wrap.up(this.dropElSelector);
