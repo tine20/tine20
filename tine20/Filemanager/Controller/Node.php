@@ -578,12 +578,18 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
                 }
                 $result->addRecord($node);
             } catch (Filemanager_Exception_NodeExists $fene) {
+                if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                    . ' Node exists: ' . $destinationPathRecord->statpath);
+                
                 // collect all nodes that already exist and add them to exception info
                 if (! isset($nodeExistsException)) {
                     $nodeExistsException = new Filemanager_Exception_NodeExists();
                 }
+                
                 $nodesInfo = $fene->getExistingNodesInfo();
                 if (count($nodesInfo) > 0) {
+                    if (Tinebase_Core::isLogLevel(Zend_Log::DEBUG)) Tinebase_Core::getLogger()->debug(__METHOD__ . '::' . __LINE__ 
+                        . ' Adding node info to exception.');
                     $nodeExistsException->addExistingNodeInfo($nodesInfo->getFirstRecord());
                 }
             }
