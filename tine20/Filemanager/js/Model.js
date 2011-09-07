@@ -198,7 +198,7 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     copyNodes : function(items, target, move, params) {
         
         var containsFolder = false,
-            reloadParent = false;
+            message = '';
         
         if(!params) {
         
@@ -258,8 +258,11 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             };
 
         }
-        else {
-            reloadParent = true;
+        else {            
+            message = 'Copying data .. {0}';
+            if(params.metho == 'Filemanager.moveNodes') {
+                message = 'Moving data .. {0}';
+            }
         }
         
         var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
