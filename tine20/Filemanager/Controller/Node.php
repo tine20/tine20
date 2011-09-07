@@ -334,7 +334,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         } catch (Filemanager_Exception_NodeExists $fene) {
             if ($_forceOverwrite && ! $_tempFileId) {
                 // just return the exisiting node and do not overwrite existing file if no tempfile id was given
-                $existingNode = $this->_backend->stat($_path->statpath);
+                $existingNode = $this->_backend->stat($path->statpath);
                 $this->resolveContainerAndAddPath($existingNode, $parentPathRecord);
                 return $existingNode;
             } else if (! $_forceOverwrite) {
