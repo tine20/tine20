@@ -329,8 +329,17 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         
         $this->_checkPathACL($parentPathRecord, 'update');
         
-        if (! $_forceOverwrite) {
+        try {
             $this->_checkIfExists($path);
+        } catch (Filemanager_Exception_NodeExists $fene) {
+            if ($_forceOverwrite && ! $_tempFileId) {
+                // just return the exisiting node and do not overwrite existing file if no tempfile id was given
+                $existingNode = $this->_backend->stat($_path->statpath);
+                $this->resolveContainerAndAddPath($existingNode, $parentPathRecord);
+                return $existingNode;
+            } else {
+                throw $fene;
+            }
         }
 
         if (! $parentPathRecord->container && $_type === Tinebase_Model_Tree_Node::TYPE_FOLDER) {
@@ -342,9 +351,7 @@ class Filemanager_Controller_Node extends Tinebase_Controller_Abstract implement
         }
         
         $newNode = $this->_createNodeInBackend($newNodePath, $_type, $_tempFileId);
-        
         $this->resolveContainerAndAddPath($newNode, $parentPathRecord, $container);
-        
         return $newNode;
     }
     
