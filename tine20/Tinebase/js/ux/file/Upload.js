@@ -213,7 +213,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
                 (! Ext.isGecko && window.XMLHttpRequest && window.File && window.FileList) || // safari, chrome, ...?
                 (Ext.isGecko && window.FileReader) // FF
         ) && this.file) {
-
+     
             if (this.isHtml5ChunkedUpload()) {
 
                 if(this.fileSize > this.maxFileUploadSize) {
@@ -404,22 +404,23 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     onUploadSuccess: function(response, options, fileRecord) {
         
-        response =
-            Ext.util.JSON.decode(response.responseText);
+        response = Ext.util.JSON.decode(response.responseText);
         
         this.retryCount = 0;
         
         this.fileRecord.beginEdit();
         this.fileRecord.set('tempFile', response.tempFile);
         this.fileRecord.set('name', response.tempFile.name);
-//        this.fileRecord.set('size', response.tempFile.size);
+//      this.fileRecord.set('size', response.tempFile.size);
         this.fileRecord.set('size', 0);
         this.fileRecord.set('type', response.tempFile.type);
         this.fileRecord.set('path', response.tempFile.path);
-        
+        this.fileRecord.set('status', 'complete');
+
         if(!this.isHtml5ChunkedUpload()) {
             this.fileRecord.set('status', 'complete');
         }
+        
         
         this.fileRecord.commit(false);
         
@@ -516,9 +517,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
     html4upload: function() {
                 
         var form = this.createForm();
-        var input = this.getInput();
-//        alert(Ext.get(input));
-        
+        var input = this.getInput();       
         form.appendChild(input);
         
         this.fileRecord = new Ext.ux.file.Upload.file({
