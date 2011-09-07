@@ -200,7 +200,15 @@ Tine.Calendar.Model.Event.getFilterModel = function() {
         {label: _('Quick search'), field: 'query', operators: ['contains']},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Calendar.Model.Event, /*defaultOperator: 'in',*/ defaultValue: {path: Tine.Tinebase.container.getMyNodePath()}},
         {filtertype: 'calendar.attendee'},
-        {filtertype: 'calendar.attendeestatus'},
+        {
+            label: app.i18n._('Attendee Status'),
+            field: 'attender_status',
+            filtertype: 'tine.widget.keyfield.filter', 
+            app: app, 
+            defaultValue: ['DECLINED'], 
+            keyfieldName: 'attendeeStatus', 
+            defaultOperator: 'notin'
+        },
         {filtertype: 'addressbook.contact', field: 'organizer', label: app.i18n._('Organizer')},
         {filtertype: 'tinebase.tag', app: app}
     ];
