@@ -132,7 +132,7 @@ Tine.Filemanager.GridContextMenu = {
             
             Ext.MessageBox.confirm(_('Confirm'), String.format(this.scope.app.i18n._('Do you really want to delete "{0}"?'), nodeName), function(_btn){
                 if ( _btn == 'yes') {
-                    Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), this.nodeName , nodeName));
+                    Ext.MessageBox.wait(_('Please wait'), String.format(_('Deleting {0} "{1}"' ), '' , nodeName));
                     
                     var params = {
                         method: this.backend + '.delete' + this.backendModel

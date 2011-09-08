@@ -482,6 +482,7 @@ Ext.extend(Tine.Filemanager.TreePanel, Tine.widgets.container.TreePanel, {
         if(grid.currentFolderNode.isAncestor(node)) {
             node.parentNode.select();
         }
+        grid.getStore().reload();
     },
 
     /**
