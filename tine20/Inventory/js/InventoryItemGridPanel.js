@@ -100,7 +100,7 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             },{
                 id: 'add_time',
                 header: this.app.i18n._("Added"),
-                width: 50,
+                width: 25,
                 sortable: true,
                 dataIndex: 'add_time', 
                 renderer: Tine.Tinebase.common.dateRenderer
@@ -113,19 +113,19 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
             },{
                 id: 'total_number',
                 header: this.app.i18n._("Total number"),
-                width: 50,
+                width: 30,
                 sortable: true,
                 dataIndex: 'total_number'
             },{
                 id: 'active_number',
                 header: this.app.i18n._("Active number"),
-                width: 50,
+                width: 30,
                 sortable: true,
                 dataIndex: 'active_number'
             },{
                 id: 'description',
                 header: this.app.i18n._("Description"),
-                width: 50,
+                width: 80,
                 sortable: true,
                 dataIndex: 'description'
             }

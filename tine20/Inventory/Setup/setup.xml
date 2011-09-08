@@ -40,7 +40,7 @@
                     <name>inventory_id</name>
                     <type>text</type>
                     <length>255</length>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>description</name>
@@ -57,7 +57,7 @@
                 <field>
                     <name>add_time</name>
                     <type>datetime</type>
-                    <notnull>true</notnull>
+                    <notnull>false</notnull>
                 </field>
                 <field>
                     <name>total_number</name>

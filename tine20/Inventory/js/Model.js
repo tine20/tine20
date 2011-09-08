@@ -23,8 +23,8 @@ Tine.Inventory.Model.InventoryItem = Tine.Tinebase.data.Record.create(Tine.Tineb
     { name: 'location' },
     { name: 'description' },
     { name: 'add_time', type: 'date', dateFormat: Date.patterns.ISO8601Long},
-    { name: 'total_number', type: 'integer'},
-    { name: 'active_number', type: 'integer' },
+    { name: 'total_number', type: 'int'},
+    { name: 'active_number', type: 'int'},
     // TODO add more record fields here
     // tine 2.0 notes + tags
     { name: 'notes'},
@@ -72,8 +72,8 @@ Tine.Inventory.Model.InventoryItem.getFilterModel = function() {
     var app = Tine.Tinebase.appMgr.get('Inventory');
     
     return [
-        {label: _('Quick search'),    field: 'query',       operators: ['contains']},
-        {label: _('Name'),    field: 'name',       operators: ['contains']},
+        {label: app.i18n._('Quick search'),    field: 'query',       operators: ['contains']},
+        {label: app.i18n._('Name'),    field: 'name',       operators: ['contains']},
         {
             label: app.i18n._('Type'),
             field: 'type',
@@ -81,8 +81,8 @@ Tine.Inventory.Model.InventoryItem.getFilterModel = function() {
             app: app, 
             keyfieldName: 'inventoryType'
         },
-        {label: _('ID'),    field: 'inventory_id',       operators: ['contains']},
-        {label: _('Location'),    field: 'location',       operators: ['contains']},
+        {label: app.i18n._('ID'),    field: 'inventory_id',       operators: ['contains']},
+        {label: app.i18n._('Location'),    field: 'location',       operators: ['contains']},
         {label: app.i18n._('Added'),         field: 'add_time', valueType: 'date', pastOnly: true},
         {filtertype: 'tinebase.tag', app: app},
         {filtertype: 'tine.widget.container.filtermodel', app: app, recordClass: Tine.Inventory.Model.InventoryItem},
