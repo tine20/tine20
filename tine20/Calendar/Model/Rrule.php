@@ -352,6 +352,7 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                 $eventLength = $_event->dtstart->diff($_event->dtend);
                 
                 foreach (explode(',', $rrule->byday) as $recurWeekDay) {
+                    // NOTE: in weecly computation, each wdays base event is a recur instance itself
                     $baseEvent = clone $_event;
                     
                     // NOTE: skipping must be done in organizer_tz
@@ -362,14 +363,14 @@ class Calendar_Model_Rrule extends Tinebase_Record_Abstract
                     $baseEvent->dtend = clone($baseEvent->dtstart);
                     $baseEvent->dtend->add($eventLength);
                     
+                    self::_computeRecurDaily($baseEvent, $dailyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
+                    
+                    // check if base event (recur instance) needs to be added to the set
                     if ($baseEvent->dtstart->isLater($_event->dtstart) && $baseEvent->dtstart->isLater($_from) && $baseEvent->dtstart->isEarlier($_until)) {
-                        $baseEvent->setRecurId();
-                        if (! in_array($baseEvent->recurid, $exceptionRecurIds)) {
+                        if (! in_array($baseEvent->setRecurId(), $exceptionRecurIds)) {
                             $recurSet->addRecord($baseEvent);
                         }
                     }
-                    
-                    self::_computeRecurDaily($baseEvent, $dailyrrule, $exceptionRecurIds, $_from, $_until, $recurSet);
                 }
                 break;
                 

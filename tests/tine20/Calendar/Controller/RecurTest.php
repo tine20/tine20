@@ -68,6 +68,50 @@ class Calendar_Controller_RecurTest extends Calendar_TestCase
         $this->assertFalse(in_array($persistentEvent->getId(), $weekviewEvents->getId()), 'baseEvent should not be in the set!');
     }
     
+    /**
+     * http://forge.tine20.org/mantisbt/view.php?id=4810
+     */
+    public function testWeeklyException()
+    {
+        $from = new Tinebase_DateTime('2011-09-01 00:00:00');
+        $until = new Tinebase_DateTime('2011-09-30 23:59:59');
+        
+        $event = new Calendar_Model_Event(array(
+            'uid'               => Tinebase_Record_Abstract::generateUID(),
+            'summary'           => 'weekly',
+            'dtstart'           => '2011-09-11 22:00:00',
+            'dtend'             => '2011-09-12 21:59:59',
+            'is_all_day_event'  => true,
+            'originator_tz' => 'Europe/Berlin',
+            'rrule'         => 'FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH',
+            'container_id'  => $this->_testCalendar->getId(),
+            Tinebase_Model_Grants::GRANT_EDIT     => true,
+        ));
+        
+        $persistentEvent = $this->_controller->create($event);
+        
+        $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        )));
+        
+        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
+        $this->assertEquals(12, count($weekviewEvents), 'there should be 12 events in the set');
+        
+        // delte one instance
+        $exception = $weekviewEvents->filter('dtstart', new Tinebase_DateTime('2011-09-19 22:00:00'))->getFirstRecord();
+        $persistentEventException = $this->_controller->createRecurException($exception, TRUE);
+        
+        $weekviewEvents = $this->_controller->search(new Calendar_Model_EventFilter(array(
+            array('field' => 'container_id', 'operator' => 'equals', 'value' => $this->_testCalendar->getId()),
+        )));
+        
+        Calendar_Model_Rrule::mergeRecuranceSet($weekviewEvents, $from, $until);
+        $this->assertEquals(11, count($weekviewEvents), 'there should be 11 events in the set');
+        
+        $exception = $weekviewEvents->filter('dtstart', new Tinebase_DateTime('2011-09-19 22:00:00'))->getFirstRecord();
+        $this->assertTrue(!$exception, 'exception must not be in eventset');
+    }
+    
     public function testAttendeeSetStatusRecurException()
     {
         // note: 2009-03-29 Europe/Berlin switched to DST
