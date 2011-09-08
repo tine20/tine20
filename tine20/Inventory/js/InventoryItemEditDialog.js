@@ -101,6 +101,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                     },
                     items: [[{
                         columnWidth: 1,
+                        xtype: 'tine.widget.field.AutoCompleteField',
+                        recordClass: this.recordClass,
                         fieldLabel: this.app.i18n._('Name'),
                         name: 'name',
                         allowBlank: false
@@ -119,6 +121,8 @@ Tine.Inventory.InventoryItemEditDialog = Ext.extend(Tine.widgets.dialog.EditDial
                         }],
                         [{
                             columnWidth: 0.5,
+                            xtype: 'tine.widget.field.AutoCompleteField',
+                            recordClass: this.recordClass,
                             fieldLabel: this.app.i18n._('Location'),
                             name: 'location',
                             allowBlank: false

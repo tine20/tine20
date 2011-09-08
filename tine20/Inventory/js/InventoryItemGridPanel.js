@@ -102,7 +102,8 @@ Tine.Inventory.InventoryItemGridPanel = Ext.extend(Tine.widgets.grid.GridPanel, 
                 header: this.app.i18n._("Added"),
                 width: 50,
                 sortable: true,
-                dataIndex: 'add_time'
+                dataIndex: 'add_time', 
+                renderer: Tine.Tinebase.common.dateRenderer
             },{
                 id: 'location',
                 header: this.app.i18n._("Location"),

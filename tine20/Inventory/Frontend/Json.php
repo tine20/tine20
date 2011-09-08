@@ -99,7 +99,7 @@ class Inventory_Frontend_Json extends Tinebase_Frontend_Json_Abstract
      * @param  string   $startswith
      * @return array
      */
-    public function autoCompleteInventoryProperty($property, $startswith)
+    public function autoCompleteInventoryItemProperty($property, $startswith)
     {
         if (preg_match('/[^A-Za-z0-9_]/', $property)) {
             // NOTE: it would be better to ask the model for property presece, but we can't atm.

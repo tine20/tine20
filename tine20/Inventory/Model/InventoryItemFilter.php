@@ -32,7 +32,7 @@ class Inventory_Model_InventoryItemFilter extends Tinebase_Model_Filter_FilterGr
      * @var array filter model fieldName => definition
      */
     protected $_filterModel = array(
-        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', /*'...'*/))),
+        'query'          => array('filter' => 'Tinebase_Model_Filter_Query', 'options' => array('fields' => array('name', 'type', 'location'/*'...'*/))),
         'container_id'   => array('filter' => 'Tinebase_Model_Filter_Container', 'options' => array('applicationName' => 'Inventory')),
         'id'             => array('filter' => 'Tinebase_Model_Filter_Id'),
         'type'           => array('filter' => 'Tinebase_Model_Filter_Text'),
