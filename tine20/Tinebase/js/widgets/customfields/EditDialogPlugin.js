@@ -25,6 +25,12 @@ Tine.widgets.customfields.EditDialogPlugin.prototype = {
     
     init: function(editDialog) {
         this.editDialog = editDialog;
+        
+        // edit dialog without recordClass cannot have custom fields
+        if(!this.editDialog.recordClass) {
+            return;
+        }
+        
         this.app = Tine.Tinebase.appMgr.get(this.editDialog.app);
         this.customfieldsValue = [];
         

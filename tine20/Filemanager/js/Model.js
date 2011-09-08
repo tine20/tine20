@@ -198,7 +198,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     copyNodes : function(items, target, move, params) {
         
         var containsFolder = false,
-            message = '';
+            message = '',
+            app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
+
         
         if(!params) {
         
@@ -243,10 +245,10 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             };
 
             var method = "Filemanager.copyNodes",
-                message = 'Copying data .. {0}';
+                message = app.i18n._('Copying data .. {0}');
             if(move) {
                 method = "Filemanager.moveNodes";
-                message = 'Moving data .. {0}';
+                message = app.i18n._('Moving data .. {0}');
             }
  
             params = {
@@ -259,14 +261,13 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
 
         }
         else {            
-            message = 'Copying data .. {0}';
-            if(params.metho == 'Filemanager.moveNodes') {
-                message = 'Moving data .. {0}';
+            message = app.i18n._('Copying data .. {0}');
+            if(params.method == 'Filemanager.moveNodes') {
+                message = app.i18n._('Moving data .. {0}');
             }
         }
         
-        var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
-        Ext.MessageBox.wait(_('Please wait'), String.format(app.i18n._(message), '' ));
+        Ext.MessageBox.wait(_('Please wait'), String.format(message, '' ));
 
         Ext.Ajax.request({
             params: params,
