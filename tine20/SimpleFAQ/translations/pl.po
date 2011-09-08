@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tine 2.0 - SimpleFAQ\n"
 "POT-Creation-Date: 2008-05-17 22:12+0100\n"
-"PO-Revision-Date: 2011-06-06 22:00+0100\n"
+"PO-Revision-Date: 2011-09-08 21:06+0100\n"
 "Last-Translator: Wojciech Kaczmarek <wojciech_kaczmarek@wp.pl>\n"
 "Language-Team: Tine 2.0 Translators\n"
 "Language: \n"
@@ -38,16 +38,22 @@ msgstr "Wewnętrzny"
 msgid "Public"
 msgstr "Publiczny"
 
-#: js/AdminPanel.js:93 js/AdminPanel.js:125 js/FaqGridDetailsPanel.js:205
-#: js/FaqStatus.js:26 js/FaqStatusFilterModel.js:27
+#: js/AdminPanel.js:93
+#: js/AdminPanel.js:125
+#: js/FaqGridDetailsPanel.js:205
+#: js/FaqStatus.js:26
+#: js/FaqStatusFilterModel.js:27
 msgid "FAQ Status"
 msgid_plural "FAQ Status"
 msgstr[0] "Status pytań"
 msgstr[1] "Statusy pytań"
 msgstr[2] "Statusów pytań"
 
-#: js/AdminPanel.js:97 js/AdminPanel.js:132 js/FaqGridDetailsPanel.js:210
-#: js/FaqType.js:26 js/FaqTypeFilterModel.js:27
+#: js/AdminPanel.js:97
+#: js/AdminPanel.js:132
+#: js/FaqGridDetailsPanel.js:210
+#: js/FaqType.js:26
+#: js/FaqTypeFilterModel.js:27
 msgid "FAQ Type"
 msgid_plural "FAQ Types"
 msgstr[0] "Typ FAQ"
@@ -58,7 +64,8 @@ msgstr[2] "Typy FAQ"
 msgid "Defaults"
 msgstr "Domyślne"
 
-#: js/FaqEditDialog.js:108 js/FaqGridDetailsPanel.js:157
+#: js/FaqEditDialog.js:108
+#: js/FaqGridDetailsPanel.js:157
 #: js/FaqGridPanel.js:120
 msgid "Question"
 msgstr "Pytanie"
@@ -67,7 +74,8 @@ msgstr "Pytanie"
 msgid "Enter a question..."
 msgstr "Wpisz pytanie..."
 
-#: js/FaqEditDialog.js:115 js/FaqGridDetailsPanel.js:163
+#: js/FaqEditDialog.js:115
+#: js/FaqGridDetailsPanel.js:163
 #: js/FaqGridPanel.js:127
 msgid "Answer"
 msgstr "Odpowiedź"
@@ -76,19 +84,23 @@ msgstr "Odpowiedź"
 msgid "Enter a answer..."
 msgstr "Wpisz odpowiedź..."
 
-#: js/FaqEditDialog.js:124 js/FaqGridPanel.js:114
+#: js/FaqEditDialog.js:124
+#: js/FaqGridPanel.js:114
 msgid "Type"
 msgstr "Typ"
 
-#: js/FaqEditDialog.js:136 js/FaqGridPanel.js:108
+#: js/FaqEditDialog.js:136
+#: js/FaqGridPanel.js:108
 msgid "Status"
 msgstr "Status"
 
-#: js/FaqGridDetailsPanel.js:103 js/FaqGridDetailsPanel.js:188
+#: js/FaqGridDetailsPanel.js:103
+#: js/FaqGridDetailsPanel.js:188
 msgid "FAQ Infos"
 msgstr "Informacje o FAQ"
 
-#: js/FaqGridDetailsPanel.js:169 js/FaqGridPanel.js:101
+#: js/FaqGridDetailsPanel.js:169
+#: js/FaqGridPanel.js:101
 msgid "Tags"
 msgstr "Znaczniki"
 
@@ -116,7 +128,8 @@ msgstr "Nowy status pytania..."
 msgid "Add a new FAQ Type..."
 msgstr "Dodaj nowy typ FAQ"
 
-#: js/Model.js:33 js/SimpleFAQ.js:19
+#: js/Model.js:33
+#: js/SimpleFAQ.js:19
 msgid "FAQ"
 msgid_plural "FAQs"
 msgstr[0] "Pytanie"
@@ -126,13 +139,13 @@ msgstr[2] "Pytania"
 #: js/Model.js:37
 msgid "FAQ List"
 msgid_plural "FAQ Lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Lista pytań"
+msgstr[1] "listy pytań"
+msgstr[2] "listy pytań"
 
 #: js/Model.js:37
 msgid "FAQ Lists"
-msgstr ""
+msgstr "Listy pytań"
 
 #: js/Model.js:72
 msgid "Quick search"
@@ -171,6 +184,7 @@ msgid "All FAQs that I have last modified"
 msgstr "Wszystkie pytania, które ostatnio zmieniłam/em"
 
 #~ msgid "FAQ List, "
+
 #~ msgid_plural "FAQ Lists"
 #~ msgstr[0] "Lista pytań"
 #~ msgstr[1] "Listy pytań"
