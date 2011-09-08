@@ -14,159 +14,6 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:43
-msgid "Fixed Calendars"
-msgstr ""
-
-#: Config.php:45
-msgid "Calendars always selected regardles of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
-msgstr ""
-
-#: Config.php:53
-msgid "Attendee Status Available"
-msgstr ""
-
-#: Config.php:55
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
-msgstr ""
-
-#: Config.php:63
-msgid "Attendee Roles Available"
-msgstr ""
-
-#: Config.php:65
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
-msgstr ""
-
-#: Controller.php:103
-#, python-format
-msgid "%s's personal calendar"
-msgstr "%s személyes naptára"
-
-#: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:67
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] "Naptár"
-msgstr[1] "Naptárak"
-
-#: Setup/Update/Release3.php:164 Setup/Initialize.php:34
-msgid "All events I attend"
-msgstr "Minden esemény, amiben résztveszek"
-
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:98
-msgid "Required"
-msgstr "Szükséges"
-
-#: Setup/Update/Release5.php:76 Setup/Initialize.php:99
-msgid "Optional"
-msgstr "Opcionális"
-
-#: Setup/Update/Release5.php:89 Setup/Initialize.php:112
-msgid "No response"
-msgstr "Nincs válasz"
-
-#: Setup/Update/Release5.php:90 Setup/Initialize.php:113
-msgid "Accepted"
-msgstr "Elfogadva"
-
-#: Setup/Update/Release5.php:91 Setup/Initialize.php:114
-msgid "Declined"
-msgstr "Elutasítva"
-
-#: Setup/Update/Release5.php:92 Setup/Initialize.php:115
-msgid "Tentative"
-msgstr "Bizonytalan"
-
-#: Setup/Initialize.php:47
-msgid "Awaiting response"
-msgstr "Visszajelzésre vár"
-
-#: Setup/Initialize.php:48
-msgid "Events I have not yet responded to"
-msgstr ""
-
-#: Setup/Initialize.php:63
-msgid "Declined events"
-msgstr "Lemondott esemének"
-
-#: Setup/Initialize.php:64
-msgid "Events I have declined"
-msgstr "Események amiket lemondtam"
-
-#: Setup/Initialize.php:77
-msgid "I'm organizer"
-msgstr "Szervező vagyok"
-
-#: Setup/Initialize.php:78
-msgid "Events I'm the organizer of"
-msgstr "Események amiket én szerveztem"
-
-#: Preference.php:31
-msgid "All my events"
-msgstr "Minden eseményem"
-
-#: Preference.php:79 js/EventDetailsPanel.js:214 js/EventEditDialog.js:99
-#: js/ContactEventsGridPanel.js:118
-msgid "Start Time"
-msgstr "Kezdési idő"
-
-#: Preference.php:80
-#, fuzzy
-msgid "Position on the left time axis, day and week view should start with"
-msgstr "Pozíció a bal időtengelyen, amivel a napi és a heti nézet kezdődjön"
-
-#: Preference.php:83
-msgid "Default Calendar"
-msgstr "Alapértelmezett naptár"
-
-#: Preference.php:84
-msgid "The default calendar for invitations and new events"
-msgstr "Meghívások és új események alapértelmezett naptára"
-
-#: Preference.php:87
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
-
-#: Preference.php:88
-msgid "The default favorite which is loaded on calendar startup"
-msgstr "Az alapértelmezett kedvenc, ami betöltődik a naptár indulásakor"
-
-#: Preference.php:91
-msgid "Get Notification Emails"
-msgstr "Értesítő emailek fogadása"
-
-#: Preference.php:92
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "Az esemény szintje, amiről értesítést szeretnél. Kérlek jegyezd meg, hogy a szervezők minden frissítésről (beleértve a résztvevők válaszait) értesítést kapnak ameddig a beállítás nem \"Soha\""
-
-#: Preference.php:95
-msgid "Send Notifications Emails of own Actions"
-msgstr "Értesítő emailek küldése saját tevékenységekről"
-
-#: Preference.php:96
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Értesítő emailek fogadása saját magadnak készített tevékenységekről"
-
-#: Preference.php:149
-msgid "Never"
-msgstr ""
-
-#: Preference.php:149
-msgid "On invitation and cancellation only"
-msgstr ""
-
-#: Preference.php:149
-msgid "On time changes"
-msgstr ""
-
-#: Preference.php:149
-msgid "On all updates but attendee responses"
-msgstr ""
-
-#: Preference.php:149
-msgid "On attendee responses too"
-msgstr ""
-
 #: Acl/Rights.php:96
 msgid "manage shared calendars"
 msgstr "megosztott naptárak kezelése"
@@ -191,6 +38,226 @@ msgstr "források kezelése"
 msgid "All Rights to administrate resources"
 msgstr "Minden jog a rendszergazdai forrásokhoz"
 
+#: Config.php:43
+msgid "Fixed Calendars"
+msgstr ""
+
+#: Config.php:45
+msgid "Calendars always selected regardles of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+msgstr ""
+
+#: Config.php:53
+msgid "Attendee Status Available"
+msgstr ""
+
+#: Config.php:55
+msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:63
+msgid "Attendee Roles Available"
+msgstr ""
+
+#: Config.php:65
+msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
+msgstr ""
+
+#: Controller/EventNotifications.php:263
+msgid "Alarm for event \"%1$s\" at %2$s"
+msgstr "Riasztás \"%1$s\" eseményhez ekkor: %2$s"
+
+#: Controller/EventNotifications.php:266
+msgid "Event invitation \"%1$s\" at %2$s"
+msgstr " \"%1$s\" esemény meghívó ekkor:"
+
+#: Controller/EventNotifications.php:269
+msgid "Event \"%1$s\" at %2$s has been canceled"
+msgstr "\"%1$s\" esemény %2$s-kor törölve lett"
+
+#: Controller/EventNotifications.php:274
+msgid "Event \"%1$s\" at %2$s has been rescheduled"
+msgstr "\"%1$s\" esemény %2$s-kor át lett ütemezve"
+
+#: Controller/EventNotifications.php:278
+msgid "Event \"%1$s\" at %2$s has been updated"
+msgstr "\"%1$s\" esemény %2$s-kor frissítve lett"
+
+#: Controller/EventNotifications.php:288
+msgid "%1$s accepted event \"%2$s\" at %3$s"
+msgstr "%1$s elfogadta ezt az eseményt:\"%2$s\" ekkor:%3$s"
+
+#: Controller/EventNotifications.php:292
+msgid "%1$s declined event \"%2$s\" at %3$s"
+msgstr "%1$s elutasította ezt az eseményt:\"%2$s\" ekkor:%3$s"
+
+#: Controller/EventNotifications.php:296
+msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Bizonytalan válasz tőle: %1$s erre az eseményre: \"%2$s\" ekkor:%3$s"
+
+#: Controller/EventNotifications.php:300
+msgid "No response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Nincs válasz tőle: %1$s erre az eseményre: \"%2$s\" ekkor:%3$s"
+
+#: Controller/EventNotifications.php:304
+msgid "Attendee changes for event \"%1$s\" at %2$s"
+msgstr "Résztvevők megváltoztak ezen az eseményen:\"%1$s\" ekkor:%2$s"
+
+#: Controller.php:103
+#, python-format
+msgid "%s's personal calendar"
+msgstr "%s személyes naptára"
+
+#: js/AddressbookGridPanelHook.js:35 js/Calendar.js:29 js/DaysView.js:88
+#: js/MonthView.js:81
+msgid "New Event"
+msgstr "Új esemény"
+
+#: js/AdminPanel.js:44
+msgid "Manage Resources"
+msgstr "Források kezelése"
+
+#: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
+#: js/EventDetailsPanel.js:251 js/Model.js:329
+msgid "Attendee"
+msgstr "Résztvevők"
+
+#: js/AttendeeFilterModel.js:101
+msgid "Select Attendee"
+msgstr "Résztvevők kiválasztása"
+
+#: js/AttendeeGridPanel.js:102
+msgid "Role"
+msgstr "Szerep"
+
+#: js/AttendeeGridPanel.js:116
+msgid "Quantity"
+msgstr "Mennyiség"
+
+#: js/AttendeeGridPanel.js:125
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "Ebben a naptárban mentette el a résztvevő ezt az eseményt"
+
+#: js/AttendeeGridPanel.js:161
+msgid "Type"
+msgstr "Típus"
+
+#: js/AttendeeGridPanel.js:168
+msgid "User"
+msgstr "Felhasználó"
+
+#: js/AttendeeGridPanel.js:169
+msgid "Group"
+msgstr "Csoport"
+
+#: js/AttendeeGridPanel.js:170 js/Model.js:484
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Forrás"
+msgstr[1] "Források"
+
+#: js/AttendeeGridPanel.js:171
+msgid "Member of group"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:178 js/ResourceEditDialog.js:56
+#: js/ResourcesGridPanel.js:41
+msgid "Name"
+msgstr "Név"
+
+#: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
+#: Model/Event.php:232
+msgid "Status"
+msgstr "Állapot"
+
+#: js/AttendeeGridPanel.js:330
+msgid "Remove Attender"
+msgstr "Résztvevő eltávolítása"
+
+#: js/AttendeeGridPanel.js:425
+msgid "Click here to invite another attender..."
+msgstr "Kattints ide másik résztvevő meghívásához..."
+
+#: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
+#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:345
+msgid "No Information"
+msgstr "Nincs információ"
+
+#: js/AttendeeGridPanel.js:449
+msgid "(as a group member)"
+msgstr "(csoporttagként)"
+
+#: js/Calendar.js:39 js/Model.js:67 Setup/setup.xml:4
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Naptár"
+msgstr[1] "Naptárak"
+
+#: js/CalendarPanel.js:51
+msgid "Loading events, please wait..."
+msgstr "Események betöltése, kérem várjion"
+
+#: js/CalendarPanel.js:275
+msgid "Scheduling Conflict"
+msgstr "Ütemezési hiba"
+
+#: js/CalendarPanel.js:277
+msgid "The following attendee are busy at the requested time:"
+msgstr "Az alábbi résztvevők elfoglaltak a kért időpontban:"
+
+#: js/CalendarPanel.js:281
+msgid "Ignore Conflict"
+msgstr "Hiba figyelmen kívűl hagyása"
+
+#: js/CalendarPanel.js:282
+msgid "Edit Event"
+msgstr "Esemény szerkesztése"
+
+#: js/CalendarPanel.js:283
+msgid "Cancel this action"
+msgstr ""
+
+#: js/CalendarPanel.js:325
+msgid "Update Event"
+msgstr "Esemény frissítése"
+
+#: js/CalendarPanel.js:329
+msgid "Update this event only"
+msgstr "Mostani esemény frissítése"
+
+#: js/CalendarPanel.js:330
+msgid "Update this and all future events"
+msgstr ""
+
+#: js/CalendarPanel.js:331
+msgid "Update whole series"
+msgstr "Egész sorozat frissítése"
+
+#: js/CalendarPanel.js:332
+msgid "Update nothing"
+msgstr "Semmi frissítése"
+
+#: js/CalendarSelectWidget.js:124
+msgid "Originally"
+msgstr "Eredetileg"
+
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:333
+msgid "Events"
+msgstr "Események"
+
+#: js/ContactEventsGridPanel.js:112 js/EventDetailsPanel.js:178
+#: js/EventEditDialog.js:87 Model/Event.php:233
+msgid "Summary"
+msgstr "Összegzés"
+
+#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:214
+#: js/EventEditDialog.js:99 Preference.php:79
+msgid "Start Time"
+msgstr "Kezdési idő"
+
+#: js/DaysView.js:93
+msgid "{0}, the {1}. of {2}"
+msgstr "{2} {1}., {0}"
+
 #: js/EventDetailsPanel.js:50
 msgid "Unknown calendar"
 msgstr "Ismeretlen naptár"
@@ -198,11 +265,6 @@ msgstr "Ismeretlen naptár"
 #: js/EventDetailsPanel.js:61
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} óra"
-
-#: js/EventDetailsPanel.js:178 js/EventEditDialog.js:87
-#: js/ContactEventsGridPanel.js:112 Model/Event.php:233
-msgid "Summary"
-msgstr "Összegzés"
 
 #: js/EventDetailsPanel.js:219 js/EventEditDialog.js:114
 msgid "End Time"
@@ -212,28 +274,59 @@ msgstr "Befejezési idő"
 msgid "Blocking"
 msgstr "Blokkolva"
 
-#: js/EventDetailsPanel.js:229 js/ResourcesGridPanel.js:52
-#: js/EventEditDialog.js:94 Model/Event.php:229
+#: js/EventDetailsPanel.js:229 js/EventEditDialog.js:94
+#: js/ResourcesGridPanel.js:52 Model/Event.php:229
 msgid "Location"
 msgstr "Hely"
 
-#: js/EventDetailsPanel.js:233 js/Model.js:204 Model/Event.php:230
+#: js/EventDetailsPanel.js:233 js/Model.js:212 Model/Event.php:230
 msgid "Organizer"
 msgstr "Szervező"
 
-#: js/EventDetailsPanel.js:251 js/AttendeeGridPanel.js:76
-#: js/AttendeeFilterModel.js:35 js/Model.js:321
-msgid "Attendee"
-msgstr "Résztvevők"
+#: js/EventEditDialog.js:122 js/Printer/Base.js:66
+msgid "whole day"
+msgstr "egész nap"
 
-#: js/ResourcesGridPanel.js:41 js/AttendeeGridPanel.js:178
-#: js/ResourceEditDialog.js:56
-msgid "Name"
-msgstr "Név"
+#: js/EventEditDialog.js:130
+msgid "non-blocking"
+msgstr "nem-blokkolt"
 
-#: js/ResourcesGridPanel.js:47 js/ResourceEditDialog.js:61
-msgid "Email"
-msgstr "Email"
+#: js/EventEditDialog.js:155
+msgid "Private"
+msgstr "Privát"
+
+#: js/EventEditDialog.js:196 js/ResourceEditDialog.js:72 Model/Event.php:228
+msgid "Description"
+msgstr "Leírás"
+
+#: js/EventEditDialog.js:210
+msgid "Enter description"
+msgstr "Leírás bevitele..."
+
+#: js/EventEditDialog.js:340
+msgid "End date is not valid"
+msgstr "Befejező időpont érvénytelen"
+
+#: js/EventEditDialog.js:343
+msgid "End date must be after start date"
+msgstr "Befejező időpontnak a kezdő időpont után kell lennie"
+
+#: js/EventEditDialog.js:356
+msgid "Start date is not valid"
+msgstr "Kezdő időpont érvénytelen"
+
+#: js/EventUI.js:220
+msgid "private classification"
+msgstr "személyes besorolás"
+
+#: js/EventUI.js:227
+msgid "recurring event"
+msgstr "ismétlődő esemény"
+
+#: js/EventUI.js:234
+#, fuzzy
+msgid "has alarm"
+msgstr "riasztást tartalmaz"
 
 #: js/MainScreenCenterPanel.js:118
 msgid "Print Page"
@@ -297,62 +390,6 @@ msgstr "Nem lehet nyomtatni"
 msgid "Sorry, your current view does not support printing."
 msgstr "Bocsánat, a mostani nézeted nem támogatja a nyomtatást."
 
-#: js/AttendeeGridPanel.js:102
-msgid "Role"
-msgstr "Szerep"
-
-#: js/AttendeeGridPanel.js:116
-msgid "Quantity"
-msgstr "Mennyiség"
-
-#: js/AttendeeGridPanel.js:125
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "Ebben a naptárban mentette el a résztvevő ezt az eseményt"
-
-#: js/AttendeeGridPanel.js:161
-msgid "Type"
-msgstr "Típus"
-
-#: js/AttendeeGridPanel.js:168
-msgid "User"
-msgstr "Felhasználó"
-
-#: js/AttendeeGridPanel.js:169
-msgid "Group"
-msgstr "Csoport"
-
-#: js/AttendeeGridPanel.js:170 js/Model.js:476
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Forrás"
-msgstr[1] "Források"
-
-#: js/AttendeeGridPanel.js:171
-msgid "Member of group"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
-#: Model/Event.php:232
-msgid "Status"
-msgstr "Állapot"
-
-#: js/AttendeeGridPanel.js:330
-msgid "Remove Attender"
-msgstr "Résztvevő eltávolítása"
-
-#: js/AttendeeGridPanel.js:425
-msgid "Click here to invite another attender..."
-msgstr "Kattints ide másik résztvevő meghívásához..."
-
-#: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
-#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:337
-msgid "No Information"
-msgstr "Nincs információ"
-
-#: js/AttendeeGridPanel.js:449
-msgid "(as a group member)"
-msgstr "(csoporttagként)"
-
 #: js/MainScreenWestPanel.js:30
 msgid "Mini Calendar"
 msgstr "Mini naptár"
@@ -361,133 +398,7 @@ msgstr "Mini naptár"
 msgid "WK"
 msgstr "HÉT"
 
-#: js/AdminPanel.js:44
-msgid "Manage Resources"
-msgstr "Források kezelése"
-
-#: js/EventEditDialog.js:122 js/Printer/Base.js:66
-msgid "whole day"
-msgstr "egész nap"
-
-#: js/EventEditDialog.js:130
-msgid "non-blocking"
-msgstr "nem-blokkolt"
-
-#: js/EventEditDialog.js:155
-msgid "Private"
-msgstr "Privát"
-
-#: js/EventEditDialog.js:196 js/ResourceEditDialog.js:72 Model/Event.php:228
-msgid "Description"
-msgstr "Leírás"
-
-#: js/EventEditDialog.js:210
-msgid "Enter description"
-msgstr "Leírás bevitele..."
-
-#: js/EventEditDialog.js:340
-msgid "End date is not valid"
-msgstr "Befejező időpont érvénytelen"
-
-#: js/EventEditDialog.js:343
-msgid "End date must be after start date"
-msgstr "Befejező időpontnak a kezdő időpont után kell lennie"
-
-#: js/EventEditDialog.js:356
-msgid "Start date is not valid"
-msgstr "Kezdő időpont érvénytelen"
-
-#: js/CalendarSelectWidget.js:124
-msgid "Originally"
-msgstr "Eredetileg"
-
-#: js/MonthView.js:81 js/AddressbookGridPanelHook.js:35 js/Calendar.js:29
-#: js/DaysView.js:88
-msgid "New Event"
-msgstr "Új esemény"
-
-#: js/MonthView.js:91
-msgid "{0} more..."
-msgstr "Még {0}..."
-
-#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
-msgid "Is a location"
-msgstr "Egy hely"
-
-#: js/ResourceEditDialog.js:73
-msgid "Enter description..."
-msgstr "Leírás bevitele..."
-
-#: js/EventUI.js:220
-msgid "private classification"
-msgstr "személyes besorolás"
-
-#: js/EventUI.js:227
-msgid "recurring event"
-msgstr "ismétlődő esemény"
-
-#: js/EventUI.js:234
-#, fuzzy
-msgid "has alarm"
-msgstr "riasztást tartalmaz"
-
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:325
-msgid "Events"
-msgstr "Események"
-
-#: js/AttendeeFilterModel.js:101
-msgid "Select Attendee"
-msgstr "Résztvevők kiválasztása"
-
-#: js/AttendeeStatusFilterModel.js:31
-msgid "Attendee Status"
-msgstr "Résztvevők állapota"
-
-#: js/CalendarPanel.js:51
-msgid "Loading events, please wait..."
-msgstr "Események betöltése, kérem várjion"
-
-#: js/CalendarPanel.js:275
-msgid "Scheduling Conflict"
-msgstr "Ütemezési hiba"
-
-#: js/CalendarPanel.js:277
-msgid "The following attendee are busy at the requested time:"
-msgstr "Az alábbi résztvevők elfoglaltak a kért időpontban:"
-
-#: js/CalendarPanel.js:281
-msgid "Ignore Conflict"
-msgstr "Hiba figyelmen kívűl hagyása"
-
-#: js/CalendarPanel.js:282
-msgid "Edit Event"
-msgstr "Esemény szerkesztése"
-
-#: js/CalendarPanel.js:283
-msgid "Cancel this action"
-msgstr ""
-
-#: js/CalendarPanel.js:325
-msgid "Update Event"
-msgstr "Esemény frissítése"
-
-#: js/CalendarPanel.js:329
-msgid "Update this event only"
-msgstr "Mostani esemény frissítése"
-
-#: js/CalendarPanel.js:330
-msgid "Update this and all future events"
-msgstr ""
-
-#: js/CalendarPanel.js:331
-msgid "Update whole series"
-msgstr "Egész sorozat frissítése"
-
-#: js/CalendarPanel.js:332
-msgid "Update nothing"
-msgstr "Semmi frissítése"
-
-#: js/Model.js:63 js/Model.js:325
+#: js/Model.js:63 js/Model.js:333
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Esemény"
@@ -501,23 +412,39 @@ msgstr "Naptárak"
 msgid "Quick search"
 msgstr "Gyors keresés"
 
-#: js/Model.js:321
+#: js/Model.js:204
+msgid "Attendee Status"
+msgstr "Résztvevők állapota"
+
+#: js/Model.js:329
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Résztvevő"
 msgstr[1] "Résztvevők"
 
-#: js/Model.js:476
+#: js/Model.js:484
 msgid "Resources"
 msgstr "Források"
+
+#: js/MonthView.js:91
+msgid "{0} more..."
+msgstr "Még {0}..."
 
 #: js/Printer/DaysView.js:36
 msgid "Week {0} :"
 msgstr "{0} Hét:"
 
-#: js/DaysView.js:93
-msgid "{0}, the {1}. of {2}"
-msgstr "{2} {1}., {0}"
+#: js/ResourceEditDialog.js:61 js/ResourcesGridPanel.js:47
+msgid "Email"
+msgstr "Email"
+
+#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
+msgid "Is a location"
+msgstr "Egy hely"
+
+#: js/ResourceEditDialog.js:73
+msgid "Enter description..."
+msgstr "Leírás bevitele..."
 
 #: js/RrulePanel.js:28
 msgid "Recurrances"
@@ -616,6 +543,14 @@ msgstr "Minden {0}. évben"
 msgid "of"
 msgstr "hónap"
 
+#: Model/Attender.php:155
+msgid "unknown"
+msgstr "ismeretlen"
+
+#: Model/Attender.php:310
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
+
 #: Model/Event.php:224
 msgid "Start"
 msgstr "Indulás"
@@ -656,53 +591,118 @@ msgstr "Igen"
 msgid "No"
 msgstr "Nem"
 
-#: Model/Attender.php:155
-msgid "unknown"
-msgstr "ismeretlen"
+#: Preference.php:31
+msgid "All my events"
+msgstr "Minden eseményem"
 
-#: Model/Attender.php:310
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "A rendszer ezt a kapcsolatot automatikusan hozzáadta, mint esemény résztvevő"
+#: Preference.php:80
+#, fuzzy
+msgid "Position on the left time axis, day and week view should start with"
+msgstr "Pozíció a bal időtengelyen, amivel a napi és a heti nézet kezdődjön"
 
-#: Controller/EventNotifications.php:263
-msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr "Riasztás \"%1$s\" eseményhez ekkor: %2$s"
+#: Preference.php:83
+msgid "Default Calendar"
+msgstr "Alapértelmezett naptár"
 
-#: Controller/EventNotifications.php:266
-msgid "Event invitation \"%1$s\" at %2$s"
-msgstr " \"%1$s\" esemény meghívó ekkor:"
+#: Preference.php:84
+msgid "The default calendar for invitations and new events"
+msgstr "Meghívások és új események alapértelmezett naptára"
 
-#: Controller/EventNotifications.php:269
-msgid "Event \"%1$s\" at %2$s has been canceled"
-msgstr "\"%1$s\" esemény %2$s-kor törölve lett"
+#: Preference.php:87
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
 
-#: Controller/EventNotifications.php:274
-msgid "Event \"%1$s\" at %2$s has been rescheduled"
-msgstr "\"%1$s\" esemény %2$s-kor át lett ütemezve"
+#: Preference.php:88
+msgid "The default favorite which is loaded on calendar startup"
+msgstr "Az alapértelmezett kedvenc, ami betöltődik a naptár indulásakor"
 
-#: Controller/EventNotifications.php:278
-msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr "\"%1$s\" esemény %2$s-kor frissítve lett"
+#: Preference.php:91
+msgid "Get Notification Emails"
+msgstr "Értesítő emailek fogadása"
 
-#: Controller/EventNotifications.php:288
-msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr "%1$s elfogadta ezt az eseményt:\"%2$s\" ekkor:%3$s"
+#: Preference.php:92
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "Az esemény szintje, amiről értesítést szeretnél. Kérlek jegyezd meg, hogy a szervezők minden frissítésről (beleértve a résztvevők válaszait) értesítést kapnak ameddig a beállítás nem \"Soha\""
 
-#: Controller/EventNotifications.php:292
-msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr "%1$s elutasította ezt az eseményt:\"%2$s\" ekkor:%3$s"
+#: Preference.php:95
+msgid "Send Notifications Emails of own Actions"
+msgstr "Értesítő emailek küldése saját tevékenységekről"
 
-#: Controller/EventNotifications.php:296
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Bizonytalan válasz tőle: %1$s erre az eseményre: \"%2$s\" ekkor:%3$s"
+#: Preference.php:96
+msgid "Get notifications emails for actions you did yourself"
+msgstr "Értesítő emailek fogadása saját magadnak készített tevékenységekről"
 
-#: Controller/EventNotifications.php:300
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Nincs válasz tőle: %1$s erre az eseményre: \"%2$s\" ekkor:%3$s"
+#: Preference.php:149
+msgid "Never"
+msgstr ""
 
-#: Controller/EventNotifications.php:304
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Résztvevők megváltoztak ezen az eseményen:\"%1$s\" ekkor:%2$s"
+#: Preference.php:149
+msgid "On invitation and cancellation only"
+msgstr ""
+
+#: Preference.php:149
+msgid "On time changes"
+msgstr ""
+
+#: Preference.php:149
+msgid "On all updates but attendee responses"
+msgstr ""
+
+#: Preference.php:149
+msgid "On attendee responses too"
+msgstr ""
+
+#: Setup/Initialize.php:34 Setup/Update/Release3.php:164
+msgid "All events I attend"
+msgstr "Minden esemény, amiben résztveszek"
+
+#: Setup/Initialize.php:47
+msgid "Awaiting response"
+msgstr "Visszajelzésre vár"
+
+#: Setup/Initialize.php:48
+msgid "Events I have not yet responded to"
+msgstr ""
+
+#: Setup/Initialize.php:63
+msgid "Declined events"
+msgstr "Lemondott esemének"
+
+#: Setup/Initialize.php:64
+msgid "Events I have declined"
+msgstr "Események amiket lemondtam"
+
+#: Setup/Initialize.php:77
+msgid "I'm organizer"
+msgstr "Szervező vagyok"
+
+#: Setup/Initialize.php:78
+msgid "Events I'm the organizer of"
+msgstr "Események amiket én szerveztem"
+
+#: Setup/Initialize.php:98 Setup/Update/Release5.php:75
+msgid "Required"
+msgstr "Szükséges"
+
+#: Setup/Initialize.php:99 Setup/Update/Release5.php:76
+msgid "Optional"
+msgstr "Opcionális"
+
+#: Setup/Initialize.php:112 Setup/Update/Release5.php:89
+msgid "No response"
+msgstr "Nincs válasz"
+
+#: Setup/Initialize.php:113 Setup/Update/Release5.php:90
+msgid "Accepted"
+msgstr "Elfogadva"
+
+#: Setup/Initialize.php:114 Setup/Update/Release5.php:91
+msgid "Declined"
+msgstr "Elutasítva"
+
+#: Setup/Initialize.php:115 Setup/Update/Release5.php:92
+msgid "Tentative"
+msgstr "Bizonytalan"
 
 #: views/eventNotification.php:12
 msgid "Updates"

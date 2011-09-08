@@ -34,10 +34,93 @@ msgstr "Mögliche Teilnehmerrollen. Bitte beachten Sie, dass Änderungen an dies
 msgid "%s's personal Projects"
 msgstr "%s persönliche Projekte"
 
-#: Setup/setup.xml:4
-#: js/Projects.js:24
+#: js/Model.js:33 js/ProjectEditDialog.js:105 js/ProjectEditDialog.js:118
+msgid "Project"
+msgid_plural "Projects"
+msgstr[0] "Projekt"
+msgstr[1] "Projekte"
+
+#: js/Model.js:37
+msgid "Project list"
+msgid_plural "Project lists"
+msgstr[0] "Projektliste"
+msgstr[1] "Projektlisten"
+
+#: js/Model.js:40
+msgid "Project lists"
+msgstr "Projektlisten"
+
+#: js/Model.js:72
+msgid "Quick search"
+msgstr "Schnellsuche"
+
+#: js/Model.js:74 js/ProjectEditDialog.js:141 js/ProjectGridPanel.js:95
+msgid "Status"
+msgstr "Status"
+
+#: js/Model.js:83
+msgid "Last modified"
+msgstr "Letzte Bearbeitung"
+
+#: js/Model.js:84
+msgid "Last modifier"
+msgstr "Letzter Bearbeiter"
+
+#: js/Model.js:85
+msgid "Creation Time"
+msgstr "Erstelldatum"
+
+#: js/Model.js:86
+msgid "Creator"
+msgstr "Ersteller"
+
+#: js/ProjectAttendeeFilter.js:43
+msgid "Attendee Role"
+msgstr "Teilnehmerrolle"
+
+#: js/ProjectEditDialog.js:83
+msgid "Attendee"
+msgstr "Teilnehmer"
+
+#: js/ProjectEditDialog.js:84
+msgid "Role"
+msgstr "Rolle"
+
+#: js/ProjectEditDialog.js:130 js/ProjectGridPanel.js:89
+msgid "Title"
+msgstr "Titel"
+
+#: js/ProjectEditDialog.js:135 js/ProjectGridPanel.js:82
+msgid "Number"
+msgstr "Projektnummer"
+
+#: js/ProjectEditDialog.js:171
+msgid "Description"
+msgstr "Beschreibung"
+
+#: js/ProjectEditDialog.js:185
+msgid "Enter description"
+msgstr "Beschreibung eingeben"
+
+#: js/ProjectGridPanel.js:79
+msgid "Tags"
+msgstr "Tags"
+
+#: js/Projects.js:24 Setup/setup.xml:4
 msgid "Projects"
 msgstr "Projekte"
+
+#: Preference.php:24
+msgid "All my projects"
+msgstr "Alle meine Projekte"
+
+#: Preference.php:60
+msgid "Default Favorite"
+msgstr "Standard-Favorit"
+
+#: Preference.php:61
+msgid "The default favorite which is loaded on Projects startup"
+msgstr "Standard_favorit, der beim starten von Projekten geladen wird"
 
 #: Setup/Initialize.php:34
 msgid "On hold"
@@ -83,96 +166,6 @@ msgstr "Meine wartenden Projekte"
 msgid "My projects that are on hold"
 msgstr "Meine wartenden Projekte"
 
-#: Preference.php:24
-msgid "All my projects"
-msgstr "Alle meine Projekte"
-
-#: Preference.php:60
-msgid "Default Favorite"
-msgstr "Standard-Favorit"
-
-#: Preference.php:61
-msgid "The default favorite which is loaded on Projects startup"
-msgstr "Standard_favorit, der beim starten von Projekten geladen wird"
-
-#: js/ProjectGridPanel.js:79
-msgid "Tags"
-msgstr "Tags"
-
-#: js/ProjectGridPanel.js:82
-#: js/ProjectEditDialog.js:137
-msgid "Number"
-msgstr "Projektnummer"
-
-#: js/ProjectGridPanel.js:89
-#: js/ProjectEditDialog.js:132
-msgid "Title"
-msgstr "Titel"
-
-#: js/ProjectGridPanel.js:95
-#: js/ProjectEditDialog.js:143
-#: js/Model.js:74
-msgid "Status"
-msgstr "Status"
-
-#: js/ProjectEditDialog.js:85
-msgid "Attendee"
-msgstr "Teilnehmer"
-
-#: js/ProjectEditDialog.js:86
-msgid "Role"
-msgstr "Rolle"
-
-#: js/ProjectEditDialog.js:107
-#: js/ProjectEditDialog.js:120
-#: js/Model.js:33
-msgid "Project"
-msgid_plural "Projects"
-msgstr[0] "Projekt"
-msgstr[1] "Projekte"
-
-#: js/ProjectEditDialog.js:173
-msgid "Description"
-msgstr "Beschreibung"
-
-#: js/ProjectEditDialog.js:187
-msgid "Enter description"
-msgstr "Beschreibung eingeben"
-
-#: js/Model.js:37
-msgid "Project list"
-msgid_plural "Project lists"
-msgstr[0] "Projektliste"
-msgstr[1] "Projektlisten"
-
-#: js/Model.js:40
-msgid "Project lists"
-msgstr "Projektlisten"
-
-#: js/Model.js:72
-msgid "Quick search"
-msgstr "Schnellsuche"
-
-#: js/Model.js:83
-msgid "Last modified"
-msgstr "Letzte Bearbeitung"
-
-#: js/Model.js:84
-msgid "Last modifier"
-msgstr "Letzter Bearbeiter"
-
-#: js/Model.js:85
-msgid "Creation Time"
-msgstr "Erstelldatum"
-
-#: js/Model.js:86
-msgid "Creator"
-msgstr "Ersteller"
-
-#: js/ProjectAttendeeFilter.js:43
-msgid "Attendee Role"
-msgstr "Teilnehmerrolle"
-
 #~ msgid "Example Application"
 #~ msgstr "Beispielanwendung"
 
@@ -189,13 +182,11 @@ msgstr "Teilnehmerrolle"
 #~ msgstr "BeispielEintrag"
 
 #~ msgid "example record"
-
 #~ msgid_plural "example records"
 #~ msgstr[0] "Beispieleintrag"
 #~ msgstr[1] "Beispieleinträge"
 
 #~ msgid "example record list"
-
 #~ msgid_plural "example record lists"
 #~ msgstr[0] "Liste von Beispieleinträgen"
 #~ msgstr[1] "Listen von Beispieleinträgen"
@@ -213,7 +204,6 @@ msgstr "Teilnehmerrolle"
 #~ msgstr "Alle BeispielEinträge"
 
 #~ msgid "record list"
-
 #~ msgid_plural "record lists"
 #~ msgstr[0] "Eintrags Liste"
 #~ msgstr[1] "Eintrags Listen"

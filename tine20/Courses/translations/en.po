@@ -14,75 +14,23 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:137
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "teacher"
+
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Teacher"
+
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Teacher Account"
+
+#: Frontend/Json.php:254 js/CourseEditDialog.js:137 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Course"
 msgstr[1] "Courses"
-
-#: Setup/setup.xml:4 js/Courses.js:32
-msgid "Courses"
-msgstr "Courses"
-
-#: js/CourseGridPanel.js:49
-msgid "Quick search"
-msgstr "Quick search"
-
-#: js/CourseGridPanel.js:71
-msgid "Name"
-msgstr "Name"
-
-#: js/CourseGridPanel.js:77
-msgid "Type"
-msgstr "Type"
-
-#: js/CourseGridPanel.js:84 js/CourseEditDialog.js:178
-msgid "Internet Access"
-msgstr "Internet Access"
-
-#: js/CourseGridPanel.js:92 js/CourseEditDialog.js:184
-msgid "Fileserver Access"
-msgstr "Fileserver Access"
-
-#: js/CourseGridPanel.js:118
-msgid "Internet Access On"
-msgstr "Internet Access On"
-
-#: js/CourseGridPanel.js:129
-msgid "Internet Access Off"
-msgstr "Internet Access Off"
-
-#: js/CourseGridPanel.js:140
-msgid "Fileserver Access On"
-msgstr "Fileserver Access On"
-
-#: js/CourseGridPanel.js:151
-msgid "Fileserver Access Off"
-msgstr "Fileserver Access Off"
-
-#: js/CourseGridPanel.js:211
-msgid "Failed"
-msgstr "Failed"
-
-#: js/CourseGridPanel.js:212
-msgid "Some error occured while trying to update the courses."
-msgstr "Some error occured while trying to update the courses."
-
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "record list"
-msgstr[1] "record lists"
-
-#: js/Models.js:74
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Course Type"
-msgstr[1] "Course Types"
-
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "All Courses"
 
 #: js/CourseEditDialog.js:31
 msgid "Import course members"
@@ -99,6 +47,14 @@ msgstr "Course / School Type"
 #: js/CourseEditDialog.js:171
 msgid "Description"
 msgstr "Description"
+
+#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:84
+msgid "Internet Access"
+msgstr "Internet Access"
+
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:92
+msgid "Fileserver Access"
+msgstr "Fileserver Access"
 
 #: js/CourseEditDialog.js:215
 msgid "Members"
@@ -124,14 +80,58 @@ msgstr "Set new password"
 msgid "Please enter the new password:"
 msgstr "Please enter the new password:"
 
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "teacher"
+#: js/CourseGridPanel.js:49
+msgid "Quick search"
+msgstr "Quick search"
 
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "Teacher"
+#: js/CourseGridPanel.js:71
+msgid "Name"
+msgstr "Name"
 
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "Teacher Account"
+#: js/CourseGridPanel.js:77
+msgid "Type"
+msgstr "Type"
+
+#: js/CourseGridPanel.js:118
+msgid "Internet Access On"
+msgstr "Internet Access On"
+
+#: js/CourseGridPanel.js:129
+msgid "Internet Access Off"
+msgstr "Internet Access Off"
+
+#: js/CourseGridPanel.js:140
+msgid "Fileserver Access On"
+msgstr "Fileserver Access On"
+
+#: js/CourseGridPanel.js:151
+msgid "Fileserver Access Off"
+msgstr "Fileserver Access Off"
+
+#: js/CourseGridPanel.js:211
+msgid "Failed"
+msgstr "Failed"
+
+#: js/CourseGridPanel.js:212
+msgid "Some error occured while trying to update the courses."
+msgstr "Some error occured while trying to update the courses."
+
+#: js/Courses.js:32 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Courses"
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr "All Courses"
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "record list"
+msgstr[1] "record lists"
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Course Type"
+msgstr[1] "Course Types"

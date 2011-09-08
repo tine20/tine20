@@ -13,158 +13,6 @@ msgstr ""
 "X-Poedit-Language: Catalan\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Config.php:43
-msgid "Fixed Calendars"
-msgstr ""
-
-#: Config.php:45
-msgid "Calendars always selected regardles of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
-msgstr ""
-
-#: Config.php:53
-msgid "Attendee Status Available"
-msgstr ""
-
-#: Config.php:55
-msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
-msgstr ""
-
-#: Config.php:63
-msgid "Attendee Roles Available"
-msgstr ""
-
-#: Config.php:65
-msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
-msgstr ""
-
-#: Controller.php:103
-#, python-format
-msgid "%s's personal calendar"
-msgstr "calendari personal de %s"
-
-#: Setup/setup.xml:4 js/Calendar.js:39 js/Model.js:67
-msgid "Calendar"
-msgid_plural "Calendars"
-msgstr[0] "Calendari"
-msgstr[1] "Calendaris"
-
-#: Setup/Update/Release3.php:164 Setup/Initialize.php:34
-msgid "All events I attend"
-msgstr "Tots els esdeveniments als quals assisteixo"
-
-#: Setup/Update/Release5.php:75 Setup/Initialize.php:98
-msgid "Required"
-msgstr "Obligatori"
-
-#: Setup/Update/Release5.php:76 Setup/Initialize.php:99
-msgid "Optional"
-msgstr "Opcional"
-
-#: Setup/Update/Release5.php:89 Setup/Initialize.php:112
-msgid "No response"
-msgstr "Sense resposta"
-
-#: Setup/Update/Release5.php:90 Setup/Initialize.php:113
-msgid "Accepted"
-msgstr "Acceptat"
-
-#: Setup/Update/Release5.php:91 Setup/Initialize.php:114
-msgid "Declined"
-msgstr "Rebutjat"
-
-#: Setup/Update/Release5.php:92 Setup/Initialize.php:115
-msgid "Tentative"
-msgstr "Temptativa"
-
-#: Setup/Initialize.php:47
-msgid "Awaiting response"
-msgstr ""
-
-#: Setup/Initialize.php:48
-msgid "Events I have not yet responded to"
-msgstr ""
-
-#: Setup/Initialize.php:63
-msgid "Declined events"
-msgstr ""
-
-#: Setup/Initialize.php:64
-msgid "Events I have declined"
-msgstr ""
-
-#: Setup/Initialize.php:77
-msgid "I'm organizer"
-msgstr ""
-
-#: Setup/Initialize.php:78
-msgid "Events I'm the organizer of"
-msgstr ""
-
-#: Preference.php:31
-msgid "All my events"
-msgstr "Tots els meus esdeveniments"
-
-#: Preference.php:79 js/EventDetailsPanel.js:214 js/EventEditDialog.js:99
-#: js/ContactEventsGridPanel.js:118
-msgid "Start Time"
-msgstr "Hora d'inici"
-
-#: Preference.php:80
-msgid "Position on the left time axis, day and week view should start with"
-msgstr ""
-
-#: Preference.php:83
-msgid "Default Calendar"
-msgstr "Calendari per defecte"
-
-#: Preference.php:84
-msgid "The default calendar for invitations and new events"
-msgstr "El calendari per defecte per a invitacions i per a nous esdeveniments"
-
-#: Preference.php:87
-msgid "Default Favorite"
-msgstr "Preferit per defecte"
-
-#: Preference.php:88
-msgid "The default favorite which is loaded on calendar startup"
-msgstr "El preferit per defecte que es carrega a l'inici del calendari"
-
-#: Preference.php:91
-msgid "Get Notification Emails"
-msgstr "Rep correus electrònics de notificació"
-
-#: Preference.php:92
-msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
-msgstr "El nivell de les accions de les quals voleu que se us notifiqui. Observeu que els organitzadors rebran notificacions de tota actualització incloent les respostes dels assistents a menys que establiu aquesta opció a \"Mai\""
-
-#: Preference.php:95
-msgid "Send Notifications Emails of own Actions"
-msgstr "Envia correus electrònics de notificació de les pròpies accions"
-
-#: Preference.php:96
-msgid "Get notifications emails for actions you did yourself"
-msgstr "Rep correus electrònics de notificació de les accions que hagueu fet"
-
-#: Preference.php:149
-msgid "Never"
-msgstr ""
-
-#: Preference.php:149
-msgid "On invitation and cancellation only"
-msgstr ""
-
-#: Preference.php:149
-msgid "On time changes"
-msgstr ""
-
-#: Preference.php:149
-msgid "On all updates but attendee responses"
-msgstr ""
-
-#: Preference.php:149
-msgid "On attendee responses too"
-msgstr ""
-
 #: Acl/Rights.php:96
 msgid "manage shared calendars"
 msgstr "gestiona calendaris compartits"
@@ -189,6 +37,226 @@ msgstr "gestiona recursos"
 msgid "All Rights to administrate resources"
 msgstr "Tots els permisos per a administrar recursos"
 
+#: Config.php:43
+msgid "Fixed Calendars"
+msgstr ""
+
+#: Config.php:45
+msgid "Calendars always selected regardles of all filter parameters. A valid use case might be to force the display of an certain holiday calendar."
+msgstr ""
+
+#: Config.php:53
+msgid "Attendee Status Available"
+msgstr ""
+
+#: Config.php:55
+msgid "Possible event attendee status. Please note that additional attendee status might impact other calendar systems on export or syncronisation."
+msgstr ""
+
+#: Config.php:63
+msgid "Attendee Roles Available"
+msgstr ""
+
+#: Config.php:65
+msgid "Possible event attendee roles. Please note that additional attendee roles might impact other calendar systems on export or syncronisation."
+msgstr ""
+
+#: Controller/EventNotifications.php:263
+msgid "Alarm for event \"%1$s\" at %2$s"
+msgstr "Alarma per a l'esdeveniment  \"%1$s\" a %2$s"
+
+#: Controller/EventNotifications.php:266
+msgid "Event invitation \"%1$s\" at %2$s"
+msgstr "Invitació a esdeveniment \"%1$s\" a %2$s"
+
+#: Controller/EventNotifications.php:269
+msgid "Event \"%1$s\" at %2$s has been canceled"
+msgstr "S'ha cancel·lat l'esdeveniment \"%1$s\" a %2$s"
+
+#: Controller/EventNotifications.php:274
+msgid "Event \"%1$s\" at %2$s has been rescheduled"
+msgstr "S'ha reprogramat l'esdeveniment \"%1$s\" a %2$s"
+
+#: Controller/EventNotifications.php:278
+msgid "Event \"%1$s\" at %2$s has been updated"
+msgstr "S'ha actualitzat l'esdeveniment \"%1$s\" a %2$s"
+
+#: Controller/EventNotifications.php:288
+msgid "%1$s accepted event \"%2$s\" at %3$s"
+msgstr "%1$s ha acceptat l'esdeveniment \"%2$s\" a %3$s"
+
+#: Controller/EventNotifications.php:292
+msgid "%1$s declined event \"%2$s\" at %3$s"
+msgstr "%1$s ha rebutjat l'esdeveniment \"%2$s\" a %3$s"
+
+#: Controller/EventNotifications.php:296
+msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
+msgstr "%1$s ha respost que potser assistirà a l'esdeveniment \"%2$s\" a %3$s"
+
+#: Controller/EventNotifications.php:300
+msgid "No response from %1$s for event \"%2$s\" at %3$s"
+msgstr "Sense resposta de %1$s per a l'esdeveniment \"%2$s\" a %3$s"
+
+#: Controller/EventNotifications.php:304
+msgid "Attendee changes for event \"%1$s\" at %2$s"
+msgstr "Canvis d'assistents per a l'esdeveniment \"%1$s\" a %2$s"
+
+#: Controller.php:103
+#, python-format
+msgid "%s's personal calendar"
+msgstr "calendari personal de %s"
+
+#: js/AddressbookGridPanelHook.js:35 js/Calendar.js:29 js/DaysView.js:88
+#: js/MonthView.js:81
+msgid "New Event"
+msgstr "Nou esdeveniment"
+
+#: js/AdminPanel.js:44
+msgid "Manage Resources"
+msgstr "Gestiona els recursos"
+
+#: js/AttendeeFilterModel.js:35 js/AttendeeGridPanel.js:76
+#: js/EventDetailsPanel.js:251 js/Model.js:329
+msgid "Attendee"
+msgstr "Assistents"
+
+#: js/AttendeeFilterModel.js:101
+msgid "Select Attendee"
+msgstr "Selecciona assistents"
+
+#: js/AttendeeGridPanel.js:102
+msgid "Role"
+msgstr "Rol"
+
+#: js/AttendeeGridPanel.js:116
+msgid "Quantity"
+msgstr "Quantitat"
+
+#: js/AttendeeGridPanel.js:125
+msgid "This is the calendar where the attender has saved this event in"
+msgstr "Aquest és el calendari en què l'organitzador ha desat l'esdeveniment"
+
+#: js/AttendeeGridPanel.js:161
+msgid "Type"
+msgstr "Tipus"
+
+#: js/AttendeeGridPanel.js:168
+msgid "User"
+msgstr "Usuari"
+
+#: js/AttendeeGridPanel.js:169
+msgid "Group"
+msgstr "Grup"
+
+#: js/AttendeeGridPanel.js:170 js/Model.js:484
+msgid "Resource"
+msgid_plural "Resources"
+msgstr[0] "Recurs"
+msgstr[1] "Recursos"
+
+#: js/AttendeeGridPanel.js:171
+msgid "Member of group"
+msgstr ""
+
+#: js/AttendeeGridPanel.js:178 js/ResourceEditDialog.js:56
+#: js/ResourcesGridPanel.js:41
+msgid "Name"
+msgstr "Nom"
+
+#: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
+#: Model/Event.php:232
+msgid "Status"
+msgstr "Estat"
+
+#: js/AttendeeGridPanel.js:330
+msgid "Remove Attender"
+msgstr "Elimina organitzador"
+
+#: js/AttendeeGridPanel.js:425
+msgid "Click here to invite another attender..."
+msgstr "Feu clic aquí per a convidar un altre organitzador"
+
+#: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
+#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:345
+msgid "No Information"
+msgstr "Sense informació"
+
+#: js/AttendeeGridPanel.js:449
+msgid "(as a group member)"
+msgstr "(com a membre de grup)"
+
+#: js/Calendar.js:39 js/Model.js:67 Setup/setup.xml:4
+msgid "Calendar"
+msgid_plural "Calendars"
+msgstr[0] "Calendari"
+msgstr[1] "Calendaris"
+
+#: js/CalendarPanel.js:51
+msgid "Loading events, please wait..."
+msgstr "S'estan carregant els esdeveniments, espereu..."
+
+#: js/CalendarPanel.js:275
+msgid "Scheduling Conflict"
+msgstr "Conflicte a la planificació"
+
+#: js/CalendarPanel.js:277
+msgid "The following attendee are busy at the requested time:"
+msgstr "L'assistent següent es troba ocupat a l'hora en qüestió:"
+
+#: js/CalendarPanel.js:281
+msgid "Ignore Conflict"
+msgstr "Ignora el conflicte"
+
+#: js/CalendarPanel.js:282
+msgid "Edit Event"
+msgstr "Edita l'esdeveniment"
+
+#: js/CalendarPanel.js:283
+msgid "Cancel this action"
+msgstr ""
+
+#: js/CalendarPanel.js:325
+msgid "Update Event"
+msgstr "Actualitza esdeveniment"
+
+#: js/CalendarPanel.js:329
+msgid "Update this event only"
+msgstr "Actualitza només aquest esdeveniment"
+
+#: js/CalendarPanel.js:330
+msgid "Update this and all future events"
+msgstr ""
+
+#: js/CalendarPanel.js:331
+msgid "Update whole series"
+msgstr "Actualitza les sèries completes"
+
+#: js/CalendarPanel.js:332
+msgid "Update nothing"
+msgstr "No actualitzis res"
+
+#: js/CalendarSelectWidget.js:124
+msgid "Originally"
+msgstr "Originàriament"
+
+#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:333
+msgid "Events"
+msgstr "Esdeveniments"
+
+#: js/ContactEventsGridPanel.js:112 js/EventDetailsPanel.js:178
+#: js/EventEditDialog.js:87 Model/Event.php:233
+msgid "Summary"
+msgstr "Resum"
+
+#: js/ContactEventsGridPanel.js:118 js/EventDetailsPanel.js:214
+#: js/EventEditDialog.js:99 Preference.php:79
+msgid "Start Time"
+msgstr "Hora d'inici"
+
+#: js/DaysView.js:93
+msgid "{0}, the {1}. of {2}"
+msgstr "{0}, el {1}. de {2}"
+
 #: js/EventDetailsPanel.js:50
 msgid "Unknown calendar"
 msgstr "Calendari desconegut"
@@ -196,11 +264,6 @@ msgstr "Calendari desconegut"
 #: js/EventDetailsPanel.js:61
 msgid "{0} {1} o'clock"
 msgstr "{0} {1} en punt"
-
-#: js/EventDetailsPanel.js:178 js/EventEditDialog.js:87
-#: js/ContactEventsGridPanel.js:112 Model/Event.php:233
-msgid "Summary"
-msgstr "Resum"
 
 #: js/EventDetailsPanel.js:219 js/EventEditDialog.js:114
 msgid "End Time"
@@ -210,28 +273,58 @@ msgstr "Hora d'acabament"
 msgid "Blocking"
 msgstr "Blocant"
 
-#: js/EventDetailsPanel.js:229 js/ResourcesGridPanel.js:52
-#: js/EventEditDialog.js:94 Model/Event.php:229
+#: js/EventDetailsPanel.js:229 js/EventEditDialog.js:94
+#: js/ResourcesGridPanel.js:52 Model/Event.php:229
 msgid "Location"
 msgstr "Ubicació"
 
-#: js/EventDetailsPanel.js:233 js/Model.js:204 Model/Event.php:230
+#: js/EventDetailsPanel.js:233 js/Model.js:212 Model/Event.php:230
 msgid "Organizer"
 msgstr "Organitzador"
 
-#: js/EventDetailsPanel.js:251 js/AttendeeGridPanel.js:76
-#: js/AttendeeFilterModel.js:35 js/Model.js:321
-msgid "Attendee"
-msgstr "Assistents"
+#: js/EventEditDialog.js:122 js/Printer/Base.js:66
+msgid "whole day"
+msgstr "tot el dia"
 
-#: js/ResourcesGridPanel.js:41 js/AttendeeGridPanel.js:178
-#: js/ResourceEditDialog.js:56
-msgid "Name"
-msgstr "Nom"
+#: js/EventEditDialog.js:130
+msgid "non-blocking"
+msgstr "no blocant"
 
-#: js/ResourcesGridPanel.js:47 js/ResourceEditDialog.js:61
-msgid "Email"
-msgstr "Correu electrònic"
+#: js/EventEditDialog.js:155
+msgid "Private"
+msgstr "Privat"
+
+#: js/EventEditDialog.js:196 js/ResourceEditDialog.js:72 Model/Event.php:228
+msgid "Description"
+msgstr "Descripció"
+
+#: js/EventEditDialog.js:210
+msgid "Enter description"
+msgstr "Introduïu una descripció"
+
+#: js/EventEditDialog.js:340
+msgid "End date is not valid"
+msgstr "La data de finalització no és vàlida"
+
+#: js/EventEditDialog.js:343
+msgid "End date must be after start date"
+msgstr "La data de finalització ha de ser posterior a la d'inici"
+
+#: js/EventEditDialog.js:356
+msgid "Start date is not valid"
+msgstr "La data d'inici no és vàlida"
+
+#: js/EventUI.js:220
+msgid "private classification"
+msgstr ""
+
+#: js/EventUI.js:227
+msgid "recurring event"
+msgstr ""
+
+#: js/EventUI.js:234
+msgid "has alarm"
+msgstr ""
 
 #: js/MainScreenCenterPanel.js:118
 msgid "Print Page"
@@ -295,62 +388,6 @@ msgstr ""
 msgid "Sorry, your current view does not support printing."
 msgstr ""
 
-#: js/AttendeeGridPanel.js:102
-msgid "Role"
-msgstr "Rol"
-
-#: js/AttendeeGridPanel.js:116
-msgid "Quantity"
-msgstr "Quantitat"
-
-#: js/AttendeeGridPanel.js:125
-msgid "This is the calendar where the attender has saved this event in"
-msgstr "Aquest és el calendari en què l'organitzador ha desat l'esdeveniment"
-
-#: js/AttendeeGridPanel.js:161
-msgid "Type"
-msgstr "Tipus"
-
-#: js/AttendeeGridPanel.js:168
-msgid "User"
-msgstr "Usuari"
-
-#: js/AttendeeGridPanel.js:169
-msgid "Group"
-msgstr "Grup"
-
-#: js/AttendeeGridPanel.js:170 js/Model.js:476
-msgid "Resource"
-msgid_plural "Resources"
-msgstr[0] "Recurs"
-msgstr[1] "Recursos"
-
-#: js/AttendeeGridPanel.js:171
-msgid "Member of group"
-msgstr ""
-
-#: js/AttendeeGridPanel.js:186 js/ContactEventsGridPanel.js:125
-#: Model/Event.php:232
-msgid "Status"
-msgstr "Estat"
-
-#: js/AttendeeGridPanel.js:330
-msgid "Remove Attender"
-msgstr "Elimina organitzador"
-
-#: js/AttendeeGridPanel.js:425
-msgid "Click here to invite another attender..."
-msgstr "Feu clic aquí per a convidar un altre organitzador"
-
-#: js/AttendeeGridPanel.js:444 js/AttendeeGridPanel.js:462
-#: js/AttendeeGridPanel.js:479 js/AttendeeGridPanel.js:491 js/Model.js:337
-msgid "No Information"
-msgstr "Sense informació"
-
-#: js/AttendeeGridPanel.js:449
-msgid "(as a group member)"
-msgstr "(com a membre de grup)"
-
 #: js/MainScreenWestPanel.js:30
 msgid "Mini Calendar"
 msgstr "Minicalendari"
@@ -359,132 +396,7 @@ msgstr "Minicalendari"
 msgid "WK"
 msgstr "set."
 
-#: js/AdminPanel.js:44
-msgid "Manage Resources"
-msgstr "Gestiona els recursos"
-
-#: js/EventEditDialog.js:122 js/Printer/Base.js:66
-msgid "whole day"
-msgstr "tot el dia"
-
-#: js/EventEditDialog.js:130
-msgid "non-blocking"
-msgstr "no blocant"
-
-#: js/EventEditDialog.js:155
-msgid "Private"
-msgstr "Privat"
-
-#: js/EventEditDialog.js:196 js/ResourceEditDialog.js:72 Model/Event.php:228
-msgid "Description"
-msgstr "Descripció"
-
-#: js/EventEditDialog.js:210
-msgid "Enter description"
-msgstr "Introduïu una descripció"
-
-#: js/EventEditDialog.js:340
-msgid "End date is not valid"
-msgstr "La data de finalització no és vàlida"
-
-#: js/EventEditDialog.js:343
-msgid "End date must be after start date"
-msgstr "La data de finalització ha de ser posterior a la d'inici"
-
-#: js/EventEditDialog.js:356
-msgid "Start date is not valid"
-msgstr "La data d'inici no és vàlida"
-
-#: js/CalendarSelectWidget.js:124
-msgid "Originally"
-msgstr "Originàriament"
-
-#: js/MonthView.js:81 js/AddressbookGridPanelHook.js:35 js/Calendar.js:29
-#: js/DaysView.js:88
-msgid "New Event"
-msgstr "Nou esdeveniment"
-
-#: js/MonthView.js:91
-msgid "{0} more..."
-msgstr "{0} més..."
-
-#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
-msgid "Is a location"
-msgstr "És una ubicació"
-
-#: js/ResourceEditDialog.js:73
-msgid "Enter description..."
-msgstr "Introduïu una descripció"
-
-#: js/EventUI.js:220
-msgid "private classification"
-msgstr ""
-
-#: js/EventUI.js:227
-msgid "recurring event"
-msgstr ""
-
-#: js/EventUI.js:234
-msgid "has alarm"
-msgstr ""
-
-#: js/ContactEventsGridPanel.js:50 js/Model.js:63 js/Model.js:325
-msgid "Events"
-msgstr "Esdeveniments"
-
-#: js/AttendeeFilterModel.js:101
-msgid "Select Attendee"
-msgstr "Selecciona assistents"
-
-#: js/AttendeeStatusFilterModel.js:31
-msgid "Attendee Status"
-msgstr "Estat de l'assistent"
-
-#: js/CalendarPanel.js:51
-msgid "Loading events, please wait..."
-msgstr "S'estan carregant els esdeveniments, espereu..."
-
-#: js/CalendarPanel.js:275
-msgid "Scheduling Conflict"
-msgstr "Conflicte a la planificació"
-
-#: js/CalendarPanel.js:277
-msgid "The following attendee are busy at the requested time:"
-msgstr "L'assistent següent es troba ocupat a l'hora en qüestió:"
-
-#: js/CalendarPanel.js:281
-msgid "Ignore Conflict"
-msgstr "Ignora el conflicte"
-
-#: js/CalendarPanel.js:282
-msgid "Edit Event"
-msgstr "Edita l'esdeveniment"
-
-#: js/CalendarPanel.js:283
-msgid "Cancel this action"
-msgstr ""
-
-#: js/CalendarPanel.js:325
-msgid "Update Event"
-msgstr "Actualitza esdeveniment"
-
-#: js/CalendarPanel.js:329
-msgid "Update this event only"
-msgstr "Actualitza només aquest esdeveniment"
-
-#: js/CalendarPanel.js:330
-msgid "Update this and all future events"
-msgstr ""
-
-#: js/CalendarPanel.js:331
-msgid "Update whole series"
-msgstr "Actualitza les sèries completes"
-
-#: js/CalendarPanel.js:332
-msgid "Update nothing"
-msgstr "No actualitzis res"
-
-#: js/Model.js:63 js/Model.js:325
+#: js/Model.js:63 js/Model.js:333
 msgid "Event"
 msgid_plural "Events"
 msgstr[0] "Esdeveniment"
@@ -498,24 +410,40 @@ msgstr "Calendaris"
 msgid "Quick search"
 msgstr "Cerca ràpida"
 
-#: js/Model.js:321
+#: js/Model.js:204
+msgid "Attendee Status"
+msgstr "Estat de l'assistent"
+
+#: js/Model.js:329
 #, fuzzy
 msgid "Attender"
 msgid_plural "Attendee"
 msgstr[0] "Organitzador"
 msgstr[1] "Organitzadors"
 
-#: js/Model.js:476
+#: js/Model.js:484
 msgid "Resources"
 msgstr "Recursos"
+
+#: js/MonthView.js:91
+msgid "{0} more..."
+msgstr "{0} més..."
 
 #: js/Printer/DaysView.js:36
 msgid "Week {0} :"
 msgstr ""
 
-#: js/DaysView.js:93
-msgid "{0}, the {1}. of {2}"
-msgstr "{0}, el {1}. de {2}"
+#: js/ResourceEditDialog.js:61 js/ResourcesGridPanel.js:47
+msgid "Email"
+msgstr "Correu electrònic"
+
+#: js/ResourceEditDialog.js:67 js/ResourceEditDialog.js:68
+msgid "Is a location"
+msgstr "És una ubicació"
+
+#: js/ResourceEditDialog.js:73
+msgid "Enter description..."
+msgstr "Introduïu una descripció"
 
 #: js/RrulePanel.js:28
 msgid "Recurrances"
@@ -614,6 +542,14 @@ msgstr "Cada any {0}"
 msgid "of"
 msgstr "de"
 
+#: Model/Attender.php:155
+msgid "unknown"
+msgstr "desconegut"
+
+#: Model/Attender.php:310
+msgid "This contact has been automatically added by the system as an event attender"
+msgstr "El sistema ha afegit automàticament aquest contacte com a organitzador de l'esdeveniment"
+
 #: Model/Event.php:224
 msgid "Start"
 msgstr "Inici"
@@ -654,53 +590,117 @@ msgstr "Sí"
 msgid "No"
 msgstr "No"
 
-#: Model/Attender.php:155
-msgid "unknown"
-msgstr "desconegut"
+#: Preference.php:31
+msgid "All my events"
+msgstr "Tots els meus esdeveniments"
 
-#: Model/Attender.php:310
-msgid "This contact has been automatically added by the system as an event attender"
-msgstr "El sistema ha afegit automàticament aquest contacte com a organitzador de l'esdeveniment"
+#: Preference.php:80
+msgid "Position on the left time axis, day and week view should start with"
+msgstr ""
 
-#: Controller/EventNotifications.php:263
-msgid "Alarm for event \"%1$s\" at %2$s"
-msgstr "Alarma per a l'esdeveniment  \"%1$s\" a %2$s"
+#: Preference.php:83
+msgid "Default Calendar"
+msgstr "Calendari per defecte"
 
-#: Controller/EventNotifications.php:266
-msgid "Event invitation \"%1$s\" at %2$s"
-msgstr "Invitació a esdeveniment \"%1$s\" a %2$s"
+#: Preference.php:84
+msgid "The default calendar for invitations and new events"
+msgstr "El calendari per defecte per a invitacions i per a nous esdeveniments"
 
-#: Controller/EventNotifications.php:269
-msgid "Event \"%1$s\" at %2$s has been canceled"
-msgstr "S'ha cancel·lat l'esdeveniment \"%1$s\" a %2$s"
+#: Preference.php:87
+msgid "Default Favorite"
+msgstr "Preferit per defecte"
 
-#: Controller/EventNotifications.php:274
-msgid "Event \"%1$s\" at %2$s has been rescheduled"
-msgstr "S'ha reprogramat l'esdeveniment \"%1$s\" a %2$s"
+#: Preference.php:88
+msgid "The default favorite which is loaded on calendar startup"
+msgstr "El preferit per defecte que es carrega a l'inici del calendari"
 
-#: Controller/EventNotifications.php:278
-msgid "Event \"%1$s\" at %2$s has been updated"
-msgstr "S'ha actualitzat l'esdeveniment \"%1$s\" a %2$s"
+#: Preference.php:91
+msgid "Get Notification Emails"
+msgstr "Rep correus electrònics de notificació"
 
-#: Controller/EventNotifications.php:288
-msgid "%1$s accepted event \"%2$s\" at %3$s"
-msgstr "%1$s ha acceptat l'esdeveniment \"%2$s\" a %3$s"
+#: Preference.php:92
+msgid "The level of actions you want to be notified about. Please note that organizers will get notifications for all updates including attendee answers unless this preference is set to \"Never\""
+msgstr "El nivell de les accions de les quals voleu que se us notifiqui. Observeu que els organitzadors rebran notificacions de tota actualització incloent les respostes dels assistents a menys que establiu aquesta opció a \"Mai\""
 
-#: Controller/EventNotifications.php:292
-msgid "%1$s declined event \"%2$s\" at %3$s"
-msgstr "%1$s ha rebutjat l'esdeveniment \"%2$s\" a %3$s"
+#: Preference.php:95
+msgid "Send Notifications Emails of own Actions"
+msgstr "Envia correus electrònics de notificació de les pròpies accions"
 
-#: Controller/EventNotifications.php:296
-msgid "Tentative response from %1$s for event \"%2$s\" at %3$s"
-msgstr "%1$s ha respost que potser assistirà a l'esdeveniment \"%2$s\" a %3$s"
+#: Preference.php:96
+msgid "Get notifications emails for actions you did yourself"
+msgstr "Rep correus electrònics de notificació de les accions que hagueu fet"
 
-#: Controller/EventNotifications.php:300
-msgid "No response from %1$s for event \"%2$s\" at %3$s"
-msgstr "Sense resposta de %1$s per a l'esdeveniment \"%2$s\" a %3$s"
+#: Preference.php:149
+msgid "Never"
+msgstr ""
 
-#: Controller/EventNotifications.php:304
-msgid "Attendee changes for event \"%1$s\" at %2$s"
-msgstr "Canvis d'assistents per a l'esdeveniment \"%1$s\" a %2$s"
+#: Preference.php:149
+msgid "On invitation and cancellation only"
+msgstr ""
+
+#: Preference.php:149
+msgid "On time changes"
+msgstr ""
+
+#: Preference.php:149
+msgid "On all updates but attendee responses"
+msgstr ""
+
+#: Preference.php:149
+msgid "On attendee responses too"
+msgstr ""
+
+#: Setup/Initialize.php:34 Setup/Update/Release3.php:164
+msgid "All events I attend"
+msgstr "Tots els esdeveniments als quals assisteixo"
+
+#: Setup/Initialize.php:47
+msgid "Awaiting response"
+msgstr ""
+
+#: Setup/Initialize.php:48
+msgid "Events I have not yet responded to"
+msgstr ""
+
+#: Setup/Initialize.php:63
+msgid "Declined events"
+msgstr ""
+
+#: Setup/Initialize.php:64
+msgid "Events I have declined"
+msgstr ""
+
+#: Setup/Initialize.php:77
+msgid "I'm organizer"
+msgstr ""
+
+#: Setup/Initialize.php:78
+msgid "Events I'm the organizer of"
+msgstr ""
+
+#: Setup/Initialize.php:98 Setup/Update/Release5.php:75
+msgid "Required"
+msgstr "Obligatori"
+
+#: Setup/Initialize.php:99 Setup/Update/Release5.php:76
+msgid "Optional"
+msgstr "Opcional"
+
+#: Setup/Initialize.php:112 Setup/Update/Release5.php:89
+msgid "No response"
+msgstr "Sense resposta"
+
+#: Setup/Initialize.php:113 Setup/Update/Release5.php:90
+msgid "Accepted"
+msgstr "Acceptat"
+
+#: Setup/Initialize.php:114 Setup/Update/Release5.php:91
+msgid "Declined"
+msgstr "Rebutjat"
+
+#: Setup/Initialize.php:115 Setup/Update/Release5.php:92
+msgid "Tentative"
+msgstr "Temptativa"
 
 #: views/eventNotification.php:12
 msgid "Updates"

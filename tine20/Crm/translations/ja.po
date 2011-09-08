@@ -13,6 +13,93 @@ msgstr ""
 "X-Poedit-Language: Japanese\n"
 "X-Poedit-Country: JAPAN\n"
 
+#: Acl/Rights.php:106
+msgid "manage leads"
+msgstr "リードの管理"
+
+#: Acl/Rights.php:107
+msgid "add, edit and delete leads"
+msgstr "リードの追加、編集と削除"
+
+#: Acl/Rights.php:110
+#, fuzzy
+msgid "manage shared lead folders"
+msgstr "リードの管理"
+
+#: Acl/Rights.php:111
+msgid "Create new shared lead folders"
+msgstr ""
+
+#: Acl/Rights.php:114
+msgid "manage shared leads favorites"
+msgstr ""
+
+#: Acl/Rights.php:115
+msgid "Create or update shared leads favorites"
+msgstr ""
+
+#: Controller/Lead.php:177
+msgid "State"
+msgstr "ステート"
+
+#: Controller/Lead.php:178 js/Contact.js:258
+msgid "Role"
+msgstr ""
+
+#: Controller/Lead.php:179
+msgid "Source"
+msgstr "ソース"
+
+#: Controller/Lead.php:180 Export/Pdf.php:93 js/LeadEditDialog.js:395
+#: js/LeadGridDetailsPanel.js:469
+msgid "Start"
+msgstr "開始"
+
+#: Controller/Lead.php:181
+msgid "Scheduled end"
+msgstr "計画終了"
+
+#: Controller/Lead.php:182 Export/Pdf.php:96 js/LeadEditDialog.js:229
+msgid "End"
+msgstr "終了"
+
+#: Controller/Lead.php:183 Export/Pdf.php:87 js/LeadGridPanel.js:121
+#: js/LeadGridPanel.js:171
+msgid "Turnover"
+msgstr "取引高"
+
+#: Controller/Lead.php:184 Export/Pdf.php:90 js/LeadEditDialog.js:222
+#: js/LeadGridPanel.js:120 js/LeadGridPanel.js:170
+msgid "Probability"
+msgstr "確度"
+
+#: Controller/Lead.php:185
+msgid "Folder"
+msgstr "フォルダー"
+
+#: Controller/Lead.php:186
+msgid "Updated by"
+msgstr "更新者"
+
+#: Controller/Lead.php:187
+msgid "Updated Fields:"
+msgstr "更新フィールド："
+
+#: Controller/Lead.php:188
+#, python-format
+msgid "%s changed from %s to %s."
+msgstr "%s 変更 %s から %s　に."
+
+#: Controller/Lead.php:194
+#, python-format
+msgid "Lead %s has been changed"
+msgstr "リード%s は変更されました"
+
+#: Controller/Lead.php:196
+#, python-format
+msgid "Lead %s has been created"
+msgstr ""
+
 #: Controller.php:112
 #, python-format
 msgid "%s's personal leads"
@@ -76,117 +163,92 @@ msgstr "電話番号"
 msgid "Website"
 msgstr "ウェブサイト"
 
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:55
-msgid "All leads I have read grants for"
-msgstr ""
+#: Export/Pdf.php:75
+msgid "Lead Data"
+msgstr "リードデータ"
 
-#: Setup/Initialize.php:62
-msgid "Last modified by me"
-msgstr ""
+#: Export/Pdf.php:78 js/AdminPanel.js:157 js/LeadEditDialog.js:337
+#: js/LeadGridPanel.js:169 js/LeadStateFilterModel.js:32
+msgid "Leadstate"
+msgstr "リードスタイル"
 
-#: Setup/Initialize.php:63
-msgid "All leads that I have last modified"
-msgstr ""
+#: Export/Pdf.php:81 js/AdminPanel.js:171 js/LeadEditDialog.js:356
+#: js/LeadGridDetailsPanel.js:479
+msgid "Leadtype"
+msgstr "リードタイプ"
 
-#: Setup/Initialize.php:72
-msgid "My leads"
-msgstr ""
+#: Export/Pdf.php:84 js/AdminPanel.js:164 js/LeadEditDialog.js:363
+#: js/LeadGridDetailsPanel.js:484
+msgid "Leadsource"
+msgstr "リードソース"
 
-#: Setup/Initialize.php:73
-msgid "All leads that I am responsible for"
-msgstr ""
+#: Export/Pdf.php:99
+msgid "End Scheduled"
+msgstr "スケジュールされた終了"
 
-#: Setup/Initialize.php:86
-msgid "Leads with overdue tasks"
-msgstr ""
+#: Export/Pdf.php:179
+msgid "Contacts"
+msgstr "コンタクト"
 
-#: Preference.php:30
-msgid "All leads"
-msgstr ""
+#: Export/Pdf.php:206 js/Contact.js:237
+msgid "Address"
+msgstr "住所"
 
-#: Preference.php:74
-msgid "Get Notification Emails"
-msgstr ""
+#: Export/Pdf.php:227 js/LeadEditDialog.js:245 js/Task.js:85
+msgid "Tasks"
+msgstr "タスク"
 
-#: Preference.php:75
-msgid "The level of actions you want to be notified about."
-msgstr ""
+#: Export/Pdf.php:247 js/Task.js:178
+msgid "Due Date"
+msgstr "期日"
 
-#: Preference.php:79
-msgid "Send Notifications Emails for own actions"
-msgstr ""
+#: Export/Pdf.php:254 js/Task.js:191
+msgid "Priority"
+msgstr "重要度"
 
-#: Preference.php:80
-msgid "Get notifications emails for actions you did yourself"
-msgstr ""
-
-#: Preference.php:83
-msgid "Default Favorite"
-msgstr ""
-
-#: Preference.php:84
-msgid "The default favorite which is loaded on crm startup"
-msgstr ""
-
-#: Acl/Rights.php:106
-msgid "manage leads"
-msgstr "リードの管理"
-
-#: Acl/Rights.php:107
-msgid "add, edit and delete leads"
-msgstr "リードの追加、編集と削除"
-
-#: Acl/Rights.php:110
-#, fuzzy
-msgid "manage shared lead folders"
-msgstr "リードの管理"
-
-#: Acl/Rights.php:111
-msgid "Create new shared lead folders"
-msgstr ""
-
-#: Acl/Rights.php:114
-msgid "manage shared leads favorites"
-msgstr ""
-
-#: Acl/Rights.php:115
-msgid "Create or update shared leads favorites"
-msgstr ""
-
-#: js/Product.js:85 js/LeadEditDialog.js:256 Export/Pdf.php:269
+#: Export/Pdf.php:269 js/LeadEditDialog.js:256 js/Product.js:85
 msgid "Products"
 msgstr "プロダクト"
 
-#: js/Product.js:134
-#, fuzzy
-msgid "Product"
-msgstr "プロダクト"
+#: Export/Pdf.php:310
+msgid "low"
+msgstr "低"
 
-#: js/Product.js:139 js/LeadEditDialog.js:433
-msgid "Description"
-msgstr "説明"
+#: Export/Pdf.php:311
+msgid "normal"
+msgstr "波"
 
-#: js/Product.js:146
-msgid "Price"
-msgstr "価格"
+#: Export/Pdf.php:312
+msgid "high"
+msgstr "高"
 
-#: js/Product.js:158
-msgid "Quantity"
+#: Export/Pdf.php:313
+msgid "urgent"
+msgstr "緊急"
+
+#: js/AddressbookGridPanelHook.js:35 js/Crm.js:24
+msgid "New Lead"
 msgstr ""
 
-#: js/Product.js:185 js/LinkGridPanel.js:55
-msgid "Unlink {0}"
+#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:218
+#: js/LeadGridDetailsPanel.js:251
+#, fuzzy
+msgid "Leadstates"
+msgstr "リードステータス"
+
+#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:240
+#, fuzzy
+msgid "Leadtypes"
+msgstr "リードタイプ"
+
+#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:229
+#, fuzzy
+msgid "Leadsources"
+msgstr "リードソース"
+
+#: js/AdminPanel.js:138
+msgid "Defaults"
 msgstr ""
-
-#: js/Product.js:186 js/LinkGridPanel.js:56
-#, fuzzy
-msgid "Unlink selected {0}"
-msgstr "選択されたコンタクトのアンリンク"
-
-#: js/Product.js:216
-#, fuzzy
-msgid "Search for Products to add ..."
-msgstr "コンタクトの検索と追加"
 
 #: js/Contact.js:168
 msgid "Change type to Customer"
@@ -216,10 +278,6 @@ msgstr "コンタクトの検索と追加"
 msgid "Name"
 msgstr "名前"
 
-#: js/Contact.js:237 Export/Pdf.php:206
-msgid "Address"
-msgstr "住所"
-
 #: js/Contact.js:248
 #, fuzzy
 msgid "Data"
@@ -233,69 +291,39 @@ msgstr "電話"
 msgid "Cellphone"
 msgstr "携帯電話"
 
-#: js/Contact.js:258 Controller/Lead.php:178
-msgid "Role"
+#: js/LeadEditDialog.js:246
+msgid "You do not have the run right for the Tasks application or it is not activated."
 msgstr ""
 
-#: js/LeadSource.js:29
-msgid "Lead Source"
-msgid_plural "Lead Sources"
-msgstr[0] ""
-
-#: js/LeadSource.js:136
-#, fuzzy
-msgid "Add a Leadsource..."
-msgstr "リードソース"
-
-#: js/LinkGridPanel.js:36 js/LinkGridPanel.js:37
-#, fuzzy
-msgid "Add new {0}"
-msgstr "新規リードの追加"
-
-#: js/LinkGridPanel.js:71
-#, fuzzy
-msgid "Edit {0}"
-msgstr "リードの編集　 \"{0}\""
-
-#: js/LinkGridPanel.js:72
-#, fuzzy
-msgid "Edit selected {0}"
-msgstr "選択されたリードの編集"
-
-#: js/AdminPanel.js:122 js/LeadGridDetailsPanel.js:218
-#: js/LeadGridDetailsPanel.js:251
-#, fuzzy
-msgid "Leadstates"
-msgstr "リードステータス"
-
-#: js/AdminPanel.js:126 js/LeadGridDetailsPanel.js:240
-#, fuzzy
-msgid "Leadtypes"
-msgstr "リードタイプ"
-
-#: js/AdminPanel.js:130 js/LeadGridDetailsPanel.js:229
-#, fuzzy
-msgid "Leadsources"
-msgstr "リードソース"
-
-#: js/AdminPanel.js:138
-msgid "Defaults"
+#: js/LeadEditDialog.js:257
+msgid "You do not have the run right for the Sales application or it is not activated."
 msgstr ""
 
-#: js/AdminPanel.js:157 js/LeadGridPanel.js:169 js/LeadStateFilterModel.js:32
-#: js/LeadEditDialog.js:337 Export/Pdf.php:78
-msgid "Leadstate"
-msgstr "リードスタイル"
+#: js/LeadEditDialog.js:268 js/Model.js:48
+#, fuzzy
+msgid "Lead"
+msgid_plural "Leads"
+msgstr[0] "リード"
 
-#: js/AdminPanel.js:164 js/LeadGridDetailsPanel.js:484
-#: js/LeadEditDialog.js:363 Export/Pdf.php:84
-msgid "Leadsource"
-msgstr "リードソース"
+#: js/LeadEditDialog.js:295
+msgid "Enter short name"
+msgstr "短縮名の入力"
 
-#: js/AdminPanel.js:171 js/LeadGridDetailsPanel.js:479
-#: js/LeadEditDialog.js:356 Export/Pdf.php:81
-msgid "Leadtype"
-msgstr "リードタイプ"
+#: js/LeadEditDialog.js:379
+msgid "Expected turnover"
+msgstr "概算売上見積"
+
+#: js/LeadEditDialog.js:401 js/LeadGridDetailsPanel.js:474
+msgid "Estimated end"
+msgstr "終了予定"
+
+#: js/LeadEditDialog.js:433 js/Product.js:139
+msgid "Description"
+msgstr "説明"
+
+#: js/LeadEditDialog.js:447
+msgid "Enter description"
+msgstr "説明を入力してください"
 
 #: js/LeadGridContactFilter.js:44
 #, fuzzy
@@ -328,39 +356,6 @@ msgstr "ウェブサイト"
 msgid "Status"
 msgstr "ステータス"
 
-#: js/LeadGridDetailsPanel.js:469 js/LeadEditDialog.js:395
-#: Controller/Lead.php:180 Export/Pdf.php:93
-msgid "Start"
-msgstr "開始"
-
-#: js/LeadGridDetailsPanel.js:474 js/LeadEditDialog.js:401
-msgid "Estimated end"
-msgstr "終了予定"
-
-#: js/LeadType.js:29
-msgid "Lead Type"
-msgid_plural "Lead Types"
-msgstr[0] ""
-
-#: js/LeadType.js:134
-#, fuzzy
-msgid "Add a Leadtype..."
-msgstr "プロダクトを追加しています..."
-
-#: js/LeadState.js:32
-msgid "Lead State"
-msgid_plural "Lead States"
-msgstr[0] ""
-
-#: js/LeadState.js:166
-#, fuzzy
-msgid "Add a Leadstate..."
-msgstr "タスクを追加しています..."
-
-#: js/Crm.js:24 js/AddressbookGridPanelHook.js:35
-msgid "New Lead"
-msgstr ""
-
 #: js/LeadGridPanel.js:116
 msgid "Quick search"
 msgstr ""
@@ -368,16 +363,6 @@ msgstr ""
 #: js/LeadGridPanel.js:118 js/LeadGridPanel.js:166
 msgid "Lead name"
 msgstr "リード名"
-
-#: js/LeadGridPanel.js:120 js/LeadGridPanel.js:170 js/LeadEditDialog.js:222
-#: Controller/Lead.php:184 Export/Pdf.php:90
-msgid "Probability"
-msgstr "確度"
-
-#: js/LeadGridPanel.js:121 js/LeadGridPanel.js:171 Controller/Lead.php:183
-#: Export/Pdf.php:87
-msgid "Turnover"
-msgstr "取引高"
 
 #: js/LeadGridPanel.js:123
 msgid "Last modified"
@@ -431,44 +416,64 @@ msgstr "PDFにエクスポート"
 msgid "Export as XLS"
 msgstr ""
 
+#: js/LeadSource.js:29
+msgid "Lead Source"
+msgid_plural "Lead Sources"
+msgstr[0] ""
+
+#: js/LeadSource.js:136
+#, fuzzy
+msgid "Add a Leadsource..."
+msgstr "リードソース"
+
+#: js/LeadState.js:32
+msgid "Lead State"
+msgid_plural "Lead States"
+msgstr[0] ""
+
+#: js/LeadState.js:166
+#, fuzzy
+msgid "Add a Leadstate..."
+msgstr "タスクを追加しています..."
+
 #: js/LeadStateFilterModel.js:37
 #, fuzzy
 msgid "Show closed"
 msgstr "クローズしたリードの表示"
 
-#: js/LeadEditDialog.js:229 Controller/Lead.php:182 Export/Pdf.php:96
-msgid "End"
-msgstr "終了"
+#: js/LeadType.js:29
+msgid "Lead Type"
+msgid_plural "Lead Types"
+msgstr[0] ""
 
-#: js/LeadEditDialog.js:245 js/Task.js:85 Export/Pdf.php:227
-msgid "Tasks"
-msgstr "タスク"
-
-#: js/LeadEditDialog.js:246
-msgid "You do not have the run right for the Tasks application or it is not activated."
-msgstr ""
-
-#: js/LeadEditDialog.js:257
-msgid "You do not have the run right for the Sales application or it is not activated."
-msgstr ""
-
-#: js/LeadEditDialog.js:268 js/Model.js:48
+#: js/LeadType.js:134
 #, fuzzy
-msgid "Lead"
-msgid_plural "Leads"
-msgstr[0] "リード"
+msgid "Add a Leadtype..."
+msgstr "プロダクトを追加しています..."
 
-#: js/LeadEditDialog.js:295
-msgid "Enter short name"
-msgstr "短縮名の入力"
+#: js/LinkGridPanel.js:36 js/LinkGridPanel.js:37
+#, fuzzy
+msgid "Add new {0}"
+msgstr "新規リードの追加"
 
-#: js/LeadEditDialog.js:379
-msgid "Expected turnover"
-msgstr "概算売上見積"
+#: js/LinkGridPanel.js:55 js/Product.js:185
+msgid "Unlink {0}"
+msgstr ""
 
-#: js/LeadEditDialog.js:447
-msgid "Enter description"
-msgstr "説明を入力してください"
+#: js/LinkGridPanel.js:56 js/Product.js:186
+#, fuzzy
+msgid "Unlink selected {0}"
+msgstr "選択されたコンタクトのアンリンク"
+
+#: js/LinkGridPanel.js:71
+#, fuzzy
+msgid "Edit {0}"
+msgstr "リードの編集　 \"{0}\""
+
+#: js/LinkGridPanel.js:72
+#, fuzzy
+msgid "Edit selected {0}"
+msgstr "選択されたリードの編集"
 
 #: js/Model.js:52
 msgid "lead list"
@@ -489,6 +494,24 @@ msgid "record list"
 msgid_plural "record lists"
 msgstr[0] ""
 
+#: js/Product.js:134
+#, fuzzy
+msgid "Product"
+msgstr "プロダクト"
+
+#: js/Product.js:146
+msgid "Price"
+msgstr "価格"
+
+#: js/Product.js:158
+msgid "Quantity"
+msgstr ""
+
+#: js/Product.js:216
+#, fuzzy
+msgid "Search for Products to add ..."
+msgstr "コンタクトの検索と追加"
+
 #: js/Task.js:111
 msgid "No Tasks to display"
 msgstr "表示するタスクがありません"
@@ -501,84 +524,61 @@ msgstr "要約"
 msgid "Add a task..."
 msgstr "タスクを追加しています..."
 
-#: js/Task.js:178 Export/Pdf.php:247
-msgid "Due Date"
-msgstr "期日"
-
-#: js/Task.js:191 Export/Pdf.php:254
-msgid "Priority"
-msgstr "重要度"
-
 #: js/Task.js:205
 msgid "Percent"
 msgstr "パーセント"
 
-#: Controller/Lead.php:177
-msgid "State"
-msgstr "ステート"
-
-#: Controller/Lead.php:179
-msgid "Source"
-msgstr "ソース"
-
-#: Controller/Lead.php:181
-msgid "Scheduled end"
-msgstr "計画終了"
-
-#: Controller/Lead.php:185
-msgid "Folder"
-msgstr "フォルダー"
-
-#: Controller/Lead.php:186
-msgid "Updated by"
-msgstr "更新者"
-
-#: Controller/Lead.php:187
-msgid "Updated Fields:"
-msgstr "更新フィールド："
-
-#: Controller/Lead.php:188
-#, python-format
-msgid "%s changed from %s to %s."
-msgstr "%s 変更 %s から %s　に."
-
-#: Controller/Lead.php:194
-#, python-format
-msgid "Lead %s has been changed"
-msgstr "リード%s は変更されました"
-
-#: Controller/Lead.php:196
-#, python-format
-msgid "Lead %s has been created"
+#: Preference.php:30
+msgid "All leads"
 msgstr ""
 
-#: Export/Pdf.php:75
-msgid "Lead Data"
-msgstr "リードデータ"
+#: Preference.php:74
+msgid "Get Notification Emails"
+msgstr ""
 
-#: Export/Pdf.php:99
-msgid "End Scheduled"
-msgstr "スケジュールされた終了"
+#: Preference.php:75
+msgid "The level of actions you want to be notified about."
+msgstr ""
 
-#: Export/Pdf.php:179
-msgid "Contacts"
-msgstr "コンタクト"
+#: Preference.php:79
+msgid "Send Notifications Emails for own actions"
+msgstr ""
 
-#: Export/Pdf.php:310
-msgid "low"
-msgstr "低"
+#: Preference.php:80
+msgid "Get notifications emails for actions you did yourself"
+msgstr ""
 
-#: Export/Pdf.php:311
-msgid "normal"
-msgstr "波"
+#: Preference.php:83
+msgid "Default Favorite"
+msgstr ""
 
-#: Export/Pdf.php:312
-msgid "high"
-msgstr "高"
+#: Preference.php:84
+msgid "The default favorite which is loaded on crm startup"
+msgstr ""
 
-#: Export/Pdf.php:313
-msgid "urgent"
-msgstr "緊急"
+#: Setup/Initialize.php:55 Setup/Update/Release3.php:37
+msgid "All leads I have read grants for"
+msgstr ""
+
+#: Setup/Initialize.php:62
+msgid "Last modified by me"
+msgstr ""
+
+#: Setup/Initialize.php:63
+msgid "All leads that I have last modified"
+msgstr ""
+
+#: Setup/Initialize.php:72
+msgid "My leads"
+msgstr ""
+
+#: Setup/Initialize.php:73
+msgid "All leads that I am responsible for"
+msgstr ""
+
+#: Setup/Initialize.php:86
+msgid "Leads with overdue tasks"
+msgstr ""
 
 #~ msgid "Lead %s has been creaded"
 #~ msgstr "リード　%s が作成されました"

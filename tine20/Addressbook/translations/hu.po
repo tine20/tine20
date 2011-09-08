@@ -14,77 +14,6 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: Controller.php:96
-#, python-format
-msgid "%s's personal addressbook"
-msgstr "%s személyes címjegyzéke"
-
-#: Setup/setup.xml:697
-msgid "Internal Contacts"
-msgstr "Belső kapcsolatok"
-
-#: Setup/setup.xml:723
-msgid "Mr"
-msgstr "Úr"
-
-#: Setup/setup.xml:745
-msgid "Ms"
-msgstr "Asszony"
-
-#: Setup/setup.xml:767 js/ContactEditDialog.js:134 js/ContactEditDialog.js:416
-#: js/ContactGridDetailsPanel.js:131 js/ContactGrid.js:109 js/Model.js:27
-#: js/Model.js:141
-msgid "Company"
-msgstr "Cég"
-
-#: Setup/Update/Release3.php:37 Setup/Initialize.php:112
-msgid "All contacts I have read grants for"
-msgstr "Összes kapcsolat, amihez olvasási engedélyem van"
-
-#: Setup/Initialize.php:117
-msgid "My company"
-msgstr "Saját cégem"
-
-#: Setup/Initialize.php:118
-msgid "All coworkers in my company"
-msgstr "Minden alkalmazott a saját cégemnél"
-
-#: Setup/Initialize.php:131
-msgid "My contacts"
-msgstr "Kapcsolataim"
-
-#: Setup/Initialize.php:132
-msgid "All contacts in my Addressbooks"
-msgstr "Minden kapcsolat a saját Címjegyzékemben"
-
-#: Setup/Initialize.php:144
-msgid "Last modified by me"
-msgstr "Utoljára módosítottam"
-
-#: Setup/Initialize.php:145
-msgid "All contacts that I have last modified"
-msgstr "Minden kapcsolat amit utoljára én módosítottam"
-
-#: Preference.php:28
-msgid "All contacts"
-msgstr "Összes kapcsolat"
-
-#: Preference.php:65
-msgid "Default Addressbook"
-msgstr "Alapértelmezett címjegyzék"
-
-#: Preference.php:66
-msgid "The default addressbook for new contacts"
-msgstr "Alapértelmezett címjegyzék az új kapcsolatoknak"
-
-#: Preference.php:69
-msgid "Default Favorite"
-msgstr "Alapértelmezett kedvenc"
-
-#: Preference.php:70
-msgid "The default favorite which is loaded on addressbook startup"
-msgstr "Alapértelmezett kedvenc ami a címjegyzék indításakor betöltődik"
-
 #: Acl/Rights.php:98
 msgid "manage shared addressbooks"
 msgstr "megosztott címjegyzékek kezelése"
@@ -101,9 +30,120 @@ msgstr "kedvenc megosztott címjegyzék kezelése"
 msgid "Create or update shared addressbook favorites"
 msgstr "Kedvenc megosztott címjegyzék készítése vagy frissítése"
 
-#: js/SearchCombo.js:97
-msgid "Searching..."
-msgstr "Keresés..."
+#: Controller.php:96
+#, python-format
+msgid "%s's personal addressbook"
+msgstr "%s személyes címjegyzéke"
+
+#: Export/Pdf.php:37
+msgid "Business Contact Data"
+msgstr "Üzleti Kapcsolati Adatok"
+
+#: Export/Pdf.php:39
+msgid "Organisation / Unit"
+msgstr "Szervezet / Egység"
+
+#: Export/Pdf.php:44
+msgid "Business Address"
+msgstr "Üzleti cím"
+
+#: Export/Pdf.php:52 js/ContactGrid.js:124
+msgid "Email"
+msgstr "Email"
+
+#: Export/Pdf.php:55
+msgid "Telephone Work"
+msgstr "Üzleti telefonszám"
+
+#: Export/Pdf.php:58
+msgid "Telephone Cellphone"
+msgstr "Mobil telefonszám"
+
+#: Export/Pdf.php:61
+msgid "Telephone Car"
+msgstr "Autó telefonszám"
+
+#: Export/Pdf.php:64
+msgid "Telephone Fax"
+msgstr "Faxszám"
+
+#: Export/Pdf.php:67
+msgid "Telephone Page"
+msgstr "Személyhívó telefonszám"
+
+#: Export/Pdf.php:70
+msgid "URL"
+msgstr "URL"
+
+#: Export/Pdf.php:73
+msgid "Role"
+msgstr "Szerep"
+
+#: Export/Pdf.php:76 js/ContactEditDialog.js:171 js/ContactGrid.js:113
+#: js/Model.js:33
+msgid "Room"
+msgstr "Szoba"
+
+#: Export/Pdf.php:79
+msgid "Assistant"
+msgstr "Aszisztens"
+
+#: Export/Pdf.php:82
+msgid "Assistant Telephone"
+msgstr "Aszisztens telefonszáma"
+
+#: Export/Pdf.php:86
+msgid "Private Contact Data"
+msgstr "Privát Kapcsolati Adatok"
+
+#: Export/Pdf.php:88 js/ContactEditDialog.js:288 js/Model.js:155
+#: js/Model.js:156 js/Model.js:157 js/Model.js:158 js/Model.js:159
+msgid "Private Address"
+msgstr "Privát cím"
+
+#: Export/Pdf.php:96
+msgid "Email Home"
+msgstr "Otthoni email"
+
+#: Export/Pdf.php:99
+msgid "Telephone Home"
+msgstr "Otthoni telefonszám"
+
+#: Export/Pdf.php:102
+msgid "Telephone Cellphone Private"
+msgstr "Privát mobil telefonszám"
+
+#: Export/Pdf.php:105
+msgid "Telephone Fax Home"
+msgstr "Otthoni faxszám"
+
+#: Export/Pdf.php:108
+msgid "URL Home"
+msgstr "Otthoni URL"
+
+#: Export/Pdf.php:112
+msgid "Other Data"
+msgstr "Egyéb adatok"
+
+#: Export/Pdf.php:114 js/ContactEditDialog.js:159 js/ContactGrid.js:139
+#: js/Model.js:26 js/Model.js:149
+msgid "Birthday"
+msgstr "Születésnap"
+
+#: Export/Pdf.php:117 js/ContactEditDialog.js:153 js/ContactGrid.js:111
+#: js/Model.js:30 js/Model.js:144
+msgid "Job Title"
+msgstr "Beosztás"
+
+#: js/Addressbook.js:22
+msgid "New Contact"
+msgstr ""
+
+#: js/Addressbook.js:32 js/Model.js:98 js/Model.js:215
+msgid "Addressbook"
+msgid_plural "Addressbooks"
+msgstr[0] "Címjegyzék"
+msgstr[1] "Címjegyzékek"
 
 #: js/ContactEditDialog.js:35 js/ContactEditDialog.js:41 js/MapPanel.js:31
 msgid "Map"
@@ -135,6 +175,12 @@ msgstr "Középső név"
 msgid "Last Name"
 msgstr "Vezeték név"
 
+#: js/ContactEditDialog.js:134 js/ContactEditDialog.js:416
+#: js/ContactGrid.js:109 js/ContactGridDetailsPanel.js:131 js/Model.js:27
+#: js/Model.js:141 Setup/setup.xml:767
+msgid "Company"
+msgstr "Cég"
+
 #: js/ContactEditDialog.js:139 js/ContactGrid.js:110 js/Model.js:28
 #: js/Model.js:142
 msgid "Unit"
@@ -143,16 +189,6 @@ msgstr "Egység"
 #: js/ContactEditDialog.js:148 js/ContactGrid.js:108 js/Model.js:24
 msgid "Display Name"
 msgstr "Kijelzett név"
-
-#: js/ContactEditDialog.js:153 js/ContactGrid.js:111 js/Model.js:30
-#: js/Model.js:144 Export/Pdf.php:117
-msgid "Job Title"
-msgstr "Beosztás"
-
-#: js/ContactEditDialog.js:159 js/ContactGrid.js:139 js/Model.js:26
-#: js/Model.js:149 Export/Pdf.php:114
-msgid "Birthday"
-msgstr "Születésnap"
 
 #: js/ContactEditDialog.js:163 js/Model.js:23
 msgid "Suffix"
@@ -163,28 +199,25 @@ msgstr "Utótag"
 msgid "Job Role"
 msgstr "Szerepkör"
 
-#: js/ContactEditDialog.js:171 js/ContactGrid.js:113 js/Model.js:33
-#: Export/Pdf.php:76
-msgid "Room"
-msgstr "Szoba"
-
 #: js/ContactEditDialog.js:178
 msgid "Contact Information"
 msgstr "Kapcsolati információk"
 
-#: js/ContactEditDialog.js:183 js/ContactGridDetailsPanel.js:139
-#: js/ContactGridDetailsPanel.js:163 js/ContactGrid.js:125 js/Model.js:51
-#: js/Model.js:143
+#: js/ContactEditDialog.js:183 js/ContactGrid.js:125
+#: js/ContactGridDetailsPanel.js:139 js/ContactGridDetailsPanel.js:163
+#: js/Model.js:51 js/Model.js:143
 msgid "Phone"
 msgstr "Telefon"
 
-#: js/ContactEditDialog.js:188 js/ContactGridDetailsPanel.js:140
-#: js/ContactGridDetailsPanel.js:164 js/ContactGrid.js:126 js/Model.js:52
+#: js/ContactEditDialog.js:188 js/ContactGrid.js:126
+#: js/ContactGridDetailsPanel.js:140 js/ContactGridDetailsPanel.js:164
+#: js/Model.js:52
 msgid "Mobile"
 msgstr "Mobil"
 
-#: js/ContactEditDialog.js:193 js/ContactGridDetailsPanel.js:141
-#: js/ContactGridDetailsPanel.js:165 js/ContactGrid.js:127 js/Model.js:53
+#: js/ContactEditDialog.js:193 js/ContactGrid.js:127
+#: js/ContactGridDetailsPanel.js:141 js/ContactGridDetailsPanel.js:165
+#: js/Model.js:53
 msgid "Fax"
 msgstr "Fax"
 
@@ -209,8 +242,9 @@ msgstr "E-Mail"
 msgid "E-Mail (private)"
 msgstr "E-Mail (privát)"
 
-#: js/ContactEditDialog.js:226 js/ContactGridDetailsPanel.js:144
-#: js/ContactGridDetailsPanel.js:168 js/ContactGrid.js:134 js/Model.js:64
+#: js/ContactEditDialog.js:226 js/ContactGrid.js:134
+#: js/ContactGridDetailsPanel.js:144 js/ContactGridDetailsPanel.js:168
+#: js/Model.js:64
 msgid "Web"
 msgstr "Web"
 
@@ -248,11 +282,6 @@ msgstr "Város"
 msgid "Country"
 msgstr "Ország"
 
-#: js/ContactEditDialog.js:288 js/Model.js:155 js/Model.js:156 js/Model.js:157
-#: js/Model.js:158 js/Model.js:159 Export/Pdf.php:88
-msgid "Private Address"
-msgstr "Privát cím"
-
 #: js/ContactEditDialog.js:333 js/Model.js:68
 msgid "Description"
 msgstr "Leírás"
@@ -269,29 +298,11 @@ msgstr "Exportálás pdf-be"
 msgid "Either {0} or {1} must be given"
 msgstr "Vagy {0} vagy {1} megadása kötelező"
 
-#: js/ContactGridDetailsPanel.js:62 js/Model.js:94
-msgid "Contacts"
-msgstr "Kapcsolatok"
-
-#: js/ContactGridDetailsPanel.js:65
-msgid "Select contact"
-msgstr "Kapcsolat kiválasztása"
-
-#: js/ContactGridDetailsPanel.js:155
-msgid "Private"
-msgstr "Privát"
-
-#: js/ContactGridDetailsPanel.js:178
-msgid "Info"
-msgstr "Info"
-
-#: js/ContactGridDetailsPanel.js:214
-msgid "Insecure link"
-msgstr "Nem biztonságos link"
-
-#: js/ContactGridDetailsPanel.js:214
-msgid "Please review this link in edit dialog."
-msgstr "Kérlek ellenőrizd ezt a linket a szerkesztő ablakban."
+#: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
+msgid "Contact"
+msgid_plural "Contacts"
+msgstr[0] "Kapcsolat"
+msgstr[1] "Kapcsolatok"
 
 #: js/ContactGrid.js:103 js/Model.js:160
 msgid "Type"
@@ -328,10 +339,6 @@ msgstr "Irányítószám (privát)"
 #: js/ContactGrid.js:123
 msgid "Country (private)"
 msgstr "Ország (privát)"
-
-#: js/ContactGrid.js:124 Export/Pdf.php:52
-msgid "Email"
-msgstr "Email"
 
 #: js/ContactGrid.js:128
 msgid "Car phone"
@@ -393,6 +400,30 @@ msgstr "Kapcsolatok importálása"
 msgid "Internal Contact"
 msgstr "Belső kapcsolatok"
 
+#: js/ContactGridDetailsPanel.js:62 js/Model.js:94
+msgid "Contacts"
+msgstr "Kapcsolatok"
+
+#: js/ContactGridDetailsPanel.js:65
+msgid "Select contact"
+msgstr "Kapcsolat kiválasztása"
+
+#: js/ContactGridDetailsPanel.js:155
+msgid "Private"
+msgstr "Privát"
+
+#: js/ContactGridDetailsPanel.js:178
+msgid "Info"
+msgstr "Info"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Insecure link"
+msgstr "Nem biztonságos link"
+
+#: js/ContactGridDetailsPanel.js:214
+msgid "Please review this link in edit dialog."
+msgstr "Kérlek ellenőrizd ezt a linket a szerkesztő ablakban."
+
 #: js/ListMemberFilterModel.js:37
 msgid "Member of List"
 msgstr ""
@@ -404,22 +435,6 @@ msgstr ""
 #: js/MapPanel.js:56
 msgid "Private address"
 msgstr ""
-
-#: js/Addressbook.js:22
-msgid "New Contact"
-msgstr ""
-
-#: js/Addressbook.js:32 js/Model.js:98 js/Model.js:215
-msgid "Addressbook"
-msgid_plural "Addressbooks"
-msgstr[0] "Címjegyzék"
-msgstr[1] "Címjegyzékek"
-
-#: js/ContactFilterModel.js:35 js/Model.js:94 js/Model.js:133
-msgid "Contact"
-msgid_plural "Contacts"
-msgstr[0] "Kapcsolat"
-msgstr[1] "Kapcsolatok"
 
 #: js/Model.js:34
 msgid "Street (Company Address)"
@@ -511,81 +526,69 @@ msgstr[1] "Listák"
 msgid "Lists"
 msgstr "Listák"
 
-#: Export/Pdf.php:37
-msgid "Business Contact Data"
-msgstr "Üzleti Kapcsolati Adatok"
+#: js/SearchCombo.js:97
+msgid "Searching..."
+msgstr "Keresés..."
 
-#: Export/Pdf.php:39
-msgid "Organisation / Unit"
-msgstr "Szervezet / Egység"
+#: Preference.php:28
+msgid "All contacts"
+msgstr "Összes kapcsolat"
 
-#: Export/Pdf.php:44
-msgid "Business Address"
-msgstr "Üzleti cím"
+#: Preference.php:65
+msgid "Default Addressbook"
+msgstr "Alapértelmezett címjegyzék"
 
-#: Export/Pdf.php:55
-msgid "Telephone Work"
-msgstr "Üzleti telefonszám"
+#: Preference.php:66
+msgid "The default addressbook for new contacts"
+msgstr "Alapértelmezett címjegyzék az új kapcsolatoknak"
 
-#: Export/Pdf.php:58
-msgid "Telephone Cellphone"
-msgstr "Mobil telefonszám"
+#: Preference.php:69
+msgid "Default Favorite"
+msgstr "Alapértelmezett kedvenc"
 
-#: Export/Pdf.php:61
-msgid "Telephone Car"
-msgstr "Autó telefonszám"
+#: Preference.php:70
+msgid "The default favorite which is loaded on addressbook startup"
+msgstr "Alapértelmezett kedvenc ami a címjegyzék indításakor betöltődik"
 
-#: Export/Pdf.php:64
-msgid "Telephone Fax"
-msgstr "Faxszám"
+#: Setup/Initialize.php:112 Setup/Update/Release3.php:37
+msgid "All contacts I have read grants for"
+msgstr "Összes kapcsolat, amihez olvasási engedélyem van"
 
-#: Export/Pdf.php:67
-msgid "Telephone Page"
-msgstr "Személyhívó telefonszám"
+#: Setup/Initialize.php:117
+msgid "My company"
+msgstr "Saját cégem"
 
-#: Export/Pdf.php:70
-msgid "URL"
-msgstr "URL"
+#: Setup/Initialize.php:118
+msgid "All coworkers in my company"
+msgstr "Minden alkalmazott a saját cégemnél"
 
-#: Export/Pdf.php:73
-msgid "Role"
-msgstr "Szerep"
+#: Setup/Initialize.php:131
+msgid "My contacts"
+msgstr "Kapcsolataim"
 
-#: Export/Pdf.php:79
-msgid "Assistant"
-msgstr "Aszisztens"
+#: Setup/Initialize.php:132
+msgid "All contacts in my Addressbooks"
+msgstr "Minden kapcsolat a saját Címjegyzékemben"
 
-#: Export/Pdf.php:82
-msgid "Assistant Telephone"
-msgstr "Aszisztens telefonszáma"
+#: Setup/Initialize.php:144
+msgid "Last modified by me"
+msgstr "Utoljára módosítottam"
 
-#: Export/Pdf.php:86
-msgid "Private Contact Data"
-msgstr "Privát Kapcsolati Adatok"
+#: Setup/Initialize.php:145
+msgid "All contacts that I have last modified"
+msgstr "Minden kapcsolat amit utoljára én módosítottam"
 
-#: Export/Pdf.php:96
-msgid "Email Home"
-msgstr "Otthoni email"
+#: Setup/setup.xml:697
+msgid "Internal Contacts"
+msgstr "Belső kapcsolatok"
 
-#: Export/Pdf.php:99
-msgid "Telephone Home"
-msgstr "Otthoni telefonszám"
+#: Setup/setup.xml:723
+msgid "Mr"
+msgstr "Úr"
 
-#: Export/Pdf.php:102
-msgid "Telephone Cellphone Private"
-msgstr "Privát mobil telefonszám"
-
-#: Export/Pdf.php:105
-msgid "Telephone Fax Home"
-msgstr "Otthoni faxszám"
-
-#: Export/Pdf.php:108
-msgid "URL Home"
-msgstr "Otthoni URL"
-
-#: Export/Pdf.php:112
-msgid "Other Data"
-msgstr "Egyéb adatok"
+#: Setup/setup.xml:745
+msgid "Ms"
+msgstr "Asszony"
 
 #~ msgid "Call contact"
 #~ msgstr "Kapcsolat hívása"

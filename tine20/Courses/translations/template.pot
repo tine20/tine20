@@ -1,72 +1,20 @@
-#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:137
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr ""
+
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr ""
+
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr ""
+
+#: Frontend/Json.php:254 js/CourseEditDialog.js:137 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] ""
 msgstr[1] ""
-
-#: Setup/setup.xml:4 js/Courses.js:32
-msgid "Courses"
-msgstr ""
-
-#: js/CourseGridPanel.js:49
-msgid "Quick search"
-msgstr ""
-
-#: js/CourseGridPanel.js:71
-msgid "Name"
-msgstr ""
-
-#: js/CourseGridPanel.js:77
-msgid "Type"
-msgstr ""
-
-#: js/CourseGridPanel.js:84 js/CourseEditDialog.js:178
-msgid "Internet Access"
-msgstr ""
-
-#: js/CourseGridPanel.js:92 js/CourseEditDialog.js:184
-msgid "Fileserver Access"
-msgstr ""
-
-#: js/CourseGridPanel.js:118
-msgid "Internet Access On"
-msgstr ""
-
-#: js/CourseGridPanel.js:129
-msgid "Internet Access Off"
-msgstr ""
-
-#: js/CourseGridPanel.js:140
-msgid "Fileserver Access On"
-msgstr ""
-
-#: js/CourseGridPanel.js:151
-msgid "Fileserver Access Off"
-msgstr ""
-
-#: js/CourseGridPanel.js:211
-msgid "Failed"
-msgstr ""
-
-#: js/CourseGridPanel.js:212
-msgid "Some error occured while trying to update the courses."
-msgstr ""
-
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Models.js:74
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] ""
-msgstr[1] ""
-
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr ""
 
 #: js/CourseEditDialog.js:31
 msgid "Import course members"
@@ -82,6 +30,14 @@ msgstr ""
 
 #: js/CourseEditDialog.js:171
 msgid "Description"
+msgstr ""
+
+#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:84
+msgid "Internet Access"
+msgstr ""
+
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:92
+msgid "Fileserver Access"
 msgstr ""
 
 #: js/CourseEditDialog.js:215
@@ -108,14 +64,58 @@ msgstr ""
 msgid "Please enter the new password:"
 msgstr ""
 
-#: Controller/Course.php:107
-msgid "teacher"
+#: js/CourseGridPanel.js:49
+msgid "Quick search"
 msgstr ""
 
-#: Controller/Course.php:115
-msgid "Teacher"
+#: js/CourseGridPanel.js:71
+msgid "Name"
 msgstr ""
 
-#: Controller/Course.php:116
-msgid "Teacher Account"
+#: js/CourseGridPanel.js:77
+msgid "Type"
 msgstr ""
+
+#: js/CourseGridPanel.js:118
+msgid "Internet Access On"
+msgstr ""
+
+#: js/CourseGridPanel.js:129
+msgid "Internet Access Off"
+msgstr ""
+
+#: js/CourseGridPanel.js:140
+msgid "Fileserver Access On"
+msgstr ""
+
+#: js/CourseGridPanel.js:151
+msgid "Fileserver Access Off"
+msgstr ""
+
+#: js/CourseGridPanel.js:211
+msgid "Failed"
+msgstr ""
+
+#: js/CourseGridPanel.js:212
+msgid "Some error occured while trying to update the courses."
+msgstr ""
+
+#: js/Courses.js:32 Setup/setup.xml:4
+msgid "Courses"
+msgstr ""
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr ""
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] ""
+msgstr[1] ""
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] ""
+msgstr[1] ""

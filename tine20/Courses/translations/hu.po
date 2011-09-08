@@ -14,75 +14,23 @@ msgstr ""
 "X-Poedit-Country: HUNGARY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
-#: Frontend/Json.php:254 js/Models.js:41 js/CourseEditDialog.js:137
+#: Controller/Course.php:107
+msgid "teacher"
+msgstr "tanár"
+
+#: Controller/Course.php:115
+msgid "Teacher"
+msgstr "Tanár"
+
+#: Controller/Course.php:116
+msgid "Teacher Account"
+msgstr "Tanár felhasználó"
+
+#: Frontend/Json.php:254 js/CourseEditDialog.js:137 js/Models.js:41
 msgid "Course"
 msgid_plural "Courses"
 msgstr[0] "Kurzus"
 msgstr[1] "Kurzusok"
-
-#: Setup/setup.xml:4 js/Courses.js:32
-msgid "Courses"
-msgstr "Kurzusok"
-
-#: js/CourseGridPanel.js:49
-msgid "Quick search"
-msgstr "Gyors keresés"
-
-#: js/CourseGridPanel.js:71
-msgid "Name"
-msgstr "Név"
-
-#: js/CourseGridPanel.js:77
-msgid "Type"
-msgstr "Típus"
-
-#: js/CourseGridPanel.js:84 js/CourseEditDialog.js:178
-msgid "Internet Access"
-msgstr "Internet elérés"
-
-#: js/CourseGridPanel.js:92 js/CourseEditDialog.js:184
-msgid "Fileserver Access"
-msgstr "Fileszerver elérés"
-
-#: js/CourseGridPanel.js:118
-msgid "Internet Access On"
-msgstr "Internet elérés be"
-
-#: js/CourseGridPanel.js:129
-msgid "Internet Access Off"
-msgstr "Internet elérés ki"
-
-#: js/CourseGridPanel.js:140
-msgid "Fileserver Access On"
-msgstr "Fileszerver elérés be"
-
-#: js/CourseGridPanel.js:151
-msgid "Fileserver Access Off"
-msgstr "Fileszerver elérés ki"
-
-#: js/CourseGridPanel.js:211
-msgid "Failed"
-msgstr "Hibás"
-
-#: js/CourseGridPanel.js:212
-msgid "Some error occured while trying to update the courses."
-msgstr "Néhány hiba történt a kurzus frissítése közben."
-
-#: js/Models.js:45
-msgid "record list"
-msgid_plural "record lists"
-msgstr[0] "rekord lista"
-msgstr[1] "rekord listák"
-
-#: js/Models.js:74
-msgid "Course Type"
-msgid_plural "Course Types"
-msgstr[0] "Kurzus típus"
-msgstr[1] "Kurzus típusok"
-
-#: js/Courses.js:37
-msgid "All Courses"
-msgstr "Minden kurzus"
 
 #: js/CourseEditDialog.js:31
 msgid "Import course members"
@@ -99,6 +47,14 @@ msgstr "Kurzus / Iskola típus"
 #: js/CourseEditDialog.js:171
 msgid "Description"
 msgstr "Leírás"
+
+#: js/CourseEditDialog.js:178 js/CourseGridPanel.js:84
+msgid "Internet Access"
+msgstr "Internet elérés"
+
+#: js/CourseEditDialog.js:184 js/CourseGridPanel.js:92
+msgid "Fileserver Access"
+msgstr "Fileszerver elérés"
 
 #: js/CourseEditDialog.js:215
 msgid "Members"
@@ -124,14 +80,58 @@ msgstr "Új jelszó beállítása"
 msgid "Please enter the new password:"
 msgstr "Kérlek írd be az új jelszót:"
 
-#: Controller/Course.php:107
-msgid "teacher"
-msgstr "tanár"
+#: js/CourseGridPanel.js:49
+msgid "Quick search"
+msgstr "Gyors keresés"
 
-#: Controller/Course.php:115
-msgid "Teacher"
-msgstr "Tanár"
+#: js/CourseGridPanel.js:71
+msgid "Name"
+msgstr "Név"
 
-#: Controller/Course.php:116
-msgid "Teacher Account"
-msgstr "Tanár felhasználó"
+#: js/CourseGridPanel.js:77
+msgid "Type"
+msgstr "Típus"
+
+#: js/CourseGridPanel.js:118
+msgid "Internet Access On"
+msgstr "Internet elérés be"
+
+#: js/CourseGridPanel.js:129
+msgid "Internet Access Off"
+msgstr "Internet elérés ki"
+
+#: js/CourseGridPanel.js:140
+msgid "Fileserver Access On"
+msgstr "Fileszerver elérés be"
+
+#: js/CourseGridPanel.js:151
+msgid "Fileserver Access Off"
+msgstr "Fileszerver elérés ki"
+
+#: js/CourseGridPanel.js:211
+msgid "Failed"
+msgstr "Hibás"
+
+#: js/CourseGridPanel.js:212
+msgid "Some error occured while trying to update the courses."
+msgstr "Néhány hiba történt a kurzus frissítése közben."
+
+#: js/Courses.js:32 Setup/setup.xml:4
+msgid "Courses"
+msgstr "Kurzusok"
+
+#: js/Courses.js:37
+msgid "All Courses"
+msgstr "Minden kurzus"
+
+#: js/Models.js:45
+msgid "record list"
+msgid_plural "record lists"
+msgstr[0] "rekord lista"
+msgstr[1] "rekord listák"
+
+#: js/Models.js:74
+msgid "Course Type"
+msgid_plural "Course Types"
+msgstr[0] "Kurzus típus"
+msgstr[1] "Kurzus típusok"
