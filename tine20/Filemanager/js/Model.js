@@ -198,7 +198,9 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
     copyNodes : function(items, target, move, params) {
         
         var containsFolder = false,
-            message = '';
+            message = '',
+            app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
+
         
         if(!params) {
         
@@ -265,7 +267,6 @@ Tine.Filemanager.fileRecordBackend =  new Tine.Tinebase.data.RecordProxy({
             }
         }
         
-        var app = Tine.Tinebase.appMgr.get(Tine.Filemanager.fileRecordBackend.appName);
         Ext.MessageBox.wait(_('Please wait'), String.format(message, '' ));
 
         Ext.Ajax.request({
