@@ -82,7 +82,8 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      */
     maxPostSize: 20971520, // 20 MB
     /**
-     * @cfg {Int} maxChunkSize the maximum chunk size used for html5 uploads
+     * @property maxChunkSize the maximum chunk size used for html5 uploads
+     * @type Int
      */
     maxChunkSize: 20955136,
     /**
@@ -216,14 +217,14 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
      
             if (this.isHtml5ChunkedUpload()) {
 
-                if(this.fileSize > this.maxFileUploadSize) {
-                    this.createFileRecord(true);
-                    this.fileRecord.beginEdit();
-                    this.fileRecord.set('status', 'failure');
-                    this.fileRecord.endEdit();
-                    this.fireEvent('uploadfailure', this, this.fileRecord); 
-                    return this.fileRecord;
-                }
+//                if(this.fileSize > this.maxAllowedFileSize) { // admin confgured max file size (nothing technically)
+//                    this.createFileRecord(true);
+//                    this.fileRecord.beginEdit();
+//                    this.fileRecord.set('status', 'failure');
+//                    this.fileRecord.endEdit();
+//                    this.fireEvent('uploadfailure', this, this.fileRecord); 
+//                    return this.fileRecord;
+//                }
                 
                 // calculate optimal maxChunkSize       
                 
