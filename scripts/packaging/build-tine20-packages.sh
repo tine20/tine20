@@ -221,7 +221,7 @@ function createSpecialArchives()
     rm -rf $TEMPDIR/allinone
     mkdir $TEMPDIR/allinone
     
-    for ARCHIVENAME in calendar tinebase crm felamimail sales tasks timetracker; do
+    for ARCHIVENAME in calendar tinebase crm felamimail filemanager projects sales tasks timetracker; do
         (cd $TEMPDIR/allinone; tar xjf ../../packages/tine20/$RELEASE/tine20-${ARCHIVENAME}_$RELEASE.tar.bz2)
     done
     
