@@ -443,8 +443,8 @@ Tine.widgets.tree.ContextMenu = {
             if(node.attributes.container) {
                 grantsContainer = node.attributes.container;
             }
-            else if(node.attributes.nodeRecord && node.attributes.nodeRecord.data) {
-                grantsContainer = node.attributes.nodeRecord.data;
+            else if(node.attributes.nodeRecord && node.attributes.nodeRecord.data.name) {
+                grantsContainer = node.attributes.nodeRecord.data.name;
             }
             
             var window = Tine.widgets.container.GrantsDialog.openWindow({
