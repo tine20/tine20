@@ -751,7 +751,7 @@ Tine.Filemanager.GridPanel = Ext.extend(Tine.widgets.grid.GridPanel, {
         fileRecord.set('revision', record.revision);
         fileRecord.set('last_modified_by', record.last_modified_by);
         fileRecord.set('last_modified_time', record.last_modified_time);
-        fileRecord.set('size', record.size);
+//        fileRecord.set('size', record.size);
         fileRecord.set('name', record.name);
         fileRecord.set('path', record.path);
         fileRecord.endEdit();

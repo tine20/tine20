@@ -385,6 +385,7 @@ Ext.extend(Ext.ux.file.Upload, Ext.util.Observable, {
             this.fileRecord.beginEdit();
             this.fileRecord.set('status', 'complete');
             this.fileRecord.set('progress', 100);
+            this.fileRecord.set('size', response.size);
             this.fileRecord.commit(false);
             this.fireEvent('uploadcomplete', this, response);               
         }
