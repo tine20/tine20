@@ -18,149 +18,154 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "X-Poedit-SearchPath-0: Inventory\n"
 
-#: Inventory/Controller.php:74
-#, php-format
-msgid "%s's personal inventory"
-msgstr "%ss persönliches Inventar"
-
-#: Inventory/js/InventoryItemGridPanel.js:83
-#: Inventory/js/Model.js:85
-#: Inventory/js/InventoryItemEditDialog.js:137
+#: js/InventoryItemGridPanel.js:83 js/Model.js:85
+#: js/InventoryItemEditDialog.js:137
 msgid "ID"
 msgstr "ID"
 
-#: Inventory/js/InventoryItemGridPanel.js:89
-#: Inventory/js/Model.js:77
-#: Inventory/js/InventoryItemEditDialog.js:121
+#: js/InventoryItemGridPanel.js:89 js/Model.js:77
+#: js/InventoryItemEditDialog.js:121
 msgid "Name"
 msgstr "Name"
 
-#: Inventory/js/InventoryItemGridPanel.js:95
-#: Inventory/js/Model.js:79
-#: Inventory/js/InventoryItemEditDialog.js:129
+#: js/InventoryItemGridPanel.js:95 js/Model.js:79
+#: js/InventoryItemEditDialog.js:129
 msgid "Type"
 msgstr "Typ"
 
-#: Inventory/js/InventoryItemGridPanel.js:102
-#: Inventory/js/Model.js:87
-#: Inventory/js/InventoryItemEditDialog.js:163
+#: js/InventoryItemGridPanel.js:102 js/Model.js:87
+#: js/InventoryItemEditDialog.js:163
 msgid "Added"
 msgstr "Hinzugefügt"
 
-#: Inventory/js/InventoryItemGridPanel.js:109
-#: Inventory/js/Model.js:86
-#: Inventory/js/InventoryItemEditDialog.js:155
+#: js/InventoryItemGridPanel.js:109 js/Model.js:86
+#: js/InventoryItemEditDialog.js:155
 msgid "Location"
 msgstr "Standort"
 
-#: Inventory/js/InventoryItemGridPanel.js:115
-#: Inventory/js/InventoryItemEditDialog.js:171
+#: js/InventoryItemGridPanel.js:115 js/InventoryItemEditDialog.js:171
 msgid "Total number"
 msgstr "Anzahl"
 
-#: Inventory/js/InventoryItemGridPanel.js:121
-#: Inventory/js/InventoryItemEditDialog.js:181
+#: js/InventoryItemGridPanel.js:121 js/InventoryItemEditDialog.js:181
 msgid "Active number"
 msgstr "Verwendbare Anzahl"
 
-#: Inventory/js/InventoryItemGridPanel.js:127
-#: Inventory/js/InventoryItemEditDialog.js:144
+#: js/InventoryItemGridPanel.js:127 js/InventoryItemEditDialog.js:144
 msgid "Description"
 msgstr "Beschreibung"
 
-#: Inventory/js/InventoryItemGridPanel.js:139
+#: js/InventoryItemGridPanel.js:139
 msgid "Title"
 msgstr "Titel"
 
-#: Inventory/js/InventoryItemGridPanel.js:145
+#: js/InventoryItemGridPanel.js:145
 msgid "Budget"
 msgstr "Budget"
 
-#: Inventory/js/InventoryItemGridPanel.js:169
+#: js/InventoryItemGridPanel.js:169
 msgid "Show closed"
 msgstr "Zeige Geschlossene"
 
-#: Inventory/js/Inventory.js:24
+#: js/Inventory.js:24 Setup/setup.xml:4
 msgid "Inventory"
 msgstr "Inventar"
 
-#: Inventory/js/Model.js:37
+#: js/Model.js:37
 msgid "Item"
 msgid_plural "Items"
 msgstr[0] "Gegenstand"
 msgstr[1] "Gegenstände"
 
-#: Inventory/js/Model.js:41
+#: js/Model.js:41
 msgid "inventories"
 msgstr "Inventare"
 
-#: Inventory/js/Model.js:42
+#: js/Model.js:42
 msgid "inventory"
 msgid_plural "inventories"
 msgstr[0] "Inventar"
 msgstr[1] "Inventare"
 
-#: Inventory/js/Model.js:76
+#: js/Model.js:76
 msgid "Quick search"
 msgstr "Schnellsuche"
 
-#: Inventory/js/Model.js:90
+#: js/Model.js:90
 msgid "Last modified"
 msgstr "Zuletzt geändert"
 
-#: Inventory/js/Model.js:91
+#: js/Model.js:91
 msgid "Last modifier"
 msgstr "Zuletzt geändert von"
 
-#: Inventory/js/Model.js:92
+#: js/Model.js:92
 msgid "Creation Time"
 msgstr "Erstelldatum"
 
-#: Inventory/js/Model.js:93
+#: js/Model.js:93
 msgid "Creator"
 msgstr "Erstellt von"
 
-#: Inventory/js/InventoryItemEditDialog.js:78
+#: js/InventoryItemEditDialog.js:78
 msgid "The active number must be less than or equal total number."
 msgstr "Die verwendbare Anzahl muss kleiner oder gleich der Gesamtanzahl sein."
 
-#: Inventory/js/InventoryItemEditDialog.js:101
+#: js/InventoryItemEditDialog.js:101
 msgid "Inventory Item"
 msgstr "Inventar Gegenstand"
 
-#: Inventory/js/InventoryItemEditDialog.js:149
+#: js/InventoryItemEditDialog.js:149
 msgid "Enter description"
 msgstr "Beschreibung einfügen"
 
-#~ msgid "book"
-#~ msgstr "Buch"
+#: Setup/Initialize.php:33
+msgid "book"
+msgstr "Buch"
 
-#~ msgid "server"
-#~ msgstr "Server"
+#: Setup/Initialize.php:34
+msgid "server"
+msgstr "Server"
 
-#~ msgid "monitor"
-#~ msgstr "Monitor"
+#: Setup/Initialize.php:35
+msgid "monitor"
+msgstr "Monitor"
 
-#~ msgid "keyboard"
-#~ msgstr "Tastatur"
+#: Setup/Initialize.php:36
+msgid "keyboard"
+msgstr "Tastatur"
+
+#: Setup/Initialize.php:37
+msgid "unkown"
+msgstr ""
+
+#: Controller.php:74
+#, python-format
+msgid "%s's personal inventory"
+msgstr "%ss persönliches Inventar"
+
+#: Config.php:31
+msgid "Status Available"
+msgstr ""
+
+#: Config.php:33
+msgid "Possible status. Please note that additional status might impact other Inventory systems on export or syncronisation."
+msgstr ""
 
 #~ msgid "unknown"
 #~ msgstr "unbekannt"
 
 #~ msgid "inventory item list"
-
 #~ msgid_plural "inventory item lists"
 #~ msgstr[0] "Inventar Gegenstandsliste"
 #~ msgstr[1] "Inventar Gegenstandslisten"
 
 #~ msgid "inventory item"
-
 #~ msgid_plural "inventory records"
 #~ msgstr[0] "Inventar Gegenstand"
 #~ msgstr[1] "Inventar Gegenstände"
 
 #~ msgid "inventory record list"
-
 #~ msgid_plural "inventory record lists"
 #~ msgstr[0] "Inventar Gegenstandsliste"
 #~ msgstr[1] "Inventar Gegenstandslisten"

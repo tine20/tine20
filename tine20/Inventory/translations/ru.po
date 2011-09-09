@@ -13,107 +13,157 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
+#: js/InventoryItemGridPanel.js:83 js/Model.js:85
+#: js/InventoryItemEditDialog.js:137
+msgid "ID"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:89 js/Model.js:77
+#: js/InventoryItemEditDialog.js:121
+msgid "Name"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:95 js/Model.js:79
+#: js/InventoryItemEditDialog.js:129
+msgid "Type"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:102 js/Model.js:87
+#: js/InventoryItemEditDialog.js:163
+msgid "Added"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:109 js/Model.js:86
+#: js/InventoryItemEditDialog.js:155
+msgid "Location"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:115 js/InventoryItemEditDialog.js:171
+msgid "Total number"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:121 js/InventoryItemEditDialog.js:181
+msgid "Active number"
+msgstr ""
+
+#: js/InventoryItemGridPanel.js:127 js/InventoryItemEditDialog.js:144
+msgid "Description"
+msgstr "Описание"
+
+#: js/InventoryItemGridPanel.js:139
+msgid "Title"
+msgstr "Заголовок"
+
+#: js/InventoryItemGridPanel.js:145
+msgid "Budget"
+msgstr "Бюджет"
+
+#: js/InventoryItemGridPanel.js:169
+msgid "Show closed"
+msgstr "Показать закрытые"
+
+#: js/Inventory.js:24 Setup/setup.xml:4
+msgid "Inventory"
+msgstr ""
+
+#: js/Model.js:37
+msgid "Item"
+msgid_plural "Items"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:41
+msgid "inventories"
+msgstr ""
+
+#: js/Model.js:42
+msgid "inventory"
+msgid_plural "inventories"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: js/Model.js:76
+msgid "Quick search"
+msgstr ""
+
+#: js/Model.js:90
+msgid "Last modified"
+msgstr ""
+
+#: js/Model.js:91
+msgid "Last modifier"
+msgstr ""
+
+#: js/Model.js:92
+msgid "Creation Time"
+msgstr ""
+
+#: js/Model.js:93
+msgid "Creator"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:78
+msgid "The active number must be less than or equal total number."
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:101
+msgid "Inventory Item"
+msgstr ""
+
+#: js/InventoryItemEditDialog.js:149
+msgid "Enter description"
+msgstr ""
+
+#: Setup/Initialize.php:33
+msgid "book"
+msgstr ""
+
+#: Setup/Initialize.php:34
+msgid "server"
+msgstr ""
+
+#: Setup/Initialize.php:35
+msgid "monitor"
+msgstr ""
+
+#: Setup/Initialize.php:36
+msgid "keyboard"
+msgstr ""
+
+#: Setup/Initialize.php:37
+msgid "unkown"
+msgstr ""
+
+#: Controller.php:74
+#, python-format
+msgid "%s's personal inventory"
+msgstr ""
+
 #: Config.php:31
 msgid "Status Available"
 msgstr ""
 
 #: Config.php:33
-msgid "Possible status. Please note that additional status might impact other ExampleApplication systems on export or syncronisation."
+msgid "Possible status. Please note that additional status might impact other Inventory systems on export or syncronisation."
 msgstr ""
 
-#: Controller.php:74
-#, python-format
-msgid "%s's personal example records"
-msgstr ""
+#~ msgid "ExampleApplication"
+#~ msgstr "ПриложениеПример"
 
-#: Setup/setup.xml:4
-msgid "ExampleApplication"
-msgstr "ПриложениеПример"
+#~ msgid "Status"
+#~ msgstr "Статус"
 
-#: Setup/Initialize.php:33
-msgid "Completed"
-msgstr ""
-
-#: Setup/Initialize.php:34
-msgid "Cancelled"
-msgstr ""
-
-#: Setup/Initialize.php:35
-msgid "In process"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:83 js/ExampleRecordEditDialog.js:104
-msgid "Name"
-msgstr ""
-
-#: js/ExampleRecordGridPanel.js:89 js/ExampleRecordEditDialog.js:110
-#: js/Model.js:71
-msgid "Status"
-msgstr "Статус"
-
-#: js/ExampleRecordGridPanel.js:96
-msgid "Title"
-msgstr "Заголовок"
-
-#: js/ExampleRecordGridPanel.js:102
-msgid "Budget"
-msgstr "Бюджет"
-
-#: js/ExampleRecordGridPanel.js:126
-msgid "Show closed"
-msgstr "Показать закрытые"
-
-#: js/ExampleRecordEditDialog.js:87
 #, fuzzy
-msgid "ExampleRecord"
-msgstr "ЗаписьПример"
-
-#: js/ExampleApplication.js:24
-msgid "Example Application test"
-msgstr ""
-
-#: js/Model.js:31
-msgid "example record"
-msgid_plural "example records"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:35
-msgid "example record list"
-msgid_plural "example record lists"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: js/Model.js:69 js/Model.js:106
-msgid "Quick search"
-msgstr ""
-
-#: js/Model.js:79
-msgid "Last modified"
-msgstr ""
-
-#: js/Model.js:80
-msgid "Last modifier"
-msgstr ""
-
-#: js/Model.js:81
-msgid "Creation Time"
-msgstr ""
-
-#: js/Model.js:82
-msgid "Creator"
-msgstr ""
+#~ msgid "ExampleRecord"
+#~ msgstr "ЗаписьПример"
 
 #~ msgid "ExampleRecords"
 #~ msgstr "ЗаписиПримеры"
 
 #~ msgid "All ExampleRecords"
 #~ msgstr "Все ЗаписиПримеры"
-
-#~ msgid "Description"
-#~ msgstr "Описание"
 
 #~ msgid "record list"
 #~ msgid_plural "record lists"
